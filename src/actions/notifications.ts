@@ -60,7 +60,6 @@ type FilterType = keyof typeof FILTER_TYPES;
 
 defineMessages({
   mention: { id: 'notification.mention', defaultMessage: '{name} mentioned you' },
-  group: { id: 'notifications.group', defaultMessage: '{count, plural, one {# notification} other {# notifications}}' },
 });
 
 const fetchRelatedRelationships = (dispatch: AppDispatch, notifications: APIEntity[]) => {
@@ -188,6 +187,42 @@ const noOp = () => new Promise(f => f(undefined));
 
 let abortExpandNotifications = new AbortController();
 
+const STATUS_NOTIFICATION_TYPES = [
+  'favourite',
+  'reblog',
+  // WIP separate notifications for each reaction?
+  // 'pleroma:emoji_reaction',
+  'pleroma:event_reminder',
+  'pleroma:participation_accepted',
+  'pleroma:participation_request',
+];
+
+const deduplicateNotifications = (notifications: any[]) => {
+  const deduplicatedNotifications: any[] = [];
+
+  for (const notification of notifications) {
+    if (STATUS_NOTIFICATION_TYPES.includes(notification.type)) {
+      const existingNotification = deduplicatedNotifications
+        .find(deduplicatedNotification => deduplicatedNotification.type === notification.type && deduplicatedNotification.status?.id === notification.status?.id);
+
+      if (existingNotification) {
+        if (existingNotification?.accounts) {
+          existingNotification.accounts.push(notification.account);
+        } else {
+          existingNotification.accounts = [existingNotification.account, notification.account];
+        }
+        existingNotification.id += '+' + notification.id;
+      } else {
+        deduplicatedNotifications.push(notification);
+      }
+    } else {
+      deduplicatedNotifications.push(notification);
+    }
+  }
+
+  return deduplicatedNotifications;
+};
+
 const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => any = noOp, abort?: boolean) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return dispatch(noOp);
@@ -259,7 +294,9 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
       const statusesFromGroups = (Object.values(entries.statuses) as Status[]).filter((status) => !!status.group);
       dispatch(fetchGroupRelationships(statusesFromGroups.map((status: any) => status.group?.id)));
 
-      dispatch(expandNotificationsSuccess(response.data, next ? next.uri : null, isLoadingMore));
+      const deduplicatedNotifications = deduplicateNotifications(response.data);
+
+      dispatch(expandNotificationsSuccess(deduplicatedNotifications, next ? next.uri : null, isLoadingMore));
       fetchRelatedRelationships(dispatch, response.data);
       done();
     }).catch(error => {

@@ -1,5 +1,6 @@
+import { List as ImmutableList } from 'immutable';
 import React, { useCallback } from 'react';
-import { defineMessages, useIntl, IntlShape, MessageDescriptor } from 'react-intl';
+import { defineMessages, useIntl, FormattedList, FormattedMessage, IntlShape, MessageDescriptor } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
 import { mentionCompose } from 'soapbox/actions/compose';
@@ -17,7 +18,8 @@ import { makeGetNotification } from 'soapbox/selectors';
 import { NotificationType, validType } from 'soapbox/utils/notification';
 
 import type { ScrollPosition } from 'soapbox/components/status';
-import type { Account as AccountEntity, Status as StatusEntity, Notification as NotificationEntity } from 'soapbox/types/entities';
+import type { Account as AccountEntity, Status as StatusEntity, Notification as NotificationEntity,
+} from 'soapbox/types/entities';
 
 const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: Date) => {
   const output = [message];
@@ -66,7 +68,7 @@ const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
     defaultMessage: '{name} has requested to follow you',
   },
   mention: {
-    id: 'notification.mentioned',
+    id: 'notification.mentioed',
     defaultMessage: '{name} mentioned you',
   },
   favourite: {
@@ -123,15 +125,29 @@ const buildMessage = (
   intl: IntlShape,
   type: NotificationType,
   account: AccountEntity,
+  accounts: ImmutableList<AccountEntity> | null,
   targetName: string,
   instanceTitle: string,
 ): React.ReactNode => {
-  const name = buildLink(account);
+  if (!accounts) accounts = accounts || ImmutableList([account]);
+
+  const renderedAccounts = accounts.slice(0, 2).map(account => buildLink(account)).toArray().filter(Boolean);
+
+  if (accounts.size > 2) {
+    renderedAccounts.push(
+      <FormattedMessage
+        id='notification.more'
+        defaultMessage='{count, plural, one {# other} other {# others}}'
+        values={{ count: accounts.size - renderedAccounts.length }}
+      />,
+    );
+  }
 
   return intl.formatMessage(messages[type], {
-    name,
+    name: <FormattedList type='conjunction' value={renderedAccounts} />,
     targetName,
     instance: instanceTitle,
+    count: accounts.size,
   });
 };
 
@@ -161,7 +177,7 @@ const Notification: React.FC<INotification> = (props) => {
   const instance = useInstance();
 
   const type = notification.type;
-  const { account, status } = notification;
+  const { account, accounts, status } = notification;
 
   const getHandlers = () => ({
     reply: handleMention,
@@ -324,7 +340,9 @@ const Notification: React.FC<INotification> = (props) => {
 
   const targetName = notification.target && typeof notification.target === 'object' ? notification.target.acct : '';
 
-  const message: React.ReactNode = validType(type) && account && typeof account === 'object' ? buildMessage(intl, type, account, targetName, instance.title) : null;
+  const message: React.ReactNode = validType(type) && account && typeof account === 'object'
+    ? buildMessage(intl, type, account, accounts as ImmutableList<AccountEntity>, targetName, instance.title)
+    : null;
 
   const ariaLabel = validType(type) ? (
     notificationForScreenReader(
