@@ -41,15 +41,15 @@ const SidebarNavigationLink = React.forwardRef((props: ISidebarNavigationLink, r
       ref={ref}
       onClick={handleClick}
       className={clsx({
-        'flex items-center py-2 text-sm font-semibold space-x-4 rtl:space-x-reverse': true,
+        'flex items-center py-2 text-sm font-semibold space-x-4 rtl:space-x-reverse transition-colors duration-200': true,
         'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200': !isActive,
         'text-gray-900 dark:text-white': isActive,
       })}
     >
       <span
         className={clsx({
-          'relative rounded-lg inline-flex p-2.5': true,
-          'bg-primary-50 dark:bg-slate-700': !isActive,
+          'relative rounded-lg inline-flex p-2.5 transition-colors duration-200': true,
+          'bg-primary-50 dark:bg-slate-700 black:bg-gray-900': !isActive,
           'bg-primary-600': isActive,
         })}
       >
