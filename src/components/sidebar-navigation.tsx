@@ -114,7 +114,7 @@ const SidebarNavigation = () => {
 
   return (
     <Stack space={4}>
-      <Stack space={2}>
+      <Stack space={1.5}>
         <SidebarNavigationLink
           to='/'
           icon={require('@tabler/icons/outline/home.svg')}

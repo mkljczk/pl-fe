@@ -41,18 +41,25 @@ const SidebarNavigationLink = React.forwardRef((props: ISidebarNavigationLink, r
       ref={ref}
       onClick={handleClick}
       className={clsx({
-        'flex items-center px-4 py-3.5 text-base font-semibold space-x-4 rtl:space-x-reverse rounded-full group text-gray-600 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-100 hover:bg-primary-200 dark:hover:bg-primary-900': true,
-        'dark:text-gray-100 text-gray-900': isActive,
+        'flex items-center py-2 text-sm font-semibold space-x-4 rtl:space-x-reverse': true,
+        'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200': !isActive,
+        'text-gray-900 dark:text-white': isActive,
       })}
     >
-      <span className='relative'>
+      <span
+        className={clsx({
+          'relative rounded-lg inline-flex p-2.5': true,
+          'bg-primary-50 dark:bg-slate-700': !isActive,
+          'bg-primary-600': isActive,
+        })}
+      >
         <Icon
           src={(isActive && activeIcon) || icon}
           count={count}
           countMax={countMax}
           className={clsx('h-5 w-5', {
-            'text-gray-600 black:text-white dark:text-gray-500 group-hover:text-primary-500 dark:group-hover:text-primary-400': !isActive,
-            'text-primary-500 dark:text-primary-400': isActive,
+            'text-primary-700 dark:text-white': !isActive,
+            'text-white': isActive,
           })}
         />
       </span>
