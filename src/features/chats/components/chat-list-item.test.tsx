@@ -8,20 +8,17 @@ import ChatListItem from './chat-list-item';
 const chat: any = {
   id: '1',
   unread: 5,
-  created_by_account: '2',
   last_message: {
     account_id: '2',
     chat_id: '1',
     content: 'hello world',
     created_at: '2022-09-09T16:02:26.186Z',
-    discarded_at: null,
     id: '12332423234',
     unread: true,
   },
   created_at: '2022-09-09T16:02:26.186Z',
   updated_at: '2022-09-09T16:02:26.186Z',
   accepted: true,
-  discarded_at: null,
   account: {
     acct: 'username',
     display_name: 'johnnie',

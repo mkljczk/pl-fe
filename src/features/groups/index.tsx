@@ -1,36 +1,23 @@
-import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { openModal } from 'soapbox/actions/modals';
 import { useGroups } from 'soapbox/api/hooks';
 import GroupCard from 'soapbox/components/group-card';
 import ScrollableList from 'soapbox/components/scrollable-list';
-import { Button, Input, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useDebounce, useFeatures } from 'soapbox/hooks';
+import { Button, Stack, Text } from 'soapbox/components/ui';
+import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 import { PERMISSION_CREATE_GROUPS, hasPermission } from 'soapbox/utils/permissions';
 
 import PlaceholderGroupCard from '../placeholder/components/placeholder-group-card';
 
-import PendingGroupsRow from './components/pending-groups-row';
-import TabBar, { TabItems } from './components/tab-bar';
-
-const messages = defineMessages({
-  placeholder: { id: 'groups.search.placeholder', defaultMessage: 'Search My Groups' },
-});
-
 const Groups: React.FC = () => {
-  const debounce = useDebounce;
   const dispatch = useAppDispatch();
-  const features = useFeatures();
-  const intl = useIntl();
 
   const canCreateGroup = useAppSelector((state) => hasPermission(state, PERMISSION_CREATE_GROUPS));
 
-  const [searchValue, setSearchValue] = useState<string>('');
-  const debouncedValue = debounce(searchValue, 300);
-
-  const { groups, isLoading, hasNextPage, fetchNextPage } = useGroups(debouncedValue);
+  const { groups, isLoading, hasNextPage, fetchNextPage } = useGroups();
 
   const handleLoadMore = () => {
     if (hasNextPage) {
@@ -72,10 +59,6 @@ const Groups: React.FC = () => {
 
   return (
     <Stack space={4}>
-      {features.groupsDiscovery && (
-        <TabBar activeTab={TabItems.MY_GROUPS} />
-      )}
-
       {canCreateGroup && (
         <Button
           className='xl:hidden'
@@ -87,17 +70,6 @@ const Groups: React.FC = () => {
           <FormattedMessage id='new_group_panel.action' defaultMessage='Create Group' />
         </Button>
       )}
-
-      {features.groupsSearch ? (
-        <Input
-          onChange={(event) => setSearchValue(event.target.value)}
-          placeholder={intl.formatMessage(messages.placeholder)}
-          theme='search'
-          value={searchValue}
-        />
-      ) : null}
-
-      <PendingGroupsRow />
 
       <ScrollableList
         scrollKey='groups'
@@ -112,7 +84,7 @@ const Groups: React.FC = () => {
         hasMore={hasNextPage}
       >
         {groups.map((group) => (
-          <Link key={group.id} to={`/group/${group.slug}`}>
+          <Link key={group.id} to={`/group/${group.id}`}>
             <GroupCard group={group} />
           </Link>
         ))}

@@ -11,11 +11,9 @@ import { HStack } from 'soapbox/components/ui';
 import { deleteEntities } from 'soapbox/entity-store/actions';
 import { Entities } from 'soapbox/entity-store/entities';
 import PlaceholderAccount from 'soapbox/features/placeholder/components/placeholder-account';
-import { useAppDispatch, useFeatures } from 'soapbox/hooks';
+import { useAppDispatch } from 'soapbox/hooks';
 import { GroupRoles } from 'soapbox/schemas/group-member';
 import toast from 'soapbox/toast';
-
-import { MAX_ADMIN_COUNT } from '../group-members';
 
 import type { Menu as IMenu } from 'soapbox/components/dropdown-menu';
 import type { Group, GroupMember } from 'soapbox/types/entities';
@@ -43,14 +41,12 @@ const messages = defineMessages({
 interface IGroupMemberListItem {
   member: GroupMember;
   group: Group;
-  canPromoteToAdmin: boolean;
 }
 
 const GroupMemberListItem = (props: IGroupMemberListItem) => {
-  const { canPromoteToAdmin, member, group } = props;
+  const { member, group } = props;
 
   const dispatch = useAppDispatch();
-  const features = useFeatures();
   const intl = useIntl();
 
   const blockGroupMember = useBlockGroupMember(group, member.account);
@@ -95,13 +91,6 @@ const GroupMemberListItem = (props: IGroupMemberListItem) => {
   };
 
   const handleAdminAssignment = () => {
-    if (!canPromoteToAdmin) {
-      toast.error(intl.formatMessage(messages.adminLimitTitle), {
-        summary: intl.formatMessage(messages.adminLimitSummary, { count: MAX_ADMIN_COUNT }),
-      });
-      return;
-    }
-
     dispatch(openModal('CONFIRM', {
       heading: intl.formatMessage(messages.promoteConfirm),
       message: intl.formatMessage(messages.promoteConfirmMessage, { name: account?.username }),
@@ -156,13 +145,11 @@ const GroupMemberListItem = (props: IGroupMemberListItem) => {
       (isMemberAdmin || isMemberUser) &&
       member.role !== group.relationship.role
     ) {
-      if (features.groupsKick) {
-        items.push({
-          text: intl.formatMessage(messages.groupModKick, { name: account.username }),
-          icon: require('@tabler/icons/outline/user-minus.svg'),
-          action: handleKickFromGroup,
-        });
-      }
+      items.push({
+        text: intl.formatMessage(messages.groupModKick, { name: account.username }),
+        icon: require('@tabler/icons/outline/user-minus.svg'),
+        action: handleKickFromGroup,
+      });
 
       items.push({
         text: intl.formatMessage(messages.groupModBlock, { name: account.username }),

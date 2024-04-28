@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchGroupRelationshipsSuccess } from 'soapbox/actions/groups';
 import { openModal } from 'soapbox/actions/modals';
-import { useCancelMembershipRequest, useJoinGroup, useLeaveGroup, usePendingGroups } from 'soapbox/api/hooks';
+import { useCancelMembershipRequest, useJoinGroup, useLeaveGroup } from 'soapbox/api/hooks';
 import { Button } from 'soapbox/components/ui';
 import { importEntities } from 'soapbox/entity-store/actions';
 import { Entities } from 'soapbox/entity-store/entities';
@@ -33,7 +33,6 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
   const joinGroup = useJoinGroup(group);
   const leaveGroup = useLeaveGroup(group);
   const cancelRequest = useCancelMembershipRequest(group);
-  const { invalidate: invalidatePendingGroups } = usePendingGroups();
 
   const isRequested = group.relationship?.requested;
   const isNonMember = !group.relationship?.member && !isRequested;
@@ -44,7 +43,6 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
   const onJoinGroup = () => joinGroup.mutate({}, {
     onSuccess(entity) {
       joinGroup.invalidate();
-      invalidatePendingGroups();
       dispatch(fetchGroupRelationshipsSuccess([entity]));
 
       toast.success(
@@ -82,7 +80,6 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
         requested: false,
       };
       dispatch(importEntities([entity], Entities.GROUP_RELATIONSHIPS));
-      invalidatePendingGroups();
     },
   });
 
@@ -94,7 +91,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
     return (
       <Button
         theme='secondary'
-        to={`/group/${group.slug}/manage`}
+        to={`/group/${group.id}/manage`}
       >
         <FormattedMessage id='group.manage' defaultMessage='Manage Group' />
       </Button>

@@ -1,21 +1,14 @@
 import React, { useRef } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { Avatar, HStack, Icon, Stack, Text, Tooltip } from 'soapbox/components/ui';
+import { Avatar, HStack, Icon, Stack, Text } from 'soapbox/components/ui';
 import VerificationBadge from 'soapbox/components/verification-badge';
 import { ChatWidgetScreens, useChatContext } from 'soapbox/contexts/chat-context';
-import { secondsToDays } from 'soapbox/utils/numbers';
 
 import Chat from '../chat';
 
 import ChatPaneHeader from './chat-pane-header';
 import ChatSettings from './chat-settings';
-
-const messages = defineMessages({
-  autoDeleteMessage: { id: 'chat_window.auto_delete_label', defaultMessage: 'Auto-delete after {day, plural, one {# day} other {# days}}' },
-  autoDeleteMessageTooltip: { id: 'chat_window.auto_delete_tooltip', defaultMessage: 'Chat messages are set to auto-delete after {day, plural, one {# day} other {# days}} upon sending.' },
-});
 
 const LinkWrapper = ({ enabled, to, children }: { enabled: boolean; to: string; children: React.ReactNode }): JSX.Element => {
   if (!enabled) {
@@ -31,9 +24,7 @@ const LinkWrapper = ({ enabled, to, children }: { enabled: boolean; to: string; 
 
 /** Floating desktop chat window. */
 const ChatWindow = () => {
-  const intl = useIntl();
-
-  const { chat, currentChatId, screen, changeScreen, isOpen, needsAcceptance, toggleChatPane } = useChatContext();
+  const { chat, currentChatId, screen, changeScreen, isOpen, toggleChatPane } = useChatContext();
 
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -50,13 +41,7 @@ const ChatWindow = () => {
     changeScreen(ChatWidgetScreens.CHAT_SETTINGS, currentChatId);
   };
 
-  const secondaryAction = () => {
-    if (needsAcceptance) {
-      return undefined;
-    }
-
-    return isOpen ? openChatSettings : openSearch;
-  };
+  const secondaryAction = () => isOpen ? openChatSettings : openSearch;
 
   if (!chat) return null;
 
@@ -92,16 +77,6 @@ const ChatWindow = () => {
                     {chat.account.verified && <VerificationBadge />}
                   </div>
                 </LinkWrapper>
-
-                {chat.message_expiration && (
-                  <Tooltip
-                    text={intl.formatMessage(messages.autoDeleteMessageTooltip, { day: secondsToDays(chat.message_expiration) })}
-                  >
-                    <Text size='sm' weight='medium' theme='primary' truncate className='cursor-help'>
-                      {intl.formatMessage(messages.autoDeleteMessage, { day: secondsToDays(chat.message_expiration) })}
-                    </Text>
-                  </Tooltip>
-                )}
               </Stack>
             </HStack>
           </HStack>

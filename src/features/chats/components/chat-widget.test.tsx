@@ -12,9 +12,6 @@ const account = buildAccount({
   acct: 'justin-username',
   display_name: 'Justin L',
   avatar: 'test.jpg',
-  source: {
-    chats_onboarded: true,
-  },
 });
 
 const store = rootState

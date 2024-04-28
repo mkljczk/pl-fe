@@ -27,7 +27,6 @@ export const AccountRecord = ImmutableRecord({
   avatar_static: '',
   birthday: '',
   bot: false,
-  chats_onboarded: true,
   created_at: '',
   discoverable: false,
   display_name: '',
@@ -52,7 +51,6 @@ export const AccountRecord = ImmutableRecord({
   uri: '',
   url: '',
   username: '',
-  website: '',
   verified: false,
 
   // Internal fields
@@ -147,7 +145,7 @@ const getTags = (account: ImmutableMap<string, any>): ImmutableList<any> => {
   return ImmutableList(ImmutableList.isList(tags) ? tags : []);
 };
 
-/** Normalize Truth Social/Pleroma verified */
+/** Normalize Pleroma verified */
 const normalizeVerified = (account: ImmutableMap<string, any>) => {
   return account.update('verified', verified => {
     return [
@@ -164,7 +162,7 @@ const normalizeDonor = (account: ImmutableMap<string, any>) => {
   return account.setIn(['pleroma', 'tags'], updated);
 };
 
-/** Normalize Fedibird/Truth Social/Pleroma location */
+/** Normalize Fedibird/Pleroma location */
 const normalizeLocation = (account: ImmutableMap<string, any>) => {
   return account.update('location', location => {
     return [
@@ -265,10 +263,9 @@ const normalizeDiscoverable = (account: ImmutableMap<string, any>) => {
   return account.set('discoverable', discoverable);
 };
 
-/** Normalize message acceptance between Pleroma and Truth Social. */
+/** Normalize message acceptance. */
 const normalizeMessageAcceptance = (account: ImmutableMap<string, any>) => {
-  const acceptance = Boolean(account.getIn(['pleroma', 'accepts_chat_messages']) || account.get('accepting_messages'));
-  return account.set('accepts_chat_messages', acceptance);
+  return account.set('accepts_chat_messages', account.getIn(['pleroma', 'accepts_chat_messages']));
 };
 
 /** Normalize undefined/null birthday to empty string. */

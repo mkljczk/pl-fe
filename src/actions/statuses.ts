@@ -1,8 +1,7 @@
 import { isLoggedIn } from 'soapbox/utils/auth';
-import { getFeatures } from 'soapbox/utils/features';
 import { shouldHaveCard } from 'soapbox/utils/status';
 
-import api, { getNextLink } from '../api';
+import api from '../api';
 
 import { setComposeToStatus } from './compose';
 import { fetchGroupRelationships } from './groups';
@@ -195,62 +194,13 @@ const fetchContext = (id: string) =>
     });
   };
 
-const fetchNext = (statusId: string, next: string) =>
-  async(dispatch: AppDispatch, getState: () => RootState) => {
-    const response = await api(getState).get(next);
-    dispatch(importFetchedStatuses(response.data));
-
-    dispatch({
-      type: CONTEXT_FETCH_SUCCESS,
-      id: statusId,
-      ancestors: [],
-      descendants: response.data,
-    });
-
-    return { next: getNextLink(response) };
-  };
-
-const fetchAncestors = (id: string) =>
-  async(dispatch: AppDispatch, getState: () => RootState) => {
-    const response = await api(getState).get(`/api/v1/statuses/${id}/context/ancestors`);
-    dispatch(importFetchedStatuses(response.data));
-    return response;
-  };
-
-const fetchDescendants = (id: string) =>
-  async(dispatch: AppDispatch, getState: () => RootState) => {
-    const response = await api(getState).get(`/api/v1/statuses/${id}/context/descendants`);
-    dispatch(importFetchedStatuses(response.data));
-    return response;
-  };
-
 const fetchStatusWithContext = (id: string) =>
   async(dispatch: AppDispatch, getState: () => RootState) => {
-    const features = getFeatures(getState().instance);
-
-    if (features.paginatedContext) {
-      await dispatch(fetchStatus(id));
-      const responses = await Promise.all([
-        dispatch(fetchAncestors(id)),
-        dispatch(fetchDescendants(id)),
-      ]);
-
-      dispatch({
-        type: CONTEXT_FETCH_SUCCESS,
-        id,
-        ancestors: responses[0].data,
-        descendants: responses[1].data,
-      });
-
-      const next = getNextLink(responses[1]);
-      return { next };
-    } else {
-      await Promise.all([
-        dispatch(fetchContext(id)),
-        dispatch(fetchStatus(id)),
-      ]);
-      return { next: undefined };
-    }
+    await Promise.all([
+      dispatch(fetchContext(id)),
+      dispatch(fetchStatus(id)),
+    ]);
+    return { next: undefined };
   };
 
 const muteStatus = (id: string) =>
@@ -381,9 +331,6 @@ export {
   deleteStatus,
   updateStatus,
   fetchContext,
-  fetchNext,
-  fetchAncestors,
-  fetchDescendants,
   fetchStatusWithContext,
   muteStatus,
   unmuteStatus,

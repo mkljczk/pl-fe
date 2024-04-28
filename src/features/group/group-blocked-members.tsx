@@ -82,7 +82,7 @@ const GroupBlockedMembers: React.FC<IGroupBlockedMembers> = ({ params }) => {
   const emptyMessage = <FormattedMessage id='empty_column.group_blocks' defaultMessage="The group hasn't banned any users yet." />;
 
   return (
-    <Column label={intl.formatMessage(messages.heading)} backHref={`/group/${group.slug}/manage`}>
+    <Column label={intl.formatMessage(messages.heading)} backHref={`/group/${group.id}/manage`}>
       <ScrollableList
         scrollKey='group_blocks'
         emptyMessage={emptyMessage}

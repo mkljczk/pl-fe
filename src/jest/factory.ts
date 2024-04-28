@@ -6,7 +6,6 @@ import {
   groupMemberSchema,
   groupRelationshipSchema,
   groupSchema,
-  groupTagSchema,
   relationshipSchema,
   statusSchema,
   type Account,
@@ -14,7 +13,6 @@ import {
   type Group,
   type GroupMember,
   type GroupRelationship,
-  type GroupTag,
   type Relationship,
   type Status,
   Instance,
@@ -55,13 +53,6 @@ function buildGroupRelationship(props: PartialDeep<GroupRelationship> = {}): Gro
   }, props));
 }
 
-function buildGroupTag(props: PartialDeep<GroupTag> = {}): GroupTag {
-  return groupTagSchema.parse(Object.assign({
-    id: uuidv4(),
-    name: uuidv4(),
-  }, props));
-}
-
 function buildGroupMember(
   props: PartialDeep<GroupMember> = {},
   accountProps: PartialDeep<Account> = {},
@@ -96,7 +87,6 @@ export {
   buildGroup,
   buildGroupMember,
   buildGroupRelationship,
-  buildGroupTag,
   buildInstance,
   buildRelationship,
   buildStatus,

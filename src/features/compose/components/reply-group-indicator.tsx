@@ -30,7 +30,7 @@ const ReplyGroupIndicator = (props: IReplyGroupIndicator) => {
         defaultMessage='Posting to {groupLink}'
         values={{
           groupLink: <Link
-            to={`/group/${group.slug}`}
+            to={`/group/${group.id}`}
             dangerouslySetInnerHTML={{ __html: group.display_name_html }}
           />,
         }}

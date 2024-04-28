@@ -1,12 +1,11 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { CreateGroupParams, useGroupValidation } from 'soapbox/api/hooks';
+import { CreateGroupParams } from 'soapbox/api/hooks';
 import { Form, FormGroup, Input, Textarea } from 'soapbox/components/ui';
 import AvatarPicker from 'soapbox/features/edit-profile/components/avatar-picker';
 import HeaderPicker from 'soapbox/features/edit-profile/components/header-picker';
-import GroupTagsField from 'soapbox/features/group/components/group-tags-field';
-import { useAppSelector, useDebounce, useInstance } from 'soapbox/hooks';
+import { useAppSelector, useInstance } from 'soapbox/hooks';
 import { usePreview } from 'soapbox/hooks/forms';
 import resizeImage from 'soapbox/utils/resize-image';
 
@@ -23,17 +22,12 @@ interface IDetailsStep {
 
 const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
   const intl = useIntl();
-  const debounce = useDebounce;
   const instance = useInstance();
 
   const {
     display_name: displayName = '',
     note = '',
-    tags = [''],
   } = params;
-
-  const debouncedName = debounce(displayName, 300);
-  const { data: { isValid, message: errorMessage } } = useGroupValidation(debouncedName);
 
   const avatarSrc = usePreview(params.avatar);
   const headerSrc = usePreview(params.header);
@@ -65,28 +59,6 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
 
   const handleImageClear = (property: keyof CreateGroupParams) => () => onChange({ [property]: undefined });
 
-  const handleTagsChange = (tags: string[]) => {
-    onChange({
-      ...params,
-      tags,
-    });
-  };
-
-  const handleAddTag = () => {
-    onChange({
-      ...params,
-      tags: [...tags, ''],
-    });
-  };
-
-  const handleRemoveTag = (i: number) => {
-    const newTags = [...tags];
-    newTags.splice(i, 1);
-    onChange({
-      ...params,
-      tags: newTags,
-    });
-  };
 
   return (
     <Form>
@@ -98,7 +70,6 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
       <FormGroup
         labelText={<FormattedMessage id='manage_group.fields.name_label' defaultMessage='Group name (required)' />}
         hintText={<FormattedMessage id='manage_group.fields.name_help' defaultMessage='This cannot be changed after the group is created.' />}
-        errors={isValid ? [] : [errorMessage as string]}
       >
         <Input
           type='text'
@@ -120,15 +91,6 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
           maxLength={Number(instance.configuration.groups.max_characters_description)}
         />
       </FormGroup>
-
-      <div className='pb-6'>
-        <GroupTagsField
-          tags={tags}
-          onChange={handleTagsChange}
-          onAddItem={handleAddTag}
-          onRemoveItem={handleRemoveTag}
-        />
-      </div>
     </Form>
   );
 };

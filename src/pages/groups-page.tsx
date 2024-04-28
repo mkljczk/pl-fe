@@ -1,9 +1,8 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom-v5-compat';
 
 import { Column, Layout } from 'soapbox/components/ui';
 import LinkFooter from 'soapbox/features/ui/components/link-footer';
-import { MyGroupsPanel, NewGroupPanel, SuggestedGroupsPanel } from 'soapbox/features/ui/util/async-components';
+import { MyGroupsPanel, NewGroupPanel } from 'soapbox/features/ui/util/async-components';
 
 interface IGroupsPage {
   children: React.ReactNode;
@@ -22,10 +21,7 @@ const GroupsPage: React.FC<IGroupsPage> = ({ children }) => (
 
     <Layout.Aside>
       <NewGroupPanel />
-      <Routes>
-        <Route path='/groups' element={<SuggestedGroupsPanel />} />
-        <Route path='/groups/discover' element={<MyGroupsPanel />} />
-      </Routes>
+      <MyGroupsPanel />
 
       <LinkFooter />
     </Layout.Aside>

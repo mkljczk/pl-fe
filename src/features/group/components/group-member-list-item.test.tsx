@@ -27,7 +27,7 @@ describe('<GroupMemberListItem />', () => {
         relationship: buildGroupRelationship(),
       });
 
-      render(<GroupMemberListItem group={group} member={groupMember} canPromoteToAdmin />);
+      render(<GroupMemberListItem group={group} member={groupMember} />);
 
       await waitFor(() => {
         expect(screen.getByTestId('group-member-list-item')).toHaveTextContent(groupMember.account.display_name);
@@ -52,7 +52,7 @@ describe('<GroupMemberListItem />', () => {
       });
 
       it('should render the correct badge', async () => {
-        render(<GroupMemberListItem group={group} member={groupMember} canPromoteToAdmin />);
+        render(<GroupMemberListItem group={group} member={groupMember} />);
 
         await waitFor(() => {
           expect(screen.getByTestId('role-badge')).toHaveTextContent('owner');
@@ -73,7 +73,7 @@ describe('<GroupMemberListItem />', () => {
       });
 
       it('should render the correct badge', async () => {
-        render(<GroupMemberListItem group={group} member={groupMember} canPromoteToAdmin />);
+        render(<GroupMemberListItem group={group} member={groupMember} />);
 
         await waitFor(() => {
           expect(screen.getByTestId('role-badge')).toHaveTextContent('admin');
@@ -94,7 +94,7 @@ describe('<GroupMemberListItem />', () => {
       });
 
       it('should render no correct badge', async () => {
-        render(<GroupMemberListItem group={group} member={groupMember} canPromoteToAdmin />);
+        render(<GroupMemberListItem group={group} member={groupMember} />);
 
         await waitFor(() => {
           expect(screen.queryAllByTestId('role-badge')).toHaveLength(0);
@@ -125,36 +125,19 @@ describe('<GroupMemberListItem />', () => {
         });
       });
 
-      describe('when "canPromoteToAdmin is true', () => {
-        it('should render dropdown with correct Owner actions', async () => {
-          const user = userEvent.setup();
+      it('should render dropdown with correct Owner actions', async () => {
+        const user = userEvent.setup();
 
-          render(<GroupMemberListItem group={group} member={groupMember} canPromoteToAdmin />);
+        render(<GroupMemberListItem group={group} member={groupMember} />);
 
-          await waitFor(async() => {
-            await user.click(screen.getByTestId('icon-button'));
-          });
-
-          const dropdownMenu = screen.getByTestId('dropdown-menu');
-          expect(dropdownMenu).toHaveTextContent('Assign admin role');
-          expect(dropdownMenu).toHaveTextContent('Kick @tiger from group');
-          expect(dropdownMenu).toHaveTextContent('Ban from group');
+        await waitFor(async() => {
+          await user.click(screen.getByTestId('icon-button'));
         });
-      });
 
-      describe('when "canPromoteToAdmin is false', () => {
-        it('should prevent promoting user to Admin', async () => {
-          const user = userEvent.setup();
-
-          render(<GroupMemberListItem group={group} member={groupMember} canPromoteToAdmin={false} />);
-
-          await waitFor(async() => {
-            await user.click(screen.getByTestId('icon-button'));
-            await user.click(screen.getByTitle('Assign admin role'));
-          });
-
-          expect(screen.getByTestId('toast')).toHaveTextContent('Admin limit reached');
-        });
+        const dropdownMenu = screen.getByTestId('dropdown-menu');
+        expect(dropdownMenu).toHaveTextContent('Assign admin role');
+        expect(dropdownMenu).toHaveTextContent('Kick @tiger from group');
+        expect(dropdownMenu).toHaveTextContent('Ban from group');
       });
     });
 
@@ -180,7 +163,7 @@ describe('<GroupMemberListItem />', () => {
       it('should render dropdown with correct Owner actions', async () => {
         const user = userEvent.setup();
 
-        render(<GroupMemberListItem group={group} member={groupMember} canPromoteToAdmin />);
+        render(<GroupMemberListItem group={group} member={groupMember} />);
 
         await waitFor(async() => {
           await user.click(screen.getByTestId('icon-button'));
@@ -219,7 +202,7 @@ describe('<GroupMemberListItem />', () => {
       it('should render dropdown with correct Admin actions', async () => {
         const user = userEvent.setup();
 
-        render(<GroupMemberListItem group={group} member={groupMember} canPromoteToAdmin />);
+        render(<GroupMemberListItem group={group} member={groupMember} />);
 
         await waitFor(async() => {
           await user.click(screen.getByTestId('icon-button'));
@@ -252,7 +235,7 @@ describe('<GroupMemberListItem />', () => {
       });
 
       it('should not render the dropdown', async () => {
-        render(<GroupMemberListItem group={group} member={groupMember} canPromoteToAdmin />);
+        render(<GroupMemberListItem group={group} member={groupMember} />);
 
         await waitFor(async() => {
           expect(screen.queryAllByTestId('icon-button')).toHaveLength(0);
@@ -280,7 +263,7 @@ describe('<GroupMemberListItem />', () => {
       });
 
       it('should not render the dropdown', async () => {
-        render(<GroupMemberListItem group={group} member={groupMember} canPromoteToAdmin />);
+        render(<GroupMemberListItem group={group} member={groupMember} />);
 
         await waitFor(async() => {
           expect(screen.queryAllByTestId('icon-button')).toHaveLength(0);
@@ -310,7 +293,7 @@ describe('<GroupMemberListItem />', () => {
     });
 
     it('should not render the dropdown', async () => {
-      render(<GroupMemberListItem group={group} member={groupMember} canPromoteToAdmin />);
+      render(<GroupMemberListItem group={group} member={groupMember} />);
 
       await waitFor(async() => {
         expect(screen.queryAllByTestId('icon-button')).toHaveLength(0);

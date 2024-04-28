@@ -27,7 +27,7 @@ const GroupGridItem = forwardRef((props: IGroup, ref: React.ForwardedRef<HTMLDiv
       }}
       data-testid='group-grid-item'
     >
-      <Link to={`/group/${group.slug}`}>
+      <Link to={`/group/${group.id}`}>
         <Stack
           className='aspect-h-7 aspect-w-10 h-full w-full overflow-hidden rounded-lg'
           ref={ref}

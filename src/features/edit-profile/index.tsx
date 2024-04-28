@@ -53,7 +53,6 @@ const messages = defineMessages({
   error: { id: 'edit_profile.error', defaultMessage: 'Profile update failed' },
   bioPlaceholder: { id: 'edit_profile.fields.bio_placeholder', defaultMessage: 'Tell us about yourself.' },
   displayNamePlaceholder: { id: 'edit_profile.fields.display_name_placeholder', defaultMessage: 'Name' },
-  websitePlaceholder: { id: 'edit_profile.fields.website_placeholder', defaultMessage: 'Display a Link' },
   locationPlaceholder: { id: 'edit_profile.fields.location_placeholder', defaultMessage: 'Location' },
   nip05Placeholder: { id: 'edit_profile.fields.nip05_placeholder', defaultMessage: 'user@{domain}' },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
@@ -120,8 +119,6 @@ interface AccountCredentials {
   hide_followers_count?: boolean;
   /** Pleroma: whether to publicly display follows count. */
   hide_follows_count?: boolean;
-  /** User's website URL. */
-  website?: string;
   /** User's location. */
   location?: string;
   /** User's birthday. */
@@ -147,7 +144,6 @@ const accountToCredentials = (account: Account): AccountCredentials => {
     hide_follows: hideNetwork,
     hide_followers_count: hideNetwork,
     hide_follows_count: hideNetwork,
-    website: account.website,
     location: account.location,
     birthday: account.pleroma?.birthday ?? undefined,
     nip05: account.source?.nostr?.nip05 ?? '',
@@ -350,19 +346,6 @@ const EditProfile: React.FC = () => {
               value={data.location}
               onChange={handleTextChange('location')}
               placeholder={intl.formatMessage(messages.locationPlaceholder)}
-            />
-          </FormGroup>
-        )}
-
-        {features.accountWebsite && (
-          <FormGroup
-            labelText={<FormattedMessage id='edit_profile.fields.website_label' defaultMessage='Website' />}
-          >
-            <Input
-              type='text'
-              value={data.website}
-              onChange={handleTextChange('website')}
-              placeholder={intl.formatMessage(messages.websitePlaceholder)}
             />
           </FormGroup>
         )}

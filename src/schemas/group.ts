@@ -6,7 +6,6 @@ import { unescapeHTML } from 'soapbox/utils/html';
 
 import { customEmojiSchema } from './custom-emoji';
 import { groupRelationshipSchema } from './group-relationship';
-import { groupTagSchema } from './group-tag';
 import { filteredArray, makeCustomEmojiMap } from './utils';
 
 const avatarMissing = require('soapbox/assets/images/avatar-missing.png');
@@ -20,7 +19,6 @@ const groupSchema = z.object({
   display_name: z.string().catch(''),
   domain: z.string().catch(''),
   emojis: filteredArray(customEmojiSchema),
-  group_visibility: z.string().catch(''), // TruthSocial
   header: z.string().catch(headerMissing),
   header_static: z.string().catch(''),
   id: z.coerce.string(),
@@ -30,18 +28,15 @@ const groupSchema = z.object({
   owner: z.object({ id: z.string() }),
   note: z.string().transform(note => note === '<p></p>' ? '' : note).catch(''),
   relationship: groupRelationshipSchema.nullable().catch(null), // Dummy field to be overwritten later
-  slug: z.string().catch(''), // TruthSocial
   source: z.object({
     note: z.string(),
   }).optional(), // TruthSocial
   statuses_visibility: z.string().catch('public'),
-  tags: z.array(groupTagSchema).catch([]),
   uri: z.string().catch(''),
   url: z.string().catch(''),
 }).transform(group => {
   group.avatar_static = group.avatar_static || group.avatar;
   group.header_static = group.header_static || group.header;
-  group.locked = group.locked || group.group_visibility === 'members_only'; // TruthSocial
 
   const customEmojiMap = makeCustomEmojiMap(group.emojis);
   return {

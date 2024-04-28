@@ -6,17 +6,17 @@ import { groupSchema, type Group } from 'soapbox/schemas/group';
 
 import { useGroupRelationships } from './useGroupRelationships';
 
-function useGroups(q: string = '') {
+function useGroups() {
   const api = useApi();
   const features = useFeatures();
 
   const { entities, ...result } = useEntities<Group>(
-    [Entities.GROUPS, 'search', q],
-    () => api.get('/api/v1/groups', { params: { q } }),
+    [Entities.GROUPS, 'search', ''],
+    () => api.get('/api/v1/groups'),
     { enabled: features.groups, schema: groupSchema },
   );
   const { relationships } = useGroupRelationships(
-    ['search', q],
+    ['search', ''],
     entities.map(entity => entity.id),
   );
 

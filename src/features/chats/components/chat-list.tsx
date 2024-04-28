@@ -14,15 +14,14 @@ import ChatListItem from './chat-list-item';
 interface IChatList {
   onClickChat: (chat: any) => void;
   useWindowScroll?: boolean;
-  searchValue?: string;
 }
 
-const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false, searchValue }) => {
+const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false }) => {
   const dispatch = useAppDispatch();
 
   const chatListRef = useRef(null);
 
-  const { chatsQuery: { data: chats, isFetching, hasNextPage, fetchNextPage } } = useChats(searchValue);
+  const { chatsQuery: { data: chats, isFetching, hasNextPage, fetchNextPage } } = useChats();
 
   const [isNearBottom, setNearBottom] = useState<boolean>(false);
   const [isNearTop, setNearTop] = useState<boolean>(true);

@@ -22,7 +22,6 @@ const NOTIFICATION_TYPES = [
 /** Notification types to exclude from the "All" filter by default. */
 const EXCLUDE_TYPES = [
   'pleroma:chat_mention',
-  'chat', // TruthSocial
 ] as const;
 
 type NotificationType = typeof NOTIFICATION_TYPES[number];

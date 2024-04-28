@@ -52,7 +52,7 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const { createChatMessage, acceptChat } = useChatActions(chat.id);
+  const { createChatMessage } = useChatActions(chat.id);
   const attachmentLimit = useAppSelector(state => state.instance.configuration.chats.max_media_attachments);
 
   const [content, setContent] = useState<string>('');
@@ -95,10 +95,6 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
   const sendMessage = () => {
     if (!isSubmitDisabled && !createChatMessage.isPending) {
       submitMessage();
-
-      if (!chat.accepted) {
-        acceptChat.mutate();
-      }
     }
   };
 

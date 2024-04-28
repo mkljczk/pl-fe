@@ -45,21 +45,19 @@ describe('<ChatPane />', () => {
   //   });
   // });
 
-  describe('when the software is not Truth Social', () => {
-    beforeEach(() => {
-      __stub((mock) => {
-        mock.onGet('/api/v1/pleroma/chats').reply(200, chats, {
-          link: '<https://example.com/api/v1/pleroma/chats?since_id=2>; rel=\'prev\'',
-        });
+  beforeEach(() => {
+    __stub((mock) => {
+      mock.onGet('/api/v1/pleroma/chats').reply(200, chats, {
+        link: '<https://example.com/api/v1/pleroma/chats?since_id=2>; rel=\'prev\'',
       });
     });
+  });
 
-    it('does not render the search input', async () => {
-      renderComponentWithChatContext();
+  it('does not render the search input', async () => {
+    renderComponentWithChatContext();
 
-      await waitFor(() => {
-        expect(screen.queryAllByTestId('chat-search-input')).toHaveLength(0);
-      });
+    await waitFor(() => {
+      expect(screen.queryAllByTestId('chat-search-input')).toHaveLength(0);
     });
   });
 });

@@ -10,9 +10,8 @@ import {
   CtaBanner,
   GroupMediaPanel,
   SignUpPanel,
-  SuggestedGroupsPanel,
 } from 'soapbox/features/ui/util/async-components';
-import { useFeatures, useOwnAccount } from 'soapbox/hooks';
+import { useOwnAccount } from 'soapbox/hooks';
 
 import type { Group } from 'soapbox/schemas';
 
@@ -90,7 +89,6 @@ const BlockedBlankslate = ({ group }: { group: Group }) => (
 /** Page to display a group. */
 const GroupPage: React.FC<IGroupPage> = ({ params, children }) => {
   const intl = useIntl();
-  const features = useFeatures();
   const match = useRouteMatch();
   const { account: me } = useOwnAccount();
 
@@ -108,34 +106,26 @@ const GroupPage: React.FC<IGroupPage> = ({ params, children }) => {
     const items = [];
     items.push({
       text: intl.formatMessage(messages.all),
-      to: `/group/${group?.slug}`,
-      name: '/group/:groupSlug',
+      to: `/group/${id}`,
+      name: '/group/:groupId',
     });
-
-    if (features.groupsTags) {
-      items.push({
-        text: intl.formatMessage(messages.tags),
-        to: `/group/${group?.slug}/tags`,
-        name: '/group/:groupSlug/tags',
-      });
-    }
 
     items.push(
       {
         text: intl.formatMessage(messages.media),
-        to: `/group/${group?.slug}/media`,
-        name: '/group/:groupSlug/media',
+        to: `/group/${id}/media`,
+        name: '/group/:groupId/media',
       },
       {
         text: intl.formatMessage(messages.members),
-        to: `/group/${group?.slug}/members`,
-        name: '/group/:groupSlug/members',
+        to: `/group/${id}/members`,
+        name: '/group/:groupId/members',
         count: pending.length,
       },
     );
 
     return items;
-  }, [features.groupsTags, pending.length, group?.slug]);
+  }, [pending.length, id]);
 
   const renderChildren = () => {
     if (isDeleted) {
@@ -174,7 +164,6 @@ const GroupPage: React.FC<IGroupPage> = ({ params, children }) => {
           <SignUpPanel />
         )}
         <GroupMediaPanel group={group} />
-        <SuggestedGroupsPanel />
         <LinkFooter />
       </Layout.Aside>
     </>

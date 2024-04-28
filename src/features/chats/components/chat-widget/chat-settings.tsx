@@ -3,12 +3,10 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { blockAccount, unblockAccount } from 'soapbox/actions/accounts';
 import { openModal } from 'soapbox/actions/modals';
-import List, { ListItem } from 'soapbox/components/list';
-import { Avatar, HStack, Icon, Select, Stack, Text } from 'soapbox/components/ui';
+import { Avatar, HStack, Icon, Stack, Text } from 'soapbox/components/ui';
 import { ChatWidgetScreens, useChatContext } from 'soapbox/contexts/chat-context';
 import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
-import { messageExpirationOptions, MessageExpirationValues, useChatActions } from 'soapbox/queries/chats';
-import { secondsToDays } from 'soapbox/utils/numbers';
+import { useChatActions } from 'soapbox/queries/chats';
 
 import ChatPaneHeader from './chat-pane-header';
 
@@ -26,8 +24,6 @@ const messages = defineMessages({
   blockUser: { id: 'chat_settings.options.block_user', defaultMessage: 'Block @{acct}' },
   unblockUser: { id: 'chat_settings.options.unblock_user', defaultMessage: 'Unblock @{acct}' },
   leaveChat: { id: 'chat_settings.options.leave_chat', defaultMessage: 'Leave Chat' },
-  autoDeleteLabel: { id: 'chat_settings.auto_delete.label', defaultMessage: 'Auto-delete messages' },
-  autoDeleteDays: { id: 'chat_settings.auto_delete.days', defaultMessage: '{day, plural, one {# day} other {# days}}' },
 });
 
 const ChatSettings = () => {
@@ -36,9 +32,7 @@ const ChatSettings = () => {
   const features = useFeatures();
 
   const { chat, changeScreen, toggleChatPane } = useChatContext();
-  const { deleteChat, updateChat } = useChatActions(chat?.id as string);
-
-  const handleUpdateChat = (value: MessageExpirationValues) => updateChat.mutate({ message_expiration: value });
+  const { deleteChat } = useChatActions(chat?.id as string);
 
   const isBlocking = useAppSelector((state) => state.getIn(['relationships', chat?.account?.id, 'blocking']));
 
@@ -115,24 +109,6 @@ const ChatSettings = () => {
             <Text size='sm' theme='primary'>@{chat.account.acct}</Text>
           </Stack>
         </HStack>
-
-        {features.chatsExpiration && (
-          <List>
-            <ListItem label={intl.formatMessage(messages.autoDeleteLabel)}>
-              <Select defaultValue={chat.message_expiration} onChange={(event) => handleUpdateChat(Number(event.target.value))}>
-                {messageExpirationOptions.map((duration) => {
-                  const inDays = secondsToDays(duration);
-
-                  return (
-                    <option key={duration} value={duration}>
-                      {intl.formatMessage(messages.autoDeleteDays, { day: inDays })}
-                    </option>
-                  );
-                })}
-              </Select>
-            </ListItem>
-          </List>
-        )}
 
         <Stack space={5}>
           <button onClick={isBlocking ? handleUnblockUser : handleBlockUser} className='flex w-full items-center space-x-2 text-sm font-bold text-primary-600 dark:text-accent-blue'>

@@ -3,9 +3,8 @@ import React, { useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { z } from 'zod';
 
-import { useCreateGroup, useGroupValidation, type CreateGroupParams } from 'soapbox/api/hooks';
+import { useCreateGroup, type CreateGroupParams } from 'soapbox/api/hooks';
 import { Modal, Stack } from 'soapbox/components/ui';
-import { useDebounce } from 'soapbox/hooks';
 import { type Group } from 'soapbox/schemas';
 import toast from 'soapbox/toast';
 
@@ -31,7 +30,6 @@ interface ICreateGroupModal {
 
 const CreateGroupModal: React.FC<ICreateGroupModal> = ({ onClose }) => {
   const intl = useIntl();
-  const debounce = useDebounce;
 
   const [group, setGroup] = useState<Group | null>(null);
   const [params, setParams] = useState<CreateGroupParams>({
@@ -40,9 +38,6 @@ const CreateGroupModal: React.FC<ICreateGroupModal> = ({ onClose }) => {
   const [currentStep, setCurrentStep] = useState<Steps>(Steps.ONE);
 
   const { createGroup, isSubmitting } = useCreateGroup();
-
-  const debouncedName = debounce(params.display_name || '', 300);
-  const { data: { isValid } } = useGroupValidation(debouncedName);
 
   const handleClose = () => {
     onClose('MANAGE_GROUP');
@@ -117,7 +112,7 @@ const CreateGroupModal: React.FC<ICreateGroupModal> = ({ onClose }) => {
       title={renderModalTitle()}
       confirmationAction={handleNextStep}
       confirmationText={confirmationText}
-      confirmationDisabled={isSubmitting || (currentStep === Steps.TWO && !isValid)}
+      confirmationDisabled={isSubmitting}
       confirmationFullWidth
       onClose={handleClose}
     >

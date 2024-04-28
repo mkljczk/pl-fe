@@ -4,15 +4,15 @@ import { useLocation, useRouteMatch } from 'react-router-dom';
 
 import { groupComposeModal } from 'soapbox/actions/compose';
 import { openModal } from 'soapbox/actions/modals';
-import { useGroupLookup } from 'soapbox/api/hooks';
+import { useGroup } from 'soapbox/api/hooks';
 import { Avatar, Button, HStack } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
 
 const ComposeButton = () => {
   const location = useLocation();
   const isOnGroupPage = location.pathname.startsWith('/group/');
-  const match = useRouteMatch<{ groupSlug: string }>('/group/:groupSlug');
-  const { entity: group } = useGroupLookup(match?.params.groupSlug || '');
+  const match = useRouteMatch<{ groupId: string }>('/group/:groupId');
+  const { group } = useGroup(match?.params.groupId || '');
   const isGroupMember = !!group?.relationship?.member;
 
   if (isOnGroupPage && isGroupMember) {
@@ -40,8 +40,8 @@ const HomeComposeButton = () => {
 
 const GroupComposeButton = () => {
   const dispatch = useAppDispatch();
-  const match = useRouteMatch<{ groupSlug: string }>('/group/:groupSlug');
-  const { entity: group } = useGroupLookup(match?.params.groupSlug || '');
+  const match = useRouteMatch<{ groupId: string }>('/group/:groupId');
+  const { group } = useGroup(match?.params.groupId || '');
 
   if (!group) return null;
 

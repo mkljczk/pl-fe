@@ -6,7 +6,6 @@
 
 import toast from 'soapbox/toast';
 import { getLoggedInAccount } from 'soapbox/utils/auth';
-import { parseVersion, TRUTHSOCIAL } from 'soapbox/utils/features';
 import { normalizeUsername } from 'soapbox/utils/input';
 
 import api from '../api';
@@ -86,8 +85,6 @@ const changePassword = (oldPassword: string, newPassword: string, confirmation: 
 const resetPassword = (usernameOrEmail: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const input = normalizeUsername(usernameOrEmail);
-    const state = getState();
-    const v = parseVersion(state.instance.version);
 
     dispatch({ type: RESET_PASSWORD_REQUEST });
 
@@ -96,28 +93,10 @@ const resetPassword = (usernameOrEmail: string) =>
         ? { email: input }
         : { nickname: input, username: input };
 
-    const endpoint =
-      v.software === TRUTHSOCIAL
-        ? '/api/v1/truth/password_reset/request'
-        : '/auth/password';
-
-    return api(getState).post(endpoint, params).then(() => {
+    return api(getState).post('/auth/password', params).then(() => {
       dispatch({ type: RESET_PASSWORD_SUCCESS });
     }).catch(error => {
       dispatch({ type: RESET_PASSWORD_FAIL, error });
-      throw error;
-    });
-  };
-
-const resetPasswordConfirm = (password: string, token: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const params = { password, reset_password_token: token };
-    dispatch({ type: RESET_PASSWORD_CONFIRM_REQUEST });
-
-    return api(getState).post('/api/v1/truth/password_reset/confirm', params).then(() => {
-      dispatch({ type: RESET_PASSWORD_CONFIRM_SUCCESS });
-    }).catch(error => {
-      dispatch({ type: RESET_PASSWORD_CONFIRM_FAIL, error });
       throw error;
     });
   };
@@ -136,10 +115,6 @@ const changeEmail = (email: string, password: string) =>
       throw error;
     });
   };
-
-const confirmChangedEmail = (token: string) =>
-  (_dispatch: AppDispatch, getState: () => RootState) =>
-    api(getState).get(`/api/v1/truth/email/confirm?confirmation_token=${token}`);
 
 const deleteAccount = (password: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -203,9 +178,7 @@ export {
   revokeOAuthTokenById,
   changePassword,
   resetPassword,
-  resetPasswordConfirm,
   changeEmail,
-  confirmChangedEmail,
   deleteAccount,
   moveAccount,
 };

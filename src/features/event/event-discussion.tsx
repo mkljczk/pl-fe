@@ -1,10 +1,9 @@
 import { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
-import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { eventDiscussionCompose } from 'soapbox/actions/compose';
-import { fetchStatusWithContext, fetchNext } from 'soapbox/actions/statuses';
+import { fetchStatusWithContext } from 'soapbox/actions/statuses';
 import MissingIndicator from 'soapbox/components/missing-indicator';
 import ScrollableList from 'soapbox/components/scrollable-list';
 import Tombstone from 'soapbox/components/tombstone';
@@ -50,16 +49,14 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
   });
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
-  const [next, setNext] = useState<string>();
 
   const node = useRef<HTMLDivElement>(null);
   const scroller = useRef<VirtuosoHandle>(null);
 
-  const fetchData = async() => {
+  const fetchData = () => {
     const { params } = props;
     const { statusId } = params;
-    const { next } = await dispatch(fetchStatusWithContext(statusId));
-    setNext(next);
+    return dispatch(fetchStatusWithContext(statusId));
   };
 
   useEffect(() => {
@@ -147,14 +144,6 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
     });
   };
 
-  const handleLoadMore = useCallback(debounce(() => {
-    if (next && status) {
-      dispatch(fetchNext(status.id, next)).then(({ next }) => {
-        setNext(next);
-      }).catch(() => {});
-    }
-  }, 300, { leading: true }), [next, status]);
-
   const hasDescendants = descendantsIds.size > 0;
 
   if (!status && isLoaded) {
@@ -182,8 +171,6 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
         <ScrollableList
           id='thread'
           ref={scroller}
-          hasMore={!!next}
-          onLoadMore={handleLoadMore}
           placeholderComponent={() => <PlaceholderStatus variant='slim' />}
           initialTopMostItemIndex={0}
           emptyMessage={<FormattedMessage id='event.discussion.empty' defaultMessage='No one has commented this event yet. When someone does, they will appear here.' />}

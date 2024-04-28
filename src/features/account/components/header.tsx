@@ -24,7 +24,7 @@ import ActionButton from 'soapbox/features/ui/components/action-button';
 import SubscriptionButton from 'soapbox/features/ui/components/subscription-button';
 import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
 import { normalizeAttachment } from 'soapbox/normalizers';
-import { ChatKeys, useChats } from 'soapbox/queries/chats';
+import { useChats } from 'soapbox/queries/chats';
 import { queryClient } from 'soapbox/queries/client';
 import { Account } from 'soapbox/schemas';
 import toast from 'soapbox/toast';
@@ -101,7 +101,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
     onSuccess: (response) => {
       history.push(`/chats/${response.data.id}`);
       queryClient.invalidateQueries({
-        queryKey: ChatKeys.chatSearch(),
+        queryKey: ['chats', 'search'],
       });
     },
   });
@@ -555,24 +555,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       return null;
     }
 
-    if (features.chatsWithFollowers) { // Truth Social
-      const canChat = account.relationship?.followed_by;
-      if (!canChat) {
-        return null;
-      }
-
-      return (
-        <IconButton
-          src={require('@tabler/icons/outline/messages.svg')}
-          onClick={() => createAndNavigateToChat.mutate(account.id)}
-          title={intl.formatMessage(messages.chat, { name: account.username })}
-          theme='outlined'
-          className='px-2'
-          iconClassName='h-4 w-4'
-          disabled={createAndNavigateToChat.isPending}
-        />
-      );
-    } else if (account.pleroma?.accepts_chat_messages) {
+    if (account.pleroma?.accepts_chat_messages) {
       return (
         <IconButton
           src={require('@tabler/icons/outline/messages.svg')}

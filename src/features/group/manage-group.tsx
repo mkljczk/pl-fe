@@ -6,10 +6,9 @@ import { openModal } from 'soapbox/actions/modals';
 import { useDeleteGroup, useGroup } from 'soapbox/api/hooks';
 import List, { ListItem } from 'soapbox/components/list';
 import { CardBody, CardHeader, CardTitle, Column, Spinner, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useBackend, useGroupsPath } from 'soapbox/hooks';
+import { useAppDispatch } from 'soapbox/hooks';
 import { GroupRoles } from 'soapbox/schemas/group-member';
 import toast from 'soapbox/toast';
-import { TRUTHSOCIAL } from 'soapbox/utils/features';
 
 import ColumnForbidden from '../ui/components/column-forbidden';
 
@@ -36,9 +35,7 @@ interface IManageGroup {
 const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
   const { groupId: id } = params;
 
-  const backend = useBackend();
   const dispatch = useAppDispatch();
-  const groupsPath = useGroupsPath();
   const history = useHistory();
   const intl = useIntl();
 
@@ -70,14 +67,14 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
         deleteGroup.mutate(group.id, {
           onSuccess() {
             toast.success(intl.formatMessage(messages.deleteSuccess));
-            history.push(groupsPath);
+            history.push('/groups');
           },
         });
       },
     }));
 
   return (
-    <Column label={intl.formatMessage(messages.heading)} backHref={`/group/${group.slug}`}>
+    <Column label={intl.formatMessage(messages.heading)} backHref={`/group/${group.id}`}>
       <CardBody className='space-y-4'>
         {isOwner && (
           <>
@@ -86,7 +83,7 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
             </CardHeader>
 
             <List>
-              <ListItem label={intl.formatMessage(messages.editGroup)} to={`/group/${group.slug}/manage/edit`}>
+              <ListItem label={intl.formatMessage(messages.editGroup)} to={`/group/${group.id}/manage/edit`}>
                 <span dangerouslySetInnerHTML={{ __html: group.display_name_html }} />
               </ListItem>
             </List>
@@ -98,11 +95,9 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
         </CardHeader>
 
         <List>
-          {backend.software !== TRUTHSOCIAL && (
-            <ListItem label={intl.formatMessage(messages.pendingRequests)} to={`/group/${group.slug}/manage/requests`} />
-          )}
+          <ListItem label={intl.formatMessage(messages.pendingRequests)} to={`/group/${group.id}/manage/requests`} />
 
-          <ListItem label={intl.formatMessage(messages.blockedMembers)} to={`/group/${group.slug}/manage/blocks`} />
+          <ListItem label={intl.formatMessage(messages.blockedMembers)} to={`/group/${group.id}/manage/blocks`} />
         </List>
 
         {isOwner && (

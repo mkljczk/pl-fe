@@ -5,7 +5,7 @@ import { useLocation, useRouteMatch } from 'react-router-dom';
 
 import { groupComposeModal } from 'soapbox/actions/compose';
 import { openModal } from 'soapbox/actions/modals';
-import { useGroupLookup } from 'soapbox/api/hooks';
+import { useGroup } from 'soapbox/api/hooks';
 import { Avatar, HStack, Icon } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
 
@@ -53,8 +53,8 @@ const GroupFAB: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const match = useRouteMatch<{ groupSlug: string }>('/group/:groupSlug');
-  const { entity: group } = useGroupLookup(match?.params.groupSlug || '');
+  const match = useRouteMatch<{ groupId: string }>('/group/:groupId');
+  const { group } = useGroup(match?.params.groupId || '');
 
   if (!group) return null;
 

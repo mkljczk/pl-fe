@@ -18,14 +18,14 @@ interface ChatPayload extends Omit<Chat, 'last_message'> {
  * @param newChat - Chat entity.
  */
 const updateChatInChatSearchQuery = (newChat: ChatPayload) => {
-  updatePageItem<ChatPayload>(ChatKeys.chatSearch(), newChat as any, (o, n) => o.id === n.id);
+  updatePageItem<ChatPayload>(['chats', 'search'], newChat as any, (o, n) => o.id === n.id);
 };
 
 /**
  * Re-order the ChatSearch query by the last message timestamp.
  */
 const reOrderChatListItems = () => {
-  sortQueryData<ChatPayload>(ChatKeys.chatSearch(), (chatA, chatB) => {
+  sortQueryData<ChatPayload>(['chats', 'search'], (chatA, chatB) => {
     return compareDate(
       chatA.last_message?.created_at as string,
       chatB.last_message?.created_at as string,
@@ -40,7 +40,7 @@ const reOrderChatListItems = () => {
  */
 const checkIfChatExists = (chatId: string) => {
   const currentChats = flattenPages(
-    queryClient.getQueryData<InfiniteData<PaginatedResult<Chat>>>(ChatKeys.chatSearch()),
+    queryClient.getQueryData<InfiniteData<PaginatedResult<Chat>>>(['chats', 'search']),
   );
 
   return currentChats?.find((chat: Chat) => chat.id === chatId);
@@ -51,7 +51,7 @@ const checkIfChatExists = (chatId: string) => {
  */
 const invalidateChatSearchQuery = () => {
   queryClient.invalidateQueries({
-    queryKey: ChatKeys.chatSearch(),
+    queryKey: ['chats', 'search'],
   });
 };
 
@@ -80,7 +80,7 @@ const updateChatListItem = (newChat: ChatPayload) => {
 /** Get unread chats count. */
 const getUnreadChatsCount = (): number => {
   const chats = flattenPages(
-    queryClient.getQueryData<InfiniteData<PaginatedResult<Chat>>>(ChatKeys.chatSearch()),
+    queryClient.getQueryData<InfiniteData<PaginatedResult<Chat>>>(['chats', 'search']),
   );
 
   return sumBy(chats, chat => chat.unread);

@@ -3,8 +3,6 @@ import punycode from 'punycode';
 import DOMPurify from 'isomorphic-dompurify';
 import { z } from 'zod';
 
-import { groupSchema } from './group';
-
 const IDNA_PREFIX = 'xn--';
 
 /**
@@ -17,7 +15,6 @@ const cardSchema = z.object({
   blurhash: z.string().nullable().catch(null),
   description: z.string().catch(''),
   embed_url: z.string().url().catch(''),
-  group: groupSchema.nullable().catch(null), // TruthSocial
   height: z.number().catch(0),
   html: z.string().catch(''),
   image: z.string().nullable().catch(null),

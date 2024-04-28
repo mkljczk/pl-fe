@@ -52,7 +52,6 @@ import {
   COMPOSE_SET_STATUS,
   COMPOSE_EVENT_REPLY,
   COMPOSE_EDITOR_STATE_SET,
-  COMPOSE_SET_GROUP_TIMELINE_VISIBLE,
   ComposeAction,
   COMPOSE_CHANGE_MEDIA_ORDER,
 } from '../actions/compose';
@@ -108,7 +107,6 @@ export const ReducerCompose = ImmutableRecord({
   tagHistory: ImmutableList<string>(),
   text: '',
   to: ImmutableOrderedSet<string>(),
-  group_timeline_visible: false, // TruthSocial
 });
 
 type State = ImmutableMap<string, Compose>;
@@ -345,12 +343,8 @@ export default function compose(state = initialState, action: ComposeAction | Ev
         map.set('spoiler_text', '');
 
         if (action.status.visibility === 'group') {
-          if (action.status.group?.group_visibility === 'everyone') {
-            map.set('privacy', privacyPreference('public', defaultCompose.privacy));
-          } else if (action.status.group?.group_visibility === 'members_only') {
-            map.set('group_id', action.status.getIn(['group', 'id']) as string);
-            map.set('privacy', 'group');
-          }
+          map.set('group_id', action.status.getIn(['group', 'id']) as string);
+          map.set('privacy', 'group');
         }
       }));
     case COMPOSE_SUBMIT_REQUEST:
@@ -508,8 +502,6 @@ export default function compose(state = initialState, action: ComposeAction | Ev
       return updateCompose(state, action.id, compose => compose.update('to', mentions => mentions!.add(action.account)));
     case COMPOSE_REMOVE_FROM_MENTIONS:
       return updateCompose(state, action.id, compose => compose.update('to', mentions => mentions!.delete(action.account)));
-    case COMPOSE_SET_GROUP_TIMELINE_VISIBLE:
-      return updateCompose(state, action.id, compose => compose.set('group_timeline_visible', action.groupTimelineVisible));
     case ME_FETCH_SUCCESS:
     case ME_PATCH_SUCCESS:
       return updateCompose(state, 'default', compose => importAccount(compose, action.me));

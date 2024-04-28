@@ -243,9 +243,6 @@ const expandGroupTimeline = (id: string, { maxId }: Record<string, any> = {}, do
 const expandGroupFeaturedTimeline = (id: string) =>
   expandTimeline(`group:${id}:pinned`, `/api/v1/timelines/group/${id}`, { pinned: true });
 
-const expandGroupTimelineFromTag = (id: string, tagName: string, { maxId }: Record<string, any> = {}, done = noOp) =>
-  expandTimeline(`group:tags:${id}:${tagName}`, `/api/v1/timelines/group/${id}/tags/${tagName}`, { max_id: maxId }, done);
-
 const expandGroupMediaTimeline = (id: string | number, { maxId }: Record<string, any> = {}) =>
   expandTimeline(`group:${id}:media`, `/api/v1/timelines/group/${id}`, { max_id: maxId, only_media: true, limit: 40, with_muted: true });
 
@@ -345,7 +342,6 @@ export {
   expandListTimeline,
   expandGroupTimeline,
   expandGroupFeaturedTimeline,
-  expandGroupTimelineFromTag,
   expandGroupMediaTimeline,
   expandHashtagTimeline,
   expandTimelineRequest,

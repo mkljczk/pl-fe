@@ -97,7 +97,6 @@ const baseAccountSchema = z.object({
   roles: filteredArray(roleSchema),
   source: z.object({
     approved: z.boolean().catch(true),
-    chats_onboarded: z.boolean().catch(true),
     fields: filteredArray(fieldSchema),
     note: z.string().catch(''),
     pleroma: z.object({
@@ -114,7 +113,6 @@ const baseAccountSchema = z.object({
   url: z.string().url(),
   username: z.string().catch(''),
   verified: z.boolean().catch(false),
-  website: z.string().catch(''),
 });
 
 type BaseAccount = z.infer<typeof baseAccountSchema>;

@@ -4,11 +4,10 @@ import { Components, Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 
 import { Avatar, Button, Divider, Spinner, Stack, Text } from 'soapbox/components/ui';
 import PlaceholderChatMessage from 'soapbox/features/placeholder/components/placeholder-chat-message';
-import { useAppSelector, useOwnAccount } from 'soapbox/hooks';
+import { useAppSelector } from 'soapbox/hooks';
 import { IChat, useChatActions, useChatMessages } from 'soapbox/queries/chats';
 
 import ChatMessage from './chat-message';
-import ChatMessageListIntro from './chat-message-list-intro';
 
 import type { ChatMessage as ChatMessageEntity } from 'soapbox/types/entities';
 
@@ -69,10 +68,6 @@ interface IChatMessageList {
 /** Scrollable list of chat messages. */
 const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
   const intl = useIntl();
-  const { account } = useOwnAccount();
-
-  const myLastReadMessageDateString = chat.latest_read_message_by_account?.find((latest) => latest.id === account?.id)?.date;
-  const myLastReadMessageTimestamp = myLastReadMessageDateString ? new Date(myLastReadMessageDateString) : null;
 
   const node = useRef<VirtuosoHandle>(null);
   const [firstItemIndex, setFirstItemIndex] = useState(START_INDEX - 20);
@@ -174,14 +169,13 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
 
     const lastMessageId = lastMessage.id;
     const isMessagePending = lastMessage.pending;
-    const isAlreadyRead = myLastReadMessageTimestamp ? myLastReadMessageTimestamp >= new Date(lastMessage.created_at) : false;
 
     /**
      * Only "mark the message as read" if..
      * 1) it is not pending and
      * 2) it has not already been read
     */
-    if (!isMessagePending && !isAlreadyRead) {
+    if (!isMessagePending) {
       markChatAsRead(lastMessageId);
     }
   }, [formattedChatMessages.length]);
@@ -263,10 +257,6 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
             Header: () => {
               if (hasNextPage || isFetchingNextPage) {
                 return <Spinner withText={false} />;
-              }
-
-              if (!hasNextPage && !isLoading) {
-                return <ChatMessageListIntro />;
               }
 
               return null;

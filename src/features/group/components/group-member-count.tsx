@@ -12,7 +12,7 @@ interface IGroupMemberCount {
 
 const GroupMemberCount = ({ group }: IGroupMemberCount) => {
   return (
-    <Link to={`/group/${group.slug}/members`} className='hover:underline'>
+    <Link to={`/group/${group.id}/members`} className='hover:underline'>
       <Text theme='inherit' tag='span' size='sm' weight='medium' data-testid='group-member-count'>
         {shortNumberFormat(group.members_count)}
         {' '}

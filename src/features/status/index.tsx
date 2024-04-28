@@ -1,12 +1,8 @@
-import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 
-import {
-  fetchStatusWithContext,
-  fetchNext,
-} from 'soapbox/actions/statuses';
+import { fetchStatusWithContext } from 'soapbox/actions/statuses';
 import MissingIndicator from 'soapbox/components/missing-indicator';
 import PullToRefresh from 'soapbox/components/pull-to-refresh';
 import { Column, Stack } from 'soapbox/components/ui';
@@ -38,7 +34,6 @@ const messages = defineMessages({
 type RouteParams = {
   statusId: string;
   groupId?: string;
-  groupSlug?: string;
 };
 
 interface IStatusDetails {
@@ -54,14 +49,12 @@ const StatusDetails: React.FC<IStatusDetails> = (props) => {
   const status = useAppSelector((state) => getStatus(state, { id: props.params.statusId }));
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
-  const [next, setNext] = useState<string>();
 
   /** Fetch the status (and context) from the API. */
-  const fetchData = async () => {
+  const fetchData = () => {
     const { params } = props;
     const { statusId } = params;
-    const { next } = await dispatch(fetchStatusWithContext(statusId));
-    setNext(next);
+    return dispatch(fetchStatusWithContext(statusId));
   };
 
   // Load data.
@@ -72,14 +65,6 @@ const StatusDetails: React.FC<IStatusDetails> = (props) => {
       setIsLoaded(true);
     });
   }, [props.params.statusId]);
-
-  const handleLoadMore = useCallback(debounce(() => {
-    if (next && status) {
-      dispatch(fetchNext(status.id, next)).then(({ next }) => {
-        setNext(next);
-      }).catch(() => { });
-    }
-  }, 300, { leading: true }), [next, status]);
 
   const handleRefresh = () => {
     return fetchData();
@@ -104,8 +89,8 @@ const StatusDetails: React.FC<IStatusDetails> = (props) => {
   }
 
   if (status.group && typeof status.group === 'object') {
-    if (status.group.slug && !props.params.groupSlug) {
-      return <Redirect to={`/group/${status.group.slug}/posts/${props.params.statusId}`} />;
+    if (status.group.id && !props.params.groupId) {
+      return <Redirect to={`/group/${status.group.id}/posts/${props.params.statusId}`} />;
     }
   }
 
@@ -118,11 +103,7 @@ const StatusDetails: React.FC<IStatusDetails> = (props) => {
     <Stack space={4}>
       <Column label={intl.formatMessage(titleMessage())}>
         <PullToRefresh onRefresh={handleRefresh}>
-          <Thread
-            status={status}
-            next={next}
-            handleLoadMore={handleLoadMore}
-          />
+          <Thread status={status} />
         </PullToRefresh>
       </Column>
 

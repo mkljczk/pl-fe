@@ -11,7 +11,6 @@ import { useUpdateCredentials } from 'soapbox/queries/accounts';
 
 type FormData = {
   accepts_chat_messages?: boolean;
-  chats_onboarded: boolean;
 }
 
 const messages = defineMessages({
@@ -32,7 +31,6 @@ const ChatPageSettings = () => {
   const updateCredentials = useUpdateCredentials();
 
   const [data, setData] = useState<FormData>({
-    chats_onboarded: true,
     accepts_chat_messages: account?.pleroma?.accepts_chat_messages === true,
   });
 

@@ -7,9 +7,8 @@ import { ChatWidgetScreens, useChatContext } from 'soapbox/contexts/chat-context
 import { useStatContext } from 'soapbox/contexts/stat-context';
 import { useApi, useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
 import { normalizeChatMessage } from 'soapbox/normalizers';
-import toast from 'soapbox/toast';
 import { ChatMessage } from 'soapbox/types/entities';
-import { reOrderChatListItems, updateChatMessage } from 'soapbox/utils/chats';
+import { reOrderChatListItems } from 'soapbox/utils/chats';
 import { flattenPages, PaginatedResult, updatePageItem } from 'soapbox/utils/queries';
 
 import { queryClient } from './client';
@@ -17,64 +16,24 @@ import { useFetchRelationships } from './relationships';
 
 import type { Account } from 'soapbox/schemas';
 
-export const messageExpirationOptions = [604800, 1209600, 2592000, 7776000];
-
-export enum MessageExpirationValues {
-  'SEVEN' = messageExpirationOptions[0],
-  'FOURTEEN' = messageExpirationOptions[1],
-  'THIRTY' = messageExpirationOptions[2],
-  'NINETY' = messageExpirationOptions[3]
-}
-
 export interface IChat {
-  accepted: boolean;
   account: Account;
-  chat_type: 'channel' | 'direct';
   created_at: string;
-  created_by_account: string;
-  discarded_at: null | string;
   id: string;
   last_message: null | {
     account_id: string;
     chat_id: string;
     content: string;
     created_at: string;
-    discarded_at: string | null;
     id: string;
     unread: boolean;
   };
-  latest_read_message_by_account?: {
-    id: string;
-    date: string;
-  }[];
-  latest_read_message_created_at: null | string;
-  message_expiration?: MessageExpirationValues;
   unread: number;
-}
-
-type UpdateChatVariables = {
-  message_expiration: MessageExpirationValues;
-}
-
-type CreateReactionVariables = {
-  messageId: string;
-  emoji: string;
-  chatMessage?: ChatMessage;
 }
 
 const ChatKeys = {
   chat: (chatId?: string) => ['chats', 'chat', chatId] as const,
   chatMessages: (chatId: string) => ['chats', 'messages', chatId] as const,
-  chatSearch: (searchQuery?: string) => searchQuery ? ['chats', 'search', searchQuery] : ['chats', 'search'] as const,
-};
-
-/** Check if item is most recent */
-const isLastMessage = (chatMessageId: string): boolean => {
-  const queryData = queryClient.getQueryData<InfiniteData<PaginatedResult<IChat>>>(ChatKeys.chatSearch());
-  const items = flattenPages<IChat>(queryData);
-  const chat = items?.find((item) => item.last_message?.id === chatMessageId);
-
-  return !!chat;
 };
 
 const useChatMessages = (chat: IChat) => {
@@ -122,7 +81,7 @@ const useChatMessages = (chat: IChat) => {
   };
 };
 
-const useChats = (search?: string) => {
+const useChats = () => {
   const api = useApi();
   const dispatch = useAppDispatch();
   const features = useFeatures();
@@ -133,11 +92,7 @@ const useChats = (search?: string) => {
     const endpoint = features.chatsV2 ? '/api/v2/pleroma/chats' : '/api/v1/pleroma/chats';
     const nextPageLink = pageParam?.link;
     const uri = nextPageLink || endpoint;
-    const response = await api.get<IChat[]>(uri, {
-      params: search ? {
-        search,
-      } : undefined,
-    });
+    const response = await api.get<IChat[]>(uri);
     const { data } = response;
 
     const link = getNextLink(response);
@@ -157,7 +112,7 @@ const useChats = (search?: string) => {
   };
 
   const queryInfo = useInfiniteQuery({
-    queryKey: ChatKeys.chatSearch(search),
+    queryKey: ['chats', 'search'],
     queryFn: ({ pageParam }) => getChats(pageParam),
     placeholderData: keepPreviousData,
     enabled: features.chats,
@@ -219,8 +174,8 @@ const useChatActions = (chatId: string) => {
   const markChatAsRead = async (lastReadId: string) => {
     return api.post<IChat>(`/api/v1/pleroma/chats/${chatId}/read`, { last_read_id: lastReadId })
       .then(({ data }) => {
-        updatePageItem(ChatKeys.chatSearch(), data, (o, n) => o.id === n.id);
-        const queryData = queryClient.getQueryData<InfiniteData<PaginatedResult<unknown>>>(ChatKeys.chatSearch());
+        updatePageItem(['chats', 'search'], data, (o, n) => o.id === n.id);
+        const queryData = queryClient.getQueryData<InfiniteData<PaginatedResult<unknown>>>(['chats', 'search']);
 
         if (queryData) {
           const flattenedQueryData: any = flattenPages(queryData)?.map((chat: any) => {
@@ -293,7 +248,7 @@ const useChatActions = (chatId: string) => {
     },
     onSuccess: (response: any, variables, context) => {
       const nextChat = { ...chat, last_message: response.data };
-      updatePageItem(ChatKeys.chatSearch(), nextChat, (o, n) => o.id === n.id);
+      updatePageItem(['chats', 'search'], nextChat, (o, n) => o.id === n.id);
       updatePageItem(
         ChatKeys.chatMessages(variables.chatId),
         normalizeChatMessage(response.data),
@@ -302,86 +257,23 @@ const useChatActions = (chatId: string) => {
       reOrderChatListItems();
     },
   });
-
-  const updateChat = useMutation({
-    mutationFn: (data: UpdateChatVariables) => api.patch<IChat>(`/api/v1/pleroma/chats/${chatId}`, data),
-    onMutate: async (data) => {
-      // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries({
-        queryKey: ChatKeys.chat(chatId),
-      });
-
-      // Snapshot the previous value
-      const prevChat = { ...chat };
-      const nextChat = { ...chat, ...data };
-
-      // Optimistically update to the new value
-      queryClient.setQueryData(ChatKeys.chat(chatId), nextChat);
-
-      // Return a context object with the snapshotted value
-      return { prevChat };
-    },
-    // If the mutation fails, use the context returned from onMutate to roll back
-    onError: (_error: any, _newData: any, context: any) => {
-      changeScreen(ChatWidgetScreens.CHAT, context.prevChat.id);
-      queryClient.setQueryData(ChatKeys.chat(chatId), context.prevChat);
-      toast.error('Chat Settings failed to update.');
-    },
-    onSuccess() {
-      queryClient.invalidateQueries({ queryKey: ChatKeys.chat(chatId) });
-      queryClient.invalidateQueries({ queryKey: ChatKeys.chatSearch() });
-      toast.success('Chat Settings updated successfully');
-    },
-  });
-
   const deleteChatMessage = (chatMessageId: string) => api.delete<IChat>(`/api/v1/pleroma/chats/${chatId}/messages/${chatMessageId}`);
-
-  const acceptChat = useMutation({
-    mutationFn: () => api.post<IChat>(`/api/v1/pleroma/chats/${chatId}/accept`),
-    onSuccess(response) {
-      changeScreen(ChatWidgetScreens.CHAT, response.data.id);
-      queryClient.invalidateQueries({ queryKey: ChatKeys.chat(chatId) });
-      queryClient.invalidateQueries({ queryKey: ChatKeys.chatMessages(chatId) });
-      queryClient.invalidateQueries({ queryKey: ChatKeys.chatSearch() });
-    },
-  });
 
   const deleteChat = useMutation({
     mutationFn: () => api.delete<IChat>(`/api/v1/pleroma/chats/${chatId}`),
     onSuccess() {
       changeScreen(ChatWidgetScreens.INBOX);
       queryClient.invalidateQueries({ queryKey: ChatKeys.chatMessages(chatId) });
-      queryClient.invalidateQueries({ queryKey: ChatKeys.chatSearch() });
-    },
-  });
-
-  const createReaction = useMutation({
-    mutationFn: (data: CreateReactionVariables) => api.post(`/api/v1/pleroma/chats/${chatId}/messages/${data.messageId}/reactions`, {
-      emoji: data.emoji,
-    }),
-    // TODO: add optimistic updates
-    onSuccess(response) {
-      updateChatMessage(response.data);
-    },
-  });
-
-  const deleteReaction = useMutation({
-    mutationFn: (data: CreateReactionVariables) => api.delete(`/api/v1/pleroma/chats/${chatId}/messages/${data.messageId}/reactions/${data.emoji}`),
-    onSuccess() {
-      queryClient.invalidateQueries({ queryKey: ChatKeys.chatMessages(chatId) });
+      queryClient.invalidateQueries({ queryKey: ['chats', 'search'] });
     },
   });
 
   return {
-    acceptChat,
     createChatMessage,
-    createReaction,
     deleteChat,
     deleteChatMessage,
-    deleteReaction,
     markChatAsRead,
-    updateChat,
   };
 };
 
-export { ChatKeys, useChat, useChatActions, useChats, useChatMessages, isLastMessage };
+export { ChatKeys, useChat, useChatActions, useChats, useChatMessages };

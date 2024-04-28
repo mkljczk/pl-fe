@@ -26,7 +26,6 @@ import EventPage from 'soapbox/pages/event-page';
 import EventsPage from 'soapbox/pages/events-page';
 import GroupPage from 'soapbox/pages/group-page';
 import GroupsPage from 'soapbox/pages/groups-page';
-import GroupsPendingPage from 'soapbox/pages/groups-pending-page';
 import HomePage from 'soapbox/pages/home-page';
 import LandingPage from 'soapbox/pages/landing-page';
 import ManageGroupsPage from 'soapbox/pages/manage-groups-page';
@@ -71,7 +70,6 @@ import {
   EditProfile,
   EditEmail,
   EditPassword,
-  EmailConfirmation,
   DeleteAccount,
   SoapboxConfig,
   ExportData,
@@ -111,15 +109,7 @@ import {
   Events,
   GroupGallery,
   Groups,
-  GroupsDiscover,
-  GroupsPopular,
-  GroupsSuggested,
-  GroupsTag,
-  GroupsTags,
-  PendingGroupRequests,
   GroupMembers,
-  GroupTags,
-  GroupTagTimeline,
   GroupTimeline,
   ManageGroup,
   GroupBlockedMembers,
@@ -131,7 +121,6 @@ import {
   RegistrationPage,
   LoginPage,
   PasswordReset,
-  PasswordResetConfirm,
   RegisterInvite,
   ExternalLogin,
   LandingTimeline,
@@ -173,7 +162,6 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
     <Switch>
       {standalone && <Redirect from='/' to='/login/external' exact />}
 
-      <WrappedRoute path='/email-confirmation' page={EmptyPage} component={EmailConfirmation} publicRoute exact />
       <WrappedRoute path='/logout' page={EmptyPage} component={LogoutPage} publicRoute exact />
 
       {isLoggedIn ? (
@@ -289,14 +277,6 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
       <WrappedRoute path='/posts/:statusId' publicRoute exact page={DefaultPage} component={Status} content={children} />
 
       {features.groups && <WrappedRoute path='/groups' exact page={GroupsPage} component={Groups} content={children} />}
-      {features.groupsDiscovery && <WrappedRoute path='/groups/discover' exact page={GroupsPage} component={GroupsDiscover} content={children} />}
-      {features.groupsDiscovery && <WrappedRoute path='/groups/popular' exact page={GroupsPendingPage} component={GroupsPopular} content={children} />}
-      {features.groupsDiscovery && <WrappedRoute path='/groups/suggested' exact page={GroupsPendingPage} component={GroupsSuggested} content={children} />}
-      {features.groupsDiscovery && <WrappedRoute path='/groups/tags' exact page={GroupsPendingPage} component={GroupsTags} content={children} />}
-      {features.groupsDiscovery && <WrappedRoute path='/groups/discover/tags/:id' exact page={GroupsPendingPage} component={GroupsTag} content={children} />}
-      {features.groupsPending && <WrappedRoute path='/groups/pending-requests' exact page={GroupsPendingPage} component={PendingGroupRequests} content={children} />}
-      {features.groupsTags && <WrappedRoute path='/groups/:groupId/tags' exact page={GroupPage} component={GroupTags} content={children} />}
-      {features.groupsTags && <WrappedRoute path='/groups/:groupId/tag/:id' exact page={GroupsPendingPage} component={GroupTagTimeline} content={children} />}
       {features.groups && <WrappedRoute path='/groups/:groupId' exact page={GroupPage} component={GroupTimeline} content={children} />}
       {features.groups && <WrappedRoute path='/groups/:groupId/members' exact page={GroupPage} component={GroupMembers} content={children} />}
       {features.groups && <WrappedRoute path='/groups/:groupId/media' publicRoute={!authenticatedProfile} component={GroupGallery} page={GroupPage} content={children} />}
@@ -361,7 +341,6 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
       <WrappedRoute path='/login/add' page={DefaultPage} component={LoginPage} publicRoute exact />
       <WrappedRoute path='/login' page={DefaultPage} component={LoginPage} publicRoute exact />
       <WrappedRoute path='/reset-password' page={DefaultPage} component={PasswordReset} publicRoute exact />
-      <WrappedRoute path='/edit-password' page={DefaultPage} component={PasswordResetConfirm} publicRoute exact />
       <WrappedRoute path='/invite/:token' page={DefaultPage} component={RegisterInvite} publicRoute exact />
       <Redirect from='/auth/password/new' to='/reset-password' />
       <Redirect from='/auth/password/edit' to={`/edit-password${search}`} />

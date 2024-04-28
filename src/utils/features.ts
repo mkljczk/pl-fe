@@ -69,12 +69,6 @@ export const PLEROMA = 'Pleroma';
 export const TAKAHE = 'Takahe';
 
 /**
- * Truth Social, the Mastodon fork powering truthsocial.com
- * @see {@link https://help.truthsocial.com/open-source}
- */
-export const TRUTHSOCIAL = 'TruthSocial';
-
-/**
  * Wildebeest, backend running on top of Cloudflare Pages.
  */
 export const WILDEBEEST = 'Wildebeest';
@@ -124,7 +118,7 @@ const getInstanceFeatures = (instance: Instance) => {
      * Ability to create accounts.
      * @see POST /api/v1/accounts
      */
-    accountCreation: v.software !== TRUTHSOCIAL,
+    accountCreation: true,
 
     /**
      * Ability to pin other accounts on one's profile.
@@ -138,10 +132,7 @@ const getInstanceFeatures = (instance: Instance) => {
      * Ability to set one's location on their profile.
      * @see PATCH /api/v1/accounts/update_credentials
      */
-    accountLocation: any([
-      v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.4.50'),
-      v.software === TRUTHSOCIAL,
-    ]),
+    accountLocation: v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.4.50'),
 
     /**
      * Look up an account by the acct.
@@ -153,7 +144,6 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === MASTODON && gte(v.compatVersion, '3.4.0'),
       v.software === PLEROMA && gte(v.version, '2.4.50'),
       v.software === TAKAHE && gte(v.version, '0.6.1'),
-      v.software === TRUTHSOCIAL,
       v.software === DITTO,
     ]),
 
@@ -170,7 +160,6 @@ const getInstanceFeatures = (instance: Instance) => {
     accountNotifies: any([
       v.software === MASTODON && gte(v.compatVersion, '3.3.0'),
       v.software === PLEROMA && gte(v.version, '2.4.50'),
-      v.software === TRUTHSOCIAL,
     ]),
 
     /**
@@ -179,12 +168,6 @@ const getInstanceFeatures = (instance: Instance) => {
      * @see POST /api/v1/pleroma/accounts/:id/unsubscribe
      */
     accountSubscriptions: v.software === PLEROMA && gte(v.version, '1.0.0'),
-
-    /**
-     * Ability to set one's website on their profile.
-     * @see PATCH /api/v1/accounts/update_credentials
-     */
-    accountWebsite: v.software === TRUTHSOCIAL,
 
     /**
      * Ability to manage announcements by admins.
@@ -286,71 +269,28 @@ const getInstanceFeatures = (instance: Instance) => {
     ]),
 
     /**
-     * Ability to accept a chat.
-     * POST /api/v1/pleroma/chats/:id/accept
-     */
-    chatAcceptance: v.software === TRUTHSOCIAL,
-
-    /**
-     * Ability to add reactions to chat messages.
-     */
-    chatEmojiReactions: v.software === TRUTHSOCIAL,
-
-    /**
      * Pleroma chats API.
      * @see {@link https://docs.pleroma.social/backend/development/API/chats/}
      */
-    chats: any([
-      v.software === TRUTHSOCIAL,
-      features.includes('pleroma_chat_messages'),
-    ]),
+    chats: features.includes('pleroma_chat_messages'),
 
     /**
      * Ability to delete a chat.
      * @see DELETE /api/v1/pleroma/chats/:id
      */
-    chatsDelete: any([
-      v.software === TRUTHSOCIAL,
-      v.build === REBASED,
-    ]),
-
-    /**
-     * Ability to set disappearing messages on chats.
-     * @see PATCH /api/v1/pleroma/chats/:id
-     */
-    chatsExpiration: v.software === TRUTHSOCIAL,
+    chatsDelete: v.build === REBASED,
 
     /**
      * Whether chat messages can accept a `media_id` attachment.
      * @see POST /api/v1/pleroma/chats/:id/messages
      */
-    chatsMedia: v.software !== TRUTHSOCIAL || v.build === UNRELEASED,
-
-    /**
-     * Whether chat messages have read receipts.
-     * @see GET /api/v1/pleroma/chats/:id/messages
-     */
-    chatsReadReceipts: v.software === TRUTHSOCIAL,
-
-    /**
-     * Ability to search among chats.
-     * @see GET /api/v1/pleroma/chats
-     */
-    chatsSearch: v.software === TRUTHSOCIAL,
+    chatsMedia: v.build === UNRELEASED,
 
     /**
      * Paginated chats API.
      * @see GET /api/v2/pleroma/chats
      */
-    chatsV2: any([
-      v.software === TRUTHSOCIAL,
-      v.software === PLEROMA && gte(v.version, '2.3.0'),
-    ]),
-
-    /**
-     * Ability to only chat with people that follow you.
-     */
-    chatsWithFollowers: v.software === TRUTHSOCIAL,
+    chatsV2: v.software === PLEROMA && gte(v.version, '2.3.0'),
 
     /**
      * Mastodon's newer solution for direct messaging.
@@ -414,7 +354,6 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PIXELFED,
       v.software === PLEROMA,
       v.software === TAKAHE && gte(v.version, '0.7.0'),
-      v.software === TRUTHSOCIAL,
       v.software === WILDEBEEST,
     ]),
 
@@ -444,10 +383,7 @@ const getInstanceFeatures = (instance: Instance) => {
      * Ability to embed posts on external sites.
      * @see GET /api/oembed
      */
-    embeds: any([
-      v.software === MASTODON,
-      v.software === TRUTHSOCIAL,
-    ]),
+    embeds: v.software === MASTODON,
 
     /**
      * Ability to add emoji reactions to a status.
@@ -490,10 +426,7 @@ const getInstanceFeatures = (instance: Instance) => {
      * Ability to address recipients of a status explicitly (with `to`).
      * @see POST /api/v1/statuses
      */
-    explicitAddressing: any([
-      v.software === PLEROMA && gte(v.version, '1.0.0'),
-      v.software === TRUTHSOCIAL,
-    ]),
+    explicitAddressing: v.software === PLEROMA && gte(v.version, '1.0.0'),
 
     /** Whether to allow exporting follows/blocks/mutes to CSV by paginating the API. */
     exportData: true,
@@ -505,7 +438,6 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === MASTODON,
       v.software === TAKAHE && gte(v.version, '0.6.1'),
-      v.software === TRUTHSOCIAL,
       features.includes('exposable_reactions'),
     ]),
 
@@ -610,52 +542,7 @@ const getInstanceFeatures = (instance: Instance) => {
      * @see POST /api/v1/admin/groups/:group_id/unsuspend
      * @see DELETE /api/v1/admin/groups/:group_id
      */
-    groups: v.software === TRUTHSOCIAL,
-
-    /**
-     * Cap # of Group Admins to 5
-     */
-    groupsAdminMax: v.software === TRUTHSOCIAL,
-
-    /**
-     * Can see trending/suggested Groups.
-     */
-    groupsDiscovery: v.software === TRUTHSOCIAL,
-
-    /**
-     * Can kick user from Group.
-     */
-    groupsKick: v.software !== TRUTHSOCIAL,
-
-    /**
-     * Can mute a Group.
-     */
-    groupsMuting: v.software === TRUTHSOCIAL,
-
-    /**
-     * Can query pending Group requests.
-    */
-    groupsPending: v.software === TRUTHSOCIAL,
-
-    /**
-    * Can promote members to Admins.
-    */
-    groupsPromoteToAdmin: v.software !== TRUTHSOCIAL,
-
-    /**
-     * Can search my own groups.
-     */
-    groupsSearch: v.software === TRUTHSOCIAL,
-
-    /**
-     * Can see topics for Groups.
-     */
-    groupsTags: v.software === TRUTHSOCIAL,
-
-    /**
-     * Can validate group names.
-     */
-    groupsValidation: v.software === TRUTHSOCIAL,
+    groups: false,
 
     /**
      * Can hide follows/followers lists and counts.
@@ -705,10 +592,7 @@ const getInstanceFeatures = (instance: Instance) => {
     /**
      * Can sign in using username instead of e-mail address.
      */
-    logInWithUsername: any([
-      v.software === PLEROMA,
-      v.software === TRUTHSOCIAL,
-    ]),
+    logInWithUsername: v.software === PLEROMA,
 
     /**
      * Can perform moderation actions with account and reports.
@@ -803,13 +687,6 @@ const getInstanceFeatures = (instance: Instance) => {
     ]),
 
     /**
-     * Supports pagination in threads.
-     * @see GET /api/v1/statuses/:id/context/ancestors
-     * @see GET /api/v1/statuses/:id/context/descendants
-     */
-    paginatedContext: v.software === TRUTHSOCIAL,
-
-    /**
      * Displays a form to follow a user when logged out.
      * @see POST /main/ostatus
      */
@@ -825,14 +702,13 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === MASTODON && gte(v.version, '2.8.0'),
       v.software === PLEROMA,
       v.software === TAKAHE && gte(v.version, '0.8.0'),
-      v.software === TRUTHSOCIAL,
     ]),
 
     /**
      * Can set privacy scopes on statuses.
      * @see POST /api/v1/statuses
      */
-    privacyScopes: ![TRUTHSOCIAL, DITTO].includes(v.software!),
+    privacyScopes: v.software !== DITTO,
 
     /**
      * A directory of discoverable profiles from the instance.
@@ -897,18 +773,6 @@ const getInstanceFeatures = (instance: Instance) => {
     ]),
 
     /**
-     * Ability to report chat messages.
-     * @see POST /api/v1/reports
-     */
-    reportChats: v.software === TRUTHSOCIAL,
-
-    /**
-     * Ability to select more than one status when reporting.
-     * @see POST /api/v1/reports
-     */
-    reportMultipleStatuses: v.software !== TRUTHSOCIAL,
-
-    /**
      * Can request a password reset email through the API.
      * @see POST /auth/password
      */
@@ -959,10 +823,7 @@ const getInstanceFeatures = (instance: Instance) => {
      * @see POST /api/pleroma/change_email
      * @see POST /api/pleroma/delete_account
      */
-    security: any([
-      v.software === PLEROMA,
-      v.software === TRUTHSOCIAL,
-    ]),
+    security: v.software === PLEROMA,
 
     /**
      * Ability to manage account sessions.
@@ -975,16 +836,13 @@ const getInstanceFeatures = (instance: Instance) => {
      * Can store client settings in the database.
      * @see PATCH /api/v1/accounts/update_credentials
      */
-    settingsStore: any([
-      v.software === PLEROMA,
-      v.software === TRUTHSOCIAL,
-    ]),
+    settingsStore: v.software === PLEROMA,
 
     /**
      * Can set content warnings on statuses.
      * @see POST /api/v1/statuses
      */
-    spoilers: v.software !== TRUTHSOCIAL,
+    spoilers: true,
 
     /**
      * Can display suggested accounts.
@@ -992,7 +850,6 @@ const getInstanceFeatures = (instance: Instance) => {
      */
     suggestions: any([
       v.software === MASTODON && gte(v.compatVersion, '2.4.3'),
-      v.software === TRUTHSOCIAL,
       features.includes('v2_suggestions'),
     ]),
 
@@ -1004,7 +861,6 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === FRIENDICA,
       v.software === ICESHRIMP,
       v.software === MASTODON && gte(v.compatVersion, '3.4.0'),
-      v.software === TRUTHSOCIAL,
       features.includes('v2_suggestions'),
     ]),
 
@@ -1032,7 +888,6 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === FRIENDICA && gte(v.version, '2022.12.0'),
       v.software === ICESHRIMP,
       v.software === MASTODON && gte(v.compatVersion, '3.0.0'),
-      v.software === TRUTHSOCIAL,
       v.software === DITTO,
     ]),
 

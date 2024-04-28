@@ -10,7 +10,6 @@ const baseNotificationSchema = z.object({
   created_at: z.string().datetime().catch(new Date().toUTCString()),
   id: z.string(),
   type: z.string(),
-  total_count: z.number().optional().catch(undefined), // TruthSocial
 });
 
 const mentionNotificationSchema = baseNotificationSchema.extend({

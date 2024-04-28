@@ -13,7 +13,6 @@ import { ChatMessage } from 'soapbox/types/entities';
 import ChatMessageList from './chat-message-list';
 
 const chat: IChat = {
-  accepted: true,
   account: buildAccount({
     username: 'username',
     verified: true,
@@ -23,15 +22,9 @@ const chat: IChat = {
     avatar_static: 'avatar',
     display_name: 'my name',
   }),
-  chat_type: 'direct',
   created_at: '2020-06-10T02:05:06.000Z',
-  created_by_account: '2',
-  discarded_at: null,
   id: '14',
   last_message: null,
-  latest_read_message_by_account: [],
-  latest_read_message_created_at: null,
-  message_expiration: 1209600,
   unread: 5,
 };
 
@@ -41,8 +34,6 @@ const chatMessages: ChatMessage[] = [
     chat_id: '14',
     content: 'this is the first chat',
     created_at: '2022-09-09T16:02:26.186Z',
-    emoji_reactions: null,
-    expiration: 1209600,
     id: '1',
     unread: false,
     pending: false,
@@ -52,8 +43,6 @@ const chatMessages: ChatMessage[] = [
     chat_id: '14',
     content: 'this is the second chat',
     created_at: '2022-09-09T16:04:26.186Z',
-    emoji_reactions: null,
-    expiration: 1209600,
     id: '2',
     unread: true,
     pending: false,

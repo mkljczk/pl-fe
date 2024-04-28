@@ -15,16 +15,6 @@ import ProfileStats from './profile-stats';
 
 import type { Account } from 'soapbox/schemas';
 
-/** Basically ensure the URL isn't `javascript:alert('hi')` or something like that */
-const isSafeUrl = (text: string): boolean => {
-  try {
-    const url = new URL(text);
-    return ['http:', 'https:'].includes(url.protocol);
-  } catch (e) {
-    return false;
-  }
-};
-
 const messages = defineMessages({
   linkVerifiedOn: { id: 'account.link_verified_on', defaultMessage: 'Ownership of this link was checked on {date}' },
   account_locked: { id: 'account.locked_info', defaultMessage: 'This account privacy status is set to locked. The owner manually reviews who can follow them.' },
@@ -202,25 +192,6 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
               <Text size='sm'>
                 {account.location}
               </Text>
-            </HStack>
-          ) : null}
-
-          {account.website ? (
-            <HStack alignItems='center' space={0.5}>
-              <Icon
-                src={require('@tabler/icons/outline/link.svg')}
-                className='h-4 w-4 text-gray-800 dark:text-gray-200'
-              />
-
-              <div className='max-w-[300px]'>
-                <Text size='sm' truncate>
-                  {isSafeUrl(account.website) ? (
-                    <a className='text-primary-600 hover:underline dark:text-accent-blue' href={account.website} target='_blank'>{account.website}</a>
-                  ) : (
-                    account.website
-                  )}
-                </Text>
-              </div>
             </HStack>
           ) : null}
 

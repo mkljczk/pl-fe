@@ -77,15 +77,11 @@ interface IThread {
   withMedia?: boolean;
   useWindowScroll?: boolean;
   itemClassName?: string;
-  next: string | undefined;
-  handleLoadMore: () => void;
 }
 
 const Thread = (props: IThread) => {
   const {
-    handleLoadMore,
     itemClassName,
-    next,
     status,
     useWindowScroll = true,
     withMedia = true,
@@ -439,8 +435,6 @@ const Thread = (props: IThread) => {
         <ScrollableList
           id='thread'
           ref={scroller}
-          hasMore={!!next}
-          onLoadMore={handleLoadMore}
           placeholderComponent={() => <PlaceholderStatus variant='slim' />}
           initialTopMostItemIndex={initialTopMostItemIndex}
           useWindowScroll={useWindowScroll}

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { defineMessages, useIntl, FormattedMessage, IntlShape, MessageDescriptor, defineMessage } from 'react-intl';
+import { defineMessages, useIntl, IntlShape, MessageDescriptor } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
 import { mentionCompose } from 'soapbox/actions/compose';
@@ -57,11 +57,6 @@ const icons: Record<NotificationType, string> = {
   'pleroma:participation_request': require('@tabler/icons/outline/calendar-event.svg'),
   'pleroma:participation_accepted': require('@tabler/icons/outline/calendar-event.svg'),
 };
-
-const nameMessage = defineMessage({
-  id: 'notification.name',
-  defaultMessage: '{link}{others}',
-});
 
 const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
   follow: {
@@ -138,21 +133,10 @@ const buildMessage = (
   intl: IntlShape,
   type: NotificationType,
   account: AccountEntity,
-  totalCount: number | null,
   targetName: string,
   instanceTitle: string,
 ): React.ReactNode => {
-  const link = buildLink(account);
-  const name = intl.formatMessage(nameMessage, {
-    link,
-    others: totalCount && totalCount > 0 ? (
-      <FormattedMessage
-        id='notification.others'
-        defaultMessage='+ {count, plural, one {# other} other {# others}}'
-        values={{ count: totalCount - 1 }}
-      />
-    ) : '',
-  });
+  const name = buildLink(account);
 
   return intl.formatMessage(messages[type], {
     name,
@@ -356,7 +340,7 @@ const Notification: React.FC<INotification> = (props) => {
 
   const targetName = notification.target && typeof notification.target === 'object' ? notification.target.acct : '';
 
-  const message: React.ReactNode = validType(type) && account && typeof account === 'object' ? buildMessage(intl, type, account, notification.total_count, targetName, instance.title) : null;
+  const message: React.ReactNode = validType(type) && account && typeof account === 'object' ? buildMessage(intl, type, account, targetName, instance.title) : null;
 
   const ariaLabel = validType(type) ? (
     notificationForScreenReader(

@@ -13,7 +13,7 @@ import { initMuteModal } from 'soapbox/actions/mutes';
 import { initReport, ReportableEntities } from 'soapbox/actions/reports';
 import { deleteStatus, editStatus, toggleMuteStatus } from 'soapbox/actions/statuses';
 import { deleteFromTimelines } from 'soapbox/actions/timelines';
-import { useBlockGroupMember, useGroup, useGroupRelationship, useMuteGroup, useUnmuteGroup } from 'soapbox/api/hooks';
+import { useBlockGroupMember, useGroup, useGroupRelationship } from 'soapbox/api/hooks';
 import { useDeleteGroupStatus } from 'soapbox/api/hooks/groups/useDeleteGroupStatus';
 import DropdownMenu from 'soapbox/components/dropdown-menu';
 import StatusActionButton from 'soapbox/components/status-action-button';
@@ -69,12 +69,7 @@ const messages = defineMessages({
   mention: { id: 'status.mention', defaultMessage: 'Mention @{name}' },
   more: { id: 'status.more', defaultMessage: 'More' },
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
-  muteConfirm: { id: 'confirmations.mute_group.confirm', defaultMessage: 'Mute' },
   muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute Conversation' },
-  muteGroup: { id: 'group.mute.long_label', defaultMessage: 'Mute Group' },
-  muteHeading: { id: 'confirmations.mute_group.heading', defaultMessage: 'Mute Group' },
-  muteMessage: { id: 'confirmations.mute_group.message', defaultMessage: 'You are about to mute the group. Do you want to continue?' },
-  muteSuccess: { id: 'group.mute.success', defaultMessage: 'Muted the group' },
   open: { id: 'status.open', defaultMessage: 'Show Post Details' },
   pin: { id: 'status.pin', defaultMessage: 'Pin on profile' },
   pinToGroup: { id: 'status.pin_to_group', defaultMessage: 'Pin to Group' },
@@ -101,8 +96,6 @@ const messages = defineMessages({
   share: { id: 'status.share', defaultMessage: 'Share' },
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute Conversation' },
-  unmuteGroup: { id: 'group.unmute.long_label', defaultMessage: 'Unmute Group' },
-  unmuteSuccess: { id: 'group.unmute.success', defaultMessage: 'Unmuted the group' },
   unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
   unpinFromGroup: { id: 'status.unpin_to_group', defaultMessage: 'Unpin from Group' },
   zap: { id: 'status.zap', defaultMessage: 'Zap' },
@@ -128,12 +121,9 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const intl = useIntl();
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const match = useRouteMatch<{ groupSlug: string }>('/group/:groupSlug');
+  const match = useRouteMatch<{ groupId: string }>('/group/:groupId');
 
   const { group } = useGroup((status.group as Group)?.id as string);
-  const muteGroup = useMuteGroup(group as Group);
-  const unmuteGroup = useUnmuteGroup(group as Group);
-  const isMutingGroup = !!group?.relationship?.muting;
   const deleteGroupStatus = useDeleteGroupStatus(group as Group, status.id);
   const blockGroupMember = useBlockGroupMember(group as Group, status.account);
 
@@ -292,27 +282,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
 
   const handleMuteClick: React.EventHandler<React.MouseEvent> = (e) => {
     dispatch(initMuteModal(status.account));
-  };
-
-  const handleMuteGroupClick: React.EventHandler<React.MouseEvent> = () =>
-    dispatch(openModal('CONFIRM', {
-      heading: intl.formatMessage(messages.muteHeading),
-      message: intl.formatMessage(messages.muteMessage),
-      confirm: intl.formatMessage(messages.muteConfirm),
-      confirmationTheme: 'primary',
-      onConfirm: () => muteGroup.mutate(undefined, {
-        onSuccess() {
-          toast.success(intl.formatMessage(messages.muteSuccess));
-        },
-      }),
-    }));
-
-  const handleUnmuteGroupClick: React.EventHandler<React.MouseEvent> = () => {
-    unmuteGroup.mutate(undefined, {
-      onSuccess() {
-        toast.success(intl.formatMessage(messages.unmuteSuccess));
-      },
-    });
   };
 
   const handleBlockClick: React.EventHandler<React.MouseEvent> = (e) => {
@@ -542,14 +511,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       }
 
       menu.push(null);
-      if (features.groupsMuting && status.group) {
-        menu.push({
-          text: isMutingGroup ? intl.formatMessage(messages.unmuteGroup) : intl.formatMessage(messages.muteGroup),
-          icon: require('@tabler/icons/outline/volume-3.svg'),
-          action: isMutingGroup ? handleUnmuteGroupClick : handleMuteGroupClick,
-        });
-        menu.push(null);
-      }
 
       menu.push({
         text: intl.formatMessage(messages.mute, { name: username }),

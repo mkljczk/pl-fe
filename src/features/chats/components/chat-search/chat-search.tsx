@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { Icon, Input, Stack } from 'soapbox/components/ui';
 import { ChatWidgetScreens, useChatContext } from 'soapbox/contexts/chat-context';
 import { useDebounce } from 'soapbox/hooks';
-import { useChats, ChatKeys } from 'soapbox/queries/chats';
+import { useChats } from 'soapbox/queries/chats';
 import { queryClient } from 'soapbox/queries/client';
 import useAccountSearch from 'soapbox/queries/search';
 import toast from 'soapbox/toast';
@@ -56,7 +56,7 @@ const ChatSearch = (props: IChatSearch) => {
         changeScreen(ChatWidgetScreens.CHAT, response.data.id);
       }
 
-      queryClient.invalidateQueries({ queryKey: ChatKeys.chatSearch() });
+      queryClient.invalidateQueries({ queryKey: ['chats', 'search'] });
     },
   });
 

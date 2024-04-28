@@ -1,11 +1,10 @@
 import clsx from 'clsx';
-import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import ReactSwipeableViews from 'react-swipeable-views';
 
-import { fetchNext, fetchStatusWithContext } from 'soapbox/actions/statuses';
+import { fetchStatusWithContext } from 'soapbox/actions/statuses';
 import ExtendedVideoPlayer from 'soapbox/components/extended-video-player';
 import MissingIndicator from 'soapbox/components/missing-indicator';
 import StatusActionBar from 'soapbox/components/status-action-bar';
@@ -68,7 +67,6 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
   const actualStatus = useAppSelector((state) => getStatus(state, { id: status?.id as string }));
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
-  const [next, setNext] = useState<string>();
   const [index, setIndex] = useState<number | null>(null);
   const [navigationHidden, setNavigationHidden] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(!status);
@@ -185,19 +183,8 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
     return null;
   }).toArray();
 
-  const handleLoadMore = useCallback(debounce(() => {
-    if (next && status) {
-      dispatch(fetchNext(status?.id, next)).then(({ next }) => {
-        setNext(next);
-      }).catch(() => { });
-    }
-  }, 300, { leading: true }), [next, status]);
-
   /** Fetch the status (and context) from the API. */
-  const fetchData = async () => {
-    const { next } = await dispatch(fetchStatusWithContext(status?.id as string));
-    setNext(next);
-  };
+  const fetchData = () => dispatch(fetchStatusWithContext(status?.id as string));
 
   // Load data.
   useEffect(() => {
@@ -351,8 +338,6 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
               withMedia={false}
               useWindowScroll={false}
               itemClassName='px-4'
-              next={next}
-              handleLoadMore={handleLoadMore}
             />
           </div>
         )}

@@ -50,7 +50,6 @@ const COMPOSE_UPLOAD_FAIL     = 'COMPOSE_UPLOAD_FAIL' as const;
 const COMPOSE_UPLOAD_PROGRESS = 'COMPOSE_UPLOAD_PROGRESS' as const;
 const COMPOSE_UPLOAD_UNDO     = 'COMPOSE_UPLOAD_UNDO' as const;
 const COMPOSE_GROUP_POST      = 'COMPOSE_GROUP_POST' as const;
-const COMPOSE_SET_GROUP_TIMELINE_VISIBLE = 'COMPOSE_SET_GROUP_TIMELINE_VISIBLE' as const;
 
 const COMPOSE_SUGGESTIONS_CLEAR = 'COMPOSE_SUGGESTIONS_CLEAR' as const;
 const COMPOSE_SUGGESTIONS_READY = 'COMPOSE_SUGGESTIONS_READY' as const;
@@ -366,7 +365,6 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
 
     if (compose.privacy === 'group') {
       params.group_id = compose.group_id;
-      params.group_timeline_visible = compose.group_timeline_visible; // Truth Social
     }
 
     return dispatch(createStatus(params, idempotencyKey, statusId)).then(function(data) {
@@ -504,12 +502,6 @@ const groupCompose = (composeId: string, groupId: string) => ({
   type: COMPOSE_GROUP_POST,
   id: composeId,
   group_id: groupId,
-});
-
-const setGroupTimelineVisible = (composeId: string, groupTimelineVisible: boolean) => ({
-  type: COMPOSE_SET_GROUP_TIMELINE_VISIBLE,
-  id: composeId,
-  groupTimelineVisible,
 });
 
 const clearComposeSuggestions = (composeId: string) => {
@@ -882,7 +874,6 @@ type ComposeAction =
   | ReturnType<typeof uploadComposeFail>
   | ReturnType<typeof undoUploadCompose>
   | ReturnType<typeof groupCompose>
-  | ReturnType<typeof setGroupTimelineVisible>
   | ReturnType<typeof clearComposeSuggestions>
   | ComposeSuggestionsReadyAction
   | ComposeSuggestionSelectAction
@@ -954,7 +945,6 @@ export {
   COMPOSE_REMOVE_FROM_MENTIONS,
   COMPOSE_SET_STATUS,
   COMPOSE_EDITOR_STATE_SET,
-  COMPOSE_SET_GROUP_TIMELINE_VISIBLE,
   COMPOSE_CHANGE_MEDIA_ORDER,
   setComposeToStatus,
   changeCompose,
@@ -984,7 +974,6 @@ export {
   undoUploadCompose,
   groupCompose,
   groupComposeModal,
-  setGroupTimelineVisible,
   clearComposeSuggestions,
   fetchComposeSuggestions,
   readyComposeSuggestionsEmojis,

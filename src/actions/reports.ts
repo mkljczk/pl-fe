@@ -22,8 +22,6 @@ const REPORT_RULE_CHANGE    = 'REPORT_RULE_CHANGE';
 
 enum ReportableEntities {
   ACCOUNT = 'ACCOUNT',
-  CHAT_MESSAGE = 'CHAT_MESSAGE',
-  GROUP = 'GROUP',
   STATUS = 'STATUS'
 }
 

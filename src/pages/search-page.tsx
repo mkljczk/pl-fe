@@ -6,7 +6,6 @@ import {
   TrendsPanel,
   SignUpPanel,
   CtaBanner,
-  SuggestedGroupsPanel,
 } from 'soapbox/features/ui/util/async-components';
 import { useAppSelector, useFeatures } from 'soapbox/hooks';
 
@@ -43,9 +42,6 @@ const SearchPage: React.FC<ISearchPage> = ({ children }) => {
           <WhoToFollowPanel limit={3} />
         )}
 
-        {features.groups && (
-          <SuggestedGroupsPanel />
-        )}
 
         <LinkFooter />
       </Layout.Aside>

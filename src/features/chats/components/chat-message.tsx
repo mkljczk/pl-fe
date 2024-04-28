@@ -6,19 +6,15 @@ import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { openModal } from 'soapbox/actions/modals';
-import { initReport, ReportableEntities } from 'soapbox/actions/reports';
 import DropdownMenu from 'soapbox/components/dropdown-menu';
 import { HStack, Icon, Stack, Text } from 'soapbox/components/ui';
 import emojify from 'soapbox/features/emoji';
 import { MediaGallery } from 'soapbox/features/ui/util/async-components';
-import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
+import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 import { ChatKeys, IChat, useChatActions } from 'soapbox/queries/chats';
 import { queryClient } from 'soapbox/queries/client';
 import { stripHTML } from 'soapbox/utils/html';
 import { onlyEmoji } from 'soapbox/utils/rich-content';
-
-import ChatMessageReaction from './chat-message-reaction';
-import ChatMessageReactionWrapper from './chat-message-reaction-wrapper/chat-message-reaction-wrapper';
 
 import type { Menu as IMenu } from 'soapbox/components/dropdown-menu';
 import type { ChatMessage as ChatMessageEntity } from 'soapbox/types/entities';
@@ -59,13 +55,11 @@ const ChatMessage = (props: IChatMessage) => {
   const { chat, chatMessage } = props;
 
   const dispatch = useAppDispatch();
-  const features = useFeatures();
   const intl = useIntl();
 
   const me = useAppSelector((state) => state.me);
-  const { createReaction, deleteChatMessage, deleteReaction } = useChatActions(chat.id);
+  const { deleteChatMessage } = useChatActions(chat.id);
 
-  const [isReactionSelectorOpen, setIsReactionSelectorOpen] = useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   const handleDeleteMessage = useMutation({
@@ -78,31 +72,13 @@ const ChatMessage = (props: IChatMessage) => {
   });
 
   const content = parseContent(chatMessage);
-  const lastReadMessageDateString = chat.latest_read_message_by_account?.find((latest) => latest.id === chat.account.id)?.date;
-  const lastReadMessageTimestamp = lastReadMessageDateString ? new Date(lastReadMessageDateString) : null;
   const isMyMessage = chatMessage.account_id === me;
-
-  // did this occur before this time?
-  const isRead = isMyMessage
-    && lastReadMessageTimestamp
-    && lastReadMessageTimestamp >= new Date(chatMessage.created_at);
 
   const isOnlyEmoji = useMemo(() => {
     const hiddenEl = document.createElement('div');
     hiddenEl.innerHTML = content;
     return onlyEmoji(hiddenEl, BIG_EMOJI_LIMIT, false);
   }, []);
-
-  const emojiReactionRows = useMemo(() => {
-    if (!chatMessage.emoji_reactions) {
-      return [];
-    }
-
-    return chatMessage.emoji_reactions.reduce((rows: any, key: any, index) => {
-      return (index % 4 === 0 ? rows.push([key])
-        : rows[rows.length - 1].push(key)) && rows;
-    }, []);
-  }, [chatMessage.emoji_reactions]);
 
   const onOpenMedia = (media: any, index: number) => {
     dispatch(openModal('MEDIA', { media, index }));
@@ -171,13 +147,6 @@ const ChatMessage = (props: IChatMessage) => {
         destructive: true,
       });
     } else {
-      if (features.reportChats) {
-        menu.push({
-          text: intl.formatMessage(messages.report),
-          action: () => dispatch(initReport(ReportableEntities.CHAT_MESSAGE, chat.account, { chatMessage })),
-          icon: require('@tabler/icons/outline/flag.svg'),
-        });
-      }
       menu.push({
         text: intl.formatMessage(messages.deleteForMe),
         action: () => handleDeleteMessage.mutate(chatMessage.id),
@@ -194,7 +163,7 @@ const ChatMessage = (props: IChatMessage) => {
       className={
         clsx({
           'group relative px-4 py-2 hover:bg-gray-200/40 dark:hover:bg-gray-800/40': true,
-          'bg-gray-200/40 dark:bg-gray-800/40': isMenuOpen || isReactionSelectorOpen,
+          'bg-gray-200/40 dark:bg-gray-800/40': isMenuOpen,
         })
       }
       data-testid='chat-message'
@@ -205,29 +174,10 @@ const ChatMessage = (props: IChatMessage) => {
             'p-1 flex items-center space-x-0.5 z-10 absolute opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100 rounded-md shadow-lg bg-white dark:bg-gray-900 dark:ring-2 dark:ring-primary-700': true,
             'top-2 right-2': !isMyMessage,
             'top-2 left-2': isMyMessage,
-            '!opacity-100': isMenuOpen || isReactionSelectorOpen,
+            '!opacity-100': isMenuOpen,
           })
         }
       >
-        {features.chatEmojiReactions && (
-          <ChatMessageReactionWrapper
-            onOpen={setIsReactionSelectorOpen}
-            onSelect={(emoji) => createReaction.mutate({ emoji, messageId: chatMessage.id, chatMessage })}
-          >
-            <button
-              title={intl.formatMessage(messages.more)}
-              className={clsx({
-                'p-1.5 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-md text-gray-600 dark:text-gray-600 hover:text-gray-700 dark:hover:text-gray-500 focus:text-gray-700 dark:focus:text-gray-500 focus:ring-0': true,
-                '!text-gray-700 dark:!text-gray-500': isReactionSelectorOpen,
-              })}
-            >
-              <Icon
-                src={require('@tabler/icons/outline/mood-smile.svg')}
-                className='h-4 w-4'
-              />
-            </button>
-          </ChatMessageReactionWrapper>
-        )}
 
         {menu.length > 0 && (
           <DropdownMenu
@@ -308,37 +258,6 @@ const ChatMessage = (props: IChatMessage) => {
           </Stack>
         </HStack>
 
-        {(chatMessage.emoji_reactions?.length) ? (
-          <div
-            className={clsx({
-              'space-y-1': true,
-              'ml-auto': isMyMessage,
-              'mr-auto': !isMyMessage,
-            })}
-          >
-            {emojiReactionRows?.map((emojiReactionRow: any, idx: number) => (
-              <HStack
-                key={idx}
-                className={
-                  clsx({
-                    'flex items-center gap-1': true,
-                    'flex-row-reverse': isMyMessage,
-                  })
-                }
-              >
-                {emojiReactionRow.map((emojiReaction: any, idx: number) => (
-                  <ChatMessageReaction
-                    key={idx}
-                    emojiReaction={emojiReaction}
-                    onAddReaction={(emoji) => createReaction.mutate({ emoji, messageId: chatMessage.id, chatMessage })}
-                    onRemoveReaction={(emoji) => deleteReaction.mutate({ emoji, messageId: chatMessage.id })}
-                  />
-                ))}
-              </HStack>
-            ))}
-          </div>
-        ) : null}
-
         <HStack
           alignItems='center'
           space={2}
@@ -356,28 +275,6 @@ const ChatMessage = (props: IChatMessage) => {
               <Text theme='muted' size='xs'>
                 {intl.formatTime(chatMessage.created_at)}
               </Text>
-
-              {(isMyMessage && features.chatsReadReceipts) ? (
-                <>
-                  {isRead ? (
-                    <span className='flex flex-col items-center justify-center rounded-full border border-solid border-primary-500 bg-primary-500 p-0.5 text-white dark:border-primary-400 dark:bg-primary-400 dark:text-primary-900'>
-                      <Icon
-                        src={require('@tabler/icons/outline/check.svg')}
-                        strokeWidth={3}
-                        className='h-2.5 w-2.5'
-                      />
-                    </span>
-                  ) : (
-                    <span className='flex flex-col items-center justify-center rounded-full border border-solid border-primary-500 bg-transparent p-0.5 text-primary-500 dark:border-primary-400 dark:text-primary-400'>
-                      <Icon
-                        src={require('@tabler/icons/outline/check.svg')}
-                        strokeWidth={3}
-                        className='h-2.5 w-2.5'
-                      />
-                    </span>
-                  )}
-                </>
-              ) : null}
             </span>
           </div>
         </HStack>

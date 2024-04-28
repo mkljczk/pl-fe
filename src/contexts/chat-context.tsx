@@ -2,12 +2,11 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 import { useHistory, useParams } from 'react-router-dom';
 
 import { toggleMainWindow } from 'soapbox/actions/chats';
-import { useAppDispatch, useOwnAccount, useSettings } from 'soapbox/hooks';
+import { useAppDispatch, useSettings } from 'soapbox/hooks';
 import { IChat, useChat } from 'soapbox/queries/chats';
 
 const ChatContext = createContext<any>({
   isOpen: false,
-  needsAcceptance: false,
 });
 
 enum ChatWidgetScreens {
@@ -25,7 +24,6 @@ const ChatProvider: React.FC<IChatProvider> = ({ children }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const { chats } = useSettings();
-  const { account } = useOwnAccount();
 
   const path = history.location.pathname;
   const isUsingMainChatPage = Boolean(path.match(/^\/chats/));
@@ -36,7 +34,6 @@ const ChatProvider: React.FC<IChatProvider> = ({ children }) => {
 
   const { data: chat } = useChat(currentChatId as string);
 
-  const needsAcceptance = !chat?.accepted && chat?.created_by_account !== account?.id;
   const isOpen = chats.mainWindow === 'open';
 
   const changeScreen = (screen: ChatWidgetScreens, currentChatId?: string | null) => {
@@ -48,14 +45,13 @@ const ChatProvider: React.FC<IChatProvider> = ({ children }) => {
 
   const value = useMemo(() => ({
     chat,
-    needsAcceptance,
     isOpen,
     isUsingMainChatPage,
     toggleChatPane,
     screen,
     changeScreen,
     currentChatId,
-  }), [chat, currentChatId, needsAcceptance, isUsingMainChatPage, isOpen, screen, changeScreen]);
+  }), [chat, currentChatId, isUsingMainChatPage, isOpen, screen, changeScreen]);
 
   useEffect(() => {
     if (chatId) {
@@ -76,7 +72,6 @@ interface IChatContext {
   chat: IChat | null;
   isOpen: boolean;
   isUsingMainChatPage?: boolean;
-  needsAcceptance: boolean;
   toggleChatPane(): void;
   screen: ChatWidgetScreens;
   currentChatId: string | null;

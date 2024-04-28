@@ -34,15 +34,6 @@ describe('parseVersion', () => {
     });
   });
 
-  it('with a Truth Social version string', () => {
-    const version = '3.4.1 (compatible; TruthSocial 1.0.0)';
-    expect(parseVersion(version)).toEqual({
-      software: 'TruthSocial',
-      version: '1.0.0',
-      compatVersion: '3.4.1',
-    });
-  });
-
   it('with a Mastodon fork', () => {
     const version = '3.5.1+glitch';
     expect(parseVersion(version)).toEqual({

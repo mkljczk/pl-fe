@@ -3,10 +3,10 @@ import React, { useEffect, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { groupCompose, setGroupTimelineVisible, uploadCompose } from 'soapbox/actions/compose';
+import { groupCompose, uploadCompose } from 'soapbox/actions/compose';
 import { expandGroupFeaturedTimeline, expandGroupTimeline } from 'soapbox/actions/timelines';
 import { useGroup, useGroupStream } from 'soapbox/api/hooks';
-import { Avatar, HStack, Icon, Stack, Text, Toggle } from 'soapbox/components/ui';
+import { Avatar, HStack, Icon, Stack, Text } from 'soapbox/components/ui';
 import ComposeForm from 'soapbox/features/compose/components/compose-form';
 import { useAppDispatch, useAppSelector, useDraggedFiles, useOwnAccount } from 'soapbox/hooks';
 import { makeGetStatusIds } from 'soapbox/selectors';
@@ -33,7 +33,6 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
 
   const composeId = `group:${groupId}`;
   const canComposeGroupStatus = !!account && group?.relationship?.member;
-  const groupTimelineVisible = useAppSelector((state) => !!state.compose.get(composeId)?.group_timeline_visible);
   const featuredStatusIds = useAppSelector((state) => getStatusIds(state, { type: `group:${group?.id}:pinned` }));
 
   const { isDragging, isDraggedOver } = useDraggedFiles(composer, (files) => {
@@ -42,10 +41,6 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
 
   const handleLoadMore = (maxId: string) => {
     dispatch(expandGroupTimeline(groupId, { maxId }));
-  };
-
-  const handleToggleChange = () => {
-    dispatch(setGroupTimelineVisible(composeId, !groupTimelineVisible));
   };
 
   useGroupStream(groupId);
@@ -89,12 +84,6 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
                       <FormattedMessage id='compose_group.share_to_followers' defaultMessage='Share with my followers' />
                     </Text>
                   </label>
-                  <Toggle
-                    id='group-timeline-visible'
-                    checked={groupTimelineVisible}
-                    onChange={handleToggleChange}
-                    size='sm'
-                  />
                 </HStack>
               )}
             />

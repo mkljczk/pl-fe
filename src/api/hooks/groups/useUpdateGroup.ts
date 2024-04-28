@@ -10,7 +10,6 @@ interface UpdateGroupParams {
   header?: File | '';
   group_visibility?: string;
   discoverable?: boolean;
-  tags?: string[];
 }
 
 function useUpdateGroup(groupId: string) {

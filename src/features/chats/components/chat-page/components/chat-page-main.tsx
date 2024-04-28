@@ -4,13 +4,11 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 
 import { blockAccount, unblockAccount } from 'soapbox/actions/accounts';
 import { openModal } from 'soapbox/actions/modals';
-import List, { ListItem } from 'soapbox/components/list';
-import { Avatar, HStack, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, Text, Tooltip } from 'soapbox/components/ui';
+import { Avatar, HStack, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, Text } from 'soapbox/components/ui';
 import VerificationBadge from 'soapbox/components/verification-badge';
 import { useChatContext } from 'soapbox/contexts/chat-context';
 import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
-import { MessageExpirationValues, useChat, useChatActions, useChats } from 'soapbox/queries/chats';
-import { secondsToDays } from 'soapbox/utils/numbers';
+import { useChat, useChatActions, useChats } from 'soapbox/queries/chats';
 
 import Chat from '../../chat';
 
@@ -31,15 +29,6 @@ const messages = defineMessages({
   unblockUser: { id: 'chat_settings.options.unblock_user', defaultMessage: 'Unblock @{acct}' },
   reportUser: { id: 'chat_settings.options.report_user', defaultMessage: 'Report @{acct}' },
   leaveChat: { id: 'chat_settings.options.leave_chat', defaultMessage: 'Leave Chat' },
-  autoDeleteLabel: { id: 'chat_settings.auto_delete.label', defaultMessage: 'Auto-delete messages' },
-  autoDeleteHint: { id: 'chat_settings.auto_delete.hint', defaultMessage: 'Sent messages will auto-delete after the time period selected' },
-  autoDelete2Minutes: { id: 'chat_settings.auto_delete.2minutes', defaultMessage: '2 minutes' },
-  autoDelete7Days: { id: 'chat_settings.auto_delete.7days', defaultMessage: '7 days' },
-  autoDelete14Days: { id: 'chat_settings.auto_delete.14days', defaultMessage: '14 days' },
-  autoDelete30Days: { id: 'chat_settings.auto_delete.30days', defaultMessage: '30 days' },
-  autoDelete90Days: { id: 'chat_settings.auto_delete.90days', defaultMessage: '90 days' },
-  autoDeleteMessage: { id: 'chat_window.auto_delete_label', defaultMessage: 'Auto-delete after {day, plural, one {# day} other {# days}}' },
-  autoDeleteMessageTooltip: { id: 'chat_window.auto_delete_tooltip', defaultMessage: 'Chat messages are set to auto-delete after {day, plural, one {# day} other {# days}} upon sending.' },
 });
 
 const ChatPageMain = () => {
@@ -56,9 +45,7 @@ const ChatPageMain = () => {
 
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const { deleteChat, updateChat } = useChatActions(chat?.id as string);
-
-  const handleUpdateChat = (value: MessageExpirationValues) => updateChat.mutate({ message_expiration: value });
+  const { deleteChat } = useChatActions(chat?.id as string);
 
   const isBlocking = useAppSelector((state) => state.getIn(['relationships', chat?.account?.id, 'blocking']));
 
@@ -139,23 +126,6 @@ const ChatPageMain = () => {
               </Link>
               {chat.account.verified && <VerificationBadge />}
             </div>
-
-            {chat.message_expiration && (
-              <Tooltip
-                text={intl.formatMessage(messages.autoDeleteMessageTooltip, { day: secondsToDays(chat.message_expiration) })}
-              >
-                <Text
-                  align='left'
-                  size='sm'
-                  weight='medium'
-                  theme='primary'
-                  truncate
-                  className='w-full cursor-help'
-                >
-                  {intl.formatMessage(messages.autoDeleteMessage, { day: secondsToDays(chat.message_expiration) })}
-                </Text>
-              </Tooltip>
-            )}
           </Stack>
         </HStack>
 
@@ -176,35 +146,6 @@ const ChatPageMain = () => {
                   <Text size='sm' theme='primary'>@{chat.account.acct}</Text>
                 </Stack>
               </HStack>
-
-              {features.chatsExpiration && (
-                <List>
-                  <ListItem
-                    label={intl.formatMessage(messages.autoDeleteLabel)}
-                    hint={intl.formatMessage(messages.autoDeleteHint)}
-                  />
-                  <ListItem
-                    label={intl.formatMessage(messages.autoDelete7Days)}
-                    onSelect={() => handleUpdateChat(MessageExpirationValues.SEVEN)}
-                    isSelected={chat.message_expiration === MessageExpirationValues.SEVEN}
-                  />
-                  <ListItem
-                    label={intl.formatMessage(messages.autoDelete14Days)}
-                    onSelect={() => handleUpdateChat(MessageExpirationValues.FOURTEEN)}
-                    isSelected={chat.message_expiration === MessageExpirationValues.FOURTEEN}
-                  />
-                  <ListItem
-                    label={intl.formatMessage(messages.autoDelete30Days)}
-                    onSelect={() => handleUpdateChat(MessageExpirationValues.THIRTY)}
-                    isSelected={chat.message_expiration === MessageExpirationValues.THIRTY}
-                  />
-                  <ListItem
-                    label={intl.formatMessage(messages.autoDelete90Days)}
-                    onSelect={() => handleUpdateChat(MessageExpirationValues.NINETY)}
-                    isSelected={chat.message_expiration === MessageExpirationValues.NINETY}
-                  />
-                </List>
-              )}
 
               <Stack space={2}>
                 <MenuItem

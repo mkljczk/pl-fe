@@ -4,7 +4,6 @@ const baseRuleSchema = z.object({
   id: z.string(),
   text: z.string().catch(''),
   hint: z.string().catch(''),
-  rule_type: z.enum(['account', 'content', 'group']).nullable().catch(null),
 });
 
 const ruleSchema = z.preprocess((data: any) => {

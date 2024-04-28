@@ -4,11 +4,9 @@ import { importEntities } from 'soapbox/entity-store/actions';
 import { Entities } from 'soapbox/entity-store/entities';
 import { selectEntity } from 'soapbox/entity-store/selectors';
 import messages from 'soapbox/messages';
-import { ChatKeys, IChat, isLastMessage } from 'soapbox/queries/chats';
 import { queryClient } from 'soapbox/queries/client';
 import { announcementSchema, type Announcement, type Relationship } from 'soapbox/schemas';
-import { getUnreadChatsCount, updateChatListItem, updateChatMessage } from 'soapbox/utils/chats';
-import { removePageItem } from 'soapbox/utils/queries';
+import { getUnreadChatsCount, updateChatListItem } from 'soapbox/utils/chats';
 import { play, soundCache } from 'soapbox/utils/sounds';
 
 import { connectStream } from '../stream';
@@ -27,40 +25,9 @@ import {
 
 import type { IStatContext } from 'soapbox/contexts/stat-context';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity, Chat } from 'soapbox/types/entities';
+import type { APIEntity } from 'soapbox/types/entities';
 
 const STREAMING_CHAT_UPDATE = 'STREAMING_CHAT_UPDATE';
-
-const removeChatMessage = (payload: string) => {
-  const data = JSON.parse(payload);
-  const chatId = data.chat_id;
-  const chatMessageId = data.deleted_message_id;
-
-  // If the user just deleted the "last_message", then let's invalidate
-  // the Chat Search query so the Chat List will show the new "last_message".
-  if (isLastMessage(chatMessageId)) {
-    queryClient.invalidateQueries({
-      queryKey: ChatKeys.chatSearch(),
-    });
-  }
-
-  removePageItem(ChatKeys.chatMessages(chatId), chatMessageId, (o: any, n: any) => String(o.id) === String(n));
-};
-
-// Update the specific Chat query data.
-const updateChatQuery = (chat: IChat) => {
-  const cachedChat = queryClient.getQueryData<IChat>(ChatKeys.chat(chat.id));
-  if (!cachedChat) {
-    return;
-  }
-
-  const newChat = {
-    ...cachedChat,
-    latest_read_message_by_account: chat.latest_read_message_by_account,
-    latest_read_message_created_at: chat.latest_read_message_created_at,
-  };
-  queryClient.setQueryData<Chat>(ChatKeys.chat(chat.id), newChat as any);
-};
 
 const updateAnnouncementReactions = ({ announcement_id: id, name, count }: APIEntity) => {
   queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
@@ -149,7 +116,6 @@ const connectTimelineStream = (
           dispatch(fetchFilters());
           break;
         case 'pleroma:chat_update':
-        case 'chat_message.created': // TruthSocial
           dispatch((_dispatch: AppDispatch, getState: () => RootState) => {
             const chat = JSON.parse(data.payload);
             const me = getState().me;
@@ -168,22 +134,6 @@ const connectTimelineStream = (
               opts?.statContext?.setUnreadChatsCount(getUnreadChatsCount());
             }
           });
-          break;
-        case 'chat_message.deleted': // TruthSocial
-          removeChatMessage(data.payload);
-          break;
-        case 'chat_message.read': // TruthSocial
-          dispatch((_dispatch: AppDispatch, getState: () => RootState) => {
-            const chat = JSON.parse(data.payload);
-            const me = getState().me;
-            const isFromOtherUser = chat.account.id !== me;
-            if (isFromOtherUser) {
-              updateChatQuery(JSON.parse(data.payload));
-            }
-          });
-          break;
-        case 'chat_message.reaction': // TruthSocial
-          updateChatMessage(JSON.parse(data.payload));
           break;
         case 'pleroma:follow_relationships_update':
           dispatch(updateFollowRelationships(JSON.parse(data.payload)));

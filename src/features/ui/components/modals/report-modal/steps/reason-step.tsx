@@ -2,12 +2,11 @@ import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeReportComment, changeReportRule, ReportableEntities } from 'soapbox/actions/reports';
+import { changeReportComment, changeReportRule } from 'soapbox/actions/reports';
 import { FormGroup, Stack, Text, Textarea } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector, useInstance } from 'soapbox/hooks';
 
 import type { Account } from 'soapbox/schemas';
-import type { Rule } from 'soapbox/schemas/rule';
 
 const messages = defineMessages({
   placeholder: { id: 'report.placeholder', defaultMessage: 'Additional comments' },
@@ -29,7 +28,6 @@ const ReasonStep: React.FC<IReasonStep> = () => {
   const [isNearBottom, setNearBottom] = useState<boolean>(false);
   const [isNearTop, setNearTop] = useState<boolean>(true);
 
-  const entityType = useAppSelector((state) => state.reports.new.entityType);
   const comment = useAppSelector((state) => state.reports.new.comment);
   const { rules } = useInstance();
   const ruleIds = useAppSelector((state) => state.reports.new.rule_ids);
@@ -57,32 +55,6 @@ const ReasonStep: React.FC<IReasonStep> = () => {
     }
   };
 
-  const filterRuleType = (rule: Rule) => {
-    let ruleTypeToFilter = 'content';
-
-    switch (entityType) {
-      case ReportableEntities.ACCOUNT:
-        ruleTypeToFilter = 'account';
-        break;
-      case ReportableEntities.STATUS:
-      case ReportableEntities.CHAT_MESSAGE:
-        ruleTypeToFilter = 'content';
-        break;
-      case ReportableEntities.GROUP:
-        ruleTypeToFilter = 'group';
-        break;
-      default:
-        ruleTypeToFilter = 'content';
-        break;
-    }
-
-    if (rule.rule_type) {
-      return rule.rule_type === ruleTypeToFilter;
-    }
-
-    return true;
-  };
-
   useEffect(() => {
     if (rules.length > 0 && rulesListRef.current) {
       const { clientHeight } = rulesListRef.current;
@@ -108,7 +80,7 @@ const ReasonStep: React.FC<IReasonStep> = () => {
               onScroll={handleRulesScrolling}
               ref={rulesListRef}
             >
-              {rules.filter(filterRuleType).map((rule, idx) => {
+              {rules.map((rule, idx) => {
                 const isSelected = ruleIds.includes(String(rule.id));
 
                 return (

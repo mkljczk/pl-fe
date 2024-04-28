@@ -11,7 +11,6 @@ export { emojiReactionSchema, type EmojiReaction } from './emoji-reaction';
 export { groupSchema, type Group } from './group';
 export { groupMemberSchema, type GroupMember } from './group-member';
 export { groupRelationshipSchema, type GroupRelationship } from './group-relationship';
-export { groupTagSchema, type GroupTag } from './group-tag';
 export { instanceSchema, type Instance } from './instance';
 export { mentionSchema, type Mention } from './mention';
 export { moderationLogEntrySchema, type ModerationLogEntry } from './moderation-log-entry';

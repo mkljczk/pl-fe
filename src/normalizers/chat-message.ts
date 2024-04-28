@@ -6,10 +6,8 @@ import {
 } from 'immutable';
 
 import { normalizeAttachment } from 'soapbox/normalizers/attachment';
-import { emojiReactionSchema } from 'soapbox/schemas';
-import { filteredArray } from 'soapbox/schemas/utils';
 
-import type { Attachment, Card, Emoji, EmojiReaction } from 'soapbox/types/entities';
+import type { Attachment, Card, Emoji } from 'soapbox/types/entities';
 
 export const ChatMessageRecord = ImmutableRecord({
   account_id: '',
@@ -20,7 +18,6 @@ export const ChatMessageRecord = ImmutableRecord({
   created_at: '',
   emojis: ImmutableList<Emoji>(),
   expiration: null as number | null,
-  emoji_reactions: null as readonly EmojiReaction[] | null,
   id: '',
   unread: false,
   deleting: false,
@@ -40,11 +37,6 @@ const normalizeMedia = (status: ImmutableMap<string, any>) => {
   }
 };
 
-const normalizeChatMessageEmojiReaction = (chatMessage: ImmutableMap<string, any>) => {
-  const emojiReactions = ImmutableList(chatMessage.get('emoji_reactions') || []);
-  return chatMessage.set('emoji_reactions', filteredArray(emojiReactionSchema).parse(emojiReactions.toJS()));
-};
-
 /** Rewrite `<p></p>` to empty string. */
 const fixContent = (chatMessage: ImmutableMap<string, any>) => {
   if (chatMessage.get('content') === '<p></p>') {
@@ -58,7 +50,6 @@ export const normalizeChatMessage = (chatMessage: Record<string, any>) => {
   return ChatMessageRecord(
     ImmutableMap(fromJS(chatMessage)).withMutations(chatMessage => {
       normalizeMedia(chatMessage);
-      normalizeChatMessageEmojiReaction(chatMessage);
       fixContent(chatMessage);
     }),
   );

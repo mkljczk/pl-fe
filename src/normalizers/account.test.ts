@@ -86,28 +86,10 @@ describe('normalizeAccount()', () => {
     expect(result.verified).toBe(false);
   });
 
-  it('normalizes a verified Truth Social user', async () => {
-    const account = await import('soapbox/__fixtures__/realDonaldTrump.json');
-    const result = normalizeAccount(account);
-    expect(result.verified).toBe(true);
-  });
-
   it('normalizes Fedibird location', async () => {
     const account = await import('soapbox/__fixtures__/fedibird-account.json');
     const result = normalizeAccount(account);
     expect(result.location).toBe('Texas, USA');
-  });
-
-  it('normalizes Truth Social location', async () => {
-    const account = await import('soapbox/__fixtures__/truthsocial-account.json');
-    const result = normalizeAccount(account);
-    expect(result.location).toBe('Texas');
-  });
-
-  it('normalizes Truth Social website', async () => {
-    const account = await import('soapbox/__fixtures__/truthsocial-account.json');
-    const result = normalizeAccount(account);
-    expect(result.website).toBe('https://soapbox.pub');
   });
 
   it('sets display_name from username', () => {

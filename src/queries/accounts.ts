@@ -26,12 +26,10 @@ export type IAccount = {
   url: string;
   username: string;
   verified: boolean;
-  website: string;
 }
 
 type UpdateCredentialsData = {
   accepts_chat_messages?: boolean;
-  chats_onboarded?: boolean;
 }
 
 const useUpdateCredentials = () => {
