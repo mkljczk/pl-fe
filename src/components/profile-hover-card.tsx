@@ -134,7 +134,12 @@ export const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }
             ) : null}
 
             {account.note.length > 0 && (
-              <Text size='sm' dangerouslySetInnerHTML={accountBio} />
+              <Text
+                truncate
+                size='sm'
+                dangerouslySetInnerHTML={accountBio}
+                className='mr-2 rtl:ml-2 rtl:mr-0 [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
+              />
             )}
           </Stack>
 
