@@ -24,7 +24,6 @@ const messages = defineMessages({
   delete: { id: 'chats.actions.delete', defaultMessage: 'Delete for both' },
   deleteForMe: { id: 'chats.actions.delete_for_me', defaultMessage: 'Delete for me' },
   more: { id: 'chats.actions.more', defaultMessage: 'More' },
-  report: { id: 'chats.actions.report', defaultMessage: 'Report' },
 });
 
 const BIG_EMOJI_LIMIT = 3;

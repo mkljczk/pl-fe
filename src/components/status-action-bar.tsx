@@ -6,7 +6,7 @@ import { blockAccount } from 'soapbox/actions/accounts';
 import { launchChat } from 'soapbox/actions/chats';
 import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'soapbox/actions/compose';
 import { editEvent } from 'soapbox/actions/events';
-import { pinToGroup, toggleBookmark, toggleDislike, toggleFavourite, togglePin, toggleReblog, unpinFromGroup, zap } from 'soapbox/actions/interactions';
+import { toggleBookmark, toggleDislike, toggleFavourite, togglePin, toggleReblog, zap } from 'soapbox/actions/interactions';
 import { openModal } from 'soapbox/actions/modals';
 import { deleteStatusModal, toggleStatusSensitivityModal } from 'soapbox/actions/moderation';
 import { initMuteModal } from 'soapbox/actions/mutes';
@@ -72,8 +72,6 @@ const messages = defineMessages({
   muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute Conversation' },
   open: { id: 'status.open', defaultMessage: 'Show Post Details' },
   pin: { id: 'status.pin', defaultMessage: 'Pin on profile' },
-  pinToGroup: { id: 'status.pin_to_group', defaultMessage: 'Pin to Group' },
-  pinToGroupSuccess: { id: 'status.pin_to_group.success', defaultMessage: 'Pinned to Group!' },
   quotePost: { id: 'status.quote', defaultMessage: 'Quote post' },
   reactionCry: { id: 'status.reactions.cry', defaultMessage: 'Sad' },
   reactionHeart: { id: 'status.reactions.heart', defaultMessage: 'Love' },
@@ -97,7 +95,6 @@ const messages = defineMessages({
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute Conversation' },
   unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
-  unpinFromGroup: { id: 'status.unpin_to_group', defaultMessage: 'Unpin from Group' },
   zap: { id: 'status.zap', defaultMessage: 'Zap' },
 });
 
@@ -255,18 +252,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     dispatch(togglePin(status));
   };
 
-  const handleGroupPinClick: React.EventHandler<React.MouseEvent> = () => {
-    const group = status.group as Group;
-
-    if (status.pinned) {
-      dispatch(unpinFromGroup(status, group));
-    } else {
-      dispatch(pinToGroup(status, group))
-        .then(() => toast.success(intl.formatMessage(messages.pinToGroupSuccess)))
-        .catch(() => null);
-    }
-  };
-
   const handleMentionClick: React.EventHandler<React.MouseEvent> = (e) => {
     dispatch(mentionCompose(status.account));
   };
@@ -404,17 +389,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     }
 
     const isGroupStatus = typeof status.group === 'object';
-    if (isGroupStatus && !!status.group) {
-      const isGroupOwner = groupRelationship?.role === GroupRoles.OWNER;
-
-      if (isGroupOwner) {
-        menu.push({
-          text: intl.formatMessage(status.pinned ? messages.unpinFromGroup : messages.pinToGroup),
-          action: handleGroupPinClick,
-          icon: status.pinned ? require('@tabler/icons/outline/pinned-off.svg') : require('@tabler/icons/outline/pin.svg'),
-        });
-      }
-    }
 
     if (features.bookmarks) {
       menu.push({

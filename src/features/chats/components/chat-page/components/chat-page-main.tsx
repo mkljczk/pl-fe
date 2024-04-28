@@ -27,7 +27,6 @@ const messages = defineMessages({
   leaveConfirm: { id: 'chat_settings.leave.confirm', defaultMessage: 'Leave Chat' },
   blockUser: { id: 'chat_settings.options.block_user', defaultMessage: 'Block @{acct}' },
   unblockUser: { id: 'chat_settings.options.unblock_user', defaultMessage: 'Unblock @{acct}' },
-  reportUser: { id: 'chat_settings.options.report_user', defaultMessage: 'Report @{acct}' },
   leaveChat: { id: 'chat_settings.options.leave_chat', defaultMessage: 'Leave Chat' },
 });
 

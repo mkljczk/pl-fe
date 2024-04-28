@@ -13,11 +13,6 @@ import type { ChatMessage as ChatMessageEntity } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   today: { id: 'chats.dividers.today', defaultMessage: 'Today' },
-  more: { id: 'chats.actions.more', defaultMessage: 'More' },
-  delete: { id: 'chats.actions.delete', defaultMessage: 'Delete for both' },
-  copy: { id: 'chats.actions.copy', defaultMessage: 'Copy' },
-  report: { id: 'chats.actions.report', defaultMessage: 'Report' },
-  deleteForMe: { id: 'chats.actions.delete_for_me', defaultMessage: 'Delete for me' },
   blockedBy: { id: 'chat_message_list.blocked_by', defaultMessage: 'You are blocked by' },
   networkFailureTitle: { id: 'chat_message_list.network_failure.title', defaultMessage: 'Whoops!' },
   networkFailureSubtitle: { id: 'chat_message_list.network_failure.subtitle', defaultMessage: 'We encountered a network failure.' },

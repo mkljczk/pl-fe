@@ -19,7 +19,6 @@ const messages = defineMessages({
   all: { id: 'group.tabs.all', defaultMessage: 'All' },
   members: { id: 'group.tabs.members', defaultMessage: 'Members' },
   media: { id: 'group.tabs.media', defaultMessage: 'Media' },
-  tags: { id: 'group.tabs.tags', defaultMessage: 'Topics' },
 });
 
 interface IGroupPage {

@@ -17,7 +17,6 @@ const messages = defineMessages({
   confirmationMessage: { id: 'confirmations.leave_group.message', defaultMessage: 'You are about to leave the group. Do you want to continue?' },
   leave: { id: 'group.leave.label', defaultMessage: 'Leave' },
   leaveSuccess: { id: 'group.leave.success', defaultMessage: 'Left the group' },
-  report: { id: 'group.report.label', defaultMessage: 'Report' },
   share: { id: 'group.share.label', defaultMessage: 'Share' },
 });
 

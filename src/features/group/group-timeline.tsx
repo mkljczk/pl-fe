@@ -77,15 +77,6 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
               shouldCondense
               autoFocus={false}
               group={groupId}
-              extra={!group.locked && (
-                <HStack alignItems='center' space={4}>
-                  <label className='ml-auto cursor-pointer' htmlFor='group-timeline-visible'>
-                    <Text theme='muted'>
-                      <FormattedMessage id='compose_group.share_to_followers' defaultMessage='Share with my followers' />
-                    </Text>
-                  </label>
-                </HStack>
-              )}
             />
           </HStack>
         </div>
