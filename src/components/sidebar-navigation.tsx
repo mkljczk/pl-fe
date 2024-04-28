@@ -15,6 +15,7 @@ const messages = defineMessages({
   lists: { id: 'column.lists', defaultMessage: 'Lists' },
   events: { id: 'column.events', defaultMessage: 'Events' },
   developers: { id: 'navigation.developers', defaultMessage: 'Developers' },
+  drafts: { id: 'navigation.drafts', defaultMessage: 'Drafts' },
 });
 
 /** Desktop sidebar with links to different views in the app. */
@@ -30,6 +31,7 @@ const SidebarNavigation = () => {
   const notificationCount = useAppSelector((state) => state.notifications.unread);
   const followRequestsCount = useAppSelector((state) => state.user_lists.follow_requests.items.count());
   const dashboardCount = useAppSelector((state) => state.admin.openReports.count() + state.admin.awaitingApproval.count());
+  const draftCount = useAppSelector((state) => state.draft_statuses.size);
 
   const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;
 
@@ -75,6 +77,15 @@ const SidebarNavigation = () => {
           to: '/developers',
           icon: require('@tabler/icons/outline/code.svg'),
           text: intl.formatMessage(messages.developers),
+        });
+      }
+
+      if (draftCount > 0) {
+        menu.push({
+          to: '/draft_statuses',
+          icon: require('@tabler/icons/outline/notes.svg'),
+          text: intl.formatMessage(messages.drafts),
+          count: draftCount,
         });
       }
     }

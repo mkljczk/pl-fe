@@ -5,6 +5,7 @@ import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom';
 import { fetchFollowRequests } from 'soapbox/actions/accounts';
 import { fetchReports, fetchUsers, fetchConfig } from 'soapbox/actions/admin';
 import { fetchCustomEmojis } from 'soapbox/actions/custom-emojis';
+import { fetchDraftStatuses } from 'soapbox/actions/draft-statuses';
 import { fetchFilters } from 'soapbox/actions/filters';
 import { fetchMarker } from 'soapbox/actions/markers';
 import { expandNotifications } from 'soapbox/actions/notifications';
@@ -131,6 +132,7 @@ import {
   Bech32Redirect,
   Relays,
   Rules,
+  DraftStatuses,
 } from './util/async-components';
 import GlobalHotkeys from './util/global-hotkeys';
 import { WrappedRoute } from './util/react-router-helpers';
@@ -289,6 +291,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
       <WrappedRoute path='/statuses/new' page={DefaultPage} component={NewStatus} content={children} exact />
       <WrappedRoute path='/statuses/:statusId' exact page={StatusPage} component={Status} content={children} />
       {features.scheduledStatuses && <WrappedRoute path='/scheduled_statuses' page={DefaultPage} component={ScheduledStatuses} content={children} />}
+      <WrappedRoute path='/draft_statuses' page={DefaultPage} component={DraftStatuses} content={children} />
 
       <WrappedRoute path='/settings/profile' page={DefaultPage} component={EditProfile} content={children} />
       {features.nip05 && <WrappedRoute path='/settings/identity' page={DefaultPage} component={EditIdentity} content={children} />}
@@ -386,6 +389,8 @@ const UI: React.FC<IUI> = ({ children }) => {
   /** Load initial data when a user is logged in */
   const loadAccountData = () => {
     if (!account) return;
+
+    dispatch(fetchDraftStatuses());
 
     dispatch(expandHomeTimeline({}, () => {
       dispatch(fetchSuggestionsForTimeline());

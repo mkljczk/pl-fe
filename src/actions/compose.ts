@@ -7,7 +7,7 @@ import api from 'soapbox/api';
 import { isNativeEmoji } from 'soapbox/features/emoji';
 import emojiSearch from 'soapbox/features/emoji/search';
 import { normalizeTag } from 'soapbox/normalizers';
-import { selectAccount, selectOwnAccount } from 'soapbox/selectors';
+import { selectAccount, selectOwnAccount, makeGetAccount } from 'soapbox/selectors';
 import { tagHistory } from 'soapbox/settings';
 import toast from 'soapbox/toast';
 import { isLoggedIn } from 'soapbox/utils/auth';
@@ -90,6 +90,8 @@ const COMPOSE_EDITOR_STATE_SET = 'COMPOSE_EDITOR_STATE_SET' as const;
 
 const COMPOSE_CHANGE_MEDIA_ORDER = 'COMPOSE_CHANGE_MEDIA_ORDER' as const;
 
+const getAccount = makeGetAccount();
+
 const messages = defineMessages({
   scheduleError: { id: 'compose.invalid_schedule', defaultMessage: 'You must schedule a post at least 5 minutes out.' },
   success: { id: 'compose.submit_success', defaultMessage: 'Your post was sent!' },
@@ -111,9 +113,11 @@ interface ComposeSetStatusAction {
   contentType?: string | false;
   v: ReturnType<typeof parseVersion>;
   withRedraft?: boolean;
+  draftId?: string;
+  editorState?: string | null;
 }
 
-const setComposeToStatus = (status: Status, rawText: string, spoilerText?: string, contentType?: string | false, withRedraft?: boolean) =>
+const setComposeToStatus = (status: Status, rawText: string, spoilerText?: string, contentType?: string | false, withRedraft?: boolean, draftId?: string, editorState?: string | null) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const { instance } = getState();
     const { explicitAddressing } = getFeatures(instance);
@@ -128,6 +132,8 @@ const setComposeToStatus = (status: Status, rawText: string, spoilerText?: strin
       contentType,
       v: parseVersion(instance.version),
       withRedraft,
+      draftId,
+      editorState,
     };
 
     dispatch(action);
@@ -274,8 +280,13 @@ const directComposeById = (accountId: string) =>
 const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, composeId: string, data: APIEntity, status: string, edit?: boolean) => {
   if (!dispatch || !getState) return;
 
+  const state = getState();
+
+  const accountUrl = getAccount(state, state.me as string)!.url;
+  const draftId = getState().compose.get(composeId)!.draft_id;
+
   dispatch(insertIntoTagHistory(composeId, data.tags || [], status));
-  dispatch(submitComposeSuccess(composeId, { ...data }));
+  dispatch(submitComposeSuccess(composeId, { ...data }, accountUrl, draftId));
   toast.success(edit ? messages.editSuccess : messages.success, {
     actionLabel: messages.view,
     actionLink: `/@${data.account.acct}/posts/${data.id}`,
@@ -382,10 +393,12 @@ const submitComposeRequest = (composeId: string) => ({
   id: composeId,
 });
 
-const submitComposeSuccess = (composeId: string, status: APIEntity) => ({
+const submitComposeSuccess = (composeId: string, status: APIEntity, accountUrl: string, draftId?: string | null) => ({
   type: COMPOSE_SUBMIT_SUCCESS,
   id: composeId,
   status: status,
+  accountUrl,
+  draftId,
 });
 
 const submitComposeFail = (composeId: string, error: unknown) => ({
@@ -839,10 +852,11 @@ const eventDiscussionCompose = (composeId: string, status: Status) =>
     });
   };
 
-const setEditorState = (composeId: string, editorState: EditorState | string | null) => ({
+const setEditorState = (composeId: string, editorState: EditorState | string | null, text?: string) => ({
   type: COMPOSE_EDITOR_STATE_SET,
   id: composeId,
   editorState: editorState,
+  text,
 });
 
 const changeMediaOrder = (composeId: string, a: string, b: string) => ({

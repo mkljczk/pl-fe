@@ -14,7 +14,7 @@ import { buildStatus } from '../util/pending-status-builder';
 
 import PollPreview from './poll-preview';
 
-import type { Status as StatusEntity } from 'soapbox/types/entities';
+import type { Poll as PollEntity, Status as StatusEntity } from 'soapbox/types/entities';
 
 const shouldHaveCard = (pendingStatus: StatusEntity) => {
   return Boolean(pendingStatus.content.match(/https?:\/\/\S*/));
@@ -89,7 +89,7 @@ const PendingStatus: React.FC<IPendingStatus> = ({ idempotencyKey, className, mu
 
               <PendingStatusMedia status={status} />
 
-              {status.poll && <PollPreview pollId={status.poll as string} />}
+              {status.poll && <PollPreview poll={status.poll as PollEntity} />}
 
               {status.quote && <QuotedStatus statusId={status.quote as string} />}
             </Stack>
