@@ -6,7 +6,7 @@ import { useAccount } from 'soapbox/api/hooks';
 import StillImage from 'soapbox/components/still-image';
 import { Avatar, HStack, Stack, Text } from 'soapbox/components/ui';
 import VerificationBadge from 'soapbox/components/verification-badge';
-import { useAppSelector } from 'soapbox/hooks';
+import { useAppSelector, useSettings } from 'soapbox/hooks';
 import { getAcct } from 'soapbox/utils/accounts';
 import { shortNumberFormat } from 'soapbox/utils/numbers';
 import { displayFqn } from 'soapbox/utils/state';
@@ -20,6 +20,7 @@ interface IUserPanel {
 
 const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) => {
   const intl = useIntl();
+  const { demetricator } = useSettings();
   const { account } = useAccount(accountId);
   const fqn = useAppSelector((state) => displayFqn(state));
 
@@ -76,33 +77,35 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
           </HStack>
         </Stack>
 
-        <HStack alignItems='center' space={3}>
-          {account.followers_count >= 0 && (
-            <Link to={`/@${account.acct}/followers`} title={intl.formatNumber(account.followers_count)}>
-              <HStack alignItems='center' space={1}>
-                <Text theme='primary' weight='bold' size='sm'>
-                  {shortNumberFormat(account.followers_count)}
-                </Text>
-                <Text weight='bold' size='sm'>
-                  <FormattedMessage id='account.followers' defaultMessage='Followers' />
-                </Text>
-              </HStack>
-            </Link>
-          )}
+        {!demetricator && (
+          <HStack alignItems='center' space={3}>
+            {account.followers_count >= 0 && (
+              <Link to={`/@${account.acct}/followers`} title={intl.formatNumber(account.followers_count)}>
+                <HStack alignItems='center' space={1}>
+                  <Text theme='primary' weight='bold' size='sm'>
+                    {shortNumberFormat(account.followers_count)}
+                  </Text>
+                  <Text weight='bold' size='sm'>
+                    <FormattedMessage id='account.followers' defaultMessage='Followers' />
+                  </Text>
+                </HStack>
+              </Link>
+            )}
 
-          {account.following_count >= 0 && (
-            <Link to={`/@${account.acct}/following`} title={intl.formatNumber(account.following_count)}>
-              <HStack alignItems='center' space={1}>
-                <Text theme='primary' weight='bold' size='sm'>
-                  {shortNumberFormat(account.following_count)}
-                </Text>
-                <Text weight='bold' size='sm'>
-                  <FormattedMessage id='account.follows' defaultMessage='Following' />
-                </Text>
-              </HStack>
-            </Link>
-          )}
-        </HStack>
+            {account.following_count >= 0 && (
+              <Link to={`/@${account.acct}/following`} title={intl.formatNumber(account.following_count)}>
+                <HStack alignItems='center' space={1}>
+                  <Text theme='primary' weight='bold' size='sm'>
+                    {shortNumberFormat(account.following_count)}
+                  </Text>
+                  <Text weight='bold' size='sm'>
+                    <FormattedMessage id='account.follows' defaultMessage='Following' />
+                  </Text>
+                </HStack>
+              </Link>
+            )}
+          </HStack>
+        )}
       </Stack>
     </div>
   );

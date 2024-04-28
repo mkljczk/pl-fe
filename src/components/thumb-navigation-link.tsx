@@ -4,6 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 
 import IconWithCounter from 'soapbox/components/icon-with-counter';
 import { Icon, Text } from 'soapbox/components/ui';
+import { useSettings } from 'soapbox/hooks';
 
 interface IThumbNavigationLink {
   count?: number;
@@ -18,6 +19,7 @@ interface IThumbNavigationLink {
 
 const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({ count, countMax, src, activeSrc, text, to, exact, paths }): JSX.Element => {
   const { pathname } = useLocation();
+  const { demetricator } = useSettings();
 
   const isActive = (): boolean => {
     if (paths) {
@@ -33,7 +35,7 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({ count, countMax, 
 
   return (
     <NavLink to={to} exact={exact} className='thumb-navigation__link'>
-      {count !== undefined ? (
+      {!demetricator && count !== undefined ? (
         <IconWithCounter
           src={icon}
           className={clsx({

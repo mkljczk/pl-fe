@@ -3,6 +3,7 @@ import { useIntl, defineMessages } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 
 import { HStack, Text } from 'soapbox/components/ui';
+import { useSettings } from 'soapbox/hooks';
 import { shortNumberFormat } from 'soapbox/utils/numbers';
 
 import type { Account } from 'soapbox/schemas';
@@ -20,6 +21,7 @@ interface IProfileStats {
 /** Display follower and following counts for an account. */
 const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
   const intl = useIntl();
+  const { demetricator } = useSettings();
 
   if (!account) {
     return null;
@@ -29,9 +31,11 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
     <HStack alignItems='center' space={3}>
       <NavLink to={`/@${account.acct}/followers`} onClick={onClickHandler} title={intl.formatNumber(account.followers_count)} className='hover:underline'>
         <HStack alignItems='center' space={1}>
-          <Text theme='primary' weight='bold' size='sm'>
-            {shortNumberFormat(account.followers_count)}
-          </Text>
+          {!demetricator && (
+            <Text theme='primary' weight='bold' size='sm'>
+              {shortNumberFormat(account.followers_count)}
+            </Text>
+          )}
           <Text weight='bold' size='sm'>
             {intl.formatMessage(messages.followers)}
           </Text>
@@ -40,9 +44,11 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
 
       <NavLink to={`/@${account.acct}/following`} onClick={onClickHandler} title={intl.formatNumber(account.following_count)} className='hover:underline'>
         <HStack alignItems='center' space={1}>
-          <Text theme='primary' weight='bold' size='sm'>
-            {shortNumberFormat(account.following_count)}
-          </Text>
+          {!demetricator && (
+            <Text theme='primary' weight='bold' size='sm'>
+              {shortNumberFormat(account.following_count)}
+            </Text>
+          )}
           <Text weight='bold' size='sm'>
             {intl.formatMessage(messages.follows)}
           </Text>

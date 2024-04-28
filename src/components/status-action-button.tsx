@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 
 import { Text, Icon, Emoji } from 'soapbox/components/ui';
+import { useSettings } from 'soapbox/hooks';
 import { shortNumberFormat } from 'soapbox/utils/numbers';
 
 import type { EmojiReaction } from 'soapbox/schemas';
@@ -19,9 +20,11 @@ interface IStatusActionCounter {
 
 /** Action button numerical counter, eg "5" likes. */
 const StatusActionCounter: React.FC<IStatusActionCounter> = ({ count = 0 }): JSX.Element => {
+  const { demetricator } = useSettings();
+
   return (
     <Text size='xs' weight='semibold' theme='inherit'>
-      {shortNumberFormat(count)}
+      {demetricator && count > 1 ? '1+' : shortNumberFormat(count)}
     </Text>
   );
 };

@@ -31,3 +31,11 @@ noscript {
 div[data-viewport-type='window'] {
   position: static !important;
 }
+
+body.system-font, body.system-font .font-sans {
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+body.system-font .font-mono {
+  font-family: ui-monospace, mono;
+}

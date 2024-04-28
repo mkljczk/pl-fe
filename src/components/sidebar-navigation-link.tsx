@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { useSettings } from 'soapbox/hooks';
+
 import { Icon, Text } from './ui';
 
 interface ISidebarNavigationLink {
@@ -25,6 +27,8 @@ interface ISidebarNavigationLink {
 const SidebarNavigationLink = React.forwardRef((props: ISidebarNavigationLink, ref: React.ForwardedRef<HTMLAnchorElement>): JSX.Element => {
   const { icon, activeIcon, text, to = '', count, countMax, onClick } = props;
   const isActive = location.pathname === to;
+
+  const { demetricator } = useSettings();
 
   const handleClick: React.EventHandler<React.MouseEvent> = (e) => {
     if (onClick) {
@@ -55,7 +59,7 @@ const SidebarNavigationLink = React.forwardRef((props: ISidebarNavigationLink, r
       >
         <Icon
           src={(isActive && activeIcon) || icon}
-          count={count}
+          count={demetricator ? undefined : count}
           countMax={countMax}
           className={clsx('h-5 w-5', {
             'text-primary-700 dark:text-white': !isActive,

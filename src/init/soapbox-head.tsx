@@ -20,7 +20,7 @@ interface ISoapboxHead {
 /** Injects metadata into site head with Helmet. */
 const SoapboxHead: React.FC<ISoapboxHead> = ({ children }) => {
   const { locale, direction } = useLocale();
-  const { demo, reduceMotion, underlineLinks, demetricator } = useSettings();
+  const { demo, reduceMotion, underlineLinks, demetricator, systemFont } = useSettings();
   const soapboxConfig = useSoapboxConfig();
   const theme = useTheme();
 
@@ -31,6 +31,7 @@ const SoapboxHead: React.FC<ISoapboxHead> = ({ children }) => {
     'no-reduce-motion': !reduceMotion,
     'underline-links': underlineLinks,
     'demetricator': demetricator,
+    'system-font': systemFont,
   });
 
   useEffect(() => {

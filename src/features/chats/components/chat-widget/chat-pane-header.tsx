@@ -1,6 +1,7 @@
 import React, { HTMLAttributes } from 'react';
 
 import { HStack, IconButton, Text } from 'soapbox/components/ui';
+import { useSettings } from 'soapbox/hooks';
 
 interface IChatPaneHeader {
   isOpen: boolean;
@@ -24,6 +25,8 @@ const ChatPaneHeader = (props: IChatPaneHeader) => {
     ...rest
   } = props;
 
+  const { demetricator } = useSettings();
+
   const ButtonComp = isToggleable ? 'button' : 'div';
   const buttonProps: HTMLAttributes<HTMLButtonElement | HTMLDivElement> = {};
   if (isToggleable) {
@@ -41,7 +44,7 @@ const ChatPaneHeader = (props: IChatPaneHeader) => {
           {title}
         </Text>
 
-        {(typeof unreadCount !== 'undefined' && unreadCount > 0) && (
+        {(!demetricator && typeof unreadCount !== 'undefined' && unreadCount > 0) && (
           <HStack alignItems='center' space={2}>
             <Text weight='semibold' data-testid='unread-count'>
               ({unreadCount})

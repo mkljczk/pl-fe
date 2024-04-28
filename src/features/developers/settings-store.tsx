@@ -109,33 +109,6 @@ const SettingsStore: React.FC = () => {
         >
           <SettingToggle settings={settings} settingPath={['demo']} onChange={onToggleChange} />
         </ListItem>
-
-        <ListItem label={<FormattedMessage id='preferences.notifications.advanced' defaultMessage='Show all notification categories' />}>
-          <SettingToggle settings={settings} settingPath={['notifications', 'quickFilter', 'advanced']} onChange={onToggleChange} />
-        </ListItem>
-
-        <ListItem label={<FormattedMessage id='preferences.fields.unfollow_modal_label' defaultMessage='Show confirmation dialog before unfollowing someone' />}>
-          <SettingToggle settings={settings} settingPath={['unfollowModal']} onChange={onToggleChange} />
-        </ListItem>
-
-        <ListItem label={<FormattedMessage id='preferences.fields.reduce_motion_label' defaultMessage='Reduce motion in animations' />}>
-          <SettingToggle settings={settings} settingPath={['reduceMotion']} onChange={onToggleChange} />
-        </ListItem>
-
-        <ListItem label={<FormattedMessage id='preferences.fields.underline_links_label' defaultMessage='Always underline links in posts' />}>
-          <SettingToggle settings={settings} settingPath={['underlineLinks']} onChange={onToggleChange} />
-        </ListItem>
-
-        <ListItem label={<FormattedMessage id='preferences.fields.system_font_label' defaultMessage="Use system's default font" />}>
-          <SettingToggle settings={settings} settingPath={['systemFont']} onChange={onToggleChange} />
-        </ListItem>
-
-        <ListItem
-          label={<FormattedMessage id='preferences.fields.demetricator_label' defaultMessage='Use Demetricator' />}
-          hint={<FormattedMessage id='preferences.hints.demetricator' defaultMessage='Decrease social media anxiety by hiding all numbers from the site.' />}
-        >
-          <SettingToggle settings={settings} settingPath={['demetricator']} onChange={onToggleChange} />
-        </ListItem>
       </List>
     </Column>
   );
