@@ -22,7 +22,7 @@ const Portal: React.FC<IPortal> = ({ children }) => {
   return (
     ReactDOM.createPortal(
       children,
-      document.getElementById('soapbox') as HTMLDivElement,
+      document.getElementById('plfe') as HTMLDivElement,
     )
   );
 };

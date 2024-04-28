@@ -68,9 +68,9 @@ export default defineConfig(({ command }) => ({
       },
       manifestFilename: 'manifest.json',
       manifest: {
-        name: 'Soapbox',
-        short_name: 'Soapbox',
-        description: 'A social media frontend with a focus on custom branding and ease of use.',
+        name: 'pl-fe',
+        short_name: 'pl-fe',
+        description: 'Web-based federated social media client, a fork of Soapbox',
       },
       srcDir: 'src/service-worker',
       filename: 'sw.ts',

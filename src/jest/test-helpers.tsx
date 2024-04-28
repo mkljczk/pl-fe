@@ -50,7 +50,7 @@ const TestApp: FC<any> = ({ children, storeProps, routerProps = {} }) => {
   };
 
   return (
-    <div id='soapbox'>
+    <div id='plfe'>
       <Provider store={props.store}>
         <MemoryRouter {...routerProps}>
           <StatProvider>

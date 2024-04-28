@@ -1,7 +1,7 @@
 {
-  "name": "Soapbox",
-  "description": "Software for the next generation of social media.",
+  "name": "pl-fe",
+  "description": "Web-based federated social media client, a fork of Soapbox.",
   "keywords": ["fediverse"],
-  "website": "https://soapbox.pub",
+  "website": "https://github.com/mkljczk/pl-fe",
   "stack": "container"
 }

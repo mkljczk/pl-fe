@@ -1,20 +1,20 @@
 {
-  "name": "soapbox",
-  "displayName": "Soapbox",
+  "name": "pl-fe",
+  "displayName": "pl-fe",
   "version": "3.2.0",
   "type": "module",
-  "description": "Soapbox frontend for the Fediverse.",
-  "homepage": "https://soapbox.pub/",
+  "description": "Web-based federated social media client, a fork of Soapbox",
+  "homepage": "https://github.com/mkljczk/pl-fe",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/soapbox-pub/soapbox"
+    "url": "https://github.com/mkljczk/pl-fe"
   },
   "keywords": [
     "fediverse",
     "pleroma"
   ],
   "bugs": {
-    "url": "https://gitlab.com/soapbox-pub/soapbox/-/issues"
+    "url": "https://github.com/mkljczk/pl-fe/issues"
   },
   "funding": {
     "type": "lightning",
