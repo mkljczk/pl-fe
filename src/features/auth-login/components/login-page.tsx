@@ -4,9 +4,9 @@ import { Redirect } from 'react-router-dom';
 
 import { logIn, verifyCredentials, switchAccount } from 'soapbox/actions/auth';
 import { fetchInstance } from 'soapbox/actions/instance';
-import { closeModal, openModal } from 'soapbox/actions/modals';
+import { closeModal } from 'soapbox/actions/modals';
 import { BigCard } from 'soapbox/components/big-card';
-import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
+import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 import { getRedirectUrl } from 'soapbox/utils/redirect';
 import { isStandalone } from 'soapbox/utils/state';
 
@@ -21,7 +21,6 @@ const LoginPage = () => {
 
   const me = useAppSelector((state) => state.me);
   const standalone = useAppSelector((state) => isStandalone(state));
-  const { nostrSignup } = useFeatures();
 
   const token = new URLSearchParams(window.location.search).get('token');
 
@@ -62,11 +61,6 @@ const LoginPage = () => {
     setIsLoading(true);
     event.preventDefault();
   };
-
-  if (nostrSignup) {
-    setTimeout(() => dispatch(openModal('NOSTR_LOGIN')), 100);
-    return <Redirect to='/' />;
-  }
 
   if (standalone) return <Redirect to='/login/external' />;
 

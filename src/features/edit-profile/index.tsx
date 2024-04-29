@@ -54,7 +54,6 @@ const messages = defineMessages({
   bioPlaceholder: { id: 'edit_profile.fields.bio_placeholder', defaultMessage: 'Tell us about yourself.' },
   displayNamePlaceholder: { id: 'edit_profile.fields.display_name_placeholder', defaultMessage: 'Name' },
   locationPlaceholder: { id: 'edit_profile.fields.location_placeholder', defaultMessage: 'Location' },
-  nip05Placeholder: { id: 'edit_profile.fields.nip05_placeholder', defaultMessage: 'user@{domain}' },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
 });
 
@@ -75,11 +74,6 @@ interface AccountCredentialsSource {
   sensitive?: boolean;
   /** Default language to use for authored statuses. (ISO 6391) */
   language?: string;
-  /** Nostr metadata. */
-  nostr?: {
-    /** Nostr NIP-05 identifier. */
-    nip05?: string;
-  };
 }
 
 /**
@@ -123,8 +117,6 @@ interface AccountCredentials {
   location?: string;
   /** User's birthday. */
   birthday?: string;
-  /** Nostr NIP-05 identifier. */
-  nip05?: string;
 }
 
 /** Convert an account into an update_credentials request object. */
@@ -146,7 +138,6 @@ const accountToCredentials = (account: Account): AccountCredentials => {
     hide_follows_count: hideNetwork,
     location: account.location,
     birthday: account.pleroma?.birthday ?? undefined,
-    nip05: account.source?.nostr?.nip05 ?? '',
   };
 };
 
@@ -312,19 +303,6 @@ const EditProfile: React.FC = () => {
             placeholder={intl.formatMessage(messages.displayNamePlaceholder)}
           />
         </FormGroup>
-
-        {features.nip05 && (
-          <FormGroup
-            labelText={<FormattedMessage id='edit_profile.fields.nip05_label' defaultMessage='Username' />}
-          >
-            <Input
-              type='text'
-              value={data.nip05}
-              onChange={handleTextChange('nip05')}
-              placeholder={intl.formatMessage(messages.nip05Placeholder, { domain: instance.domain })}
-            />
-          </FormGroup>
-        )}
 
         {features.birthdays && (
           <FormGroup

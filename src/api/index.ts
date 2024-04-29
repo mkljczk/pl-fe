@@ -62,16 +62,11 @@ const getAuthBaseURL = createSelector([
 export const baseClient = (
   accessToken?: string | null,
   baseURL: string = '',
-  nostrSign = false,
 ): AxiosInstance => {
   const headers: Record<string, string> = {};
 
   if (accessToken) {
     headers.Authorization = `Bearer ${accessToken}`;
-  }
-
-  if (nostrSign) {
-    headers['X-Nostr-Sign'] = 'true';
   }
 
   return axios.create({
@@ -105,11 +100,7 @@ export default (getState: () => RootState, authType: string = 'user'): AxiosInst
   const me = state.me;
   const baseURL = me ? getAuthBaseURL(state, me) : '';
 
-  const relayUrl = state.getIn(['instance', 'nostr', 'relay']) as string | undefined;
-  const pubkey = state.getIn(['instance', 'nostr', 'pubkey']) as string | undefined;
-  const nostrSign = Boolean(relayUrl && pubkey);
-
-  return baseClient(accessToken, baseURL, nostrSign);
+  return baseClient(accessToken, baseURL);
 };
 
 // The Jest mock exports these, so they're needed for TypeScript.
