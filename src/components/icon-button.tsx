@@ -68,7 +68,7 @@ const IconButton: React.FC<IIconButton> = ({
 
   const classes = clsx(className, 'icon-button', {
     active,
-    disabled,
+    'opacity-20 cursor-default': disabled,
   });
 
   return (
@@ -89,10 +89,10 @@ const IconButton: React.FC<IIconButton> = ({
       disabled={disabled}
       type='button'
     >
-      <div>
+      <div className='flex items-center justify-center'>
         <Icon className={iconClassName} src={src} aria-hidden='true' />
       </div>
-      {text && <span className='icon-button__text'>{text}</span>}
+      {text && <span className='pl-0.5'>{text}</span>}
     </button>
   );
 };

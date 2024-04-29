@@ -29,9 +29,7 @@ const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
 
   const [value, setValue] = useState('');
 
-  const isEmpty = (): boolean => {
-    return !(value.length > 0);
-  };
+  const empty = !(value.length > 0);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
     refreshCancelToken();
@@ -48,7 +46,7 @@ const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
   const handleClear: React.MouseEventHandler = e => {
     e.preventDefault();
 
-    if (!isEmpty()) {
+    if (!empty) {
       setValue('');
     }
   };
@@ -99,9 +97,9 @@ const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
         onKeyDown={handleKeyDown}
         renderSuggestion={AutosuggestLocation}
       />
-      <div role='button' tabIndex={0} className='search__icon' onClick={handleClear}>
-        <Icon src={require('@tabler/icons/outline/search.svg')} className={clsx('svg-icon--search', { active: isEmpty() })} />
-        <Icon src={require('@tabler/icons/outline/backspace.svg')} className={clsx('svg-icon--backspace', { active: !isEmpty() })} aria-label={intl.formatMessage(messages.placeholder)} />
+      <div role='button' tabIndex={0} className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto' onClick={handleClear}>
+        <Icon src={require('@tabler/icons/outline/search.svg')} className={clsx('h-5 w-5 text-gray-600', { 'hidden': !empty })} />
+        <Icon src={require('@tabler/icons/outline/backspace.svg')} className={clsx('h-5 w-5 text-gray-600', { 'hidden': empty })} aria-label={intl.formatMessage(messages.placeholder)} />
       </div>
     </div>
   );

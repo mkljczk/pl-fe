@@ -500,13 +500,13 @@ const Video: React.FC<IVideo> = ({
         onVolumeChange={handleVolumeChange}
       />
 
-      <div className={clsx('video-player__controls absolute bottom-0 left-0 z-[2] box-border px-4 py-0 opacity-0 ring-0 transition-opacity duration-100 ease-in-out', { 'opacity-100': paused || hovered })}>
+      <div className={clsx('video-player__controls absolute inset-x-0 bottom-0 z-[2] box-border px-4 py-0 opacity-0 ring-0 transition-opacity duration-100 ease-in-out', { 'opacity-100': paused || hovered })}>
         <div className='video-player__seek' onMouseDown={handleMouseDown} ref={seek}>
-          <div className='video-player__seek__buffer' style={{ width: `${buffer}%` }} />
-          <div className='video-player__seek__progress' style={{ width: `${progress}%` }} />
+          <div className='absolute top-3.5 block h-1 rounded bg-white/20' style={{ width: `${buffer}%` }} />
+          <div className='absolute top-3.5 block h-1 rounded bg-accent-500' style={{ width: `${progress}%` }} />
 
           <span
-            className={clsx('video-player__seek__handle', { active: dragging })}
+            className={clsx('video-player__seek__handle', { 'opacity-100': dragging })}
             tabIndex={0}
             style={{ left: `${progress}%` }}
             onKeyDown={handleVideoKeyDown}
@@ -536,10 +536,10 @@ const Video: React.FC<IVideo> = ({
               <Icon src={muted ? require('@tabler/icons/outline/volume-3.svg') : require('@tabler/icons/outline/volume.svg')} />
             </button>
 
-            <div className={clsx('video-player__volume', { active: hovered })} onMouseDown={handleVolumeMouseDown} ref={slider}>
+            <div className={clsx('video-player__volume', { 'overflow-visible w-12 mr-4': hovered })} onMouseDown={handleVolumeMouseDown} ref={slider}>
               <div className='video-player__volume__current' style={{ width: `${volume * 100}%` }} />
               <span
-                className={clsx('video-player__volume__handle')}
+                className={clsx('video-player__volume__handle', { 'opacity-100': dragging || hovered })}
                 tabIndex={0}
                 style={{ left: `${volume * 100}%` }}
               />
@@ -554,7 +554,7 @@ const Video: React.FC<IVideo> = ({
             )}
 
             {link && (
-              <span className='video-player__link'>{link}</span>
+              <span className='video-player__link px-2.5 py-0.5'>{link}</span>
             )}
           </div>
 

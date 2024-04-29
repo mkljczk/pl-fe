@@ -1,18 +1,10 @@
 .icon-button {
   @apply text-black dark:text-white inline-flex items-center p-0 border-0 bg-transparent cursor-pointer transition duration-100 ease-in opacity-40;
 
-  &__text {
-    @apply pl-0.5;
-  }
-
   &:hover,
   &:active,
   &:focus {
     @apply opacity-60 transition-colors duration-200 ease-out;
-  }
-
-  &.disabled {
-  @apply opacity-20 cursor-default;
   }
 
   &::-moz-focus-inner {

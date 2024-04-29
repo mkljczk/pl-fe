@@ -438,7 +438,7 @@ const Audio: React.FC<IAudio> = (props) => {
 
   return (
     <div
-      className={clsx('audio-player', { editable })}
+      className={clsx('relative box-border overflow-hidden rounded-[10px] bg-black pb-11 [direction:ltr]', { 'rounded-none h-full': editable })}
       ref={player}
       style={{
         backgroundColor: _getBackgroundColor(),
@@ -490,24 +490,24 @@ const Audio: React.FC<IAudio> = (props) => {
         />
       )}
 
-      <div className='video-player__seek' onMouseDown={handleMouseDown} ref={seek}>
+      <div className='video-player__seek before:top-0 before:bg-white/10' onMouseDown={handleMouseDown} ref={seek}>
 
-        <div className='video-player__seek__buffer' style={{ width: `${buffer}%` }} />
+        <div className='absolute top-0 block h-1 rounded bg-white/20' style={{ width: `${buffer}%` }} />
 
         <div
-          className='video-player__seek__progress'
+          className='absolute top-0 block h-1 rounded bg-accent-500'
           style={{ width: `${progress}%`, backgroundColor: accentColor }}
         />
 
         <span
-          className={clsx('video-player__seek__handle', { active: dragging })}
+          className={clsx('video-player__seek__handle -top-1', { 'opacity-100': dragging })}
           tabIndex={0}
           style={{ left: `${progress}%`, backgroundColor: accentColor }}
           onKeyDown={handleAudioKeyDown}
         />
       </div>
 
-      <div className='video-player__controls absolute bottom-0 left-0 z-[2] box-border px-4 py-0 opacity-100 ring-0 transition-opacity duration-100 ease-in-out'>
+      <div className='video-player__controls absolute bottom-0 left-0 z-[2] box-border bg-transparent px-4 py-0 pt-2.5 opacity-100 ring-0 transition-opacity duration-100 ease-in-out'>
         <div className='-mx-[5px] my-0 flex justify-between pb-2'>
           <div className='video-player__buttons left'>
 
@@ -515,7 +515,7 @@ const Audio: React.FC<IAudio> = (props) => {
               type='button'
               title={intl.formatMessage(paused ? messages.play : messages.pause)}
               aria-label={intl.formatMessage(paused ? messages.play : messages.pause)}
-              className='player-button'
+              className='player-button text-current opacity-[75] hover:text-current hover:opacity-100 focus:text-current focus:opacity-100 active:text-current active:opacity-100'
               onClick={togglePlay}
             >
               <Icon src={paused ? require('@tabler/icons/outline/player-play.svg') : require('@tabler/icons/outline/player-pause.svg')} />
@@ -525,14 +525,14 @@ const Audio: React.FC<IAudio> = (props) => {
               type='button'
               title={intl.formatMessage(muted ? messages.unmute : messages.mute)}
               aria-label={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-              className='player-button'
+              className='player-button text-current opacity-[75] hover:text-current hover:opacity-100 focus:text-current focus:opacity-100 active:text-current active:opacity-100'
               onClick={toggleMute}
             >
               <Icon src={muted ? require('@tabler/icons/outline/volume-3.svg') : require('@tabler/icons/outline/volume.svg')} />
             </button>
 
             <div
-              className={clsx('video-player__volume', { active: hovered })}
+              className={clsx('video-player__volume before:bg-white/10', { 'overflow-visible w-12 mr-4': hovered })}
               ref={slider}
               onMouseDown={handleVolumeMouseDown}
             >
@@ -545,7 +545,7 @@ const Audio: React.FC<IAudio> = (props) => {
               />
 
               <span
-                className='video-player__volume__handle'
+                className={clsx('video-player__volume__handle', { 'opacity-100': dragging || hovered })}
                 tabIndex={0}
                 style={{ left: `${volume * 100}%`, backgroundColor: _getAccentColor() }}
               />

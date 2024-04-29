@@ -20,7 +20,7 @@
     flex: 0 1 auto;
 
     .player-button {
-      @apply inline-block outline-0 bg-transparent text-base border-0 text-white/75;
+      @apply inline-block outline-0 bg-transparent text-base border-0 text-white/75 active:text-white hover:text-white focus:text-white;
       flex: 0 0 auto;
       padding: 5px 6px;
 
@@ -37,27 +37,14 @@
   }
 
   &__volume {
-    @apply inline-flex cursor-pointer h-6 relative overflow-hidden;
+    @apply inline-flex cursor-pointer h-6 relative overflow-hidden before:content-[''] before:w-12 before:bg-white/35 before:rounded before:absolute before:h-1 before:left-0 before:top-1/2;
     flex: 0 0 auto;
 
     .no-reduce-motion & {
       transition: all 100ms linear;
     }
 
-    &.active {
-      @apply overflow-visible w-12 mr-4;
-    }
-
     &::before {
-      content: '';
-      width: 50px;
-      background: rgba(#fff, 0.35);
-      border-radius: 4px;
-      display: block;
-      position: absolute;
-      height: 4px;
-      left: 0;
-      top: 50%;
       transform: translate(0, -50%);
     }
 
@@ -75,43 +62,16 @@
         transition: opacity 100ms linear;
       }
     }
-
-    &.active &__handle {
-      @apply opacity-100;
-    }
   }
 
   &__link {
-    @apply py-0.5 px-2.5;
-
     a {
       @apply no-underline text-sm font-medium text-white hover:underline active:underline focus:underline;
     }
   }
 
   &__seek {
-    cursor: pointer;
-    height: 24px;
-    position: relative;
-
-    &::before {
-      content: '';
-      width: 100%;
-      background: rgba(#fff, 0.35);
-      border-radius: 4px;
-      display: block;
-      position: absolute;
-      height: 4px;
-      top: 14px;
-    }
-
-    &__progress {
-      @apply block absolute h-1 rounded top-3.5 bg-accent-500;
-    }
-
-    &__buffer {
-      @apply block absolute h-1 rounded top-3.5 bg-white/20;
-    }
+    @apply cursor-pointer h-6 relative before:content-[''] before:w-full before:bg-white/35 before:rounded before:block before:absolute before:h-1 before:top-3.5;
 
     &__handle {
       @apply bg-accent-500 absolute z-[3] opacity-0 rounded-[50%] size-3 top-2.5 -ml-1.5;
@@ -119,16 +79,6 @@
 
       .no-reduce-motion & {
         transition: opacity 0.1s ease;
-      }
-
-      &.active {
-        @apply opacity-100;
-      }
-    }
-
-    &:hover {
-      .video-player__seek__handle {
-        @apply opacity-100;
       }
     }
   }

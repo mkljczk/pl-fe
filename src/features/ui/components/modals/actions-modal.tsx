@@ -56,7 +56,7 @@ const ActionsModal: React.FC<IActionsModal> = ({ status, actions, onClick, onClo
     <Motion defaultStyle={{ top: 100 }} style={{ top: spring(0) }}>
       {({ top }) => (
         <div
-          className='actions-modal pointer-events-auto relative z-[9999] m-auto flex max-h-[calc(100vh-3rem)] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white text-gray-400 shadow-xl black:bg-black dark:bg-gray-900'
+          className='pointer-events-auto relative z-[9999] m-auto flex max-h-[calc(100vh-3rem)] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white text-gray-400 shadow-xl black:bg-black dark:bg-gray-900'
           style={{ top: `${top}%` }}
         >
           {status && (

@@ -28,10 +28,6 @@
 
   &__preview {
     @apply bg-gray-200 dark:bg-gray-900 rounded-lg w-full h-full object-cover absolute top-0 left-0 z-0;
-
-    &--hidden {
-      @apply hidden;
-    }
   }
 
   &__gifv {
