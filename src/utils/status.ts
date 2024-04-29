@@ -71,3 +71,13 @@ export const getActualStatus = <T extends { reblog: T | string | null }>(status:
     return status;
   }
 };
+
+export const getStatusIdsFromLinksInContent = (content: string): string[] => {
+  const urls = content.match(RegExp(`${window.location.origin}/@([a-z\\d_-]+(?:@[^@\\s]+)?)/posts/[a-z0-9]+(?!\\S)`, 'gi'));
+
+  if (!urls) return [];
+
+  return Array.from(new Set(urls
+    .map(url => url.split('/').at(-1) as string)
+    .filter(url => url)));
+};

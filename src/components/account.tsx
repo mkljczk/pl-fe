@@ -154,6 +154,8 @@ const Account = ({
       );
     }
 
+    if (!withRelationship) return null;
+
     if (account.id !== me) {
       return <ActionButton account={account} actionType={actionType} />;
     }
@@ -297,7 +299,7 @@ const Account = ({
         </HStack>
 
         <div ref={actionRef}>
-          {(withRelationship || action) ? renderAction() : null}
+          {renderAction()}
         </div>
       </HStack>
     </div>
