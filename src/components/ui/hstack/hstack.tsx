@@ -18,17 +18,17 @@ const alignItemsOptions = {
 };
 
 const spaces = {
-  0: 'space-x-0',
-  [0.5]: 'space-x-0.5',
-  1: 'space-x-1',
-  1.5: 'space-x-1.5',
-  2: 'space-x-2',
-  2.5: 'space-x-2.5',
-  3: 'space-x-3',
-  4: 'space-x-4',
-  5: 'space-x-5',
-  6: 'space-x-6',
-  8: 'space-x-8',
+  0: 'gap-x-0',
+  [0.5]: 'gap-x-0.5',
+  1: 'gap-x-1',
+  1.5: 'gap-x-1.5',
+  2: 'gap-x-2',
+  2.5: 'gap-x-2.5',
+  3: 'gap-x-3',
+  4: 'gap-x-4',
+  5: 'gap-x-5',
+  6: 'gap-x-6',
+  8: 'gap-x-8',
 };
 
 interface IHStack extends Pick<React.HTMLAttributes<HTMLDivElement>, 'children' | 'className' | 'onClick' | 'style' | 'title'> {
@@ -56,7 +56,7 @@ const HStack = forwardRef<HTMLDivElement, IHStack>((props, ref) => {
     <Elem
       {...filteredProps}
       ref={ref}
-      className={clsx('flex rtl:space-x-reverse', {
+      className={clsx('flex', {
         // @ts-ignore
         [alignItemsOptions[alignItems]]: typeof alignItems !== 'undefined',
         // @ts-ignore
