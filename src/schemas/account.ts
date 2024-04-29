@@ -1,4 +1,3 @@
-import { NSchema as n } from '@soapbox/nspec';
 import escapeTextContentForBrowser from 'escape-html';
 import DOMPurify from 'isomorphic-dompurify';
 import z from 'zod';
@@ -8,7 +7,7 @@ import { unescapeHTML } from 'soapbox/utils/html';
 
 import { customEmojiSchema } from './custom-emoji';
 import { relationshipSchema } from './relationship';
-import { coerceObject, contentSchema, filteredArray, makeCustomEmojiMap } from './utils';
+import { contentSchema, filteredArray, makeCustomEmojiMap } from './utils';
 
 import type { Resolve } from 'soapbox/utils/types';
 
@@ -40,10 +39,6 @@ const baseAccountSchema = z.object({
   created_at: z.string().datetime().catch(new Date().toUTCString()),
   discoverable: z.boolean().catch(false),
   display_name: z.string().catch(''),
-  ditto: coerceObject({
-    accepts_zaps: z.boolean().catch(false),
-    is_registered: z.boolean().catch(false),
-  }),
   emojis: filteredArray(customEmojiSchema),
   fields: filteredArray(fieldSchema),
   followers_count: z.number().catch(0),
@@ -61,9 +56,6 @@ const baseAccountSchema = z.object({
     z.string(),
     z.null(),
   ]).catch(null),
-  nostr: coerceObject({
-    pubkey: n.id().optional().catch(undefined),
-  }),
   note: contentSchema,
   /** Fedibird extra settings. */
   other_settings: z.object({
@@ -101,10 +93,6 @@ const baseAccountSchema = z.object({
     note: z.string().catch(''),
     pleroma: z.object({
       discoverable: z.boolean().catch(true),
-    }).optional().catch(undefined),
-    sms_verified: z.boolean().catch(false),
-    nostr: z.object({
-      nip05: z.string().optional().catch(undefined),
     }).optional().catch(undefined),
   }).optional().catch(undefined),
   statuses_count: z.number().catch(0),

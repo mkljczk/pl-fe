@@ -6,7 +6,7 @@ import { blockAccount } from 'soapbox/actions/accounts';
 import { launchChat } from 'soapbox/actions/chats';
 import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'soapbox/actions/compose';
 import { editEvent } from 'soapbox/actions/events';
-import { toggleBookmark, toggleDislike, toggleFavourite, togglePin, toggleReblog, zap } from 'soapbox/actions/interactions';
+import { toggleBookmark, toggleDislike, toggleFavourite, togglePin, toggleReblog } from 'soapbox/actions/interactions';
 import { openModal } from 'soapbox/actions/modals';
 import { deleteStatusModal, toggleStatusSensitivityModal } from 'soapbox/actions/moderation';
 import { initMuteModal } from 'soapbox/actions/mutes';
@@ -95,7 +95,6 @@ const messages = defineMessages({
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute Conversation' },
   unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
-  zap: { id: 'status.zap', defaultMessage: 'Zap' },
 });
 
 interface IStatusActionBar {
@@ -177,14 +176,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       dispatch(toggleDislike(status));
     } else {
       onOpenUnauthorizedModal('DISLIKE');
-    }
-  };
-
-  const handleZapClick: React.EventHandler<React.MouseEvent> = (e) => {
-    if (me) {
-      dispatch(zap(status, 1337));
-    } else {
-      onOpenUnauthorizedModal('ZAP');
     }
   };
 
@@ -647,7 +638,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   }
 
   const canShare = ('share' in navigator) && (status.visibility === 'public' || status.visibility === 'group');
-  const acceptsZaps = status.account.ditto.accepts_zaps === true;
 
   const spacing: {
     [key: string]: React.ComponentProps<typeof HStack>['space'];
@@ -731,19 +721,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
             active={status.disliked}
             count={status.dislikes_count}
             text={withLabels ? intl.formatMessage(messages.disfavourite) : undefined}
-            theme={statusActionButtonTheme}
-          />
-        )}
-
-        {(acceptsZaps && window.webln) && (
-          <StatusActionButton
-            title={intl.formatMessage(messages.zap)}
-            icon={require('@tabler/icons/outline/bolt.svg')}
-            color='accent'
-            filled
-            onClick={handleZapClick}
-            active={status.zapped}
-            text={withLabels ? intl.formatMessage(messages.zap) : undefined}
             theme={statusActionButtonTheme}
           />
         )}

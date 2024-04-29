@@ -79,10 +79,6 @@ const contactSchema = coerceObject({
   email: z.string().email().catch(''),
 });
 
-const nostrSchema = coerceObject({
-  pubkey: z.string(),
-  relay: z.string().url(),
-});
 
 const pleromaSchema = coerceObject({
   metadata: coerceObject({
@@ -183,7 +179,6 @@ const instanceV1Schema = coerceObject({
   languages: z.string().array().catch([]),
   max_media_attachments: z.number().optional().catch(undefined),
   max_toot_chars: z.number().optional().catch(undefined),
-  nostr: nostrSchema.optional().catch(undefined),
   pleroma: pleromaSchema,
   poll_limits: pleromaPollLimitsSchema,
   registrations: z.boolean().catch(false),
@@ -271,7 +266,6 @@ const instanceSchema = z.preprocess((data: any) => {
   feature_quote: z.boolean().catch(false),
   fedibird_capabilities: z.array(z.string()).catch([]),
   languages: z.string().array().catch([]),
-  nostr: nostrSchema.optional().catch(undefined),
   pleroma: pleromaSchema,
   registrations: registrations,
   rules: filteredArray(ruleSchema),

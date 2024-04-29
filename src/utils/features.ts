@@ -15,12 +15,6 @@ const overrides = custom('features');
 const any = (arr: Array<any>): boolean => arr.some(Boolean);
 
 /**
- * Ditto, a Nostr server with Mastodon API.
- * @see {@link https://gitlab.com/soapbox-pub/ditto}
- */
-export const DITTO = 'Ditto';
-
-/**
  * Firefish, a fork of Misskey. Formerly known as Calckey.
  * @see {@link https://joinfirefish.org/}
  */
@@ -144,7 +138,6 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === MASTODON && gte(v.compatVersion, '3.4.0'),
       v.software === PLEROMA && gte(v.version, '2.4.50'),
       v.software === TAKAHE && gte(v.version, '0.6.1'),
-      v.software === DITTO,
     ]),
 
     /**
@@ -256,7 +249,6 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PLEROMA && gte(v.version, '0.9.9'),
       v.software === PIXELFED,
       v.software === TAKAHE && gte(v.version, '0.9.0'),
-      v.software === DITTO,
     ]),
 
     /**
@@ -513,7 +505,6 @@ const getInstanceFeatures = (instance: Instance) => {
      */
     frontendConfigurations: any([
       v.software === PLEROMA,
-      v.software === DITTO,
     ]),
 
     /**
@@ -604,7 +595,6 @@ const getInstanceFeatures = (instance: Instance) => {
      * @see POST /api/v1/admin/accounts/:account_id/approve
      */
     mastodonAdmin: any([
-      v.software === DITTO,
       v.software === MASTODON && gte(v.compatVersion, '2.9.1'),
       v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.4.50'),
     ]),
@@ -643,27 +633,6 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === MASTODON && gte(v.compatVersion, '3.3.0'),
       v.software === TAKAHE,
     ]),
-
-    /**
-     * Can set a Nostr username.
-     * @see PATCH /api/v1/accounts/update_credentials
-     */
-    nip05: v.software === DITTO,
-
-    /** Has a Nostr relay. */
-    nostr: !!instance.nostr?.relay,
-
-    /**
-     * Ability to sign Nostr events over websocket.
-     * @see GET /api/v1/streaming?stream=nostr
-     */
-    nostrSign: v.software === DITTO,
-
-    /**
-     * Whether the backend uses Ditto's Nosteric way of registration.
-     * @see POST /api/v1/accounts
-     */
-    nostrSignup: v.software === DITTO,
 
     /**
      * Add private notes to accounts.
@@ -708,7 +677,7 @@ const getInstanceFeatures = (instance: Instance) => {
      * Can set privacy scopes on statuses.
      * @see POST /api/v1/statuses
      */
-    privacyScopes: v.software !== DITTO,
+    privacyScopes: true,
 
     /**
      * A directory of discoverable profiles from the instance.
@@ -743,7 +712,6 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PLEROMA,
       v.software === TAKAHE,
       v.software === WILDEBEEST,
-      v.software === DITTO,
     ]),
 
     /**
@@ -888,7 +856,6 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === FRIENDICA && gte(v.version, '2022.12.0'),
       v.software === ICESHRIMP,
       v.software === MASTODON && gte(v.compatVersion, '3.0.0'),
-      v.software === DITTO,
     ]),
 
     /**
