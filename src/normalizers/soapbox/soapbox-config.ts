@@ -102,10 +102,10 @@ export const SoapboxConfigRecord = ImmutableRecord({
     limit: 1,
   }),
   aboutPages: ImmutableMap<string, ImmutableMap<string, unknown>>(),
-  authenticatedProfile: true,
+  authenticatedProfile: false,
   linkFooterMessage: '',
   links: ImmutableMap<string, string>(),
-  displayCta: true,
+  displayCta: false,
   /** Whether to inject suggested profiles into the Home feed. */
   feedInjection: true,
   tileServer: '',
