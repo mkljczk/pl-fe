@@ -297,7 +297,7 @@ const Account = ({
         </HStack>
 
         <div ref={actionRef}>
-          {withRelationship ? renderAction() : null}
+          {(withRelationship || action) ? renderAction() : null}
         </div>
       </HStack>
     </div>

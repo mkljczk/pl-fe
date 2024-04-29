@@ -6,7 +6,6 @@ import { addToMentions, removeFromMentions } from 'soapbox/actions/compose';
 import { useAccount } from 'soapbox/api/hooks';
 import AccountComponent from 'soapbox/components/account';
 import IconButton from 'soapbox/components/icon-button';
-import { HStack } from 'soapbox/components/ui';
 import { useAppDispatch, useCompose } from 'soapbox/hooks';
 
 const messages = defineMessages({
@@ -48,12 +47,9 @@ const Account: React.FC<IAccount> = ({ composeId, accountId, author }) => {
   }
 
   return (
-    <HStack space={1} alignItems='center' justifyContent='between' className='p-2.5'>
-      <div className='w-full'>
-        <AccountComponent account={account} withRelationship={false} withLinkToProfile={false} />
-      </div>
-      {!author && button}
-    </HStack>
+    <div className='p-2'>
+      <AccountComponent account={account} withRelationship={false} withLinkToProfile={false} action={author ? undefined : button} />
+    </div>
   );
 };
 

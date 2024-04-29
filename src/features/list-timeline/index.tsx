@@ -1,18 +1,28 @@
 import React, { useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
-import { fetchList } from 'soapbox/actions/lists';
+import { deleteList, fetchList } from 'soapbox/actions/lists';
 import { openModal } from 'soapbox/actions/modals';
 import { expandListTimeline } from 'soapbox/actions/timelines';
 import { useListStream } from 'soapbox/api/hooks';
+import DropdownMenu from 'soapbox/components/dropdown-menu';
 import MissingIndicator from 'soapbox/components/missing-indicator';
 import { Column, Button, Spinner } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector, useTheme } from 'soapbox/hooks';
 
 import Timeline from '../ui/components/timeline';
 
+const messages = defineMessages({
+  deleteHeading: { id: 'confirmations.delete_list.heading', defaultMessage: 'Delete list' },
+  deleteMessage: { id: 'confirmations.delete_list.message', defaultMessage: 'Are you sure you want to permanently delete this list?' },
+  deleteConfirm: { id: 'confirmations.delete_list.confirm', defaultMessage: 'Delete' },
+  editList: { id: 'lists.edit', defaultMessage: 'Edit list' },
+  deleteList: { id: 'lists.delete', defaultMessage: 'Delete list' },
+});
+
 const ListTimeline: React.FC = () => {
+  const intl = useIntl();
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
   const theme = useTheme();
@@ -33,6 +43,19 @@ const ListTimeline: React.FC = () => {
 
   const handleEditClick = () => {
     dispatch(openModal('LIST_EDITOR', { listId: id }));
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.preventDefault();
+
+    dispatch(openModal('CONFIRM', {
+      heading: intl.formatMessage(messages.deleteHeading),
+      message: intl.formatMessage(messages.deleteMessage),
+      confirm: intl.formatMessage(messages.deleteConfirm),
+      onConfirm: () => {
+        dispatch(deleteList(id));
+      },
+    }));
   };
 
   const title  = list ? list.title : id;
@@ -59,8 +82,25 @@ const ListTimeline: React.FC = () => {
     </div>
   );
 
+  const items = [
+    {
+      text: intl.formatMessage(messages.editList),
+      action: handleEditClick,
+      icon: require('@tabler/icons/outline/edit.svg'),
+    },
+    {
+      text: intl.formatMessage(messages.deleteList),
+      action: handleDeleteClick,
+      icon: require('@tabler/icons/outline/trash.svg'),
+    },
+  ];
+
   return (
-    <Column label={title} transparent>
+    <Column
+      label={title}
+      action={<DropdownMenu items={items} src={require('@tabler/icons/outline/dots-vertical.svg')} />}
+      transparent
+    >
       <Timeline
         className='black:p-4 black:sm:p-5'
         scrollKey='list_timeline'
