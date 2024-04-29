@@ -90,7 +90,7 @@ export const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) 
       onMouseEnter={handleMouseEnter()}
       onMouseLeave={handleMouseLeave()}
     >
-      <Card className='relative'>
+      <Card className='relative black:rounded-xl black:border black:border-gray-800'>
         <CardBody>
           {renderStatus(statusId)}
         </CardBody>
