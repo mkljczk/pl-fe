@@ -577,7 +577,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
 
   return (
     <div
-      className={clsx(className, 'media-gallery', { 'media-gallery--compact': compact })}
+      className={clsx(className, 'media-gallery', { 'media-gallery--compact !h-12 bg-transparent': compact })}
       style={sizeData.style}
       ref={node}
     >

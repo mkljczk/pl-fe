@@ -119,7 +119,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       // List of elements that shouldn't collapse the composer when clicked
       // FIXME: Make this less brittle
       getClickableArea(),
-      document.querySelector('.privacy-dropdown__dropdown'),
+      document.getElementById('privacy-dropdown'),
       document.querySelector('em-emoji-picker'),
       document.getElementById('modal-overlay'),
     ].some(element => element?.contains(e.target as any));
@@ -209,7 +209,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   ), [features, id]);
 
   const composeModifiers = !condensed && (
-    <Stack space={4} className='compose-form__modifiers'>
+    <Stack space={4} className='font-[inherit] text-sm text-gray-900'>
       <UploadForm composeId={id} onSubmit={handleSubmit} />
       <PollForm composeId={id} />
 
@@ -253,7 +253,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
               id='compose_form.scheduled_statuses.message'
               defaultMessage='You have scheduled posts. {click_here} to see them.'
               values={{ click_here: (
-                <Link to='/scheduled_statuses'>
+                <Link className='underline' to='/scheduled_statuses'>
                   <FormattedMessage
                     id='compose_form.scheduled_statuses.click_here'
                     defaultMessage='Click here'

@@ -141,7 +141,7 @@ const Upload: React.FC<IUpload> = ({
   const description = dirtyDescription || (dirtyDescription !== '' && media.description) || '';
   const focusX = media.meta.getIn(['focus', 'x']) as number | undefined;
   const focusY = media.meta.getIn(['focus', 'y']) as number | undefined;
-  const x = focusX ? ((focusX /  2) + .5) * 100 : undefined;
+  const x = focusX ? ((focusX / 2) + .5) * 100 : undefined;
   const y = focusY ? ((focusY / -2) + .5) * 100 : undefined;
   const mediaType = media.type;
   const mimeType = media.pleroma.get('mime_type') as string | undefined;
@@ -155,7 +155,7 @@ const Upload: React.FC<IUpload> = ({
 
   return (
     <div
-      className='compose-form__upload'
+      className='relative m-[5px] min-w-[40%] flex-1 overflow-hidden rounded'
       tabIndex={0}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -170,11 +170,12 @@ const Upload: React.FC<IUpload> = ({
       <Motion defaultStyle={{ scale: 0.8 }} style={{ scale: spring(1, { stiffness: 180, damping: 12 }) }}>
         {({ scale }) => (
           <div
-            className={clsx('compose-form__upload-thumbnail', mediaType)}
+            className={clsx('compose-form__upload-thumbnail relative h-40 w-full overflow-hidden bg-contain bg-center bg-no-repeat', mediaType)}
             style={{
               transform: `scale(${scale})`,
               backgroundImage: mediaType === 'image' ? `url(${media.preview_url})` : undefined,
-              backgroundPosition: typeof x === 'number' && typeof y === 'number' ? `${x}% ${y}%` : undefined }}
+              backgroundPosition: typeof x === 'number' && typeof y === 'number' ? `${x}% ${y}%` : undefined,
+            }}
           >
             <HStack className='absolute right-2 top-2 z-10' space={2}>
               {(withPreview && mediaType !== 'unknown' && Boolean(media.url)) && (
@@ -200,11 +201,16 @@ const Upload: React.FC<IUpload> = ({
             </HStack>
 
             {onDescriptionChange && (
-              <div className={clsx('compose-form__upload-description', { active })}>
+              <div
+                className={clsx('absolute inset-x-0 bottom-0 z-[2px] bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900/80 p-2.5 opacity-0 transition-opacity duration-100 ease-linear', {
+                  'opacity-100': active,
+                })}
+              >
                 <label>
                   <span style={{ display: 'none' }}>{intl.formatMessage(messages.description)}</span>
 
                   <textarea
+                    className='m-0 w-full rounded-md border border-solid border-white/25 bg-transparent p-2.5 text-sm text-white placeholder:text-white/60'
                     placeholder={intl.formatMessage(messages.description)}
                     value={description}
                     maxLength={descriptionLimit}
@@ -230,9 +236,9 @@ const Upload: React.FC<IUpload> = ({
               </span>
             )}
 
-            <div className='compose-form__upload-preview'>
+            <div className='absolute inset-0 -z-[1] h-full w-full'>
               {mediaType === 'video' && (
-                <video autoPlay playsInline muted loop>
+                <video className='h-full w-full object-cover' autoPlay playsInline muted loop>
                   <source src={media.preview_url} />
                 </video>
               )}

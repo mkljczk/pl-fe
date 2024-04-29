@@ -463,7 +463,7 @@ const Video: React.FC<IVideo> = ({
   return (
     <div
       role='menuitem'
-      className={clsx('video-player relative box-border max-w-full overflow-hidden rounded-[10px] bg-black text-white [direction:ltr] focus:outline-0', { 'h-full w-full m-0': fullscreen })}
+      className={clsx('video-player relative box-border max-h-screen max-w-full overflow-hidden rounded-[10px] bg-black text-white [direction:ltr] focus:outline-0', { 'h-full w-full m-0': fullscreen })}
       style={playerStyle}
       ref={player}
       onMouseEnter={handleMouseEnter}

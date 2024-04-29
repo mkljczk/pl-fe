@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 
 import { toggleStatusReport } from 'soapbox/actions/reports';
 import StatusContent from 'soapbox/components/status-content';
-import { Toggle } from 'soapbox/components/ui';
+import { Stack, Toggle } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
 import { MediaGallery, Video, Audio } from '../../ui/util/async-components';
@@ -64,19 +64,21 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled }) => {
           sensitive={status.sensitive}
           height={110}
           onOpenMedia={noop}
+          visible
         />
       );
     }
   }
 
   return (
-    <div className='status-check-box'>
-      <div className='status-check-box__status'>
+    <div className='flex items-center justify-between'>
+      <Stack className='status-check-box__status py-2' space={1}>
         <StatusContent status={status} />
         <Suspense>{media}</Suspense>
-      </div>
 
-      <div className='status-check-box-toggle'>
+      </Stack>
+
+      <div className='flex items-center justify-center p-2.5'>
         <Toggle checked={checked} onChange={onToggle} disabled={disabled} />
       </div>
     </div>

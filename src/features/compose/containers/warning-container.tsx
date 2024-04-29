@@ -29,7 +29,7 @@ const WarningWrapper: React.FC<IWarningWrapper> = ({ composeId }) => {
             defaultMessage='Your account is not {locked}. Anyone can follow you to view your follower-only posts.'
             values={{
               locked: (
-                <Link to='/settings/profile'>
+                <Link className='underline' to='/settings/profile'>
                   <FormattedMessage id='compose_form.lock_disclaimer.lock' defaultMessage='locked' />
                 </Link>
               ),
