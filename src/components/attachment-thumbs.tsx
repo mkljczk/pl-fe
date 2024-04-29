@@ -21,7 +21,7 @@ const AttachmentThumbs = (props: IAttachmentThumbs) => {
   const onOpenMedia = (media: ImmutableList<Attachment>, index: number) => dispatch(openModal('MEDIA', { media, index }));
 
   return (
-    <div className='attachment-thumbs'>
+    <div className='relative'>
       <Suspense fallback={fallback}>
         <MediaGallery
           media={media}
@@ -34,7 +34,7 @@ const AttachmentThumbs = (props: IAttachmentThumbs) => {
       </Suspense>
 
       {onClick && (
-        <div className='attachment-thumbs__clickable-region' onClick={onClick} />
+        <div className='absolute inset-0 h-full w-full cursor-pointer' onClick={onClick} />
       )}
     </div>
   );

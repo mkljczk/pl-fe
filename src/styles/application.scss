@@ -1,18 +1,13 @@
-@import 'variables';
-@import 'fonts';
 @import 'basics';
 @import 'loading';
 @import 'ui';
 @import 'emoji-picker';
 @import 'accessibility';
-@import 'navigation';
-@import 'autosuggest';
 
 // COMPONENTS
 @import 'components/modal';
 @import 'components/compose-form';
 @import 'components/status';
-@import 'components/reply-mentions';
 @import 'components/detailed-status';
 @import 'components/media-gallery';
 @import 'components/notification';
@@ -20,8 +15,6 @@
 @import 'components/search';
 @import 'components/video-player';
 @import 'components/audio-player';
-@import 'components/crypto-donate';
-@import 'components/aliases';
 @import 'components/icon';
 @import 'forms';
 @import 'utilities';

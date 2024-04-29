@@ -20,22 +20,23 @@ const DetailedCryptoAddress: React.FC<IDetailedCryptoAddress> = ({ address, tick
   const explorerUrl = getExplorerUrl(ticker, address);
 
   return (
-    <div className='crypto-address'>
-      <div className='crypto-address__head'>
+    <div className='flex flex-col'>
+      <div className='mb-1.5 flex items-center'>
         <CryptoIcon
-          className='crypto-address__icon'
+          className='mr-2.5 flex w-6 items-start justify-center'
+          imgClassName='w-full'
           ticker={ticker}
           title={title}
         />
-        <div className='crypto-address__title'>{title || ticker.toUpperCase()}</div>
-        <div className='crypto-address__actions'>
-          {explorerUrl && <a href={explorerUrl} target='_blank'>
-            <Icon src={require('@tabler/icons/outline/external-link.svg')} />
+        <div className='font-bold'>{title || ticker.toUpperCase()}</div>
+        <div className='ml-auto flex'>
+          {explorerUrl && <a className='ml-2 text-gray-400' href={explorerUrl} target='_blank'>
+            <Icon className='h-4.5 w-4.5' src={require('@tabler/icons/outline/external-link.svg')} />
           </a>}
         </div>
       </div>
-      {note && <div className='crypto-address__note'>{note}</div>}
-      <div className='crypto-address__qrcode'>
+      {note && <div className='mb-2.5'>{note}</div>}
+      <div className='mb-3 flex items-center justify-center p-2.5'>
         <QRCode className='rounded-lg' value={address} includeMargin />
       </div>
 

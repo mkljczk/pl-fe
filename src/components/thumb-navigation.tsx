@@ -45,7 +45,7 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
   };
 
   return (
-    <div className='thumb-navigation'>
+    <div className='fixed inset-x-0 bottom-0 z-50 flex w-full overflow-x-auto border-t border-solid border-gray-200 bg-white/90 shadow-2xl backdrop-blur-md black:bg-black/90 lg:hidden dark:border-gray-800 dark:bg-primary-900/90'>
       <ThumbNavigationLink
         src={require('@tabler/icons/outline/home.svg')}
         activeSrc={require('@tabler/icons/filled/home.svg')}

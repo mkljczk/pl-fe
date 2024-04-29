@@ -12,12 +12,14 @@ interface ICryptoIcon {
   ticker: string;
   title?: string;
   className?: string;
+  imgClassName?: string;
 }
 
-const CryptoIcon: React.FC<ICryptoIcon> = ({ ticker, title, className }): JSX.Element => {
+const CryptoIcon: React.FC<ICryptoIcon> = ({ ticker, title, className, imgClassName }): JSX.Element => {
   return (
     <div className={className}>
       <img
+        className={imgClassName}
         src={getIcon(ticker)}
         alt={title || ticker}
       />

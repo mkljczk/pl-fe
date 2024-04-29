@@ -193,7 +193,7 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
           <FormGroup labelText={intl.formatMessage(messages.expires)}>
             <SelectDropdown
               items={expirations}
-              defaultValue={''}
+              defaultValue=''
               onChange={handleSelectChange}
             />
           </FormGroup>

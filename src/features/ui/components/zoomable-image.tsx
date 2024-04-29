@@ -124,11 +124,12 @@ class ZoomableImage extends React.PureComponent<IZoomableImage> {
 
     return (
       <div
-        className='zoomable-image'
+        className='relative flex h-full w-full items-center justify-center'
         ref={this.setContainerRef}
         style={{ overflow }}
       >
         <img
+          className='h-auto max-h-[80%] w-auto max-w-full object-contain shadow-2xl'
           role='presentation'
           ref={this.setImageRef}
           alt={alt}

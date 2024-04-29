@@ -135,7 +135,7 @@ const AccountGallery = () => {
       </div>
 
       {isLoading && attachments.size === 0 && (
-        <div className='slist__append'>
+        <div className='relative flex-auto px-8 py-4'>
           <Spinner />
         </div>
       )}

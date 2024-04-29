@@ -3,27 +3,10 @@ select {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
 }
 
-.form-error::before,
-.form-error::after {
-  border: solid transparent;
-  bottom: 100%;
-  content: '';
-  height: 0;
-  left: 10px;
-  pointer-events: none;
-  width: 0;
-  position: absolute;
-}
-
-.form-error::before {
-  --tw-bg-opacity: 1;
-  border-bottom-color: rgba(254, 202, 202, var(--tw-bg-opacity));
-  border-width: 6px;
-  margin-left: -1px;
+.form-error {
+  @apply before:border-solid before:border-transparent before:h-0 before:left-2.5 before:pointer-events-none before:w-0 before:absolute before:border-[6px] before:ml-[-1px] after:border-solid after:border-transparent after:h-0 after:left-2.5 after:pointer-events-none after:w-0 after:absolute before:border-b-red-200;
 }
 
 .input.with_label.toggle .label_input {
-  display: flex;
-  font-size: 14px;
-  align-items: center;
+  @apply flex text-sm items-center;
 }

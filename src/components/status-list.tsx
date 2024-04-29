@@ -11,6 +11,8 @@ import PlaceholderStatus from 'soapbox/features/placeholder/components/placehold
 import PendingStatus from 'soapbox/features/ui/components/pending-status';
 import { useSoapboxConfig } from 'soapbox/hooks';
 
+import { Stack, Text } from './ui';
+
 import type { OrderedSet as ImmutableOrderedSet } from 'immutable';
 import type { VirtuosoHandle } from 'react-virtuoso';
 import type { IScrollableList } from 'soapbox/components/scrollable-list';
@@ -212,14 +214,15 @@ const StatusList: React.FC<IStatusList> = ({
 
   if (isPartial) {
     return (
-      <div className='regeneration-indicator'>
-        <div>
-          <div className='regeneration-indicator__label'>
-            <FormattedMessage id='regeneration_indicator.label' tagName='strong' defaultMessage='Loading…' />
-            <FormattedMessage id='regeneration_indicator.sublabel' defaultMessage='Your home feed is being prepared!' />
-          </div>
-        </div>
-      </div>
+      <Stack className='py-2' space={2}>
+        <Text size='2xl' weight='bold' tag='h2' align='center'>
+          <FormattedMessage id='regeneration_indicator.label' tagName='strong' defaultMessage='Loading…' />
+        </Text>
+
+        <Text size='sm' theme='muted' align='center'>
+          <FormattedMessage id='regeneration_indicator.sublabel' defaultMessage='Your home feed is being prepared!' />
+        </Text>
+      </Stack>
     );
   }
 

@@ -463,7 +463,7 @@ const Video: React.FC<IVideo> = ({
   return (
     <div
       role='menuitem'
-      className={clsx('video-player', { detailed, 'video-player--inline': inline && !fullscreen, fullscreen })}
+      className={clsx('video-player relative box-border max-w-full overflow-hidden rounded-[10px] bg-black text-white [direction:ltr] focus:outline-0', { 'h-full w-full m-0': fullscreen })}
       style={playerStyle}
       ref={player}
       onMouseEnter={handleMouseEnter}
@@ -477,6 +477,10 @@ const Video: React.FC<IVideo> = ({
       )}
 
       <video
+        className={clsx('relative z-[1] block', {
+          'object-contain max-h-full': inline && !fullscreen,
+          'h-full w-full outline-0 !max-h-full !max-w-full': fullscreen,
+        })}
         ref={video}
         src={src}
         loop
@@ -496,7 +500,7 @@ const Video: React.FC<IVideo> = ({
         onVolumeChange={handleVolumeChange}
       />
 
-      <div className={clsx('video-player__controls', { active: paused || hovered })}>
+      <div className={clsx('video-player__controls absolute bottom-0 left-0 z-[2] box-border px-4 py-0 opacity-0 ring-0 transition-opacity duration-100 ease-in-out', { 'opacity-100': paused || hovered })}>
         <div className='video-player__seek' onMouseDown={handleMouseDown} ref={seek}>
           <div className='video-player__seek__buffer' style={{ width: `${buffer}%` }} />
           <div className='video-player__seek__progress' style={{ width: `${progress}%` }} />
@@ -509,13 +513,13 @@ const Video: React.FC<IVideo> = ({
           />
         </div>
 
-        <div className='video-player__buttons-bar'>
+        <div className='-mx-[5px] my-0 flex justify-between pb-2'>
           <div className='video-player__buttons left'>
             <button
               type='button'
               title={intl.formatMessage(paused ? messages.play : messages.pause)}
               aria-label={intl.formatMessage(paused ? messages.play : messages.pause)}
-              className='player-button'
+              className={clsx('player-button', detailed || fullscreen && 'py-2.5')}
               onClick={togglePlay}
               autoFocus={autoFocus}
             >
@@ -526,7 +530,7 @@ const Video: React.FC<IVideo> = ({
               type='button'
               title={intl.formatMessage(muted ? messages.unmute : messages.mute)}
               aria-label={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-              className='player-button'
+              className={clsx('player-button', detailed || fullscreen && 'py-2.5')}
               onClick={toggleMute}
             >
               <Icon src={muted ? require('@tabler/icons/outline/volume-3.svg') : require('@tabler/icons/outline/volume.svg')} />
@@ -543,9 +547,9 @@ const Video: React.FC<IVideo> = ({
 
             {(detailed || fullscreen) && (
               <span>
-                <span className='video-player__time-current'>{formatTime(currentTime)}</span>
-                <span className='video-player__time-sep'>/</span>
-                <span className='video-player__time-total'>{formatTime(duration)}</span>
+                <span className='text-sm font-medium text-white'>{formatTime(currentTime)}</span>
+                <span className='mx-1.5 my-0 inline-block text-sm font-medium text-white'>/</span>
+                <span className='text-sm font-medium'>{formatTime(duration)}</span>
               </span>
             )}
 
@@ -559,7 +563,7 @@ const Video: React.FC<IVideo> = ({
               type='button'
               title={intl.formatMessage(fullscreen ? messages.exit_fullscreen : messages.fullscreen)}
               aria-label={intl.formatMessage(fullscreen ? messages.exit_fullscreen : messages.fullscreen)}
-              className='player-button'
+              className={clsx('player-button', detailed || fullscreen && 'py-2.5')}
               onClick={toggleFullscreen}
             >
               <Icon src={fullscreen ? require('@tabler/icons/outline/arrows-minimize.svg') : require('@tabler/icons/outline/arrows-maximize.svg')} />

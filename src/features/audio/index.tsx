@@ -507,8 +507,8 @@ const Audio: React.FC<IAudio> = (props) => {
         />
       </div>
 
-      <div className='video-player__controls active'>
-        <div className='video-player__buttons-bar'>
+      <div className='video-player__controls absolute bottom-0 left-0 z-[2] box-border px-4 py-0 opacity-100 ring-0 transition-opacity duration-100 ease-in-out'>
+        <div className='-mx-[5px] my-0 flex justify-between pb-2'>
           <div className='video-player__buttons left'>
 
             <button
@@ -551,11 +551,11 @@ const Audio: React.FC<IAudio> = (props) => {
               />
             </div>
 
-            <span className='video-player__time'>
-              <span className='video-player__time-current'>{formatTime(Math.floor(currentTime))}</span>
+            <span className='mx-[5px] my-0 inline flex-initial overflow-hidden text-ellipsis'>
+              <span className='text-sm font-medium text-current'>{formatTime(Math.floor(currentTime))}</span>
               {getDuration() && (<>
-                <span className='video-player__time-sep'>/</span>
-                <span className='video-player__time-total'>{formatTime(Math.floor(getDuration()))}</span>
+                <span className='mx-1.5 my-0 inline-block text-sm font-medium text-current'>/</span>
+                <span className='text-sm font-medium text-current'>{formatTime(Math.floor(getDuration()))}</span>
               </>)}
             </span>
           </div>
@@ -564,7 +564,7 @@ const Audio: React.FC<IAudio> = (props) => {
             <a
               title={intl.formatMessage(messages.download)}
               aria-label={intl.formatMessage(messages.download)}
-              className='video-player__download__icon player-button'
+              className='text-inherit'
               href={src}
               download
               target='_blank'

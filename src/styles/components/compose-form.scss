@@ -1,3 +1,7 @@
+// Language codes that uses CJK fonts
+/* stylelint-disable-next-line value-keyword-case -- locale filenames */
+$cjk-langs: ja, ko, zh-CN, zh-HK, zh-TW;
+
 .compose-form {
   &__warning {
     @apply text-xs mb-2.5 px-2.5 py-2 shadow-md rounded bg-accent-300 text-white;

@@ -1,40 +1,23 @@
 .search__icon {
-  &::-moz-focus-inner {
-    border: 0;
-  }
+  @apply focus:outline-0 #{!important};
 
-  &::-moz-focus-inner,
-  &:focus {
-    outline: 0 !important;
+  &::-moz-focus-inner {
+    @apply border-0 outline-0 #{!important};
   }
 
   .svg-icon {
-    @apply right-4 rtl:left-4 rtl:right-auto text-gray-400;
-    @include font-size(16);
-    cursor: default;
-    display: inline-block;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
-    width: 18px;
-    height: 18px;
-    opacity: 0;
-    pointer-events: none;
+    @apply right-4 rtl:left-4 rtl:right-auto text-gray-400 cursor-default inline-block absolute top-1/2 -translate-y-1/2 z-[2] w-4.5 h-4.5 opacity-0 pointer-events-none text-lg;
 
     &.active {
-      pointer-events: auto;
-      opacity: 1;
+      @apply pointer-events-auto opacity-100;
     }
 
     &--search.active {
-      pointer-events: none;
+      @apply pointer-events-none;
     }
 
     &--backspace {
-      cursor: pointer;
-      width: 22px;
-      height: 22px;
+      @apply cursor-pointer w-[22px] h-[22px];
     }
   }
 }

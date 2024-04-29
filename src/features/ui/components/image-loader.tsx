@@ -135,16 +135,11 @@ class ImageLoader extends React.PureComponent<IImageLoader> {
     const { alt, src, width, height, onClick } = this.props;
     const { loading } = this.state;
 
-    const className = clsx('image-loader', {
-      'image-loader--loading': loading,
-      'image-loader--amorphous': !this.hasSize(),
-    });
-
     return (
-      <div className={className}>
+      <div className='relative flex h-full w-full flex-col items-center justify-center'>
         {loading ? (
           <canvas
-            className='image-loader__preview-canvas'
+            className={clsx({ 'hidden': !this.hasSize() })}
             ref={this.setCanvasRef}
             width={width}
             height={height}

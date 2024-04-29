@@ -34,7 +34,7 @@
 }
 
 .react-datepicker__current-month {
-  margin-top: 2px;
+  @apply mt-0.5;
 }
 
 .react-datepicker__navigation {
@@ -58,7 +58,7 @@
 }
 
 .react-datepicker__navigation--next {
-  right: 16px;
+  @apply right-4;
 
   &--with-time:not(.react-datepicker__navigation--next--with-today-button) {
     right: 100px;

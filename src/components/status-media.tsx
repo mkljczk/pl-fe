@@ -44,11 +44,11 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   };
 
   const renderLoadingVideoPlayer = (): JSX.Element => {
-    return <div className='media-spoiler-video' style={{ height: '285px' }} />;
+    return <div className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat' style={{ height: '285px' }} />;
   };
 
   const renderLoadingAudioPlayer = (): JSX.Element => {
-    return <div className='media-spoiler-audio' style={{ height: '285px' }} />;
+    return <div className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat' style={{ height: '285px' }} />;
   };
 
   const openMedia = (media: ImmutableList<Attachment>, index: number) => {
@@ -93,7 +93,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
             backgroundColor={attachment.meta.getIn(['colors', 'background']) as string | undefined}
             foregroundColor={attachment.meta.getIn(['colors', 'foreground']) as string | undefined}
             accentColor={attachment.meta.getIn(['colors', 'accent']) as string | undefined}
-            duration={attachment.meta.getIn(['original', 'duration'], 0)  as number | undefined}
+            duration={attachment.meta.getIn(['original', 'duration'], 0) as number | undefined}
             height={263}
           />
         </Suspense>

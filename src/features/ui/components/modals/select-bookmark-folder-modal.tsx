@@ -47,7 +47,7 @@ const SelectBookmarkFolderModal: React.FC<ISelectBookmarkFolderModal> = ({ statu
         </HStack>
       }
       checked={selectedFolder === null}
-      value={''}
+      value=''
     />,
   ];
 

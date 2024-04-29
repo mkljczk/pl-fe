@@ -6,6 +6,7 @@ import {
   useSoapboxConfig,
   useTheme,
   useLocale,
+  useAppSelector,
 } from 'soapbox/hooks';
 import { normalizeSoapboxConfig } from 'soapbox/normalizers';
 import { startSentry } from 'soapbox/sentry';
@@ -24,14 +25,17 @@ const SoapboxHead: React.FC<ISoapboxHead> = ({ children }) => {
   const soapboxConfig = useSoapboxConfig();
   const theme = useTheme();
 
+  const withModals = useAppSelector((state) => !state.modals.isEmpty());
+
   const themeCss = generateThemeCss(demo ? normalizeSoapboxConfig({ brandColor: '#0482d8' }) : soapboxConfig);
   const dsn = soapboxConfig.sentryDsn;
 
-  const bodyClass = clsx('h-full bg-white text-base black:bg-black dark:bg-gray-800', {
+  const bodyClass = clsx('h-full bg-white text-base antialiased black:bg-black dark:bg-gray-800', {
     'no-reduce-motion': !reduceMotion,
     'underline-links': underlineLinks,
     'demetricator': demetricator,
     'system-font': systemFont,
+    'overflow-hidden': withModals,
   });
 
   useEffect(() => {

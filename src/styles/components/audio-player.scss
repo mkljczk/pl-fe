@@ -1,14 +1,17 @@
 .audio-player {
-  @apply relative box-border overflow-hidden rounded-[10px] bg-black pb-11;
-  direction: ltr;
+  @apply [direction:ltr] relative box-border overflow-hidden rounded-[10px] bg-black pb-11;
 
   &.editable {
     @apply rounded-none h-full;
   }
 
-  .video-player__volume::before,
-  .video-player__seek::before {
-    @apply bg-white/10;
+  .video-player__seek {
+    @apply before:top-0;
+  }
+
+  .video-player__volume,
+  .video-player__seek {
+    @apply before:bg-white/10;
   }
 
   .video-player__seek__buffer {
@@ -25,13 +28,6 @@
     }
   }
 
-  .video-player__time-sep,
-  .video-player__time-total,
-  .video-player__time-current {
-    @apply text-current;
-  }
-
-  .video-player__seek::before,
   .video-player__seek__buffer,
   .video-player__seek__progress {
     @apply top-0;
@@ -44,8 +40,4 @@
   .video-player__controls {
     @apply pt-2.5 bg-transparent;
   }
-}
-
-.media-spoiler-audio {
-  @apply relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat;
 }

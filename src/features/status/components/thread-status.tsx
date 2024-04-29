@@ -39,7 +39,7 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): JSX.Element => {
   };
 
   return (
-    <div className='thread__status'>
+    <div className='thread__status relative pb-4'>
       {renderConnector()}
       {isLoaded ? (
         // @ts-ignore FIXME

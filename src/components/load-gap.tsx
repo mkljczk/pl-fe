@@ -19,8 +19,8 @@ const LoadGap: React.FC<ILoadGap> = ({ disabled, maxId, onClick }) => {
   const handleClick = () => onClick(maxId);
 
   return (
-    <button className='load-more load-gap' disabled={disabled} onClick={handleClick} aria-label={intl.formatMessage(messages.load_more)}>
-      <Icon src={require('@tabler/icons/outline/dots.svg')} />
+    <button className='m-0 box-border block w-full border-0 bg-transparent p-4 text-gray-900' disabled={disabled} onClick={handleClick} aria-label={intl.formatMessage(messages.load_more)}>
+      <Icon className='mx-auto' src={require('@tabler/icons/outline/dots.svg')} />
     </button>
   );
 };

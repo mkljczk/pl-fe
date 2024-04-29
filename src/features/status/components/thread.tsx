@@ -394,7 +394,7 @@ const Thread = (props: IThread) => {
       <div
         ref={node}
         className={
-          clsx('thread', {
+          clsx('bg-white black:bg-black dark:bg-primary-900', {
             'h-full': !useWindowScroll,
           })
         }

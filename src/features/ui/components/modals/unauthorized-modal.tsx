@@ -106,8 +106,8 @@ const UnauthorizedModal: React.FC<IUnauthorizedModal> = ({ action, onClose, acco
         secondaryAction={isOpen ? onRegister : undefined}
         secondaryText={isOpen ? <FormattedMessage id='account.register' defaultMessage='Sign up' /> : undefined}
       >
-        <div className='remote-interaction-modal__content'>
-          <Form className='remote-interaction-modal__fields' onSubmit={onSubmit}>
+        <div className='flex flex-col gap-2.5'>
+          <Form className='flex w-full flex-col gap-2.5' onSubmit={onSubmit}>
             <Input
               placeholder={intl.formatMessage(messages.accountPlaceholder)}
               name='remote_follow[acct]'
@@ -117,9 +117,9 @@ const UnauthorizedModal: React.FC<IUnauthorizedModal> = ({ action, onClose, acco
               onChange={onAccountChange}
               required
             />
-            <Button type='submit' theme='primary'>{button}</Button>
+            <Button className='self-end' type='submit' theme='primary'>{button}</Button>
           </Form>
-          <div className='remote-interaction-modal__divider'>
+          <div className={'-mx-2.5 my-0 flex items-center gap-2.5 before:flex-1 before:border-b before:border-gray-300 before:content-[\'\'] after:flex-1 after:border-b after:border-gray-300 after:content-[\'\'] before:dark:border-gray-600 after:dark:border-gray-600'}>
             <Text align='center'>
               <FormattedMessage id='remote_interaction.divider' defaultMessage='or' />
             </Text>

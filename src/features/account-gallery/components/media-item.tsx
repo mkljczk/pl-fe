@@ -123,7 +123,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia }) => {
         <Blurhash
           hash={attachment.blurhash}
           className={clsx('media-gallery__preview', {
-            'media-gallery__preview--hidden': visible,
+            'hidden': visible,
           })}
         />
         {visible && thumbnail}

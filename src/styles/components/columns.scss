@@ -1,10 +1,5 @@
-.empty-column-indicator,
-.error-column {
+.empty-column-indicator {
   @apply bg-primary-50 dark:bg-gray-700 text-gray-900 dark:text-gray-300 text-center p-10 flex flex-1 items-center justify-center min-h-[160px] rounded-lg;
-
-  @supports (display: grid) { // hack to fix Chrome <57
-    contain: strict;
-  }
 
   & > span {
     @apply max-w-[400px];
@@ -12,15 +7,5 @@
 
   a {
     @apply text-primary-600 dark:text-primary-400 no-underline hover:underline;
-  }
-}
-
-.error-column {
-  flex-direction: column;
-
-  .svg-icon {
-    width: 70px;
-    height: 70px;
-    margin-bottom: 30px;
   }
 }

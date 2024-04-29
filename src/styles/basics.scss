@@ -1,17 +1,12 @@
 body {
-  @apply antialiased;
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: -ms-autohiding-scrollbar;
-}
-
-body.with-modals {
-  @apply overflow-hidden;
 }
 
 // Note: this is needed for React HotKeys performance. Removing this
 // will cause severe performance degradation on Safari.
 div[tabindex='-1']:focus {
-  outline: 0;
+  @apply outline-0;
 }
 
 ::selection {
@@ -19,7 +14,7 @@ div[tabindex='-1']:focus {
 }
 
 noscript {
-  text-align: center;
+  @apply text-center;
 }
 
 .emojione {
@@ -29,10 +24,11 @@ noscript {
 // Virtuoso empty placeholder fix.
 // https://gitlab.com/petyosi/soapbox-fe/-/commit/1e22c39934b60e5e186de804060ecfdf1955b506
 div[data-viewport-type='window'] {
-  position: static !important;
+  @apply static;
 }
 
-body.system-font, body.system-font .font-sans {
+body.system-font,
+body.system-font .font-sans {
   font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
