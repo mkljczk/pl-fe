@@ -2,8 +2,7 @@ import React, { useCallback } from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
 import { openModal } from 'soapbox/actions/modals';
-import { useAppDispatch, useAppSelector, useCompose, useFeatures, useOwnAccount } from 'soapbox/hooks';
-import { statusToMentionsAccountIdsArray } from 'soapbox/reducers/compose';
+import { useAppDispatch, useAppSelector, useCompose, useFeatures } from 'soapbox/hooks';
 import { makeGetStatus } from 'soapbox/selectors';
 
 import type { Status as StatusEntity } from 'soapbox/types/entities';
@@ -20,13 +19,10 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector<StatusEntity | null>(state => getStatus(state, { id: compose.in_reply_to! }));
   const to = compose.to;
-  const { account } = useOwnAccount();
 
   if (!features.explicitAddressing || !status || !to) {
     return null;
   }
-
-  const parentTo = status && statusToMentionsAccountIdsArray(status, account!);
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -36,7 +32,7 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
     }));
   };
 
-  if (!parentTo || (parentTo.size === 0)) {
+  if (!compose.parent_reblogged_by && to.size === 0) {
     return null;
   }
 

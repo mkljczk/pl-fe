@@ -152,9 +152,10 @@ interface ComposeReplyAction {
   account: Account;
   explicitAddressing: boolean;
   preserveSpoilers: boolean;
+  rebloggedBy?: Account;
 }
 
-const replyCompose = (status: Status) =>
+const replyCompose = (status: Status, rebloggedBy?: Account) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const instance = state.instance;
@@ -171,6 +172,7 @@ const replyCompose = (status: Status) =>
       account,
       explicitAddressing,
       preserveSpoilers,
+      rebloggedBy: rebloggedBy,
     };
 
     dispatch(action);

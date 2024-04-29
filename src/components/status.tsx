@@ -138,7 +138,7 @@ const Status: React.FC<IStatus> = (props) => {
 
   const handleHotkeyReply = (e?: KeyboardEvent): void => {
     e?.preventDefault();
-    dispatch(replyCompose(actualStatus));
+    dispatch(replyCompose(actualStatus, status.reblog && typeof status.reblog === 'object' ? status.account : undefined));
   };
 
   const handleHotkeyFavourite = (): void => {
@@ -458,7 +458,7 @@ const Status: React.FC<IStatus> = (props) => {
 
             {!hideActionBar && (
               <div className='pt-4'>
-                <StatusActionBar status={actualStatus} fromBookmarks={fromBookmarks} />
+                <StatusActionBar status={actualStatus} rebloggedBy={isReblog ? status.account : undefined} fromBookmarks={fromBookmarks} />
               </div>
             )}
           </div>

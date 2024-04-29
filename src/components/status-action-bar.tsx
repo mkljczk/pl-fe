@@ -28,7 +28,7 @@ import { getReactForStatus, reduceEmoji } from 'soapbox/utils/emoji-reacts';
 import GroupPopover from './groups/popover/group-popover';
 
 import type { Menu } from 'soapbox/components/dropdown-menu';
-import type { Group, Status } from 'soapbox/types/entities';
+import type { Account, Group, Status } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
@@ -99,6 +99,7 @@ const messages = defineMessages({
 
 interface IStatusActionBar {
   status: Status;
+  rebloggedBy?: Account;
   withLabels?: boolean;
   expandable?: boolean;
   space?: 'sm' | 'md' | 'lg';
@@ -113,6 +114,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   space = 'sm',
   statusActionButtonTheme = 'default',
   fromBookmarks = false,
+  rebloggedBy,
 }) => {
   const intl = useIntl();
   const history = useHistory();
@@ -148,7 +150,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
 
   const handleReplyClick: React.MouseEventHandler = (e) => {
     if (me) {
-      dispatch(replyCompose(status));
+      dispatch(replyCompose(status, rebloggedBy));
     } else {
       onOpenUnauthorizedModal('REPLY');
     }
@@ -211,7 +213,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   };
 
   const doDeleteStatus = (withRedraft = false) => {
-    dispatch((_, getState) => {
+    dispatch((_) => {
       if (!deleteModal) {
         dispatch(deleteStatus(status.id, withRedraft));
       } else {
