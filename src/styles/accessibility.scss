@@ -5,7 +5,7 @@ $black-emojis: '8ball' 'ant' 'back' 'black_circle' 'black_heart' 'black_large_sq
   transform: scale(0.71);
 }
 
-.emojione {
+.dark .emojione {
   @each $emoji in $black-emojis {
     &[title=':#{$emoji}:'] {
       @extend %white-emoji-outline;
