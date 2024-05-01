@@ -90,6 +90,8 @@ const COMPOSE_EDITOR_STATE_SET = 'COMPOSE_EDITOR_STATE_SET' as const;
 
 const COMPOSE_CHANGE_MEDIA_ORDER = 'COMPOSE_CHANGE_MEDIA_ORDER' as const;
 
+const COMPOSE_ADD_SUGGESTED_QUOTE      = 'COMPOSE_ADD_SUGGESTED_QUOTE' as const;
+
 const getAccount = makeGetAccount();
 
 const messages = defineMessages({
@@ -210,9 +212,9 @@ const quoteCompose = (status: Status) =>
     dispatch(openModal('COMPOSE'));
   };
 
-const cancelQuoteCompose = () => ({
+const cancelQuoteCompose = (composeId: string) => ({
   type: COMPOSE_QUOTE_CANCEL,
-  id: 'compose-modal',
+  id: composeId,
 });
 
 const groupComposeModal = (group: Group) =>
@@ -868,6 +870,12 @@ const changeMediaOrder = (composeId: string, a: string, b: string) => ({
   b,
 });
 
+const addSuggestedQuote = (composeId: string, quoteId: string) => ({
+  type: COMPOSE_ADD_SUGGESTED_QUOTE,
+  id: composeId,
+  quoteId: quoteId,
+});
+
 type ComposeAction =
   ComposeSetStatusAction
   | ReturnType<typeof changeCompose>
@@ -914,6 +922,7 @@ type ComposeAction =
   | ComposeEventReplyAction
   | ReturnType<typeof setEditorState>
   | ReturnType<typeof changeMediaOrder>
+  | ReturnType<typeof addSuggestedQuote>
 
 export {
   COMPOSE_CHANGE,
@@ -962,6 +971,7 @@ export {
   COMPOSE_SET_STATUS,
   COMPOSE_EDITOR_STATE_SET,
   COMPOSE_CHANGE_MEDIA_ORDER,
+  COMPOSE_ADD_SUGGESTED_QUOTE,
   setComposeToStatus,
   changeCompose,
   replyCompose,
@@ -1017,5 +1027,6 @@ export {
   eventDiscussionCompose,
   setEditorState,
   changeMediaOrder,
+  addSuggestedQuote,
   type ComposeAction,
 };

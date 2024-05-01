@@ -54,6 +54,7 @@ import {
   COMPOSE_EDITOR_STATE_SET,
   ComposeAction,
   COMPOSE_CHANGE_MEDIA_ORDER,
+  COMPOSE_ADD_SUGGESTED_QUOTE,
 } from '../actions/compose';
 import { EVENT_COMPOSE_CANCEL, EVENT_FORM_SET, type EventsAction } from '../actions/events';
 import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS, MeAction } from '../actions/me';
@@ -109,6 +110,7 @@ export const ReducerCompose = ImmutableRecord({
   text: '',
   to: ImmutableOrderedSet<string>(),
   parent_reblogged_by: null as string | null,
+  dismissed_quotes: ImmutableOrderedSet<string>(),
 });
 
 type State = ImmutableMap<string, Compose>;
@@ -362,7 +364,6 @@ export default function compose(state = initialState, action: ComposeAction | Ev
     case COMPOSE_UPLOAD_CHANGE_REQUEST:
       return updateCompose(state, action.id, compose => compose.set('is_changing_upload', true));
     case COMPOSE_REPLY_CANCEL:
-    case COMPOSE_QUOTE_CANCEL:
     case COMPOSE_RESET:
     case COMPOSE_SUBMIT_SUCCESS:
       return updateCompose(state, action.id, () => state.get('default')!.withMutations(map => {
@@ -543,6 +544,13 @@ export default function compose(state = initialState, action: ComposeAction | Ev
 
         return list.splice(indexA, 1).splice(indexB, 0, moveItem);
       }));
+    case COMPOSE_ADD_SUGGESTED_QUOTE:
+      return updateCompose(state, action.id, compose => compose
+        .set('quote', action.quoteId));
+    case COMPOSE_QUOTE_CANCEL:
+      return updateCompose(state, action.id, compose => compose
+        .update('dismissed_quotes', quotes => compose.quote ? quotes.add(compose.quote) : quotes)
+        .set('quote', null));
     default:
       return state;
   }
