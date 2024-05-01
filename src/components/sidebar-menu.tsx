@@ -34,7 +34,6 @@ const messages = defineMessages({
   developers: { id: 'navigation.developers', defaultMessage: 'Developers' },
   drafts: { id: 'navigation.drafts', defaultMessage: 'Drafts' },
   addAccount: { id: 'profile_dropdown.add_account', defaultMessage: 'Add an existing account' },
-  addRemoteAccount: { id: 'profile_dropdown.add_remote_account', defaultMessage: 'Add account from remote instance' },
   followRequests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
 });
@@ -362,11 +361,6 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                         <NavLink className='flex items-center space-x-1 py-2' to='/login/add' onClick={handleClose}>
                           <Icon className='h-4 w-4 text-primary-500' src={require('@tabler/icons/outline/plus.svg')} />
                           <Text size='sm' weight='medium'>{intl.formatMessage(messages.addAccount)}</Text>
-                        </NavLink>
-
-                        <NavLink className='flex items-center space-x-1 py-2' to='/login/external' onClick={handleClose}>
-                          <Icon className='h-4 w-4 text-primary-500' src={require('@tabler/icons/outline/external-link.svg')} />
-                          <Text size='sm' weight='medium'>{intl.formatMessage(messages.addRemoteAccount)}</Text>
                         </NavLink>
                       </div>
                     )}
