@@ -14,12 +14,12 @@
   &::-moz-focus-inner,
   &:focus,
   &:active {
-    outline: 0!important;
+    @apply outline-0 #{!important};
   }
 }
 
 .react-datepicker-popper {
-  z-index: 9999 !important;
+  @apply z-[9999] #{!important};
 }
 
 .ellipsis::after {

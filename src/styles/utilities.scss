@@ -8,6 +8,5 @@
 }
 
 .emoji-lg img.emojione {
-  width: 36px !important;
-  height: 36px !important;
+  @apply h-9 w-9 #{!important};
 }

@@ -61,10 +61,6 @@ const defaultSettings = ImmutableMap({
       reply: true,
       direct: false,
     }),
-
-    regex: ImmutableMap({
-      body: '',
-    }),
   }),
 
   notifications: ImmutableMap({
@@ -117,9 +113,6 @@ const defaultSettings = ImmutableMap({
     other: ImmutableMap({
       onlyMedia: false,
     }),
-    regex: ImmutableMap({
-      body: '',
-    }),
   }),
 
   public: ImmutableMap({
@@ -131,15 +124,9 @@ const defaultSettings = ImmutableMap({
     other: ImmutableMap({
       onlyMedia: false,
     }),
-    regex: ImmutableMap({
-      body: '',
-    }),
   }),
 
   direct: ImmutableMap({
-    regex: ImmutableMap({
-      body: '',
-    }),
   }),
 
   account_timeline: ImmutableMap({
