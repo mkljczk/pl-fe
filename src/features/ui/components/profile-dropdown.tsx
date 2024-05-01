@@ -17,6 +17,7 @@ import type { Account as AccountEntity } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   add: { id: 'profile_dropdown.add_account', defaultMessage: 'Add an existing account' },
+  addRemoteAccount: { id: 'profile_dropdown.add_remote_account', defaultMessage: 'Add account from remote instance' },
   theme: { id: 'profile_dropdown.theme', defaultMessage: 'Theme' },
   logout: { id: 'profile_dropdown.logout', defaultMessage: 'Log out @{acct}' },
 });
@@ -88,6 +89,12 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
       text: intl.formatMessage(messages.add),
       to: '/login/add',
       icon: require('@tabler/icons/outline/plus.svg'),
+    });
+
+    menu.push({
+      text: intl.formatMessage(messages.addRemoteAccount),
+      to: '/login/external',
+      icon: require('@tabler/icons/outline/external-link.svg'),
     });
 
     menu.push({
