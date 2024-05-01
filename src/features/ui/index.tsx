@@ -203,9 +203,6 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
       <Redirect from='/users/:username' to='/@:username' />
       <Redirect from='/registration' to='/' exact />
 
-      {/* Gab */}
-      <Redirect from='/home' to='/' />
-
       {/* Mastodon rendered pages */}
       <Redirect from='/admin' to='/soapbox/admin' />
       <Redirect from='/terms' to='/about' />

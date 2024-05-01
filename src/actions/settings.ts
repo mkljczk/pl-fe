@@ -1,7 +1,6 @@
 import { Map as ImmutableMap, List as ImmutableList } from 'immutable';
 import { defineMessage } from 'react-intl';
 import { createSelector } from 'reselect';
-import { v4 as uuid } from 'uuid';
 
 import { patchMe } from 'soapbox/actions/me';
 import messages from 'soapbox/messages';
@@ -107,10 +106,6 @@ const defaultSettings = ImmutableMap({
       move: false,
       'pleroma:emoji_reaction': false,
     }),
-
-    birthdays: ImmutableMap({
-      show: true,
-    }),
   }),
 
   community: ImmutableMap({
@@ -155,17 +150,9 @@ const defaultSettings = ImmutableMap({
     }),
   }),
 
-  groups: ImmutableMap({}),
-
   trends: ImmutableMap({
     show: true,
   }),
-
-  columns: ImmutableList([
-    ImmutableMap({ id: 'COMPOSE', uuid: uuid(), params: {} }),
-    ImmutableMap({ id: 'HOME', uuid: uuid(), params: {} }),
-    ImmutableMap({ id: 'NOTIFICATIONS', uuid: uuid(), params: {} }),
-  ]),
 
   remote_timeline: ImmutableMap({
     pinnedHosts: ImmutableList(),
@@ -196,7 +183,7 @@ const changeSettingImmediate = (path: string[], value: any, opts?: SettingOpts) 
     };
 
     dispatch(action);
-    dispatch(saveSettingsImmediate(opts));
+    dispatch(saveSettings(opts));
   };
 
 const changeSetting = (path: string[], value: any, opts?: SettingOpts) =>
@@ -211,7 +198,7 @@ const changeSetting = (path: string[], value: any, opts?: SettingOpts) =>
     return dispatch(saveSettings(opts));
   };
 
-const saveSettingsImmediate = (opts?: SettingOpts) =>
+const saveSettings = (opts?: SettingOpts) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
@@ -235,9 +222,6 @@ const saveSettingsImmediate = (opts?: SettingOpts) =>
     });
   };
 
-const saveSettings = (opts?: SettingOpts) =>
-  (dispatch: AppDispatch) => dispatch(saveSettingsImmediate(opts));
-
 const getLocale = (state: RootState, fallback = 'en') => {
   const localeWithVariant = (getSettings(state).get('locale') as string).replace('_', '-');
   const locale = localeWithVariant.split('-')[0];
@@ -257,7 +241,6 @@ export {
   getSettings,
   changeSettingImmediate,
   changeSetting,
-  saveSettingsImmediate,
   saveSettings,
   getLocale,
   type SettingsAction,
