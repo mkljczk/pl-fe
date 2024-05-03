@@ -64,17 +64,6 @@ const defaultSettings = ImmutableMap({
   }),
 
   notifications: ImmutableMap({
-    alerts: ImmutableMap({
-      follow: true,
-      follow_request: false,
-      favourite: true,
-      reblog: true,
-      mention: true,
-      poll: true,
-      move: true,
-      'pleroma:emoji_reaction': true,
-    }),
-
     quickFilter: ImmutableMap({
       active: 'all',
       show: true,
