@@ -45,6 +45,19 @@ const NOTIFICATIONS_MARK_READ_FAIL    = 'NOTIFICATIONS_MARK_READ_FAIL';
 
 const MAX_QUEUED_NOTIFICATIONS = 40;
 
+const FILTER_TYPES = {
+  all: undefined,
+  mention: ['mention'],
+  favourite: ['favourite', 'pleroma:emoji_reaction'],
+  reblog: ['reblog'],
+  poll: ['poll'],
+  status: ['status'],
+  follow: ['follow', 'follow_request'],
+  events: ['pleroma:event_reminder', 'pleroma:participation_request', 'pleroma:participation_accepted'],
+};
+
+type FilterType = keyof typeof FILTER_TYPES;
+
 defineMessages({
   mention: { id: 'notification.mention', defaultMessage: '{name} mentioned you' },
   group: { id: 'notifications.group', defaultMessage: '{count, plural, one {# notification} other {# notifications}}' },
@@ -168,25 +181,32 @@ const dequeueNotifications = () =>
     dispatch(markReadNotifications());
   };
 
-const excludeTypesFromFilter = (filter: string) => {
-  return NOTIFICATION_TYPES.filter(item => item !== filter);
+const excludeTypesFromFilter = (filters: string[]) => {
+  return NOTIFICATION_TYPES.filter(item => !filters.includes(item));
 };
 
 const noOp = () => new Promise(f => f(undefined));
 
-const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => any = noOp) =>
+let abortExpandNotifications = new AbortController();
+
+const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => any = noOp, abort?: boolean) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return dispatch(noOp);
 
     const state = getState();
     const features = getFeatures(state.instance);
-    const activeFilter = getSettings(state).getIn(['notifications', 'quickFilter', 'active']) as string;
+    const activeFilter = getSettings(state).getIn(['notifications', 'quickFilter', 'active']) as FilterType;
     const notifications = state.notifications;
     const isLoadingMore = !!maxId;
 
     if (notifications.isLoading) {
-      done();
-      return dispatch(noOp);
+      if (abort) {
+        abortExpandNotifications.abort();
+        abortExpandNotifications = new AbortController();
+      } else {
+        done();
+        return dispatch(noOp);
+      }
     }
 
     const params: Record<string, any> = {
@@ -200,10 +220,11 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
         params.exclude_types = EXCLUDE_TYPES;
       }
     } else {
+      const filtered = FILTER_TYPES[activeFilter] || [activeFilter];
       if (features.notificationsIncludeTypes) {
-        params.types = [activeFilter];
+        params.types = filtered;
       } else {
-        params.exclude_types = excludeTypesFromFilter(activeFilter);
+        params.exclude_types = excludeTypesFromFilter(filtered);
       }
     }
 
@@ -213,7 +234,7 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
 
     dispatch(expandNotificationsRequest(isLoadingMore));
 
-    return api(getState).get('/api/v1/notifications', { params }).then(response => {
+    return api(getState).get('/api/v1/notifications', { params, signal: abortExpandNotifications.signal }).then(response => {
       const next = getLinks(response).refs.find(link => link.rel === 'next');
 
       const entries = (response.data as APIEntity[]).reduce((acc, item) => {
@@ -286,14 +307,14 @@ const scrollTopNotifications = (top: boolean) =>
     dispatch(markReadNotifications());
   };
 
-const setFilter = (filterType: string) =>
+const setFilter = (filterType: FilterType, abort?: boolean) =>
   (dispatch: AppDispatch) => {
     dispatch({
       type: NOTIFICATIONS_FILTER_SET,
       path: ['notifications', 'quickFilter', 'active'],
       value: filterType,
     });
-    dispatch(expandNotifications());
+    dispatch(expandNotifications(undefined, undefined, abort));
     dispatch(saveSettings());
   };
 
@@ -343,6 +364,7 @@ export {
   NOTIFICATIONS_MARK_READ_SUCCESS,
   NOTIFICATIONS_MARK_READ_FAIL,
   MAX_QUEUED_NOTIFICATIONS,
+  type FilterType,
   updateNotifications,
   updateNotificationsQueue,
   dequeueNotifications,

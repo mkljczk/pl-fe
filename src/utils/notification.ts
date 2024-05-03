@@ -5,8 +5,6 @@ const NOTIFICATION_TYPES = [
   'mention',
   'reblog',
   'favourite',
-  'group_favourite',
-  'group_reblog',
   'poll',
   'status',
   'move',

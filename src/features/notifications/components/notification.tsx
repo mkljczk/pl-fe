@@ -43,9 +43,7 @@ const icons: Record<NotificationType, string> = {
   follow_request: require('@tabler/icons/outline/user-plus.svg'),
   mention: require('@tabler/icons/outline/at.svg'),
   favourite: require('@tabler/icons/outline/heart.svg'),
-  group_favourite: require('@tabler/icons/outline/heart.svg'),
   reblog: require('@tabler/icons/outline/repeat.svg'),
-  group_reblog: require('@tabler/icons/outline/repeat.svg'),
   status: require('@tabler/icons/outline/bell-ringing.svg'),
   poll: require('@tabler/icons/outline/chart-bar.svg'),
   move: require('@tabler/icons/outline/briefcase.svg'),
@@ -75,17 +73,9 @@ const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
     id: 'notification.favourite',
     defaultMessage: '{name} liked your post',
   },
-  group_favourite: {
-    id: 'notification.group_favourite',
-    defaultMessage: '{name} liked your group post',
-  },
   reblog: {
     id: 'notification.reblog',
     defaultMessage: '{name} reposted your post',
-  },
-  group_reblog: {
-    id: 'notification.group_reblog',
-    defaultMessage: '{name} reposted your group post',
   },
   status: {
     id: 'notification.status',
@@ -307,10 +297,8 @@ const Notification: React.FC<INotification> = (props) => {
           />
         ) : null;
       case 'favourite':
-      case 'group_favourite':
       case 'mention':
       case 'reblog':
-      case 'group_reblog':
       case 'status':
       case 'poll':
       case 'update':

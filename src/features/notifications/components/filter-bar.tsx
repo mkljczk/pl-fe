@@ -1,7 +1,7 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { setFilter } from 'soapbox/actions/notifications';
+import { type FilterType, setFilter } from 'soapbox/actions/notifications';
 import { Icon, Tabs } from 'soapbox/components/ui';
 import { useAppDispatch, useFeatures, useSettings } from 'soapbox/hooks';
 
@@ -10,12 +10,12 @@ import type { Item } from 'soapbox/components/ui/tabs/tabs';
 const messages = defineMessages({
   all: { id: 'notifications.filter.all', defaultMessage: 'All' },
   mentions: { id: 'notifications.filter.mentions', defaultMessage: 'Mentions' },
+  statuses: { id: 'notifications.filter.statuses', defaultMessage: 'Updates from people you follow' },
   favourites: { id: 'notifications.filter.favourites', defaultMessage: 'Likes' },
   boosts: { id: 'notifications.filter.boosts', defaultMessage: 'Reposts' },
   polls: { id: 'notifications.filter.polls', defaultMessage: 'Poll results' },
+  events: { id: 'notifications.filter.events', defaultMessage: 'Events' },
   follows: { id: 'notifications.filter.follows', defaultMessage: 'Follows' },
-  emoji_reacts: { id: 'notifications.filter.emoji_reacts', defaultMessage: 'Emoji reacts' },
-  statuses: { id: 'notifications.filter.statuses', defaultMessage: 'Updates from people you follow' },
 });
 
 const NotificationFilterBar = () => {
@@ -27,7 +27,13 @@ const NotificationFilterBar = () => {
   const selectedFilter = settings.notifications.quickFilter.active;
   const advancedMode = settings.notifications.quickFilter.advanced;
 
-  const onClick = (notificationType: string) => () => dispatch(setFilter(notificationType));
+  const onClick = (notificationType: FilterType) => () => {
+    try {
+      dispatch(setFilter(notificationType, true));
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const items: Item[] = [
     {
@@ -50,17 +56,17 @@ const NotificationFilterBar = () => {
       action: onClick('mention'),
       name: 'mention',
     });
+    if (features.accountNotifies || features.accountSubscriptions) items.push({
+      text:  <Icon className='h-4 w-4' src={require('@tabler/icons/outline/bell-ringing.svg')} />,
+      title: intl.formatMessage(messages.statuses),
+      action: onClick('status'),
+      name: 'status',
+    });
     items.push({
       text:  <Icon className='h-4 w-4' src={require('@tabler/icons/outline/heart.svg')} />,
       title: intl.formatMessage(messages.favourites),
       action: onClick('favourite'),
       name: 'favourite',
-    });
-    if (features.emojiReacts) items.push({
-      text:  <Icon className='h-4 w-4' src={require('@tabler/icons/outline/mood-smile.svg')} />,
-      title: intl.formatMessage(messages.emoji_reacts),
-      action: onClick('pleroma:emoji_reaction'),
-      name: 'pleroma:emoji_reaction',
     });
     items.push({
       text:  <Icon className='h-4 w-4' src={require('@tabler/icons/outline/repeat.svg')} />,
@@ -74,11 +80,11 @@ const NotificationFilterBar = () => {
       action: onClick('poll'),
       name: 'poll',
     });
-    if (features.accountNotifies || features.accountSubscriptions) items.push({
-      text:  <Icon className='h-4 w-4' src={require('@tabler/icons/outline/bell-ringing.svg')} />,
-      title: intl.formatMessage(messages.statuses),
-      action: onClick('status'),
-      name: 'status',
+    if (features.events) items.push({
+      text:  <Icon className='h-4 w-4' src={require('@tabler/icons/outline/calendar.svg')} />,
+      title: intl.formatMessage(messages.events),
+      action: onClick('events'),
+      name: 'events',
     });
     items.push({
       text:  <Icon className='h-4 w-4' src={require('@tabler/icons/outline/user-plus.svg')} />,

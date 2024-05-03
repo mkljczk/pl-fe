@@ -208,6 +208,7 @@ export default function notifications(state: State = ReducerRecord(), action: An
     case NOTIFICATIONS_EXPAND_REQUEST:
       return state.set('isLoading', true);
     case NOTIFICATIONS_EXPAND_FAIL:
+      if (action.error?.message === 'canceled') return state;
       return state.set('isLoading', false);
     case NOTIFICATIONS_FILTER_SET:
       return state.set('items', ImmutableOrderedMap()).set('hasMore', true);

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
+import { List as ImmutableList } from 'immutable';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -10,7 +10,6 @@ import {
   scrollTopNotifications,
   dequeueNotifications,
 } from 'soapbox/actions/notifications';
-import { getSettings } from 'soapbox/actions/settings';
 import PullToRefresh from 'soapbox/components/pull-to-refresh';
 import ScrollTopButton from 'soapbox/components/scroll-top-button';
 import ScrollableList from 'soapbox/components/scrollable-list';
@@ -23,7 +22,6 @@ import Notification from './components/notification';
 
 import type { VirtuosoHandle } from 'react-virtuoso';
 import type { RootState } from 'soapbox/store';
-import type { Notification as NotificationEntity } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },
@@ -31,19 +29,8 @@ const messages = defineMessages({
 });
 
 const getNotifications = createSelector([
-  state => getSettings(state).getIn(['notifications', 'quickFilter', 'show']),
-  state => getSettings(state).getIn(['notifications', 'quickFilter', 'active']),
-  state => ImmutableList((getSettings(state).getIn(['notifications', 'shows']) as ImmutableMap<string, boolean>).filter(item => !item).keys()),
   (state: RootState) => state.notifications.items.toList(),
-], (showFilterBar, allowedType, excludedTypes, notifications: ImmutableList<NotificationEntity>) => {
-  if (!showFilterBar || allowedType === 'all') {
-    // used if user changed the notification settings after loading the notifications from the server
-    // otherwise a list of notifications will come pre-filtered from the backend
-    // we need to turn it off for FilterBar in order not to block ourselves from seeing a specific category
-    return notifications.filterNot(item => item !== null && excludedTypes.includes(item.get('type')));
-  }
-  return notifications.filter(item => item !== null && allowedType === item.get('type'));
-});
+], (notifications) => notifications.filter(item => item !== null));
 
 const Notifications = () => {
   const dispatch = useAppDispatch();
@@ -164,9 +151,8 @@ const Notifications = () => {
       onLoadMore={handleLoadOlder}
       onScrollToTop={handleScrollToTop}
       onScroll={handleScroll}
-      listClassName={clsx({
-        'divide-y divide-gray-200 black:divide-gray-800 dark:divide-primary-800 divide-solid': notifications.size > 0,
-        'space-y-2': notifications.size === 0,
+      listClassName={clsx('divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800', {
+        'animate-pulse': notifications.size === 0,
       })}
     >
       {scrollableContent as ImmutableList<JSX.Element>}

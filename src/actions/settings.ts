@@ -81,17 +81,6 @@ const defaultSettings = ImmutableMap({
       advanced: false,
     }),
 
-    shows: ImmutableMap({
-      follow: true,
-      follow_request: true,
-      favourite: true,
-      reblog: true,
-      mention: true,
-      poll: true,
-      move: true,
-      'pleroma:emoji_reaction': true,
-    }),
-
     sounds: ImmutableMap({
       follow: false,
       follow_request: false,
