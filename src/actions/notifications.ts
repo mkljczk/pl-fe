@@ -243,6 +243,12 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
       }
     }
 
+    if (maxId?.includes('+')) {
+      const ids =  maxId.split('+');
+
+      maxId = ids[ids.length - 1];
+    }
+
     const params: Record<string, any> = {
       max_id: maxId,
     };
