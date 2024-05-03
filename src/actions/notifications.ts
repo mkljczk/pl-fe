@@ -373,8 +373,12 @@ const markReadNotifications = () =>
 
     const state = getState();
     const topNotificationId = state.notifications.items.first()?.id;
-    const lastReadId = state.notifications.lastRead;
+    let lastReadId = state.notifications.lastRead;
     const v = parseVersion(state.instance.version);
+
+    if (typeof lastReadId === 'string' && lastReadId?.includes('+')) {
+      lastReadId = lastReadId.split('+')[0];
+    }
 
     if (topNotificationId && (lastReadId === -1 || compareId(topNotificationId, lastReadId) > 0)) {
       const marker = {

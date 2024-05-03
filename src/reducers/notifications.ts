@@ -107,7 +107,7 @@ const isValid = (notification: APIEntity) => {
 // Count how many notifications appear after the given ID (for unread count)
 const countFuture = (notifications: ImmutableOrderedMap<string, NotificationRecord>, lastId: string | number) => {
   return notifications.reduce((acc, notification) => {
-    if (parseId(notification.get('id')) > parseId(lastId)) {
+    if (parseId(notification.get('id').split('+')[0]) > parseId(lastId)) {
       return acc + 1;
     } else {
       return acc;
