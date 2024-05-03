@@ -12,8 +12,6 @@ import type { DraftStatus } from 'soapbox/reducers/draft-statuses';
 import type { Status as StatusEntity } from 'soapbox/types/entities';
 
 const messages = defineMessages({
-  edit: { id: 'draft_status.edit', defaultMessage: 'Edit' },
-  cancel: { id: 'draft_status.cancel', defaultMessage: 'Cancel' },
   deleteConfirm: { id: 'confirmations.draft_status_delete.confirm', defaultMessage: 'Discard' },
   deleteHeading: { id: 'confirmations.draft_status_delete.heading', defaultMessage: 'Cancel draft post' },
   deleteMessage: { id: 'confirmations.draft_status_delete.message', defaultMessage: 'Are you sure you want to discard this draft post?' },
