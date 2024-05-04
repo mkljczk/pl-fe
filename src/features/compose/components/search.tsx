@@ -149,7 +149,11 @@ const Search = (props: ISearch) => {
   }, []);
 
   return (
-    <div className='w-full'>
+    <div
+      className={clsx('w-full', {
+        'sticky top-[124px] z-10 bg-white/90 backdrop-blur black:bg-black/80 dark:bg-primary-900/90': !openInRoute,
+      })}
+    >
       <label htmlFor='search' className='sr-only'>{intl.formatMessage(messages.placeholder)}</label>
 
       <div className='relative'>
