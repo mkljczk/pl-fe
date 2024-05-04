@@ -11,7 +11,7 @@ import ActionButton from '../ui/components/action-button';
 import { HotKeys } from '../ui/components/hotkeys';
 
 const messages = defineMessages({
-  heading: { id: 'feed_suggestions.heading', defaultMessage: 'Suggested Profiles' },
+  heading: { id: 'feed_suggestions.heading', defaultMessage: 'Suggested profiles' },
   viewAll: { id: 'feed_suggestions.view_all', defaultMessage: 'View all' },
 });
 

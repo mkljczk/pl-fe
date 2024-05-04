@@ -12,7 +12,7 @@ const messages = defineMessages({
   oldPasswordFieldLabel: { id: 'security.fields.old_password.label', defaultMessage: 'Current password' },
   newPasswordFieldLabel: { id: 'security.fields.new_password.label', defaultMessage: 'New password' },
   confirmationFieldLabel: { id: 'security.fields.password_confirmation.label', defaultMessage: 'New password (again)' },
-  header: { id: 'edit_password.header', defaultMessage: 'Change Password' },
+  header: { id: 'edit_password.header', defaultMessage: 'Change password' },
   submit: { id: 'security.submit', defaultMessage: 'Save changes' },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
 });

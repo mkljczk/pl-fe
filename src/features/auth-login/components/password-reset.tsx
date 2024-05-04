@@ -37,7 +37,7 @@ const PasswordReset = () => {
   if (success) return <Redirect to='/' />;
 
   return (
-    <BigCard title={<FormattedMessage id='password_reset.header' defaultMessage='Reset Password' />}>
+    <BigCard title={<FormattedMessage id='password_reset.header' defaultMessage='Reset password' />}>
       <Form onSubmit={handleSubmit}>
         <FormGroup labelText={intl.formatMessage(features.logInWithUsername ? messages.nicknameOrEmail : messages.email)}>
           <Input

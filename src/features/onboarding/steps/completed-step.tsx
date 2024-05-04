@@ -28,7 +28,7 @@ const CompletedStep = ({ onComplete }: { onComplete: () => void }) => (
             theme='primary'
             onClick={onComplete}
           >
-            <FormattedMessage id='onboarding.view_feed' defaultMessage='View Feed' />
+            <FormattedMessage id='onboarding.view_feed' defaultMessage='View feed' />
           </Button>
         </Stack>
       </div>

@@ -18,7 +18,7 @@ const messages = defineMessages({
   username: { id: 'registration.fields.username_placeholder', defaultMessage: 'Username' },
   username_hint: { id: 'registration.fields.username_hint', defaultMessage: 'Only letters, numbers, and underscores are allowed.' },
   usernameUnavailable: { id: 'registration.username_unavailable', defaultMessage: 'Username is already taken.' },
-  email: { id: 'registration.fields.email_placeholder', defaultMessage: 'E-Mail address' },
+  email: { id: 'registration.fields.email_placeholder', defaultMessage: 'E-mail address' },
   password: { id: 'registration.fields.password_placeholder', defaultMessage: 'Password' },
   passwordMismatch: { id: 'registration.password_mismatch', defaultMessage: 'Passwords don\'t match.' },
   confirm: { id: 'registration.fields.confirm_placeholder', defaultMessage: 'Password (again)' },

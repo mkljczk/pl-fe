@@ -97,12 +97,12 @@ const CreateGroupModal: React.FC<ICreateGroupModal> = ({ onClose }) => {
   const renderModalTitle = () => {
     switch (currentStep) {
       case Steps.ONE:
-        return <FormattedMessage id='navigation_bar.create_group' defaultMessage='Create Group' />;
+        return <FormattedMessage id='navigation_bar.create_group' defaultMessage='Create group' />;
       default:
         if (params.group_visibility === 'everyone') {
-          return <FormattedMessage id='navigation_bar.create_group.public' defaultMessage='Create Public Group' />;
+          return <FormattedMessage id='navigation_bar.create_group.public' defaultMessage='Create public group' />;
         } else {
-          return <FormattedMessage id='navigation_bar.create_group.private' defaultMessage='Create Private Group' />;
+          return <FormattedMessage id='navigation_bar.create_group.private' defaultMessage='Create private group' />;
         }
     }
   };

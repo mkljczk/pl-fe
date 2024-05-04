@@ -46,7 +46,7 @@ const hidesNetwork = ({ pleroma }: Account): boolean => {
 
 const messages = defineMessages({
   heading: { id: 'column.edit_profile', defaultMessage: 'Edit profile' },
-  header: { id: 'edit_profile.header', defaultMessage: 'Edit Profile' },
+  header: { id: 'edit_profile.header', defaultMessage: 'Edit profile' },
   metaFieldLabel: { id: 'edit_profile.fields.meta_fields.label_placeholder', defaultMessage: 'Label' },
   metaFieldContent: { id: 'edit_profile.fields.meta_fields.content_placeholder', defaultMessage: 'Content' },
   success: { id: 'edit_profile.success', defaultMessage: 'Your profile has been successfully saved!' },

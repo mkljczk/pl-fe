@@ -8,7 +8,7 @@ import { Column, Stack, Text } from 'soapbox/components/ui';
 import type { ModerationLogEntry } from 'soapbox/schemas';
 
 const messages = defineMessages({
-  heading: { id: 'column.admin.moderation_log', defaultMessage: 'Moderation Log' },
+  heading: { id: 'column.admin.moderation_log', defaultMessage: 'Moderation log' },
   emptyMessage: { id: 'admin.moderation_log.empty_message', defaultMessage: 'You have not performed any moderation actions yet. When you do, a history will be shown here.' },
 });
 

@@ -14,7 +14,7 @@ import Thread from './components/thread';
 import ThreadLoginCta from './components/thread-login-cta';
 
 const messages = defineMessages({
-  title: { id: 'status.title', defaultMessage: 'Post Details' },
+  title: { id: 'status.title', defaultMessage: 'Post details' },
   titleDirect: { id: 'status.title_direct', defaultMessage: 'Direct message' },
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
   deleteHeading: { id: 'confirmations.delete.heading', defaultMessage: 'Delete post' },
@@ -28,7 +28,7 @@ const messages = defineMessages({
   detailedStatus: { id: 'status.detailed_status', defaultMessage: 'Detailed conversation view' },
   replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
   replyMessage: { id: 'confirmations.reply.message', defaultMessage: 'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?' },
-  blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block & Report' },
+  blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block and report' },
 });
 
 type RouteParams = {

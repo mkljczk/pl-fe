@@ -73,7 +73,7 @@ const LoginPage = () => {
   if (mfaAuthNeeded) return <OtpAuthForm mfa_token={mfaToken} />;
 
   return (
-    <BigCard title={<FormattedMessage id='login_form.header' defaultMessage='Sign In' />}>
+    <BigCard title={<FormattedMessage id='login_form.header' defaultMessage='Sign in' />}>
       <Stack space={4}>
         <LoginForm handleSubmit={handleSubmit} isLoading={isLoading} />
         <ConsumersList />

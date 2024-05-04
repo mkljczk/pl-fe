@@ -59,7 +59,7 @@ const GroupComposeButton = () => {
       <HStack space={3} alignItems='center'>
         <Avatar className='-my-1 border-2 border-white' size={30} src={group.avatar} />
         <span>
-          <FormattedMessage id='navigation.compose_group' defaultMessage='Compose to Group' />
+          <FormattedMessage id='navigation.compose_group' defaultMessage='Compose to group' />
         </span>
       </HStack>
     </Button>

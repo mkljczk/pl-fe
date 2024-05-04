@@ -90,7 +90,7 @@ const Dashboard: React.FC = () => {
 
         <ListItem
           to='/soapbox/admin/log'
-          label={<FormattedMessage id='column.admin.moderation_log' defaultMessage='Moderation Log' />}
+          label={<FormattedMessage id='column.admin.moderation_log' defaultMessage='Moderation log' />}
         />
 
         {features.adminAnnouncements && (

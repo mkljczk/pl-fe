@@ -7,7 +7,7 @@ import { useAppDispatch } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 
 const messages = defineMessages({
-  header: { id: 'edit_email.header', defaultMessage: 'Change Email' },
+  header: { id: 'edit_email.header', defaultMessage: 'Change email' },
   updateEmailSuccess: { id: 'security.update_email.success', defaultMessage: 'Email successfully updated.' },
   updateEmailFail: { id: 'security.update_email.fail', defaultMessage: 'Update email failed.' },
   emailFieldLabel: { id: 'security.fields.email.label', defaultMessage: 'Email address' },

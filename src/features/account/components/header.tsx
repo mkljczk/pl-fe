@@ -66,7 +66,7 @@ const messages = defineMessages({
   unfollowConfirm: { id: 'confirmations.unfollow.confirm', defaultMessage: 'Unfollow' },
   blockConfirm: { id: 'confirmations.block.confirm', defaultMessage: 'Block' },
   blockDomainConfirm: { id: 'confirmations.domain_block.confirm', defaultMessage: 'Hide entire domain' },
-  blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block & Report' },
+  blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block and report' },
   removeFromFollowersConfirm: { id: 'confirmations.remove_from_followers.confirm', defaultMessage: 'Remove' },
   userEndorsed: { id: 'account.endorse.success', defaultMessage: 'You are now featuring @{acct} on your profile' },
   userUnendorsed: { id: 'account.unendorse.success', defaultMessage: 'You are no longer featuring @{acct}' },

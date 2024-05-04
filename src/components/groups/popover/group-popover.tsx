@@ -19,7 +19,7 @@ interface IGroupPopoverContainer {
 const messages = defineMessages({
   title: { id: 'group.popover.title', defaultMessage: 'Membership required' },
   summary: { id: 'group.popover.summary', defaultMessage: 'You must be a member of the group in order to reply to this status.' },
-  action: { id: 'group.popover.action', defaultMessage: 'View Group' },
+  action: { id: 'group.popover.action', defaultMessage: 'View group' },
 });
 
 const GroupPopover = (props: IGroupPopoverContainer) => {

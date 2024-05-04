@@ -20,12 +20,7 @@ import type { Account as AccountEntity } from 'soapbox/types/entities';
 const messages = defineMessages({
   profile: { id: 'account.profile', defaultMessage: 'Profile' },
   preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },
-  blocks: { id: 'navigation_bar.blocks', defaultMessage: 'Blocks' },
-  domainBlocks: { id: 'navigation_bar.domain_blocks', defaultMessage: 'Domain blocks' },
-  mutes: { id: 'navigation_bar.mutes', defaultMessage: 'Mutes' },
-  filters: { id: 'navigation_bar.filters', defaultMessage: 'Filters' },
   followedTags: { id: 'navigation_bar.followed_tags', defaultMessage: 'Followed hashtags' },
-  soapboxConfig: { id: 'navigation_bar.soapbox_config', defaultMessage: 'Soapbox config' },
   logout: { id: 'navigation_bar.logout', defaultMessage: 'Logout' },
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
   lists: { id: 'column.lists', defaultMessage: 'Lists' },
@@ -230,15 +225,6 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                     />
                   )}
 
-                  {settings.get('isDeveloper') && (
-                    <SidebarLink
-                      to='/developers'
-                      icon={require('@tabler/icons/outline/code.svg')}
-                      text={intl.formatMessage(messages.developers)}
-                      onClick={onClose}
-                    />
-                  )}
-
                   {draftCount > 0 && (
                     <SidebarLink
                       to='/draft_statuses'
@@ -271,43 +257,11 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                   <Divider />
 
                   <SidebarLink
-                    to='/blocks'
-                    icon={require('@tabler/icons/outline/ban.svg')}
-                    text={intl.formatMessage(messages.blocks)}
-                    onClick={onClose}
-                  />
-
-                  <SidebarLink
-                    to='/mutes'
-                    icon={require('@tabler/icons/outline/circle-x.svg')}
-                    text={intl.formatMessage(messages.mutes)}
-                    onClick={onClose}
-                  />
-
-                  <SidebarLink
                     to='/settings/preferences'
                     icon={require('@tabler/icons/outline/settings.svg')}
                     text={intl.formatMessage(messages.preferences)}
                     onClick={onClose}
                   />
-
-                  {features.federating && (
-                    <SidebarLink
-                      to='/domain_blocks'
-                      icon={require('@tabler/icons/outline/ban.svg')}
-                      text={intl.formatMessage(messages.domainBlocks)}
-                      onClick={onClose}
-                    />
-                  )}
-
-                  {(features.filters || features.filtersV2) && (
-                    <SidebarLink
-                      to='/filters'
-                      icon={require('@tabler/icons/outline/filter.svg')}
-                      text={intl.formatMessage(messages.filters)}
-                      onClick={onClose}
-                    />
-                  )}
 
                   {features.followedHashtagsList && (
                     <SidebarLink
@@ -318,11 +272,11 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                     />
                   )}
 
-                  {account.admin && (
+                  {settings.get('isDeveloper') && (
                     <SidebarLink
-                      to='/soapbox/config'
-                      icon={require('@tabler/icons/outline/settings.svg')}
-                      text={intl.formatMessage(messages.soapboxConfig)}
+                      to='/developers'
+                      icon={require('@tabler/icons/outline/code.svg')}
+                      text={intl.formatMessage(messages.developers)}
                       onClick={onClose}
                     />
                   )}

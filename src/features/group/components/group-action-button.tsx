@@ -93,7 +93,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
         theme='secondary'
         to={`/group/${group.id}/manage`}
       >
-        <FormattedMessage id='group.manage' defaultMessage='Manage Group' />
+        <FormattedMessage id='group.manage' defaultMessage='Manage group' />
       </Button>
     );
   }
@@ -106,8 +106,8 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
         disabled={joinGroup.isSubmitting}
       >
         {group.locked
-          ? <FormattedMessage id='group.join.private' defaultMessage='Request Access' />
-          : <FormattedMessage id='group.join.public' defaultMessage='Join Group' />}
+          ? <FormattedMessage id='group.join.private' defaultMessage='Request access' />
+          : <FormattedMessage id='group.join.public' defaultMessage='Join group' />}
       </Button>
     );
   }
@@ -119,7 +119,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
         onClick={onCancelRequest}
         disabled={cancelRequest.isSubmitting}
       >
-        <FormattedMessage id='group.cancel_request' defaultMessage='Cancel Request' />
+        <FormattedMessage id='group.cancel_request' defaultMessage='Cancel request' />
       </Button>
     );
   }
@@ -130,7 +130,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
       onClick={onLeaveGroup}
       disabled={leaveGroup.isSubmitting}
     >
-      <FormattedMessage id='group.leave' defaultMessage='Leave Group' />
+      <FormattedMessage id='group.leave' defaultMessage='Leave group' />
     </Button>
   );
 };

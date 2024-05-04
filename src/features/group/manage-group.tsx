@@ -15,16 +15,16 @@ import ColumnForbidden from '../ui/components/column-forbidden';
 type RouteParams = { groupId: string };
 
 const messages = defineMessages({
-  heading: { id: 'column.manage_group', defaultMessage: 'Manage Group' },
-  editGroup: { id: 'manage_group.edit_group', defaultMessage: 'Edit Group' },
-  pendingRequests: { id: 'manage_group.pending_requests', defaultMessage: 'Pending Requests' },
-  blockedMembers: { id: 'manage_group.blocked_members', defaultMessage: 'Banned Members' },
-  deleteGroup: { id: 'manage_group.delete_group', defaultMessage: 'Delete Group' },
+  heading: { id: 'column.manage_group', defaultMessage: 'Manage group' },
+  editGroup: { id: 'manage_group.edit_group', defaultMessage: 'Edit group' },
+  pendingRequests: { id: 'manage_group.pending_requests', defaultMessage: 'Pending requests' },
+  blockedMembers: { id: 'manage_group.blocked_members', defaultMessage: 'Banned members' },
+  deleteGroup: { id: 'manage_group.delete_group', defaultMessage: 'Delete group' },
   deleteConfirm: { id: 'confirmations.delete_group.confirm', defaultMessage: 'Delete' },
-  deleteHeading: { id: 'confirmations.delete_group.heading', defaultMessage: 'Delete Group' },
+  deleteHeading: { id: 'confirmations.delete_group.heading', defaultMessage: 'Delete group' },
   deleteMessage: { id: 'confirmations.delete_group.message', defaultMessage: 'Are you sure you want to delete this group? This is a permanent action that cannot be undone.' },
   members: { id: 'group.tabs.members', defaultMessage: 'Members' },
-  other: { id: 'settings.other', defaultMessage: 'Other Options' },
+  other: { id: 'settings.other', defaultMessage: 'Other options' },
   deleteSuccess: { id: 'group.delete.success', defaultMessage: 'Group successfully deleted' },
 });
 

@@ -26,7 +26,7 @@ const RegistrationPage: React.FC = () => {
   }
 
   return (
-    <BigCard title={<FormattedMessage id='column.registration' defaultMessage='Sign Up' />}>
+    <BigCard title={<FormattedMessage id='column.registration' defaultMessage='Sign up' />}>
       <RegistrationForm />
     </BigCard>
   );

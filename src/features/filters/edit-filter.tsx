@@ -26,7 +26,7 @@ interface IEditFilter {
 }
 
 const messages = defineMessages({
-  subheading_add_new: { id: 'column.filters.subheading_add_new', defaultMessage: 'Add New Filter' },
+  subheading_add_new: { id: 'column.filters.subheading_add_new', defaultMessage: 'Add new filter' },
   title: { id: 'column.filters.title', defaultMessage: 'Title' },
   keyword: { id: 'column.filters.keyword', defaultMessage: 'Keyword or phrase' },
   keywords: { id: 'column.filters.keywords', defaultMessage: 'Keywords or phrases' },
@@ -40,8 +40,8 @@ const messages = defineMessages({
   drop_hint: { id: 'column.filters.drop_hint', defaultMessage: 'Filtered posts will disappear irreversibly, even if filter is later removed' },
   hide_header: { id: 'column.filters.hide_header', defaultMessage: 'Hide completely' },
   hide_hint: { id: 'column.filters.hide_hint', defaultMessage: 'Completely hide the filtered content, instead of showing a warning' },
-  add_new: { id: 'column.filters.add_new', defaultMessage: 'Add New Filter' },
-  edit: { id: 'column.filters.edit', defaultMessage: 'Edit Filter' },
+  add_new: { id: 'column.filters.add_new', defaultMessage: 'Add new filter' },
+  edit: { id: 'column.filters.edit', defaultMessage: 'Edit filter' },
   create_error: { id: 'column.filters.create_error', defaultMessage: 'Error adding filter' },
   expiration_never: { id: 'column.filters.expiration.never', defaultMessage: 'Never' },
   expiration_1800: { id: 'column.filters.expiration.1800', defaultMessage: '30 minutes' },

@@ -21,8 +21,8 @@ import type { Group, GroupMember } from 'soapbox/types/entities';
 const messages = defineMessages({
   adminLimitTitle: { id: 'group.member.admin.limit.title', defaultMessage: 'Admin limit reached' },
   adminLimitSummary: { id: 'group.member.admin.limit.summary', defaultMessage: 'You can assign up to {count, plural, one {admin} other {admins}} for the group at this time.' },
-  blockConfirm: { id: 'confirmations.block_from_group.confirm', defaultMessage: 'Ban User' },
-  blockFromGroupHeading: { id: 'confirmations.block_from_group.heading', defaultMessage: 'Ban From Group' },
+  blockConfirm: { id: 'confirmations.block_from_group.confirm', defaultMessage: 'Ban user' },
+  blockFromGroupHeading: { id: 'confirmations.block_from_group.heading', defaultMessage: 'Ban from group' },
   blockFromGroupMessage: { id: 'confirmations.block_from_group.message', defaultMessage: 'Are you sure you want to ban @{name} from the group?' },
   blocked: { id: 'group.group_mod_block.success', defaultMessage: '@{name} is banned' },
   demotedToUser: { id: 'group.demote.user.success', defaultMessage: '@{name} is now a member' },
@@ -33,7 +33,7 @@ const messages = defineMessages({
   kickConfirm: { id: 'confirmations.kick_from_group.confirm', defaultMessage: 'Kick' },
   kickFromGroupMessage: { id: 'confirmations.kick_from_group.message', defaultMessage: 'Are you sure you want to kick @{name} from this group?' },
   kicked: { id: 'group.group_mod_kick.success', defaultMessage: 'Kicked @{name} from group' },
-  promoteConfirm: { id: 'group.promote.admin.confirmation.title', defaultMessage: 'Assign Admin Role' },
+  promoteConfirm: { id: 'group.promote.admin.confirmation.title', defaultMessage: 'Assign admin role' },
   promoteConfirmMessage: { id: 'group.promote.admin.confirmation.message', defaultMessage: 'Are you sure you want to assign the admin role to @{name}?' },
   promotedToAdmin: { id: 'group.promote.admin.success', defaultMessage: '@{name} is now an admin' },
 });

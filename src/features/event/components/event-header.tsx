@@ -55,7 +55,7 @@ const messages = defineMessages({
   markStatusNotSensitive: { id: 'admin.statuses.actions.mark_status_not_sensitive', defaultMessage: 'Mark post not sensitive' },
   deleteStatus: { id: 'admin.statuses.actions.delete_status', defaultMessage: 'Delete post' },
   blockConfirm: { id: 'confirmations.block.confirm', defaultMessage: 'Block' },
-  blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block & Report' },
+  blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block and report' },
   deleteConfirm: { id: 'confirmations.delete_event.confirm', defaultMessage: 'Delete' },
   deleteHeading: { id: 'confirmations.delete_event.heading', defaultMessage: 'Delete event' },
   deleteMessage: { id: 'confirmations.delete_event.message', defaultMessage: 'Are you sure you want to delete this event?' },

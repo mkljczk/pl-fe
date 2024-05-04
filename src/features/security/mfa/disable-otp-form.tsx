@@ -42,7 +42,7 @@ const DisableOtpForm: React.FC = () => {
     <Form onSubmit={handleSubmit}>
       <Stack>
         <Text weight='medium'>
-          <FormattedMessage id='mfa.otp_enabled_title' defaultMessage='OTP Enabled' />
+          <FormattedMessage id='mfa.otp_enabled_title' defaultMessage='OTP enabled' />
         </Text>
 
         <Text theme='muted'>

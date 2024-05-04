@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
 const messages = defineMessages({
   title: { id: 'lists.edit.submit', defaultMessage: 'Change title' },
-  save: { id: 'lists.new.save_title', defaultMessage: 'Save Title' },
+  save: { id: 'lists.new.save_title', defaultMessage: 'Save title' },
 });
 
 const ListForm = () => {

@@ -10,7 +10,7 @@ import { useAppSelector, useAppDispatch } from 'soapbox/hooks';
 import ScheduledStatus from './components/scheduled-status';
 
 const messages = defineMessages({
-  heading: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled Posts' },
+  heading: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
 });
 
 const handleLoadMore = debounce((dispatch) => {
