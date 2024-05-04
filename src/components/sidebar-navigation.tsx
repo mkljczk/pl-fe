@@ -10,10 +10,12 @@ import DropdownMenu, { Menu } from './dropdown-menu';
 import SidebarNavigationLink from './sidebar-navigation-link';
 
 const messages = defineMessages({
-  follow_requests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
+  followRequests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
   lists: { id: 'column.lists', defaultMessage: 'Lists' },
   events: { id: 'column.events', defaultMessage: 'Events' },
+  profileDirectory: { id: 'navigation_bar.profile_directory', defaultMessage: 'Profile directory' },
+  followedTags: { id: 'navigation_bar.followed_tags', defaultMessage: 'Followed hashtags' },
   developers: { id: 'navigation.developers', defaultMessage: 'Developers' },
   drafts: { id: 'navigation.drafts', defaultMessage: 'Drafts' },
 });
@@ -42,7 +44,7 @@ const SidebarNavigation = () => {
       if (account.locked || followRequestsCount > 0) {
         menu.push({
           to: '/follow_requests',
-          text: intl.formatMessage(messages.follow_requests),
+          text: intl.formatMessage(messages.followRequests),
           icon: require('@tabler/icons/outline/user-plus.svg'),
           count: followRequestsCount,
         });
@@ -69,6 +71,22 @@ const SidebarNavigation = () => {
           to: '/events',
           text: intl.formatMessage(messages.events),
           icon: require('@tabler/icons/outline/calendar-event.svg'),
+        });
+      }
+
+      if (features.profileDirectory) {
+        menu.push({
+          to: '/directory',
+          text: intl.formatMessage(messages.profileDirectory),
+          icon: require('@tabler/icons/outline/address-book.svg'),
+        });
+      }
+
+      if (features.followedHashtagsList) {
+        menu.push({
+          to: '/followed_tags',
+          text: intl.formatMessage(messages.followedTags),
+          icon: require('@tabler/icons/outline/hash.svg'),
         });
       }
 

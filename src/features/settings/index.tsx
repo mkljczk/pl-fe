@@ -19,15 +19,17 @@ const messages = defineMessages({
   changePassword: { id: 'settings.change_password', defaultMessage: 'Change Password' },
   configureMfa: { id: 'settings.configure_mfa', defaultMessage: 'Configure MFA' },
   deleteAccount: { id: 'settings.delete_account', defaultMessage: 'Delete Account' },
+  domainBlocks: { id: 'navigation_bar.domain_blocks', defaultMessage: 'Hidden domains' },
   editProfile: { id: 'settings.edit_profile', defaultMessage: 'Edit Profile' },
   exportData: { id: 'column.export_data', defaultMessage: 'Export data' },
+  filters: { id: 'navigation_bar.filters', defaultMessage: 'Filters' },
   importData: { id: 'navigation_bar.import_data', defaultMessage: 'Import data' },
   mfaDisabled: { id: 'mfa.disabled', defaultMessage: 'Disabled' },
   mfaEnabled: { id: 'mfa.enabled', defaultMessage: 'Enabled' },
   mutes: { id: 'settings.mutes', defaultMessage: 'Mutes' },
+  mutesAndBlocks: { id: 'settings.mutes_blocks', defaultMessage: 'Mutes and blocks' },
   other: { id: 'settings.other', defaultMessage: 'Other Options' },
   preferences: { id: 'settings.preferences', defaultMessage: 'Preferences' },
-  privacy: { id: 'settings.privacy', defaultMessage: 'Privacy' },
   profile: { id: 'settings.profile', defaultMessage: 'Profile' },
   security: { id: 'settings.security', defaultMessage: 'Security' },
   sessions: { id: 'settings.sessions', defaultMessage: 'Active sessions' },
@@ -69,13 +71,15 @@ const Settings = () => {
         </CardBody>
 
         <CardHeader>
-          <CardTitle title={intl.formatMessage(messages.privacy)} />
+          <CardTitle title={intl.formatMessage(messages.mutesAndBlocks)} />
         </CardHeader>
 
         <CardBody>
           <List>
             <ListItem label={intl.formatMessage(messages.mutes)} to='/mutes' />
             <ListItem label={intl.formatMessage(messages.blocks)} to='/blocks' />
+            {(features.filters || features.filtersV2) && <ListItem label={intl.formatMessage(messages.filters)} to='/filters' />}
+            {features.federating && <ListItem label={intl.formatMessage(messages.domainBlocks)} to='/domain_blocks' />}
           </List>
         </CardBody>
 
