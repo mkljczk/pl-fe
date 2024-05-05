@@ -41,7 +41,7 @@ interface IHStack extends Pick<React.HTMLAttributes<HTMLDivElement>, 'children' 
   /** Whether to let the flexbox grow. */
   grow?: boolean;
   /** HTML element to use for container. */
-  element?: keyof JSX.IntrinsicElements;
+  element?: React.ComponentType | keyof JSX.IntrinsicElements;
   /** Whether to let the flexbox wrap onto multiple lines. */
   wrap?: boolean;
 }

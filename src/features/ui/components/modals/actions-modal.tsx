@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { spring } from 'react-motion';
+import { Link } from 'react-router-dom';
 
 import Icon from 'soapbox/components/icon';
 import { HStack } from 'soapbox/components/ui';
@@ -25,15 +26,15 @@ const ActionsModal: React.FC<IActionsModal> = ({ status, actions, onClick, onClo
       return <li key={`sep-${i}`} className='m-2 block h-[1px] bg-gray-200 black:bg-gray-800 dark:bg-gray-600' />;
     }
 
-    const { icon = null, text, meta = null, href = '#', destructive } = action;
+    const { icon = null, text, meta = null, href = '#', to, destructive } = action;
 
-    const Comp = href === '#' ? 'button' : 'a';
-    const compProps = href === '#' ? { onClick: onClick } : { href: href, rel: 'noopener' };
+    const Comp = href === '#' ? to ? Link : 'button' : 'a';
+    const compProps = href === '#' ? to ? { to, onClick } : { onClick } : { href: href, rel: 'noopener' };
 
     return (
       <li key={`${text}-${i}`}>
         <HStack
-          {...compProps}
+          {...compProps as any}
           space={2.5}
           data-index={i}
           className={clsx(
