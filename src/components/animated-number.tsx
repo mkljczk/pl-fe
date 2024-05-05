@@ -15,7 +15,7 @@ const obfuscatedCount = (count: number): string => {
   }
 };
 
-const shortNumberFormat = (number: any, intl: IntlShape) => {
+const shortNumberFormat = (number: any, intl: IntlShape, max?: number) => {
   if (!isNumber(number)) return '•';
 
   let value = number;
@@ -26,6 +26,10 @@ const shortNumberFormat = (number: any, intl: IntlShape) => {
   } else if (number >= 1000000) {
     factor = 'M';
     value = roundDown(value / 1000000);
+  }
+
+  if (max && value > max) {
+    return `${max}+`;
   }
 
   return intl.formatNumber(value, {
@@ -41,9 +45,10 @@ interface IAnimatedNumber {
   value: number;
   obfuscate?: boolean;
   short?: boolean;
+  max?: number;
 }
 
-const AnimatedNumber: React.FC<IAnimatedNumber> = ({ value, obfuscate, short }) => {
+const AnimatedNumber: React.FC<IAnimatedNumber> = ({ value, obfuscate, short, max }) => {
   const intl = useIntl();
   const { reduceMotion } = useSettings();
 
@@ -61,7 +66,7 @@ const AnimatedNumber: React.FC<IAnimatedNumber> = ({ value, obfuscate, short }) 
     setFormattedValue(obfuscate
       ? obfuscatedCount(value)
       : short
-        ? shortNumberFormat(value, intl)
+        ? shortNumberFormat(value, intl, max)
         : intl.formatNumber(value, { numberingSystem: 'latn' }));
   }, [value]);
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { shortNumberFormat } from 'soapbox/utils/numbers';
+import AnimatedNumber from 'soapbox/components/animated-number';
 
 interface ICounter {
   /** Number this counter should display. */
@@ -13,7 +13,7 @@ interface ICounter {
 const Counter: React.FC<ICounter> = ({ count, countMax }) => {
   return (
     <span className='flex h-5 min-w-[20px] max-w-[26px] items-center justify-center rounded-full bg-secondary-500 text-xs font-medium text-white ring-2 ring-white black:ring-black dark:ring-gray-800'>
-      {shortNumberFormat(count, countMax)}
+      <AnimatedNumber value={count} max={countMax} />
     </span>
   );
 };
