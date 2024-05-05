@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 import clsx from 'clsx';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link, NavLink } from 'react-router-dom';
 
@@ -80,6 +80,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   const settings = useAppSelector((state) => getSettings(state));
   const followRequestsCount = useAppSelector((state) => state.user_lists.follow_requests.items.count());
   const draftCount = useAppSelector((state) => state.draft_statuses.size);
+  const [sidebarVisible, setSidebarVisible] = useState(sidebarOpen);
 
   const closeButtonRef = React.useRef(null);
 
@@ -122,6 +123,13 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
     dispatch(fetchOwnAccounts());
   }, []);
 
+  React.useEffect(() => {
+    // eslint-disable-next-line compat/compat
+    requestAnimationFrame(() => {
+      setSidebarVisible(sidebarOpen);
+    });
+  }, [sidebarOpen]);
+
   if (!account) return null;
 
   return (
@@ -135,7 +143,10 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
       }
     >
       <div
-        className='fixed inset-0 bg-gray-500/90 black:bg-gray-900/90 dark:bg-gray-700/90'
+        className={clsx('fixed inset-0 bg-gray-500 transition-opacity black:bg-gray-900 dark:bg-gray-700', {
+          'opacity-0': !sidebarVisible,
+          'opacity-90': sidebarVisible,
+        })}
         role='button'
         onClick={handleClose}
       />
@@ -144,8 +155,8 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
         <div
           className={
             clsx({
-              'flex flex-col flex-1 bg-white black:bg-black dark:bg-primary-900 -translate-x-full rtl:translate-x-full w-full max-w-xs': true,
-              '!translate-x-0': sidebarOpen,
+              'flex flex-col flex-1 bg-white black:bg-black dark:bg-primary-900 -translate-x-full rtl:translate-x-full w-full max-w-xs transition-transform ease-in-out': true,
+              '!translate-x-0': sidebarVisible,
             })
           }
         >
