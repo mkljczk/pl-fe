@@ -159,6 +159,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
     if (typeof action === 'function') {
       action(event);
     } else if (to) {
+      dispatch(closeModal('MEDIA'));
       history.push(to);
     }
   };
