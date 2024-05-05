@@ -89,3 +89,8 @@
   transform-origin: center center;
   animation: heartbeat 1.5s ease-in-out infinite both;
 }
+
+.ptr,
+.ptr__children {
+  @apply overflow-visible #{!important};
+}
