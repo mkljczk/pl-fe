@@ -3,7 +3,8 @@ import React from 'react';
 
 import { Text, Icon, Emoji } from 'soapbox/components/ui';
 import { useSettings } from 'soapbox/hooks';
-import { shortNumberFormat } from 'soapbox/utils/numbers';
+
+import AnimatedNumber from './animated-number';
 
 import type { EmojiReaction } from 'soapbox/schemas';
 
@@ -24,7 +25,7 @@ const StatusActionCounter: React.FC<IStatusActionCounter> = ({ count = 0 }): JSX
 
   return (
     <Text size='xs' weight='semibold' theme='inherit'>
-      {demetricator && count > 1 ? '1+' : shortNumberFormat(count)}
+      <AnimatedNumber value={count} obfuscate={demetricator} short />
     </Text>
   );
 };

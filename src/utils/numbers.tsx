@@ -10,7 +10,7 @@ export const realNumberSchema = z.coerce.number().refine(n => !isNaN(n));
 
 export const secondsToDays = (seconds: number) => Math.floor(seconds / (3600 * 24));
 
-const roundDown = (num: number) => {
+export const roundDown = (num: number) => {
   if (num >= 100 && num < 1000) {
     num = Math.floor(num);
   }

@@ -3,10 +3,10 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { openModal } from 'soapbox/actions/modals';
+import AnimatedNumber from 'soapbox/components/animated-number';
 import { HStack, Text, Emoji } from 'soapbox/components/ui';
 import { useAppSelector, useSoapboxConfig, useFeatures, useAppDispatch } from 'soapbox/hooks';
 import { reduceEmoji } from 'soapbox/utils/emoji-reacts';
-import { shortNumberFormat } from 'soapbox/utils/numbers';
 
 import type { Status } from 'soapbox/types/entities';
 
@@ -218,7 +218,8 @@ const InteractionCounter: React.FC<IInteractionCounter> = ({ count, children, on
   const body = (
     <HStack space={1} alignItems='center'>
       <Text weight='bold'>
-        {shortNumberFormat(count)}
+        <AnimatedNumber value={count} short />
+        {/* {shortNumberFormat(count)} */}
       </Text>
 
       <Text tag='div' theme='muted'>
