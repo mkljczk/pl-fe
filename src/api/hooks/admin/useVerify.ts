@@ -34,7 +34,10 @@ function useVerify() {
     const accts = accountIdsToAccts(getState(), accountIds);
     verifyEffect(accountIds, true);
     try {
-      await api.put('/api/v1/pleroma/admin/users/tag', { nicknames: accts, tags: ['verified'] });
+      await api('/api/v1/pleroma/admin/users/tag', {
+        method: 'PUT',
+        body: JSON.stringify({ nicknames: accts, tags: ['verified'] }),
+      });
       callbacks?.onSuccess?.();
     } catch (e) {
       callbacks?.onError?.(e);
@@ -46,7 +49,10 @@ function useVerify() {
     const accts = accountIdsToAccts(getState(), accountIds);
     verifyEffect(accountIds, false);
     try {
-      await api.delete('/api/v1/pleroma/admin/users/tag', { data: { nicknames: accts, tags: ['verified'] } });
+      await api('/api/v1/pleroma/admin/users/tag', {
+        method: 'DELETE',
+        body: JSON.stringify({ nicknames: accts, tags: ['verified'] }),
+      });
       callbacks?.onSuccess?.();
     } catch (e) {
       callbacks?.onError?.(e);

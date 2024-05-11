@@ -42,9 +42,8 @@ const fetchFiltersV1 = () =>
       skipLoading: true,
     });
 
-    return api(getState)
-      .get('/api/v1/filters')
-      .then(({ data }) => dispatch({
+    return api(getState)('/api/v1/filters')
+      .then(({ json: data }) => dispatch({
         type: FILTERS_FETCH_SUCCESS,
         filters: data,
         skipLoading: true,
@@ -64,9 +63,8 @@ const fetchFiltersV2 = () =>
       skipLoading: true,
     });
 
-    return api(getState)
-      .get('/api/v2/filters')
-      .then(({ data }) => dispatch({
+    return api(getState)('/api/v2/filters')
+      .then(({ json: data }) => dispatch({
         type: FILTERS_FETCH_SUCCESS,
         filters: data,
         skipLoading: true,
@@ -99,9 +97,8 @@ const fetchFilterV1 = (id: string) =>
       skipLoading: true,
     });
 
-    return api(getState)
-      .get(`/api/v1/filters/${id}`)
-      .then(({ data }) => dispatch({
+    return api(getState)(`/api/v1/filters/${id}`)
+      .then(({ json: data }) => dispatch({
         type: FILTER_FETCH_SUCCESS,
         filter: data,
         skipLoading: true,
@@ -121,9 +118,8 @@ const fetchFilterV2 = (id: string) =>
       skipLoading: true,
     });
 
-    return api(getState)
-      .get(`/api/v2/filters/${id}`)
-      .then(({ data }) => dispatch({
+    return api(getState)(`/api/v2/filters/${id}`)
+      .then(({ json: data }) => dispatch({
         type: FILTER_FETCH_SUCCESS,
         filter: data,
         skipLoading: true,
@@ -150,14 +146,17 @@ const fetchFilter = (id: string) =>
 const createFilterV1 = (title: string, expires_in: string | null, context: Array<string>, hide: boolean, keywords: FilterKeywords) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FILTERS_CREATE_REQUEST });
-    return api(getState).post('/api/v1/filters', {
-      phrase: keywords[0].keyword,
-      context,
-      irreversible: hide,
-      whole_word: keywords[0].whole_word,
-      expires_in,
+    return api(getState)('/api/v1/filters', {
+      method: 'POST',
+      body: JSON.stringify({
+        phrase: keywords[0].keyword,
+        context,
+        irreversible: hide,
+        whole_word: keywords[0].whole_word,
+        expires_in,
+      }),
     }).then(response => {
-      dispatch({ type: FILTERS_CREATE_SUCCESS, filter: response.data });
+      dispatch({ type: FILTERS_CREATE_SUCCESS, filter: response.json });
       toast.success(messages.added);
     }).catch(error => {
       dispatch({ type: FILTERS_CREATE_FAIL, error });
@@ -167,14 +166,17 @@ const createFilterV1 = (title: string, expires_in: string | null, context: Array
 const createFilterV2 = (title: string, expires_in: string | null, context: Array<string>, hide: boolean, keywords_attributes: FilterKeywords) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FILTERS_CREATE_REQUEST });
-    return api(getState).post('/api/v2/filters', {
-      title,
-      context,
-      filter_action: hide ? 'hide' : 'warn',
-      expires_in,
-      keywords_attributes,
+    return api(getState)('/api/v2/filters', {
+      method: 'POST',
+      body: JSON.stringify({
+        title,
+        context,
+        filter_action: hide ? 'hide' : 'warn',
+        expires_in,
+        keywords_attributes,
+      }),
     }).then(response => {
-      dispatch({ type: FILTERS_CREATE_SUCCESS, filter: response.data });
+      dispatch({ type: FILTERS_CREATE_SUCCESS, filter: response.json });
       toast.success(messages.added);
     }).catch(error => {
       dispatch({ type: FILTERS_CREATE_FAIL, error });
@@ -195,14 +197,17 @@ const createFilter = (title: string, expires_in: string | null, context: Array<s
 const updateFilterV1 = (id: string, title: string, expires_in: string | null, context: Array<string>, hide: boolean, keywords: FilterKeywords) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FILTERS_UPDATE_REQUEST });
-    return api(getState).patch(`/api/v1/filters/${id}`, {
-      phrase: keywords[0].keyword,
-      context,
-      irreversible: hide,
-      whole_word: keywords[0].whole_word,
-      expires_in,
+    return api(getState)(`/api/v1/filters/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        phrase: keywords[0].keyword,
+        context,
+        irreversible: hide,
+        whole_word: keywords[0].whole_word,
+        expires_in,
+      }),
     }).then(response => {
-      dispatch({ type: FILTERS_UPDATE_SUCCESS, filter: response.data });
+      dispatch({ type: FILTERS_UPDATE_SUCCESS, filter: response.json });
       toast.success(messages.added);
     }).catch(error => {
       dispatch({ type: FILTERS_UPDATE_FAIL, error });
@@ -212,14 +217,17 @@ const updateFilterV1 = (id: string, title: string, expires_in: string | null, co
 const updateFilterV2 = (id: string, title: string, expires_in: string | null, context: Array<string>, hide: boolean, keywords_attributes: FilterKeywords) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FILTERS_UPDATE_REQUEST });
-    return api(getState).patch(`/api/v2/filters/${id}`, {
-      title,
-      context,
-      filter_action: hide ? 'hide' : 'warn',
-      expires_in,
-      keywords_attributes,
+    return api(getState)(`/api/v2/filters/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        title,
+        context,
+        filter_action: hide ? 'hide' : 'warn',
+        expires_in,
+        keywords_attributes,
+      }),
     }).then(response => {
-      dispatch({ type: FILTERS_UPDATE_SUCCESS, filter: response.data });
+      dispatch({ type: FILTERS_UPDATE_SUCCESS, filter: response.json });
       toast.success(messages.added);
     }).catch(error => {
       dispatch({ type: FILTERS_UPDATE_FAIL, error });
@@ -240,8 +248,8 @@ const updateFilter = (id: string, title: string, expires_in: string | null, cont
 const deleteFilterV1 = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FILTERS_DELETE_REQUEST });
-    return api(getState).delete(`/api/v1/filters/${id}`).then(response => {
-      dispatch({ type: FILTERS_DELETE_SUCCESS, filter: response.data });
+    return api(getState)(`/api/v1/filters/${id}`, { method: 'DELETE' }).then(response => {
+      dispatch({ type: FILTERS_DELETE_SUCCESS, filter: response.json });
       toast.success(messages.removed);
     }).catch(error => {
       dispatch({ type: FILTERS_DELETE_FAIL, error });
@@ -251,8 +259,8 @@ const deleteFilterV1 = (id: string) =>
 const deleteFilterV2 = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FILTERS_DELETE_REQUEST });
-    return api(getState).delete(`/api/v2/filters/${id}`).then(response => {
-      dispatch({ type: FILTERS_DELETE_SUCCESS, filter: response.data });
+    return api(getState)(`/api/v2/filters/${id}`, { method: 'DELETE' }).then(response => {
+      dispatch({ type: FILTERS_DELETE_SUCCESS, filter: response.json });
       toast.success(messages.removed);
     }).catch(error => {
       dispatch({ type: FILTERS_DELETE_FAIL, error });

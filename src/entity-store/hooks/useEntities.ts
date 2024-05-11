@@ -66,8 +66,8 @@ function useEntities<TEntity extends Entity>(
     dispatch(entitiesFetchRequest(entityType, listKey));
     try {
       const response = await req();
-      const entities = filteredArray(schema).parse(response.data);
-      const parsedCount = realNumberSchema.safeParse(response.headers['x-total-count']);
+      const entities = filteredArray(schema).parse(response.json);
+      const parsedCount = realNumberSchema.safeParse(response.headers.get('x-total-count'));
       const totalCount = parsedCount.success ? parsedCount.data : undefined;
 
       dispatch(entitiesFetchSuccess(entities, entityType, listKey, pos, {
@@ -91,13 +91,13 @@ function useEntities<TEntity extends Entity>(
 
   const fetchNextPage = async(): Promise<void> => {
     if (next) {
-      await fetchPage(() => api.get(next), 'end');
+      await fetchPage(() => api(next), 'end');
     }
   };
 
   const fetchPreviousPage = async(): Promise<void> => {
     if (prev) {
-      await fetchPage(() => api.get(prev), 'start');
+      await fetchPage(() => api(prev), 'start');
     }
   };
 

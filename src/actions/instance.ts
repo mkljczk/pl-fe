@@ -25,12 +25,6 @@ const supportsInstanceV2 = (instance: Record<string, any>): boolean => {
     (v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.5.54'));
 };
 
-/** We may need to fetch nodeinfo on Pleroma < 2.1 */
-const needsNodeinfo = (instance: Record<string, any>): boolean => {
-  const v = parseVersion(get(instance, 'version'));
-  return v.software === PLEROMA && !get(instance, ['pleroma', 'metadata']);
-};
-
 interface InstanceData {
   instance: Record<string, any>;
   host: string | null | undefined;
@@ -40,15 +34,13 @@ export const fetchInstance = createAsyncThunk<InstanceData, InstanceData['host']
   'instance/fetch',
   async(host, { dispatch, getState, rejectWithValue }) => {
     try {
-      const { data: instance } = await api(getState).get('/api/v1/instance');
+      const response = await api(getState)('/api/v1/instance');
+      const instance = response.json;
 
       if (supportsInstanceV2(instance)) {
         dispatch(fetchInstanceV2(host));
       }
 
-      if (needsNodeinfo(instance)) {
-        dispatch(fetchNodeinfo());
-      }
       return { instance, host };
     } catch (e) {
       return rejectWithValue(e);
@@ -60,15 +52,12 @@ export const fetchInstanceV2 = createAsyncThunk<InstanceData, InstanceData['host
   'instanceV2/fetch',
   async(host, { getState, rejectWithValue }) => {
     try {
-      const { data: instance } = await api(getState).get('/api/v2/instance');
+      const response = await api(getState)('/api/v2/instance');
+      const instance = response.json;
+
       return { instance, host };
     } catch (e) {
       return rejectWithValue(e);
     }
   },
-);
-
-export const fetchNodeinfo = createAsyncThunk<void, void, { state: RootState }>(
-  'nodeinfo/fetch',
-  async(_arg, { getState }) => await api(getState).get('/nodeinfo/2.1.json'),
 );

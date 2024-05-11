@@ -16,10 +16,16 @@ function useUpdateGroup(groupId: string) {
   const api = useApi();
 
   const { createEntity, ...rest } = useCreateEntity([Entities.GROUPS], (params: UpdateGroupParams) => {
-    return api.put(`/api/v1/groups/${groupId}`, params, {
+    const formData = new FormData();
+
+    Object.entries(params).forEach(([key, value]) => formData.append(key, value));
+
+    return api(`/api/v1/groups/${groupId}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'multipart/form-data',
       },
+      body: formData,
     });
   }, { schema: groupSchema });
 

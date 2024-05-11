@@ -6,8 +6,6 @@ import { Button, Form, FormActions, FormGroup, Input, Spinner } from 'soapbox/co
 import { useAppDispatch } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 
-import type { AxiosError } from 'axios';
-
 const messages = defineMessages({
   instanceLabel: { id: 'login.fields.instance_label', defaultMessage: 'Instance' },
   instancePlaceholder: { id: 'login.fields.instance_placeholder', defaultMessage: 'example.com' },
@@ -26,7 +24,7 @@ const ExternalLoginForm: React.FC = () => {
 
   const [host, setHost] = useState(server || '');
   const [isLoading, setLoading] = useState(false);
-
+  
   const handleHostChange: React.ChangeEventHandler<HTMLInputElement> = ({ currentTarget }) => {
     setHost(currentTarget.value);
   };
@@ -36,13 +34,13 @@ const ExternalLoginForm: React.FC = () => {
 
     dispatch(externalLogin(host))
       .then(() => setLoading(false))
-      .catch((error: AxiosError) => {
+      .catch((error) => {
         console.error(error);
         const status = error.response?.status;
 
         if (status) {
           toast.error(intl.formatMessage(messages.instanceFailed));
-        } else if (!status && error.code === 'ERR_NETWORK') {
+        } else if (!status && ['Network request failed', 'Timeout'].includes(error.message)) {
           toast.error(intl.formatMessage(messages.networkFailed));
         }
 

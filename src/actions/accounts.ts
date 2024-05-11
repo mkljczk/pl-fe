@@ -12,7 +12,6 @@ import {
   importErrorWhileFetchingAccountByUsername,
 } from './importer';
 
-import type { AxiosError, CancelToken } from 'axios';
 import type { Map as ImmutableMap } from 'immutable';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity, Status } from 'soapbox/types/entities';
@@ -118,7 +117,7 @@ const BIRTHDAY_REMINDERS_FETCH_REQUEST = 'BIRTHDAY_REMINDERS_FETCH_REQUEST';
 const BIRTHDAY_REMINDERS_FETCH_SUCCESS = 'BIRTHDAY_REMINDERS_FETCH_SUCCESS';
 const BIRTHDAY_REMINDERS_FETCH_FAIL    = 'BIRTHDAY_REMINDERS_FETCH_FAIL';
 
-const maybeRedirectLogin = (error: AxiosError, history?: History) => {
+const maybeRedirectLogin = (error: { response: Response }, history?: History) => {
   // The client is unauthorized - redirect to login.
   if (history && error?.response?.status === 401) {
     history.push('/login');
@@ -130,7 +129,10 @@ const noOp = () => new Promise(f => f(undefined));
 const createAccount = (params: Record<string, any>) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: ACCOUNT_CREATE_REQUEST, params });
-    return api(getState, 'app').post('/api/v1/accounts', params).then(({ data: token }) => {
+    return api(getState, 'app')('/api/v1/accounts', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    }).then(({ json: token }) => {
       return dispatch({ type: ACCOUNT_CREATE_SUCCESS, params, token });
     }).catch(error => {
       dispatch({ type: ACCOUNT_CREATE_FAIL, error, params });
@@ -150,11 +152,10 @@ const fetchAccount = (id: string) =>
 
     dispatch(fetchAccountRequest(id));
 
-    return api(getState)
-      .get(`/api/v1/accounts/${id}`)
+    return api(getState)(`/api/v1/accounts/${id}`)
       .then(response => {
-        dispatch(importFetchedAccount(response.data));
-        dispatch(fetchAccountSuccess(response.data));
+        dispatch(importFetchedAccount(response.json));
+        dispatch(fetchAccountSuccess(response.json));
       })
       .catch(error => {
         dispatch(fetchAccountFail(id, error));
@@ -167,10 +168,10 @@ const fetchAccountByUsername = (username: string, history?: History) =>
     const features = getFeatures(instance);
 
     if (features.accountByUsername && (me || !features.accountLookup)) {
-      return api(getState).get(`/api/v1/accounts/${username}`).then(response => {
-        dispatch(fetchRelationships([response.data.id]));
-        dispatch(importFetchedAccount(response.data));
-        dispatch(fetchAccountSuccess(response.data));
+      return api(getState)(`/api/v1/accounts/${username}`).then(response => {
+        dispatch(fetchRelationships([response.json.id]));
+        dispatch(importFetchedAccount(response.json));
+        dispatch(fetchAccountSuccess(response.json));
       }).catch(error => {
         dispatch(fetchAccountFail(null, error));
         dispatch(importErrorWhileFetchingAccountByUsername(username));
@@ -228,12 +229,11 @@ const blockAccount = (id: string) =>
 
     dispatch(blockAccountRequest(id));
 
-    return api(getState)
-      .post(`/api/v1/accounts/${id}/block`)
+    return api(getState)(`/api/v1/accounts/${id}/block`, { method: 'POST' })
       .then(response => {
-        dispatch(importEntities([response.data], Entities.RELATIONSHIPS));
+        dispatch(importEntities([response.json], Entities.RELATIONSHIPS));
         // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
-        return dispatch(blockAccountSuccess(response.data, getState().statuses));
+        return dispatch(blockAccountSuccess(response.json, getState().statuses));
       }).catch(error => dispatch(blockAccountFail(error)));
   };
 
@@ -243,11 +243,10 @@ const unblockAccount = (id: string) =>
 
     dispatch(unblockAccountRequest(id));
 
-    return api(getState)
-      .post(`/api/v1/accounts/${id}/unblock`)
+    return api(getState)(`/api/v1/accounts/${id}/unblock`, { method: 'POST' })
       .then(response => {
-        dispatch(importEntities([response.data], Entities.RELATIONSHIPS));
-        return dispatch(unblockAccountSuccess(response.data));
+        dispatch(importEntities([response.json], Entities.RELATIONSHIPS));
+        return dispatch(unblockAccountSuccess(response.json));
       })
       .catch(error => dispatch(unblockAccountFail(error)));
   };
@@ -305,12 +304,14 @@ const muteAccount = (id: string, notifications?: boolean, duration = 0) =>
       }
     }
 
-    return api(getState)
-      .post(`/api/v1/accounts/${id}/mute`, params)
+    return api(getState)(`/api/v1/accounts/${id}/mute`, {
+      method: 'POST',
+      body: JSON.stringify(params),
+    })
       .then(response => {
-        dispatch(importEntities([response.data], Entities.RELATIONSHIPS));
+        dispatch(importEntities([response.json], Entities.RELATIONSHIPS));
         // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
-        return dispatch(muteAccountSuccess(response.data, getState().statuses));
+        return dispatch(muteAccountSuccess(response.json, getState().statuses));
       })
       .catch(error => dispatch(muteAccountFail(error)));
   };
@@ -321,11 +322,10 @@ const unmuteAccount = (id: string) =>
 
     dispatch(unmuteAccountRequest(id));
 
-    return api(getState)
-      .post(`/api/v1/accounts/${id}/unmute`)
+    return api(getState)(`/api/v1/accounts/${id}/unmute`, { method: 'POST' })
       .then(response => {
-        dispatch(importEntities([response.data], Entities.RELATIONSHIPS));
-        return dispatch(unmuteAccountSuccess(response.data));
+        dispatch(importEntities([response.json], Entities.RELATIONSHIPS));
+        return dispatch(unmuteAccountSuccess(response.json));
       })
       .catch(error => dispatch(unmuteAccountFail(error)));
   };
@@ -367,9 +367,10 @@ const subscribeAccount = (id: string, notifications?: boolean) =>
 
     dispatch(subscribeAccountRequest(id));
 
-    return api(getState)
-      .post(`/api/v1/pleroma/accounts/${id}/subscribe`, { notifications })
-      .then(response => dispatch(subscribeAccountSuccess(response.data)))
+    return api(getState)(`/api/v1/pleroma/accounts/${id}/subscribe`, {
+      method: 'POST',
+      body: JSON.stringify({ notifications }),
+    }).then(response => dispatch(subscribeAccountSuccess(response.json)))
       .catch(error => dispatch(subscribeAccountFail(error)));
   };
 
@@ -379,9 +380,8 @@ const unsubscribeAccount = (id: string) =>
 
     dispatch(unsubscribeAccountRequest(id));
 
-    return api(getState)
-      .post(`/api/v1/pleroma/accounts/${id}/unsubscribe`)
-      .then(response => dispatch(unsubscribeAccountSuccess(response.data)))
+    return api(getState)(`/api/v1/pleroma/accounts/${id}/unsubscribe`, { method: 'POST' })
+      .then(response => dispatch(unsubscribeAccountSuccess(response.json)))
       .catch(error => dispatch(unsubscribeAccountFail(error)));
   };
 
@@ -421,9 +421,10 @@ const removeFromFollowers = (id: string) =>
 
     dispatch(removeFromFollowersRequest(id));
 
-    return api(getState)
-      .post(`/api/v1/accounts/${id}/remove_from_followers`)
-      .then(response => dispatch(removeFromFollowersSuccess(response.data)))
+    return api(getState)(`/api/v1/accounts/${id}/remove_from_followers`, {
+      method: 'POST',
+    })
+      .then(response => dispatch(removeFromFollowersSuccess(response.json)))
       .catch(error => dispatch(removeFromFollowersFail(id, error)));
   };
 
@@ -447,14 +448,13 @@ const fetchFollowers = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchFollowersRequest(id));
 
-    return api(getState)
-      .get(`/api/v1/accounts/${id}/followers`)
+    return api(getState)(`/api/v1/accounts/${id}/followers`)
       .then(response => {
         const next = getLinks(response).refs.find(link => link.rel === 'next');
 
-        dispatch(importFetchedAccounts(response.data));
-        dispatch(fetchFollowersSuccess(id, response.data, next ? next.uri : null));
-        dispatch(fetchRelationships(response.data.map((item: APIEntity) => item.id)));
+        dispatch(importFetchedAccounts(response.json));
+        dispatch(fetchFollowersSuccess(id, response.json, next ? next.uri : null));
+        dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
       })
       .catch(error => {
         dispatch(fetchFollowersFail(id, error));
@@ -491,14 +491,13 @@ const expandFollowers = (id: string) =>
 
     dispatch(expandFollowersRequest(id));
 
-    return api(getState)
-      .get(url)
+    return api(getState)(url)
       .then(response => {
         const next = getLinks(response).refs.find(link => link.rel === 'next');
 
-        dispatch(importFetchedAccounts(response.data));
-        dispatch(expandFollowersSuccess(id, response.data, next ? next.uri : null));
-        dispatch(fetchRelationships(response.data.map((item: APIEntity) => item.id)));
+        dispatch(importFetchedAccounts(response.json));
+        dispatch(expandFollowersSuccess(id, response.json, next ? next.uri : null));
+        dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
       })
       .catch(error => {
         dispatch(expandFollowersFail(id, error));
@@ -527,14 +526,13 @@ const fetchFollowing = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchFollowingRequest(id));
 
-    return api(getState)
-      .get(`/api/v1/accounts/${id}/following`)
+    return api(getState)(`/api/v1/accounts/${id}/following`)
       .then(response => {
         const next = getLinks(response).refs.find(link => link.rel === 'next');
 
-        dispatch(importFetchedAccounts(response.data));
-        dispatch(fetchFollowingSuccess(id, response.data, next ? next.uri : null));
-        dispatch(fetchRelationships(response.data.map((item: APIEntity) => item.id)));
+        dispatch(importFetchedAccounts(response.json));
+        dispatch(fetchFollowingSuccess(id, response.json, next ? next.uri : null));
+        dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
       })
       .catch(error => {
         dispatch(fetchFollowingFail(id, error));
@@ -571,14 +569,13 @@ const expandFollowing = (id: string) =>
 
     dispatch(expandFollowingRequest(id));
 
-    return api(getState)
-      .get(url)
+    return api(getState)(url)
       .then(response => {
         const next = getLinks(response).refs.find(link => link.rel === 'next');
 
-        dispatch(importFetchedAccounts(response.data));
-        dispatch(expandFollowingSuccess(id, response.data, next ? next.uri : null));
-        dispatch(fetchRelationships(response.data.map((item: APIEntity) => item.id)));
+        dispatch(importFetchedAccounts(response.json));
+        dispatch(expandFollowingSuccess(id, response.json, next ? next.uri : null));
+        dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
       })
       .catch(error => {
         dispatch(expandFollowingFail(id, error));
@@ -616,11 +613,10 @@ const fetchRelationships = (accountIds: string[]) =>
 
     dispatch(fetchRelationshipsRequest(newAccountIds));
 
-    return api(getState)
-      .get(`/api/v1/accounts/relationships?${newAccountIds.map(id => `id[]=${id}`).join('&')}`)
+    return api(getState)(`/api/v1/accounts/relationships?${newAccountIds.map(id => `id[]=${id}`).join('&')}`)
       .then(response => {
-        dispatch(importEntities(response.data, Entities.RELATIONSHIPS));
-        dispatch(fetchRelationshipsSuccess(response.data));
+        dispatch(importEntities(response.json, Entities.RELATIONSHIPS));
+        dispatch(fetchRelationshipsSuccess(response.json));
       })
       .catch(error => dispatch(fetchRelationshipsFail(error)));
   };
@@ -649,12 +645,11 @@ const fetchFollowRequests = () =>
 
     dispatch(fetchFollowRequestsRequest());
 
-    return api(getState)
-      .get('/api/v1/follow_requests')
+    return api(getState)('/api/v1/follow_requests')
       .then(response => {
         const next = getLinks(response).refs.find(link => link.rel === 'next');
-        dispatch(importFetchedAccounts(response.data));
-        dispatch(fetchFollowRequestsSuccess(response.data, next ? next.uri : null));
+        dispatch(importFetchedAccounts(response.json));
+        dispatch(fetchFollowRequestsSuccess(response.json, next ? next.uri : null));
       })
       .catch(error => dispatch(fetchFollowRequestsFail(error)));
   };
@@ -686,12 +681,11 @@ const expandFollowRequests = () =>
 
     dispatch(expandFollowRequestsRequest());
 
-    return api(getState)
-      .get(url)
+    return api(getState)(url)
       .then(response => {
         const next = getLinks(response).refs.find(link => link.rel === 'next');
-        dispatch(importFetchedAccounts(response.data));
-        dispatch(expandFollowRequestsSuccess(response.data, next ? next.uri : null));
+        dispatch(importFetchedAccounts(response.json));
+        dispatch(expandFollowRequestsSuccess(response.json, next ? next.uri : null));
       })
       .catch(error => dispatch(expandFollowRequestsFail(error)));
   };
@@ -717,8 +711,7 @@ const authorizeFollowRequest = (id: string) =>
 
     dispatch(authorizeFollowRequestRequest(id));
 
-    return api(getState)
-      .post(`/api/v1/follow_requests/${id}/authorize`)
+    return api(getState)(`/api/v1/follow_requests/${id}/authorize`, { method: 'POST' })
       .then(() => dispatch(authorizeFollowRequestSuccess(id)))
       .catch(error => dispatch(authorizeFollowRequestFail(id, error)));
   };
@@ -745,8 +738,7 @@ const rejectFollowRequest = (id: string) =>
 
     dispatch(rejectFollowRequestRequest(id));
 
-    api(getState)
-      .post(`/api/v1/follow_requests/${id}/reject`)
+    api(getState)(`/api/v1/follow_requests/${id}/reject`, { method: 'POST' })
       .then(() => dispatch(rejectFollowRequestSuccess(id)))
       .catch(error => dispatch(rejectFollowRequestFail(id, error)));
   };
@@ -773,8 +765,8 @@ const pinAccount = (id: string) =>
 
     dispatch(pinAccountRequest(id));
 
-    return api(getState).post(`/api/v1/accounts/${id}/pin`).then(response => {
-      dispatch(pinAccountSuccess(response.data));
+    return api(getState)(`/api/v1/accounts/${id}/pin`, { method: 'POST' }).then(response => {
+      dispatch(pinAccountSuccess(response.json));
     }).catch(error => {
       dispatch(pinAccountFail(error));
     });
@@ -786,8 +778,8 @@ const unpinAccount = (id: string) =>
 
     dispatch(unpinAccountRequest(id));
 
-    return api(getState).post(`/api/v1/accounts/${id}/unpin`).then(response => {
-      dispatch(unpinAccountSuccess(response.data));
+    return api(getState)(`/api/v1/accounts/${id}/unpin`, { method: 'POST' }).then(response => {
+      dispatch(unpinAccountSuccess(response.json));
     }).catch(error => {
       dispatch(unpinAccountFail(error));
     });
@@ -796,7 +788,10 @@ const unpinAccount = (id: string) =>
 const updateNotificationSettings = (params: Record<string, any>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: NOTIFICATION_SETTINGS_REQUEST, params });
-    return api(getState).put('/api/pleroma/notification_settings', params).then(({ data }) => {
+    return api(getState)('/api/pleroma/notification_settings', {
+      method: 'PUT',
+      body: JSON.stringify(params),
+    }).then(({ json: data }) => {
       dispatch({ type: NOTIFICATION_SETTINGS_SUCCESS, params, data });
     }).catch(error => {
       dispatch({ type: NOTIFICATION_SETTINGS_FAIL, params, error });
@@ -838,9 +833,9 @@ const fetchPinnedAccounts = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchPinnedAccountsRequest(id));
 
-    api(getState).get(`/api/v1/pleroma/accounts/${id}/endorsements`).then(response => {
-      dispatch(importFetchedAccounts(response.data));
-      dispatch(fetchPinnedAccountsSuccess(id, response.data, null));
+    api(getState)(`/api/v1/pleroma/accounts/${id}/endorsements`).then(response => {
+      dispatch(importFetchedAccounts(response.json));
+      dispatch(fetchPinnedAccountsSuccess(id, response.json, null));
     }).catch(error => {
       dispatch(fetchPinnedAccountsFail(id, error));
     });
@@ -867,7 +862,7 @@ const fetchPinnedAccountsFail = (id: string, error: unknown) => ({
 const accountSearch = (params: Record<string, any>, signal?: AbortSignal) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: ACCOUNT_SEARCH_REQUEST, params });
-    return api(getState).get('/api/v1/accounts/search', { params, signal }).then(({ data: accounts }) => {
+    return api(getState)('/api/v1/accounts/search', { params, signal }).then(({ json: accounts }) => {
       dispatch(importFetchedAccounts(accounts));
       dispatch({ type: ACCOUNT_SEARCH_SUCCESS, accounts });
       return accounts;
@@ -877,10 +872,13 @@ const accountSearch = (params: Record<string, any>, signal?: AbortSignal) =>
     });
   };
 
-const accountLookup = (acct: string, cancelToken?: CancelToken) =>
+const accountLookup = (acct: string, signal?: AbortSignal) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: ACCOUNT_LOOKUP_REQUEST, acct });
-    return api(getState).get('/api/v1/accounts/lookup', { params: { acct }, cancelToken }).then(({ data: account }) => {
+    return api(getState)('/api/v1/accounts/lookup', {
+      body: JSON.stringify({ acct }),
+      signal,
+    }).then(({ json: account }) => {
       if (account && account.id) dispatch(importFetchedAccount(account));
       dispatch({ type: ACCOUNT_LOOKUP_SUCCESS, account });
       return account;
@@ -898,11 +896,11 @@ const fetchBirthdayReminders = (month: number, day: number) =>
 
     dispatch({ type: BIRTHDAY_REMINDERS_FETCH_REQUEST, day, month, id: me });
 
-    return api(getState).get('/api/v1/pleroma/birthdays', { params: { day, month } }).then(response => {
-      dispatch(importFetchedAccounts(response.data));
+    return api(getState)('/api/v1/pleroma/birthdays', { params: { day, month } }).then(response => {
+      dispatch(importFetchedAccounts(response.json));
       dispatch({
         type: BIRTHDAY_REMINDERS_FETCH_SUCCESS,
-        accounts: response.data,
+        accounts: response.json,
         day,
         month,
         id: me,

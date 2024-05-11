@@ -15,14 +15,13 @@ import sourceCode from 'soapbox/utils/code';
 import { getQuirks } from 'soapbox/utils/quirks';
 import { getInstanceScopes } from 'soapbox/utils/scopes';
 
-import { baseClient } from '../api';
+import { getFetch } from '../api';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 
 const fetchExternalInstance = (baseURL?: string) => {
-  return baseClient(null, baseURL)
-    .get('/api/v1/instance')
-    .then(({ data: instance }) => instanceSchema.parse(instance))
+  return getFetch(null, baseURL)('/api/v1/instance')
+    .then(({ json: instance }) => instanceSchema.parse(instance))
     .catch(error => {
       if (error.response?.status === 401) {
         // Authenticated fetch is enabled.
@@ -63,9 +62,9 @@ const externalAuthorize = (instance: Instance, baseURL: string) =>
         scope: scopes,
       });
 
-      localStorage.setItem('soapbox:external:app', JSON.stringify(app));
-      localStorage.setItem('soapbox:external:baseurl', baseURL);
-      localStorage.setItem('soapbox:external:scopes', scopes);
+      localStorage.setItem('plfe:external:app', JSON.stringify(app));
+      localStorage.setItem('plfe:external:baseurl', baseURL);
+      localStorage.setItem('plfe:external:scopes', scopes);
 
       window.location.href = `${baseURL}/oauth/authorize?${query.toString()}`;
     });
@@ -82,9 +81,9 @@ export const externalLogin = (host: string) =>
 
 export const loginWithCode = (code: string) =>
   (dispatch: AppDispatch) => {
-    const { client_id, client_secret, redirect_uri } = JSON.parse(localStorage.getItem('soapbox:external:app')!);
-    const baseURL = localStorage.getItem('soapbox:external:baseurl')!;
-    const scope   = localStorage.getItem('soapbox:external:scopes')!;
+    const { client_id, client_secret, redirect_uri } = JSON.parse(localStorage.getItem('plfe:external:app')!);
+    const baseURL = localStorage.getItem('plfe:external:baseurl')!;
+    const scope   = localStorage.getItem('plfe:external:scopes')!;
 
     const params: Record<string, string> = {
       client_id,

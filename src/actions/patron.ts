@@ -14,8 +14,8 @@ const PATRON_ACCOUNT_FETCH_FAIL     = 'PATRON_ACCOUNT_FETCH_FAIL';
 const fetchPatronInstance = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: PATRON_INSTANCE_FETCH_REQUEST });
-    return api(getState).get('/api/patron/v1/instance').then(response => {
-      dispatch(importFetchedInstance(response.data));
+    return api(getState)('/api/patron/v1/instance').then(response => {
+      dispatch(importFetchedInstance(response.json));
     }).catch(error => {
       dispatch(fetchInstanceFail(error));
     });
@@ -25,8 +25,8 @@ const fetchPatronAccount = (apId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     apId = encodeURIComponent(apId);
     dispatch({ type: PATRON_ACCOUNT_FETCH_REQUEST });
-    api(getState).get(`/api/patron/v1/accounts/${apId}`).then(response => {
-      dispatch(importFetchedAccount(response.data));
+    api(getState)(`/api/patron/v1/accounts/${apId}`).then(response => {
+      dispatch(importFetchedAccount(response.json));
     }).catch(error => {
       dispatch(fetchAccountFail(error));
     });

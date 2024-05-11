@@ -18,10 +18,6 @@ import {
   BIRTHDAY_REMINDERS_FETCH_SUCCESS,
 } from 'soapbox/actions/accounts';
 import {
-  BLOCKS_FETCH_SUCCESS,
-  BLOCKS_EXPAND_SUCCESS,
-} from 'soapbox/actions/blocks';
-import {
   DIRECTORY_FETCH_REQUEST,
   DIRECTORY_FETCH_SUCCESS,
   DIRECTORY_FETCH_FAIL,
@@ -41,20 +37,9 @@ import {
   FAMILIAR_FOLLOWERS_FETCH_SUCCESS,
 } from 'soapbox/actions/familiar-followers';
 import {
-  GROUP_MEMBERSHIP_REQUESTS_FETCH_SUCCESS,
-  GROUP_MEMBERSHIP_REQUESTS_EXPAND_SUCCESS,
-  GROUP_MEMBERSHIP_REQUESTS_FETCH_REQUEST,
-  GROUP_MEMBERSHIP_REQUESTS_EXPAND_REQUEST,
-  GROUP_MEMBERSHIP_REQUESTS_FETCH_FAIL,
-  GROUP_MEMBERSHIP_REQUESTS_EXPAND_FAIL,
-  GROUP_MEMBERSHIP_REQUEST_AUTHORIZE_SUCCESS,
-  GROUP_MEMBERSHIP_REQUEST_REJECT_SUCCESS,
   GROUP_BLOCKS_FETCH_REQUEST,
   GROUP_BLOCKS_FETCH_SUCCESS,
   GROUP_BLOCKS_FETCH_FAIL,
-  GROUP_BLOCKS_EXPAND_REQUEST,
-  GROUP_BLOCKS_EXPAND_SUCCESS,
-  GROUP_BLOCKS_EXPAND_FAIL,
   GROUP_UNBLOCK_SUCCESS,
 } from 'soapbox/actions/groups';
 import {
@@ -109,7 +94,6 @@ export const ReducerRecord = ImmutableRecord({
   disliked_by: ImmutableMap<string, List>(),
   reactions: ImmutableMap<string, ReactionList>(),
   follow_requests: ListRecord(),
-  blocks: ListRecord(),
   mutes: ListRecord(),
   directory: ListRecord({ isLoading: true }),
   pinned: ImmutableMap<string, List>(),
@@ -129,7 +113,7 @@ type ParticipationRequest = ReturnType<typeof ParticipationRequestRecord>;
 type ParticipationRequestList = ReturnType<typeof ParticipationRequestListRecord>;
 type Items = ImmutableOrderedSet<string>;
 type NestedListPath = ['followers' | 'following' | 'reblogged_by' | 'favourited_by' | 'disliked_by' | 'reactions' | 'pinned' | 'birthday_reminders' | 'familiar_followers' | 'event_participations' | 'event_participation_requests' | 'membership_requests' | 'group_blocks', string];
-type ListPath = ['follow_requests' | 'blocks' | 'mutes' | 'directory'];
+type ListPath = ['follow_requests' | 'mutes' | 'directory'];
 
 const normalizeList = (state: State, path: NestedListPath | ListPath, accounts: APIEntity[], next?: string | null) => {
   return state.setIn(path, ListRecord({
@@ -195,10 +179,6 @@ export default function userLists(state = ReducerRecord(), action: AnyAction) {
     case FOLLOW_REQUEST_AUTHORIZE_SUCCESS:
     case FOLLOW_REQUEST_REJECT_SUCCESS:
       return removeFromList(state, ['follow_requests'], action.id);
-    case BLOCKS_FETCH_SUCCESS:
-      return normalizeList(state, ['blocks'], action.accounts, action.next);
-    case BLOCKS_EXPAND_SUCCESS:
-      return appendToList(state, ['blocks'], action.accounts, action.next);
     case DIRECTORY_FETCH_SUCCESS:
       return normalizeList(state, ['directory'], action.accounts, action.next);
     case DIRECTORY_EXPAND_SUCCESS:
@@ -242,28 +222,11 @@ export default function userLists(state = ReducerRecord(), action: AnyAction) {
         ['event_participation_requests', action.id, 'items'],
         items => (items as ImmutableOrderedSet<ParticipationRequest>).filter(({ account }) => account !== action.accountId),
       );
-    case GROUP_MEMBERSHIP_REQUESTS_FETCH_SUCCESS:
-      return normalizeList(state, ['membership_requests', action.id], action.accounts, action.next);
-    case GROUP_MEMBERSHIP_REQUESTS_EXPAND_SUCCESS:
-      return appendToList(state, ['membership_requests', action.id], action.accounts, action.next);
-    case GROUP_MEMBERSHIP_REQUESTS_FETCH_REQUEST:
-    case GROUP_MEMBERSHIP_REQUESTS_EXPAND_REQUEST:
-      return state.setIn(['membership_requests', action.id, 'isLoading'], true);
-    case GROUP_MEMBERSHIP_REQUESTS_FETCH_FAIL:
-    case GROUP_MEMBERSHIP_REQUESTS_EXPAND_FAIL:
-      return state.setIn(['membership_requests', action.id, 'isLoading'], false);
-    case GROUP_MEMBERSHIP_REQUEST_AUTHORIZE_SUCCESS:
-    case GROUP_MEMBERSHIP_REQUEST_REJECT_SUCCESS:
-      return state.updateIn(['membership_requests', action.groupId, 'items'], list => (list as ImmutableOrderedSet<string>).filterNot(item => item === action.accountId));
     case GROUP_BLOCKS_FETCH_SUCCESS:
       return normalizeList(state, ['group_blocks', action.id], action.accounts, action.next);
-    case GROUP_BLOCKS_EXPAND_SUCCESS:
-      return appendToList(state, ['group_blocks', action.id], action.accounts, action.next);
     case GROUP_BLOCKS_FETCH_REQUEST:
-    case GROUP_BLOCKS_EXPAND_REQUEST:
       return state.setIn(['group_blocks', action.id, 'isLoading'], true);
     case GROUP_BLOCKS_FETCH_FAIL:
-    case GROUP_BLOCKS_EXPAND_FAIL:
       return state.setIn(['group_blocks', action.id, 'isLoading'], false);
     case GROUP_UNBLOCK_SUCCESS:
       return state.updateIn(['group_blocks', action.groupId, 'items'], list => (list as ImmutableOrderedSet<string>).filterNot(item => item === action.accountId));

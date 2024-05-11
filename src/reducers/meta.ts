@@ -15,6 +15,7 @@ const ReducerRecord = ImmutableRecord({
 export default function meta(state = ReducerRecord(), action: AnyAction) {
   switch (action.type) {
     case fetchInstance.rejected.type:
+      console.log(action, action.payload.response?.status);
       if (action.payload.response?.status === 404) {
         return state.set('instance_fetch_failed', true);
       }

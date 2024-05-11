@@ -75,7 +75,7 @@ const WrappedRoute: React.FC<IWrappedRoute> = ({
 
   const loginRedirect = () => {
     const actualUrl = encodeURIComponent(`${history.location.pathname}${history.location.search}`);
-    localStorage.setItem('soapbox:redirect_uri', actualUrl);
+    localStorage.setItem('plfe:redirect_uri', actualUrl);
     return <Redirect to='/login' />;
   };
 

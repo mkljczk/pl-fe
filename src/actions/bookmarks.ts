@@ -23,10 +23,10 @@ const fetchBookmarkedStatuses = (folderId?: string) =>
 
     dispatch(fetchBookmarkedStatusesRequest(folderId));
 
-    return api(getState).get(`/api/v1/bookmarks${folderId ? `?folder_id=${folderId}` : ''}`).then(response => {
+    return api(getState)(`/api/v1/bookmarks${folderId ? `?folder_id=${folderId}` : ''}`).then(response => {
       const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(importFetchedStatuses(response.data));
-      return dispatch(fetchBookmarkedStatusesSuccess(response.data, next ? next.uri : null, folderId));
+      dispatch(importFetchedStatuses(response.json));
+      return dispatch(fetchBookmarkedStatusesSuccess(response.json, next ? next.uri : null, folderId));
     }).catch(error => {
       dispatch(fetchBookmarkedStatusesFail(error, folderId));
     });
@@ -61,10 +61,10 @@ const expandBookmarkedStatuses = (folderId?: string) =>
 
     dispatch(expandBookmarkedStatusesRequest(folderId));
 
-    return api(getState).get(url).then(response => {
+    return api(getState)(url).then(response => {
       const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(importFetchedStatuses(response.data));
-      return dispatch(expandBookmarkedStatusesSuccess(response.data, next ? next.uri : null, folderId));
+      dispatch(importFetchedStatuses(response.json));
+      return dispatch(expandBookmarkedStatusesSuccess(response.json, next ? next.uri : null, folderId));
     }).catch(error => {
       dispatch(expandBookmarkedStatusesFail(error, folderId));
     });

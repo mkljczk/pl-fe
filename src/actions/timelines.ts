@@ -6,7 +6,6 @@ import { shouldFilter } from 'soapbox/utils/timelines';
 
 import api, { getNextLink, getPrevLink } from '../api';
 
-import { fetchGroupRelationships } from './groups';
 import { importFetchedStatus, importFetchedStatuses } from './importer';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
@@ -190,14 +189,11 @@ const expandTimeline = (timelineId: string, path: string, params: Record<string,
 
     dispatch(expandTimelineRequest(timelineId, isLoadingMore));
 
-    return api(getState).get(path, { params }).then(response => {
-      dispatch(importFetchedStatuses(response.data));
+    return api(getState)(path, { params }).then(response => {
+      dispatch(importFetchedStatuses(response.json));
 
-      const statuses = deduplicateStatuses(response.data);
+      const statuses = deduplicateStatuses(response.json);
       dispatch(importFetchedStatuses(statuses.filter(status => status.accounts)));
-
-      const statusesFromGroups = (response.data as Status[]).filter((status) => !!status.group);
-      dispatch(fetchGroupRelationships(statusesFromGroups.map((status: any) => status.group?.id)));
 
       dispatch(expandTimelineSuccess(
         timelineId,

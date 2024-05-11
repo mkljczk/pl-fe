@@ -3,7 +3,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import { blockAccount } from 'soapbox/actions/accounts';
-import { launchChat } from 'soapbox/actions/chats';
 import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'soapbox/actions/compose';
 import { editEvent } from 'soapbox/actions/events';
 import { toggleBookmark, toggleDislike, toggleFavourite, togglePin, toggleReblog } from 'soapbox/actions/interactions';
@@ -20,6 +19,7 @@ import StatusActionButton from 'soapbox/components/status-action-button';
 import StatusReactionWrapper from 'soapbox/components/status-reaction-wrapper';
 import { HStack } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount, useSettings, useSoapboxConfig } from 'soapbox/hooks';
+import { useChats } from 'soapbox/queries/chats';
 import { GroupRoles } from 'soapbox/schemas/group-member';
 import toast from 'soapbox/toast';
 import copy from 'soapbox/utils/copy';
@@ -124,6 +124,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const { group } = useGroup((status.group as Group)?.id as string);
   const deleteGroupStatus = useDeleteGroupStatus(group as Group, status.id);
   const blockGroupMember = useBlockGroupMember(group as Group, status.account);
+  const { getOrCreateChatByAccountId } = useChats();
 
   const me = useAppSelector(state => state.me);
   const { groupRelationship } = useGroupRelationship(status.group?.id);
@@ -255,7 +256,10 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
 
   const handleChatClick: React.EventHandler<React.MouseEvent> = (e) => {
     const account = status.account;
-    dispatch(launchChat(account.id, history));
+
+    getOrCreateChatByAccountId(account.id)
+      .then(({ json: chat }) => history.push(`/chats/${chat.id}`))
+      .catch(() => {});
   };
 
   const handleMuteClick: React.EventHandler<React.MouseEvent> = (e) => {

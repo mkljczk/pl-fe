@@ -54,7 +54,7 @@ function useBatchedEntities<TEntity extends Entity>(
     dispatch(entitiesFetchRequest(entityType, listKey));
     try {
       const response = await entityFn(filteredIds);
-      const entities = filteredArray(schema).parse(response.data);
+      const entities = filteredArray(schema).parse(response.json);
       dispatch(entitiesFetchSuccess(entities, entityType, listKey, 'end', {
         next: undefined,
         prev: undefined,

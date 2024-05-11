@@ -11,9 +11,6 @@ import admin_user_index from './admin-user-index';
 import aliases from './aliases';
 import auth from './auth';
 import backups from './backups';
-import chat_message_lists from './chat-message-lists';
-import chat_messages from './chat-messages';
-import chats from './chats';
 import compose from './compose';
 import compose_event from './compose-event';
 import contexts from './contexts';
@@ -24,9 +21,6 @@ import draft_statuses from './draft-statuses';
 import dropdown_menu from './dropdown-menu';
 import filters from './filters';
 import followed_tags from './followed-tags';
-import group_memberships from './group-memberships';
-import group_relationships from './group-relationships';
-import groups from './groups';
 import history from './history';
 import instance from './instance';
 import listAdder from './list-adder';
@@ -69,9 +63,6 @@ const reducers = {
   aliases,
   auth,
   backups,
-  chat_message_lists,
-  chat_messages,
-  chats,
   compose,
   compose_event,
   contexts,
@@ -83,9 +74,6 @@ const reducers = {
   entities,
   filters,
   followed_tags,
-  group_memberships,
-  group_relationships,
-  groups,
   history,
   instance,
   listAdder,

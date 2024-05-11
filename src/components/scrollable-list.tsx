@@ -112,7 +112,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
   const { autoloadMore } = useSettings();
 
   // Preserve scroll position
-  const scrollDataKey = `soapbox:scrollData:${scrollKey}`;
+  const scrollDataKey = `plfe:scrollData:${scrollKey}`;
   const scrollData: SavedScrollPosition | null = useMemo(() => JSON.parse(sessionStorage.getItem(scrollDataKey)!), [scrollDataKey]);
   const topIndex = useRef<number>(scrollData ? scrollData.index : 0);
   const topOffset = useRef<number>(scrollData ? scrollData.offset : 0);

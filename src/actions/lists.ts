@@ -65,8 +65,8 @@ const fetchList = (id: string | number) => (dispatch: AppDispatch, getState: () 
 
   dispatch(fetchListRequest(id));
 
-  api(getState).get(`/api/v1/lists/${id}`)
-    .then(({ data }) => dispatch(fetchListSuccess(data)))
+  api(getState)(`/api/v1/lists/${id}`)
+    .then(({ json: data }) => dispatch(fetchListSuccess(data)))
     .catch(err => dispatch(fetchListFail(id, err)));
 };
 
@@ -91,8 +91,8 @@ const fetchLists = () => (dispatch: AppDispatch, getState: () => RootState) => {
 
   dispatch(fetchListsRequest());
 
-  api(getState).get('/api/v1/lists')
-    .then(({ data }) => dispatch(fetchListsSuccess(data)))
+  api(getState)('/api/v1/lists')
+    .then(({ json: data }) => dispatch(fetchListsSuccess(data)))
     .catch(err => dispatch(fetchListsFail(err)));
 };
 
@@ -140,7 +140,10 @@ const createList = (title: string, shouldReset?: boolean) => (dispatch: AppDispa
 
   dispatch(createListRequest());
 
-  api(getState).post('/api/v1/lists', { title }).then(({ data }) => {
+  api(getState)('/api/v1/lists', {
+    method: 'POST',
+    body: JSON.stringify({ title }),
+  }).then(({ json: data }) => {
     dispatch(createListSuccess(data));
 
     if (shouldReset) {
@@ -168,7 +171,10 @@ const updateList = (id: string | number, title: string, shouldReset?: boolean) =
 
   dispatch(updateListRequest(id));
 
-  api(getState).put(`/api/v1/lists/${id}`, { title }).then(({ data }) => {
+  api(getState)(`/api/v1/lists/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ title }),
+  }).then(({ json: data }) => {
     dispatch(updateListSuccess(data));
 
     if (shouldReset) {
@@ -202,7 +208,7 @@ const deleteList = (id: string | number) => (dispatch: AppDispatch, getState: ()
 
   dispatch(deleteListRequest(id));
 
-  api(getState).delete(`/api/v1/lists/${id}`)
+  api(getState)(`/api/v1/lists/${id}`, { method: 'DELETE' })
     .then(() => dispatch(deleteListSuccess(id)))
     .catch(err => dispatch(deleteListFail(id, err)));
 };
@@ -228,7 +234,7 @@ const fetchListAccounts = (listId: string | number) => (dispatch: AppDispatch, g
 
   dispatch(fetchListAccountsRequest(listId));
 
-  api(getState).get(`/api/v1/lists/${listId}/accounts`, { params: { limit: 0 } }).then(({ data }) => {
+  api(getState)(`/api/v1/lists/${listId}/accounts`, { params: { limit: 0 } }).then(({ json: data }) => {
     dispatch(importFetchedAccounts(data));
     dispatch(fetchListAccountsSuccess(listId, data, null));
   }).catch(err => dispatch(fetchListAccountsFail(listId, err)));
@@ -262,7 +268,7 @@ const fetchListSuggestions = (q: string) => (dispatch: AppDispatch, getState: ()
     following: true,
   };
 
-  api(getState).get('/api/v1/accounts/search', { params }).then(({ data }) => {
+  api(getState)('/api/v1/accounts/search', { params }).then(({ json: data }) => {
     dispatch(importFetchedAccounts(data));
     dispatch(fetchListSuggestionsReady(q, data));
   }).catch(error => toast.showAlertForError(error));
@@ -292,7 +298,10 @@ const addToList = (listId: string | number, accountId: string) => (dispatch: App
 
   dispatch(addToListRequest(listId, accountId));
 
-  api(getState).post(`/api/v1/lists/${listId}/accounts`, { account_ids: [accountId] })
+  api(getState)(`/api/v1/lists/${listId}/accounts`, {
+    method: 'POST',
+    body: JSON.stringify({ account_ids: [accountId] }),
+  })
     .then(() => dispatch(addToListSuccess(listId, accountId)))
     .catch(err => dispatch(addToListFail(listId, accountId, err)));
 };
@@ -325,7 +334,10 @@ const removeFromList = (listId: string | number, accountId: string) => (dispatch
 
   dispatch(removeFromListRequest(listId, accountId));
 
-  api(getState).delete(`/api/v1/lists/${listId}/accounts`, { params: { account_ids: [accountId] } })
+  api(getState)(`/api/v1/lists/${listId}/accounts`, {
+    method: 'DELETE',
+    body: JSON.stringify({ account_ids: [accountId] }),
+  })
     .then(() => dispatch(removeFromListSuccess(listId, accountId)))
     .catch(err => dispatch(removeFromListFail(listId, accountId, err)));
 };
@@ -367,8 +379,8 @@ const fetchAccountLists = (accountId: string) => (dispatch: AppDispatch, getStat
 
   dispatch(fetchAccountListsRequest(accountId));
 
-  api(getState).get(`/api/v1/accounts/${accountId}/lists`)
-    .then(({ data }) => dispatch(fetchAccountListsSuccess(accountId, data)))
+  api(getState)(`/api/v1/accounts/${accountId}/lists`)
+    .then(({ json: data }) => dispatch(fetchAccountListsSuccess(accountId, data)))
     .catch(err => dispatch(fetchAccountListsFail(accountId, err)));
 };
 

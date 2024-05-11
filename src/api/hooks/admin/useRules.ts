@@ -4,8 +4,6 @@ import { useApi } from 'soapbox/hooks';
 import { queryClient } from 'soapbox/queries/client';
 import { adminRuleSchema, type AdminRule } from 'soapbox/schemas';
 
-import type { AxiosResponse } from 'axios';
-
 interface CreateRuleParams {
   priority?: number;
   text: string;
@@ -23,7 +21,7 @@ const useRules = () => {
   const api = useApi();
 
   const getRules = async () => {
-    const { data } = await api.get<AdminRule[]>('/api/v1/pleroma/admin/rules');
+    const { json: data } = await api<AdminRule[]>('/api/v1/pleroma/admin/rules');
 
     const normalizedData = data.map((rule) => adminRuleSchema.parse(rule));
     return normalizedData;
@@ -39,9 +37,12 @@ const useRules = () => {
     mutate: createRule,
     isPending: isCreating,
   } = useMutation({
-    mutationFn: (params: CreateRuleParams) => api.post('/api/v1/pleroma/admin/rules', params),
+    mutationFn: (params: CreateRuleParams) => api('/api/v1/pleroma/admin/rules', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    }),
     retry: false,
-    onSuccess: ({ data }: AxiosResponse) =>
+    onSuccess: ({ json: data }) =>
       queryClient.setQueryData(['admin', 'rules'], (prevResult: ReadonlyArray<AdminRule>) =>
         [...prevResult, adminRuleSchema.parse(data)],
       ),
@@ -51,9 +52,12 @@ const useRules = () => {
     mutate: updateRule,
     isPending: isUpdating,
   } = useMutation({
-    mutationFn: ({ id, ...params }: UpdateRuleParams) => api.patch(`/api/v1/pleroma/admin/rules/${id}`, params),
+    mutationFn: ({ id, ...params }: UpdateRuleParams) => api(`/api/v1/pleroma/admin/rules/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(params),
+    }),
     retry: false,
-    onSuccess: ({ data }: AxiosResponse) =>
+    onSuccess: ({ json: data }) =>
       queryClient.setQueryData(['admin', 'rules'], (prevResult: ReadonlyArray<AdminRule>) =>
         prevResult.map((rule) => rule.id === data.id ? adminRuleSchema.parse(data) : rule),
       ),
@@ -63,7 +67,7 @@ const useRules = () => {
     mutate: deleteRule,
     isPending: isDeleting,
   } = useMutation({
-    mutationFn: (id: string) => api.delete(`/api/v1/pleroma/admin/rules/${id}`),
+    mutationFn: (id: string) => api(`/api/v1/pleroma/admin/rules/${id}`, { method: 'DELETE' }),
     retry: false,
     onSuccess: (_, id) =>
       queryClient.setQueryData(['admin', 'rules'], (prevResult: ReadonlyArray<AdminRule>) =>

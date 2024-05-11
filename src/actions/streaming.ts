@@ -27,8 +27,6 @@ import type { IStatContext } from 'soapbox/contexts/stat-context';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
 
-const STREAMING_CHAT_UPDATE = 'STREAMING_CHAT_UPDATE';
-
 const updateAnnouncementReactions = ({ announcement_id: id, name, count }: APIEntity) => {
   queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
     prevResult.map(value => {
@@ -200,7 +198,6 @@ function updateFollowRelationships(update: FollowUpdate) {
 }
 
 export {
-  STREAMING_CHAT_UPDATE,
   connectTimelineStream,
   type TimelineStreamOpts,
 };

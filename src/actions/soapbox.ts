@@ -6,7 +6,7 @@ import KVStore from 'soapbox/storage/kv-store';
 import { removeVS16s } from 'soapbox/utils/emoji';
 import { getFeatures } from 'soapbox/utils/features';
 
-import api, { staticClient } from '../api';
+import api, { staticFetch } from '../api';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
@@ -51,9 +51,8 @@ const rememberSoapboxConfig = (host: string | null) =>
 
 const fetchFrontendConfigurations = () =>
   (dispatch: AppDispatch, getState: () => RootState) =>
-    api(getState)
-      .get('/api/pleroma/frontend_configurations')
-      .then(({ data }) => data);
+    api(getState)('/api/pleroma/frontend_configurations')
+      .then(({ json: data }) => data);
 
 /** Conditionally fetches Soapbox config depending on backend features */
 const fetchSoapboxConfig = (host: string | null) =>
@@ -86,7 +85,7 @@ const loadSoapboxConfig = () =>
 
 const fetchSoapboxJson = (host: string | null) =>
   (dispatch: AppDispatch) =>
-    staticClient.get('/instance/soapbox.json').then(({ data }) => {
+    staticFetch('/instance/soapbox.json').then(({ json: data }) => {
       if (!isObject(data)) throw 'soapbox.json failed';
       dispatch(importSoapboxConfig(data, host));
       return data;

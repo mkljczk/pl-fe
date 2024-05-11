@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
@@ -36,7 +35,7 @@ function useEntityLookup<TEntity extends Entity>(
   const fetchEntity = async () => {
     try {
       const response = await setPromise(entityFn());
-      const entity = schema.parse(response.data);
+      const entity = schema.parse(response.json);
       setFetchedEntity(entity);
       dispatch(importEntities([entity], entityType));
     } catch (e) {
@@ -57,8 +56,8 @@ function useEntityLookup<TEntity extends Entity>(
     fetchEntity,
     isFetching,
     isLoading,
-    isUnauthorized: error instanceof AxiosError && error.response?.status === 401,
-    isForbidden: error instanceof AxiosError && error.response?.status === 403,
+    isUnauthorized: (error as { response?: Response })?.response?.status === 401,
+    isForbidden: (error as { response?: Response })?.response?.status === 403,
   };
 }
 

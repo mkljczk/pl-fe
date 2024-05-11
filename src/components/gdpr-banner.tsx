@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Banner, Button, HStack, Stack, Text } from 'soapbox/components/ui';
 import { useInstance, useSoapboxConfig } from 'soapbox/hooks';
 
-const acceptedGdpr = !!localStorage.getItem('soapbox:gdpr');
+const acceptedGdpr = !!localStorage.getItem('plfe:gdpr');
 
 /** Displays a cookie consent banner. */
 const GdprBanner: React.FC = () => {
@@ -17,7 +17,7 @@ const GdprBanner: React.FC = () => {
   const { gdprUrl } = useSoapboxConfig();
 
   const handleAccept = () => {
-    localStorage.setItem('soapbox:gdpr', 'true');
+    localStorage.setItem('plfe:gdpr', 'true');
     setSlideout(true);
     setTimeout(() => setShown(true), 200);
   };

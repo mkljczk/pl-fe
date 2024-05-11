@@ -32,17 +32,17 @@ const useSuggestions = () => {
 
   const getV2Suggestions = async (pageParam: PageParam): Promise<PaginatedResult<Result>> => {
     const endpoint = pageParam?.link || '/api/v2/suggestions';
-    const response = await api.get<Suggestion[]>(endpoint);
-    const hasMore = !!response.headers.link;
+    const response = await api<Suggestion[]>(endpoint);
+    const hasMore = !!response.headers.get('link');
     const nextLink = getLinks(response).refs.find(link => link.rel === 'next')?.uri;
 
-    const accounts = response.data.map(({ account }) => account);
+    const accounts = response.json.map(({ account }) => account);
     const accountIds = accounts.map((account) => account.id);
     dispatch(importFetchedAccounts(accounts));
     dispatch(fetchRelationships(accountIds));
 
     return {
-      result: response.data.map(x => ({ ...x, account: x.account.id })),
+      result: response.json.map(x => ({ ...x, account: x.account.id })),
       link: nextLink,
       hasMore,
     };
@@ -77,7 +77,7 @@ const useDismissSuggestion = () => {
   const api = useApi();
 
   return useMutation({
-    mutationFn: (accountId: string) => api.delete(`/api/v1/suggestions/${accountId}`),
+    mutationFn: (accountId: string) => api(`/api/v1/suggestions/${accountId}`, { method: 'DELETE' }),
     onMutate(accountId: string) {
       removePageItem(SuggestionKeys.suggestions, accountId, (o: any, n: any) => o.account === n);
     },
@@ -90,17 +90,17 @@ function useOnboardingSuggestions() {
 
   const getV2Suggestions = async (pageParam: any): Promise<{ data: Suggestion[]; link: string | undefined; hasMore: boolean }> => {
     const link = pageParam?.link || '/api/v2/suggestions';
-    const response = await api.get<Suggestion[]>(link);
-    const hasMore = !!response.headers.link;
+    const response = await api<Suggestion[]>(link);
+    const hasMore = !!response.headers.get('link');
     const nextLink = getLinks(response).refs.find(link => link.rel === 'next')?.uri;
 
-    const accounts = response.data.map(({ account }) => account);
+    const accounts = response.json.map(({ account }) => account);
     const accountIds = accounts.map((account) => account.id);
     dispatch(importFetchedAccounts(accounts));
     dispatch(fetchRelationships(accountIds));
 
     return {
-      data: response.data,
+      data: response.json,
       link: nextLink,
       hasMore,
     };

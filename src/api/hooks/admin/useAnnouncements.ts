@@ -6,8 +6,6 @@ import { adminAnnouncementSchema, type AdminAnnouncement } from 'soapbox/schemas
 
 import { useAnnouncements as useUserAnnouncements } from '../announcements';
 
-import type { AxiosResponse } from 'axios';
-
 interface CreateAnnouncementParams {
   content: string;
   starts_at?: string | null;
@@ -24,7 +22,7 @@ const useAnnouncements = () => {
   const userAnnouncements = useUserAnnouncements();
 
   const getAnnouncements = async () => {
-    const { data } = await api.get<AdminAnnouncement[]>('/api/v1/pleroma/admin/announcements');
+    const { json: data } = await api<AdminAnnouncement[]>('/api/v1/pleroma/admin/announcements');
 
     const normalizedData = data.map((announcement) => adminAnnouncementSchema.parse(announcement));
     return normalizedData;
@@ -40,9 +38,12 @@ const useAnnouncements = () => {
     mutate: createAnnouncement,
     isPending: isCreating,
   } = useMutation({
-    mutationFn: (params: CreateAnnouncementParams) => api.post('/api/v1/pleroma/admin/announcements', params),
+    mutationFn: (params: CreateAnnouncementParams) => api('/api/v1/pleroma/admin/announcements', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    }),
     retry: false,
-    onSuccess: ({ data }: AxiosResponse) =>
+    onSuccess: ({ json: data }) =>
       queryClient.setQueryData(['admin', 'announcements'], (prevResult: ReadonlyArray<AdminAnnouncement>) =>
         [...prevResult, adminAnnouncementSchema.parse(data)],
       ),
@@ -53,9 +54,12 @@ const useAnnouncements = () => {
     mutate: updateAnnouncement,
     isPending: isUpdating,
   } = useMutation({
-    mutationFn: ({ id, ...params }: UpdateAnnouncementParams) => api.patch(`/api/v1/pleroma/admin/announcements/${id}`, params),
+    mutationFn: ({ id, ...params }: UpdateAnnouncementParams) => api(`/api/v1/pleroma/admin/announcements/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(params),
+    }),
     retry: false,
-    onSuccess: ({ data }: AxiosResponse) =>
+    onSuccess: ({ json: data }) =>
       queryClient.setQueryData(['admin', 'announcements'], (prevResult: ReadonlyArray<AdminAnnouncement>) =>
         prevResult.map((announcement) => announcement.id === data.id ? adminAnnouncementSchema.parse(data) : announcement),
       ),
@@ -66,7 +70,7 @@ const useAnnouncements = () => {
     mutate: deleteAnnouncement,
     isPending: isDeleting,
   } = useMutation({
-    mutationFn: (id: string) => api.delete(`/api/v1/pleroma/admin/announcements/${id}`),
+    mutationFn: (id: string) => api(`/api/v1/pleroma/admin/announcements/${id}`, { method: 'DELETE' }),
     retry: false,
     onSuccess: (_, id) =>
       queryClient.setQueryData(['admin', 'announcements'], (prevResult: ReadonlyArray<AdminAnnouncement>) =>

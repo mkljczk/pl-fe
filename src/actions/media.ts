@@ -21,24 +21,35 @@ const noOp = (e: any) => {};
 
 const fetchMedia = (mediaId: string) =>
   (dispatch: any, getState: () => RootState) => {
-    return api(getState).get(`/api/v1/media/${mediaId}`);
+    return api(getState)(`/api/v1/media/${mediaId}`);
   };
 
 const updateMedia = (mediaId: string, params: Record<string, any>) =>
   (dispatch: any, getState: () => RootState) => {
-    return api(getState).put(`/api/v1/media/${mediaId}`, params);
+    return api(getState)(`/api/v1/media/${mediaId}`, {
+      method: 'PUT',
+      body: JSON.stringify(params),
+    });
   };
 
-const uploadMediaV1 = (data: FormData, onUploadProgress = noOp) =>
+const uploadMediaV1 = (body: FormData, onUploadProgress = noOp) =>
   (dispatch: any, getState: () => RootState) =>
-    api(getState).post('/api/v1/media', data, {
-      onUploadProgress: onUploadProgress,
+    api(getState)('/api/v1/media', {
+      method: 'POST',
+      body,
+      headers: { 'Content-Type': 'multipart/form-data' },
+    // }, {
+    //   onUploadProgress: onUploadProgress,
     });
 
-const uploadMediaV2 = (data: FormData, onUploadProgress = noOp) =>
+const uploadMediaV2 = (body: FormData, onUploadProgress = noOp) =>
   (dispatch: any, getState: () => RootState) =>
-    api(getState).post('/api/v2/media', data, {
-      onUploadProgress: onUploadProgress,
+    api(getState)('/api/v2/media', {
+      method: 'POST',
+      body,
+      headers: { 'Content-Type': 'multipart/form-data' },
+    // }, {
+    //   onUploadProgress: onUploadProgress,
     });
 
 const uploadMedia = (data: FormData, onUploadProgress = noOp) =>
@@ -99,16 +110,16 @@ const uploadFile = (
       changeTotal(resized.size - file.size);
 
       return dispatch(uploadMedia(data, onProgress))
-        .then(({ status, data }) => {
+        .then(({ status, json }) => {
           // If server-side processing of the media attachment has not completed yet,
           // poll the server until it is, before showing the media attachment as uploaded
           if (status === 200) {
-            onSuccess(data);
+            onSuccess(json);
           } else if (status === 202) {
             const poll = () => {
-              dispatch(fetchMedia(data.id)).then(({ status, data }) => {
+              dispatch(fetchMedia(json.id)).then(({ status, data }) => {
                 if (status === 200) {
-                  onSuccess(data);
+                  onSuccess(json);
                 } else if (status === 206) {
                   setTimeout(() => poll(), 1000);
                 }

@@ -17,10 +17,16 @@ function useCreateGroup() {
   const api = useApi();
 
   const { createEntity, ...rest } = useCreateEntity([Entities.GROUPS, 'search', ''], (params: CreateGroupParams) => {
-    return api.post('/api/v1/groups', params, {
+    const formData = new FormData();
+
+    Object.entries(params).forEach(([key, value]) => formData.append(key, value));
+
+    return api('/api/v1/groups', {
+      method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',
       },
+      body: formData,
     });
   }, { schema: groupSchema });
 

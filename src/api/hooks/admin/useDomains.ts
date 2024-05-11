@@ -4,8 +4,6 @@ import { useApi } from 'soapbox/hooks';
 import { queryClient } from 'soapbox/queries/client';
 import { domainSchema, type Domain } from 'soapbox/schemas';
 
-import type { AxiosResponse } from 'axios';
-
 interface CreateDomainParams {
   domain: string;
   public: boolean;
@@ -20,7 +18,7 @@ const useDomains = () => {
   const api = useApi();
 
   const getDomains = async () => {
-    const { data } = await api.get<Domain[]>('/api/v1/pleroma/admin/domains');
+    const { json: data } = await api<Domain[]>('/api/v1/pleroma/admin/domains');
 
     const normalizedData = data.map((domain) => domainSchema.parse(domain));
     return normalizedData;
@@ -36,9 +34,12 @@ const useDomains = () => {
     mutate: createDomain,
     isPending: isCreating,
   } = useMutation({
-    mutationFn: (params: CreateDomainParams) => api.post('/api/v1/pleroma/admin/domains', params),
+    mutationFn: (params: CreateDomainParams) => api('/api/v1/pleroma/admin/domains', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    }),
     retry: false,
-    onSuccess: ({ data }: AxiosResponse) =>
+    onSuccess: ({ data }) =>
       queryClient.setQueryData(['admin', 'domains'], (prevResult: ReadonlyArray<Domain>) =>
         [...prevResult, domainSchema.parse(data)],
       ),
@@ -48,9 +49,12 @@ const useDomains = () => {
     mutate: updateDomain,
     isPending: isUpdating,
   } = useMutation({
-    mutationFn: ({ id, ...params }: UpdateDomainParams) => api.patch(`/api/v1/pleroma/admin/domains/${id}`, params),
+    mutationFn: ({ id, ...params }: UpdateDomainParams) => api(`/api/v1/pleroma/admin/domains/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(params),
+    }),
     retry: false,
-    onSuccess: ({ data }: AxiosResponse) =>
+    onSuccess: ({ json: data }) =>
       queryClient.setQueryData(['admin', 'domains'], (prevResult: ReadonlyArray<Domain>) =>
         prevResult.map((domain) => domain.id === data.id ? domainSchema.parse(data) : domain),
       ),
@@ -60,7 +64,7 @@ const useDomains = () => {
     mutate: deleteDomain,
     isPending: isDeleting,
   } = useMutation({
-    mutationFn: (id: string) => api.delete(`/api/v1/pleroma/admin/domains/${id}`),
+    mutationFn: (id: string) => api(`/api/v1/pleroma/admin/domains/${id}`, { method: 'DELETE' }),
     retry: false,
     onSuccess: (_, id) =>
       queryClient.setQueryData(['admin', 'domains'], (prevResult: ReadonlyArray<Domain>) =>

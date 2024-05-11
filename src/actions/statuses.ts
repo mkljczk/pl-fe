@@ -4,7 +4,6 @@ import { shouldHaveCard } from 'soapbox/utils/status';
 import api from '../api';
 
 import { setComposeToStatus } from './compose';
-import { fetchGroupRelationships } from './groups';
 import { importFetchedStatus, importFetchedStatuses } from './importer';
 import { openModal } from './modals';
 import { deleteFromTimelines } from './timelines';
@@ -58,12 +57,11 @@ const createStatus = (params: Record<string, any>, idempotencyKey: string, statu
   return (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: STATUS_CREATE_REQUEST, params, idempotencyKey, editing: !!statusId });
 
-    return api(getState).request({
-      url: statusId === null ? '/api/v1/statuses' : `/api/v1/statuses/${statusId}`,
-      method: statusId === null ? 'post' : 'put',
-      data: params,
+    return api(getState)(statusId === null ? '/api/v1/statuses' : `/api/v1/statuses/${statusId}`, {
+      method: statusId === null ? 'POST' : 'PUT',
+      body: JSON.stringify(params),
       headers: { 'Idempotency-Key': idempotencyKey },
-    }).then(({ data: status }) => {
+    }).then(({ json: status }) => {
       // The backend might still be processing the rich media attachment
       if (!status.card && shouldHaveCard(status)) {
         status.expectsCard = true;
@@ -77,9 +75,9 @@ const createStatus = (params: Record<string, any>, idempotencyKey: string, statu
         const delay = 1000;
 
         const poll = (retries = 5) => {
-          api(getState).get(`/api/v1/statuses/${status.id}`).then(response => {
-            if (response.data?.card) {
-              dispatch(importFetchedStatus(response.data));
+          api(getState)(`/api/v1/statuses/${status.id}`).then(response => {
+            if (response.json?.card) {
+              dispatch(importFetchedStatus(response.json));
             } else if (retries > 0 && response.status === 200) {
               setTimeout(() => poll(retries - 1), delay);
             }
@@ -106,9 +104,9 @@ const editStatus = (id: string) => (dispatch: AppDispatch, getState: () => RootS
 
   dispatch({ type: STATUS_FETCH_SOURCE_REQUEST });
 
-  api(getState).get(`/api/v1/statuses/${id}/source`).then(response => {
+  api(getState)(`/api/v1/statuses/${id}/source`).then(response => {
     dispatch({ type: STATUS_FETCH_SOURCE_SUCCESS });
-    dispatch(setComposeToStatus(status, response.data.text, response.data.spoiler_text, response.data.content_type, false));
+    dispatch(setComposeToStatus(status, response.json.text, response.json.spoiler_text, response.json.content_type, false));
     dispatch(openModal('COMPOSE'));
   }).catch(error => {
     dispatch({ type: STATUS_FETCH_SOURCE_FAIL, error });
@@ -122,11 +120,8 @@ const fetchStatus = (id: string) => {
 
     dispatch({ type: STATUS_FETCH_REQUEST, id, skipLoading });
 
-    return api(getState).get(`/api/v1/statuses/${id}`).then(({ data: status }) => {
+    return api(getState)(`/api/v1/statuses/${id}`).then(({ json: status }) => {
       dispatch(importFetchedStatus(status));
-      if (status.group) {
-        dispatch(fetchGroupRelationships([status.group.id]));
-      }
       dispatch({ type: STATUS_FETCH_SUCCESS, status, skipLoading });
       return status;
     }).catch(error => {
@@ -147,14 +142,13 @@ const deleteStatus = (id: string, withRedraft = false) => {
 
     dispatch({ type: STATUS_DELETE_REQUEST, params: status });
 
-    return api(getState)
-      .delete(`/api/v1/statuses/${id}`)
+    return api(getState)(`/api/v1/statuses/${id}`, { method: 'DELETE' })
       .then(response => {
         dispatch({ type: STATUS_DELETE_SUCCESS, id });
         dispatch(deleteFromTimelines(id));
 
         if (withRedraft) {
-          dispatch(setComposeToStatus(status, response.data.text, response.data.spoiler_text, response.data.pleroma?.content_type, withRedraft));
+          dispatch(setComposeToStatus(status, response.json.text, response.json.spoiler_text, response.json.pleroma?.content_type, withRedraft));
           dispatch(openModal('COMPOSE'));
         }
       })
@@ -171,7 +165,7 @@ const fetchContext = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: CONTEXT_FETCH_REQUEST, id });
 
-    return api(getState).get(`/api/v1/statuses/${id}/context`).then(({ data: context }) => {
+    return api(getState)(`/api/v1/statuses/${id}/context`).then(({ json: context }) => {
       if (Array.isArray(context)) {
         // Mitra: returns a list of statuses
         dispatch(importFetchedStatuses(context));
@@ -208,7 +202,7 @@ const muteStatus = (id: string) =>
     if (!isLoggedIn(getState)) return;
 
     dispatch({ type: STATUS_MUTE_REQUEST, id });
-    api(getState).post(`/api/v1/statuses/${id}/mute`).then(() => {
+    api(getState)(`/api/v1/statuses/${id}/mute`, { method: 'POST' }).then(() => {
       dispatch({ type: STATUS_MUTE_SUCCESS, id });
     }).catch(error => {
       dispatch({ type: STATUS_MUTE_FAIL, id, error });
@@ -220,7 +214,7 @@ const unmuteStatus = (id: string) =>
     if (!isLoggedIn(getState)) return;
 
     dispatch({ type: STATUS_UNMUTE_REQUEST, id });
-    api(getState).post(`/api/v1/statuses/${id}/unmute`).then(() => {
+    api(getState)(`/api/v1/statuses/${id}/unmute`, { method: 'POST' }).then(() => {
       dispatch({ type: STATUS_UNMUTE_SUCCESS, id });
     }).catch(error => {
       dispatch({ type: STATUS_UNMUTE_FAIL, id, error });
@@ -269,13 +263,13 @@ const toggleStatusHidden = (status: Status) => {
 const translateStatus = (id: string, targetLanguage?: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch({ type: STATUS_TRANSLATE_REQUEST, id });
 
-  api(getState).post(`/api/v1/statuses/${id}/translate`, {
-    target_language: targetLanguage,
+  api(getState)(`/api/v1/statuses/${id}/translate`, {
+    body: JSON.stringify({ target_language: targetLanguage }),
   }).then(response => {
     dispatch({
       type: STATUS_TRANSLATE_SUCCESS,
       id,
-      translation: response.data,
+      translation: response.json,
     });
   }).catch(error => {
     dispatch({

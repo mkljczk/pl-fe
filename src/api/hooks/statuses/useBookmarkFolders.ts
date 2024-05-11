@@ -10,7 +10,7 @@ function useBookmarkFolders() {
 
   const { entities, ...result } = useEntities<BookmarkFolder>(
     [Entities.BOOKMARK_FOLDERS],
-    () => api.get('/api/v1/pleroma/bookmark_folders'),
+    () => api('/api/v1/pleroma/bookmark_folders'),
     { enabled: features.bookmarkFolders, schema: bookmarkFolderSchema },
   );
 

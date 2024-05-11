@@ -8,7 +8,7 @@ function usePatronUser(url?: string) {
 
   const { entity: patronUser, ...result } = useEntity<PatronUser>(
     [Entities.PATRON_USERS, url || ''],
-    () => api.get(`/api/patron/v1/accounts/${encodeURIComponent(url!)}`),
+    () => api(`/api/patron/v1/accounts/${encodeURIComponent(url!)}`),
     { schema: patronUserSchema, enabled: !!url },
   );
 

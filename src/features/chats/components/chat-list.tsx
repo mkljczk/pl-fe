@@ -2,11 +2,9 @@ import clsx from 'clsx';
 import React, { useRef, useState } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 
-import { fetchChats } from 'soapbox/actions/chats';
 import PullToRefresh from 'soapbox/components/pull-to-refresh';
 import { Spinner, Stack } from 'soapbox/components/ui';
 import PlaceholderChat from 'soapbox/features/placeholder/components/placeholder-chat';
-import { useAppDispatch } from 'soapbox/hooks';
 import { useChats } from 'soapbox/queries/chats';
 
 import ChatListItem from './chat-list-item';
@@ -17,11 +15,9 @@ interface IChatList {
 }
 
 const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false }) => {
-  const dispatch = useAppDispatch();
-
   const chatListRef = useRef(null);
 
-  const { chatsQuery: { data: chats, isFetching, hasNextPage, fetchNextPage } } = useChats();
+  const { chatsQuery: { data: chats, isFetching, hasNextPage, fetchNextPage, refetch } } = useChats();
 
   const [isNearBottom, setNearBottom] = useState<boolean>(false);
   const [isNearTop, setNearTop] = useState<boolean>(true);
@@ -32,7 +28,7 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
     }
   };
 
-  const handleRefresh = () => dispatch(fetchChats());
+  const handleRefresh = () => refetch();
 
   const renderEmpty = () => {
     if (isFetching) {

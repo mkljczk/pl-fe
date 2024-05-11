@@ -14,9 +14,9 @@ const MARKER_SAVE_FAIL    = 'MARKER_SAVE_FAIL';
 const fetchMarker = (timeline: Array<string>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: MARKER_FETCH_REQUEST });
-    return api(getState).get('/api/v1/markers', {
+    return api(getState)('/api/v1/markers', {
       params: { timeline },
-    }).then(({ data: marker }) => {
+    }).then(({ json: marker }) => {
       dispatch({ type: MARKER_FETCH_SUCCESS, marker });
     }).catch(error => {
       dispatch({ type: MARKER_FETCH_FAIL, error });
@@ -26,7 +26,10 @@ const fetchMarker = (timeline: Array<string>) =>
 const saveMarker = (marker: APIEntity) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: MARKER_SAVE_REQUEST, marker });
-    return api(getState).post('/api/v1/markers', marker).then(({ data: marker }) => {
+    return api(getState)('/api/v1/markers', {
+      method: 'POST',
+      body: JSON.stringify(marker),
+    }).then(({ json: marker }) => {
       dispatch({ type: MARKER_SAVE_SUCCESS, marker });
     }).catch(error => {
       dispatch({ type: MARKER_SAVE_FAIL, error });

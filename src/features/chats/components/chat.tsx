@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import clsx from 'clsx';
 import React, { MutableRefObject, useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -70,8 +69,8 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
       onSuccess: () => {
         setErrorMessage(undefined);
       },
-      onError: (error: AxiosError<{ error: string }>, _variables, context) => {
-        const message = error.response?.data?.error;
+      onError: (error: { response: Response & { json: any } }, _variables, context) => {
+        const message = error.response?.json?.error;
         setErrorMessage(message || intl.formatMessage(messages.failedToSend));
         setContent(context.prevContent as string);
       },
@@ -153,7 +152,7 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
       const data = new FormData();
       data.append('file', file);
       const response = await dispatch(uploadMedia(data, onUploadProgress));
-      return normalizeAttachment(response.data);
+      return normalizeAttachment(response.json);
     });
 
     return Promise.all(promises)

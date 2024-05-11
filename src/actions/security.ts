@@ -49,7 +49,7 @@ const MOVE_ACCOUNT_FAIL    = 'MOVE_ACCOUNT_FAIL';
 const fetchOAuthTokens = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FETCH_TOKENS_REQUEST });
-    return api(getState).get('/api/oauth_tokens').then(({ data: tokens }) => {
+    return api(getState)('/api/oauth_tokens').then(({ json: tokens }) => {
       dispatch({ type: FETCH_TOKENS_SUCCESS, tokens });
     }).catch(() => {
       dispatch({ type: FETCH_TOKENS_FAIL });
@@ -59,7 +59,7 @@ const fetchOAuthTokens = () =>
 const revokeOAuthTokenById = (id: number) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: REVOKE_TOKEN_REQUEST, id });
-    return api(getState).delete(`/api/oauth_tokens/${id}`).then(() => {
+    return api(getState)(`/api/oauth_tokens/${id}`, { method: 'DELETE' }).then(() => {
       dispatch({ type: REVOKE_TOKEN_SUCCESS, id });
     }).catch(() => {
       dispatch({ type: REVOKE_TOKEN_FAIL, id });
@@ -69,12 +69,15 @@ const revokeOAuthTokenById = (id: number) =>
 const changePassword = (oldPassword: string, newPassword: string, confirmation: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: CHANGE_PASSWORD_REQUEST });
-    return api(getState).post('/api/pleroma/change_password', {
-      password: oldPassword,
-      new_password: newPassword,
-      new_password_confirmation: confirmation,
+    return api(getState)('/api/pleroma/change_password', {
+      method: 'POST',
+      body: JSON.stringify({
+        password: oldPassword,
+        new_password: newPassword,
+        new_password_confirmation: confirmation,
+      }),
     }).then(response => {
-      if (response.data.error) throw response.data.error; // This endpoint returns HTTP 200 even on failure
+      if (response.json.error) throw response.json.error; // This endpoint returns HTTP 200 even on failure
       dispatch({ type: CHANGE_PASSWORD_SUCCESS, response });
     }).catch(error => {
       dispatch({ type: CHANGE_PASSWORD_FAIL, error, skipAlert: true });
@@ -93,7 +96,10 @@ const resetPassword = (usernameOrEmail: string) =>
         ? { email: input }
         : { nickname: input, username: input };
 
-    return api(getState).post('/auth/password', params).then(() => {
+    return api(getState)('/auth/password', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    }).then(() => {
       dispatch({ type: RESET_PASSWORD_SUCCESS });
     }).catch(error => {
       dispatch({ type: RESET_PASSWORD_FAIL, error });
@@ -104,11 +110,14 @@ const resetPassword = (usernameOrEmail: string) =>
 const changeEmail = (email: string, password: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: CHANGE_EMAIL_REQUEST, email });
-    return api(getState).post('/api/pleroma/change_email', {
-      email,
-      password,
+    return api(getState)('/api/pleroma/change_email', {
+      method: 'POST',
+      body: JSON.stringify({
+        email,
+        password,
+      }),
     }).then(response => {
-      if (response.data.error) throw response.data.error; // This endpoint returns HTTP 200 even on failure
+      if (response.json.error) throw response.json.error; // This endpoint returns HTTP 200 even on failure
       dispatch({ type: CHANGE_EMAIL_SUCCESS, email, response });
     }).catch(error => {
       dispatch({ type: CHANGE_EMAIL_FAIL, email, error, skipAlert: true });
@@ -121,10 +130,11 @@ const deleteAccount = (password: string) =>
     const account = getLoggedInAccount(getState());
 
     dispatch({ type: DELETE_ACCOUNT_REQUEST });
-    return api(getState).post('/api/pleroma/delete_account', {
-      password,
+    return api(getState)('/api/pleroma/delete_account', {
+      method: 'POST',
+      body: JSON.stringify({ password }),
     }).then(response => {
-      if (response.data.error) throw response.data.error; // This endpoint returns HTTP 200 even on failure
+      if (response.json.error) throw response.json.error; // This endpoint returns HTTP 200 even on failure
       dispatch({ type: DELETE_ACCOUNT_SUCCESS, response });
       dispatch({ type: AUTH_LOGGED_OUT, account });
       toast.success(messages.loggedOut);
@@ -137,11 +147,14 @@ const deleteAccount = (password: string) =>
 const moveAccount = (targetAccount: string, password: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: MOVE_ACCOUNT_REQUEST });
-    return api(getState).post('/api/pleroma/move_account', {
-      password,
-      target_account: targetAccount,
+    return api(getState)('/api/pleroma/move_account', {
+      method: 'POST',
+      body: JSON.stringify({
+        password,
+        target_account: targetAccount,
+      }),
     }).then(response => {
-      if (response.data.error) throw response.data.error; // This endpoint returns HTTP 200 even on failure
+      if (response.json.error) throw response.json.error; // This endpoint returns HTTP 200 even on failure
       dispatch({ type: MOVE_ACCOUNT_SUCCESS, response });
     }).catch(error => {
       dispatch({ type: MOVE_ACCOUNT_FAIL, error, skipAlert: true });

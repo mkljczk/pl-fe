@@ -26,11 +26,10 @@ import { normalizeUsername } from 'soapbox/utils/input';
 import { getScopes } from 'soapbox/utils/scopes';
 import { isStandalone } from 'soapbox/utils/state';
 
-import api, { baseClient } from '../api';
+import api, { getFetch } from '../api';
 
 import { importFetchedAccount } from './importer';
 
-import type { AxiosError } from 'axios';
 import type { AppDispatch, RootState } from 'soapbox/store';
 
 export const SWITCH_ACCOUNT = 'SWITCH_ACCOUNT';
@@ -126,15 +125,18 @@ const createUserToken = (username: string, password: string) =>
 export const otpVerify = (code: string, mfa_token: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const app = getState().auth.app;
-    return api(getState, 'app').post('/oauth/mfa/challenge', {
-      client_id: app.client_id,
-      client_secret: app.client_secret,
-      mfa_token: mfa_token,
-      code: code,
-      challenge_type: 'totp',
-      redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
-      scope: getScopes(getState()),
-    }).then(({ data: token }) => dispatch(authLoggedIn(token)));
+    return api(getState, 'app')('/oauth/mfa/challenge', {
+      method: 'POST',
+      body: JSON.stringify({
+        client_id: app.client_id,
+        client_secret: app.client_secret,
+        mfa_token: mfa_token,
+        code: code,
+        challenge_type: 'totp',
+        redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
+        scope: getScopes(getState()),
+      }),
+    }).then(({ json: token }) => dispatch(authLoggedIn(token)));
   };
 
 export const verifyCredentials = (token: string, accountUrl?: string) => {
@@ -143,15 +145,15 @@ export const verifyCredentials = (token: string, accountUrl?: string) => {
   return (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: VERIFY_CREDENTIALS_REQUEST, token });
 
-    return baseClient(token, baseURL).get('/api/v1/accounts/verify_credentials').then(({ data: account }) => {
+    return getFetch(token, baseURL)('/api/v1/accounts/verify_credentials').then(({ json: account }) => {
       dispatch(importFetchedAccount(account));
       dispatch({ type: VERIFY_CREDENTIALS_SUCCESS, token, account });
       if (account.id === getState().me) dispatch(fetchMeSuccess(account));
       return account;
     }).catch(error => {
-      if (error?.response?.status === 403 && error?.response?.data?.id) {
+      if (error?.response?.status === 403 && error?.response?.json?.id) {
         // The user is waitlisted
-        const account = error.response.data;
+        const account = error.response.json;
         dispatch(importFetchedAccount(account));
         dispatch({ type: VERIFY_CREDENTIALS_SUCCESS, token, account });
         if (account.id === getState().me) dispatch(fetchMeSuccess(account));
@@ -185,11 +187,11 @@ export const loadCredentials = (token: string, accountUrl: string) =>
 export const logIn = (username: string, password: string) =>
   (dispatch: AppDispatch) => dispatch(getAuthApp()).then(() => {
     return dispatch(createUserToken(normalizeUsername(username), password));
-  }).catch((error: AxiosError) => {
-    if ((error.response?.data as any)?.error === 'mfa_required') {
+  }).catch((error: { response: Response }) => {
+    if ((error.response?.json as any)?.error === 'mfa_required') {
       // If MFA is required, throw the error and handle it in the component.
       throw error;
-    } else if ((error.response?.data as any)?.identifier === 'awaiting_approval') {
+    } else if ((error.response?.json as any)?.identifier === 'awaiting_approval') {
       toast.error(messages.awaitingApproval);
     } else {
       // Return "wrong password" message.
@@ -199,7 +201,7 @@ export const logIn = (username: string, password: string) =>
   });
 
 export const deleteSession = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => api(getState).delete('/api/sign_out');
+  (dispatch: AppDispatch, getState: () => RootState) => api(getState)('/api/sign_out', { method: 'DELETE' });
 
 export const logOut = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -266,7 +268,7 @@ export const register = (params: Record<string, any>) =>
 
 export const fetchCaptcha = () =>
   (_dispatch: AppDispatch, getState: () => RootState) => {
-    return api(getState).get('/api/pleroma/captcha');
+    return api(getState)('/api/pleroma/captcha');
   };
 
 export const authLoggedIn = (token: Record<string, string | number>) =>

@@ -22,7 +22,7 @@ export default function useEmbed(url: string) {
   const api = useApi();
 
   const getEmbed = async() => {
-    const { data } = await api.get('/api/oembed', { params: { url } });
+    const { json: data } = await api('/api/oembed', { params: { url } });
     return data;
   };
 

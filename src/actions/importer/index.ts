@@ -1,6 +1,6 @@
 import { importEntities } from 'soapbox/entity-store/actions';
 import { Entities } from 'soapbox/entity-store/entities';
-import { Group, accountSchema, groupSchema } from 'soapbox/schemas';
+import { accountSchema } from 'soapbox/schemas';
 import { filteredArray } from 'soapbox/schemas/utils';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
@@ -8,8 +8,6 @@ import type { APIEntity } from 'soapbox/types/entities';
 
 const ACCOUNT_IMPORT  = 'ACCOUNT_IMPORT';
 const ACCOUNTS_IMPORT = 'ACCOUNTS_IMPORT';
-const GROUP_IMPORT    = 'GROUP_IMPORT';
-const GROUPS_IMPORT   = 'GROUPS_IMPORT';
 const STATUS_IMPORT   = 'STATUS_IMPORT';
 const STATUSES_IMPORT = 'STATUSES_IMPORT';
 const POLLS_IMPORT    = 'POLLS_IMPORT';
@@ -36,12 +34,6 @@ const importAccounts = (data: APIEntity[]) =>
       //
     }
   };
-
-const importGroup = (group: Group) =>
-  importEntities([group], Entities.GROUPS);
-
-const importGroups = (groups: Group[]) =>
-  importEntities(groups, Entities.GROUPS);
 
 const importStatus = (status: APIEntity, idempotencyKey?: string) => ({ type: STATUS_IMPORT, status, idempotencyKey });
 
@@ -76,14 +68,6 @@ const importFetchedAccounts = (accounts: APIEntity[], args = { should_refetch: f
   return importAccounts(normalAccounts);
 };
 
-const importFetchedGroup = (group: APIEntity) =>
-  importFetchedGroups([group]);
-
-const importFetchedGroups = (groups: APIEntity[]) => {
-  const entities = filteredArray(groupSchema).parse(groups);
-  return importGroups(entities);
-};
-
 const importFetchedStatus = (status: APIEntity, idempotencyKey?: string) =>
   (dispatch: AppDispatch) => {
     // Skip broken statuses
@@ -115,10 +99,6 @@ const importFetchedStatus = (status: APIEntity, idempotencyKey?: string) =>
 
     if (status.poll?.id) {
       dispatch(importFetchedPoll(status.poll));
-    }
-
-    if (status.group?.id) {
-      dispatch(importFetchedGroup(status.group));
     }
 
     dispatch(importFetchedAccount(status.account));
@@ -173,10 +153,6 @@ const importFetchedStatuses = (statuses: APIEntity[]) => (dispatch: AppDispatch)
     if (status.poll?.id) {
       polls.push(status.poll);
     }
-
-    if (status.group?.id) {
-      dispatch(importFetchedGroup(status.group));
-    }
   }
 
   statuses.forEach(processStatus);
@@ -197,23 +173,17 @@ const importErrorWhileFetchingAccountByUsername = (username: string) =>
 export {
   ACCOUNT_IMPORT,
   ACCOUNTS_IMPORT,
-  GROUP_IMPORT,
-  GROUPS_IMPORT,
   STATUS_IMPORT,
   STATUSES_IMPORT,
   POLLS_IMPORT,
   ACCOUNT_FETCH_FAIL_FOR_USERNAME_LOOKUP,
   importAccount,
   importAccounts,
-  importGroup,
-  importGroups,
   importStatus,
   importStatuses,
   importPolls,
   importFetchedAccount,
   importFetchedAccounts,
-  importFetchedGroup,
-  importFetchedGroups,
   importFetchedStatus,
   importFetchedStatuses,
   importFetchedPoll,

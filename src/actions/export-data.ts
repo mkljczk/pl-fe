@@ -4,7 +4,6 @@ import api, { getLinks } from 'soapbox/api';
 import { normalizeAccount } from 'soapbox/normalizers';
 import toast from 'soapbox/toast';
 
-import type { AxiosResponse } from 'axios';
 import type { RootState } from 'soapbox/store';
 
 export const EXPORT_FOLLOWS_REQUEST = 'EXPORT_FOLLOWS_REQUEST';
@@ -49,14 +48,14 @@ function fileExport(content: string, fileName: string) {
   document.body.removeChild(fileToDownload);
 }
 
-const listAccounts = (getState: () => RootState) => async(apiResponse: AxiosResponse<any, any>) => {
-  const followings = apiResponse.data;
+const listAccounts = (getState: () => RootState) => async(apiResponse: Response & { json: any }) => {
+  const followings = apiResponse.json;
   let accounts = [];
   let next = getLinks(apiResponse).refs.find(link => link.rel === 'next');
   while (next) {
-    apiResponse = await api(getState).get(next.uri);
+    apiResponse = await api(getState)(next.uri);
     next = getLinks(apiResponse).refs.find(link => link.rel === 'next');
-    Array.prototype.push.apply(followings, apiResponse.data);
+    Array.prototype.push.apply(followings, apiResponse.json);
   }
 
   accounts = followings.map((account: any) => normalizeAccount(account).fqn);
@@ -66,8 +65,7 @@ const listAccounts = (getState: () => RootState) => async(apiResponse: AxiosResp
 export const exportFollows = () => (dispatch: React.Dispatch<ExportDataActions>, getState: () => RootState) => {
   dispatch({ type: EXPORT_FOLLOWS_REQUEST });
   const me = getState().me;
-  return api(getState)
-    .get(`/api/v1/accounts/${me}/following?limit=40`)
+  return api(getState)(`/api/v1/accounts/${me}/following?limit=40`)
     .then(listAccounts(getState))
     .then((followings) => {
       followings = followings.map(fqn => fqn + ',true');
@@ -83,8 +81,7 @@ export const exportFollows = () => (dispatch: React.Dispatch<ExportDataActions>,
 
 export const exportBlocks = () => (dispatch: React.Dispatch<ExportDataActions>, getState: () => RootState) => {
   dispatch({ type: EXPORT_BLOCKS_REQUEST });
-  return api(getState)
-    .get('/api/v1/blocks?limit=40')
+  return api(getState)('/api/v1/blocks?limit=40')
     .then(listAccounts(getState))
     .then((blocks) => {
       fileExport(blocks.join('\n'), 'export_block.csv');
@@ -98,8 +95,7 @@ export const exportBlocks = () => (dispatch: React.Dispatch<ExportDataActions>, 
 
 export const exportMutes = () => (dispatch: React.Dispatch<ExportDataActions>, getState: () => RootState) => {
   dispatch({ type: EXPORT_MUTES_REQUEST });
-  return api(getState)
-    .get('/api/v1/mutes?limit=40')
+  return api(getState)('/api/v1/mutes?limit=40')
     .then(listAccounts(getState))
     .then((mutes) => {
       fileExport(mutes.join('\n'), 'export_mutes.csv');

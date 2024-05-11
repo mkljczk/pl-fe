@@ -9,8 +9,7 @@ function useRelationships(listKey: string[], ids: string[]) {
   const { isLoggedIn } = useLoggedIn();
 
   function fetchRelationships(ids: string[]) {
-    const q = ids.map((id) => `id[]=${id}`).join('&');
-    return api.get(`/api/v1/accounts/relationships?${q}`);
+    return api('/api/v1/accounts/relationships', { params: { ids } });
   }
 
   const { entityMap: relationships, ...result } = useBatchedEntities<Relationship>(

@@ -14,7 +14,7 @@ const useModerationLog = () => {
   const api = useApi();
 
   const getModerationLog = async (page: number): Promise<ModerationLogResult> => {
-    const { data } = await api.get<ModerationLogResult>('/api/v1/pleroma/admin/moderation_log', { params: { page } });
+    const { json: data } = await api<ModerationLogResult>('/api/v1/pleroma/admin/moderation_log', { params: { page } });
 
     const normalizedData = data.items.map((domain) => moderationLogEntrySchema.parse(domain));
 

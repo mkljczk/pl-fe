@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import React from 'react';
 import toast from 'react-hot-toast';
 import { defineMessages, MessageDescriptor } from 'react-intl';
@@ -43,9 +42,9 @@ const messages = defineMessages({
   unexpectedMessage: { id: 'alert.unexpected.message', defaultMessage: 'Something went wrong.' },
 });
 
-function showAlertForError(networkError: AxiosError<any>) {
+function showAlertForError(networkError: { response: Response & { json: any } }) {
   if (networkError?.response) {
-    const { data, status, statusText } = networkError.response;
+    const { json, status, statusText } = networkError.response;
 
     if (status === 502) {
       return error('The server is down');
@@ -58,8 +57,8 @@ function showAlertForError(networkError: AxiosError<any>) {
 
     let message: string | undefined = statusText;
 
-    if (data?.error) {
-      message = data.error;
+    if (json?.error) {
+      message = json.error;
     }
 
     if (!message) {

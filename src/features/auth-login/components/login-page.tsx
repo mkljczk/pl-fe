@@ -15,8 +15,6 @@ import ConsumersList from './consumers-list';
 import LoginForm from './login-form';
 import OtpAuthForm from './otp-auth-form';
 
-import type { AxiosError } from 'axios';
-
 const LoginPage = () => {
   const dispatch = useAppDispatch();
 
@@ -51,8 +49,8 @@ const LoginPage = () => {
         } else {
           setShouldRedirect(true);
         }
-      }).catch((error: AxiosError) => {
-        const data: any = error.response?.data;
+      }).catch((error: { response: Response }) => {
+        const data: any = error.response?.json;
         if (data?.error === 'mfa_required') {
           setMfaAuthNeeded(true);
           setMfaToken(data.mfa_token);

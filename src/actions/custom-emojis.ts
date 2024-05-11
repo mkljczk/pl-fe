@@ -14,8 +14,8 @@ const fetchCustomEmojis = () =>
 
     dispatch(fetchCustomEmojisRequest());
 
-    api(getState).get('/api/v1/custom_emojis').then(response => {
-      dispatch(fetchCustomEmojisSuccess(response.data));
+    api(getState)('/api/v1/custom_emojis').then(response => {
+      dispatch(fetchCustomEmojisSuccess(response.json));
     }).catch(error => {
       dispatch(fetchCustomEmojisFail(error));
     });

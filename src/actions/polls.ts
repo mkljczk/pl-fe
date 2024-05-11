@@ -17,20 +17,21 @@ const vote = (pollId: string, choices: string[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(voteRequest());
 
-    api(getState).post(`/api/v1/polls/${pollId}/votes`, { choices })
-      .then(({ data }) => {
-        dispatch(importFetchedPoll(data));
-        dispatch(voteSuccess(data));
-      })
-      .catch(err => dispatch(voteFail(err)));
+    api(getState)(`/api/v1/polls/${pollId}/votes`, {
+      method: 'POST',
+      body: JSON.stringify({ choices }),
+    }).then(({ json: data }) => {
+      dispatch(importFetchedPoll(data));
+      dispatch(voteSuccess(data));
+    }).catch(err => dispatch(voteFail(err)));
   };
 
 const fetchPoll = (pollId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchPollRequest());
 
-    api(getState).get(`/api/v1/polls/${pollId}`)
-      .then(({ data }) => {
+    api(getState)(`/api/v1/polls/${pollId}`)
+      .then(({ json: data }) => {
         dispatch(importFetchedPoll(data));
         dispatch(fetchPollSuccess(data));
       })

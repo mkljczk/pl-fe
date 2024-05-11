@@ -11,14 +11,12 @@ const submitAccountNote = (id: string, value: string) =>
   (dispatch: React.Dispatch<AnyAction>, getState: () => RootState) => {
     dispatch(submitAccountNoteRequest());
 
-    return api(getState)
-      .post(`/api/v1/accounts/${id}/note`, {
-        comment: value,
-      })
-      .then(response => {
-        dispatch(submitAccountNoteSuccess(response.data));
-      })
-      .catch(error => dispatch(submitAccountNoteFail(error)));
+    return api(getState)(`/api/v1/accounts/${id}/note`, {
+      method: 'POST', body:
+      JSON.stringify({ comment: value }),
+    }).then(response => {
+      dispatch(submitAccountNoteSuccess(response.json));
+    }).catch(error => dispatch(submitAccountNoteFail(error)));
   };
 
 const submitAccountNoteRequest = () => ({

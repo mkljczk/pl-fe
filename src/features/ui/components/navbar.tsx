@@ -13,8 +13,6 @@ import { useAppDispatch, useFeatures, useOwnAccount, useRegistrationStatus } fro
 
 import ProfileDropdown from './profile-dropdown';
 
-import type { AxiosError } from 'axios';
-
 const messages = defineMessages({
   login: { id: 'navbar.login.action', defaultMessage: 'Log in' },
   username: { id: 'navbar.login.username.placeholder', defaultMessage: 'Email or username' },
@@ -52,10 +50,10 @@ const Navbar = () => {
             .then(() => dispatch(fetchInstance()))
         );
       })
-      .catch((error: AxiosError) => {
+      .catch((error: { response: Response }) => {
         setLoading(false);
 
-        const data: any = error.response?.data;
+        const data: any = error.response?.json;
         if (data?.error === 'mfa_required') {
           setMfaToken(data.mfa_token);
         }

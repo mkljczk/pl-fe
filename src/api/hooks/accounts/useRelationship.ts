@@ -15,7 +15,7 @@ function useRelationship(accountId: string | undefined, opts: UseRelationshipOpt
 
   const { entity: relationship, ...result } = useEntity<Relationship>(
     [Entities.RELATIONSHIPS, accountId!],
-    () => api.get(`/api/v1/accounts/relationships?id[]=${accountId}`),
+    () => api(`/api/v1/accounts/relationships?id[]=${accountId}`),
     {
       enabled: enabled && !!accountId,
       schema: z.array(relationshipSchema).nonempty().transform(arr => arr[0]),

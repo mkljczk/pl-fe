@@ -1,4 +1,3 @@
-import axios, { Canceler } from 'axios';
 import { List as ImmutableList } from 'immutable';
 import throttle from 'lodash/throttle';
 import { defineMessages, IntlShape } from 'react-intl';
@@ -28,9 +27,7 @@ import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity, Status, Tag } from 'soapbox/types/entities';
 import type { History } from 'soapbox/types/history';
 
-const { CancelToken, isCancel } = axios;
-
-let cancelFetchComposeSuggestions: Canceler;
+let cancelFetchComposeSuggestions = new AbortController();
 
 const COMPOSE_CHANGE          = 'COMPOSE_CHANGE' as const;
 const COMPOSE_SUBMIT_REQUEST  = 'COMPOSE_SUBMIT_REQUEST' as const;
@@ -482,7 +479,7 @@ const changeUploadCompose = (composeId: string, id: string, params: Record<strin
     dispatch(changeUploadComposeRequest(composeId));
 
     dispatch(updateMedia(id, params)).then(response => {
-      dispatch(changeUploadComposeSuccess(composeId, response.data));
+      dispatch(changeUploadComposeSuccess(composeId, response.json));
     }).catch(error => {
       dispatch(changeUploadComposeFail(composeId, id, error));
     });
@@ -523,7 +520,8 @@ const groupCompose = (composeId: string, groupId: string) => ({
 
 const clearComposeSuggestions = (composeId: string) => {
   if (cancelFetchComposeSuggestions) {
-    cancelFetchComposeSuggestions();
+    cancelFetchComposeSuggestions.abort();
+    cancelFetchComposeSuggestions = new AbortController();
   }
   return {
     type: COMPOSE_SUGGESTIONS_CLEAR,
@@ -532,23 +530,25 @@ const clearComposeSuggestions = (composeId: string) => {
 };
 
 const fetchComposeSuggestionsAccounts = throttle((dispatch, getState, composeId, token) => {
+  const signal = cancelFetchComposeSuggestions.signal;
+
   if (cancelFetchComposeSuggestions) {
-    cancelFetchComposeSuggestions(composeId);
+    cancelFetchComposeSuggestions.abort();
+    cancelFetchComposeSuggestions = new AbortController();
   }
-  api(getState).get('/api/v1/accounts/search', {
-    cancelToken: new CancelToken(cancel => {
-      cancelFetchComposeSuggestions = cancel;
-    }),
+
+  api(getState)('/api/v1/accounts/search', {
     params: {
       q: token.slice(1),
       resolve: false,
       limit: 10,
     },
+    signal: cancelFetchComposeSuggestions.signal,
   }).then(response => {
-    dispatch(importFetchedAccounts(response.data));
-    dispatch(readyComposeSuggestionsAccounts(composeId, token, response.data));
+    dispatch(importFetchedAccounts(response.json));
+    dispatch(readyComposeSuggestionsAccounts(composeId, token, response.json));
   }).catch(error => {
-    if (!isCancel(error)) {
+    if (!signal.aborted) {
       toast.showAlertForError(error);
     }
   });
@@ -562,8 +562,11 @@ const fetchComposeSuggestionsEmojis = (dispatch: AppDispatch, getState: () => Ro
 };
 
 const fetchComposeSuggestionsTags = (dispatch: AppDispatch, getState: () => RootState, composeId: string, token: string) => {
+  const signal = cancelFetchComposeSuggestions.signal;
+
   if (cancelFetchComposeSuggestions) {
-    cancelFetchComposeSuggestions(composeId);
+    cancelFetchComposeSuggestions.abort();
+    cancelFetchComposeSuggestions = new AbortController();
   }
 
   const state = getState();
@@ -577,19 +580,17 @@ const fetchComposeSuggestionsTags = (dispatch: AppDispatch, getState: () => Root
     return dispatch(updateSuggestionTags(composeId, token, currentTrends));
   }
 
-  api(getState).get('/api/v2/search', {
-    cancelToken: new CancelToken(cancel => {
-      cancelFetchComposeSuggestions = cancel;
-    }),
+  api(getState)('/api/v2/search', {
     params: {
       q: token.slice(1),
       limit: 10,
       type: 'hashtags',
     },
+    signal: cancelFetchComposeSuggestions.signal,
   }).then(response => {
-    dispatch(updateSuggestionTags(composeId, token, response.data?.hashtags.map(normalizeTag)));
+    dispatch(updateSuggestionTags(composeId, token, response.json?.hashtags.map(normalizeTag)));
   }).catch(error => {
-    if (!isCancel(error)) {
+    if (!signal.aborted) {
       toast.showAlertForError(error);
     }
   });

@@ -41,38 +41,41 @@ const messages = defineMessages({
 export const importFollows = (params: FormData) =>
   (dispatch: React.Dispatch<ImportDataActions>, getState: () => RootState) => {
     dispatch({ type: IMPORT_FOLLOWS_REQUEST });
-    return api(getState)
-      .post('/api/pleroma/follow_import', params)
-      .then(response => {
-        toast.success(messages.followersSuccess);
-        dispatch({ type: IMPORT_FOLLOWS_SUCCESS, config: response.data });
-      }).catch(error => {
-        dispatch({ type: IMPORT_FOLLOWS_FAIL, error });
-      });
+    return api(getState)('/api/pleroma/follow_import', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    }).then(response => {
+      toast.success(messages.followersSuccess);
+      dispatch({ type: IMPORT_FOLLOWS_SUCCESS, config: response.json });
+    }).catch(error => {
+      dispatch({ type: IMPORT_FOLLOWS_FAIL, error });
+    });
   };
 
 export const importBlocks = (params: FormData) =>
   (dispatch: React.Dispatch<ImportDataActions>, getState: () => RootState) => {
     dispatch({ type: IMPORT_BLOCKS_REQUEST });
-    return api(getState)
-      .post('/api/pleroma/blocks_import', params)
-      .then(response => {
-        toast.success(messages.blocksSuccess);
-        dispatch({ type: IMPORT_BLOCKS_SUCCESS, config: response.data });
-      }).catch(error => {
-        dispatch({ type: IMPORT_BLOCKS_FAIL, error });
-      });
+    return api(getState)('/api/pleroma/blocks_import', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    }).then(response => {
+      toast.success(messages.blocksSuccess);
+      dispatch({ type: IMPORT_BLOCKS_SUCCESS, config: response.json });
+    }).catch(error => {
+      dispatch({ type: IMPORT_BLOCKS_FAIL, error });
+    });
   };
 
 export const importMutes = (params: FormData) =>
   (dispatch: React.Dispatch<ImportDataActions>, getState: () => RootState) => {
     dispatch({ type: IMPORT_MUTES_REQUEST });
-    return api(getState)
-      .post('/api/pleroma/mutes_import', params)
-      .then(response => {
-        toast.success(messages.mutesSuccess);
-        dispatch({ type: IMPORT_MUTES_SUCCESS, config: response.data });
-      }).catch(error => {
-        dispatch({ type: IMPORT_MUTES_FAIL, error });
-      });
+    return api(getState)('/api/pleroma/mutes_import', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    }).then(response => {
+      toast.success(messages.mutesSuccess);
+      dispatch({ type: IMPORT_MUTES_SUCCESS, config: response.json });
+    }).catch(error => {
+      dispatch({ type: IMPORT_MUTES_FAIL, error });
+    });
   };

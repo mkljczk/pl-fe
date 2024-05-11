@@ -8,7 +8,7 @@ function useDeleteGroupStatus(group: Group, statusId: string) {
   const api = useApi();
   const { deleteEntity, isSubmitting } = useDeleteEntity(
     Entities.STATUSES,
-    () => api.delete(`/api/v1/groups/${group.id}/statuses/${statusId}`),
+    () => api(`/api/v1/groups/${group.id}/statuses/${statusId}`, { method: 'DELETE' }),
   );
 
   return {

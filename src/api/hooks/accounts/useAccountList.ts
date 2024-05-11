@@ -33,12 +33,12 @@ function useAccountList(listKey: string[], entityFn: EntityFn<void>, opts: useAc
 
 function useBlocks() {
   const api = useApi();
-  return useAccountList(['blocks'], () => api.get('/api/v1/blocks'));
+  return useAccountList(['blocks'], () => api('/api/v1/blocks'));
 }
 
 function useMutes() {
   const api = useApi();
-  return useAccountList(['mutes'], () => api.get('/api/v1/mutes'));
+  return useAccountList(['mutes'], () => api('/api/v1/mutes'));
 }
 
 function useFollowing(accountId: string | undefined) {
@@ -46,7 +46,7 @@ function useFollowing(accountId: string | undefined) {
 
   return useAccountList(
     [accountId!, 'following'],
-    () => api.get(`/api/v1/accounts/${accountId}/following`),
+    () => api(`/api/v1/accounts/${accountId}/following`),
     { enabled: !!accountId },
   );
 }
@@ -56,7 +56,7 @@ function useFollowers(accountId: string | undefined) {
 
   return useAccountList(
     [accountId!, 'followers'],
-    () => api.get(`/api/v1/accounts/${accountId}/followers`),
+    () => api(`/api/v1/accounts/${accountId}/followers`),
     { enabled: !!accountId },
   );
 }

@@ -7,8 +7,6 @@ import { Button, FormGroup, Input, Stack } from 'soapbox/components/ui';
 import { useAppDispatch, useOwnAccount } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 
-import type { AxiosError } from 'axios';
-
 const messages = defineMessages({
   usernamePlaceholder: { id: 'onboarding.display_name.placeholder', defaultMessage: 'Eg. John Smith' },
   error: { id: 'onboarding.error', defaultMessage: 'An unexpected error occurred. Please try again or skip this step.' },
@@ -43,11 +41,11 @@ const DisplayNameStep = ({ onNext }: { onNext: () => void }) => {
       .then(() => {
         setSubmitting(false);
         onNext();
-      }).catch((error: AxiosError) => {
+      }).catch((error: { response: Response }) => {
         setSubmitting(false);
 
         if (error.response?.status === 422) {
-          setErrors([(error.response.data as any).error.replace('Validation failed: ', '')]);
+          setErrors([(error.response.json as any).error.replace('Validation failed: ', '')]);
         } else {
           toast.error(messages.error);
         }

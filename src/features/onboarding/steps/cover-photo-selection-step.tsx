@@ -11,8 +11,6 @@ import toast from 'soapbox/toast';
 import { isDefaultHeader } from 'soapbox/utils/accounts';
 import resizeImage from 'soapbox/utils/resize-image';
 
-import type { AxiosError } from 'axios';
-
 const messages = defineMessages({
   header: { id: 'account.header.alt', defaultMessage: 'Profile header' },
   error: { id: 'onboarding.error', defaultMessage: 'An unexpected error occurred. Please try again or skip this step.' },
@@ -53,13 +51,13 @@ const CoverPhotoSelectionStep = ({ onNext }: { onNext: () => void }) => {
         setDisabled(false);
         setSubmitting(false);
         onNext();
-      }).catch((error: AxiosError) => {
+      }).catch((error: { response: Response }) => {
         setSubmitting(false);
         setDisabled(false);
         setSelectedFile(null);
 
         if (error.response?.status === 422) {
-          toast.error((error.response.data as any).error.replace('Validation failed: ', ''));
+          toast.error((error.response.json as any).error.replace('Validation failed: ', ''));
         } else {
           toast.error(messages.error);
         }

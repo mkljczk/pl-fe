@@ -1,7 +1,6 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchGroupRelationshipsSuccess } from 'soapbox/actions/groups';
 import { openModal } from 'soapbox/actions/modals';
 import { useCancelMembershipRequest, useJoinGroup, useLeaveGroup } from 'soapbox/api/hooks';
 import { Button } from 'soapbox/components/ui';
@@ -43,7 +42,6 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
   const onJoinGroup = () => joinGroup.mutate({}, {
     onSuccess(entity) {
       joinGroup.invalidate();
-      dispatch(fetchGroupRelationshipsSuccess([entity]));
 
       toast.success(
         group.locked
@@ -67,7 +65,6 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
       onConfirm: () => leaveGroup.mutate(group.relationship?.id as string, {
         onSuccess(entity) {
           leaveGroup.invalidate();
-          dispatch(fetchGroupRelationshipsSuccess([entity]));
           toast.success(intl.formatMessage(messages.leaveSuccess));
         },
       }),

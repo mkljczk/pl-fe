@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { List as ImmutableList } from 'immutable';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -94,12 +93,12 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
   const createAndNavigateToChat = useMutation({
     mutationFn: (accountId: string) => getOrCreateChatByAccountId(accountId),
-    onError: (error: AxiosError) => {
-      const data = error.response?.data as any;
+    onError: (error: { response: Response }) => {
+      const data = error.response?.json as any;
       toast.error(data?.error);
     },
     onSuccess: (response) => {
-      history.push(`/chats/${response.data.id}`);
+      history.push(`/chats/${response.json.id}`);
       queryClient.invalidateQueries({
         queryKey: ['chats', 'search'],
       });

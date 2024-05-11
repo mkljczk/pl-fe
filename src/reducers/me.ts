@@ -10,13 +10,12 @@ import {
   ME_PATCH_SUCCESS,
 } from '../actions/me';
 
-import type { AxiosError } from 'axios';
 import type { AnyAction } from 'redux';
 import type { Me } from 'soapbox/types/soapbox';
 
 const initialState: Me = null;
 
-const handleForbidden = (state: Me, error: AxiosError) => {
+const handleForbidden = (state: Me, error: { response: Response }) => {
   if (([401, 403] as any[]).includes(error.response?.status)) {
     return false;
   } else {

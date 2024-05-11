@@ -10,7 +10,7 @@ function useGroupMedia(groupId: string) {
   const api = useApi();
 
   return useEntities([Entities.STATUSES, 'groupMedia', groupId], () => {
-    return api.get(`/api/v1/timelines/group/${groupId}?only_media=true`);
+    return api(`/api/v1/timelines/group/${groupId}?only_media=true`);
   }, { schema: statusSchema });
 }
 

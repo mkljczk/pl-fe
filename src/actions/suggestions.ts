@@ -23,7 +23,7 @@ const SUGGESTIONS_V2_FETCH_FAIL = 'SUGGESTIONS_V2_FETCH_FAIL';
 const fetchSuggestionsV1 = (params: Record<string, any> = {}) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: SUGGESTIONS_FETCH_REQUEST, skipLoading: true });
-    return api(getState).get('/api/v1/suggestions', { params }).then(({ data: accounts }) => {
+    return api(getState)('/api/v1/suggestions', { params }).then(({ json: accounts }) => {
       dispatch(importFetchedAccounts(accounts));
       dispatch({ type: SUGGESTIONS_FETCH_SUCCESS, accounts, skipLoading: true });
       return accounts;
@@ -39,8 +39,8 @@ const fetchSuggestionsV2 = (params: Record<string, any> = {}) =>
 
     dispatch({ type: SUGGESTIONS_V2_FETCH_REQUEST, skipLoading: true });
 
-    return api(getState).get(next ? next : '/api/v2/suggestions', next ? {} : { params }).then((response) => {
-      const suggestions: APIEntity[] = response.data;
+    return api(getState)(next ? next : '/api/v2/suggestions', next ? {} : { params }).then((response) => {
+      const suggestions: APIEntity[] = response.json;
       const accounts = suggestions.map(({ account }) => account);
       const next = getLinks(response).refs.find(link => link.rel === 'next')?.uri;
 
@@ -95,7 +95,7 @@ const dismissSuggestion = (accountId: string) =>
       id: accountId,
     });
 
-    api(getState).delete(`/api/v1/suggestions/${accountId}`);
+    api(getState)(`/api/v1/suggestions/${accountId}`, { method: 'DELETE' });
   };
 
 export {

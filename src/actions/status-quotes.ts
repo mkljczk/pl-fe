@@ -25,13 +25,13 @@ export const fetchStatusQuotes = (statusId: string) =>
       type: STATUS_QUOTES_FETCH_REQUEST,
     });
 
-    return api(getState).get(`/api/v1/pleroma/statuses/${statusId}/quotes`).then(response => {
+    return api(getState)(`/api/v1/pleroma/statuses/${statusId}/quotes`).then(response => {
       const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(importFetchedStatuses(response.data));
+      dispatch(importFetchedStatuses(response.json));
       return dispatch({
         type: STATUS_QUOTES_FETCH_SUCCESS,
         statusId,
-        statuses: response.data,
+        statuses: response.json,
         next: next ? next.uri : null,
       });
     }).catch(error => {
@@ -56,13 +56,13 @@ export const expandStatusQuotes = (statusId: string) =>
       statusId,
     });
 
-    return api(getState).get(url).then(response => {
+    return api(getState)(url).then(response => {
       const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(importFetchedStatuses(response.data));
+      dispatch(importFetchedStatuses(response.json));
       dispatch({
         type: STATUS_QUOTES_EXPAND_SUCCESS,
         statusId,
-        statuses: response.data,
+        statuses: response.json,
         next: next ? next.uri : null,
       });
     }).catch(error => {

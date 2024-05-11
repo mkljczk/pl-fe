@@ -26,7 +26,7 @@ const FOLLOWED_HASHTAGS_EXPAND_FAIL    = 'FOLLOWED_HASHTAGS_EXPAND_FAIL';
 const fetchHashtag = (name: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(fetchHashtagRequest());
 
-  api(getState).get(`/api/v1/tags/${name}`).then(({ data }) => {
+  api(getState)(`/api/v1/tags/${name}`).then(({ json: data }) => {
     dispatch(fetchHashtagSuccess(name, data));
   }).catch(err => {
     dispatch(fetchHashtagFail(err));
@@ -51,7 +51,7 @@ const fetchHashtagFail = (error: unknown) => ({
 const followHashtag = (name: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(followHashtagRequest(name));
 
-  api(getState).post(`/api/v1/tags/${name}/follow`).then(({ data }) => {
+  api(getState)(`/api/v1/tags/${name}/follow`, { method: 'POST' }).then(({ json: data }) => {
     dispatch(followHashtagSuccess(name, data));
   }).catch(err => {
     dispatch(followHashtagFail(name, err));
@@ -78,7 +78,7 @@ const followHashtagFail = (name: string, error: unknown) => ({
 const unfollowHashtag = (name: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(unfollowHashtagRequest(name));
 
-  api(getState).post(`/api/v1/tags/${name}/unfollow`).then(({ data }) => {
+  api(getState)(`/api/v1/tags/${name}/unfollow`, { method: 'POST' }).then(({ json: data }) => {
     dispatch(unfollowHashtagSuccess(name, data));
   }).catch(err => {
     dispatch(unfollowHashtagFail(name, err));
@@ -105,9 +105,9 @@ const unfollowHashtagFail = (name: string, error: unknown) => ({
 const fetchFollowedHashtags = () => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(fetchFollowedHashtagsRequest());
 
-  api(getState).get('/api/v1/followed_tags').then(response => {
+  api(getState)('/api/v1/followed_tags').then(response => {
     const next = getLinks(response).refs.find(link => link.rel === 'next');
-    dispatch(fetchFollowedHashtagsSuccess(response.data, next ? next.uri : null));
+    dispatch(fetchFollowedHashtagsSuccess(response.json, next ? next.uri : null));
   }).catch(err => {
     dispatch(fetchFollowedHashtagsFail(err));
   });
@@ -137,9 +137,9 @@ const expandFollowedHashtags = () => (dispatch: AppDispatch, getState: () => Roo
 
   dispatch(expandFollowedHashtagsRequest());
 
-  api(getState).get(url).then(response => {
+  api(getState)(url).then(response => {
     const next = getLinks(response).refs.find(link => link.rel === 'next');
-    dispatch(expandFollowedHashtagsSuccess(response.data, next ? next.uri : null));
+    dispatch(expandFollowedHashtagsSuccess(response.json, next ? next.uri : null));
   }).catch(error => {
     dispatch(expandFollowedHashtagsFail(error));
   });

@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
@@ -45,15 +44,15 @@ const ChatSearch = (props: IChatSearch) => {
 
   const handleClickOnSearchResult = useMutation({
     mutationFn: (accountId: string) => getOrCreateChatByAccountId(accountId),
-    onError: (error: AxiosError) => {
-      const data = error.response?.data as any;
+    onError: (error: { response: Response }) => {
+      const data = error.response?.json as any;
       toast.error(data?.error);
     },
     onSuccess: (response) => {
       if (isMainPage) {
-        history.push(`/chats/${response.data.id}`);
+        history.push(`/chats/${response.json.id}`);
       } else {
-        changeScreen(ChatWidgetScreens.CHAT, response.data.id);
+        changeScreen(ChatWidgetScreens.CHAT, response.json.id);
       }
 
       queryClient.invalidateQueries({ queryKey: ['chats', 'search'] });

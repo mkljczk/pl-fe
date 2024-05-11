@@ -56,8 +56,11 @@ function useFollow() {
     followEffect(accountId);
 
     try {
-      const response = await api.post(`/api/v1/accounts/${accountId}/follow`, options);
-      const result = relationshipSchema.safeParse(response.data);
+      const response = await api(`/api/v1/accounts/${accountId}/follow`, {
+        method: 'POST',
+        body: JSON.stringify(options),
+      });
+      const result = relationshipSchema.safeParse(response.json);
       if (result.success) {
         dispatch(importEntities([result.data], Entities.RELATIONSHIPS));
       }
@@ -71,7 +74,7 @@ function useFollow() {
     unfollowEffect(accountId);
 
     try {
-      await api.post(`/api/v1/accounts/${accountId}/unfollow`);
+      await api(`/api/v1/accounts/${accountId}/unfollow`, { method: 'POST' });
     } catch (e) {
       followEffect(accountId);
     }

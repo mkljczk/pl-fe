@@ -59,11 +59,11 @@ const fetchEmojiReacts = (id: string, emoji: string) =>
       ? `/api/v1/pleroma/statuses/${id}/reactions/${emoji}`
       : `/api/v1/pleroma/statuses/${id}/reactions`;
 
-    return api(getState).get(url).then(response => {
-      response.data.forEach((emojiReact: APIEntity) => {
+    return api(getState)(url).then(response => {
+      response.json.forEach((emojiReact: APIEntity) => {
         dispatch(importFetchedAccounts(emojiReact.accounts));
       });
-      dispatch(fetchEmojiReactsSuccess(id, response.data));
+      dispatch(fetchEmojiReactsSuccess(id, response.json));
     }).catch(error => {
       dispatch(fetchEmojiReactsFail(id, error));
     });
@@ -75,14 +75,14 @@ const emojiReact = (status: Status, emoji: string, custom?: string) =>
 
     dispatch(emojiReactRequest(status, emoji, custom));
 
-    return api(getState)
-      .put(`/api/v1/pleroma/statuses/${status.id}/reactions/${emoji}`)
-      .then(function(response) {
-        dispatch(importFetchedStatus(response.data));
-        dispatch(emojiReactSuccess(status, emoji));
-      }).catch(function(error) {
-        dispatch(emojiReactFail(status, emoji, error));
-      });
+    return api(getState)(`/api/v1/pleroma/statuses/${status.id}/reactions/${emoji}`, {
+      method: 'PUT',
+    }).then(function(response) {
+      dispatch(importFetchedStatus(response.json));
+      dispatch(emojiReactSuccess(status, emoji));
+    }).catch(function(error) {
+      dispatch(emojiReactFail(status, emoji, error));
+    });
   };
 
 const unEmojiReact = (status: Status, emoji: string) =>
@@ -91,14 +91,15 @@ const unEmojiReact = (status: Status, emoji: string) =>
 
     dispatch(unEmojiReactRequest(status, emoji));
 
-    return api(getState)
-      .delete(`/api/v1/pleroma/statuses/${status.id}/reactions/${emoji}`)
-      .then(response => {
-        dispatch(importFetchedStatus(response.data));
-        dispatch(unEmojiReactSuccess(status, emoji));
-      }).catch(error => {
-        dispatch(unEmojiReactFail(status, emoji, error));
-      });
+    return api(getState)(`/api/v1/pleroma/statuses/${status.id}/reactions/${emoji}`, {
+      method: 'DELETE',
+
+    }).then(response => {
+      dispatch(importFetchedStatus(response.json));
+      dispatch(unEmojiReactSuccess(status, emoji));
+    }).catch(error => {
+      dispatch(unEmojiReactFail(status, emoji, error));
+    });
   };
 
 const fetchEmojiReactsRequest = (id: string, emoji: string) => ({

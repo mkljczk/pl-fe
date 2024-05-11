@@ -1,10 +1,7 @@
 /**
  * API: HTTP client and utilities.
- * @see {@link https://github.com/axios/axios}
  * @module soapbox/api
  */
-
-import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import LinkHeader from 'http-link-header';
 import { createSelector } from 'reselect';
 
@@ -12,37 +9,27 @@ import * as BuildConfig from 'soapbox/build-config';
 import { selectAccount } from 'soapbox/selectors';
 import { RootState } from 'soapbox/store';
 import { getAccessToken, getAppToken, isURL, parseBaseURL } from 'soapbox/utils/auth';
-
-import type MockAdapter from 'axios-mock-adapter';
+import { buildFullPath } from 'soapbox/utils/url';
 
 /**
   Parse Link headers, mostly for pagination.
-  @see {@link https://www.npmjs.com/package/http-link-header}
-  @param {object} response - Axios response object
+  @param {object} response - Fetch API response object
   @returns {object} Link object
   */
-export const getLinks = (response: AxiosResponse): LinkHeader => {
-  return new LinkHeader(response.headers?.link);
+export const getLinks = (response: Pick<Response, 'headers'>): LinkHeader => {
+  return new LinkHeader(response.headers?.get('link') || undefined);
 };
 
-export const getNextLink = (response: AxiosResponse): string | undefined => {
+export const getNextLink = (response: Pick<Response, 'headers'>): string | undefined => {
   return getLinks(response).refs.find(link => link.rel === 'next')?.uri;
 };
 
-export const getPrevLink = (response: AxiosResponse): string | undefined => {
+export const getPrevLink = (response: Pick<Response, 'headers'>): string | undefined => {
   return getLinks(response).refs.find(link => link.rel === 'prev')?.uri;
 };
 
 const getToken = (state: RootState, authType: string) => {
   return authType === 'app' ? getAppToken(state) : getAccessToken(state);
-};
-
-const maybeParseJSON = (data: string) => {
-  try {
-    return JSON.parse(data);
-  } catch (Exception) {
-    return data;
-  }
 };
 
 const getAuthBaseURL = createSelector([
@@ -53,39 +40,55 @@ const getAuthBaseURL = createSelector([
   return baseURL !== window.location.origin ? baseURL : '';
 });
 
-/**
-  * Base client for HTTP requests.
-  * @param {string} accessToken
-  * @param {string} baseURL
-  * @returns {object} Axios instance
-  */
-export const baseClient = (
-  accessToken?: string | null,
-  baseURL: string = '',
-): AxiosInstance => {
-  const headers: Record<string, string> = {};
+export const getFetch = (accessToken?: string | null, baseURL: string = '') =>
+  <T = any>(input: URL | RequestInfo, init?: RequestInit & { params?:  Record<string, any>} | undefined) => {
+    const fullPath = buildFullPath(input.toString(), isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : baseURL, init?.params);
 
-  if (accessToken) {
-    headers.Authorization = `Bearer ${accessToken}`;
-  }
+    const headers = new Headers(init?.headers);
+    const contentType = headers.get('Content-Type') || 'application/json';
 
-  return axios.create({
-    // When BACKEND_URL is set, always use it.
-    baseURL: isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : baseURL,
-    headers,
-    transformResponse: [maybeParseJSON],
-  });
-};
+    if (accessToken) {
+      headers.set('Authorization', `Bearer ${accessToken}`);
+    }
+
+    headers.set('Content-Type', contentType);
+
+    return fetch(fullPath, {
+      ...init,
+      headers,
+    }).then(async (response) => {
+      if (!response.ok) throw { response };
+      const data = await response.text();
+      let json: T = undefined!;
+      try {
+        json = JSON.parse(data);
+      } catch (e) {
+        //
+      }
+      return { ...response, data, json };
+    });
+  };
 
 /**
   * Dumb client for grabbing static files.
   * It uses FE_SUBDIRECTORY and parses JSON if possible.
   * No authorization is needed.
   */
-export const staticClient = axios.create({
-  baseURL: BuildConfig.FE_SUBDIRECTORY,
-  transformResponse: [maybeParseJSON],
-});
+export const staticFetch = (input: URL | RequestInfo, init?: RequestInit | undefined) => {
+  const fullPath = buildFullPath(input.toString(), BuildConfig.FE_SUBDIRECTORY);
+
+  return fetch(fullPath, init).then(async (response) => {
+    if (!response.ok) throw { response };
+    const data = await response.text();
+    let json: any = undefined!;
+    try {
+      json = JSON.parse(data);
+    } catch (e) {
+      //
+    }
+    return { ...response, data, json };
+  });
+};
 
 /**
   * Stateful API client.
@@ -94,15 +97,13 @@ export const staticClient = axios.create({
   * @param {string} authType - Either 'user' or 'app'
   * @returns {object} Axios instance
   */
-export default (getState: () => RootState, authType: string = 'user'): AxiosInstance => {
+export const api = (getState: () => RootState, authType: string = 'user') => {
   const state = getState();
   const accessToken = getToken(state, authType);
   const me = state.me;
   const baseURL = me ? getAuthBaseURL(state, me) : '';
 
-  return baseClient(accessToken, baseURL);
+  return getFetch(accessToken, baseURL);
 };
 
-// The Jest mock exports these, so they're needed for TypeScript.
-export const __stub = (_func: (mock: MockAdapter) => void) => 0;
-export const __clear = (): Function[] => [];
+export default api;

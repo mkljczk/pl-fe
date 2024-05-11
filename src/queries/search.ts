@@ -12,14 +12,14 @@ export default function useAccountSearch(q: string) {
     const nextPageLink = pageParam?.link;
     const uri = nextPageLink || '/api/v1/accounts/search';
 
-    const response = await api.get(uri, {
+    const response = await api(uri, {
       params: {
         q,
         limit: 10,
         followers: true,
       },
     });
-    const { data } = response;
+    const { json: data } = response;
 
     const link = getNextLink(response);
     const hasMore = !!link;

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import queryString from 'query-string';
 
 import * as BuildConfig from 'soapbox/build-config';
 import { isURL } from 'soapbox/utils/auth';
@@ -32,21 +32,18 @@ export const prepareRequest = (provider: string) => {
     const app = await dispatch(createProviderApp());
     const { client_id, redirect_uri } = app;
 
-    localStorage.setItem('soapbox:external:app', JSON.stringify(app));
-    localStorage.setItem('soapbox:external:baseurl', baseURL);
-    localStorage.setItem('soapbox:external:scopes', scopes);
+    localStorage.setItem('plfe:external:app', JSON.stringify(app));
+    localStorage.setItem('plfe:external:baseurl', baseURL);
+    localStorage.setItem('plfe:external:scopes', scopes);
 
     const params = {
       provider,
-      authorization: {
-        client_id,
-        redirect_uri,
-        scope: scopes,
-      },
+      'authorization[client_id]': client_id,
+      'authorization[redirect_uri]': redirect_uri,
+      'authorization[scope]': scopes,
     };
 
-    const formdata = axios.toFormData(params);
-    const query = new URLSearchParams(formdata as any);
+    const query = queryString.stringify(params);
 
     location.href = `${baseURL}/oauth/prepare_request?${query.toString()}`;
   };

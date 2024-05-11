@@ -12,7 +12,6 @@ import { EXCLUDE_TYPES, NOTIFICATION_TYPES } from 'soapbox/utils/notification';
 import { joinPublicPath } from 'soapbox/utils/static';
 
 import { fetchRelationships } from './accounts';
-import { fetchGroupRelationships } from './groups';
 import {
   importFetchedAccount,
   importFetchedAccounts,
@@ -23,7 +22,7 @@ import { saveMarker } from './markers';
 import { getSettings, saveSettings } from './settings';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity, Status } from 'soapbox/types/entities';
+import type { APIEntity } from 'soapbox/types/entities';
 
 const NOTIFICATIONS_UPDATE      = 'NOTIFICATIONS_UPDATE';
 const NOTIFICATIONS_UPDATE_NOOP = 'NOTIFICATIONS_UPDATE_NOOP';
@@ -274,10 +273,10 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
 
     dispatch(expandNotificationsRequest(isLoadingMore));
 
-    return api(getState).get('/api/v1/notifications', { params, signal: abortExpandNotifications.signal }).then(response => {
+    return api(getState)('/api/v1/notifications', { params, signal: abortExpandNotifications.signal }).then(response => {
       const next = getLinks(response).refs.find(link => link.rel === 'next');
 
-      const entries = (response.data as APIEntity[]).reduce((acc, item) => {
+      const entries = (response.json as APIEntity[]).reduce((acc, item) => {
         if (item.account?.id) {
           acc.accounts[item.account.id] = item.account;
         }
@@ -297,13 +296,10 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
       dispatch(importFetchedAccounts(Object.values(entries.accounts)));
       dispatch(importFetchedStatuses(Object.values(entries.statuses)));
 
-      const statusesFromGroups = (Object.values(entries.statuses) as Status[]).filter((status) => !!status.group);
-      dispatch(fetchGroupRelationships(statusesFromGroups.map((status: any) => status.group?.id)));
-
-      const deduplicatedNotifications = deduplicateNotifications(response.data);
+      const deduplicatedNotifications = deduplicateNotifications(response.json);
 
       dispatch(expandNotificationsSuccess(deduplicatedNotifications, next ? next.uri : null, isLoadingMore));
-      fetchRelatedRelationships(dispatch, response.data);
+      fetchRelatedRelationships(dispatch, response.json);
       done();
     }).catch(error => {
       dispatch(expandNotificationsFail(error, isLoadingMore));
@@ -337,7 +333,7 @@ const clearNotifications = () =>
       type: NOTIFICATIONS_CLEAR,
     });
 
-    api(getState).post('/api/v1/notifications/clear');
+    api(getState)('/api/v1/notifications/clear', { method: 'POST' });
   };
 
 const scrollTopNotifications = (top: boolean) =>
@@ -364,7 +360,10 @@ const setFilter = (filterType: FilterType, abort?: boolean) =>
 // https://git.pleroma.social/pleroma/pleroma/-/issues/2769
 const markReadPleroma = (max_id: string | number) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    return api(getState).post('/api/v1/pleroma/notifications/read', { max_id });
+    return api(getState)('/api/v1/pleroma/notifications/read', {
+      method: 'POST',
+      body: JSON.stringify({ max_id }),
+    });
   };
 
 const markReadNotifications = () =>

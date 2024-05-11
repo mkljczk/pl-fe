@@ -17,7 +17,6 @@ import {
 } from '../actions/auth';
 import { ME_FETCH_SKIP } from '../actions/me';
 
-import type { AxiosError } from 'axios';
 import type { AnyAction } from 'redux';
 import type { APIEntity, Account as AccountEntity } from 'soapbox/types/entities';
 
@@ -136,27 +135,6 @@ const setSessionUser = (state: State) => state.update('me', me => {
   return getUrlOrId(user);
 });
 
-// Upgrade the initial state
-const migrateLegacy = (state: State) => {
-  if (localState) return state;
-  return state.withMutations(state => {
-    const app = AuthAppRecord(JSON.parse(localStorage.getItem('soapbox:auth:app')!));
-    const user = fromJS(JSON.parse(localStorage.getItem('soapbox:auth:user')!)) as ImmutableMap<string, any>;
-    if (!user) return;
-    state.set('me', '_legacy'); // Placeholder account ID
-    state.set('app', app);
-    state.set('tokens', ImmutableMap({
-      [user.get('access_token')]: AuthTokenRecord(user.set('account', '_legacy')),
-    }));
-    state.set('users', ImmutableMap({
-      '_legacy': AuthUserRecord({
-        id: '_legacy',
-        access_token: user.get('access_token'),
-      }),
-    }));
-  });
-};
-
 const isUpgradingUrlId = (state: State) => {
   const me = state.me;
   const user = state.users.get(me!);
@@ -202,7 +180,6 @@ const initialize = (state: State) => {
   return state.withMutations(state => {
     maybeShiftMe(state);
     setSessionUser(state);
-    migrateLegacy(state);
     sanitizeState(state);
     persistState(state);
   });
@@ -212,17 +189,6 @@ const initialState = initialize(ReducerRecord().merge(localState as any));
 
 const importToken = (state: State, token: APIEntity) => {
   return state.setIn(['tokens', token.access_token], AuthTokenRecord(token));
-};
-
-// Upgrade the `_legacy` placeholder ID with a real account
-const upgradeLegacyId = (state: State, account: APIEntity) => {
-  if (localState) return state;
-  return state.withMutations(state => {
-    state.update('me', me => me === '_legacy' ? account.url : me);
-    state.deleteIn(['users', '_legacy']);
-  });
-  // TODO: Delete `soapbox:auth:app` and `soapbox:auth:user` localStorage?
-  // By this point it's probably safe, but we'll leave it just in case.
 };
 
 // Users are now stored by their ActivityPub ID instead of their
@@ -259,7 +225,6 @@ const importCredentials = (state: State, token: string, account: APIEntity) => {
     state.setIn(['tokens', token, 'me'], account.url);
     state.update('users', users => users.filterNot(userMismatch(token, account)));
     state.update('me', me => me || account.url);
-    upgradeLegacyId(state, account);
     upgradeNonUrlId(state, account);
   });
 };
@@ -323,7 +288,7 @@ const persistAuthAccount = (account: APIEntity) => {
   }
 };
 
-const deleteForbiddenToken = (state: State, error: AxiosError, token: string) => {
+const deleteForbiddenToken = (state: State, error: { response: Response }, token: string) => {
   if ([401, 403].includes(error.response?.status!)) {
     return deleteToken(state, token);
   } else {
@@ -362,7 +327,7 @@ const reload = () => location.replace('/');
 // `me` is a user ID string
 const validMe = (state: State) => {
   const me = state.me;
-  return typeof me === 'string' && me !== '_legacy';
+  return typeof me === 'string';
 };
 
 // `me` has changed from one valid ID to another

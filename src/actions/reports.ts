@@ -61,14 +61,17 @@ const submitReport = () =>
     dispatch(submitReportRequest());
     const { reports } = getState();
 
-    return api(getState).post('/api/v1/reports', {
-      account_id: reports.getIn(['new', 'account_id']),
-      status_ids: reports.getIn(['new', 'status_ids']),
-      message_ids: [reports.getIn(['new', 'chat_message', 'id'])].filter(Boolean),
-      group_id: reports.getIn(['new', 'group', 'id']),
-      rule_ids: reports.getIn(['new', 'rule_ids']),
-      comment: reports.getIn(['new', 'comment']),
-      forward: reports.getIn(['new', 'forward']),
+    return api(getState)('/api/v1/reports', {
+      method: 'POST',
+      body: JSON.stringify({
+        account_id: reports.getIn(['new', 'account_id']),
+        status_ids: reports.getIn(['new', 'status_ids']),
+        message_ids: [reports.getIn(['new', 'chat_message', 'id'])].filter(Boolean),
+        group_id: reports.getIn(['new', 'group', 'id']),
+        rule_ids: reports.getIn(['new', 'rule_ids']),
+        comment: reports.getIn(['new', 'comment']),
+        forward: reports.getIn(['new', 'forward']),
+      }),
     });
   };
 

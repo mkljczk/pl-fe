@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -83,12 +82,12 @@ const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params })
   async function handleAuthorize(account: AccountEntity) {
     return authorize(account.id)
       .then(() => Promise.resolve())
-      .catch((error: AxiosError) => {
+      .catch((error: { response: Response }) => {
         refetch();
 
         let message = intl.formatMessage(messages.authorizeFail, { name: account.username });
         if (error.response?.status === 409) {
-          message = (error.response?.data as any).error;
+          message = (error.response?.json as any).error;
         }
         toast.error(message);
 
@@ -99,12 +98,12 @@ const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params })
   async function handleReject(account: AccountEntity) {
     return reject(account.id)
       .then(() => Promise.resolve())
-      .catch((error: AxiosError) => {
+      .catch((error: { response: Response }) => {
         refetch();
 
         let message = intl.formatMessage(messages.rejectFail, { name: account.username });
         if (error.response?.status === 409) {
-          message = (error.response?.data as any).error;
+          message = (error.response?.json as any).error;
         }
         toast.error(message);
 

@@ -1,7 +1,7 @@
 const ONBOARDING_START = 'ONBOARDING_START';
 const ONBOARDING_END = 'ONBOARDING_END';
 
-const ONBOARDING_LOCAL_STORAGE_KEY = 'soapbox:onboarding';
+const ONBOARDING_LOCAL_STORAGE_KEY = 'plfe:onboarding';
 
 type OnboardingStartAction = {
   type: typeof ONBOARDING_START;

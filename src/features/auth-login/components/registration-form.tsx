@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Map as ImmutableMap } from 'immutable';
 import debounce from 'lodash/debounce';
 import React, { useState, useRef, useCallback } from 'react';
@@ -60,13 +59,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [passwordMismatch, setPasswordMismatch] = useState(false);
 
-  const source = useRef(axios.CancelToken.source());
-
-  const refreshCancelToken = () => {
-    source.current.cancel();
-    source.current = axios.CancelToken.source();
-    return source.current;
-  };
+  const controller = useRef(new AbortController());
 
   const updateParams = (map: any) => {
     setParams(params.merge(ImmutableMap(map)));
@@ -79,7 +72,8 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const onUsernameChange: React.ChangeEventHandler<HTMLInputElement> = e => {
     updateParams({ username: e.target.value });
     setUsernameUnavailable(false);
-    source.current.cancel();
+    controller.current.abort();
+    controller.current = new AbortController();
 
     const domain = params.get('domain');
     usernameAvailable(e.target.value, domain ? domains!.find(({ id }) => id === domain)?.domain : undefined);
@@ -88,7 +82,9 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const onDomainChange: React.ChangeEventHandler<HTMLSelectElement> = e => {
     updateParams({ domain: e.target.value || null });
     setUsernameUnavailable(false);
-    source.current.cancel();
+
+    controller.current.abort();
+    controller.current = new AbortController();
 
     const username = params.get('username');
     if (username) {
@@ -171,9 +167,10 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const usernameAvailable = useCallback(debounce((username, domain?: string) => {
     if (!supportsAccountLookup) return;
 
-    const source = refreshCancelToken();
+    controller.current.abort();
+    controller.current = new AbortController();
 
-    dispatch(accountLookup(`${username}${domain ? `@${domain}` : ''}`, source.token))
+    dispatch(accountLookup(`${username}${domain ? `@${domain}` : ''}`, controller.current.signal))
       .then(account => {
         setUsernameUnavailable(!!account);
       })

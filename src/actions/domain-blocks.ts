@@ -29,7 +29,10 @@ const blockDomain = (domain: string) =>
 
     dispatch(blockDomainRequest(domain));
 
-    api(getState).post('/api/v1/domain_blocks', { domain }).then(() => {
+    api(getState)('/api/v1/domain_blocks', {
+      method: 'POST',
+      body: JSON.stringify(domain),
+    }).then(() => {
       const accounts = selectAccountsByDomain(getState(), domain);
       if (!accounts) return;
       dispatch(blockDomainSuccess(domain, accounts));
@@ -61,13 +64,11 @@ const unblockDomain = (domain: string) =>
 
     dispatch(unblockDomainRequest(domain));
 
-    // Do it both ways for maximum compatibility
-    const params = {
+    api(getState)('/api/v1/domain_blocks', {
+      method: 'DELETE',
       params: { domain },
-      data: { domain },
-    };
-
-    api(getState).delete('/api/v1/domain_blocks', params).then(() => {
+      body: JSON.stringify({ domain }),
+    }).then(() => {
       const accounts = selectAccountsByDomain(getState(), domain);
       if (!accounts) return;
       dispatch(unblockDomainSuccess(domain, accounts));
@@ -99,9 +100,9 @@ const fetchDomainBlocks = () =>
 
     dispatch(fetchDomainBlocksRequest());
 
-    api(getState).get('/api/v1/domain_blocks').then(response => {
+    api(getState)('/api/v1/domain_blocks').then(response => {
       const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(fetchDomainBlocksSuccess(response.data, next ? next.uri : null));
+      dispatch(fetchDomainBlocksSuccess(response.json, next ? next.uri : null));
     }).catch(err => {
       dispatch(fetchDomainBlocksFail(err));
     });
@@ -134,9 +135,9 @@ const expandDomainBlocks = () =>
 
     dispatch(expandDomainBlocksRequest());
 
-    api(getState).get(url).then(response => {
+    api(getState)(url).then(response => {
       const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(expandDomainBlocksSuccess(response.data, next ? next.uri : null));
+      dispatch(expandDomainBlocksSuccess(response.json, next ? next.uri : null));
     }).catch(err => {
       dispatch(expandDomainBlocksFail(err));
     });

@@ -6,8 +6,6 @@ import { fetchCaptcha } from 'soapbox/actions/auth';
 import { Stack, Text, Input } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
 
-import type { AxiosResponse } from 'axios';
-
 const noOp = () => {};
 
 const messages = defineMessages({
@@ -42,8 +40,8 @@ const CaptchaField: React.FC<ICaptchaField> = ({
   const [refresh, setRefresh] = useState<NodeJS.Timeout | undefined>(undefined);
 
   const getCaptcha = () => {
-    dispatch(fetchCaptcha()).then((response: AxiosResponse) => {
-      const captcha = ImmutableMap<string, any>(response.data);
+    dispatch(fetchCaptcha()).then((response) => {
+      const captcha = ImmutableMap<string, any>(response.json);
       setCaptcha(captcha);
       onFetch(captcha);
     }).catch((error: Error) => {

@@ -8,7 +8,6 @@ import api from '../api';
 import { loadCredentials } from './auth';
 import { importFetchedAccount } from './importer';
 
-import type { RawAxiosRequestHeaders } from 'axios';
 import type { Account } from 'soapbox/schemas';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
@@ -71,15 +70,26 @@ const patchMe = (params: Record<string, any>, isFormData = false) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(patchMeRequest());
 
-    const headers: RawAxiosRequestHeaders = isFormData ? {
+    const headers: HeadersInit = isFormData ? {
       'Content-Type': 'multipart/form-data',
     } : {};
 
-    return api(getState)
-      .patch('/api/v1/accounts/update_credentials', params, { headers })
+    let body: FormData | string;
+    if (isFormData) {
+      body = new FormData();
+      Object.entries(params).forEach(([key, value]) => (body as FormData).append(key, value));
+    } else {
+      body = JSON.stringify(params);
+    }
+
+    return api(getState)('/api/v1/accounts/update_credentials', {
+      method: 'PATCH',
+      body,
+      headers,
+    })
       .then(response => {
-        persistAuthAccount(response.data, params);
-        dispatch(patchMeSuccess(response.data));
+        persistAuthAccount(response.json, params);
+        dispatch(patchMeSuccess(response.json));
       }).catch(error => {
         dispatch(patchMeFail(error));
         throw error;

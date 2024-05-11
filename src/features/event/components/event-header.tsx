@@ -4,7 +4,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
 import { blockAccount } from 'soapbox/actions/accounts';
-import { launchChat } from 'soapbox/actions/chats';
 import { directCompose, mentionCompose, quoteCompose } from 'soapbox/actions/compose';
 import { editEvent, fetchEventIcs } from 'soapbox/actions/events';
 import { toggleBookmark, togglePin, toggleReblog } from 'soapbox/actions/interactions';
@@ -19,6 +18,7 @@ import { Button, HStack, IconButton, Menu, MenuButton, MenuDivider, MenuItem, Me
 import SvgIcon from 'soapbox/components/ui/icon/svg-icon';
 import VerificationBadge from 'soapbox/components/verification-badge';
 import { useAppDispatch, useFeatures, useOwnAccount, useSettings } from 'soapbox/hooks';
+import { useChats } from 'soapbox/queries/chats';
 import copy from 'soapbox/utils/copy';
 import { download } from 'soapbox/utils/download';
 import { shortNumberFormat } from 'soapbox/utils/numbers';
@@ -69,6 +69,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const history = useHistory();
+
+  const { getOrCreateChatByAccountId } = useChats();
 
   const features = useFeatures();
   const { boostModal } = useSettings();
@@ -149,7 +151,9 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleChatClick = () => {
-    dispatch(launchChat(account.id, history));
+    getOrCreateChatByAccountId(account.id)
+      .then(({ json: chat }) => history.push(`/chats/${chat.id}`))
+      .catch(() => {});
   };
 
   const handleDirectClick = () => {

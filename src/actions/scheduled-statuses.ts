@@ -32,9 +32,9 @@ const fetchScheduledStatuses = () =>
 
     dispatch(fetchScheduledStatusesRequest());
 
-    api(getState).get('/api/v1/scheduled_statuses').then(response => {
+    api(getState)('/api/v1/scheduled_statuses').then(response => {
       const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(fetchScheduledStatusesSuccess(response.data, next ? next.uri : null));
+      dispatch(fetchScheduledStatusesSuccess(response.json, next ? next.uri : null));
     }).catch(error => {
       dispatch(fetchScheduledStatusesFail(error));
     });
@@ -43,7 +43,7 @@ const fetchScheduledStatuses = () =>
 const cancelScheduledStatus = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: SCHEDULED_STATUS_CANCEL_REQUEST, id });
-    api(getState).delete(`/api/v1/scheduled_statuses/${id}`).then(({ data }) => {
+    api(getState)(`/api/v1/scheduled_statuses/${id}`, { method: 'DELETE' }).then(({ json: data }) => {
       dispatch({ type: SCHEDULED_STATUS_CANCEL_SUCCESS, id, data });
     }).catch(error => {
       dispatch({ type: SCHEDULED_STATUS_CANCEL_FAIL, id, error });
@@ -75,9 +75,9 @@ const expandScheduledStatuses = () =>
 
     dispatch(expandScheduledStatusesRequest());
 
-    api(getState).get(url).then(response => {
+    api(getState)(url).then(response => {
       const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(expandScheduledStatusesSuccess(response.data, next ? next.uri : null));
+      dispatch(expandScheduledStatusesSuccess(response.json, next ? next.uri : null));
     }).catch(error => {
       dispatch(expandScheduledStatusesFail(error));
     });

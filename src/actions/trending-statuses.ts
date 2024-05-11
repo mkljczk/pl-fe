@@ -20,7 +20,7 @@ const fetchTrendingStatuses = () =>
     if (!features.trendingStatuses) return;
 
     dispatch({ type: TRENDING_STATUSES_FETCH_REQUEST });
-    return api(getState).get('/api/v1/trends/statuses').then(({ data: statuses }) => {
+    return api(getState)('/api/v1/trends/statuses').then(({ json: statuses }) => {
       dispatch(importFetchedStatuses(statuses));
       dispatch({ type: TRENDING_STATUSES_FETCH_SUCCESS, statuses });
       return statuses;

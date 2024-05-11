@@ -71,21 +71,21 @@ const submitSearch = (filter?: SearchFilter) =>
 
     if (accountId) params.account_id = accountId;
 
-    api(getState).get('/api/v2/search', {
+    api(getState)('/api/v2/search', {
       params,
     }).then(response => {
-      if (response.data.accounts) {
-        dispatch(importFetchedAccounts(response.data.accounts));
+      if (response.json.accounts) {
+        dispatch(importFetchedAccounts(response.json.accounts));
       }
 
-      if (response.data.statuses) {
-        dispatch(importFetchedStatuses(response.data.statuses));
+      if (response.json.statuses) {
+        dispatch(importFetchedStatuses(response.json.statuses));
       }
 
       const next = getLinks(response).refs.find(link => link.rel === 'next');
 
-      dispatch(fetchSearchSuccess(response.data, value, type, next ? next.uri : null));
-      dispatch(fetchRelationships(response.data.accounts.map((item: APIEntity) => item.id)));
+      dispatch(fetchSearchSuccess(response.json, value, type, next ? next.uri : null));
+      dispatch(fetchRelationships(response.json.accounts.map((item: APIEntity) => item.id)));
     }).catch(error => {
       dispatch(fetchSearchFail(error));
     });
@@ -142,10 +142,10 @@ const expandSearch = (type: SearchFilter) => (dispatch: AppDispatch, getState: (
     if (accountId) params.account_id = accountId;
   }
 
-  api(getState).get(url, {
+  api(getState)(url, {
     params,
   }).then(response => {
-    const data = response.data;
+    const data = response.json;
 
     if (data.accounts) {
       dispatch(importFetchedAccounts(data.accounts));

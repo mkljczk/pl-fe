@@ -37,7 +37,7 @@ const markConversationRead = (conversationId: string) => (dispatch: AppDispatch,
     id: conversationId,
   });
 
-  api(getState).post(`/api/v1/conversations/${conversationId}/read`);
+  api(getState)(`/api/v1/conversations/${conversationId}/read`, { method: 'POST' });
 };
 
 const expandConversations = ({ maxId }: Record<string, any> = {}) => (dispatch: AppDispatch, getState: () => RootState) => {
@@ -53,13 +53,13 @@ const expandConversations = ({ maxId }: Record<string, any> = {}) => (dispatch: 
 
   const isLoadingRecent = !!params.since_id;
 
-  api(getState).get('/api/v1/conversations', { params })
+  api(getState)('/api/v1/conversations', { params })
     .then(response => {
       const next = getLinks(response).refs.find(link => link.rel === 'next');
 
-      dispatch(importFetchedAccounts(response.data.reduce((aggr: Array<APIEntity>, item: APIEntity) => aggr.concat(item.accounts), [])));
-      dispatch(importFetchedStatuses(response.data.map((item: Record<string, any>) => item.last_status).filter((x?: APIEntity) => !!x)));
-      dispatch(expandConversationsSuccess(response.data, next ? next.uri : null, isLoadingRecent));
+      dispatch(importFetchedAccounts(response.json.reduce((aggr: Array<APIEntity>, item: APIEntity) => aggr.concat(item.accounts), [])));
+      dispatch(importFetchedStatuses(response.json.map((item: Record<string, any>) => item.last_status).filter((x?: APIEntity) => !!x)));
+      dispatch(expandConversationsSuccess(response.json, next ? next.uri : null, isLoadingRecent));
     })
     .catch(err => dispatch(expandConversationsFail(err)));
 };

@@ -14,7 +14,7 @@ function useGroup(groupId: string, refetch = true) {
 
   const { entity: group, isUnauthorized, ...result } = useEntity<Group>(
     [Entities.GROUPS, groupId],
-    () => api.get(`/api/v1/groups/${groupId}`),
+    () => api(`/api/v1/groups/${groupId}`),
     {
       schema: groupSchema,
       refetch,
