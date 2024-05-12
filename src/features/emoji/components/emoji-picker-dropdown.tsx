@@ -50,7 +50,7 @@ export interface IEmojiPickerDropdown {
 }
 
 const perLine = 8;
-const lines   = 2;
+const lines = 2;
 
 const DEFAULTS = [
   '+1',

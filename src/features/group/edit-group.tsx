@@ -62,7 +62,7 @@ const EditGroup: React.FC<IEditGroup> = ({ params: { groupId } }) => {
         toast.success(intl.formatMessage(messages.groupSaved));
       },
       onError(error) {
-        const message = (error.response?.data as any)?.error;
+        const message = error.response?.json?.error;
 
         if (error.response?.status === 422 && typeof message !== 'undefined') {
           toast.error(message);

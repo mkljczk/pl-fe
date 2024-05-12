@@ -50,7 +50,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
       );
     },
     onError(error) {
-      const message = (error.response?.data as any).error;
+      const message = error.response?.json?.error;
       if (message) {
         toast.error(message);
       }

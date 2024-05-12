@@ -41,7 +41,10 @@ const getAuthBaseURL = createSelector([
 });
 
 export const getFetch = (accessToken?: string | null, baseURL: string = '') =>
-  <T = any>(input: URL | RequestInfo, init?: RequestInit & { params?:  Record<string, any>} | undefined) => {
+  <T = any>(
+    input: URL | RequestInfo,
+    init?: RequestInit & { params?: Record<string, any>; onUploadProgress?: (e: ProgressEvent) => void } | undefined,
+  ) => {
     const fullPath = buildFullPath(input.toString(), isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : baseURL, init?.params);
 
     const headers = new Headers(init?.headers);
@@ -56,18 +59,47 @@ export const getFetch = (accessToken?: string | null, baseURL: string = '') =>
       headers.set('Content-Type', headers.get('Content-Type') || 'application/json');
     }
 
+    // Fetch API doesn't report upload progress, use XHR
+    if (init?.onUploadProgress) {
+      return new Promise<Response & { data: string; json: T }>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.addEventListener('progress', init.onUploadProgress!);
+        xhr.addEventListener('loadend', () => {
+          const data = xhr.response;
+          let json: T = undefined!;
+
+          try {
+            json = JSON.parse(data);
+          } catch (e) {
+            //
+          }
+
+          if (xhr.status >= 400) reject({ response: { status: xhr.status, data, json } });
+          resolve({ status: xhr.status, data, json } as any);
+        });
+
+        xhr.open(init?.method || 'GET', fullPath, true);
+        headers.forEach((value, key) => xhr.setRequestHeader(key, value));
+        xhr.responseType = 'text';
+        xhr.send(init.body as FormData);
+      });
+    }
+
     return fetch(fullPath, {
       ...init,
       headers,
     }).then(async (response) => {
-      if (!response.ok) throw { response };
       const data = await response.text();
       let json: T = undefined!;
+
       try {
         json = JSON.parse(data);
       } catch (e) {
         //
       }
+
+      if (!response.ok) throw { response: { ...response, data, json } };
       return { ...response, data, json };
     });
   };

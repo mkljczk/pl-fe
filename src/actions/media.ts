@@ -32,37 +32,18 @@ const updateMedia = (mediaId: string, params: Record<string, any>) =>
     });
   };
 
-const uploadMediaV1 = (body: FormData, onUploadProgress = noOp) =>
-  (dispatch: any, getState: () => RootState) =>
-    api(getState)('/api/v1/media', {
-      method: 'POST',
-      body,
-      headers: { 'Content-Type': '' },
-    // }, {
-    //   onUploadProgress: onUploadProgress,
-    });
-
-const uploadMediaV2 = (body: FormData, onUploadProgress = noOp) =>
-  (dispatch: any, getState: () => RootState) =>
-    api(getState)('/api/v2/media', {
-      method: 'POST',
-      body,
-      headers: { 'Content-Type': '' },
-    // }, {
-    //   onUploadProgress: onUploadProgress,
-    });
-
-const uploadMedia = (data: FormData, onUploadProgress = noOp) =>
+const uploadMedia = (body: FormData, onUploadProgress: (e: ProgressEvent) => void = noOp) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const instance = state.instance;
     const features = getFeatures(instance);
 
-    if (features.mediaV2) {
-      return dispatch(uploadMediaV2(data, onUploadProgress));
-    } else {
-      return dispatch(uploadMediaV1(data, onUploadProgress));
-    }
+    return api(getState)(features.mediaV2 ? '/api/v2/media' : '/api/v1/media', {
+      method: 'POST',
+      body,
+      headers: { 'Content-Type': '' },
+      onUploadProgress,
+    });
   };
 
 const uploadFile = (
@@ -70,7 +51,7 @@ const uploadFile = (
   intl: IntlShape,
   onSuccess: (data: APIEntity) => void = () => {},
   onFail: (error: unknown) => void = () => {},
-  onProgress: (loaded: number) => void = () => {},
+  onProgress: (e: ProgressEvent) => void = () => {},
   changeTotal: (value: number) => void = () => {},
 ) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -135,8 +116,6 @@ const uploadFile = (
 export {
   fetchMedia,
   updateMedia,
-  uploadMediaV1,
-  uploadMediaV2,
   uploadMedia,
   uploadFile,
 };

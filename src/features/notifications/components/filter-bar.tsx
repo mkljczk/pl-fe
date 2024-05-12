@@ -57,37 +57,37 @@ const NotificationFilterBar = () => {
       name: 'mention',
     });
     if (features.accountNotifies || features.accountSubscriptions) items.push({
-      text:  <Icon className='h-4 w-4' src={require('@tabler/icons/outline/bell-ringing.svg')} />,
+      text: <Icon className='h-4 w-4' src={require('@tabler/icons/outline/bell-ringing.svg')} />,
       title: intl.formatMessage(messages.statuses),
       action: onClick('status'),
       name: 'status',
     });
     items.push({
-      text:  <Icon className='h-4 w-4' src={require('@tabler/icons/outline/heart.svg')} />,
+      text: <Icon className='h-4 w-4' src={require('@tabler/icons/outline/heart.svg')} />,
       title: intl.formatMessage(messages.favourites),
       action: onClick('favourite'),
       name: 'favourite',
     });
     items.push({
-      text:  <Icon className='h-4 w-4' src={require('@tabler/icons/outline/repeat.svg')} />,
+      text: <Icon className='h-4 w-4' src={require('@tabler/icons/outline/repeat.svg')} />,
       title: intl.formatMessage(messages.boosts),
       action: onClick('reblog'),
       name: 'reblog',
     });
     if (features.polls) items.push({
-      text:  <Icon className='h-4 w-4' src={require('@tabler/icons/outline/chart-bar.svg')} />,
+      text: <Icon className='h-4 w-4' src={require('@tabler/icons/outline/chart-bar.svg')} />,
       title: intl.formatMessage(messages.polls),
       action: onClick('poll'),
       name: 'poll',
     });
     if (features.events) items.push({
-      text:  <Icon className='h-4 w-4' src={require('@tabler/icons/outline/calendar.svg')} />,
+      text: <Icon className='h-4 w-4' src={require('@tabler/icons/outline/calendar.svg')} />,
       title: intl.formatMessage(messages.events),
       action: onClick('events'),
       name: 'events',
     });
     items.push({
-      text:  <Icon className='h-4 w-4' src={require('@tabler/icons/outline/user-plus.svg')} />,
+      text: <Icon className='h-4 w-4' src={require('@tabler/icons/outline/user-plus.svg')} />,
       title: intl.formatMessage(messages.follows),
       action: onClick('follow'),
       name: 'follow',

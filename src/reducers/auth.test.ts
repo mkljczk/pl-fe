@@ -117,7 +117,7 @@ describe('auth reducer', () => {
       };
 
       const expected = ImmutableMap({
-        'https://gleasonator.com/users/alex':  AuthUserRecord({ id: '1234', access_token: 'ABCDEFG', url: 'https://gleasonator.com/users/alex' }),
+        'https://gleasonator.com/users/alex': AuthUserRecord({ id: '1234', access_token: 'ABCDEFG', url: 'https://gleasonator.com/users/alex' }),
       });
 
       const result = reducer(undefined, action);

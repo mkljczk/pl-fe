@@ -24,7 +24,7 @@ function useCreateEntity<TEntity extends Entity = Entity, Data = unknown>(
   const [isSubmitting, setPromise] = useLoading();
   const { entityType, listKey } = parseEntitiesPath(expandedPath);
 
-  async function createEntity(data: Data, callbacks: EntityCallbacks<TEntity> = {}): Promise<void> {
+  async function createEntity(data: Data, callbacks: EntityCallbacks<TEntity, { response?: Response & { json: any } }> = {}): Promise<void> {
     const result = await setPromise(entityFn(data));
     const schema = opts.schema || z.custom<TEntity>();
     const entity = schema.parse(result.json);

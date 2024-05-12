@@ -1,11 +1,11 @@
-import MockAdapter from 'axios-mock-adapter';
+// import MockAdapter from 'axios-mock-adapter';
 import LinkHeader from 'http-link-header';
 import { vi } from 'vitest';
 
 const api = await vi.importActual('../index') as Record<string, Function>;
 let mocks: Array<Function> = [];
 
-export const __stub = (func: (mock: MockAdapter) => void) => mocks.push(func);
+export const __stub = (func: (mock: any) => void) => mocks.push(func);
 export const __clear = (): Function[] => mocks = [];
 
 // const setupMock = (axios: AxiosInstance) => {

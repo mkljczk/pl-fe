@@ -154,7 +154,7 @@ const processImage = (
     name?: string;
   },
 ) => new Promise<File>((resolve, reject) => {
-  const canvas  = document.createElement('canvas');
+  const canvas = document.createElement('canvas');
 
   if (4 < orientation && orientation < 9) {
     canvas.width  = height;
