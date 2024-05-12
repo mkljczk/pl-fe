@@ -99,7 +99,10 @@ export const getFetch = (accessToken?: string | null, baseURL: string = '') =>
         //
       }
 
-      if (!response.ok) throw { response: { ...response, data, json } };
+      if (!response.ok) {
+        const { headers, ok, redirected, status, statusText, type, url } = response;
+        throw { response: { headers, ok, redirected, status, statusText, type, url, data, json } };
+      }
       return { ...response, data, json };
     });
   };
