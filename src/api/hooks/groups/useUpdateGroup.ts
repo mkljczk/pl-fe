@@ -1,3 +1,5 @@
+import { serialize } from 'object-to-formdata';
+
 import { Entities } from 'soapbox/entity-store/entities';
 import { useCreateEntity } from 'soapbox/entity-store/hooks';
 import { useApi } from 'soapbox/hooks/useApi';
@@ -16,7 +18,7 @@ function useUpdateGroup(groupId: string) {
   const api = useApi();
 
   const { createEntity, ...rest } = useCreateEntity([Entities.GROUPS], (params: UpdateGroupParams) => {
-    const formData = new FormData();
+    const formData = serialize(params, { indices: true });
 
     Object.entries(params).forEach(([key, value]) => formData.append(key, value));
 

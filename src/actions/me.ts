@@ -1,3 +1,5 @@
+import { serialize } from 'object-to-formdata';
+
 import { selectAccount } from 'soapbox/selectors';
 import { setSentryAccount } from 'soapbox/sentry';
 import KVStore from 'soapbox/storage/kv-store';
@@ -70,14 +72,11 @@ const patchMe = (params: Record<string, any>, isFormData = false) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(patchMeRequest());
 
-    const headers: HeadersInit = isFormData ? {
-      'Content-Type': 'multipart/form-data',
-    } : {};
+    const headers: HeadersInit = isFormData ? { 'Content-Type': '' } : {};
 
     let body: FormData | string;
     if (isFormData) {
-      body = new FormData();
-      Object.entries(params).forEach(([key, value]) => (body as FormData).append(key, value));
+      body = serialize(params, { indices: true });
     } else {
       body = JSON.stringify(params);
     }

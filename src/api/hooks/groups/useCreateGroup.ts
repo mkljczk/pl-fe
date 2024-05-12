@@ -1,3 +1,5 @@
+import { serialize } from 'object-to-formdata';
+
 import { Entities } from 'soapbox/entity-store/entities';
 import { useCreateEntity } from 'soapbox/entity-store/hooks';
 import { useApi } from 'soapbox/hooks/useApi';
@@ -17,9 +19,7 @@ function useCreateGroup() {
   const api = useApi();
 
   const { createEntity, ...rest } = useCreateEntity([Entities.GROUPS, 'search', ''], (params: CreateGroupParams) => {
-    const formData = new FormData();
-
-    Object.entries(params).forEach(([key, value]) => formData.append(key, value));
+    const formData = serialize(params, { indices: true });
 
     return api('/api/v1/groups', {
       method: 'POST',
