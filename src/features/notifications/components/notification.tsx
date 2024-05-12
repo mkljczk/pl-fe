@@ -30,7 +30,7 @@ const notificationForScreenReader = (intl: IntlShape, message: string, timestamp
 };
 
 const buildLink = (account: AccountEntity): JSX.Element => (
-  <bdi>
+  <bdi key={account.acct}>
     <Link
       className='font-bold text-gray-800 hover:underline dark:text-gray-200'
       title={account.acct}
@@ -136,6 +136,7 @@ const buildMessage = (
   if (accounts.size > 2) {
     renderedAccounts.push(
       <FormattedMessage
+        key='more'
         id='notification.more'
         defaultMessage='{count, plural, one {# other} other {# others}}'
         values={{ count: accounts.size - renderedAccounts.length }}

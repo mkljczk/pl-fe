@@ -240,7 +240,7 @@ const Status: React.FC<IStatus> = (props) => {
       const accounts = status.accounts || ImmutableList([status.account]);
 
       const renderedAccounts = accounts.slice(0, 2).map(account => !!account && (
-        <Link to={`/@${account.acct}`} className='hover:underline'>
+        <Link key={account.acct} to={`/@${account.acct}`} className='hover:underline'>
           <bdi className='truncate'>
             <strong
               className='text-gray-800 dark:text-gray-200'

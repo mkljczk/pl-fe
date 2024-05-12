@@ -50,7 +50,10 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
   const accounts = to.slice(0, 2).map((acct: string) => {
     const username = acct.split('@')[0];
     return (
-      <span className='inline-block text-primary-600 no-underline [direction:ltr] hover:text-primary-700 hover:underline dark:text-accent-blue dark:hover:text-accent-blue'>
+      <span
+        key={acct}
+        className='inline-block text-primary-600 no-underline [direction:ltr] hover:text-primary-700 hover:underline dark:text-accent-blue dark:hover:text-accent-blue'
+      >
         @{username}
       </span>
     );

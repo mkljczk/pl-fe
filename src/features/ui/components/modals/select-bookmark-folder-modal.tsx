@@ -40,6 +40,7 @@ const SelectBookmarkFolderModal: React.FC<ISelectBookmarkFolderModal> = ({ statu
 
   const items = [
     <RadioItem
+      key='all'
       label={
         <HStack alignItems='center' space={2}>
           <Icon src={require('@tabler/icons/outline/bookmarks.svg')} size={20} />
