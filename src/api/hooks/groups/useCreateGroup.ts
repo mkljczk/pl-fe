@@ -23,9 +23,7 @@ function useCreateGroup() {
 
     return api('/api/v1/groups', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+      headers: { 'Content-Type': '' },
       body: formData,
     });
   }, { schema: groupSchema });

@@ -37,7 +37,7 @@ const uploadMediaV1 = (body: FormData, onUploadProgress = noOp) =>
     api(getState)('/api/v1/media', {
       method: 'POST',
       body,
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { 'Content-Type': '' },
     // }, {
     //   onUploadProgress: onUploadProgress,
     });
@@ -47,7 +47,7 @@ const uploadMediaV2 = (body: FormData, onUploadProgress = noOp) =>
     api(getState)('/api/v2/media', {
       method: 'POST',
       body,
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { 'Content-Type': '' },
     // }, {
     //   onUploadProgress: onUploadProgress,
     });

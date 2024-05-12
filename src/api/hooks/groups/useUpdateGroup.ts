@@ -22,9 +22,7 @@ function useUpdateGroup(groupId: string) {
 
     return api(`/api/v1/groups/${groupId}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+      headers: { 'Content-Type': '' },
       body: formData,
     });
   }, { schema: groupSchema });

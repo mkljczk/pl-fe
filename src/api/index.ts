@@ -45,13 +45,16 @@ export const getFetch = (accessToken?: string | null, baseURL: string = '') =>
     const fullPath = buildFullPath(input.toString(), isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : baseURL, init?.params);
 
     const headers = new Headers(init?.headers);
-    const contentType = headers.get('Content-Type') || 'application/json';
 
     if (accessToken) {
       headers.set('Authorization', `Bearer ${accessToken}`);
     }
 
-    headers.set('Content-Type', contentType);
+    if (headers.get('Content-Type') === '') {
+      headers.delete('Content-Type');
+    } else {
+      headers.set('Content-Type', headers.get('Content-Type') || 'application/json');
+    }
 
     return fetch(fullPath, {
       ...init,
