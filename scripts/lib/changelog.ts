@@ -2,7 +2,7 @@ import fs from 'fs';
 import { join } from 'path';
 
 /** Parse the changelog into an object. */
-function parseChangelog(changelog: string): Record<string, string> {
+const parseChangelog = (changelog: string): Record<string, string> => {
   const result: Record<string, string> = {};
 
   let currentVersion: string;
@@ -16,15 +16,15 @@ function parseChangelog(changelog: string): Record<string, string> {
   });
 
   return result;
-}
+};
 
 /** Get Markdown changes for a specific version. */
-function getChanges(version: string) {
+const getChanges = (version: string) => {
   version = version.replace('v', '');
   const content = fs.readFileSync(join(__dirname, '..', '..', 'CHANGELOG.md'), 'utf8');
   const parsed = parseChangelog(content);
   return (parsed[version] || '').trim();
-}
+};
 
 export {
   parseChangelog,

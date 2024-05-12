@@ -13,7 +13,7 @@ const api = new Gitlab({
   jobToken: CI_JOB_TOKEN,
 });
 
-async function main() {
+const main = async () => {
   await api.Releases.create(CI_PROJECT_ID!, {
     name: CI_COMMIT_TAG,
     tag_name: CI_COMMIT_TAG,
@@ -26,6 +26,6 @@ async function main() {
       }],
     },
   });
-}
+};
 
 main();

@@ -119,10 +119,10 @@ export default defineConfig(({ command }) => ({
 }));
 
 /** Return file as string, or return empty string if the file isn't found. */
-function readFileContents(path: string) {
+const readFileContents = (path: string) => {
   try {
     return fs.readFileSync(path, 'utf8');
   } catch {
     return '';
   }
-}
+};

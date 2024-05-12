@@ -26,23 +26,20 @@ const createToast = (type: ToastType, message: ToastText, opts?: IToastOptions) 
   });
 };
 
-function info(message: ToastText, opts?: IToastOptions) {
+const info = (message: ToastText, opts?: IToastOptions) =>
   createToast('info', message, opts);
-}
 
-function success(message: ToastText, opts?: IToastOptions) {
+const success = (message: ToastText, opts?: IToastOptions) =>
   createToast('success', message, opts);
-}
 
-function error(message: ToastText, opts?: IToastOptions) {
+const error = (message: ToastText, opts?: IToastOptions) =>
   createToast('error', message, opts);
-}
 
 const messages = defineMessages({
   unexpectedMessage: { id: 'alert.unexpected.message', defaultMessage: 'Something went wrong.' },
 });
 
-function showAlertForError(networkError: { response: Response & { json: any } }) {
+const showAlertForError = (networkError: { response: Response & { json: any } }) => {
   if (networkError?.response) {
     const { json, status, statusText } = networkError.response;
 
@@ -72,7 +69,7 @@ function showAlertForError(networkError: { response: Response & { json: any } })
     console.error(networkError);
     return error(messages.unexpectedMessage);
   }
-}
+};
 
 export default {
   info,

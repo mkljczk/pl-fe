@@ -1,9 +1,7 @@
 import { type RecursiveKeyValuePair } from 'tailwindcss/types/config';
 
 /** https://tailwindcss.com/docs/customizing-colors#using-css-variables */
-function withOpacityValue(variable: string): string {
-  return `rgb(var(${variable}) / <alpha-value>)`;
-}
+const withOpacityValue = (variable: string): string => `rgb(var(${variable}) / <alpha-value>)`;
 
 /** Parse a single color as a CSS variable. */
 const toColorVariable = (colorName: string, tint: number | null = null): string => {
@@ -41,7 +39,4 @@ const parseColorMatrix = (colorMatrix: ColorMatrix): RecursiveKeyValuePair => {
   }, {});
 };
 
-export {
-  withOpacityValue,
-  parseColorMatrix,
-};
+export { withOpacityValue, parseColorMatrix };
