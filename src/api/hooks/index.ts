@@ -10,7 +10,6 @@ export {
 } from './accounts/useAccountList';
 export { useFollow } from './accounts/useFollow';
 export { useRelationships } from './accounts/useRelationships';
-export { usePatronUser } from './accounts/usePatronUser';
 
 // Groups
 export { useBlockGroupMember } from './groups/useBlockGroupMember';

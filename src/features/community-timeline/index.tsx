@@ -28,9 +28,7 @@ const CommunityTimeline = () => {
     dispatch(expandCommunityTimeline({ url: next, maxId, onlyMedia }));
   };
 
-  const handleRefresh = () => {
-    return dispatch(expandCommunityTimeline({ onlyMedia }));
-  };
+  const handleRefresh = () => dispatch(expandCommunityTimeline({ onlyMedia }));
 
   useCommunityStream({ onlyMedia });
 

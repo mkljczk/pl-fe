@@ -76,9 +76,10 @@ const StatusContent: React.FC<IStatusContent> = ({
     maybeSetOnlyEmoji();
   });
 
-  const parsedHtml = useMemo((): string => {
-    return translatable && status.translation ? status.translation.get('content')! : status.contentHtml;
-  }, [status.contentHtml, status.translation]);
+  const parsedHtml = useMemo(
+    (): string => translatable && status.translation ? status.translation.get('content')! : status.contentHtml,
+    [status.contentHtml, status.translation],
+  );
 
   if (status.content.length === 0) {
     return null;

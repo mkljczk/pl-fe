@@ -4,13 +4,12 @@ import { useLoggedIn } from 'soapbox/hooks';
 import { useApi } from 'soapbox/hooks/useApi';
 import { type Relationship, relationshipSchema } from 'soapbox/schemas';
 
-function useRelationships(listKey: string[], ids: string[]) {
+const useRelationships = (listKey: string[], ids: string[]) => {
   const api = useApi();
   const { isLoggedIn } = useLoggedIn();
 
-  function fetchRelationships(ids: string[]) {
-    return api('/api/v1/accounts/relationships', { params: { ids } });
-  }
+  const fetchRelationships = (ids: string[]) =>
+    api('/api/v1/accounts/relationships', { params: { ids } });
 
   const { entityMap: relationships, ...result } = useBatchedEntities<Relationship>(
     [Entities.RELATIONSHIPS, ...listKey],
@@ -20,6 +19,6 @@ function useRelationships(listKey: string[], ids: string[]) {
   );
 
   return { relationships, ...result };
-}
+};
 
 export { useRelationships };

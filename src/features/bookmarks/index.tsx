@@ -56,9 +56,7 @@ const Bookmarks: React.FC<IBookmarks> = ({ params }) => {
     dispatch(fetchBookmarkedStatuses(folderId));
   }, [folderId]);
 
-  const handleRefresh = () => {
-    return dispatch(fetchBookmarkedStatuses(folderId));
-  };
+  const handleRefresh = () => dispatch(fetchBookmarkedStatuses(folderId));
 
   const handleEditFolder = () => {
     dispatch(openModal('EDIT_BOOKMARK_FOLDER', { folderId }));

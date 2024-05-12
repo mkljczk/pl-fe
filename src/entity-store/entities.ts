@@ -8,7 +8,6 @@ enum Entities {
   GROUP_MEMBERSHIPS = 'GroupMemberships',
   GROUP_MUTES = 'GroupMutes',
   GROUP_RELATIONSHIPS = 'GroupRelationships',
-  PATRON_USERS = 'PatronUsers',
   RELATIONSHIPS = 'Relationships',
   RELAYS = 'Relays',
   RULES = 'Rules',
@@ -22,7 +21,6 @@ interface EntityTypes {
   [Entities.GROUPS]: Schemas.Group;
   [Entities.GROUP_MEMBERSHIPS]: Schemas.GroupMember;
   [Entities.GROUP_RELATIONSHIPS]: Schemas.GroupRelationship;
-  [Entities.PATRON_USERS]: Schemas.PatronUser;
   [Entities.RELATIONSHIPS]: Schemas.Relationship;
   [Entities.RELAYS]: Schemas.Relay;
   [Entities.RULES]: Schemas.AdminRule;

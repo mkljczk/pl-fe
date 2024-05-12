@@ -90,7 +90,7 @@ const expandNormalizedConversations = (state: State, conversations: APIEntity[],
   });
 };
 
-export default function conversations(state = ReducerRecord(), action: AnyAction) {
+const conversations = (state = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case CONVERSATIONS_FETCH_REQUEST:
       return state.set('isLoading', true);
@@ -115,4 +115,6 @@ export default function conversations(state = ReducerRecord(), action: AnyAction
     default:
       return state;
   }
-}
+};
+
+export default conversations;

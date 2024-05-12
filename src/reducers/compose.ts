@@ -175,8 +175,8 @@ const removeMedia = (compose: Compose, mediaId: string) => {
   });
 };
 
-const insertSuggestion = (compose: Compose, position: number, token: string | null, completion: string, path: Array<string | number>) => {
-  return compose.withMutations(map => {
+const insertSuggestion = (compose: Compose, position: number, token: string | null, completion: string, path: Array<string | number>) =>
+  compose.withMutations(map => {
     map.updateIn(path, oldText => `${(oldText as string).slice(0, position)}${completion} ${(oldText as string).slice(position + (token?.length ?? 0))}`);
     map.set('suggestion_token', null);
     map.set('suggestions', ImmutableList());
@@ -186,7 +186,6 @@ const insertSuggestion = (compose: Compose, position: number, token: string | nu
     }
     map.set('idempotencyKey', uuid());
   });
-};
 
 const updateSuggestionTags = (compose: Compose, token: string, tags: ImmutableList<Tag>) => {
   const prefix = token.slice(1);
@@ -245,9 +244,8 @@ const getExplicitMentions = (me: string, status: Status) => {
   return ImmutableOrderedSet<string>(mentions);
 };
 
-const getAccountSettings = (account: ImmutableMap<string, any>) => {
-  return account.getIn(['pleroma', 'settings_store', FE_NAME], ImmutableMap()) as ImmutableMap<string, any>;
-};
+const getAccountSettings = (account: ImmutableMap<string, any>) =>
+  account.getIn(['pleroma', 'settings_store', FE_NAME], ImmutableMap()) as ImmutableMap<string, any>;
 
 const importAccount = (compose: Compose, account: APIEntity) => {
   const settings = getAccountSettings(ImmutableMap(fromJS(account)));
@@ -281,7 +279,7 @@ export const initialState: State = ImmutableMap({
   default: ReducerCompose({ idempotencyKey: uuid(), resetFileKey: getResetFileKey() }),
 });
 
-export default function compose(state = initialState, action: ComposeAction | EventsAction | MeAction | SettingsAction | TimelineAction) {
+const compose = (state = initialState, action: ComposeAction | EventsAction | MeAction | SettingsAction | TimelineAction) => {
   switch (action.type) {
     case COMPOSE_TYPE_CHANGE:
       return updateCompose(state, action.id, compose => compose.withMutations(map => {
@@ -554,4 +552,6 @@ export default function compose(state = initialState, action: ComposeAction | Ev
     default:
       return state;
   }
-}
+};
+
+export default compose;

@@ -8,7 +8,7 @@ import { type Group, groupSchema } from 'soapbox/schemas';
 
 import { useGroupRelationship } from './useGroupRelationship';
 
-function useGroup(groupId: string, refetch = true) {
+const useGroup = (groupId: string, refetch = true) => {
   const api = useApi();
   const history = useHistory();
 
@@ -34,6 +34,6 @@ function useGroup(groupId: string, refetch = true) {
     isUnauthorized,
     group: group ? { ...group, relationship: relationship || null } : undefined,
   };
-}
+};
 
 export { useGroup };

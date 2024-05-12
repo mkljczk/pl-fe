@@ -44,9 +44,7 @@ const CommunityTimeline = () => {
     dispatch(expandPublicTimeline({ url: next, maxId, onlyMedia }));
   };
 
-  const handleRefresh = () => {
-    return dispatch(expandPublicTimeline({ onlyMedia }));
-  };
+  const handleRefresh = () => dispatch(expandPublicTimeline({ onlyMedia }));
 
   usePublicStream({ onlyMedia });
 

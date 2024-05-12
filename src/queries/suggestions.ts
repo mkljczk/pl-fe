@@ -84,7 +84,7 @@ const useDismissSuggestion = () => {
   });
 };
 
-function useOnboardingSuggestions() {
+const useOnboardingSuggestions = () => {
   const api = useApi();
   const dispatch = useAppDispatch();
 
@@ -129,6 +129,6 @@ function useOnboardingSuggestions() {
     ...result,
     data,
   };
-}
+};
 
 export { useOnboardingSuggestions, useSuggestions, useDismissSuggestion };

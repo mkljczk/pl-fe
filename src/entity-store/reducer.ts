@@ -33,100 +33,92 @@ const importEntities = (
   pos?: ImportPosition,
   newState?: EntityListState,
   overwrite = false,
-): State => {
-  return produce(state, draft => {
-    const cache = draft[entityType] ?? createCache();
-    cache.store = updateStore(cache.store, entities);
+): State => produce(state, draft => {
+  const cache = draft[entityType] ?? createCache();
+  cache.store = updateStore(cache.store, entities);
 
-    if (typeof listKey === 'string') {
-      let list = cache.lists[listKey] ?? createList();
+  if (typeof listKey === 'string') {
+    let list = cache.lists[listKey] ?? createList();
 
-      if (overwrite) {
-        list.ids = new Set();
-      }
-
-      list = updateList(list, entities, pos);
-
-      if (newState) {
-        list.state = newState;
-      }
-
-      cache.lists[listKey] = list;
+    if (overwrite) {
+      list.ids = new Set();
     }
 
-    draft[entityType] = cache;
-  });
-};
+    list = updateList(list, entities, pos);
+
+    if (newState) {
+      list.state = newState;
+    }
+
+    cache.lists[listKey] = list;
+  }
+
+  draft[entityType] = cache;
+});
 
 const deleteEntities = (
   state: State,
   entityType: string,
   ids: Iterable<string>,
   opts: DeleteEntitiesOpts,
-) => {
-  return produce(state, draft => {
-    const cache = draft[entityType] ?? createCache();
+) => produce(state, draft => {
+  const cache = draft[entityType] ?? createCache();
 
-    for (const id of ids) {
-      delete cache.store[id];
+  for (const id of ids) {
+    delete cache.store[id];
 
-      if (!opts?.preserveLists) {
-        for (const list of Object.values(cache.lists)) {
-          if (list) {
-            list.ids.delete(id);
+    if (!opts?.preserveLists) {
+      for (const list of Object.values(cache.lists)) {
+        if (list) {
+          list.ids.delete(id);
 
-            if (typeof list.state.totalCount === 'number') {
-              list.state.totalCount--;
-            }
+          if (typeof list.state.totalCount === 'number') {
+            list.state.totalCount--;
           }
         }
       }
     }
+  }
 
-    draft[entityType] = cache;
-  });
-};
+  draft[entityType] = cache;
+});
 
 const dismissEntities = (
   state: State,
   entityType: string,
   ids: Iterable<string>,
   listKey: string,
-) => {
-  return produce(state, draft => {
-    const cache = draft[entityType] ?? createCache();
-    const list = cache.lists[listKey];
+) => produce(state, draft => {
+  const cache = draft[entityType] ?? createCache();
+  const list = cache.lists[listKey];
 
-    if (list) {
-      for (const id of ids) {
-        list.ids.delete(id);
+  if (list) {
+    for (const id of ids) {
+      list.ids.delete(id);
 
-        if (typeof list.state.totalCount === 'number') {
-          list.state.totalCount--;
-        }
+      if (typeof list.state.totalCount === 'number') {
+        list.state.totalCount--;
       }
-
-      draft[entityType] = cache;
     }
-  });
-};
+
+    draft[entityType] = cache;
+  }
+});
 
 const incrementEntities = (
   state: State,
   entityType: string,
   listKey: string,
   diff: number,
-) => {
-  return produce(state, draft => {
-    const cache = draft[entityType] ?? createCache();
-    const list = cache.lists[listKey];
+) => produce(state, draft => {
+  const cache = draft[entityType] ?? createCache();
+  const list = cache.lists[listKey];
 
-    if (typeof list?.state?.totalCount === 'number') {
-      list.state.totalCount += diff;
-      draft[entityType] = cache;
-    }
-  });
-};
+  if (typeof list?.state?.totalCount === 'number') {
+    list.state.totalCount += diff;
+    draft[entityType] = cache;
+  }
+});
 
 const setFetching = (
   state: State,
@@ -134,45 +126,39 @@ const setFetching = (
   listKey: string | undefined,
   isFetching: boolean,
   error?: any,
-) => {
-  return produce(state, draft => {
-    const cache = draft[entityType] ?? createCache();
+) => produce(state, draft => {
+  const cache = draft[entityType] ?? createCache();
 
-    if (typeof listKey === 'string') {
-      const list = cache.lists[listKey] ?? createList();
-      list.state.fetching = isFetching;
-      list.state.error = error;
-      cache.lists[listKey] = list;
-    }
-
-    draft[entityType] = cache;
-  });
-};
-
-const invalidateEntityList = (state: State, entityType: string, listKey: string) => {
-  return produce(state, draft => {
-    const cache = draft[entityType] ?? createCache();
+  if (typeof listKey === 'string') {
     const list = cache.lists[listKey] ?? createList();
-    list.state.invalid = true;
-  });
-};
+    list.state.fetching = isFetching;
+    list.state.error = error;
+    cache.lists[listKey] = list;
+  }
 
-const doTransaction = (state: State, transaction: EntitiesTransaction) => {
-  return produce(state, draft => {
-    for (const [entityType, changes] of Object.entries(transaction)) {
-      const cache = draft[entityType] ?? createCache();
-      for (const [id, change] of Object.entries(changes)) {
-        const entity = cache.store[id];
-        if (entity) {
-          cache.store[id] = change(entity);
-        }
+  draft[entityType] = cache;
+});
+
+const invalidateEntityList = (state: State, entityType: string, listKey: string) => produce(state, draft => {
+  const cache = draft[entityType] ?? createCache();
+  const list = cache.lists[listKey] ?? createList();
+  list.state.invalid = true;
+});
+
+const doTransaction = (state: State, transaction: EntitiesTransaction) => produce(state, draft => {
+  for (const [entityType, changes] of Object.entries(transaction)) {
+    const cache = draft[entityType] ?? createCache();
+    for (const [id, change] of Object.entries(changes)) {
+      const entity = cache.store[id];
+      if (entity) {
+        cache.store[id] = change(entity);
       }
     }
-  });
-};
+  }
+});
 
 /** Stores various entity data and lists in a one reducer. */
-function reducer(state: Readonly<State> = {}, action: EntityAction): State {
+const reducer = (state: Readonly<State> = {}, action: EntityAction): State => {
   switch (action.type) {
     case ENTITIES_IMPORT:
       return importEntities(state, action.entityType, action.entities, action.listKey, action.pos);
@@ -195,7 +181,7 @@ function reducer(state: Readonly<State> = {}, action: EntityAction): State {
     default:
       return state;
   }
-}
+};
 
 export default reducer;
 export type { State };

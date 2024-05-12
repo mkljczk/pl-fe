@@ -31,14 +31,14 @@ interface UseEntitiesOpts<TEntity extends Entity> {
 }
 
 /** A hook for fetching and displaying API entities. */
-function useEntities<TEntity extends Entity>(
+const useEntities = <TEntity extends Entity>(
   /** Tells us where to find/store the entity in the cache. */
   expandedPath: ExpandedEntitiesPath,
   /** API route to GET, eg `'/api/v1/notifications'`. If undefined, nothing will be fetched. */
   entityFn: EntityFn<void>,
   /** Additional options for the hook. */
   opts: UseEntitiesOpts<TEntity> = {},
-) {
+) => {
   const api = useApi();
   const dispatch = useAppDispatch();
   const getState = useGetState();
@@ -134,7 +134,7 @@ function useEntities<TEntity extends Entity>(
     /** The `X-Total-Count` from the API if available, or the length of items in the store. */
     count: typeof totalCount === 'number' ? totalCount : entities.length,
   };
-}
+};
 
 export {
   useEntities,

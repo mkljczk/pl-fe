@@ -18,7 +18,7 @@ interface AccountMeta {
 
 type State = Record<string, AccountMeta | undefined>;
 
-function importAccount(state: State, data: unknown): State {
+const importAccount = (state: State, data: unknown): State => {
   const result = accountSchema.safeParse(data);
 
   if (!result.success) {
@@ -35,9 +35,9 @@ function importAccount(state: State, data: unknown): State {
       source: account.source ?? existing?.source,
     };
   });
-}
+};
 
-export default function accounts_meta(state: Readonly<State> = {}, action: AnyAction): State {
+const accounts_meta = (state: Readonly<State> = {}, action: AnyAction): State => {
   switch (action.type) {
     case ME_FETCH_SUCCESS:
     case ME_PATCH_SUCCESS:
@@ -48,4 +48,6 @@ export default function accounts_meta(state: Readonly<State> = {}, action: AnyAc
     default:
       return state;
   }
-}
+};
+
+export default accounts_meta;

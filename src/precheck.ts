@@ -10,4 +10,6 @@ const hasPrerenderPleroma  = Boolean(document.getElementById('initial-results'))
 const hasPrerenderMastodon = Boolean(document.getElementById('initial-state'));
 
 /** Whether initial data was loaded into the page by server-side-rendering (SSR). */
-export const isPrerendered = hasPrerenderPleroma || hasPrerenderMastodon;
+const isPrerendered = hasPrerenderPleroma || hasPrerenderMastodon;
+
+export { isPrerendered };

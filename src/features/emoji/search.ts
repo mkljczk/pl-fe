@@ -41,36 +41,34 @@ export const addCustomToPool = (customEmojis: any[]) => {
 const search = (
   str: string, { maxResults = 5 }: searchOptions = {},
   custom_emojis?: ImmutableList<ImmutableMap<string, string>>,
-): Emoji[] => {
-  return index.search(str, maxResults)
-    .flatMap((id) => {
-      if (typeof id !== 'string') return;
+): Emoji[] => index.search(str, maxResults)
+  .flatMap((id) => {
+    if (typeof id !== 'string') return;
 
-      if (id[0] === 'c' && custom_emojis) {
-        const index = Number(id.slice(1));
-        const custom = custom_emojis.get(index);
+    if (id[0] === 'c' && custom_emojis) {
+      const index = Number(id.slice(1));
+      const custom = custom_emojis.get(index);
 
-        if (custom) {
-          return {
-            id: custom.get('shortcode', ''),
-            colons: ':' + custom.get('shortcode', '') + ':',
-            custom: true,
-            imageUrl: custom.get('static_url', ''),
-          };
-        }
-      }
-
-      const skins = data.emojis[id.slice(1)]?.skins;
-
-      if (skins) {
+      if (custom) {
         return {
-          id: id.slice(1),
-          colons: ':' + id.slice(1) + ':',
-          unified: skins[0].unified,
-          native: skins[0].native,
+          id: custom.get('shortcode', ''),
+          colons: ':' + custom.get('shortcode', '') + ':',
+          custom: true,
+          imageUrl: custom.get('static_url', ''),
         };
       }
-    }).filter(Boolean) as Emoji[];
-};
+    }
+
+    const skins = data.emojis[id.slice(1)]?.skins;
+
+    if (skins) {
+      return {
+        id: id.slice(1),
+        colons: ':' + id.slice(1) + ':',
+        unified: skins[0].unified,
+        native: skins[0].native,
+      };
+    }
+  }).filter(Boolean) as Emoji[];
 
 export default search;

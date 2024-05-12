@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useState, useRef, useLayoutEffect, Suspense } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 
 import Blurhash from 'soapbox/components/blurhash';
 import Icon from 'soapbox/components/icon';
@@ -14,8 +14,6 @@ import { isPanoramic, isPortrait, isNonConformingRatio, minimumAspectRatio, maxi
 
 import type { Property } from 'csstype';
 import type { List as ImmutableList } from 'immutable';
-
-const Gameboy = React.lazy(() => import('./gameboy'));
 
 const ATTACHMENT_LIMIT = 4;
 const MAX_FILENAME_LENGTH = 45;
@@ -38,9 +36,8 @@ interface SizeData {
   width: number;
 }
 
-const withinLimits = (aspectRatio: number) => {
-  return aspectRatio >= minimumAspectRatio && aspectRatio <= maximumAspectRatio;
-};
+const withinLimits = (aspectRatio: number) =>
+  aspectRatio >= minimumAspectRatio && aspectRatio <= maximumAspectRatio;
 
 const shouldLetterbox = (attachment: Attachment): boolean => {
   const aspectRatio = attachment.getIn(['meta', 'original', 'aspect']) as number | undefined;
@@ -88,9 +85,7 @@ const Item: React.FC<IItem> = ({
     }
   };
 
-  const hoverToPlay = () => {
-    return !autoPlayGif && attachment.type === 'gifv';
-  };
+  const hoverToPlay = () => !autoPlayGif && attachment.type === 'gifv';
 
   // FIXME: wtf?
   const handleClick: React.MouseEventHandler = (e: any) => {
@@ -144,22 +139,7 @@ const Item: React.FC<IItem> = ({
   let thumbnail: React.ReactNode = '';
   const ext = attachment.url.split('.').pop()?.toLowerCase();
 
-  if (attachment.type === 'unknown' && ['gb', 'gbc'].includes(ext!)) {
-    return (
-      <div
-        className={clsx('media-gallery__item', {
-          standalone,
-          'rounded-md': total > 1,
-        })}
-        key={attachment.id}
-        style={{ position, float, left, top, right, bottom, height, width: `${width}%` }}
-      >
-        <Suspense fallback={<div  className='media-gallery__item-thumbnail' />}>
-          <Gameboy className='media-gallery__item-thumbnail cursor-default' src={attachment.url} />
-        </Suspense>
-      </div>
-    );
-  } else if (attachment.type === 'unknown') {
+  if (attachment.type === 'unknown') {
     const filename = truncateFilename(attachment.url, MAX_FILENAME_LENGTH);
     const attachmentIcon = (
       <Icon

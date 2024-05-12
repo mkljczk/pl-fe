@@ -1,13 +1,13 @@
 /** Convert HTML to a plaintext representation, preserving whitespace. */
 // NB: This function can still return unsafe HTML
-export const unescapeHTML = (html: string = ''): string => {
+const unescapeHTML = (html: string = ''): string => {
   const wrapper = document.createElement('div');
   wrapper.innerHTML = html.replace(/<br\s*\/?>/g, '\n').replace(/<\/p><[^>]*>/g, '\n\n').replace(/<[^>]*>/g, '');
   return wrapper.textContent || '';
 };
 
 /** Remove compatibility markup for features Soapbox supports. */
-export const stripCompatibilityFeatures = (html: string): string => {
+const stripCompatibilityFeatures = (html: string): string => {
   const node = document.createElement('div');
   node.innerHTML = html;
 
@@ -30,8 +30,14 @@ export const stripCompatibilityFeatures = (html: string): string => {
 
 /** Convert HTML to plaintext. */
 // https://stackoverflow.com/a/822486
-export const stripHTML = (html: string) => {
+const stripHTML = (html: string) => {
   const div = document.createElement('div');
   div.innerHTML = html;
   return div.textContent || div.innerText || '';
+};
+
+export {
+  unescapeHTML,
+  stripCompatibilityFeatures,
+  stripHTML,
 };

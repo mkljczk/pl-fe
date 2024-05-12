@@ -5,7 +5,7 @@ import { GroupRoles } from 'soapbox/schemas/group-member';
 
 import { useApi } from '../../../hooks/useApi';
 
-function useGroupMembers(groupId: string, role: GroupRoles) {
+const useGroupMembers = (groupId: string, role: GroupRoles) => {
   const api = useApi();
 
   const { entities, ...result } = useEntities<GroupMember>(
@@ -18,6 +18,6 @@ function useGroupMembers(groupId: string, role: GroupRoles) {
     ...result,
     groupMembers: entities,
   };
-}
+};
 
 export { useGroupMembers };

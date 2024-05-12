@@ -42,10 +42,8 @@ const normalizePleromaReport = (report: ImmutableMap<string, any>) => {
   return report;
 };
 
-export const normalizeAdminReport = (report: Record<string, any>) => {
-  return AdminReportRecord(
-    ImmutableMap(fromJS(report)).withMutations((report: ImmutableMap<string, any>) => {
-      normalizePleromaReport(report);
-    }),
-  );
-};
+export const normalizeAdminReport = (report: Record<string, any>) => AdminReportRecord(
+  ImmutableMap(fromJS(report)).withMutations((report: ImmutableMap<string, any>) => {
+    normalizePleromaReport(report);
+  }),
+);

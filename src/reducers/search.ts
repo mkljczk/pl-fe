@@ -54,12 +54,10 @@ type State = ReturnType<typeof ReducerRecord>;
 type APIEntities = Array<APIEntity>;
 export type SearchFilter = 'accounts' | 'statuses' | 'groups' | 'hashtags';
 
-const toIds = (items: APIEntities = []) => {
-  return ImmutableOrderedSet(items.map(item => item.id));
-};
+const toIds = (items: APIEntities = []) => ImmutableOrderedSet(items.map(item => item.id));
 
-const importResults = (state: State, results: APIEntity, searchTerm: string, searchType: SearchFilter, next: string | null) => {
-  return state.withMutations(state => {
+const importResults = (state: State, results: APIEntity, searchTerm: string, searchType: SearchFilter, next: string | null) =>
+  state.withMutations(state => {
     if (state.value === searchTerm && state.filter === searchType) {
       state.set('results', ResultsRecord({
         accounts: toIds(results.accounts),
@@ -80,10 +78,9 @@ const importResults = (state: State, results: APIEntity, searchTerm: string, sea
       state.set('next', next);
     }
   });
-};
 
-const paginateResults = (state: State, searchType: SearchFilter, results: APIEntity, searchTerm: string, next: string | null) => {
-  return state.withMutations(state => {
+const paginateResults = (state: State, searchType: SearchFilter, results: APIEntity, searchTerm: string, next: string | null) =>
+  state.withMutations(state => {
     if (state.value === searchTerm) {
       state.setIn(['results', `${searchType}HasMore`], results[searchType].length >= 20);
       state.setIn(['results', `${searchType}Loaded`], true);
@@ -99,17 +96,15 @@ const paginateResults = (state: State, searchType: SearchFilter, results: APIEnt
       });
     }
   });
-};
 
-const handleSubmitted = (state: State, value: string) => {
-  return state.withMutations(state => {
+const handleSubmitted = (state: State, value: string) =>
+  state.withMutations(state => {
     state.set('results', ResultsRecord());
     state.set('submitted', true);
     state.set('submittedValue', value);
   });
-};
 
-export default function search(state = ReducerRecord(), action: AnyAction) {
+const search = (state = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case SEARCH_CHANGE:
       return state.set('value', action.value);
@@ -151,4 +146,6 @@ export default function search(state = ReducerRecord(), action: AnyAction) {
     default:
       return state;
   }
-}
+};
+
+export default search;

@@ -47,7 +47,12 @@ export default class Settings {
 }
 
 /** Remember push notification settings. */
-export const pushNotificationsSetting = new Settings('soapbox_push_notification_data');
+const pushNotificationsSetting = new Settings('soapbox_push_notification_data');
 
 /** Remember hashtag usage. */
-export const tagHistory = new Settings('soapbox_tag_history');
+const tagHistory = new Settings('soapbox_tag_history');
+
+export {
+  pushNotificationsSetting,
+  tagHistory,
+};

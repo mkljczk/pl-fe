@@ -8,7 +8,7 @@ import { useGroupRelationship } from './useGroupRelationship';
 
 import type { ExpandedEntitiesPath } from 'soapbox/entity-store/hooks/types';
 
-function useGroupMembershipRequests(groupId: string) {
+const useGroupMembershipRequests = (groupId: string) => {
   const api = useApi();
   const path: ExpandedEntitiesPath = [Entities.ACCOUNTS, 'membership_requests', groupId];
 
@@ -42,6 +42,6 @@ function useGroupMembershipRequests(groupId: string) {
     reject,
     ...rest,
   };
-}
+};
 
 export { useGroupMembershipRequests };

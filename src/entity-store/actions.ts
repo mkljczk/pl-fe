@@ -11,97 +11,84 @@ const ENTITIES_INVALIDATE_LIST = 'ENTITIES_INVALIDATE_LIST' as const;
 const ENTITIES_TRANSACTION = 'ENTITIES_TRANSACTION' as const;
 
 /** Action to import entities into the cache. */
-function importEntities(entities: Entity[], entityType: string, listKey?: string, pos?: ImportPosition) {
-  return {
-    type: ENTITIES_IMPORT,
-    entityType,
-    entities,
-    listKey,
-    pos,
-  };
-}
+const importEntities = (
+  entities: Entity[],
+  entityType: string,
+  listKey?: string,
+  pos?: ImportPosition,
+) => ({
+  type: ENTITIES_IMPORT,
+  entityType,
+  entities,
+  listKey,
+  pos,
+});
 
 interface DeleteEntitiesOpts {
   preserveLists?: boolean;
 }
 
-function deleteEntities(ids: Iterable<string>, entityType: string, opts: DeleteEntitiesOpts = {}) {
-  return {
-    type: ENTITIES_DELETE,
-    ids,
-    entityType,
-    opts,
-  };
-}
+const deleteEntities = (ids: Iterable<string>, entityType: string, opts: DeleteEntitiesOpts = {}) => ({
+  type: ENTITIES_DELETE,
+  ids,
+  entityType,
+  opts,
+});
 
-function dismissEntities(ids: Iterable<string>, entityType: string, listKey: string) {
-  return {
-    type: ENTITIES_DISMISS,
-    ids,
-    entityType,
-    listKey,
-  };
-}
+const dismissEntities = (ids: Iterable<string>, entityType: string, listKey: string) => ({
+  type: ENTITIES_DISMISS,
+  ids,
+  entityType,
+  listKey,
+});
 
-function incrementEntities(entityType: string, listKey: string, diff: number) {
-  return {
-    type: ENTITIES_INCREMENT,
-    entityType,
-    listKey,
-    diff,
-  };
-}
+const incrementEntities = (entityType: string, listKey: string, diff: number) => ({
+  type: ENTITIES_INCREMENT,
+  entityType,
+  listKey,
+  diff,
+});
 
-function entitiesFetchRequest(entityType: string, listKey?: string) {
-  return {
-    type: ENTITIES_FETCH_REQUEST,
-    entityType,
-    listKey,
-  };
-}
+const entitiesFetchRequest = (entityType: string, listKey?: string) => ({
+  type: ENTITIES_FETCH_REQUEST,
+  entityType,
+  listKey,
+});
 
-function entitiesFetchSuccess(
+const entitiesFetchSuccess = (
   entities: Entity[],
   entityType: string,
   listKey?: string,
   pos?: ImportPosition,
   newState?: EntityListState,
   overwrite = false,
-) {
-  return {
-    type: ENTITIES_FETCH_SUCCESS,
-    entityType,
-    entities,
-    listKey,
-    pos,
-    newState,
-    overwrite,
-  };
-}
+) => ({
+  type: ENTITIES_FETCH_SUCCESS,
+  entityType,
+  entities,
+  listKey,
+  pos,
+  newState,
+  overwrite,
+});
 
-function entitiesFetchFail(entityType: string, listKey: string | undefined, error: any) {
-  return {
-    type: ENTITIES_FETCH_FAIL,
-    entityType,
-    listKey,
-    error,
-  };
-}
+const entitiesFetchFail = (entityType: string, listKey: string | undefined, error: any) => ({
+  type: ENTITIES_FETCH_FAIL,
+  entityType,
+  listKey,
+  error,
+});
 
-function invalidateEntityList(entityType: string, listKey: string) {
-  return {
-    type: ENTITIES_INVALIDATE_LIST,
-    entityType,
-    listKey,
-  };
-}
+const invalidateEntityList = (entityType: string, listKey: string) => ({
+  type: ENTITIES_INVALIDATE_LIST,
+  entityType,
+  listKey,
+});
 
-function entitiesTransaction(transaction: EntitiesTransaction) {
-  return {
-    type: ENTITIES_TRANSACTION,
-    transaction,
-  };
-}
+const entitiesTransaction = (transaction: EntitiesTransaction) => ({
+  type: ENTITIES_TRANSACTION,
+  transaction,
+});
 
 /** Any action pertaining to entities. */
 type EntityAction =

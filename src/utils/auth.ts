@@ -4,9 +4,9 @@ import { selectAccount, selectOwnAccount } from 'soapbox/selectors';
 
 import type { RootState } from 'soapbox/store';
 
-export const validId = (id: any) => typeof id === 'string' && id !== 'null' && id !== 'undefined';
+const validId = (id: any) => typeof id === 'string' && id !== 'null' && id !== 'undefined';
 
-export const isURL = (url?: string | null) => {
+const isURL = (url?: string | null) => {
   if (typeof url !== 'string') return false;
   try {
     new URL(url);
@@ -16,7 +16,7 @@ export const isURL = (url?: string | null) => {
   }
 };
 
-export const parseBaseURL = (url: any) => {
+const parseBaseURL = (url: any) => {
   try {
     return new URL(url).origin;
   } catch {
@@ -24,27 +24,25 @@ export const parseBaseURL = (url: any) => {
   }
 };
 
-export const getLoggedInAccount = (state: RootState) => selectOwnAccount(state);
+const getLoggedInAccount = (state: RootState) => selectOwnAccount(state);
 
-export const isLoggedIn = (getState: () => RootState) => {
-  return validId(getState().me);
-};
+const isLoggedIn = (getState: () => RootState) => validId(getState().me);
 
-export const getAppToken = (state: RootState) => state.auth.app.access_token as string;
+const getAppToken = (state: RootState) => state.auth.app.access_token as string;
 
-export const getUserToken = (state: RootState, accountId?: string | false | null) => {
+const getUserToken = (state: RootState, accountId?: string | false | null) => {
   if (!accountId) return;
   const accountUrl = selectAccount(state, accountId)?.url;
   if (!accountUrl) return;
   return state.auth.users.get(accountUrl)?.access_token;
 };
 
-export const getAccessToken = (state: RootState) => {
+const getAccessToken = (state: RootState) => {
   const me = state.me;
   return getUserToken(state, me);
 };
 
-export const getAuthUserId = (state: RootState) => {
+const getAuthUserId = (state: RootState) => {
   const me = state.auth.me;
 
   return ImmutableList([
@@ -53,7 +51,7 @@ export const getAuthUserId = (state: RootState) => {
   ].filter(id => id)).find(validId);
 };
 
-export const getAuthUserUrl = (state: RootState) => {
+const getAuthUserUrl = (state: RootState) => {
   const me = state.auth.me;
 
   return ImmutableList([
@@ -63,7 +61,22 @@ export const getAuthUserUrl = (state: RootState) => {
 };
 
 /** Get the VAPID public key. */
-export const getVapidKey = (state: RootState) =>
+const getVapidKey = (state: RootState) =>
   state.auth.app.vapid_key || state.instance.pleroma.vapid_public_key;
 
-export const getMeUrl = (state: RootState) => selectOwnAccount(state)?.url;
+const getMeUrl = (state: RootState) => selectOwnAccount(state)?.url;
+
+export {
+  validId,
+  isURL,
+  parseBaseURL,
+  getLoggedInAccount,
+  isLoggedIn,
+  getAppToken,
+  getUserToken,
+  getAccessToken,
+  getAuthUserId,
+  getAuthUserUrl,
+  getVapidKey,
+  getMeUrl,
+};

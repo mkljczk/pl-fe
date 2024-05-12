@@ -13,7 +13,7 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-export default function dropdownMenu(state: State = ReducerRecord(), action: AnyAction) {
+const dropdownMenu = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case DROPDOWN_MENU_OPEN:
       return state.set('isOpen', true);
@@ -22,4 +22,6 @@ export default function dropdownMenu(state: State = ReducerRecord(), action: Any
     default:
       return state;
   }
-}
+};
+
+export default dropdownMenu;

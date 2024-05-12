@@ -27,7 +27,7 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-export default function admin_user_index(state: State = ReducerRecord(), action: AnyAction): State {
+const admin_user_index = (state: State = ReducerRecord(), action: AnyAction): State => {
   switch (action.type) {
     case ADMIN_USER_INDEX_QUERY_SET:
       return state.set('query', action.query);
@@ -65,4 +65,6 @@ export default function admin_user_index(state: State = ReducerRecord(), action:
     default:
       return state;
   }
-}
+};
+
+export default admin_user_index;

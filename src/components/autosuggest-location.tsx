@@ -9,7 +9,7 @@ const homeIcon = require('@tabler/icons/outline/home-2.svg');
 const mapPinIcon = require('@tabler/icons/outline/map-pin.svg');
 const roadIcon = require('@tabler/icons/outline/road.svg');
 
-export const ADDRESS_ICONS: Record<string, string> = {
+const ADDRESS_ICONS: Record<string, string> = {
   house: homeIcon,
   street: roadIcon,
   secondary: roadIcon,
@@ -38,4 +38,7 @@ const AutosuggestLocation: React.FC<IAutosuggestLocation> = ({ id }) => {
   );
 };
 
-export default AutosuggestLocation;
+export {
+  ADDRESS_ICONS,
+  AutosuggestLocation as default,
+};

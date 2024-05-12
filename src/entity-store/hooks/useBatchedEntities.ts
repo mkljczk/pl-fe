@@ -20,12 +20,12 @@ interface UseBatchedEntitiesOpts<TEntity extends Entity> {
   enabled?: boolean;
 }
 
-function useBatchedEntities<TEntity extends Entity>(
+const useBatchedEntities = <TEntity extends Entity>(
   expandedPath: ExpandedEntitiesPath,
   ids: string[],
   entityFn: EntityFn<string[]>,
   opts: UseBatchedEntitiesOpts<TEntity> = {},
-) {
+) => {
   const getState = useGetState();
   const dispatch = useAppDispatch();
   const { entityType, listKey, path } = parseEntitiesPath(expandedPath);
@@ -47,7 +47,7 @@ function useBatchedEntities<TEntity extends Entity>(
 
   const entityMap = useAppSelector((state) => selectEntityMap<TEntity>(state, path, ids));
 
-  async function fetchEntities() {
+  const fetchEntities = async () => {
     const isFetching = selectListState(getState(), path, 'fetching');
     if (isFetching) return;
 
@@ -68,7 +68,7 @@ function useBatchedEntities<TEntity extends Entity>(
     } catch (e) {
       dispatch(entitiesFetchFail(entityType, listKey, e));
     }
-  }
+  };
 
   useEffect(() => {
     if (filteredIds.length && isEnabled) {
@@ -84,13 +84,9 @@ function useBatchedEntities<TEntity extends Entity>(
     isError: !!error,
     isInvalid,
   };
-}
+};
 
-function selectEntityMap<TEntity extends Entity>(
-  state: RootState,
-  path: EntitiesPath,
-  entityIds: string[],
-): Record<string, TEntity> {
+const selectEntityMap = <TEntity extends Entity>(state: RootState, path: EntitiesPath, entityIds: string[]): Record<string, TEntity> => {
   const cache = selectCache(state, path);
 
   return entityIds.reduce<Record<string, TEntity>>((result, id) => {
@@ -100,6 +96,6 @@ function selectEntityMap<TEntity extends Entity>(
     }
     return result;
   }, {});
-}
+};
 
 export { useBatchedEntities };

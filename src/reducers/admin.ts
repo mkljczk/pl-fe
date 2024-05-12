@@ -96,20 +96,18 @@ const maybeImportLatest = (state: State, users: APIUser[], filters: Filter[], pa
   }
 };
 
-const minifyUser = (user: AdminAccountRecord): ReducerAdminAccount => {
-  return user.mergeWith((o, n) => n || o, {
+const minifyUser = (user: AdminAccountRecord): ReducerAdminAccount =>
+  user.mergeWith((o, n) => n || o, {
     account: normalizeId(user.getIn(['account', 'id'])),
   }) as ReducerAdminAccount;
-};
 
-const fixUser = (user: APIEntity): ReducerAdminAccount => {
-  return normalizeAdminAccount(user).withMutations(user => {
+const fixUser = (user: APIEntity): ReducerAdminAccount =>
+  normalizeAdminAccount(user).withMutations(user => {
     minifyUser(user);
   }) as ReducerAdminAccount;
-};
 
-function importUsers(state: State, users: APIUser[], filters: Filter[], page: number): State {
-  return state.withMutations(state => {
+const importUsers = (state: State, users: APIUser[], filters: Filter[], page: number): State =>
+  state.withMutations(state => {
     maybeImportUnapproved(state, users, filters);
     maybeImportLatest(state, users, filters, page);
 
@@ -118,45 +116,40 @@ function importUsers(state: State, users: APIUser[], filters: Filter[], page: nu
       state.setIn(['users', user.id], normalizedUser);
     });
   });
-}
 
-function deleteUsers(state: State, accountIds: string[]): State {
-  return state.withMutations(state => {
+const deleteUsers = (state: State, accountIds: string[]): State =>
+  state.withMutations(state => {
     accountIds.forEach(id => {
       state.update('awaitingApproval', orderedSet => orderedSet.delete(id));
       state.deleteIn(['users', id]);
     });
   });
-}
 
-function approveUsers(state: State, users: APIUser[]): State {
-  return state.withMutations(state => {
+const approveUsers = (state: State, users: APIUser[]): State =>
+  state.withMutations(state => {
     users.forEach(user => {
       const normalizedUser = fixUser(user);
       state.update('awaitingApproval', orderedSet => orderedSet.delete(user.id));
       state.setIn(['users', user.id], normalizedUser);
     });
   });
-}
 
-const minifyReport = (report: AdminReportRecord): ReducerAdminReport => {
-  return report.mergeWith((o, n) => n || o, {
+const minifyReport = (report: AdminReportRecord): ReducerAdminReport =>
+  report.mergeWith((o, n) => n || o, {
     account: normalizeId(report.getIn(['account', 'id'])),
     target_account: normalizeId(report.getIn(['target_account', 'id'])),
     action_taken_by_account: normalizeId(report.getIn(['action_taken_by_account', 'id'])),
     assigned_account: normalizeId(report.getIn(['assigned_account', 'id'])),
     statuses: report.get('statuses').map((status: any) => normalizeId(status.get('id'))),
   }) as ReducerAdminReport;
-};
 
-const fixReport = (report: APIEntity): ReducerAdminReport => {
-  return normalizeAdminReport(report).withMutations(report => {
+const fixReport = (report: APIEntity): ReducerAdminReport =>
+  normalizeAdminReport(report).withMutations(report => {
     minifyReport(report);
   }) as ReducerAdminReport;
-};
 
-function importReports(state: State, reports: APIEntity[]): State {
-  return state.withMutations(state => {
+const importReports = (state: State, reports: APIEntity[]): State =>
+  state.withMutations(state => {
     reports.forEach(report => {
       const normalizedReport = fixReport(report);
       if (!normalizedReport.action_taken) {
@@ -165,12 +158,11 @@ function importReports(state: State, reports: APIEntity[]): State {
       state.setIn(['reports', report.id], normalizedReport);
     });
   });
-}
 
-function handleReportDiffs(state: State, reports: APIReport[]) {
+const handleReportDiffs = (state: State, reports: APIReport[]) =>
   // Note: the reports here aren't full report objects
   // hence the need for a new function.
-  return state.withMutations(state => {
+  state.withMutations(state => {
     reports.forEach(report => {
       switch (report.state) {
         case 'open':
@@ -181,19 +173,14 @@ function handleReportDiffs(state: State, reports: APIReport[]) {
       }
     });
   });
-}
 
 const normalizeConfig = (config: any): Config => ImmutableMap(fromJS(config));
 
-const normalizeConfigs = (configs: any): ImmutableList<Config> => {
-  return ImmutableList(fromJS(configs)).map(normalizeConfig);
-};
+const normalizeConfigs = (configs: any): ImmutableList<Config> => ImmutableList(fromJS(configs)).map(normalizeConfig);
 
-const importConfigs = (state: State, configs: any): State => {
-  return state.set('configs', normalizeConfigs(configs));
-};
+const importConfigs = (state: State, configs: any): State => state.set('configs', normalizeConfigs(configs));
 
-export default function admin(state: State = ReducerRecord(), action: AnyAction): State {
+const admin = (state: State = ReducerRecord(), action: AnyAction): State => {
   switch (action.type) {
     case ADMIN_CONFIG_FETCH_SUCCESS:
     case ADMIN_CONFIG_UPDATE_SUCCESS:
@@ -215,4 +202,6 @@ export default function admin(state: State = ReducerRecord(), action: AnyAction)
     default:
       return state;
   }
-}
+};
+
+export default admin;

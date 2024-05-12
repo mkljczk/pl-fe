@@ -34,7 +34,7 @@ const IconButton: React.FC<IIconButton> = ({
   title,
 }) => {
 
-  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) =>  {
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
 
     if (!disabled && onClick) {

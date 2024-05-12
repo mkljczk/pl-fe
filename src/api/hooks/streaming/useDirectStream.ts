@@ -2,7 +2,7 @@ import { useLoggedIn } from 'soapbox/hooks/useLoggedIn';
 
 import { useTimelineStream } from './useTimelineStream';
 
-function useDirectStream() {
+const useDirectStream = () => {
   const { isLoggedIn } = useLoggedIn();
 
   return useTimelineStream(
@@ -12,6 +12,6 @@ function useDirectStream() {
     null,
     { enabled: isLoggedIn },
   );
-}
+};
 
 export { useDirectStream };

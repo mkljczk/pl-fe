@@ -36,13 +36,8 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
     ?.filter((type) => type.startsWith('image/'))
     .join(',');
 
-  const handleTextChange = (property: keyof CreateGroupParams): React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> => {
-    return (e) => {
-      onChange({
-        ...params,
-        [property]: e.target.value,
-      });
-    };
+  const handleTextChange = (property: keyof CreateGroupParams): React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> => (e) => {
+    onChange({ ...params, [property]: e.target.value });
   };
 
   const handleImageChange = (property: 'header' | 'avatar', maxPixels?: number) =>

@@ -1,18 +1,18 @@
 /** Register the ServiceWorker. */
-function registerSW(path: string) {
+const registerSW = (path: string) => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register(path, { scope: '/' });
   }
-}
+};
 
 /** Prevent a new ServiceWorker from being installed. */
-function lockSW() {
+const lockSW = () => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register = () => {
       throw new Error('ServiceWorker already registered.');
     };
   }
-}
+};
 
 /** Unregister the ServiceWorker */
 // https://stackoverflow.com/a/49771828/8811886

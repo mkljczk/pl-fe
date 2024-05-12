@@ -4,7 +4,7 @@ import { useApi } from 'soapbox/hooks';
 import { useFeatures } from 'soapbox/hooks/useFeatures';
 import { bookmarkFolderSchema, type BookmarkFolder } from 'soapbox/schemas/bookmark-folder';
 
-function useBookmarkFolders() {
+const useBookmarkFolders = () => {
   const api = useApi();
   const features = useFeatures();
 
@@ -20,6 +20,6 @@ function useBookmarkFolders() {
     ...result,
     bookmarkFolders,
   };
-}
+};
 
 export { useBookmarkFolders };

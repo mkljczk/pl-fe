@@ -27,7 +27,7 @@ SOFTWARE.
 
 import type { Rgb, TailwindColorObject } from 'soapbox/types/colors';
 
-export function hexToRgb(hex: string): Rgb | null {
+const hexToRgb = (hex: string): Rgb | null => {
   const sanitizedHex = hex.replace(/##/g, '#');
   const colorParts = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(
     sanitizedHex,
@@ -44,14 +44,14 @@ export function hexToRgb(hex: string): Rgb | null {
     g: parseInt(g, 16),
     b: parseInt(b, 16),
   } as Rgb;
-}
+};
 
-function rgbToHex(r: number, g: number, b: number): string {
+const rgbToHex = (r: number, g: number, b: number): string => {
   const toHex = (c: number) => `0${c.toString(16)}`.slice(-2);
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-}
+};
 
-export function getTextColor(color: string): '#FFF' | '#333' {
+const getTextColor = (color: string): '#FFF' | '#333' => {
   const rgbColor = hexToRgb(color);
 
   if (!rgbColor) {
@@ -62,9 +62,9 @@ export function getTextColor(color: string): '#FFF' | '#333' {
   const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
   return luma < 120 ? '#FFF' : '#333';
-}
+};
 
-function lighten(hex: string, intensity: number): string {
+const lighten = (hex: string, intensity: number): string => {
   const color = hexToRgb(`#${hex}`);
 
   if (!color) {
@@ -76,9 +76,9 @@ function lighten(hex: string, intensity: number): string {
   const b = Math.round(color.b + (255 - color.b) * intensity);
 
   return rgbToHex(r, g, b);
-}
+};
 
-function darken(hex: string, intensity: number): string {
+const darken = (hex: string, intensity: number): string => {
   const color = hexToRgb(hex);
 
   if (!color) {
@@ -90,9 +90,9 @@ function darken(hex: string, intensity: number): string {
   const b = Math.round(color.b * intensity);
 
   return rgbToHex(r, g, b);
-}
+};
 
-export default function(baseColor: string): TailwindColorObject {
+const colors = (baseColor: string): TailwindColorObject => {
   const response: TailwindColorObject = {
     500: `#${baseColor}`.replace(/##/g, '#'),
   };
@@ -120,4 +120,10 @@ export default function(baseColor: string): TailwindColorObject {
   });
 
   return response;
-}
+};
+
+export {
+  hexToRgb,
+  getTextColor,
+  colors as default,
+};

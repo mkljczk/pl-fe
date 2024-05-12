@@ -10,7 +10,7 @@ interface IExtendedVideoPlayer {
   time?: number;
   controls?: boolean;
   muted?: boolean;
-  onClick?: () =>  void;
+  onClick?: () => void;
 }
 
 const ExtendedVideoPlayer: React.FC<IExtendedVideoPlayer> = ({ src, alt, time, controls, muted, onClick }) => {

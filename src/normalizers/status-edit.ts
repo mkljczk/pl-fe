@@ -36,18 +36,16 @@ export const StatusEditRecord = ImmutableRecord({
   spoilerHtml: '',
 });
 
-const normalizeAttachments = (statusEdit: ImmutableMap<string, any>) => {
-  return statusEdit.update('media_attachments', ImmutableList(), attachments => {
-    return attachments.map(normalizeAttachment);
-  });
-};
+const normalizeAttachments = (statusEdit: ImmutableMap<string, any>) =>
+  statusEdit.update('media_attachments', ImmutableList(), attachments =>
+    attachments.map(normalizeAttachment),
+  );
 
 // Normalize emojis
-const normalizeEmojis = (entity: ImmutableMap<string, any>) => {
-  return entity.update('emojis', ImmutableList(), emojis => {
-    return emojis.map(normalizeEmoji);
-  });
-};
+const normalizeEmojis = (entity: ImmutableMap<string, any>) =>
+  entity.update('emojis', ImmutableList(), emojis =>
+    emojis.map(normalizeEmoji),
+  );
 
 // Normalize the poll in the status, if applicable
 const normalizeStatusPoll = (statusEdit: ImmutableMap<string, any>) => {
@@ -69,13 +67,11 @@ const normalizeContent = (statusEdit: ImmutableMap<string, any>) => {
     .set('spoilerHtml', spoilerHtml);
 };
 
-export const normalizeStatusEdit = (statusEdit: Record<string, any>) => {
-  return StatusEditRecord(
-    ImmutableMap(fromJS(statusEdit)).withMutations(statusEdit => {
-      normalizeAttachments(statusEdit);
-      normalizeEmojis(statusEdit);
-      normalizeStatusPoll(statusEdit);
-      normalizeContent(statusEdit);
-    }),
-  );
-};
+export const normalizeStatusEdit = (statusEdit: Record<string, any>) => StatusEditRecord(
+  ImmutableMap(fromJS(statusEdit)).withMutations(statusEdit => {
+    normalizeAttachments(statusEdit);
+    normalizeEmojis(statusEdit);
+    normalizeStatusPoll(statusEdit);
+    normalizeContent(statusEdit);
+  }),
+);

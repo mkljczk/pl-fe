@@ -30,7 +30,7 @@ const importLists = (state: State, lists: APIEntities) => {
   return state;
 };
 
-export default function lists(state: State = initialState, action: AnyAction) {
+const lists = (state: State = initialState, action: AnyAction) => {
   switch (action.type) {
     case LIST_FETCH_SUCCESS:
     case LIST_CREATE_SUCCESS:
@@ -44,4 +44,6 @@ export default function lists(state: State = initialState, action: AnyAction) {
     default:
       return state;
   }
-}
+};
+
+export default lists;

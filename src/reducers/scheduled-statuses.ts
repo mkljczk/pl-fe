@@ -40,7 +40,7 @@ const importStatuses = (state: State, statuses: APIEntity[]) =>
 
 const deleteStatus = (state: State, id: string) => state.delete(id);
 
-export default function scheduled_statuses(state: State = initialState, action: AnyAction) {
+const scheduled_statuses = (state: State = initialState, action: AnyAction) => {
   switch (action.type) {
     case STATUS_IMPORT:
     case STATUS_CREATE_SUCCESS:
@@ -54,4 +54,6 @@ export default function scheduled_statuses(state: State = initialState, action: 
     default:
       return state;
   }
-}
+};
+
+export default scheduled_statuses;

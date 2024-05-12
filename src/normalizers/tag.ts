@@ -24,18 +24,14 @@ export const TagRecord = ImmutableRecord({
 
 const normalizeHistoryList = (tag: ImmutableMap<string, any>) => {
   if (tag.get('history')){
-    return tag.update('history', ImmutableList(), attachments => {
-      return attachments.map(normalizeHistory);
-    });
+    return tag.update('history', ImmutableList(), attachments => attachments.map(normalizeHistory));
   } else {
     return tag.set('history', null);
   }
 };
 
-export const normalizeTag = (tag: Record<string, any>) => {
-  return TagRecord(
-    ImmutableMap(fromJS(tag)).withMutations(tag => {
-      normalizeHistoryList(tag);
-    }),
-  );
-};
+export const normalizeTag = (tag: Record<string, any>) => TagRecord(
+  ImmutableMap(fromJS(tag)).withMutations(tag => {
+    normalizeHistoryList(tag);
+  }),
+);

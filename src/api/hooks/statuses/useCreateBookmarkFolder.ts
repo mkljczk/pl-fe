@@ -8,7 +8,7 @@ interface CreateBookmarkFolderParams {
   emoji?: string;
 }
 
-function useCreateBookmarkFolder() {
+const useCreateBookmarkFolder = () => {
   const api = useApi();
 
   const { createEntity, ...rest } = useCreateEntity(
@@ -25,6 +25,6 @@ function useCreateBookmarkFolder() {
     createBookmarkFolder: createEntity,
     ...rest,
   };
-}
+};
 
 export { useCreateBookmarkFolder };

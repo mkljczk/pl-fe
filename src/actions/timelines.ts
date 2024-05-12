@@ -139,11 +139,8 @@ const clearTimeline = (timeline: string) =>
 const noOp = () => { };
 const noOpAsync = () => () => new Promise(f => f(undefined));
 
-const parseTags = (tags: Record<string, any[]> = {}, mode: 'any' | 'all' | 'none') => {
-  return (tags[mode] || []).map((tag) => {
-    return tag.value;
-  });
-};
+const parseTags = (tags: Record<string, any[]> = {}, mode: 'any' | 'all' | 'none') =>
+  (tags[mode] || []).map((tag) => tag.value);
 
 const deduplicateStatuses = (statuses: any[]) => {
   const deduplicatedStatuses: any[] = [];
@@ -266,14 +263,13 @@ const expandGroupFeaturedTimeline = (id: string) =>
 const expandGroupMediaTimeline = (id: string | number, { maxId }: Record<string, any> = {}) =>
   expandTimeline(`group:${id}:media`, `/api/v1/timelines/group/${id}`, { max_id: maxId, only_media: true, limit: 40, with_muted: true });
 
-const expandHashtagTimeline = (hashtag: string, { url, maxId, tags }: Record<string, any> = {}, done = noOp) => {
-  return expandTimeline(`hashtag:${hashtag}`, url || `/api/v1/timelines/tag/${hashtag}`, url ? {} : {
+const expandHashtagTimeline = (hashtag: string, { url, maxId, tags }: Record<string, any> = {}, done = noOp) =>
+  expandTimeline(`hashtag:${hashtag}`, url || `/api/v1/timelines/tag/${hashtag}`, url ? {} : {
     max_id: maxId,
     any: parseTags(tags, 'any'),
     all: parseTags(tags, 'all'),
     none: parseTags(tags, 'none'),
   }, done);
-};
 
 const expandTimelineRequest = (timeline: string, isLoadingMore: boolean) => ({
   type: TIMELINE_EXPAND_REQUEST,

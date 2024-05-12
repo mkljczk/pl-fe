@@ -95,9 +95,7 @@ const Notifications = () => {
     dispatch(dequeueNotifications());
   }, []);
 
-  const handleRefresh = useCallback(() => {
-    return dispatch(expandNotifications());
-  }, []);
+  const handleRefresh = useCallback(() => dispatch(expandNotifications()), []);
 
   useEffect(() => {
     handleDequeueNotifications();

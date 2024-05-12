@@ -17,9 +17,7 @@ import type { APIEntity } from 'soapbox/types/entities';
 
 const initialState: Instance = instanceSchema.parse({});
 
-const importInstance = (_state: Instance, instance: APIEntity): Instance => {
-  return instanceSchema.parse(instance);
-};
+const importInstance = (_state: Instance, instance: APIEntity): Instance => instanceSchema.parse(instance);
 
 const importInstanceV2 = (state: Instance, data: APIEntity): Instance => {
   const instance = instanceSchema.parse(data);
@@ -105,7 +103,7 @@ const handleInstanceFetchFail = (state: Instance, error: Record<string, any>) =>
   }
 };
 
-export default function instance(state = initialState, action: AnyAction) {
+const instance = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case PLEROMA_PRELOAD_IMPORT:
       return preloadImport(state, action, '/api/v1/instance');
@@ -123,4 +121,6 @@ export default function instance(state = initialState, action: AnyAction) {
     default:
       return state;
   }
-}
+};
+
+export default instance;

@@ -46,10 +46,8 @@ const normalizePleromaAccount = (account: ImmutableMap<string, any>) => {
   return account;
 };
 
-export const normalizeAdminAccount = (account: Record<string, any>) => {
-  return AdminAccountRecord(
-    ImmutableMap(fromJS(account)).withMutations((account: ImmutableMap<string, any>) => {
-      normalizePleromaAccount(account);
-    }),
-  );
-};
+export const normalizeAdminAccount = (account: Record<string, any>) => AdminAccountRecord(
+  ImmutableMap(fromJS(account)).withMutations((account: ImmutableMap<string, any>) => {
+    normalizePleromaAccount(account);
+  }),
+);

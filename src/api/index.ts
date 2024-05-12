@@ -16,21 +16,17 @@ import { buildFullPath } from 'soapbox/utils/url';
   @param {object} response - Fetch API response object
   @returns {object} Link object
   */
-export const getLinks = (response: Pick<Response, 'headers'>): LinkHeader => {
-  return new LinkHeader(response.headers?.get('link') || undefined);
-};
+const getLinks = (response: Pick<Response, 'headers'>): LinkHeader =>
+  new LinkHeader(response.headers?.get('link') || undefined);
 
-export const getNextLink = (response: Pick<Response, 'headers'>): string | undefined => {
-  return getLinks(response).refs.find(link => link.rel === 'next')?.uri;
-};
+const getNextLink = (response: Pick<Response, 'headers'>): string | undefined =>
+  getLinks(response).refs.find(link => link.rel === 'next')?.uri;
 
-export const getPrevLink = (response: Pick<Response, 'headers'>): string | undefined => {
-  return getLinks(response).refs.find(link => link.rel === 'prev')?.uri;
-};
+const getPrevLink = (response: Pick<Response, 'headers'>): string | undefined =>
+  getLinks(response).refs.find(link => link.rel === 'prev')?.uri;
 
-const getToken = (state: RootState, authType: string) => {
-  return authType === 'app' ? getAppToken(state) : getAccessToken(state);
-};
+const getToken = (state: RootState, authType: string) =>
+  authType === 'app' ? getAppToken(state) : getAccessToken(state);
 
 const getAuthBaseURL = createSelector([
   (state: RootState, me: string | false | null) => me ? selectAccount(state, me)?.url : undefined,
@@ -40,7 +36,7 @@ const getAuthBaseURL = createSelector([
   return baseURL !== window.location.origin ? baseURL : '';
 });
 
-export const getFetch = (accessToken?: string | null, baseURL: string = '') =>
+const getFetch = (accessToken?: string | null, baseURL: string = '') =>
   <T = any>(
     input: URL | RequestInfo,
     init?: RequestInit & { params?: Record<string, any>; onUploadProgress?: (e: ProgressEvent) => void } | undefined,
@@ -112,7 +108,7 @@ export const getFetch = (accessToken?: string | null, baseURL: string = '') =>
   * It uses FE_SUBDIRECTORY and parses JSON if possible.
   * No authorization is needed.
   */
-export const staticFetch = (input: URL | RequestInfo, init?: RequestInit | undefined) => {
+const staticFetch = (input: URL | RequestInfo, init?: RequestInit | undefined) => {
   const fullPath = buildFullPath(input.toString(), BuildConfig.FE_SUBDIRECTORY);
 
   return fetch(fullPath, init).then(async (response) => {
@@ -135,7 +131,7 @@ export const staticFetch = (input: URL | RequestInfo, init?: RequestInit | undef
   * @param {string} authType - Either 'user' or 'app'
   * @returns {object} Axios instance
   */
-export const api = (getState: () => RootState, authType: string = 'user') => {
+const api = (getState: () => RootState, authType: string = 'user') => {
   const state = getState();
   const accessToken = getToken(state, authType);
   const me = state.me;
@@ -144,4 +140,12 @@ export const api = (getState: () => RootState, authType: string = 'user') => {
   return getFetch(accessToken, baseURL);
 };
 
-export default api;
+export {
+  getLinks,
+  getNextLink,
+  getPrevLink,
+  getFetch,
+  staticFetch,
+  api,
+  api as default,
+};

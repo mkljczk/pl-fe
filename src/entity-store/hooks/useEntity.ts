@@ -21,11 +21,11 @@ interface UseEntityOpts<TEntity extends Entity> {
   enabled?: boolean;
 }
 
-function useEntity<TEntity extends Entity>(
+const useEntity = <TEntity extends Entity>(
   path: EntityPath,
   entityFn: EntityFn<void>,
   opts: UseEntityOpts<TEntity> = {},
-) {
+) => {
   const [isFetching, setPromise] = useLoading(true);
   const [error, setError] = useState<unknown>();
 
@@ -69,7 +69,7 @@ function useEntity<TEntity extends Entity>(
     isUnauthorized: (error as { response?: Response })?.response?.status === 401,
     isForbidden: (error as { response?: Response })?.response?.status === 403,
   };
-}
+};
 
 export {
   useEntity,

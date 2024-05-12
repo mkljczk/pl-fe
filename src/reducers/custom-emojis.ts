@@ -29,10 +29,12 @@ const importEmojis = (customEmojis: APIEntity[]) => {
   return emojis;
 };
 
-export default function custom_emojis(state = initialState, action: AnyAction) {
+const custom_emojis = (state = initialState, action: AnyAction) => {
   if (action.type === CUSTOM_EMOJIS_FETCH_SUCCESS) {
     return importEmojis(action.custom_emojis);
   }
 
   return state;
-}
+};
+
+export default custom_emojis;

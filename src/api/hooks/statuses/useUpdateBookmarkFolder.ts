@@ -8,7 +8,7 @@ interface UpdateBookmarkFolderParams {
   emoji?: string;
 }
 
-function useUpdateBookmarkFolder(folderId: string) {
+const useUpdateBookmarkFolder = (folderId: string) => {
   const api = useApi();
 
   const { createEntity, ...rest } = useCreateEntity(
@@ -25,6 +25,6 @@ function useUpdateBookmarkFolder(folderId: string) {
     updateBookmarkFolder: createEntity,
     ...rest,
   };
-}
+};
 
 export { useUpdateBookmarkFolder };

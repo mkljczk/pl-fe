@@ -43,13 +43,12 @@ const normalizeRelationships = (state: State, relationships: APIEntities) => {
   return state;
 };
 
-const setDomainBlocking = (state: State, accounts: string[], blocking: boolean) => {
-  return state.withMutations(map => {
+const setDomainBlocking = (state: State, accounts: string[], blocking: boolean) =>
+  state.withMutations(map => {
     accounts.forEach(id => {
       map.setIn([id, 'domain_blocking'], blocking);
     });
   });
-};
 
 const importPleromaAccount = (state: State, account: APIEntity) => {
   const relationship = get(account, ['pleroma', 'relationship'], {});
@@ -66,7 +65,7 @@ const importPleromaAccounts = (state: State, accounts: APIEntities) => {
   return state;
 };
 
-export default function relationships(state: State = ImmutableMap<string, Relationship>(), action: AnyAction) {
+const relationships = (state: State = ImmutableMap<string, Relationship>(), action: AnyAction) => {
   switch (action.type) {
     case ACCOUNT_IMPORT:
       return importPleromaAccount(state, action.account);
@@ -92,4 +91,6 @@ export default function relationships(state: State = ImmutableMap<string, Relati
     default:
       return state;
   }
-}
+};
+
+export default relationships;

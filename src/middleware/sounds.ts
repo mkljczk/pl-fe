@@ -11,13 +11,15 @@ interface Action extends AnyAction {
 }
 
 /** Middleware to play sounds in response to certain Redux actions. */
-export default function soundsMiddleware(): Middleware {
-  return () => next => anyAction => {
-    const action = anyAction as Action;
-    if (action.meta?.sound && soundCache[action.meta.sound]) {
-      play(soundCache[action.meta.sound]);
-    }
+const soundsMiddleware = (): Middleware => () => next => anyAction => {
+  const action = anyAction as Action;
+  if (action.meta?.sound && soundCache[action.meta.sound]) {
+    play(soundCache[action.meta.sound]);
+  }
 
-    return next(action);
-  };
-}
+  return next(action);
+};
+
+export {
+  soundsMiddleware as default,
+};

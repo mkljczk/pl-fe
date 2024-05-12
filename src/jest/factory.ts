@@ -25,61 +25,51 @@ import type { PartialDeep } from 'type-fest';
 // TODO: there's probably a better way to create these factory functions.
 // This looks promising but didn't work on my first attempt: https://github.com/anatine/zod-plugins/tree/main/packages/zod-mock
 
-function buildAccount(props: PartialDeep<Account> = {}): Account {
-  return accountSchema.parse(Object.assign({
+const buildAccount = (props: PartialDeep<Account> = {}): Account =>
+  accountSchema.parse(Object.assign({
     id: uuidv4(),
     url: `https://soapbox.test/users/${uuidv4()}`,
   }, props));
-}
 
-function buildCard(props: PartialDeep<Card> = {}): Card {
-  return cardSchema.parse(Object.assign({
+const buildCard = (props: PartialDeep<Card> = {}): Card =>
+  cardSchema.parse(Object.assign({
     url: 'https://soapbox.test',
   }, props));
-}
 
-function buildGroup(props: PartialDeep<Group> = {}): Group {
-  return groupSchema.parse(Object.assign({
+const buildGroup = (props: PartialDeep<Group> = {}): Group =>
+  groupSchema.parse(Object.assign({
     id: uuidv4(),
     owner: {
       id: uuidv4(),
     },
   }, props));
-}
 
-function buildGroupRelationship(props: PartialDeep<GroupRelationship> = {}): GroupRelationship {
-  return groupRelationshipSchema.parse(Object.assign({
+const buildGroupRelationship = (props: PartialDeep<GroupRelationship> = {}): GroupRelationship =>
+  groupRelationshipSchema.parse(Object.assign({
     id: uuidv4(),
   }, props));
-}
 
-function buildGroupMember(
+const buildGroupMember = (
   props: PartialDeep<GroupMember> = {},
   accountProps: PartialDeep<Account> = {},
-): GroupMember {
-  return groupMemberSchema.parse(Object.assign({
-    id: uuidv4(),
-    account: buildAccount(accountProps),
-    role: GroupRoles.USER,
-  }, props));
-}
+): GroupMember => groupMemberSchema.parse(Object.assign({
+  id: uuidv4(),
+  account: buildAccount(accountProps),
+  role: GroupRoles.USER,
+}, props));
 
-function buildInstance(props: PartialDeep<Instance> = {}) {
-  return instanceSchema.parse(props);
-}
+const buildInstance = (props: PartialDeep<Instance> = {}) => instanceSchema.parse(props);
 
-function buildRelationship(props: PartialDeep<Relationship> = {}): Relationship {
-  return relationshipSchema.parse(Object.assign({
+const buildRelationship = (props: PartialDeep<Relationship> = {}): Relationship =>
+  relationshipSchema.parse(Object.assign({
     id: uuidv4(),
   }, props));
-}
 
-function buildStatus(props: PartialDeep<Status> = {}) {
-  return statusSchema.parse(Object.assign({
+const buildStatus = (props: PartialDeep<Status> = {}) =>
+  statusSchema.parse(Object.assign({
     id: uuidv4(),
     account: buildAccount(),
   }, props));
-}
 
 export {
   buildAccount,

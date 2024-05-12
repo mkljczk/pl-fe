@@ -6,7 +6,7 @@ import { groupMemberSchema } from 'soapbox/schemas';
 
 import type { Group, GroupMember } from 'soapbox/schemas';
 
-function usePromoteGroupMember(group: Group, groupMember: GroupMember) {
+const usePromoteGroupMember = (group: Group, groupMember: GroupMember) => {
   const { createEntity } = useEntityActions<GroupMember>(
     [Entities.GROUP_MEMBERSHIPS, groupMember.account.id],
     { post: `/api/v1/groups/${group.id}/promote` },
@@ -14,6 +14,6 @@ function usePromoteGroupMember(group: Group, groupMember: GroupMember) {
   );
 
   return createEntity;
-}
+};
 
 export { usePromoteGroupMember };

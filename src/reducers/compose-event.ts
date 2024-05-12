@@ -51,7 +51,7 @@ const setHasEndTime = (state: State) => {
   return state.set('end_time', endTime);
 };
 
-export default function compose_event(state = ReducerRecord(), action: AnyAction): State {
+const compose_event = (state = ReducerRecord(), action: AnyAction): State => {
   switch (action.type) {
     case EDIT_EVENT_NAME_CHANGE:
       return state.set('name', action.value);
@@ -104,4 +104,6 @@ export default function compose_event(state = ReducerRecord(), action: AnyAction
     default:
       return state;
   }
-}
+};
+
+export default compose_event;

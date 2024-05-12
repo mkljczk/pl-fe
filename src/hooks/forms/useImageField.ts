@@ -12,7 +12,7 @@ interface UseImageFieldOpts {
 }
 
 /** Returns props for `<input type="file">`, and optionally resizes the file. */
-function useImageField(opts: UseImageFieldOpts = {}) {
+const useImageField = (opts: UseImageFieldOpts = {}) => {
   const [file, setFile] = useState<File | null>();
   const src = usePreview(file) || (file === null ? undefined : opts.preview);
 
@@ -35,7 +35,7 @@ function useImageField(opts: UseImageFieldOpts = {}) {
     onChange,
     onClear,
   };
-}
+};
 
 export { useImageField };
 export type { UseImageFieldOpts };

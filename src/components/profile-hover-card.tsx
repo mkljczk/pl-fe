@@ -9,7 +9,7 @@ import {
   closeProfileHoverCard,
   updateProfileHoverCard,
 } from 'soapbox/actions/profile-hover-card';
-import { useAccount, usePatronUser } from 'soapbox/api/hooks';
+import { useAccount } from 'soapbox/api/hooks';
 import Badge from 'soapbox/components/badge';
 import ActionButton from 'soapbox/features/ui/components/action-button';
 import { UserPanel } from 'soapbox/features/ui/util/async-components';
@@ -19,12 +19,11 @@ import { showProfileHoverCard } from './hover-ref-wrapper';
 import { dateFormatOptions } from './relative-timestamp';
 import { Card, CardBody, HStack, Icon, Stack, Text } from './ui';
 
-import type { Account, PatronUser } from 'soapbox/schemas';
+import type { Account } from 'soapbox/schemas';
 import type { AppDispatch } from 'soapbox/store';
 
 const getBadges = (
   account?: Pick<Account, 'admin' | 'moderator'>,
-  patronUser?: Pick<PatronUser, 'is_patron'>,
 ): JSX.Element[] => {
   const badges = [];
 
@@ -34,23 +33,15 @@ const getBadges = (
     badges.push(<Badge key='moderator' slug='moderator' title={<FormattedMessage id='account_moderation_modal.roles.moderator' defaultMessage='Moderator' />} />);
   }
 
-  if (patronUser?.is_patron) {
-    badges.push(<Badge key='patron' slug='patron' title={<FormattedMessage id='account.patron' defaultMessage='Patron' />} />);
-  }
-
   return badges;
 };
 
-const handleMouseEnter = (dispatch: AppDispatch): React.MouseEventHandler => {
-  return () => {
-    dispatch(updateProfileHoverCard());
-  };
+const handleMouseEnter = (dispatch: AppDispatch): React.MouseEventHandler => () => {
+  dispatch(updateProfileHoverCard());
 };
 
-const handleMouseLeave = (dispatch: AppDispatch): React.MouseEventHandler => {
-  return () => {
-    dispatch(closeProfileHoverCard(true));
-  };
+const handleMouseLeave = (dispatch: AppDispatch): React.MouseEventHandler => () => {
+  dispatch(closeProfileHoverCard(true));
 };
 
 interface IProfileHoverCard {
@@ -68,9 +59,8 @@ export const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }
   const me = useAppSelector(state => state.me);
   const accountId: string | undefined = useAppSelector(state => state.profile_hover_card.accountId || undefined);
   const { account } = useAccount(accountId, { withRelationship: true });
-  const { patronUser } = usePatronUser(account?.url);
   const targetRef = useAppSelector(state => state.profile_hover_card.ref?.current);
-  const badges = getBadges(account, patronUser);
+  const badges = getBadges(account);
 
   useEffect(() => {
     if (accountId) dispatch(fetchRelationships([accountId]));

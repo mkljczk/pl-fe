@@ -1,7 +1,6 @@
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { usePatronUser } from 'soapbox/api/hooks';
 import Badge from 'soapbox/components/badge';
 import Markup from 'soapbox/components/markup';
 import { dateFormatOptions } from 'soapbox/components/relative-timestamp';
@@ -32,7 +31,6 @@ interface IProfileInfoPanel {
 const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) => {
   const intl = useIntl();
   const { displayFqn } = useSoapboxConfig();
-  const { patronUser } = usePatronUser(account?.url);
   const me = useAppSelector(state => state.me);
   const ownAccount = account?.id === me;
 
@@ -62,16 +60,11 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   const getBadges = (): React.ReactNode[] => {
     const custom = getCustomBadges();
     const staffBadge = getStaffBadge();
-    const isPatron = patronUser?.is_patron === true;
 
     const badges = [];
 
     if (staffBadge) {
       badges.push(staffBadge);
-    }
-
-    if (isPatron) {
-      badges.push(<Badge slug='patron' title={<FormattedMessage id='account.patron' defaultMessage='Patron' />} key='patron' />);
     }
 
     return [...badges, ...custom];

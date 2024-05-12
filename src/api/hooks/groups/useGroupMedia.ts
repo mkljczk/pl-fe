@@ -6,12 +6,14 @@ import { toSchema } from 'soapbox/utils/normalizers';
 
 const statusSchema = toSchema(normalizeStatus);
 
-function useGroupMedia(groupId: string) {
+const useGroupMedia = (groupId: string) => {
   const api = useApi();
 
-  return useEntities([Entities.STATUSES, 'groupMedia', groupId], () => {
-    return api(`/api/v1/timelines/group/${groupId}?only_media=true`);
-  }, { schema: statusSchema });
-}
+  return useEntities(
+    [Entities.STATUSES, 'groupMedia', groupId],
+    () => api(`/api/v1/timelines/group/${groupId}?only_media=true`),
+    { schema: statusSchema })
+  ;
+};
 
 export { useGroupMedia };

@@ -4,7 +4,7 @@ import { useApi, useOwnAccount } from 'soapbox/hooks';
 
 import type { Group } from 'soapbox/schemas';
 
-function useCancelMembershipRequest(group: Group) {
+const useCancelMembershipRequest = (group: Group) => {
   const api = useApi();
   const { account: me } = useOwnAccount();
 
@@ -17,6 +17,6 @@ function useCancelMembershipRequest(group: Group) {
     mutate: createEntity,
     isSubmitting,
   };
-}
+};
 
 export { useCancelMembershipRequest };

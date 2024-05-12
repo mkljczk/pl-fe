@@ -15,16 +15,14 @@ interface ICryptoIcon {
   imgClassName?: string;
 }
 
-const CryptoIcon: React.FC<ICryptoIcon> = ({ ticker, title, className, imgClassName }): JSX.Element => {
-  return (
-    <div className={className}>
-      <img
-        className={imgClassName}
-        src={getIcon(ticker)}
-        alt={title || ticker}
-      />
-    </div>
-  );
-};
+const CryptoIcon: React.FC<ICryptoIcon> = ({ ticker, title, className, imgClassName }): JSX.Element => (
+  <div className={className}>
+    <img
+      className={imgClassName}
+      src={getIcon(ticker)}
+      alt={title || ticker}
+    />
+  </div>
+);
 
 export default CryptoIcon;

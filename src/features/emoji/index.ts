@@ -35,13 +35,11 @@ export interface NativeEmoji {
 
 export type Emoji = CustomEmoji | NativeEmoji;
 
-export function isCustomEmoji(emoji: Emoji): emoji is CustomEmoji {
-  return (emoji as CustomEmoji).imageUrl !== undefined;
-}
+export const isCustomEmoji = (emoji: Emoji): emoji is CustomEmoji =>
+  (emoji as CustomEmoji).imageUrl !== undefined;
 
-export function isNativeEmoji(emoji: Emoji): emoji is NativeEmoji {
-  return (emoji as NativeEmoji).native !== undefined;
-}
+export const isNativeEmoji = (emoji: Emoji): emoji is NativeEmoji =>
+  (emoji as NativeEmoji).native !== undefined;
 
 const isAlphaNumeric = (c: string) => {
   const code = c.charCodeAt(0);
@@ -55,16 +53,11 @@ const isAlphaNumeric = (c: string) => {
   }
 };
 
-const validEmojiChar = (c: string) => {
-  return isAlphaNumeric(c)
-    || c === '_'
-    || c === '-'
-    || c === '.';
-};
+const validEmojiChar = (c: string) =>
+  isAlphaNumeric(c) || ['_', '-', '.'].includes(c);
 
-const convertCustom = (shortname: string, filename: string) => {
-  return `<img draggable="false" class="emojione" alt="${shortname}" title="${shortname}" src="${filename}" />`;
-};
+const convertCustom = (shortname: string, filename: string) =>
+  `<img draggable="false" class="emojione" alt="${shortname}" title="${shortname}" src="${filename}" />`;
 
 const convertUnicode = (c: string) => {
   const { unified, shortcode } = unicodeMapping[c];
@@ -195,8 +188,8 @@ export const parseHTML = (str: string): { text: boolean; data: string }[] => {
   return tokens;
 };
 
-const emojify = (str: string, customEmojis = {}) => {
-  return parseHTML(str)
+const emojify = (str: string, customEmojis = {}) =>
+  parseHTML(str)
     .map(({ text, data }) => {
       if (!text) return data;
       if (data.length === 0 || data === ' ') return data;
@@ -204,7 +197,6 @@ const emojify = (str: string, customEmojis = {}) => {
       return emojifyText(data, customEmojis);
     })
     .join('');
-};
 
 export default emojify;
 

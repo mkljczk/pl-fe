@@ -236,10 +236,8 @@ const DropdownMenu = (props: IDropdownMenu) => {
     return {};
   }, [middlewareData.arrow, placement]);
 
-  useEffect(() => {
-    return () => {
-      closeDropdownMenu();
-    };
+  useEffect(() => () => {
+    closeDropdownMenu();
   }, []);
 
   useEffect(() => {

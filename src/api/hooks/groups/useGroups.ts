@@ -6,7 +6,7 @@ import { groupSchema, type Group } from 'soapbox/schemas/group';
 
 import { useGroupRelationships } from './useGroupRelationships';
 
-function useGroups() {
+const useGroups = () => {
   const api = useApi();
   const features = useFeatures();
 
@@ -29,6 +29,6 @@ function useGroups() {
     ...result,
     groups,
   };
-}
+};
 
 export { useGroups };

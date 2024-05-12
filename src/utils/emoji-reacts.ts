@@ -4,7 +4,7 @@ import { EmojiReaction, emojiReactionSchema } from 'soapbox/schemas';
 
 // https://emojipedia.org/facebook
 // I've customized them.
-export const ALLOWED_EMOJI = ImmutableList([
+const ALLOWED_EMOJI = ImmutableList([
   '👍',
   '❤️',
   '😆',
@@ -13,13 +13,13 @@ export const ALLOWED_EMOJI = ImmutableList([
   '😩',
 ]);
 
-export const sortEmoji = (emojiReacts: ImmutableList<EmojiReaction>, allowedEmoji: ImmutableList<string>): ImmutableList<EmojiReaction> => (
+const sortEmoji = (emojiReacts: ImmutableList<EmojiReaction>, allowedEmoji: ImmutableList<string>): ImmutableList<EmojiReaction> => (
   emojiReacts
     .sortBy(emojiReact =>
       -((emojiReact.count || 0) + Number(allowedEmoji.includes(emojiReact.name))))
 );
 
-export const mergeEmojiFavourites = (emojiReacts: ImmutableList<EmojiReaction> | null, favouritesCount: number, favourited: boolean) => {
+const mergeEmojiFavourites = (emojiReacts: ImmutableList<EmojiReaction> | null, favouritesCount: number, favourited: boolean) => {
   if (!emojiReacts) return ImmutableList([emojiReactionSchema.parse({ count: favouritesCount, me: favourited, name: '👍' })]);
   if (!favouritesCount) return emojiReacts;
   const likeIndex = emojiReacts.findIndex(emojiReact => emojiReact.name === '👍');
@@ -34,13 +34,13 @@ export const mergeEmojiFavourites = (emojiReacts: ImmutableList<EmojiReaction> |
   }
 };
 
-export const reduceEmoji = (emojiReacts: ImmutableList<EmojiReaction> | null, favouritesCount: number, favourited: boolean, allowedEmoji = ALLOWED_EMOJI): ImmutableList<EmojiReaction> => (
+const reduceEmoji = (emojiReacts: ImmutableList<EmojiReaction> | null, favouritesCount: number, favourited: boolean, allowedEmoji = ALLOWED_EMOJI): ImmutableList<EmojiReaction> => (
   sortEmoji(
     mergeEmojiFavourites(emojiReacts, favouritesCount, favourited),
     allowedEmoji,
   ));
 
-export const getReactForStatus = (status: any, allowedEmoji = ALLOWED_EMOJI): EmojiReaction | undefined => {
+const getReactForStatus = (status: any, allowedEmoji = ALLOWED_EMOJI): EmojiReaction | undefined => {
   if (!status.reactions) return;
 
   const result = reduceEmoji(
@@ -54,7 +54,7 @@ export const getReactForStatus = (status: any, allowedEmoji = ALLOWED_EMOJI): Em
   return typeof result?.name === 'string' ? result : undefined;
 };
 
-export const simulateEmojiReact = (emojiReacts: ImmutableList<EmojiReaction>, emoji: string, url?: string) => {
+const simulateEmojiReact = (emojiReacts: ImmutableList<EmojiReaction>, emoji: string, url?: string) => {
   const idx = emojiReacts.findIndex(e => e.name === emoji);
   const emojiReact = emojiReacts.get(idx);
 
@@ -75,7 +75,7 @@ export const simulateEmojiReact = (emojiReacts: ImmutableList<EmojiReaction>, em
   }
 };
 
-export const simulateUnEmojiReact = (emojiReacts: ImmutableList<EmojiReaction>, emoji: string) => {
+const simulateUnEmojiReact = (emojiReacts: ImmutableList<EmojiReaction>, emoji: string) => {
   const idx = emojiReacts.findIndex(e =>
     e.name === emoji && e.me === true);
 
@@ -92,4 +92,14 @@ export const simulateUnEmojiReact = (emojiReacts: ImmutableList<EmojiReaction>, 
   } else {
     return emojiReacts;
   }
+};
+
+export {
+  ALLOWED_EMOJI,
+  sortEmoji,
+  mergeEmojiFavourites,
+  reduceEmoji,
+  getReactForStatus,
+  simulateEmojiReact,
+  simulateUnEmojiReact,
 };

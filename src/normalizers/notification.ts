@@ -34,11 +34,9 @@ const normalizeType = (notification: ImmutableMap<string, any>) => {
   return notification;
 };
 
-export const normalizeNotification = (notification: Record<string, any>) => {
-  return NotificationRecord(
-    ImmutableMap(fromJS(notification))
-      .withMutations((notification: ImmutableMap<string, any>) => {
-        normalizeType(notification);
-      }),
-  );
-};
+export const normalizeNotification = (notification: Record<string, any>) => NotificationRecord(
+  ImmutableMap(fromJS(notification))
+    .withMutations((notification: ImmutableMap<string, any>) => {
+      normalizeType(notification);
+    }),
+);

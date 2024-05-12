@@ -20,23 +20,21 @@ const messages = defineMessages({
   saveDraft: { id: 'confirmations.cancel_editing.save_draft', defaultMessage: 'Save draft' },
 });
 
-export const checkComposeContent = (compose?: ReturnType<typeof ReducerCompose>) => {
-  return !!compose && [
+const checkComposeContent = (compose?: ReturnType<typeof ReducerCompose>) =>
+  !!compose && [
     compose.editorState && compose.editorState.length > 0,
     compose.spoiler_text.length > 0,
     compose.media_attachments.size > 0,
     compose.poll !== null,
   ].some(check => check === true);
-};
 
-export const checkEventComposeContent = (compose?: ReturnType<typeof ReducerComposeEvent>) => {
-  return !!compose && [
+const checkEventComposeContent = (compose?: ReturnType<typeof ReducerComposeEvent>) =>
+  !!compose && [
     compose.name.length > 0,
     compose.status.length > 0,
     compose.location !== null,
     compose.banner !== null,
   ].some(check => check === true);
-};
 
 interface IModalRoot {
   onCancel?: () => void;
@@ -177,11 +175,9 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
     }
   };
 
-  const getSiblings = () => {
-    return Array(...(ref.current!.parentElement!.childNodes as any as ChildNode[]))
-      .filter(node => (node as HTMLDivElement).id !== 'toaster')
-      .filter(node => node !== ref.current);
-  };
+  const getSiblings = () => Array(...(ref.current!.parentElement!.childNodes as any as ChildNode[]))
+    .filter(node => (node as HTMLDivElement).id !== 'toaster')
+    .filter(node => node !== ref.current);
 
   useEffect(() => {
     if (!visible) return;
@@ -258,4 +254,8 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   );
 };
 
-export default ModalRoot;
+export {
+  checkComposeContent,
+  checkEventComposeContent,
+  ModalRoot as default,
+};

@@ -153,7 +153,7 @@ const connectTimelineStream = (
   };
 });
 
-function followStateToRelationship(followState: string) {
+const followStateToRelationship = (followState: string) => {
   switch (followState) {
     case 'follow_pending':
       return { following: false, requested: true };
@@ -164,7 +164,7 @@ function followStateToRelationship(followState: string) {
     default:
       return {};
   }
-}
+};
 
 interface FollowUpdate {
   state: 'follow_pending' | 'follow_accept' | 'follow_reject';
@@ -180,8 +180,8 @@ interface FollowUpdate {
   };
 }
 
-function updateFollowRelationships(update: FollowUpdate) {
-  return (dispatch: AppDispatch, getState: () => RootState) => {
+const updateFollowRelationships = (update: FollowUpdate) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
     const me = getState().me;
     const relationship = selectEntity<Relationship>(getState(), Entities.RELATIONSHIPS, update.following.id);
 
@@ -195,7 +195,6 @@ function updateFollowRelationships(update: FollowUpdate) {
       setTimeout(() => dispatch(importEntities([updated], Entities.RELATIONSHIPS)), 300);
     }
   };
-}
 
 export {
   connectTimelineStream,

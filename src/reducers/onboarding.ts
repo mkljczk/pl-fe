@@ -10,7 +10,7 @@ const initialState: OnboardingState = {
   needsOnboarding: false,
 };
 
-export default function onboarding(state: OnboardingState = initialState, action: OnboardingActions): OnboardingState {
+const onboarding = (state: OnboardingState = initialState, action: OnboardingActions): OnboardingState => {
   switch (action.type) {
     case ONBOARDING_START:
       return { ...state, needsOnboarding: true };
@@ -19,4 +19,6 @@ export default function onboarding(state: OnboardingState = initialState, action
     default:
       return state;
   }
-}
+};
+
+export default onboarding;

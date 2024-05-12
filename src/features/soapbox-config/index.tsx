@@ -83,9 +83,7 @@ const SoapboxConfig: React.FC = () => {
   const [rawJSON, setRawJSON] = useState<string>(JSON.stringify(initialData, null, 2));
   const [jsonValid, setJsonValid] = useState(true);
 
-  const soapbox = useMemo(() => {
-    return normalizeSoapboxConfig(data);
-  }, [data]);
+  const soapbox = useMemo(() => normalizeSoapboxConfig(data), [data]);
 
   const setConfig = (path: ConfigPath, value: any) => {
     const newData = data.setIn(path, value);
@@ -109,51 +107,39 @@ const SoapboxConfig: React.FC = () => {
     e.preventDefault();
   };
 
-  const handleChange = (path: ConfigPath, getValue: ValueGetter<any>): React.ChangeEventHandler => {
-    return e => {
-      setConfig(path, getValue(e));
-    };
+  const handleChange = (path: ConfigPath, getValue: ValueGetter<any>): React.ChangeEventHandler => e => {
+    setConfig(path, getValue(e));
   };
 
-  const handleThemeChange = (path: ConfigPath): ThemeChangeHandler => {
-    return theme => {
-      setConfig(path, theme);
-    };
+  const handleThemeChange = (path: ConfigPath): ThemeChangeHandler => theme => {
+    setConfig(path, theme);
   };
 
-  const handleFileChange = (path: ConfigPath): React.ChangeEventHandler<HTMLInputElement> => {
-    return e => {
-      const data = new FormData();
-      const file = e.target.files?.item(0);
+  const handleFileChange = (path: ConfigPath): React.ChangeEventHandler<HTMLInputElement> => e => {
+    const data = new FormData();
+    const file = e.target.files?.item(0);
 
-      if (file) {
-        data.append('file', file);
+    if (file) {
+      data.append('file', file);
 
-        dispatch(uploadMedia(data)).then(({ data }: any) => {
-          handleChange(path, () => data.url)(e);
-        }).catch(console.error);
-      }
-    };
+      dispatch(uploadMedia(data)).then(({ data }: any) => {
+        handleChange(path, () => data.url)(e);
+      }).catch(console.error);
+    }
   };
 
-  const handleStreamItemChange = (path: ConfigPath) => {
-    return (values: any[]) => {
-      setConfig(path, ImmutableList(values));
-    };
+  const handleStreamItemChange = (path: ConfigPath) => (values: any[]) => {
+    setConfig(path, ImmutableList(values));
   };
 
-  const addStreamItem = (path: ConfigPath, template: Template) => {
-    return () => {
-      const items = data.getIn(path) || ImmutableList();
-      setConfig(path, items.push(template));
-    };
+  const addStreamItem = (path: ConfigPath, template: Template) => () => {
+    const items = data.getIn(path) || ImmutableList();
+    setConfig(path, items.push(template));
   };
 
-  const deleteStreamItem = (path: ConfigPath) => {
-    return (i: number) => {
-      const newData = data.deleteIn([...path, i]);
-      setData(newData);
-    };
+  const deleteStreamItem = (path: ConfigPath) => (i: number) => {
+    const newData = data.deleteIn([...path, i]);
+    setData(newData);
   };
 
   const handleEditJSON: React.ChangeEventHandler<HTMLTextAreaElement> = e => {

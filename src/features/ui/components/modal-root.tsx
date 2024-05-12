@@ -108,9 +108,7 @@ export default class ModalRoot extends React.PureComponent<IModalRoot> {
     }
   }
 
-  renderLoading = (modalId: string) => {
-    return !['MEDIA', 'VIDEO', 'BOOST', 'CONFIRM', 'ACTIONS'].includes(modalId) ? <ModalLoading /> : null;
-  };
+  renderLoading = (modalId: string) => !['MEDIA', 'VIDEO', 'BOOST', 'CONFIRM', 'ACTIONS'].includes(modalId) ? <ModalLoading /> : null;
 
   onClickClose = (_?: ModalType) => {
     const { onClose, type } = this.props;

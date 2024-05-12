@@ -46,11 +46,10 @@ type State = ImmutableMap<any, ReducerAccount>;
 
 const initialState: State = ImmutableMap();
 
-const minifyAccount = (account: AccountRecord): ReducerAccount => {
-  return account.mergeWith((o, n) => n || o, {
+const minifyAccount = (account: AccountRecord): ReducerAccount =>
+  account.mergeWith((o, n) => n || o, {
     moved: normalizeId(account.getIn(['moved', 'id'])),
   }) as ReducerAccount;
-};
 
 const fixAccount = (state: State, account: APIEntity) => {
   const normalized = minifyAccount(normalizeAccount(account));
@@ -69,59 +68,54 @@ const addTags = (
   state: State,
   accountIds: Array<string>,
   tags: Array<string>,
-): State => {
-  return state.withMutations(state => {
-    accountIds.forEach(id => {
-      state.updateIn([id, 'pleroma', 'tags'], ImmutableList(), v =>
-        ImmutableOrderedSet(fromJS(v)).union(tags).toList(),
-      );
+): State => state.withMutations(state => {
+  accountIds.forEach(id => {
+    state.updateIn([id, 'pleroma', 'tags'], ImmutableList(), v =>
+      ImmutableOrderedSet(fromJS(v)).union(tags).toList(),
+    );
 
-      tags.forEach(tag => {
-        switch (tag) {
-          case 'verified':
-            state.setIn([id, 'verified'], true);
-            break;
-          case 'donor':
-            state.setIn([id, 'donor'], true);
-            break;
-        }
-      });
+    tags.forEach(tag => {
+      switch (tag) {
+        case 'verified':
+          state.setIn([id, 'verified'], true);
+          break;
+        case 'donor':
+          state.setIn([id, 'donor'], true);
+          break;
+      }
     });
   });
-};
+});
 
 const removeTags = (
   state: State,
   accountIds: Array<string>,
   tags: Array<string>,
-): State => {
-  return state.withMutations(state => {
-    accountIds.forEach(id => {
-      state.updateIn([id, 'pleroma', 'tags'], ImmutableList(), v =>
-        ImmutableOrderedSet(fromJS(v)).subtract(tags).toList(),
-      );
+): State => state.withMutations(state => {
+  accountIds.forEach(id => {
+    state.updateIn([id, 'pleroma', 'tags'], ImmutableList(), v =>
+      ImmutableOrderedSet(fromJS(v)).subtract(tags).toList(),
+    );
 
-      tags.forEach(tag => {
-        switch (tag) {
-          case 'verified':
-            state.setIn([id, 'verified'], false);
-            break;
-          case 'donor':
-            state.setIn([id, 'donor'], false);
-            break;
-        }
-      });
+    tags.forEach(tag => {
+      switch (tag) {
+        case 'verified':
+          state.setIn([id, 'verified'], false);
+          break;
+        case 'donor':
+          state.setIn([id, 'donor'], false);
+          break;
+      }
     });
   });
-};
+});
 
-const setActive = (state: State, accountIds: Array<string>, active: boolean): State => {
-  return state.withMutations(state => {
+const setActive = (state: State, accountIds: Array<string>, active: boolean): State =>
+  state.withMutations(state => {
     accountIds.forEach(id => {
       state.setIn([id, 'pleroma', 'is_active'], active);
     });
   });
-};
 
 const permissionGroupFields: Record<string, string> = {
   admin: 'is_admin',
@@ -186,18 +180,16 @@ const buildAccount = (adminUser: ImmutableMap<string, any>): AccountRecord => no
 const mergeAdminUser = (
   account: AccountRecord,
   adminUser: ImmutableMap<string, any>,
-) => {
-  return account.withMutations(account => {
-    account.set('display_name', adminUser.get('display_name'));
-    account.set('avatar', adminUser.get('avatar'));
-    account.set('avatar_static', adminUser.get('avatar'));
-    account.setIn(['pleroma', 'is_active'], adminUser.get('is_active'));
-    account.setIn(['pleroma', 'is_admin'], adminUser.getIn(['roles', 'admin']));
-    account.setIn(['pleroma', 'is_moderator'], adminUser.getIn(['roles', 'moderator']));
-    account.setIn(['pleroma', 'is_confirmed'], adminUser.get('is_confirmed'));
-    account.setIn(['pleroma', 'tags'], adminUser.get('tags'));
-  });
-};
+) => account.withMutations(account => {
+  account.set('display_name', adminUser.get('display_name'));
+  account.set('avatar', adminUser.get('avatar'));
+  account.set('avatar_static', adminUser.get('avatar'));
+  account.setIn(['pleroma', 'is_active'], adminUser.get('is_active'));
+  account.setIn(['pleroma', 'is_admin'], adminUser.getIn(['roles', 'admin']));
+  account.setIn(['pleroma', 'is_moderator'], adminUser.getIn(['roles', 'moderator']));
+  account.setIn(['pleroma', 'is_confirmed'], adminUser.get('is_confirmed'));
+  account.setIn(['pleroma', 'tags'], adminUser.get('tags'));
+});
 
 const importAdminUser = (state: State, adminUser: ImmutableMap<string, any>): State => {
   const id = adminUser.get('id');
@@ -210,15 +202,14 @@ const importAdminUser = (state: State, adminUser: ImmutableMap<string, any>): St
   }
 };
 
-const importAdminUsers = (state: State, adminUsers: Array<Record<string, any>>): State => {
-  return state.withMutations((state: State) => {
+const importAdminUsers = (state: State, adminUsers: Array<Record<string, any>>): State =>
+  state.withMutations((state: State) => {
     adminUsers.filter(adminUser => !adminUser.account).forEach(adminUser => {
       importAdminUser(state, ImmutableMap(fromJS(adminUser)));
     });
   });
-};
 
-export default function accounts(state: State = initialState, action: AnyAction): State {
+const accounts = (state: State = initialState, action: AnyAction): State => {
   switch (action.type) {
     case ACCOUNT_IMPORT:
       return fixAccount(state, action.account);
@@ -253,4 +244,6 @@ export default function accounts(state: State = initialState, action: AnyAction)
     default:
       return state;
   }
-}
+};
+
+export default accounts;

@@ -83,7 +83,6 @@ export const UserPanel = lazy(() => import('soapbox/features/ui/components/user-
 export const PromoPanel = lazy(() => import('soapbox/features/ui/components/promo-panel'));
 export const SignUpPanel = lazy(() => import('soapbox/features/ui/components/panels/sign-up-panel'));
 export const CtaBanner = lazy(() => import('soapbox/features/ui/components/cta-banner'));
-export const FundingPanel = lazy(() => import('soapbox/features/ui/components/funding-panel'));
 export const TrendsPanel = lazy(() => import('soapbox/features/ui/components/trends-panel'));
 export const ProfileInfoPanel = lazy(() => import('soapbox/features/ui/components/profile-info-panel'));
 export const ProfileMediaPanel = lazy(() => import('soapbox/features/ui/components/profile-media-panel'));

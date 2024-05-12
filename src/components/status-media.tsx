@@ -39,17 +39,15 @@ const StatusMedia: React.FC<IStatusMedia> = ({
 
   let media: JSX.Element | null = null;
 
-  const renderLoadingMediaGallery = (): JSX.Element => {
-    return <div className='media_gallery' style={{ height: '285px' }} />;
-  };
+  const renderLoadingMediaGallery = (): JSX.Element => <div className='media_gallery' style={{ height: '285px' }} />;
 
-  const renderLoadingVideoPlayer = (): JSX.Element => {
-    return <div className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat' style={{ height: '285px' }} />;
-  };
+  const renderLoadingVideoPlayer = (): JSX.Element => (
+    <div className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat' style={{ height: '285px' }} />
+  );
 
-  const renderLoadingAudioPlayer = (): JSX.Element => {
-    return <div className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat' style={{ height: '285px' }} />;
-  };
+  const renderLoadingAudioPlayer = (): JSX.Element => (
+    <div className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat' style={{ height: '285px' }} />
+  );
 
   const openMedia = (media: ImmutableList<Attachment>, index: number) => {
     dispatch(openModal('MEDIA', { media, status, index }));

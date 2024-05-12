@@ -25,7 +25,7 @@ const ReducerRecord = ImmutableRecord({
 
 type Subscription = ReturnType<typeof SubscriptionRecord>;
 
-export default function push_subscriptions(state = ReducerRecord(), action: AnyAction) {
+const push_subscriptions = (state = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case SET_SUBSCRIPTION:
       return state
@@ -44,4 +44,6 @@ export default function push_subscriptions(state = ReducerRecord(), action: AnyA
     default:
       return state;
   }
-}
+};
+
+export default push_subscriptions;

@@ -12,11 +12,13 @@ type State = ImmutableList<FilterEntity>;
 const importFilters = (_state: State, filters: APIEntity[]): State =>
   ImmutableList(filters.map((filter) => normalizeFilter(filter)));
 
-export default function filters(state: State = ImmutableList(), action: AnyAction): State {
+const filters = (state: State = ImmutableList(), action: AnyAction): State => {
   switch (action.type) {
     case FILTERS_FETCH_SUCCESS:
       return importFilters(state, action.filters);
     default:
       return state;
   }
-}
+};
+
+export default filters;

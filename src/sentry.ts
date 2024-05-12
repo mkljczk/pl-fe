@@ -6,7 +6,7 @@ import type { CaptureContext, UserFeedback } from '@sentry/types';
 import type { SetOptional } from 'type-fest';
 
 /** Start Sentry. */
-async function startSentry(dsn: string): Promise<void> {
+const startSentry = async (dsn: string): Promise<void> => {
   const Sentry = await import('@sentry/react');
 
   Sentry.init({
@@ -43,10 +43,10 @@ async function startSentry(dsn: string): Promise<void> {
   });
 
   Sentry.setContext('soapbox', sourceCode);
-}
+};
 
 /** Associate the account with Sentry events. */
-async function setSentryAccount(account: Account): Promise<void> {
+const setSentryAccount = async (account: Account): Promise<void> => {
   const Sentry = await import('@sentry/react');
 
   Sentry.setUser({
@@ -54,28 +54,25 @@ async function setSentryAccount(account: Account): Promise<void> {
     username: account.acct,
     url: account.url,
   });
-}
+};
 
 /** Remove the account from Sentry events. */
-async function unsetSentryAccount(): Promise<void> {
+const unsetSentryAccount = async (): Promise<void> => {
   const Sentry = await import('@sentry/react');
   Sentry.setUser(null);
-}
+};
 
 /** Capture the exception and report it to Sentry. */
-async function captureSentryException (
-  exception: any,
-  captureContext?: CaptureContext | undefined,
-): Promise<string> {
+const captureSentryException = async (exception: any, captureContext?: CaptureContext | undefined): Promise<string> => {
   const Sentry = await import('@sentry/react');
   return Sentry.captureException(exception, captureContext);
-}
+};
 
 /** Capture user feedback and report it to Sentry. */
-async function captureSentryFeedback(feedback: SetOptional<UserFeedback, 'name' | 'email'>): Promise<void> {
+const captureSentryFeedback = async (feedback: SetOptional<UserFeedback, 'name' | 'email'>): Promise<void> => {
   const Sentry = await import('@sentry/react');
   Sentry.captureUserFeedback(feedback as UserFeedback);
-}
+};
 
 export {
   startSentry,

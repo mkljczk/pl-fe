@@ -12,10 +12,9 @@ const ReducerRecord = ImmutableRecord({
   swUpdating: false,
 });
 
-export default function meta(state = ReducerRecord(), action: AnyAction) {
+const meta = (state = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case fetchInstance.rejected.type:
-      console.log(action, action.payload.response?.status);
       if (action.payload.response?.status === 404) {
         return state.set('instance_fetch_failed', true);
       }
@@ -25,4 +24,6 @@ export default function meta(state = ReducerRecord(), action: AnyAction) {
     default:
       return state;
   }
-}
+};
+
+export default meta;

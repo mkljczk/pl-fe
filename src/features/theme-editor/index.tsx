@@ -55,25 +55,21 @@ const ThemeEditor: React.FC<IThemeEditor> = () => {
 
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const updateColors = (key: string) => {
-    return (newColors: ColorGroup) => {
-      setColors({
-        ...colors,
-        [key]: {
-          ...colors[key],
-          ...newColors,
-        },
-      });
-    };
+  const updateColors = (key: string) => (newColors: ColorGroup) => {
+    setColors({
+      ...colors,
+      [key]: {
+        ...colors[key],
+        ...newColors,
+      },
+    });
   };
 
-  const updateColor = (key: string) => {
-    return (hex: string) => {
-      setColors({
-        ...colors,
-        [key]: hex,
-      });
-    };
+  const updateColor = (key: string) => (hex: string) => {
+    setColors({
+      ...colors,
+      [key]: hex,
+    });
   };
 
   const setTheme = (theme: any) => {
@@ -249,13 +245,11 @@ interface IPaletteListItem {
 }
 
 /** Palette editor inside a ListItem. */
-const PaletteListItem: React.FC<IPaletteListItem> = ({ label, palette, onChange, resetKey }) => {
-  return (
-    <ListItem label={<div className='w-20'>{label}</div>}>
-      <Palette palette={palette} onChange={onChange} resetKey={resetKey} />
-    </ListItem>
-  );
-};
+const PaletteListItem: React.FC<IPaletteListItem> = ({ label, palette, onChange, resetKey }) => (
+  <ListItem label={<div className='w-20'>{label}</div>}>
+    <Palette palette={palette} onChange={onChange} resetKey={resetKey} />
+  </ListItem>
+);
 
 interface IColorListItem {
   label: React.ReactNode;

@@ -27,13 +27,12 @@ type State = ImmutableMap<string, PendingStatus>;
 
 const initialState: State = ImmutableMap();
 
-const importStatus = (state: State, params: ImmutableMap<string, any>, idempotencyKey: string) => {
-  return state.set(idempotencyKey, PendingStatusRecord(params));
-};
+const importStatus = (state: State, params: ImmutableMap<string, any>, idempotencyKey: string) =>
+  state.set(idempotencyKey, PendingStatusRecord(params));
 
 const deleteStatus = (state: State, idempotencyKey: string) => state.delete(idempotencyKey);
 
-export default function pending_statuses(state = initialState, action: AnyAction) {
+const pending_statuses = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case STATUS_CREATE_REQUEST:
       return action.editing ? state : importStatus(state, ImmutableMap(fromJS(action.params)), action.idempotencyKey);
@@ -43,4 +42,6 @@ export default function pending_statuses(state = initialState, action: AnyAction
     default:
       return state;
   }
-}
+};
+
+export default pending_statuses;

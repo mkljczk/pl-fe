@@ -6,7 +6,7 @@ import { normalizeTag } from 'soapbox/normalizers';
 
 import type { Tag } from 'soapbox/types/entities';
 
-export default function useTrends() {
+const useTrends = () => {
   const api = useApi();
   const dispatch = useAppDispatch();
 
@@ -27,4 +27,6 @@ export default function useTrends() {
   });
 
   return result;
-}
+};
+
+export default useTrends;

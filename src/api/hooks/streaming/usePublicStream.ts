@@ -4,11 +4,7 @@ interface UsePublicStreamOpts {
   onlyMedia?: boolean;
 }
 
-function usePublicStream({ onlyMedia }: UsePublicStreamOpts = {}) {
-  return useTimelineStream(
-    `public${onlyMedia ? ':media' : ''}`,
-    `public${onlyMedia ? ':media' : ''}`,
-  );
-}
+const usePublicStream = ({ onlyMedia }: UsePublicStreamOpts = {}) =>
+  useTimelineStream(`public${onlyMedia ? ':media' : ''}`, `public${onlyMedia ? ':media' : ''}`);
 
 export { usePublicStream };

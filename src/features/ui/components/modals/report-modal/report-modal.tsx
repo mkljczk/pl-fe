@@ -173,9 +173,9 @@ const ReportModal = ({ onClose }: IReportModal) => {
     return null;
   };
 
-  const renderTitle = () => {
-    return <FormattedMessage id='report.target' defaultMessage='Reporting {target}' values={{ target: <strong>@{account?.acct}</strong> }} />;
-  };
+  const renderTitle = () => (
+    <FormattedMessage id='report.target' defaultMessage='Reporting {target}' values={{ target: <strong>@{account?.acct}</strong> }} />
+  );
 
   const isConfirmationButtonDisabled = useMemo(() => {
     if (currentStep === Steps.THREE) {

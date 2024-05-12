@@ -158,25 +158,23 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
   }, []);
 
   /* Render an empty state instead of the scrollable list. */
-  const renderEmpty = (): JSX.Element => {
-    return (
-      <div className='mt-2'>
-        {alwaysPrepend && prepend}
+  const renderEmpty = (): JSX.Element => (
+    <div className='mt-2'>
+      {alwaysPrepend && prepend}
 
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <>
-            {emptyMessageCard ? (
-              <Card variant='rounded' size='lg'>
-                {emptyMessage}
-              </Card>
-            ) : emptyMessage}
-          </>
-        )}
-      </div>
-    );
-  };
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          {emptyMessageCard ? (
+            <Card variant='rounded' size='lg'>
+              {emptyMessage}
+            </Card>
+          ) : emptyMessage}
+        </>
+      )}
+    </div>
+  );
 
   /** Render a single item. */
   const renderItem = (_i: number, element: JSX.Element): JSX.Element => {

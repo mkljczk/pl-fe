@@ -17,11 +17,11 @@ interface EntityActionEndpoints {
   post?: string;
 }
 
-function useEntityActions<TEntity extends Entity = Entity, Data = any>(
+const useEntityActions = <TEntity extends Entity = Entity, Data = any>(
   expandedPath: ExpandedEntitiesPath,
   endpoints: EntityActionEndpoints,
   opts: UseEntityActionsOpts<TEntity> = {},
-) {
+) => {
   const api = useApi();
   const { entityType, path } = parseEntitiesPath(expandedPath);
 
@@ -46,6 +46,6 @@ function useEntityActions<TEntity extends Entity = Entity, Data = any>(
     updateEntity,
     isSubmitting: createSubmitting || deleteSubmitting || updateSubmitting,
   };
-}
+};
 
 export { useEntityActions };

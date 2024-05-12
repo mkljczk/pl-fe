@@ -68,18 +68,14 @@ const comparator = (a: NotificationRecord, b: NotificationRecord) => {
   return 0;
 };
 
-const minifyNotification = (notification: NotificationRecord) => {
-  return notification.mergeWith((o, n) => n || o, {
-    account: notification.getIn(['account', 'id']) as string,
-    accounts: notification.accounts?.map((account: any) => account.get('id')),
-    target: notification.getIn(['target', 'id']) as string,
-    status: notification.getIn(['status', 'id']) as string,
-  });
-};
+const minifyNotification = (notification: NotificationRecord) => notification.mergeWith((o, n) => n || o, {
+  account: notification.getIn(['account', 'id']) as string,
+  accounts: notification.accounts?.map((account: any) => account.get('id')),
+  target: notification.getIn(['target', 'id']) as string,
+  status: notification.getIn(['status', 'id']) as string,
+});
 
-const fixNotification = (notification: APIEntity) => {
-  return minifyNotification(normalizeNotification(notification));
-};
+const fixNotification = (notification: APIEntity) => minifyNotification(normalizeNotification(notification));
 
 const isValid = (notification: APIEntity) => {
   try {
@@ -105,15 +101,14 @@ const isValid = (notification: APIEntity) => {
 };
 
 // Count how many notifications appear after the given ID (for unread count)
-const countFuture = (notifications: ImmutableOrderedMap<string, NotificationRecord>, lastId: string | number) => {
-  return notifications.reduce((acc, notification) => {
+const countFuture = (notifications: ImmutableOrderedMap<string, NotificationRecord>, lastId: string | number) =>
+  notifications.reduce((acc, notification) => {
     if (parseId(notification.get('id').split('+')[0]) > parseId(lastId)) {
       return acc + 1;
     } else {
       return acc;
     }
   }, 0);
-};
 
 const importNotification = (state: State, notification: APIEntity) => {
   const top = state.top;
@@ -148,9 +143,8 @@ const expandNormalizedNotifications = (state: State, notifications: APIEntity[],
   });
 };
 
-const filterNotifications = (state: State, relationship: APIEntity) => {
-  return state.update('items', map => map.filterNot(item => item !== null && item.account === relationship.id));
-};
+const filterNotifications = (state: State, relationship: APIEntity) =>
+  state.update('items', map => map.filterNot(item => item !== null && item.account === relationship.id));
 
 const filterNotificationIds = (state: State, accountIds: Array<string>, type?: string) => {
   const helper = (list: ImmutableOrderedMap<string, NotificationRecord>) => list.filterNot(item => item !== null && accountIds.includes(item.account as string) && (type === undefined || type === item.type));
@@ -162,9 +156,8 @@ const updateTop = (state: State, top: boolean) => {
   return state.set('top', top);
 };
 
-const deleteByStatus = (state: State, statusId: string) => {
-  return state.update('items', map => map.filterNot(item => item !== null && item.status === statusId));
-};
+const deleteByStatus = (state: State, statusId: string) =>
+  state.update('items', map => map.filterNot(item => item !== null && item.status === statusId));
 
 const updateNotificationsQueue = (state: State, notification: APIEntity, intlMessages: Record<string, string>, intlLocale: string) => {
   const queuedNotifications = state.queuedNotifications;
@@ -204,7 +197,7 @@ const importMarker = (state: State, marker: ImmutableMap<string, any>) => {
   });
 };
 
-export default function notifications(state: State = ReducerRecord(), action: AnyAction) {
+const notifications = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case NOTIFICATIONS_EXPAND_REQUEST:
       return state.set('isLoading', true);
@@ -246,4 +239,6 @@ export default function notifications(state: State = ReducerRecord(), action: An
     default:
       return state;
   }
-}
+};
+
+export default notifications;

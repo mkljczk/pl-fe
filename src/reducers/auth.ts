@@ -88,7 +88,7 @@ const getLocalState = () => {
 };
 
 const sessionUser = getSessionUser();
-export const localState = getLocalState(); fromJS(JSON.parse(localStorage.getItem(STORAGE_KEY)!));
+export const localState = getLocalState();fromJS(JSON.parse(localStorage.getItem(STORAGE_KEY)!));
 
 // Checks if the user has an ID and access token
 const validUser = (user?: AuthUser) => {
@@ -176,20 +176,18 @@ const persistState = (state: State) => {
   persistSession(state);
 };
 
-const initialize = (state: State) => {
-  return state.withMutations(state => {
+const initialize = (state: State) =>
+  state.withMutations(state => {
     maybeShiftMe(state);
     setSessionUser(state);
     sanitizeState(state);
     persistState(state);
   });
-};
 
 const initialState = initialize(ReducerRecord().merge(localState as any));
 
-const importToken = (state: State, token: APIEntity) => {
-  return state.setIn(['tokens', token.access_token], AuthTokenRecord(token));
-};
+const importToken = (state: State, token: APIEntity) =>
+  state.setIn(['tokens', token.access_token], AuthTokenRecord(token));
 
 // Users are now stored by their ActivityPub ID instead of their
 // primary key to support auth against multiple hosts.
@@ -204,18 +202,17 @@ const upgradeNonUrlId = (state: State, account: APIEntity) => {
 };
 
 // Returns a predicate function for filtering a mismatched user/token
-const userMismatch = (token: string, account: APIEntity) => {
-  return (user: AuthUser, url: string) => {
+const userMismatch = (token: string, account: APIEntity) =>
+  (user: AuthUser, url: string) => {
     const sameToken = user.get('access_token') === token;
     const differentUrl = url !== account.url || user.get('url') !== account.url;
     const differentId = user.get('id') !== account.id;
 
     return sameToken && (differentUrl || differentId);
   };
-};
 
-const importCredentials = (state: State, token: string, account: APIEntity) => {
-  return state.withMutations(state => {
+const importCredentials = (state: State, token: string, account: APIEntity) =>
+  state.withMutations(state => {
     state.setIn(['users', account.url], AuthUserRecord({
       id: account.id,
       access_token: token,
@@ -227,15 +224,13 @@ const importCredentials = (state: State, token: string, account: APIEntity) => {
     state.update('me', me => me || account.url);
     upgradeNonUrlId(state, account);
   });
-};
 
-const deleteToken = (state: State, token: string) => {
-  return state.withMutations(state => {
+const deleteToken = (state: State, token: string) =>
+  state.withMutations(state => {
     state.update('tokens', tokens => tokens.delete(token));
     state.update('users', users => users.filterNot(user => user.get('access_token') === token));
     maybeShiftMe(state);
   });
-};
 
 const deleteUser = (state: State, account: Pick<AccountEntity, 'url'>) => {
   const accountUrl = account.url;
@@ -247,8 +242,8 @@ const deleteUser = (state: State, account: Pick<AccountEntity, 'url'>) => {
   });
 };
 
-const importMastodonPreload = (state: State, data: ImmutableMap<string, any>) => {
-  return state.withMutations(state => {
+const importMastodonPreload = (state: State, data: ImmutableMap<string, any>) =>
+  state.withMutations(state => {
     const accountId   = data.getIn(['meta', 'me']) as string;
     const accountUrl  = data.getIn(['accounts', accountId, 'url']) as string;
     const accessToken = data.getIn(['meta', 'access_token']) as string;
@@ -271,7 +266,6 @@ const importMastodonPreload = (state: State, data: ImmutableMap<string, any>) =>
 
     maybeShiftMe(state);
   });
-};
 
 const persistAuthAccount = (account: APIEntity) => {
   if (account && account.url) {
@@ -351,7 +345,7 @@ const maybeReload = (oldState: State, state: State, action: AnyAction) => {
   }
 };
 
-export default function auth(oldState: State = initialState, action: AnyAction) {
+const auth = (oldState: State = initialState, action: AnyAction) => {
   const state = reducer(oldState, action);
 
   if (!state.equals(oldState)) {
@@ -372,4 +366,6 @@ export default function auth(oldState: State = initialState, action: AnyAction) 
   }
 
   return state;
-}
+};
+
+export default auth;

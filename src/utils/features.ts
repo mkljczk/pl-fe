@@ -18,76 +18,76 @@ const any = (arr: Array<any>): boolean => arr.some(Boolean);
  * Firefish, a fork of Misskey. Formerly known as Calckey.
  * @see {@link https://joinfirefish.org/}
  */
-export const FIREFISH = 'Firefish';
+const FIREFISH = 'Firefish';
 
 /**
  * Friendica, decentralized social platform implementing multiple federation protocols.
  * @see {@link https://friendi.ca/}
  */
-export const FRIENDICA = 'Friendica';
+const FRIENDICA = 'Friendica';
 
 /**
  * Iceshrimp, yet another Misskey fork.
  * @see {@link https://iceshrimp.dev/}
  */
-export const ICESHRIMP = 'Iceshrimp';
+const ICESHRIMP = 'Iceshrimp';
 
 /**
  * Mastodon, the software upon which this is all based.
  * @see {@link https://joinmastodon.org/}
  */
-export const MASTODON = 'Mastodon';
+const MASTODON = 'Mastodon';
 
 /**
  * Mitra, a Rust backend with cryptocurrency integrations.
  * @see {@link https://codeberg.org/silverpill/mitra}
  */
-export const MITRA = 'Mitra';
+const MITRA = 'Mitra';
 
 /**
  * Pixelfed, a federated image sharing platform.
  * @see {@link https://pixelfed.org/}
  */
-export const PIXELFED = 'Pixelfed';
+const PIXELFED = 'Pixelfed';
 
 /**
  * Pleroma, a feature-rich alternative written in Elixir.
  * @see {@link https://pleroma.social/}
  */
-export const PLEROMA = 'Pleroma';
+const PLEROMA = 'Pleroma';
 
 /**
  * Takahē, backend with support for serving multiple domains.
  * @see {@link https://jointakahe.org/}
  */
-export const TAKAHE = 'Takahe';
+const TAKAHE = 'Takahe';
 
 /**
  * Wildebeest, backend running on top of Cloudflare Pages.
  */
-export const WILDEBEEST = 'Wildebeest';
+const WILDEBEEST = 'Wildebeest';
 
 /**
  * Akkoma, a Pleroma fork.
  * @see {@link https://akkoma.dev/AkkomaGang/akkoma}
  */
-export const AKKOMA = 'akkoma';
+const AKKOMA = 'akkoma';
 
 /**
  * glitch-soc, fork of Mastodon with a number of experimental features.
  * @see {@link https://glitch-soc.github.io/docs/}
  */
-export const GLITCH = 'glitch';
+const GLITCH = 'glitch';
 
 /**
  * Rebased, the recommended backend for Soapbox.
  * @see {@link https://gitlab.com/soapbox-pub/rebased}
  */
 // NOTE: Rebased is named 'soapbox' for legacy reasons.
-export const REBASED = 'soapbox';
+const REBASED = 'soapbox';
 
 /** Backend name reserved only for tests. */
-export const UNRELEASED = 'unreleased';
+const UNRELEASED = 'unreleased';
 
 /** Parse features for the given instance */
 const getInstanceFeatures = (instance: Instance) => {
@@ -870,7 +870,7 @@ const getInstanceFeatures = (instance: Instance) => {
 export type Features = ReturnType<typeof getInstanceFeatures>;
 
 /** Detect backend features to conditionally render elements */
-export const getFeatures = createSelector([
+const getFeatures = createSelector([
   (instance: Instance) => instance,
 ], (instance): Features => {
   const features = getInstanceFeatures(instance);
@@ -890,7 +890,7 @@ interface Backend {
 }
 
 /** Get information about the software from its version string */
-export const parseVersion = (version: string): Backend => {
+const parseVersion = (version: string): Backend => {
   const regex = /^([\w+.-]*)(?: \(compatible; ([\w]*) (.*)\))?$/;
   const match = regex.exec(version);
 
@@ -916,4 +916,22 @@ export const parseVersion = (version: string): Backend => {
       version: '0.0.0',
     };
   }
+};
+
+export {
+  FIREFISH,
+  FRIENDICA,
+  ICESHRIMP,
+  MASTODON,
+  MITRA,
+  PIXELFED,
+  PLEROMA,
+  TAKAHE,
+  WILDEBEEST,
+  AKKOMA,
+  GLITCH,
+  REBASED,
+  UNRELEASED,
+  getFeatures,
+  parseVersion,
 };

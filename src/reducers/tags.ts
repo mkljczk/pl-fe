@@ -14,7 +14,7 @@ import type { Tag } from 'soapbox/types/entities';
 
 const initialState = ImmutableMap<string, Tag>();
 
-export default function tags(state = initialState, action: AnyAction) {
+const tags = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case HASHTAG_FETCH_SUCCESS:
       return state.set(action.name, normalizeTag(action.tag));
@@ -27,4 +27,6 @@ export default function tags(state = initialState, action: AnyAction) {
     default:
       return state;
   }
-}
+};
+
+export default tags;

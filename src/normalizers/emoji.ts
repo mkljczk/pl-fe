@@ -14,8 +14,6 @@ export const EmojiRecord = ImmutableRecord({
   visible_in_picker: true,
 });
 
-export const normalizeEmoji = (emoji: Record<string, any>) => {
-  return EmojiRecord(
-    ImmutableMap(fromJS(emoji)),
-  );
-};
+export const normalizeEmoji = (emoji: Record<string, any>) => EmojiRecord(
+  ImmutableMap(fromJS(emoji)),
+);

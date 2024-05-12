@@ -5,7 +5,7 @@ import { useEntity } from 'soapbox/entity-store/hooks';
 import { useApi } from 'soapbox/hooks';
 import { type GroupRelationship, groupRelationshipSchema } from 'soapbox/schemas';
 
-function useGroupRelationship(groupId: string | undefined) {
+const useGroupRelationship = (groupId: string | undefined) => {
   const api = useApi();
 
   const { entity: groupRelationship, ...result } = useEntity<GroupRelationship>(
@@ -21,6 +21,6 @@ function useGroupRelationship(groupId: string | undefined) {
     groupRelationship,
     ...result,
   };
-}
+};
 
 export { useGroupRelationship };

@@ -171,8 +171,8 @@ const useChatActions = (chatId: string) => {
 
   const { chat, changeScreen } = useChatContext();
 
-  const markChatAsRead = async (lastReadId: string) => {
-    return api<IChat>(`/api/v1/pleroma/chats/${chatId}/read`, { body: JSON.stringify({ last_read_id: lastReadId }) })
+  const markChatAsRead = async (lastReadId: string) =>
+    api<IChat>(`/api/v1/pleroma/chats/${chatId}/read`, { body: JSON.stringify({ last_read_id: lastReadId }) })
       .then(({ json: data }) => {
         updatePageItem(['chats', 'search'], data, (o, n) => o.id === n.id);
         const queryData = queryClient.getQueryData<InfiniteData<PaginatedResult<unknown>>>(['chats', 'search']);
@@ -191,19 +191,17 @@ const useChatActions = (chatId: string) => {
         return data;
       })
       .catch(() => null);
-  };
 
   const createChatMessage = useMutation({
-    mutationFn: ({ chatId, content, mediaIds }: { chatId: string; content: string; mediaIds?: string[] }) => {
-      return api<ChatMessage>(`/api/v1/pleroma/chats/${chatId}/messages`, {
+    mutationFn: ({ chatId, content, mediaIds }: { chatId: string; content: string; mediaIds?: string[] }) =>
+      api<ChatMessage>(`/api/v1/pleroma/chats/${chatId}/messages`, {
         method: 'POST',
         body: JSON.stringify({
           content,
           media_id: (mediaIds && mediaIds.length === 1) ? mediaIds[0] : undefined, // Pleroma backwards-compat
           media_ids: mediaIds,
         }),
-      });
-    },
+      }),
     retry: false,
     onMutate: async (variables) => {
       // Cancel any outgoing refetches (so they don't overwrite our optimistic update)

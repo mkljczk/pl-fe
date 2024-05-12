@@ -15,9 +15,8 @@ export const __clear = (): Function[] => mocks = [];
 
 export const staticClient = api.staticClient;
 
-export const getLinks = (response: Response): LinkHeader => {
-  return new LinkHeader(response.headers?.get('link') || undefined);
-};
+export const getLinks = (response: Response): LinkHeader =>
+  new LinkHeader(response.headers?.get('link') || undefined);
 
 export const getNextLink = (response: Response) => {
   const nextLink = new LinkHeader(response.headers?.get('link') || undefined);

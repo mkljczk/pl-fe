@@ -52,11 +52,9 @@ const normalizeMeta = (attachment: ImmutableMap<string, any>) => {
   return attachment.set('meta', meta);
 };
 
-export const normalizeAttachment = (attachment: Record<string, any>) => {
-  return AttachmentRecord(
-    ImmutableMap(fromJS(attachment)).withMutations((attachment: ImmutableMap<string, any>) => {
-      normalizeUrls(attachment);
-      normalizeMeta(attachment);
-    }),
-  );
-};
+export const normalizeAttachment = (attachment: Record<string, any>) => AttachmentRecord(
+  ImmutableMap(fromJS(attachment)).withMutations((attachment: ImmutableMap<string, any>) => {
+    normalizeUrls(attachment);
+    normalizeMeta(attachment);
+  }),
+);

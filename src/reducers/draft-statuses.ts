@@ -31,9 +31,8 @@ type State = ImmutableMap<string, DraftStatus>;
 
 const initialState: State = ImmutableMap();
 
-const importStatus = (state: State, status: APIEntity) => {
-  return state.set(status.draft_id, DraftStatusRecord(ImmutableMap(fromJS(status))));
-};
+const importStatus = (state: State, status: APIEntity) =>
+  state.set(status.draft_id, DraftStatusRecord(ImmutableMap(fromJS(status))));
 
 const importStatuses = (state: State, statuses: APIEntity[]) =>
   state.withMutations(mutable => Object.values(statuses || {}).forEach(status => importStatus(mutable, status)));
@@ -48,7 +47,7 @@ const persistState = (state: State, accountUrl: string) => {
   return state;
 };
 
-export default function scheduled_statuses(state: State = initialState, action: AnyAction) {
+const scheduled_statuses = (state: State = initialState, action: AnyAction) => {
   switch (action.type) {
     case DRAFT_STATUSES_FETCH_SUCCESS:
       return importStatuses(state, action.statuses);
@@ -61,4 +60,6 @@ export default function scheduled_statuses(state: State = initialState, action: 
     default:
       return state;
   }
-}
+};
+
+export default scheduled_statuses;

@@ -55,14 +55,12 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
     }));
   };
 
-  const getNormalizedReacts = () => {
-    return reduceEmoji(
-      status.reactions,
-      status.favourites_count,
-      status.favourited,
-      allowedEmoji,
-    );
-  };
+  const getNormalizedReacts = () => reduceEmoji(
+    status.reactions,
+    status.favourites_count,
+    status.favourited,
+    allowedEmoji,
+  );
 
   const handleOpenReblogsModal: React.EventHandler<React.MouseEvent> = (e) => {
     e.preventDefault();

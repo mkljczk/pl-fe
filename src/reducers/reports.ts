@@ -36,7 +36,7 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-export default function reports(state: State = ReducerRecord(), action: AnyAction) {
+const reports = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case REPORT_INIT:
       return state.withMutations(map => {
@@ -99,4 +99,6 @@ export default function reports(state: State = ReducerRecord(), action: AnyActio
     default:
       return state;
   }
-}
+};
+
+export default reports;

@@ -6,7 +6,7 @@ import { groupMemberSchema } from 'soapbox/schemas';
 
 import type { Group, GroupMember } from 'soapbox/schemas';
 
-function useDemoteGroupMember(group: Group, groupMember: GroupMember) {
+const useDemoteGroupMember = (group: Group, groupMember: GroupMember) => {
   const { createEntity } = useEntityActions<GroupMember>(
     [Entities.GROUP_MEMBERSHIPS, groupMember.id],
     { post: `/api/v1/groups/${group.id}/demote` },
@@ -14,6 +14,6 @@ function useDemoteGroupMember(group: Group, groupMember: GroupMember) {
   );
 
   return createEntity;
-}
+};
 
 export { useDemoteGroupMember };

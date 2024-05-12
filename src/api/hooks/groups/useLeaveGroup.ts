@@ -6,7 +6,7 @@ import { useGroups } from './useGroups';
 
 import type { Group, GroupRelationship } from 'soapbox/schemas';
 
-function useLeaveGroup(group: Group) {
+const useLeaveGroup = (group: Group) => {
   const { invalidate } = useGroups();
 
   const { createEntity, isSubmitting } = useEntityActions<GroupRelationship>(
@@ -20,6 +20,6 @@ function useLeaveGroup(group: Group) {
     isSubmitting,
     invalidate,
   };
-}
+};
 
 export { useLeaveGroup };

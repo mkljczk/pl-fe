@@ -32,11 +32,11 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({ onAuthorize
     }, (countdown as number) / 100);
   };
 
-  function handleAction(
+  const handleAction = (
     present: 'authorizing' | 'rejecting',
     past: 'authorized' | 'rejected',
     action: () => Promise<unknown> | unknown,
-  ): void {
+  ): void => {
     if (state === present) {
       if (interval.current) {
         clearInterval(interval.current);
@@ -62,7 +62,7 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({ onAuthorize
         doAction();
       }
     }
-  }
+  };
 
   const handleAuthorize = async () => handleAction('authorizing', 'authorized', onAuthorize);
   const handleReject = async () => handleAction('rejecting', 'rejected', onReject);
@@ -81,15 +81,13 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({ onAuthorize
     return {};
   };
 
-  useEffect(() => {
-    return () => {
-      if (timeout.current) {
-        clearTimeout(timeout.current);
-      }
-      if (interval.current) {
-        clearInterval(interval.current);
-      }
-    };
+  useEffect(() => () => {
+    if (timeout.current) {
+      clearTimeout(timeout.current);
+    }
+    if (interval.current) {
+      clearInterval(interval.current);
+    }
   }, []);
 
   switch (state) {
@@ -129,15 +127,13 @@ interface IActionEmblem {
   text: React.ReactNode;
 }
 
-const ActionEmblem: React.FC<IActionEmblem> = ({ text }) => {
-  return (
-    <div className='rounded-full bg-gray-100 px-4 py-2 dark:bg-gray-800'>
-      <Text theme='muted' size='sm'>
-        {text}
-      </Text>
-    </div>
-  );
-};
+const ActionEmblem: React.FC<IActionEmblem> = ({ text }) => (
+  <div className='rounded-full bg-gray-100 px-4 py-2 dark:bg-gray-800'>
+    <Text theme='muted' size='sm'>
+      {text}
+    </Text>
+  </div>
+);
 
 interface IAuthorizeRejectButton {
   theme: 'primary' | 'danger';
@@ -148,33 +144,31 @@ interface IAuthorizeRejectButton {
   style: React.CSSProperties;
 }
 
-const AuthorizeRejectButton: React.FC<IAuthorizeRejectButton> = ({ theme, icon, action, isLoading, style, disabled }) => {
-  return (
-    <div className='relative'>
-      <div
-        style={style}
-        className={
-          clsx({
-            'flex h-11 w-11 items-center justify-center rounded-full': true,
-            'bg-danger-600/10': theme === 'danger',
-            'bg-primary-500/10': theme === 'primary',
-          })
-        }
-      >
-        <IconButton
-          src={isLoading ? require('@tabler/icons/filled/player-stop.svg') : icon}
-          onClick={action}
-          theme='seamless'
-          className='h-10 w-10 items-center justify-center bg-white focus:!ring-0 dark:!bg-gray-900'
-          iconClassName={clsx('h-6 w-6', {
-            'text-primary-500': theme === 'primary',
-            'text-danger-600': theme === 'danger',
-          })}
-          disabled={disabled}
-        />
-      </div>
+const AuthorizeRejectButton: React.FC<IAuthorizeRejectButton> = ({ theme, icon, action, isLoading, style, disabled }) => (
+  <div className='relative'>
+    <div
+      style={style}
+      className={
+        clsx({
+          'flex h-11 w-11 items-center justify-center rounded-full': true,
+          'bg-danger-600/10': theme === 'danger',
+          'bg-primary-500/10': theme === 'primary',
+        })
+      }
+    >
+      <IconButton
+        src={isLoading ? require('@tabler/icons/filled/player-stop.svg') : icon}
+        onClick={action}
+        theme='seamless'
+        className='h-10 w-10 items-center justify-center bg-white focus:!ring-0 dark:!bg-gray-900'
+        iconClassName={clsx('h-6 w-6', {
+          'text-primary-500': theme === 'primary',
+          'text-danger-600': theme === 'danger',
+        })}
+        disabled={disabled}
+      />
     </div>
-  );
-};
+  </div>
+);
 
 export { AuthorizeRejectButtons };

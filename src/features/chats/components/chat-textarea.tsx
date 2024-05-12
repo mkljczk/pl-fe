@@ -23,12 +23,10 @@ const ChatTextarea: React.FC<IChatTextarea> = React.forwardRef(({
 }, ref) => {
   const isUploading = uploadCount > 0;
 
-  const handleDeleteAttachment = (i: number) => {
-    return () => {
-      if (onDeleteAttachment) {
-        onDeleteAttachment(i);
-      }
-    };
+  const handleDeleteAttachment = (i: number) => () => {
+    if (onDeleteAttachment) {
+      onDeleteAttachment(i);
+    }
   };
 
   return (

@@ -246,31 +246,27 @@ const Thread = (props: IThread) => {
     });
   };
 
-  const renderTombstone = (id: string) => {
-    return (
-      <div className='py-4 pb-8'>
-        <Tombstone
-          key={id}
-          id={id}
-          onMoveUp={handleMoveUp}
-          onMoveDown={handleMoveDown}
-        />
-      </div>
-    );
-  };
-
-  const renderStatus = (id: string) => {
-    return (
-      <ThreadStatus
+  const renderTombstone = (id: string) => (
+    <div className='py-4 pb-8'>
+      <Tombstone
         key={id}
         id={id}
-        focusedStatusId={status!.id}
         onMoveUp={handleMoveUp}
         onMoveDown={handleMoveDown}
-        contextType='thread'
       />
-    );
-  };
+    </div>
+  );
+
+  const renderStatus = (id: string) => (
+    <ThreadStatus
+      key={id}
+      id={id}
+      focusedStatusId={status!.id}
+      onMoveUp={handleMoveUp}
+      onMoveDown={handleMoveDown}
+      contextType='thread'
+    />
+  );
 
   const renderPendingStatus = (id: string) => {
     const idempotencyKey = id.replace(/^末pending-/, '');
@@ -284,17 +280,15 @@ const Thread = (props: IThread) => {
     );
   };
 
-  const renderChildren = (list: ImmutableOrderedSet<string>) => {
-    return list.map(id => {
-      if (id.endsWith('-tombstone')) {
-        return renderTombstone(id);
-      } else if (id.startsWith('末pending-')) {
-        return renderPendingStatus(id);
-      } else {
-        return renderStatus(id);
-      }
-    });
-  };
+  const renderChildren = (list: ImmutableOrderedSet<string>) => list.map(id => {
+    if (id.endsWith('-tombstone')) {
+      return renderTombstone(id);
+    } else if (id.startsWith('末pending-')) {
+      return renderPendingStatus(id);
+    } else {
+      return renderStatus(id);
+    }
+  });
 
   // Scroll focused status into view when thread updates.
   useEffect(() => {

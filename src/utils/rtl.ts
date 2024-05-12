@@ -16,7 +16,7 @@ const rtlChars = /[\u0590-\u083F]|[\u08A0-\u08FF]|[\uFB1D-\uFDFF]|[\uFE70-\uFEFF
  * - U+FB50 to U+FDFF - Arabic presentation forms A
  * - U+FE70 to U+FEFF - Arabic presentation forms B
  */
-function isRtl(text: string, confidence = 0.3): boolean {
+const isRtl = (text: string, confidence = 0.3): boolean => {
   if (text.length === 0) {
     return false;
   }
@@ -41,7 +41,7 @@ function isRtl(text: string, confidence = 0.3): boolean {
   }
 
   return matches.length / text.length > confidence;
-}
+};
 
 interface GetTextDirectionOpts {
   /** The default direction to return if the text is empty. */
@@ -51,9 +51,9 @@ interface GetTextDirectionOpts {
 }
 
 /** Get the direction of the text. */
-function getTextDirection(text: string, { fallback = 'ltr', confidence }: GetTextDirectionOpts = {}): 'ltr' | 'rtl' {
+const getTextDirection = (text: string, { fallback = 'ltr', confidence }: GetTextDirectionOpts = {}): 'ltr' | 'rtl' => {
   if (!text) return fallback;
   return isRtl(text, confidence) ? 'rtl' : 'ltr';
-}
+};
 
 export { getTextDirection, isRtl };

@@ -40,9 +40,7 @@ const Filters = () => {
   const handleFilterEdit = (id: string) => () => history.push(`/filters/${id}`);
 
   const handleFilterDelete = (id: string) => () => {
-    dispatch(deleteFilter(id)).then(() => {
-      return dispatch(fetchFilters(true));
-    }).catch(() => {
+    dispatch(deleteFilter(id)).then(() => dispatch(fetchFilters(true))).catch(() => {
       toast.error(intl.formatMessage(messages.delete_error));
     });
   };

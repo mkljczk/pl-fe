@@ -160,9 +160,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
     }
   };
 
-  const passwordsMatch = () => {
-    return params.get('password', '') === passwordConfirmation;
-  };
+  const passwordsMatch = () => params.get('password', '') === passwordConfirmation;
 
   const usernameAvailable = useCallback(debounce((username, domain?: string) => {
     if (!supportsAccountLookup) return;

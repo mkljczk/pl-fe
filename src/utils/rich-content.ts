@@ -1,5 +1,5 @@
 /** Returns `true` if the node contains only emojis, up to a limit */
-export const onlyEmoji = (node: HTMLElement, limit = 1, ignoreMentions = true): boolean => {
+const onlyEmoji = (node: HTMLElement, limit = 1, ignoreMentions = true): boolean => {
   if (!node) return false;
 
   try {
@@ -22,3 +22,5 @@ export const onlyEmoji = (node: HTMLElement, limit = 1, ignoreMentions = true): 
     return false;
   }
 };
+
+export { onlyEmoji };

@@ -24,15 +24,14 @@ const messages = defineMessages({
   action: { id: 'search.action', defaultMessage: 'Search for “{query}”' },
 });
 
-function redirectToAccount(accountId: string, routerHistory: any) {
-  return (_dispatch: AppDispatch, getState: () => RootState) => {
+const redirectToAccount = (accountId: string, routerHistory: any) =>
+  (_dispatch: AppDispatch, getState: () => RootState) => {
     const acct = selectAccount(getState(), accountId)!.acct;
 
     if (acct && routerHistory) {
       routerHistory.push(`/@${acct}`);
     }
   };
-}
 
 interface ISearch {
   autoFocus?: boolean;
@@ -136,16 +135,14 @@ const Search = (props: ISearch) => {
     componentProps.autoSelect = false;
   }
 
-  useEffect(() => {
-    return () => {
-      const newPath = history.location.pathname;
-      const shouldPersistSearch = !!newPath.match(/@.+\/posts\/[a-zA-Z0-9]+/g)
+  useEffect(() => () => {
+    const newPath = history.location.pathname;
+    const shouldPersistSearch = !!newPath.match(/@.+\/posts\/[a-zA-Z0-9]+/g)
         || !!newPath.match(/\/tags\/.+/g);
 
-      if (!shouldPersistSearch) {
-        dispatch(changeSearch(''));
-      }
-    };
+    if (!shouldPersistSearch) {
+      dispatch(changeSearch(''));
+    }
   }, []);
 
   return (

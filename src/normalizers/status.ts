@@ -95,24 +95,21 @@ export const StatusRecord = ImmutableRecord({
   translation: null as ImmutableMap<string, string> | null,
 });
 
-const normalizeAttachments = (status: ImmutableMap<string, any>) => {
-  return status.update('media_attachments', ImmutableList(), attachments => {
-    return attachments.map(normalizeAttachment);
-  });
-};
+const normalizeAttachments = (status: ImmutableMap<string, any>) =>
+  status.update('media_attachments', ImmutableList(), attachments =>
+    attachments.map(normalizeAttachment),
+  );
 
-const normalizeMentions = (status: ImmutableMap<string, any>) => {
-  return status.update('mentions', ImmutableList(), mentions => {
-    return mentions.map(normalizeMention);
-  });
-};
+const normalizeMentions = (status: ImmutableMap<string, any>) =>
+  status.update('mentions', ImmutableList(), mentions =>
+    mentions.map(normalizeMention),
+  );
 
 // Normalize emoji reactions
-const normalizeReactions = (entity: ImmutableMap<string, any>) => {
-  return entity.update('emojis', ImmutableList(), emojis => {
-    return emojis.map(normalizeEmoji);
-  });
-};
+const normalizeReactions = (entity: ImmutableMap<string, any>) =>
+  entity.update('emojis', ImmutableList(), emojis =>
+    emojis.map(normalizeEmoji),
+  );
 
 // Normalize the poll in the status, if applicable
 const normalizeStatusPoll = (status: ImmutableMap<string, any>) => {
@@ -178,14 +175,13 @@ const addSelfMention = (status: ImmutableMap<string, any>) => {
 };
 
 // Move the quote to the top-level
-const fixQuote = (status: ImmutableMap<string, any>) => {
-  return status.withMutations(status => {
+const fixQuote = (status: ImmutableMap<string, any>) =>
+  status.withMutations(status => {
     status.update('quote', quote => quote || status.getIn(['pleroma', 'quote']) || null);
     status.deleteIn(['pleroma', 'quote']);
     status.update('quotes_count', quotes_count => quotes_count || status.getIn(['pleroma', 'quotes_count'], 0));
     status.deleteIn(['pleroma', 'quotes_count']);
   });
-};
 
 /** If the status contains spoiler text, treat it as sensitive. */
 const fixSensitivity = (status: ImmutableMap<string, any>) => {
@@ -286,27 +282,25 @@ const parseGroup = (status: ImmutableMap<string, any>) => {
   }
 };
 
-export const normalizeStatus = (status: Record<string, any>) => {
-  return StatusRecord(
-    ImmutableMap(fromJS(status)).withMutations(status => {
-      normalizeAttachments(status);
-      normalizeMentions(status);
-      normalizeEmojis(status);
-      normalizeStatusPoll(status);
-      normalizeStatusCard(status);
-      fixMentionsOrder(status);
-      addSelfMention(status);
-      fixQuote(status);
-      fixSensitivity(status);
-      normalizeEvent(status);
-      normalizeReactions(status);
-      fixContent(status);
-      normalizeFilterResults(status);
-      normalizeDislikes(status);
-      normalizeTombstone(status);
-      parseAccount(status);
-      parseAccounts(status);
-      parseGroup(status);
-    }),
-  );
-};
+export const normalizeStatus = (status: Record<string, any>) => StatusRecord(
+  ImmutableMap(fromJS(status)).withMutations(status => {
+    normalizeAttachments(status);
+    normalizeMentions(status);
+    normalizeEmojis(status);
+    normalizeStatusPoll(status);
+    normalizeStatusCard(status);
+    fixMentionsOrder(status);
+    addSelfMention(status);
+    fixQuote(status);
+    fixSensitivity(status);
+    normalizeEvent(status);
+    normalizeReactions(status);
+    fixContent(status);
+    normalizeFilterResults(status);
+    normalizeDislikes(status);
+    normalizeTombstone(status);
+    parseAccount(status);
+    parseAccounts(status);
+    parseGroup(status);
+  }),
+);

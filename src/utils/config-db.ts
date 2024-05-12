@@ -15,11 +15,9 @@ const find = (
   configs: ImmutableList<Config>,
   group: string,
   key: string,
-): Config | undefined => {
-  return configs.find(config =>
-    config.isSuperset(ImmutableMap({ group, key })),
-  );
-};
+): Config | undefined => configs.find(config =>
+  config.isSuperset(ImmutableMap({ group, key })),
+);
 
 const toSimplePolicy = (configs: ImmutableList<Config>): MRFSimple => {
   const config = find(configs, ':pleroma', ':mrf_simple');
@@ -53,10 +51,13 @@ const fromSimplePolicy = (simplePolicy: Policy): ImmutableList<Config> => {
   ]);
 };
 
-export const ConfigDB = {
+const ConfigDB = {
   find,
   toSimplePolicy,
   fromSimplePolicy,
 };
 
-export default ConfigDB;
+export {
+  ConfigDB,
+  ConfigDB as default,
+};

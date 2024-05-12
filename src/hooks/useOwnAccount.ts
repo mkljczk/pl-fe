@@ -5,10 +5,10 @@ import { makeGetAccount } from 'soapbox/selectors';
 import { useAppSelector } from './useAppSelector';
 
 /** Get the logged-in account from the store, if any. */
-export const useOwnAccount = () => {
+const useOwnAccount = () => {
   const getAccount = useCallback(makeGetAccount(), []);
 
-  const account = useAppSelector((state) =>  {
+  const account = useAppSelector((state) => {
     const { me } = state;
 
     if (typeof me === 'string') {
@@ -17,4 +17,8 @@ export const useOwnAccount = () => {
   });
 
   return { account: account || undefined };
+};
+
+export {
+  useOwnAccount,
 };

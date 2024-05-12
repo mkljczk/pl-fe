@@ -17,15 +17,13 @@ export interface IIcon extends React.HTMLAttributes<HTMLDivElement> {
 /**
  * @deprecated Use the UI Icon component directly.
  */
-const Icon: React.FC<IIcon> = ({ src, alt, className, ...rest }) => {
-  return (
-    <div
-      className={clsx('svg-icon', className)}
-      {...rest}
-    >
-      <InlineSVG src={src} title={alt} loader={<></>} />
-    </div>
-  );
-};
+const Icon: React.FC<IIcon> = ({ src, alt, className, ...rest }) => (
+  <div
+    className={clsx('svg-icon', className)}
+    {...rest}
+  >
+    <InlineSVG src={src} title={alt} loader={<></>} />
+  </div>
+);
 
 export default Icon;

@@ -51,24 +51,22 @@ interface ILogItem {
   log: ModerationLogEntry;
 }
 
-const LogItem: React.FC<ILogItem> = ({ log }) => {
-  return (
-    <Stack space={2} className='p-4'>
-      <Text>{log.message}</Text>
+const LogItem: React.FC<ILogItem> = ({ log }) => (
+  <Stack space={2} className='p-4'>
+    <Text>{log.message}</Text>
 
-      <Text theme='muted' size='xs'>
-        <FormattedDate
-          value={new Date(log.time * 1000)}
-          hour12
-          year='numeric'
-          month='short'
-          day='2-digit'
-          hour='numeric'
-          minute='2-digit'
-        />
-      </Text>
-    </Stack>
-  );
-};
+    <Text theme='muted' size='xs'>
+      <FormattedDate
+        value={new Date(log.time * 1000)}
+        hour12
+        year='numeric'
+        month='short'
+        day='2-digit'
+        hour='numeric'
+        minute='2-digit'
+      />
+    </Text>
+  </Stack>
+);
 
 export default ModerationLog;

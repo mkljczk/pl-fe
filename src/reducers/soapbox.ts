@@ -51,7 +51,7 @@ const importSoapboxConfig = (state: ImmutableMap<string, any>, soapboxConfig: Im
   return soapboxConfig;
 };
 
-export default function soapbox(state = initialState, action: Record<string, any>) {
+const soapbox = (state = initialState, action: Record<string, any>) => {
   switch (action.type) {
     case PLEROMA_PRELOAD_IMPORT:
       return preloadImport(state, action);
@@ -66,4 +66,6 @@ export default function soapbox(state = initialState, action: Record<string, any
     default:
       return state;
   }
-}
+};
+
+export default soapbox;

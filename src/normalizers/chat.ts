@@ -10,8 +10,6 @@ export const ChatRecord = ImmutableRecord({
   updated_at: '',
 });
 
-export const normalizeChat = (chat: Record<string, any>) => {
-  return ChatRecord(
-    ImmutableMap(fromJS(chat)),
-  );
-};
+export const normalizeChat = (chat: Record<string, any>) => ChatRecord(
+  ImmutableMap(fromJS(chat)),
+);

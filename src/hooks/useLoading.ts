@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-function useLoading(initialState: boolean = false) {
+const useLoading = (initialState: boolean = false) => {
   const [isLoading, setIsLoading] = useState<boolean>(initialState);
 
-  function setPromise<T>(promise: Promise<T>) {
+  const setPromise = <T>(promise: Promise<T>) => {
     setIsLoading(true);
 
     promise
@@ -11,9 +11,9 @@ function useLoading(initialState: boolean = false) {
       .catch(() => setIsLoading(false));
 
     return promise;
-  }
+  };
 
   return [isLoading, setPromise] as const;
-}
+};
 
 export { useLoading };

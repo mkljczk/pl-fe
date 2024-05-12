@@ -4,7 +4,7 @@ import type { IntlShape } from 'react-intl';
 import type { Status } from 'soapbox/schemas';
 
 /** Get the initial visibility of media attachments from user settings. */
-export const defaultMediaVisibility = <T extends { reblog: T | string | null } & Pick<Status, 'visibility' | 'sensitive'>>(
+const defaultMediaVisibility = <T extends { reblog: T | string | null } & Pick<Status, 'visibility' | 'sensitive'>>(
   status: T | undefined | null,
   displayMedia: string,
 ): boolean => {
@@ -15,7 +15,7 @@ export const defaultMediaVisibility = <T extends { reblog: T | string | null } &
 };
 
 /** Grab the first external link from a status. */
-export const getFirstExternalLink = (status: Pick<Status, 'content'>): HTMLAnchorElement | null => {
+const getFirstExternalLink = (status: Pick<Status, 'content'>): HTMLAnchorElement | null => {
   try {
     // Pulled from Pleroma's media parser
     const selector = 'a:not(.mention,.hashtag,.attachment,[rel~="tag"])';
@@ -28,18 +28,16 @@ export const getFirstExternalLink = (status: Pick<Status, 'content'>): HTMLAncho
 };
 
 /** Whether the status is expected to have a Card after it loads. */
-export const shouldHaveCard = (status: Pick<Status, 'content'>): boolean => {
-  return Boolean(getFirstExternalLink(status));
-};
+const shouldHaveCard = (status: Pick<Status, 'content'>): boolean =>
+  Boolean(getFirstExternalLink(status));
 
 /** Whether the media IDs on this status have integer IDs (opposed to FlakeIds). */
 // https://gitlab.com/soapbox-pub/soapbox/-/merge_requests/1087
-export const hasIntegerMediaIds = (status: Pick<Status, 'media_attachments'>): boolean => {
-  return status.media_attachments.some(({ id }) => isIntegerId(id));
-};
+const hasIntegerMediaIds = (status: Pick<Status, 'media_attachments'>): boolean =>
+  status.media_attachments.some(({ id }) => isIntegerId(id));
 
 /** Sanitize status text for use with screen readers. */
-export const textForScreenReader = (
+const textForScreenReader = (
   intl: IntlShape,
   status: Pick<Status, 'account' | 'spoiler_text' | 'hidden' | 'search_index' | 'created_at'>,
   rebloggedByText?: string,
@@ -64,7 +62,7 @@ export const textForScreenReader = (
 };
 
 /** Get reblogged status if any, otherwise return the original status. */
-export const getActualStatus = <T extends { reblog: T | string | null }>(status: T): T => {
+const getActualStatus = <T extends { reblog: T | string | null }>(status: T): T => {
   if (status?.reblog && typeof status?.reblog === 'object') {
     return status.reblog;
   } else {
@@ -72,7 +70,7 @@ export const getActualStatus = <T extends { reblog: T | string | null }>(status:
   }
 };
 
-export const getStatusIdsFromLinksInContent = (content: string): string[] => {
+const getStatusIdsFromLinksInContent = (content: string): string[] => {
   const urls = content.match(RegExp(`${window.location.origin}/@([a-z\\d_-]+(?:@[^@\\s]+)?)/posts/[a-z0-9]+(?!\\S)`, 'gi'));
 
   if (!urls) return [];
@@ -80,4 +78,14 @@ export const getStatusIdsFromLinksInContent = (content: string): string[] => {
   return Array.from(new Set(urls
     .map(url => url.split('/').at(-1) as string)
     .filter(url => url)));
+};
+
+export {
+  defaultMediaVisibility,
+  getFirstExternalLink,
+  shouldHaveCard,
+  hasIntegerMediaIds,
+  textForScreenReader,
+  getActualStatus,
+  getStatusIdsFromLinksInContent,
 };

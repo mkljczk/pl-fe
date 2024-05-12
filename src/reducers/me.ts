@@ -23,7 +23,7 @@ const handleForbidden = (state: Me, error: { response: Response }) => {
   }
 };
 
-export default function me(state: Me = initialState, action: AnyAction): Me {
+const me = (state: Me = initialState, action: AnyAction): Me => {
   switch (action.type) {
     case ME_FETCH_SUCCESS:
     case ME_PATCH_SUCCESS:
@@ -39,4 +39,6 @@ export default function me(state: Me = initialState, action: AnyAction): Me {
     default:
       return state;
   }
-}
+};
+
+export default me;

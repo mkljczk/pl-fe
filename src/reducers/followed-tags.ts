@@ -19,7 +19,7 @@ const ReducerRecord = ImmutableRecord({
   next: null,
 });
 
-export default function followed_tags(state = ReducerRecord(), action: AnyAction) {
+const followed_tags = (state = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case FOLLOWED_HASHTAGS_FETCH_REQUEST:
       return state.set('isLoading', true);
@@ -44,4 +44,6 @@ export default function followed_tags(state = ReducerRecord(), action: AnyAction
     default:
       return state;
   }
-}
+};
+
+export default followed_tags;

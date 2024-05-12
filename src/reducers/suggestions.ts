@@ -31,37 +31,31 @@ type Suggestion = ReturnType<typeof SuggestionRecord>;
 type APIEntities = Array<APIEntity>;
 
 // Convert a v1 account into a v2 suggestion
-const accountToSuggestion = (account: APIEntity) => {
-  return {
-    source: 'past_interactions',
-    account: account.id,
-  };
-};
+const accountToSuggestion = (account: APIEntity) => ({
+  source: 'past_interactions',
+  account: account.id,
+});
 
-const importAccounts = (state: State, accounts: APIEntities) => {
-  return state.withMutations(state => {
+const importAccounts = (state: State, accounts: APIEntities) =>
+  state.withMutations(state => {
     state.set('items', ImmutableOrderedSet(accounts.map(accountToSuggestion).map(suggestion => SuggestionRecord(suggestion))));
     state.set('isLoading', false);
   });
-};
 
-const importSuggestions = (state: State, suggestions: APIEntities, next: string | null) => {
-  return state.withMutations(state => {
+const importSuggestions = (state: State, suggestions: APIEntities, next: string | null) =>
+  state.withMutations(state => {
     state.update('items', items => items.concat(suggestions.map(x => ({ ...x, account: x.account.id })).map(suggestion => SuggestionRecord(suggestion))));
     state.set('isLoading', false);
     state.set('next', next);
   });
-};
 
-const dismissAccount = (state: State, accountId: string) => {
-  return state.update('items', items => items.filterNot(item => item.account === accountId));
-};
+const dismissAccount = (state: State, accountId: string) =>
+  state.update('items', items => items.filterNot(item => item.account === accountId));
 
-const dismissAccounts = (state: State, accountIds: string[]) => {
-  return state.update('items', items => items.filterNot(item => accountIds.includes(item.account)));
-};
+const dismissAccounts = (state: State, accountIds: string[]) =>
+  state.update('items', items => items.filterNot(item => accountIds.includes(item.account)));
 
-export default function suggestionsReducer(state: State = ReducerRecord(), action: AnyAction) {
+const suggestionsReducer = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case SUGGESTIONS_FETCH_REQUEST:
     case SUGGESTIONS_V2_FETCH_REQUEST:
@@ -83,4 +77,6 @@ export default function suggestionsReducer(state: State = ReducerRecord(), actio
     default:
       return state;
   }
-}
+};
+
+export default suggestionsReducer;

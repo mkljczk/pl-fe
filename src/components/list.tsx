@@ -37,23 +37,21 @@ const ListItem: React.FC<IListItem> = ({ label, hint, children, to, onClick, onS
 
   const LabelComp = to || onClick || onSelect ? 'span' : 'label';
 
-  const renderChildren = React.useCallback(() => {
-    return React.Children.map(children, (child) => {
-      if (React.isValidElement(child)) {
-        const isSelect = child.type === SelectDropdown || child.type === Select;
+  const renderChildren = React.useCallback(() => React.Children.map(children, (child) => {
+    if (React.isValidElement(child)) {
+      const isSelect = child.type === SelectDropdown || child.type === Select;
 
-        return React.cloneElement(child, {
-          // @ts-ignore
-          id: domId,
-          className: clsx({
-            'w-auto': isSelect,
-          }, child.props.className),
-        });
-      }
+      return React.cloneElement(child, {
+        // @ts-ignore
+        id: domId,
+        className: clsx({
+          'w-auto': isSelect,
+        }, child.props.className),
+      });
+    }
 
-      return null;
-    });
-  }, [children, domId]);
+    return null;
+  }), [children, domId]);
 
   const className = clsx('flex items-center justify-between overflow-hidden bg-gradient-to-r from-gradient-start/20 to-gradient-end/20 px-4 py-2 first:rounded-t-lg last:rounded-b-lg dark:from-gradient-start/10 dark:to-gradient-end/10', {
     'cursor-pointer hover:from-gradient-start/30 hover:to-gradient-end/30 dark:hover:from-gradient-start/5 dark:hover:to-gradient-end/5': typeof to !== 'undefined' || typeof onClick !== 'undefined' || typeof onSelect !== 'undefined',

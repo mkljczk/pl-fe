@@ -118,7 +118,7 @@ const loadImage = (inputFile: File) => new Promise<HTMLImageElement>((resolve, r
 });
 
 /** Get the exif orientation for the image. */
-async function getOrientation(img: HTMLImageElement, type = 'image/png'): Promise<number> {
+const getOrientation = async (img: HTMLImageElement, type = 'image/png'): Promise<number> => {
   if (!['image/jpeg', 'image/webp'].includes(type)) {
     return 1;
   }
@@ -136,7 +136,7 @@ async function getOrientation(img: HTMLImageElement, type = 'image/png'): Promis
     console.error('Failed to get orientation:', error);
     return 1;
   }
-}
+};
 
 const processImage = (
   img: HTMLImageElement,
@@ -219,7 +219,7 @@ const resizeImage = (
 });
 
 /** Resize an image to the maximum number of pixels. */
-export default (inputFile: File, maxPixels = DEFAULT_MAX_PIXELS) => new Promise<File>((resolve) => {
+const resize = (inputFile: File, maxPixels = DEFAULT_MAX_PIXELS) => new Promise<File>((resolve) => {
   if (!inputFile.type.match(/image.*/) || inputFile.type === 'image/gif') {
     resolve(inputFile);
     return;
@@ -239,3 +239,7 @@ export default (inputFile: File, maxPixels = DEFAULT_MAX_PIXELS) => new Promise<
       });
   }).catch(() => resolve(inputFile));
 });
+
+export {
+  resize as default,
+};

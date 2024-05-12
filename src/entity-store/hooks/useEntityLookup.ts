@@ -15,12 +15,12 @@ import { type UseEntityOpts } from './useEntity';
 /** Entities will be filtered through this function until it returns true. */
 type LookupFn<TEntity extends Entity> = (entity: TEntity) => boolean
 
-function useEntityLookup<TEntity extends Entity>(
+const useEntityLookup = <TEntity extends Entity>(
   entityType: string,
   lookupFn: LookupFn<TEntity>,
   entityFn: EntityFn<void>,
   opts: UseEntityOpts<TEntity> = {},
-) {
+) => {
   const { schema = z.custom<TEntity>() } = opts;
 
   const dispatch = useAppDispatch();
@@ -59,6 +59,6 @@ function useEntityLookup<TEntity extends Entity>(
     isUnauthorized: (error as { response?: Response })?.response?.status === 401,
     isForbidden: (error as { response?: Response })?.response?.status === 403,
   };
-}
+};
 
 export { useEntityLookup };

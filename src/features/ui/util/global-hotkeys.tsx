@@ -92,9 +92,8 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
     if (!me || !hotkeys.current) return;
 
     // @ts-ignore
-    hotkeys.current.__mousetrap__.stopCallback = (_e, element) => {
-      return ['TEXTAREA', 'SELECT', 'INPUT', 'EM-EMOJI-PICKER'].includes(element.tagName) || !!element.closest('[contenteditable]');
-    };
+    hotkeys.current.__mousetrap__.stopCallback = (_e, element) =>
+      ['TEXTAREA', 'SELECT', 'INPUT', 'EM-EMOJI-PICKER'].includes(element.tagName) || !!element.closest('[contenteditable]');
   };
 
   const handleHotkeyToggleHelp = () => {

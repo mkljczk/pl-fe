@@ -311,13 +311,13 @@ const AutosuggestPlugin = ({
         const offset = leadOffset - 1;
 
         /** Replace the matched text with the given node. */
-        function replaceMatch(replaceWith: LexicalNode) {
+        const replaceMatch = (replaceWith: LexicalNode) => {
           const result = (node as TextNode).splitText(offset, offset + matchingString.length);
           const textNode = result[1] ?? result[0];
           const replacedNode = textNode.replace(replaceWith);
           replacedNode.insertAfter(new TextNode(' '));
           replacedNode.selectNext();
-        }
+        };
 
         if (typeof suggestion === 'object') {
           if (!suggestion.id) return;

@@ -3,14 +3,14 @@ import { FormattedNumber } from 'react-intl';
 import { z } from 'zod';
 
 /** Check if a value is REALLY a number. */
-export const isNumber = (value: unknown): value is number => typeof value === 'number' && !isNaN(value);
+const isNumber = (value: unknown): value is number => typeof value === 'number' && !isNaN(value);
 
 /** The input is a number and is not NaN. */
-export const realNumberSchema = z.coerce.number().refine(n => !isNaN(n));
+const realNumberSchema = z.coerce.number().refine(n => !isNaN(n));
 
-export const secondsToDays = (seconds: number) => Math.floor(seconds / (3600 * 24));
+const secondsToDays = (seconds: number) => Math.floor(seconds / (3600 * 24));
 
-export const roundDown = (num: number) => {
+const roundDown = (num: number) => {
   if (num >= 100 && num < 1000) {
     num = Math.floor(num);
   }
@@ -20,7 +20,7 @@ export const roundDown = (num: number) => {
 };
 
 /** Display a number nicely for the UI, eg 1000 becomes 1K. */
-export const shortNumberFormat = (number: any, max?: number): React.ReactNode => {
+const shortNumberFormat = (number: any, max?: number): React.ReactNode => {
   if (!isNumber(number)) return '•';
 
   let value = number;
@@ -53,4 +53,13 @@ export const shortNumberFormat = (number: any, max?: number): React.ReactNode =>
 };
 
 /** Check if an entity ID is an integer (eg not a FlakeId). */
-export const isIntegerId = (id: string): boolean => new RegExp(/^-?[0-9]+$/g).test(id);
+const isIntegerId = (id: string): boolean => new RegExp(/^-?[0-9]+$/g).test(id);
+
+export {
+  isNumber,
+  realNumberSchema,
+  secondsToDays,
+  roundDown,
+  shortNumberFormat,
+  isIntegerId,
+};

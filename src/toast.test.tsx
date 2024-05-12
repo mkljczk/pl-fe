@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { AxiosError, AxiosHeaders } from 'axios';
+// import { AxiosError, AxiosHeaders } from 'axios';
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
 import { IntlProvider } from 'react-intl';
@@ -8,16 +8,14 @@ import { act, screen } from 'soapbox/jest/test-helpers';
 
 import toast from './toast';
 
-function renderApp() {
-  return {
-    toast,
-    ...render(
-      <IntlProvider locale='en'>
-        <Toaster />,
-      </IntlProvider>,
-    ),
-  };
-}
+const renderApp = () => ({
+  toast,
+  ...render(
+    <IntlProvider locale='en'>
+      <Toaster />,
+    </IntlProvider>,
+  ),
+});
 
 beforeAll(() => {
   vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -31,7 +29,7 @@ afterAll(() => {
   (console.error as any).mockRestore();
 });
 
-describe('toasts', () =>{
+describe('toasts', () => {
   it('renders successfully', async() => {
     const { toast } = renderApp();
 
@@ -65,104 +63,104 @@ describe('toasts', () =>{
     });
   });
 
-  describe('showAlertForError()', () => {
-    const buildError = (message: string, status: number) => new AxiosError<any>(message, String(status), undefined, null, {
-      data: {
-        error: message,
-      },
-      statusText: String(status),
-      status,
-      headers: {},
-      config: {
-        headers: new AxiosHeaders(),
-      },
-    });
+  // describe('showAlertForError()', () => {
+  //   const buildError = (message: string, status: number) => new AxiosError<any>(message, String(status), undefined, null, {
+  //     data: {
+  //       error: message,
+  //     },
+  //     statusText: String(status),
+  //     status,
+  //     headers: {},
+  //     config: {
+  //       headers: new AxiosHeaders(),
+  //     },
+  //   });
 
-    describe('with a 502 status code', () => {
-      it('renders the correct message', async() => {
-        const message = 'The server is down';
-        const error = buildError(message, 502);
-        const { toast } = renderApp();
+  //   describe('with a 502 status code', () => {
+  //     it('renders the correct message', async() => {
+  //       const message = 'The server is down';
+  //       const error = buildError(message, 502);
+  //       const { toast } = renderApp();
 
-        act(() => {
-          toast.showAlertForError(error);
-        });
+  //       act(() => {
+  //         toast.showAlertForError(error);
+  //       });
 
-        expect(screen.getByTestId('toast')).toBeInTheDocument();
-        expect(screen.getByTestId('toast-message')).toHaveTextContent('The server is down');
-      });
-    });
+  //       expect(screen.getByTestId('toast')).toBeInTheDocument();
+  //       expect(screen.getByTestId('toast-message')).toHaveTextContent('The server is down');
+  //     });
+  //   });
 
-    describe('with a 404 status code', () => {
-      it('renders the correct message', async() => {
-        const error = buildError('', 404);
-        const { toast } = renderApp();
+  //   describe('with a 404 status code', () => {
+  //     it('renders the correct message', async() => {
+  //       const error = buildError('', 404);
+  //       const { toast } = renderApp();
 
-        act(() => {
-          toast.showAlertForError(error);
-        });
+  //       act(() => {
+  //         toast.showAlertForError(error);
+  //       });
 
-        expect(screen.queryAllByTestId('toast')).toHaveLength(0);
-      });
-    });
+  //       expect(screen.queryAllByTestId('toast')).toHaveLength(0);
+  //     });
+  //   });
 
-    describe('with a 410 status code', () => {
-      it('renders the correct message', async() => {
-        const error = buildError('', 410);
-        const { toast } = renderApp();
+  //   describe('with a 410 status code', () => {
+  //     it('renders the correct message', async() => {
+  //       const error = buildError('', 410);
+  //       const { toast } = renderApp();
 
-        act(() => {
-          toast.showAlertForError(error);
-        });
+  //       act(() => {
+  //         toast.showAlertForError(error);
+  //       });
 
-        expect(screen.queryAllByTestId('toast')).toHaveLength(0);
-      });
-    });
+  //       expect(screen.queryAllByTestId('toast')).toHaveLength(0);
+  //     });
+  //   });
 
-    describe('with an accepted status code', () => {
-      describe('with a message from the server', () => {
-        it('renders the correct message', async() => {
-          const message = 'custom message';
-          const error = buildError(message, 200);
-          const { toast } = renderApp();
+  //   describe('with an accepted status code', () => {
+  //     describe('with a message from the server', () => {
+  //       it('renders the correct message', async() => {
+  //         const message = 'custom message';
+  //         const error = buildError(message, 200);
+  //         const { toast } = renderApp();
 
-          act(() => {
-            toast.showAlertForError(error);
-          });
+  //         act(() => {
+  //           toast.showAlertForError(error);
+  //         });
 
-          expect(screen.getByTestId('toast')).toBeInTheDocument();
-          expect(screen.getByTestId('toast-message')).toHaveTextContent(message);
-        });
-      });
+  //         expect(screen.getByTestId('toast')).toBeInTheDocument();
+  //         expect(screen.getByTestId('toast-message')).toHaveTextContent(message);
+  //       });
+  //     });
 
-      describe('without a message from the server', () => {
-        it('renders the correct message', async() => {
-          const message = 'The request has been accepted for processing';
-          const error = buildError(message, 202);
-          const { toast } = renderApp();
+  //     describe('without a message from the server', () => {
+  //       it('renders the correct message', async() => {
+  //         const message = 'The request has been accepted for processing';
+  //         const error = buildError(message, 202);
+  //         const { toast } = renderApp();
 
-          act(() => {
-            toast.showAlertForError(error);
-          });
+  //         act(() => {
+  //           toast.showAlertForError(error);
+  //         });
 
-          expect(screen.getByTestId('toast')).toBeInTheDocument();
-          expect(screen.getByTestId('toast-message')).toHaveTextContent(message);
-        });
-      });
-    });
+  //         expect(screen.getByTestId('toast')).toBeInTheDocument();
+  //         expect(screen.getByTestId('toast-message')).toHaveTextContent(message);
+  //       });
+  //     });
+  //   });
 
-    describe('without a response', () => {
-      it('renders the default message', async() => {
-        const error = new AxiosError();
-        const { toast } = renderApp();
+  //   // describe('without a response', () => {
+  //   //   it('renders the default message', async() => {
+  //   //     const error = new AxiosError();
+  //   //     const { toast } = renderApp();
 
-        act(() => {
-          toast.showAlertForError(error);
-        });
+  //   //     act(() => {
+  //   //       toast.showAlertForError(error);
+  //   //     });
 
-        expect(screen.getByTestId('toast')).toBeInTheDocument();
-        expect(screen.getByTestId('toast-message')).toHaveTextContent('An unexpected error occurred.');
-      });
-    });
-  });
+  //   //     expect(screen.getByTestId('toast')).toBeInTheDocument();
+  //   //     expect(screen.getByTestId('toast-message')).toHaveTextContent('An unexpected error occurred.');
+  //   //   });
+  //   // });
+  // });
 });

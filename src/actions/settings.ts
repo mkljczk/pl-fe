@@ -127,11 +127,7 @@ const defaultSettings = ImmutableMap({
 const getSettings = createSelector([
   (state: RootState) => state.soapbox.get('defaultSettings'),
   (state: RootState) => state.settings,
-], (soapboxSettings, settings) => {
-  return defaultSettings
-    .mergeDeep(soapboxSettings)
-    .mergeDeep(settings);
-});
+], (soapboxSettings, settings) => defaultSettings.mergeDeep(soapboxSettings).mergeDeep(settings));
 
 interface SettingChangeAction {
   type: typeof SETTING_CHANGE;

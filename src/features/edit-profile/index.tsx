@@ -35,14 +35,9 @@ const nonDefaultHeader = (url: string | undefined) => url && isDefaultHeader(url
  * Whether the user is hiding their follows and/or followers.
  * Pleroma's config is granular, but we simplify it into one setting.
  */
-const hidesNetwork = ({ pleroma }: Account): boolean => {
-  return Boolean(
-    pleroma?.hide_followers &&
-    pleroma?.hide_follows &&
-    pleroma?.hide_followers_count &&
-    pleroma?.hide_follows_count,
-  );
-};
+const hidesNetwork = ({ pleroma }: Account): boolean => Boolean(
+  pleroma?.hide_followers && pleroma?.hide_follows && pleroma?.hide_followers_count && pleroma?.hide_follows_count,
+);
 
 const messages = defineMessages({
   heading: { id: 'column.edit_profile', defaultMessage: 'Edit profile' },
@@ -144,10 +139,8 @@ const accountToCredentials = (account: Account): AccountCredentials => {
 const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({ value, onChange }) => {
   const intl = useIntl();
 
-  const handleChange = (key: string): React.ChangeEventHandler<HTMLInputElement> => {
-    return e => {
-      onChange({ ...value, [key]: e.currentTarget.value });
-    };
+  const handleChange = (key: string): React.ChangeEventHandler<HTMLInputElement> => e => {
+    onChange({ ...value, [key]: e.currentTarget.value });
   };
 
   return (
@@ -203,9 +196,7 @@ const EditProfile: React.FC = () => {
 
   /** Set a single key in the request data. */
   const updateData = (key: string, value: any) => {
-    setData(prevData => {
-      return { ...prevData, [key]: value };
-    });
+    setData(prevData => ({ ...prevData, [key]: value }));
   };
 
   const handleSubmit: React.FormEventHandler = (event) => {
@@ -239,16 +230,12 @@ const EditProfile: React.FC = () => {
     event.preventDefault();
   };
 
-  const handleCheckboxChange = (key: keyof AccountCredentials): React.ChangeEventHandler<HTMLInputElement> => {
-    return e => {
-      updateData(key, e.target.checked);
-    };
+  const handleCheckboxChange = (key: keyof AccountCredentials): React.ChangeEventHandler<HTMLInputElement> => e => {
+    updateData(key, e.target.checked);
   };
 
-  const handleTextChange = (key: keyof AccountCredentials): React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> => {
-    return e => {
-      updateData(key, e.target.value);
-    };
+  const handleTextChange = (key: keyof AccountCredentials): React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> => e => {
+    updateData(key, e.target.value);
   };
 
   const handleBirthdayChange = (date: string) => {
@@ -257,15 +244,13 @@ const EditProfile: React.FC = () => {
 
   const handleHideNetworkChange: React.ChangeEventHandler<HTMLInputElement> = e => {
     const hide = e.target.checked;
-    setData(prevData => {
-      return {
-        ...prevData,
-        hide_followers: hide,
-        hide_follows: hide,
-        hide_followers_count: hide,
-        hide_follows_count: hide,
-      };
-    });
+    setData(prevData => ({
+      ...prevData,
+      hide_followers: hide,
+      hide_follows: hide,
+      hide_followers_count: hide,
+      hide_follows_count: hide,
+    }));
   };
 
   const handleFieldsChange = (fields: AccountCredentialsField[]) => {

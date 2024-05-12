@@ -26,7 +26,7 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-export default function listAdderReducer(state: State = ReducerRecord(), action: AnyAction) {
+const listAdderReducer = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case LIST_ADDER_RESET:
       return ReducerRecord();
@@ -51,4 +51,6 @@ export default function listAdderReducer(state: State = ReducerRecord(), action:
     default:
       return state;
   }
-}
+};
+
+export default listAdderReducer;

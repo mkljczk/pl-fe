@@ -1,17 +1,15 @@
 import z from 'zod';
 
 /** Use new value only if old value is undefined */
-export const mergeDefined = (oldVal: any, newVal: any) => oldVal === undefined ? newVal : oldVal;
+const mergeDefined = (oldVal: any, newVal: any) => oldVal === undefined ? newVal : oldVal;
 
-export const makeEmojiMap = (emojis: any) => emojis.reduce((obj: any, emoji: any) => {
+const makeEmojiMap = (emojis: any) => emojis.reduce((obj: any, emoji: any) => {
   obj[`:${emoji.shortcode}:`] = emoji;
   return obj;
 }, {});
 
 /** Normalize entity ID */
-export const normalizeId = (id: any): string | null => {
-  return z.string().nullable().catch(null).parse(id);
-};
+const normalizeId = (id: any): string | null => z.string().nullable().catch(null).parse(id);
 
 export type Normalizer<V, R> = (value: V) => R;
 
@@ -24,15 +22,21 @@ export type Normalizer<V, R> = (value: V) => R;
  * statusSchema.parse(status);
  * ```
  */
-export const toSchema = <V, R>(normalizer: Normalizer<V, R>) => {
-  return z.custom<V>().transform<R>(normalizer);
-};
+const toSchema = <V, R>(normalizer: Normalizer<V, R>) => z.custom<V>().transform<R>(normalizer);
 
 /** Legacy normalizer transition helper function. */
-export const maybeFromJS = (value: any): unknown => {
+const maybeFromJS = (value: any): unknown => {
   if ('toJS' in value) {
     return value.toJS();
   } else {
     return value;
   }
+};
+
+export {
+  mergeDefined,
+  makeEmojiMap,
+  normalizeId,
+  toSchema,
+  maybeFromJS,
 };

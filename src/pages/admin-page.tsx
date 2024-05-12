@@ -11,19 +11,17 @@ interface IAdminPage {
   children: React.ReactNode;
 }
 
-const AdminPage: React.FC<IAdminPage> = ({ children }) => {
-  return (
-    <>
-      <Layout.Main>
-        {children}
-      </Layout.Main>
+const AdminPage: React.FC<IAdminPage> = ({ children }) => (
+  <>
+    <Layout.Main>
+      {children}
+    </Layout.Main>
 
-      <Layout.Aside>
-        <LatestAccountsPanel limit={5} />
-        <LinkFooter />
-      </Layout.Aside>
-    </>
-  );
-};
+    <Layout.Aside>
+      <LatestAccountsPanel limit={5} />
+      <LinkFooter />
+    </Layout.Aside>
+  </>
+);
 
 export default AdminPage;

@@ -14,7 +14,7 @@ interface UpdateGroupParams {
   discoverable?: boolean;
 }
 
-function useUpdateGroup(groupId: string) {
+const useUpdateGroup = (groupId: string) => {
   const api = useApi();
 
   const { createEntity, ...rest } = useCreateEntity([Entities.GROUPS], (params: UpdateGroupParams) => {
@@ -33,6 +33,6 @@ function useUpdateGroup(groupId: string) {
     updateGroup: createEntity,
     ...rest,
   };
-}
+};
 
 export { useUpdateGroup };

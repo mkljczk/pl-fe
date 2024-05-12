@@ -249,7 +249,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 };
 
 /** Trim the text, adding ellipses if it's too long. */
-function trim(text: string, len: number): string {
+const trim = (text: string, len: number): string => {
   const cut = text.indexOf(' ', len);
 
   if (cut === -1) {
@@ -257,6 +257,6 @@ function trim(text: string, len: number): string {
   }
 
   return text.substring(0, cut) + (text.length > len ? '…' : '');
-}
+};
 
 export default PreviewCard;

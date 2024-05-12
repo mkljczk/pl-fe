@@ -51,7 +51,7 @@ const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
     document.execCommand('copy');
   };
 
-  function handleError(error: Error, info: ErrorInfo) {
+  const handleError = (error: Error, info: ErrorInfo) => {
     setError(error);
     setComponentStack(info.componentStack);
 
@@ -67,11 +67,11 @@ const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
     import('bowser')
       .then(({ default: Bowser }) => setBrowser(Bowser.getParser(window.navigator.userAgent)))
       .catch(() => {});
-  }
+  };
 
-  function goHome() {
+  const goHome = () => {
     location.href = '/';
-  }
+  };
 
   const fallback = (
     <div className='flex h-screen flex-col bg-white pb-12 pt-16 black:bg-black dark:bg-primary-900'>
@@ -185,15 +185,13 @@ interface ISiteErrorBoundaryLink {
   children: React.ReactNode;
 }
 
-function SiteErrorBoundaryLink({ href, children }: ISiteErrorBoundaryLink) {
-  return (
-    <>
-      <span className='inline-block border-l border-gray-300' aria-hidden='true' />
-      <a href={href} className='text-sm font-medium text-gray-700 hover:underline dark:text-gray-600'>
-        {children}
-      </a>
-    </>
-  );
-}
+const SiteErrorBoundaryLink = ({ href, children }: ISiteErrorBoundaryLink) => (
+  <>
+    <span className='inline-block border-l border-gray-300' aria-hidden='true' />
+    <a href={href} className='text-sm font-medium text-gray-700 hover:underline dark:text-gray-600'>
+      {children}
+    </a>
+  </>
+);
 
 export default SiteErrorBoundary;

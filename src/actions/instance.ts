@@ -9,7 +9,7 @@ import { MASTODON, parseVersion, PLEROMA, REBASED } from 'soapbox/utils/features
 import api from '../api';
 
 /** Figure out the appropriate instance to fetch depending on the state */
-export const getHost = (state: RootState) => {
+const getHost = (state: RootState) => {
   const accountUrl = getMeUrl(state) || getAuthUserUrl(state) as string;
 
   try {
@@ -30,7 +30,7 @@ interface InstanceData {
   host: string | null | undefined;
 }
 
-export const fetchInstance = createAsyncThunk<InstanceData, InstanceData['host'], { state: RootState }>(
+const fetchInstance = createAsyncThunk<InstanceData, InstanceData['host'], { state: RootState }>(
   'instance/fetch',
   async(host, { dispatch, getState, rejectWithValue }) => {
     try {
@@ -48,7 +48,7 @@ export const fetchInstance = createAsyncThunk<InstanceData, InstanceData['host']
   },
 );
 
-export const fetchInstanceV2 = createAsyncThunk<InstanceData, InstanceData['host'], { state: RootState }>(
+const fetchInstanceV2 = createAsyncThunk<InstanceData, InstanceData['host'], { state: RootState }>(
   'instanceV2/fetch',
   async(host, { getState, rejectWithValue }) => {
     try {
@@ -61,3 +61,9 @@ export const fetchInstanceV2 = createAsyncThunk<InstanceData, InstanceData['host
     }
   },
 );
+
+export {
+  getHost,
+  fetchInstance,
+  fetchInstanceV2,
+};

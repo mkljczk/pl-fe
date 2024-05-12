@@ -8,9 +8,8 @@ const messages = defineMessages({
   upload: { id: 'upload_button.label', defaultMessage: 'Add media attachment' },
 });
 
-export const onlyImages = (types: string[] | undefined): boolean => {
-  return types?.every((type) => type.startsWith('image/')) ?? false;
-};
+export const onlyImages = (types: string[] | undefined): boolean =>
+  types?.every((type) => type.startsWith('image/')) ?? false;
 
 export interface IUploadButton {
   disabled?: boolean;

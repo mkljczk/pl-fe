@@ -21,8 +21,6 @@ export const GroupRelationshipRecord = ImmutableRecord({
   pending_requests: false,
 });
 
-export const normalizeGroupRelationship = (relationship: Record<string, any>) => {
-  return GroupRelationshipRecord(
-    ImmutableMap(fromJS(relationship)),
-  );
-};
+export const normalizeGroupRelationship = (relationship: Record<string, any>) => GroupRelationshipRecord(
+  ImmutableMap(fromJS(relationship)),
+);

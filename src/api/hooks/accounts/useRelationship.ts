@@ -9,7 +9,7 @@ interface UseRelationshipOpts {
   enabled?: boolean;
 }
 
-function useRelationship(accountId: string | undefined, opts: UseRelationshipOpts = {}) {
+const useRelationship = (accountId: string | undefined, opts: UseRelationshipOpts = {}) => {
   const api = useApi();
   const { enabled = false } = opts;
 
@@ -23,6 +23,6 @@ function useRelationship(accountId: string | undefined, opts: UseRelationshipOpt
   );
 
   return { relationship, ...result };
-}
+};
 
 export { useRelationship };

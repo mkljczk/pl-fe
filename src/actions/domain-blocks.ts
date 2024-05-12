@@ -143,14 +143,14 @@ const expandDomainBlocks = () =>
     });
   };
 
-function selectAccountsByDomain(state: RootState, domain: string): string[] {
+const selectAccountsByDomain = (state: RootState, domain: string): string[] => {
   const store = state.entities[Entities.ACCOUNTS]?.store as EntityStore<Account> | undefined;
   const entries = store ? Object.entries(store) : undefined;
   const accounts = entries
     ?.filter(([_, item]) => item && item.acct.endsWith(`@${domain}`))
     .map(([_, item]) => item!.id);
   return accounts || [];
-}
+};
 
 const expandDomainBlocksRequest = () => ({
   type: DOMAIN_BLOCKS_EXPAND_REQUEST,

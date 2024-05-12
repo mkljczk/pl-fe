@@ -24,9 +24,7 @@ const sanitizeURL = (url: string | undefined = ''): string => {
   }
 };
 
-const sanitizeBasename = (path: string | undefined = ''): string => {
-  return `/${trim(path, '/')}`;
-};
+const sanitizeBasename = (path: string | undefined = ''): string => `/${trim(path, '/')}`;
 
 const env = {
   NODE_ENV: NODE_ENV || 'development',

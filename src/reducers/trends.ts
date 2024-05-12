@@ -18,7 +18,7 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-export default function trendsReducer(state: State = ReducerRecord(), action: AnyAction) {
+const trendsReducer = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case TRENDS_FETCH_REQUEST:
       return state.set('isLoading', true);
@@ -32,4 +32,6 @@ export default function trendsReducer(state: State = ReducerRecord(), action: An
     default:
       return state;
   }
-}
+};
+
+export default trendsReducer;

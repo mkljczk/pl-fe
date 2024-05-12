@@ -135,20 +135,18 @@ const statusSchema = baseStatusSchema.extend({
     quote: embeddedStatusSchema,
     emoji_reactions: filteredArray(emojiReactionSchema),
   }).optional().catch(undefined),
-}).transform(({ pleroma, ...status }) => {
-  return {
-    ...status,
-    event: pleroma?.event,
-    quote: pleroma?.quote || status.quote || null,
-    reactions: pleroma?.emoji_reactions || status.reactions || null,
-    // There's apparently no better way to do this...
-    // Just trying to remove the `event` and `quote` keys from the object.
-    pleroma: pleroma ? (() => {
-      const { event, quote, emoji_reactions, ...rest } = pleroma;
-      return rest;
-    })() : undefined,
-  };
-}).transform(transformStatus);
+}).transform(({ pleroma, ...status }) => ({
+  ...status,
+  event: pleroma?.event,
+  quote: pleroma?.quote || status.quote || null,
+  reactions: pleroma?.emoji_reactions || status.reactions || null,
+  // There's apparently no better way to do this...
+  // Just trying to remove the `event` and `quote` keys from the object.
+  pleroma: pleroma ? (() => {
+    const { event, quote, emoji_reactions, ...rest } = pleroma;
+    return rest;
+  })() : undefined,
+})).transform(transformStatus);
 
 type Status = Resolve<z.infer<typeof statusSchema>>;
 

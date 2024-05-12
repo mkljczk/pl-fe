@@ -62,13 +62,11 @@ interface IProfilePopper {
   children: React.ReactNode;
 }
 
-const ProfilePopper: React.FC<IProfilePopper> = ({ condition, wrapper, children }) => {
-  return (
-    <>
-      {condition ? wrapper(children) : children}
-    </>
-  );
-};
+const ProfilePopper: React.FC<IProfilePopper> = ({ condition, wrapper, children }) => (
+  <>
+    {condition ? wrapper(children) : children}
+  </>
+);
 
 export interface IAccount {
   account: AccountSchema;

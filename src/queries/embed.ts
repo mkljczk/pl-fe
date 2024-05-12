@@ -18,7 +18,7 @@ type Embed = {
 /** Fetch OEmbed information for a status by its URL. */
 // https://github.com/mastodon/mastodon/blob/main/app/controllers/api/oembed_controller.rb
 // https://github.com/mastodon/mastodon/blob/main/app/serializers/oembed_serializer.rb
-export default function useEmbed(url: string) {
+const useEmbed = (url: string) => {
   const api = useApi();
 
   const getEmbed = async() => {
@@ -30,4 +30,6 @@ export default function useEmbed(url: string) {
     queryKey: ['embed', url],
     queryFn: getEmbed,
   });
-}
+};
+
+export default useEmbed;

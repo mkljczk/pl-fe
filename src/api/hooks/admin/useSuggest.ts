@@ -5,12 +5,12 @@ import { accountIdsToAccts } from 'soapbox/selectors';
 
 import type { Account } from 'soapbox/schemas';
 
-function useSuggest() {
+const useSuggest = () => {
   const api = useApi();
   const getState = useGetState();
   const { transaction } = useTransaction();
 
-  function suggestEffect(accountIds: string[], suggested: boolean) {
+  const suggestEffect = (accountIds: string[], suggested: boolean) => {
     const updater = (account: Account): Account => {
       if (account.pleroma) {
         account.pleroma.is_suggested = suggested;
@@ -23,9 +23,9 @@ function useSuggest() {
         (result, id) => ({ ...result, [id]: updater }),
       {}),
     });
-  }
+  };
 
-  async function suggest(accountIds: string[], callbacks?: EntityCallbacks<void, unknown>) {
+  const suggest = async (accountIds: string[], callbacks?: EntityCallbacks<void, unknown>) => {
     const accts = accountIdsToAccts(getState(), accountIds);
     suggestEffect(accountIds, true);
     try {
@@ -38,9 +38,9 @@ function useSuggest() {
       callbacks?.onError?.(e);
       suggestEffect(accountIds, false);
     }
-  }
+  };
 
-  async function unsuggest(accountIds: string[], callbacks?: EntityCallbacks<void, unknown>) {
+  const unsuggest = async (accountIds: string[], callbacks?: EntityCallbacks<void, unknown>) => {
     const accts = accountIdsToAccts(getState(), accountIds);
     suggestEffect(accountIds, false);
     try {
@@ -53,12 +53,12 @@ function useSuggest() {
       callbacks?.onError?.(e);
       suggestEffect(accountIds, true);
     }
-  }
+  };
 
   return {
     suggest,
     unsuggest,
   };
-}
+};
 
 export { useSuggest };

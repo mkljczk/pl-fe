@@ -24,20 +24,18 @@ store.dispatch(preload() as any);
 store.dispatch(checkOnboardingStatus() as any);
 
 /** The root React node of the application. */
-const Soapbox: React.FC = () => {
-  return (
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <StatProvider>
-          <SoapboxHead>
-            <SoapboxLoad>
-              <SoapboxMount />
-            </SoapboxLoad>
-          </SoapboxHead>
-        </StatProvider>
-      </QueryClientProvider>
-    </Provider>
-  );
-};
+const Soapbox: React.FC = () => (
+  <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
+      <StatProvider>
+        <SoapboxHead>
+          <SoapboxLoad>
+            <SoapboxMount />
+          </SoapboxLoad>
+        </SoapboxHead>
+      </StatProvider>
+    </QueryClientProvider>
+  </Provider>
+);
 
 export default Soapbox;

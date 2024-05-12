@@ -30,7 +30,10 @@ const importSettings = (state: State, account: APIEntity) => {
 //
 // Settings should be accessed with `getSettings(getState()).getIn(...)`
 // instead of directly from the state.
-export default function settings(state: State = ImmutableMap<string, any>({ saved: true }), action: AnyAction): State {
+const settings = (
+  state: State = ImmutableMap<string, any>({ saved: true }),
+  action: AnyAction,
+): State => {
   switch (action.type) {
     case ME_FETCH_SUCCESS:
       return importSettings(state, action.me);
@@ -49,4 +52,6 @@ export default function settings(state: State = ImmutableMap<string, any>({ save
     default:
       return state;
   }
-}
+};
+
+export default settings;

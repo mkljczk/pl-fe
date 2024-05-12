@@ -10,7 +10,7 @@ const initialState: State = {
   sidebarOpen: false,
 };
 
-export default function sidebar(state: State = initialState, action: AnyAction): State {
+const sidebar = (state: State = initialState, action: AnyAction): State => {
   switch (action.type) {
     case SIDEBAR_OPEN:
       return { sidebarOpen: true };
@@ -19,4 +19,6 @@ export default function sidebar(state: State = initialState, action: AnyAction):
     default:
       return state;
   }
-}
+};
+
+export default sidebar;

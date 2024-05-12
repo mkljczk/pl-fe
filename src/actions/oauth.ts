@@ -12,15 +12,15 @@ import { getFetch } from '../api';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 
-export const OAUTH_TOKEN_CREATE_REQUEST = 'OAUTH_TOKEN_CREATE_REQUEST';
-export const OAUTH_TOKEN_CREATE_SUCCESS = 'OAUTH_TOKEN_CREATE_SUCCESS';
-export const OAUTH_TOKEN_CREATE_FAIL    = 'OAUTH_TOKEN_CREATE_FAIL';
+const OAUTH_TOKEN_CREATE_REQUEST = 'OAUTH_TOKEN_CREATE_REQUEST';
+const OAUTH_TOKEN_CREATE_SUCCESS = 'OAUTH_TOKEN_CREATE_SUCCESS';
+const OAUTH_TOKEN_CREATE_FAIL    = 'OAUTH_TOKEN_CREATE_FAIL';
 
-export const OAUTH_TOKEN_REVOKE_REQUEST = 'OAUTH_TOKEN_REVOKE_REQUEST';
-export const OAUTH_TOKEN_REVOKE_SUCCESS = 'OAUTH_TOKEN_REVOKE_SUCCESS';
-export const OAUTH_TOKEN_REVOKE_FAIL    = 'OAUTH_TOKEN_REVOKE_FAIL';
+const OAUTH_TOKEN_REVOKE_REQUEST = 'OAUTH_TOKEN_REVOKE_REQUEST';
+const OAUTH_TOKEN_REVOKE_SUCCESS = 'OAUTH_TOKEN_REVOKE_SUCCESS';
+const OAUTH_TOKEN_REVOKE_FAIL    = 'OAUTH_TOKEN_REVOKE_FAIL';
 
-export const obtainOAuthToken = (params: Record<string, string | undefined>, baseURL?: string) =>
+const obtainOAuthToken = (params: Record<string, string | undefined>, baseURL?: string) =>
   (dispatch: AppDispatch) => {
     dispatch({ type: OAUTH_TOKEN_CREATE_REQUEST, params });
     return getFetch(null, baseURL)('/oauth/token', {
@@ -35,7 +35,7 @@ export const obtainOAuthToken = (params: Record<string, string | undefined>, bas
     });
   };
 
-export const revokeOAuthToken = (params: Record<string, string>) =>
+const revokeOAuthToken = (params: Record<string, string>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: OAUTH_TOKEN_REVOKE_REQUEST, params });
     const baseURL = getBaseURL(getState());
@@ -50,3 +50,14 @@ export const revokeOAuthToken = (params: Record<string, string>) =>
       throw error;
     });
   };
+
+export {
+  OAUTH_TOKEN_CREATE_REQUEST,
+  OAUTH_TOKEN_CREATE_SUCCESS,
+  OAUTH_TOKEN_CREATE_FAIL,
+  OAUTH_TOKEN_REVOKE_REQUEST,
+  OAUTH_TOKEN_REVOKE_SUCCESS,
+  OAUTH_TOKEN_REVOKE_FAIL,
+  obtainOAuthToken,
+  revokeOAuthToken,
+};

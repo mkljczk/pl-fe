@@ -49,7 +49,7 @@ const EditGroup: React.FC<IEditGroup> = ({ params: { groupId } }) => {
     ?.filter((type) => type.startsWith('image/'))
     .join(',');
 
-  async function handleSubmit() {
+  const handleSubmit = async () => {
     setIsSubmitting(true);
 
     await updateGroup({
@@ -71,7 +71,7 @@ const EditGroup: React.FC<IEditGroup> = ({ params: { groupId } }) => {
     });
 
     setIsSubmitting(false);
-  }
+  };
 
   if (isLoading) {
     return <Spinner />;

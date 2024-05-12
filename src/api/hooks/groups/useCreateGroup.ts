@@ -15,7 +15,7 @@ interface CreateGroupParams {
   tags?: string[];
 }
 
-function useCreateGroup() {
+const useCreateGroup = () => {
   const api = useApi();
 
   const { createEntity, ...rest } = useCreateEntity([Entities.GROUPS, 'search', ''], (params: CreateGroupParams) => {
@@ -32,6 +32,6 @@ function useCreateGroup() {
     createGroup: createEntity,
     ...rest,
   };
-}
+};
 
 export { useCreateGroup, type CreateGroupParams };

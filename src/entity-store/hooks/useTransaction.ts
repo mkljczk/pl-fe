@@ -10,14 +10,14 @@ type Changes = Partial<{
   [K in keyof EntityTypes]: Updater<EntityTypes[K]>
 }>
 
-function useTransaction() {
+const useTransaction = () => {
   const dispatch = useAppDispatch();
 
-  function transaction(changes: Changes): void {
+  const transaction = (changes: Changes): void => {
     dispatch(entitiesTransaction(changes as EntitiesTransaction));
-  }
+  };
 
   return { transaction };
-}
+};
 
 export { useTransaction };

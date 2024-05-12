@@ -15,8 +15,6 @@ export const HistoryRecord = ImmutableRecord({
   day: '',
   uses: '',
 });
-export const normalizeHistory = (history: Record<string, any>) => {
-  return HistoryRecord(
-    ImmutableMap(fromJS(history)),
-  );
-};
+export const normalizeHistory = (history: Record<string, any>) => HistoryRecord(
+  ImmutableMap(fromJS(history)),
+);

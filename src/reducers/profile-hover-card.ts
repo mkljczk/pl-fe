@@ -16,7 +16,7 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-export default function profileHoverCard(state: State = ReducerRecord(), action: AnyAction) {
+const profileHoverCard = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case PROFILE_HOVER_CARD_OPEN:
       return state.withMutations((state) => {
@@ -33,4 +33,6 @@ export default function profileHoverCard(state: State = ReducerRecord(), action:
     default:
       return state;
   }
-}
+};
+
+export default profileHoverCard;

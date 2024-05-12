@@ -46,11 +46,9 @@ const fixContent = (chatMessage: ImmutableMap<string, any>) => {
   }
 };
 
-export const normalizeChatMessage = (chatMessage: Record<string, any>) => {
-  return ChatMessageRecord(
-    ImmutableMap(fromJS(chatMessage)).withMutations(chatMessage => {
-      normalizeMedia(chatMessage);
-      fixContent(chatMessage);
-    }),
-  );
-};
+export const normalizeChatMessage = (chatMessage: Record<string, any>) => ChatMessageRecord(
+  ImmutableMap(fromJS(chatMessage)).withMutations(chatMessage => {
+    normalizeMedia(chatMessage);
+    fixContent(chatMessage);
+  }),
+);

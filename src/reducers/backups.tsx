@@ -22,17 +22,13 @@ type State = ImmutableMap<string, Backup>;
 
 const initialState: State = ImmutableMap();
 
-const importBackup = (state: State, backup: APIEntity) => {
-  return state.set(backup.inserted_at, BackupRecord(backup));
-};
+const importBackup = (state: State, backup: APIEntity) => state.set(backup.inserted_at, BackupRecord(backup));
 
-const importBackups = (state: State, backups: APIEntity[]) => {
-  return state.withMutations(mutable => {
-    backups.forEach(backup => importBackup(mutable, backup));
-  });
-};
+const importBackups = (state: State, backups: APIEntity[]) => state.withMutations(mutable => {
+  backups.forEach(backup => importBackup(mutable, backup));
+});
 
-export default function backups(state = initialState, action: AnyAction) {
+const backups = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case BACKUPS_FETCH_SUCCESS:
     case BACKUPS_CREATE_SUCCESS:
@@ -40,4 +36,6 @@ export default function backups(state = initialState, action: AnyAction) {
     default:
       return state;
   }
-}
+};
+
+export default backups;

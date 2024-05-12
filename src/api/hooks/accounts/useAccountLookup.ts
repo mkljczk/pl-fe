@@ -13,7 +13,7 @@ interface UseAccountLookupOpts {
   withRelationship?: boolean;
 }
 
-function useAccountLookup(acct: string | undefined, opts: UseAccountLookupOpts = {}) {
+const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts = {}) => {
   const api = useApi();
   const features = useFeatures();
   const history = useHistory();
@@ -49,6 +49,6 @@ function useAccountLookup(acct: string | undefined, opts: UseAccountLookupOpts =
     isUnavailable,
     account: account ? { ...account, relationship } : undefined,
   };
-}
+};
 
 export { useAccountLookup };

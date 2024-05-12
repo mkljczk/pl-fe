@@ -5,7 +5,7 @@ import { type BookmarkFolder } from 'soapbox/schemas/bookmark-folder';
 
 import { useBookmarkFolders } from './useBookmarkFolders';
 
-function useBookmarkFolder(folderId?: string) {
+const useBookmarkFolder = (folderId?: string) => {
   const {
     isError,
     isFetched,
@@ -26,6 +26,6 @@ function useBookmarkFolder(folderId?: string) {
     isLoading,
     invalidate,
   };
-}
+};
 
 export { useBookmarkFolder };

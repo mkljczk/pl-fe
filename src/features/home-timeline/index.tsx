@@ -47,9 +47,7 @@ const HomeTimeline: React.FC = () => {
     }
   };
 
-  const handleRefresh = () => {
-    return dispatch(expandHomeTimeline());
-  };
+  const handleRefresh = () => dispatch(expandHomeTimeline());
 
   useEffect(() => {
     checkIfReloadNeeded();

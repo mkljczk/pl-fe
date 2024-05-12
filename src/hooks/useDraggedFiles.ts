@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 /** Controls the state of files being dragged over a node. */
-function useDraggedFiles<R extends HTMLElement>(node: React.RefObject<R>, onDrop?: (files: FileList) => void) {
+const useDraggedFiles = <R extends HTMLElement>(node: React.RefObject<R>, onDrop?: (files: FileList) => void) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isDraggedOver, setIsDraggedOver] = useState(false);
 
@@ -71,26 +71,23 @@ function useDraggedFiles<R extends HTMLElement>(node: React.RefObject<R>, onDrop
     /** Whether the node is being dragged over. */
     isDraggedOver,
   };
-}
+};
 
 /** Ensure only files are being dragged, and not eg highlighted text. */
-function isDraggingFiles(e: DragEvent): e is DragEvent & { dataTransfer: DataTransfer } {
+const isDraggingFiles = (e: DragEvent): e is DragEvent & { dataTransfer: DataTransfer } => {
   if (e.dataTransfer) {
     const { types } = e.dataTransfer;
     return types.length === 1 && types[0] === 'Files';
   } else {
     return false;
   }
-}
+};
 
 /** Check whether the cursor is in the screen. Mostly useful for dragleave events. */
-function isDraggedOffscreen(e: DragEvent): boolean {
-  return e.screenX === 0 && e.screenY === 0;
-}
+const isDraggedOffscreen = (e: DragEvent): boolean => e.screenX === 0 && e.screenY === 0;
 
 /** Check whether the cursor is dragged out of the node. */
-function isDraggedOutOfNode(e: DragEvent, node: Node): boolean {
-  return !node.contains(document.elementFromPoint(e.clientX, e.clientY));
-}
+const isDraggedOutOfNode = (e: DragEvent, node: Node): boolean =>
+  !node.contains(document.elementFromPoint(e.clientX, e.clientY));
 
 export { useDraggedFiles };

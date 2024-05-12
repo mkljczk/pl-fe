@@ -12,20 +12,19 @@ const toColorVariable = (colorName: string, tint: number | null = null): string 
 };
 
 /** Parse list of tints into Tailwind function with CSS variables. */
-const parseTints = (colorName: string, tints: number[]): RecursiveKeyValuePair => {
-  return tints.reduce<Record<string, string>>((colorObj, tint) => {
+const parseTints = (colorName: string, tints: number[]): RecursiveKeyValuePair =>
+  tints.reduce<Record<string, string>>((colorObj, tint) => {
     colorObj[tint] = toColorVariable(colorName, tint);
     return colorObj;
   }, {});
-};
 
 interface ColorMatrix {
   [colorName: string]: number[] | boolean;
 }
 
 /** Parse color matrix into Tailwind color palette. */
-const parseColorMatrix = (colorMatrix: ColorMatrix): RecursiveKeyValuePair => {
-  return Object.entries(colorMatrix).reduce<RecursiveKeyValuePair>((palette, colorData) => {
+const parseColorMatrix = (colorMatrix: ColorMatrix): RecursiveKeyValuePair =>
+  Object.entries(colorMatrix).reduce<RecursiveKeyValuePair>((palette, colorData) => {
     const [colorName, tints] = colorData;
 
     // Conditionally parse array or single-tint colors
@@ -37,6 +36,5 @@ const parseColorMatrix = (colorMatrix: ColorMatrix): RecursiveKeyValuePair => {
 
     return palette;
   }, {});
-};
 
 export { withOpacityValue, parseColorMatrix };

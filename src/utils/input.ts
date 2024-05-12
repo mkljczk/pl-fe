@@ -8,13 +8,11 @@ const normalizeUsername = (username: string): string => {
   }
 };
 
-function slugify(text: string): string {
-  return text
-    .trim()
-    .toLowerCase()
-    .replace(/[^\w]/g, '-') // replace non-word characters with a hyphen
-    .replace(/-+/g, '-'); // replace multiple hyphens with a single hyphen
-}
+const slugify = (text: string): string => text
+  .trim()
+  .toLowerCase()
+  .replace(/[^\w]/g, '-') // replace non-word characters with a hyphen
+  .replace(/-+/g, '-'); // replace multiple hyphens with a single hyphen
 
 export {
   normalizeUsername,

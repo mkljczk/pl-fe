@@ -70,7 +70,7 @@ const ReactionsModal: React.FC<IReactionsModal> = ({ onClose, statusId, reaction
     return <Tabs items={items} activeItem={reaction || 'all'} />;
   };
 
-  const accounts = useMemo((): ImmutableList<IAccountWithReaction> | undefined  => {
+  const accounts = useMemo((): ImmutableList<IAccountWithReaction> | undefined => {
     if (!reactions) return;
 
     if (reaction) {

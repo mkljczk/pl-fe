@@ -4,7 +4,7 @@ import { connectTimelineStream } from 'soapbox/actions/streaming';
 import { useAppDispatch, useAppSelector, useInstance } from 'soapbox/hooks';
 import { getAccessToken } from 'soapbox/utils/auth';
 
-function useTimelineStream(...args: Parameters<typeof connectTimelineStream>) {
+const useTimelineStream = (...args: Parameters<typeof connectTimelineStream>) => {
   // TODO: get rid of streaming.ts and move the actual opts here.
   const [timelineId, path] = args;
   const { enabled = true } = args[4] ?? {};
@@ -37,6 +37,6 @@ function useTimelineStream(...args: Parameters<typeof connectTimelineStream>) {
   return {
     disconnect,
   };
-}
+};
 
 export { useTimelineStream };

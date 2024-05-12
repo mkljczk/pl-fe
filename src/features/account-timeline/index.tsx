@@ -3,13 +3,12 @@ import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { fetchAccountByUsername } from 'soapbox/actions/accounts';
-import { fetchPatronAccount } from 'soapbox/actions/patron';
 import { expandAccountFeaturedTimeline, expandAccountTimeline } from 'soapbox/actions/timelines';
 import { useAccountLookup } from 'soapbox/api/hooks';
 import MissingIndicator from 'soapbox/components/missing-indicator';
 import StatusList from 'soapbox/components/status-list';
 import { Card, CardBody, Spinner, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useFeatures, useSettings, useSoapboxConfig } from 'soapbox/hooks';
+import { useAppDispatch, useAppSelector, useFeatures, useSettings } from 'soapbox/hooks';
 import { makeGetStatusIds } from 'soapbox/selectors';
 
 const getStatusIds = makeGetStatusIds();
@@ -26,7 +25,6 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const settings = useSettings();
-  const soapboxConfig = useSoapboxConfig();
 
   const { account } = useAccountLookup(params.username, { withRelationship: true });
   const [accountLoading, setAccountLoading] = useState<boolean>(!account);
@@ -38,7 +36,6 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
 
   const isBlocked = useAppSelector(state => state.relationships.getIn([account?.id, 'blocked_by']) === true);
   const unavailable = isBlocked && !features.blockersVisible;
-  const patronEnabled = soapboxConfig.getIn(['extensions', 'patron', 'enabled']) === true;
   const isLoading = useAppSelector(state => state.getIn(['timelines', `account:${path}`, 'isLoading']) === true);
   const hasMore = useAppSelector(state => state.getIn(['timelines', `account:${path}`, 'hasMore']) === true);
   const next = useAppSelector(state => state.timelines.get(`account:${path}`)?.next);
@@ -56,12 +53,6 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
       dispatch(expandAccountFeaturedTimeline(account.id));
     }
   }, [account?.id, withReplies]);
-
-  useEffect(() => {
-    if (account && patronEnabled) {
-      dispatch(fetchPatronAccount(account.url));
-    }
-  }, [account?.url, patronEnabled]);
 
   useEffect(() => {
     if (account) {

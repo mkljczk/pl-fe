@@ -12,7 +12,7 @@ const ModalRecord = ImmutableRecord({
 type Modal = ReturnType<typeof ModalRecord>;
 type State = ImmutableList<Modal>;
 
-export default function modal(state: State = ImmutableList<Modal>(), action: AnyAction) {
+const modal = (state: State = ImmutableList<Modal>(), action: AnyAction) => {
   switch (action.type) {
     case MODAL_OPEN:
       return state.push(ModalRecord({ modalType: action.modalType, modalProps: action.modalProps }));
@@ -30,4 +30,6 @@ export default function modal(state: State = ImmutableList<Modal>(), action: Any
     default:
       return state;
   }
-}
+};
+
+export default modal;

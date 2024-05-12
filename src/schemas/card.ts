@@ -82,12 +82,10 @@ const cardSchema = z.object({
   return card;
 });
 
-const decodeIDNA = (domain: string): string => {
-  return domain
-    .split('.')
-    .map(part => part.indexOf(IDNA_PREFIX) === 0 ? punycode.decode(part.slice(IDNA_PREFIX.length)) : part)
-    .join('.');
-};
+const decodeIDNA = (domain: string): string => domain
+  .split('.')
+  .map(part => part.indexOf(IDNA_PREFIX) === 0 ? punycode.decode(part.slice(IDNA_PREFIX.length)) : part)
+  .join('.');
 
 type Card = z.infer<typeof cardSchema>;
 

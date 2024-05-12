@@ -167,37 +167,35 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
     dispatch(changeSetting(['skinTone'], skinTone));
   };
 
-  const getI18n = () => {
-    return {
-      search: intl.formatMessage(messages.emoji_search),
-      pick: intl.formatMessage(messages.emoji_pick),
-      search_no_results_1: intl.formatMessage(messages.emoji_oh_no),
-      search_no_results_2: intl.formatMessage(messages.emoji_not_found),
-      add_custom: intl.formatMessage(messages.emoji_add_custom),
-      categories: {
-        search: intl.formatMessage(messages.search_results),
-        frequent: intl.formatMessage(messages.recent),
-        people: intl.formatMessage(messages.people),
-        nature: intl.formatMessage(messages.nature),
-        foods: intl.formatMessage(messages.food),
-        activity: intl.formatMessage(messages.activity),
-        places: intl.formatMessage(messages.travel),
-        objects: intl.formatMessage(messages.objects),
-        symbols: intl.formatMessage(messages.symbols),
-        flags: intl.formatMessage(messages.flags),
-        custom: intl.formatMessage(messages.custom),
-      },
-      skins: {
-        choose: intl.formatMessage(messages.skins_choose),
-        1: intl.formatMessage(messages.skins_1),
-        2: intl.formatMessage(messages.skins_2),
-        3: intl.formatMessage(messages.skins_3),
-        4: intl.formatMessage(messages.skins_4),
-        5: intl.formatMessage(messages.skins_5),
-        6: intl.formatMessage(messages.skins_6),
-      },
-    };
-  };
+  const getI18n = () => ({
+    search: intl.formatMessage(messages.emoji_search),
+    pick: intl.formatMessage(messages.emoji_pick),
+    search_no_results_1: intl.formatMessage(messages.emoji_oh_no),
+    search_no_results_2: intl.formatMessage(messages.emoji_not_found),
+    add_custom: intl.formatMessage(messages.emoji_add_custom),
+    categories: {
+      search: intl.formatMessage(messages.search_results),
+      frequent: intl.formatMessage(messages.recent),
+      people: intl.formatMessage(messages.people),
+      nature: intl.formatMessage(messages.nature),
+      foods: intl.formatMessage(messages.food),
+      activity: intl.formatMessage(messages.activity),
+      places: intl.formatMessage(messages.travel),
+      objects: intl.formatMessage(messages.objects),
+      symbols: intl.formatMessage(messages.symbols),
+      flags: intl.formatMessage(messages.flags),
+      custom: intl.formatMessage(messages.custom),
+    },
+    skins: {
+      choose: intl.formatMessage(messages.skins_choose),
+      1: intl.formatMessage(messages.skins_1),
+      2: intl.formatMessage(messages.skins_2),
+      3: intl.formatMessage(messages.skins_3),
+      4: intl.formatMessage(messages.skins_4),
+      5: intl.formatMessage(messages.skins_5),
+      6: intl.formatMessage(messages.skins_6),
+    },
+  });
 
   useEffect(() => {
     // fix scrolling focus issue

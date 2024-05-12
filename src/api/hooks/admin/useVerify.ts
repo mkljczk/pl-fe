@@ -5,12 +5,12 @@ import { accountIdsToAccts } from 'soapbox/selectors';
 
 import type { Account } from 'soapbox/schemas';
 
-function useVerify() {
+const useVerify = () => {
   const api = useApi();
   const getState = useGetState();
   const { transaction } = useTransaction();
 
-  function verifyEffect(accountIds: string[], verified: boolean) {
+  const verifyEffect = (accountIds: string[], verified: boolean) => {
     const updater = (account: Account): Account => {
       if (account.pleroma) {
         const tags = account.pleroma.tags.filter((tag) => tag !== 'verified');
@@ -28,9 +28,9 @@ function useVerify() {
         (result, id) => ({ ...result, [id]: updater }),
       {}),
     });
-  }
+  };
 
-  async function verify(accountIds: string[], callbacks?: EntityCallbacks<void, unknown>) {
+  const verify = async (accountIds: string[], callbacks?: EntityCallbacks<void, unknown>) => {
     const accts = accountIdsToAccts(getState(), accountIds);
     verifyEffect(accountIds, true);
     try {
@@ -43,9 +43,9 @@ function useVerify() {
       callbacks?.onError?.(e);
       verifyEffect(accountIds, false);
     }
-  }
+  };
 
-  async function unverify(accountIds: string[], callbacks?: EntityCallbacks<void, unknown>) {
+  const unverify = async (accountIds: string[], callbacks?: EntityCallbacks<void, unknown>) => {
     const accts = accountIdsToAccts(getState(), accountIds);
     verifyEffect(accountIds, false);
     try {
@@ -58,12 +58,12 @@ function useVerify() {
       callbacks?.onError?.(e);
       verifyEffect(accountIds, true);
     }
-  }
+  };
 
   return {
     verify,
     unverify,
   };
-}
+};
 
 export { useVerify };

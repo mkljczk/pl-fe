@@ -11,9 +11,7 @@ const importCustom = async (locale: string): Promise<MessageModule> => {
 };
 
 /** Import git-checked messages */
-const importMessages = (locale: string): Promise<MessageModule> => {
-  return import(`./locales/${locale}.json`);
-};
+const importMessages = (locale: string): Promise<MessageModule> => import(`./locales/${locale}.json`);
 
 /** Override custom messages */
 const importMessagesWithCustom = async (locale: string): Promise<MessageJson> => {

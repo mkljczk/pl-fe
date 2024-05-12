@@ -5,14 +5,13 @@ interface UseCommunityStreamOpts {
   enabled?: boolean;
 }
 
-function useCommunityStream({ onlyMedia, enabled }: UseCommunityStreamOpts = {}) {
-  return useTimelineStream(
+const useCommunityStream = ({ onlyMedia, enabled }: UseCommunityStreamOpts = {}) =>
+  useTimelineStream(
     `community${onlyMedia ? ':media' : ''}`,
     `public:local${onlyMedia ? ':media' : ''}`,
     undefined,
     undefined,
     { enabled },
   );
-}
 
 export { useCommunityStream };

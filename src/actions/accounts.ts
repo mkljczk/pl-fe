@@ -132,9 +132,9 @@ const createAccount = (params: Record<string, any>) =>
     return api(getState, 'app')('/api/v1/accounts', {
       method: 'POST',
       body: JSON.stringify(params),
-    }).then(({ json: token }) => {
-      return dispatch({ type: ACCOUNT_CREATE_SUCCESS, params, token });
-    }).catch(error => {
+    }).then(({ json: token }) =>
+      dispatch({ type: ACCOUNT_CREATE_SUCCESS, params, token }),
+    ).catch(error => {
       dispatch({ type: ACCOUNT_CREATE_FAIL, error, params });
       throw error;
     });

@@ -118,28 +118,24 @@ interface IInfoListNumber {
   number: number;
 }
 
-const InfoListNumber: React.FC<IInfoListNumber> = ({ number }) => {
-  return (
-    <div className='flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-gray-200 dark:border-gray-800'>
-      <Text theme='primary' size='sm' weight='bold'>{number}</Text>
-    </div>
-  );
-};
+const InfoListNumber: React.FC<IInfoListNumber> = ({ number }) => (
+  <div className='flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-gray-200 dark:border-gray-800'>
+    <Text theme='primary' size='sm' weight='bold'>{number}</Text>
+  </div>
+);
 
 interface IInfoListItem {
   number: number;
   children: React.ReactNode;
 }
 
-const InfoListItem: React.FC<IInfoListItem> = ({ number, children }) => {
-  return (
-    <HStack alignItems='top' space={3}>
-      <InfoListNumber number={number} />
-      <div className='mt-0.5'>
-        {children}
-      </div>
-    </HStack>
-  );
-};
+const InfoListItem: React.FC<IInfoListItem> = ({ number, children }) => (
+  <HStack alignItems='top' space={3}>
+    <InfoListNumber number={number} />
+    <div className='mt-0.5'>
+      {children}
+    </div>
+  </HStack>
+);
 
 export default ConfirmationStep;

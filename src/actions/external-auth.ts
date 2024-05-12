@@ -19,8 +19,8 @@ import { getFetch } from '../api';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 
-const fetchExternalInstance = (baseURL?: string) => {
-  return getFetch(null, baseURL)('/api/v1/instance')
+const fetchExternalInstance = (baseURL?: string) =>
+  getFetch(null, baseURL)('/api/v1/instance')
     .then(({ json: instance }) => instanceSchema.parse(instance))
     .catch(error => {
       if (error.response?.status === 401) {
@@ -31,7 +31,6 @@ const fetchExternalInstance = (baseURL?: string) => {
         throw error;
       }
     });
-};
 
 const createExternalApp = (instance: Instance, baseURL?: string) =>
   (dispatch: AppDispatch, _getState: () => RootState) => {
@@ -70,7 +69,7 @@ const externalAuthorize = (instance: Instance, baseURL: string) =>
     });
   };
 
-export const externalLogin = (host: string) =>
+const externalLogin = (host: string) =>
   (dispatch: AppDispatch) => {
     const baseURL = parseBaseURL(host) || parseBaseURL(`https://${host}`);
 
@@ -79,7 +78,7 @@ export const externalLogin = (host: string) =>
     });
   };
 
-export const loginWithCode = (code: string) =>
+const loginWithCode = (code: string) =>
   (dispatch: AppDispatch) => {
     const { client_id, client_secret, redirect_uri } = JSON.parse(localStorage.getItem('plfe:external:app')!);
     const baseURL = localStorage.getItem('plfe:external:baseurl')!;
@@ -100,3 +99,8 @@ export const loginWithCode = (code: string) =>
       .then((account: { id: string }) => dispatch(switchAccount(account.id)))
       .then(() => window.location.href = '/');
   };
+
+export {
+  externalLogin,
+  loginWithCode,
+};

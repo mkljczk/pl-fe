@@ -11,13 +11,13 @@ interface FollowOpts {
   languages?: string[];
 }
 
-function useFollow() {
+const useFollow = () => {
   const api = useApi();
   const dispatch = useAppDispatch();
   const { isLoggedIn } = useLoggedIn();
   const { transaction } = useTransaction();
 
-  function followEffect(accountId: string) {
+  const followEffect = (accountId: string) => {
     transaction({
       Accounts: {
         [accountId]: (account) => ({
@@ -32,9 +32,9 @@ function useFollow() {
         }),
       },
     });
-  }
+  };
 
-  function unfollowEffect(accountId: string) {
+  const unfollowEffect = (accountId: string) => {
     transaction({
       Accounts: {
         [accountId]: (account) => ({
@@ -49,9 +49,9 @@ function useFollow() {
         }),
       },
     });
-  }
+  };
 
-  async function follow(accountId: string, options: FollowOpts = {}) {
+  const follow = async (accountId: string, options: FollowOpts = {}) => {
     if (!isLoggedIn) return;
     followEffect(accountId);
 
@@ -67,9 +67,9 @@ function useFollow() {
     } catch (e) {
       unfollowEffect(accountId);
     }
-  }
+  };
 
-  async function unfollow(accountId: string) {
+  const unfollow = async (accountId: string) => {
     if (!isLoggedIn) return;
     unfollowEffect(accountId);
 
@@ -78,7 +78,7 @@ function useFollow() {
     } catch (e) {
       followEffect(accountId);
     }
-  }
+  };
 
   return {
     follow,
@@ -86,6 +86,6 @@ function useFollow() {
     followEffect,
     unfollowEffect,
   };
-}
+};
 
 export { useFollow };

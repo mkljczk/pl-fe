@@ -16,7 +16,7 @@ export const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-export default function statusHoverCard(state: State = ReducerRecord(), action: AnyAction) {
+const statusHoverCard = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case STATUS_HOVER_CARD_OPEN:
       return state.withMutations((state) => {
@@ -33,4 +33,6 @@ export default function statusHoverCard(state: State = ReducerRecord(), action: 
     default:
       return state;
   }
-}
+};
+
+export default statusHoverCard;

@@ -10,7 +10,7 @@ const updateReaction = (reaction: AnnouncementReaction, count: number, me?: bool
   count: overwrite ? count : (reaction.count + count),
 });
 
-export const updateReactions = (reactions: AnnouncementReaction[], name: string, count: number, me?: boolean, overwrite?: boolean) => {
+const updateReactions = (reactions: AnnouncementReaction[], name: string, count: number, me?: boolean, overwrite?: boolean) => {
   const idx = reactions.findIndex(reaction => reaction.name === name);
 
   if (idx > -1) {
@@ -92,8 +92,7 @@ const useAnnouncements = () => {
   };
 };
 
-function compareAnnouncements(a: Announcement, b: Announcement): number {
-  return new Date(a.starts_at || a.published_at).getDate() - new Date(b.starts_at || b.published_at).getDate();
-}
+const compareAnnouncements = (a: Announcement, b: Announcement): number =>
+  new Date(a.starts_at || a.published_at).getDate() - new Date(b.starts_at || b.published_at).getDate();
 
-export { useAnnouncements };
+export { updateReactions, useAnnouncements };

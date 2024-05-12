@@ -11,9 +11,9 @@ const buildPoll = (draftStatus: DraftStatus) => {
   if (draftStatus.hasIn(['poll', 'options'])) {
     return draftStatus.poll!
       .set('id', `${draftStatus.draft_id}-poll`)
-      .update('options', (options: ImmutableMap<string, any>) => {
-        return options.map((title: string) => ImmutableMap({ title }));
-      });
+      .update('options', (options: ImmutableMap<string, any>) =>
+        options.map((title: string) => ImmutableMap({ title })),
+      );
   } else {
     return null;
   }

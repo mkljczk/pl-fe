@@ -121,11 +121,10 @@ export const SoapboxConfigRecord = ImmutableRecord({
 
 type SoapboxConfigMap = ImmutableMap<string, any>;
 
-const normalizeCryptoAddress = (address: unknown): CryptoAddress => {
-  return CryptoAddressRecord(ImmutableMap(fromJS(address))).update('ticker', ticker => {
-    return trimStart(ticker, '$').toLowerCase();
-  });
-};
+const normalizeCryptoAddress = (address: unknown): CryptoAddress =>
+  CryptoAddressRecord(ImmutableMap(fromJS(address))).update('ticker', ticker =>
+    trimStart(ticker, '$').toLowerCase(),
+  );
 
 const normalizeCryptoAddresses = (soapboxConfig: SoapboxConfigMap): SoapboxConfigMap => {
   const addresses = ImmutableList(soapboxConfig.get('cryptoAddresses'));
@@ -215,18 +214,16 @@ const normalizeRedirectRootNoLogin = (soapboxConfig: SoapboxConfigMap): SoapboxC
   }
 };
 
-export const normalizeSoapboxConfig = (soapboxConfig: Record<string, any>) => {
-  return SoapboxConfigRecord(
-    ImmutableMap(fromJS(soapboxConfig)).withMutations(soapboxConfig => {
-      normalizeBrandColor(soapboxConfig);
-      normalizeAccentColor(soapboxConfig);
-      normalizeColors(soapboxConfig);
-      normalizePromoPanel(soapboxConfig);
-      normalizeFooterLinks(soapboxConfig);
-      maybeAddMissingColors(soapboxConfig);
-      normalizeCryptoAddresses(soapboxConfig);
-      upgradeSingleUserMode(soapboxConfig);
-      normalizeRedirectRootNoLogin(soapboxConfig);
-    }),
-  );
-};
+export const normalizeSoapboxConfig = (soapboxConfig: Record<string, any>) => SoapboxConfigRecord(
+  ImmutableMap(fromJS(soapboxConfig)).withMutations(soapboxConfig => {
+    normalizeBrandColor(soapboxConfig);
+    normalizeAccentColor(soapboxConfig);
+    normalizeColors(soapboxConfig);
+    normalizePromoPanel(soapboxConfig);
+    normalizeFooterLinks(soapboxConfig);
+    maybeAddMissingColors(soapboxConfig);
+    normalizeCryptoAddresses(soapboxConfig);
+    upgradeSingleUserMode(soapboxConfig);
+    normalizeRedirectRootNoLogin(soapboxConfig);
+  }),
+);

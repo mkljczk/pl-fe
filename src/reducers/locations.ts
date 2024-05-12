@@ -11,18 +11,19 @@ type State = ImmutableMap<any, LocationRecord>;
 
 const initialState: State = ImmutableMap();
 
-const normalizeLocations = (state: State, locations: APIEntity[]) => {
-  return locations.reduce(
+const normalizeLocations = (state: State, locations: APIEntity[]) =>
+  locations.reduce(
     (state: State, location: APIEntity) => state.set(location.origin_id, normalizeLocation(location)),
     state,
   );
-};
 
-export default function accounts(state: State = initialState, action: AnyAction): State {
+const locations = (state: State = initialState, action: AnyAction): State => {
   switch (action.type) {
     case LOCATION_SEARCH_SUCCESS:
       return normalizeLocations(state, action.locations);
     default:
       return state;
   }
-}
+};
+
+export default locations;

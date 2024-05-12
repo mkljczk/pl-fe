@@ -20,17 +20,13 @@ const messages = defineMessages({
 const noOp = (e: any) => {};
 
 const fetchMedia = (mediaId: string) =>
-  (dispatch: any, getState: () => RootState) => {
-    return api(getState)(`/api/v1/media/${mediaId}`);
-  };
+  (dispatch: any, getState: () => RootState) => api(getState)(`/api/v1/media/${mediaId}`);
 
 const updateMedia = (mediaId: string, params: Record<string, any>) =>
-  (dispatch: any, getState: () => RootState) => {
-    return api(getState)(`/api/v1/media/${mediaId}`, {
-      method: 'PUT',
-      body: JSON.stringify(params),
-    });
-  };
+  (dispatch: any, getState: () => RootState) => api(getState)(`/api/v1/media/${mediaId}`, {
+    method: 'PUT',
+    body: JSON.stringify(params),
+  });
 
 const uploadMedia = (body: FormData, onUploadProgress: (e: ProgressEvent) => void = noOp) =>
   (dispatch: AppDispatch, getState: () => RootState) => {

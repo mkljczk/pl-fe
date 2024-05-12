@@ -7,7 +7,7 @@
  * - `1`: id1 > id2
  * - `-1`: id1 < id2
  */
-function compareId(id1: string, id2: string) {
+const compareId = (id1: string, id2: string) => {
   if (id1 === id2) {
     return 0;
   }
@@ -16,7 +16,7 @@ function compareId(id1: string, id2: string) {
   } else {
     return id1.length > id2.length ? 1 : -1;
   }
-}
+};
 
 /**
  * Compare by dates, where most recent date is returned first.
@@ -25,13 +25,13 @@ function compareId(id1: string, id2: string) {
  * @param dateString2 - string that is parsable by Date
  * @returns 1 | -1 | 0
  */
-function compareDate(dateString1: string, dateString2: string) {
+const compareDate = (dateString1: string, dateString2: string) => {
   const date1 = new Date(dateString1);
   const date2 = new Date(dateString2);
 
   if (date2 < date1) return -1;
   if (date2 > date1) return 1;
   return 0;
-}
+};
 
 export { compareId, compareDate };

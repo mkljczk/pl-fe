@@ -13,7 +13,7 @@ interface UseAccountOpts {
   withRelationship?: boolean;
 }
 
-function useAccount(accountId?: string, opts: UseAccountOpts = {}) {
+const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
   const api = useApi();
   const history = useHistory();
   const features = useFeatures();
@@ -53,6 +53,6 @@ function useAccount(accountId?: string, opts: UseAccountOpts = {}) {
     isUnavailable,
     account,
   };
-}
+};
 
 export { useAccount };

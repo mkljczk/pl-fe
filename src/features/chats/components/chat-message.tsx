@@ -28,13 +28,10 @@ const messages = defineMessages({
 
 const BIG_EMOJI_LIMIT = 3;
 
-const makeEmojiMap = (record: any) => record.get('emojis', ImmutableList()).reduce((map: ImmutableMap<string, any>, emoji: ImmutableMap<string, any>) => {
-  return map.set(`:${emoji.get('shortcode')}:`, emoji);
-}, ImmutableMap());
+const makeEmojiMap = (record: any) => record.get('emojis', ImmutableList()).reduce((map: ImmutableMap<string, any>, emoji: ImmutableMap<string, any>) =>
+  map.set(`:${emoji.get('shortcode')}:`, emoji), ImmutableMap());
 
-const parsePendingContent = (content: string) => {
-  return escape(content).replace(/(?:\r\n|\r|\n)/g, '<br>');
-};
+const parsePendingContent = (content: string) => escape(content).replace(/(?:\r\n|\r|\n)/g, '<br>');
 
 const parseContent = (chatMessage: ChatMessageEntity) => {
   const content = chatMessage.content || '';
@@ -116,8 +113,8 @@ const ChatMessage = (props: IChatMessage) => {
     });
   };
 
-  const getFormattedTimestamp = (chatMessage: ChatMessageEntity) => {
-    return intl.formatDate(new Date(chatMessage.created_at), {
+  const getFormattedTimestamp = (chatMessage: ChatMessageEntity) =>
+    intl.formatDate(new Date(chatMessage.created_at), {
       hour12: false,
       year: 'numeric',
       month: 'short',
@@ -125,7 +122,6 @@ const ChatMessage = (props: IChatMessage) => {
       hour: '2-digit',
       minute: '2-digit',
     });
-  };
 
   const menu = useMemo(() => {
     const menu: IMenu = [];

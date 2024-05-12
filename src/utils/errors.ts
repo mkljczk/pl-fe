@@ -201,10 +201,9 @@ const httpErrorMessages: { code: number; name: string; description: string }[] =
 ];
 
 /** Whether the error is caused by a JS chunk failing to load. */
-function isNetworkError(error: unknown): boolean {
-  return error instanceof Error
+const isNetworkError = (error: unknown): boolean =>
+  error instanceof Error
     && error.name === 'TypeError'
     && error.message.startsWith('Failed to fetch dynamically imported module: ');
-}
 
 export { buildErrorMessage, httpErrorMessages, isNetworkError };

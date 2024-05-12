@@ -66,9 +66,7 @@ const StatusDetails: React.FC<IStatusDetails> = (props) => {
     });
   }, [props.params.statusId]);
 
-  const handleRefresh = () => {
-    return fetchData();
-  };
+  const handleRefresh = () => fetchData();
 
   if (status?.event) {
     return (

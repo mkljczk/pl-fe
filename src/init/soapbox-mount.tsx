@@ -37,9 +37,8 @@ const SoapboxMount = () => {
   const { redirectRootNoLogin, gdpr } = soapboxConfig;
 
   // @ts-ignore: I don't actually know what these should be, lol
-  const shouldUpdateScroll = (prevRouterProps, { location }) => {
-    return !(location.state?.soapboxModalKey && location.state?.soapboxModalKey !== prevRouterProps?.location?.state?.soapboxModalKey);
-  };
+  const shouldUpdateScroll = (prevRouterProps, { location }) =>
+    !(location.state?.soapboxModalKey && location.state?.soapboxModalKey !== prevRouterProps?.location?.state?.soapboxModalKey);
 
   return (
     <SiteErrorBoundary>

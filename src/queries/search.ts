@@ -5,7 +5,7 @@ import { useApi } from 'soapbox/hooks';
 import { Account } from 'soapbox/types/entities';
 import { flattenPages, PaginatedResult } from 'soapbox/utils/queries';
 
-export default function useAccountSearch(q: string) {
+const useAccountSearch = (q: string) => {
   const api = useApi();
 
   const getAccountSearch = async(q: string, pageParam: { link?: string }): Promise<PaginatedResult<Account>> => {
@@ -51,4 +51,6 @@ export default function useAccountSearch(q: string) {
     ...queryInfo,
     data,
   };
-}
+};
+
+export default useAccountSearch;

@@ -22,7 +22,7 @@ const ReducerRecord = ImmutableRecord({
   })(),
 });
 
-export default function aliasesReducer(state = ReducerRecord(), action: AnyAction) {
+const aliasesReducer = (state = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case ALIASES_FETCH_SUCCESS:
       return state
@@ -44,4 +44,6 @@ export default function aliasesReducer(state = ReducerRecord(), action: AnyActio
     default:
       return state;
   }
-}
+};
+
+export default aliasesReducer;

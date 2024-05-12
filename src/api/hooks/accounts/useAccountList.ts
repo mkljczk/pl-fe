@@ -11,7 +11,7 @@ interface useAccountListOpts {
   enabled?: boolean;
 }
 
-function useAccountList(listKey: string[], entityFn: EntityFn<void>, opts: useAccountListOpts = {}) {
+const useAccountList = (listKey: string[], entityFn: EntityFn<void>, opts: useAccountListOpts = {}) => {
   const { entities, ...rest } = useEntities(
     [Entities.ACCOUNTS, ...listKey],
     entityFn,
@@ -29,19 +29,19 @@ function useAccountList(listKey: string[], entityFn: EntityFn<void>, opts: useAc
   }));
 
   return { accounts, ...rest };
-}
+};
 
-function useBlocks() {
+const useBlocks = () => {
   const api = useApi();
   return useAccountList(['blocks'], () => api('/api/v1/blocks'));
-}
+};
 
-function useMutes() {
+const useMutes = () => {
   const api = useApi();
   return useAccountList(['mutes'], () => api('/api/v1/mutes'));
-}
+};
 
-function useFollowing(accountId: string | undefined) {
+const useFollowing = (accountId: string | undefined) => {
   const api = useApi();
 
   return useAccountList(
@@ -49,9 +49,9 @@ function useFollowing(accountId: string | undefined) {
     () => api(`/api/v1/accounts/${accountId}/following`),
     { enabled: !!accountId },
   );
-}
+};
 
-function useFollowers(accountId: string | undefined) {
+const useFollowers = (accountId: string | undefined) => {
   const api = useApi();
 
   return useAccountList(
@@ -59,7 +59,7 @@ function useFollowers(accountId: string | undefined) {
     () => api(`/api/v1/accounts/${accountId}/followers`),
     { enabled: !!accountId },
   );
-}
+};
 
 export {
   useAccountList,

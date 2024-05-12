@@ -43,7 +43,7 @@ const rgbToHsl = (value: Rgb): Hsl => {
 };
 
 // https://stackoverflow.com/a/44134328
-function hslToHex(color: Hsl): string {
+const hslToHex = (color: Hsl): string => {
   const { h, s } = color;
   let { l } = color;
 
@@ -57,10 +57,10 @@ function hslToHex(color: Hsl): string {
   };
 
   return `#${f(0)}${f(8)}${f(4)}`;
-}
+};
 
 /** Generate accent color from brand color. */
-export const generateAccent = (brandColor: string): string | null => {
+const generateAccent = (brandColor: string): string | null => {
   const rgb = hexToRgb(brandColor);
   if (!rgb) return null;
 
@@ -69,7 +69,7 @@ export const generateAccent = (brandColor: string): string | null => {
 };
 
 /** Generate neutral color from brand color. */
-export const generateNeutral = (brandColor: string): string | null => {
+const generateNeutral = (brandColor: string): string | null => {
   const rgb = hexToRgb(brandColor);
   if (!rgb) return null;
 
@@ -99,30 +99,26 @@ const parseShades = (obj: Record<string, any>, color: string, shades: Record<str
 };
 
 // Convert colors as CSS variables
-const parseColors = (colors: TailwindColorPalette): TailwindColorPalette => {
-  return Object.keys(colors).reduce((obj, color) => {
+const parseColors = (colors: TailwindColorPalette): TailwindColorPalette =>
+  Object.keys(colors).reduce((obj, color) => {
     parseShades(obj, color, colors[color] as TailwindColorObject);
     return obj;
   }, {});
-};
 
-export const colorsToCss = (colors: TailwindColorPalette): string => {
+const colorsToCss = (colors: TailwindColorPalette): string => {
   const parsed = parseColors(colors);
-  return Object.keys(parsed).reduce((css, variable) => {
-    return css + `${variable}:${parsed[variable]};`;
-  }, '');
+  return Object.keys(parsed).reduce((css, variable) => css + `${variable}:${parsed[variable]};`, '');
 };
 
-export const generateThemeCss = (soapboxConfig: SoapboxConfig): string => {
-  return colorsToCss(soapboxConfig.colors.toJS() as TailwindColorPalette);
-};
+const generateThemeCss = (soapboxConfig: SoapboxConfig): string =>
+  colorsToCss(soapboxConfig.colors.toJS() as TailwindColorPalette);
 
-export const hexToHsl = (hex: string): Hsl | null => {
+const hexToHsl = (hex: string): Hsl | null => {
   const rgb = hexToRgb(hex);
   return rgb ? rgbToHsl(rgb) : null;
 };
 
-export const hueShift = (hex: string, delta: number): string => {
+const hueShift = (hex: string, delta: number): string => {
   const { h, s, l } = hexToHsl(hex)!;
 
   return hslToHex({
@@ -130,4 +126,13 @@ export const hueShift = (hex: string, delta: number): string => {
     s,
     l,
   });
+};
+
+export {
+  generateAccent,
+  generateNeutral,
+  colorsToCss,
+  generateThemeCss,
+  hexToHsl,
+  hueShift,
 };

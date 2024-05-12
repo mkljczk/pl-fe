@@ -4,7 +4,7 @@ import { useApi } from 'soapbox/hooks';
 
 import type { Group } from 'soapbox/schemas';
 
-function useDeleteGroupStatus(group: Group, statusId: string) {
+const useDeleteGroupStatus = (group: Group, statusId: string) => {
   const api = useApi();
   const { deleteEntity, isSubmitting } = useDeleteEntity(
     Entities.STATUSES,
@@ -15,6 +15,6 @@ function useDeleteGroupStatus(group: Group, statusId: string) {
     mutate: deleteEntity,
     isSubmitting,
   };
-}
+};
 
 export { useDeleteGroupStatus };

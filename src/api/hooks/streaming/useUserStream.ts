@@ -7,7 +7,7 @@ import { useTimelineStream } from './useTimelineStream';
 
 import type { AppDispatch } from 'soapbox/store';
 
-function useUserStream() {
+const useUserStream = () => {
   const { isLoggedIn } = useLoggedIn();
   const statContext = useStatContext();
 
@@ -18,12 +18,10 @@ function useUserStream() {
     null,
     { statContext, enabled: isLoggedIn },
   );
-}
+};
 
 /** Refresh home timeline and notifications. */
-function refresh(dispatch: AppDispatch, done?: () => void) {
-  return dispatch(expandHomeTimeline({}, () =>
-    dispatch(expandNotifications({}, done))));
-}
+const refresh = (dispatch: AppDispatch, done?: () => void) =>
+  dispatch(expandHomeTimeline({}, () => dispatch(expandNotifications({}, done))));
 
 export { useUserStream };

@@ -2,7 +2,7 @@ import { useLoggedIn } from 'soapbox/hooks';
 
 import { useTimelineStream } from './useTimelineStream';
 
-function useListStream(listId: string) {
+const useListStream = (listId: string) => {
   const { isLoggedIn } = useLoggedIn();
 
   return useTimelineStream(
@@ -12,6 +12,6 @@ function useListStream(listId: string) {
     null,
     { enabled: isLoggedIn },
   );
-}
+};
 
 export { useListStream };

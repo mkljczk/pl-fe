@@ -7,7 +7,7 @@ import { changeSettingImmediate } from 'soapbox/actions/settings';
 import type { Store } from 'soapbox/store';
 
 /** Add Soapbox globals to the window. */
-export const createGlobals = (store: Store) => {
+const createGlobals = (store: Store) => {
   const Soapbox = {
     /** Become a developer with `Soapbox.isDeveloper()` */
     isDeveloper: (bool = true): boolean => {
@@ -21,3 +21,5 @@ export const createGlobals = (store: Store) => {
 
   (window as any).Soapbox = Soapbox;
 };
+
+export { createGlobals };

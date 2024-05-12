@@ -19,7 +19,7 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-export default function domainLists(state: State = ReducerRecord(), action: AnyAction) {
+const domainLists = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case DOMAIN_BLOCKS_FETCH_SUCCESS:
       return state.setIn(['blocks', 'items'], ImmutableOrderedSet(action.domains)).setIn(['blocks', 'next'], action.next);
@@ -30,4 +30,6 @@ export default function domainLists(state: State = ReducerRecord(), action: AnyA
     default:
       return state;
   }
-}
+};
+
+export default domainLists;

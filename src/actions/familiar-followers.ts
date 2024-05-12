@@ -7,11 +7,11 @@ import { importFetchedAccounts } from './importer';
 
 import type { APIEntity } from 'soapbox/types/entities';
 
-export const FAMILIAR_FOLLOWERS_FETCH_REQUEST = 'FAMILIAR_FOLLOWERS_FETCH_REQUEST';
-export const FAMILIAR_FOLLOWERS_FETCH_SUCCESS = 'FAMILIAR_FOLLOWERS_FETCH_SUCCESS';
-export const FAMILIAR_FOLLOWERS_FETCH_FAIL    = 'FAMILIAR_FOLLOWERS_FETCH_FAIL';
+const FAMILIAR_FOLLOWERS_FETCH_REQUEST = 'FAMILIAR_FOLLOWERS_FETCH_REQUEST';
+const FAMILIAR_FOLLOWERS_FETCH_SUCCESS = 'FAMILIAR_FOLLOWERS_FETCH_SUCCESS';
+const FAMILIAR_FOLLOWERS_FETCH_FAIL    = 'FAMILIAR_FOLLOWERS_FETCH_FAIL';
 
-export const fetchAccountFamiliarFollowers = (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+const fetchAccountFamiliarFollowers = (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch({
     type: FAMILIAR_FOLLOWERS_FETCH_REQUEST,
     id: accountId,
@@ -35,4 +35,11 @@ export const fetchAccountFamiliarFollowers = (accountId: string) => (dispatch: A
       error,
       skipAlert: true,
     }));
+};
+
+export {
+  FAMILIAR_FOLLOWERS_FETCH_REQUEST,
+  FAMILIAR_FOLLOWERS_FETCH_SUCCESS,
+  FAMILIAR_FOLLOWERS_FETCH_FAIL,
+  fetchAccountFamiliarFollowers,
 };

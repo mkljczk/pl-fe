@@ -61,10 +61,8 @@ const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params })
   const { accounts, authorize, reject, refetch, isLoading } = useGroupMembershipRequests(id);
   const { invalidate } = useGroupMembers(id, GroupRoles.USER);
 
-  useEffect(() => {
-    return () => {
-      invalidate();
-    };
+  useEffect(() => () => {
+    invalidate();
   }, []);
 
   if (!group || !group.relationship || isLoading) {
@@ -79,8 +77,8 @@ const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params })
     return <ColumnForbidden />;
   }
 
-  async function handleAuthorize(account: AccountEntity) {
-    return authorize(account.id)
+  const handleAuthorize = async (account: AccountEntity) =>
+    authorize(account.id)
       .then(() => Promise.resolve())
       .catch((error: { response: Response }) => {
         refetch();
@@ -93,10 +91,9 @@ const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params })
 
         return Promise.reject();
       });
-  }
 
-  async function handleReject(account: AccountEntity) {
-    return reject(account.id)
+  const handleReject = async (account: AccountEntity) =>
+    reject(account.id)
       .then(() => Promise.resolve())
       .catch((error: { response: Response }) => {
         refetch();
@@ -109,7 +106,6 @@ const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params })
 
         return Promise.reject();
       });
-  }
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>

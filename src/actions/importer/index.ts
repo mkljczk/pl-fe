@@ -126,7 +126,7 @@ const importFetchedStatuses = (statuses: APIEntity[]) => (dispatch: AppDispatch)
   const normalStatuses: APIEntity[] = [];
   const polls: APIEntity[] = [];
 
-  function processStatus(status: APIEntity) {
+  const processStatus = (status: APIEntity) => {
     // Skip broken statuses
     if (isBroken(status)) return;
 
@@ -153,7 +153,7 @@ const importFetchedStatuses = (statuses: APIEntity[]) => (dispatch: AppDispatch)
     if (status.poll?.id) {
       polls.push(status.poll);
     }
-  }
+  };
 
   statuses.forEach(processStatus);
 

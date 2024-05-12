@@ -21,7 +21,7 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-export default function mutes(state: State = ReducerRecord(), action: AnyAction) {
+const mutes = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case MUTES_INIT_MODAL:
       return state.withMutations((state) => {
@@ -36,4 +36,6 @@ export default function mutes(state: State = ReducerRecord(), action: AnyAction)
     default:
       return state;
   }
-}
+};
+
+export default mutes;

@@ -17,17 +17,15 @@ interface IRestriction {
   children: React.ReactNode;
 }
 
-const Restriction: React.FC<IRestriction> = ({ icon, children }) => {
-  return (
-    <HStack space={3}>
-      <Icon className='h-5 w-5 flex-none' src={icon} />
+const Restriction: React.FC<IRestriction> = ({ icon, children }) => (
+  <HStack space={3}>
+    <Icon className='h-5 w-5 flex-none' src={icon} />
 
-      <Text theme='muted'>
-        {children}
-      </Text>
-    </HStack>
-  );
-};
+    <Text theme='muted'>
+      {children}
+    </Text>
+  </HStack>
+);
 
 interface IInstanceRestrictions {
   remoteInstance: RemoteInstance;

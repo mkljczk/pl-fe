@@ -10,7 +10,6 @@ import {
   TrendsPanel,
   SignUpPanel,
   PromoPanel,
-  FundingPanel,
   CryptoDonatePanel,
   BirthdayPanel,
   CtaBanner,
@@ -37,7 +36,6 @@ const HomePage: React.FC<IHomePage> = ({ children }) => {
   const composeId = 'home';
   const composeBlock = useRef<HTMLDivElement>(null);
 
-  const hasPatron = soapboxConfig.extensions.getIn(['patron', 'enabled']) === true;
   const hasCrypto = typeof soapboxConfig.cryptoAddresses.getIn([0, 'ticker']) === 'string';
   const cryptoLimit = soapboxConfig.cryptoDonatePanel.get('limit', 0);
 
@@ -95,9 +93,6 @@ const HomePage: React.FC<IHomePage> = ({ children }) => {
         )}
         {features.trends && (
           <TrendsPanel limit={5} />
-        )}
-        {(hasPatron && me) && (
-          <FundingPanel />
         )}
         {(hasCrypto && cryptoLimit > 0 && me) && (
           <CryptoDonatePanel limit={cryptoLimit} />

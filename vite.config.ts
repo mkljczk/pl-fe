@@ -29,9 +29,6 @@ export default defineConfig(({ command }) => ({
   server: {
     port: Number(process.env.PORT ?? 3036),
   },
-  optimizeDeps: {
-    exclude: command === 'serve' ? ['@soapbox.pub/wasmboy'] : [],
-  },
   plugins: [
     checker({ typescript: true }),
     // @ts-ignore

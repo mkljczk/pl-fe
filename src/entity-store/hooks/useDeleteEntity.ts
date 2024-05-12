@@ -11,15 +11,12 @@ import type { EntityCallbacks, EntityFn } from './types';
  * This hook should be used to globally delete an entity from all lists.
  * To remove an entity from a single list, see `useDismissEntity`.
  */
-function useDeleteEntity(
-  entityType: string,
-  entityFn: EntityFn<string>,
-) {
+const useDeleteEntity = (entityType: string, entityFn: EntityFn<string>) => {
   const dispatch = useAppDispatch();
   const getState = useGetState();
   const [isSubmitting, setPromise] = useLoading();
 
-  async function deleteEntity(entityId: string, callbacks: EntityCallbacks<string> = {}): Promise<void> {
+  const deleteEntity = async (entityId: string, callbacks: EntityCallbacks<string> = {}): Promise<void> => {
     // Get the entity before deleting, so we can reverse the action if the API request fails.
     const entity = getState().entities[entityType]?.store[entityId];
 
@@ -45,12 +42,12 @@ function useDeleteEntity(
         callbacks.onError(e);
       }
     }
-  }
+  };
 
   return {
     deleteEntity,
     isSubmitting,
   };
-}
+};
 
 export { useDeleteEntity };

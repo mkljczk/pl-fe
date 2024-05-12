@@ -2,7 +2,7 @@ import { Map as ImmutableMap, type Collection } from 'immutable';
 
 import type { Status } from 'soapbox/schemas';
 
-export const shouldFilter = (
+const shouldFilter = (
   status: Pick<Status, 'in_reply_to_id' | 'visibility'> & { reblog: unknown },
   columnSettings: Collection<any, any>,
 ) => {
@@ -12,7 +12,7 @@ export const shouldFilter = (
     direct: status.visibility === 'direct',
   });
 
-  return shows.some((value, key) => {
-    return columnSettings.getIn(['shows', key]) === false && value;
-  });
+  return shows.some((value, key) => columnSettings.getIn(['shows', key]) === false && value);
 };
+
+export { shouldFilter };

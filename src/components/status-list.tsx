@@ -64,9 +64,7 @@ const StatusList: React.FC<IStatusList> = ({
   const soapboxConfig = useSoapboxConfig();
   const node = useRef<VirtuosoHandle>(null);
 
-  const getFeaturedStatusCount = () => {
-    return featuredStatusIds?.size || 0;
-  };
+  const getFeaturedStatusCount = () => featuredStatusIds?.size || 0;
 
   const getCurrentStatusIndex = (id: string, featured: boolean): number => {
     if (featured) {
@@ -121,20 +119,18 @@ const StatusList: React.FC<IStatusList> = ({
     );
   };
 
-  const renderStatus = (statusId: string) => {
-    return (
-      <StatusContainer
-        key={statusId}
-        id={statusId}
-        onMoveUp={handleMoveUp}
-        onMoveDown={handleMoveDown}
-        contextType={timelineId}
-        showGroup={showGroup}
-        variant={divideType === 'border' ? 'slim' : 'rounded'}
-        fromBookmarks={other.scrollKey === 'bookmarked_statuses'}
-      />
-    );
-  };
+  const renderStatus = (statusId: string) => (
+    <StatusContainer
+      key={statusId}
+      id={statusId}
+      onMoveUp={handleMoveUp}
+      onMoveDown={handleMoveDown}
+      contextType={timelineId}
+      showGroup={showGroup}
+      variant={divideType === 'border' ? 'slim' : 'rounded'}
+      fromBookmarks={other.scrollKey === 'bookmarked_statuses'}
+    />
+  );
 
   const renderPendingStatus = (statusId: string) => {
     const idempotencyKey = statusId.replace(/^末pending-/, '');
@@ -164,16 +160,14 @@ const StatusList: React.FC<IStatusList> = ({
     ));
   };
 
-  const renderFeedSuggestions = (statusId: string): React.ReactNode => {
-    return (
-      <FeedSuggestions
-        key='suggestions'
-        statusId={statusId}
-        onMoveUp={handleMoveUp}
-        onMoveDown={handleMoveDown}
-      />
-    );
-  };
+  const renderFeedSuggestions = (statusId: string): React.ReactNode => (
+    <FeedSuggestions
+      key='suggestions'
+      statusId={statusId}
+      onMoveUp={handleMoveUp}
+      onMoveDown={handleMoveDown}
+    />
+  );
 
   const renderStatuses = (): React.ReactNode[] => {
     if (isLoading || statusIds.size > 0) {

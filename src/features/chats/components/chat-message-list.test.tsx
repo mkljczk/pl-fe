@@ -50,7 +50,7 @@ const chatMessages: ChatMessage[] = [
 ];
 
 // Mock scrollIntoView function.
-window.HTMLElement.prototype.scrollIntoView = function () { };
+window.HTMLElement.prototype.scrollIntoView = () => { };
 Object.assign(navigator, {
   clipboard: {
     writeText: () => { },

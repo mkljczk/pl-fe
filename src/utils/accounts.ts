@@ -9,12 +9,12 @@ const getDomainFromURL = (account: Pick<Account, 'url'>): string => {
   }
 };
 
-export const getDomain = (account: Pick<Account, 'acct' | 'url'>): string => {
+const getDomain = (account: Pick<Account, 'acct' | 'url'>): string => {
   const domain = account.acct.split('@')[1];
   return domain ? domain : getDomainFromURL(account);
 };
 
-export const getBaseURL = (account: Pick<Account, 'url'>): string => {
+const getBaseURL = (account: Pick<Account, 'url'>): string => {
   try {
     return new URL(account.url).origin;
   } catch {
@@ -22,7 +22,7 @@ export const getBaseURL = (account: Pick<Account, 'url'>): string => {
   }
 };
 
-export const getAcct = (account: Pick<Account, 'fqn' | 'acct'>, displayFqn: boolean): string => (
+const getAcct = (account: Pick<Account, 'fqn' | 'acct'>, displayFqn: boolean): string => (
   displayFqn === true ? account.fqn : account.acct
 );
 
@@ -34,9 +34,7 @@ const DEFAULT_HEADERS: string[] = [
 ];
 
 /** Check if the avatar is a default avatar */
-export const isDefaultHeader = (url: string) => {
-  return DEFAULT_HEADERS.some(header => url.endsWith(header));
-};
+const isDefaultHeader = (url: string) => DEFAULT_HEADERS.some(header => url.endsWith(header));
 
 /** Default avatar filenames from various backends */
 const DEFAULT_AVATARS = [
@@ -46,6 +44,12 @@ const DEFAULT_AVATARS = [
 ];
 
 /** Check if the avatar is a default avatar */
-export const isDefaultAvatar = (url: string) => {
-  return DEFAULT_AVATARS.some(avatar => url.endsWith(avatar));
+const isDefaultAvatar = (url: string) => DEFAULT_AVATARS.some(avatar => url.endsWith(avatar));
+
+export {
+  getDomain,
+  getBaseURL,
+  getAcct,
+  isDefaultHeader,
+  isDefaultAvatar,
 };

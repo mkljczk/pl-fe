@@ -97,14 +97,13 @@ const getStatusIds = (statuses: APIEntity[] = []) => (
 const setLoading = (state: State, listType: string, loading: boolean) =>
   state.update(listType, StatusListRecord(), listMap => listMap.set('isLoading', loading));
 
-const normalizeList = (state: State, listType: string, statuses: APIEntity[], next: string | null) => {
-  return state.update(listType, StatusListRecord(), listMap => listMap.withMutations(map => {
+const normalizeList = (state: State, listType: string, statuses: APIEntity[], next: string | null) =>
+  state.update(listType, StatusListRecord(), listMap => listMap.withMutations(map => {
     map.set('next', next);
     map.set('loaded', true);
     map.set('isLoading', false);
     map.set('items', getStatusIds(statuses));
   }));
-};
 
 const appendToList = (state: State, listType: string, statuses: APIEntity[], next: string | null) => {
   const newIds = getStatusIds(statuses);
@@ -118,9 +117,9 @@ const appendToList = (state: State, listType: string, statuses: APIEntity[], nex
 
 const prependOneToList = (state: State, listType: string, status: APIEntity) => {
   const statusId = getStatusId(status);
-  return state.update(listType, StatusListRecord(), listMap => listMap.update('items', items => {
-    return ImmutableOrderedSet([statusId]).union(items as ImmutableOrderedSet<string>);
-  }));
+  return state.update(listType, StatusListRecord(), listMap => listMap.update('items', items =>
+    ImmutableOrderedSet([statusId]).union(items as ImmutableOrderedSet<string>),
+  ));
 };
 
 const removeOneFromList = (state: State, listType: string, status: APIEntity) => {
@@ -151,7 +150,7 @@ const removeBookmarkFromLists = (state: State, status: StatusEntity) => {
   return state;
 };
 
-export default function statusLists(state = initialState, action: AnyAction) {
+const statusLists = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case FAVOURITED_STATUSES_FETCH_REQUEST:
     case FAVOURITED_STATUSES_EXPAND_REQUEST:
@@ -237,4 +236,6 @@ export default function statusLists(state = initialState, action: AnyAction) {
     default:
       return state;
   }
-}
+};
+
+export default statusLists;
