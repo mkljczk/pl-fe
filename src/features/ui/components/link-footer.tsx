@@ -31,4 +31,4 @@ const LinkFooter: React.FC = (): JSX.Element => {
   );
 };
 
-export default LinkFooter;
+export { LinkFooter as default };

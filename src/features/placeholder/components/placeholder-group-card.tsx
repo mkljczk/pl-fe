@@ -32,4 +32,4 @@ const PlaceholderGroupCard = () => {
   );
 };
 
-export default PlaceholderGroupCard;
+export { PlaceholderGroupCard as default };

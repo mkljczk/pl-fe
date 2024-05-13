@@ -32,4 +32,4 @@ const modal = (state: State = ImmutableList<Modal>(), action: AnyAction) => {
   }
 };
 
-export default modal;
+export { modal as default };

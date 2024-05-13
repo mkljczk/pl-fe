@@ -98,4 +98,4 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
   );
 };
 
-export default EventActionButton;
+export { EventActionButton as default };

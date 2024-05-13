@@ -89,4 +89,4 @@ const Datepicker = ({ onChange }: IDatepicker) => {
   );
 };
 
-export default Datepicker;
+export { Datepicker as default };

@@ -135,4 +135,4 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   }
 };
 
-export default StatusMedia;
+export { StatusMedia as default };

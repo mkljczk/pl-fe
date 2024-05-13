@@ -64,4 +64,4 @@ const Reaction: React.FC<IReaction> = ({ announcementId, reaction, emojiMap, sty
   );
 };
 
-export default Reaction;
+export { Reaction as default };

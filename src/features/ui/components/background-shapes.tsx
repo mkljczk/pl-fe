@@ -13,4 +13,4 @@ const BackgroundShapes: React.FC<IBackgroundShapes> = ({ position = 'fixed' }) =
   </div>
 );
 
-export default BackgroundShapes;
+export { BackgroundShapes as default };

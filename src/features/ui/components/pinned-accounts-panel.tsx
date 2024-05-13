@@ -50,4 +50,4 @@ const PinnedAccountsPanel: React.FC<IPinnedAccountsPanel> = ({ account, limit })
   );
 };
 
-export default PinnedAccountsPanel;
+export { PinnedAccountsPanel as default };

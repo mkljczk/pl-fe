@@ -16,4 +16,4 @@ const ChatIndex: React.FC<IChatIndex> = ({ params }) => (
   </ChatProvider>
 );
 
-export default ChatIndex;
+export { ChatIndex as default };

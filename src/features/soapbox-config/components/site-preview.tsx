@@ -55,4 +55,4 @@ const SitePreview: React.FC<ISitePreview> = ({ soapbox }) => {
 
 };
 
-export default SitePreview;
+export { SitePreview as default };

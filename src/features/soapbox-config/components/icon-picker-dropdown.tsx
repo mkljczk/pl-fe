@@ -82,4 +82,4 @@ const IconPickerDropdown: React.FC<IIconPickerDropdown> = ({ value, onPickIcon }
   );
 };
 
-export default IconPickerDropdown;
+export { IconPickerDropdown as default };

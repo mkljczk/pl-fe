@@ -51,4 +51,4 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): JSX.Element => {
   );
 };
 
-export default ThreadStatus;
+export { ThreadStatus as default };

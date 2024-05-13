@@ -63,4 +63,4 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({ className, status, hideActi
   );
 };
 
-export default ReplyIndicator;
+export { ReplyIndicator as default };

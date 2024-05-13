@@ -49,4 +49,4 @@ const FollowedTags = () => {
   );
 };
 
-export default FollowedTags;
+export { FollowedTags as default };

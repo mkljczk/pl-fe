@@ -128,4 +128,4 @@ const ChatSettings = () => {
   );
 };
 
-export default ChatSettings;
+export { ChatSettings as default };

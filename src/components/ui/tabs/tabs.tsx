@@ -102,7 +102,7 @@ const AnimatedTab: React.FC<IAnimatedTab> = ({ index, ...props }) => {
 };
 
 /** Structure to represent a tab. */
-export type Item = {
+type Item = {
   /** Tab text. */
   text: React.ReactNode;
   /** Tab tooltip text. */
@@ -176,4 +176,7 @@ const Tabs = ({ items, activeItem }: ITabs) => {
   );
 };
 
-export default Tabs;
+export {
+  type Item,
+  Tabs as default,
+};

@@ -98,4 +98,4 @@ const Favourites: React.FC<IFavourites> = ({ params }) => {
   );
 };
 
-export default Favourites;
+export { Favourites as default };

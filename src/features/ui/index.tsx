@@ -514,4 +514,4 @@ const UI: React.FC<IUI> = ({ children }) => {
   );
 };
 
-export default UI;
+export { UI as default };

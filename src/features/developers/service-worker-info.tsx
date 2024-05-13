@@ -137,4 +137,4 @@ const ServiceWorkerInfo: React.FC<IServiceWorkerInfo> = () => {
   );
 };
 
-export default ServiceWorkerInfo;
+export { ServiceWorkerInfo as default };

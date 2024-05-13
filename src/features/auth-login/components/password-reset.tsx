@@ -58,4 +58,4 @@ const PasswordReset = () => {
   );
 };
 
-export default PasswordReset;
+export { PasswordReset as default };

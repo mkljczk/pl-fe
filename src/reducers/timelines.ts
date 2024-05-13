@@ -372,4 +372,4 @@ const timelines = (state: State = initialState, action: AnyAction) => {
   }
 };
 
-export default timelines;
+export { timelines as default };

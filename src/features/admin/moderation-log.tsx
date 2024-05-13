@@ -69,4 +69,4 @@ const LogItem: React.FC<ILogItem> = ({ log }) => (
   </Stack>
 );
 
-export default ModerationLog;
+export { ModerationLog as default };

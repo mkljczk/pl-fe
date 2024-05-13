@@ -60,4 +60,4 @@ const EventParticipantsModal: React.FC<IEventParticipantsModal> = ({ onClose, st
   );
 };
 
-export default EventParticipantsModal;
+export { EventParticipantsModal as default };

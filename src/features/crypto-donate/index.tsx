@@ -37,4 +37,4 @@ const CryptoDonate: React.FC = (): JSX.Element => {
   );
 };
 
-export default CryptoDonate;
+export { CryptoDonate as default };

@@ -38,4 +38,4 @@ const PromoPanelInput: StreamfieldComponent<FooterItem> = ({ value, onChange }) 
   );
 };
 
-export default PromoPanelInput;
+export { PromoPanelInput as default };

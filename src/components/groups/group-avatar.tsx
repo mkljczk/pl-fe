@@ -34,4 +34,4 @@ const GroupAvatar = (props: IGroupAvatar) => {
   );
 };
 
-export default GroupAvatar;
+export { GroupAvatar as default };

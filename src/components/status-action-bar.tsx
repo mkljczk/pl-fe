@@ -752,4 +752,4 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   );
 };
 
-export default StatusActionBar;
+export { StatusActionBar as default };

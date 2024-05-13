@@ -93,4 +93,4 @@ const Groups: React.FC = () => {
   );
 };
 
-export default Groups;
+export { Groups as default };

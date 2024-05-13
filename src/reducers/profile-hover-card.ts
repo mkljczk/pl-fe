@@ -35,4 +35,4 @@ const profileHoverCard = (state: State = ReducerRecord(), action: AnyAction) => 
   }
 };
 
-export default profileHoverCard;
+export { profileHoverCard as default };

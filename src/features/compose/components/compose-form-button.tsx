@@ -34,4 +34,4 @@ const ComposeFormButton: React.FC<IComposeFormButton> = ({
   </div>
 );
 
-export default ComposeFormButton;
+export { ComposeFormButton as default };

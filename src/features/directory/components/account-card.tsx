@@ -100,4 +100,4 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
   );
 };
 
-export default AccountCard;
+export { AccountCard as default };

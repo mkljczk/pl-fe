@@ -19,4 +19,4 @@ const AutosuggestAccount: React.FC<IAutosuggestAccount> = ({ id }) => {
 
 };
 
-export default AutosuggestAccount;
+export { AutosuggestAccount as default };

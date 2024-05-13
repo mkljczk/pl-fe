@@ -35,4 +35,4 @@ const Tombstone: React.FC<ITombstone> = ({ id, onMoveUp, onMoveDown }) => {
   );
 };
 
-export default Tombstone;
+export { Tombstone as default };

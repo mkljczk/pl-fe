@@ -22,4 +22,4 @@ const LoadMore: React.FC<ILoadMore> = ({ onClick, disabled, visible = true, clas
   );
 };
 
-export default LoadMore;
+export { LoadMore as default };

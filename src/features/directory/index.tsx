@@ -104,4 +104,4 @@ const Directory = () => {
   );
 };
 
-export default Directory;
+export { Directory as default };

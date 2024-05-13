@@ -85,4 +85,4 @@ const FediverseStep = ({ onNext }: { onNext: () => void }) => {
   );
 };
 
-export default FediverseStep;
+export { FediverseStep as default };

@@ -176,4 +176,4 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
   );
 };
 
-export default EventDiscussion;
+export { EventDiscussion as default };

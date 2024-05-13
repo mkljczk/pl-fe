@@ -102,4 +102,4 @@ const AnimatedNumber: React.FC<IAnimatedNumber> = ({ value, obfuscate, short, ma
   );
 };
 
-export default AnimatedNumber;
+export { AnimatedNumber as default };

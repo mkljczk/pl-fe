@@ -129,4 +129,4 @@ const ProfilePage: React.FC<IProfilePage> = ({ params, children }) => {
   );
 };
 
-export default ProfilePage;
+export { ProfilePage as default };

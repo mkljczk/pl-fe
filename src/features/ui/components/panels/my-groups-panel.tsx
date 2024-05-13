@@ -30,4 +30,4 @@ const MyGroupsPanel = () => {
   );
 };
 
-export default MyGroupsPanel;
+export { MyGroupsPanel as default };

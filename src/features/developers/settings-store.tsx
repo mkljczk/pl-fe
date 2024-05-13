@@ -114,4 +114,4 @@ const SettingsStore: React.FC = () => {
   );
 };
 
-export default SettingsStore;
+export { SettingsStore as default };

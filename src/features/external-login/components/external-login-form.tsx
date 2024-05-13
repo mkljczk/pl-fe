@@ -94,4 +94,4 @@ const ExternalLoginForm: React.FC = () => {
   );
 };
 
-export default ExternalLoginForm;
+export { ExternalLoginForm as default };

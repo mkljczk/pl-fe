@@ -38,4 +38,4 @@ const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
   </div>
 );
 
-export default MovedNote;
+export { MovedNote as default };

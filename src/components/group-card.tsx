@@ -51,4 +51,4 @@ const GroupCard: React.FC<IGroupCard> = ({ group }) => (
   </Stack>
 );
 
-export default GroupCard;
+export { GroupCard as default };

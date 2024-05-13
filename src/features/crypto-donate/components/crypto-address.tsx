@@ -10,7 +10,7 @@ import { getTitle } from '../utils/coin-db';
 
 import CryptoIcon from './crypto-icon';
 
-export interface ICryptoAddress {
+interface ICryptoAddress {
   address: string;
   ticker: string;
   note?: string;
@@ -62,4 +62,7 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props): JSX.Element => {
   );
 };
 
-export default CryptoAddress;
+export {
+  type ICryptoAddress,
+  CryptoAddress as default,
+};

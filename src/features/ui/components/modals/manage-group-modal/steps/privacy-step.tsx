@@ -55,4 +55,4 @@ const PrivacyStep: React.FC<IPrivacyStep> = ({ params, onChange }) => {
   );
 };
 
-export default PrivacyStep;
+export { PrivacyStep as default };

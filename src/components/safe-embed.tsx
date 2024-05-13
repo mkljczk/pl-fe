@@ -60,4 +60,4 @@ const SafeEmbed: React.FC<ISafeEmbed> = ({
   );
 };
 
-export default SafeEmbed;
+export { SafeEmbed as default };

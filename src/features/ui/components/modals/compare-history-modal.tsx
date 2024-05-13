@@ -98,4 +98,4 @@ const CompareHistoryModal: React.FC<ICompareHistoryModal> = ({ onClose, statusId
   );
 };
 
-export default CompareHistoryModal;
+export { CompareHistoryModal as default };

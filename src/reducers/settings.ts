@@ -54,4 +54,4 @@ const settings = (
   }
 };
 
-export default settings;
+export { settings as default };

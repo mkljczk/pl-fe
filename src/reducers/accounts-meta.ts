@@ -50,4 +50,4 @@ const accounts_meta = (state: Readonly<State> = {}, action: AnyAction): State =>
   }
 };
 
-export default accounts_meta;
+export { accounts_meta as default };

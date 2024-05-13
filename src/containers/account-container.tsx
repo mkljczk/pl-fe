@@ -16,4 +16,4 @@ const AccountContainer: React.FC<IAccountContainer> = ({ id, withRelationship, .
   );
 };
 
-export default AccountContainer;
+export { AccountContainer as default };

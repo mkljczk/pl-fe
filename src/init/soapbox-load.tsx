@@ -82,4 +82,4 @@ const SoapboxLoad: React.FC<ISoapboxLoad> = ({ children }) => {
   );
 };
 
-export default SoapboxLoad;
+export { SoapboxLoad as default };

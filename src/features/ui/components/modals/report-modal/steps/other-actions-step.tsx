@@ -125,4 +125,4 @@ const OtherActionsStep = ({ account }: IOtherActionsStep) => {
   );
 };
 
-export default OtherActionsStep;
+export { OtherActionsStep as default };

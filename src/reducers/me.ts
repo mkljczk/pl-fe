@@ -41,4 +41,4 @@ const me = (state: Me = initialState, action: AnyAction): Me => {
   }
 };
 
-export default me;
+export { me as default };

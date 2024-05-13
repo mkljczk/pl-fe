@@ -104,4 +104,4 @@ const SubscriptionButton = ({ account }: ISubscriptionButton) => {
   return null;
 };
 
-export default SubscriptionButton;
+export { SubscriptionButton as default };

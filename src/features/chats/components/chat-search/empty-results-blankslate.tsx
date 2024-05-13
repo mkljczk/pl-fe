@@ -24,4 +24,4 @@ const EmptyResultsBlankslate = () => {
   );
 };
 
-export default EmptyResultsBlankslate;
+export { EmptyResultsBlankslate as default };

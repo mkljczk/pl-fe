@@ -80,7 +80,7 @@ const PollRecord = ImmutableRecord({
   multiple: false,
 });
 
-export const ReducerCompose = ImmutableRecord({
+const ReducerCompose = ImmutableRecord({
   caretPosition: null as number | null,
   content_type: 'text/plain',
   draft_id: null as string | null,
@@ -114,7 +114,7 @@ export const ReducerCompose = ImmutableRecord({
 });
 
 type State = ImmutableMap<string, Compose>;
-export type Compose = ReturnType<typeof ReducerCompose>;
+type Compose = ReturnType<typeof ReducerCompose>;
 type Poll = ReturnType<typeof PollRecord>;
 
 const statusToTextMentions = (status: Status, account: Account) => {
@@ -128,7 +128,7 @@ const statusToTextMentions = (status: Status, account: Account) => {
     .join('');
 };
 
-export const statusToMentionsArray = (status: Status, account: Account, rebloggedBy?: Account) => {
+const statusToMentionsArray = (status: Status, account: Account, rebloggedBy?: Account) => {
   const author = status.getIn(['account', 'acct']) as string;
   const mentions = status.get('mentions')?.map((m) => m.acct) || [];
 
@@ -138,7 +138,7 @@ export const statusToMentionsArray = (status: Status, account: Account, reblogge
     .delete(account.acct) as ImmutableOrderedSet<string>;
 };
 
-export const statusToMentionsAccountIdsArray = (status: StatusEntity, account: Account, parentRebloggedBy?: string | null) => {
+const statusToMentionsAccountIdsArray = (status: StatusEntity, account: Account, parentRebloggedBy?: string | null) => {
   const mentions = status.mentions.map((m) => m.id);
 
   return ImmutableOrderedSet<string>([status.account.id])
@@ -275,7 +275,7 @@ const updateSetting = (compose: Compose, path: string[], value: string) => {
 const updateCompose = (state: State, key: string, updater: (compose: Compose) => Compose) =>
   state.update(key, state.get('default')!, updater);
 
-export const initialState: State = ImmutableMap({
+const initialState: State = ImmutableMap({
   default: ReducerCompose({ idempotencyKey: uuid(), resetFileKey: getResetFileKey() }),
 });
 
@@ -554,4 +554,11 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
   }
 };
 
-export default compose;
+export {
+  ReducerCompose,
+  type Compose,
+  statusToMentionsArray,
+  statusToMentionsAccountIdsArray,
+  initialState,
+  compose as default,
+};

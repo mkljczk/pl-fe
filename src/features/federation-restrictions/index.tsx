@@ -55,4 +55,4 @@ const FederationRestrictions = () => {
   );
 };
 
-export default FederationRestrictions;
+export { FederationRestrictions as default };

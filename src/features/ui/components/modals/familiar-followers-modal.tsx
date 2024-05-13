@@ -55,4 +55,4 @@ const FamiliarFollowersModal = ({ accountId, onClose }: IFamiliarFollowersModal)
   );
 };
 
-export default FamiliarFollowersModal;
+export { FamiliarFollowersModal as default };

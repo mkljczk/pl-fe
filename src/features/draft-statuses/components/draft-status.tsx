@@ -85,4 +85,4 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
   );
 };
 
-export default DraftStatus;
+export { DraftStatus as default };

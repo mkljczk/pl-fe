@@ -96,4 +96,4 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
   );
 };
 
-export default ThumbNavigation;
+export { ThumbNavigation as default };

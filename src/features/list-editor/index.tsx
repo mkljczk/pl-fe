@@ -74,4 +74,4 @@ const ListEditor: React.FC<IListEditor> = ({ listId, onClose }) => {
   );
 };
 
-export default ListEditor;
+export { ListEditor as default };

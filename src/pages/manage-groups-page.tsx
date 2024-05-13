@@ -23,4 +23,4 @@ const ManageGroupsPage: React.FC<IGroupsPage> = ({ children }) => (
   </>
 );
 
-export default ManageGroupsPage;
+export { ManageGroupsPage as default };

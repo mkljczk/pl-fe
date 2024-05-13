@@ -176,4 +176,4 @@ const Notifications = () => {
   );
 };
 
-export default Notifications;
+export { Notifications as default };

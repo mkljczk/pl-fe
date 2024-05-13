@@ -46,4 +46,4 @@ const aliasesReducer = (state = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default aliasesReducer;
+export { aliasesReducer as default };

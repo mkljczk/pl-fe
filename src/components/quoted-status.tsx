@@ -133,4 +133,4 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
   );
 };
 
-export default QuotedStatus;
+export { QuotedStatus as default };

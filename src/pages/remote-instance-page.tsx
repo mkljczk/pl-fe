@@ -43,4 +43,4 @@ const RemoteInstancePage: React.FC<IRemoteInstancePage> = ({ children, params })
   );
 };
 
-export default RemoteInstancePage;
+export { RemoteInstancePage as default };

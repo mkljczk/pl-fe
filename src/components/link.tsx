@@ -8,4 +8,4 @@ const Link = (props: LinkProps) => (
   />
 );
 
-export default Link;
+export { Link as default };

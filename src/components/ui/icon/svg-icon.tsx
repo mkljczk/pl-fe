@@ -41,4 +41,4 @@ const SvgIcon: React.FC<ISvgIcon> = ({ src, alt, size = 24, className, ...filter
   );
 };
 
-export default SvgIcon;
+export { SvgIcon as default };

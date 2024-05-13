@@ -52,4 +52,4 @@ const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({ status 
   );
 };
 
-export default ScheduledStatusActionBar;
+export { ScheduledStatusActionBar as default };

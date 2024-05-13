@@ -65,4 +65,4 @@ const GroupPrivacy = ({ group }: IGroupPolicy) => (
   </Popover>
 );
 
-export default GroupPrivacy;
+export { GroupPrivacy as default };

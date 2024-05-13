@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import { Counter, Icon } from '../ui';
 
-export interface MenuItem {
+interface MenuItem {
   action?: React.EventHandler<React.KeyboardEvent | React.MouseEvent>;
   active?: boolean;
   count?: number;
@@ -106,4 +106,4 @@ const DropdownMenuItem = ({ index, item, onClick }: IDropdownMenuItem) => {
   );
 };
 
-export default DropdownMenuItem;
+export { type MenuItem, DropdownMenuItem as default };

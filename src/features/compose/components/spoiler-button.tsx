@@ -34,4 +34,4 @@ const SpoilerButton: React.FC<ISpoilerButton> = ({ composeId }) => {
   );
 };
 
-export default SpoilerButton;
+export { SpoilerButton as default };

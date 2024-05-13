@@ -65,4 +65,4 @@ const Events = () => {
   );
 };
 
-export default Events;
+export { Events as default };

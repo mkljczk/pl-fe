@@ -170,4 +170,4 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
   );
 };
 
-export default GroupHeader;
+export { GroupHeader as default };

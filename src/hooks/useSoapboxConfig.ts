@@ -5,4 +5,6 @@ import { useAppSelector } from './useAppSelector';
 import type { SoapboxConfig } from 'soapbox/types/soapbox';
 
 /** Get the Soapbox config from the store */
-export const useSoapboxConfig = (): SoapboxConfig => useAppSelector((state) => getSoapboxConfig(state));
+const useSoapboxConfig = (): SoapboxConfig => useAppSelector((state) => getSoapboxConfig(state));
+
+export { useSoapboxConfig };

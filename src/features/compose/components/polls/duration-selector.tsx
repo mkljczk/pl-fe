@@ -82,4 +82,4 @@ const DurationSelector = ({ onDurationChange }: IDurationSelector) => {
   );
 };
 
-export default DurationSelector;
+export { DurationSelector as default };

@@ -131,4 +131,4 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia }) => {
   );
 };
 
-export default MediaItem;
+export { MediaItem as default };

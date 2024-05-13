@@ -42,4 +42,4 @@ const StatusInfo = (props: IStatusInfo) => {
   );
 };
 
-export default StatusInfo;
+export { StatusInfo as default };

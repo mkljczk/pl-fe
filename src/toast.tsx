@@ -5,10 +5,10 @@ import { defineMessages, MessageDescriptor } from 'react-intl';
 import { Toast } from './components/ui';
 import { httpErrorMessages } from './utils/errors';
 
-export type ToastText = string | MessageDescriptor
-export type ToastType = 'success' | 'error' | 'info'
+type ToastText = string | MessageDescriptor
+type ToastType = 'success' | 'error' | 'info'
 
-export interface IToastOptions {
+interface IToastOptions {
   action?(): void;
   actionLink?: string;
   actionLabel?: ToastText;
@@ -69,6 +69,12 @@ const showAlertForError = (networkError: { response: Response & { json: any } })
     console.error(networkError);
     return error(messages.unexpectedMessage);
   }
+};
+
+export {
+  type ToastText,
+  type IToastOptions,
+  type ToastType,
 };
 
 export default {

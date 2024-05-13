@@ -120,4 +120,4 @@ const Bookmarks: React.FC<IBookmarks> = ({ params }) => {
   );
 };
 
-export default Bookmarks;
+export { Bookmarks as default };

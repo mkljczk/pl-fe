@@ -90,4 +90,4 @@ const Aliases = () => {
   );
 };
 
-export default Aliases;
+export { Aliases as default };

@@ -137,4 +137,4 @@ const CoverPhotoSelectionStep = ({ onNext }: { onNext: () => void }) => {
   );
 };
 
-export default CoverPhotoSelectionStep;
+export { CoverPhotoSelectionStep as default };

@@ -38,4 +38,4 @@ const mutes = (state: State = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default mutes;
+export { mutes as default };

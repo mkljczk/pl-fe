@@ -96,4 +96,4 @@ const DisplayNameStep = ({ onNext }: { onNext: () => void }) => {
   );
 };
 
-export default DisplayNameStep;
+export { DisplayNameStep as default };

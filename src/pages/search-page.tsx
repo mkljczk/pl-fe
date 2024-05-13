@@ -49,4 +49,4 @@ const SearchPage: React.FC<ISearchPage> = ({ children }) => {
   );
 };
 
-export default SearchPage;
+export { SearchPage as default };

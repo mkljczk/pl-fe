@@ -127,4 +127,4 @@ const EditFederationModal: React.FC<IEditFederationModal> = ({ host, onClose }) 
   );
 };
 
-export default EditFederationModal;
+export { EditFederationModal as default };

@@ -86,7 +86,7 @@ const MODAL_COMPONENTS: Record<string, React.LazyExoticComponent<any>> = {
   'VIDEO': VideoModal,
 };
 
-export type ModalType = keyof typeof MODAL_COMPONENTS | null;
+type ModalType = keyof typeof MODAL_COMPONENTS | null;
 
 interface IModalRoot {
   type: ModalType;
@@ -94,7 +94,7 @@ interface IModalRoot {
   onClose: (type?: ModalType) => void;
 }
 
-export default class ModalRoot extends React.PureComponent<IModalRoot> {
+class ModalRoot extends React.PureComponent<IModalRoot> {
 
   getSnapshotBeforeUpdate() {
     return { visible: !!this.props.type };
@@ -131,3 +131,5 @@ export default class ModalRoot extends React.PureComponent<IModalRoot> {
   }
 
 }
+
+export { type ModalType, ModalRoot as default };

@@ -34,4 +34,4 @@ const SignUpPanel = () => {
   );
 };
 
-export default SignUpPanel;
+export { SignUpPanel as default };

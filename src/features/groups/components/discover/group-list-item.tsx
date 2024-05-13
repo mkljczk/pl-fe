@@ -78,4 +78,4 @@ const GroupListItem = (props: IGroupListItem) => {
   );
 };
 
-export default GroupListItem;
+export { GroupListItem as default };

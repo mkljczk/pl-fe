@@ -90,4 +90,4 @@ const EventPreview: React.FC<IEventPreview> = ({ status, className, hideAction, 
   );
 };
 
-export default EventPreview;
+export { EventPreview as default };

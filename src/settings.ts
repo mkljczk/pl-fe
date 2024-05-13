@@ -1,4 +1,4 @@
-export default class Settings {
+class Settings {
 
   keyBase: string | null = null;
 
@@ -55,4 +55,5 @@ const tagHistory = new Settings('soapbox_tag_history');
 export {
   pushNotificationsSetting,
   tagHistory,
+  Settings as default,
 };

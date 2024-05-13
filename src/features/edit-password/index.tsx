@@ -94,4 +94,4 @@ const EditPassword = () => {
   );
 };
 
-export default EditPassword;
+export { EditPassword as default };

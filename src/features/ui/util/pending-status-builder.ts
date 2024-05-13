@@ -27,7 +27,7 @@ const buildPoll = (pendingStatus: PendingStatus) => {
   }
 };
 
-export const buildStatus = (state: RootState, pendingStatus: PendingStatus, idempotencyKey: string) => {
+const buildStatus = (state: RootState, pendingStatus: PendingStatus, idempotencyKey: string) => {
   const me = state.me as string;
   const account = getAccount(state, me);
   const inReplyToId = pendingStatus.in_reply_to_id;
@@ -48,3 +48,5 @@ export const buildStatus = (state: RootState, pendingStatus: PendingStatus, idem
 
   return calculateStatus(normalizeStatus(status));
 };
+
+export { buildStatus };

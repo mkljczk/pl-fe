@@ -30,4 +30,4 @@ const Spinner = ({ size = 30, withText = true }: ISpinner) => (
   </Stack>
 );
 
-export default Spinner;
+export { Spinner as default };

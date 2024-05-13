@@ -26,4 +26,4 @@ const meta = (state = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default meta;
+export { meta as default };

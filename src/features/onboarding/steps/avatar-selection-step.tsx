@@ -114,4 +114,4 @@ const AvatarSelectionStep = ({ onNext }: { onNext: () => void }) => {
   );
 };
 
-export default AvatarSelectionStep;
+export { AvatarSelectionStep as default };

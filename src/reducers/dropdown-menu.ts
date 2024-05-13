@@ -24,4 +24,4 @@ const dropdownMenu = (state: State = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default dropdownMenu;
+export { dropdownMenu as default };

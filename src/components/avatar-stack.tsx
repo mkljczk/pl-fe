@@ -37,4 +37,4 @@ const AvatarStack: React.FC<IAvatarStack> = ({ accountIds, limit = 3 }) => {
   );
 };
 
-export default AvatarStack;
+export { AvatarStack as default };

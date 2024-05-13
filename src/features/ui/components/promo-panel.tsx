@@ -29,4 +29,4 @@ const PromoPanel: React.FC = () => {
   );
 };
 
-export default PromoPanel;
+export { PromoPanel as default };

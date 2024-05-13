@@ -4,7 +4,7 @@ import { patchMeSuccess } from 'soapbox/actions/me';
 import { useApi, useAppDispatch, useOwnAccount } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 
-export type IAccount = {
+type IAccount = {
   acct: string;
   avatar: string;
   avatar_static: string;
@@ -59,4 +59,4 @@ const useUpdateCredentials = () => {
   });
 };
 
-export { useUpdateCredentials };
+export { type IAccount, useUpdateCredentials };

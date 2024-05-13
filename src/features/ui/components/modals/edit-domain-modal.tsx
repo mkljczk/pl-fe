@@ -99,4 +99,4 @@ const EditDomainModal: React.FC<IEditDomainModal> = ({ onClose, domainId }) => {
   );
 };
 
-export default EditDomainModal;
+export { EditDomainModal as default };

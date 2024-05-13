@@ -110,4 +110,4 @@ const StatusDetails: React.FC<IStatusDetails> = (props) => {
   );
 };
 
-export default StatusDetails;
+export { StatusDetails as default };

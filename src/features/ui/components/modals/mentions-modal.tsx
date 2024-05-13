@@ -61,4 +61,4 @@ const MentionsModal: React.FC<IMentionsModal> = ({ onClose, statusId }) => {
   );
 };
 
-export default MentionsModal;
+export { MentionsModal as default };

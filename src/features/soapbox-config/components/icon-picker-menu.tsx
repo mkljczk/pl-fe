@@ -93,4 +93,4 @@ const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onClose, onPick, sty
   );
 };
 
-export default IconPickerMenu;
+export { IconPickerMenu as default };

@@ -24,4 +24,4 @@ const PlaceholderEventPreview = () => {
   );
 };
 
-export default PlaceholderEventPreview;
+export { PlaceholderEventPreview as default };

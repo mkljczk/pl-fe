@@ -82,4 +82,4 @@ const GroupFAB: React.FC = () => {
   );
 };
 
-export default FloatingActionButton;
+export { FloatingActionButton as default };

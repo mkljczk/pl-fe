@@ -35,4 +35,4 @@ const history = (state: State = initialState, action: AnyAction) => {
   }
 };
 
-export default history;
+export { history as default };

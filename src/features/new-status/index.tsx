@@ -16,4 +16,4 @@ const NewStatus = () => {
   );
 };
 
-export default NewStatus;
+export { NewStatus as default };

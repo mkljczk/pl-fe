@@ -15,7 +15,7 @@ interface IHashtagTimeline {
   };
 }
 
-export const HashtagTimeline: React.FC<IHashtagTimeline> = ({ params }) => {
+const HashtagTimeline: React.FC<IHashtagTimeline> = ({ params }) => {
   const id = params?.id || '';
 
   const features = useFeatures();
@@ -75,4 +75,4 @@ export const HashtagTimeline: React.FC<IHashtagTimeline> = ({ params }) => {
   );
 };
 
-export default HashtagTimeline;
+export { HashtagTimeline as default };

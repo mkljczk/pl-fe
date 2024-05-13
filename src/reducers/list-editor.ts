@@ -104,4 +104,4 @@ const listEditorReducer = (state: State = ReducerRecord(), action: AnyAction) =>
   }
 };
 
-export default listEditorReducer;
+export { listEditorReducer as default };

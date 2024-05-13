@@ -52,4 +52,4 @@ const Toggle: React.FC<IToggle> = ({ id, size = 'md', name, checked = false, onC
   );
 };
 
-export default Toggle;
+export { Toggle as default };

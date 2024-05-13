@@ -117,4 +117,4 @@ const Popover: React.FC<IPopover> = (props) => {
   );
 };
 
-export default Popover;
+export { Popover as default };

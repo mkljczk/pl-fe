@@ -48,4 +48,4 @@ const PinnedStatuses = () => {
   );
 };
 
-export default PinnedStatuses;
+export { PinnedStatuses as default };

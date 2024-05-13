@@ -169,4 +169,4 @@ const GroupPage: React.FC<IGroupPage> = ({ params, children }) => {
   );
 };
 
-export default GroupPage;
+export { GroupPage as default };

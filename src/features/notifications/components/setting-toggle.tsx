@@ -31,4 +31,4 @@ const SettingToggle: React.FC<ISettingToggle> = ({ id, settings, settingPath, on
   );
 };
 
-export default SettingToggle;
+export { SettingToggle as default };

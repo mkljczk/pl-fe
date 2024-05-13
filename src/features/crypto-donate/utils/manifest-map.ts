@@ -8,6 +8,6 @@ const manifestMap = (fromJS(manifest) as ImmutableList<ImmutableMap<string, stri
   (acc: ImmutableMap<string, ImmutableMap<string, string>>, entry: ImmutableMap<string, string>) =>
     acc.set(entry.get('symbol')!.toLowerCase(), entry),
   ImmutableMap(),
-);
+).toJS();
 
-export default manifestMap.toJS();
+export { manifestMap as default };

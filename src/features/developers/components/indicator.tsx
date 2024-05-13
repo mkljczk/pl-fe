@@ -19,4 +19,4 @@ const Indicator: React.FC<IIndicator> = ({ state = 'inactive', size = 'sm' }) =>
   />
 );
 
-export default Indicator;
+export { Indicator as default };

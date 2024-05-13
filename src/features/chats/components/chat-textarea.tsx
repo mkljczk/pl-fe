@@ -67,4 +67,4 @@ const ChatTextarea: React.FC<IChatTextarea> = React.forwardRef(({
   );
 });
 
-export default ChatTextarea;
+export { ChatTextarea as default };

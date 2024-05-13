@@ -96,4 +96,4 @@ const GroupBlockedMembers: React.FC<IGroupBlockedMembers> = ({ params }) => {
   );
 };
 
-export default GroupBlockedMembers;
+export { GroupBlockedMembers as default };

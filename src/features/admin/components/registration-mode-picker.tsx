@@ -71,4 +71,4 @@ const RegistrationModePicker: React.FC = () => {
   );
 };
 
-export default RegistrationModePicker;
+export { RegistrationModePicker as default };

@@ -13,4 +13,4 @@ const FormActions: React.FC<IFormActions> = ({ children }) => (
   </HStack>
 );
 
-export default FormActions;
+export { FormActions as default };

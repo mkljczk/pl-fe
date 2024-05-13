@@ -48,4 +48,4 @@ const ScheduleButton: React.FC<IScheduleButton> = ({ composeId, disabled }) => {
   );
 };
 
-export default ScheduleButton;
+export { ScheduleButton as default };

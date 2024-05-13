@@ -45,4 +45,4 @@ const DetailedCryptoAddress: React.FC<IDetailedCryptoAddress> = ({ address, tick
   );
 };
 
-export default DetailedCryptoAddress;
+export { DetailedCryptoAddress as default };

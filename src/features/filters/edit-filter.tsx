@@ -276,4 +276,4 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
   );
 };
 
-export default EditFilter;
+export { EditFilter as default };

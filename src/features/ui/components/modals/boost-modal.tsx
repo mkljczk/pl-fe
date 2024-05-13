@@ -45,4 +45,4 @@ const BoostModal: React.FC<IBoostModal> = ({ status, onReblog, onClose }) => {
   );
 };
 
-export default BoostModal;
+export { BoostModal as default };

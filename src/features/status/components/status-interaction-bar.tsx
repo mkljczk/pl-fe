@@ -245,4 +245,4 @@ const InteractionCounter: React.FC<IInteractionCounter> = ({ count, children, on
   );
 };
 
-export default StatusInteractionBar;
+export { StatusInteractionBar as default };

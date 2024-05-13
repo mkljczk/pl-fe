@@ -21,4 +21,4 @@ const sidebar = (state: State = initialState, action: AnyAction): State => {
   }
 };
 
-export default sidebar;
+export { sidebar as default };

@@ -10,11 +10,11 @@ import { FilterKeyword, FilterStatus } from 'soapbox/types/entities';
 import { normalizeFilterKeyword } from './filter-keyword';
 import { normalizeFilterStatus } from './filter-status';
 
-export type ContextType = 'home' | 'public' | 'notifications' | 'thread' | 'account';
-export type FilterActionType = 'warn' | 'hide';
+type ContextType = 'home' | 'public' | 'notifications' | 'thread' | 'account';
+type FilterActionType = 'warn' | 'hide';
 
 // https://docs.joinmastodon.org/entities/filter/
-export const FilterRecord = ImmutableRecord({
+const FilterRecord = ImmutableRecord({
   id: '',
   title: '',
   context: ImmutableList<ContextType>(),
@@ -43,7 +43,7 @@ const normalizeStatuses = (filter: ImmutableMap<string, any>) =>
     statuses.map(normalizeFilterStatus),
   );
 
-export const normalizeFilter = (filter: Record<string, any>) =>
+const normalizeFilter = (filter: Record<string, any>) =>
   FilterRecord(
     ImmutableMap(fromJS(filter)).withMutations(filter => {
       if (filter.has('phrase')) normalizeFilterV1(filter);
@@ -51,3 +51,10 @@ export const normalizeFilter = (filter: Record<string, any>) =>
       normalizeStatuses(filter);
     }),
   );
+
+export {
+  type ContextType,
+  type FilterActionType,
+  FilterRecord,
+  normalizeFilter,
+};

@@ -59,4 +59,4 @@ const ReactionsBar: React.FC<IReactionsBar> = ({ announcementId, reactions, emoj
   );
 };
 
-export default ReactionsBar;
+export { ReactionsBar as default };

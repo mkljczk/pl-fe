@@ -41,7 +41,7 @@ const getAncestorsIds = createSelector([
   return ancestorsIds;
 });
 
-export const getDescendantsIds = createSelector([
+const getDescendantsIds = createSelector([
   (_: RootState, statusId: string) => statusId,
   (state: RootState) => state.contexts.replies,
 ], (statusId, contextReplies) => {
@@ -413,4 +413,4 @@ const Thread = (props: IThread) => {
   );
 };
 
-export default Thread;
+export { getDescendantsIds, Thread as default };

@@ -118,4 +118,4 @@ const Textarea = React.forwardRef(({
 },
 );
 
-export default Textarea;
+export { Textarea as default };

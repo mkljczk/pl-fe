@@ -28,4 +28,4 @@ const GroupsPage: React.FC<IGroupsPage> = ({ children }) => (
   </>
 );
 
-export default GroupsPage;
+export { GroupsPage as default };

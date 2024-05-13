@@ -126,4 +126,4 @@ const Announcements: React.FC = () => {
   );
 };
 
-export default Announcements;
+export { Announcements as default };

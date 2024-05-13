@@ -1,6 +1,6 @@
 const regexen: { [x: string]: string | RegExp } = {};
 
-const regexSupplant = function(regex: string | RegExp, flags = '') {
+const regexSupplant = (regex: string | RegExp, flags = '') => {
   if (typeof regex !== 'string') {
     if (regex.global && flags.indexOf('g') < 0) {
       flags += 'g';
@@ -14,7 +14,7 @@ const regexSupplant = function(regex: string | RegExp, flags = '') {
 
     regex = regex.source;
   }
-  return new RegExp(regex.replace(/#\{(\w+)\}/g, function(match, name) {
+  return new RegExp(regex.replace(/#\{(\w+)\}/g, (match, name) => {
     let newRegex = regexen[name] || '';
     if (typeof newRegex !== 'string') {
       newRegex = newRegex.source;
@@ -23,13 +23,10 @@ const regexSupplant = function(regex: string | RegExp, flags = '') {
   }), flags);
 };
 
-const stringSupplant = function(str: string, values: { [x: string]: any }) {
-  return str.replace(/#\{(\w+)\}/g, function(match, name) {
-    return values[name] || '';
-  });
-};
+const stringSupplant = (str: string, values: { [x: string]: any }) =>
+  str.replace(/#\{(\w+)\}/g, (match, name) => values[name] || '');
 
-export const urlRegex = (function() {
+const urlRegex = (() => {
   regexen.spaces_group = /\x09-\x0D\x20\x85\xA0\u1680\u180E\u2000-\u200A\u2028\u2029\u202F\u205F\u3000/; // eslint-disable-line no-control-regex
   regexen.invalid_chars_group = /\uFFFE\uFEFF\uFFFF\u202A-\u202E/;
   // eslint-disable-next-line no-useless-escape
@@ -194,4 +191,6 @@ export const urlRegex = (function() {
     ')',
     'gi');
   return regexen.validUrl;
-}());
+})();
+
+export { urlRegex };

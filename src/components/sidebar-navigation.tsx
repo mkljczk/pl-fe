@@ -240,4 +240,4 @@ const SidebarNavigation = () => {
   );
 };
 
-export default SidebarNavigation;
+export { SidebarNavigation as default };

@@ -153,4 +153,4 @@ const Report: React.FC<IReport> = ({ id }) => {
   );
 };
 
-export default Report;
+export { Report as default };

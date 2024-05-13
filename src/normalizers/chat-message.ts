@@ -9,7 +9,7 @@ import { normalizeAttachment } from 'soapbox/normalizers/attachment';
 
 import type { Attachment, Card, Emoji } from 'soapbox/types/entities';
 
-export const ChatMessageRecord = ImmutableRecord({
+const ChatMessageRecord = ImmutableRecord({
   account_id: '',
   media_attachments: ImmutableList<Attachment>(),
   card: null as Card | null,
@@ -46,9 +46,11 @@ const fixContent = (chatMessage: ImmutableMap<string, any>) => {
   }
 };
 
-export const normalizeChatMessage = (chatMessage: Record<string, any>) => ChatMessageRecord(
+const normalizeChatMessage = (chatMessage: Record<string, any>) => ChatMessageRecord(
   ImmutableMap(fromJS(chatMessage)).withMutations(chatMessage => {
     normalizeMedia(chatMessage);
     fixContent(chatMessage);
   }),
 );
+
+export { ChatMessageRecord, normalizeChatMessage };

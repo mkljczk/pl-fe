@@ -143,4 +143,4 @@ const AccountGallery = () => {
   );
 };
 
-export default AccountGallery;
+export { AccountGallery as default };

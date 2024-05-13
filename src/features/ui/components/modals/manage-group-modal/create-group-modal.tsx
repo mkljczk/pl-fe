@@ -120,4 +120,4 @@ const CreateGroupModal: React.FC<ICreateGroupModal> = ({ onClose }) => {
   );
 };
 
-export default CreateGroupModal;
+export { CreateGroupModal as default };

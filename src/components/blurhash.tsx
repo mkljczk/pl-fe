@@ -21,7 +21,7 @@ interface IBlurhash {
  * Renders a blurhash in a canvas element.
  * @see {@link https://blurha.sh/}
  */
-const Blurhash: React.FC<IBlurhash> = ({
+const Blurhash: React.FC<IBlurhash> = React.memo(({
   hash,
   width = 32,
   height = width,
@@ -54,6 +54,6 @@ const Blurhash: React.FC<IBlurhash> = ({
   return (
     <canvas {...canvasProps} ref={canvasRef} width={width} height={height} />
   );
-};
+});
 
-export default React.memo(Blurhash);
+export { Blurhash as default };

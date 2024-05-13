@@ -132,4 +132,4 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
   );
 };
 
-export default GroupActionButton;
+export { GroupActionButton as default };

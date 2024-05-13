@@ -15,7 +15,7 @@ import { normalizeHistory } from './history';
 import type { History } from 'soapbox/types/entities';
 
 // https://docs.joinmastodon.org/entities/tag/
-export const TagRecord = ImmutableRecord({
+const TagRecord = ImmutableRecord({
   name: '',
   url: '',
   history: null as ImmutableList<History> | null,
@@ -30,8 +30,10 @@ const normalizeHistoryList = (tag: ImmutableMap<string, any>) => {
   }
 };
 
-export const normalizeTag = (tag: Record<string, any>) => TagRecord(
+const normalizeTag = (tag: Record<string, any>) => TagRecord(
   ImmutableMap(fromJS(tag)).withMutations(tag => {
     normalizeHistoryList(tag);
   }),
 );
+
+export { TagRecord, normalizeTag };

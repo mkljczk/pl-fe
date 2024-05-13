@@ -55,4 +55,4 @@ const DomainBlocks: React.FC = () => {
   );
 };
 
-export default DomainBlocks;
+export { DomainBlocks as default };

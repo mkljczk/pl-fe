@@ -56,7 +56,7 @@ type APIEntities = Array<APIEntity>;
 
 type State = ImmutableMap<string, ReducerStatus>;
 
-export interface ReducerStatus extends StatusRecord {
+interface ReducerStatus extends StatusRecord {
   reblog: string | null;
   poll: string | null;
   quote: string | null;
@@ -97,7 +97,7 @@ const buildSearchContent = (status: StatusRecord): string => {
 
 // Only calculate these values when status first encountered
 // Otherwise keep the ones already in the reducer
-export const calculateStatus = (
+const calculateStatus = (
   status: StatusRecord,
   oldStatus?: StatusRecord,
 ): StatusRecord => {
@@ -332,4 +332,8 @@ const statuses = (state = initialState, action: AnyAction): State => {
   }
 };
 
-export default statuses;
+export {
+  type ReducerStatus,
+  calculateStatus,
+  statuses as default,
+};

@@ -108,4 +108,4 @@ const Rules: React.FC = () => {
   );
 };
 
-export default Rules;
+export { Rules as default };

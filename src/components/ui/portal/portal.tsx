@@ -27,4 +27,4 @@ const Portal: React.FC<IPortal> = ({ children }) => {
   );
 };
 
-export default Portal;
+export { Portal as default };

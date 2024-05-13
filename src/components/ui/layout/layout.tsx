@@ -63,4 +63,4 @@ Layout.Sidebar = Sidebar;
 Layout.Main = Main;
 Layout.Aside = Aside;
 
-export default Layout;
+export { Layout as default };

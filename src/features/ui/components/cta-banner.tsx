@@ -41,4 +41,4 @@ const CtaBanner = () => {
   );
 };
 
-export default CtaBanner;
+export { CtaBanner as default };

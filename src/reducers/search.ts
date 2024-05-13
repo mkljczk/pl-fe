@@ -52,7 +52,7 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 type APIEntities = Array<APIEntity>;
-export type SearchFilter = 'accounts' | 'statuses' | 'groups' | 'hashtags';
+type SearchFilter = 'accounts' | 'statuses' | 'groups' | 'hashtags';
 
 const toIds = (items: APIEntities = []) => ImmutableOrderedSet(items.map(item => item.id));
 
@@ -148,4 +148,7 @@ const search = (state = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default search;
+export {
+  type SearchFilter,
+  search as default,
+};

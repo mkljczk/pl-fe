@@ -29,4 +29,4 @@ const tags = (state = initialState, action: AnyAction) => {
   }
 };
 
-export default tags;
+export { tags as default };

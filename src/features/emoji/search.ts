@@ -17,12 +17,12 @@ for (const [key, emoji] of sortedEmojis) {
   index.add('n' + key, `${emoji.id} ${emoji.name} ${emoji.keywords.join(' ')}`);
 }
 
-export interface searchOptions {
+interface searchOptions {
   maxResults?: number;
   custom?: any;
 }
 
-export const addCustomToPool = (customEmojis: any[]) => {
+const addCustomToPool = (customEmojis: any[]) => {
   // @ts-ignore
   for (const key in index.register) {
     if (key[0] === 'c') {
@@ -71,4 +71,8 @@ const search = (
     }
   }).filter(Boolean) as Emoji[];
 
-export default search;
+export {
+  type searchOptions,
+  addCustomToPool,
+  search as default,
+};

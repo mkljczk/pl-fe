@@ -270,7 +270,7 @@ const getRemoteInstanceFavicon = (state: RootState, host: string) => {
   return account?.pleroma?.favicon;
 };
 
-export type HostFederation = {
+type HostFederation = {
   [key in keyof MRFSimple]: boolean;
 };
 
@@ -298,7 +298,7 @@ const RemoteInstanceRecord = ImmutableRecord({
   federation: null as unknown as HostFederation,
 });
 
-export type RemoteInstance = ReturnType<typeof RemoteInstanceRecord>;
+type RemoteInstance = ReturnType<typeof RemoteInstanceRecord>;
 
 const makeGetRemoteInstance = () =>
   createSelector([
@@ -327,6 +327,8 @@ const makeGetStatusIds = () => createSelector([
 );
 
 export {
+  type HostFederation,
+  type RemoteInstance,
   selectAccount,
   selectAccounts,
   selectOwnAccount,

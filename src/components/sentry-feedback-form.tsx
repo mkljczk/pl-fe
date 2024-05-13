@@ -63,4 +63,4 @@ const SentryFeedbackForm: React.FC<ISentryFeedbackForm> = ({ eventId }) => {
   );
 };
 
-export default SentryFeedbackForm;
+export { SentryFeedbackForm as default };

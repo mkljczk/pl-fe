@@ -65,4 +65,4 @@ const Stack = React.forwardRef<HTMLDivElement, IStack>((props, ref: React.Legacy
   );
 });
 
-export default Stack;
+export { Stack as default };

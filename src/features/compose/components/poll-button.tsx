@@ -48,4 +48,4 @@ const PollButton: React.FC<IPollButton> = ({ composeId, disabled }) => {
   );
 };
 
-export default PollButton;
+export { PollButton as default };

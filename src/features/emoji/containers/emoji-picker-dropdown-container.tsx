@@ -9,7 +9,7 @@ import { useClickOutside } from 'soapbox/hooks';
 
 import EmojiPickerDropdown, { IEmojiPickerDropdown } from '../components/emoji-picker-dropdown';
 
-export const messages = defineMessages({
+const messages = defineMessages({
   emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
 });
 
@@ -74,4 +74,7 @@ const EmojiPickerDropdownContainer = (
   );
 };
 
-export default EmojiPickerDropdownContainer;
+export {
+  messages,
+  EmojiPickerDropdownContainer as default,
+};

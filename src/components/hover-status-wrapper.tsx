@@ -21,7 +21,7 @@ interface IHoverStatusWrapper {
 }
 
 /** Makes a status hover card appear when the wrapped element is hovered. */
-export const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({ statusId, children, inline = false, className }) => {
+const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({ statusId, children, inline = false, className }) => {
   const dispatch = useDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const Elem: keyof JSX.IntrinsicElements = inline ? 'span' : 'div';

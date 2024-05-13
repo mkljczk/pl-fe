@@ -61,4 +61,4 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({ classNam
   );
 });
 
-export default AvatarPicker;
+export { AvatarPicker as default };

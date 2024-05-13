@@ -12,4 +12,4 @@ const HashtagLink: React.FC<IHashtagLink> = ({ hashtag }) => (
   </Link>
 );
 
-export default HashtagLink;
+export { HashtagLink as default };

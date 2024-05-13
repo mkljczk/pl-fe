@@ -56,4 +56,4 @@ const ChatPageSidebar = () => {
   );
 };
 
-export default ChatPageSidebar;
+export { ChatPageSidebar as default };

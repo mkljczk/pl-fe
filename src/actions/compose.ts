@@ -379,12 +379,12 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
       params.group_id = compose.group_id;
     }
 
-    return dispatch(createStatus(params, idempotencyKey, statusId)).then(function(data) {
+    return dispatch(createStatus(params, idempotencyKey, statusId)).then((data) => {
       if (!statusId && data.visibility === 'direct' && getState().conversations.mounted <= 0 && history) {
         history.push('/messages');
       }
       handleComposeSubmit(dispatch, getState, composeId, data, status, !!statusId);
-    }).catch(function(error) {
+    }).catch((error) => {
       dispatch(submitComposeFail(composeId, error));
     });
   };

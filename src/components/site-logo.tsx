@@ -43,4 +43,4 @@ const SiteLogo: React.FC<ISiteLogo> = ({ className, theme, ...rest }) => {
   );
 };
 
-export default SiteLogo;
+export { SiteLogo as default };

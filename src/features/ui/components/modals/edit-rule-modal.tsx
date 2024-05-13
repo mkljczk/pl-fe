@@ -89,4 +89,4 @@ const EditRuleModal: React.FC<IEditRuleModal> = ({ onClose, rule }) => {
   );
 };
 
-export default EditRuleModal;
+export { EditRuleModal as default };

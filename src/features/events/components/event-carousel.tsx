@@ -80,4 +80,4 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
   );
 };
 
-export default EventCarousel;
+export { EventCarousel as default };

@@ -157,4 +157,4 @@ class ImageLoader extends React.PureComponent<IImageLoader> {
 
 }
 
-export default ImageLoader;
+export { ImageLoader as default };

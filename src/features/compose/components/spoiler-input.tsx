@@ -77,4 +77,4 @@ const SpoilerInput = React.forwardRef<AutosuggestInput, ISpoilerInput>(({
   );
 });
 
-export default SpoilerInput;
+export { SpoilerInput as default };

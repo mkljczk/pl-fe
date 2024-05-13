@@ -121,4 +121,4 @@ const ReactionsModal: React.FC<IReactionsModal> = ({ onClose, statusId, reaction
   );
 };
 
-export default ReactionsModal;
+export { ReactionsModal as default };

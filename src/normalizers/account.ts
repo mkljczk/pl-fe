@@ -19,7 +19,7 @@ import { mergeDefined, makeEmojiMap } from 'soapbox/utils/normalizers';
 import type { Emoji, Field, EmbeddedEntity, Relationship } from 'soapbox/types/entities';
 
 // https://docs.joinmastodon.org/entities/account/
-export const AccountRecord = ImmutableRecord({
+const AccountRecord = ImmutableRecord({
   accepts_chat_messages: false,
   acct: '',
   avatar: '',
@@ -65,7 +65,7 @@ export const AccountRecord = ImmutableRecord({
 });
 
 // https://docs.joinmastodon.org/entities/field/
-export const FieldRecord = ImmutableRecord({
+const FieldRecord = ImmutableRecord({
   name: '',
   value: '',
   verified_at: null as Date | null,
@@ -211,7 +211,7 @@ const getDomainFromURL = (account: ImmutableMap<string, any>): string => {
   }
 };
 
-export const guessFqn = (account: ImmutableMap<string, any>): string => {
+const guessFqn = (account: ImmutableMap<string, any>): string => {
   const acct = account.get('acct', '');
   const [user, domain] = acct.split('@');
 
@@ -273,7 +273,7 @@ const fixNote = (account: ImmutableMap<string, any>) => {
   }
 };
 
-export const normalizeAccount = (account: Record<string, any>) => AccountRecord(
+const normalizeAccount = (account: Record<string, any>) => AccountRecord(
   ImmutableMap(fromJS(account)).withMutations(account => {
     normalizePleromaLegacyFields(account);
     normalizeEmojis(account);
@@ -297,3 +297,5 @@ export const normalizeAccount = (account: Record<string, any>) => AccountRecord(
     addInternalFields(account);
   }),
 );
+
+export { AccountRecord, FieldRecord, guessFqn, normalizeAccount };

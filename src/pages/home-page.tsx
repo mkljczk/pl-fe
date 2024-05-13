@@ -110,4 +110,4 @@ const HomePage: React.FC<IHomePage> = ({ children }) => {
   );
 };
 
-export default HomePage;
+export { HomePage as default };

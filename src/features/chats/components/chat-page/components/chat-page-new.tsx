@@ -37,4 +37,4 @@ const ChatPageNew: React.FC<IChatPageNew> = () => {
   );
 };
 
-export default ChatPageNew;
+export { ChatPageNew as default };

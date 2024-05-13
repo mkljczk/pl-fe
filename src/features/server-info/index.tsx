@@ -35,4 +35,4 @@ const ServerInfo = () => {
   );
 };
 
-export default ServerInfo;
+export { ServerInfo as default };

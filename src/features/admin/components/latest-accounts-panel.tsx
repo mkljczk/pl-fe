@@ -50,4 +50,4 @@ const LatestAccountsPanel: React.FC<ILatestAccountsPanel> = ({ limit = 5 }) => {
   );
 };
 
-export default LatestAccountsPanel;
+export { LatestAccountsPanel as default };

@@ -97,4 +97,4 @@ const IconButton: React.FC<IIconButton> = ({
   );
 };
 
-export default IconButton;
+export { IconButton as default };

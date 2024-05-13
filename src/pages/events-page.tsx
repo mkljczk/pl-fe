@@ -37,4 +37,4 @@ const EventsPage: React.FC<IEventsPage> = ({ children }) => {
   );
 };
 
-export default EventsPage;
+export { EventsPage as default };

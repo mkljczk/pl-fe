@@ -47,4 +47,4 @@ const ScheduledStatuses = () => {
   );
 };
 
-export default ScheduledStatuses;
+export { ScheduledStatuses as default };

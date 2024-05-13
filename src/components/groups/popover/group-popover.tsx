@@ -105,4 +105,4 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
   );
 };
 
-export default GroupPopover;
+export { GroupPopover as default };

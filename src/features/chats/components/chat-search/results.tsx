@@ -79,4 +79,4 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
   );
 };
 
-export default Results;
+export { Results as default };

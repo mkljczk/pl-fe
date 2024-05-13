@@ -257,4 +257,4 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
   );
 });
 
-export default ChatComposer;
+export { ChatComposer as default };

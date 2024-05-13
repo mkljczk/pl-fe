@@ -404,4 +404,4 @@ const SoapboxConfig: React.FC = () => {
   );
 };
 
-export default SoapboxConfig;
+export { SoapboxConfig as default };

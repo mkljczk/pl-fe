@@ -31,4 +31,4 @@ const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
   );
 };
 
-export default Emoji;
+export { Emoji as default };

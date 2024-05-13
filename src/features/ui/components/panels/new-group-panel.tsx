@@ -40,4 +40,4 @@ const NewGroupPanel = () => {
   );
 };
 
-export default NewGroupPanel;
+export { NewGroupPanel as default };

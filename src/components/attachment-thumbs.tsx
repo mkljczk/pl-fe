@@ -40,4 +40,4 @@ const AttachmentThumbs = (props: IAttachmentThumbs) => {
   );
 };
 
-export default AttachmentThumbs;
+export { AttachmentThumbs as default };

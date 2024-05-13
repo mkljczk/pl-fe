@@ -20,7 +20,7 @@ import { ME_FETCH_SKIP } from '../actions/me';
 import type { AnyAction } from 'redux';
 import type { APIEntity, Account as AccountEntity } from 'soapbox/types/entities';
 
-export const AuthAppRecord = ImmutableRecord({
+const AuthAppRecord = ImmutableRecord({
   access_token: null as string | null,
   client_id: null as string | null,
   client_secret: null as string | null,
@@ -32,7 +32,7 @@ export const AuthAppRecord = ImmutableRecord({
   website: null as string | null,
 });
 
-export const AuthTokenRecord = ImmutableRecord({
+const AuthTokenRecord = ImmutableRecord({
   access_token: '',
   account: null as string | null,
   created_at: 0,
@@ -44,13 +44,13 @@ export const AuthTokenRecord = ImmutableRecord({
   token_type: '',
 });
 
-export const AuthUserRecord = ImmutableRecord({
+const AuthUserRecord = ImmutableRecord({
   access_token: '',
   id: '',
   url: '',
 });
 
-export const ReducerRecord = ImmutableRecord({
+const ReducerRecord = ImmutableRecord({
   app: AuthAppRecord(),
   tokens: ImmutableMap<string, AuthToken>(),
   users: ImmutableMap<string, AuthUser>(),
@@ -88,7 +88,7 @@ const getLocalState = () => {
 };
 
 const sessionUser = getSessionUser();
-export const localState = getLocalState();fromJS(JSON.parse(localStorage.getItem(STORAGE_KEY)!));
+const localState = getLocalState();fromJS(JSON.parse(localStorage.getItem(STORAGE_KEY)!));
 
 // Checks if the user has an ID and access token
 const validUser = (user?: AuthUser) => {
@@ -368,4 +368,11 @@ const auth = (oldState: State = initialState, action: AnyAction) => {
   return state;
 };
 
-export default auth;
+export {
+  AuthAppRecord,
+  AuthTokenRecord,
+  AuthUserRecord,
+  ReducerRecord,
+  localState,
+  auth as default,
+};

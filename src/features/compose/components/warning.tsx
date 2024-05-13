@@ -18,4 +18,4 @@ const Warning: React.FC<IWarning> = ({ message }) => (
   </Motion>
 );
 
-export default Warning;
+export { Warning as default };

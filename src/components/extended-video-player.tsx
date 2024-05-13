@@ -61,4 +61,4 @@ const ExtendedVideoPlayer: React.FC<IExtendedVideoPlayer> = ({ src, alt, time, c
   );
 };
 
-export default ExtendedVideoPlayer;
+export { ExtendedVideoPlayer as default };

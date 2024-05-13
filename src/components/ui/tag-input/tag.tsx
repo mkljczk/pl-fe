@@ -23,4 +23,4 @@ const Tag: React.FC<ITag> = ({ tag, onDelete }) => (
   </div>
 );
 
-export default Tag;
+export { Tag as default };

@@ -85,4 +85,4 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled }) => {
   );
 };
 
-export default StatusCheckBox;
+export { StatusCheckBox as default };

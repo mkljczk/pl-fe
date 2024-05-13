@@ -88,4 +88,4 @@ const BioStep = ({ onNext }: { onNext: () => void }) => {
   );
 };
 
-export default BioStep;
+export { BioStep as default };

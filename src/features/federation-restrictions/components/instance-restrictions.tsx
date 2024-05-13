@@ -153,4 +153,4 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
   );
 };
 
-export default InstanceRestrictions;
+export { InstanceRestrictions as default };

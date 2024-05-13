@@ -12,7 +12,7 @@ import {
 import type { ReducerAccount } from 'soapbox/reducers/accounts';
 import type { Account, EmbeddedEntity, Status } from 'soapbox/types/entities';
 
-export const AdminReportRecord = ImmutableRecord({
+const AdminReportRecord = ImmutableRecord({
   account: null as EmbeddedEntity<Account | ReducerAccount>,
   action_taken: false,
   action_taken_by_account: null as EmbeddedEntity<Account | ReducerAccount> | null,
@@ -42,8 +42,10 @@ const normalizePleromaReport = (report: ImmutableMap<string, any>) => {
   return report;
 };
 
-export const normalizeAdminReport = (report: Record<string, any>) => AdminReportRecord(
+const normalizeAdminReport = (report: Record<string, any>) => AdminReportRecord(
   ImmutableMap(fromJS(report)).withMutations((report: ImmutableMap<string, any>) => {
     normalizePleromaReport(report);
   }),
 );
+
+export { AdminReportRecord, normalizeAdminReport };

@@ -193,4 +193,4 @@ const CreateApp: React.FC = () => {
   );
 };
 
-export default CreateApp;
+export { CreateApp as default };

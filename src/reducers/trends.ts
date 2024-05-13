@@ -34,4 +34,4 @@ const trendsReducer = (state: State = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default trendsReducer;
+export { trendsReducer as default };

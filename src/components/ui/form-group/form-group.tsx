@@ -111,4 +111,4 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
   );
 };
 
-export default FormGroup;
+export { FormGroup as default };

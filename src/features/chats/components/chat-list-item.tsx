@@ -157,4 +157,4 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
   );
 };
 
-export default ChatListItem;
+export { ChatListItem as default };

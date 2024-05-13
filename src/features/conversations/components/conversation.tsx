@@ -59,4 +59,4 @@ const Conversation: React.FC<IConversation> = ({ conversationId, onMoveUp, onMov
   );
 };
 
-export default Conversation;
+export { Conversation as default };

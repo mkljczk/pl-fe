@@ -88,4 +88,4 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
   );
 };
 
-export default ProfileFamiliarFollowers;
+export { ProfileFamiliarFollowers as default };

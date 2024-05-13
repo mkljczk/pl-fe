@@ -29,4 +29,4 @@ const errorsMiddleware = (): Middleware =>
     return next(action);
   };
 
-export default errorsMiddleware;
+export { errorsMiddleware as default };

@@ -96,4 +96,4 @@ const EventPage: React.FC<IEventPage> = ({ params, children }) => {
   );
 };
 
-export default EventPage;
+export { EventPage as default };

@@ -188,4 +188,4 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
   );
 };
 
-export default DetailedStatus;
+export { DetailedStatus as default };

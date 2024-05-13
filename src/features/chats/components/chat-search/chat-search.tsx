@@ -114,4 +114,4 @@ const ChatSearch = (props: IChatSearch) => {
   );
 };
 
-export default ChatSearch;
+export { ChatSearch as default };

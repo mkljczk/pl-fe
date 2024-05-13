@@ -19,7 +19,7 @@ const buildPoll = (draftStatus: DraftStatus) => {
   }
 };
 
-export const buildStatus = (state: RootState, draftStatus: DraftStatus) => {
+const buildStatus = (state: RootState, draftStatus: DraftStatus) => {
   const me = state.me as string;
   const account = state.entities[Entities.ACCOUNTS]?.store[me];
 
@@ -41,3 +41,5 @@ export const buildStatus = (state: RootState, draftStatus: DraftStatus) => {
 
   return calculateStatus(normalizeStatus(status));
 };
+
+export { buildStatus };

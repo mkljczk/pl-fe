@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 type SystemTheme = 'light' | 'dark';
 
 /** Get the system color scheme of the system. */
-export const useSystemTheme = (): SystemTheme => {
+const useSystemTheme = (): SystemTheme => {
   const query = window.matchMedia('(prefers-color-scheme: dark)');
   const [dark, setDark] = useState(query.matches);
 
@@ -31,3 +31,5 @@ export const useSystemTheme = (): SystemTheme => {
 
   return dark ? 'dark' : 'light';
 };
+
+export { useSystemTheme };

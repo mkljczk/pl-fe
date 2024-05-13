@@ -61,4 +61,4 @@ const NewFolderForm: React.FC = () => {
   );
 };
 
-export default NewFolderForm;
+export { NewFolderForm as default };

@@ -145,4 +145,4 @@ const Domains: React.FC = () => {
   );
 };
 
-export default Domains;
+export { Domains as default };

@@ -58,4 +58,4 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
   );
 };
 
-export default ProfileStats;
+export { ProfileStats as default };

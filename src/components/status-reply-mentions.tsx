@@ -110,4 +110,4 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
   );
 };
 
-export default StatusReplyMentions;
+export { StatusReplyMentions as default };

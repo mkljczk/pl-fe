@@ -10,7 +10,7 @@ import {
 
 import { GroupRoles } from 'soapbox/schemas/group-member';
 
-export const GroupRelationshipRecord = ImmutableRecord({
+const GroupRelationshipRecord = ImmutableRecord({
   id: '',
   blocked_by: false,
   member: false,
@@ -21,6 +21,8 @@ export const GroupRelationshipRecord = ImmutableRecord({
   pending_requests: false,
 });
 
-export const normalizeGroupRelationship = (relationship: Record<string, any>) => GroupRelationshipRecord(
+const normalizeGroupRelationship = (relationship: Record<string, any>) => GroupRelationshipRecord(
   ImmutableMap(fromJS(relationship)),
 );
+
+export { GroupRelationshipRecord, normalizeGroupRelationship };

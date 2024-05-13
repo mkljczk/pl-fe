@@ -564,4 +564,4 @@ const Audio: React.FC<IAudio> = (props) => {
   );
 };
 
-export default Audio;
+export { Audio as default };

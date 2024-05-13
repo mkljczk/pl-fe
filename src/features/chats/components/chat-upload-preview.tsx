@@ -53,4 +53,4 @@ const ChatUploadPreview: React.FC<IChatUploadPreview> = ({ className, attachment
   }
 };
 
-export default ChatUploadPreview;
+export { ChatUploadPreview as default };

@@ -46,4 +46,4 @@ const List: React.FC<IList> = ({ listId }) => {
   );
 };
 
-export default List;
+export { List as default };

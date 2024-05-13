@@ -22,7 +22,7 @@ interface IHoverRefWrapper {
 }
 
 /** Makes a profile hover card appear when the wrapped element is hovered. */
-export const HoverRefWrapper: React.FC<IHoverRefWrapper> = ({ accountId, children, inline = false, className }) => {
+const HoverRefWrapper: React.FC<IHoverRefWrapper> = ({ accountId, children, inline = false, className }) => {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const Elem: keyof JSX.IntrinsicElements = inline ? 'span' : 'div';

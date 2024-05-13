@@ -26,4 +26,4 @@ const Divider = ({ text, textSize = 'md' }: IDivider) => (
   </div>
 );
 
-export default Divider;
+export { Divider as default };

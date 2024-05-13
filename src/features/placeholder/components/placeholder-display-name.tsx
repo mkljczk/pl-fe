@@ -9,7 +9,7 @@ interface IPlaceholderDisplayName {
 }
 
 /** Fake display name to show when data is loading. */
-const PlaceholderDisplayName: React.FC<IPlaceholderDisplayName> = ({ minLength, maxLength, withSuffix = true }) => {
+const PlaceholderDisplayName: React.FC<IPlaceholderDisplayName> = React.memo(({ minLength, maxLength, withSuffix = true }) => {
   const length = randomIntFromInterval(maxLength, minLength);
   const acctLength = randomIntFromInterval(maxLength, minLength);
 
@@ -19,6 +19,6 @@ const PlaceholderDisplayName: React.FC<IPlaceholderDisplayName> = ({ minLength, 
       {withSuffix && <p>{generateText(acctLength)}</p>}
     </div>
   );
-};
+});
 
-export default React.memo(PlaceholderDisplayName);
+export { PlaceholderDisplayName as default };

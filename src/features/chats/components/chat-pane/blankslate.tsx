@@ -44,4 +44,4 @@ const Blankslate = ({ onSearch }: IBlankslate) => {
   );
 };
 
-export default Blankslate;
+export { Blankslate as default };

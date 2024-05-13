@@ -23,4 +23,4 @@ const Blankslate = () => {
   );
 };
 
-export default Blankslate;
+export { Blankslate as default };

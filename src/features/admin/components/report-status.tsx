@@ -62,4 +62,4 @@ const ReportStatus: React.FC<IReportStatus> = ({ status }) => {
   );
 };
 
-export default ReportStatus;
+export { ReportStatus as default };

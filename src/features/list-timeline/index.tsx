@@ -113,4 +113,4 @@ const ListTimeline: React.FC = () => {
   );
 };
 
-export default ListTimeline;
+export { ListTimeline as default };

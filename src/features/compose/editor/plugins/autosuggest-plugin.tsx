@@ -553,4 +553,4 @@ const AutosuggestPlugin = ({
   );
 };
 
-export default AutosuggestPlugin;
+export { AutosuggestPlugin as default };

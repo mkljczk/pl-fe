@@ -179,4 +179,4 @@ const MenuItem: React.FC<MenuItemProps> = ({ className, menuItem }) => {
   }
 };
 
-export default ProfileDropdown;
+export { ProfileDropdown as default };

@@ -35,4 +35,4 @@ const trending_statuses = (state: State = ReducerRecord(), action: AnyAction) =>
   }
 };
 
-export default trending_statuses;
+export { trending_statuses as default };

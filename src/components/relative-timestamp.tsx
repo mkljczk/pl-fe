@@ -16,7 +16,7 @@ const messages = defineMessages({
   days_remaining: { id: 'time_remaining.days', defaultMessage: '{number, plural, one {# day} other {# days}} left' },
 });
 
-export const dateFormatOptions: FormatDateOptions = {
+const dateFormatOptions: FormatDateOptions = {
   hour12: true,
   year: 'numeric',
   month: 'short',
@@ -66,7 +66,7 @@ const getUnitDelay = (units: string) => {
   }
 };
 
-export const timeAgoString = (intl: IntlShape, date: Date, now: number, year: number) => {
+const timeAgoString = (intl: IntlShape, date: Date, now: number, year: number) => {
   const delta = now - date.getTime();
 
   let relativeTime;
@@ -124,7 +124,7 @@ interface RelativeTimestampState {
 }
 
 /** Displays a timestamp compared to the current time, eg "1m" for one minute ago. */
-class RelativeTimestamp extends React.Component<RelativeTimestampProps, RelativeTimestampState> {
+const RelativeTimestamp = injectIntl(class RelativeTimestamp extends React.Component<RelativeTimestampProps, RelativeTimestampState> {
 
   _timer: NodeJS.Timeout | undefined;
 
@@ -195,6 +195,10 @@ class RelativeTimestamp extends React.Component<RelativeTimestampProps, Relative
     );
   }
 
-}
+});
 
-export default injectIntl(RelativeTimestamp);
+export {
+  dateFormatOptions,
+  timeAgoString,
+  RelativeTimestamp as default,
+};

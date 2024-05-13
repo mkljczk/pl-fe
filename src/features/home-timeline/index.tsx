@@ -107,4 +107,4 @@ const HomeTimeline: React.FC = () => {
   );
 };
 
-export default HomeTimeline;
+export { HomeTimeline as default };

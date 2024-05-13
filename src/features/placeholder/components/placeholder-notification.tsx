@@ -7,7 +7,7 @@ import PlaceholderDisplayName from './placeholder-display-name';
 import PlaceholderStatusContent from './placeholder-status-content';
 
 /** Fake notification to display while data is loading. */
-const PlaceholderNotification = () => (
+const PlaceholderNotification = React.memo(() => (
   <div className='bg-white p-4 black:bg-black dark:bg-primary-900'>
     <div className='w-full animate-pulse'>
       <div className='mb-2'>
@@ -31,6 +31,6 @@ const PlaceholderNotification = () => (
       </div>
     </div>
   </div>
-);
+));
 
-export default React.memo(PlaceholderNotification);
+export { PlaceholderNotification as default };

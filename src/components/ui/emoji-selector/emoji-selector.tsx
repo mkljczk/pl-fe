@@ -144,4 +144,4 @@ const EmojiSelector: React.FC<IEmojiSelector> = ({
   );
 };
 
-export default EmojiSelector;
+export { EmojiSelector as default };

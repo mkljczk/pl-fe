@@ -234,4 +234,4 @@ const ReportModal = ({ onClose }: IReportModal) => {
   );
 };
 
-export default ReportModal;
+export { ReportModal as default };

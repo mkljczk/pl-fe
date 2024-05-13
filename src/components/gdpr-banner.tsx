@@ -61,4 +61,4 @@ const GdprBanner: React.FC = () => {
   );
 };
 
-export default GdprBanner;
+export { GdprBanner as default };

@@ -182,4 +182,4 @@ const Search = (props: ISearch) => {
   );
 };
 
-export default Search;
+export { Search as default };

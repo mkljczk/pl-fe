@@ -74,4 +74,4 @@ const ChatPaneHeader = (props: IChatPaneHeader) => {
   );
 };
 
-export default ChatPaneHeader;
+export { ChatPaneHeader as default };

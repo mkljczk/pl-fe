@@ -48,4 +48,4 @@ const Emoji: React.FC<IEmoji> = ({ emoji, emojiMap, hovered }) => {
   }
 };
 
-export default Emoji;
+export { Emoji as default };

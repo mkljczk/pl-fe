@@ -174,4 +174,4 @@ const HotkeysModal: React.FC<IHotkeysModal> = ({ onClose }) => {
   );
 };
 
-export default HotkeysModal;
+export { HotkeysModal as default };

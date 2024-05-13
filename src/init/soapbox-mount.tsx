@@ -95,4 +95,4 @@ const SoapboxMount = () => {
   );
 };
 
-export default SoapboxMount;
+export { SoapboxMount as default };

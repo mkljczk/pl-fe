@@ -2,7 +2,7 @@ import { ExtendedRefs } from '@floating-ui/react';
 import { useCallback, useEffect } from 'react';
 
 /** Trigger `callback` when a Floating UI element is clicked outside from. */
-export const useClickOutside = <T extends HTMLElement>(
+const useClickOutside = <T extends HTMLElement>(
   refs: ExtendedRefs<T>,
   callback: (e: MouseEvent) => void,
 ) => {
@@ -27,3 +27,5 @@ export const useClickOutside = <T extends HTMLElement>(
     };
   }, []);
 };
+
+export { useClickOutside };

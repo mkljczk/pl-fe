@@ -79,4 +79,4 @@ const EditEmail = () => {
   );
 };
 
-export default EditEmail;
+export { EditEmail as default };

@@ -90,4 +90,4 @@ const GroupGallery: React.FC<IGroupGallery> = (props) => {
   );
 };
 
-export default GroupGallery;
+export { GroupGallery as default };

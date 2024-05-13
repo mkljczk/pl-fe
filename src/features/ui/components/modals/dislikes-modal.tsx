@@ -60,4 +60,4 @@ const DislikesModal: React.FC<IDislikesModal> = ({ onClose, statusId }) => {
   );
 };
 
-export default DislikesModal;
+export { DislikesModal as default };

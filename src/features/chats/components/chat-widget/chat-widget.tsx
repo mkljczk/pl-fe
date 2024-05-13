@@ -22,4 +22,4 @@ const ChatWidget = () => {
   );
 };
 
-export default ChatWidget;
+export { ChatWidget as default };

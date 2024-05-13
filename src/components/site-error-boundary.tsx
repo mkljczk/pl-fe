@@ -194,4 +194,4 @@ const SiteErrorBoundaryLink = ({ href, children }: ISiteErrorBoundaryLink) => (
   </>
 );
 
-export default SiteErrorBoundary;
+export { SiteErrorBoundary as default };

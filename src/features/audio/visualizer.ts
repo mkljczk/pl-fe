@@ -13,7 +13,7 @@ const hex2rgba = (hex: string, alpha = 1) => {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
-export default class Visualizer {
+class Visualizer {
 
   tickSize: number;
   canvas?: HTMLCanvasElement;
@@ -139,3 +139,5 @@ export default class Visualizer {
   }
 
 }
+
+export { Visualizer as default };

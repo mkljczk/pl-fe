@@ -45,4 +45,4 @@ const DefaultPage: React.FC<IDefaultPage> = ({ children }) => {
   );
 };
 
-export default DefaultPage;
+export { DefaultPage as default };

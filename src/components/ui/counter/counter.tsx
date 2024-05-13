@@ -16,4 +16,4 @@ const Counter: React.FC<ICounter> = ({ count, countMax }) => (
   </span>
 );
 
-export default Counter;
+export { Counter as default };

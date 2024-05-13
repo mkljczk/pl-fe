@@ -30,4 +30,4 @@ const VerificationBadge: React.FC<IVerificationBadge> = ({ className }) => {
   );
 };
 
-export default VerificationBadge;
+export { VerificationBadge as default };

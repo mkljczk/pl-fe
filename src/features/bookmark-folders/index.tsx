@@ -69,4 +69,4 @@ const BookmarkFolders: React.FC = () => {
   );
 };
 
-export default BookmarkFolders;
+export { BookmarkFolders as default };

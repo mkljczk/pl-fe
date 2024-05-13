@@ -59,4 +59,4 @@ const SoapboxHead: React.FC<ISoapboxHead> = ({ children }) => {
   );
 };
 
-export default SoapboxHead;
+export { SoapboxHead as default };

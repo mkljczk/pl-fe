@@ -34,4 +34,4 @@ const MarkdownButton: React.FC<IMarkdownButton> = ({ composeId }) => {
 
 };
 
-export default MarkdownButton;
+export { MarkdownButton as default };

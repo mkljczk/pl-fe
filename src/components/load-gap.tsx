@@ -25,4 +25,4 @@ const LoadGap: React.FC<ILoadGap> = ({ disabled, maxId, onClick }) => {
   );
 };
 
-export default LoadGap;
+export { LoadGap as default };

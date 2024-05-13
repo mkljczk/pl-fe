@@ -11,7 +11,7 @@ const makeEmojiMap = (emojis: any) => emojis.reduce((obj: any, emoji: any) => {
 /** Normalize entity ID */
 const normalizeId = (id: any): string | null => z.string().nullable().catch(null).parse(id);
 
-export type Normalizer<V, R> = (value: V) => R;
+type Normalizer<V, R> = (value: V) => R;
 
 /**
  * Allows using any legacy normalizer function as a zod schema.
@@ -34,6 +34,7 @@ const maybeFromJS = (value: any): unknown => {
 };
 
 export {
+  type Normalizer,
   mergeDefined,
   makeEmojiMap,
   normalizeId,

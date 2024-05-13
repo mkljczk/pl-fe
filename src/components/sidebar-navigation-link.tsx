@@ -73,4 +73,4 @@ const SidebarNavigationLink = React.forwardRef((props: ISidebarNavigationLink, r
   );
 });
 
-export default SidebarNavigationLink;
+export { SidebarNavigationLink as default };

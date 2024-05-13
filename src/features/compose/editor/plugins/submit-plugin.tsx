@@ -25,4 +25,4 @@ const SubmitPlugin: React.FC<ISubmitPlugin> = ({ composeId, handleSubmit }) => {
   return null;
 };
 
-export default SubmitPlugin;
+export { SubmitPlugin as default };

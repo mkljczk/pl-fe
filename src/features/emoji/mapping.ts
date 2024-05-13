@@ -79,7 +79,7 @@ const stripcodes = (unified: string, native: string) => {
   }
 };
 
-export const generateMappings = (data: EmojiData): UnicodeMap => {
+const generateMappings = (data: EmojiData): UnicodeMap => {
   const result: UnicodeMap = {};
   const emojis = Object.values(data.emojis ?? {});
 
@@ -103,4 +103,4 @@ export const generateMappings = (data: EmojiData): UnicodeMap => {
 
 const unicodeMapping = generateMappings(data);
 
-export default unicodeMapping;
+export { generateMappings, unicodeMapping as default };

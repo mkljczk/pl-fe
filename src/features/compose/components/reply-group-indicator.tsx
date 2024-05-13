@@ -39,4 +39,4 @@ const ReplyGroupIndicator = (props: IReplyGroupIndicator) => {
   );
 };
 
-export default ReplyGroupIndicator;
+export { ReplyGroupIndicator as default };

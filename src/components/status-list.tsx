@@ -243,5 +243,4 @@ const StatusList: React.FC<IStatusList> = ({
   );
 };
 
-export default StatusList;
-export type { IStatusList };
+export { type IStatusList, StatusList as default };

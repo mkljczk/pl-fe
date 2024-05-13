@@ -101,5 +101,4 @@ const messages = locales.reduce((acc, locale) => {
   return acc;
 }, {} as Record<string, () => Promise<MessageJson>>);
 
-export default messages;
-export { locales };
+export { locales, messages as default };

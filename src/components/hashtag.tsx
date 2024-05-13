@@ -52,4 +52,4 @@ const Hashtag: React.FC<IHashtag> = ({ hashtag }) => {
   );
 };
 
-export default Hashtag;
+export { Hashtag as default };

@@ -90,4 +90,4 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
   );
 };
 
-export default DetailsStep;
+export { DetailsStep as default };

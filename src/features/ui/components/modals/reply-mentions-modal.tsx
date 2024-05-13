@@ -43,4 +43,4 @@ const ReplyMentionsModal: React.FC<IReplyMentionsModal> = ({ composeId, onClose 
   );
 };
 
-export default ReplyMentionsModal;
+export { ReplyMentionsModal as default };

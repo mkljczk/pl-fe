@@ -263,4 +263,4 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
   );
 };
 
-export default ChatMessageList;
+export { ChatMessageList as default };

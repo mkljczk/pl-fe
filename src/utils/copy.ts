@@ -28,4 +28,4 @@ const copy = (text: string, onSuccess?: () => void) => {
   }
 };
 
-export default copy;
+export { copy as default };

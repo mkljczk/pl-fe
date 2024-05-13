@@ -20,7 +20,7 @@ import Motion from 'soapbox/features/ui/util/optional-motion';
 import { useAppDispatch, useSettings } from 'soapbox/hooks';
 import { Attachment } from 'soapbox/types/entities';
 
-export const MIMETYPE_ICONS: Record<string, string> = {
+const MIMETYPE_ICONS: Record<string, string> = {
   'application/x-freearc': fileZipIcon,
   'application/x-bzip': fileZipIcon,
   'application/x-bzip2': fileZipIcon,
@@ -251,4 +251,7 @@ const Upload: React.FC<IUpload> = ({
   );
 };
 
-export default Upload;
+export {
+  MIMETYPE_ICONS,
+  Upload as default,
+};

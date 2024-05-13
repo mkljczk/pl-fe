@@ -24,4 +24,4 @@ const QuotedStatusIndicator: React.FC<IQuotedStatusIndicator> = ({ statusId }) =
   );
 };
 
-export default QuotedStatusIndicator;
+export { QuotedStatusIndicator as default };

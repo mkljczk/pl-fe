@@ -23,4 +23,4 @@ const TextCharacterCounter: React.FC<ITextCharacterCounter> = ({ text, max }) =>
   return checkRemainingText(diff);
 };
 
-export default TextCharacterCounter;
+export { TextCharacterCounter as default };

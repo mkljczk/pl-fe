@@ -49,7 +49,7 @@ interface IProfileHoverCard {
 }
 
 /** Popup profile preview that appears when hovering avatars and display names. */
-export const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
+const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const intl = useIntl();
@@ -147,4 +147,4 @@ export const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }
   );
 };
 
-export default ProfileHoverCard;
+export { ProfileHoverCard as default };

@@ -12,7 +12,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import vitePluginRequire from 'vite-plugin-require';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
-export default defineConfig(({ command }) => ({
+const config =  defineConfig(({ command }) => ({
   build: {
     assetsDir: 'packs',
     assetsInlineLimit: 0,
@@ -123,3 +123,5 @@ const readFileContents = (path: string) => {
     return '';
   }
 };
+
+export { config as default };

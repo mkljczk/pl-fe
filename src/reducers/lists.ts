@@ -46,4 +46,4 @@ const lists = (state: State = initialState, action: AnyAction) => {
   }
 };
 
-export default lists;
+export { lists as default };

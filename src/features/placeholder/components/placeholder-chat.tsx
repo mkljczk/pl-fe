@@ -18,4 +18,4 @@ const PlaceholderChat = () => (
   </div>
 );
 
-export default PlaceholderChat;
+export { PlaceholderChat as default };

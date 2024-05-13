@@ -147,4 +147,4 @@ class ZoomableImage extends React.PureComponent<IZoomableImage> {
 
 }
 
-export default ZoomableImage;
+export { ZoomableImage as default };

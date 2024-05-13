@@ -134,4 +134,4 @@ const OtpConfirmForm: React.FC = () => {
   );
 };
 
-export default OtpConfirmForm;
+export { OtpConfirmForm as default };

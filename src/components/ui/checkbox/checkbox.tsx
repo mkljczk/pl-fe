@@ -12,4 +12,4 @@ const Checkbox = React.forwardRef<HTMLInputElement, ICheckbox>((props, ref) => (
   />
 ));
 
-export default Checkbox;
+export { Checkbox as default };

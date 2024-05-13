@@ -6,10 +6,12 @@
 import { Record as ImmutableRecord, Map as ImmutableMap, fromJS } from 'immutable';
 
 // https://docs.joinmastodon.org/entities/list/
-export const ListRecord = ImmutableRecord({
+const ListRecord = ImmutableRecord({
   id: '',
   title: '',
   replies_policy: null as 'followed' | 'list' | 'none' | null,
 });
 
-export const normalizeList = (list: Record<string, any>) => ListRecord(ImmutableMap(fromJS(list)));
+const normalizeList = (list: Record<string, any>) => ListRecord(ImmutableMap(fromJS(list)));
+
+export { ListRecord, normalizeList };

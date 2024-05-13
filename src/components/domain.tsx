@@ -43,4 +43,4 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
   );
 };
 
-export default Domain;
+export { Domain as default };

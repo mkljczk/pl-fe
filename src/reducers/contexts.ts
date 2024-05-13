@@ -20,7 +20,7 @@ import { TIMELINE_DELETE } from '../actions/timelines';
 import type { AnyAction } from 'redux';
 import type { Status } from 'soapbox/schemas';
 
-export const ReducerRecord = ImmutableRecord({
+const ReducerRecord = ImmutableRecord({
   inReplyTos: ImmutableMap<string, string>(),
   replies: ImmutableMap<string, ImmutableOrderedSet<string>>(),
 });
@@ -216,4 +216,7 @@ const replies = (state = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default replies;
+export {
+  ReducerRecord,
+  replies as default,
+};

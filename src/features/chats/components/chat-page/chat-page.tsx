@@ -91,4 +91,4 @@ const ChatPage: React.FC<IChatPage> = ({ chatId }) => {
   );
 };
 
-export default ChatPage;
+export { ChatPage as default };

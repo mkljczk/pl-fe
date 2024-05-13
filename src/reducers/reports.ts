@@ -101,4 +101,4 @@ const reports = (state: State = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default reports;
+export { reports as default };

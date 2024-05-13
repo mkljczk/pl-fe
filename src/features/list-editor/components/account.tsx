@@ -43,4 +43,4 @@ const Account: React.FC<IAccount> = ({ accountId }) => {
   );
 };
 
-export default Account;
+export { Account as default };

@@ -126,4 +126,4 @@ const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params })
   );
 };
 
-export default GroupMembershipRequests;
+export { GroupMembershipRequests as default };

@@ -49,4 +49,4 @@ const TestTimeline: React.FC = () => {
   );
 };
 
-export default TestTimeline;
+export { TestTimeline as default };

@@ -346,4 +346,4 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
   );
 };
 
-export default MediaModal;
+export { MediaModal as default };

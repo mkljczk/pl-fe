@@ -46,4 +46,4 @@ const followed_tags = (state = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default followed_tags;
+export { followed_tags as default };

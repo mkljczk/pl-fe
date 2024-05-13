@@ -6,13 +6,15 @@
 import { Map as ImmutableMap, Record as ImmutableRecord, fromJS } from 'immutable';
 
 // https://docs.joinmastodon.org/entities/FilterKeyword/
-export const FilterKeywordRecord = ImmutableRecord({
+const FilterKeywordRecord = ImmutableRecord({
   id: '',
   keyword: '',
   whole_word: false,
 });
 
-export const normalizeFilterKeyword = (filterKeyword: Record<string, any>) =>
+const normalizeFilterKeyword = (filterKeyword: Record<string, any>) =>
   FilterKeywordRecord(
     ImmutableMap(fromJS(filterKeyword)),
   );
+
+export { FilterKeywordRecord, normalizeFilterKeyword };

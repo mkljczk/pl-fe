@@ -46,4 +46,4 @@ const ColorPicker: React.FC<IColorPicker> = ({ style, value, onClose, onChange }
   );
 };
 
-export default ColorPicker;
+export { ColorPicker as default };

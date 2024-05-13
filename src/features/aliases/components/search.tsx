@@ -61,4 +61,4 @@ const Search: React.FC = () => {
   );
 };
 
-export default Search;
+export { Search as default };

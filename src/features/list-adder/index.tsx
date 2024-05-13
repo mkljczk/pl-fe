@@ -78,4 +78,4 @@ const ListAdder: React.FC<IListAdder> = ({ accountId, onClose }) => {
   );
 };
 
-export default ListAdder;
+export { ListAdder as default };

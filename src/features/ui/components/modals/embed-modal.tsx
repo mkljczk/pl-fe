@@ -54,4 +54,4 @@ const EmbedModal: React.FC<IEmbedModal> = ({ url, onError }) => {
   );
 };
 
-export default EmbedModal;
+export { EmbedModal as default };

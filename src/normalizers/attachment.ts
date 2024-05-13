@@ -12,7 +12,7 @@ import {
 import { mergeDefined } from 'soapbox/utils/normalizers';
 
 // https://docs.joinmastodon.org/entities/attachment/
-export const AttachmentRecord = ImmutableRecord({
+const AttachmentRecord = ImmutableRecord({
   blurhash: undefined,
   description: '',
   id: '',
@@ -52,9 +52,11 @@ const normalizeMeta = (attachment: ImmutableMap<string, any>) => {
   return attachment.set('meta', meta);
 };
 
-export const normalizeAttachment = (attachment: Record<string, any>) => AttachmentRecord(
+const normalizeAttachment = (attachment: Record<string, any>) => AttachmentRecord(
   ImmutableMap(fromJS(attachment)).withMutations((attachment: ImmutableMap<string, any>) => {
     normalizeUrls(attachment);
     normalizeMeta(attachment);
   }),
 );
+
+export { AttachmentRecord, normalizeAttachment };

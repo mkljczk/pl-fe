@@ -278,4 +278,4 @@ const ChatMessage = (props: IChatMessage) => {
   );
 };
 
-export default ChatMessage;
+export { ChatMessage as default };

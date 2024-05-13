@@ -34,4 +34,4 @@ const BadgeInput: React.FC<IBadgeInput> = ({ badges, onChange }) => {
   );
 };
 
-export default BadgeInput;
+export { BadgeInput as default };

@@ -91,4 +91,4 @@ const ChatPane = () => {
   );
 };
 
-export default ChatPane;
+export { ChatPane as default };

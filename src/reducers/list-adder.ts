@@ -53,4 +53,4 @@ const listAdderReducer = (state: State = ReducerRecord(), action: AnyAction) => 
   }
 };
 
-export default listAdderReducer;
+export { listAdderReducer as default };

@@ -62,4 +62,4 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
   );
 };
 
-export default DraftStatusActionBar;
+export { DraftStatusActionBar as default };

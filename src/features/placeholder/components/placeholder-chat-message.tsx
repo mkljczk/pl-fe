@@ -67,4 +67,4 @@ const PlaceholderChatMessage = ({ isMyMessage = false }: { isMyMessage?: boolean
   );
 };
 
-export default PlaceholderChatMessage;
+export { PlaceholderChatMessage as default };

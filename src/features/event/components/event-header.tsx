@@ -476,4 +476,4 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   );
 };
 
-export default EventHeader;
+export { EventHeader as default };

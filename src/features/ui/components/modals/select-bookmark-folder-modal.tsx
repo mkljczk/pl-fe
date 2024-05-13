@@ -94,4 +94,4 @@ const SelectBookmarkFolderModal: React.FC<ISelectBookmarkFolderModal> = ({ statu
   );
 };
 
-export default SelectBookmarkFolderModal;
+export { SelectBookmarkFolderModal as default };

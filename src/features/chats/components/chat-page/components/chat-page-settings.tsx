@@ -90,4 +90,4 @@ const ChatPageSettings = () => {
   );
 };
 
-export default ChatPageSettings;
+export { ChatPageSettings as default };

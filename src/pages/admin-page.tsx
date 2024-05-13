@@ -24,4 +24,4 @@ const AdminPage: React.FC<IAdminPage> = ({ children }) => (
   </>
 );
 
-export default AdminPage;
+export { AdminPage as default };

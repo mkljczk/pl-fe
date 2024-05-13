@@ -138,4 +138,4 @@ const InfoListItem: React.FC<IInfoListItem> = ({ number, children }) => (
   </HStack>
 );
 
-export default ConfirmationStep;
+export { ConfirmationStep as default };

@@ -48,4 +48,4 @@ const ConsumerButton: React.FC<IConsumerButton> = ({ provider }) => {
   );
 };
 
-export default ConsumerButton;
+export { ConsumerButton as default };

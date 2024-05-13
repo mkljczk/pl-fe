@@ -54,4 +54,4 @@ const FollowRequests: React.FC = () => {
   );
 };
 
-export default FollowRequests;
+export { FollowRequests as default };

@@ -53,4 +53,4 @@ const Quotes: React.FC = () => {
   );
 };
 
-export default Quotes;
+export { Quotes as default };

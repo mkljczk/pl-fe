@@ -67,4 +67,4 @@ const admin_user_index = (state: State = ReducerRecord(), action: AnyAction): St
   }
 };
 
-export default admin_user_index;
+export { admin_user_index as default };

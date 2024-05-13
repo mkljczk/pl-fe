@@ -78,4 +78,4 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
   );
 };
 
-export default ReplyMentions;
+export { ReplyMentions as default };

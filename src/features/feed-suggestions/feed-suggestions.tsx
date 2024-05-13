@@ -118,4 +118,4 @@ const FeedSuggestions: React.FC<IFeedSuggesetions> = ({ statusId, onMoveUp, onMo
   );
 };
 
-export default FeedSuggestions;
+export { FeedSuggestions as default };

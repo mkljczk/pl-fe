@@ -57,4 +57,4 @@ const NewListForm: React.FC = () => {
   );
 };
 
-export default NewListForm;
+export { NewListForm as default };

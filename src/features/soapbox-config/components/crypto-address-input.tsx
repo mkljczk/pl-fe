@@ -46,4 +46,4 @@ const CryptoAddressInput: StreamfieldComponent<CryptoAddress> = ({ value, onChan
   );
 };
 
-export default CryptoAddressInput;
+export { CryptoAddressInput as default };

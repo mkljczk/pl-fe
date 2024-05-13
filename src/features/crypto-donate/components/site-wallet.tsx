@@ -27,4 +27,4 @@ const SiteWallet: React.FC<ISiteWallet> = ({ limit }): JSX.Element => {
   );
 };
 
-export default SiteWallet;
+export { SiteWallet as default };

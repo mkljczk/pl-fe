@@ -79,4 +79,4 @@ const suggestionsReducer = (state: State = ReducerRecord(), action: AnyAction) =
   }
 };
 
-export default suggestionsReducer;
+export { suggestionsReducer as default };

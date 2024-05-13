@@ -13,7 +13,7 @@ const messages = defineMessages({
 });
 
 /** Type of the inner Streamfield input component. */
-export type StreamfieldComponent<T> = React.ComponentType<{
+type StreamfieldComponent<T> = React.ComponentType<{
   value: T;
   onChange: (value: T) => void;
   autoFocus: boolean;
@@ -104,4 +104,4 @@ const Streamfield: React.FC<IStreamfield> = ({
   );
 };
 
-export default Streamfield;
+export { type StreamfieldComponent, Streamfield as default };

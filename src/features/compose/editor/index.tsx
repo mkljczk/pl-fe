@@ -174,4 +174,4 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
   );
 });
 
-export default ComposeEditor;
+export { ComposeEditor as default };

@@ -47,4 +47,4 @@ const InstanceInfoPanel: React.FC<IInstanceInfoPanel> = ({ host }) => {
   );
 };
 
-export default InstanceInfoPanel;
+export { InstanceInfoPanel as default };

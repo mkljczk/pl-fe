@@ -41,4 +41,4 @@ const PullToRefresh: React.FC<IPullToRefresh> = ({ children, onRefresh, ...rest 
   );
 };
 
-export default PullToRefresh;
+export { PullToRefresh as default };

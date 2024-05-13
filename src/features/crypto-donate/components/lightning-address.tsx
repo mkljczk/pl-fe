@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import CopyableInput from 'soapbox/components/copyable-input';
 import { Text, Stack, HStack, Emoji } from 'soapbox/components/ui';
 
-export interface ILightningAddress {
+interface ILightningAddress {
   address: string;
 }
 
@@ -29,4 +29,7 @@ const LightningAddress: React.FC<ILightningAddress> = (props): JSX.Element => {
   );
 };
 
-export default LightningAddress;
+export {
+  type ILightningAddress,
+  LightningAddress as default,
+};

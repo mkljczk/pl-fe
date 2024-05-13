@@ -86,4 +86,4 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({ src, onC
   );
 });
 
-export default HeaderPicker;
+export { HeaderPicker as default };

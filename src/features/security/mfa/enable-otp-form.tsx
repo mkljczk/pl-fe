@@ -83,4 +83,4 @@ const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupPr
   );
 };
 
-export default EnableOtpForm;
+export { EnableOtpForm as default };

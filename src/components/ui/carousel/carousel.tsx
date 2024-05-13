@@ -109,4 +109,4 @@ const Carousel: React.FC<ICarousel> = (props): JSX.Element => {
   );
 };
 
-export default Carousel;
+export { Carousel as default };

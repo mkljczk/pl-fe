@@ -52,4 +52,4 @@ const Helmet: React.FC<IHelmet> = ({ children }) => {
   );
 };
 
-export default Helmet;
+export { Helmet as default };

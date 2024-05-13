@@ -55,4 +55,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export { Search as default };

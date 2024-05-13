@@ -64,4 +64,4 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ value, onChange }) => {
   );
 };
 
-export default ThemeSelector;
+export { ThemeSelector as default };

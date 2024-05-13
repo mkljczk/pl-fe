@@ -42,4 +42,4 @@ const Reports: React.FC = () => {
   );
 };
 
-export default Reports;
+export { Reports as default };

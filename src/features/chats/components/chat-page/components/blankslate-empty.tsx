@@ -43,4 +43,4 @@ const BlankslateEmpty: React.FC<IBlankslate> = () => {
   );
 };
 
-export default BlankslateEmpty;
+export { BlankslateEmpty as default };

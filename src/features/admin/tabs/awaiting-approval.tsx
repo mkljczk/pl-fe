@@ -44,4 +44,4 @@ const AwaitingApproval: React.FC = () => {
   );
 };
 
-export default AwaitingApproval;
+export { AwaitingApproval as default };

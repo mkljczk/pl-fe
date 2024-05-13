@@ -68,4 +68,4 @@ const ProfileField: React.FC<IProfileField> = ({ field }) => {
   );
 };
 
-export default ProfileField;
+export { ProfileField as default };

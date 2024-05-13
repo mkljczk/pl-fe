@@ -10,13 +10,14 @@ import { normalizeFilter } from './filter';
 import type { Filter } from 'soapbox/types/entities';
 
 // https://docs.joinmastodon.org/entities/FilterResult/
-export const FilterResultRecord = ImmutableRecord({
+const FilterResultRecord = ImmutableRecord({
   filter: null as Filter | null,
   keyword_matches: ImmutableList<string>(),
   status_matches: ImmutableList<string>(),
 });
 
-export const normalizeFilterResult = (filterResult: Record<string, any>) =>
-  FilterResultRecord(
-    ImmutableMap(fromJS(filterResult)).update('filter', (filter: any) => normalizeFilter(filter) as any),
-  );
+const normalizeFilterResult = (filterResult: Record<string, any>) => FilterResultRecord(
+  ImmutableMap(fromJS(filterResult)).update('filter', (filter: any) => normalizeFilter(filter) as any),
+);
+
+export { FilterResultRecord, normalizeFilterResult };

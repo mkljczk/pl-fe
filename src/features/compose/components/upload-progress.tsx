@@ -23,4 +23,4 @@ const ComposeUploadProgress: React.FC<IComposeUploadProgress> = ({ composeId }) 
   );
 };
 
-export default ComposeUploadProgress;
+export { ComposeUploadProgress as default };

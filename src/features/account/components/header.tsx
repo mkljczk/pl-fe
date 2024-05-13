@@ -654,4 +654,4 @@ const Header: React.FC<IHeader> = ({ account }) => {
   );
 };
 
-export default Header;
+export { Header as default };

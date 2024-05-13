@@ -156,4 +156,4 @@ const UnauthorizedModal: React.FC<IUnauthorizedModal> = ({ action, onClose, acco
   );
 };
 
-export default UnauthorizedModal;
+export { UnauthorizedModal as default };

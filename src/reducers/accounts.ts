@@ -38,7 +38,7 @@ import type { APIEntity } from 'soapbox/types/entities';
 type AccountRecord = ReturnType<typeof normalizeAccount>;
 type AccountMap = ImmutableMap<string, any>;
 
-export interface ReducerAccount extends AccountRecord {
+interface ReducerAccount extends AccountRecord {
   moved: string | null;
 }
 
@@ -246,4 +246,7 @@ const accounts = (state: State = initialState, action: AnyAction): State => {
   }
 };
 
-export default accounts;
+export {
+  type ReducerAccount,
+  accounts as default,
+};

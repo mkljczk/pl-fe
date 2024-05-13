@@ -26,4 +26,4 @@ const Form: React.FC<IForm> = ({ onSubmit, children, ...filteredProps }) => {
   );
 };
 
-export default Form;
+export { Form as default };

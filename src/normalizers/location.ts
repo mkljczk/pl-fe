@@ -1,11 +1,11 @@
 import { Map as ImmutableMap, Record as ImmutableRecord, fromJS } from 'immutable';
 
-export const GeographicLocationRecord = ImmutableRecord({
+const GeographicLocationRecord = ImmutableRecord({
   coordinates: null as [number, number] | null,
   srid: '',
 });
 
-export const LocationRecord = ImmutableRecord({
+const LocationRecord = ImmutableRecord({
   url: '',
   description: '',
   country: '',
@@ -28,7 +28,9 @@ const normalizeGeographicLocation = (location: ImmutableMap<string, any>) => {
   return location;
 };
 
-export const normalizeLocation = (location: Record<string, any>) => LocationRecord(ImmutableMap(fromJS(location))
+const normalizeLocation = (location: Record<string, any>) => LocationRecord(ImmutableMap(fromJS(location))
   .withMutations((location: ImmutableMap<string, any>) => {
     normalizeGeographicLocation(location);
   }));
+
+export { GeographicLocationRecord, LocationRecord, normalizeLocation };

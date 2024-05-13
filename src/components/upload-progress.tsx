@@ -26,4 +26,4 @@ const UploadProgress: React.FC<IUploadProgress> = ({ progress }) => (
   </HStack>
 );
 
-export default UploadProgress;
+export { UploadProgress as default };

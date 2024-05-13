@@ -65,4 +65,4 @@ const FollowRecommendations: React.FC = () => {
   );
 };
 
-export default FollowRecommendations;
+export { FollowRecommendations as default };

@@ -56,13 +56,13 @@ import {
 
 import type { APIEntity } from 'soapbox/types/entities';
 
-export const ListRecord = ImmutableRecord({
+const ListRecord = ImmutableRecord({
   next: null as string | null,
   items: ImmutableOrderedSet<string>(),
   isLoading: false,
 });
 
-export const ReactionRecord = ImmutableRecord({
+const ReactionRecord = ImmutableRecord({
   accounts: ImmutableOrderedSet<string>(),
   count: 0,
   name: '',
@@ -75,7 +75,7 @@ const ReactionListRecord = ImmutableRecord({
   isLoading: false,
 });
 
-export const ParticipationRequestRecord = ImmutableRecord({
+const ParticipationRequestRecord = ImmutableRecord({
   account: '',
   participation_message: null as string | null,
 });
@@ -86,7 +86,7 @@ const ParticipationRequestListRecord = ImmutableRecord({
   isLoading: false,
 });
 
-export const ReducerRecord = ImmutableRecord({
+const ReducerRecord = ImmutableRecord({
   followers: ImmutableMap<string, List>(),
   following: ImmutableMap<string, List>(),
   reblogged_by: ImmutableMap<string, List>(),
@@ -106,7 +106,7 @@ export const ReducerRecord = ImmutableRecord({
 });
 
 type State = ReturnType<typeof ReducerRecord>;
-export type List = ReturnType<typeof ListRecord>;
+type List = ReturnType<typeof ListRecord>;
 type Reaction = ReturnType<typeof ReactionRecord>;
 type ReactionList = ReturnType<typeof ReactionListRecord>;
 type ParticipationRequest = ReturnType<typeof ParticipationRequestRecord>;
@@ -230,4 +230,11 @@ const userLists = (state = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default userLists;
+export {
+  ListRecord,
+  type List,
+  ReactionRecord,
+  ParticipationRequest,
+  ReducerRecord,
+  userLists as default,
+};

@@ -101,4 +101,4 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
   );
 };
 
-export default AccountTimeline;
+export { AccountTimeline as default };

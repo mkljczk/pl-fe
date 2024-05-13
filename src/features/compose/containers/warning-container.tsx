@@ -69,4 +69,4 @@ const WarningWrapper: React.FC<IWarningWrapper> = ({ composeId }) => {
   return null;
 };
 
-export default WarningWrapper;
+export { WarningWrapper as default };

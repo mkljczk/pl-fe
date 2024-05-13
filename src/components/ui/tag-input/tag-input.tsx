@@ -67,4 +67,4 @@ const TagInput: React.FC<ITagInput> = ({ tags, onChange, placeholder }) => {
   );
 };
 
-export default TagInput;
+export { TagInput as default };

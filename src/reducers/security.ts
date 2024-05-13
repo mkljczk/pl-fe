@@ -29,7 +29,7 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-export type Token = ReturnType<typeof TokenRecord>;
+type Token = ReturnType<typeof TokenRecord>;
 
 const deleteToken = (state: State, tokenId: number) => state.update('tokens', tokens => tokens.filterNot(token => token.id === tokenId));
 
@@ -56,4 +56,7 @@ const security = (state = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default security;
+export {
+  type Token,
+  security as default,
+};

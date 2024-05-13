@@ -36,4 +36,4 @@ const CompletedStep = ({ onComplete }: { onComplete: () => void }) => (
   </Card>
 );
 
-export default CompletedStep;
+export { CompletedStep as default };

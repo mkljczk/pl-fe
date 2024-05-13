@@ -50,7 +50,7 @@ const families = {
   mono: 'font-mono',
 };
 
-export type Sizes = keyof typeof sizes
+type Sizes = keyof typeof sizes
 type Tags = 'abbr' | 'p' | 'span' | 'pre' | 'time' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'label' | 'div' | 'blockquote'
 type Directions = 'ltr' | 'rtl'
 
@@ -132,6 +132,7 @@ const Text = React.forwardRef<any, IText>(
 );
 
 export {
+  type Sizes,
+  type IText,
   Text as default,
-  IText,
 };

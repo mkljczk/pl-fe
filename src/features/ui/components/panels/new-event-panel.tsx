@@ -36,4 +36,4 @@ const NewEventPanel = () => {
   );
 };
 
-export default NewEventPanel;
+export { NewEventPanel as default };

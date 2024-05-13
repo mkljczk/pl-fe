@@ -19,7 +19,7 @@ interface IStatusHoverCard {
 }
 
 /** Popup status preview that appears when hovering reply to */
-export const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
+const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
@@ -93,4 +93,4 @@ export const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) 
   );
 };
 
-export default StatusHoverCard;
+export { StatusHoverCard as default };

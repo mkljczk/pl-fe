@@ -40,4 +40,4 @@ const AutosuggestEmoji: React.FC<IAutosuggestEmoji> = ({ emoji }) => {
   );
 };
 
-export default AutosuggestEmoji;
+export { AutosuggestEmoji as default };

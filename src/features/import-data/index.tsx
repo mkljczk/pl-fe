@@ -45,4 +45,4 @@ const ImportData = () => {
   );
 };
 
-export default ImportData;
+export { ImportData as default };

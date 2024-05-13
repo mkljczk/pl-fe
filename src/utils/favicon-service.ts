@@ -96,4 +96,4 @@ const createFaviconService = () => {
 
 const FaviconService = createFaviconService();
 
-export default FaviconService;
+export { FaviconService as default };

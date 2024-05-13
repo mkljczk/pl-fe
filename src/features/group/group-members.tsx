@@ -67,4 +67,4 @@ const GroupMembers: React.FC<IGroupMembers> = (props) => {
   );
 };
 
-export default GroupMembers;
+export { GroupMembers as default };

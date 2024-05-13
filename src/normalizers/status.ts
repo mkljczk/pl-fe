@@ -19,13 +19,13 @@ import { maybeFromJS } from 'soapbox/utils/normalizers';
 
 import type { Account, Attachment, Card, Emoji, Group, Mention, Poll, EmbeddedEntity, EmojiReaction } from 'soapbox/types/entities';
 
-export type StatusApprovalStatus = 'pending' | 'approval' | 'rejected';
-export type StatusVisibility = 'public' | 'unlisted' | 'private' | 'direct' | 'group';
+type StatusApprovalStatus = 'pending' | 'approval' | 'rejected';
+type StatusVisibility = 'public' | 'unlisted' | 'private' | 'direct' | 'group';
 
-export type EventJoinMode = 'free' | 'restricted' | 'invite';
-export type EventJoinState = 'pending' | 'reject' | 'accept';
+type EventJoinMode = 'free' | 'restricted' | 'invite';
+type EventJoinState = 'pending' | 'reject' | 'accept';
 
-export const EventRecord = ImmutableRecord({
+const EventRecord = ImmutableRecord({
   name: '',
   start_time: null as string | null,
   end_time: null as string | null,
@@ -42,7 +42,7 @@ interface Tombstone {
 }
 
 // https://docs.joinmastodon.org/entities/status/
-export const StatusRecord = ImmutableRecord({
+const StatusRecord = ImmutableRecord({
   account: null as unknown as Account,
   accounts: null as ImmutableList<Account> | null,
   application: null as ImmutableMap<string, any> | null,
@@ -282,7 +282,7 @@ const parseGroup = (status: ImmutableMap<string, any>) => {
   }
 };
 
-export const normalizeStatus = (status: Record<string, any>) => StatusRecord(
+const normalizeStatus = (status: Record<string, any>) => StatusRecord(
   ImmutableMap(fromJS(status)).withMutations(status => {
     normalizeAttachments(status);
     normalizeMentions(status);
@@ -304,3 +304,13 @@ export const normalizeStatus = (status: Record<string, any>) => StatusRecord(
     parseGroup(status);
   }),
 );
+
+export {
+  type StatusApprovalStatus,
+  type StatusVisibility,
+  type EventJoinMode,
+  type EventJoinState,
+  EventRecord,
+  StatusRecord,
+  normalizeStatus,
+};

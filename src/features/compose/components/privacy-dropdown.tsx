@@ -303,4 +303,4 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   );
 };
 
-export default PrivacyDropdown;
+export { PrivacyDropdown as default };

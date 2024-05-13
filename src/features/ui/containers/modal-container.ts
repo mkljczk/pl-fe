@@ -41,4 +41,6 @@ const mapDispatchToProps = (dispatch: AppDispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalRoot);
+const ModalContainer = connect(mapStateToProps, mapDispatchToProps)(ModalRoot);
+
+export { ModalContainer as default };

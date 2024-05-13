@@ -156,4 +156,4 @@ const Toast = (props: IToast) => {
   );
 };
 
-export default Toast;
+export { Toast as default };

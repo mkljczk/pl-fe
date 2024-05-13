@@ -89,4 +89,4 @@ const AccountSearch: React.FC<IAccountSearch> = ({ onSelected, ...rest }) => {
   );
 };
 
-export default AccountSearch;
+export { AccountSearch as default };

@@ -118,4 +118,4 @@ const StatusReactionWrapper: React.FC<IStatusReactionWrapper> = ({ statusId, chi
   );
 };
 
-export default StatusReactionWrapper;
+export { StatusReactionWrapper as default };

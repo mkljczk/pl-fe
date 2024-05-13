@@ -4,7 +4,7 @@ import React from 'react';
 import { randomIntFromInterval, generateText } from '../utils';
 
 /** Fake link preview to display while data is loading. */
-const PlaceholderCard: React.FC = () => (
+const PlaceholderCard: React.FC = React.memo(() => (
   <div className={clsx('status-card', {
     'animate-pulse': true,
   })}
@@ -17,6 +17,6 @@ const PlaceholderCard: React.FC = () => (
       <p>{generateText(randomIntFromInterval(5, 15))}</p>
     </div>
   </div>
-);
+));
 
-export default React.memo(PlaceholderCard);
+export { PlaceholderCard as default };

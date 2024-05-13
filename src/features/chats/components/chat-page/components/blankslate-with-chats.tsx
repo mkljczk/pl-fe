@@ -40,4 +40,4 @@ const BlankslateWithChats = () => {
   );
 };
 
-export default BlankslateWithChats;
+export { BlankslateWithChats as default };

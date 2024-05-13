@@ -4,7 +4,7 @@ import { HStack, Stack, Text } from 'soapbox/components/ui';
 
 import { generateText, randomIntFromInterval } from '../utils';
 
-export default ({ withJoinAction = true }: { withJoinAction?: boolean }) => {
+const PlaceholderGroupSearch = ({ withJoinAction = true }: { withJoinAction?: boolean }) => {
   const groupNameLength = randomIntFromInterval(12, 20);
 
   return (
@@ -43,3 +43,5 @@ export default ({ withJoinAction = true }: { withJoinAction?: boolean }) => {
     </HStack>
   );
 };
+
+export { PlaceholderGroupSearch as default };

@@ -21,4 +21,4 @@ const filters = (state: State = ImmutableList(), action: AnyAction): State => {
   }
 };
 
-export default filters;
+export { filters as default };

@@ -37,4 +37,4 @@ const MessagesSettings = () => {
   );
 };
 
-export default MessagesSettings;
+export { MessagesSettings as default };

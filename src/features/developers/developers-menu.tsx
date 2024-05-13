@@ -131,4 +131,4 @@ const Developers: React.FC = () => {
   );
 };
 
-export default Developers;
+export { Developers as default };

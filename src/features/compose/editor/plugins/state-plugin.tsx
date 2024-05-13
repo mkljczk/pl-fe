@@ -61,4 +61,4 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId }) => {
   return null;
 };
 
-export default StatePlugin;
+export { StatePlugin as default };

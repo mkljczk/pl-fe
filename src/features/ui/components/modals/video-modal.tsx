@@ -47,4 +47,4 @@ const VideoModal: React.FC<IVideoModal> = ({ status, account, media, time, onClo
   );
 };
 
-export default VideoModal;
+export { VideoModal as default };

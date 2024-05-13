@@ -32,4 +32,4 @@ const RegistrationPage: React.FC = () => {
   );
 };
 
-export default RegistrationPage;
+export { RegistrationPage as default };

@@ -1,10 +1,12 @@
-export type Rgb = { r: number; g: number; b: number };
-export type Hsl = { h: number; s: number; l: number };
+type Rgb = { r: number; g: number; b: number };
+type Hsl = { h: number; s: number; l: number };
 
-export type TailwindColorObject = {
+type TailwindColorObject = {
   [key: number]: string;
 };
 
-export type TailwindColorPalette = {
+type TailwindColorPalette = {
   [key: string]: TailwindColorObject | string;
 }
+
+export type { Rgb, Hsl, TailwindColorObject, TailwindColorPalette };

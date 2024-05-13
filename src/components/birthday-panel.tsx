@@ -65,4 +65,4 @@ const BirthdayPanel = ({ limit }: IBirthdayPanel) => {
   );
 };
 
-export default BirthdayPanel;
+export { BirthdayPanel as default };

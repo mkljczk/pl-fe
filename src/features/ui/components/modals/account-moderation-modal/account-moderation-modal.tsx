@@ -182,4 +182,4 @@ const AccountModerationModal: React.FC<IAccountModerationModal> = ({ onClose, ac
   );
 };
 
-export default AccountModerationModal;
+export { AccountModerationModal as default };

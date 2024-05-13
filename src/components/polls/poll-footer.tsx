@@ -95,4 +95,4 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected }): JSX
   );
 };
 
-export default PollFooter;
+export { PollFooter as default };

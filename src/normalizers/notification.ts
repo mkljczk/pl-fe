@@ -13,7 +13,7 @@ import {
 import type { Account, Status, EmbeddedEntity } from 'soapbox/types/entities';
 
 // https://docs.joinmastodon.org/entities/notification/
-export const NotificationRecord = ImmutableRecord({
+const NotificationRecord = ImmutableRecord({
   account: null as EmbeddedEntity<Account>,
   accounts: null as ImmutableList<EmbeddedEntity<Account>> | null,
   chat_message: null as ImmutableMap<string, any> | string | null, // pleroma:chat_mention
@@ -34,9 +34,11 @@ const normalizeType = (notification: ImmutableMap<string, any>) => {
   return notification;
 };
 
-export const normalizeNotification = (notification: Record<string, any>) => NotificationRecord(
+const normalizeNotification = (notification: Record<string, any>) => NotificationRecord(
   ImmutableMap(fromJS(notification))
     .withMutations((notification: ImmutableMap<string, any>) => {
       normalizeType(notification);
     }),
 );
+
+export { NotificationRecord, normalizeNotification };

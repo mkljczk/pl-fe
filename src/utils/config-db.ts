@@ -8,8 +8,8 @@ import trimStart from 'lodash/trimStart';
 
 import { type MRFSimple, mrfSimpleSchema } from 'soapbox/schemas/pleroma';
 
-export type Config = ImmutableMap<string, any>;
-export type Policy = Record<string, any>;
+type Config = ImmutableMap<string, any>;
+type Policy = Record<string, any>;
 
 const find = (
   configs: ImmutableList<Config>,
@@ -57,7 +57,4 @@ const ConfigDB = {
   fromSimplePolicy,
 };
 
-export {
-  ConfigDB,
-  ConfigDB as default,
-};
+export { type Config, type Policy, ConfigDB as default };

@@ -22,4 +22,4 @@ const ProfileFieldsPanel: React.FC<IProfileFieldsPanel> = ({ account }) => (
   </Widget>
 );
 
-export default ProfileFieldsPanel;
+export { ProfileFieldsPanel as default };

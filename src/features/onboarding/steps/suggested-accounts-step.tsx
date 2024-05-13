@@ -90,4 +90,4 @@ const SuggestedAccountsStep = ({ onNext }: { onNext: () => void }) => {
   );
 };
 
-export default SuggestedAccountsStep;
+export { SuggestedAccountsStep as default };

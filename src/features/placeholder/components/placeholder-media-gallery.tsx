@@ -90,4 +90,4 @@ const PlaceholderMediaGallery: React.FC<IPlaceholderMediaGallery> = ({ media, de
   );
 };
 
-export default PlaceholderMediaGallery;
+export { PlaceholderMediaGallery as default };

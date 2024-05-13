@@ -12,4 +12,4 @@ const InlineSVG: React.FC<IInlineSVG> = ({ loader }): JSX.Element => {
   }
 };
 
-export default InlineSVG;
+export { InlineSVG as default };

@@ -15,7 +15,7 @@ import DropdownMenuItem, { MenuItem } from './dropdown-menu-item';
 
 import type { Status } from 'soapbox/types/entities';
 
-export type Menu = Array<MenuItem | null>;
+type Menu = Array<MenuItem | null>;
 
 interface IDropdownMenu {
   children?: React.ReactElement;
@@ -326,4 +326,4 @@ const DropdownMenu = (props: IDropdownMenu) => {
   );
 };
 
-export default DropdownMenu;
+export { type Menu, DropdownMenu as default };

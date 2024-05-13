@@ -67,4 +67,4 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ statusId, ...other }) => 
   );
 };
 
-export default ScheduledStatus;
+export { ScheduledStatus as default };

@@ -41,4 +41,4 @@ const LandingPage: React.FC<ILandingPage> = ({ children }) => {
   );
 };
 
-export default LandingPage;
+export { LandingPage as default };

@@ -23,4 +23,4 @@ const PlaceholderEventHeader = () => {
   );
 };
 
-export default PlaceholderEventHeader;
+export { PlaceholderEventHeader as default };

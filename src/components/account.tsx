@@ -68,7 +68,7 @@ const ProfilePopper: React.FC<IProfilePopper> = ({ condition, wrapper, children 
   </>
 );
 
-export interface IAccount {
+interface IAccount {
   account: AccountSchema;
   action?: React.ReactElement;
   actionAlignment?: 'center' | 'top';
@@ -304,4 +304,4 @@ const Account = ({
   );
 };
 
-export default Account;
+export { type IAccount, Account as default };

@@ -35,4 +35,4 @@ const AccountAuthorize: React.FC<IAccountAuthorize> = ({ id }) => {
   );
 };
 
-export default AccountAuthorize;
+export { AccountAuthorize as default };

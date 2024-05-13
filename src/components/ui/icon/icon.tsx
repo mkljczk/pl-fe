@@ -37,4 +37,4 @@ const Icon: React.FC<IIcon> = ({ src, alt, count, size, countMax, ...filteredPro
   </div>
 );
 
-export default Icon;
+export { Icon as default };

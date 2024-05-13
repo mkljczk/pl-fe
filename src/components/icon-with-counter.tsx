@@ -22,4 +22,4 @@ const IconWithCounter: React.FC<IIconWithCounter> = ({ icon, count, countMax, ..
   </div>
 );
 
-export default IconWithCounter;
+export { IconWithCounter as default };

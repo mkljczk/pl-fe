@@ -58,4 +58,4 @@ const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
   );
 };
 
-export default UploadForm;
+export { UploadForm as default };

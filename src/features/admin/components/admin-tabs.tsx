@@ -37,4 +37,4 @@ const AdminTabs: React.FC = () => {
   return <Tabs items={tabs} activeItem={match.path} />;
 };
 
-export default AdminTabs;
+export { AdminTabs as default };

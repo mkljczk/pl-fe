@@ -20,4 +20,4 @@ const ColumnForbidden = () => {
   );
 };
 
-export default ColumnForbidden;
+export { ColumnForbidden as default };

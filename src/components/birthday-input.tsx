@@ -126,4 +126,4 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
   );
 };
 
-export default BirthdayInput;
+export { BirthdayInput as default };

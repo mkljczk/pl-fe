@@ -40,7 +40,7 @@ interface IStatusContent {
 }
 
 /** Renders the text content of a status */
-const StatusContent: React.FC<IStatusContent> = ({
+const StatusContent: React.FC<IStatusContent> = React.memo(({
   status,
   onClick,
   collapsable = false,
@@ -187,6 +187,6 @@ const StatusContent: React.FC<IStatusContent> = ({
 
     return <>{output}</>;
   }
-};
+});
 
-export default React.memo(StatusContent);
+export { StatusContent as default };

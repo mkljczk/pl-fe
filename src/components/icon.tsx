@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import React from 'react';
 import InlineSVG from 'react-inlinesvg'; // eslint-disable-line no-restricted-imports
 
-export interface IIcon extends React.HTMLAttributes<HTMLDivElement> {
+interface IIcon extends React.HTMLAttributes<HTMLDivElement> {
   src: string;
   id?: string;
   alt?: string;
@@ -26,4 +26,4 @@ const Icon: React.FC<IIcon> = ({ src, alt, className, ...rest }) => (
   </div>
 );
 
-export default Icon;
+export { type IIcon, Icon as default };

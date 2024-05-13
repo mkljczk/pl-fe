@@ -46,4 +46,4 @@ const ConversationsTimeline = () => {
   );
 };
 
-export default ConversationsTimeline;
+export { ConversationsTimeline as default };

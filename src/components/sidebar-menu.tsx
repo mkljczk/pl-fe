@@ -345,4 +345,4 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   );
 };
 
-export default SidebarMenu;
+export { SidebarMenu as default };

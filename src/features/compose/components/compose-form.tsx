@@ -313,4 +313,4 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   );
 };
 
-export default ComposeForm;
+export { ComposeForm as default };

@@ -33,4 +33,4 @@ const Admin: React.FC = () => {
   );
 };
 
-export default Admin;
+export { Admin as default };

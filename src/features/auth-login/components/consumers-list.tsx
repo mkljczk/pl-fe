@@ -32,4 +32,4 @@ const ConsumersList: React.FC<IConsumersList> = () => {
   }
 };
 
-export default ConsumersList;
+export { ConsumersList as default };

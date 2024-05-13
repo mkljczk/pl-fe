@@ -76,4 +76,4 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   );
 };
 
-export default TranslateButton;
+export { TranslateButton as default };

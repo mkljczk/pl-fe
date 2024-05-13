@@ -82,4 +82,4 @@ const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {
   );
 };
 
-export default LoginForm;
+export { LoginForm as default };

@@ -183,5 +183,4 @@ const reducer = (state: Readonly<State> = {}, action: EntityAction): State => {
   }
 };
 
-export default reducer;
-export type { State };
+export { type State, reducer as default };

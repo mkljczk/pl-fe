@@ -116,4 +116,4 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
   );
 };
 
-export default ManageGroup;
+export { ManageGroup as default };

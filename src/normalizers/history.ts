@@ -10,11 +10,12 @@ import {
 } from 'immutable';
 
 // https://docs.joinmastodon.org/entities/history/
-export const HistoryRecord = ImmutableRecord({
+const HistoryRecord = ImmutableRecord({
   accounts: '',
   day: '',
   uses: '',
 });
-export const normalizeHistory = (history: Record<string, any>) => HistoryRecord(
-  ImmutableMap(fromJS(history)),
-);
+
+const normalizeHistory = (history: Record<string, any>) => HistoryRecord(ImmutableMap(fromJS(history)));
+
+export { HistoryRecord, normalizeHistory };

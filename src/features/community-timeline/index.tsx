@@ -53,4 +53,4 @@ const CommunityTimeline = () => {
   );
 };
 
-export default CommunityTimeline;
+export { CommunityTimeline as default };

@@ -48,4 +48,4 @@ const BirthdaysModal = ({ onClose }: IBirthdaysModal) => {
   );
 };
 
-export default BirthdaysModal;
+export { BirthdaysModal as default };

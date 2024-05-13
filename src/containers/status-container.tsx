@@ -32,4 +32,4 @@ const StatusContainer: React.FC<IStatusContainer> = (props) => {
   }
 };
 
-export default StatusContainer;
+export { StatusContainer as default };

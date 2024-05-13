@@ -93,4 +93,4 @@ const AutosuggestAccountInput: React.FC<IAutosuggestAccountInput> = ({
   );
 };
 
-export default AutosuggestAccountInput;
+export { AutosuggestAccountInput as default };

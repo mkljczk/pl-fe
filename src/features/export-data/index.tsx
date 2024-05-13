@@ -45,4 +45,4 @@ const ExportData = () => {
   );
 };
 
-export default ExportData;
+export { ExportData as default };

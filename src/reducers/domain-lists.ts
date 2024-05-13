@@ -32,4 +32,4 @@ const domainLists = (state: State = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default domainLists;
+export { domainLists as default };

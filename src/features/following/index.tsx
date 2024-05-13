@@ -67,4 +67,4 @@ const Following: React.FC<IFollowing> = ({ params }) => {
   );
 };
 
-export default Following;
+export { Following as default };

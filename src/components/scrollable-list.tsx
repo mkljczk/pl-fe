@@ -252,5 +252,4 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
   );
 });
 
-export default ScrollableList;
-export type { IScrollableList };
+export { type IScrollableList, ScrollableList as default };

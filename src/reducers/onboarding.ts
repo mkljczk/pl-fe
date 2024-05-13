@@ -21,4 +21,4 @@ const onboarding = (state: OnboardingState = initialState, action: OnboardingAct
   }
 };
 
-export default onboarding;
+export { onboarding as default };

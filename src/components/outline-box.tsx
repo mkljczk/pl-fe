@@ -16,4 +16,4 @@ const OutlineBox: React.FC<IOutlineBox> = ({ children, className, ...rest }) => 
   </div>
 );
 
-export default OutlineBox;
+export { OutlineBox as default };

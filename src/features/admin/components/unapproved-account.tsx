@@ -44,4 +44,4 @@ const UnapprovedAccount: React.FC<IUnapprovedAccount> = ({ accountId }) => {
   );
 };
 
-export default UnapprovedAccount;
+export { UnapprovedAccount as default };

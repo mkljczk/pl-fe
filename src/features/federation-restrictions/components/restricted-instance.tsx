@@ -43,4 +43,4 @@ const RestrictedInstance: React.FC<IRestrictedInstance> = ({ host }) => {
   );
 };
 
-export default RestrictedInstance;
+export { RestrictedInstance as default };

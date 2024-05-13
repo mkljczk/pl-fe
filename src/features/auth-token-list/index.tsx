@@ -106,4 +106,4 @@ const AuthTokenList: React.FC = () => {
   );
 };
 
-export default AuthTokenList;
+export { AuthTokenList as default };

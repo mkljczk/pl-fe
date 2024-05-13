@@ -42,11 +42,11 @@ type State = ReturnType<typeof ReducerRecord>;
 type AdminAccountRecord = ReturnType<typeof normalizeAdminAccount>;
 type AdminReportRecord = ReturnType<typeof normalizeAdminReport>;
 
-export interface ReducerAdminAccount extends AdminAccountRecord {
+interface ReducerAdminAccount extends AdminAccountRecord {
   account: string | null;
 }
 
-export interface ReducerAdminReport extends AdminReportRecord {
+interface ReducerAdminReport extends AdminReportRecord {
   account: string | null;
   target_account: string | null;
   action_taken_by_account: string | null;
@@ -204,4 +204,8 @@ const admin = (state: State = ReducerRecord(), action: AnyAction): State => {
   }
 };
 
-export default admin;
+export {
+  type ReducerAdminAccount,
+  type ReducerAdminReport,
+  admin as default,
+};

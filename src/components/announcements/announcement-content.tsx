@@ -87,4 +87,4 @@ const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) =
   );
 };
 
-export default AnnouncementContent;
+export { AnnouncementContent as default };

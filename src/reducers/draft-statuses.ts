@@ -26,7 +26,7 @@ const DraftStatusRecord = ImmutableRecord({
   to: ImmutableOrderedSet<string>(),
 });
 
-export type DraftStatus = ReturnType<typeof DraftStatusRecord>;
+type DraftStatus = ReturnType<typeof DraftStatusRecord>;
 type State = ImmutableMap<string, DraftStatus>;
 
 const initialState: State = ImmutableMap();
@@ -62,4 +62,7 @@ const scheduled_statuses = (state: State = initialState, action: AnyAction) => {
   }
 };
 
-export default scheduled_statuses;
+export {
+  type DraftStatus,
+  scheduled_statuses as default,
+};

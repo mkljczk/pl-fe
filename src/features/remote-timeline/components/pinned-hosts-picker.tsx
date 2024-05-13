@@ -30,4 +30,4 @@ const PinnedHostsPicker: React.FC<IPinnedHostsPicker> = ({ host: activeHost }) =
   );
 };
 
-export default PinnedHostsPicker;
+export { PinnedHostsPicker as default };

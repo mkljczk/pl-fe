@@ -4,7 +4,7 @@ import { HStack, Stack } from 'soapbox/components/ui';
 
 import { randomIntFromInterval, generateText } from '../utils';
 
-export default ({ limit }: { limit: number }) => {
+const PlaceholderSidebarSuggestions = ({ limit }: { limit: number }) => {
   const length = randomIntFromInterval(15, 3);
   const acctLength = randomIntFromInterval(15, 3);
 
@@ -27,3 +27,5 @@ export default ({ limit }: { limit: number }) => {
     </>
   );
 };
+
+export { PlaceholderSidebarSuggestions as default };

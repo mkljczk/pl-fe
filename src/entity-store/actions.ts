@@ -103,6 +103,8 @@ type EntityAction =
   | ReturnType<typeof entitiesTransaction>;
 
 export {
+  type DeleteEntitiesOpts,
+  type EntityAction,
   ENTITIES_IMPORT,
   ENTITIES_DELETE,
   ENTITIES_DISMISS,
@@ -122,5 +124,3 @@ export {
   invalidateEntityList,
   entitiesTransaction,
 };
-
-export type { DeleteEntitiesOpts, EntityAction };

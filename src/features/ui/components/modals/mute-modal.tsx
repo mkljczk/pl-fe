@@ -105,4 +105,4 @@ const MuteModal = () => {
   );
 };
 
-export default MuteModal;
+export { MuteModal as default };

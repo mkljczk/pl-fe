@@ -7,7 +7,7 @@ import { calculateStatus } from 'soapbox/reducers/statuses';
 import type { ScheduledStatus } from 'soapbox/reducers/scheduled-statuses';
 import type { RootState } from 'soapbox/store';
 
-export const buildStatus = (state: RootState, scheduledStatus: ScheduledStatus) => {
+const buildStatus = (state: RootState, scheduledStatus: ScheduledStatus) => {
   const me = state.me as string;
   const account = state.entities[Entities.ACCOUNTS]?.store[me];
 
@@ -27,3 +27,5 @@ export const buildStatus = (state: RootState, scheduledStatus: ScheduledStatus) 
 
   return calculateStatus(normalizeStatus(status));
 };
+
+export { buildStatus };

@@ -12,4 +12,4 @@ const ExternalLoginPage: React.FC = () => (
   </BigCard>
 );
 
-export default ExternalLoginPage;
+export { ExternalLoginPage as default };

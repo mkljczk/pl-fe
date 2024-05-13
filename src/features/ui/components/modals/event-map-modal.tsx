@@ -72,4 +72,4 @@ const EventMapModal: React.FC<IEventMapModal> = ({ onClose, statusId }) => {
   );
 };
 
-export default EventMapModal;
+export { EventMapModal as default };

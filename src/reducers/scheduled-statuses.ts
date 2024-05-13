@@ -25,7 +25,7 @@ const ScheduledStatusRecord = ImmutableRecord({
   poll: null as ImmutableMap<string, any> | null,
 });
 
-export type ScheduledStatus = ReturnType<typeof ScheduledStatusRecord>;
+type ScheduledStatus = ReturnType<typeof ScheduledStatusRecord>;
 type State = ImmutableMap<string, ScheduledStatus>;
 
 const initialState: State = ImmutableMap();
@@ -56,4 +56,7 @@ const scheduled_statuses = (state: State = initialState, action: AnyAction) => {
   }
 };
 
-export default scheduled_statuses;
+export {
+  ScheduledStatus,
+  scheduled_statuses as default,
+};

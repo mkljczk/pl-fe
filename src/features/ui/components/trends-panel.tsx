@@ -56,4 +56,4 @@ const TrendsPanel = ({ limit }: ITrendsPanel) => {
   );
 };
 
-export default TrendsPanel;
+export { TrendsPanel as default };

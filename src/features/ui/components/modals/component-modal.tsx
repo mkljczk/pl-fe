@@ -16,4 +16,4 @@ const ComponentModal: React.FC<IComponentModal> = ({ onClose, component: Compone
   </Modal>
 );
 
-export default ComponentModal;
+export { ComponentModal as default };

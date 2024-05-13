@@ -47,4 +47,4 @@ const GroupHeaderImage: React.FC<IGroupHeaderImage> = ({ className, group }) => 
   );
 };
 
-export default GroupHeaderImage;
+export { GroupHeaderImage as default };

@@ -66,4 +66,4 @@ const UserIndex: React.FC = () => {
   );
 };
 
-export default UserIndex;
+export { UserIndex as default };

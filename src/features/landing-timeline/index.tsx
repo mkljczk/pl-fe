@@ -67,4 +67,4 @@ const LandingTimeline = () => {
   );
 };
 
-export default LandingTimeline;
+export { LandingTimeline as default };

@@ -201,4 +201,4 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
   );
 };
 
-export default EventInformation;
+export { EventInformation as default };

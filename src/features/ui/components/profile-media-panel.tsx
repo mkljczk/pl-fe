@@ -86,4 +86,4 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
   );
 };
 
-export default ProfileMediaPanel;
+export { ProfileMediaPanel as default };

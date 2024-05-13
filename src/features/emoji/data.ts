@@ -1,17 +1,17 @@
 import data from '@emoji-mart/data/sets/14/twitter.json';
 
-export interface NativeEmoji {
+interface NativeEmoji {
   unified: string;
   native: string;
   x: number;
   y: number;
 }
 
-export interface CustomEmoji {
+interface CustomEmoji {
   src: string;
 }
 
-export interface Emoji<T> {
+interface Emoji<T> {
   id: string;
   name: string;
   keywords: string[];
@@ -19,25 +19,25 @@ export interface Emoji<T> {
   version?: number;
 }
 
-export interface EmojiCategory {
+interface EmojiCategory {
   id: string;
   emojis: string[];
 }
 
-export interface EmojiMap {
+interface EmojiMap {
   [s: string]: Emoji<NativeEmoji>;
 }
 
-export interface EmojiAlias {
+interface EmojiAlias {
   [s: string]: string;
 }
 
-export interface EmojiSheet {
+interface EmojiSheet {
   cols: number;
   rows: number;
 }
 
-export interface EmojiData {
+interface EmojiData {
   categories: EmojiCategory[];
   emojis: EmojiMap;
   aliases: EmojiAlias;
@@ -47,6 +47,18 @@ export interface EmojiData {
 const emojiData = data as EmojiData;
 const { categories, emojis, aliases, sheet } = emojiData;
 
-export { categories, emojis, aliases, sheet };
-
-export default emojiData;
+export {
+  type NativeEmoji,
+  type CustomEmoji,
+  type Emoji,
+  type EmojiCategory,
+  type EmojiMap,
+  type EmojiAlias,
+  type EmojiSheet,
+  type EmojiData,
+  categories,
+  emojis,
+  aliases,
+  sheet,
+  emojiData as default,
+};

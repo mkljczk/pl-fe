@@ -37,5 +37,4 @@ const useImageField = (opts: UseImageFieldOpts = {}) => {
   };
 };
 
-export { useImageField };
-export type { UseImageFieldOpts };
+export { type UseImageFieldOpts, useImageField };

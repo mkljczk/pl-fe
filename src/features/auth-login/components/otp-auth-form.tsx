@@ -78,4 +78,4 @@ const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token }) => {
   );
 };
 
-export default OtpAuthForm;
+export { OtpAuthForm as default };

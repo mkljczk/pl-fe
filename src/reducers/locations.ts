@@ -26,4 +26,4 @@ const locations = (state: State = initialState, action: AnyAction): State => {
   }
 };
 
-export default locations;
+export { locations as default };

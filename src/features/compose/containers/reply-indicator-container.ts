@@ -32,4 +32,6 @@ const mapDispatchToProps = (dispatch: AppDispatch) => ({
 
 });
 
-export default connect(makeMapStateToProps, mapDispatchToProps)(ReplyIndicator);
+const ReplyIndicatorContainer = connect(makeMapStateToProps, mapDispatchToProps)(ReplyIndicator);
+
+export { ReplyIndicatorContainer as default };

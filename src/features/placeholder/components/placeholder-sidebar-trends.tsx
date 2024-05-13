@@ -4,7 +4,7 @@ import { Stack } from 'soapbox/components/ui';
 
 import { randomIntFromInterval, generateText } from '../utils';
 
-export default ({ limit }: { limit: number }) => {
+const PlaceholderSidebarTrends = ({ limit }: { limit: number }) => {
   const trend = randomIntFromInterval(6, 3);
   const stat = randomIntFromInterval(10, 3);
 
@@ -19,3 +19,5 @@ export default ({ limit }: { limit: number }) => {
     </>
   );
 };
+
+export { PlaceholderSidebarTrends as default };

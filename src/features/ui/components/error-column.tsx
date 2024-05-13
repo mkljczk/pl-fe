@@ -42,4 +42,4 @@ const ErrorColumn: React.FC<IErrorColumn> = ({ error, onRetry = () => location.r
   );
 };
 
-export default ErrorColumn;
+export { ErrorColumn as default };

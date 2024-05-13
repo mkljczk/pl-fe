@@ -50,4 +50,4 @@ const PromoPanelInput: StreamfieldComponent<PromoPanelItem> = ({ value, onChange
   );
 };
 
-export default PromoPanelInput;
+export { PromoPanelInput as default };

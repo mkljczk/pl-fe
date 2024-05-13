@@ -61,4 +61,4 @@ const RemoveButton: React.FC<IRemoveButton> = ({ onClick }) => (
   </button>
 );
 
-export default ChatUpload;
+export { ChatUpload as default };

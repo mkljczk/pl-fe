@@ -66,4 +66,4 @@ const GroupComposeButton = () => {
   );
 };
 
-export default ComposeButton;
+export { ComposeButton as default };

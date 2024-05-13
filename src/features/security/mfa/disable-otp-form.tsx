@@ -77,4 +77,4 @@ const DisableOtpForm: React.FC = () => {
   );
 };
 
-export default DisableOtpForm;
+export { DisableOtpForm as default };

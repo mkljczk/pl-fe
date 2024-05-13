@@ -74,4 +74,4 @@ const DevelopersChallenge = () => {
   );
 };
 
-export default DevelopersChallenge;
+export { DevelopersChallenge as default };

@@ -50,4 +50,4 @@ const MfaForm: React.FC = () => {
   );
 };
 
-export default MfaForm;
+export { MfaForm as default };

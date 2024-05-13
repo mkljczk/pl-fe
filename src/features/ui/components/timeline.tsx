@@ -77,4 +77,4 @@ const Timeline: React.FC<ITimeline> = ({
   );
 };
 
-export default Timeline;
+export { Timeline as default };

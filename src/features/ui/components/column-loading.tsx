@@ -10,4 +10,4 @@ const ColumnLoading = () => (
   </Card>
 );
 
-export default ColumnLoading;
+export { ColumnLoading as default };

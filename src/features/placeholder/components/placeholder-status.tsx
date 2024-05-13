@@ -12,7 +12,7 @@ interface IPlaceholderStatus {
 }
 
 /** Fake status to display while data is loading. */
-const PlaceholderStatus: React.FC<IPlaceholderStatus> = ({ variant }) => (
+const PlaceholderStatus: React.FC<IPlaceholderStatus> = React.memo(({ variant }) => (
   <div
     className={clsx({
       'status-placeholder bg-white black:bg-black dark:bg-primary-900': true,
@@ -38,6 +38,6 @@ const PlaceholderStatus: React.FC<IPlaceholderStatus> = ({ variant }) => (
       </div>
     </div>
   </div>
-);
+));
 
-export default React.memo(PlaceholderStatus);
+export { PlaceholderStatus as default };

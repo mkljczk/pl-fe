@@ -107,4 +107,4 @@ const Backups = () => {
   );
 };
 
-export default Backups;
+export { Backups as default };

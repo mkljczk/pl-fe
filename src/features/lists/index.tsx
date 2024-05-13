@@ -74,4 +74,4 @@ const Lists: React.FC = () => {
   );
 };
 
-export default Lists;
+export { Lists as default };

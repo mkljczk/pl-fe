@@ -97,4 +97,4 @@ const NotificationFilterBar = () => {
   return <Tabs items={items} activeItem={selectedFilter} />;
 };
 
-export default NotificationFilterBar;
+export { NotificationFilterBar as default };

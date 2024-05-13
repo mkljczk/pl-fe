@@ -43,4 +43,4 @@ const Badge: React.FC<IBadge> = ({ title, slug, color }) => {
   );
 };
 
-export default Badge;
+export { Badge as default };

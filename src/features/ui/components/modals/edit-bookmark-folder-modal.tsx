@@ -159,4 +159,4 @@ const EditBookmarkFolderModal: React.FC<IEditBookmarkFolderModal> = ({ folderId,
   );
 };
 
-export default EditBookmarkFolderModal;
+export { EditBookmarkFolderModal as default };

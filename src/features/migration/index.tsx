@@ -123,4 +123,4 @@ const Migration = () => {
   );
 };
 
-export default Migration;
+export { Migration as default };

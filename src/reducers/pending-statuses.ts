@@ -22,7 +22,7 @@ const PendingStatusRecord = ImmutableRecord({
   visibility: 'public' as StatusVisibility,
 });
 
-export type PendingStatus = ReturnType<typeof PendingStatusRecord>;
+type PendingStatus = ReturnType<typeof PendingStatusRecord>;
 type State = ImmutableMap<string, PendingStatus>;
 
 const initialState: State = ImmutableMap();
@@ -44,4 +44,7 @@ const pending_statuses = (state = initialState, action: AnyAction) => {
   }
 };
 
-export default pending_statuses;
+export {
+  type PendingStatus,
+  pending_statuses as default,
+};

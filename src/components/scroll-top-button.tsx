@@ -101,4 +101,4 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   );
 };
 
-export default ScrollTopButton;
+export { ScrollTopButton as default };

@@ -2,7 +2,7 @@ import { queryClient } from 'soapbox/queries/client';
 
 import type { InfiniteData, QueryKey } from '@tanstack/react-query';
 
-export interface PaginatedResult<T> {
+interface PaginatedResult<T> {
   result: T[];
   hasMore: boolean;
   link?: string;
@@ -105,6 +105,7 @@ const sortQueryData = <T>(queryKey: QueryKey, comparator: (a: T, b: T) => number
 };
 
 export {
+  type PaginatedResult,
   flattenPages,
   updatePageItem,
   appendPageItem,

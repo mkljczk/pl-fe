@@ -88,12 +88,12 @@ const messages = defineMessages({
 });
 
 const reblog = (status: StatusEntity) =>
-  function(dispatch: AppDispatch, getState: () => RootState) {
+  (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
     dispatch(reblogRequest(status));
 
-    api(getState)(`/api/v1/statuses/${status.id}/reblog`, { method: 'POST' }).then(function(response) {
+    api(getState)(`/api/v1/statuses/${status.id}/reblog`, { method: 'POST' }).then((response) => {
       // The reblog API method returns a new status wrapped around the original. In this case we are only
       // interested in how the original is modified, hence passing it skipping the wrapper
       dispatch(importFetchedStatus(response.json.reblog));
@@ -169,9 +169,9 @@ const favourite = (status: StatusEntity) =>
 
     dispatch(favouriteRequest(status));
 
-    api(getState)(`/api/v1/statuses/${status.id}/favourite`, { method: 'POST' }).then(function(response) {
+    api(getState)(`/api/v1/statuses/${status.id}/favourite`, { method: 'POST' }).then(() => {
       dispatch(favouriteSuccess(status));
-    }).catch(function(error) {
+    }).catch((error) => {
       dispatch(favouriteFail(status, error));
     });
   };
@@ -242,9 +242,9 @@ const dislike = (status: StatusEntity) =>
 
     dispatch(dislikeRequest(status));
 
-    api(getState)(`/api/friendica/statuses/${status.id}/dislike`, { method: 'POST' }).then(function() {
+    api(getState)(`/api/friendica/statuses/${status.id}/dislike`, { method: 'POST' }).then(() => {
       dispatch(dislikeSuccess(status));
-    }).catch(function(error) {
+    }).catch((error) => {
       dispatch(dislikeFail(status, error));
     });
   };
@@ -321,7 +321,7 @@ const bookmark = (status: StatusEntity, folderId?: string) =>
     return api(getState)(`/api/v1/statuses/${status.id}/bookmark`, {
       method: 'POST',
       body: folderId ? JSON.stringify({ folder_id: folderId }) : undefined,
-    }).then(function(response) {
+    }).then((response) => {
       dispatch(importFetchedStatus(response.json));
       dispatch(bookmarkSuccess(status, response.json));
 
@@ -339,7 +339,7 @@ const bookmark = (status: StatusEntity, folderId?: string) =>
       }
 
       toast.success(typeof folderId === 'string' ? messages.folderChanged : messages.bookmarkAdded, opts);
-    }).catch(function(error) {
+    }).catch((error) => {
       dispatch(bookmarkFail(status, error));
     });
   };

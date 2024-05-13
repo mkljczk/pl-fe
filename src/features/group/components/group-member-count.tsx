@@ -26,4 +26,4 @@ const GroupMemberCount = ({ group }: IGroupMemberCount) => (
   </Link>
 );
 
-export default GroupMemberCount;
+export { GroupMemberCount as default };

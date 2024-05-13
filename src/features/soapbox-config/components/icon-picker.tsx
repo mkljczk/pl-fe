@@ -13,4 +13,4 @@ const IconPicker: React.FC<IIconPicker> = ({ value, onChange }) => (
   </div>
 );
 
-export default IconPicker;
+export { IconPicker as default };

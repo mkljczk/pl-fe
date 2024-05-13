@@ -269,7 +269,7 @@ const Item: React.FC<IItem> = ({
   );
 };
 
-export interface IMediaGallery {
+interface IMediaGallery {
   sensitive?: boolean;
   media: ImmutableList<Attachment>;
   height?: number;
@@ -566,4 +566,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
   );
 };
 
-export default MediaGallery;
+export {
+  type IMediaGallery,
+  MediaGallery as default,
+};

@@ -56,4 +56,4 @@ const ColorWithPicker: React.FC<IColorWithPicker> = ({ value, onChange, classNam
   );
 };
 
-export default ColorWithPicker;
+export { ColorWithPicker as default };

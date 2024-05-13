@@ -13,9 +13,9 @@ import type { Menu, MenuItem } from 'soapbox/components/dropdown-menu';
 import type { InputThemes } from 'soapbox/components/ui/input/input';
 import type { Emoji } from 'soapbox/features/emoji';
 
-export type AutoSuggestion = string | Emoji;
+type AutoSuggestion = string | Emoji;
 
-export interface IAutosuggestInput extends Pick<React.HTMLAttributes<HTMLInputElement>, 'onChange' | 'onKeyUp' | 'onKeyDown'> {
+interface IAutosuggestInput extends Pick<React.HTMLAttributes<HTMLInputElement>, 'onChange' | 'onKeyUp' | 'onKeyDown'> {
   value: string;
   suggestions: ImmutableList<any>;
   disabled?: boolean;
@@ -35,7 +35,7 @@ export interface IAutosuggestInput extends Pick<React.HTMLAttributes<HTMLInputEl
   theme?: InputThemes;
 }
 
-export default class AutosuggestInput extends ImmutablePureComponent<IAutosuggestInput> {
+class AutosuggestInput extends ImmutablePureComponent<IAutosuggestInput> {
 
   static defaultProps = {
     autoFocus: false,
@@ -307,3 +307,5 @@ export default class AutosuggestInput extends ImmutablePureComponent<IAutosugges
   }
 
 }
+
+export { type AutoSuggestion, type IAutosuggestInput, AutosuggestInput as default };

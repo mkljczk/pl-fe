@@ -23,4 +23,4 @@ const Logout: React.FC = () => {
   }
 };
 
-export default Logout;
+export { Logout as default };

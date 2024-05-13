@@ -21,4 +21,4 @@ const Picker: React.FC<any> = (props) => {
   return <div ref={ref} />;
 };
 
-export default Picker;
+export { Picker as default };

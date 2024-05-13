@@ -36,4 +36,4 @@ const ThreadLoginCta: React.FC = () => {
   );
 };
 
-export default ThreadLoginCta;
+export { ThreadLoginCta as default };

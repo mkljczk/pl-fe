@@ -51,4 +51,4 @@ const InstanceModerationPanel: React.FC<IInstanceModerationPanel> = ({ host }) =
   );
 };
 
-export default InstanceModerationPanel;
+export { InstanceModerationPanel as default };

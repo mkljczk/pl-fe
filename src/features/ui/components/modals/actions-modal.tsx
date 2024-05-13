@@ -81,4 +81,4 @@ const ActionsModal: React.FC<IActionsModal> = ({ status, actions, onClick, onClo
   );
 };
 
-export default ActionsModal;
+export { ActionsModal as default };

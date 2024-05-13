@@ -162,4 +162,4 @@ const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
   );
 };
 
-export default PollOption;
+export { PollOption as default };

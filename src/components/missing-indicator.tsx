@@ -23,4 +23,4 @@ const MissingIndicator = ({ nested = false }: MissingIndicatorProps): JSX.Elemen
   </Card>
 );
 
-export default MissingIndicator;
+export { MissingIndicator as default };

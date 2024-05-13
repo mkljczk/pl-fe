@@ -50,4 +50,4 @@ const ListForm = () => {
   );
 };
 
-export default ListForm;
+export { ListForm as default };

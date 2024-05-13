@@ -11,4 +11,4 @@ const FileInput = forwardRef<HTMLInputElement, IFileInput>((props, ref) => (
   />
 ));
 
-export default FileInput;
+export { FileInput as default };

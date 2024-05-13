@@ -44,29 +44,29 @@ const DEFAULT_COLORS = ImmutableMap<string, any>({
   'greentext': '#789922',
 });
 
-export const PromoPanelItemRecord = ImmutableRecord({
+const PromoPanelItemRecord = ImmutableRecord({
   icon: '',
   text: '',
   url: '',
   textLocales: ImmutableMap<string, string>(),
 });
 
-export const PromoPanelRecord = ImmutableRecord({
+const PromoPanelRecord = ImmutableRecord({
   items: ImmutableList<PromoPanelItem>(),
 });
 
-export const FooterItemRecord = ImmutableRecord({
+const FooterItemRecord = ImmutableRecord({
   title: '',
   url: '',
 });
 
-export const CryptoAddressRecord = ImmutableRecord({
+const CryptoAddressRecord = ImmutableRecord({
   address: '',
   note: '',
   ticker: '',
 });
 
-export const SoapboxConfigRecord = ImmutableRecord({
+const SoapboxConfigRecord = ImmutableRecord({
   appleAppId: null,
   authProvider: '',
   logo: '',
@@ -214,7 +214,7 @@ const normalizeRedirectRootNoLogin = (soapboxConfig: SoapboxConfigMap): SoapboxC
   }
 };
 
-export const normalizeSoapboxConfig = (soapboxConfig: Record<string, any>) => SoapboxConfigRecord(
+const normalizeSoapboxConfig = (soapboxConfig: Record<string, any>) => SoapboxConfigRecord(
   ImmutableMap(fromJS(soapboxConfig)).withMutations(soapboxConfig => {
     normalizeBrandColor(soapboxConfig);
     normalizeAccentColor(soapboxConfig);
@@ -227,3 +227,12 @@ export const normalizeSoapboxConfig = (soapboxConfig: Record<string, any>) => So
     normalizeRedirectRootNoLogin(soapboxConfig);
   }),
 );
+
+export {
+  PromoPanelItemRecord,
+  PromoPanelRecord,
+  FooterItemRecord,
+  CryptoAddressRecord,
+  SoapboxConfigRecord,
+  normalizeSoapboxConfig,
+};

@@ -25,4 +25,4 @@ const Color: React.FC<IColor> = ({ color, onChange }) => {
   );
 };
 
-export default Color;
+export { Color as default };

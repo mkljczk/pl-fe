@@ -18,14 +18,14 @@ import type { Emoji as EmojiMart, CustomEmoji as EmojiMartCustom } from 'soapbox
  * and one type that is used everywhere that the above two are converted into
  */
 
-export interface CustomEmoji {
+interface CustomEmoji {
   id: string;
   colons: string;
   custom: true;
   imageUrl: string;
 }
 
-export interface NativeEmoji {
+interface NativeEmoji {
   id: string;
   colons: string;
   custom?: false;
@@ -33,12 +33,12 @@ export interface NativeEmoji {
   native: string;
 }
 
-export type Emoji = CustomEmoji | NativeEmoji;
+type Emoji = CustomEmoji | NativeEmoji;
 
-export const isCustomEmoji = (emoji: Emoji): emoji is CustomEmoji =>
+const isCustomEmoji = (emoji: Emoji): emoji is CustomEmoji =>
   (emoji as CustomEmoji).imageUrl !== undefined;
 
-export const isNativeEmoji = (emoji: Emoji): emoji is NativeEmoji =>
+const isNativeEmoji = (emoji: Emoji): emoji is NativeEmoji =>
   (emoji as NativeEmoji).native !== undefined;
 
 const isAlphaNumeric = (c: string) => {
@@ -79,7 +79,7 @@ const convertEmoji = (str: string, customEmojis: any) => {
   return str;
 };
 
-export const emojifyText = (str: string, customEmojis = {}) => {
+const emojifyText = (str: string, customEmojis = {}) => {
   let buf = '';
   let stack = '';
   let open = false;
@@ -144,7 +144,7 @@ export const emojifyText = (str: string, customEmojis = {}) => {
   return buf;
 };
 
-export const parseHTML = (str: string): { text: boolean; data: string }[] => {
+const parseHTML = (str: string): { text: boolean; data: string }[] => {
   const tokens = [];
   let buf = '';
   let stack = '';
@@ -198,15 +198,13 @@ const emojify = (str: string, customEmojis = {}) =>
     })
     .join('');
 
-export default emojify;
-
-export const buildCustomEmojis = (customEmojis: any) => {
+const buildCustomEmojis = (customEmojis: any) => {
   const emojis: EmojiMart<EmojiMartCustom>[] = [];
 
   customEmojis.forEach((emoji: any) => {
     const shortcode = emoji.get('shortcode');
-    const url       = emoji.get('static_url');
-    const name      = shortcode.replace(':', '');
+    const url = emoji.get('static_url');
+    const name = shortcode.replace(':', '');
 
     emojis.push({
       id: name,
@@ -217,4 +215,16 @@ export const buildCustomEmojis = (customEmojis: any) => {
   });
 
   return emojis;
+};
+
+export {
+  type CustomEmoji,
+  type NativeEmoji,
+  type Emoji,
+  isCustomEmoji,
+  isNativeEmoji,
+  emojifyText,
+  parseHTML,
+  buildCustomEmojis,
+  emojify as default,
 };

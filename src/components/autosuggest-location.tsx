@@ -38,7 +38,4 @@ const AutosuggestLocation: React.FC<IAutosuggestLocation> = ({ id }) => {
   );
 };
 
-export {
-  ADDRESS_ICONS,
-  AutosuggestLocation as default,
-};
+export { ADDRESS_ICONS, AutosuggestLocation as default };

@@ -259,4 +259,4 @@ const trim = (text: string, len: number): string => {
   return text.substring(0, cut) + (text.length > len ? '…' : '');
 };
 
-export default PreviewCard;
+export { PreviewCard as default };

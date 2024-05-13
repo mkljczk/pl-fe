@@ -39,4 +39,4 @@ const PlaceholderAvatar: React.FC<IPlaceholderAvatar> = ({ size, withText = fals
   );
 };
 
-export default PlaceholderAvatar;
+export { PlaceholderAvatar as default };

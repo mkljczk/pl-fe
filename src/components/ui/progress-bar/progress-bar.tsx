@@ -30,4 +30,4 @@ const ProgressBar: React.FC<IProgressBar> = ({ progress, size = 'md' }) => (
   </div>
 );
 
-export default ProgressBar;
+export { ProgressBar as default };

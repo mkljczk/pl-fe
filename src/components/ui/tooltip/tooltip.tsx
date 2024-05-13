@@ -91,4 +91,4 @@ const Tooltip: React.FC<ITooltip> = (props) => {
   );
 };
 
-export default Tooltip;
+export { Tooltip as default };

@@ -28,13 +28,13 @@ import { Card, Icon, Stack, Text } from './ui';
 import type { Status as StatusEntity } from 'soapbox/types/entities';
 
 // Defined in components/scrollable-list
-export type ScrollPosition = { height: number; top: number };
+type ScrollPosition = { height: number; top: number };
 
 const messages = defineMessages({
   reblogged_by: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
 });
 
-export interface IStatus {
+interface IStatus {
   id?: string;
   avatarSize?: number;
   status: StatusEntity;
@@ -484,4 +484,8 @@ const Status: React.FC<IStatus> = (props) => {
   );
 };
 
-export default Status;
+export {
+  type ScrollPosition,
+  type IStatus,
+  Status as default,
+};

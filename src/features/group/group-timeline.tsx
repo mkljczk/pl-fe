@@ -109,4 +109,4 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
   );
 };
 
-export default GroupTimeline;
+export { GroupTimeline as default };

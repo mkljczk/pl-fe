@@ -867,7 +867,7 @@ const getInstanceFeatures = (instance: Instance) => {
 };
 
 /** Features available from a backend */
-export type Features = ReturnType<typeof getInstanceFeatures>;
+type Features = ReturnType<typeof getInstanceFeatures>;
 
 /** Detect backend features to conditionally render elements */
 const getFeatures = createSelector([
@@ -932,6 +932,7 @@ export {
   GLITCH,
   REBASED,
   UNRELEASED,
+  type Features,
   getFeatures,
   parseVersion,
 };

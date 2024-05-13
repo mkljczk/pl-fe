@@ -111,4 +111,4 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
   );
 };
 
-export default UserPanel;
+export { UserPanel as default };

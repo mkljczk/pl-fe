@@ -147,4 +147,4 @@ const ReasonStep: React.FC<IReasonStep> = () => {
   );
 };
 
-export default ReasonStep;
+export { ReasonStep as default };

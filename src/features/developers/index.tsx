@@ -12,4 +12,4 @@ const Developers: React.FC = () => {
   return isDeveloper ? <DevelopersMenu /> : <DevelopersChallenge />;
 };
 
-export default Developers;
+export { Developers as default };

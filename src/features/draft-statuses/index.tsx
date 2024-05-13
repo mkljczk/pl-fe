@@ -37,4 +37,4 @@ const DraftStatuses = () => {
   );
 };
 
-export default DraftStatuses;
+export { DraftStatuses as default };

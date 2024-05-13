@@ -83,4 +83,4 @@ const StaffRolePicker: React.FC<IStaffRolePicker> = ({ account }) => {
   );
 };
 
-export default StaffRolePicker;
+export { StaffRolePicker as default };

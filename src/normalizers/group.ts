@@ -17,7 +17,7 @@ import { makeEmojiMap } from 'soapbox/utils/normalizers';
 
 import type { Emoji, GroupRelationship } from 'soapbox/types/entities';
 
-export const GroupRecord = ImmutableRecord({
+const GroupRecord = ImmutableRecord({
   avatar: '',
   avatar_static: '',
   created_at: '',
@@ -119,7 +119,7 @@ const getDomainFromURL = (group: ImmutableMap<string, any>): string => {
   }
 };
 
-export const guessFqn = (group: ImmutableMap<string, any>): string => {
+const guessFqn = (group: ImmutableMap<string, any>): string => {
   const acct = group.get('acct', '');
   const [user, domain] = acct.split('@');
 
@@ -149,7 +149,7 @@ const fixNote = (group: ImmutableMap<string, any>) => {
   }
 };
 
-export const normalizeGroup = (group: Record<string, any>) => GroupRecord(
+const normalizeGroup = (group: Record<string, any>) => GroupRecord(
   ImmutableMap(fromJS(group)).withMutations(group => {
     normalizeEmojis(group);
     normalizeAvatar(group);
@@ -161,3 +161,9 @@ export const normalizeGroup = (group: Record<string, any>) => GroupRecord(
     addInternalFields(group);
   }),
 );
+
+export {
+  GroupRecord,
+  guessFqn,
+  normalizeGroup,
+};

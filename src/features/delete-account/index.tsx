@@ -79,4 +79,4 @@ const DeleteAccount = () => {
   );
 };
 
-export default DeleteAccount;
+export { DeleteAccount as default };

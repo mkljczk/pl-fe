@@ -31,4 +31,4 @@ const PollPreview: React.FC<IPollPreview> = ({ poll }) => {
   );
 };
 
-export default PollPreview;
+export { PollPreview as default };

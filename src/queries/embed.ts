@@ -32,4 +32,4 @@ const useEmbed = (url: string) => {
   });
 };
 
-export default useEmbed;
+export { useEmbed as default };

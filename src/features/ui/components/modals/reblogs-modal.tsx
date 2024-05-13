@@ -72,4 +72,4 @@ const ReblogsModal: React.FC<IReblogsModal> = ({ onClose, statusId }) => {
   );
 };
 
-export default ReblogsModal;
+export { ReblogsModal as default };

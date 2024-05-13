@@ -56,4 +56,4 @@ const EventDate: React.FC<IEventDate> = ({ status }) => {
   );
 };
 
-export default EventDate;
+export { EventDate as default };

@@ -72,4 +72,4 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({ count, countMax, 
   );
 };
 
-export default ThumbNavigationLink;
+export { ThumbNavigationLink as default };

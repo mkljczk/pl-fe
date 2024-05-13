@@ -30,4 +30,4 @@ const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ statusId }) =
   );
 };
 
-export default QuotedStatusContainer;
+export { QuotedStatusContainer as default };

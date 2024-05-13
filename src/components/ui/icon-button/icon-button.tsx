@@ -46,4 +46,4 @@ const IconButton = React.forwardRef((props: IIconButton, ref: React.ForwardedRef
   );
 });
 
-export default IconButton;
+export { IconButton as default };

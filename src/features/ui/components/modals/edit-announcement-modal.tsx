@@ -138,4 +138,4 @@ const EditAnnouncementModal: React.FC<IEditAnnouncementModal> = ({ onClose, anno
   );
 };
 
-export default EditAnnouncementModal;
+export { EditAnnouncementModal as default };

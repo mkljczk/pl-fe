@@ -56,4 +56,4 @@ const ConfirmationStep: React.FC<IConfirmationStep> = () => {
   );
 };
 
-export default ConfirmationStep;
+export { ConfirmationStep as default };

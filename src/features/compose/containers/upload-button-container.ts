@@ -20,4 +20,6 @@ const mapDispatchToProps = (dispatch: AppDispatch, { composeId }: { composeId: s
 
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UploadButton);
+const UploadButtonContainer = connect(mapStateToProps, mapDispatchToProps)(UploadButton);
+
+export { UploadButtonContainer as default };

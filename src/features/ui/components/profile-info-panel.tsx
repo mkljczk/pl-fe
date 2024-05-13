@@ -205,4 +205,4 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   );
 };
 
-export default ProfileInfoPanel;
+export { ProfileInfoPanel as default };

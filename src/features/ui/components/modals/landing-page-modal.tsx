@@ -68,4 +68,4 @@ const LandingPageModal: React.FC<ILandingPageModal> = ({ onClose }) => {
   );
 };
 
-export default LandingPageModal;
+export { LandingPageModal as default };

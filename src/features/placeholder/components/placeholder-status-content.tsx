@@ -18,4 +18,4 @@ const PlaceholderStatusContent: React.FC<IPlaceholderStatusContent> = ({ minLeng
   );
 };
 
-export default PlaceholderStatusContent;
+export { PlaceholderStatusContent as default };

@@ -116,4 +116,4 @@ const OnboardingWizard = () => {
   );
 };
 
-export default OnboardingWizard;
+export { OnboardingWizard as default };

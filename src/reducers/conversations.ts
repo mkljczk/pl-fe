@@ -117,4 +117,4 @@ const conversations = (state = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default conversations;
+export { conversations as default };

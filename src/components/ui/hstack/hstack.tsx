@@ -70,4 +70,4 @@ const HStack = forwardRef<HTMLDivElement, IHStack>((props, ref) => {
   );
 });
 
-export default HStack;
+export { HStack as default };

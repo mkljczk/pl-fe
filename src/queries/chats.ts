@@ -16,7 +16,7 @@ import { useFetchRelationships } from './relationships';
 
 import type { Account } from 'soapbox/schemas';
 
-export interface IChat {
+interface IChat {
   account: Account;
   created_at: string;
   id: string;
@@ -278,4 +278,4 @@ const useChatActions = (chatId: string) => {
   };
 };
 
-export { ChatKeys, useChat, useChatActions, useChats, useChatMessages };
+export { type IChat, ChatKeys, useChat, useChatActions, useChats, useChatMessages };

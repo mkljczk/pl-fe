@@ -93,4 +93,4 @@ const relationships = (state: State = ImmutableMap<string, Relationship>(), acti
   }
 };
 
-export default relationships;
+export { relationships as default };

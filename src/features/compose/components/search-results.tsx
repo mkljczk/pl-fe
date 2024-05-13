@@ -237,4 +237,4 @@ const SearchResults = () => {
   );
 };
 
-export default SearchResults;
+export { SearchResults as default };

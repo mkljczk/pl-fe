@@ -120,4 +120,4 @@ const getPointerPosition = (el: HTMLElement, event: MouseEvent & TouchEvent): Po
   };
 };
 
-export default Slider;
+export { Slider as default };

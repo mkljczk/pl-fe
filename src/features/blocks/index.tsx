@@ -48,4 +48,4 @@ const Blocks: React.FC = () => {
   );
 };
 
-export default Blocks;
+export { Blocks as default };

@@ -197,4 +197,4 @@ const GroupMemberListItem = (props: IGroupMemberListItem) => {
   );
 };
 
-export default GroupMemberListItem;
+export { GroupMemberListItem as default };

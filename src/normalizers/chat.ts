@@ -2,7 +2,7 @@ import { Map as ImmutableMap, Record as ImmutableRecord, fromJS } from 'immutabl
 
 import type { Account, EmbeddedEntity } from 'soapbox/types/entities';
 
-export const ChatRecord = ImmutableRecord({
+const ChatRecord = ImmutableRecord({
   account: null as EmbeddedEntity<Account>,
   id: '',
   unread: 0,
@@ -10,6 +10,8 @@ export const ChatRecord = ImmutableRecord({
   updated_at: '',
 });
 
-export const normalizeChat = (chat: Record<string, any>) => ChatRecord(
+const normalizeChat = (chat: Record<string, any>) => ChatRecord(
   ImmutableMap(fromJS(chat)),
 );
+
+export { ChatRecord, normalizeChat };

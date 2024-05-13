@@ -6,4 +6,4 @@ const ready = (loaded: () => void): void => {
   }
 };
 
-export default ready;
+export { ready as default };

@@ -53,4 +53,4 @@ const useAccountSearch = (q: string) => {
   };
 };
 
-export default useAccountSearch;
+export { useAccountSearch as default };

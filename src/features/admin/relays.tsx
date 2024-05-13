@@ -136,4 +136,4 @@ const Relays: React.FC = () => {
   );
 };
 
-export default Relays;
+export { Relays as default };

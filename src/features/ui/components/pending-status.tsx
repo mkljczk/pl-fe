@@ -101,4 +101,4 @@ const PendingStatus: React.FC<IPendingStatus> = ({ idempotencyKey, className, mu
   );
 };
 
-export default PendingStatus;
+export { PendingStatus as default };

@@ -35,4 +35,4 @@ const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ composeId }) 
   );
 };
 
-export default QuotedStatusContainer;
+export { QuotedStatusContainer as default };

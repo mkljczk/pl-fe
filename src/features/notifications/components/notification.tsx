@@ -395,4 +395,4 @@ const Notification: React.FC<INotification> = (props) => {
   );
 };
 
-export default Notification;
+export { Notification as default };

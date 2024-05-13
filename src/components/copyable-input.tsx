@@ -51,4 +51,4 @@ const CopyableInput: React.FC<ICopyableInput> = ({ value, type = 'text', onCopy 
   );
 };
 
-export default CopyableInput;
+export { CopyableInput as default };

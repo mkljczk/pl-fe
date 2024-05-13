@@ -25,4 +25,4 @@ const CryptoIcon: React.FC<ICryptoIcon> = ({ ticker, title, className, imgClassN
   </div>
 );
 
-export default CryptoIcon;
+export { CryptoIcon as default };

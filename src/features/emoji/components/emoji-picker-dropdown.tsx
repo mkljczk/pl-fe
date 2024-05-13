@@ -13,7 +13,7 @@ import { EmojiPicker } from '../../ui/util/async-components';
 
 import type { Emoji, CustomEmoji, NativeEmoji } from 'soapbox/features/emoji';
 
-export const messages = defineMessages({
+const messages = defineMessages({
   emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
   emoji_pick: { id: 'emoji_button.pick', defaultMessage: 'Pick an emoji…' },
   emoji_oh_no: { id: 'emoji_button.oh_no', defaultMessage: 'Oh no!' },
@@ -40,7 +40,7 @@ export const messages = defineMessages({
   skins_6: { id: 'emoji_button.skins_6', defaultMessage: 'Dark' },
 });
 
-export interface IEmojiPickerDropdown {
+interface IEmojiPickerDropdown {
   onPickEmoji?: (emoji: Emoji) => void;
   condensed?: boolean;
   withCustom?: boolean;
@@ -71,7 +71,7 @@ const DEFAULTS = [
   'ok_hand',
 ];
 
-export const getFrequentlyUsedEmojis = createSelector([
+const getFrequentlyUsedEmojis = createSelector([
   (state: RootState) => state.settings.get('frequentlyUsedEmojis', ImmutableMap()),
 ], (emojiCounters: ImmutableMap<string, number>) => {
   let emojis = emojiCounters
@@ -235,4 +235,9 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
   );
 };
 
-export default EmojiPickerDropdown;
+export {
+  messages,
+  type IEmojiPickerDropdown,
+  getFrequentlyUsedEmojis,
+  EmojiPickerDropdown as default,
+};

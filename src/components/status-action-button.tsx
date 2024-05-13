@@ -108,4 +108,4 @@ const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButt
   );
 });
 
-export default StatusActionButton;
+export { StatusActionButton as default };

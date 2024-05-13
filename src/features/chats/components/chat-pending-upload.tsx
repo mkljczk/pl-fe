@@ -13,4 +13,4 @@ const ChatPendingUpload: React.FC<IChatPendingUpload> = ({ progress }) => (
   </div>
 );
 
-export default ChatPendingUpload;
+export { ChatPendingUpload as default };

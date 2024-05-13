@@ -85,4 +85,4 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
   );
 };
 
-export default ChatList;
+export { ChatList as default };

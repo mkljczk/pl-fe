@@ -62,4 +62,4 @@ const CSVImporter: React.FC<ICSVImporter> = ({ messages, action }) => {
   );
 };
 
-export default CSVImporter;
+export { CSVImporter as default };

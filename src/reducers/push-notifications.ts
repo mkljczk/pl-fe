@@ -46,4 +46,4 @@ const push_subscriptions = (state = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default push_subscriptions;
+export { push_subscriptions as default };

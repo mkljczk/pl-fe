@@ -4,10 +4,11 @@ import manifestMap from './manifest-map';
 
 // All this does is converts the result from manifest_map.js into an ImmutableMap
 const coinDB = fromJS(manifestMap);
-export default coinDB;
 
 /** Get title from CoinDB based on ticker symbol */
-export const getTitle = (ticker: string): string => {
+const getTitle = (ticker: string): string => {
   const title = coinDB.getIn([ticker, 'name']);
   return typeof title === 'string' ? title : '';
 };
+
+export { getTitle, coinDB as default };

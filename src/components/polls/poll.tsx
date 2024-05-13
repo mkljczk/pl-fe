@@ -10,7 +10,7 @@ import { Stack, Text } from '../ui';
 import PollFooter from './poll-footer';
 import PollOption from './poll-option';
 
-export type Selected = Record<number, boolean>;
+type Selected = Record<number, boolean>;
 
 interface IPoll {
   id: string;
@@ -97,4 +97,4 @@ const Poll: React.FC<IPoll> = ({ id, status }): JSX.Element | null => {
   );
 };
 
-export default Poll;
+export { type Selected, Poll as default };

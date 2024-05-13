@@ -43,4 +43,4 @@ const ChatSearchHeader = () => {
   );
 };
 
-export default ChatSearchHeader;
+export { ChatSearchHeader as default };

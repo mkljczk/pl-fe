@@ -66,4 +66,4 @@ const JoinEventModal: React.FC<IJoinEventModal> = ({ statusId }) => {
   );
 };
 
-export default JoinEventModal;
+export { JoinEventModal as default };

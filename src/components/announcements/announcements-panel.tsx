@@ -60,4 +60,4 @@ const AnnouncementsPanel = () => {
   );
 };
 
-export default AnnouncementsPanel;
+export { AnnouncementsPanel as default };

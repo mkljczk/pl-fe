@@ -36,4 +36,4 @@ const RadioButton: React.FC<IRadioButton> = ({ name, value, checked, onChange, l
   );
 };
 
-export default RadioButton;
+export { RadioButton as default };

@@ -1,7 +1,7 @@
 import { useFeatures } from './useFeatures';
 import { useInstance } from './useInstance';
 
-export const useRegistrationStatus = () => {
+const useRegistrationStatus = () => {
   const instance = useInstance();
   const features = useFeatures();
 
@@ -10,3 +10,5 @@ export const useRegistrationStatus = () => {
     isOpen: features.accountCreation && instance.registrations.enabled,
   };
 };
+
+export { useRegistrationStatus };

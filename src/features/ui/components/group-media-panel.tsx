@@ -91,4 +91,4 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
   );
 };
 
-export default GroupMediaPanel;
+export { GroupMediaPanel as default };

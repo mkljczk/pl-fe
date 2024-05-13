@@ -12,7 +12,7 @@ const urlRegExp = new RegExp(
   /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/,
 );
 
-export const validateUrl = (url: string): boolean => {
+const validateUrl = (url: string): boolean => {
   // TODO Fix UI for link insertion; it should never default to an invalid URL such as https://.
   // Maybe show a dialog where they user can type the URL before inserting it.
   return url === 'https://' || urlRegExp.test(url);
@@ -20,4 +20,7 @@ export const validateUrl = (url: string): boolean => {
 
 const LinkPlugin = (): JSX.Element => <LexicalLinkPlugin validateUrl={validateUrl} />;
 
-export default LinkPlugin;
+export {
+  validateUrl,
+  LinkPlugin as default,
+};

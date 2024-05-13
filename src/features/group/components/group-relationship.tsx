@@ -42,4 +42,4 @@ const GroupRelationship = ({ group }: IGroupRelationship) => {
   );
 };
 
-export default GroupRelationship;
+export { GroupRelationship as default };

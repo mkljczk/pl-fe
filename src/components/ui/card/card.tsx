@@ -18,7 +18,7 @@ const messages = defineMessages({
   back: { id: 'card.back.label', defaultMessage: 'Back' },
 });
 
-export type CardSizes = keyof typeof sizes
+type CardSizes = keyof typeof sizes
 
 interface ICard {
   /** The type of card. */
@@ -108,4 +108,4 @@ const CardBody: React.FC<ICardBody> = ({ className, children }): JSX.Element => 
   <div data-testid='card-body' className={className}>{children}</div>
 );
 
-export { Card, CardHeader, CardTitle, CardBody };
+export { type CardSizes, Card, CardHeader, CardTitle, CardBody };

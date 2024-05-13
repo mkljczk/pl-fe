@@ -99,4 +99,4 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
   );
 };
 
-export default GroupOptionsButton;
+export { GroupOptionsButton as default };

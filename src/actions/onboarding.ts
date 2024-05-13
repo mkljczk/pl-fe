@@ -11,7 +11,7 @@ type OnboardingEndAction = {
   type: typeof ONBOARDING_END;
 }
 
-export type OnboardingActions = OnboardingStartAction | OnboardingEndAction
+type OnboardingActions = OnboardingStartAction | OnboardingEndAction
 
 const checkOnboardingStatus = () => (dispatch: React.Dispatch<OnboardingActions>) => {
   const needsOnboarding = localStorage.getItem(ONBOARDING_LOCAL_STORAGE_KEY) === '1';
@@ -32,6 +32,7 @@ const endOnboarding = () => (dispatch: React.Dispatch<OnboardingActions>) => {
 };
 
 export {
+  type OnboardingActions,
   ONBOARDING_END,
   ONBOARDING_START,
   checkOnboardingStatus,

@@ -23,7 +23,7 @@ const messages = defineMessages({
   exit_fullscreen: { id: 'video.exit_fullscreen', defaultMessage: 'Exit full screen' },
 });
 
-export const formatTime = (secondsNum: number): string => {
+const formatTime = (secondsNum: number): string => {
   let hours:   number | string = Math.floor(secondsNum / 3600);
   let minutes: number | string = Math.floor((secondsNum - (hours * 3600)) / 60);
   let seconds: number | string = secondsNum - (hours * 3600) - (minutes * 60);
@@ -35,7 +35,7 @@ export const formatTime = (secondsNum: number): string => {
   return (hours === '00' ? '' : `${hours}:`) + `${minutes}:${seconds}`;
 };
 
-export const findElementPosition = (el: HTMLElement) => {
+const findElementPosition = (el: HTMLElement) => {
   let box;
 
   if (el.getBoundingClientRect && el.parentNode) {
@@ -66,7 +66,7 @@ export const findElementPosition = (el: HTMLElement) => {
   };
 };
 
-export const getPointerPosition = (el: HTMLElement, event: MouseEvent & TouchEvent): Position => {
+const getPointerPosition = (el: HTMLElement, event: MouseEvent & TouchEvent): Position => {
   const box = findElementPosition(el);
   const boxW = el.offsetWidth;
   const boxH = el.offsetHeight;
@@ -87,7 +87,7 @@ export const getPointerPosition = (el: HTMLElement, event: MouseEvent & TouchEve
   };
 };
 
-export const fileNameFromURL = (str: string) => {
+const fileNameFromURL = (str: string) => {
   const url      = new URL(str);
   const pathname = url.pathname;
   const index    = pathname.lastIndexOf('/');
@@ -575,4 +575,10 @@ const Video: React.FC<IVideo> = ({
   );
 };
 
-export default Video;
+export {
+  formatTime,
+  findElementPosition,
+  getPointerPosition,
+  fileNameFromURL,
+  Video as default,
+};

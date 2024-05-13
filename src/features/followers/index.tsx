@@ -67,4 +67,4 @@ const Followers: React.FC<IFollowers> = ({ params }) => {
   );
 };
 
-export default Followers;
+export { Followers as default };

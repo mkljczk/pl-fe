@@ -74,4 +74,4 @@ const EmbeddedStatus: React.FC<IEmbeddedStatus> = ({ params }) => {
   );
 };
 
-export default EmbeddedStatus;
+export { EmbeddedStatus as default };

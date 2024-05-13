@@ -62,4 +62,4 @@ const WhoToFollowPanel = ({ limit }: IWhoToFollowPanel) => {
   );
 };
 
-export default WhoToFollowPanel;
+export { WhoToFollowPanel as default };

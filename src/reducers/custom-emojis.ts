@@ -37,4 +37,4 @@ const custom_emojis = (state = initialState, action: AnyAction) => {
   return state;
 };
 
-export default custom_emojis;
+export { custom_emojis as default };

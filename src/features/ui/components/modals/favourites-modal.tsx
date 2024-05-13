@@ -71,4 +71,4 @@ const FavouritesModal: React.FC<IFavouritesModal> = ({ onClose, statusId }) => {
   );
 };
 
-export default FavouritesModal;
+export { FavouritesModal as default };

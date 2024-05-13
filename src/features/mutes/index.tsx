@@ -48,4 +48,4 @@ const Mutes: React.FC = () => {
   );
 };
 
-export default Mutes;
+export { Mutes as default };

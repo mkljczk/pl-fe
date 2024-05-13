@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 
 import { useSettings } from 'soapbox/hooks';
 
-export interface IStillImage {
+interface IStillImage {
   /** Image alt text. */
   alt?: string;
   /** Extra class names for the outer <div> container. */
@@ -92,4 +92,7 @@ const ExtensionBadge: React.FC<IExtensionBadge> = ({ ext }) => (
   </div>
 );
 
-export default StillImage;
+export {
+  type IStillImage,
+  StillImage as default,
+};

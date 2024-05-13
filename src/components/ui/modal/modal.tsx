@@ -177,4 +177,4 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
   );
 });
 
-export default Modal;
+export { Modal as default };

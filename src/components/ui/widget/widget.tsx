@@ -62,4 +62,4 @@ const Widget: React.FC<IWidget> = ({
   </Stack>
 );
 
-export default Widget;
+export { Widget as default };

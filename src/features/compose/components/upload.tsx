@@ -50,4 +50,4 @@ const UploadCompose: React.FC<IUploadCompose> = ({ composeId, id, onSubmit, onDr
   );
 };
 
-export default UploadCompose;
+export { UploadCompose as default };

@@ -109,7 +109,7 @@ const reducers = {
 };
 
 // Build a default state from all reducers: it has the key and `undefined`
-export const StateRecord = ImmutableRecord(
+const StateRecord = ImmutableRecord(
   Object.keys(reducers).reduce((params: Record<string, any>, reducer) => {
     params[reducer] = undefined;
     return params;
@@ -143,4 +143,7 @@ const rootReducer: typeof appReducer = (state, action) => {
   }
 };
 
-export default rootReducer;
+export {
+  StateRecord,
+  rootReducer as default,
+};

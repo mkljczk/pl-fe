@@ -187,4 +187,4 @@ const ChatPageMain = () => {
   );
 };
 
-export default ChatPageMain;
+export { ChatPageMain as default };

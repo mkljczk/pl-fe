@@ -52,4 +52,4 @@ const DirectTimeline = () => {
   );
 };
 
-export default DirectTimeline;
+export { DirectTimeline as default };

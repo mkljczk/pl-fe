@@ -40,7 +40,7 @@ const ColumnHeader: React.FC<IColumnHeader> = ({ label, backHref, className, act
   );
 };
 
-export interface IColumn {
+interface IColumn {
   /** Route the back button goes to. */
   backHref?: string;
   /** Column title text. */
@@ -120,6 +120,7 @@ const Column: React.FC<IColumn> = React.forwardRef((props, ref: React.ForwardedR
 });
 
 export {
+  type IColumn,
   Column,
   ColumnHeader,
 };

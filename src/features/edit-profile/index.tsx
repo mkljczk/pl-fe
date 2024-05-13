@@ -425,4 +425,4 @@ const EditProfile: React.FC = () => {
   );
 };
 
-export default EditProfile;
+export { EditProfile as default };

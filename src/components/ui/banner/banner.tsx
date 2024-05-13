@@ -22,4 +22,4 @@ const Banner: React.FC<IBanner> = ({ theme, children, className }) => (
   </div>
 );
 
-export default Banner;
+export { Banner as default };

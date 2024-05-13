@@ -32,4 +32,4 @@ const VisualCharacterCounter: React.FC<IVisualCharacterCounter> = ({ text, max }
   );
 };
 
-export default VisualCharacterCounter;
+export { VisualCharacterCounter as default };

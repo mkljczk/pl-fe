@@ -8,4 +8,4 @@ const IntentionalError: React.FC = () => {
   throw new Error('This error is intentional.');
 };
 
-export default IntentionalError;
+export { IntentionalError as default };

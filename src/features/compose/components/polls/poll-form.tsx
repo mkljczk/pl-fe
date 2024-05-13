@@ -208,4 +208,4 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
   );
 };
 
-export default PollForm;
+export { PollForm as default };

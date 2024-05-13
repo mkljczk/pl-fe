@@ -85,4 +85,4 @@ const ConfirmationModal: React.FC<IConfirmationModal> = ({
   );
 };
 
-export default ConfirmationModal;
+export { ConfirmationModal as default };

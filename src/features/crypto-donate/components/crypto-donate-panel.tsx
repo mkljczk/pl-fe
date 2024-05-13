@@ -49,4 +49,4 @@ const CryptoDonatePanel: React.FC<ICryptoDonatePanel> = ({ limit = 3 }): JSX.Ele
   );
 };
 
-export default CryptoDonatePanel;
+export { CryptoDonatePanel as default };

@@ -124,7 +124,7 @@ const importNotification = (state: State, notification: APIEntity) => {
   });
 };
 
-export const processRawNotifications = (notifications: APIEntity[]) => (
+const processRawNotifications = (notifications: APIEntity[]) => (
   ImmutableOrderedMap(
     notifications
       .map(normalizeNotification)
@@ -241,4 +241,7 @@ const notifications = (state: State = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export default notifications;
+export {
+  processRawNotifications,
+  notifications as default,
+};

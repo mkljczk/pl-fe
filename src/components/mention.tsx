@@ -33,4 +33,4 @@ const Mention: React.FC<IMention> = ({ mention: { acct, username }, disabled }) 
   );
 };
 
-export default Mention;
+export { Mention as default };

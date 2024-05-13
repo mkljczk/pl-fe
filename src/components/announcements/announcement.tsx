@@ -69,4 +69,4 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement, emojiMap }) => {
   );
 };
 
-export default Announcement;
+export { Announcement as default };

@@ -20,7 +20,7 @@ import { makeEmojiMap } from 'soapbox/utils/normalizers';
 import type { ReducerAccount } from 'soapbox/reducers/accounts';
 import type { Account, Attachment, Emoji, EmbeddedEntity, Poll } from 'soapbox/types/entities';
 
-export const StatusEditRecord = ImmutableRecord({
+const StatusEditRecord = ImmutableRecord({
   account: null as EmbeddedEntity<Account | ReducerAccount>,
   content: '',
   created_at: new Date(),
@@ -67,7 +67,7 @@ const normalizeContent = (statusEdit: ImmutableMap<string, any>) => {
     .set('spoilerHtml', spoilerHtml);
 };
 
-export const normalizeStatusEdit = (statusEdit: Record<string, any>) => StatusEditRecord(
+const normalizeStatusEdit = (statusEdit: Record<string, any>) => StatusEditRecord(
   ImmutableMap(fromJS(statusEdit)).withMutations(statusEdit => {
     normalizeAttachments(statusEdit);
     normalizeEmojis(statusEdit);
@@ -75,3 +75,5 @@ export const normalizeStatusEdit = (statusEdit: Record<string, any>) => StatusEd
     normalizeContent(statusEdit);
   }),
 );
+
+export { StatusEditRecord, normalizeStatusEdit };

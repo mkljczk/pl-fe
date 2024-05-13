@@ -5,7 +5,7 @@ import { ADMIN_CONFIG_UPDATE_REQUEST, ADMIN_CONFIG_UPDATE_SUCCESS } from 'soapbo
 import { PLEROMA_PRELOAD_IMPORT } from 'soapbox/actions/preload';
 import { type Instance, instanceSchema } from 'soapbox/schemas';
 import KVStore from 'soapbox/storage/kv-store';
-import { ConfigDB } from 'soapbox/utils/config-db';
+import ConfigDB from 'soapbox/utils/config-db';
 
 import {
   fetchInstance,
@@ -123,4 +123,4 @@ const instance = (state = initialState, action: AnyAction) => {
   }
 };
 
-export default instance;
+export { instance as default };

@@ -49,4 +49,4 @@ const ProgressCircle: React.FC<IProgressCircle> = ({ progress, radius = 12, stro
   );
 };
 
-export default ProgressCircle;
+export { ProgressCircle as default };

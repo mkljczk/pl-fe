@@ -27,7 +27,7 @@ import type {
   Location as LocationEntity,
 } from 'soapbox/types/entities';
 
-export const ReducerRecord = ImmutableRecord({
+const ReducerRecord = ImmutableRecord({
   name: '',
   status: '',
   location: null as LocationEntity | null,
@@ -106,4 +106,7 @@ const compose_event = (state = ReducerRecord(), action: AnyAction): State => {
   }
 };
 
-export default compose_event;
+export {
+  ReducerRecord,
+  compose_event as default,
+};

@@ -28,4 +28,4 @@ const ColumnsArea: React.FC<IColumnsArea> = (props) => {
   );
 };
 
-export default ColumnsArea;
+export { ColumnsArea as default };

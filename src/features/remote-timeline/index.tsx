@@ -82,4 +82,4 @@ const RemoteTimeline: React.FC<IRemoteTimeline> = ({ params }) => {
   );
 };
 
-export default RemoteTimeline;
+export { RemoteTimeline as default };

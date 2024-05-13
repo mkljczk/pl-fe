@@ -6,4 +6,4 @@ const GenericNotFound = () => (
   <MissingIndicator />
 );
 
-export default GenericNotFound;
+export { GenericNotFound as default };

@@ -38,4 +38,4 @@ const Soapbox: React.FC = () => (
   </Provider>
 );
 
-export default Soapbox;
+export { Soapbox as default };

@@ -78,4 +78,4 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
   );
 };
 
-export default AccountNotePanel;
+export { AccountNotePanel as default };

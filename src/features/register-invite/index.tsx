@@ -37,4 +37,4 @@ const RegisterInvite: React.FC = () => {
   );
 };
 
-export default RegisterInvite;
+export { RegisterInvite as default };

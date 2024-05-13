@@ -8,4 +8,4 @@ const ModalLoading = () => (
   </Modal>
 );
 
-export default ModalLoading;
+export { ModalLoading as default };

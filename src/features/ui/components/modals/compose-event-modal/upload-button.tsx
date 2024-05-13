@@ -48,4 +48,4 @@ const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
   );
 };
 
-export default UploadButton;
+export { UploadButton as default };

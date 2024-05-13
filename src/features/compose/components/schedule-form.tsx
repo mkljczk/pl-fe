@@ -8,7 +8,7 @@ import { HStack, Input, Stack, Text } from 'soapbox/components/ui';
 import { DatePicker } from 'soapbox/features/ui/util/async-components';
 import { useAppDispatch, useCompose } from 'soapbox/hooks';
 
-export const isCurrentOrFutureDate = (date: Date) =>
+const isCurrentOrFutureDate = (date: Date) =>
   date && new Date().setHours(0, 0, 0, 0) <= new Date(date).setHours(0, 0, 0, 0);
 
 const isFiveMinutesFromNow = (time: Date) => {
@@ -23,7 +23,7 @@ const messages = defineMessages({
   remove: { id: 'schedule.remove', defaultMessage: 'Remove schedule' },
 });
 
-export interface IScheduleForm {
+interface IScheduleForm {
   composeId: string;
 }
 
@@ -81,4 +81,8 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
   );
 };
 
-export default ScheduleForm;
+export {
+  isCurrentOrFutureDate,
+  type IScheduleForm,
+  ScheduleForm as default,
+};

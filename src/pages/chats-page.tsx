@@ -11,4 +11,4 @@ const ChatsPage: React.FC<IChatsPage> = ({ children }) => (
   </div>
 );
 
-export default ChatsPage;
+export { ChatsPage as default };

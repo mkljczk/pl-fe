@@ -260,4 +260,4 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
   return null;
 };
 
-export default ActionButton;
+export { ActionButton as default };

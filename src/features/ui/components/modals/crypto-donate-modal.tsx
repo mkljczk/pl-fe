@@ -17,4 +17,4 @@ const CryptoDonateModal: React.FC<ICryptoAddress & { onClose: () => void }> = ({
 
 };
 
-export default CryptoDonateModal;
+export { CryptoDonateModal as default };

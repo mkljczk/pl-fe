@@ -29,4 +29,4 @@ const useTrends = () => {
   return result;
 };
 
-export default useTrends;
+export { useTrends as default };

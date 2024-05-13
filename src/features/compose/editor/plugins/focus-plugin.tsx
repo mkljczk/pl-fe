@@ -6,7 +6,7 @@ interface IFocusPlugin {
   autoFocus?: boolean;
 }
 
-export const FOCUS_EDITOR_COMMAND: LexicalCommand<void> = createCommand();
+const FOCUS_EDITOR_COMMAND: LexicalCommand<void> = createCommand();
 
 const FocusPlugin: React.FC<IFocusPlugin> = ({ autoFocus }) => {
   const [editor] = useLexicalComposerContext();
@@ -33,4 +33,7 @@ const FocusPlugin: React.FC<IFocusPlugin> = ({ autoFocus }) => {
   return null;
 };
 
-export default FocusPlugin;
+export {
+  FOCUS_EDITOR_COMMAND,
+  FocusPlugin as default,
+};

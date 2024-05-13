@@ -118,4 +118,4 @@ const EditGroup: React.FC<IEditGroup> = ({ params: { groupId } }) => {
   );
 };
 
-export default EditGroup;
+export { EditGroup as default };

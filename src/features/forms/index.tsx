@@ -14,7 +14,7 @@ interface IInputContainer {
   children: React.ReactNode;
 }
 
-export const InputContainer: React.FC<IInputContainer> = (props) => {
+const InputContainer: React.FC<IInputContainer> = (props) => {
   const containerClass = clsx('input', {
     'with_label': props.label,
     'required': props.required,
@@ -36,7 +36,7 @@ interface ILabelInputContainer {
   children: React.ReactNode;
 }
 
-export const LabelInputContainer: React.FC<ILabelInputContainer> = ({ label, hint, children }) => {
+const LabelInputContainer: React.FC<ILabelInputContainer> = ({ label, hint, children }) => {
   const [id] = useState(uuidv4());
   const childrenWithProps = React.Children.map(children, child => (
     // @ts-ignore: not sure how to get the right type here
@@ -58,7 +58,7 @@ interface ILabelInput {
   label?: React.ReactNode;
 }
 
-export const LabelInput: React.FC<ILabelInput> = ({ label, ...props }) => (
+const LabelInput: React.FC<ILabelInput> = ({ label, ...props }) => (
   <LabelInputContainer label={label}>
     <input {...props} />
   </LabelInputContainer>
@@ -68,7 +68,7 @@ interface ILabelTextarea {
   label?: React.ReactNode;
 }
 
-export const LabelTextarea: React.FC<ILabelTextarea> = ({ label, ...props }) => (
+const LabelTextarea: React.FC<ILabelTextarea> = ({ label, ...props }) => (
   <LabelInputContainer label={label}>
     <textarea {...props} />
   </LabelInputContainer>
@@ -92,7 +92,7 @@ interface ISimpleInput {
   required?: boolean;
 }
 
-export const SimpleInput: React.FC<ISimpleInput> = (props) => {
+const SimpleInput: React.FC<ISimpleInput> = (props) => {
   const { hint, error, ...rest } = props;
   const Input = props.label ? LabelInput : 'input';
 
@@ -113,7 +113,7 @@ interface ICheckbox {
   required?: boolean;
 }
 
-export const Checkbox: React.FC<ICheckbox> = (props) => (
+const Checkbox: React.FC<ICheckbox> = (props) => (
   <SimpleInput type='checkbox' {...props} />
 );
 
@@ -126,7 +126,7 @@ interface ISelectDropdown {
   onChange?: React.ChangeEventHandler;
 }
 
-export const SelectDropdown: React.FC<ISelectDropdown> = (props) => {
+const SelectDropdown: React.FC<ISelectDropdown> = (props) => {
   const { label, hint, items, ...rest } = props;
 
   const optionElems = Object.keys(items).map(item => (
@@ -156,11 +156,11 @@ interface ITextInput {
   required?: boolean;
 }
 
-export const TextInput: React.FC<ITextInput> = props => (
+const TextInput: React.FC<ITextInput> = props => (
   <SimpleInput type='text' {...props} />
 );
 
-export const FileChooser : React.FC = (props) => (
+const FileChooser : React.FC = (props) => (
   <SimpleInput type='file' {...props} />
 );
 
@@ -176,10 +176,23 @@ interface IFileChooserLogo {
   onChange: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-export const FileChooserLogo: React.FC<IFileChooserLogo> = props => (
+const FileChooserLogo: React.FC<IFileChooserLogo> = props => (
   <SimpleInput type='file' {...props} />
 );
 
 FileChooserLogo.defaultProps = {
   accept: ['image/svg', 'image/png'],
+};
+
+export {
+  InputContainer,
+  LabelInputContainer,
+  LabelInput,
+  LabelTextarea,
+  SimpleInput,
+  Checkbox,
+  SelectDropdown,
+  TextInput,
+  FileChooser,
+  FileChooserLogo,
 };

@@ -37,4 +37,4 @@ const polls = (state: State = initialState, action: AnyAction): State => {
   }
 };
 
-export default polls;
+export { polls as default };

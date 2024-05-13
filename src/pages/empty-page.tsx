@@ -16,4 +16,4 @@ const EmptyPage: React.FC<IEmptyPage> = ({ children }) => (
   </>
 );
 
-export default EmptyPage;
+export { EmptyPage as default };

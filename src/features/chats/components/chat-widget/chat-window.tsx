@@ -95,4 +95,4 @@ const ChatWindow = () => {
   );
 };
 
-export default ChatWindow;
+export { ChatWindow as default };

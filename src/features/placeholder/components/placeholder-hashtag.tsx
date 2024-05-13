@@ -13,4 +13,4 @@ const PlaceholderHashtag: React.FC = () => {
   );
 };
 
-export default PlaceholderHashtag;
+export { PlaceholderHashtag as default };

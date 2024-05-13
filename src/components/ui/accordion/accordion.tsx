@@ -92,4 +92,4 @@ const Accordion: React.FC<IAccordion> = ({ headline, children, menu, expanded = 
   );
 };
 
-export default Accordion;
+export { Accordion as default };

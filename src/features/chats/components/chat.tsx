@@ -195,4 +195,4 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
   );
 };
 
-export default Chat;
+export { Chat as default };

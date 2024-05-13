@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 
 /** Get the last version of this value. */
 // https://usehooks.com/usePrevious/
-export const usePrevious = <T>(value: T): T | undefined => {
+const usePrevious = <T>(value: T): T | undefined => {
   const ref = useRef<T>();
 
   useEffect(() => {
@@ -11,3 +11,5 @@ export const usePrevious = <T>(value: T): T | undefined => {
 
   return ref.current;
 };
+
+export { usePrevious };

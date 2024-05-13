@@ -335,4 +335,4 @@ const ComposeEventModal: React.FC<IComposeEventModal> = ({ onClose }) => {
   );
 };
 
-export default ComposeEventModal;
+export { ComposeEventModal as default };

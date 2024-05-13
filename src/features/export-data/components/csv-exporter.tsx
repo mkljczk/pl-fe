@@ -43,4 +43,4 @@ const CSVExporter: React.FC<ICSVExporter> = ({ messages, action }) => {
   );
 };
 
-export default CSVExporter;
+export { CSVExporter as default };

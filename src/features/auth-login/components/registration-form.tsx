@@ -372,4 +372,4 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   );
 };
 
-export default RegistrationForm;
+export { RegistrationForm as default };

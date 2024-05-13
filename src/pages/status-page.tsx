@@ -45,4 +45,4 @@ const StatusPage: React.FC<IStatusPage> = ({ children }) => {
   );
 };
 
-export default StatusPage;
+export { StatusPage as default };

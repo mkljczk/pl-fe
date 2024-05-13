@@ -94,4 +94,4 @@ const ComposeModal: React.FC<IComposeModal> = ({ onClose, composeId = 'compose-m
   );
 };
 
-export default ComposeModal;
+export { ComposeModal as default };

@@ -27,4 +27,4 @@ const Select = React.forwardRef<HTMLSelectElement, ISelect>((props, ref) => {
   );
 });
 
-export default Select;
+export { Select as default };

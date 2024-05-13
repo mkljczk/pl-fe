@@ -105,4 +105,4 @@ const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
   );
 };
 
-export default LocationSearch;
+export { LocationSearch as default };
