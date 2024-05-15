@@ -5,6 +5,7 @@ import { defineMessages, IntlShape } from 'react-intl';
 import api from 'soapbox/api';
 import { isNativeEmoji } from 'soapbox/features/emoji';
 import emojiSearch from 'soapbox/features/emoji/search';
+import { Language } from 'soapbox/features/preferences';
 import { normalizeTag } from 'soapbox/normalizers';
 import { selectAccount, selectOwnAccount, makeGetAccount } from 'soapbox/selectors';
 import { tagHistory } from 'soapbox/settings';
@@ -59,6 +60,7 @@ const COMPOSE_SPOILERNESS_CHANGE = 'COMPOSE_SPOILERNESS_CHANGE' as const;
 const COMPOSE_TYPE_CHANGE = 'COMPOSE_TYPE_CHANGE' as const;
 const COMPOSE_SPOILER_TEXT_CHANGE = 'COMPOSE_SPOILER_TEXT_CHANGE' as const;
 const COMPOSE_VISIBILITY_CHANGE  = 'COMPOSE_VISIBILITY_CHANGE' as const;
+const COMPOSE_LANGUAGE_CHANGE  = 'COMPOSE_LANGUAGE_CHANGE' as const;
 const COMPOSE_LISTABILITY_CHANGE = 'COMPOSE_LISTABILITY_CHANGE' as const;
 
 const COMPOSE_EMOJI_INSERT = 'COMPOSE_EMOJI_INSERT' as const;
@@ -372,6 +374,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
       content_type: compose.content_type,
       poll: compose.poll,
       scheduled_at: compose.schedule,
+      language: compose.language,
       to,
     };
 
@@ -725,6 +728,12 @@ const changeComposeVisibility = (composeId: string, value: string) => ({
   value,
 });
 
+const changeComposeLanguage = (composeId: string, value: Language | null) => ({
+  type: COMPOSE_LANGUAGE_CHANGE,
+  id: composeId,
+  value,
+});
+
 const insertEmojiCompose = (composeId: string, position: number, emoji: Emoji, needsSpace: boolean) => ({
   type: COMPOSE_EMOJI_INSERT,
   id: composeId,
@@ -908,6 +917,7 @@ type ComposeAction =
   | ReturnType<typeof changeComposeContentType>
   | ReturnType<typeof changeComposeSpoilerText>
   | ReturnType<typeof changeComposeVisibility>
+  | ReturnType<typeof changeComposeLanguage>
   | ReturnType<typeof insertEmojiCompose>
   | ReturnType<typeof addPoll>
   | ReturnType<typeof removePoll>
@@ -953,6 +963,7 @@ export {
   COMPOSE_TYPE_CHANGE,
   COMPOSE_SPOILER_TEXT_CHANGE,
   COMPOSE_VISIBILITY_CHANGE,
+  COMPOSE_LANGUAGE_CHANGE,
   COMPOSE_LISTABILITY_CHANGE,
   COMPOSE_EMOJI_INSERT,
   COMPOSE_UPLOAD_CHANGE_REQUEST,
@@ -1012,6 +1023,7 @@ export {
   changeComposeContentType,
   changeComposeSpoilerText,
   changeComposeVisibility,
+  changeComposeLanguage,
   insertEmojiCompose,
   addPoll,
   removePoll,

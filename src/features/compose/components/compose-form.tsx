@@ -27,6 +27,7 @@ import { $createEmojiNode } from '../editor/nodes/emoji-node';
 import { countableText } from '../util/counter';
 
 import ContentTypeButton from './content-type-button';
+import LanguageDropdown from './language-dropdown';
 import PollButton from './poll-button';
 import PollForm from './polls/poll-form';
 import PrivacyDropdown from './privacy-dropdown';
@@ -242,6 +243,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
 
   if (features.privacyScopes && !group && !groupId) selectButtons.push(<PrivacyDropdown composeId={id} />);
   if (features.richText) selectButtons.push(<ContentTypeButton composeId={id} />);
+  selectButtons.push(<LanguageDropdown composeId={id} />);
 
   return (
     <Stack className='w-full' space={4} ref={formRef} onClick={handleClick} element='form' onSubmit={handleSubmit}>

@@ -10,7 +10,7 @@ import type { ButtonSizes, ButtonThemes } from './useButtonStyles';
 
 interface IButton extends Pick<
   React.ComponentProps<'button'>,
-  'children' | 'className' | 'disabled' | 'onClick' | 'onMouseDown' | 'onKeyDown' | 'title' | 'type'
+  'children' | 'className' | 'disabled' | 'onClick' | 'onMouseDown' | 'onKeyDown' | 'onKeyPress' | 'title' | 'type'
 > {
   /** Whether this button expands the width of its container. */
   block?: boolean;

@@ -18,17 +18,17 @@ const alignItemsOptions = {
 };
 
 const spaces = {
-  0: 'gap-x-0',
-  [0.5]: 'gap-x-0.5',
-  1: 'gap-x-1',
-  1.5: 'gap-x-1.5',
-  2: 'gap-x-2',
-  2.5: 'gap-x-2.5',
-  3: 'gap-x-3',
-  4: 'gap-x-4',
-  5: 'gap-x-5',
-  6: 'gap-x-6',
-  8: 'gap-x-8',
+  0: 'gap-0',
+  [0.5]: 'gap-0.5',
+  1: 'gap-1',
+  1.5: 'gap-1.5',
+  2: 'gap-2',
+  2.5: 'gap-2.5',
+  3: 'gap-3',
+  4: 'gap-4',
+  5: 'gap-5',
+  6: 'gap-6',
+  8: 'gap-8',
 };
 
 interface IHStack extends Pick<React.HTMLAttributes<HTMLDivElement>, 'children' | 'className' | 'onClick' | 'style' | 'title'> {

@@ -33,6 +33,7 @@ import {
   COMPOSE_TYPE_CHANGE,
   COMPOSE_SPOILER_TEXT_CHANGE,
   COMPOSE_VISIBILITY_CHANGE,
+  COMPOSE_LANGUAGE_CHANGE,
   COMPOSE_EMOJI_INSERT,
   COMPOSE_UPLOAD_CHANGE_REQUEST,
   COMPOSE_UPLOAD_CHANGE_SUCCESS,
@@ -52,9 +53,9 @@ import {
   COMPOSE_SET_STATUS,
   COMPOSE_EVENT_REPLY,
   COMPOSE_EDITOR_STATE_SET,
-  ComposeAction,
   COMPOSE_CHANGE_MEDIA_ORDER,
   COMPOSE_ADD_SUGGESTED_QUOTE,
+  ComposeAction,
 } from '../actions/compose';
 import { EVENT_COMPOSE_CANCEL, EVENT_FORM_SET, type EventsAction } from '../actions/events';
 import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS, MeAction } from '../actions/me';
@@ -64,6 +65,7 @@ import { normalizeAttachment } from '../normalizers/attachment';
 import { unescapeHTML } from '../utils/html';
 
 import type { Emoji } from 'soapbox/features/emoji';
+import type { Language } from 'soapbox/features/preferences';
 import type {
   APIEntity,
   Attachment as AttachmentEntity,
@@ -111,6 +113,7 @@ const ReducerCompose = ImmutableRecord({
   to: ImmutableOrderedSet<string>(),
   parent_reblogged_by: null as string | null,
   dismissed_quotes: ImmutableOrderedSet<string>(),
+  language: null as Language | null,
 });
 
 type State = ImmutableMap<string, Compose>;
@@ -301,6 +304,11 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
       return updateCompose(state, action.id, compose => compose
         .set('privacy', action.value)
         .set('idempotencyKey', uuid()));
+    case COMPOSE_LANGUAGE_CHANGE:
+      return updateCompose(state, action.id, compose => compose.withMutations(map => {
+        map.set('language', action.value);
+        map.set('idempotencyKey', uuid());
+      }));
     case COMPOSE_CHANGE:
       return updateCompose(state, action.id, compose => compose
         .set('text', action.text)

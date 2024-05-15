@@ -73,7 +73,9 @@ const languages = {
   'zh-CN': '简体中文',
   'zh-HK': '繁體中文（香港）',
   'zh-TW': '繁體中文（臺灣）',
-};
+} as const;
+
+type Language = keyof typeof languages;
 
 const messages = defineMessages({
   heading: { id: 'column.preferences', defaultMessage: 'Preferences' },
@@ -242,4 +244,4 @@ const Preferences = () => {
   );
 };
 
-export { Preferences as default, languages };
+export { Preferences as default, languages, type Language };
