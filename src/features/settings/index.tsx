@@ -19,7 +19,7 @@ const messages = defineMessages({
   changePassword: { id: 'settings.change_password', defaultMessage: 'Change password' },
   configureMfa: { id: 'settings.configure_mfa', defaultMessage: 'Configure MFA' },
   deleteAccount: { id: 'settings.delete_account', defaultMessage: 'Delete account' },
-  domainBlocks: { id: 'navigation_bar.domain_blocks', defaultMessage: 'Hidden domains' },
+  domainBlocks: { id: 'navigation_bar.domain_blocks', defaultMessage: 'Domain blocks' },
   editProfile: { id: 'settings.edit_profile', defaultMessage: 'Edit profile' },
   exportData: { id: 'column.export_data', defaultMessage: 'Export data' },
   filters: { id: 'navigation_bar.filters', defaultMessage: 'Filters' },

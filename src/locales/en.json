@@ -38,7 +38,6 @@
   "account.mute": "Mute @{name}",
   "account.muted": "Muted",
   "account.never_active": "Never",
-  "account.patron": "Patron",
   "account.posts": "Posts",
   "account.posts_with_replies": "Posts & replies",
   "account.profile": "Profile",
@@ -356,7 +355,7 @@
   "column.filters.delete_error": "Error deleting filter",
   "column.filters.drop_header": "Drop instead of hide",
   "column.filters.drop_hint": "Filtered posts will disappear irreversibly, even if filter is later removed",
-  "column.filters.edit": "Edit Filter",
+  "column.filters.edit": "Edit filter",
   "column.filters.expiration.1800": "30 minutes",
   "column.filters.expiration.21600": "6 hours",
   "column.filters.expiration.3600": "1 hour",
@@ -1125,8 +1124,6 @@
   "password_reset.fields.username_placeholder": "Email or username",
   "password_reset.header": "Reset password",
   "password_reset.reset": "Reset password",
-  "patron.donate": "Donate",
-  "patron.title": "Funding Goal",
   "pinned_accounts.title": "{name}’s choices",
   "pinned_statuses.none": "No pins to show.",
   "poll.choose_multiple": "Choose as many as you'd like.",
@@ -1526,5 +1523,5 @@
   "video.pause": "Pause",
   "video.play": "Play",
   "video.unmute": "Unmute sound",
-  "who_to_follow.title": "People To Follow"
+  "who_to_follow.title": "People to follow"
 }
