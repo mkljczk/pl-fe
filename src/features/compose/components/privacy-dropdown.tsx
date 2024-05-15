@@ -9,7 +9,7 @@ import Overlay from 'react-overlays/lib/Overlay';
 import { changeComposeVisibility } from 'soapbox/actions/compose';
 import { closeModal, openModal } from 'soapbox/actions/modals';
 import Icon from 'soapbox/components/icon';
-import { IconButton } from 'soapbox/components/ui';
+import { Button } from 'soapbox/components/ui';
 import { useAppDispatch, useCompose } from 'soapbox/hooks';
 import { userTouching } from 'soapbox/is-mobile';
 
@@ -277,12 +277,12 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
           active: valueOption && options.indexOf(valueOption) === 0,
         })}
       >
-        <IconButton
-          className={clsx({
-            'text-gray-600 hover:text-gray-700 dark:hover:text-gray-500': !open,
-            'text-primary-500 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-400': open,
-          })}
-          src={valueOption?.icon}
+        <Button
+          theme='muted'
+          size='xs'
+          text={valueOption?.text}
+          icon={valueOption?.icon}
+          secondaryIcon={require('@tabler/icons/outline/chevron-down.svg')}
           title={intl.formatMessage(messages.change_privacy)}
           onClick={handleToggle}
           onMouseDown={handleMouseDown}

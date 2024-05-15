@@ -26,7 +26,7 @@ import WarningContainer from '../containers/warning-container';
 import { $createEmojiNode } from '../editor/nodes/emoji-node';
 import { countableText } from '../util/counter';
 
-import MarkdownButton from './markdown-button';
+import ContentTypeButton from './content-type-button';
 import PollButton from './poll-button';
 import PollForm from './polls/poll-form';
 import PrivacyDropdown from './privacy-dropdown';
@@ -197,10 +197,8 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       {features.media && <UploadButtonContainer composeId={id} />}
       <EmojiPickerDropdown onPickEmoji={handleEmojiPick} condensed={shouldCondense} />
       {features.polls && <PollButton composeId={id} />}
-      {features.privacyScopes && !group && !groupId && <PrivacyDropdown composeId={id} />}
       {features.scheduledStatuses && <ScheduleButton composeId={id} />}
       {features.spoilers && <SpoilerButton composeId={id} />}
-      {features.richText && <MarkdownButton composeId={id} />}
     </HStack>
   ), [features, id]);
 
@@ -240,6 +238,11 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     publishText = intl.formatMessage(messages.schedule);
   }
 
+  const selectButtons = [];
+
+  if (features.privacyScopes && !group && !groupId) selectButtons.push(<PrivacyDropdown composeId={id} />);
+  if (features.richText) selectButtons.push(<ContentTypeButton composeId={id} />);
+
   return (
     <Stack className='w-full' space={4} ref={formRef} onClick={handleClick} element='form' onSubmit={handleSubmit}>
       {scheduledStatusCount > 0 && !event && !group && (
@@ -268,6 +271,12 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       {!shouldCondense && !event && !group && <ReplyIndicatorContainer composeId={id} />}
 
       {!shouldCondense && !event && !group && <ReplyMentions composeId={id} />}
+
+      {!!selectButtons && (
+        <HStack space={2} wrap className='-mb-2'>
+          {selectButtons}
+        </HStack>
+      )}
 
       <div>
         <Suspense>

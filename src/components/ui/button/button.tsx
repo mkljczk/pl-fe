@@ -8,19 +8,16 @@ import { useButtonStyles } from './useButtonStyles';
 
 import type { ButtonSizes, ButtonThemes } from './useButtonStyles';
 
-interface IButton {
+interface IButton extends Pick<
+  React.ComponentProps<'button'>,
+  'children' | 'className' | 'disabled' | 'onClick' | 'onMouseDown' | 'onKeyDown' | 'title' | 'type'
+> {
   /** Whether this button expands the width of its container. */
   block?: boolean;
-  /** Elements inside the <button> */
-  children?: React.ReactNode;
-  /** Extra class names for the button. */
-  className?: string;
-  /** Prevent the button from being clicked. */
-  disabled?: boolean;
   /** URL to an SVG icon to render inside the button. */
   icon?: string;
-  /** Action when the button is clicked. */
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  /** URL to an SVG icon to render inside the button next to the text. */
+  secondaryIcon?: string;
   /** A predefined button size. */
   size?: ButtonSizes;
   /** Text inside the button. Takes precedence over `children`. */
@@ -29,26 +26,24 @@ interface IButton {
   to?: string;
   /** Styles the button visually with a predefined theme. */
   theme?: ButtonThemes;
-  /** Whether this button should submit a form by default. */
-  type?: 'button' | 'submit';
 }
 
 /** Customizable button element with various themes. */
-const Button = React.forwardRef<HTMLButtonElement, IButton>((props, ref): JSX.Element => {
-  const {
-    block = false,
-    children,
-    disabled = false,
-    icon,
-    onClick,
-    size = 'md',
-    text,
-    theme = 'secondary',
-    to,
-    type = 'button',
-    className,
-  } = props;
-
+const Button = React.forwardRef<HTMLButtonElement, IButton>(({
+  block = false,
+  children,
+  disabled = false,
+  icon,
+  secondaryIcon,
+  onClick,
+  size = 'md',
+  text,
+  theme = 'secondary',
+  to,
+  type = 'button',
+  className,
+  ...props
+}, ref): JSX.Element => {
   const body = text || children;
 
   const themeClass = useButtonStyles({
@@ -58,14 +53,6 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>((props, ref): JSX.El
     size,
   });
 
-  const renderIcon = () => {
-    if (!icon) {
-      return null;
-    }
-
-    return <Icon src={icon} className='h-4 w-4' />;
-  };
-
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = React.useCallback((event) => {
     if (onClick && !disabled) {
       onClick(event);
@@ -74,18 +61,21 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>((props, ref): JSX.El
 
   const renderButton = () => (
     <button
-      className={clsx('space-x-2 rtl:space-x-reverse', themeClass, className)}
+      {...props}
+      className={clsx('rtl:space-x-reverse', themeClass, className)}
       disabled={disabled}
       onClick={handleClick}
       ref={ref}
       type={type}
       data-testid='button'
     >
-      {renderIcon()}
+      {icon ? <Icon src={icon} className='h-4 w-4' /> : null}
 
       {body && (
         <span>{body}</span>
       )}
+
+      {secondaryIcon ? <Icon src={secondaryIcon} className='h-4 w-4' /> : null}
     </button>
   );
 

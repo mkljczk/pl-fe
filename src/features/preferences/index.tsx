@@ -85,6 +85,7 @@ const messages = defineMessages({
   privacy_followers_only: { id: 'preferences.options.privacy_followers_only', defaultMessage: 'Followers-only' },
   content_type_plaintext: { id: 'preferences.options.content_type_plaintext', defaultMessage: 'Plain text' },
   content_type_markdown: { id: 'preferences.options.content_type_markdown', defaultMessage: 'Markdown' },
+  content_type_html: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
 });
 
 const Preferences = () => {
@@ -116,6 +117,7 @@ const Preferences = () => {
   const defaultContentTypeOptions = React.useMemo(() => ({
     'text/plain': intl.formatMessage(messages.content_type_plaintext),
     'text/markdown': intl.formatMessage(messages.content_type_markdown),
+    'text/html': intl.formatMessage(messages.content_type_html),
   }), []);
 
   return (

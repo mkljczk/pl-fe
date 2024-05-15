@@ -22,9 +22,10 @@ interface IDropdownMenuItem {
   index: number;
   item: MenuItem | null;
   onClick?(): void;
+  autoFocus?: boolean;
 }
 
-const DropdownMenuItem = ({ index, item, onClick }: IDropdownMenuItem) => {
+const DropdownMenuItem = ({ index, item, onClick, autoFocus }: IDropdownMenuItem) => {
   const history = useHistory();
 
   const itemRef = useRef<HTMLAnchorElement>(null);
@@ -63,7 +64,7 @@ const DropdownMenuItem = ({ index, item, onClick }: IDropdownMenuItem) => {
   useEffect(() => {
     const firstItem = index === 0;
 
-    if (itemRef.current && firstItem) {
+    if (itemRef.current && (autoFocus ? firstItem : item?.active)) {
       itemRef.current.focus({ preventScroll: true });
     }
   }, [itemRef.current, index]);

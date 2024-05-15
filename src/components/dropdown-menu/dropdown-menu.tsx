@@ -262,6 +262,8 @@ const DropdownMenu = (props: IDropdownMenu) => {
     return null;
   }
 
+  const autoFocus = !items.some((item) => item?.active);
+
   return (
     <>
       {children ? (
@@ -309,6 +311,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
                   item={item}
                   index={idx}
                   onClick={handleClose}
+                  autoFocus={autoFocus}
                 />
               ))}
             </ul>
