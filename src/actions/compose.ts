@@ -15,6 +15,7 @@ import { getFeatures, parseVersion } from 'soapbox/utils/features';
 
 import { chooseEmoji } from './emojis';
 import { importFetchedAccounts } from './importer';
+import { rememberLanguageUse } from './languages';
 import { uploadFile, updateMedia } from './media';
 import { openModal, closeModal } from './modals';
 import { getSettings } from './settings';
@@ -360,6 +361,10 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
 
     dispatch(submitComposeRequest(composeId));
     dispatch(closeModal());
+
+    if (compose.language && !statusId) {
+      dispatch(rememberLanguageUse(compose.language));
+    }
 
     const idempotencyKey = compose.idempotencyKey;
 

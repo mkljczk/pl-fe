@@ -415,6 +415,7 @@
   "compose.edit_success": "Your post was edited",
   "compose.invalid_schedule": "You must schedule a post at least 5 minutes out.",
   "compose.language_dropdown.prompt": "Select language",
+  "compose.language_dropdown.search": "Search language…",
   "compose.reply_group_indicator.message": "Posting to {groupLink}",
   "compose.submit_success": "Your post was sent!",
   "compose_event.create": "Create",

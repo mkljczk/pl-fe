@@ -2,13 +2,24 @@ import { offset, useFloating, flip, arrow, shift } from '@floating-ui/react';
 import clsx from 'clsx';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import fuzzysort from 'fuzzysort';
+import { Map as ImmutableMap } from 'immutable';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
+import { createSelector } from 'reselect';
 
 import { changeComposeLanguage } from 'soapbox/actions/compose';
 import { Button, Icon, Input, Portal } from 'soapbox/components/ui';
 import { type Language, languages as languagesObject } from 'soapbox/features/preferences';
-import { useAppDispatch, useCompose } from 'soapbox/hooks';
+import { useAppDispatch, useAppSelector, useCompose } from 'soapbox/hooks';
+
+const getFrequentlyUsedLanguages = createSelector([
+  state => state.settings.get('frequentlyUsedLanguages', ImmutableMap()),
+], (languageCounters: ImmutableMap<Language, number>) => (
+  languageCounters.keySeq()
+    .sort((a, b) => languageCounters.get(a, 0) - languageCounters.get(b, 0))
+    .reverse()
+    .toArray()
+));
 
 const listenerOptions = supportsPassiveEvents ? { passive: true } : false;
 
@@ -26,14 +37,15 @@ interface ILanguageDropdown {
 const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const frequentlyUsedLanguages = useAppSelector(getFrequentlyUsedLanguages);
 
   const node = useRef<HTMLDivElement>(null);
   const focusedItem = useRef<HTMLDivElement>(null);
+  const arrowRef = useRef<HTMLDivElement>(null);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState('');
 
-  const arrowRef = useRef<HTMLDivElement>(null);
 
   const { x, y, strategy, refs, middlewareData, placement } = useFloating<HTMLButtonElement>({
     placement: 'top',
@@ -131,7 +143,12 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
         } else if (b[0] === language) {
           return 1;
         } else {
-          return 0;
+          // Sort according to frequently used languages
+
+          const indexOfA = frequentlyUsedLanguages.indexOf(a[0]);
+          const indexOfB = frequentlyUsedLanguages.indexOf(b[0]);
+
+          return ((indexOfA > -1 ? indexOfA : Infinity) - (indexOfB > -1 ? indexOfB : Infinity));
         }
       });
     }

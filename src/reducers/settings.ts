@@ -1,6 +1,7 @@
 import { Map as ImmutableMap, fromJS } from 'immutable';
 import { AnyAction } from 'redux';
 
+import { LANGUAGE_USE } from 'soapbox/actions/languages';
 import { ME_FETCH_SUCCESS } from 'soapbox/actions/me';
 
 import { EMOJI_CHOOSE } from '../actions/emojis';
@@ -18,7 +19,11 @@ import type { APIEntity } from 'soapbox/types/entities';
 
 type State = ImmutableMap<string, any>;
 
-const updateFrequentEmojis = (state: State, emoji: Emoji) => state.update('frequentlyUsedEmojis', ImmutableMap(), map => map.update(emoji.id, 0, (count: number) => count + 1)).set('saved', false);
+const updateFrequentEmojis = (state: State, emoji: Emoji) =>
+  state.update('frequentlyUsedEmojis', ImmutableMap(), map => map.update(emoji.id, 0, (count: number) => count + 1)).set('saved', false);
+
+const updateFrequentLanguages = (state: State, language: string) =>
+  state.update('frequentlyUsedLanguages', ImmutableMap<string, number>(), map => map.update(language, 0, (count: number) => count + 1)).set('saved', false);
 
 const importSettings = (state: State, account: APIEntity) => {
   account = fromJS(account);
@@ -45,6 +50,8 @@ const settings = (
         .set('saved', false);
     case EMOJI_CHOOSE:
       return updateFrequentEmojis(state, action.emoji);
+    case LANGUAGE_USE:
+      return updateFrequentLanguages(state, action.language);
     case SETTING_SAVE:
       return state.set('saved', true);
     case SETTINGS_UPDATE:
