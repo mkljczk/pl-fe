@@ -97,6 +97,10 @@ const pleromaSchema = coerceObject({
       name_length: z.number().nonnegative().catch(255),
       value_length: z.number().nonnegative().catch(2047),
     }),
+    markup: coerceObject({
+      allow_headings: z.boolean().catch(false),
+      allow_inline_images: z.boolean().catch(false),
+    }),
     migration_cooldown_period: z.number().optional().catch(undefined),
     multitenancy: coerceObject({
       domains: z

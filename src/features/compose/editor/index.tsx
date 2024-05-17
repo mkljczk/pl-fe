@@ -11,17 +11,24 @@ import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
+import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
-import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
+import { $createRemarkExport, $createRemarkImport } from '@mkljczk/lexical-remark';
 import clsx from 'clsx';
-import { $createParagraphNode, $createTextNode, $getRoot, type LexicalEditor } from 'lexical';
+import { $createParagraphNode, $createTextNode, $getRoot, type EditorState, type LexicalEditor } from 'lexical';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useAppDispatch } from 'soapbox/hooks';
+import { useAppDispatch, useCompose } from 'soapbox/hooks';
 
+import { importImage } from './handlers/image';
 import { useNodes } from './nodes';
 import AutosuggestPlugin from './plugins/autosuggest-plugin';
+import FloatingBlockTypeToolbarPlugin from './plugins/floating-block-type-toolbar-plugin';
+import FloatingLinkEditorPlugin from './plugins/floating-link-editor-plugin';
+import FloatingTextFormatToolbarPlugin from './plugins/floating-text-format-toolbar-plugin';
 import FocusPlugin from './plugins/focus-plugin';
 import RefPlugin from './plugins/ref-plugin';
 import StatePlugin from './plugins/state-plugin';
@@ -83,7 +90,8 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
   placeholder,
 }, ref) => {
   const dispatch = useAppDispatch();
-  const nodes = useNodes();
+  const isWysiwyg = useCompose(composeId).content_type === 'wysiwyg';
+  const nodes = useNodes(isWysiwyg);
 
   const [suggestionsHidden, setSuggestionsHidden] = useState(true);
 
@@ -103,22 +111,50 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
       }
 
       return () => {
-        const paragraph = $createParagraphNode();
-        const textNode = $createTextNode(compose.text);
+        if (isWysiwyg) {
+          $createRemarkImport({
+            handlers: {
+              image: importImage,
+            },
+          })(compose.text);
+        } else {
+          const paragraph = $createParagraphNode();
+          const textNode = $createTextNode(compose.text);
 
-        paragraph.append(textNode);
+          paragraph.append(textNode);
 
-        $getRoot()
-          .clear()
-          .append(paragraph);
+          $getRoot()
+            .clear()
+            .append(paragraph);
+        }
       };
     }),
-  }), []);
+  }), [isWysiwyg]);
+
+  const [floatingAnchorElem, setFloatingAnchorElem] =
+    useState<HTMLDivElement | null>(null);
+
+  const onRef = (_floatingAnchorElem: HTMLDivElement) => {
+    if (_floatingAnchorElem !== null) {
+      setFloatingAnchorElem(_floatingAnchorElem);
+    }
+  };
 
   const handlePaste: React.ClipboardEventHandler<HTMLDivElement> = (e) => {
     if (onPaste && e.clipboardData && e.clipboardData.files.length === 1) {
       onPaste(e.clipboardData.files);
       e.preventDefault();
+    }
+  };
+
+  const handleChange = (_: EditorState, editor: LexicalEditor) => {
+    if (onChange) {
+      onChange(editor.getEditorState().read($createRemarkExport({
+        handlers: {
+          hashtag: (node) => ({ type: 'text', value: node.getTextContent() }),
+          mention: (node) => ({ type: 'text', value: node.getTextContent() }),
+        },
+      })));
     }
   };
 
@@ -131,11 +167,11 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
   }
 
   return (
-    <LexicalComposer initialConfig={initialConfig}>
+    <LexicalComposer key={isWysiwyg ? 'wysiwyg' : ''} initialConfig={initialConfig}>
       <div className={clsx('relative', className)}>
-        <PlainTextPlugin
+        <RichTextPlugin
           contentEditable={
-            <div onFocus={onFocus} onPaste={handlePaste}>
+            <div onFocus={onFocus} onPaste={handlePaste} ref={onRef}>
               <ContentEditable
                 className={clsx('relative z-10 text-[1rem] outline-none transition-[min-height] motion-reduce:transition-none', {
                   'min-h-[39px]': condensed,
@@ -156,15 +192,21 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
           )}
           ErrorBoundary={LexicalErrorBoundary}
         />
-        <OnChangePlugin onChange={(_, editor) => {
-          onChange?.(editor.getEditorState().read(() => $getRoot().getTextContent()));
-        }}
-        />
+        <OnChangePlugin onChange={handleChange} />
         <HistoryPlugin />
         <HashtagPlugin />
         <AutosuggestPlugin composeId={composeId} suggestionsHidden={suggestionsHidden} setSuggestionsHidden={setSuggestionsHidden} />
         <AutoLinkPlugin matchers={LINK_MATCHERS} />
-        <StatePlugin composeId={composeId} />
+        {isWysiwyg && <LinkPlugin />}
+        {isWysiwyg && <ListPlugin />}
+        {isWysiwyg && floatingAnchorElem && (
+          <>
+            <FloatingBlockTypeToolbarPlugin anchorElem={floatingAnchorElem} />
+            <FloatingTextFormatToolbarPlugin anchorElem={floatingAnchorElem} />
+            <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
+          </>
+        )}
+        <StatePlugin composeId={composeId} isWysiwyg={isWysiwyg} />
         <SubmitPlugin composeId={composeId} handleSubmit={handleSubmit} />
         <FocusPlugin autoFocus={autoFocus} />
         <ClearEditorPlugin />

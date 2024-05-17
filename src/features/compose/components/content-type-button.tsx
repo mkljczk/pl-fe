@@ -10,6 +10,7 @@ const messages = defineMessages({
   content_type_plaintext: { id: 'preferences.options.content_type_plaintext', defaultMessage: 'Plain text' },
   content_type_markdown: { id: 'preferences.options.content_type_markdown', defaultMessage: 'Markdown' },
   content_type_html: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
+  content_type_wysiwyg: { id: 'preferences.options.content_type_wysiwyf', defaultMessage: 'WYSIWYG' },
   change_content_type: { id: 'compose_form.content_type.change', defaultMessage: 'Change content type' },
 });
 
@@ -39,6 +40,11 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId }) => {
       icon: require('@tabler/icons/outline/html.svg'),
       text: intl.formatMessage(messages.content_type_html),
       value: 'text/html',
+    },
+    {
+      icon: require('@tabler/icons/outline/text-caption.svg'),
+      text: intl.formatMessage(messages.content_type_wysiwyg),
+      value: 'wysiwyg',
     },
   ];
 

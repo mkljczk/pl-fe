@@ -367,6 +367,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
     }
 
     const idempotencyKey = compose.idempotencyKey;
+    const contentType = compose.content_type === 'wysiwyg' ? 'text/markdown' : compose.content_type;
 
     const params: Record<string, any> = {
       status,
@@ -376,7 +377,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
       sensitive: compose.sensitive,
       spoiler_text: compose.spoiler_text,
       visibility: compose.privacy,
-      content_type: compose.content_type,
+      content_type: contentType,
       poll: compose.poll,
       scheduled_at: compose.schedule,
       language: compose.language,

@@ -6,7 +6,6 @@ import { Link, useHistory } from 'react-router-dom';
 import { length } from 'stringz';
 
 import {
-  changeCompose,
   submitCompose,
   clearComposeSuggestions,
   fetchComposeSuggestions,
@@ -140,7 +139,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     if (!canSubmit) return;
     e?.preventDefault();
 
-    dispatch(changeCompose(id, text));
+    // dispatch(changeCompose(id, text));
     dispatch(submitCompose(id, { history }));
 
     editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);

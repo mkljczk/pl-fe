@@ -1,4 +1,5 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { $createRemarkExport } from '@mkljczk/lexical-remark';
 import { $getRoot } from 'lexical';
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
@@ -10,9 +11,10 @@ import { getStatusIdsFromLinksInContent } from 'soapbox/utils/status';
 
 interface IStatePlugin {
   composeId: string;
+  isWysiwyg?: boolean;
 }
 
-const StatePlugin: React.FC<IStatePlugin> = ({ composeId }) => {
+const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   const dispatch = useAppDispatch();
   const [editor] = useLexicalComposerContext();
   const features = useFeatures();
@@ -50,7 +52,17 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId }) => {
 
   useEffect(() => {
     editor.registerUpdateListener(({ editorState }) => {
-      const text = editorState.read(() => $getRoot().getTextContent());
+      let text;
+      if (isWysiwyg) {
+        text = editorState.read($createRemarkExport({
+          handlers: {
+            hashtag: (node) => ({ type: 'text', value: node.getTextContent() }),
+            mention: (node) => ({ type: 'text', value: node.getTextContent() }),
+          },
+        }));
+      } else {
+        text = editorState.read(() => $getRoot().getTextContent());
+      }
       const isEmpty = text === '';
       const data = isEmpty ? null : JSON.stringify(editorState.toJSON());
       dispatch(setEditorState(composeId, data, text));
