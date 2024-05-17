@@ -25,11 +25,11 @@ import {
 } from 'lexical';
 import * as React from 'react';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { openModal } from 'soapbox/actions/modals';
-import { HStack, IconButton } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import { HStack, Icon, IconButton } from 'soapbox/components/ui';
+import { useAppDispatch, useSettings } from 'soapbox/hooks';
 import { normalizeAttachment } from 'soapbox/normalizers';
 
 import { $isImageNode } from './image-node';
@@ -42,6 +42,7 @@ import type {
 
 const messages = defineMessages({
   description: { id: 'upload_form.description', defaultMessage: 'Describe for the visually impaired' },
+  descriptionMissingTitle: { id: 'upload_form.description_missing.title', defaultMessage: 'This attachment doesn\'t have a description' },
 });
 
 const imageCache = new Set();
@@ -93,6 +94,7 @@ const ImageComponent = ({
 }): JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const { missingDescriptionModal } = useSettings();
 
   const imageRef = useRef<null | HTMLImageElement>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -322,11 +324,16 @@ const ImageComponent = ({
             />
           </HStack>
 
-          <div className={clsx('compose-form__upload-description', { active })}>
+          <div
+            className={clsx('absolute inset-x-0 bottom-0 z-[2px] bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900/80 p-2.5 opacity-0 transition-opacity duration-100 ease-linear', {
+              'opacity-100': active,
+            })}
+          >
             <label>
               <span style={{ display: 'none' }}>{intl.formatMessage(messages.description)}</span>
 
               <textarea
+                className='m-0 w-full rounded-md border border-solid border-white/25 bg-transparent p-2.5 text-sm text-white placeholder:text-white/60'
                 placeholder={intl.formatMessage(messages.description)}
                 value={description}
                 onFocus={handleInputFocus}
@@ -337,9 +344,22 @@ const ImageComponent = ({
             </label>
           </div>
 
+          {missingDescriptionModal && !description && (
+            <span
+              title={intl.formatMessage(messages.descriptionMissingTitle)}
+              className={clsx('absolute bottom-2 left-2 z-10 inline-flex items-center gap-1 rounded bg-gray-900 px-2 py-1 text-xs font-medium uppercase text-white transition-opacity duration-100 ease-linear', {
+                'opacity-0 pointer-events-none': active,
+                'opacity-100': !active,
+              })}
+            >
+              <Icon className='h-4 w-4' src={require('@tabler/icons/outline/alert-triangle.svg')} />
+              <FormattedMessage id='upload_form.description_missing.indicator' defaultMessage='Alt' />
+            </span>
+          )}
+
           <LazyImage
             className={
-              clsx('cursor-default', {
+              clsx('mx-auto cursor-default', {
                 'select-none': isSelected,
                 'cursor-grab active:cursor-grabbing': isSelected && $isNodeSelection(selection),
               })
