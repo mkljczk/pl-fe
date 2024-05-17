@@ -114,6 +114,7 @@ const pleromaSchema = coerceObject({
         .optional(),
       enabled: z.boolean().catch(false),
     }),
+    post_formats: z.string().array().optional().catch(undefined),
     restrict_unauthenticated: coerceObject({
       activities: coerceObject({
         local: z.boolean().catch(false),

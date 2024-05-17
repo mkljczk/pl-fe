@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { changeComposeContentType } from 'soapbox/actions/compose';
 import DropdownMenu from 'soapbox/components/dropdown-menu';
 import { Button } from 'soapbox/components/ui';
-import { useAppDispatch, useCompose } from 'soapbox/hooks';
+import { useAppDispatch, useCompose, useInstance } from 'soapbox/hooks';
 
 const messages = defineMessages({
   content_type_plaintext: { id: 'preferences.options.content_type_plaintext', defaultMessage: 'Plain text' },
@@ -21,6 +21,7 @@ interface IContentTypeButton {
 const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const instance = useInstance();
 
   const contentType = useCompose(composeId).content_type;
 
@@ -36,17 +37,21 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId }) => {
       text: intl.formatMessage(messages.content_type_markdown),
       value: 'text/markdown',
     },
-    {
+  ];
+
+  if (instance.pleroma.metadata.post_formats?.includes('text/html')) {
+    options.push({
       icon: require('@tabler/icons/outline/html.svg'),
       text: intl.formatMessage(messages.content_type_html),
       value: 'text/html',
-    },
-    {
-      icon: require('@tabler/icons/outline/text-caption.svg'),
-      text: intl.formatMessage(messages.content_type_wysiwyg),
-      value: 'wysiwyg',
-    },
-  ];
+    });
+  }
+
+  options.push({
+    icon: require('@tabler/icons/outline/text-caption.svg'),
+    text: intl.formatMessage(messages.content_type_wysiwyg),
+    value: 'wysiwyg',
+  });
 
   const option = options.find(({ value }) => value === contentType);
 
