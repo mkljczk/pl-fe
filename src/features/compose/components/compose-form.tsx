@@ -240,9 +240,9 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
 
   const selectButtons = [];
 
-  if (features.privacyScopes && !group && !groupId) selectButtons.push(<PrivacyDropdown composeId={id} />);
-  if (features.richText) selectButtons.push(<ContentTypeButton composeId={id} />);
-  selectButtons.push(<LanguageDropdown composeId={id} />);
+  if (features.privacyScopes && !group && !groupId) selectButtons.push(<PrivacyDropdown key='privacy-dropdown' composeId={id} />);
+  if (features.richText) selectButtons.push(<ContentTypeButton key='compose-type-button' composeId={id} />);
+  if (features.postLanguages) selectButtons.push(<LanguageDropdown key='language-dropdown' composeId={id} />);
 
   return (
     <Stack className='w-full' space={4} ref={formRef} onClick={handleClick} element='form' onSubmit={handleSubmit}>

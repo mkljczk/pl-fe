@@ -674,6 +674,15 @@ const getInstanceFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * Can select a language for statuses.
+     * @see POST /api/v1/statuses
+     */
+    postLanguages: any([
+      v.software === MASTODON,
+      v.software === PLEROMA && v.build === REBASED,
+    ]),
+
+    /**
      * Can set privacy scopes on statuses.
      * @see POST /api/v1/statuses
      */
