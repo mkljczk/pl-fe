@@ -82,6 +82,12 @@ const config =  defineConfig(({ command }) => ({
       }, {
         src: './custom/instance',
         dest: '.',
+      }, {
+        src: './node_modules/fasttext.wasm.js/dist/models/language-identification/assets/lid.176.ftz',
+        dest: 'fastText/models/',
+      }, {
+        src: './node_modules/fasttext.wasm.js/dist/core/fastText.common.wasm',
+        dest: 'fastText/',
       }],
     }),
     visualizer({

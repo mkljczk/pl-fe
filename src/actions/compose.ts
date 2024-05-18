@@ -90,7 +90,8 @@ const COMPOSE_EDITOR_STATE_SET = 'COMPOSE_EDITOR_STATE_SET' as const;
 
 const COMPOSE_CHANGE_MEDIA_ORDER = 'COMPOSE_CHANGE_MEDIA_ORDER' as const;
 
-const COMPOSE_ADD_SUGGESTED_QUOTE      = 'COMPOSE_ADD_SUGGESTED_QUOTE' as const;
+const COMPOSE_ADD_SUGGESTED_QUOTE    = 'COMPOSE_ADD_SUGGESTED_QUOTE' as const;
+const COMPOSE_ADD_SUGGESTED_LANGUAGE = 'COMPOSE_ADD_SUGGESTED_LANGUAGE' as const;
 
 const getAccount = makeGetAccount();
 
@@ -380,7 +381,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
       content_type: contentType,
       poll: compose.poll,
       scheduled_at: compose.schedule,
-      language: compose.language,
+      language: compose.language || compose.suggested_language,
       to,
     };
 
@@ -875,7 +876,7 @@ const eventDiscussionCompose = (composeId: string, status: Status) =>
 const setEditorState = (composeId: string, editorState: EditorState | string | null, text?: string) => ({
   type: COMPOSE_EDITOR_STATE_SET,
   id: composeId,
-  editorState: editorState,
+  editorState,
   text,
 });
 
@@ -889,7 +890,13 @@ const changeMediaOrder = (composeId: string, a: string, b: string) => ({
 const addSuggestedQuote = (composeId: string, quoteId: string) => ({
   type: COMPOSE_ADD_SUGGESTED_QUOTE,
   id: composeId,
-  quoteId: quoteId,
+  quoteId,
+});
+
+const addSuggestedLanguage = (composeId: string, language: string) => ({
+  type: COMPOSE_ADD_SUGGESTED_LANGUAGE,
+  id: composeId,
+  language,
 });
 
 type ComposeAction =
@@ -940,6 +947,7 @@ type ComposeAction =
   | ReturnType<typeof setEditorState>
   | ReturnType<typeof changeMediaOrder>
   | ReturnType<typeof addSuggestedQuote>
+  | ReturnType<typeof addSuggestedLanguage>
 
 export {
   COMPOSE_CHANGE,
@@ -990,6 +998,7 @@ export {
   COMPOSE_EDITOR_STATE_SET,
   COMPOSE_CHANGE_MEDIA_ORDER,
   COMPOSE_ADD_SUGGESTED_QUOTE,
+  COMPOSE_ADD_SUGGESTED_LANGUAGE,
   setComposeToStatus,
   changeCompose,
   replyCompose,
@@ -1047,5 +1056,6 @@ export {
   setEditorState,
   changeMediaOrder,
   addSuggestedQuote,
+  addSuggestedLanguage,
   type ComposeAction,
 };

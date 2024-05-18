@@ -568,6 +568,11 @@ const getInstanceFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * TODO: Replace with proper feature gate.
+     */
+    languageDetection: v.software === PLEROMA && v.build === REBASED,
+
+    /**
      * Can create, view, and manage lists.
      * @see {@link https://docs.joinmastodon.org/methods/lists/}
      * @see GET /api/v1/timelines/list/:list_id
@@ -909,8 +914,11 @@ const parseVersion = (version: string): Backend => {
   }) : null;
   const compat = match ? semverParse(match[1]) || semverCoerce(match[1]) : null;
   if (match && semver && compat) {
+    let build = semver.build[0];
+    if (build === 'pl') build = 'soapbox';
+
     return {
-      build: semver.build[0],
+      build,
       compatVersion: compat.version,
       software: match[2] || MASTODON,
       version: semver.version.split('-')[0],

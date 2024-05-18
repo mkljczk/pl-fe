@@ -56,6 +56,7 @@ import {
   COMPOSE_CHANGE_MEDIA_ORDER,
   COMPOSE_ADD_SUGGESTED_QUOTE,
   ComposeAction,
+  COMPOSE_ADD_SUGGESTED_LANGUAGE,
 } from '../actions/compose';
 import { EVENT_COMPOSE_CANCEL, EVENT_FORM_SET, type EventsAction } from '../actions/events';
 import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS, MeAction } from '../actions/me';
@@ -114,6 +115,7 @@ const ReducerCompose = ImmutableRecord({
   parent_reblogged_by: null as string | null,
   dismissed_quotes: ImmutableOrderedSet<string>(),
   language: null as Language | null,
+  suggested_language: null as string | null,
 });
 
 type State = ImmutableMap<string, Compose>;
@@ -553,6 +555,9 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
     case COMPOSE_ADD_SUGGESTED_QUOTE:
       return updateCompose(state, action.id, compose => compose
         .set('quote', action.quoteId));
+    case COMPOSE_ADD_SUGGESTED_LANGUAGE:
+      return updateCompose(state, action.id, compose => compose
+        .set('suggested_language', action.language));
     case COMPOSE_QUOTE_CANCEL:
       return updateCompose(state, action.id, compose => compose
         .update('dismissed_quotes', quotes => compose.quote ? quotes.add(compose.quote) : quotes)

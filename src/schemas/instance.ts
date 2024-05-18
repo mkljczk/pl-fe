@@ -21,10 +21,6 @@ const fixVersion = (version: string) => {
     version = '2.7.2 (compatible; Pleroma 2.4.50+akkoma)';
   }
 
-  if (version.endsWith('+pl)')) {
-    version = version.slice(0, -3) + 'soapbox)';
-  }
-
   // Set Takahē version to a Pleroma-like string
   if (version.startsWith('takahe/')) {
     version = `0.0.0 (compatible; Takahe ${version.slice(7)})`;

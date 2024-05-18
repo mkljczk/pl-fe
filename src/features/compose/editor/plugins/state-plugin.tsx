@@ -1,13 +1,16 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $createRemarkExport } from '@mkljczk/lexical-remark';
+import { type LanguageIdentificationModel } from 'fasttext.wasm.js/dist/models/language-identification/common.js';
 import { $getRoot } from 'lexical';
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
 
-import { addSuggestedQuote, setEditorState } from 'soapbox/actions/compose';
+import { addSuggestedLanguage, addSuggestedQuote, setEditorState } from 'soapbox/actions/compose';
 import { fetchStatus } from 'soapbox/actions/statuses';
 import { useAppDispatch, useFeatures } from 'soapbox/hooks';
 import { getStatusIdsFromLinksInContent } from 'soapbox/utils/status';
+
+let lidModel: LanguageIdentificationModel;
 
 interface IStatePlugin {
   composeId: string;
@@ -50,9 +53,35 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
     });
   }, 2000), []);
 
+  const detectLanguage = useCallback(debounce(async (text: string) => {
+    dispatch(async (dispatch, getState) => {
+      const state = getState();
+      const compose = state.compose.get(composeId);
+
+      if (!features.postLanguages || features.languageDetection || compose?.language) return;
+
+      const wordsLength = text.split(/\s+/).length;
+
+      if (wordsLength < 4) return;
+
+      if (!lidModel) {
+        // eslint-disable-next-line import/extensions
+        const { getLIDModel } = await import('fasttext.wasm.js/common');
+        lidModel = await getLIDModel();
+      }
+      if (!lidModel.model) await lidModel.load();
+      const { alpha2, possibility } = await lidModel.identify(text.replace(/\s+/i, ' '));
+
+      if (alpha2 && possibility > 0.5) {
+        dispatch(addSuggestedLanguage(composeId, alpha2));
+      }
+    });
+  }, 750), []);
+
   useEffect(() => {
     editor.registerUpdateListener(({ editorState }) => {
-      let text;
+      const plainText = editorState.read(() => $getRoot().getTextContent());
+      let text = plainText;
       if (isWysiwyg) {
         text = editorState.read($createRemarkExport({
           handlers: {
@@ -60,13 +89,12 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
             mention: (node) => ({ type: 'text', value: node.getTextContent() }),
           },
         }));
-      } else {
-        text = editorState.read(() => $getRoot().getTextContent());
       }
       const isEmpty = text === '';
       const data = isEmpty ? null : JSON.stringify(editorState.toJSON());
       dispatch(setEditorState(composeId, data, text));
-      getQuoteSuggestions(text);
+      getQuoteSuggestions(plainText);
+      detectLanguage(plainText);
     });
   }, [editor]);
 

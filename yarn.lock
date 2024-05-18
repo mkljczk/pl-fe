@@ -2585,6 +2585,11 @@
   dependencies:
     "@types/trusted-types" "*"
 
+"@types/emscripten@^1.39.10":
+  version "1.39.12"
+  resolved "https://registry.yarnpkg.com/@types/emscripten/-/emscripten-1.39.12.tgz#e43b4fdd4b389861897d6cbb9665532f3afd5abd"
+  integrity sha512-AQImDBgudQfMqUBfrjZYilRxoHDzTBp+ejh+g1fY67eSMalwIKtBXofjpyI0JBgNpHGzxeGAR2QDya0wxW9zbA==
+
 "@types/escape-html@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/escape-html/-/escape-html-1.0.1.tgz#b19b4646915f0ae2c306bf984dc0a59c5cfc97ba"
@@ -5768,6 +5773,13 @@ fastq@^1.6.0:
   integrity sha512-YpkpUnK8od0o1hmeSc7UUs/eB/vIPWJYjKck2QKIzAf71Vm1AAQ3EbuZB3g2JIy+pg+ERD0vqI79KyZiB2e2Nw==
   dependencies:
     reusify "^1.0.4"
+
+fasttext.wasm.js@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/fasttext.wasm.js/-/fasttext.wasm.js-1.0.0.tgz#3f89dfc024386af6c0a070ab5b65f0a62a0a79d2"
+  integrity sha512-Rv2DyM9ZaJ/r09FRIYeVXxsSRFu45CVH3Zu7nheTe/EPCH0Sew1wKf0zQ4VCBmibGRBpeHlpMuRdsp+VC/YwZw==
+  dependencies:
+    "@types/emscripten" "^1.39.10"
 
 file-entry-cache@^6.0.1:
   version "6.0.1"

@@ -27,6 +27,7 @@ const languages = Object.entries(languagesObject) as Array<[Language, string]>;
 
 const messages = defineMessages({
   languagePrompt: { id: 'compose.language_dropdown.prompt', defaultMessage: 'Select language' },
+  languageSuggestion: { id: 'compose.language_dropdown.suggestion', defaultMessage: '{language} (detected)' },
   search: { id: 'compose.language_dropdown.search', defaultMessage: 'Search language…' },
 });
 
@@ -61,7 +62,7 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
     ],
   });
 
-  const language = useCompose(composeId).language;
+  const { language, suggested_language: suggestedLanguage } = useCompose(composeId);
 
   const handleClick: React.EventHandler<
     React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>
@@ -253,12 +254,18 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
   const isSearching = searchValue !== '';
   const results = search();
 
+  let buttonLabel = intl.formatMessage(messages.languagePrompt);
+  if (language) buttonLabel = languagesObject[language];
+  else if (suggestedLanguage) buttonLabel = intl.formatMessage(messages.languageSuggestion, {
+    language: languagesObject[suggestedLanguage as Language] || suggestedLanguage,
+  });
+
   return (
     <>
       <Button
         theme='muted'
         size='xs'
-        text={language ? languagesObject[language] : intl.formatMessage(messages.languagePrompt)}
+        text={buttonLabel}
         icon={require('@tabler/icons/outline/language.svg')}
         secondaryIcon={require('@tabler/icons/outline/chevron-down.svg')}
         title={intl.formatMessage(messages.languagePrompt)}
