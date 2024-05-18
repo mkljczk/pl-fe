@@ -59,9 +59,9 @@ const HomePage: React.FC<IHomePage> = ({ children }) => {
             ref={composeBlock}
           >
             <CardBody>
-              <HStack alignItems='start' space={4}>
+              <HStack alignItems='start' space={2}>
                 <Link to={`/@${acct}`}>
-                  <Avatar src={avatar} size={46} />
+                  <Avatar src={avatar} size={42} />
                 </Link>
 
                 <div className='w-full translate-y-0.5'>

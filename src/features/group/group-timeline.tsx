@@ -62,14 +62,14 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
           <HStack
             ref={composer}
             alignItems='start'
-            space={4}
+            space={2}
             className={clsx('relative rounded-xl transition', {
               'border-2 border-primary-600 border-dashed z-[99] p-4': isDragging,
               'ring-2 ring-offset-2 ring-primary-600': isDraggedOver,
             })}
           >
             <Link to={`/@${account.acct}`}>
-              <Avatar src={account.avatar} size={46} />
+              <Avatar src={account.avatar} size={42} />
             </Link>
 
             <ComposeForm
