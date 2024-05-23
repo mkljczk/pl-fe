@@ -62,6 +62,8 @@ const COMPOSE_TYPE_CHANGE = 'COMPOSE_TYPE_CHANGE' as const;
 const COMPOSE_SPOILER_TEXT_CHANGE = 'COMPOSE_SPOILER_TEXT_CHANGE' as const;
 const COMPOSE_VISIBILITY_CHANGE  = 'COMPOSE_VISIBILITY_CHANGE' as const;
 const COMPOSE_LANGUAGE_CHANGE  = 'COMPOSE_LANGUAGE_CHANGE' as const;
+const COMPOSE_LANGUAGE_ADD  = 'COMPOSE_LANGUAGE_ADD' as const;
+const COMPOSE_LANGUAGE_DELETE  = 'COMPOSE_LANGUAGE_DELETE' as const;
 const COMPOSE_LISTABILITY_CHANGE = 'COMPOSE_LISTABILITY_CHANGE' as const;
 
 const COMPOSE_EMOJI_INSERT = 'COMPOSE_EMOJI_INSERT' as const;
@@ -741,6 +743,18 @@ const changeComposeLanguage = (composeId: string, value: Language | null) => ({
   value,
 });
 
+const addComposeLanguage = (composeId: string, value: Language | null) => ({
+  type: COMPOSE_LANGUAGE_ADD,
+  id: composeId,
+  value,
+});
+
+const deleteComposeLanguage = (composeId: string, value: Language | null) => ({
+  type: COMPOSE_LANGUAGE_DELETE,
+  id: composeId,
+  value,
+});
+
 const insertEmojiCompose = (composeId: string, position: number, emoji: Emoji, needsSpace: boolean) => ({
   type: COMPOSE_EMOJI_INSERT,
   id: composeId,
@@ -931,6 +945,8 @@ type ComposeAction =
   | ReturnType<typeof changeComposeSpoilerText>
   | ReturnType<typeof changeComposeVisibility>
   | ReturnType<typeof changeComposeLanguage>
+  | ReturnType<typeof addComposeLanguage>
+  | ReturnType<typeof deleteComposeLanguage>
   | ReturnType<typeof insertEmojiCompose>
   | ReturnType<typeof addPoll>
   | ReturnType<typeof removePoll>
@@ -978,6 +994,8 @@ export {
   COMPOSE_SPOILER_TEXT_CHANGE,
   COMPOSE_VISIBILITY_CHANGE,
   COMPOSE_LANGUAGE_CHANGE,
+  COMPOSE_LANGUAGE_ADD,
+  COMPOSE_LANGUAGE_DELETE,
   COMPOSE_LISTABILITY_CHANGE,
   COMPOSE_EMOJI_INSERT,
   COMPOSE_UPLOAD_CHANGE_REQUEST,
@@ -1039,6 +1057,8 @@ export {
   changeComposeSpoilerText,
   changeComposeVisibility,
   changeComposeLanguage,
+  addComposeLanguage,
+  deleteComposeLanguage,
   insertEmojiCompose,
   addPoll,
   removePoll,

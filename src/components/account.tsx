@@ -23,6 +23,7 @@ interface IInstanceFavicon {
 
 const messages = defineMessages({
   bot: { id: 'account.badges.bot', defaultMessage: 'Bot' },
+  languageVersions: { id: 'status.language_versions', defaultMessage: 'The post has multiple language versions.' },
 });
 
 const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
@@ -90,6 +91,7 @@ interface IAccount {
   withLinkToProfile?: boolean;
   withRelationship?: boolean;
   showEdit?: boolean;
+  showMultiLanguage?: boolean;
   approvalStatus?: StatusApprovalStatus;
   emoji?: string;
   emojiUrl?: string;
@@ -116,6 +118,7 @@ const Account = ({
   withLinkToProfile = true,
   withRelationship = true,
   showEdit = false,
+  showMultiLanguage = false,
   approvalStatus,
   emoji,
   emojiUrl,
@@ -265,6 +268,16 @@ const Account = ({
                     <Text tag='span' theme='muted' size='sm'>&middot;</Text>
 
                     <Icon className='h-5 w-5 text-gray-700 dark:text-gray-600' src={require('@tabler/icons/outline/pencil.svg')} />
+                  </>
+                ) : null}
+
+                {showMultiLanguage ? (
+                  <>
+                    <Text tag='span' theme='muted' size='sm'>&middot;</Text>
+
+                    <button title={intl.formatMessage(messages.languageVersions)}>
+                      <Icon className='h-5 w-5 text-gray-700 dark:text-gray-600' src={require('@tabler/icons/outline/language.svg')} />
+                    </button>
                   </>
                 ) : null}
 

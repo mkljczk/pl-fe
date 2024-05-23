@@ -428,6 +428,7 @@ const Status: React.FC<IStatus> = (props) => {
             action={accountAction}
             hideActions={!accountAction}
             showEdit={!!actualStatus.edited_at}
+            showMultiLanguage={!!actualStatus.content_map && actualStatus.content_map?.count() > 1}
             showProfileHoverCard={hoverable}
             withLinkToProfile={hoverable}
             approvalStatus={actualStatus.approval_status}

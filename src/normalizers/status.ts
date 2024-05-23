@@ -50,6 +50,7 @@ const StatusRecord = ImmutableRecord({
   bookmarked: false,
   card: null as Card | null,
   content: '',
+  content_map: null as ImmutableMap<string, string> | null,
   created_at: '',
   dislikes_count: 0,
   disliked: false,

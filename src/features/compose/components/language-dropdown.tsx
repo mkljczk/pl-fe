@@ -7,10 +7,10 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { createSelector } from 'reselect';
 
-import { changeComposeLanguage } from 'soapbox/actions/compose';
+import { addComposeLanguage, changeComposeLanguage, deleteComposeLanguage } from 'soapbox/actions/compose';
 import { Button, Icon, Input, Portal } from 'soapbox/components/ui';
 import { type Language, languages as languagesObject } from 'soapbox/features/preferences';
-import { useAppDispatch, useAppSelector, useCompose } from 'soapbox/hooks';
+import { useAppDispatch, useAppSelector, useCompose, useFeatures } from 'soapbox/hooks';
 
 const getFrequentlyUsedLanguages = createSelector([
   state => state.settings.get('frequentlyUsedLanguages', ImmutableMap()),
@@ -28,7 +28,10 @@ const languages = Object.entries(languagesObject) as Array<[Language, string]>;
 const messages = defineMessages({
   languagePrompt: { id: 'compose.language_dropdown.prompt', defaultMessage: 'Select language' },
   languageSuggestion: { id: 'compose.language_dropdown.suggestion', defaultMessage: '{language} (detected)' },
+  multipleLanguages: { id: 'compose.language_dropdown.more_languages', defaultMessage: '{count, plural, one {# more language} other {# more languages}}' },
   search: { id: 'compose.language_dropdown.search', defaultMessage: 'Search language…' },
+  addLanguage: { id: 'compose.language_dropdown.add_language', defaultMessage: 'Add language' },
+  deleteLanguage: { id: 'compose.language_dropdown.delete_language', defaultMessage: 'DElete language' },
 });
 
 interface ILanguageDropdown {
@@ -37,6 +40,7 @@ interface ILanguageDropdown {
 
 const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
   const intl = useIntl();
+  const features = useFeatures();
   const dispatch = useAppDispatch();
   const frequentlyUsedLanguages = useAppSelector(getFrequentlyUsedLanguages);
 
@@ -62,7 +66,7 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
     ],
   });
 
-  const { language, suggested_language: suggestedLanguage } = useCompose(composeId);
+  const { language, suggested_language: suggestedLanguage, textMap } = useCompose(composeId);
 
   const handleClick: React.EventHandler<
     React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>
@@ -127,6 +131,26 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
     handleChange(value);
   };
 
+  const handleAddLanguageClick: React.EventHandler<any> = (e: MouseEvent | KeyboardEvent) => {
+    const value = (e.currentTarget as HTMLElement)?.parentElement?.getAttribute('data-index') as Language;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    setIsOpen(false);
+    dispatch(addComposeLanguage(composeId, value));
+  };
+
+  const handleDeleteLanguageClick: React.EventHandler<any> = (e: MouseEvent | KeyboardEvent) => {
+    const value = (e.currentTarget as HTMLElement)?.parentElement?.getAttribute('data-index') as Language;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    setIsOpen(false);
+    dispatch(deleteComposeLanguage(composeId, value));
+  };
+
   const handleClear: React.MouseEventHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -139,6 +163,14 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
       return [...languages].sort((a, b) => {
         // Push current selection to the top of the list
 
+        if (textMap.has(a[0])) {
+          if (b[0] === language) return 1;
+          return -1;
+        }
+        if (textMap.has(b[0])) {
+          if (a[0] === language) return -1;
+          return 1;
+        }
         if (a[0] === language) {
           return -1;
         } else if (b[0] === language) {
@@ -255,8 +287,13 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
   const results = search();
 
   let buttonLabel = intl.formatMessage(messages.languagePrompt);
-  if (language) buttonLabel = languagesObject[language];
-  else if (suggestedLanguage) buttonLabel = intl.formatMessage(messages.languageSuggestion, {
+  if (language) {
+    const list: string[] = [languagesObject[language]];
+    if (textMap.size) list.push(intl.formatMessage(messages.multipleLanguages, {
+      count: textMap.size,
+    }));
+    buttonLabel = intl.formatList(list);
+  } else if (suggestedLanguage) buttonLabel = intl.formatMessage(messages.languageSuggestion, {
     language: languagesObject[suggestedLanguage as Language] || suggestedLanguage,
   });
 
@@ -320,19 +357,30 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
                     onKeyDown={handleOptionKeyDown}
                     onClick={handleOptionClick}
                     className={clsx(
-                      'flex cursor-pointer p-2.5 text-sm text-gray-700 hover:bg-gray-100 black:hover:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800',
+                      'flex cursor-pointer gap-2 p-2.5 text-sm text-gray-700 hover:bg-gray-100 black:hover:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800',
                       { 'bg-gray-100 dark:bg-gray-800 black:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-700': active },
                     )}
                     aria-selected={active}
                     ref={active ? focusedItem : null}
                   >
                     <div
-                      className={clsx('flex-auto text-primary-600 dark:text-primary-400', {
+                      className={clsx('flex-auto grow text-primary-600 dark:text-primary-400', {
                         'text-black dark:text-white': active,
                       })}
                     >
                       {name}
                     </div>
+                    {features.multiLanguage && !!language && !active && (
+                      textMap.has(code) ? (
+                        <button title={intl.formatMessage(messages.deleteLanguage)} onClick={handleDeleteLanguageClick}>
+                          <Icon className='h-4 w-4' src={require('@tabler/icons/outline/minus.svg')} />
+                        </button>
+                      ) : (
+                        <button title={intl.formatMessage(messages.addLanguage)} onClick={handleAddLanguageClick}>
+                          <Icon className='h-4 w-4' src={require('@tabler/icons/outline/plus.svg')} />
+                        </button>
+                      )
+                    )}
                   </div>
                 );
               })}

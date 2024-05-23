@@ -57,6 +57,8 @@ import {
   COMPOSE_ADD_SUGGESTED_QUOTE,
   ComposeAction,
   COMPOSE_ADD_SUGGESTED_LANGUAGE,
+  COMPOSE_LANGUAGE_ADD,
+  COMPOSE_LANGUAGE_DELETE,
 } from '../actions/compose';
 import { EVENT_COMPOSE_CANCEL, EVENT_FORM_SET, type EventsAction } from '../actions/events';
 import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS, MeAction } from '../actions/me';
@@ -111,6 +113,7 @@ const ReducerCompose = ImmutableRecord({
   suggestion_token: null as string | null,
   tagHistory: ImmutableList<string>(),
   text: '',
+  textMap: ImmutableMap<Language, string>(),
   to: ImmutableOrderedSet<string>(),
   parent_reblogged_by: null as string | null,
   dismissed_quotes: ImmutableOrderedSet<string>(),
@@ -553,11 +556,13 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
         return list.splice(indexA, 1).splice(indexB, 0, moveItem);
       }));
     case COMPOSE_ADD_SUGGESTED_QUOTE:
-      return updateCompose(state, action.id, compose => compose
-        .set('quote', action.quoteId));
+      return updateCompose(state, action.id, compose => compose.set('quote', action.quoteId));
     case COMPOSE_ADD_SUGGESTED_LANGUAGE:
-      return updateCompose(state, action.id, compose => compose
-        .set('suggested_language', action.language));
+      return updateCompose(state, action.id, compose => compose.set('suggested_language', action.language));
+    case COMPOSE_LANGUAGE_ADD:
+      return updateCompose(state, action.id, compose => compose.setIn(['textMap', action.value], ''));
+    case COMPOSE_LANGUAGE_DELETE:
+      return updateCompose(state, action.id, compose => compose.removeIn(['textMap', action.value]));
     case COMPOSE_QUOTE_CANCEL:
       return updateCompose(state, action.id, compose => compose
         .update('dismissed_quotes', quotes => compose.quote ? quotes.add(compose.quote) : quotes)
