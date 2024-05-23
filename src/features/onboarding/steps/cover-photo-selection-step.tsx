@@ -11,6 +11,8 @@ import toast from 'soapbox/toast';
 import { isDefaultHeader } from 'soapbox/utils/accounts';
 import resizeImage from 'soapbox/utils/resize-image';
 
+import type { PlfeResponse } from 'soapbox/api';
+
 const messages = defineMessages({
   header: { id: 'account.header.alt', defaultMessage: 'Profile header' },
   error: { id: 'onboarding.error', defaultMessage: 'An unexpected error occurred. Please try again or skip this step.' },
@@ -51,7 +53,7 @@ const CoverPhotoSelectionStep = ({ onNext }: { onNext: () => void }) => {
         setDisabled(false);
         setSubmitting(false);
         onNext();
-      }).catch((error: { response: Response }) => {
+      }).catch((error: { response: PlfeResponse }) => {
         setSubmitting(false);
         setDisabled(false);
         setSelectedFile(null);

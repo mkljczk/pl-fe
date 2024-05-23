@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 
-import api, { getLinks } from 'soapbox/api';
+import api, { type PlfeResponse, getLinks } from 'soapbox/api';
 import { normalizeAccount } from 'soapbox/normalizers';
 import toast from 'soapbox/toast';
 
@@ -48,7 +48,7 @@ const fileExport = (content: string, fileName: string) => {
   document.body.removeChild(fileToDownload);
 };
 
-const listAccounts = (getState: () => RootState) => async(apiResponse: Response & { json: any }) => {
+const listAccounts = (getState: () => RootState) => async(apiResponse: PlfeResponse) => {
   const followings = apiResponse.json;
   let accounts = [];
   let next = getLinks(apiResponse).refs.find(link => link.rel === 'next');

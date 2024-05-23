@@ -18,6 +18,7 @@ import {
 import { ME_FETCH_SKIP } from '../actions/me';
 
 import type { AnyAction } from 'redux';
+import type { PlfeResponse } from 'soapbox/api';
 import type { APIEntity, Account as AccountEntity } from 'soapbox/types/entities';
 
 const AuthAppRecord = ImmutableRecord({
@@ -282,7 +283,7 @@ const persistAuthAccount = (account: APIEntity) => {
   }
 };
 
-const deleteForbiddenToken = (state: State, error: { response: Response }, token: string) => {
+const deleteForbiddenToken = (state: State, error: { response: PlfeResponse }, token: string) => {
   if ([401, 403].includes(error.response?.status!)) {
     return deleteToken(state, token);
   } else {

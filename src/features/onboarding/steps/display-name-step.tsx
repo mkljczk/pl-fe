@@ -7,6 +7,8 @@ import { Button, FormGroup, Input, Stack } from 'soapbox/components/ui';
 import { useAppDispatch, useOwnAccount } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 
+import type { PlfeResponse } from 'soapbox/api';
+
 const messages = defineMessages({
   usernamePlaceholder: { id: 'onboarding.display_name.placeholder', defaultMessage: 'Eg. John Smith' },
   error: { id: 'onboarding.error', defaultMessage: 'An unexpected error occurred. Please try again or skip this step.' },
@@ -41,7 +43,7 @@ const DisplayNameStep = ({ onNext }: { onNext: () => void }) => {
       .then(() => {
         setSubmitting(false);
         onNext();
-      }).catch((error: { response: Response }) => {
+      }).catch((error: { response: PlfeResponse }) => {
         setSubmitting(false);
 
         if (error.response?.status === 422) {

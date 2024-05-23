@@ -7,10 +7,11 @@ import { useLoading } from 'soapbox/hooks/useLoading';
 
 import { importEntities } from '../actions';
 import { findEntity } from '../selectors';
-import { Entity } from '../types';
 
-import { EntityFn } from './types';
-import { type UseEntityOpts } from './useEntity';
+import type { EntityFn } from './types';
+import type { UseEntityOpts } from './useEntity';
+import type { Entity } from '../types';
+import type { PlfeResponse } from 'soapbox/api';
 
 /** Entities will be filtered through this function until it returns true. */
 type LookupFn<TEntity extends Entity> = (entity: TEntity) => boolean
@@ -56,8 +57,8 @@ const useEntityLookup = <TEntity extends Entity>(
     fetchEntity,
     isFetching,
     isLoading,
-    isUnauthorized: (error as { response?: Response })?.response?.status === 401,
-    isForbidden: (error as { response?: Response })?.response?.status === 403,
+    isUnauthorized: (error as { response?: PlfeResponse })?.response?.status === 401,
+    isForbidden: (error as { response?: PlfeResponse })?.response?.status === 403,
   };
 };
 

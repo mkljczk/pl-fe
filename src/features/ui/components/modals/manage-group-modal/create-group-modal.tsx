@@ -11,6 +11,8 @@ import ConfirmationStep from './steps/confirmation-step';
 import DetailsStep from './steps/details-step';
 import PrivacyStep from './steps/privacy-step';
 
+import type { PlfeResponse } from 'soapbox/api';
+
 const messages = defineMessages({
   next: { id: 'manage_group.next', defaultMessage: 'Next' },
   create: { id: 'manage_group.create', defaultMessage: 'Create Group' },
@@ -64,7 +66,7 @@ const CreateGroupModal: React.FC<ICreateGroupModal> = ({ onClose }) => {
             setCurrentStep(Steps.THREE);
             setGroup(group);
           },
-          onError(error: { response?: Response }) {
+          onError(error: { response?: PlfeResponse }) {
             const msg = z.object({ error: z.string() }).safeParse(error?.response?.json);
             if (msg.success) {
               toast.error(msg.data.error);

@@ -1,4 +1,5 @@
 import type { Entity } from '../types';
+import type { PlfeResponse } from 'soapbox/api';
 import type z from 'zod';
 
 type EntitySchema<TEntity extends Entity = Entity> = z.ZodType<TEntity, z.ZodTypeDef, any>;
@@ -32,9 +33,9 @@ interface EntityCallbacks<Value, Error = unknown> {
 
 /**
  * Passed into hooks to make requests.
- * Must return an Axios response.
+ * Must return a response.
  */
-type EntityFn<T> = (value: T) => Promise<Response>
+type EntityFn<T> = (value: T) => Promise<PlfeResponse>
 
 export type {
   EntitySchema,

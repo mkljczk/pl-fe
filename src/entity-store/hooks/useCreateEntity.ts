@@ -9,6 +9,7 @@ import { parseEntitiesPath } from './utils';
 
 import type { EntityCallbacks, EntityFn, EntitySchema, ExpandedEntitiesPath } from './types';
 import type { Entity } from '../types';
+import type { PlfeResponse } from 'soapbox/api';
 
 interface UseCreateEntityOpts<TEntity extends Entity = Entity> {
   schema?: EntitySchema<TEntity>;
@@ -26,7 +27,7 @@ const useCreateEntity = <TEntity extends Entity = Entity, Data = unknown>(
 
   const createEntity = async (
     data: Data,
-    callbacks: EntityCallbacks<TEntity, { response?: Response & { json: any } }> = {},
+    callbacks: EntityCallbacks<TEntity, { response?: PlfeResponse }> = {},
   ): Promise<void> => {
     const result = await setPromise(entityFn(data));
     const schema = opts.schema || z.custom<TEntity>();

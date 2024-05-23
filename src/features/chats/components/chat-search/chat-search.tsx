@@ -15,6 +15,8 @@ import Blankslate from './blankslate';
 import EmptyResultsBlankslate from './empty-results-blankslate';
 import Results from './results';
 
+import type { PlfeResponse } from 'soapbox/api';
+
 const messages = defineMessages({
   placeholder: { id: 'chat_search.placeholder', defaultMessage: 'Type a name' },
 });
@@ -44,7 +46,7 @@ const ChatSearch = (props: IChatSearch) => {
 
   const handleClickOnSearchResult = useMutation({
     mutationFn: (accountId: string) => getOrCreateChatByAccountId(accountId),
-    onError: (error: { response: Response }) => {
+    onError: (error: { response: PlfeResponse }) => {
       const data = error.response?.json as any;
       toast.error(data?.error);
     },

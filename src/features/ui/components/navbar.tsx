@@ -13,6 +13,8 @@ import { useAppDispatch, useFeatures, useOwnAccount, useRegistrationStatus } fro
 
 import ProfileDropdown from './profile-dropdown';
 
+import type { PlfeResponse } from 'soapbox/api';
+
 const messages = defineMessages({
   login: { id: 'navbar.login.action', defaultMessage: 'Log in' },
   username: { id: 'navbar.login.username.placeholder', defaultMessage: 'Email or username' },
@@ -50,7 +52,7 @@ const Navbar = () => {
             .then(() => dispatch(fetchInstance()))
         );
       })
-      .catch((error: { response: Response }) => {
+      .catch((error: { response: PlfeResponse }) => {
         setLoading(false);
 
         const data: any = error.response?.json;

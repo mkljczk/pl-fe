@@ -7,6 +7,8 @@ import { Button, FormGroup, Stack, Textarea } from 'soapbox/components/ui';
 import { useAppDispatch, useOwnAccount } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 
+import type { PlfeResponse } from 'soapbox/api';
+
 const messages = defineMessages({
   bioPlaceholder: { id: 'onboarding.bio.placeholder', defaultMessage: 'Tell the world a little about yourself…' },
   error: { id: 'onboarding.error', defaultMessage: 'An unexpected error occurred. Please try again or skip this step.' },
@@ -30,7 +32,7 @@ const BioStep = ({ onNext }: { onNext: () => void }) => {
       .then(() => {
         setSubmitting(false);
         onNext();
-      }).catch((error: { response: Response }) => {
+      }).catch((error: { response: PlfeResponse }) => {
         setSubmitting(false);
 
         if (error.response?.status === 422) {

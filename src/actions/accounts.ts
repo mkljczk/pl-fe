@@ -4,7 +4,7 @@ import { selectAccount } from 'soapbox/selectors';
 import { isLoggedIn } from 'soapbox/utils/auth';
 import { getFeatures, parseVersion, PLEROMA } from 'soapbox/utils/features';
 
-import api, { getLinks } from '../api';
+import api, { getLinks, type PlfeResponse } from '../api';
 
 import {
   importFetchedAccount,
@@ -117,7 +117,7 @@ const BIRTHDAY_REMINDERS_FETCH_REQUEST = 'BIRTHDAY_REMINDERS_FETCH_REQUEST';
 const BIRTHDAY_REMINDERS_FETCH_SUCCESS = 'BIRTHDAY_REMINDERS_FETCH_SUCCESS';
 const BIRTHDAY_REMINDERS_FETCH_FAIL    = 'BIRTHDAY_REMINDERS_FETCH_FAIL';
 
-const maybeRedirectLogin = (error: { response: Response }, history?: History) => {
+const maybeRedirectLogin = (error: { response: PlfeResponse }, history?: History) => {
   // The client is unauthorized - redirect to login.
   if (history && error?.response?.status === 401) {
     history.push('/login');

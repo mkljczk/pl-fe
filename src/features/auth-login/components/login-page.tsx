@@ -15,6 +15,8 @@ import ConsumersList from './consumers-list';
 import LoginForm from './login-form';
 import OtpAuthForm from './otp-auth-form';
 
+import type { PlfeResponse } from 'soapbox/api';
+
 const LoginPage = () => {
   const dispatch = useAppDispatch();
 
@@ -49,7 +51,7 @@ const LoginPage = () => {
         } else {
           setShouldRedirect(true);
         }
-      }).catch((error: { response: Response }) => {
+      }).catch((error: { response: PlfeResponse }) => {
         const data: any = error.response?.json;
         if (data?.error === 'mfa_required') {
           setMfaAuthNeeded(true);

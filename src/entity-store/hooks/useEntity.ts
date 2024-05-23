@@ -10,6 +10,7 @@ import { selectEntity } from '../selectors';
 
 import type { EntitySchema, EntityPath, EntityFn } from './types';
 import type { Entity } from '../types';
+import type { PlfeResponse } from 'soapbox/api';
 
 /** Additional options for the hook. */
 interface UseEntityOpts<TEntity extends Entity> {
@@ -66,8 +67,8 @@ const useEntity = <TEntity extends Entity>(
     isLoading,
     isLoaded,
     error,
-    isUnauthorized: (error as { response?: Response })?.response?.status === 401,
-    isForbidden: (error as { response?: Response })?.response?.status === 403,
+    isUnauthorized: (error as { response?: PlfeResponse })?.response?.status === 401,
+    isForbidden: (error as { response?: PlfeResponse })?.response?.status === 403,
   };
 };
 

@@ -5,6 +5,8 @@ import { defineMessages, MessageDescriptor } from 'react-intl';
 import { Toast } from './components/ui';
 import { httpErrorMessages } from './utils/errors';
 
+import type { PlfeResponse } from './api';
+
 type ToastText = string | MessageDescriptor
 type ToastType = 'success' | 'error' | 'info'
 
@@ -39,7 +41,7 @@ const messages = defineMessages({
   unexpectedMessage: { id: 'alert.unexpected.message', defaultMessage: 'Something went wrong.' },
 });
 
-const showAlertForError = (networkError: { response: Response & { json: any } }) => {
+const showAlertForError = (networkError: { response: PlfeResponse }) => {
   if (networkError?.response) {
     const { json, status, statusText } = networkError.response;
 

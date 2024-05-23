@@ -11,6 +11,8 @@ import { RootState } from 'soapbox/store';
 import { getAccessToken, getAppToken, isURL, parseBaseURL } from 'soapbox/utils/auth';
 import { buildFullPath } from 'soapbox/utils/url';
 
+type PlfeResponse<T = any> = Response & { data: string; json: T };
+
 /**
   Parse Link headers, mostly for pagination.
   @param {object} response - Fetch API response object
@@ -57,7 +59,7 @@ const getFetch = (accessToken?: string | null, baseURL: string = '') =>
 
     // Fetch API doesn't report upload progress, use XHR
     if (init?.onUploadProgress) {
-      return new Promise<Response & { data: string; json: T }>((resolve, reject) => {
+      return new Promise<PlfeResponse<T>>((resolve, reject) => {
         const xhr = new XMLHttpRequest();
 
         xhr.addEventListener('progress', init.onUploadProgress!);
@@ -72,7 +74,7 @@ const getFetch = (accessToken?: string | null, baseURL: string = '') =>
           }
 
           if (xhr.status >= 400) reject({ response: { status: xhr.status, data, json } });
-          resolve({ status: xhr.status, data, json } as any);
+          resolve({ status: xhr.status, data, json } as any as PlfeResponse<T>);
         });
 
         xhr.open(init?.method || 'GET', fullPath, true);
@@ -85,8 +87,8 @@ const getFetch = (accessToken?: string | null, baseURL: string = '') =>
     return fetch(fullPath, {
       ...init,
       headers,
-    }).then(async (response) => {
-      const data = await response.text();
+    }).then(async (res) => {
+      const data = await res.text();
       let json: T = undefined!;
 
       try {
@@ -95,11 +97,14 @@ const getFetch = (accessToken?: string | null, baseURL: string = '') =>
         //
       }
 
-      if (!response.ok) {
-        const { headers, ok, redirected, status, statusText, type, url } = response;
-        throw { response: { headers, ok, redirected, status, statusText, type, url, data, json } };
+      const { headers, ok, redirected, status, statusText, type, url } = res;
+
+      const response = { headers, ok, redirected, status, statusText, type, url, data, json };
+
+      if (!ok) {
+        throw { response };
       }
-      return { ...response, data, json };
+      return response as any as PlfeResponse<T>;
     });
   };
 
@@ -120,7 +125,10 @@ const staticFetch = (input: URL | RequestInfo, init?: RequestInit | undefined) =
     } catch (e) {
       //
     }
-    return { ...response, data, json };
+
+    const { headers, ok, redirected, status, statusText, type, url } = response;
+
+    return { headers, ok, redirected, status, statusText, type, url, data, json } as any as PlfeResponse;
   });
 };
 
@@ -141,6 +149,7 @@ const api = (getState: () => RootState, authType: string = 'user') => {
 };
 
 export {
+  type PlfeResponse,
   getLinks,
   getNextLink,
   getPrevLink,

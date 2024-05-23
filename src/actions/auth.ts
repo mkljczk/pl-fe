@@ -26,7 +26,7 @@ import { normalizeUsername } from 'soapbox/utils/input';
 import { getScopes } from 'soapbox/utils/scopes';
 import { isStandalone } from 'soapbox/utils/state';
 
-import api, { getFetch } from '../api';
+import api, { type PlfeResponse, getFetch } from '../api';
 
 import { importFetchedAccount } from './importer';
 
@@ -187,7 +187,7 @@ const loadCredentials = (token: string, accountUrl: string) =>
 const logIn = (username: string, password: string) =>
   (dispatch: AppDispatch) => dispatch(getAuthApp()).then(() =>
     dispatch(createUserToken(normalizeUsername(username), password)),
-  ).catch((error: { response: Response }) => {
+  ).catch((error: { response: PlfeResponse }) => {
     if ((error.response?.json as any)?.error === 'mfa_required') {
       // If MFA is required, throw the error and handle it in the component.
       throw error;

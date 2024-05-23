@@ -31,6 +31,8 @@ import { isDefaultHeader } from 'soapbox/utils/accounts';
 import copy from 'soapbox/utils/copy';
 import { MASTODON, parseVersion } from 'soapbox/utils/features';
 
+import type { PlfeResponse } from 'soapbox/api';
+
 const messages = defineMessages({
   edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
   linkVerifiedOn: { id: 'account.link_verified_on', defaultMessage: 'Ownership of this link was checked on {date}' },
@@ -93,7 +95,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
   const createAndNavigateToChat = useMutation({
     mutationFn: (accountId: string) => getOrCreateChatByAccountId(accountId),
-    onError: (error: { response: Response }) => {
+    onError: (error: { response: PlfeResponse }) => {
       const data = error.response?.json as any;
       toast.error(data?.error);
     },

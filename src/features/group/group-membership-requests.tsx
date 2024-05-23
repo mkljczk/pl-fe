@@ -11,6 +11,7 @@ import toast from 'soapbox/toast';
 
 import ColumnForbidden from '../ui/components/column-forbidden';
 
+import type { PlfeResponse } from 'soapbox/api';
 import type { Account as AccountEntity } from 'soapbox/schemas';
 
 type RouteParams = { groupId: string };
@@ -80,7 +81,7 @@ const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params })
   const handleAuthorize = async (account: AccountEntity) =>
     authorize(account.id)
       .then(() => Promise.resolve())
-      .catch((error: { response: Response }) => {
+      .catch((error: { response: PlfeResponse }) => {
         refetch();
 
         let message = intl.formatMessage(messages.authorizeFail, { name: account.username });
@@ -95,7 +96,7 @@ const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params })
   const handleReject = async (account: AccountEntity) =>
     reject(account.id)
       .then(() => Promise.resolve())
-      .catch((error: { response: Response }) => {
+      .catch((error: { response: PlfeResponse }) => {
         refetch();
 
         let message = intl.formatMessage(messages.rejectFail, { name: account.username });

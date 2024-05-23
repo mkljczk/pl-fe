@@ -11,11 +11,12 @@ import {
 } from '../actions/me';
 
 import type { AnyAction } from 'redux';
+import type { PlfeResponse } from 'soapbox/api';
 import type { Me } from 'soapbox/types/soapbox';
 
 const initialState: Me = null;
 
-const handleForbidden = (state: Me, error: { response: Response }) => {
+const handleForbidden = (state: Me, error: { response: PlfeResponse }) => {
   if (([401, 403] as any[]).includes(error.response?.status)) {
     return false;
   } else {

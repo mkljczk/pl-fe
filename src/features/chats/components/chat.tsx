@@ -12,6 +12,7 @@ import toast from 'soapbox/toast';
 import ChatComposer from './chat-composer';
 import ChatMessageList from './chat-message-list';
 
+import type { PlfeResponse } from 'soapbox/api';
 import type { Attachment } from 'soapbox/types/entities';
 
 const fileKeyGen = (): number => Math.floor((Math.random() * 0x10000));
@@ -69,7 +70,7 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
       onSuccess: () => {
         setErrorMessage(undefined);
       },
-      onError: (error: { response: Response & { json: any } }, _variables, context) => {
+      onError: (error: { response: PlfeResponse }, _variables, context) => {
         const message = error.response?.json?.error;
         setErrorMessage(message || intl.formatMessage(messages.failedToSend));
         setContent(context.prevContent as string);
