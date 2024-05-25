@@ -51,7 +51,6 @@ const icons: Record<NotificationType, string> = {
   move: require('@tabler/icons/outline/briefcase.svg'),
   'pleroma:chat_mention': require('@tabler/icons/outline/messages.svg'),
   'pleroma:emoji_reaction': require('@tabler/icons/outline/mood-happy.svg'),
-  user_approved: require('@tabler/icons/outline/user-plus.svg'),
   update: require('@tabler/icons/outline/pencil.svg'),
   'pleroma:event_reminder': require('@tabler/icons/outline/calendar-time.svg'),
   'pleroma:participation_request': require('@tabler/icons/outline/calendar-event.svg'),
@@ -98,10 +97,6 @@ const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
   'pleroma:emoji_reaction': {
     id: 'notification.pleroma:emoji_reaction',
     defaultMessage: '{name} reacted to your post',
-  },
-  user_approved: {
-    id: 'notification.user_approved',
-    defaultMessage: 'Welcome to {instance}!',
   },
   update: {
     id: 'notification.update',
@@ -285,15 +280,6 @@ const Notification: React.FC<INotification> = (props) => {
   const renderContent = () => {
     switch (type as NotificationType) {
       case 'follow':
-      case 'user_approved':
-        return account && typeof account === 'object' ? (
-          <AccountContainer
-            id={account.id}
-            hidden={hidden}
-            avatarSize={avatarSize}
-            withRelationship
-          />
-        ) : null;
       case 'follow_request':
         return account && typeof account === 'object' ? (
           <AccountContainer

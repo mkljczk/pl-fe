@@ -10,7 +10,6 @@ const NOTIFICATION_TYPES = [
   'move',
   'pleroma:chat_mention',
   'pleroma:emoji_reaction',
-  'user_approved',
   'update',
   'pleroma:event_reminder',
   'pleroma:participation_request',
