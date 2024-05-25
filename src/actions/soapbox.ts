@@ -61,9 +61,9 @@ const fetchSoapboxConfig = (host: string | null) =>
 
     if (features.frontendConfigurations) {
       return dispatch(fetchFrontendConfigurations()).then(data => {
-        if (data.soapbox_fe) {
-          dispatch(importSoapboxConfig(data.soapbox_fe, host));
-          return data.soapbox_fe;
+        if (data.pl_fe) {
+          dispatch(importSoapboxConfig(data.pl_fe, host));
+          return data.pl_fe;
         }
       });
     } else {

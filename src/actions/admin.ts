@@ -104,7 +104,7 @@ const updateSoapboxConfig = (data: Record<string, any>) =>
       group: ':pleroma',
       key: ':frontend_configurations',
       value: [{
-        tuple: [':soapbox_fe', data],
+        tuple: [':pl_fe', data],
       }],
     }];
 

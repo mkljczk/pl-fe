@@ -21,7 +21,7 @@ const updateFromAdmin = (state: ImmutableMap<string, any>, configs: ImmutableLis
   try {
     return ConfigDB.find(configs, ':pleroma', ':frontend_configurations')!
       .get('value')
-      .find((value: ImmutableMap<string, any>) => value.getIn(['tuple', 0]) === ':soapbox_fe')
+      .find((value: ImmutableMap<string, any>) => value.getIn(['tuple', 0]) === ':pl_fe')
       .getIn(['tuple', 1]);
   } catch {
     return state;
@@ -33,7 +33,7 @@ const preloadImport = (state: ImmutableMap<string, any>, action: Record<string, 
   const feData = action.data[path];
 
   if (feData) {
-    const soapbox = feData.soapbox_fe;
+    const soapbox = feData.pl_fe;
     return soapbox ? fallbackState.mergeDeep(fromJS(soapbox)) : fallbackState;
   } else {
     return state;

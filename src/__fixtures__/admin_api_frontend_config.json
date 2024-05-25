@@ -6,7 +6,7 @@
       "value": [
         {
           "tuple": [
-            ":soapbox_fe",
+            ":pl_fe",
             {
               "logo": "blob:http://localhost:3036/0cdfa863-6889-4199-b870-4942cedd364f",
               "banner": "blob:http://localhost:3036/a835afed-6078-45bd-92b4-7ffd858c3eca",

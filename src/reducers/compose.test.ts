@@ -165,7 +165,7 @@ describe('compose reducer', () => {
     const state = initialState.set('default', ReducerCompose({ privacy: 'public' }));
     const action = {
       type: ME_FETCH_SUCCESS,
-      me: { pleroma: { settings_store: { soapbox_fe: { defaultPrivacy: 'unlisted' } } } },
+      me: { pleroma: { settings_store: { pl_fe: { defaultPrivacy: 'unlisted' } } } },
     };
     expect(reducer(state, action as any).toJS().default).toMatchObject({
       privacy: 'unlisted',
@@ -188,7 +188,7 @@ describe('compose reducer', () => {
     const state = initialState.set('default', ReducerCompose({ privacy: 'public' }));
     const action = {
       type: ME_PATCH_SUCCESS,
-      me: { pleroma: { settings_store: { soapbox_fe: { defaultPrivacy: 'unlisted' } } } },
+      me: { pleroma: { settings_store: { pl_fe: { defaultPrivacy: 'unlisted' } } } },
     };
     expect(reducer(state, action).toJS().default).toMatchObject({
       privacy: 'unlisted',

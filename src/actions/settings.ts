@@ -13,7 +13,7 @@ const SETTING_CHANGE = 'SETTING_CHANGE' as const;
 const SETTING_SAVE   = 'SETTING_SAVE' as const;
 const SETTINGS_UPDATE = 'SETTINGS_UPDATE' as const;
 
-const FE_NAME = 'soapbox_fe';
+const FE_NAME = 'pl_fe';
 
 /** Options when changing/saving settings. */
 type SettingOpts = {

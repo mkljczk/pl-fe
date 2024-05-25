@@ -2665,7 +2665,7 @@
     },
     {
       "db": [
-        ":soapbox_fe"
+        ":pl_fe"
       ],
       "group": ":pleroma",
       "key": ":frontend_configurations",
@@ -2714,7 +2714,7 @@
         },
         {
           "tuple": [
-            ":soapbox_fe",
+            ":pl_fe",
             {
               "brandColor": "#0e9066",
               "copyright": "♥2020. Copying is an act of love. Please copy and share.",
