@@ -10,9 +10,11 @@ const combineURLs = (baseURL: string, relativeURL: string) => relativeURL
 const buildFullPath = (requestedURL: string, baseURL?: string, params?: Record<string, any>) => {
   const path = (baseURL && !isAbsoluteURL(requestedURL)) ? combineURLs(baseURL, requestedURL) : requestedURL;
 
-  if (params) {
-    return `${path}?${queryString.stringify(params, { arrayFormat: 'bracket' })}`;
+  if (params && Object.entries(params).length) {
+    const { url, query } = queryString.parseUrl(path);
+    return `${url}?${queryString.stringify({ ...query, ...params }, { arrayFormat: 'bracket' })}`;
   }
+
   return path;
 };
 
