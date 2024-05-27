@@ -43,6 +43,7 @@ import {
   STATUS_TRANSLATE_SUCCESS,
   STATUS_TRANSLATE_UNDO,
   STATUS_UNFILTER,
+  STATUS_LANGUAGE_CHANGE,
 } from '../actions/statuses';
 import { TIMELINE_DELETE } from '../actions/timelines';
 
@@ -95,6 +96,9 @@ const buildSearchContent = (status: StatusRecord): string => {
   return unescapeHTML(fields.join('\n\n')) || '';
 };
 
+const calculateContent = (text: string, emojiMap: any) => DOMPurify.sanitize(stripCompatibilityFeatures(emojify(text, emojiMap)), { USE_PROFILES: { html: true } });
+const calculateSpoiler = (text: string, emojiMap: any) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { USE_PROFILES: { html: true } });
+
 // Only calculate these values when status first encountered
 // Otherwise keep the ones already in the reducer
 const calculateStatus = (
@@ -102,21 +106,23 @@ const calculateStatus = (
   oldStatus?: StatusRecord,
 ): StatusRecord => {
   if (oldStatus && oldStatus.content === status.content && oldStatus.spoiler_text === status.spoiler_text) {
+    const {
+      search_index, contentHtml, spoilerHtml, contentMapHtml, spoilerMapHtml, hidden, translation, currentLanguage,
+    } = oldStatus;
+
     return status.merge({
-      search_index: oldStatus.search_index,
-      contentHtml: oldStatus.contentHtml,
-      spoilerHtml: oldStatus.spoilerHtml,
-      hidden: oldStatus.hidden,
+      search_index, contentHtml, spoilerHtml, contentMapHtml, spoilerMapHtml, hidden, translation, currentLanguage,
     });
   } else {
-    const spoilerText   = status.spoiler_text;
     const searchContent = buildSearchContent(status);
-    const emojiMap      = makeEmojiMap(status.emojis);
+    const emojiMap = makeEmojiMap(status.emojis);
 
     return status.merge({
       search_index: domParser.parseFromString(searchContent, 'text/html').documentElement.textContent || '',
-      contentHtml: DOMPurify.sanitize(stripCompatibilityFeatures(emojify(status.content, emojiMap)), { USE_PROFILES: { html: true } }),
-      spoilerHtml: DOMPurify.sanitize(emojify(escapeTextContentForBrowser(spoilerText), emojiMap), { USE_PROFILES: { html: true } }),
+      contentHtml: calculateContent(status.content, emojiMap),
+      spoilerHtml: calculateSpoiler(status.spoiler_text, emojiMap),
+      contentMapHtml: status.content_map?.map(value => calculateContent(value, emojiMap)),
+      spoilerMapHtml: status.spoiler_text_map?.map(value => calculateSpoiler(value, emojiMap)),
     });
   }
 };
@@ -318,6 +324,8 @@ const statuses = (state = initialState, action: AnyAction): State => {
       return deleteTranslation(state, action.id);
     case STATUS_UNFILTER:
       return state.setIn([action.id, 'showFiltered'], false);
+    case STATUS_LANGUAGE_CHANGE:
+      return state.setIn([action.id, 'currentLanguage'], action.language);
     case TIMELINE_DELETE:
       return deleteStatus(state, action.id, action.references);
     case EVENT_JOIN_REQUEST:

@@ -90,7 +90,8 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
   placeholder,
 }, ref) => {
   const dispatch = useAppDispatch();
-  const isWysiwyg = useCompose(composeId).content_type === 'wysiwyg';
+  const { content_type: contentType } = useCompose(composeId);
+  const isWysiwyg = contentType === 'wysiwyg';
   const nodes = useNodes(isWysiwyg);
 
   const [suggestionsHidden, setSuggestionsHidden] = useState(true);
@@ -106,20 +107,28 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
 
       if (!compose) return;
 
-      if (compose.editorState) {
-        return compose.editorState;
+      const editorState = !compose.modified_language || compose.modified_language === compose.language
+        ? compose.editorState
+        : compose.editorStateMap.get(compose.modified_language, '');
+      
+      if (editorState) {
+        return editorState;
       }
 
       return () => {
+        const text = !compose.modified_language || compose.modified_language === compose.language
+          ? compose.text
+          : compose.textMap.get(compose.modified_language, '');
+
         if (isWysiwyg) {
           $createRemarkImport({
             handlers: {
               image: importImage,
             },
-          })(compose.text);
+          })(text);
         } else {
           const paragraph = $createParagraphNode();
-          const textNode = $createTextNode(compose.text);
+          const textNode = $createTextNode(text);
 
           paragraph.append(textNode);
 

@@ -47,6 +47,10 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
 
   if (visible && !showHideButton) return null;
 
+  const spoilerText = status.currentLanguage
+    ? status.spoilerMapHtml!.get(status.currentLanguage, status.spoilerHtml)
+    : status.spoilerHtml;
+
   return (
     <div
       className={clsx('absolute z-40', {
@@ -66,7 +70,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
         />
       ) : (
         <div className='flex max-h-screen items-center justify-center'>
-          <div className='mx-auto w-3/4 space-y-4 text-center' ref={ref}>
+          <div className='mx-auto space-y-4 text-center' ref={ref}>
             <div className='space-y-1'>
               <Text theme='white' weight='semibold'>
                 {intl.formatMessage(messages.sensitiveTitle)}
@@ -79,7 +83,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
               {status.spoiler_text && (
                 <div className='py-4 italic'>
                   <Text className='line-clamp-6' theme='white' size='md' weight='medium'>
-                    &ldquo;<span dangerouslySetInnerHTML={{ __html: status.spoilerHtml }} />&rdquo;
+                    &ldquo;<span dangerouslySetInnerHTML={{ __html: spoilerText }} />&rdquo;
                   </Text>
                 </div>
               )}

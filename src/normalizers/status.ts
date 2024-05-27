@@ -79,6 +79,7 @@ const StatusRecord = ImmutableRecord({
   replies_count: 0,
   sensitive: false,
   spoiler_text: '',
+  spoiler_text_map: null as ImmutableMap<string, string> | null,
   tags: ImmutableList<ImmutableMap<string, any>>(),
   tombstone: null as Tombstone | null,
   uri: '',
@@ -88,12 +89,15 @@ const StatusRecord = ImmutableRecord({
 
   // Internal fields
   contentHtml: '',
+  spoilerHtml: '',
+  contentMapHtml: null as ImmutableMap<string, string> | null,
+  spoilerMapHtml: null as ImmutableMap<string, string> | null,
   expectsCard: false,
   hidden: null as boolean | null,
   search_index: '',
   showFiltered: true,
-  spoilerHtml: '',
   translation: null as ImmutableMap<string, string> | null,
+  currentLanguage: null as string | null,
 });
 
 const normalizeAttachments = (status: ImmutableMap<string, any>) =>

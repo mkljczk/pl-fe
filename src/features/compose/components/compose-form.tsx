@@ -87,6 +87,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     schedule: scheduledAt,
     group_id: groupId,
     text,
+    modified_language: modifiedLanguage,
   } = compose;
 
   const prevSpoiler = usePrevious(spoiler);
@@ -282,6 +283,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       <div>
         <Suspense>
           <ComposeEditor
+            key={modifiedLanguage}
             ref={editorRef}
             className='mt-2'
             composeId={id}

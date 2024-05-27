@@ -48,7 +48,7 @@ const Option: React.FC<IOption> = ({
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const suggestions = useCompose(composeId).suggestions;
+  const { suggestions } = useCompose(composeId);
 
   const handleOptionTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => onChange(index, event.target.value);
 
@@ -112,11 +112,11 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
   const intl = useIntl();
   const { configuration } = useInstance();
 
-  const compose = useCompose(composeId);
+  const { poll, language, modified_language: modifiedLanguage } = useCompose(composeId);
 
-  const options = compose.poll?.options;
-  const expiresIn = compose.poll?.expires_in;
-  const isMultiple = compose.poll?.multiple;
+  const options = !modifiedLanguage || modifiedLanguage === language ? poll?.options : poll?.options_map.map((option, key) => option.get(modifiedLanguage, poll.options.get(key)!));
+  const expiresIn = poll?.expires_in;
+  const isMultiple = poll?.multiple;
 
   const {
     max_options: maxOptions,

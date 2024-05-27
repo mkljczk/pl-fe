@@ -7,7 +7,7 @@ import {
 } from 'immutable';
 import { createSelector } from 'reselect';
 
-import { getSettings } from 'soapbox/actions/settings';
+import { getLocale, getSettings } from 'soapbox/actions/settings';
 import { Entities } from 'soapbox/entity-store/entities';
 import { type MRFSimple } from 'soapbox/schemas/pleroma';
 import { getDomain } from 'soapbox/utils/accounts';
@@ -136,9 +136,10 @@ const makeGetStatus = () => createSelector(
     getFilters,
     (state: RootState) => state.me,
     (state: RootState) => getFeatures(state.instance),
+    (state: RootState) => getLocale(state, 'en'),
   ],
 
-  (statusBase, statusReblog, username, filters, me, features) => {
+  (statusBase, statusReblog, username, filters, me, features, locale) => {
     if (!statusBase) return null;
     const { account } = statusBase;
     const accountUsername = account.acct;
@@ -150,6 +151,14 @@ const makeGetStatus = () => createSelector(
 
     return statusBase.withMutations((map: Status) => {
       map.set('reblog', statusReblog || null);
+
+      if (map.currentLanguage === null && map.content_map?.size) {
+        let currentLanguage: string | null = null;
+        if (map.content_map.has(locale)) currentLanguage = locale;
+        else if (map.language && map.content_map.has(map.language)) currentLanguage = map.language;
+        else currentLanguage = map.content_map.keySeq().first();
+        map.set('currentLanguage', currentLanguage);
+      }
 
       if ((features.filters) && account.id !== me) {
         const filtered = checkFiltered(statusReblog?.search_index || statusBase.search_index, filters);

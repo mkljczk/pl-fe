@@ -13,41 +13,43 @@ import type { APIEntity, Status } from 'soapbox/types/entities';
 
 const STATUS_CREATE_REQUEST = 'STATUS_CREATE_REQUEST';
 const STATUS_CREATE_SUCCESS = 'STATUS_CREATE_SUCCESS';
-const STATUS_CREATE_FAIL    = 'STATUS_CREATE_FAIL';
+const STATUS_CREATE_FAIL = 'STATUS_CREATE_FAIL';
 
 const STATUS_FETCH_SOURCE_REQUEST = 'STATUS_FETCH_SOURCE_REQUEST';
 const STATUS_FETCH_SOURCE_SUCCESS = 'STATUS_FETCH_SOURCE_SUCCESS';
-const STATUS_FETCH_SOURCE_FAIL    = 'STATUS_FETCH_SOURCE_FAIL';
+const STATUS_FETCH_SOURCE_FAIL = 'STATUS_FETCH_SOURCE_FAIL';
 
 const STATUS_FETCH_REQUEST = 'STATUS_FETCH_REQUEST';
 const STATUS_FETCH_SUCCESS = 'STATUS_FETCH_SUCCESS';
-const STATUS_FETCH_FAIL    = 'STATUS_FETCH_FAIL';
+const STATUS_FETCH_FAIL = 'STATUS_FETCH_FAIL';
 
 const STATUS_DELETE_REQUEST = 'STATUS_DELETE_REQUEST';
 const STATUS_DELETE_SUCCESS = 'STATUS_DELETE_SUCCESS';
-const STATUS_DELETE_FAIL    = 'STATUS_DELETE_FAIL';
+const STATUS_DELETE_FAIL = 'STATUS_DELETE_FAIL';
 
 const CONTEXT_FETCH_REQUEST = 'CONTEXT_FETCH_REQUEST';
 const CONTEXT_FETCH_SUCCESS = 'CONTEXT_FETCH_SUCCESS';
-const CONTEXT_FETCH_FAIL    = 'CONTEXT_FETCH_FAIL';
+const CONTEXT_FETCH_FAIL = 'CONTEXT_FETCH_FAIL';
 
 const STATUS_MUTE_REQUEST = 'STATUS_MUTE_REQUEST';
 const STATUS_MUTE_SUCCESS = 'STATUS_MUTE_SUCCESS';
-const STATUS_MUTE_FAIL    = 'STATUS_MUTE_FAIL';
+const STATUS_MUTE_FAIL = 'STATUS_MUTE_FAIL';
 
 const STATUS_UNMUTE_REQUEST = 'STATUS_UNMUTE_REQUEST';
 const STATUS_UNMUTE_SUCCESS = 'STATUS_UNMUTE_SUCCESS';
-const STATUS_UNMUTE_FAIL    = 'STATUS_UNMUTE_FAIL';
+const STATUS_UNMUTE_FAIL = 'STATUS_UNMUTE_FAIL';
 
 const STATUS_REVEAL = 'STATUS_REVEAL';
-const STATUS_HIDE   = 'STATUS_HIDE';
+const STATUS_HIDE = 'STATUS_HIDE';
 
 const STATUS_TRANSLATE_REQUEST = 'STATUS_TRANSLATE_REQUEST';
 const STATUS_TRANSLATE_SUCCESS = 'STATUS_TRANSLATE_SUCCESS';
-const STATUS_TRANSLATE_FAIL    = 'STATUS_TRANSLATE_FAIL';
-const STATUS_TRANSLATE_UNDO    = 'STATUS_TRANSLATE_UNDO';
+const STATUS_TRANSLATE_FAIL = 'STATUS_TRANSLATE_FAIL';
+const STATUS_TRANSLATE_UNDO = 'STATUS_TRANSLATE_UNDO';
 
 const STATUS_UNFILTER = 'STATUS_UNFILTER';
+
+const STATUS_LANGUAGE_CHANGE = 'STATUS_LANGUAGE_CHANGE';
 
 const statusExists = (getState: () => RootState, statusId: string) =>
   (getState().statuses.get(statusId) || null) !== null;
@@ -185,7 +187,7 @@ const fetchContext = (id: string) =>
   };
 
 const fetchStatusWithContext = (id: string) =>
-  async(dispatch: AppDispatch, getState: () => RootState) => {
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     await Promise.all([
       dispatch(fetchContext(id)),
       dispatch(fetchStatus(id)),
@@ -286,6 +288,12 @@ const unfilterStatus = (id: string) => ({
   id,
 });
 
+const changeStatusLanguage = (id: string, language: string) => ({
+  type: STATUS_LANGUAGE_CHANGE,
+  id,
+  language,
+});
+
 export {
   STATUS_CREATE_REQUEST,
   STATUS_CREATE_SUCCESS,
@@ -315,6 +323,7 @@ export {
   STATUS_TRANSLATE_FAIL,
   STATUS_TRANSLATE_UNDO,
   STATUS_UNFILTER,
+  STATUS_LANGUAGE_CHANGE,
   createStatus,
   editStatus,
   fetchStatus,
@@ -331,4 +340,5 @@ export {
   translateStatus,
   undoStatusTranslation,
   unfilterStatus,
+  changeStatusLanguage,
 };

@@ -192,8 +192,6 @@ const expandTimeline = (timelineId: string, path: string, params: Record<string,
       const statuses = deduplicateStatuses(response.json);
       dispatch(importFetchedStatuses(statuses.filter(status => status.accounts)));
 
-      console.log(response);
-
       dispatch(expandTimelineSuccess(
         timelineId,
         statuses,

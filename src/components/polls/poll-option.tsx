@@ -100,10 +100,11 @@ interface IPollOption {
   showResults?: boolean;
   active: boolean;
   onToggle: (value: number) => void;
+  language?: string | null;
 }
 
 const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
-  const { index, poll, option, showResults } = props;
+  const { index, poll, option, showResults, language } = props;
 
   const intl = useIntl();
 
@@ -133,7 +134,7 @@ const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
               <Text
                 theme='inherit'
                 weight='medium'
-                dangerouslySetInnerHTML={{ __html: option.title_emojified }}
+                dangerouslySetInnerHTML={{ __html: (language && option.title_map_emojified) && option.title_map_emojified[language] || option.title_emojified }}
                 className='relative'
               />
             </div>

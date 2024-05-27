@@ -26,7 +26,7 @@ const SpoilerInput = React.forwardRef<AutosuggestInput, ISpoilerInput>(({
 }, ref) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const compose = useCompose(composeId);
+  const { language, modified_language, spoiler, spoiler_text: spoilerText, spoilerTextMap, suggestions } = useCompose(composeId);
 
   const handleChangeSpoilerText: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     dispatch(changeComposeSpoilerText(composeId, e.target.value));
@@ -36,12 +36,14 @@ const SpoilerInput = React.forwardRef<AutosuggestInput, ISpoilerInput>(({
     dispatch(changeComposeSpoilerness(composeId));
   };
 
+  const value = !modified_language || modified_language === language ? spoilerText : spoilerTextMap.get(modified_language, '');
+
   return (
     <Stack
       space={4}
       className={clsx({
         'relative transition-height': true,
-        'hidden': !compose.spoiler,
+        'hidden': !spoiler,
       })}
     >
       <Divider />
@@ -53,10 +55,10 @@ const SpoilerInput = React.forwardRef<AutosuggestInput, ISpoilerInput>(({
 
         <AutosuggestInput
           placeholder={intl.formatMessage(messages.placeholder)}
-          value={compose.spoiler_text}
+          value={value}
           onChange={handleChangeSpoilerText}
-          disabled={!compose.spoiler}
-          suggestions={compose.suggestions}
+          disabled={!spoiler}
+          suggestions={suggestions}
           onSuggestionsFetchRequested={onSuggestionsFetchRequested}
           onSuggestionsClearRequested={onSuggestionsClearRequested}
           onSuggestionSelected={onSuggestionSelected}

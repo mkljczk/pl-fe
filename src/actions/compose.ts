@@ -31,24 +31,24 @@ import type { History } from 'soapbox/types/history';
 
 let cancelFetchComposeSuggestions = new AbortController();
 
-const COMPOSE_CHANGE          = 'COMPOSE_CHANGE' as const;
-const COMPOSE_SUBMIT_REQUEST  = 'COMPOSE_SUBMIT_REQUEST' as const;
-const COMPOSE_SUBMIT_SUCCESS  = 'COMPOSE_SUBMIT_SUCCESS' as const;
-const COMPOSE_SUBMIT_FAIL     = 'COMPOSE_SUBMIT_FAIL' as const;
-const COMPOSE_REPLY           = 'COMPOSE_REPLY' as const;
-const COMPOSE_EVENT_REPLY     = 'COMPOSE_EVENT_REPLY' as const;
-const COMPOSE_REPLY_CANCEL    = 'COMPOSE_REPLY_CANCEL' as const;
-const COMPOSE_QUOTE           = 'COMPOSE_QUOTE' as const;
-const COMPOSE_QUOTE_CANCEL    = 'COMPOSE_QUOTE_CANCEL' as const;
-const COMPOSE_DIRECT          = 'COMPOSE_DIRECT' as const;
-const COMPOSE_MENTION         = 'COMPOSE_MENTION' as const;
-const COMPOSE_RESET           = 'COMPOSE_RESET' as const;
-const COMPOSE_UPLOAD_REQUEST  = 'COMPOSE_UPLOAD_REQUEST' as const;
-const COMPOSE_UPLOAD_SUCCESS  = 'COMPOSE_UPLOAD_SUCCESS' as const;
-const COMPOSE_UPLOAD_FAIL     = 'COMPOSE_UPLOAD_FAIL' as const;
+const COMPOSE_CHANGE = 'COMPOSE_CHANGE' as const;
+const COMPOSE_SUBMIT_REQUEST = 'COMPOSE_SUBMIT_REQUEST' as const;
+const COMPOSE_SUBMIT_SUCCESS = 'COMPOSE_SUBMIT_SUCCESS' as const;
+const COMPOSE_SUBMIT_FAIL = 'COMPOSE_SUBMIT_FAIL' as const;
+const COMPOSE_REPLY = 'COMPOSE_REPLY' as const;
+const COMPOSE_EVENT_REPLY = 'COMPOSE_EVENT_REPLY' as const;
+const COMPOSE_REPLY_CANCEL = 'COMPOSE_REPLY_CANCEL' as const;
+const COMPOSE_QUOTE = 'COMPOSE_QUOTE' as const;
+const COMPOSE_QUOTE_CANCEL = 'COMPOSE_QUOTE_CANCEL' as const;
+const COMPOSE_DIRECT = 'COMPOSE_DIRECT' as const;
+const COMPOSE_MENTION = 'COMPOSE_MENTION' as const;
+const COMPOSE_RESET = 'COMPOSE_RESET' as const;
+const COMPOSE_UPLOAD_REQUEST = 'COMPOSE_UPLOAD_REQUEST' as const;
+const COMPOSE_UPLOAD_SUCCESS = 'COMPOSE_UPLOAD_SUCCESS' as const;
+const COMPOSE_UPLOAD_FAIL = 'COMPOSE_UPLOAD_FAIL' as const;
 const COMPOSE_UPLOAD_PROGRESS = 'COMPOSE_UPLOAD_PROGRESS' as const;
-const COMPOSE_UPLOAD_UNDO     = 'COMPOSE_UPLOAD_UNDO' as const;
-const COMPOSE_GROUP_POST      = 'COMPOSE_GROUP_POST' as const;
+const COMPOSE_UPLOAD_UNDO = 'COMPOSE_UPLOAD_UNDO' as const;
+const COMPOSE_GROUP_POST = 'COMPOSE_GROUP_POST' as const;
 
 const COMPOSE_SUGGESTIONS_CLEAR = 'COMPOSE_SUGGESTIONS_CLEAR' as const;
 const COMPOSE_SUGGESTIONS_READY = 'COMPOSE_SUGGESTIONS_READY' as const;
@@ -60,27 +60,28 @@ const COMPOSE_TAG_HISTORY_UPDATE = 'COMPOSE_TAG_HISTORY_UPDATE' as const;
 const COMPOSE_SPOILERNESS_CHANGE = 'COMPOSE_SPOILERNESS_CHANGE' as const;
 const COMPOSE_TYPE_CHANGE = 'COMPOSE_TYPE_CHANGE' as const;
 const COMPOSE_SPOILER_TEXT_CHANGE = 'COMPOSE_SPOILER_TEXT_CHANGE' as const;
-const COMPOSE_VISIBILITY_CHANGE  = 'COMPOSE_VISIBILITY_CHANGE' as const;
-const COMPOSE_LANGUAGE_CHANGE  = 'COMPOSE_LANGUAGE_CHANGE' as const;
-const COMPOSE_LANGUAGE_ADD  = 'COMPOSE_LANGUAGE_ADD' as const;
-const COMPOSE_LANGUAGE_DELETE  = 'COMPOSE_LANGUAGE_DELETE' as const;
+const COMPOSE_VISIBILITY_CHANGE = 'COMPOSE_VISIBILITY_CHANGE' as const;
+const COMPOSE_LANGUAGE_CHANGE = 'COMPOSE_LANGUAGE_CHANGE' as const;
+const COMPOSE_MODIFIED_LANGUAGE_CHANGE = 'COMPOSE_MODIFIED_LANGUAGE_CHANGE' as const;
+const COMPOSE_LANGUAGE_ADD = 'COMPOSE_LANGUAGE_ADD' as const;
+const COMPOSE_LANGUAGE_DELETE = 'COMPOSE_LANGUAGE_DELETE' as const;
 const COMPOSE_LISTABILITY_CHANGE = 'COMPOSE_LISTABILITY_CHANGE' as const;
 
 const COMPOSE_EMOJI_INSERT = 'COMPOSE_EMOJI_INSERT' as const;
 
-const COMPOSE_UPLOAD_CHANGE_REQUEST     = 'COMPOSE_UPLOAD_UPDATE_REQUEST' as const;
-const COMPOSE_UPLOAD_CHANGE_SUCCESS     = 'COMPOSE_UPLOAD_UPDATE_SUCCESS' as const;
-const COMPOSE_UPLOAD_CHANGE_FAIL        = 'COMPOSE_UPLOAD_UPDATE_FAIL' as const;
+const COMPOSE_UPLOAD_CHANGE_REQUEST = 'COMPOSE_UPLOAD_UPDATE_REQUEST' as const;
+const COMPOSE_UPLOAD_CHANGE_SUCCESS = 'COMPOSE_UPLOAD_UPDATE_SUCCESS' as const;
+const COMPOSE_UPLOAD_CHANGE_FAIL = 'COMPOSE_UPLOAD_UPDATE_FAIL' as const;
 
-const COMPOSE_POLL_ADD             = 'COMPOSE_POLL_ADD' as const;
-const COMPOSE_POLL_REMOVE          = 'COMPOSE_POLL_REMOVE' as const;
-const COMPOSE_POLL_OPTION_ADD      = 'COMPOSE_POLL_OPTION_ADD' as const;
-const COMPOSE_POLL_OPTION_CHANGE   = 'COMPOSE_POLL_OPTION_CHANGE' as const;
-const COMPOSE_POLL_OPTION_REMOVE   = 'COMPOSE_POLL_OPTION_REMOVE' as const;
+const COMPOSE_POLL_ADD = 'COMPOSE_POLL_ADD' as const;
+const COMPOSE_POLL_REMOVE = 'COMPOSE_POLL_REMOVE' as const;
+const COMPOSE_POLL_OPTION_ADD = 'COMPOSE_POLL_OPTION_ADD' as const;
+const COMPOSE_POLL_OPTION_CHANGE = 'COMPOSE_POLL_OPTION_CHANGE' as const;
+const COMPOSE_POLL_OPTION_REMOVE = 'COMPOSE_POLL_OPTION_REMOVE' as const;
 const COMPOSE_POLL_SETTINGS_CHANGE = 'COMPOSE_POLL_SETTINGS_CHANGE' as const;
 
-const COMPOSE_SCHEDULE_ADD    = 'COMPOSE_SCHEDULE_ADD' as const;
-const COMPOSE_SCHEDULE_SET    = 'COMPOSE_SCHEDULE_SET' as const;
+const COMPOSE_SCHEDULE_ADD = 'COMPOSE_SCHEDULE_ADD' as const;
+const COMPOSE_SCHEDULE_SET = 'COMPOSE_SCHEDULE_SET' as const;
 const COMPOSE_SCHEDULE_REMOVE = 'COMPOSE_SCHEDULE_REMOVE' as const;
 
 const COMPOSE_ADD_TO_MENTIONS = 'COMPOSE_ADD_TO_MENTIONS' as const;
@@ -92,7 +93,7 @@ const COMPOSE_EDITOR_STATE_SET = 'COMPOSE_EDITOR_STATE_SET' as const;
 
 const COMPOSE_CHANGE_MEDIA_ORDER = 'COMPOSE_CHANGE_MEDIA_ORDER' as const;
 
-const COMPOSE_ADD_SUGGESTED_QUOTE    = 'COMPOSE_ADD_SUGGESTED_QUOTE' as const;
+const COMPOSE_ADD_SUGGESTED_QUOTE = 'COMPOSE_ADD_SUGGESTED_QUOTE' as const;
 const COMPOSE_ADD_SUGGESTED_LANGUAGE = 'COMPOSE_ADD_SUGGESTED_LANGUAGE' as const;
 
 const getAccount = makeGetAccount();
@@ -301,7 +302,7 @@ const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, c
 };
 
 const needsDescriptions = (state: RootState, composeId: string) => {
-  const media  = state.compose.get(composeId)!.media_attachments;
+  const media = state.compose.get(composeId)!.media_attachments;
   const missingDescriptionModal = getSettings(state).get('missingDescriptionModal');
 
   const hasMissing = media.filter(item => !item.description).size > 0;
@@ -332,10 +333,10 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
 
     const compose = state.compose.get(composeId)!;
 
-    const status   = compose.text;
-    const media    = compose.media_attachments;
+    const status = compose.text;
+    const media = compose.media_attachments;
     const statusId = compose.id;
-    let to         = compose.to;
+    let to = compose.to;
 
     if (!validateSchedule(state, composeId)) {
       toast.error(messages.scheduleError);
@@ -387,6 +388,22 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
       to,
     };
 
+    if (compose.language && compose.textMap.size) {
+      params.status_map = compose.textMap.toJS();
+      params.status_map[compose.language] = status;
+
+      if (params.spoiler_text) {
+        params.spoiler_text_map = compose.spoilerTextMap.toJS();
+        params.spoiler_text_map[compose.language] = compose.spoiler_text;
+      }
+
+      if (params.poll) {
+        const poll = params.poll.toJS();
+        poll.options.forEach((option: any, index: number) => poll.options_map[index][compose.language!] = option);
+        params.poll = poll;
+      }
+    }
+
     if (compose.privacy === 'group') {
       params.group_id = compose.group_id;
     }
@@ -425,7 +442,7 @@ const uploadCompose = (composeId: string, files: FileList, intl: IntlShape) =>
     if (!isLoggedIn(getState)) return;
     const attachmentLimit = getState().instance.configuration.statuses.max_media_attachments;
 
-    const media  = getState().compose.get(composeId)?.media_attachments;
+    const media = getState().compose.get(composeId)?.media_attachments;
     const progress = new Array(files.length).fill(0);
     let total = Array.from(files).reduce((a, v) => a + v.size, 0);
 
@@ -438,7 +455,7 @@ const uploadCompose = (composeId: string, files: FileList, intl: IntlShape) =>
 
     dispatch(uploadComposeRequest(composeId));
 
-    Array.from(files).forEach(async(f, i) => {
+    Array.from(files).forEach(async (f, i) => {
       if (mediaCount + i > attachmentLimit - 1) return;
 
       dispatch(uploadFile(
@@ -659,15 +676,15 @@ const selectComposeSuggestion = (composeId: string, position: number, token: str
     let completion = '', startPosition = position;
 
     if (typeof suggestion === 'object' && suggestion.id) {
-      completion    = isNativeEmoji(suggestion) ? suggestion.native : suggestion.colons;
+      completion = isNativeEmoji(suggestion) ? suggestion.native : suggestion.colons;
       startPosition = position - 1;
 
       dispatch(chooseEmoji(suggestion));
     } else if (typeof suggestion === 'string' && suggestion[0] === '#') {
-      completion    = suggestion;
+      completion = suggestion;
       startPosition = position - 1;
     } else if (typeof suggestion === 'string') {
-      completion    = selectAccount(getState(), suggestion)!.acct;
+      completion = selectAccount(getState(), suggestion)!.acct;
       startPosition = position;
     }
 
@@ -743,13 +760,19 @@ const changeComposeLanguage = (composeId: string, value: Language | null) => ({
   value,
 });
 
-const addComposeLanguage = (composeId: string, value: Language | null) => ({
+const changeComposeModifiedLanguage = (composeId: string, value: Language | null) => ({
+  type: COMPOSE_MODIFIED_LANGUAGE_CHANGE,
+  id: composeId,
+  value,
+});
+
+const addComposeLanguage = (composeId: string, value: Language) => ({
   type: COMPOSE_LANGUAGE_ADD,
   id: composeId,
   value,
 });
 
-const deleteComposeLanguage = (composeId: string, value: Language | null) => ({
+const deleteComposeLanguage = (composeId: string, value: Language) => ({
   type: COMPOSE_LANGUAGE_DELETE,
   id: composeId,
   value,
@@ -945,6 +968,7 @@ type ComposeAction =
   | ReturnType<typeof changeComposeSpoilerText>
   | ReturnType<typeof changeComposeVisibility>
   | ReturnType<typeof changeComposeLanguage>
+  | ReturnType<typeof changeComposeModifiedLanguage>
   | ReturnType<typeof addComposeLanguage>
   | ReturnType<typeof deleteComposeLanguage>
   | ReturnType<typeof insertEmojiCompose>
@@ -994,6 +1018,7 @@ export {
   COMPOSE_SPOILER_TEXT_CHANGE,
   COMPOSE_VISIBILITY_CHANGE,
   COMPOSE_LANGUAGE_CHANGE,
+  COMPOSE_MODIFIED_LANGUAGE_CHANGE,
   COMPOSE_LANGUAGE_ADD,
   COMPOSE_LANGUAGE_DELETE,
   COMPOSE_LISTABILITY_CHANGE,
@@ -1057,6 +1082,7 @@ export {
   changeComposeSpoilerText,
   changeComposeVisibility,
   changeComposeLanguage,
+  changeComposeModifiedLanguage,
   addComposeLanguage,
   deleteComposeLanguage,
   insertEmojiCompose,

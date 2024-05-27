@@ -7,7 +7,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { createSelector } from 'reselect';
 
-import { addComposeLanguage, changeComposeLanguage, deleteComposeLanguage } from 'soapbox/actions/compose';
+import { addComposeLanguage, changeComposeLanguage, changeComposeModifiedLanguage, deleteComposeLanguage } from 'soapbox/actions/compose';
 import { Button, Icon, Input, Portal } from 'soapbox/components/ui';
 import { type Language, languages as languagesObject } from 'soapbox/features/preferences';
 import { useAppDispatch, useAppSelector, useCompose, useFeatures } from 'soapbox/hooks';
@@ -66,7 +66,12 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
     ],
   });
 
-  const { language, suggested_language: suggestedLanguage, textMap } = useCompose(composeId);
+  const {
+    language,
+    modified_language: modifiedLanguage,
+    suggested_language: suggestedLanguage,
+    textMap,
+  } = useCompose(composeId);
 
   const handleClick: React.EventHandler<
     React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>
@@ -86,8 +91,6 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
         break;
     }
   };
-
-  const handleChange = (language: Language | null) => dispatch(changeComposeLanguage(composeId, language));
 
   const handleOptionKeyDown: React.KeyboardEventHandler = e => {
     const value = e.currentTarget.getAttribute('data-index');
@@ -125,10 +128,17 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
   const handleOptionClick: React.EventHandler<any> = (e: MouseEvent | KeyboardEvent) => {
     const value = (e.currentTarget as HTMLElement)?.getAttribute('data-index') as Language;
 
+    if (textMap.size) {
+      if (!(textMap.has(value) || language === value)) return;
+
+      dispatch(changeComposeModifiedLanguage(composeId, value));
+    } else {
+      dispatch(changeComposeLanguage(composeId, value));
+    }
+
     e.preventDefault();
 
     setIsOpen(false);
-    handleChange(value);
   };
 
   const handleAddLanguageClick: React.EventHandler<any> = (e: MouseEvent | KeyboardEvent) => {
@@ -288,7 +298,7 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
 
   let buttonLabel = intl.formatMessage(messages.languagePrompt);
   if (language) {
-    const list: string[] = [languagesObject[language]];
+    const list: string[] = [languagesObject[modifiedLanguage || language]];
     if (textMap.size) list.push(intl.formatMessage(messages.multipleLanguages, {
       count: textMap.size,
     }));
@@ -347,6 +357,7 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
             <div className='h-96 w-full overflow-scroll' ref={node} tabIndex={-1}>
               {results.map(([code, name]) => {
                 const active = code === language;
+                const modified = code === modifiedLanguage;
 
                 return (
                   <div
@@ -357,15 +368,20 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
                     onKeyDown={handleOptionKeyDown}
                     onClick={handleOptionClick}
                     className={clsx(
-                      'flex cursor-pointer gap-2 p-2.5 text-sm text-gray-700 hover:bg-gray-100 black:hover:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800',
-                      { 'bg-gray-100 dark:bg-gray-800 black:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-700': active },
+                      'flex gap-2 p-2.5 text-sm text-gray-700 dark:text-gray-400',
+                      {
+                        'bg-gray-100 dark:bg-gray-800 black:bg-gray-900 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700': modified,
+                        'cursor-pointer hover:bg-gray-100 black:hover:bg-gray-900 dark:hover:bg-gray-800': !textMap.size || textMap.has(code),
+                        'cursor-pointer': active,
+                        'cursor-default': !active && !(!textMap.size || textMap.has(code)),
+                      },
                     )}
                     aria-selected={active}
                     ref={active ? focusedItem : null}
                   >
                     <div
                       className={clsx('flex-auto grow text-primary-600 dark:text-primary-400', {
-                        'text-black dark:text-white': active,
+                        'text-black dark:text-white': modified,
                       })}
                     >
                       {name}

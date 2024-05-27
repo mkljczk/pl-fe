@@ -77,8 +77,12 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   });
 
   const parsedHtml = useMemo(
-    (): string => translatable && status.translation ? status.translation.get('content')! : status.contentHtml,
-    [status.contentHtml, status.translation],
+    (): string => translatable && status.translation
+      ? status.translation.get('content')!
+      : (status.contentMapHtml && status.currentLanguage)
+        ? status.contentMapHtml.get(status.currentLanguage, status.contentHtml)
+        : status.contentHtml,
+    [status.contentHtml, status.translation, status.currentLanguage],
   );
 
   if (status.content.length === 0) {
@@ -160,7 +164,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
 
     const hasPoll = status.poll && typeof status.poll === 'string';
     if (hasPoll) {
-      output.push(<Poll id={status.poll} key='poll' status={status.url} />);
+      output.push(<Poll id={status.poll} key='poll' status={status} />);
     }
 
     return <div className={clsx({ 'bg-gray-100 dark:bg-primary-800 rounded-md p-4': hasPoll })}>{output}</div>;
@@ -182,7 +186,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     ];
 
     if (status.poll && typeof status.poll === 'string') {
-      output.push(<Poll id={status.poll} key='poll' status={status.url} />);
+      output.push(<Poll id={status.poll} key='poll' status={status} />);
     }
 
     return <>{output}</>;

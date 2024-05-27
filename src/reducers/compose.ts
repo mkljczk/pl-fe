@@ -34,6 +34,10 @@ import {
   COMPOSE_SPOILER_TEXT_CHANGE,
   COMPOSE_VISIBILITY_CHANGE,
   COMPOSE_LANGUAGE_CHANGE,
+  COMPOSE_MODIFIED_LANGUAGE_CHANGE,
+  COMPOSE_LANGUAGE_ADD,
+  COMPOSE_LANGUAGE_DELETE,
+  COMPOSE_ADD_SUGGESTED_LANGUAGE,
   COMPOSE_EMOJI_INSERT,
   COMPOSE_UPLOAD_CHANGE_REQUEST,
   COMPOSE_UPLOAD_CHANGE_SUCCESS,
@@ -56,9 +60,6 @@ import {
   COMPOSE_CHANGE_MEDIA_ORDER,
   COMPOSE_ADD_SUGGESTED_QUOTE,
   ComposeAction,
-  COMPOSE_ADD_SUGGESTED_LANGUAGE,
-  COMPOSE_LANGUAGE_ADD,
-  COMPOSE_LANGUAGE_DELETE,
 } from '../actions/compose';
 import { EVENT_COMPOSE_CANCEL, EVENT_FORM_SET, type EventsAction } from '../actions/events';
 import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS, MeAction } from '../actions/me';
@@ -81,6 +82,7 @@ const getResetFileKey = () => Math.floor((Math.random() * 0x10000));
 
 const PollRecord = ImmutableRecord({
   options: ImmutableList(['', '']),
+  options_map: ImmutableList<ImmutableMap<Language, string>>([ImmutableMap(), ImmutableMap()]),
   expires_in: 24 * 3600,
   multiple: false,
 });
@@ -90,6 +92,7 @@ const ReducerCompose = ImmutableRecord({
   content_type: 'text/plain',
   draft_id: null as string | null,
   editorState: null as string | null,
+  editorStateMap: ImmutableMap<Language, string | null>(),
   focusDate: null as Date | null,
   group_id: null as string | null,
   idempotencyKey: '',
@@ -109,6 +112,7 @@ const ReducerCompose = ImmutableRecord({
   sensitive: false,
   spoiler: false,
   spoiler_text: '',
+  spoilerTextMap: ImmutableMap<Language, string>(),
   suggestions: ImmutableList<string>(),
   suggestion_token: null as string | null,
   tagHistory: ImmutableList<string>(),
@@ -118,6 +122,7 @@ const ReducerCompose = ImmutableRecord({
   parent_reblogged_by: null as string | null,
   dismissed_quotes: ImmutableOrderedSet<string>(),
   language: null as Language | null,
+  modified_language: null as Language | null,
   suggested_language: null as string | null,
 });
 
@@ -302,9 +307,11 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
         map.set('idempotencyKey', uuid());
       }));
     case COMPOSE_SPOILER_TEXT_CHANGE:
-      return updateCompose(state, action.id, compose => compose
-        .set('spoiler_text', action.text)
-        .set('idempotencyKey', uuid()));
+      return updateCompose(state, action.id, compose => {
+        return compose
+          .setIn(compose.modified_language === compose.language ? ['spoiler_text'] : ['spoilerTextMap', compose.modified_language], action.text)
+          .set('idempotencyKey', uuid());
+      });
     case COMPOSE_VISIBILITY_CHANGE:
       return updateCompose(state, action.id, compose => compose
         .set('privacy', action.value)
@@ -312,6 +319,12 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
     case COMPOSE_LANGUAGE_CHANGE:
       return updateCompose(state, action.id, compose => compose.withMutations(map => {
         map.set('language', action.value);
+        map.set('modified_language', action.value);
+        map.set('idempotencyKey', uuid());
+      }));
+    case COMPOSE_MODIFIED_LANGUAGE_CHANGE:
+      return updateCompose(state, action.id, compose => compose.withMutations(map => {
+        map.set('modified_language', action.value);
         map.set('idempotencyKey', uuid());
       }));
     case COMPOSE_CHANGE:
@@ -513,11 +526,21 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
     case COMPOSE_SCHEDULE_REMOVE:
       return updateCompose(state, action.id, compose => compose.set('schedule', null));
     case COMPOSE_POLL_OPTION_ADD:
-      return updateCompose(state, action.id, compose => compose.updateIn(['poll', 'options'], options => (options as ImmutableList<string>).push(action.title)));
+      return updateCompose(state, action.id, compose =>
+        compose
+          .updateIn(['poll', 'options'], options => (options as ImmutableList<string>).push(action.title))
+          .updateIn(['poll', 'options_map'], options_map => (options_map as ImmutableList<ImmutableMap<Language, string>>).push(ImmutableMap(compose.textMap.map(_ => action.title)))),
+      );
     case COMPOSE_POLL_OPTION_CHANGE:
-      return updateCompose(state, action.id, compose => compose.setIn(['poll', 'options', action.index], action.title));
+      return updateCompose(state, action.id, compose =>
+        compose.setIn(!compose.modified_language || compose.modified_language === compose.language ? ['poll', 'options', action.index] : ['poll', 'options_map', action.index, compose.modified_language], action.title),
+      );
     case COMPOSE_POLL_OPTION_REMOVE:
-      return updateCompose(state, action.id, compose => compose.updateIn(['poll', 'options'], options => (options as ImmutableList<string>).delete(action.index)));
+      return updateCompose(state, action.id, compose =>
+        compose
+          .updateIn(['poll', 'options'], options => (options as ImmutableList<string>).delete(action.index))
+          .updateIn(['poll', 'options_map'], options_map => (options_map as ImmutableList<ImmutableMap<Language, string>>).delete(action.index)),
+      );
     case COMPOSE_POLL_SETTINGS_CHANGE:
       return updateCompose(state, action.id, compose => compose.update('poll', poll => {
         if (!poll) return null;
@@ -541,8 +564,8 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
       return updateCompose(state, 'default', compose => updateSetting(compose, action.path, action.value));
     case COMPOSE_EDITOR_STATE_SET:
       return updateCompose(state, action.id, compose => compose
-        .set('editorState', action.editorState as string)
-        .set('text', action.text as string));
+        .setIn(!compose.modified_language || compose.modified_language === compose.language ? ['editorState'] : ['editorStateMap', compose.modified_language], action.editorState as string)
+        .setIn(!compose.modified_language || compose.modified_language === compose.language ? ['text'] : ['textMap', compose.modified_language], action.text as string));
     case EVENT_COMPOSE_CANCEL:
       return updateCompose(state, 'event-compose-modal', compose => compose.set('text', ''));
     case EVENT_FORM_SET:
@@ -560,9 +583,21 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
     case COMPOSE_ADD_SUGGESTED_LANGUAGE:
       return updateCompose(state, action.id, compose => compose.set('suggested_language', action.language));
     case COMPOSE_LANGUAGE_ADD:
-      return updateCompose(state, action.id, compose => compose.setIn(['textMap', action.value], ''));
+      return updateCompose(state, action.id, compose =>
+        compose
+          .setIn(['editorStateMap', action.value], compose.editorState)
+          .setIn(['textMap', action.value], compose.text)
+          .setIn(['spoilerTextMap', action.value], compose.spoiler_text)
+          .update('poll', poll => {
+            if (!poll) return poll;
+            return poll.update('options_map', optionsMap => optionsMap.map((option, key) => option.set(action.value, poll.options.get(key)!)));
+          }),
+      );
     case COMPOSE_LANGUAGE_DELETE:
-      return updateCompose(state, action.id, compose => compose.removeIn(['textMap', action.value]));
+      return updateCompose(state, action.id, compose => compose
+        .removeIn(['editorStateMap', action.value])
+        .removeIn(['textMap', action.value])
+        .removeIn(['spoilerTextMap', action.value]));
     case COMPOSE_QUOTE_CANCEL:
       return updateCompose(state, action.id, compose => compose
         .update('dismissed_quotes', quotes => compose.quote ? quotes.add(compose.quote) : quotes)

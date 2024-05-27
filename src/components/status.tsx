@@ -18,6 +18,7 @@ import { textForScreenReader, getActualStatus } from 'soapbox/utils/status';
 import EventPreview from './event-preview';
 import StatusActionBar from './status-action-bar';
 import StatusContent from './status-content';
+import StatusLanguagePicker from './status-language-picker';
 import StatusMedia from './status-media';
 import StatusReplyMentions from './status-reply-mentions';
 import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
@@ -428,11 +429,11 @@ const Status: React.FC<IStatus> = (props) => {
             action={accountAction}
             hideActions={!accountAction}
             showEdit={!!actualStatus.edited_at}
-            showMultiLanguage={!!actualStatus.content_map && actualStatus.content_map?.count() > 1}
             showProfileHoverCard={hoverable}
             withLinkToProfile={hoverable}
             approvalStatus={actualStatus.approval_status}
             avatarSize={avatarSize}
+            items={<StatusLanguagePicker status={status} />}
           />
 
           <div className='status__content-wrapper'>

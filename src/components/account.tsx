@@ -23,7 +23,6 @@ interface IInstanceFavicon {
 
 const messages = defineMessages({
   bot: { id: 'account.badges.bot', defaultMessage: 'Bot' },
-  languageVersions: { id: 'status.language_versions', defaultMessage: 'The post has multiple language versions.' },
 });
 
 const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
@@ -91,11 +90,11 @@ interface IAccount {
   withLinkToProfile?: boolean;
   withRelationship?: boolean;
   showEdit?: boolean;
-  showMultiLanguage?: boolean;
   approvalStatus?: StatusApprovalStatus;
   emoji?: string;
   emojiUrl?: string;
   note?: string;
+  items?: React.ReactNode;
 }
 
 const Account = ({
@@ -118,11 +117,11 @@ const Account = ({
   withLinkToProfile = true,
   withRelationship = true,
   showEdit = false,
-  showMultiLanguage = false,
   approvalStatus,
   emoji,
   emojiUrl,
   note,
+  items,
 }: IAccount) => {
   const overflowRef = useRef<HTMLDivElement>(null);
   const actionRef = useRef<HTMLDivElement>(null);
@@ -271,16 +270,6 @@ const Account = ({
                   </>
                 ) : null}
 
-                {showMultiLanguage ? (
-                  <>
-                    <Text tag='span' theme='muted' size='sm'>&middot;</Text>
-
-                    <button title={intl.formatMessage(messages.languageVersions)}>
-                      <Icon className='h-5 w-5 text-gray-700 dark:text-gray-600' src={require('@tabler/icons/outline/language.svg')} />
-                    </button>
-                  </>
-                ) : null}
-
                 {actionType === 'muting' && account.mute_expires_at ? (
                   <>
                     <Text tag='span' theme='muted' size='sm'>&middot;</Text>
@@ -288,6 +277,8 @@ const Account = ({
                     <Text theme='muted' size='sm'><RelativeTimestamp timestamp={account.mute_expires_at} futureDate /></Text>
                   </>
                 ) : null}
+
+                {items}
               </HStack>
 
               {note ? (

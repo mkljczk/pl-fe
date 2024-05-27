@@ -10,11 +10,13 @@ import { Stack, Text } from '../ui';
 import PollFooter from './poll-footer';
 import PollOption from './poll-option';
 
+import type { Status } from 'soapbox/types/entities';
+
 type Selected = Record<number, boolean>;
 
 interface IPoll {
   id: string;
-  status?: string;
+  status?: Status;
 }
 
 const messages = defineMessages({
@@ -33,7 +35,7 @@ const Poll: React.FC<IPoll> = ({ id, status }): JSX.Element | null => {
   const openUnauthorizedModal = () =>
     dispatch(openModal('UNAUTHORIZED', {
       action: 'POLL_VOTE',
-      ap_id: status,
+      ap_id: status?.url,
     }));
 
   const handleVote = (selectedId: number) => dispatch(vote(id, [String(selectedId)]));
@@ -83,6 +85,7 @@ const Poll: React.FC<IPoll> = ({ id, status }): JSX.Element | null => {
               showResults={showResults}
               active={!!selected[i]}
               onToggle={toggleOption}
+              language={status?.currentLanguage}
             />
           ))}
         </Stack>

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import Account from 'soapbox/components/account';
 import StatusContent from 'soapbox/components/status-content';
+import StatusLanguagePicker from 'soapbox/components/status-language-picker';
 import StatusMedia from 'soapbox/components/status-media';
 import StatusReplyMentions from 'soapbox/components/status-reply-mentions';
 import SensitiveContentOverlay from 'soapbox/components/statuses/sensitive-content-overlay';
@@ -181,7 +182,10 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                 </>
               )}
             </span>
+
+            <StatusLanguagePicker status={status} showLabel />
           </HStack>
+
         </HStack>
       </div>
     </div>

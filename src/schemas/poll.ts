@@ -7,8 +7,11 @@ import emojify from 'soapbox/features/emoji';
 import { customEmojiSchema } from './custom-emoji';
 import { filteredArray, makeCustomEmojiMap } from './utils';
 
+const sanitizeTitle = (text: string, emojiMap: any) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { ALLOWED_TAGS: [] });
+
 const pollOptionSchema = z.object({
   title: z.string().catch(''),
+  title_map: z.record(z.string(), z.string()).nullable().catch(null),
   votes_count: z.number().catch(0),
 });
 
@@ -31,7 +34,10 @@ const pollSchema = z.object({
 
   const emojifiedOptions = poll.options.map((option) => ({
     ...option,
-    title_emojified: DOMPurify.sanitize(emojify(escapeTextContentForBrowser(option.title), emojiMap), { ALLOWED_TAGS: [] }),
+    title_emojified: sanitizeTitle(option.title, emojiMap),
+    title_map_emojified: option.title_map
+      ? Object.fromEntries(Object.entries(option.title_map).map(([key, title]) => [key, sanitizeTitle(title, emojiMap)]))
+      : null,
   }));
 
   // If the user has votes, they have certainly voted.

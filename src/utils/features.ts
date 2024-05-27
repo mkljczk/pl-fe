@@ -626,7 +626,7 @@ const getInstanceFeatures = (instance: Instance) => {
      * Ability to include multiple language variants for a post.
      * @see POST /api/v1/statuses
      */
-    multiLanguage: false, // features.includes('pleroma:multi_language'),
+    multiLanguage: features.includes('pleroma:multi_language'),
 
     /**
      * Ability to hide notifications from people you don't follow.

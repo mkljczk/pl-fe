@@ -242,10 +242,6 @@ const DropdownMenu = (props: IDropdownMenu) => {
 
   useEffect(() => {
     if (isOpen) {
-      if (refs.floating.current) {
-        (refs.floating.current?.querySelector('li a[role=\'button\']') as HTMLAnchorElement)?.focus();
-      }
-
       document.addEventListener('click', handleDocumentClick, false);
       document.addEventListener('keydown', handleKeyDown, false);
       document.addEventListener('touchend', handleDocumentClick, listenerOptions);
