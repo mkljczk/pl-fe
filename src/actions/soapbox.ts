@@ -64,6 +64,8 @@ const fetchSoapboxConfig = (host: string | null) =>
         if (data.pl_fe) {
           dispatch(importSoapboxConfig(data.pl_fe, host));
           return data.pl_fe;
+        } else {
+          return dispatch(fetchSoapboxJson(host));
         }
       });
     } else {
