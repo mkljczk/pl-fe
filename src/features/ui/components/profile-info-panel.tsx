@@ -154,7 +154,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
         <ProfileStats account={account} />
 
         {account.note.length > 0 && (
-          <Markup size='sm' dangerouslySetInnerHTML={{ __html: account.note_emojified }} truncate />
+          <Markup size='sm' dangerouslySetInnerHTML={{ __html: account.note_emojified }} />
         )}
 
         <div className='flex flex-col items-start gap-2 md:flex-row md:flex-wrap md:items-center'>
