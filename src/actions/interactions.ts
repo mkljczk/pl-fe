@@ -348,7 +348,7 @@ const unbookmark = (status: StatusEntity) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(unbookmarkRequest(status));
 
-    api(getState)(`/api/v1/statuses/${status.id}/unbookmark`, { method: 'JSON' }).then(response => {
+    api(getState)(`/api/v1/statuses/${status.id}/unbookmark`, { method: 'POST' }).then(response => {
       dispatch(importFetchedStatus(response.json));
       dispatch(unbookmarkSuccess(status, response.json));
       toast.success(messages.bookmarkRemoved);
@@ -585,7 +585,7 @@ const pin = (status: StatusEntity) =>
 
     dispatch(pinRequest(status));
 
-    api(getState)(`/api/v1/statuses/${status.id}/pin`, { method: 'JSON' }).then(response => {
+    api(getState)(`/api/v1/statuses/${status.id}/pin`, { method: 'POST' }).then(response => {
       dispatch(importFetchedStatus(response.json));
       dispatch(pinSuccess(status));
     }).catch(error => {
@@ -618,7 +618,7 @@ const unpin = (status: StatusEntity) =>
 
     dispatch(unpinRequest(status));
 
-    api(getState)(`/api/v1/statuses/${status.id}/unpin`, { method: 'JSON' }).then(response => {
+    api(getState)(`/api/v1/statuses/${status.id}/unpin`, { method: 'POST' }).then(response => {
       dispatch(importFetchedStatus(response.json));
       dispatch(unpinSuccess(status));
     }).catch(error => {
