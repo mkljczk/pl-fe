@@ -99,7 +99,7 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
 
     switch (e.key) {
       case 'Escape':
-        setIsOpen(false);
+        handleClose();
         break;
       case 'Enter':
         handleOptionClick(e);
@@ -138,7 +138,7 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
 
     e.preventDefault();
 
-    setIsOpen(false);
+    handleClose();
   };
 
   const handleAddLanguageClick: React.EventHandler<any> = (e: MouseEvent | KeyboardEvent) => {
@@ -147,7 +147,7 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
     e.preventDefault();
     e.stopPropagation();
 
-    setIsOpen(false);
+    handleClose();
     dispatch(addComposeLanguage(composeId, value));
   };
 
@@ -157,7 +157,7 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
     e.preventDefault();
     e.stopPropagation();
 
-    setIsOpen(false);
+    handleClose();
     dispatch(deleteComposeLanguage(composeId, value));
   };
 
@@ -205,7 +205,7 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
 
   const handleDocumentClick = (event: Event) => {
     if (refs.floating.current && !refs.floating.current.contains(event.target as Node)) {
-      setIsOpen(false);
+      handleClose();
     }
   };
 
@@ -238,7 +238,7 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
         element = items[items.length - 1];
         break;
       case 'Escape':
-        setIsOpen(false);
+        handleClose();
         break;
     }
 
@@ -247,6 +247,11 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
       e.preventDefault();
       e.stopPropagation();
     }
+  };
+
+  const handleClose = () => {
+    setSearchValue('');
+    handleClose();
   };
 
   const arrowProps: React.CSSProperties = useMemo(() => {
