@@ -8,6 +8,7 @@ import { usePublicStream } from 'soapbox/api/hooks';
 import PullToRefresh from 'soapbox/components/pull-to-refresh';
 import { Accordion, Column } from 'soapbox/components/ui';
 import { useAppSelector, useAppDispatch, useInstance, useSettings, useTheme } from 'soapbox/hooks';
+import { useIsMobile } from 'soapbox/hooks/useIsMobile';
 
 import PinnedHostsPicker from '../remote-timeline/components/pinned-hosts-picker';
 import Timeline from '../ui/components/timeline';
@@ -28,6 +29,7 @@ const CommunityTimeline = () => {
   const next = useAppSelector(state => state.timelines.get('public')?.next);
 
   const timelineId = 'public';
+  const isMobile = useIsMobile();
 
   const explanationBoxExpanded = settings.explanationBox;
   const showExplanationBox = settings.showExplanationBox;
@@ -53,7 +55,7 @@ const CommunityTimeline = () => {
   }, [onlyMedia]);
 
   return (
-    <Column className='-mt-3 sm:mt-0' label={intl.formatMessage(messages.title)} transparent>
+    <Column className='-mt-3 sm:mt-0' label={intl.formatMessage(messages.title)} transparent={!isMobile}>
       <PinnedHostsPicker />
 
       {showExplanationBox && <div className='mb-4 black:mx-4'>
@@ -91,7 +93,7 @@ const CommunityTimeline = () => {
           prefix='home'
           onLoadMore={handleLoadMore}
           emptyMessage={<FormattedMessage id='empty_column.public' defaultMessage='There is nothing here! Write something publicly, or manually follow users from other servers to fill it up' />}
-          divideType={theme === 'black' ? 'border' : 'space'}
+          divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
         />
       </PullToRefresh>
     </Column>

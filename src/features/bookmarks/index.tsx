@@ -12,6 +12,7 @@ import PullToRefresh from 'soapbox/components/pull-to-refresh';
 import StatusList from 'soapbox/components/status-list';
 import { Column } from 'soapbox/components/ui';
 import { useAppSelector, useAppDispatch, useTheme } from 'soapbox/hooks';
+import { useIsMobile } from 'soapbox/hooks/useIsMobile';
 import toast from 'soapbox/toast';
 
 const messages = defineMessages({
@@ -40,6 +41,7 @@ const Bookmarks: React.FC<IBookmarks> = ({ params }) => {
   const intl = useIntl();
   const history = useHistory();
   const theme = useTheme();
+  const isMobile = useIsMobile();
 
   const folderId = params?.id;
 
@@ -102,7 +104,7 @@ const Bookmarks: React.FC<IBookmarks> = ({ params }) => {
     <Column
       label={folder ? folder.name : intl.formatMessage(messages.heading)}
       action={<DropdownMenu items={items} src={require('@tabler/icons/outline/dots-vertical.svg')} />}
-      transparent
+      transparent={!isMobile}
     >
       <PullToRefresh onRefresh={handleRefresh}>
         <StatusList
@@ -113,7 +115,7 @@ const Bookmarks: React.FC<IBookmarks> = ({ params }) => {
           isLoading={typeof isLoading === 'boolean' ? isLoading : true}
           onLoadMore={() => handleLoadMore(dispatch, folderId)}
           emptyMessage={emptyMessage}
-          divideType={theme === 'black' ? 'border' : 'space'}
+          divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
         />
       </PullToRefresh>
     </Column>
