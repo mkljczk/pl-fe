@@ -263,6 +263,7 @@ const translateStatus = (id: string, targetLanguage?: string) => (dispatch: AppD
 
   api(getState)(`/api/v1/statuses/${id}/translate`, {
     body: JSON.stringify({ target_language: targetLanguage }),
+    method: 'POST',
   }).then(response => {
     dispatch({
       type: STATUS_TRANSLATE_SUCCESS,
