@@ -283,7 +283,7 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
   useEffect(() => {
     if (isOpen) {
       if (refs.floating.current) {
-        (refs.floating.current?.querySelector('li a[role=\'button\']') as HTMLAnchorElement)?.focus();
+        (refs.floating.current?.querySelector('div[aria-selected=true]') as HTMLDivElement)?.focus();
       }
 
       document.addEventListener('click', handleDocumentClick, false);
