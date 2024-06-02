@@ -251,7 +251,7 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
 
   const handleClose = () => {
     setSearchValue('');
-    handleClose();
+    setIsOpen(false);
   };
 
   const arrowProps: React.CSSProperties = useMemo(() => {
