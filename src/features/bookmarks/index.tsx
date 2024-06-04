@@ -108,7 +108,7 @@ const Bookmarks: React.FC<IBookmarks> = ({ params }) => {
     >
       <PullToRefresh onRefresh={handleRefresh}>
         <StatusList
-          className='black:p-4 black:sm:p-5'
+          className='black:p-4 black:sm:p-0'
           statusIds={statusIds}
           scrollKey='bookmarked_statuses'
           hasMore={hasMore}

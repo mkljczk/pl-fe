@@ -42,7 +42,7 @@ const CommunityTimeline = () => {
     <Column className='-mt-3 sm:mt-0' label={intl.formatMessage(messages.title)} transparent={!isMobile}>
       <PullToRefresh onRefresh={handleRefresh}>
         <Timeline
-          className='black:p-4 black:sm:p-5'
+          className='black:p-4 black:sm:p-0'
           scrollKey={`${timelineId}_timeline`}
           timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
           prefix='home'

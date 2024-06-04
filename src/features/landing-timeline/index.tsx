@@ -53,7 +53,7 @@ const LandingTimeline = () => {
       {timelineEnabled ? (
         <PullToRefresh onRefresh={handleRefresh}>
           <Timeline
-            className='black:p-4 black:sm:p-5'
+            className='black:p-4 black:sm:p-0'
             scrollKey={`${timelineId}_timeline`}
             timelineId={timelineId}
             prefix='home'
