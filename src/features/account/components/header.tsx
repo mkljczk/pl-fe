@@ -284,7 +284,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       return [];
     }
 
-    if (features.rssFeeds && account.local) {
+    if (!ownAccount && features.rssFeeds && account.local) {
       menu.push({
         text: intl.formatMessage(messages.subscribeFeed),
         icon: require('@tabler/icons/outline/rss.svg'),
@@ -591,6 +591,25 @@ const Header: React.FC<IHeader> = ({ account }) => {
     );
   };
 
+  const renderRssButton = () => {
+    if (ownAccount || !features.rssFeeds || !account.local) {
+      return null;
+    }
+
+    const href = software === MASTODON ? `${account.url}.rss` : `${account.url}/feed.rss`;
+
+    return (
+      <IconButton
+        src={require('@tabler/icons/outline/rss.svg')}
+        href={href}
+        title={intl.formatMessage(messages.subscribeFeed)}
+        theme='outlined'
+        className='px-2'
+        iconClassName='h-4 w-4'
+      />
+    );
+  };
+
   const info = makeInfo();
   const menu = makeMenu();
 
@@ -646,6 +665,8 @@ const Header: React.FC<IHeader> = ({ account }) => {
                   />
                 </DropdownMenu>
               )}
+
+              {renderRssButton()}
 
               <ActionButton account={account} />
             </HStack>

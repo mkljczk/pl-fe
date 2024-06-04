@@ -15,14 +15,18 @@ interface IIconButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   theme?: 'seamless' | 'outlined' | 'secondary' | 'transparent' | 'dark';
   /** Override the data-testid */
   'data-testid'?: string;
+  /** URL address */
+  href?: string;
 }
 
 /** A clickable icon. */
 const IconButton = React.forwardRef((props: IIconButton, ref: React.ForwardedRef<HTMLButtonElement>): JSX.Element => {
   const { src, className, iconClassName, text, theme = 'seamless', ...filteredProps } = props;
 
+  const Component = (props.href ? 'a' : 'button') as 'button';
+
   return (
-    <button
+    <Component
       ref={ref}
       type='button'
       className={clsx('flex items-center space-x-2 rounded-full p-1 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:ring-offset-0', {
@@ -34,6 +38,7 @@ const IconButton = React.forwardRef((props: IIconButton, ref: React.ForwardedRef
       }, className)}
       {...filteredProps}
       data-testid={filteredProps['data-testid'] || 'icon-button'}
+      {...(props.href ? { target: '_blank' } as any : {})}
     >
       <SvgIcon src={src} className={iconClassName} />
 
@@ -42,7 +47,7 @@ const IconButton = React.forwardRef((props: IIconButton, ref: React.ForwardedRef
           {text}
         </Text>
       ) : null}
-    </button>
+    </Component>
   );
 });
 
