@@ -73,6 +73,7 @@ const HomePage: React.FC<IHomePage> = ({ children }) => {
                     shouldCondense
                     autoFocus={false}
                     clickableAreaRef={composeBlock}
+                    withAvatar
                   />
                 </div>
               </HStack>
