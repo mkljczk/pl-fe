@@ -176,24 +176,36 @@ const deleteStatus = (state: State, id: string, references: Array<string>) => {
   return state.delete(id);
 };
 
-const incrementReplyCount = (state: State, { in_reply_to_id }: APIEntity) => {
+const incrementReplyCount = (state: State, { in_reply_to_id, quote_id }: APIEntity) => {
   if (in_reply_to_id) {
-    return state.updateIn([in_reply_to_id, 'replies_count'], 0, count =>
+    state = state.updateIn([in_reply_to_id, 'replies_count'], 0, count =>
       typeof count === 'number' ? count + 1 : 0,
     );
-  } else {
-    return state;
   }
+
+  if (quote_id) {
+    state = state.updateIn([quote_id, 'quotes_count'], 0, count =>
+      typeof count === 'number' ? count + 1 : 0,
+    );
+  }
+
+  return state;
 };
 
-const decrementReplyCount = (state: State, { in_reply_to_id }: APIEntity) => {
+const decrementReplyCount = (state: State, { in_reply_to_id, quote_id }: APIEntity) => {
   if (in_reply_to_id) {
-    return state.updateIn([in_reply_to_id, 'replies_count'], 0, count =>
+    state = state.updateIn([in_reply_to_id, 'replies_count'], 0, count =>
       typeof count === 'number' ? Math.max(0, count - 1) : 0,
     );
-  } else {
-    return state;
   }
+
+  if (quote_id) {
+    state = state.updateIn([quote_id, 'quotes_count'], 0, count =>
+      typeof count === 'number' ? Math.max(0, count - 1) : 0,
+    );
+  }
+
+  return state;
 };
 
 /** Simulate favourite/unfavourite of status for optimistic interactions */
