@@ -13,71 +13,71 @@ import { openModal } from './modals';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity, Status as StatusEntity } from 'soapbox/types/entities';
 
-const REBLOG_REQUEST = 'REBLOG_REQUEST';
-const REBLOG_SUCCESS = 'REBLOG_SUCCESS';
-const REBLOG_FAIL    = 'REBLOG_FAIL';
+const REBLOG_REQUEST = 'REBLOG_REQUEST' as const;
+const REBLOG_SUCCESS = 'REBLOG_SUCCESS' as const;
+const REBLOG_FAIL    = 'REBLOG_FAIL' as const;
 
-const FAVOURITE_REQUEST = 'FAVOURITE_REQUEST';
-const FAVOURITE_SUCCESS = 'FAVOURITE_SUCCESS';
-const FAVOURITE_FAIL    = 'FAVOURITE_FAIL';
+const FAVOURITE_REQUEST = 'FAVOURITE_REQUEST' as const;
+const FAVOURITE_SUCCESS = 'FAVOURITE_SUCCESS' as const;
+const FAVOURITE_FAIL    = 'FAVOURITE_FAIL' as const;
 
-const DISLIKE_REQUEST = 'DISLIKE_REQUEST';
-const DISLIKE_SUCCESS = 'DISLIKE_SUCCESS';
-const DISLIKE_FAIL    = 'DISLIKE_FAIL';
+const DISLIKE_REQUEST = 'DISLIKE_REQUEST' as const;
+const DISLIKE_SUCCESS = 'DISLIKE_SUCCESS' as const;
+const DISLIKE_FAIL    = 'DISLIKE_FAIL' as const;
 
-const UNREBLOG_REQUEST = 'UNREBLOG_REQUEST';
-const UNREBLOG_SUCCESS = 'UNREBLOG_SUCCESS';
-const UNREBLOG_FAIL    = 'UNREBLOG_FAIL';
+const UNREBLOG_REQUEST = 'UNREBLOG_REQUEST' as const;
+const UNREBLOG_SUCCESS = 'UNREBLOG_SUCCESS' as const;
+const UNREBLOG_FAIL    = 'UNREBLOG_FAIL' as const;
 
-const UNFAVOURITE_REQUEST = 'UNFAVOURITE_REQUEST';
-const UNFAVOURITE_SUCCESS = 'UNFAVOURITE_SUCCESS';
-const UNFAVOURITE_FAIL    = 'UNFAVOURITE_FAIL';
+const UNFAVOURITE_REQUEST = 'UNFAVOURITE_REQUEST' as const;
+const UNFAVOURITE_SUCCESS = 'UNFAVOURITE_SUCCESS' as const;
+const UNFAVOURITE_FAIL    = 'UNFAVOURITE_FAIL' as const;
 
-const UNDISLIKE_REQUEST = 'UNDISLIKE_REQUEST';
-const UNDISLIKE_SUCCESS = 'UNDISLIKE_SUCCESS';
-const UNDISLIKE_FAIL    = 'UNDISLIKE_FAIL';
+const UNDISLIKE_REQUEST = 'UNDISLIKE_REQUEST' as const;
+const UNDISLIKE_SUCCESS = 'UNDISLIKE_SUCCESS' as const;
+const UNDISLIKE_FAIL    = 'UNDISLIKE_FAIL' as const;
 
-const REBLOGS_FETCH_REQUEST = 'REBLOGS_FETCH_REQUEST';
-const REBLOGS_FETCH_SUCCESS = 'REBLOGS_FETCH_SUCCESS';
-const REBLOGS_FETCH_FAIL    = 'REBLOGS_FETCH_FAIL';
+const REBLOGS_FETCH_REQUEST = 'REBLOGS_FETCH_REQUEST' as const;
+const REBLOGS_FETCH_SUCCESS = 'REBLOGS_FETCH_SUCCESS' as const;
+const REBLOGS_FETCH_FAIL    = 'REBLOGS_FETCH_FAIL' as const;
 
-const FAVOURITES_FETCH_REQUEST = 'FAVOURITES_FETCH_REQUEST';
-const FAVOURITES_FETCH_SUCCESS = 'FAVOURITES_FETCH_SUCCESS';
-const FAVOURITES_FETCH_FAIL    = 'FAVOURITES_FETCH_FAIL';
+const FAVOURITES_FETCH_REQUEST = 'FAVOURITES_FETCH_REQUEST' as const;
+const FAVOURITES_FETCH_SUCCESS = 'FAVOURITES_FETCH_SUCCESS' as const;
+const FAVOURITES_FETCH_FAIL    = 'FAVOURITES_FETCH_FAIL' as const;
 
-const DISLIKES_FETCH_REQUEST = 'DISLIKES_FETCH_REQUEST';
-const DISLIKES_FETCH_SUCCESS = 'DISLIKES_FETCH_SUCCESS';
-const DISLIKES_FETCH_FAIL    = 'DISLIKES_FETCH_FAIL';
+const DISLIKES_FETCH_REQUEST = 'DISLIKES_FETCH_REQUEST' as const;
+const DISLIKES_FETCH_SUCCESS = 'DISLIKES_FETCH_SUCCESS' as const;
+const DISLIKES_FETCH_FAIL    = 'DISLIKES_FETCH_FAIL' as const;
 
-const REACTIONS_FETCH_REQUEST = 'REACTIONS_FETCH_REQUEST';
-const REACTIONS_FETCH_SUCCESS = 'REACTIONS_FETCH_SUCCESS';
-const REACTIONS_FETCH_FAIL    = 'REACTIONS_FETCH_FAIL';
+const REACTIONS_FETCH_REQUEST = 'REACTIONS_FETCH_REQUEST' as const;
+const REACTIONS_FETCH_SUCCESS = 'REACTIONS_FETCH_SUCCESS' as const;
+const REACTIONS_FETCH_FAIL    = 'REACTIONS_FETCH_FAIL' as const;
 
-const PIN_REQUEST = 'PIN_REQUEST';
-const PIN_SUCCESS = 'PIN_SUCCESS';
-const PIN_FAIL    = 'PIN_FAIL';
+const PIN_REQUEST = 'PIN_REQUEST' as const;
+const PIN_SUCCESS = 'PIN_SUCCESS' as const;
+const PIN_FAIL    = 'PIN_FAIL' as const;
 
-const UNPIN_REQUEST = 'UNPIN_REQUEST';
-const UNPIN_SUCCESS = 'UNPIN_SUCCESS';
-const UNPIN_FAIL    = 'UNPIN_FAIL';
+const UNPIN_REQUEST = 'UNPIN_REQUEST' as const;
+const UNPIN_SUCCESS = 'UNPIN_SUCCESS' as const;
+const UNPIN_FAIL    = 'UNPIN_FAIL' as const;
 
-const BOOKMARK_REQUEST = 'BOOKMARK_REQUEST';
-const BOOKMARK_SUCCESS = 'BOOKMARKED_SUCCESS';
-const BOOKMARK_FAIL    = 'BOOKMARKED_FAIL';
+const BOOKMARK_REQUEST = 'BOOKMARK_REQUEST' as const;
+const BOOKMARK_SUCCESS = 'BOOKMARKED_SUCCESS' as const;
+const BOOKMARK_FAIL    = 'BOOKMARKED_FAIL' as const;
 
-const UNBOOKMARK_REQUEST = 'UNBOOKMARKED_REQUEST';
-const UNBOOKMARK_SUCCESS = 'UNBOOKMARKED_SUCCESS';
-const UNBOOKMARK_FAIL    = 'UNBOOKMARKED_FAIL';
+const UNBOOKMARK_REQUEST = 'UNBOOKMARKED_REQUEST' as const;
+const UNBOOKMARK_SUCCESS = 'UNBOOKMARKED_SUCCESS' as const;
+const UNBOOKMARK_FAIL    = 'UNBOOKMARKED_FAIL' as const;
 
-const REMOTE_INTERACTION_REQUEST = 'REMOTE_INTERACTION_REQUEST';
-const REMOTE_INTERACTION_SUCCESS = 'REMOTE_INTERACTION_SUCCESS';
-const REMOTE_INTERACTION_FAIL    = 'REMOTE_INTERACTION_FAIL';
+const REMOTE_INTERACTION_REQUEST = 'REMOTE_INTERACTION_REQUEST' as const;
+const REMOTE_INTERACTION_SUCCESS = 'REMOTE_INTERACTION_SUCCESS' as const;
+const REMOTE_INTERACTION_FAIL    = 'REMOTE_INTERACTION_FAIL' as const;
 
-const FAVOURITES_EXPAND_SUCCESS = 'FAVOURITES_EXPAND_SUCCESS';
-const FAVOURITES_EXPAND_FAIL = 'FAVOURITES_EXPAND_FAIL';
+const FAVOURITES_EXPAND_SUCCESS = 'FAVOURITES_EXPAND_SUCCESS' as const;
+const FAVOURITES_EXPAND_FAIL = 'FAVOURITES_EXPAND_FAIL' as const;
 
-const REBLOGS_EXPAND_SUCCESS = 'REBLOGS_EXPAND_SUCCESS';
-const REBLOGS_EXPAND_FAIL = 'REBLOGS_EXPAND_FAIL';
+const REBLOGS_EXPAND_SUCCESS = 'REBLOGS_EXPAND_SUCCESS' as const;
+const REBLOGS_EXPAND_FAIL = 'REBLOGS_EXPAND_FAIL' as const;
 
 const messages = defineMessages({
   bookmarkAdded: { id: 'status.bookmarked', defaultMessage: 'Bookmark added.' },
@@ -579,79 +579,89 @@ const fetchReactionsFail = (id: string, error: unknown) => ({
   error,
 });
 
-const pin = (status: StatusEntity) =>
+const pin = (status: StatusEntity, accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
-    dispatch(pinRequest(status));
+    dispatch(pinRequest(status, accountId));
 
     api(getState)(`/api/v1/statuses/${status.id}/pin`, { method: 'POST' }).then(response => {
       dispatch(importFetchedStatus(response.json));
-      dispatch(pinSuccess(status));
+      dispatch(pinSuccess(status, accountId));
     }).catch(error => {
-      dispatch(pinFail(status, error));
+      dispatch(pinFail(status, error, accountId));
     });
   };
 
-const pinRequest = (status: StatusEntity) => ({
+const pinRequest = (status: StatusEntity, accountId: string) => ({
   type: PIN_REQUEST,
   status,
   skipLoading: true,
+  accountId,
 });
 
-const pinSuccess = (status: StatusEntity) => ({
+const pinSuccess = (status: StatusEntity, accountId: string) => ({
   type: PIN_SUCCESS,
   status,
   skipLoading: true,
+  accountId,
 });
 
-const pinFail = (status: StatusEntity, error: unknown) => ({
+const pinFail = (status: StatusEntity, error: unknown, accountId: string) => ({
   type: PIN_FAIL,
   status,
   error,
   skipLoading: true,
+  accountId,
 });
 
-const unpin = (status: StatusEntity) =>
+const unpin = (status: StatusEntity, accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
-    dispatch(unpinRequest(status));
+    dispatch(unpinRequest(status, accountId));
 
     api(getState)(`/api/v1/statuses/${status.id}/unpin`, { method: 'POST' }).then(response => {
       dispatch(importFetchedStatus(response.json));
-      dispatch(unpinSuccess(status));
+      dispatch(unpinSuccess(status, accountId));
     }).catch(error => {
-      dispatch(unpinFail(status, error));
+      dispatch(unpinFail(status, error, accountId));
     });
   };
 
 const togglePin = (status: StatusEntity) =>
-  (dispatch: AppDispatch) => {
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    const accountId = getState().me;
+
+    if (!accountId) return;
+
     if (status.pinned) {
-      dispatch(unpin(status));
+      dispatch(unpin(status, accountId));
     } else {
-      dispatch(pin(status));
+      dispatch(pin(status, accountId));
     }
   };
 
-const unpinRequest = (status: StatusEntity) => ({
+const unpinRequest = (status: StatusEntity, accountId: string) => ({
   type: UNPIN_REQUEST,
   status,
   skipLoading: true,
+  accountId,
 });
 
-const unpinSuccess = (status: StatusEntity) => ({
+const unpinSuccess = (status: StatusEntity, accountId: string) => ({
   type: UNPIN_SUCCESS,
   status,
   skipLoading: true,
+  accountId,
 });
 
-const unpinFail = (status: StatusEntity, error: unknown) => ({
+const unpinFail = (status: StatusEntity, error: unknown, accountId: string) => ({
   type: UNPIN_FAIL,
   status,
   error,
   skipLoading: true,
+  accountId,
 });
 
 const remoteInteraction = (ap_id: string, profile: string) =>

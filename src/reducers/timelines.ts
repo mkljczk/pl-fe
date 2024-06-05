@@ -11,6 +11,7 @@ import {
   ACCOUNT_BLOCK_SUCCESS,
   ACCOUNT_MUTE_SUCCESS,
 } from '../actions/accounts';
+import { PIN_SUCCESS, UNPIN_SUCCESS } from '../actions/interactions';
 import {
   STATUS_CREATE_REQUEST,
   STATUS_CREATE_SUCCESS,
@@ -367,6 +368,16 @@ const timelines = (state: State = initialState, action: AnyAction) => {
           return ImmutableOrderedSet(oldIdsArray);
         });
       }));
+    case PIN_SUCCESS:
+      return state.updateIn(
+        [`account:${action.accountId}:pinned`, 'items'],
+        ids => ImmutableOrderedSet([action.status.id]).union(ids as ImmutableOrderedSet<string>),
+      );
+    case UNPIN_SUCCESS:
+      return state.updateIn(
+        [`account:${action.accountId}:pinned`, 'items'],
+        ids => (ids as ImmutableOrderedSet<string>).delete(action.status.id),
+      );
     default:
       return state;
   }
