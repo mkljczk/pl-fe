@@ -104,7 +104,7 @@ const ListTimeline: React.FC = () => {
       transparent={!isMobile}
     >
       <Timeline
-        className='black:p-4 black:sm:p-0'
+        className='black:p-0 black:sm:p-4'
         scrollKey='list_timeline'
         timelineId={`list:${id}`}
         onLoadMore={handleLoadMore}

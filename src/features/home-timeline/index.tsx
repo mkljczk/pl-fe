@@ -63,7 +63,7 @@ const HomeTimeline: React.FC = () => {
     <Column className='py-0' label={intl.formatMessage(messages.title)} transparent={!isMobile} withHeader={false}>
       <PullToRefresh onRefresh={handleRefresh}>
         <Timeline
-          className='black:p-4 black:sm:p-0'
+          className='black:p-0 black:sm:p-4'
           scrollKey='home_timeline'
           onLoadMore={handleLoadMore}
           timelineId='home'

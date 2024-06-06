@@ -66,7 +66,7 @@ const HashtagTimeline: React.FC<IHashtagTimeline> = ({ params }) => {
         </List>
       )}
       <Timeline
-        className='black:p-4 black:sm:p-0'
+        className='black:p-0 black:sm:p-4'
         scrollKey='hashtag_timeline'
         timelineId={`hashtag:${id}`}
         onLoadMore={handleLoadMore}
