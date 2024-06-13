@@ -533,7 +533,7 @@ const getInstanceFeatures = (instance: Instance) => {
      * @see POST /api/v1/admin/groups/:group_id/unsuspend
      * @see DELETE /api/v1/admin/groups/:group_id
      */
-    groups: false,
+    groups: true,
 
     /**
      * Can hide follows/followers lists and counts.

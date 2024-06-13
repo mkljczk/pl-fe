@@ -59,7 +59,7 @@ const Groups: React.FC = () => {
 
   return (
     <Stack space={4}>
-      {canCreateGroup && (
+      {canCreateGroup && !(!isLoading && groups.length === 0) && (
         <Button
           className='xl:hidden'
           icon={require('@tabler/icons/outline/circles.svg')}
