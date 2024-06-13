@@ -140,10 +140,10 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     if (!canSubmit) return;
     e?.preventDefault();
 
-    // dispatch(changeCompose(id, text));
-    dispatch(submitCompose(id, { history }));
+    dispatch(submitCompose(id, { history })).then(() => {
+      editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+    }).catch(() => {});
 
-    editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
   };
 
   const onSuggestionsClearRequested = () => {
