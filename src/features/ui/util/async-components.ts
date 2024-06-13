@@ -159,3 +159,4 @@ export const Relays = lazy(() => import('soapbox/features/admin/relays'));
 export const Rules = lazy(() => import('soapbox/features/admin/rules'));
 export const EditRuleModal = lazy(() => import('soapbox/features/ui/components/modals/edit-rule-modal'));
 export const DraftStatuses = lazy(() => import('soapbox/features/draft-statuses'));
+export const Circle = lazy(() => import('soapbox/features/circle'));

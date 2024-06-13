@@ -129,6 +129,7 @@ import {
   Relays,
   Rules,
   DraftStatuses,
+  Circle,
 } from './util/async-components';
 import GlobalHotkeys from './util/global-hotkeys';
 import { WrappedRoute } from './util/react-router-helpers';
@@ -285,6 +286,8 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
       <WrappedRoute path='/statuses/:statusId' exact page={StatusPage} component={Status} content={children} />
       {features.scheduledStatuses && <WrappedRoute path='/scheduled_statuses' page={DefaultPage} component={ScheduledStatuses} content={children} />}
       <WrappedRoute path='/draft_statuses' page={DefaultPage} component={DraftStatuses} content={children} />
+
+      <WrappedRoute path='/circle' page={DefaultPage} component={Circle} content={children} />
 
       <WrappedRoute path='/settings/profile' page={DefaultPage} component={EditProfile} content={children} />
       {features.exportData && <WrappedRoute path='/settings/export' page={DefaultPage} component={ExportData} content={children} />}
