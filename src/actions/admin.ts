@@ -5,7 +5,7 @@ import { accountIdsToAccts } from 'soapbox/selectors';
 import { filterBadges, getTagDiff } from 'soapbox/utils/badges';
 import { getFeatures } from 'soapbox/utils/features';
 
-import api, { getLinks } from '../api';
+import api, { getNextLink } from '../api';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
@@ -217,7 +217,7 @@ const fetchMastodonUsers = (filters: string[], page: number, query: string | nul
     return api(getState)(next || '/api/v1/admin/accounts', { params })
       .then((response) => {
         const accounts = response.json;
-        const next = getLinks(response).refs.find(link => link.rel === 'next');
+        const next = getNextLink(response);
 
         const count = next
           ? page * pageSize + 1
@@ -225,8 +225,8 @@ const fetchMastodonUsers = (filters: string[], page: number, query: string | nul
 
         dispatch(importFetchedAccounts(accounts.map(({ account }: APIEntity) => account)));
         dispatch(fetchRelationships(accounts.map((account: APIEntity) => account.id)));
-        dispatch({ type: ADMIN_USERS_FETCH_SUCCESS, users: accounts, count, pageSize, filters, page, next: next?.uri || false });
-        return { users: accounts, count, pageSize, next: next?.uri || false };
+        dispatch({ type: ADMIN_USERS_FETCH_SUCCESS, users: accounts, count, pageSize, filters, page, next: next || false });
+        return { users: accounts, count, pageSize, next: next || false };
       }).catch(error =>
         dispatch({ type: ADMIN_USERS_FETCH_FAIL, error, filters, page, pageSize }),
       );

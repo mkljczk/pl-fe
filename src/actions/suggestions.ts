@@ -1,7 +1,7 @@
 import { isLoggedIn } from 'soapbox/utils/auth';
 import { getFeatures } from 'soapbox/utils/features';
 
-import api, { getLinks } from '../api';
+import api, { getNextLink } from '../api';
 
 import { fetchRelationships } from './accounts';
 import { importFetchedAccounts } from './importer';
@@ -42,7 +42,7 @@ const fetchSuggestionsV2 = (params: Record<string, any> = {}) =>
     return api(getState)(next ? next : '/api/v2/suggestions', next ? {} : { params }).then((response) => {
       const suggestions: APIEntity[] = response.json;
       const accounts = suggestions.map(({ account }) => account);
-      const next = getLinks(response).refs.find(link => link.rel === 'next')?.uri;
+      const next = getNextLink(response) || null;
 
       dispatch(importFetchedAccounts(accounts));
       dispatch({ type: SUGGESTIONS_V2_FETCH_SUCCESS, suggestions, next, skipLoading: true });

@@ -2,7 +2,7 @@ import { useInfiniteQuery, useMutation, keepPreviousData } from '@tanstack/react
 
 import { fetchRelationships } from 'soapbox/actions/accounts';
 import { importFetchedAccounts } from 'soapbox/actions/importer';
-import { getLinks } from 'soapbox/api';
+import { getNextLink } from 'soapbox/api';
 import { useApi, useAppDispatch } from 'soapbox/hooks';
 
 import { PaginatedResult, removePageItem } from '../utils/queries';
@@ -34,7 +34,7 @@ const useSuggestions = () => {
     const endpoint = pageParam?.link || '/api/v2/suggestions';
     const response = await api<Suggestion[]>(endpoint);
     const hasMore = !!response.headers.get('link');
-    const nextLink = getLinks(response).refs.find(link => link.rel === 'next')?.uri;
+    const nextLink = getNextLink(response);
 
     const accounts = response.json.map(({ account }) => account);
     const accountIds = accounts.map((account) => account.id);
@@ -92,7 +92,7 @@ const useOnboardingSuggestions = () => {
     const link = pageParam?.link || '/api/v2/suggestions';
     const response = await api<Suggestion[]>(link);
     const hasMore = !!response.headers.get('link');
-    const nextLink = getLinks(response).refs.find(link => link.rel === 'next')?.uri;
+    const nextLink = getNextLink(response);
 
     const accounts = response.json.map(({ account }) => account);
     const accountIds = accounts.map((account) => account.id);

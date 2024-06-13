@@ -1,5 +1,5 @@
 
-import api, { getLinks } from '../api';
+import api, { getNextLink } from '../api';
 
 import { importFetchedAccounts } from './importer';
 
@@ -28,10 +28,10 @@ const fetchGroupBlocks = (id: string) =>
     dispatch(fetchGroupBlocksRequest(id));
 
     return api(getState)(`/api/v1/groups/${id}/blocks`).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
 
       dispatch(importFetchedAccounts(response.json));
-      dispatch(fetchGroupBlocksSuccess(id, response.json, next ? next.uri : null));
+      dispatch(fetchGroupBlocksSuccess(id, response.json, next || null));
     }).catch(error => {
       dispatch(fetchGroupBlocksFail(id, error));
     });

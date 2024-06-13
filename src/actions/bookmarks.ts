@@ -1,4 +1,4 @@
-import api, { getLinks } from '../api';
+import api, { getNextLink } from '../api';
 
 import { importFetchedStatuses } from './importer';
 
@@ -24,9 +24,9 @@ const fetchBookmarkedStatuses = (folderId?: string) =>
     dispatch(fetchBookmarkedStatusesRequest(folderId));
 
     return api(getState)(`/api/v1/bookmarks${folderId ? `?folder_id=${folderId}` : ''}`).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
       dispatch(importFetchedStatuses(response.json));
-      return dispatch(fetchBookmarkedStatusesSuccess(response.json, next ? next.uri : null, folderId));
+      return dispatch(fetchBookmarkedStatusesSuccess(response.json, next || null, folderId));
     }).catch(error => {
       dispatch(fetchBookmarkedStatusesFail(error, folderId));
     });
@@ -62,9 +62,9 @@ const expandBookmarkedStatuses = (folderId?: string) =>
     dispatch(expandBookmarkedStatusesRequest(folderId));
 
     return api(getState)(url).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
       dispatch(importFetchedStatuses(response.json));
-      return dispatch(expandBookmarkedStatusesSuccess(response.json, next ? next.uri : null, folderId));
+      return dispatch(expandBookmarkedStatusesSuccess(response.json, next || null, folderId));
     }).catch(error => {
       dispatch(expandBookmarkedStatusesFail(error, folderId));
     });

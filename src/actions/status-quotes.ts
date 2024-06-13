@@ -1,4 +1,4 @@
-import api, { getLinks } from '../api';
+import api, { getNextLink } from '../api';
 
 import { importFetchedStatuses } from './importer';
 
@@ -26,13 +26,13 @@ const fetchStatusQuotes = (statusId: string) =>
     });
 
     return api(getState)(`/api/v1/pleroma/statuses/${statusId}/quotes`).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
       dispatch(importFetchedStatuses(response.json));
       return dispatch({
         type: STATUS_QUOTES_FETCH_SUCCESS,
         statusId,
         statuses: response.json,
-        next: next ? next.uri : null,
+        next: next || null,
       });
     }).catch(error => {
       dispatch({
@@ -57,13 +57,13 @@ const expandStatusQuotes = (statusId: string) =>
     });
 
     return api(getState)(url).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
       dispatch(importFetchedStatuses(response.json));
       dispatch({
         type: STATUS_QUOTES_EXPAND_SUCCESS,
         statusId,
         statuses: response.json,
-        next: next ? next.uri : null,
+        next: next || null,
       });
     }).catch(error => {
       dispatch({

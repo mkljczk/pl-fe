@@ -4,7 +4,7 @@ import { selectAccount } from 'soapbox/selectors';
 import { isLoggedIn } from 'soapbox/utils/auth';
 import { getFeatures, parseVersion, PLEROMA } from 'soapbox/utils/features';
 
-import api, { getLinks, type PlfeResponse } from '../api';
+import api, { getNextLink, type PlfeResponse } from '../api';
 
 import {
   importFetchedAccount,
@@ -450,10 +450,10 @@ const fetchFollowers = (id: string) =>
 
     return api(getState)(`/api/v1/accounts/${id}/followers`)
       .then(response => {
-        const next = getLinks(response).refs.find(link => link.rel === 'next');
+        const next = getNextLink(response);
 
         dispatch(importFetchedAccounts(response.json));
-        dispatch(fetchFollowersSuccess(id, response.json, next ? next.uri : null));
+        dispatch(fetchFollowersSuccess(id, response.json, next || null));
         dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
       })
       .catch(error => {
@@ -493,10 +493,10 @@ const expandFollowers = (id: string) =>
 
     return api(getState)(url)
       .then(response => {
-        const next = getLinks(response).refs.find(link => link.rel === 'next');
+        const next = getNextLink(response);
 
         dispatch(importFetchedAccounts(response.json));
-        dispatch(expandFollowersSuccess(id, response.json, next ? next.uri : null));
+        dispatch(expandFollowersSuccess(id, response.json, next || null));
         dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
       })
       .catch(error => {
@@ -528,10 +528,10 @@ const fetchFollowing = (id: string) =>
 
     return api(getState)(`/api/v1/accounts/${id}/following`)
       .then(response => {
-        const next = getLinks(response).refs.find(link => link.rel === 'next');
+        const next = getNextLink(response);
 
         dispatch(importFetchedAccounts(response.json));
-        dispatch(fetchFollowingSuccess(id, response.json, next ? next.uri : null));
+        dispatch(fetchFollowingSuccess(id, response.json, next || null));
         dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
       })
       .catch(error => {
@@ -571,10 +571,10 @@ const expandFollowing = (id: string) =>
 
     return api(getState)(url)
       .then(response => {
-        const next = getLinks(response).refs.find(link => link.rel === 'next');
+        const next = getNextLink(response);
 
         dispatch(importFetchedAccounts(response.json));
-        dispatch(expandFollowingSuccess(id, response.json, next ? next.uri : null));
+        dispatch(expandFollowingSuccess(id, response.json, next || null));
         dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
       })
       .catch(error => {
@@ -647,9 +647,9 @@ const fetchFollowRequests = () =>
 
     return api(getState)('/api/v1/follow_requests')
       .then(response => {
-        const next = getLinks(response).refs.find(link => link.rel === 'next');
+        const next = getNextLink(response);
         dispatch(importFetchedAccounts(response.json));
-        dispatch(fetchFollowRequestsSuccess(response.json, next ? next.uri : null));
+        dispatch(fetchFollowRequestsSuccess(response.json, next || null));
       })
       .catch(error => dispatch(fetchFollowRequestsFail(error)));
   };
@@ -683,9 +683,9 @@ const expandFollowRequests = () =>
 
     return api(getState)(url)
       .then(response => {
-        const next = getLinks(response).refs.find(link => link.rel === 'next');
+        const next = getNextLink(response);
         dispatch(importFetchedAccounts(response.json));
-        dispatch(expandFollowRequestsSuccess(response.json, next ? next.uri : null));
+        dispatch(expandFollowRequestsSuccess(response.json, next || null));
       })
       .catch(error => dispatch(expandFollowRequestsFail(error)));
   };

@@ -1,4 +1,4 @@
-import api, { getLinks } from '../api';
+import api, { getNextLink } from '../api';
 
 import { fetchRelationships } from './accounts';
 import { importFetchedAccounts, importFetchedStatuses } from './importer';
@@ -82,9 +82,9 @@ const submitSearch = (filter?: SearchFilter) =>
         dispatch(importFetchedStatuses(response.json.statuses));
       }
 
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
 
-      dispatch(fetchSearchSuccess(response.json, value, type, next ? next.uri : null));
+      dispatch(fetchSearchSuccess(response.json, value, type, next || null));
       dispatch(fetchRelationships(response.json.accounts.map((item: APIEntity) => item.id)));
     }).catch(error => {
       dispatch(fetchSearchFail(error));
@@ -155,9 +155,9 @@ const expandSearch = (type: SearchFilter) => (dispatch: AppDispatch, getState: (
       dispatch(importFetchedStatuses(data.statuses));
     }
 
-    const next = getLinks(response).refs.find(link => link.rel === 'next');
+    const next = getNextLink(response);
 
-    dispatch(expandSearchSuccess(data, value, type, next ? next.uri : null));
+    dispatch(expandSearchSuccess(data, value, type, next || null));
     dispatch(fetchRelationships(data.accounts.map((item: APIEntity) => item.id)));
   }).catch(error => {
     dispatch(expandSearchFail(error));

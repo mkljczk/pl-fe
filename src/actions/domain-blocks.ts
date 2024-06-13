@@ -1,7 +1,7 @@
 import { Entities } from 'soapbox/entity-store/entities';
 import { isLoggedIn } from 'soapbox/utils/auth';
 
-import api, { getLinks } from '../api';
+import api, { getNextLink } from '../api';
 
 import type { EntityStore } from 'soapbox/entity-store/types';
 import type { Account } from 'soapbox/schemas';
@@ -101,8 +101,8 @@ const fetchDomainBlocks = () =>
     dispatch(fetchDomainBlocksRequest());
 
     api(getState)('/api/v1/domain_blocks').then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(fetchDomainBlocksSuccess(response.json, next ? next.uri : null));
+      const next = getNextLink(response);
+      dispatch(fetchDomainBlocksSuccess(response.json, next || null));
     }).catch(err => {
       dispatch(fetchDomainBlocksFail(err));
     });
@@ -136,8 +136,8 @@ const expandDomainBlocks = () =>
     dispatch(expandDomainBlocksRequest());
 
     api(getState)(url).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(expandDomainBlocksSuccess(response.json, next ? next.uri : null));
+      const next = getNextLink(response);
+      dispatch(expandDomainBlocksSuccess(response.json, next || null));
     }).catch(err => {
       dispatch(expandDomainBlocksFail(err));
     });

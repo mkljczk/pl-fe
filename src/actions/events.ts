@@ -1,6 +1,6 @@
 import { defineMessages, IntlShape } from 'react-intl';
 
-import api, { getLinks } from 'soapbox/api';
+import api, { getNextLink } from 'soapbox/api';
 import toast from 'soapbox/toast';
 
 import { importFetchedAccounts, importFetchedStatus, importFetchedStatuses } from './importer';
@@ -344,9 +344,9 @@ const fetchEventParticipations = (id: string) =>
     dispatch(fetchEventParticipationsRequest(id));
 
     return api(getState)(`/api/v1/pleroma/events/${id}/participations`).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
       dispatch(importFetchedAccounts(response.json));
-      return dispatch(fetchEventParticipationsSuccess(id, response.json, next ? next.uri : null));
+      return dispatch(fetchEventParticipationsSuccess(id, response.json, next || null));
     }).catch(error => {
       dispatch(fetchEventParticipationsFail(id, error));
     });
@@ -381,9 +381,9 @@ const expandEventParticipations = (id: string) =>
     dispatch(expandEventParticipationsRequest(id));
 
     return api(getState)(url).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
       dispatch(importFetchedAccounts(response.json));
-      return dispatch(expandEventParticipationsSuccess(id, response.json, next ? next.uri : null));
+      return dispatch(expandEventParticipationsSuccess(id, response.json, next || null));
     }).catch(error => {
       dispatch(expandEventParticipationsFail(id, error));
     });
@@ -412,9 +412,9 @@ const fetchEventParticipationRequests = (id: string) =>
     dispatch(fetchEventParticipationRequestsRequest(id));
 
     return api(getState)(`/api/v1/pleroma/events/${id}/participation_requests`).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
       dispatch(importFetchedAccounts(response.json.map(({ account }: APIEntity) => account)));
-      return dispatch(fetchEventParticipationRequestsSuccess(id, response.json, next ? next.uri : null));
+      return dispatch(fetchEventParticipationRequestsSuccess(id, response.json, next || null));
     }).catch(error => {
       dispatch(fetchEventParticipationRequestsFail(id, error));
     });
@@ -449,9 +449,9 @@ const expandEventParticipationRequests = (id: string) =>
     dispatch(expandEventParticipationRequestsRequest(id));
 
     return api(getState)(url).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
       dispatch(importFetchedAccounts(response.json.map(({ account }: APIEntity) => account)));
-      return dispatch(expandEventParticipationRequestsSuccess(id, response.json, next ? next.uri : null));
+      return dispatch(expandEventParticipationRequestsSuccess(id, response.json, next || null));
     }).catch(error => {
       dispatch(expandEventParticipationRequestsFail(id, error));
     });
@@ -580,12 +580,12 @@ const fetchRecentEvents = () =>
     dispatch({ type: RECENT_EVENTS_FETCH_REQUEST });
 
     api(getState)('/api/v1/timelines/public?only_events=true').then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
       dispatch(importFetchedStatuses(response.json));
       dispatch({
         type: RECENT_EVENTS_FETCH_SUCCESS,
         statuses: response.json,
-        next: next ? next.uri : null,
+        next: next || null,
       });
     }).catch(error => {
       dispatch({ type: RECENT_EVENTS_FETCH_FAIL, error });
@@ -601,12 +601,12 @@ const fetchJoinedEvents = () =>
     dispatch({ type: JOINED_EVENTS_FETCH_REQUEST });
 
     api(getState)('/api/v1/pleroma/events/joined_events').then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
       dispatch(importFetchedStatuses(response.json));
       dispatch({
         type: JOINED_EVENTS_FETCH_SUCCESS,
         statuses: response.json,
-        next: next ? next.uri : null,
+        next: next || null,
       });
     }).catch(error => {
       dispatch({ type: JOINED_EVENTS_FETCH_FAIL, error });

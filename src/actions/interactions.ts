@@ -4,7 +4,7 @@ import toast, { type IToastOptions } from 'soapbox/toast';
 import { isLoggedIn } from 'soapbox/utils/auth';
 import { getFeatures } from 'soapbox/utils/features';
 
-import api, { getLinks } from '../api';
+import api, { getNextLink } from '../api';
 
 import { fetchRelationships } from './accounts';
 import { importFetchedAccounts, importFetchedStatus } from './importer';
@@ -407,10 +407,10 @@ const fetchReblogs = (id: string) =>
     dispatch(fetchReblogsRequest(id));
 
     api(getState)(`/api/v1/statuses/${id}/reblogged_by`).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
       dispatch(importFetchedAccounts(response.json));
       dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
-      dispatch(fetchReblogsSuccess(id, response.json, next ? next.uri : null));
+      dispatch(fetchReblogsSuccess(id, response.json, next || null));
     }).catch(error => {
       dispatch(fetchReblogsFail(id, error));
     });
@@ -437,10 +437,10 @@ const fetchReblogsFail = (id: string, error: unknown) => ({
 const expandReblogs = (id: string, path: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     api(getState)(path).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
       dispatch(importFetchedAccounts(response.json));
       dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
-      dispatch(expandReblogsSuccess(id, response.json, next ? next.uri : null));
+      dispatch(expandReblogsSuccess(id, response.json, next || null));
     }).catch(error => {
       dispatch(expandReblogsFail(id, error));
     });
@@ -466,10 +466,10 @@ const fetchFavourites = (id: string) =>
     dispatch(fetchFavouritesRequest(id));
 
     api(getState)(`/api/v1/statuses/${id}/favourited_by`).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
       dispatch(importFetchedAccounts(response.json));
       dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
-      dispatch(fetchFavouritesSuccess(id, response.json, next ? next.uri : null));
+      dispatch(fetchFavouritesSuccess(id, response.json, next || null));
     }).catch(error => {
       dispatch(fetchFavouritesFail(id, error));
     });
@@ -496,10 +496,10 @@ const fetchFavouritesFail = (id: string, error: unknown) => ({
 const expandFavourites = (id: string, path: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     api(getState)(path).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
       dispatch(importFetchedAccounts(response.json));
       dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
-      dispatch(expandFavouritesSuccess(id, response.json, next ? next.uri : null));
+      dispatch(expandFavouritesSuccess(id, response.json, next || null));
     }).catch(error => {
       dispatch(expandFavouritesFail(id, error));
     });

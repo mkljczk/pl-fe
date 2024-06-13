@@ -1,6 +1,6 @@
 import { getFeatures } from 'soapbox/utils/features';
 
-import api, { getLinks } from '../api';
+import api, { getNextLink } from '../api';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
@@ -33,8 +33,8 @@ const fetchScheduledStatuses = () =>
     dispatch(fetchScheduledStatusesRequest());
 
     api(getState)('/api/v1/scheduled_statuses').then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(fetchScheduledStatusesSuccess(response.json, next ? next.uri : null));
+      const next = getNextLink(response);
+      dispatch(fetchScheduledStatusesSuccess(response.json, next || null));
     }).catch(error => {
       dispatch(fetchScheduledStatusesFail(error));
     });
@@ -76,8 +76,8 @@ const expandScheduledStatuses = () =>
     dispatch(expandScheduledStatusesRequest());
 
     api(getState)(url).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(expandScheduledStatusesSuccess(response.json, next ? next.uri : null));
+      const next = getNextLink(response);
+      dispatch(expandScheduledStatusesSuccess(response.json, next || null));
     }).catch(error => {
       dispatch(expandScheduledStatusesFail(error));
     });

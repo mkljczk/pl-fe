@@ -2,7 +2,7 @@ import IntlMessageFormat from 'intl-messageformat';
 import 'intl-pluralrules';
 import { defineMessages } from 'react-intl';
 
-import api, { getLinks } from 'soapbox/api';
+import api, { getNextLink } from 'soapbox/api';
 import { getFilters, regexFromFilters } from 'soapbox/selectors';
 import { isLoggedIn } from 'soapbox/utils/auth';
 import { compareId } from 'soapbox/utils/comparators';
@@ -272,7 +272,7 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
     dispatch(expandNotificationsRequest(isLoadingMore));
 
     return api(getState)('/api/v1/notifications', { params, signal: abortExpandNotifications.signal }).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
 
       const entries = (response.json as APIEntity[]).reduce((acc, item) => {
         if (item.account?.id) {
@@ -296,7 +296,7 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
 
       const deduplicatedNotifications = deduplicateNotifications(response.json);
 
-      dispatch(expandNotificationsSuccess(deduplicatedNotifications, next ? next.uri : null, isLoadingMore));
+      dispatch(expandNotificationsSuccess(deduplicatedNotifications, next || null, isLoadingMore));
       fetchRelatedRelationships(dispatch, response.json);
       done();
     }).catch(error => {

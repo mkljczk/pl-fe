@@ -1,6 +1,6 @@
 import { isLoggedIn } from 'soapbox/utils/auth';
 
-import api, { getLinks } from '../api';
+import api, { getNextLink } from '../api';
 
 import {
   importFetchedAccounts,
@@ -55,11 +55,11 @@ const expandConversations = ({ maxId }: Record<string, any> = {}) => (dispatch: 
 
   api(getState)('/api/v1/conversations', { params })
     .then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      const next = getNextLink(response);
 
       dispatch(importFetchedAccounts(response.json.reduce((aggr: Array<APIEntity>, item: APIEntity) => aggr.concat(item.accounts), [])));
       dispatch(importFetchedStatuses(response.json.map((item: Record<string, any>) => item.last_status).filter((x?: APIEntity) => !!x)));
-      dispatch(expandConversationsSuccess(response.json, next ? next.uri : null, isLoadingRecent));
+      dispatch(expandConversationsSuccess(response.json, next || null, isLoadingRecent));
     })
     .catch(err => dispatch(expandConversationsFail(err)));
 };

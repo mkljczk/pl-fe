@@ -1,4 +1,4 @@
-import api, { getLinks } from '../api';
+import api, { getNextLink } from '../api';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
@@ -106,8 +106,8 @@ const fetchFollowedHashtags = () => (dispatch: AppDispatch, getState: () => Root
   dispatch(fetchFollowedHashtagsRequest());
 
   api(getState)('/api/v1/followed_tags').then(response => {
-    const next = getLinks(response).refs.find(link => link.rel === 'next');
-    dispatch(fetchFollowedHashtagsSuccess(response.json, next ? next.uri : null));
+    const next = getNextLink(response);
+    dispatch(fetchFollowedHashtagsSuccess(response.json, next || null));
   }).catch(err => {
     dispatch(fetchFollowedHashtagsFail(err));
   });
@@ -138,8 +138,8 @@ const expandFollowedHashtags = () => (dispatch: AppDispatch, getState: () => Roo
   dispatch(expandFollowedHashtagsRequest());
 
   api(getState)(url).then(response => {
-    const next = getLinks(response).refs.find(link => link.rel === 'next');
-    dispatch(expandFollowedHashtagsSuccess(response.json, next ? next.uri : null));
+    const next = getNextLink(response);
+    dispatch(expandFollowedHashtagsSuccess(response.json, next || null));
   }).catch(error => {
     dispatch(expandFollowedHashtagsFail(error));
   });
