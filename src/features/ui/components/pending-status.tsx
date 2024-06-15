@@ -22,7 +22,7 @@ interface IPendingStatus {
   className?: string;
   idempotencyKey: string;
   muted?: boolean;
-  thread?: boolean;
+  variant?: 'default' | 'rounded' | 'slim';
 }
 
 interface IPendingStatusMedia {
@@ -43,7 +43,7 @@ const PendingStatusMedia: React.FC<IPendingStatusMedia> = ({ status }) => {
   }
 };
 
-const PendingStatus: React.FC<IPendingStatus> = ({ idempotencyKey, className, muted, thread = false }) => {
+const PendingStatus: React.FC<IPendingStatus> = ({ idempotencyKey, className, muted, variant = 'rounded' }) => {
   const status = useAppSelector((state) => {
     const pendingStatus = state.pending_statuses.get(idempotencyKey);
     return pendingStatus ? buildStatus(state, pendingStatus, idempotencyKey) : null;
@@ -59,10 +59,10 @@ const PendingStatus: React.FC<IPendingStatus> = ({ idempotencyKey, className, mu
       <div className={clsx('status', { 'status-reply': !!status.in_reply_to_id, muted })} data-id={status.id}>
         <Card
           className={clsx(`status-${status.visibility}`, {
-            'py-6 sm:p-5': !thread,
+            'py-6 sm:p-5': variant === 'rounded',
             'status-reply': !!status.in_reply_to_id,
           })}
-          variant={thread ? 'default' : 'rounded'}
+          variant={variant}
         >
           <div className='mb-4'>
             <HStack justifyContent='between' alignItems='start'>

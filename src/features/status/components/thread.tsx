@@ -275,7 +275,7 @@ const Thread = (props: IThread) => {
       <PendingStatus
         key={id}
         idempotencyKey={idempotencyKey}
-        thread
+        variant='default'
       />
     );
   };

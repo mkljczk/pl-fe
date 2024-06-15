@@ -139,6 +139,7 @@ const StatusList: React.FC<IStatusList> = ({
       <PendingStatus
         key={statusId}
         idempotencyKey={idempotencyKey}
+        variant={divideType === 'border' ? 'slim' : 'rounded'}
       />
     );
   };

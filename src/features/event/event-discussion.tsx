@@ -123,7 +123,7 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
       <PendingStatus
         key={id}
         idempotencyKey={idempotencyKey}
-        thread
+        variant='default'
       />
     );
   };
