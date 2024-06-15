@@ -79,7 +79,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   }, 750), []);
 
   useEffect(() => {
-    editor.registerUpdateListener(({ editorState }) => {
+    return editor.registerUpdateListener(({ editorState }) => {
       const plainText = editorState.read(() => $getRoot().getTextContent());
       let text = plainText;
       if (isWysiwyg) {

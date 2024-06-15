@@ -302,8 +302,9 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       <QuotedStatusContainer composeId={id} />
 
       <div
-        className={clsx('ml-[-56px] flex flex-wrap items-center justify-between sm:ml-0', {
+        className={clsx('flex flex-wrap items-center justify-between', {
           'hidden': condensed,
+          'ml-[-56px] sm:ml-0': withAvatar,
         })}
       >
         {renderButtons()}
