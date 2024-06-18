@@ -33,8 +33,6 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
   const isMember = group.relationship?.role === GroupRoles.USER;
   const isAdmin = group.relationship?.role === GroupRoles.ADMIN;
   const isInGroup = !!group.relationship?.member;
-  const isBlocked = group.relationship?.blocked_by;
-  const isMuting = group.relationship?.muting;
 
   const handleShare = () => {
     navigator.share({
@@ -80,9 +78,9 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
     }
 
     return items;
-  }, [isMember, isAdmin, isInGroup, isMuting]);
+  }, [isMember, isAdmin, isInGroup]);
 
-  if (isBlocked || menu.length === 0) {
+  if (menu.length === 0) {
     return null;
   }
 

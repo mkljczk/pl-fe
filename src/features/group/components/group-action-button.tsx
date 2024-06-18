@@ -37,7 +37,6 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
   const isNonMember = !group.relationship?.member && !isRequested;
   const isOwner = group.relationship?.role === GroupRoles.OWNER;
   const isAdmin = group.relationship?.role === GroupRoles.ADMIN;
-  const isBlocked = group.relationship?.blocked_by;
 
   const onJoinGroup = () => joinGroup.mutate({}, {
     onSuccess(entity) {
@@ -79,10 +78,6 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
       dispatch(importEntities([entity], Entities.GROUP_RELATIONSHIPS));
     },
   });
-
-  if (isBlocked) {
-    return null;
-  }
 
   if (isOwner || isAdmin) {
     return (

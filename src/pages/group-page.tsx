@@ -13,8 +13,6 @@ import {
 } from 'soapbox/features/ui/util/async-components';
 import { useOwnAccount } from 'soapbox/hooks';
 
-import type { Group } from 'soapbox/schemas';
-
 const messages = defineMessages({
   all: { id: 'group.tabs.all', defaultMessage: 'All' },
   members: { id: 'group.tabs.members', defaultMessage: 'Members' },
@@ -27,24 +25,6 @@ interface IGroupPage {
   };
   children: React.ReactNode;
 }
-
-const DeletedBlankslate = () => (
-  <Stack space={4} className='py-10' alignItems='center'>
-    <div className='rounded-full bg-danger-200 p-3 dark:bg-danger-400/20'>
-      <Icon
-        src={require('@tabler/icons/outline/trash.svg')}
-        className='h-6 w-6 text-danger-600 dark:text-danger-400'
-      />
-    </div>
-
-    <Text theme='muted'>
-      <FormattedMessage
-        id='group.deleted.message'
-        defaultMessage='This group has been deleted.'
-      />
-    </Text>
-  </Stack>
-);
 
 const PrivacyBlankslate = () => (
   <Stack space={4} className='py-10' alignItems='center'>
@@ -64,27 +44,6 @@ const PrivacyBlankslate = () => (
   </Stack>
 );
 
-const BlockedBlankslate = ({ group }: { group: Group }) => (
-  <Stack space={4} className='py-10' alignItems='center'>
-    <div className='rounded-full bg-danger-200 p-3 dark:bg-danger-400/20'>
-      <Icon
-        src={require('@tabler/icons/outline/ban.svg')}
-        className='h-6 w-6 text-danger-600 dark:text-danger-400'
-      />
-    </div>
-
-    <Text theme='muted'>
-      <FormattedMessage
-        id='group.banned.message'
-        defaultMessage='You are banned from {group}'
-        values={{
-          group: <Text theme='inherit' tag='span' dangerouslySetInnerHTML={{ __html: group.display_name_html }} />,
-        }}
-      />
-    </Text>
-  </Stack>
-);
-
 /** Page to display a group. */
 const GroupPage: React.FC<IGroupPage> = ({ params, children }) => {
   const intl = useIntl();
@@ -97,9 +56,7 @@ const GroupPage: React.FC<IGroupPage> = ({ params, children }) => {
   const { accounts: pending } = useGroupMembershipRequests(id);
 
   const isMember = !!group?.relationship?.member;
-  const isBlocked = group?.relationship?.blocked_by;
   const isPrivate = group?.locked;
-  const isDeleted = !!group?.deleted_at;
 
   const tabItems = useMemo(() => {
     const items = [];
@@ -127,12 +84,8 @@ const GroupPage: React.FC<IGroupPage> = ({ params, children }) => {
   }, [pending.length, id]);
 
   const renderChildren = () => {
-    if (isDeleted) {
-      return <DeletedBlankslate />;
-    } else if (!isMember && isPrivate) {
+    if (!isMember && isPrivate) {
       return <PrivacyBlankslate />;
-    } else if (isBlocked) {
-      return <BlockedBlankslate group={group} />;
     } else {
       return children;
     }

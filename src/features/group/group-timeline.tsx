@@ -4,7 +4,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { groupCompose, uploadCompose } from 'soapbox/actions/compose';
-import { expandGroupFeaturedTimeline, expandGroupTimeline } from 'soapbox/actions/timelines';
+import { expandGroupTimeline } from 'soapbox/actions/timelines';
 import { useGroup, useGroupStream } from 'soapbox/api/hooks';
 import { Avatar, HStack, Icon, Stack, Text } from 'soapbox/components/ui';
 import ComposeForm from 'soapbox/features/compose/components/compose-form';
@@ -47,7 +47,7 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
 
   useEffect(() => {
     dispatch(expandGroupTimeline(groupId));
-    dispatch(expandGroupFeaturedTimeline(groupId));
+    // dispatch(expandGroupFeaturedTimeline(groupId));
     dispatch(groupCompose(composeId, groupId));
   }, [groupId]);
 

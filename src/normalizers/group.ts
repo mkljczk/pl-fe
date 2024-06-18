@@ -21,7 +21,6 @@ const GroupRecord = ImmutableRecord({
   avatar: '',
   avatar_static: '',
   created_at: '',
-  deleted_at: null,
   display_name: '',
   domain: '',
   emojis: [] as Emoji[],

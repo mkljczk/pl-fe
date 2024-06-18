@@ -501,14 +501,12 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     }
 
     if (isGroupStatus && !!status.group) {
-      const group = status.group as Group;
-      const account = status.account;
       const isGroupOwner = groupRelationship?.role === GroupRoles.OWNER;
       const isGroupAdmin = groupRelationship?.role === GroupRoles.ADMIN;
-      const isStatusFromOwner = group.owner.id === account.id;
+      // const isStatusFromOwner = group.owner.id === account.id;
 
-      const canBanUser = match?.isExact && (isGroupOwner || isGroupAdmin) && !isStatusFromOwner && !ownAccount;
-      const canDeleteStatus = !ownAccount && (isGroupOwner || (isGroupAdmin && !isStatusFromOwner));
+      const canBanUser = match?.isExact && (isGroupOwner || isGroupAdmin) && !ownAccount;
+      const canDeleteStatus = !ownAccount && (isGroupOwner || isGroupAdmin);
 
       if (canBanUser || canDeleteStatus) {
         menu.push(null);

@@ -40,7 +40,7 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
   useEffect(() => {
     setLoading(true);
 
-    if (group && !group.deleted_at && (isMember || !isPrivate)) {
+    if (group && (isMember || !isPrivate)) {
       dispatch(expandGroupMediaTimeline(group.id))
       // @ts-ignore
         .then(() => setLoading(false))
@@ -72,7 +72,7 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
     }
   };
 
-  if ((isPrivate && !isMember) || group?.deleted_at) {
+  if (isPrivate && !isMember) {
     return null;
   }
 

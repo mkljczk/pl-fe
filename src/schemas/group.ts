@@ -15,7 +15,6 @@ const groupSchema = z.object({
   avatar: z.string().catch(avatarMissing),
   avatar_static: z.string().catch(''),
   created_at: z.string().datetime().catch(new Date().toUTCString()),
-  deleted_at: z.string().datetime().or(z.null()).catch(null),
   display_name: z.string().catch(''),
   domain: z.string().catch(''),
   emojis: filteredArray(customEmojiSchema),
@@ -25,7 +24,7 @@ const groupSchema = z.object({
   locked: z.boolean().catch(false),
   membership_required: z.boolean().catch(false),
   members_count: z.number().catch(0),
-  owner: z.object({ id: z.string() }),
+  owner: z.object({ id: z.string() }).nullable().catch(null),
   note: z.string().transform(note => note === '<p></p>' ? '' : note).catch(''),
   relationship: groupRelationshipSchema.nullable().catch(null), // Dummy field to be overwritten later
   source: z.object({

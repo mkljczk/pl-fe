@@ -52,8 +52,6 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
     );
   }
 
-  const isDeleted = !!group.deleted_at;
-
   const onAvatarClick = () => {
     const avatar = normalizeAttachment({
       type: 'image',
@@ -142,29 +140,25 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
           data-testid='group-name'
         />
 
-        {!isDeleted && (
-          <>
-            <Stack data-testid='group-meta' space={1} alignItems='center'>
-              <HStack className='text-gray-700 dark:text-gray-600' space={2} wrap>
-                <GroupRelationship group={group} />
-                <GroupPrivacy group={group} />
-                <GroupMemberCount group={group} />
-              </HStack>
+        <Stack data-testid='group-meta' space={1} alignItems='center'>
+          <HStack className='text-gray-700 dark:text-gray-600' space={2} wrap>
+            <GroupRelationship group={group} />
+            <GroupPrivacy group={group} />4
+            <GroupMemberCount group={group} />
+          </HStack>
 
-              <Text
-                theme='muted'
-                align='center'
-                dangerouslySetInnerHTML={{ __html: group.note_emojified }}
-                className='[&_a]:text-primary-600 [&_a]:hover:underline [&_a]:dark:text-accent-blue'
-              />
-            </Stack>
+          <Text
+            theme='muted'
+            align='center'
+            dangerouslySetInnerHTML={{ __html: group.note_emojified }}
+            className='[&_a]:text-primary-600 [&_a]:hover:underline [&_a]:dark:text-accent-blue'
+          />
+        </Stack>
 
-            <HStack alignItems='center' space={2} data-testid='group-actions'>
-              <GroupOptionsButton group={group} />
-              <GroupActionButton group={group} />
-            </HStack>
-          </>
-        )}
+        <HStack alignItems='center' space={2} data-testid='group-actions'>
+          <GroupOptionsButton group={group} />
+          <GroupActionButton group={group} />
+        </HStack>
       </Stack>
     </div>
   );

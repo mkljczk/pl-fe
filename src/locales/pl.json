@@ -781,7 +781,7 @@
   "group.join.success": "Pomyślnie dołączono do grupy!",
   "group.leave": "Opuść grupę",
   "group.leave.label": "Opuść",
-  "group.leave.success": "Opuść grupę",
+  "group.leave.success": "Opuszczono grupę",
   "group.manage": "Zarządzaj grupę",
   "group.member.admin.limit.summary": "Możesz teraz przypisać do {count, plural, one {# administratora}, other {# administratorów}} do grupy.",
   "group.member.admin.limit.title": "Przekroczono limit administratorów",
