@@ -70,6 +70,8 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
 
     if (element) {
       element.focus();
+    } else {
+      history.push('/search');
     }
   };
 
