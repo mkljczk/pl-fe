@@ -53,7 +53,7 @@ const GroupFAB: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const match = useRouteMatch<{ groupId: string }>('/group/:groupId');
+  const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
   const { group } = useGroup(match?.params.groupId || '');
 
   if (!group) return null;

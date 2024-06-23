@@ -62,20 +62,20 @@ const GroupPage: React.FC<IGroupPage> = ({ params, children }) => {
     const items = [];
     items.push({
       text: intl.formatMessage(messages.all),
-      to: `/group/${id}`,
-      name: '/group/:groupId',
+      to: `/groups/${id}`,
+      name: '/groups/:groupId',
     });
 
     items.push(
       {
         text: intl.formatMessage(messages.media),
-        to: `/group/${id}/media`,
-        name: '/group/:groupId/media',
+        to: `/groups/${id}/media`,
+        name: '/groups/:groupId/media',
       },
       {
         text: intl.formatMessage(messages.members),
-        to: `/group/${id}/members`,
-        name: '/group/:groupId/members',
+        to: `/groups/${id}/members`,
+        name: '/groups/:groupId/members',
         count: pending.length,
       },
     );

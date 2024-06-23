@@ -74,7 +74,7 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
     }));
 
   return (
-    <Column label={intl.formatMessage(messages.heading)} backHref={`/group/${group.id}`}>
+    <Column label={intl.formatMessage(messages.heading)} backHref={`/groups/${group.id}`}>
       <CardBody className='space-y-4'>
         {isOwner && (
           <>
@@ -83,7 +83,7 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
             </CardHeader>
 
             <List>
-              <ListItem label={intl.formatMessage(messages.editGroup)} to={`/group/${group.id}/manage/edit`}>
+              <ListItem label={intl.formatMessage(messages.editGroup)} to={`/groups/${group.id}/manage/edit`}>
                 <span dangerouslySetInnerHTML={{ __html: group.display_name_html }} />
               </ListItem>
             </List>
@@ -95,9 +95,9 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
         </CardHeader>
 
         <List>
-          <ListItem label={intl.formatMessage(messages.pendingRequests)} to={`/group/${group.id}/manage/requests`} />
+          <ListItem label={intl.formatMessage(messages.pendingRequests)} to={`/groups/${group.id}/manage/requests`} />
 
-          <ListItem label={intl.formatMessage(messages.blockedMembers)} to={`/group/${group.id}/manage/blocks`} />
+          <ListItem label={intl.formatMessage(messages.blockedMembers)} to={`/groups/${group.id}/manage/blocks`} />
         </List>
 
         {isOwner && (

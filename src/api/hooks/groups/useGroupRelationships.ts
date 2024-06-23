@@ -8,7 +8,7 @@ const useGroupRelationships = (listKey: string[], ids: string[]) => {
   const { isLoggedIn } = useLoggedIn();
 
   const fetchGroupRelationships = (ids: string[]) =>
-    api('/api/v1/groups/relationships', { params: { ids } });
+    api('/api/v1/groups/relationships', { params: { id: ids } });
 
   const { entityMap: relationships, ...result } = useBatchedEntities<GroupRelationship>(
     [Entities.RELATIONSHIPS, ...listKey],

@@ -83,7 +83,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
     return (
       <Button
         theme='secondary'
-        to={`/group/${group.id}/manage`}
+        to={`/groups/${group.id}/manage`}
       >
         <FormattedMessage id='group.manage' defaultMessage='Manage group' />
       </Button>

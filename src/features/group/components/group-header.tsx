@@ -143,7 +143,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
         <Stack data-testid='group-meta' space={1} alignItems='center'>
           <HStack className='text-gray-700 dark:text-gray-600' space={2} wrap>
             <GroupRelationship group={group} />
-            <GroupPrivacy group={group} />4
+            <GroupPrivacy group={group} />
             <GroupMemberCount group={group} />
           </HStack>
 

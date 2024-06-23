@@ -223,7 +223,7 @@ const Status: React.FC<IStatus> = (props) => {
                   </Link>
                 ),
                 group: (
-                  <Link to={`/group/${group.id}`} className='hover:underline'>
+                  <Link to={`/groups/${group.id}`} className='hover:underline'>
                     <strong
                       className='text-gray-800 dark:text-gray-200'
                       dangerouslySetInnerHTML={{
@@ -300,7 +300,7 @@ const Status: React.FC<IStatus> = (props) => {
               defaultMessage='Posted in {group}'
               values={{
                 group: (
-                  <Link to={`/group/${group.id}`} className='hover:underline'>
+                  <Link to={`/groups/${group.id}`} className='hover:underline'>
                     <bdi className='truncate'>
                       <strong className='text-gray-800 dark:text-gray-200'>
                         <span dangerouslySetInnerHTML={{ __html: group.display_name_html }} />

@@ -30,7 +30,7 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
 
   const path = history.location.pathname;
   const shouldHideAction = matchPath(path, {
-    path: ['/group/:groupId'],
+    path: ['/groups/:groupId'],
     exact: true,
   });
 
@@ -88,7 +88,7 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
 
           {!shouldHideAction && (
             <div className='px-4'>
-              <Link to={`/group/${group.id}`}>
+              <Link to={`/groups/${group.id}`}>
                 <Button type='button' theme='secondary' block>
                   {intl.formatMessage(messages.action)}
                 </Button>

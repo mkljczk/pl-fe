@@ -64,7 +64,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                 defaultMessage='Posted in {group}'
                 values={{
                   group: (
-                    <Link to={`/group/${status.group.id}`} className='hover:underline'>
+                    <Link to={`/groups/${status.group.id}`} className='hover:underline'>
                       <bdi className='truncate'>
                         <strong className='text-gray-800 dark:text-gray-200'>
                           <span dangerouslySetInnerHTML={{ __html: (status.group as Group).display_name_html }} />

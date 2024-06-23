@@ -119,7 +119,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const intl = useIntl();
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const match = useRouteMatch<{ groupId: string }>('/group/:groupId');
+  const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
 
   const { group } = useGroup((status.group as Group)?.id as string);
   const deleteGroupStatus = useDeleteGroupStatus(group as Group, status.id);

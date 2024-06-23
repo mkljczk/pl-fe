@@ -22,7 +22,7 @@ const GroupListItem = (props: IGroupListItem) => {
       justifyContent='between'
       data-testid='group-list-item'
     >
-      <Link key={group.id} to={`/group/${group.id}`} className='overflow-hidden'>
+      <Link key={group.id} to={`/groups/${group.id}`} className='overflow-hidden'>
         <HStack alignItems='center' space={2}>
           <GroupAvatar
             group={group}

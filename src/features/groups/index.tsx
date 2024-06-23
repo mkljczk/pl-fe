@@ -84,7 +84,7 @@ const Groups: React.FC = () => {
         hasMore={hasNextPage}
       >
         {groups.map((group) => (
-          <Link key={group.id} to={`/group/${group.id}`}>
+          <Link key={group.id} to={`/groups/${group.id}`}>
             <GroupCard group={group} />
           </Link>
         ))}

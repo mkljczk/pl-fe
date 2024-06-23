@@ -11,7 +11,7 @@ import { useAppDispatch } from 'soapbox/hooks';
 const ComposeButton = () => {
   const location = useLocation();
   const isOnGroupPage = location.pathname.startsWith('/group/');
-  const match = useRouteMatch<{ groupId: string }>('/group/:groupId');
+  const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
   const { group } = useGroup(match?.params.groupId || '');
   const isGroupMember = !!group?.relationship?.member;
 
@@ -40,7 +40,7 @@ const HomeComposeButton = () => {
 
 const GroupComposeButton = () => {
   const dispatch = useAppDispatch();
-  const match = useRouteMatch<{ groupId: string }>('/group/:groupId');
+  const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
   const { group } = useGroup(match?.params.groupId || '');
 
   if (!group) return null;
