@@ -1,11 +1,15 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { openSidebar } from 'soapbox/actions/sidebar';
 import ThumbNavigationLink from 'soapbox/components/thumb-navigation-link';
 import { useStatContext } from 'soapbox/contexts/stat-context';
-import { useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
+import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
+
+import { Icon } from './ui';
 
 const ThumbNavigation: React.FC = (): JSX.Element => {
+  const dispatch = useAppDispatch();
   const { account } = useOwnAccount();
   const features = useFeatures();
 
@@ -13,6 +17,8 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
 
   const notificationCount = useAppSelector((state) => state.notifications.unread);
   const dashboardCount = useAppSelector((state) => state.admin.openReports.count() + state.admin.awaitingApproval.count());
+
+  const onOpenSidebar = () => dispatch(openSidebar());
 
   /** Conditionally render the supported messages link */
   const renderMessagesLink = (): React.ReactNode => {
@@ -46,6 +52,13 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
 
   return (
     <div className='fixed inset-x-0 bottom-0 z-50 flex w-full overflow-x-auto border-t border-solid border-gray-200 bg-white/90 shadow-2xl backdrop-blur-md black:bg-black/80 lg:hidden dark:border-gray-800 dark:bg-primary-900/90'>
+      <button className='flex flex-1 flex-col items-center px-2 py-4 text-lg text-gray-600' onClick={onOpenSidebar}>
+        <Icon
+          src={require('@tabler/icons/outline/menu-2.svg')}
+          className='h-5 w-5 text-gray-600 black:text-white'
+        />
+      </button>
+
       <ThumbNavigationLink
         src={require('@tabler/icons/outline/home.svg')}
         activeSrc={require('@tabler/icons/filled/home.svg')}

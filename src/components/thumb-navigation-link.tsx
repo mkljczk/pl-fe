@@ -3,7 +3,7 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 import IconWithCounter from 'soapbox/components/icon-with-counter';
-import { Icon, Text } from 'soapbox/components/ui';
+import { Icon } from 'soapbox/components/ui';
 import { useSettings } from 'soapbox/hooks';
 
 interface IThumbNavigationLink {
@@ -34,7 +34,7 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({ count, countMax, 
   const icon = (active && activeSrc) || src;
 
   return (
-    <NavLink to={to} exact={exact} className='flex flex-1 flex-col items-center space-y-1 px-2 py-2.5 text-lg text-gray-600'>
+    <NavLink to={to} exact={exact} className='flex flex-1 flex-col items-center space-y-1 px-2 py-4 text-lg text-gray-600'>
       {!demetricator && count !== undefined ? (
         <IconWithCounter
           src={icon}
@@ -56,18 +56,6 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({ count, countMax, 
           })}
         />
       )}
-
-      <Text
-        tag='span'
-        size='xs'
-        weight='medium'
-        className={clsx({
-          'text-gray-600': !active,
-          'text-primary-500': active,
-        })}
-      >
-        {text}
-      </Text>
     </NavLink>
   );
 };

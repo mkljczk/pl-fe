@@ -5,12 +5,9 @@ import { Link, Redirect } from 'react-router-dom';
 
 import { logIn, verifyCredentials } from 'soapbox/actions/auth';
 import { fetchInstance } from 'soapbox/actions/instance';
-import { openSidebar } from 'soapbox/actions/sidebar';
-import SiteLogo from 'soapbox/components/site-logo';
 import { Avatar, Button, Form, HStack, IconButton, Input, Tooltip } from 'soapbox/components/ui';
 import Search from 'soapbox/features/compose/components/search';
 import { useAppDispatch, useFeatures, useOwnAccount, useRegistrationStatus } from 'soapbox/hooks';
-import { useIsMobile } from 'soapbox/hooks/useIsMobile';
 
 import ProfileDropdown from './profile-dropdown';
 
@@ -31,14 +28,11 @@ const Navbar = () => {
   const { isOpen } = useRegistrationStatus();
   const { account } = useOwnAccount();
   const node = useRef(null);
-  const isMobile = useIsMobile();
 
   const [isLoading, setLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [mfaToken, setMfaToken] = useState<boolean>(false);
-
-  const onOpenSidebar = () => dispatch(openSidebar());
 
   const handleSubmit: React.FormEventHandler = (event) => {
     event.preventDefault();
@@ -69,47 +63,33 @@ const Navbar = () => {
   return (
     <nav
       className={clsx(
-        'sticky top-0 z-50 border-gray-200 bg-white shadow black:border-b black:border-b-gray-800 black:bg-black dark:border-gray-800 dark:bg-primary-900',
-        { 'border-b': isMobile },
+        'sticky top-0 z-50 hidden border-gray-200 bg-white shadow black:border-b black:border-b-gray-800 black:bg-black lg:block dark:border-gray-800 dark:bg-primary-900',
       )}
       ref={node}
       data-testid='navbar'
     >
-      <div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>
-        <div className='relative flex h-12 justify-between lg:h-16'>
-          {account && (
-            <div className='absolute inset-y-0 left-0 flex items-center lg:hidden rtl:left-auto rtl:right-0'>
-              <button onClick={onOpenSidebar}>
-                <Avatar src={account.avatar} size={34} />
-              </button>
-            </div>
-          )}
-
+      <div className='mx-auto max-w-7xl px-8'>
+        <div className='relative flex h-16 justify-between'>
           <HStack
             space={4}
             alignItems='center'
-            className={clsx('enter flex-1 lg:items-stretch', {
-              'justify-center lg:justify-start': account,
+            className={clsx('enter flex-1 items-stretch', {
+              'justify-center justify-start': account,
               'justify-start': !account,
             })}
           >
-            <Link key='logo' to='/' data-preview-title-id='column.home' className='ml-4 flex shrink-0 items-center'>
-              <SiteLogo alt='Logo' className='h-5 w-auto cursor-pointer' />
-              <span className='hidden'><FormattedMessage id='tabs_bar.home' defaultMessage='Home' /></span>
-            </Link>
-
             {account && (
-              <div className='hidden flex-1 items-center justify-center px-2 lg:ml-6 lg:flex lg:justify-start'>
-                <div className='hidden w-full max-w-xl lg:block lg:max-w-xs'>
+              <div className='flex flex-1 items-center justify-start pl-0'>
+                <div className='block w-full max-w-xs'>
                   <Search openInRoute autosuggest />
                 </div>
               </div>
             )}
           </HStack>
 
-          <HStack space={3} alignItems='center' className='absolute inset-y-0 right-0 pr-2 lg:static lg:inset-auto lg:ml-6 lg:pr-0'>
+          <HStack space={3} alignItems='center'>
             {account ? (
-              <div className='relative hidden items-center lg:flex'>
+              <div className='relative flex items-center'>
                 <ProfileDropdown account={account}>
                   <Avatar src={account.avatar} size={34} />
                 </ProfileDropdown>
