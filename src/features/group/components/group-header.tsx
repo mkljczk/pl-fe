@@ -90,7 +90,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
         <StillImage
           src={group.header}
           alt={intl.formatMessage(messages.header)}
-          className='relative h-32 w-full bg-gray-200 object-center md:rounded-t-xl lg:h-52 dark:bg-gray-900/50'
+          className='relative h-32 w-full bg-gray-200 object-center black:rounded-t-none md:rounded-t-xl lg:h-52 dark:bg-gray-900/50'
           onError={() => setIsHeaderMissing(true)}
         />
       );

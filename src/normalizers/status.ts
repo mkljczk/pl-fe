@@ -280,7 +280,7 @@ const parseAccounts = (status: ImmutableMap<string, any>) => {
 
 const parseGroup = (status: ImmutableMap<string, any>) => {
   try {
-    const group = groupSchema.parse(status.get('group').toJS());
+    const group = groupSchema.parse(status.get('group', status.getIn(['pleroma', 'group'])).toJS());
     return status.set('group', group);
   } catch (_e) {
     return status.set('group', null);
