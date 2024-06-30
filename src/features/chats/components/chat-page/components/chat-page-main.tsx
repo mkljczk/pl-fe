@@ -23,11 +23,11 @@ const messages = defineMessages({
   unblockHeading: { id: 'chat_settings.unblock.heading', defaultMessage: 'Unblock @{acct}' },
   unblockConfirm: { id: 'chat_settings.unblock.confirm', defaultMessage: 'Unblock' },
   leaveMessage: { id: 'chat_settings.leave.message', defaultMessage: 'Are you sure you want to leave this chat? Messages will be deleted for you and this chat will be removed from your inbox.' },
-  leaveHeading: { id: 'chat_settings.leave.heading', defaultMessage: 'Leave Chat' },
-  leaveConfirm: { id: 'chat_settings.leave.confirm', defaultMessage: 'Leave Chat' },
+  leaveHeading: { id: 'chat_settings.leave.heading', defaultMessage: 'Leave chat' },
+  leaveConfirm: { id: 'chat_settings.leave.confirm', defaultMessage: 'Leave chat' },
   blockUser: { id: 'chat_settings.options.block_user', defaultMessage: 'Block @{acct}' },
   unblockUser: { id: 'chat_settings.options.unblock_user', defaultMessage: 'Unblock @{acct}' },
-  leaveChat: { id: 'chat_settings.options.leave_chat', defaultMessage: 'Leave Chat' },
+  leaveChat: { id: 'chat_settings.options.leave_chat', defaultMessage: 'Leave chat' },
 });
 
 const ChatPageMain = () => {

@@ -1,7 +1,8 @@
 import React from 'react';
 
 import ForkAwesomeIcon from 'soapbox/components/fork-awesome-icon';
-import { Widget, Stack, Text } from 'soapbox/components/ui';
+import List, { ListItem } from 'soapbox/components/list';
+import { Widget, HStack } from 'soapbox/components/ui';
 import { useInstance, useSettings, useSoapboxConfig } from 'soapbox/hooks';
 
 const PromoPanel: React.FC = () => {
@@ -15,16 +16,21 @@ const PromoPanel: React.FC = () => {
 
   return (
     <Widget title={instance.title}>
-      <Stack space={2}>
+      <List>
         {promoItems.map((item, i) => (
-          <Text key={i}>
-            <a className='flex items-center' href={item.url} target='_blank'>
-              <ForkAwesomeIcon id={item.icon} className='mr-2 flex-none text-lg rtl:ml-2 rtl:mr-0' fixedWidth />
-              {item.textLocales.get(locale) || item.text}
-            </a>
-          </Text>
+          <ListItem
+            key={i}
+            href={item.url}
+            label={
+              <HStack alignItems='center' space={2}>
+                <ForkAwesomeIcon id={item.icon} className='flex-none text-lg' fixedWidth />
+                <span>{item.textLocales.get(locale) || item.text}</span>
+              </HStack>
+            }
+            size='sm'
+          />
         ))}
-      </Stack>
+      </List>
     </Widget>
   );
 };

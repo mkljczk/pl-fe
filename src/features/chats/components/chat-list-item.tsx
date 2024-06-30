@@ -17,9 +17,9 @@ const messages = defineMessages({
   blockedYou: { id: 'chat_list_item.blocked_you', defaultMessage: 'This user has blocked you' },
   blocking: { id: 'chat_list_item.blocking', defaultMessage: 'You have blocked this user' },
   leaveMessage: { id: 'chat_settings.leave.message', defaultMessage: 'Are you sure you want to leave this chat? Messages will be deleted for you and this chat will be removed from your inbox.' },
-  leaveHeading: { id: 'chat_settings.leave.heading', defaultMessage: 'Leave Chat' },
-  leaveConfirm: { id: 'chat_settings.leave.confirm', defaultMessage: 'Leave Chat' },
-  leaveChat: { id: 'chat_settings.options.leave_chat', defaultMessage: 'Leave Chat' },
+  leaveHeading: { id: 'chat_settings.leave.heading', defaultMessage: 'Leave chat' },
+  leaveConfirm: { id: 'chat_settings.leave.confirm', defaultMessage: 'Leave chat' },
+  leaveChat: { id: 'chat_settings.options.leave_chat', defaultMessage: 'Leave chat' },
 });
 
 interface IChatListItemInterface {

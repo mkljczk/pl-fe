@@ -16,16 +16,19 @@ const List: React.FC<IList> = ({ children }) => (
 );
 
 interface IListItem {
+  className?: string;
   label: React.ReactNode;
   hint?: React.ReactNode;
   to?: string;
+  href?: string;
   onClick?(): void;
   onSelect?(): void;
   isSelected?: boolean;
   children?: React.ReactNode;
+  size?: 'sm' | 'md';
 }
 
-const ListItem: React.FC<IListItem> = ({ label, hint, children, to, onClick, onSelect, isSelected }) => {
+const ListItem: React.FC<IListItem> = ({ className, label, hint, children, to, href, onClick, onSelect, isSelected, size = 'md' }) => {
   const id = uuidv4();
   const domId = `list-group-${id}`;
 
@@ -35,7 +38,7 @@ const ListItem: React.FC<IListItem> = ({ label, hint, children, to, onClick, onS
     }
   };
 
-  const LabelComp = to || onClick || onSelect ? 'span' : 'label';
+  const LabelComp = to || href || onClick || onSelect ? 'span' : 'label';
 
   const renderChildren = React.useCallback(() => React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {
@@ -53,9 +56,14 @@ const ListItem: React.FC<IListItem> = ({ label, hint, children, to, onClick, onS
     return null;
   }), [children, domId]);
 
-  const className = clsx('flex items-center justify-between overflow-hidden bg-gradient-to-r from-gradient-start/20 to-gradient-end/20 px-4 py-2 first:rounded-t-lg last:rounded-b-lg dark:from-gradient-start/10 dark:to-gradient-end/10', {
-    'cursor-pointer hover:from-gradient-start/30 hover:to-gradient-end/30 dark:hover:from-gradient-start/5 dark:hover:to-gradient-end/5': typeof to !== 'undefined' || typeof onClick !== 'undefined' || typeof onSelect !== 'undefined',
-  });
+  const classNames = clsx('flex items-center justify-between overflow-hidden bg-gradient-to-r from-gradient-start/20 to-gradient-end/20 first:rounded-t-lg last:rounded-b-lg dark:from-gradient-start/10 dark:to-gradient-end/10',
+    className,
+    {
+      'px-4 py-2': size === 'md',
+      'px-2 py-0.5': size === 'sm',
+      'cursor-pointer hover:from-gradient-start/30 hover:to-gradient-end/30 dark:hover:from-gradient-start/5 dark:hover:to-gradient-end/5': typeof to !== 'undefined' || typeof onClick !== 'undefined' || typeof onSelect !== 'undefined',
+    },
+  );
 
   const body = (
     <>
@@ -67,7 +75,7 @@ const ListItem: React.FC<IListItem> = ({ label, hint, children, to, onClick, onS
         ) : null}
       </div>
 
-      {(to || onClick) ? (
+      {(to || href || onClick) ? (
         <HStack space={1} alignItems='center' className='overflow-hidden text-gray-700 dark:text-gray-600'>
           {children}
 
@@ -107,17 +115,17 @@ const ListItem: React.FC<IListItem> = ({ label, hint, children, to, onClick, onS
   );
 
   if (to) return (
-    <Link className={className} to={to}>
+    <Link className={classNames} to={to}>
       {body}
     </Link>
   );
 
-  const Comp = onClick ? 'a' : 'div';
-  const linkProps = onClick || onSelect ? { onClick: onClick || onSelect, onKeyDown, tabIndex: 0, role: 'link' } : {};
+  const Comp = onClick || href ? 'a' : 'div';
+  const linkProps = onClick || onSelect || href ? { onClick: onClick || onSelect, onKeyDown, tabIndex: 0, role: 'link', ...(href && { href, target: '_blank' }) } : {};
 
   return (
     <Comp
-      className={className}
+      className={classNames}
       {...linkProps}
     >
       {body}

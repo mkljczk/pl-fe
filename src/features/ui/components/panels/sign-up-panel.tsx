@@ -7,8 +7,10 @@ import { fetchInstance } from 'soapbox/actions/instance';
 import { Button, Stack, Text } from 'soapbox/components/ui';
 import LoginForm from 'soapbox/features/auth-login/components/login-form';
 import OtpAuthForm from 'soapbox/features/auth-login/components/otp-auth-form';
+import ExternalLoginForm from 'soapbox/features/external-login/components/external-login-form';
 import { useAppDispatch, useAppSelector, useInstance, useRegistrationStatus } from 'soapbox/hooks';
 import { getRedirectUrl } from 'soapbox/utils/redirect';
+import { isStandalone } from 'soapbox/utils/state';
 
 import type { PlfeResponse } from 'soapbox/api';
 
@@ -18,6 +20,7 @@ const SignUpPanel = () => {
   const instance = useInstance();
   const { isOpen } = useRegistrationStatus();
   const me = useAppSelector((state) => state.me);
+  const standalone = useAppSelector(isStandalone);
 
   const token = new URLSearchParams(window.location.search).get('token');
 
@@ -91,13 +94,26 @@ const SignUpPanel = () => {
         </>
       )}
 
-      <Stack>
-        <Text size='lg' weight='bold'>
-          <FormattedMessage id='signup_panel.sign_in.title' defaultMessage='Already have an account?' />
-        </Text>
-      </Stack>
+      {standalone ? (
+        <>
+          <Text size='lg' weight='bold'>
+            <FormattedMessage id='signup_panel.sign_in.title.external' defaultMessage='Sign in to external instance' />
+          </Text>
+          <ExternalLoginForm />
+        </>
+      ) : (
+        <>
+          <Text size='lg' weight='bold'>
+            {isOpen ? (
+              <FormattedMessage id='signup_panel.sign_in.title' defaultMessage='Sign in' />
+            ) : (
+              <FormattedMessage id='signup_panel.sign_in.title.or' defaultMessage='Already have an account?' />
+            )}
+          </Text>
 
-      <LoginForm handleSubmit={handleSubmit} isLoading={isLoading} />
+          <LoginForm handleSubmit={handleSubmit} isLoading={isLoading} />
+        </>
+      )}
     </Stack>
   );
 };
