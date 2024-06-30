@@ -38,7 +38,6 @@ import { isStandalone } from 'soapbox/utils/state';
 
 import BackgroundShapes from './components/background-shapes';
 import FloatingActionButton from './components/floating-action-button';
-import Navbar from './components/navbar';
 import {
   Status,
   CommunityTimeline,
@@ -470,8 +469,6 @@ const UI: React.FC<IUI> = ({ children }) => {
         <BackgroundShapes />
 
         <div className='z-10 flex min-h-screen flex-col'>
-          <Navbar />
-
           <Layout>
             <Layout.Sidebar>
               {!standalone && <SidebarNavigation />}
@@ -488,11 +485,9 @@ const UI: React.FC<IUI> = ({ children }) => {
             </div>
           )}
 
-          {me && (
-            <Suspense>
-              <SidebarMenu />
-            </Suspense>
-          )}
+          <Suspense>
+            <SidebarMenu />
+          </Suspense>
 
           {me && features.chats && (
             <div className='hidden xl:block'>

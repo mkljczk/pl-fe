@@ -95,6 +95,7 @@ interface IAccount {
   emojiUrl?: string;
   note?: string;
   items?: React.ReactNode;
+  disabled?: boolean;
 }
 
 const Account = ({
@@ -122,6 +123,7 @@ const Account = ({
   emojiUrl,
   note,
   items,
+  disabled,
 }: IAccount) => {
   const overflowRef = useRef<HTMLDivElement>(null);
   const actionRef = useRef<HTMLDivElement>(null);
@@ -186,6 +188,56 @@ const Account = ({
     title: account.acct,
     onClick: (event: React.MouseEvent) => event.stopPropagation(),
   } : {};
+
+  if (disabled) return (
+    <div data-testid='account' className='group block w-full shrink-0' ref={overflowRef}>
+      <HStack alignItems={actionAlignment} space={3} justifyContent='between'>
+        <HStack alignItems='center' space={3} className='overflow-hidden'>
+          <div className='rounded-full'>
+            <Avatar src={account.avatar} size={avatarSize} />
+            {emoji && (
+              <Emoji
+                className='absolute -right-1.5 bottom-0 h-5 w-5'
+                emoji={emoji}
+                src={emojiUrl}
+              />
+            )}
+          </div>
+
+          <div className='grow overflow-hidden'>
+            <HStack space={1} alignItems='center' grow>
+              <Text
+                size='sm'
+                weight='semibold'
+                truncate
+                dangerouslySetInnerHTML={{ __html: account.display_name_html }}
+              />
+
+              {account.verified && <VerificationBadge />}
+
+              {account.bot && <Badge slug='bot' title={intl.formatMessage(messages.bot)} />}
+            </HStack>
+
+            <Stack space={withAccountNote || note ? 1 : 0}>
+              <HStack alignItems='center' space={1}>
+                <Text theme='muted' size='sm' direction='ltr' truncate>@{username}</Text>
+
+                {account.pleroma?.favicon && (
+                  <InstanceFavicon account={account} disabled={!withLinkToProfile} />
+                )}
+
+                {items}
+              </HStack>
+            </Stack>
+          </div>
+        </HStack>
+
+        <div ref={actionRef}>
+          {renderAction()}
+        </div>
+      </HStack>
+    </div>
+  );
 
   return (
     <div data-testid='account' className='group block w-full shrink-0' ref={overflowRef}>

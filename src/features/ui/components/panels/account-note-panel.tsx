@@ -4,7 +4,7 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { submitAccountNote } from 'soapbox/actions/account-notes';
 import { HStack, Text, Textarea, Widget } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
 import type { Account as AccountEntity } from 'soapbox/schemas';
 import type { AppDispatch } from 'soapbox/store';
@@ -27,6 +27,7 @@ interface IAccountNotePanel {
 const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const me = useAppSelector((state) => state.me);
 
   const textarea = useRef<HTMLTextAreaElement>(null);
 
@@ -46,7 +47,7 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
     setValue(account.relationship?.note);
   }, [account.relationship?.note]);
 
-  if (!account) {
+  if (!me || !account) {
     return null;
   }
 

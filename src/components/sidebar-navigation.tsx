@@ -1,11 +1,14 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { Stack } from 'soapbox/components/ui';
+import { Icon, Stack } from 'soapbox/components/ui';
 import { useStatContext } from 'soapbox/contexts/stat-context';
+import Search from 'soapbox/features/compose/components/search';
 import ComposeButton from 'soapbox/features/ui/components/compose-button';
+import ProfileDropdown from 'soapbox/features/ui/components/profile-dropdown';
 import { useAppSelector, useFeatures, useOwnAccount, useSettings, useInstance } from 'soapbox/hooks';
 
+import Account from './account';
 import DropdownMenu, { Menu } from './dropdown-menu';
 import SidebarNavigationLink from './sidebar-navigation-link';
 
@@ -142,6 +145,24 @@ const SidebarNavigation = () => {
 
   return (
     <Stack space={4}>
+
+      {account && (
+        <Stack space={4}>
+          <div className='relative flex items-center'>
+            <ProfileDropdown account={account}>
+              <Account
+                account={account}
+                action={<Icon src={require('@tabler/icons/outline/chevron-down.svg')} className='text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500' />}
+                disabled
+              />
+            </ProfileDropdown>
+          </div>
+          <div className='block w-full max-w-xs'>
+            <Search openInRoute autosuggest />
+          </div>
+        </Stack>
+      )}
+
       <Stack space={1.5}>
         <SidebarNavigationLink
           to='/'
@@ -230,6 +251,22 @@ const SidebarNavigation = () => {
               text={<FormattedMessage id='tabs_bar.more' defaultMessage='More' />}
             />
           </DropdownMenu>
+        )}
+
+        {!account && (
+          <Stack className='xl:hidden' space={1.5}>
+            <SidebarNavigationLink
+              to='/login'
+              icon={require('@tabler/icons/outline/login.svg')}
+              text={<FormattedMessage id='account.login' defaultMessage='Log in' />}
+            />
+
+            <SidebarNavigationLink
+              to='/signup'
+              icon={require('@tabler/icons/outline/user-plus.svg')}
+              text={<FormattedMessage id='account.register' defaultMessage='Sign up' />}
+            />
+          </Stack>
         )}
       </Stack>
 

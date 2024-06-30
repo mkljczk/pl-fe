@@ -31,7 +31,7 @@ const Layout: LayoutComponent = ({ children }) => (
 /** Left sidebar container in the UI. */
 const Sidebar: React.FC<ISidebar> = ({ children }) => (
   <div className='hidden lg:col-span-3 lg:block'>
-    <StickyBox offsetTop={80} className='pb-4'>
+    <StickyBox offsetTop={16} className='pb-4'>
       {children}
     </StickyBox>
   </div>
@@ -51,7 +51,7 @@ const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, classN
 /** Right sidebar container in the UI. */
 const Aside: React.FC<IAside> = ({ children }) => (
   <aside className='hidden xl:col-span-3 xl:block'>
-    <StickyBox offsetTop={80} className='space-y-6 pb-12'>
+    <StickyBox offsetTop={16} className='space-y-6 pb-12'>
       <Suspense>
         {children}
       </Suspense>
