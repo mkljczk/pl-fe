@@ -176,7 +176,7 @@
     "twemoji": "https://github.com/twitter/twemoji#v14.0.2",
     "type-fest": "^4.0.0",
     "typescript": "^5.4.5",
-    "util": "^0.12.4",
+    "util": "^0.12.5",
     "uuid": "^9.0.0",
     "vite": "^5.0.10",
     "vite-plugin-compile-time": "^0.2.1",

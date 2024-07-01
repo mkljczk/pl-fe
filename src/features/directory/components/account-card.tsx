@@ -1,12 +1,14 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 import { getSettings } from 'soapbox/actions/settings';
 import { useAccount } from 'soapbox/api/hooks';
 import Account from 'soapbox/components/account';
 import Badge from 'soapbox/components/badge';
+import HoverRefWrapper from 'soapbox/components/hover-ref-wrapper';
 import RelativeTimestamp from 'soapbox/components/relative-timestamp';
-import { Stack, Text } from 'soapbox/components/ui';
+import { Avatar, Stack, Text } from 'soapbox/components/ui';
 import ActionButton from 'soapbox/features/ui/components/action-button';
 import { useAppSelector } from 'soapbox/hooks';
 import { shortNumberFormat } from 'soapbox/utils/numbers';
@@ -36,7 +38,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           </div>
         )}
 
-        <div className='absolute bottom-2.5 right-2.5'>
+        <div className='absolute bottom-0 right-3 translate-y-1/2'>
           <ActionButton account={account} small />
         </div>
 
@@ -45,18 +47,25 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           alt=''
           className='h-32 w-full rounded-t-lg object-cover'
         />
+
+        <HoverRefWrapper key={account.id} accountId={account.id} inline>
+          <Link to={`/@${account.acct}`} title={account.acct}>
+            <Avatar src={account.avatar} className='!absolute bottom-0 left-3 translate-y-1/2 bg-white ring-2 ring-white dark:bg-primary-900 dark:ring-primary-900' size={64} />
+          </Link>
+        </HoverRefWrapper>
       </div>
 
-      <Stack space={4} className='p-3'>
+      <Stack space={4} className='p-3 pt-10'>
         <Account
           account={account}
+          withAvatar={false}
           withRelationship={false}
         />
 
         <Text
           truncate
           align='left'
-          className='[&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
+          className='line-clamp-2 [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
           dangerouslySetInnerHTML={{ __html: account.note_emojified || '&nbsp;' }}
         />
       </Stack>

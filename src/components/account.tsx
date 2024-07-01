@@ -86,6 +86,7 @@ interface IAccount {
   timestampUrl?: string;
   futureTimestamp?: boolean;
   withAccountNote?: boolean;
+  withAvatar?: boolean;
   withDate?: boolean;
   withLinkToProfile?: boolean;
   withRelationship?: boolean;
@@ -114,6 +115,7 @@ const Account = ({
   timestampUrl,
   futureTimestamp = false,
   withAccountNote = false,
+  withAvatar = true,
   withDate = false,
   withLinkToProfile = true,
   withRelationship = true,
@@ -243,21 +245,23 @@ const Account = ({
     <div data-testid='account' className='group block w-full shrink-0' ref={overflowRef}>
       <HStack alignItems={actionAlignment} space={3} justifyContent='between'>
         <HStack alignItems={withAccountNote || note ? 'top' : 'center'} space={3} className='overflow-hidden'>
-          <ProfilePopper
-            condition={showProfileHoverCard}
-            wrapper={(children) => <HoverRefWrapper className='relative' accountId={account.id} inline>{children}</HoverRefWrapper>}
-          >
-            <LinkEl className='rounded-full' {...linkProps}>
-              <Avatar src={account.avatar} size={avatarSize} />
-              {emoji && (
-                <Emoji
-                  className='absolute -right-1.5 bottom-0 h-5 w-5'
-                  emoji={emoji}
-                  src={emojiUrl}
-                />
-              )}
-            </LinkEl>
-          </ProfilePopper>
+          {withAvatar && (
+            <ProfilePopper
+              condition={showProfileHoverCard}
+              wrapper={(children) => <HoverRefWrapper className='relative' accountId={account.id} inline>{children}</HoverRefWrapper>}
+            >
+              <LinkEl className='rounded-full' {...linkProps}>
+                <Avatar src={account.avatar} size={avatarSize} />
+                {emoji && (
+                  <Emoji
+                    className='absolute -right-1.5 bottom-0 h-5 w-5'
+                    emoji={emoji}
+                    src={emojiUrl}
+                  />
+                )}
+              </LinkEl>
+            </ProfilePopper>
+          )}
 
           <div className='grow overflow-hidden'>
             <ProfilePopper
