@@ -1,6 +1,6 @@
 import React from 'react';
 
-import List, { ListItem } from './list';
+import List, { type IListItem, ListItem } from './list';
 
 interface IRadioGroup {
   onChange: React.ChangeEventHandler;
@@ -15,7 +15,7 @@ const RadioGroup = ({ onChange, children }: IRadioGroup) => {
   return <List>{childrenWithProps}</List>;
 };
 
-interface IRadioItem {
+interface IRadioItem extends IListItem {
   label: React.ReactNode;
   hint?: React.ReactNode;
   value: string;
@@ -23,8 +23,8 @@ interface IRadioItem {
   onChange?: React.ChangeEventHandler;
 }
 
-const RadioItem: React.FC<IRadioItem> = ({ label, hint, checked = false, onChange, value }) => (
-  <ListItem label={label} hint={hint}>
+const RadioItem: React.FC<IRadioItem> = ({ label, hint, checked = false, onChange, value, ...props }) => (
+  <ListItem label={label} hint={hint} {...props}>
     <input
       type='radio'
       checked={checked}

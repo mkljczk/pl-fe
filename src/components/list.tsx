@@ -133,4 +133,4 @@ const ListItem: React.FC<IListItem> = ({ className, label, hint, children, to, h
   );
 };
 
-export { List as default, ListItem };
+export { List as default, type IListItem, ListItem };

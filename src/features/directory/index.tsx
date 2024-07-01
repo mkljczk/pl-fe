@@ -5,7 +5,8 @@ import { useLocation } from 'react-router-dom';
 
 import { fetchDirectory, expandDirectory } from 'soapbox/actions/directory';
 import LoadMore from 'soapbox/components/load-more';
-import { Column, RadioButton, Stack, Text } from 'soapbox/components/ui';
+import { RadioGroup, RadioItem } from 'soapbox/components/radio';
+import { CardTitle, Column, Stack } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance } from 'soapbox/hooks';
 
 import AccountCard from './components/account-card';
@@ -51,37 +52,41 @@ const Directory = () => {
   return (
     <Column label={intl.formatMessage(messages.title)}>
       <Stack space={4}>
-        <div className='grid grid-cols-2 gap-2'>
-          <div>
-            <Text weight='medium'>
-              <FormattedMessage id='directory.display_filter' defaultMessage='Display filter' />
-            </Text>
-            <fieldset className='mt-3'>
-              <legend className='sr-only'>
-                <FormattedMessage id='directory.display_filter' defaultMessage='Display filter' />
-              </legend>
-              <div className='space-y-2'>
-                <RadioButton name='order' value='active' label={intl.formatMessage(messages.recentlyActive)} checked={order === 'active'} onChange={handleChangeOrder} />
-                <RadioButton name='order' value='new' label={intl.formatMessage(messages.newArrivals)} checked={order === 'new'} onChange={handleChangeOrder} />
-              </div>
-            </fieldset>
-          </div>
+        <div className='grid grid-cols-1 gap-2 md:grid-cols-2'>
+          <Stack space={2}>
+            <CardTitle title={<FormattedMessage id='directory.display_filter' defaultMessage='Display filter' />} />
+
+            <RadioGroup onChange={handleChangeOrder}>
+              <RadioItem
+                label={intl.formatMessage(messages.recentlyActive)}
+                checked={order === 'active'}
+                value='active'
+              />
+              <RadioItem
+                label={intl.formatMessage(messages.newArrivals)}
+                checked={order === 'new'}
+                value='new'
+              />
+            </RadioGroup>
+          </Stack>
 
           {features.federating && (
-            <div>
-              <Text weight='medium'>
-                <FormattedMessage id='directory.fediverse_filter' defaultMessage='Fediverse filter' />
-              </Text>
-              <fieldset className='mt-3'>
-                <legend className='sr-only'>
-                  <FormattedMessage id='directory.fediverse_filter' defaultMessage='Fediverse filter' />
-                </legend>
-                <div className='space-y-2'>
-                  <RadioButton name='local' value='1' label={intl.formatMessage(messages.local, { domain: instance.title })} checked={local} onChange={handleChangeLocal} />
-                  <RadioButton name='local' value='0' label={intl.formatMessage(messages.federated)} checked={!local} onChange={handleChangeLocal} />
-                </div>
-              </fieldset>
-            </div>
+            <Stack space={2}>
+              <CardTitle title={<FormattedMessage id='directory.fediverse_filter' defaultMessage='Fediverse filter' />} />
+
+              <RadioGroup onChange={handleChangeLocal}>
+                <RadioItem
+                  label={intl.formatMessage(messages.local, { domain: instance.title })}
+                  checked={local}
+                  value='1'
+                />
+                <RadioItem
+                  label={intl.formatMessage(messages.federated)}
+                  checked={!local}
+                  value='0'
+                />
+              </RadioGroup>
+            </Stack>
           )}
         </div>
 
