@@ -53,7 +53,7 @@ const SidebarNavigationLink = React.forwardRef((props: ISidebarNavigationLink, r
       <span
         className={clsx({
           'relative rounded-lg inline-flex p-2.5 transition-colors duration-200': true,
-          'bg-primary-50 dark:bg-slate-700 black:bg-gray-900': !isActive,
+          'bg-primary-50 hover:bg-primary-100 dark:bg-slate-700 dark:hover:bg-slate-600 black:bg-gray-900 black:hover:bg-gray-800': !isActive,
           'bg-primary-600': isActive,
         })}
       >

@@ -86,10 +86,10 @@ const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButt
       ref={ref}
       type='button'
       className={clsx(
-        'flex items-center rounded-full p-1 rtl:space-x-reverse',
-        'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:ring-offset-0',
+        '-m-1 flex items-center rounded-full p-2 rtl:space-x-reverse',
+        'transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:ring-offset-0',
         {
-          'text-gray-600 hover:text-gray-600 dark:hover:text-white bg-white dark:bg-transparent': theme === 'default',
+          'text-gray-600 hover:text-gray-800 dark:hover:text-white bg-white hover:bg-primary-100 dark:hover:bg-primary-800 dark:bg-transparent black:hover:bg-gray-800': theme === 'default',
           'text-white/80 hover:text-white bg-transparent dark:bg-transparent': theme === 'inverse',
           'text-black dark:text-white': active && emoji,
           'hover:text-gray-600 dark:hover:text-white': !filteredProps.disabled,
