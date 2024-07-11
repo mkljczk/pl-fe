@@ -102,6 +102,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   const formRef = useRef<HTMLDivElement>(null);
   const spoilerTextRef = useRef<AutosuggestInput>(null);
   const editorRef = useRef<LexicalEditor>(null);
+
   const { isDraggedOver } = useDraggedFiles(formRef);
 
   const fulltext = [spoilerText, countableText(text)].join('');

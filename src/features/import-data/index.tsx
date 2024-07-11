@@ -8,7 +8,7 @@ import {
 } from 'soapbox/actions/import-data';
 import { Column } from 'soapbox/components/ui';
 
-import CSVImporter from './components/csv-importer';
+import DataImporter from './components/data-importer';
 
 const messages = defineMessages({
   heading: { id: 'column.import_data', defaultMessage: 'Import data' },
@@ -38,9 +38,9 @@ const ImportData = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <CSVImporter action={importFollows} messages={followMessages} />
-      <CSVImporter action={importBlocks} messages={blockMessages} />
-      <CSVImporter action={importMutes} messages={muteMessages} />
+      <DataImporter action={importFollows} messages={followMessages} />
+      <DataImporter action={importBlocks} messages={blockMessages} />
+      <DataImporter action={importMutes} messages={muteMessages} />
     </Column>
   );
 };

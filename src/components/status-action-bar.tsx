@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
@@ -10,7 +10,8 @@ import { openModal } from 'soapbox/actions/modals';
 import { deleteStatusModal, toggleStatusSensitivityModal } from 'soapbox/actions/moderation';
 import { initMuteModal } from 'soapbox/actions/mutes';
 import { initReport, ReportableEntities } from 'soapbox/actions/reports';
-import { deleteStatus, editStatus, toggleMuteStatus } from 'soapbox/actions/statuses';
+import { changeSetting } from 'soapbox/actions/settings';
+import { deleteStatus, editStatus, toggleMuteStatus, translateStatus, undoStatusTranslation } from 'soapbox/actions/statuses';
 import { deleteFromTimelines } from 'soapbox/actions/timelines';
 import { useBlockGroupMember, useGroup, useGroupRelationship } from 'soapbox/api/hooks';
 import { useDeleteGroupStatus } from 'soapbox/api/hooks/groups/useDeleteGroupStatus';
@@ -18,7 +19,8 @@ import DropdownMenu from 'soapbox/components/dropdown-menu';
 import StatusActionButton from 'soapbox/components/status-action-button';
 import StatusReactionWrapper from 'soapbox/components/status-reaction-wrapper';
 import { HStack } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount, useSettings, useSoapboxConfig } from 'soapbox/hooks';
+import { languages } from 'soapbox/features/preferences';
+import { useAppDispatch, useAppSelector, useFeatures, useInstance, useOwnAccount, useSettings, useSoapboxConfig } from 'soapbox/hooks';
 import { useChats } from 'soapbox/queries/chats';
 import { GroupRoles } from 'soapbox/schemas/group-member';
 import toast from 'soapbox/toast';
@@ -69,7 +71,7 @@ const messages = defineMessages({
   mention: { id: 'status.mention', defaultMessage: 'Mention @{name}' },
   more: { id: 'status.more', defaultMessage: 'More' },
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
-  muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute Conversation' },
+  muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute conversation' },
   open: { id: 'status.open', defaultMessage: 'Show post details' },
   pin: { id: 'status.pin', defaultMessage: 'Pin on profile' },
   quotePost: { id: 'status.quote', defaultMessage: 'Quote post' },
@@ -93,8 +95,11 @@ const messages = defineMessages({
   report: { id: 'status.report', defaultMessage: 'Report @{name}' },
   share: { id: 'status.share', defaultMessage: 'Share' },
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
-  unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute Conversation' },
+  unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
   unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
+  addKnownLanguage: { id: 'status.add_known_language', defaultMessage: 'Do not auto-translate posts in {language}.' },
+  translate: { id: 'status.translate', defaultMessage: 'Translate' },
+  hideTranslation: { id: 'status.hide_translation', defaultMessage: 'Hide translation' },
 });
 
 interface IStatusActionBar {
@@ -129,8 +134,23 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const me = useAppSelector(state => state.me);
   const { groupRelationship } = useGroupRelationship(status.group?.id);
   const features = useFeatures();
-  const { boostModal, deleteModal } = useSettings();
+  const instance = useInstance();
+  const { autoTranslate, boostModal, deleteModal, knownLanguages } = useSettings();
   const soapboxConfig = useSoapboxConfig();
+
+  const autoTranslating = useMemo(() => {
+    const {
+      allow_remote: allowRemote,
+      allow_unauthenticated: allowUnauthenticated,
+      source_languages: sourceLanguages,
+      target_languages: targetLanguages,
+    } = instance.pleroma.metadata.translation;
+
+    const renderTranslate = (me || allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.contentHtml.length > 0 && status.language !== null && !knownLanguages.includes(status.language);
+    const supportsLanguages = (!sourceLanguages || sourceLanguages.includes(status.language!)) && (!targetLanguages || targetLanguages.includes(intl.locale));
+
+    return autoTranslate && features.translations && renderTranslate && supportsLanguages;
+  }, [me, status, autoTranslate]);
 
   const { allowedEmoji } = soapboxConfig;
 
@@ -349,6 +369,18 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     }));
   };
 
+  const handleIgnoreLanguage = () => {
+    dispatch(changeSetting(['autoTranslate'], [...knownLanguages, status.language], { showAlert: true }));
+  };
+
+  const handleTranslate = () => {
+    if (status.translation) {
+      dispatch(undoStatusTranslation(status.id));
+    } else {
+      dispatch(translateStatus(status.id, intl.locale));
+    }
+  };
+
   const _makeMenu = (publicStatus: boolean) => {
     const mutingConversation = status.muted;
     const ownAccount = status.account.id === me;
@@ -496,6 +528,28 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       menu.push({
         text: intl.formatMessage(messages.report, { name: username }),
         action: handleReport,
+        icon: require('@tabler/icons/outline/flag.svg'),
+      });
+    }
+
+    if (autoTranslating) {
+      if (status.translation) {
+        menu.push({
+          text: intl.formatMessage(messages.hideTranslation),
+          action: handleTranslate,
+          icon: require('@tabler/icons/outline/language.svg'),
+        });
+      } else {
+        menu.push({
+          text: intl.formatMessage(messages.translate),
+          action: handleTranslate,
+          icon: require('@tabler/icons/outline/language.svg'),
+        });
+      }
+
+      menu.push({
+        text: intl.formatMessage(messages.addKnownLanguage, { language: languages[status.language as 'en'] || status.language }),
+        action: handleIgnoreLanguage,
         icon: require('@tabler/icons/outline/flag.svg'),
       });
     }

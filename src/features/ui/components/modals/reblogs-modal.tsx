@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchReblogs, expandReblogs } from 'soapbox/actions/interactions';
 import { fetchStatus } from 'soapbox/actions/statuses';
@@ -15,12 +15,13 @@ interface IReblogsModal {
 
 const ReblogsModal: React.FC<IReblogsModal> = ({ onClose, statusId }) => {
   const dispatch = useAppDispatch();
+  const intl = useIntl();
   const accountIds = useAppSelector((state) => state.user_lists.reblogged_by.get(statusId)?.items);
   const next = useAppSelector((state) => state.user_lists.reblogged_by.get(statusId)?.next);
 
   const fetchData = () => {
     dispatch(fetchReblogs(statusId));
-    dispatch(fetchStatus(statusId));
+    dispatch(fetchStatus(statusId, intl));
   };
 
   useEffect(() => {

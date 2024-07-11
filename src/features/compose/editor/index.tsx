@@ -43,6 +43,7 @@ const LINK_MATCHERS = [
 
 interface IComposeEditor {
   className?: string;
+  editableClassName?: string;
   placeholderClassName?: string;
   composeId: string;
   condensed?: boolean;
@@ -77,6 +78,7 @@ const theme: InitialConfigType['theme'] = {
 
 const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
   className,
+  editableClassName,
   placeholderClassName,
   composeId,
   condensed,
@@ -110,7 +112,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
       const editorState = !compose.modified_language || compose.modified_language === compose.language
         ? compose.editorState
         : compose.editorStateMap.get(compose.modified_language, '');
-      
+
       if (editorState) {
         return editorState;
       }
@@ -177,15 +179,17 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
 
   return (
     <LexicalComposer key={isWysiwyg ? 'wysiwyg' : ''} initialConfig={initialConfig}>
-      <div className={clsx('relative', className)}>
+      <div className={clsx('lexical relative', className)} data-markup>
         <RichTextPlugin
           contentEditable={
             <div onFocus={onFocus} onPaste={handlePaste} ref={onRef}>
               <ContentEditable
-                className={clsx('relative z-10 text-[1rem] outline-none transition-[min-height] motion-reduce:transition-none', {
-                  'min-h-[39px]': condensed,
-                  'min-h-[99px]': !condensed,
-                })}
+                className={clsx('relative z-10 text-[1rem] outline-none transition-[min-height] motion-reduce:transition-none',
+                  editableClassName,
+                  {
+                    'min-h-[39px]': condensed,
+                    'min-h-[99px]': !condensed,
+                  })}
               />
             </div>
           }

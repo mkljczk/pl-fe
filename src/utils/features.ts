@@ -573,6 +573,12 @@ const getInstanceFeatures = (instance: Instance) => {
     languageDetection: v.software === PLEROMA && v.build === REBASED,
 
     /**
+     * Can translate multiple statuses in a single request.
+     * @see POST /api/v1/pl/statuses/translate
+     */
+    lazyTranslations: features.includes('pl:translations'),
+
+    /**
      * Can create, view, and manage lists.
      * @see {@link https://docs.joinmastodon.org/methods/lists/}
      * @see GET /api/v1/timelines/list/:list_id

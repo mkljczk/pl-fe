@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { expandCommunityTimeline } from 'soapbox/actions/timelines';
 import { useCommunityStream } from 'soapbox/api/hooks';
@@ -16,6 +16,7 @@ import { SiteBanner } from './components/site-banner';
 const LandingTimeline = () => {
   const dispatch = useAppDispatch();
   const instance = useInstance();
+  const intl = useIntl();
   const theme = useTheme();
   const isMobile = useIsMobile();
 
@@ -26,13 +27,13 @@ const LandingTimeline = () => {
 
   const handleLoadMore = (maxId: string) => {
     if (timelineEnabled) {
-      dispatch(expandCommunityTimeline({ url: next, maxId }));
+      dispatch(expandCommunityTimeline({ url: next, maxId }, intl));
     }
   };
 
   const handleRefresh = async () => {
     if (timelineEnabled) {
-      return dispatch(expandCommunityTimeline());
+      return dispatch(expandCommunityTimeline({}, intl));
     }
   };
 
@@ -40,7 +41,7 @@ const LandingTimeline = () => {
 
   useEffect(() => {
     if (timelineEnabled) {
-      dispatch(expandCommunityTimeline());
+      dispatch(expandCommunityTimeline({}, intl));
     }
   }, []);
 

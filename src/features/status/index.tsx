@@ -54,7 +54,7 @@ const StatusDetails: React.FC<IStatusDetails> = (props) => {
   const fetchData = () => {
     const { params } = props;
     const { statusId } = params;
-    return dispatch(fetchStatusWithContext(statusId));
+    return dispatch(fetchStatusWithContext(statusId, intl));
   };
 
   // Load data.

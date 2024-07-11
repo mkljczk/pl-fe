@@ -34,15 +34,17 @@ import {
 import {
   STATUS_CREATE_REQUEST,
   STATUS_CREATE_FAIL,
-  STATUS_MUTE_SUCCESS,
-  STATUS_UNMUTE_SUCCESS,
-  STATUS_REVEAL,
-  STATUS_HIDE,
   STATUS_DELETE_REQUEST,
   STATUS_DELETE_FAIL,
+  STATUS_HIDE,
+  STATUS_MUTE_SUCCESS,
+  STATUS_REVEAL,
+  STATUS_TRANSLATE_FAIL,
+  STATUS_TRANSLATE_REQUEST,
   STATUS_TRANSLATE_SUCCESS,
   STATUS_TRANSLATE_UNDO,
   STATUS_UNFILTER,
+  STATUS_UNMUTE_SUCCESS,
   STATUS_LANGUAGE_CHANGE,
 } from '../actions/statuses';
 import { TIMELINE_DELETE } from '../actions/timelines';
@@ -255,8 +257,13 @@ interface Translation {
 /** Import translation from translation service into the store. */
 const importTranslation = (state: State, statusId: string, translation: Translation) => {
   const map = ImmutableMap(translation);
-  const result = map.set('content', stripCompatibilityFeatures(map.get('content', '')));
-  return state.setIn([statusId, 'translation'], result);
+
+  const emojiMap = makeEmojiMap(state.get(statusId)!.emojis);
+
+  const result = map.set('content', stripCompatibilityFeatures(emojify(map.get('content', ''), emojiMap)));
+  return state
+    .setIn([statusId, 'translation'], result)
+    .setIn([statusId, 'translating'], false);
 };
 
 /** Delete translation from the store. */
@@ -330,8 +337,14 @@ const statuses = (state = initialState, action: AnyAction): State => {
       return decrementReplyCount(state, action.params);
     case STATUS_DELETE_FAIL:
       return incrementReplyCount(state, action.params);
+    case STATUS_TRANSLATE_REQUEST:
+      return state.setIn([action.id, 'translating'], true);
     case STATUS_TRANSLATE_SUCCESS:
       return importTranslation(state, action.id, action.translation);
+    case STATUS_TRANSLATE_FAIL:
+      return state
+        .setIn([action.id, 'translating'], false)
+        .setIn([action.id, 'translation'], false);
     case STATUS_TRANSLATE_UNDO:
       return deleteTranslation(state, action.id);
     case STATUS_UNFILTER:

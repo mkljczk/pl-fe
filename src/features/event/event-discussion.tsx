@@ -1,6 +1,6 @@
 import { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { eventDiscussionCompose } from 'soapbox/actions/compose';
 import { fetchStatusWithContext } from 'soapbox/actions/statuses';
@@ -30,6 +30,7 @@ interface IEventDiscussion {
 
 const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
   const dispatch = useAppDispatch();
+  const intl = useIntl();
 
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector(state => getStatus(state, { id: props.params.statusId }));
@@ -56,7 +57,7 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
   const fetchData = () => {
     const { params } = props;
     const { statusId } = params;
-    return dispatch(fetchStatusWithContext(statusId));
+    return dispatch(fetchStatusWithContext(statusId, intl));
   };
 
   useEffect(() => {

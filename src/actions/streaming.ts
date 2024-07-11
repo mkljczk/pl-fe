@@ -23,6 +23,7 @@ import {
   processTimelineUpdate,
 } from './timelines';
 
+import type { IntlShape } from 'react-intl';
 import type { IStatContext } from 'soapbox/contexts/stat-context';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
@@ -64,7 +65,7 @@ interface TimelineStreamOpts {
 const connectTimelineStream = (
   timelineId: string,
   path: string,
-  pollingRefresh: ((dispatch: AppDispatch, done?: () => void) => void) | null = null,
+  pollingRefresh: ((dispatch: AppDispatch, intl?: IntlShape, done?: () => void) => void) | null = null,
   accept: ((status: APIEntity) => boolean) | null = null,
   opts?: TimelineStreamOpts,
 ) => connectStream(path, pollingRefresh, (dispatch: AppDispatch, getState: () => RootState) => {

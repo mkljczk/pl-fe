@@ -208,6 +208,7 @@ const ComposeEventModal: React.FC<IComposeEventModal> = ({ onClose }) => {
     <Form>
       <FormGroup
         labelText={<FormattedMessage id='compose_event.fields.banner_label' defaultMessage='Event banner' />}
+        hintText={<FormattedMessage id='compose_event.fields.banner_hint' defaultMessage='PNG, GIF or JPG. Landscape format is preferred.' />}
       >
         <div className='dark:sm:shadow-inset relative flex h-24 items-center justify-center overflow-hidden rounded-lg bg-primary-100 text-primary-500 sm:h-32 sm:shadow dark:bg-gray-800 dark:text-white'>
           {banner ? (

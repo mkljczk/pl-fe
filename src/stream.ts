@@ -2,6 +2,7 @@ import WebSocketClient from '@gamestdio/websocket';
 
 import { getAccessToken } from 'soapbox/utils/auth';
 
+import type { IntlShape } from 'react-intl';
 import type { AppDispatch, RootState } from 'soapbox/store';
 
 const randomIntUpTo = (max: number) => Math.floor(Math.random() * Math.floor(max));
@@ -12,7 +13,7 @@ interface ConnectStreamCallbacks {
   onReceive(websocket: WebSocket, data: unknown): void;
 }
 
-type PollingRefreshFn = (dispatch: AppDispatch, done?: () => void) => void
+type PollingRefreshFn = (dispatch: AppDispatch, intl?: IntlShape, done?: () => void) => void
 
 const connectStream = (
   path: string,
@@ -27,7 +28,7 @@ const connectStream = (
 
   const setupPolling = () => {
     if (pollingRefresh) {
-      pollingRefresh(dispatch, () => {
+      pollingRefresh(dispatch, undefined, () => {
         polling = setTimeout(() => setupPolling(), 20000 + randomIntUpTo(20000));
       });
     }

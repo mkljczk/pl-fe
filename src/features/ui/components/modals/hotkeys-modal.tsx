@@ -135,7 +135,7 @@ const HotkeysModal: React.FC<IHotkeysModal> = ({ onClose }) => {
             </tr>
             <tr>
               <TableCell><Hotkey>g</Hotkey> + <Hotkey>n</Hotkey></TableCell>
-              <TableCell><FormattedMessage id='keyboard_shortcuts.notifications' defaultMessage='to open notifications column' /></TableCell>
+              <TableCell><FormattedMessage id='keyboard_shortcuts.notifications' defaultMessage='to open notifications list' /></TableCell>
             </tr>
             <tr>
               <TableCell><Hotkey>g</Hotkey> + <Hotkey>f</Hotkey></TableCell>

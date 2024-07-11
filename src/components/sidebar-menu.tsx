@@ -22,6 +22,7 @@ const messages = defineMessages({
   preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },
   followedTags: { id: 'navigation_bar.followed_tags', defaultMessage: 'Followed hashtags' },
   logout: { id: 'navigation_bar.logout', defaultMessage: 'Logout' },
+  profileDirectory: { id: 'navigation_bar.profile_directory', defaultMessage: 'Profile directory' },
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
   lists: { id: 'column.lists', defaultMessage: 'Lists' },
   groups: { id: 'column.groups', defaultMessage: 'Groups' },
@@ -231,6 +232,15 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                         to='/events'
                         icon={require('@tabler/icons/outline/calendar-event.svg')}
                         text={intl.formatMessage(messages.events)}
+                        onClick={onClose}
+                      />
+                    )}
+
+                    {features.profileDirectory && (
+                      <SidebarLink
+                        to='/directory'
+                        icon={require('@tabler/icons/outline/address-book.svg')}
+                        text={intl.formatMessage(messages.profileDirectory)}
                         onClick={onClose}
                       />
                     )}

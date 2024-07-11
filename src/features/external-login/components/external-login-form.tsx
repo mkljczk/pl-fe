@@ -24,7 +24,7 @@ const ExternalLoginForm: React.FC = () => {
 
   const [host, setHost] = useState(server || '');
   const [isLoading, setLoading] = useState(false);
-  
+
   const handleHostChange: React.ChangeEventHandler<HTMLInputElement> = ({ currentTarget }) => {
     setHost(currentTarget.value);
   };

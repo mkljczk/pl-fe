@@ -36,11 +36,11 @@ const ListTimeline: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchList(id));
-    dispatch(expandListTimeline(id));
+    dispatch(expandListTimeline(id, {}, intl));
   }, [id]);
 
   const handleLoadMore = (maxId: string) => {
-    dispatch(expandListTimeline(id, { url: next, maxId }));
+    dispatch(expandListTimeline(id, { url: next, maxId }, intl));
   };
 
   const handleEditClick = () => {

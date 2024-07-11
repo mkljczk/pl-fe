@@ -40,13 +40,13 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
   });
 
   const handleLoadMore = (maxId: string) => {
-    dispatch(expandGroupTimeline(groupId, { maxId }));
+    dispatch(expandGroupTimeline(groupId, { maxId }, intl));
   };
 
   useGroupStream(groupId);
 
   useEffect(() => {
-    dispatch(expandGroupTimeline(groupId));
+    dispatch(expandGroupTimeline(groupId, {}, intl));
     // dispatch(expandGroupFeaturedTimeline(groupId));
     dispatch(groupCompose(composeId, groupId));
   }, [groupId]);

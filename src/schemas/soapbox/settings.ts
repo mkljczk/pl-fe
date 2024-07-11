@@ -72,6 +72,8 @@ const settingsSchema = z.object({
       show: z.boolean().catch(true),
     }),
   }),
+  autoTranslate: z.boolean().catch(false),
+  knownLanguages: z.array(z.string()).catch([]),
 });
 
 type Settings = z.infer<typeof settingsSchema>;

@@ -10,3 +10,29 @@ select {
 .input.with_label.toggle .label_input {
   @apply flex text-sm items-center;
 }
+
+.plfe-multiselect {
+  .chip {
+    @apply bg-primary-600 my-1;
+  }
+
+  .search-wrapper {
+    @apply rounded-md border-gray-300 bg-white min-h-[38px] max-w-[400px] py-0 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 disabled:opacity-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-1 dark:ring-gray-800 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm w-auto;
+
+    > input {
+      @apply first:pl-0 p-1.5 m-0 focus:ring-0 text-base sm:text-sm;
+    }
+  }
+
+  .optionContainer {
+    @apply border-gray-300 dark:border-gray-800 dark:bg-gray-900;
+  }
+
+  .option {
+    @apply hover:bg-primary-600;
+  }
+
+  .highlightOption {
+    @apply bg-primary-600;
+  }
+}

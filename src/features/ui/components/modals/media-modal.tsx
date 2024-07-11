@@ -184,7 +184,7 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
   }).toArray();
 
   /** Fetch the status (and context) from the API. */
-  const fetchData = () => dispatch(fetchStatusWithContext(status?.id as string));
+  const fetchData = () => dispatch(fetchStatusWithContext(status?.id as string, intl));
 
   // Load data.
   useEffect(() => {

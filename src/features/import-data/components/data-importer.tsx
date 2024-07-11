@@ -6,16 +6,18 @@ import { useAppDispatch } from 'soapbox/hooks';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 
-interface ICSVImporter {
+interface IDataImporter {
   messages: {
     input_label: MessageDescriptor;
     input_hint: MessageDescriptor;
     submit: MessageDescriptor;
   };
   action: (params: FormData) => (dispatch: AppDispatch, getState: () => RootState) => Promise<void>;
+  paramName?: string;
+  accept?: string;
 }
 
-const CSVImporter: React.FC<ICSVImporter> = ({ messages, action }) => {
+const DataImporter: React.FC<IDataImporter> = ({ messages, action, paramName = 'list', accept = '.csv,text/csv' }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -24,7 +26,7 @@ const CSVImporter: React.FC<ICSVImporter> = ({ messages, action }) => {
 
   const handleSubmit: React.FormEventHandler = (event) => {
     const params = new FormData();
-    params.append('list', file!);
+    params.append(paramName, file!);
 
     setIsLoading(true);
     dispatch(action(params)).then(() => {
@@ -48,7 +50,7 @@ const CSVImporter: React.FC<ICSVImporter> = ({ messages, action }) => {
         hintText={<Text theme='muted'>{intl.formatMessage(messages.input_hint)}</Text>}
       >
         <FileInput
-          accept='.csv,text/csv'
+          accept={accept}
           onChange={handleFileChange}
           required
         />
@@ -62,4 +64,4 @@ const CSVImporter: React.FC<ICSVImporter> = ({ messages, action }) => {
   );
 };
 
-export { CSVImporter as default };
+export { DataImporter as default };

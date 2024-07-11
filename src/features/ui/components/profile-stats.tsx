@@ -11,10 +11,11 @@ import type { Account } from 'soapbox/schemas';
 const messages = defineMessages({
   followers: { id: 'account.followers', defaultMessage: 'Followers' },
   follows: { id: 'account.follows', defaultMessage: 'Following' },
+  statuses: { id: 'account.statuses', defaultMessage: 'Statuses' },
 });
 
 interface IProfileStats {
-  account: Pick<Account, 'acct' | 'followers_count' | 'following_count'> | undefined;
+  account: Pick<Account, 'acct' | 'followers_count' | 'following_count' | 'statuses_count'> | undefined;
   onClickHandler?: React.MouseEventHandler;
 }
 
@@ -28,7 +29,16 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
   }
 
   return (
-    <HStack alignItems='center' space={3}>
+    <HStack alignItems='center' className='gap-x-3' wrap>
+      <HStack alignItems='center' space={1}>
+        <Text theme='primary' weight='bold' size='sm'>
+          {shortNumberFormat(account.statuses_count)}
+        </Text>
+        <Text weight='bold' size='sm'>
+          {intl.formatMessage(messages.statuses)}
+        </Text>
+      </HStack>
+
       <NavLink to={`/@${account.acct}/followers`} onClick={onClickHandler} title={intl.formatNumber(account.followers_count)} className='hover:underline'>
         <HStack alignItems='center' space={1}>
           {!demetricator && (

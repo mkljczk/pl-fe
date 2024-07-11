@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React, { Suspense, lazy, useEffect, useRef } from 'react';
+import { useIntl } from 'react-intl';
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom';
 
 import { fetchFollowRequests } from 'soapbox/actions/accounts';
@@ -358,6 +359,7 @@ const UI: React.FC<IUI> = ({ children }) => {
   const { account } = useOwnAccount();
   const features = useFeatures();
   const vapidKey = useAppSelector(state => getVapidKey(state));
+  const intl = useIntl();
 
   const dropdownMenuIsOpen = useAppSelector(state => state.dropdown_menu.isOpen);
   const standalone = useAppSelector(isStandalone);
@@ -383,7 +385,7 @@ const UI: React.FC<IUI> = ({ children }) => {
 
     dispatch(fetchDraftStatuses());
 
-    dispatch(expandHomeTimeline({}, () => {
+    dispatch(expandHomeTimeline({}, intl, () => {
       dispatch(fetchSuggestionsForTimeline());
     }));
 

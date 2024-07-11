@@ -23,7 +23,7 @@ const DirectTimeline = () => {
   useDirectStream();
 
   useEffect(() => {
-    dispatch(expandDirectTimeline());
+    dispatch(expandDirectTimeline({}, intl));
   }, []);
 
   const handleSuggestion = (accountId: string) => {
@@ -31,7 +31,7 @@ const DirectTimeline = () => {
   };
 
   const handleLoadMore = (maxId: string) => {
-    dispatch(expandDirectTimeline({ url: next, maxId }));
+    dispatch(expandDirectTimeline({ url: next, maxId }, intl));
   };
 
   return (

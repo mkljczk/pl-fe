@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { expandRemoteTimeline } from 'soapbox/actions/timelines';
@@ -23,6 +23,7 @@ interface IRemoteTimeline {
 const RemoteTimeline: React.FC<IRemoteTimeline> = ({ params }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const intl = useIntl();
   const theme = useTheme();
 
   const instance = params?.instance as string;
@@ -40,13 +41,13 @@ const RemoteTimeline: React.FC<IRemoteTimeline> = ({ params }) => {
   };
 
   const handleLoadMore = (maxId: string) => {
-    dispatch(expandRemoteTimeline(instance, { url: next, maxId, onlyMedia }));
+    dispatch(expandRemoteTimeline(instance, { url: next, maxId, onlyMedia }, intl));
   };
 
   useRemoteStream({ instance, onlyMedia });
 
   useEffect(() => {
-    dispatch(expandRemoteTimeline(instance, { onlyMedia, maxId: undefined }));
+    dispatch(expandRemoteTimeline(instance, { onlyMedia, maxId: undefined }, intl));
   }, [onlyMedia]);
 
   return (

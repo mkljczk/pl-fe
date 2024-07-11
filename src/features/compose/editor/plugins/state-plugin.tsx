@@ -4,6 +4,7 @@ import { type LanguageIdentificationModel } from 'fasttext.wasm.js/dist/models/l
 import { $getRoot } from 'lexical';
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
+import { useIntl } from 'react-intl';
 
 import { addSuggestedLanguage, addSuggestedQuote, setEditorState } from 'soapbox/actions/compose';
 import { fetchStatus } from 'soapbox/actions/statuses';
@@ -19,6 +20,7 @@ interface IStatePlugin {
 
 const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   const dispatch = useAppDispatch();
+  const intl = useIntl();
   const [editor] = useLexicalComposerContext();
   const features = useFeatures();
 
@@ -41,7 +43,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
           break;
         }
 
-        const status = await dispatch(fetchStatus(id));
+        const status = await dispatch(fetchStatus(id, intl));
 
         if (status) {
           quoteId = status.id;

@@ -1,6 +1,6 @@
 import { List as ImmutableList } from 'immutable';
 import React, { useEffect, useRef } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
 import { openModal } from 'soapbox/actions/modals';
@@ -33,6 +33,7 @@ const LoadMoreMedia: React.FC<ILoadMoreMedia> = ({ maxId, onLoadMore }) => {
 
 const AccountGallery = () => {
   const dispatch = useAppDispatch();
+  const intl = useIntl();
   const { username } = useParams<{ username: string }>();
 
   const {
@@ -56,7 +57,7 @@ const AccountGallery = () => {
 
   const handleLoadMore = (maxId: string | null) => {
     if (account) {
-      dispatch(expandAccountMediaTimeline(account.id, { url: next, maxId }));
+      dispatch(expandAccountMediaTimeline(account.id, { url: next, maxId }, intl));
     }
   };
 
@@ -78,7 +79,7 @@ const AccountGallery = () => {
 
   useEffect(() => {
     if (account) {
-      dispatch(expandAccountMediaTimeline(account.id));
+      dispatch(expandAccountMediaTimeline(account.id, {}, intl));
     }
   }, [account?.id]);
 

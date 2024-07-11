@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchHashtag, followHashtag, unfollowHashtag } from 'soapbox/actions/tags';
 import { expandHashtagTimeline, clearTimeline } from 'soapbox/actions/timelines';
@@ -21,6 +21,7 @@ const HashtagTimeline: React.FC<IHashtagTimeline> = ({ params }) => {
 
   const features = useFeatures();
   const dispatch = useAppDispatch();
+  const intl = useIntl();
   const tag = useAppSelector((state) => state.tags.get(id));
   const next = useAppSelector(state => state.timelines.get(`hashtag:${id}`)?.next);
   const { isLoggedIn } = useLoggedIn();
@@ -28,7 +29,7 @@ const HashtagTimeline: React.FC<IHashtagTimeline> = ({ params }) => {
   const isMobile = useIsMobile();
 
   const handleLoadMore = (maxId: string) => {
-    dispatch(expandHashtagTimeline(id, { url: next, maxId }));
+    dispatch(expandHashtagTimeline(id, { url: next, maxId }, intl));
   };
 
   const handleFollow = () => {
@@ -42,7 +43,7 @@ const HashtagTimeline: React.FC<IHashtagTimeline> = ({ params }) => {
   useHashtagStream(id);
 
   useEffect(() => {
-    dispatch(expandHashtagTimeline(id));
+    dispatch(expandHashtagTimeline(id, {}, intl));
     dispatch(fetchHashtag(id));
   }, [id]);
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { fetchAccountByUsername } from 'soapbox/actions/accounts';
@@ -25,6 +25,7 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const settings = useSettings();
+  const intl = useIntl();
 
   const { account } = useAccountLookup(params.username, { withRelationship: true });
   const [accountLoading, setAccountLoading] = useState<boolean>(!account);
@@ -50,19 +51,19 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
 
   useEffect(() => {
     if (account && !withReplies) {
-      dispatch(expandAccountFeaturedTimeline(account.id));
+      dispatch(expandAccountFeaturedTimeline(account.id, intl));
     }
   }, [account?.id, withReplies]);
 
   useEffect(() => {
     if (account) {
-      dispatch(expandAccountTimeline(account.id, { withReplies }));
+      dispatch(expandAccountTimeline(account.id, { withReplies }, intl));
     }
   }, [account?.id, withReplies]);
 
   const handleLoadMore = (maxId: string) => {
     if (account) {
-      dispatch(expandAccountTimeline(account.id, { url: next, maxId, withReplies }));
+      dispatch(expandAccountTimeline(account.id, { url: next, maxId, withReplies }, intl));
     }
   };
 

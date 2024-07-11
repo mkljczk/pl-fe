@@ -1,4 +1,5 @@
 import { isLoggedIn } from 'soapbox/utils/auth';
+import { getFeatures } from 'soapbox/utils/features';
 import { shouldHaveCard } from 'soapbox/utils/status';
 
 import api from '../api';
@@ -6,8 +7,10 @@ import api from '../api';
 import { setComposeToStatus } from './compose';
 import { importFetchedStatus, importFetchedStatuses } from './importer';
 import { openModal } from './modals';
+import { getSettings } from './settings';
 import { deleteFromTimelines } from './timelines';
 
+import type { IntlShape } from 'react-intl';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity, Status } from 'soapbox/types/entities';
 
@@ -114,13 +117,18 @@ const editStatus = (id: string) => (dispatch: AppDispatch, getState: () => RootS
   });
 };
 
-const fetchStatus = (id: string) =>
+const fetchStatus = (id: string, intl?: IntlShape) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const skipLoading = statusExists(getState, id);
 
     dispatch({ type: STATUS_FETCH_REQUEST, id, skipLoading });
 
-    return api(getState)(`/api/v1/statuses/${id}`).then(({ json: status }) => {
+    const params = new URLSearchParams();
+    if (intl && getSettings(getState()).get('autoTranslate')) {
+      params.set('language', intl.locale);
+    }
+
+    return api(getState)(`/api/v1/statuses/${id}`, { params }).then(({ json: status }) => {
       dispatch(importFetchedStatus(status));
       dispatch({ type: STATUS_FETCH_SUCCESS, status, skipLoading });
       return status;
@@ -159,11 +167,16 @@ const deleteStatus = (id: string, withRedraft = false) =>
 const updateStatus = (status: APIEntity) => (dispatch: AppDispatch) =>
   dispatch(importFetchedStatus(status));
 
-const fetchContext = (id: string) =>
+const fetchContext = (id: string, intl?: IntlShape) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: CONTEXT_FETCH_REQUEST, id });
 
-    return api(getState)(`/api/v1/statuses/${id}/context`).then(({ json: context }) => {
+    const params = new URLSearchParams();
+    if (intl && getSettings(getState()).get('autoTranslate')) {
+      params.set('language', intl.locale);
+    }
+
+    return api(getState)(`/api/v1/statuses/${id}/context`, { params }).then(({ json: context }) => {
       if (Array.isArray(context)) {
         // Mitra: returns a list of statuses
         dispatch(importFetchedStatuses(context));
@@ -186,14 +199,11 @@ const fetchContext = (id: string) =>
     });
   };
 
-const fetchStatusWithContext = (id: string) =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    await Promise.all([
-      dispatch(fetchContext(id)),
-      dispatch(fetchStatus(id)),
-    ]);
-    return { next: undefined };
-  };
+const fetchStatusWithContext = (id: string, intl?: IntlShape) =>
+  async (dispatch: AppDispatch) => Promise.all([
+    dispatch(fetchContext(id, intl)),
+    dispatch(fetchStatus(id, intl)),
+  ]);
 
 const muteStatus = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -258,26 +268,78 @@ const toggleStatusHidden = (status: Status) => {
   }
 };
 
-const translateStatus = (id: string, targetLanguage?: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  dispatch({ type: STATUS_TRANSLATE_REQUEST, id });
+let TRANSLATIONS_QUEUE: Set<string> = new Set();
+let TRANSLATIONS_TIMEOUT: NodeJS.Timeout | null = null;
 
-  api(getState)(`/api/v1/statuses/${id}/translate`, {
-    body: JSON.stringify({ target_language: targetLanguage }),
-    method: 'POST',
-  }).then(response => {
-    dispatch({
-      type: STATUS_TRANSLATE_SUCCESS,
-      id,
-      translation: response.json,
-    });
-  }).catch(error => {
-    dispatch({
-      type: STATUS_TRANSLATE_FAIL,
-      id,
-      error,
-    });
-  });
-};
+const translateStatus = (id: string, targetLanguage?: string, lazy?: boolean) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    const features = getFeatures(getState().instance);
+
+    dispatch({ type: STATUS_TRANSLATE_REQUEST, id });
+
+    const handleTranslateMany = () => {
+      const copy = [...TRANSLATIONS_QUEUE];
+      TRANSLATIONS_QUEUE = new Set();
+      if (TRANSLATIONS_TIMEOUT) clearTimeout(TRANSLATIONS_TIMEOUT);
+
+      api(getState)('/api/v1/pl/statuses/translate', {
+        method: 'POST',
+        body: JSON.stringify({
+          ids: copy,
+          target_language: targetLanguage,
+        }),
+      }).then((response) => {
+        response.json.forEach((translation: APIEntity) => {
+          dispatch({
+            type: STATUS_TRANSLATE_SUCCESS,
+            id: translation.id,
+            translation: translation,
+          });
+
+          copy
+            .filter((statusId) => !response.json.some(({ id }: APIEntity) => id === statusId))
+            .forEach((id) => dispatch({
+              type: STATUS_TRANSLATE_FAIL,
+              id,
+            }));
+        });
+      }).catch(error => {
+        dispatch({
+          type: STATUS_TRANSLATE_FAIL,
+          id,
+          error,
+        });
+      });
+    };
+
+    if (features.lazyTranslations && lazy) {
+      TRANSLATIONS_QUEUE.add(id);
+
+      if (TRANSLATIONS_TIMEOUT) clearTimeout(TRANSLATIONS_TIMEOUT);
+      TRANSLATIONS_TIMEOUT = setTimeout(() => handleTranslateMany(), 3000);
+    } else if (features.lazyTranslations && TRANSLATIONS_QUEUE.size) {
+      TRANSLATIONS_QUEUE.add(id);
+
+      handleTranslateMany();
+    } else {
+      api(getState)(`/api/v1/statuses/${id}/translate`, {
+        body: JSON.stringify({ target_language: targetLanguage }),
+        method: 'POST',
+      }).then(response => {
+        dispatch({
+          type: STATUS_TRANSLATE_SUCCESS,
+          id,
+          translation: response.json,
+        });
+      }).catch(error => {
+        dispatch({
+          type: STATUS_TRANSLATE_FAIL,
+          id,
+          error,
+        });
+      });
+    }
+  };
 
 const undoStatusTranslation = (id: string) => ({
   type: STATUS_TRANSLATE_UNDO,

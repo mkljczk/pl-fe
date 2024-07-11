@@ -27,10 +27,10 @@ const CommunityTimeline = () => {
   const isMobile = useIsMobile();
 
   const handleLoadMore = (maxId: string) => {
-    dispatch(expandCommunityTimeline({ url: next, maxId, onlyMedia }));
+    dispatch(expandCommunityTimeline({ url: next, maxId, onlyMedia }, intl));
   };
 
-  const handleRefresh = () => dispatch(expandCommunityTimeline({ onlyMedia }));
+  const handleRefresh = () => dispatch(expandCommunityTimeline({ onlyMedia }, intl));
 
   useCommunityStream({ onlyMedia });
 

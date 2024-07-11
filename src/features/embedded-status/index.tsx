@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { fetchStatus } from 'soapbox/actions/statuses';
@@ -21,6 +22,7 @@ const EmbeddedStatus: React.FC<IEmbeddedStatus> = ({ params }) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const getStatus = useCallback(makeGetStatus(), []);
+  const intl = useIntl();
 
   const status = useAppSelector(state => getStatus(state, { id: params.statusId }));
 
@@ -31,7 +33,7 @@ const EmbeddedStatus: React.FC<IEmbeddedStatus> = ({ params }) => {
     // https://stackoverflow.com/a/71531211
     history.block();
 
-    dispatch(fetchStatus(params.statusId))
+    dispatch(fetchStatus(params.statusId, intl))
       .then(() => setLoading(false))
       .catch(() => setLoading(false));
   }, []);

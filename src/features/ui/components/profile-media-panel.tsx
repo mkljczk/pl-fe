@@ -1,6 +1,6 @@
 import { List as ImmutableList } from 'immutable';
 import React, { useState, useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { openModal } from 'soapbox/actions/modals';
 import { expandAccountMediaTimeline } from 'soapbox/actions/timelines';
@@ -19,6 +19,7 @@ interface IProfileMediaPanel {
 
 const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
   const dispatch = useAppDispatch();
+  const intl = useIntl();
 
   const [loading, setLoading] = useState(true);
 
@@ -39,7 +40,7 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
     setLoading(true);
 
     if (account) {
-      dispatch(expandAccountMediaTimeline(account.id))
+      dispatch(expandAccountMediaTimeline(account.id, {}, intl))
         // @ts-ignore yes it does
         .then(() => setLoading(false))
         .catch(() => {});

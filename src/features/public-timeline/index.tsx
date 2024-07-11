@@ -43,15 +43,15 @@ const CommunityTimeline = () => {
   };
 
   const handleLoadMore = (maxId: string) => {
-    dispatch(expandPublicTimeline({ url: next, maxId, onlyMedia }));
+    dispatch(expandPublicTimeline({ url: next, maxId, onlyMedia }, intl));
   };
 
-  const handleRefresh = () => dispatch(expandPublicTimeline({ onlyMedia }));
+  const handleRefresh = () => dispatch(expandPublicTimeline({ onlyMedia }, intl));
 
   usePublicStream({ onlyMedia });
 
   useEffect(() => {
-    dispatch(expandPublicTimeline({ onlyMedia }));
+    dispatch(expandPublicTimeline({ onlyMedia }, intl));
   }, [onlyMedia]);
 
   return (

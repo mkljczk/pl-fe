@@ -200,7 +200,7 @@ const ReportModal = ({ onClose }: IReportModal) => {
 
   useEffect(() => {
     if (account?.id) {
-      dispatch(expandAccountTimeline(account.id, { withReplies: true, maxId: null }));
+      dispatch(expandAccountTimeline(account.id, { withReplies: true, maxId: null }, intl));
     }
   }, [account?.id]);
 

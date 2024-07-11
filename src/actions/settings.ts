@@ -1,4 +1,4 @@
-import { Map as ImmutableMap, List as ImmutableList } from 'immutable';
+import { Map as ImmutableMap, List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
 import { defineMessage } from 'react-intl';
 import { createSelector } from 'reselect';
 
@@ -43,6 +43,8 @@ const defaultSettings = ImmutableMap({
   autoloadTimelines: true,
   autoloadMore: false,
   preserveSpoilers: true,
+  autoTranslate: false,
+  knownLanguages: ImmutableOrderedSet(),
 
   systemFont: false,
   demetricator: false,

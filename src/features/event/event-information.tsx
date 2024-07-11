@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FormattedDate, FormattedMessage } from 'react-intl';
+import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
 import { openModal } from 'soapbox/actions/modals';
 import { fetchStatus } from 'soapbox/actions/statuses';
@@ -23,6 +23,7 @@ interface IEventInformation {
 const EventInformation: React.FC<IEventInformation> = ({ params }) => {
   const dispatch = useAppDispatch();
   const getStatus = useCallback(makeGetStatus(), []);
+  const intl = useIntl();
 
   const status = useAppSelector(state => getStatus(state, { id: params.statusId })) as StatusEntity;
 
@@ -31,7 +32,7 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 
   useEffect(() => {
-    dispatch(fetchStatus(params.statusId)).then(() => {
+    dispatch(fetchStatus(params.statusId, intl)).then(() => {
       setIsLoaded(true);
     }).catch(() => {
       setIsLoaded(true);

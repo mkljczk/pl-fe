@@ -83,6 +83,8 @@ interface IText extends Pick<React.HTMLAttributes<HTMLParagraphElement>, 'danger
   weight?: keyof typeof weights;
   /** Tooltip title. */
   title?: string;
+  /** Extra CSS styles */
+  style?: React.CSSProperties;
 }
 
 /** UI-friendly text container with dark mode support. */

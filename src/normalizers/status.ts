@@ -96,7 +96,8 @@ const StatusRecord = ImmutableRecord({
   hidden: null as boolean | null,
   search_index: '',
   showFiltered: true,
-  translation: null as ImmutableMap<string, string> | null,
+  translation: null as ImmutableMap<string, string> | null | false,
+  translating: false,
   currentLanguage: null as string | null,
 });
 
@@ -187,6 +188,14 @@ const fixQuote = (status: ImmutableMap<string, any>) =>
     status.update('quotes_count', quotes_count => quotes_count || status.getIn(['pleroma', 'quotes_count'], 0));
     status.deleteIn(['pleroma', 'quotes_count']);
   });
+
+// Move the translation to the top-level
+const fixTranslation = (status: ImmutableMap<string, any>) => {
+  return status.withMutations(status => {
+    status.update('translation', translation => translation || status.getIn(['pleroma', 'translation']) || null);
+    status.deleteIn(['pleroma', 'translation']);
+  });
+};
 
 /** If the status contains spoiler text, treat it as sensitive. */
 const fixSensitivity = (status: ImmutableMap<string, any>) => {
@@ -297,6 +306,7 @@ const normalizeStatus = (status: Record<string, any>) => StatusRecord(
     fixMentionsOrder(status);
     addSelfMention(status);
     fixQuote(status);
+    fixTranslation(status);
     fixSensitivity(status);
     normalizeEvent(status);
     normalizeReactions(status);

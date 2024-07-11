@@ -1,10 +1,11 @@
+import { Set as ImmutableSet } from 'immutable';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from 'soapbox/actions/settings';
 import List, { ListItem } from 'soapbox/components/list';
 import { Form } from 'soapbox/components/ui';
-import { SelectDropdown } from 'soapbox/features/forms';
+import { Mutliselect, SelectDropdown } from 'soapbox/features/forms';
 import SettingToggle from 'soapbox/features/notifications/components/setting-toggle';
 import { useAppDispatch, useFeatures, useSettings } from 'soapbox/hooks';
 
@@ -98,6 +99,10 @@ const Preferences = () => {
 
   const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, path: string[]) => {
     dispatch(changeSetting(path, event.target.value, { showAlert: true }));
+  };
+
+  const onSelectMultiple = (selectedList: string[], path: string[]) => {
+    dispatch(changeSetting(path, ImmutableSet(selectedList.sort((a, b) => a.localeCompare(b))), { showAlert: true }));
   };
 
   const onToggleChange = (key: string[], checked: boolean) => {
@@ -240,6 +245,24 @@ const Preferences = () => {
           <SettingToggle settings={settings} settingPath={['autoloadMore']} onChange={onToggleChange} />
         </ListItem>
       </List>
+
+      {features.translations && (
+        <List>
+          <ListItem label={<FormattedMessage id='preferences.fields.auto_translate_label' defaultMessage='Automatically translate posts in unknown languages' />}>
+            <SettingToggle settings={settings} settingPath={['autoTranslate']} onChange={onToggleChange} />
+          </ListItem>
+
+          <ListItem className='!overflow-visible' label={<FormattedMessage id='preferences.fields.known_languages_label' defaultMessage='Languages you know' />}>
+            <Mutliselect
+              className='max-w-[200px]'
+              items={languages}
+              value={settings.knownLanguages as string[] | undefined}
+              onChange={(selectedList) => onSelectMultiple(selectedList, ['knownLanguages'])}
+              disabled={!settings.autoTranslate}
+            />
+          </ListItem>
+        </List>
+      )}
     </Form>
   );
 };

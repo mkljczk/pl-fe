@@ -27,7 +27,7 @@ const HomeTimeline: React.FC = () => {
   const next = useAppSelector(state => state.timelines.get('home')?.next);
 
   const handleLoadMore = (maxId: string) => {
-    dispatch(expandHomeTimeline({ url: next, maxId }));
+    dispatch(expandHomeTimeline({ url: next, maxId }, intl));
   };
 
   // Mastodon generates the feed in Redis, and can return a partial timeline
@@ -35,7 +35,7 @@ const HomeTimeline: React.FC = () => {
   const checkIfReloadNeeded = () => {
     if (isPartial) {
       polling.current = setInterval(() => {
-        dispatch(expandHomeTimeline());
+        dispatch(expandHomeTimeline({}, intl));
       }, 3000);
     } else {
       stopPolling();
@@ -49,7 +49,7 @@ const HomeTimeline: React.FC = () => {
     }
   };
 
-  const handleRefresh = () => dispatch(expandHomeTimeline());
+  const handleRefresh = () => dispatch(expandHomeTimeline({}, intl));
 
   useEffect(() => {
     checkIfReloadNeeded();

@@ -5,6 +5,7 @@ import { useLoggedIn } from 'soapbox/hooks';
 
 import { useTimelineStream } from './useTimelineStream';
 
+import type { IntlShape } from 'react-intl';
 import type { AppDispatch } from 'soapbox/store';
 
 const useUserStream = () => {
@@ -21,7 +22,7 @@ const useUserStream = () => {
 };
 
 /** Refresh home timeline and notifications. */
-const refresh = (dispatch: AppDispatch, done?: () => void) =>
-  dispatch(expandHomeTimeline({}, () => dispatch(expandNotifications({}, done))));
+const refresh = (dispatch: AppDispatch, intl?: IntlShape, done?: () => void) =>
+  dispatch(expandHomeTimeline({}, intl, () => dispatch(expandNotifications({}, done))));
 
 export { useUserStream };

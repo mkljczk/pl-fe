@@ -1,8 +1,15 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import MultiselectReactDropdown from 'multiselect-react-dropdown';
+import React, { useMemo, useState } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Select } from '../../components/ui';
+import { Icon, Select } from '../../components/ui';
+
+const messages = defineMessages({
+  selectPlaceholder: { id: 'select.placeholder', defaultMessage: 'Select' },
+  selectNoOptions: { id: 'select.no_options', defaultMessage: 'No options available' },
+});
 
 interface IInputContainer {
   label?: React.ReactNode;
@@ -141,6 +148,47 @@ const SelectDropdown: React.FC<ISelectDropdown> = (props) => {
   ) : selectElem;
 };
 
+interface IMultiselect {
+  className?: string;
+  label?: React.ReactNode;
+  hint?: React.ReactNode;
+  items: Record<string, string>;
+  value?: string[];
+  onChange?: ((values: string[]) => void);
+  disabled?: boolean;
+}
+
+const Mutliselect: React.FC<IMultiselect> = (props) => {
+  const intl = useIntl();
+  const { label, hint, items, value, onChange, disabled } = props;
+
+  const options = useMemo(() => Object.entries(items).map(([key, value]) => ({ key, value })), [items]);
+  const selectedValues = value?.map(key => options.find(option => option.key === key)).filter(value => value);
+
+  const handleChange = (values: Record<'key' | 'value', string>[]) => {
+    onChange?.(values.map(({ key }) => key));
+  };
+
+  const selectElem = (
+    <MultiselectReactDropdown
+      className='plfe-multiselect'
+      options={options}
+      selectedValues={selectedValues}
+      onSelect={handleChange}
+      onRemove={handleChange}
+      displayValue='value'
+      disable={disabled}
+      customCloseIcon={<Icon className='ml-1 h-4 w-4 hover:cursor-pointer' src={require('@tabler/icons/outline/circle-x.svg')} />}
+      placeholder={intl.formatMessage(messages.selectPlaceholder)}
+      emptyRecordMsg={intl.formatMessage(messages.selectNoOptions)}
+    />
+  );
+
+  return label ? (
+    <LabelInputContainer label={label} hint={hint}>{selectElem}</LabelInputContainer>
+  ) : selectElem;
+};
+
 interface ITextInput {
   name?: string;
   onChange?: React.ChangeEventHandler;
@@ -192,6 +240,7 @@ export {
   SimpleInput,
   Checkbox,
   SelectDropdown,
+  Mutliselect,
   TextInput,
   FileChooser,
   FileChooserLogo,

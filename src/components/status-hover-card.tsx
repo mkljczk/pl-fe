@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect, useState, useCallback } from 'react';
+import { useIntl } from 'react-intl';
 import { usePopper } from 'react-popper';
 import { useHistory } from 'react-router-dom';
 
@@ -21,6 +22,7 @@ interface IStatusHoverCard {
 /** Popup status preview that appears when hovering reply to */
 const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
   const dispatch = useAppDispatch();
+  const intl = useIntl();
   const history = useHistory();
 
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
@@ -31,7 +33,7 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
 
   useEffect(() => {
     if (statusId && !status) {
-      dispatch(fetchStatus(statusId));
+      dispatch(fetchStatus(statusId, intl));
     }
   }, [statusId, status]);
 

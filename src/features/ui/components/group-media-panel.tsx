@@ -1,6 +1,6 @@
 import { List as ImmutableList } from 'immutable';
 import React, { useState, useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { openModal } from 'soapbox/actions/modals';
 import { expandGroupMediaTimeline } from 'soapbox/actions/timelines';
@@ -18,6 +18,7 @@ interface IGroupMediaPanel {
 
 const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
   const dispatch = useAppDispatch();
+  const intl = useIntl();
 
   const [loading, setLoading] = useState(true);
 
@@ -41,7 +42,7 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
     setLoading(true);
 
     if (group && (isMember || !isPrivate)) {
-      dispatch(expandGroupMediaTimeline(group.id))
+      dispatch(expandGroupMediaTimeline(group.id, {}, intl))
       // @ts-ignore
         .then(() => setLoading(false))
         .catch(() => {});

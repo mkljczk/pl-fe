@@ -12,7 +12,6 @@ import GroupMemberListItem from './components/group-member-list-item';
 
 import type { Group } from 'soapbox/types/entities';
 
-
 interface IGroupMembers {
   params: { groupId: string };
 }
