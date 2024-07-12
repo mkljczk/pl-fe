@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 import clsx from 'clsx';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link, NavLink } from 'react-router-dom';
 
@@ -84,7 +84,10 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   const followRequestsCount = useAppSelector((state) => state.user_lists.follow_requests.items.count());
   const draftCount = useAppSelector((state) => state.draft_statuses.size);
   const [sidebarVisible, setSidebarVisible] = useState(sidebarOpen);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const closeButtonRef = React.useRef(null);
 
   const [switcher, setSwitcher] = React.useState(false);
@@ -120,15 +123,29 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
     </a>
   );
 
-  React.useEffect(() => {
+  const handleOutsideClick: React.MouseEventHandler = (e) => {
+    if ((e.target as HTMLElement).isSameNode(e.currentTarget)) handleClose();
+  };
+
+  const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
+    if (e.key === 'Escape') handleClose();
+  };
+
+  const handleTouchStart: React.TouchEventHandler<HTMLDivElement> = (e) => setTouchStart(e.targetTouches[0].clientX);
+  const handleTouchMove: React.TouchEventHandler<HTMLDivElement> = (e) => setTouchEnd(e.targetTouches[0].clientX);
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 100) {
+      handleClose();
+    }
+  };
+
+  useEffect(() => {
     dispatch(fetchOwnAccounts());
   }, []);
 
-  React.useEffect(() => {
-    // eslint-disable-next-line compat/compat
-    requestAnimationFrame(() => {
-      setSidebarVisible(sidebarOpen);
-    });
+  useEffect(() => {
+    setTimeout(() => setSidebarVisible(sidebarOpen), sidebarOpen ? 0 : 150);
   }, [sidebarOpen]);
 
   return (
@@ -136,26 +153,34 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
       aria-expanded={sidebarOpen}
       className={
         clsx({
-          'z-[1000]': sidebarOpen,
-          hidden: !sidebarOpen,
+          'z-[1000]': sidebarOpen || sidebarVisible,
+          hidden: !(sidebarOpen || sidebarVisible),
         })
       }
+      ref={containerRef}
+      onKeyDown={handleKeyDown}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <div
         className={clsx('fixed inset-0 bg-gray-500 black:bg-gray-900 no-reduce-motion:transition-opacity dark:bg-gray-700', {
-          'opacity-0': !sidebarVisible,
-          'opacity-90': sidebarVisible,
+          'opacity-0': !(sidebarVisible && sidebarOpen),
+          'opacity-90': (sidebarVisible && sidebarOpen),
         })}
         role='button'
         onClick={handleClose}
       />
 
-      <div className='fixed inset-0 z-[1000] flex'>
+      <div
+        className='fixed inset-0 z-[1000] flex'
+        onClick={handleOutsideClick}
+      >
         <div
           className={
             clsx({
               'flex flex-col flex-1 bg-white black:bg-black dark:bg-primary-900 -translate-x-full rtl:translate-x-full w-full max-w-xs no-reduce-motion:transition-transform ease-in-out': true,
-              '!translate-x-0': sidebarVisible,
+              '!translate-x-0': sidebarVisible && sidebarOpen,
             })
           }
         >
