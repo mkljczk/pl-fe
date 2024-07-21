@@ -1391,7 +1391,6 @@
   "soapbox_config.sentry_dsn_label": "Sentry DSN",
   "soapbox_config.tile_server_attribution_label": "Map tiles attribution",
   "soapbox_config.tile_server_label": "Map tile server",
-  "soapbox_config.verified_can_edit_name_label": "Allow verified users to edit their own display name.",
   "status.add_known_language": "Do not auto-translate posts in {language}.",
   "status.admin_account": "Moderate @{name}",
   "status.admin_status": "Open this post in the moderation interface",

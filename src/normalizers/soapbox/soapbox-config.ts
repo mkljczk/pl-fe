@@ -95,7 +95,6 @@ const SoapboxConfigRecord = ImmutableRecord({
     '😩',
   ]),
   verifiedIcon: '',
-  verifiedCanEditName: false,
   displayFqn: true,
   cryptoAddresses: ImmutableList<CryptoAddress>(),
   cryptoDonatePanel: ImmutableMap({
