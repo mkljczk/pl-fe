@@ -68,7 +68,7 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
 
     const element = node.current.querySelector('input#search') as HTMLInputElement;
 
-    if (element) {
+    if (element?.checkVisibility()) {
       element.focus();
     } else {
       history.push('/search');

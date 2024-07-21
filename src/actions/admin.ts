@@ -90,7 +90,7 @@ const fetchConfig = () =>
 const updateConfig = (configs: Record<string, any>[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: ADMIN_CONFIG_UPDATE_REQUEST, configs });
-    return api(getState)('/api/v1/pleroma/admin/config', { method: 'POST', body: JSON.stringify(configs) })
+    return api(getState)('/api/v1/pleroma/admin/config', { method: 'POST', body: JSON.stringify({ configs }) })
       .then(({ json: data }) => {
         dispatch({ type: ADMIN_CONFIG_UPDATE_SUCCESS, configs: data.configs, needsReboot: data.need_reboot });
       }).catch(error => {
