@@ -5,7 +5,7 @@ import { importFetchedAccount, importFetchedAccounts } from 'soapbox/actions/imp
 import { getNextLink } from 'soapbox/api';
 import { ChatWidgetScreens, useChatContext } from 'soapbox/contexts/chat-context';
 import { useStatContext } from 'soapbox/contexts/stat-context';
-import { useApi, useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
+import { useApi, useAppDispatch, useAppSelector, useFeatures, useLoggedIn, useOwnAccount } from 'soapbox/hooks';
 import { normalizeChatMessage } from 'soapbox/normalizers';
 import { ChatMessage } from 'soapbox/types/entities';
 import { reOrderChatListItems } from 'soapbox/utils/chats';
@@ -87,6 +87,7 @@ const useChats = () => {
   const features = useFeatures();
   const { setUnreadChatsCount } = useStatContext();
   const fetchRelationships = useFetchRelationships();
+  const { me } = useLoggedIn();
 
   const getChats = async (pageParam?: any): Promise<PaginatedResult<IChat>> => {
     const endpoint = features.chatsV2 ? '/api/v2/pleroma/chats' : '/api/v1/pleroma/chats';
@@ -115,7 +116,7 @@ const useChats = () => {
     queryKey: ['chats', 'search'],
     queryFn: ({ pageParam }) => getChats(pageParam),
     placeholderData: keepPreviousData,
-    enabled: features.chats,
+    enabled: features.chats && !!me,
     initialPageParam: { link: undefined as string | undefined },
     getNextPageParam: (config) => {
       if (config.hasMore) {

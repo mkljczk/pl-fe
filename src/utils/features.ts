@@ -358,6 +358,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === MASTODON && gte(v.version, '3.5.0'),
       v.software === TAKAHE && gte(v.version, '0.8.0'),
+      v.software === MITRA,
       features.includes('editing'),
     ]),
 
@@ -491,6 +492,7 @@ const getInstanceFeatures = (instance: Instance) => {
     followRequests: any([
       v.software === MASTODON,
       v.software === PLEROMA,
+      v.software === MITRA,
     ]),
 
     /**
@@ -712,6 +714,7 @@ const getInstanceFeatures = (instance: Instance) => {
     profileDirectory: any([
       v.software === FRIENDICA,
       v.software === MASTODON && gte(v.compatVersion, '3.0.0'),
+      v.software === MITRA,
       features.includes('profile_directory'),
     ]),
 
@@ -723,6 +726,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === PLEROMA,
       v.software === TAKAHE && gte(v.version, '0.7.0'),
+      v.software === MITRA,
     ]),
 
     /**
@@ -779,6 +783,7 @@ const getInstanceFeatures = (instance: Instance) => {
     richText: any([
       v.software === MASTODON && v.build === GLITCH,
       v.software === PLEROMA,
+      v.software === MITRA,
     ]),
 
     /**
