@@ -67,7 +67,7 @@ const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
     defaultMessage: '{name} has requested to follow you',
   },
   mention: {
-    id: 'notification.mentioed',
+    id: 'notification.mention',
     defaultMessage: '{name} mentioned you',
   },
   favourite: {

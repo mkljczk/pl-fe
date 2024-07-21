@@ -31,7 +31,7 @@ const messages = defineMessages({
   multipleLanguages: { id: 'compose.language_dropdown.more_languages', defaultMessage: '{count, plural, one {# more language} other {# more languages}}' },
   search: { id: 'compose.language_dropdown.search', defaultMessage: 'Search language…' },
   addLanguage: { id: 'compose.language_dropdown.add_language', defaultMessage: 'Add language' },
-  deleteLanguage: { id: 'compose.language_dropdown.delete_language', defaultMessage: 'DElete language' },
+  deleteLanguage: { id: 'compose.language_dropdown.delete_language', defaultMessage: 'Delete language' },
 });
 
 interface ILanguageDropdown {

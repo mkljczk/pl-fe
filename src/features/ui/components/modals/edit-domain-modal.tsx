@@ -63,7 +63,7 @@ const EditDomainModal: React.FC<IEditDomainModal> = ({ onClose, domainId }) => {
       onClose={onClickClose}
       title={domainId
         ? <FormattedMessage id='column.admin.edit_domain' defaultMessage='Edit domain' />
-        : <FormattedMessage id='column.admin.create_domain' defaultMessage='Create domaian' />}
+        : <FormattedMessage id='column.admin.create_domain' defaultMessage='Create domain' />}
       confirmationAction={handleSubmit}
       confirmationText={intl.formatMessage(messages.save)}
       confirmationDisabled={isCreating || isUpdating}
@@ -90,7 +90,7 @@ const EditDomainModal: React.FC<IEditDomainModal> = ({ onClose, domainId }) => {
               <FormattedMessage id='admin.edit_domain.fields.public_label' defaultMessage='Public' />
             </Text>
             <Text size='xs' tag='span' theme='muted'>
-              <FormattedMessage id='admin.edit_domain.fields.all_day_hint' defaultMessage='When checked, everyone can sign up for an username with this domain' />
+              <FormattedMessage id='admin.edit_domain.fields.public_hint' defaultMessage='When checked, everyone can sign up for an username with this domain' />
             </Text>
           </Stack>
         </HStack>

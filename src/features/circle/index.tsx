@@ -22,7 +22,7 @@ const messages = defineMessages({
   fetchingFavourites: { id: 'interactions_circle.state.fetching_favourites', defaultMessage: 'Fetching likes' },
   fetchingAvatars: { id: 'interactions_circle.state.fetching_avatars', defaultMessage: 'Fetching avatars' },
   drawing: { id: 'interactions_circle.state.drawing', defaultMessage: 'Drawing circle' },
-  done: { id: 'interactions_circle.state.done', defaultMessage: 'Drawing circle' },
+  done: { id: 'interactions_circle.state.done', defaultMessage: 'Finalizing…' },
 });
 
 const Circle: React.FC = () => {

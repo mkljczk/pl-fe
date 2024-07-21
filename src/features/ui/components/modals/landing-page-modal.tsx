@@ -7,7 +7,6 @@ import { Text, Button, Icon, Modal } from 'soapbox/components/ui';
 import { useRegistrationStatus, useSoapboxConfig } from 'soapbox/hooks';
 
 const messages = defineMessages({
-  download: { id: 'landing_page_modal.download', defaultMessage: 'Download' },
   helpCenter: { id: 'landing_page_modal.help_center', defaultMessage: 'Help Center' },
   login: { id: 'header.login.label', defaultMessage: 'Log in' },
   register: { id: 'header.register.label', defaultMessage: 'Register' },
