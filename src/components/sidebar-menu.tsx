@@ -11,7 +11,7 @@ import { useAccount } from 'soapbox/api/hooks';
 import Account from 'soapbox/components/account';
 import { Stack, Divider, HStack, Icon, IconButton, Text } from 'soapbox/components/ui';
 import ProfileStats from 'soapbox/features/ui/components/profile-stats';
-import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
+import { useAppDispatch, useAppSelector, useFeatures, useInstance } from 'soapbox/hooks';
 import { makeGetOtherAccounts } from 'soapbox/selectors';
 
 import type { List as ImmutableList } from 'immutable';
@@ -86,6 +86,9 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   const [sidebarVisible, setSidebarVisible] = useState(sidebarOpen);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+
+  const instance = useInstance();
+  const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const closeButtonRef = React.useRef(null);
@@ -297,6 +300,15 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                           onClick={onClose}
                         />
                       )}
+
+                      {features.bubbleTimeline && (
+                        <SidebarLink
+                          to='/timeline/bubble'
+                          icon={require('@tabler/icons/outline/chart-bubble.svg')}
+                          text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                          onClick={onClose}
+                        />
+                      )}
                     </>}
 
                     <Divider />
@@ -368,6 +380,35 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                 </Stack>
               ) : (
                 <Stack space={4}>
+                  {features.publicTimeline && !restrictUnauth.timelines.local && <>
+                    <SidebarLink
+                      to='/timeline/local'
+                      icon={features.federating ? require('@tabler/icons/outline/affiliate.svg') : require('@tabler/icons/outline/world.svg')}
+                      text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
+                      onClick={onClose}
+                    />
+
+                    {features.federating && !restrictUnauth.timelines.federated && (
+                      <SidebarLink
+                        to='/timeline/fediverse'
+                        icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
+                        text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
+                        onClick={onClose}
+                      />
+                    )}
+
+                    {features.bubbleTimeline && !restrictUnauth.timelines.bubble && (
+                      <SidebarLink
+                        to='/timeline/bubble'
+                        icon={require('@tabler/icons/outline/chart-bubble.svg')}
+                        text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                        onClick={onClose}
+                      />
+                    )}
+
+                    <Divider />
+                  </>}
+
                   <SidebarLink
                     to='/login'
                     icon={require('@tabler/icons/outline/login.svg')}

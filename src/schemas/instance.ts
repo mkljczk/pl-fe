@@ -121,6 +121,7 @@ const pleromaSchema = coerceObject({
         remote: z.boolean().catch(false),
       }),
       timelines: coerceObject({
+        bubble: z.boolean().catch(false),
         federated: z.boolean().catch(false),
         local: z.boolean().catch(false),
       }),

@@ -241,6 +241,14 @@ const SidebarNavigation = () => {
                 text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
               />
             )}
+
+            {(features.bubbleTimeline && (account || !restrictUnauth.timelines.bubble)) && (
+              <SidebarNavigationLink
+                to='/timeline/bubble'
+                icon={require('@tabler/icons/outline/chart-bubble.svg')}
+                text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+              />
+            )}
           </>
         )}
 

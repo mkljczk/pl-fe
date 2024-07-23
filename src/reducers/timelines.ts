@@ -250,7 +250,7 @@ const getTimelinesForStatus = (status: APIEntity) => {
     case 'direct':
       return ['direct'];
     case 'public':
-      return ['home', 'community', 'public'];
+      return ['home', 'community', 'public', 'bubble'];
     default:
       return ['home'];
   }
