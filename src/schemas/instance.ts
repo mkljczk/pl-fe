@@ -197,6 +197,11 @@ const instanceV1Schema = coerceObject({
 });
 
 const instanceSchema = z.preprocess((data: any) => {
+  // Detect GoToSocial
+  if (typeof data.configuration?.accounts?.allow_custom_css === 'boolean') {
+    data.version = `0.0.0 (compatible; GoToSocial ${data.version})`;
+  }
+
   if (data.domain) return data;
 
   const {

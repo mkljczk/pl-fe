@@ -30,6 +30,7 @@ const getAcct = (account: Pick<Account, 'fqn' | 'acct'>, displayFqn: boolean): s
 const DEFAULT_HEADERS: string[] = [
   '/headers/original/missing.png', // Mastodon
   '/images/banner.png', // Pleroma
+  '/assets/default_header.webp', // GoToSocial
   require('soapbox/assets/images/header-missing.png'), // header not provided by backend
 ];
 
@@ -40,6 +41,7 @@ const isDefaultHeader = (url: string) => DEFAULT_HEADERS.some(header => url.ends
 const DEFAULT_AVATARS = [
   '/avatars/original/missing.png', // Mastodon
   '/images/avi.png', // Pleroma
+  '/assets/default_avatars/GoToSocial_icon2.webp', // GoToSocial
   require('soapbox/assets/images/avatar-missing.png'), // avatar not provided by backend
 ];
 

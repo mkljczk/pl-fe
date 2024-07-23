@@ -86,6 +86,12 @@ const GLITCH = 'glitch';
 // NOTE: Rebased is named 'soapbox' for legacy reasons.
 const REBASED = 'soapbox';
 
+/**
+ * GoToSocial,  an ActivityPub server writter in Golang.
+ * @see {@link https://gotosocial.org/}
+ */
+const GOTOSOCIAL = 'GoToSocial';
+
 /** Backend name reserved only for tests. */
 const UNRELEASED = 'unreleased';
 
@@ -138,6 +144,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === MASTODON && gte(v.compatVersion, '3.4.0'),
       v.software === PLEROMA && gte(v.version, '2.4.50'),
       v.software === TAKAHE && gte(v.version, '0.6.1'),
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -153,6 +160,7 @@ const getInstanceFeatures = (instance: Instance) => {
     accountNotifies: any([
       v.software === MASTODON && gte(v.compatVersion, '3.3.0'),
       v.software === PLEROMA && gte(v.version, '2.4.50'),
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -249,6 +257,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PLEROMA && gte(v.version, '0.9.9'),
       v.software === PIXELFED,
       v.software === TAKAHE && gte(v.version, '0.9.0'),
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -258,6 +267,7 @@ const getInstanceFeatures = (instance: Instance) => {
     bots: any([
       v.software === MASTODON,
       v.software === PLEROMA,
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -296,6 +306,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PLEROMA && gte(v.version, '0.9.9'),
       v.software === PIXELFED,
       v.software === TAKAHE,
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -347,6 +358,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PLEROMA,
       v.software === TAKAHE && gte(v.version, '0.7.0'),
       v.software === WILDEBEEST,
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -431,6 +443,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === MASTODON,
       v.software === TAKAHE && gte(v.version, '0.6.1'),
+      v.software === GOTOSOCIAL,
       features.includes('exposable_reactions'),
     ]),
 
@@ -454,25 +467,33 @@ const getInstanceFeatures = (instance: Instance) => {
     filters: any([
       v.software === MASTODON && lt(v.compatVersion, '3.6.0'),
       v.software === PLEROMA,
+      v.software === GOTOSOCIAL,
     ]),
 
     /** Whether filters can automatically expires. */
     filtersExpiration: any([
       v.software === MASTODON,
       v.software === PLEROMA && gte(v.version, '2.3.0'),
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
      * Can edit and manage timeline filters (aka "muted words").
      * @see {@link https://docs.joinmastodon.org/methods/filters/}
      */
-    filtersV2: v.software === MASTODON && gte(v.compatVersion, '3.6.0'),
+    filtersV2: any([
+      v.software === MASTODON && gte(v.compatVersion, '3.6.0'),
+      v.software === GOTOSOCIAL,
+    ]),
 
     /**
      * Allows setting the focal point of a media attachment.
      * @see {@link https://docs.joinmastodon.org/methods/media/}
      */
-    focalPoint: v.software === MASTODON && gte(v.compatVersion, '2.3.0'),
+    focalPoint: any([
+      v.software === MASTODON && gte(v.compatVersion, '2.3.0'),
+      v.software === GOTOSOCIAL,
+    ]),
 
     /**
      * Ability to follow hashtags.
@@ -493,6 +514,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === PLEROMA,
       v.software === MITRA,
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -567,6 +589,7 @@ const getInstanceFeatures = (instance: Instance) => {
     instanceV2: any([
       v.software === MASTODON && gte(v.compatVersion, '4.0.0'),
       v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.5.54'),
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -591,6 +614,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === MASTODON && gte(v.compatVersion, '2.1.0'),
       v.software === PLEROMA && gte(v.version, '0.9.9'),
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -610,6 +634,7 @@ const getInstanceFeatures = (instance: Instance) => {
     mastodonAdmin: any([
       v.software === MASTODON && gte(v.compatVersion, '2.9.1'),
       v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.4.50'),
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -651,6 +676,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PLEROMA && gte(v.version, '2.3.0'),
       v.software === MASTODON && gte(v.compatVersion, '3.3.0'),
       v.software === TAKAHE,
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -661,6 +687,7 @@ const getInstanceFeatures = (instance: Instance) => {
     notes: any([
       v.software === MASTODON && gte(v.compatVersion, '3.2.0'),
       v.software === PLEROMA && gte(v.version, '2.4.50'),
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -672,6 +699,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === MASTODON && gte(v.compatVersion, '3.5.0'),
       v.software === PLEROMA && gte(v.version, '2.4.50'),
       v.software === TAKAHE && gte(v.version, '0.6.2'),
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -690,6 +718,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === MASTODON && gte(v.version, '2.8.0'),
       v.software === PLEROMA,
       v.software === TAKAHE && gte(v.version, '0.8.0'),
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -699,6 +728,7 @@ const getInstanceFeatures = (instance: Instance) => {
     postLanguages: any([
       v.software === MASTODON,
       v.software === PLEROMA && v.build === REBASED,
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -727,6 +757,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PLEROMA,
       v.software === TAKAHE && gte(v.version, '0.7.0'),
       v.software === MITRA,
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -742,6 +773,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PLEROMA,
       v.software === TAKAHE,
       v.software === WILDEBEEST,
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -784,6 +816,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === MASTODON && v.build === GLITCH,
       v.software === PLEROMA,
       v.software === MITRA,
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -792,6 +825,7 @@ const getInstanceFeatures = (instance: Instance) => {
     rssFeeds: any([
       v.software === MASTODON,
       v.software === PLEROMA,
+      // v.software === GOTOSOCIAL, // TODO
     ]),
 
     /**
@@ -803,6 +837,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === FRIENDICA,
       v.software === MASTODON && gte(v.version, '2.7.0'),
       v.software === PLEROMA,
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -814,6 +849,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === MASTODON && gte(v.version, '2.8.0'),
       v.software === PLEROMA && gte(v.version, '1.0.0'),
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
