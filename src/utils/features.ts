@@ -63,11 +63,6 @@ const PLEROMA = 'Pleroma';
 const TAKAHE = 'Takahe';
 
 /**
- * Wildebeest, backend running on top of Cloudflare Pages.
- */
-const WILDEBEEST = 'Wildebeest';
-
-/**
  * Akkoma, a Pleroma fork.
  * @see {@link https://akkoma.dev/AkkomaGang/akkoma}
  */
@@ -357,7 +352,6 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PIXELFED,
       v.software === PLEROMA,
       v.software === TAKAHE && gte(v.version, '0.7.0'),
-      v.software === WILDEBEEST,
       v.software === GOTOSOCIAL,
     ]),
 
@@ -650,7 +644,6 @@ const getInstanceFeatures = (instance: Instance) => {
      */
     mediaV2: any([
       v.software === MASTODON && gte(v.compatVersion, '3.1.3'),
-      v.software === WILDEBEEST,
       // Even though Pleroma supports these endpoints, it has disadvantages
       // v.software === PLEROMA && gte(v.version, '2.1.0'),
     ]),
@@ -772,7 +765,6 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === PLEROMA,
       v.software === TAKAHE,
-      v.software === WILDEBEEST,
       v.software === GOTOSOCIAL,
     ]),
 
@@ -997,7 +989,6 @@ export {
   PIXELFED,
   PLEROMA,
   TAKAHE,
-  WILDEBEEST,
   AKKOMA,
   GLITCH,
   REBASED,
