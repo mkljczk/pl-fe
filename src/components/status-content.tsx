@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import parse, { Element, type HTMLReactParserOptions, domToReact, type DOMNode } from 'html-react-parser';
 import React, { useState, useRef, useLayoutEffect, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 import Icon from 'soapbox/components/icon';
 import { onlyEmoji as isOnlyEmoji } from 'soapbox/utils/rich-content';
@@ -9,8 +10,8 @@ import { onlyEmoji as isOnlyEmoji } from 'soapbox/utils/rich-content';
 import { getTextDirection } from '../utils/rtl';
 
 import HashtagLink from './hashtag-link';
+import HoverRefWrapper from './hover-ref-wrapper';
 import Markup from './markup';
-import Mention from './mention';
 import Poll from './polls/poll';
 
 import type { Sizes } from 'soapbox/components/ui/text/text';
@@ -105,7 +106,18 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
         if (classes?.includes('mention')) {
           const mention = status.mentions.find(({ url }) => domNode.attribs.href === url);
           if (mention) {
-            return <Mention mention={mention} />;
+            return (
+              <HoverRefWrapper accountId={mention.id} inline>
+                <Link
+                  to={`/@${mention.acct}`}
+                  className='text-primary-600 hover:underline dark:text-accent-blue'
+                  dir='ltr'
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  @{mention.username}
+                </Link>
+              </HoverRefWrapper>
+            );
           }
         }
 
