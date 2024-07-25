@@ -29,7 +29,7 @@ const ActionsModal: React.FC<IActionsModal> = ({ status, actions, onClick, onClo
     const { icon = null, text, meta = null, href = '#', to, destructive } = action;
 
     const Comp = href === '#' ? to ? Link : 'button' : 'a';
-    const compProps = href === '#' ? to ? { to, onClick } : { onClick } : { href: href, rel: 'noopener' };
+    const compProps = href === '#' ? to ? { to, onClick } : { onClick } : { href: href, rel: 'noopener', target: '_blank' };
 
     return (
       <li key={`${text}-${i}`}>
