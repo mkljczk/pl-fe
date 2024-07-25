@@ -25,6 +25,7 @@ import DefaultPage from 'soapbox/pages/default-page';
 import EmptyPage from 'soapbox/pages/empty-page';
 import EventPage from 'soapbox/pages/event-page';
 import EventsPage from 'soapbox/pages/events-page';
+import ExternalLoginPage from 'soapbox/pages/external-login-page';
 import GroupPage from 'soapbox/pages/group-page';
 import GroupsPage from 'soapbox/pages/groups-page';
 import HomePage from 'soapbox/pages/home-page';
@@ -336,7 +337,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
         <WrappedRoute path='/signup' page={EmptyPage} component={RegistrationPage} publicRoute exact />
       )}
 
-      <WrappedRoute path='/login/external' page={DefaultPage} component={ExternalLogin} publicRoute exact />
+      <WrappedRoute path='/login/external' page={ExternalLoginPage} component={ExternalLogin} publicRoute exact />
       <WrappedRoute path='/login/add' page={DefaultPage} component={LoginPage} publicRoute exact />
       <WrappedRoute path='/login' page={DefaultPage} component={LoginPage} publicRoute exact />
       <WrappedRoute path='/reset-password' page={DefaultPage} component={PasswordReset} publicRoute exact />
