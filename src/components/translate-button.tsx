@@ -57,7 +57,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   if (settings.autoTranslate && !status.translating) return null;
 
   const button = (
-    <button onClick={handleTranslate}>
+    <button className='w-fit' onClick={handleTranslate}>
       <HStack alignItems='center' space={1} className='text-primary-600 hover:underline dark:text-accent-blue'>
         <Icon src={require('@tabler/icons/outline/language.svg')} className='h-4 w-4' />
         <span>
