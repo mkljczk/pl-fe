@@ -1,0 +1,52 @@
+name: pl-fe CI
+
+on:
+  push:
+    branches: [ "fork" ]
+  pull_request:
+    branches: [ "fork" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Test and upload artifacts
+    strategy:
+      matrix:
+        node-version: [21.x]
+
+    steps:
+    - name: Install system dependencies
+      run: sudo apt install -y unzip
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install deps
+      run: yarn install --ignore-scripts
+
+    - name: Lint
+      run: yarn lint
+
+    - name: build
+      env:
+        NODE_ENV: production
+      run: |
+          yarn build
+          cp dist/index.html dist/404.html
+
+    - name: i18n
+      run: |
+          yarn i18n
+          git diff
+          git diff --quiet || (echo "Locale files are out of date. Please run \`yarn i18n\`" && exit 1)
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: pl-fe
+        path: dist
