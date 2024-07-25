@@ -19,7 +19,7 @@ const filteredArray = <T extends z.ZodTypeAny>(schema: T) =>
     ));
 
 /** Validates the string as an emoji. */
-const emojiSchema = z.string().refine((v) => /\p{Extended_Pictographic}/u.test(v));
+const emojiSchema = z.string().refine((v) => /\p{Extended_Pictographic}|[\u{1F1E6}-\u{1F1FF}]{2}/u.test(v));
 
 /** Map a list of CustomEmoji to their shortcodes. */
 const makeCustomEmojiMap = (customEmojis: CustomEmoji[]) =>
