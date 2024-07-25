@@ -82,10 +82,16 @@ const GLITCH = 'glitch';
 const REBASED = 'soapbox';
 
 /**
- * GoToSocial,  an ActivityPub server writter in Golang.
+ * GoToSocial, an ActivityPub server writter in Golang.
  * @see {@link https://gotosocial.org/}
  */
 const GOTOSOCIAL = 'GoToSocial';
+
+/**
+ * Toki, a C# Fediverse server.
+ * @see {@link https://github.com/purifetchi/Toki}
+ */
+const TOKI = 'Toki';
 
 /** Backend name reserved only for tests. */
 const UNRELEASED = 'unreleased';
@@ -140,6 +146,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PLEROMA && gte(v.version, '2.4.50'),
       v.software === TAKAHE && gte(v.version, '0.6.1'),
       v.software === GOTOSOCIAL,
+      v.software === TOKI,
     ]),
 
     /**
@@ -253,6 +260,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PIXELFED,
       v.software === TAKAHE && gte(v.version, '0.9.0'),
       v.software === GOTOSOCIAL,
+      v.software === TOKI,
     ]),
 
     /**
@@ -359,6 +367,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PLEROMA,
       v.software === TAKAHE && gte(v.version, '0.7.0'),
       v.software === GOTOSOCIAL,
+      v.software === TOKI,
     ]),
 
     /**
@@ -444,6 +453,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === TAKAHE && gte(v.version, '0.6.1'),
       v.software === GOTOSOCIAL,
+      v.software === TOKI,
       features.includes('exposable_reactions'),
     ]),
 
@@ -515,6 +525,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PLEROMA,
       v.software === MITRA,
       v.software === GOTOSOCIAL,
+      v.software === TOKI,
     ]),
 
     /**
@@ -620,7 +631,10 @@ const getInstanceFeatures = (instance: Instance) => {
     /**
      * Can sign in using username instead of e-mail address.
      */
-    logInWithUsername: v.software === PLEROMA,
+    logInWithUsername: any([
+      v.software === PLEROMA,
+      v.software === TOKI,
+    ]),
 
     /**
      * Can perform moderation actions with account and reports.
@@ -650,6 +664,7 @@ const getInstanceFeatures = (instance: Instance) => {
      */
     mediaV2: any([
       v.software === MASTODON && gte(v.compatVersion, '3.1.3'),
+      v.software === TOKI,
       // Even though Pleroma supports these endpoints, it has disadvantages
       // v.software === PLEROMA && gte(v.version, '2.1.0'),
     ]),
@@ -772,6 +787,7 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === PLEROMA,
       v.software === TAKAHE,
       v.software === GOTOSOCIAL,
+      v.software === TOKI,
     ]),
 
     /**
@@ -957,7 +973,7 @@ interface Backend {
 /** Get information about the software from its version string */
 const parseVersion = (version: string): Backend => {
   const regex = /^([\w+.-]*)(?: \(compatible; ([\w]*) (.*)\))?$/;
-  const match = regex.exec(version);
+  const match = regex.exec(version.replace('/', ' '));
 
   const semverString = match && (match[3] || match[1]);
   const semver = match ? semverParse(semverString) || semverCoerce(semverString, {
