@@ -877,8 +877,11 @@ const getInstanceFeatures = (instance: Instance) => {
      * @see POST /api/pleroma/change_password
      * @see POST /api/pleroma/change_email
      * @see POST /api/pleroma/delete_account
+     * @see POST /api/v1/user/email_change
+     * @see POST /api/v1/user/password_change
+     * @see POST /api/v1/accounts/delete_account
      */
-    security: v.software === PLEROMA,
+    security: any([v.software === PLEROMA, v.software === GOTOSOCIAL]),
 
     /**
      * Ability to manage account sessions.
