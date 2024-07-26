@@ -16,7 +16,7 @@ interface IWarningWrapper {
 const WarningWrapper: React.FC<IWarningWrapper> = ({ composeId }) => {
   const compose = useCompose(composeId);
 
-  const needsLockWarning = useAppSelector((state) => compose.privacy === 'private' && !selectOwnAccount(state)!.locked);
+  const needsLockWarning = useAppSelector((state) => (compose.privacy === 'private' || compose.privacy === 'mutuals_only') && !selectOwnAccount(state)!.locked);
   const hashtagWarning = (compose.privacy !== 'public' && compose.privacy !== 'group') && APPROX_HASHTAG_RE.test(compose.text);
   const directMessageWarning = compose.privacy === 'direct';
 

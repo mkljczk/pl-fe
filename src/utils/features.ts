@@ -635,6 +635,15 @@ const getInstanceFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * Ability to post statuses that don't federate.
+     * @see POST /api/v1/statuses
+     */
+    localOnlyStatuses: federation.enabled && any([
+      v.software === GOTOSOCIAL,
+      v.software === PLEROMA,
+    ]),
+
+    /**
      * Can sign in using username instead of e-mail address.
      */
     logInWithUsername: any([
@@ -698,6 +707,12 @@ const getInstanceFeatures = (instance: Instance) => {
       v.software === TAKAHE,
       v.software === GOTOSOCIAL,
     ]),
+
+    /**
+     * Ability to post statuses only to accounts with mutual relationship.
+     * @see POST /api/v1/statuses
+     */
+    mutualsOnlyStatuses: v.software === GOTOSOCIAL,
 
     /**
      * Add private notes to accounts.
@@ -881,7 +896,10 @@ const getInstanceFeatures = (instance: Instance) => {
      * @see POST /api/v1/user/password_change
      * @see POST /api/v1/accounts/delete_account
      */
-    security: any([v.software === PLEROMA, v.software === GOTOSOCIAL]),
+    security: any([
+      v.software === PLEROMA,
+      v.software === GOTOSOCIAL,
+    ]),
 
     /**
      * Ability to manage account sessions.

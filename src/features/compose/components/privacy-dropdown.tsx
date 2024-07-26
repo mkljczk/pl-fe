@@ -1,17 +1,18 @@
 import clsx from 'clsx';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useState, useRef, useEffect } from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { spring } from 'react-motion';
 // @ts-ignore
 import Overlay from 'react-overlays/lib/Overlay';
 
-import { changeComposeVisibility } from 'soapbox/actions/compose';
+import { changeComposeFederated, changeComposeVisibility } from 'soapbox/actions/compose';
 import { closeModal, openModal } from 'soapbox/actions/modals';
 import Icon from 'soapbox/components/icon';
-import { Button } from 'soapbox/components/ui';
-import { useAppDispatch, useCompose } from 'soapbox/hooks';
+import { Button, Toggle } from 'soapbox/components/ui';
+import { useAppDispatch, useCompose, useFeatures, useInstance } from 'soapbox/hooks';
 import { userTouching } from 'soapbox/is-mobile';
+import { GOTOSOCIAL, parseVersion, PLEROMA } from 'soapbox/utils/features';
 
 import Motion from '../../ui/util/optional-motion';
 
@@ -22,12 +23,25 @@ const messages = defineMessages({
   unlisted_long: { id: 'privacy.unlisted.long', defaultMessage: 'Do not post to public timelines' },
   private_short: { id: 'privacy.private.short', defaultMessage: 'Followers-only' },
   private_long: { id: 'privacy.private.long', defaultMessage: 'Post to followers only' },
+  mutuals_only_short: { id: 'privacy.mutuals_only.short', defaultMessage: 'Mutuals-only' },
+  mutuals_only_long: { id: 'privacy.mutuals_only.long', defaultMessage: 'Post to mutually followed users only' },
   direct_short: { id: 'privacy.direct.short', defaultMessage: 'Direct' },
   direct_long: { id: 'privacy.direct.long', defaultMessage: 'Post to mentioned users only' },
+  local_short: { id: 'privacy.local.short', defaultMessage: 'Local-only' },
+  local_long: { id: 'privacy.local.long', defaultMessage: 'Only visible on your instance' },
+
   change_privacy: { id: 'privacy.change', defaultMessage: 'Adjust post privacy' },
+  local: { id: 'privacy.local', defaultMessage: '{privacy} (local-only)' },
 });
 
 const listenerOptions = supportsPassiveEvents ? { passive: true } : false;
+
+interface Option {
+  icon: string;
+  value: string;
+  text: string;
+  meta: string;
+}
 
 interface IPrivacyDropdownMenu {
   style?: React.CSSProperties;
@@ -37,9 +51,14 @@ interface IPrivacyDropdownMenu {
   onClose: () => void;
   onChange: (value: string | null) => void;
   unavailable?: boolean;
+  showFederated?: boolean;
+  federated?: boolean;
+  onChangeFederated: () => void;
 }
 
-const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({ style, items, placement, value, onClose, onChange }) => {
+const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({
+  style, items, placement, value, onClose, onChange, showFederated, federated, onChangeFederated,
+}) => {
   const node = useRef<HTMLDivElement>(null);
   const focusedItem = useRef<HTMLDivElement>(null);
 
@@ -52,9 +71,7 @@ const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({ style, items, pla
   };
 
   const handleKeyDown: React.KeyboardEventHandler = e => {
-    const value = e.currentTarget.getAttribute('data-index');
-    const index = items.findIndex(item => item.value === value);
-    let element: ChildNode | null | undefined = null;
+    const index = [...e.currentTarget.parentElement!.children].indexOf(e.currentTarget);    let element: ChildNode | null | undefined = null;
 
     switch (e.key) {
       case 'Escape':
@@ -86,7 +103,8 @@ const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({ style, items, pla
 
     if (element) {
       (element as HTMLElement).focus();
-      onChange((element as HTMLElement).getAttribute('data-index'));
+      const value = (element as HTMLElement).getAttribute('data-index');
+      if (value !== 'local_switch') onChange(value);
       e.preventDefault();
       e.stopPropagation();
     }
@@ -97,8 +115,11 @@ const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({ style, items, pla
 
     e.preventDefault();
 
-    onClose();
-    onChange(value);
+    if (value === 'local_switch') onChangeFederated();
+    else {
+      onClose();
+      onChange(value);
+    }
   };
 
   useEffect(() => {
@@ -143,7 +164,7 @@ const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({ style, items, pla
                 onKeyDown={handleKeyDown}
                 onClick={handleClick}
                 className={clsx(
-                  'flex cursor-pointer p-2.5 text-sm text-gray-700 hover:bg-gray-100 black:hover:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800',
+                  'flex cursor-pointer items-center p-2.5 text-gray-700 hover:bg-gray-100 black:hover:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800',
                   { 'bg-gray-100 dark:bg-gray-800 black:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-700': active },
                 )}
                 aria-selected={active}
@@ -154,16 +175,41 @@ const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({ style, items, pla
                 </div>
 
                 <div
-                  className={clsx('flex-auto text-primary-600 dark:text-primary-400', {
+                  className={clsx('flex-auto text-xs text-primary-600 dark:text-primary-400', {
                     'text-black dark:text-white': active,
                   })}
                 >
-                  <strong className='block font-medium text-black dark:text-white'>{item.text}</strong>
+                  <strong className='block text-sm font-medium text-black dark:text-white'>{item.text}</strong>
                   {item.meta}
                 </div>
               </div>
             );
           })}
+          {showFederated && (
+            <div
+              role='option'
+              tabIndex={0}
+              data-index='local_switch'
+              onKeyDown={handleKeyDown}
+              onClick={onChangeFederated}
+              className='flex cursor-pointer items-center p-2.5 text-xs text-gray-700 hover:bg-gray-100 focus:bg-gray-100 black:hover:bg-gray-900 black:focus:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:focus:bg-gray-800'
+            >
+              <div className='mr-2.5 flex items-center justify-center rtl:ml-2.5 rtl:mr-0'>
+                <Icon src={require('@tabler/icons/outline/affiliate.svg')} />
+              </div>
+
+              <div
+                className='flex-auto text-xs text-primary-600 dark:text-primary-400'
+              >
+                <strong className='block text-sm font-medium text-black focus:text-black dark:text-white dark:focus:text-primary-400'>
+                  <FormattedMessage id='privacy.local.short' defaultMessage='Local-only' />
+                </strong>
+                <FormattedMessage id='privacy.local.long' defaultMessage='Only visible on your instance' />
+              </div>
+
+              <Toggle checked={!federated} onChange={onChangeFederated} />
+            </div>
+          )}
         </div>
       )}
     </Motion>
@@ -181,6 +227,10 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   const intl = useIntl();
   const node = useRef<HTMLDivElement>(null);
   const activeElement = useRef<HTMLElement | null>(null);
+  const instance = useInstance();
+  const features = useFeatures();
+
+  const v = parseVersion(instance.version);
 
   const compose = useCompose(composeId);
 
@@ -194,10 +244,14 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
     { icon: require('@tabler/icons/outline/world.svg'), value: 'public', text: intl.formatMessage(messages.public_short), meta: intl.formatMessage(messages.public_long) },
     { icon: require('@tabler/icons/outline/lock-open.svg'), value: 'unlisted', text: intl.formatMessage(messages.unlisted_short), meta: intl.formatMessage(messages.unlisted_long) },
     { icon: require('@tabler/icons/outline/lock.svg'), value: 'private', text: intl.formatMessage(messages.private_short), meta: intl.formatMessage(messages.private_long) },
+    features.mutualsOnlyStatuses ? { icon: require('@tabler/icons/outline/users-group.svg'), value: 'mutuals_only', text: intl.formatMessage(messages.mutuals_only_short), meta: intl.formatMessage(messages.mutuals_only_long) } : undefined,
     { icon: require('@tabler/icons/outline/mail.svg'), value: 'direct', text: intl.formatMessage(messages.direct_short), meta: intl.formatMessage(messages.direct_long) },
-  ];
+    features.localOnlyStatuses && v.software === PLEROMA ? { icon: require('@tabler/icons/outline/affiliate.svg'), value: 'local', text: intl.formatMessage(messages.local_short), meta: intl.formatMessage(messages.local_long) } : undefined,
+  ].filter((option): option is Option => !!option);
 
   const onChange = (value: string | null) => value && dispatch(changeComposeVisibility(composeId, value));
+
+  const onChangeFederated = () => dispatch(changeComposeFederated(composeId));
 
   const onModalOpen = (props: Record<string, any>) => dispatch(openModal('ACTIONS', props));
 
@@ -280,7 +334,9 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
         <Button
           theme='muted'
           size='xs'
-          text={valueOption?.text}
+          text={compose.federated ? valueOption?.text : intl.formatMessage(messages.local, {
+            privacy: valueOption?.text,
+          })}
           icon={valueOption?.icon}
           secondaryIcon={require('@tabler/icons/outline/chevron-down.svg')}
           title={intl.formatMessage(messages.change_privacy)}
@@ -297,6 +353,9 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
           onClose={handleClose}
           onChange={onChange}
           placement={placement}
+          showFederated={features.localOnlyStatuses && v.software === GOTOSOCIAL}
+          federated={compose.federated}
+          onChangeFederated={onChangeFederated}
         />
       </Overlay>
     </div>

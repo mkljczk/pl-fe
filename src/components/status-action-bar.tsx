@@ -463,7 +463,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
           icon: status.pinned ? require('@tabler/icons/outline/pinned-off.svg') : require('@tabler/icons/outline/pin.svg'),
         });
       } else {
-        if (status.visibility === 'private') {
+        if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
           menu.push({
             text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog_private),
             action: handleReblogClick,
@@ -656,7 +656,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
 
   if (status.visibility === 'direct') {
     reblogIcon = require('@tabler/icons/outline/mail.svg');
-  } else if (status.visibility === 'private') {
+  } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
     reblogIcon = require('@tabler/icons/outline/lock.svg');
   }
 

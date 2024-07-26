@@ -78,7 +78,7 @@ const LoginPage = () => {
         <LoginForm handleSubmit={handleSubmit} isLoading={isLoading} />
         <ConsumersList />
 
-        <div className={'flex items-center gap-2.5 before:flex-1 before:border-b before:border-gray-300 before:content-[\'\'] after:flex-1 after:border-b after:border-gray-300 after:content-[\'\'] before:black:border-gray-800 after:black:border-gray-800 before:dark:border-gray-600 after:dark:border-gray-600'}>
+        <div className={'flex items-center gap-2.5 before:flex-1 before:border-b before:border-gray-300 before:content-[\'\'] after:flex-1 after:border-b after:border-gray-300 after:content-[\'\'] before:dark:border-gray-800 after:dark:border-gray-800'}>
           <Text align='center'>
             <FormattedMessage id='login_form.divider' defaultMessage='or' />
           </Text>

@@ -65,7 +65,7 @@ const COMPOSE_LANGUAGE_CHANGE = 'COMPOSE_LANGUAGE_CHANGE' as const;
 const COMPOSE_MODIFIED_LANGUAGE_CHANGE = 'COMPOSE_MODIFIED_LANGUAGE_CHANGE' as const;
 const COMPOSE_LANGUAGE_ADD = 'COMPOSE_LANGUAGE_ADD' as const;
 const COMPOSE_LANGUAGE_DELETE = 'COMPOSE_LANGUAGE_DELETE' as const;
-const COMPOSE_LISTABILITY_CHANGE = 'COMPOSE_LISTABILITY_CHANGE' as const;
+const COMPOSE_FEDERATED_CHANGE = 'COMPOSE_FEDERATED_CHANGE' as const;
 
 const COMPOSE_EMOJI_INSERT = 'COMPOSE_EMOJI_INSERT' as const;
 
@@ -387,6 +387,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
       scheduled_at: compose.schedule,
       language: compose.language || compose.suggested_language,
       to,
+      federated: compose.federated,
     };
 
     if (compose.language && compose.textMap.size) {
@@ -937,6 +938,11 @@ const addSuggestedLanguage = (composeId: string, language: string) => ({
   language,
 });
 
+const changeComposeFederated = (composeId: string) => ({
+  type: COMPOSE_FEDERATED_CHANGE,
+  id: composeId,
+});
+
 type ComposeAction =
   ComposeSetStatusAction
   | ReturnType<typeof changeCompose>
@@ -989,6 +995,7 @@ type ComposeAction =
   | ReturnType<typeof changeMediaOrder>
   | ReturnType<typeof addSuggestedQuote>
   | ReturnType<typeof addSuggestedLanguage>
+  | ReturnType<typeof changeComposeFederated>
 
 export {
   COMPOSE_CHANGE,
@@ -1022,7 +1029,6 @@ export {
   COMPOSE_MODIFIED_LANGUAGE_CHANGE,
   COMPOSE_LANGUAGE_ADD,
   COMPOSE_LANGUAGE_DELETE,
-  COMPOSE_LISTABILITY_CHANGE,
   COMPOSE_EMOJI_INSERT,
   COMPOSE_UPLOAD_CHANGE_REQUEST,
   COMPOSE_UPLOAD_CHANGE_SUCCESS,
@@ -1043,6 +1049,7 @@ export {
   COMPOSE_CHANGE_MEDIA_ORDER,
   COMPOSE_ADD_SUGGESTED_QUOTE,
   COMPOSE_ADD_SUGGESTED_LANGUAGE,
+  COMPOSE_FEDERATED_CHANGE,
   setComposeToStatus,
   changeCompose,
   replyCompose,
@@ -1104,5 +1111,6 @@ export {
   changeMediaOrder,
   addSuggestedQuote,
   addSuggestedLanguage,
+  changeComposeFederated,
   type ComposeAction,
 };

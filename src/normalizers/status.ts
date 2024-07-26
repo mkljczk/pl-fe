@@ -20,7 +20,7 @@ import { maybeFromJS } from 'soapbox/utils/normalizers';
 import type { Account, Attachment, Card, Emoji, Group, Mention, Poll, EmbeddedEntity, EmojiReaction } from 'soapbox/types/entities';
 
 type StatusApprovalStatus = 'pending' | 'approval' | 'rejected';
-type StatusVisibility = 'public' | 'unlisted' | 'private' | 'direct' | 'group';
+type StatusVisibility = 'public' | 'unlisted' | 'private' | 'direct' | 'group' | 'mutuals_only' | 'local';
 
 type EventJoinMode = 'free' | 'restricted' | 'invite';
 type EventJoinState = 'pending' | 'reject' | 'accept';
