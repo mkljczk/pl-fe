@@ -30,6 +30,11 @@ const fixVersion = (version: string) => {
 };
 
 const configurationSchema = coerceObject({
+  accounts: z.object({
+    allow_custom_css: z.boolean(),
+    max_featured_tags: z.number().int(),
+    max_profile_fields: z.number().int(),
+  }).nullable().catch(null),
   chats: coerceObject({
     max_characters: z.number().catch(5000),
     max_media_attachments: z.number().catch(1),

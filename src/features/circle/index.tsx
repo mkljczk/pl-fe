@@ -31,7 +31,7 @@ const Circle: React.FC = () => {
     progress: number;
   }>({ state: 'pending', progress: 0 });
   const [expanded, setExpanded] = useState(false);
-  const [users, setUsers] = useState<Array<{ id: string; avatar?: string; acct: string }>>();
+  const [users, setUsers] = useState<Array<{ id: string; avatar?: string; avatar_description?: string; acct: string }>>();
 
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -153,7 +153,7 @@ const Circle: React.FC = () => {
               {users?.map(user => (
                 <Link key={user.id} to={`/@${user.acct}`}>
                   <HStack space={2} alignItems='center'>
-                    <Avatar size={20} src={user.avatar!} />
+                    <Avatar size={20} src={user.avatar!} alt={user.avatar_description} />
                     <Text size='sm' weight='semibold' truncate>
                       {user.acct}
                     </Text>

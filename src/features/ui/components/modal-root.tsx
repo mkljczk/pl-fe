@@ -17,6 +17,7 @@ import {
   EditBookmarkFolderModal,
   EditDomainModal,
   EditFederationModal,
+  EditRuleModal,
   EmbedModal,
   EventMapModal,
   EventParticipantsModal,
@@ -37,9 +38,9 @@ import {
   ReplyMentionsModal,
   ReportModal,
   SelectBookmarkFolderModal,
+  TextFieldModal,
   UnauthorizedModal,
   VideoModal,
-  EditRuleModal,
 } from 'soapbox/features/ui/util/async-components';
 
 import ModalLoading from './modal-loading';
@@ -82,6 +83,7 @@ const MODAL_COMPONENTS: Record<string, React.LazyExoticComponent<any>> = {
   'REPLY_MENTIONS': ReplyMentionsModal,
   'REPORT': ReportModal,
   'SELECT_BOOKMARK_FOLDER': SelectBookmarkFolderModal,
+  'TEXT_FIELD': TextFieldModal,
   'UNAUTHORIZED': UnauthorizedModal,
   'VIDEO': VideoModal,
 };

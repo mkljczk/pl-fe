@@ -29,7 +29,7 @@ import { Account } from 'soapbox/schemas';
 import toast from 'soapbox/toast';
 import { isDefaultHeader } from 'soapbox/utils/accounts';
 import copy from 'soapbox/utils/copy';
-import { MASTODON, parseVersion } from 'soapbox/utils/features';
+import { GOTOSOCIAL, MASTODON, parseVersion } from 'soapbox/utils/features';
 
 import type { PlfeResponse } from 'soapbox/api';
 
@@ -284,7 +284,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       return [];
     }
 
-    if (!ownAccount && features.rssFeeds && account.local) {
+    if (features.rssFeeds && account.local && (software !== GOTOSOCIAL || account.enable_rss)) {
       menu.push({
         text: intl.formatMessage(messages.subscribeFeed),
         icon: require('@tabler/icons/outline/rss.svg'),
@@ -535,7 +535,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       header = (
         <StillImage
           src={account.header}
-          alt={intl.formatMessage(messages.header)}
+          alt={account.header_description || intl.formatMessage(messages.header)}
         />
       );
 
@@ -592,7 +592,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const renderRssButton = () => {
-    if (ownAccount || !features.rssFeeds || !account.local) {
+    if (ownAccount || !features.rssFeeds || !account.local || (software === GOTOSOCIAL && !account.enable_rss)) {
       return null;
     }
 
@@ -637,6 +637,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
             <a href={account.avatar} onClick={handleAvatarClick} target='_blank'>
               <Avatar
                 src={account.avatar}
+                alt={account.avatar_description}
                 size={96}
                 className='relative h-24 w-24 rounded-full bg-white ring-4 ring-white black:ring-black dark:bg-primary-900 dark:ring-primary-900'
               />

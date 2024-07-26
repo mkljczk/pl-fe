@@ -44,13 +44,18 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
 
         <img
           src={autoPlayGif ? account.header : account.header_static}
-          alt=''
+          alt={account.header_description}
           className='h-32 w-full rounded-t-lg object-cover'
         />
 
         <HoverRefWrapper key={account.id} accountId={account.id} inline>
           <Link to={`/@${account.acct}`} title={account.acct}>
-            <Avatar src={account.avatar} className='!absolute bottom-0 left-3 translate-y-1/2 bg-white ring-2 ring-white dark:bg-primary-900 dark:ring-primary-900' size={64} />
+            <Avatar
+              src={account.avatar}
+              alt={account.avatar_description}
+              className='!absolute bottom-0 left-3 translate-y-1/2 bg-white ring-2 ring-white dark:bg-primary-900 dark:ring-primary-900'
+              size={64}
+            />
           </Link>
         </HoverRefWrapper>
       </div>

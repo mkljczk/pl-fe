@@ -29,6 +29,7 @@ const GroupAvatar = (props: IGroupAvatar) => {
         })
       }
       src={group.avatar}
+      alt={group.avatar_description}
       size={size}
     />
   );

@@ -2,11 +2,16 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
+import { openModal } from 'soapbox/actions/modals';
+import AltIndicator from 'soapbox/components/alt-indicator';
 import { HStack, Icon, IconButton, Text } from 'soapbox/components/ui';
-import { useDraggedFiles } from 'soapbox/hooks';
+import { useAppDispatch, useDraggedFiles } from 'soapbox/hooks';
 
 const messages = defineMessages({
   title: { id: 'group.upload_banner.title', defaultMessage: 'Upload background picture' },
+  changeHeaderDescriptionHeading: { id: 'group.upload_banner.alt.heading', defaultMessage: 'Change header description' },
+  changeHeaderDescriptionPlaceholder: { id: 'group.upload_banner.alt.placeholder', defaultMessage: 'Image description' },
+  changeHeaderDescriptionConfirm: { id: 'group.upload_banner.alt.confirm', defaultMessage: 'Save' },
 });
 
 interface IMediaInput {
@@ -15,9 +20,14 @@ interface IMediaInput {
   onChange: (files: FileList | null) => void;
   onClear?: () => void;
   disabled?: boolean;
+  description?: string;
+  onChangeDescription?: (value: string) => void;
 }
 
-const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({ src, onChange, onClear, accept, disabled }, ref) => {
+const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
+  src, onChange, onClear, accept, disabled, description, onChangeDescription,
+}, ref) => {
+  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const picker = useRef<HTMLLabelElement>(null);
@@ -30,6 +40,20 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({ src, onC
     e.stopPropagation();
 
     onClear!();
+  };
+
+  const handleChangeDescriptionClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+
+    dispatch(openModal('TEXT_FIELD', {
+      heading: intl.formatMessage(messages.changeHeaderDescriptionHeading),
+      message: intl.formatMessage(messages.changeHeaderDescriptionPlaceholder),
+      confirm: intl.formatMessage(messages.changeHeaderDescriptionConfirm),
+      onConfirm: (description: string) => {
+        onChangeDescription?.(description);
+      },
+      text: description,
+    }));
   };
 
   return (
@@ -81,6 +105,11 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({ src, onC
           className='absolute right-2 top-2 z-10 hover:scale-105 hover:bg-gray-900'
           iconClassName='h-5 w-5'
         />
+      )}
+      {onChangeDescription && src && (
+        <button type='button' className='absolute left-2 top-2' onClick={handleChangeDescriptionClick}>
+          <AltIndicator warning={!description} />
+        </button>
       )}
     </label>
   );

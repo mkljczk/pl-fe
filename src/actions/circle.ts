@@ -8,6 +8,7 @@ import type { APIEntity } from 'soapbox/types/entities';
 interface Interaction {
   acct: string;
   avatar?: string;
+  avatar_description?: string;
   replies: number;
   reblogs: number;
   favourites: number;
@@ -49,6 +50,7 @@ const processCircle = (setProgress: (progress: {
           interaction.reblogs += 1;
           interaction.acct = status.reblog.account.acct;
           interaction.avatar = status.reblog.account.avatar_static || status.reblog.account.avatar;
+          interaction.avatar_description = status.reblog.account.avatar_description;
         } else if (status.in_reply_to_account_id) {
           if (status.in_reply_to_account_id === me) return;
 
@@ -75,6 +77,7 @@ const processCircle = (setProgress: (progress: {
         interaction.favourites += 1;
         interaction.acct = status.account.acct;
         interaction.avatar = status.account.avatar_static || status.account.avatar;
+        interaction.avatar_description = status.account.avatar_description;
       });
 
       return next;
@@ -92,9 +95,9 @@ const processCircle = (setProgress: (progress: {
       if (!link) break;
     }
 
-    const result = await Promise.all(Object.entries(interactions).map(([id, { acct, avatar, favourites, reblogs, replies }]) => {
+    const result = await Promise.all(Object.entries(interactions).map(([id, { acct, avatar, avatar_description, favourites, reblogs, replies }]) => {
       const score = favourites + replies * 1.1 + reblogs * 1.3;
-      return { id, acct, avatar, score };
+      return { id, acct, avatar, avatar_description, score };
     }).toSorted((a, b) => b.score - a.score).slice(0, 49).map(async (interaction, index, array) => {
       setProgress({ state: 'fetchingAvatars', progress: 80 + (index / array.length) * 10 });
 
@@ -104,6 +107,7 @@ const processCircle = (setProgress: (progress: {
 
       interaction.acct = account.acct;
       interaction.avatar = account.avatar_static || account.avatar;
+      interaction.avatar_description = account.avatar_description;
 
       return interaction;
     }));

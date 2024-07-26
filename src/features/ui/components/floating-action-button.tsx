@@ -72,7 +72,7 @@ const GroupFAB: React.FC = () => {
       aria-label={intl.formatMessage(messages.publish)}
     >
       <HStack space={3} alignItems='center'>
-        <Avatar className='-my-3 -ml-2 border-white' size={42} src={group.avatar} />
+        <Avatar className='-my-3 -ml-2 border-white' size={42} src={group.avatar} alt={group.avatar_description} />
         <Icon
           src={require('@tabler/icons/outline/pencil-plus.svg')}
           className='h-6 w-6'

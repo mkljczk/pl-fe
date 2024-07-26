@@ -161,3 +161,4 @@ export const EditRuleModal = lazy(() => import('soapbox/features/ui/components/m
 export const DraftStatuses = lazy(() => import('soapbox/features/draft-statuses'));
 export const Circle = lazy(() => import('soapbox/features/circle'));
 export const BubbleTimeline = lazy(() => import('soapbox/features/bubble-timeline'));
+export const TextFieldModal = lazy(() => import('soapbox/features/ui/components/modals/text-field-modal'));

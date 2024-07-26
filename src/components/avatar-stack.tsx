@@ -29,6 +29,7 @@ const AvatarStack: React.FC<IAvatarStack> = ({ accountIds, limit = 3 }) => {
           <Avatar
             className='ring-1 ring-white dark:ring-primary-900'
             src={account.avatar}
+            alt={account.avatar_description}
             size={20}
           />
         </div>

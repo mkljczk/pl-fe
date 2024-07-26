@@ -10,10 +10,11 @@ import zoomInIcon from '@tabler/icons/outline/zoom-in.svg';
 import clsx from 'clsx';
 import { List as ImmutableList } from 'immutable';
 import React, { useState } from 'react';
-import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 import { spring } from 'react-motion';
 
 import { openModal } from 'soapbox/actions/modals';
+import AltIndicator from 'soapbox/components/alt-indicator';
 import Blurhash from 'soapbox/components/blurhash';
 import { HStack, Icon, IconButton } from 'soapbox/components/ui';
 import Motion from 'soapbox/features/ui/util/optional-motion';
@@ -224,16 +225,14 @@ const Upload: React.FC<IUpload> = ({
             )}
 
             {missingDescriptionModal && !description && (
-              <span
+              <AltIndicator
+                warning
                 title={intl.formatMessage(messages.descriptionMissingTitle)}
-                className={clsx('absolute bottom-2 left-2 z-10 inline-flex items-center gap-1 rounded bg-gray-900 px-2 py-1 text-xs font-medium uppercase text-white transition-opacity duration-100 ease-linear', {
+                className={clsx('absolute bottom-2 left-2 z-10 transition-opacity duration-100 ease-linear', {
                   'opacity-0 pointer-events-none': active,
                   'opacity-100': !active,
                 })}
-              >
-                <Icon className='h-4 w-4' src={require('@tabler/icons/outline/alert-triangle.svg')} />
-                <FormattedMessage id='upload_form.description_missing.indicator' defaultMessage='Alt' />
-              </span>
+              />
             )}
 
             <div className='absolute inset-0 -z-[1] h-full w-full'>

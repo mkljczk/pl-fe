@@ -27,6 +27,12 @@ const FIREFISH = 'Firefish';
 const FRIENDICA = 'Friendica';
 
 /**
+ * GoToSocial, an ActivityPub server writter in Golang.
+ * @see {@link https://gotosocial.org/}
+ */
+const GOTOSOCIAL = 'GoToSocial';
+
+/**
  * Iceshrimp, yet another Misskey fork.
  * @see {@link https://iceshrimp.dev/}
  */
@@ -63,6 +69,12 @@ const PLEROMA = 'Pleroma';
 const TAKAHE = 'Takahe';
 
 /**
+ * Toki, a C# Fediverse server.
+ * @see {@link https://github.com/purifetchi/Toki}
+ */
+const TOKI = 'Toki';
+
+/**
  * Akkoma, a Pleroma fork.
  * @see {@link https://akkoma.dev/AkkomaGang/akkoma}
  */
@@ -81,18 +93,6 @@ const GLITCH = 'glitch';
 // NOTE: Rebased is named 'soapbox' for legacy reasons.
 const REBASED = 'soapbox';
 
-/**
- * GoToSocial, an ActivityPub server writter in Golang.
- * @see {@link https://gotosocial.org/}
- */
-const GOTOSOCIAL = 'GoToSocial';
-
-/**
- * Toki, a C# Fediverse server.
- * @see {@link https://github.com/purifetchi/Toki}
- */
-const TOKI = 'Toki';
-
 /** Backend name reserved only for tests. */
 const UNRELEASED = 'unreleased';
 
@@ -108,6 +108,12 @@ const getInstanceFeatures = (instance: Instance) => {
      * @see PATCH /api/v1/accounts/update_credentials
      */
     accountAliases: v.software === PLEROMA,
+
+    /**
+     * Ability to set description of profile avatar and header.
+     * @see PATCH /api/v1/accounts/update_credentials
+     */
+    accountAvatarDescription: v.software === GOTOSOCIAL,
 
     /**
      * The accounts API allows an acct instead of an ID.
@@ -839,7 +845,7 @@ const getInstanceFeatures = (instance: Instance) => {
     rssFeeds: any([
       v.software === MASTODON,
       v.software === PLEROMA,
-      // v.software === GOTOSOCIAL, // TODO
+      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -1005,12 +1011,14 @@ const parseVersion = (version: string): Backend => {
 export {
   FIREFISH,
   FRIENDICA,
+  GOTOSOCIAL,
   ICESHRIMP,
   MASTODON,
   MITRA,
   PIXELFED,
   PLEROMA,
   TAKAHE,
+  TOKI,
   AKKOMA,
   GLITCH,
   REBASED,

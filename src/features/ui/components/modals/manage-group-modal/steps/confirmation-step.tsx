@@ -48,7 +48,7 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
           </label>
 
           <label className='mx-auto -mt-10 cursor-pointer rounded-full bg-primary-500 ring-2 ring-white dark:ring-primary-900'>
-            {group.avatar && <Avatar src={group.avatar} size={80} />}
+            {group.avatar && <Avatar src={group.avatar} alt={group.avatar_description} size={80} />}
           </label>
         </Stack>
 

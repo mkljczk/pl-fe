@@ -112,7 +112,7 @@ const ChatPageMain = () => {
             />
 
             <Link to={`/@${chat.account.acct}`}>
-              <Avatar src={chat.account.avatar} size={40} className='flex-none' />
+              <Avatar src={chat.account.avatar} alt={chat.account.avatar_description} size={40} className='flex-none' />
             </Link>
           </HStack>
 
@@ -139,7 +139,7 @@ const ChatPageMain = () => {
           <MenuList className='w-80'>
             <Stack space={4} className='px-6 py-5'>
               <HStack alignItems='center' space={3}>
-                <Avatar src={chat.account.avatar_static} size={50} />
+                <Avatar src={chat.account.avatar_static} alt={chat.account.avatar_description} size={50} />
                 <Stack>
                   <Text weight='semibold'>{chat.account.display_name}</Text>
                   <Text size='sm' theme='primary'>@{chat.account.acct}</Text>

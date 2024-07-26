@@ -1,3 +1,4 @@
+import pick from 'lodash/pick';
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -21,6 +22,7 @@ import { useAppDispatch, useOwnAccount, useFeatures, useInstance, useAppSelector
 import { useImageField } from 'soapbox/hooks/forms';
 import toast from 'soapbox/toast';
 import { isDefaultAvatar, isDefaultHeader } from 'soapbox/utils/accounts';
+import { GOTOSOCIAL, parseVersion } from 'soapbox/utils/features';
 
 import AvatarPicker from './components/avatar-picker';
 import HeaderPicker from './components/header-picker';
@@ -112,6 +114,12 @@ interface AccountCredentials {
   location?: string;
   /** User's birthday. */
   birthday?: string;
+  /** GoToSocial: Avatar image description. */
+  avatar_description?: string;
+  /** GoToSocial: Header image description. */
+  header_description?: string;
+  /** GoToSocial: Enable RSS feed for public posts */
+  enable_rss?: boolean;
 }
 
 /** Convert an account into an update_credentials request object. */
@@ -119,11 +127,8 @@ const accountToCredentials = (account: Account): AccountCredentials => {
   const hideNetwork = hidesNetwork(account);
 
   return {
-    discoverable: account.discoverable,
-    bot: account.bot,
-    display_name: account.display_name,
+    ...(pick(account, ['discoverable', 'bot', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss'])),
     note: account.source?.note ?? '',
-    locked: account.locked,
     fields_attributes: [...account.source?.fields ?? []],
     stranger_notifications: account.pleroma?.notification_settings?.block_from_strangers === true,
     accepts_email_list: account.pleroma?.accepts_email_list === true,
@@ -131,7 +136,6 @@ const accountToCredentials = (account: Account): AccountCredentials => {
     hide_follows: hideNetwork,
     hide_followers_count: hideNetwork,
     hide_follows_count: hideNetwork,
-    location: account.location,
     birthday: account.pleroma?.birthday ?? undefined,
   };
 };
@@ -168,10 +172,13 @@ const EditProfile: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const instance = useInstance();
+  const { software } = parseVersion(instance.version);
 
   const { account } = useOwnAccount();
   const features = useFeatures();
-  const maxFields = instance.pleroma.metadata.fields_limits.max_fields;
+  const maxFields = instance.configuration.accounts
+    ? instance.configuration.accounts.max_profile_fields
+    : instance.pleroma.metadata.fields_limits.max_fields;
 
   const attachmentTypes = useAppSelector(
     state => state.instance.configuration.media_attachments.supported_mime_types)
@@ -230,6 +237,10 @@ const EditProfile: React.FC = () => {
     event.preventDefault();
   };
 
+  const handleFieldChange = <T = any>(key: keyof AccountCredentials) => (value: T) => {
+    updateData(key, value);
+  };
+
   const handleCheckboxChange = (key: keyof AccountCredentials): React.ChangeEventHandler<HTMLInputElement> => e => {
     updateData(key, e.target.checked);
   };
@@ -270,12 +281,30 @@ const EditProfile: React.FC = () => {
     updateData('fields_attributes', fields);
   };
 
+  const handleAvatarChangeDescription = features.accountAvatarDescription
+    ? handleFieldChange<string>('avatar_description') : undefined;
+  const handleHeaderChangeDescription = features.accountAvatarDescription
+    ? handleFieldChange<string>('header_description') : undefined;
+
   return (
     <Column label={intl.formatMessage(messages.header)}>
       <Form onSubmit={handleSubmit}>
         <div className='relative mb-12 flex'>
-          <HeaderPicker accept={attachmentTypes} disabled={isLoading} {...header} />
-          <AvatarPicker className='!sm:left-6 !left-4 !translate-x-0' accept={attachmentTypes} disabled={isLoading} {...avatar} />
+          <HeaderPicker
+            accept={attachmentTypes}
+            disabled={isLoading}
+            description={data.header_description}
+            onChangeDescription={handleHeaderChangeDescription}
+            {...header}
+          />
+          <AvatarPicker
+            className='!sm:left-6 !left-4 !translate-x-0'
+            accept={attachmentTypes}
+            disabled={isLoading}
+            description={data.avatar_description}
+            onChangeDescription={handleAvatarChangeDescription}
+            {...avatar}
+          />
         </div>
 
         <FormGroup
@@ -393,6 +422,17 @@ const EditProfile: React.FC = () => {
               <Toggle
                 checked={data.accepts_email_list}
                 onChange={handleCheckboxChange('accepts_email_list')}
+              />
+            </ListItem>
+          )}
+
+          {features.rssFeeds && software === GOTOSOCIAL && (
+            <ListItem
+              label={<FormattedMessage id='edit_profile.fields.rss_label' defaultMessage='Enable RSS feed for public posts' />}
+            >
+              <Toggle
+                checked={data.enable_rss}
+                onChange={handleCheckboxChange('enable_rss')}
               />
             </ListItem>
           )}

@@ -66,7 +66,7 @@ const ChatWindow = () => {
             <HStack alignItems='center' space={3}>
               {isOpen && (
                 <Link to={`/@${chat.account.acct}`}>
-                  <Avatar src={chat.account.avatar} size={40} />
+                  <Avatar src={chat.account.avatar} alt={chat.account.avatar_description} size={40} />
                 </Link>
               )}
 

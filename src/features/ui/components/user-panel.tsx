@@ -36,7 +36,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
         <Stack>
           <div className='relative -mx-4 -mt-4 h-24 overflow-hidden bg-gray-200'>
             {header && (
-              <StillImage src={account.header} />
+              <StillImage src={account.header} alt={account.header_description} />
             )}
           </div>
 
@@ -46,7 +46,12 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
               title={acct}
               className='-mt-12 block'
             >
-              <Avatar src={account.avatar} size={80} className='h-20 w-20 overflow-hidden bg-gray-50 ring-2 ring-white' />
+              <Avatar
+                src={account.avatar}
+                alt={account.avatar_description}
+                size={80}
+                className='h-20 w-20 overflow-hidden bg-gray-50 ring-2 ring-white'
+              />
             </Link>
 
             {action && (

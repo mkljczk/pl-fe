@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 
 import StillImage, { IStillImage } from 'soapbox/components/still-image';
 
@@ -7,14 +8,20 @@ import Icon from '../icon/icon';
 
 const AVATAR_SIZE = 42;
 
-interface IAvatar extends Pick<IStillImage, 'src' | 'onError' | 'className'> {
+const messages = defineMessages({
+  avatar: { id: 'account.avatar.alt', defaultMessage: 'Avatar' },
+});
+
+interface IAvatar extends Pick<IStillImage, 'alt' | 'src' | 'onError' | 'className'> {
   /** Width and height of the avatar in pixels. */
   size?: number;
 }
 
 /** Round profile avatar for accounts. */
 const Avatar = (props: IAvatar) => {
-  const { src, size = AVATAR_SIZE, className } = props;
+  const intl = useIntl();
+
+  const { alt, src, size = AVATAR_SIZE, className } = props;
 
   const [isAvatarMissing, setIsAvatarMissing] = useState<boolean>(false);
 
@@ -47,7 +54,7 @@ const Avatar = (props: IAvatar) => {
       className={clsx('rounded-full', className)}
       style={style}
       src={src}
-      alt='Avatar'
+      alt={alt || intl.formatMessage(messages.avatar)}
       onError={handleLoadFailure}
     />
   );

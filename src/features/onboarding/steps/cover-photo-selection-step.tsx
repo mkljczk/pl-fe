@@ -81,7 +81,7 @@ const CoverPhotoSelectionStep = ({ onNext }: { onNext: () => void }) => {
             {selectedFile || account?.header && (
               <StillImage
                 src={selectedFile || account.header}
-                alt={intl.formatMessage(messages.header)}
+                alt={account.header_description || intl.formatMessage(messages.header)}
                 className='absolute inset-0 rounded-t-md object-cover'
               />
             )}
@@ -111,7 +111,12 @@ const CoverPhotoSelectionStep = ({ onNext }: { onNext: () => void }) => {
 
           <div className='flex flex-col px-4 pb-4'>
             {account && (
-              <Avatar src={account.avatar} size={64} className='-mt-8 mb-2 ring-2 ring-white dark:ring-primary-800' />
+              <Avatar
+                src={account.avatar}
+                alt={account.avatar_description}
+                size={64}
+                className='-mt-8 mb-2 ring-2 ring-white dark:ring-primary-800'
+              />
             )}
 
             <Text weight='bold' size='sm'>{account?.display_name}</Text>

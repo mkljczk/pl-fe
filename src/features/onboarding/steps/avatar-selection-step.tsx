@@ -72,7 +72,7 @@ const AvatarSelectionStep = ({ onNext }: { onNext: () => void }) => {
       <Stack space={10}>
         <div className='relative mx-auto rounded-full bg-gray-200'>
           {account && (
-            <Avatar src={selectedFile || account.avatar} size={175} />
+            <Avatar src={selectedFile || account.avatar} alt={account.avatar_description} size={175} />
           )}
 
           {isSubmitting && (

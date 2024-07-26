@@ -83,7 +83,12 @@ const Report: React.FC<IReport> = ({ id }) => {
     <HStack space={3} className='p-3' key={report.id}>
       <HoverRefWrapper accountId={targetAccount.id} inline>
         <Link to={`/@${acct}`} title={acct}>
-          <Avatar src={targetAccount.avatar} size={32} className='overflow-hidden' />
+          <Avatar
+            src={targetAccount.avatar}
+            alt={account.avatar_description}
+            size={32}
+            className='overflow-hidden'
+          />
         </Link>
       </HoverRefWrapper>
 

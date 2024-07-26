@@ -1,3 +1,5 @@
+import range from 'lodash/range';
+
 import type { Account } from 'soapbox/schemas';
 
 const getDomainFromURL = (account: Pick<Account, 'url'>): string => {
@@ -41,6 +43,7 @@ const isDefaultHeader = (url: string) => DEFAULT_HEADERS.some(header => url.ends
 const DEFAULT_AVATARS = [
   '/avatars/original/missing.png', // Mastodon
   '/images/avi.png', // Pleroma
+  ...(range(1, 6).map(i => `/assets/default_avatars/GoToSocial_icon${i}.webp`)), // GoToSocial
   '/assets/default_avatars/GoToSocial_icon2.webp', // GoToSocial
   require('soapbox/assets/images/avatar-missing.png'), // avatar not provided by backend
 ];

@@ -196,7 +196,7 @@ const Account = ({
       <HStack alignItems={actionAlignment} space={3} justifyContent='between'>
         <HStack alignItems='center' space={3} className='overflow-hidden'>
           <div className='rounded-full'>
-            <Avatar src={account.avatar} size={avatarSize} />
+            <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} />
             {emoji && (
               <Emoji
                 className='absolute -right-1.5 bottom-0 h-5 w-5'
@@ -251,7 +251,7 @@ const Account = ({
               wrapper={(children) => <HoverRefWrapper className='relative' accountId={account.id} inline>{children}</HoverRefWrapper>}
             >
               <LinkEl className='rounded-full' {...linkProps}>
-                <Avatar src={account.avatar} size={avatarSize} />
+                <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} />
                 {emoji && (
                   <Emoji
                     className='absolute -right-1.5 bottom-0 h-5 w-5'

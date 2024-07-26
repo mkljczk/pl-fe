@@ -13,12 +13,14 @@ const headerMissing = require('soapbox/assets/images/header-missing.png');
 
 const groupSchema = z.object({
   avatar: z.string().catch(avatarMissing),
+  avatar_description: z.string().catch(''),
   avatar_static: z.string().catch(''),
   created_at: z.string().datetime().catch(new Date().toUTCString()),
   display_name: z.string().catch(''),
   domain: z.string().catch(''),
   emojis: filteredArray(customEmojiSchema),
   header: z.string().catch(headerMissing),
+  header_description: z.string().catch(''),
   header_static: z.string().catch(''),
   id: z.coerce.string(),
   locked: z.boolean().catch(false),
