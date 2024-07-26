@@ -229,7 +229,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   } else if (privacy === 'direct') {
     publishIcon = require('@tabler/icons/outline/mail.svg');
     publishText = intl.formatMessage(messages.message);
-  } else if (privacy === 'private') {
+  } else if (privacy === 'private' || privacy === 'mutuals_only') {
     publishIcon = require('@tabler/icons/outline/lock.svg');
     publishText = intl.formatMessage(messages.publish);
   } else {

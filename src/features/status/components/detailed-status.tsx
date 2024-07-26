@@ -104,7 +104,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
   if (actualStatus.visibility === 'direct') {
     statusTypeIcon = <Icon className='h-4 w-4 text-gray-700 dark:text-gray-600' src={require('@tabler/icons/outline/mail.svg')} />;
-  } else if (actualStatus.visibility === 'private') {
+  } else if (actualStatus.visibility === 'private' || actualStatus.visibility === 'mutuals_only') {
     statusTypeIcon = <Icon className='h-4 w-4 text-gray-700 dark:text-gray-600' src={require('@tabler/icons/outline/lock.svg')} />;
   }
 

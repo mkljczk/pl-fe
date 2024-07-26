@@ -1301,7 +1301,7 @@
   "security.fields.new_password.label": "Nowe hasło",
   "security.fields.old_password.label": "Obecne hasło",
   "security.fields.password.label": "Hasło",
-  "security.fields.password_confirmation.label": "Obecne hasło (ponownie)",
+  "security.fields.password_confirmation.label": "Nowe hasło (ponownie)",
   "security.headers.delete": "Usuń konto",
   "security.headers.tokens": "Sesje",
   "security.qr.fail": "Nie udało się uzyskać klucza konfiguracyjnego",

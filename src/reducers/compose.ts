@@ -59,6 +59,7 @@ import {
   COMPOSE_EDITOR_STATE_SET,
   COMPOSE_CHANGE_MEDIA_ORDER,
   COMPOSE_ADD_SUGGESTED_QUOTE,
+  COMPOSE_FEDERATED_CHANGE,
   ComposeAction,
 } from '../actions/compose';
 import { EVENT_COMPOSE_CANCEL, EVENT_FORM_SET, type EventsAction } from '../actions/events';
@@ -124,6 +125,7 @@ const ReducerCompose = ImmutableRecord({
   language: null as Language | null,
   modified_language: null as Language | null,
   suggested_language: null as string | null,
+  federated: true,
 });
 
 type State = ImmutableMap<string, Compose>;
@@ -226,7 +228,7 @@ const insertEmoji = (compose: Compose, position: number, emojiData: Emoji, needs
 };
 
 const privacyPreference = (a: string, b: string) => {
-  const order = ['public', 'unlisted', 'private', 'direct'];
+  const order = ['public', 'unlisted', 'mutuals_only', 'private', 'direct', 'local'];
 
   if (a === 'group') return a;
 
@@ -602,6 +604,8 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
       return updateCompose(state, action.id, compose => compose
         .update('dismissed_quotes', quotes => compose.quote ? quotes.add(compose.quote) : quotes)
         .set('quote', null));
+    case COMPOSE_FEDERATED_CHANGE:
+      return updateCompose(state, action.id, compose => compose.update('federated', value => !value));
     default:
       return state;
   }

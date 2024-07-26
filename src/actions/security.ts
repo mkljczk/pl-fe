@@ -4,11 +4,11 @@
  * @see module:soapbox/actions/auth
  */
 
+import api from 'soapbox/api';
 import toast from 'soapbox/toast';
 import { getLoggedInAccount } from 'soapbox/utils/auth';
+import { GOTOSOCIAL, parseVersion } from 'soapbox/utils/features';
 import { normalizeUsername } from 'soapbox/utils/input';
-
-import api from '../api';
 
 import { AUTH_LOGGED_OUT, messages } from './auth';
 
@@ -69,20 +69,39 @@ const revokeOAuthTokenById = (id: number) =>
 const changePassword = (oldPassword: string, newPassword: string, confirmation: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: CHANGE_PASSWORD_REQUEST });
-    return api(getState)('/api/pleroma/change_password', {
-      method: 'POST',
-      body: JSON.stringify({
-        password: oldPassword,
-        new_password: newPassword,
-        new_password_confirmation: confirmation,
-      }),
-    }).then(response => {
-      if (response.json.error) throw response.json.error; // This endpoint returns HTTP 200 even on failure
-      dispatch({ type: CHANGE_PASSWORD_SUCCESS, response });
-    }).catch(error => {
-      dispatch({ type: CHANGE_PASSWORD_FAIL, error, skipAlert: true });
-      throw error;
-    });
+    const state = getState();
+    const instance = state.instance;
+    const v = parseVersion(instance.version);
+
+    if (v.software === GOTOSOCIAL) {
+      return api(getState)('/api/v1/user/password_change', {
+        method: 'POST',
+        body: JSON.stringify({
+          old_password: oldPassword,
+          new_password: newPassword,
+        }),
+      }).then(response => {
+        dispatch({ type: CHANGE_PASSWORD_SUCCESS, response });
+      }).catch(error => {
+        dispatch({ type: CHANGE_PASSWORD_FAIL, error, skipAlert: true });
+        throw error;
+      });
+    } else {
+      return api(getState)('/api/pleroma/change_password', {
+        method: 'POST',
+        body: JSON.stringify({
+          password: oldPassword,
+          new_password: newPassword,
+          new_password_confirmation: confirmation,
+        }),
+      }).then(response => {
+        if (response.json.error) throw response.json.error; // This endpoint returns HTTP 200 even on failure
+        dispatch({ type: CHANGE_PASSWORD_SUCCESS, response });
+      }).catch(error => {
+        dispatch({ type: CHANGE_PASSWORD_FAIL, error, skipAlert: true });
+        throw error;
+      });
+    }
   };
 
 const resetPassword = (usernameOrEmail: string) =>
@@ -110,10 +129,14 @@ const resetPassword = (usernameOrEmail: string) =>
 const changeEmail = (email: string, password: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: CHANGE_EMAIL_REQUEST, email });
-    return api(getState)('/api/pleroma/change_email', {
+    const state = getState();
+    const instance = state.instance;
+    const v = parseVersion(instance.version);
+
+    return api(getState)(v.software === GOTOSOCIAL ? '/api/v1/user/email_change' : '/api/pleroma/change_email', {
       method: 'POST',
       body: JSON.stringify({
-        email,
+        [v.software === GOTOSOCIAL ? 'new_email' : 'email']: email,
         password,
       }),
     }).then(response => {
@@ -127,10 +150,14 @@ const changeEmail = (email: string, password: string) =>
 
 const deleteAccount = (password: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch({ type: CHANGE_PASSWORD_REQUEST });
     const account = getLoggedInAccount(getState());
+    const state = getState();
+    const instance = state.instance;
+    const v = parseVersion(instance.version);
 
     dispatch({ type: DELETE_ACCOUNT_REQUEST });
-    return api(getState)('/api/pleroma/delete_account', {
+    return api(getState)(v.software === GOTOSOCIAL ? '/api/v1/accounts/delete' : '/api/pleroma/delete_account', {
       method: 'POST',
       body: JSON.stringify({ password }),
     }).then(response => {
