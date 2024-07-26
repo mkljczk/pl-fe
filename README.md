@@ -15,7 +15,7 @@ There is more to mention. `pl-fe` includes various minor improvements and visual
 
 Want to test `pl-fe` with **any existing MastoAPI-compatible server?** Try [pl.mkljczk.pl](https://pl.mkljczk.pl) — enter your server's domain name to use `pl-fe` on any server!
 
-# License
+## License
 
 `pl-fe` is a fork of Soapbox, which was forked from [Gab Social](https://github.com/GabOpenSource/gab-social), which is a fork of [Mastodon](https://github.com/mastodon/mastodon/).
 
