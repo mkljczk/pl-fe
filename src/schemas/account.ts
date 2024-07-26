@@ -21,7 +21,7 @@ const hexSchema = z.string().regex(/^#[a-f0-9]{6}$/i);
 const fieldSchema = z.object({
   name: z.string(),
   value: z.string(),
-  verified_at: z.string().datetime().nullable().catch(null),
+  verified_at: z.string().datetime({ offset: true }).nullable().catch(null),
 });
 
 const roleSchema = z.object({
