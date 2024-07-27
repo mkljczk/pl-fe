@@ -580,7 +580,10 @@ const getInstanceFeatures = (instance: Instance) => {
      * Can hide follows/followers lists and counts.
      * @see PATCH /api/v1/accounts/update_credentials
      */
-    hideNetwork: v.software === PLEROMA,
+    hideNetwork: any([
+      v.software === PLEROMA,
+      v.software === GOTOSOCIAL,
+    ]),
 
     /**
      * Pleroma import API.

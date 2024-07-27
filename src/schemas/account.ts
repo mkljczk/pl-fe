@@ -49,6 +49,7 @@ const baseAccountSchema = z.object({
   header: z.string().url().catch(headerMissing),
   header_description: z.string().catch(''),
   header_static: z.string().url().optional().catch(undefined),
+  hide_collections: z.boolean().catch(false),
   id: z.string(),
   last_status_at: z.string().datetime().optional().catch(undefined),
   local: z.boolean().catch(false),

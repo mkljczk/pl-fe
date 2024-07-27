@@ -120,6 +120,8 @@ interface AccountCredentials {
   header_description?: string;
   /** GoToSocial: Enable RSS feed for public posts */
   enable_rss?: boolean;
+  /** GoToSocial: whether to publicly display followers/follows. */
+  hide_collections?: boolean;
 }
 
 /** Convert an account into an update_credentials request object. */
@@ -127,7 +129,7 @@ const accountToCredentials = (account: Account): AccountCredentials => {
   const hideNetwork = hidesNetwork(account);
 
   return {
-    ...(pick(account, ['discoverable', 'bot', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss'])),
+    ...(pick(account, ['discoverable', 'bot', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections'])),
     note: account.source?.note ?? '',
     fields_attributes: [...account.source?.fields ?? []],
     stranger_notifications: account.pleroma?.notification_settings?.block_from_strangers === true,
@@ -257,10 +259,12 @@ const EditProfile: React.FC = () => {
     const hide = e.target.checked;
     setData(prevData => ({
       ...prevData,
-      hide_followers: hide,
-      hide_follows: hide,
-      hide_followers_count: hide,
-      hide_follows_count: hide,
+      ...(software === GOTOSOCIAL ? { hide_collections: hide } : {
+        hide_followers: hide,
+        hide_follows: hide,
+        hide_followers_count: hide,
+        hide_follows_count: hide,
+      }),
     }));
   };
 
@@ -372,7 +376,7 @@ const EditProfile: React.FC = () => {
               hint={<FormattedMessage id='edit_profile.hints.hide_network' defaultMessage='Who you follow and who follows you will not be shown on your profile' />}
             >
               <Toggle
-                checked={account ? (data.hide_followers && data.hide_follows && data.hide_followers_count && data.hide_follows_count) : false}
+                checked={account ? (software === GOTOSOCIAL ? data.hide_collections : (data.hide_followers && data.hide_follows && data.hide_followers_count && data.hide_follows_count)) : false}
                 onChange={handleHideNetworkChange}
               />
             </ListItem>
