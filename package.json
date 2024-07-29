@@ -163,7 +163,7 @@
     "react-sparklines": "^1.7.0",
     "react-sticky-box": "^2.0.0",
     "react-swipeable-views": "^0.14.0",
-    "react-virtuoso": "^4.7.12",
+    "react-virtuoso": "^4.7.13",
     "redux": "^5.0.0",
     "redux-immutable": "^4.0.0",
     "redux-thunk": "^3.1.0",
