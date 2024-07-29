@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import debounce from 'lodash/debounce';
 import React, { useEffect, useRef, useMemo, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -223,33 +224,39 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
   }, [showLoading, initialTopMostItemIndex]);
 
   return (
-    <Virtuoso
-      ref={ref}
-      id={id}
-      useWindowScroll={useWindowScroll}
-      data={data}
-      startReached={onScrollToTop}
-      endReached={handleEndReached}
-      isScrolling={isScrolling => isScrolling && onScroll && onScroll()}
-      itemContent={renderItem}
-      initialTopMostItemIndex={initialIndex}
-      rangeChanged={handleRangeChange}
-      className={className}
-      style={style}
-      context={{
-        listClassName,
-        itemClassName,
-      }}
-      components={{
-        Header: () => <>{prepend}</>,
-        ScrollSeekPlaceholder: Placeholder as any,
-        EmptyPlaceholder: () => renderEmpty(),
-        List,
-        Item,
-        Footer: loadMore,
-      }}
-    />
+    <div className={className}>
+      {data}
+    </div>
   );
+
+  // return (
+  //   <Virtuoso
+  //     ref={ref}
+  //     id={id}
+  //     useWindowScroll={useWindowScroll}
+  //     data={data}
+  //     startReached={onScrollToTop}
+  //     endReached={handleEndReached}
+  //     isScrolling={isScrolling => isScrolling && onScroll && onScroll()}
+  //     itemContent={renderItem}
+  //     initialTopMostItemIndex={initialIndex}
+  //     rangeChanged={handleRangeChange}
+  //     className={className}
+  //     style={style}
+  //     context={{
+  //       listClassName,
+  //       itemClassName,
+  //     }}
+  //     components={{
+  //       Header: () => <>{prepend}</>,
+  //       ScrollSeekPlaceholder: Placeholder as any,
+  //       EmptyPlaceholder: () => renderEmpty(),
+  //       List,
+  //       Item,
+  //       Footer: loadMore,
+  //     }}
+  //   />
+  // );
 });
 
 export { type IScrollableList, ScrollableList as default };
