@@ -42,7 +42,7 @@ const startSentry = async (dsn: string): Promise<void> => {
     tracesSampleRate: .1,
   });
 
-  Sentry.setContext('soapbox', sourceCode);
+  Sentry.setContext('pl-fe', sourceCode);
 };
 
 /** Associate the account with Sentry events. */

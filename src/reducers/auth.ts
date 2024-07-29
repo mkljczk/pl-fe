@@ -65,7 +65,7 @@ type State = ReturnType<typeof ReducerRecord>;
 const buildKey = (parts: string[]) => parts.join(':');
 
 // For subdirectory support
-const NAMESPACE = trim(BuildConfig.FE_SUBDIRECTORY, '/') ? `soapbox@${BuildConfig.FE_SUBDIRECTORY}` : 'soapbox';
+const NAMESPACE = trim(BuildConfig.FE_SUBDIRECTORY, '/') ? `soapbox@${BuildConfig.FE_SUBDIRECTORY}` : 'pl-fe';
 
 const STORAGE_KEY = buildKey([NAMESPACE, 'auth']);
 const SESSION_KEY = buildKey([NAMESPACE, 'auth', 'me']);

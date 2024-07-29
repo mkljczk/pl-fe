@@ -7,8 +7,8 @@ interface IKVStore extends LocalForage {
 // localForage
 // https://localforage.github.io/localForage/#settings-api-config
 const KVStore = localforage.createInstance({
-  name: 'soapbox',
-  description: 'Soapbox offline data store',
+  name: 'pl-fe',
+  description: 'pl-fe offline data store',
   driver: localforage.INDEXEDDB,
   storeName: 'keyvaluepairs',
 }) as IKVStore;
