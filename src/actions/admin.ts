@@ -5,7 +5,7 @@ import { accountIdsToAccts } from 'soapbox/selectors';
 import { filterBadges, getTagDiff } from 'soapbox/utils/badges';
 import { getFeatures } from 'soapbox/utils/features';
 
-import api, { getNextLink } from '../api';
+import { getClient, getNextLink } from '../api';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
@@ -79,7 +79,7 @@ const ADMIN_USER_INDEX_QUERY_SET = 'ADMIN_USER_INDEX_QUERY_SET';
 const fetchConfig = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: ADMIN_CONFIG_FETCH_REQUEST });
-    return api(getState)('/api/v1/pleroma/admin/config')
+    return getClient(getState).request('/api/v1/pleroma/admin/config')
       .then(({ json: data }) => {
         dispatch({ type: ADMIN_CONFIG_FETCH_SUCCESS, configs: data.configs, needsReboot: data.need_reboot });
       }).catch(error => {
@@ -90,7 +90,7 @@ const fetchConfig = () =>
 const updateConfig = (configs: Record<string, any>[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: ADMIN_CONFIG_UPDATE_REQUEST, configs });
-    return api(getState)('/api/v1/pleroma/admin/config', { method: 'POST', body: JSON.stringify({ configs }) })
+    return getClient(getState).request('/api/v1/pleroma/admin/config', { method: 'POST', body: { configs } })
       .then(({ json: data }) => {
         dispatch({ type: ADMIN_CONFIG_UPDATE_SUCCESS, configs: data.configs, needsReboot: data.need_reboot });
       }).catch(error => {
@@ -113,7 +113,7 @@ const updateSoapboxConfig = (data: Record<string, any>) =>
 
 const fetchMastodonReports = (params: Record<string, any>) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
-    api(getState)('/api/v1/admin/reports', { params })
+    getClient(getState).request('/api/v1/admin/reports', { params })
       .then(({ json: reports }) => {
         reports.forEach((report: APIEntity) => {
           dispatch(importFetchedAccount(report.account?.account));
@@ -127,7 +127,7 @@ const fetchMastodonReports = (params: Record<string, any>) =>
 
 const fetchPleromaReports = (params: Record<string, any>) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
-    api(getState)('/api/v1/pleroma/admin/reports', { params })
+    getClient(getState).request('/api/v1/pleroma/admin/reports', { params })
       .then(({ json: { reports } }) => {
         reports.forEach((report: APIEntity) => {
           dispatch(importFetchedAccount(report.account));
@@ -160,9 +160,11 @@ const fetchReports = (params: Record<string, any> = {}) =>
   };
 
 const patchMastodonReports = (reports: { id: string; state: string }[]) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    Promise.all(reports.map(({ id, state }) =>
-      api(getState)(`/api/v1/admin/reports/${id}/${state === 'resolved' ? 'reopen' : 'resolve'}`, {
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    const client = getClient(getState);
+
+    return Promise.all(reports.map(({ id, state }) =>
+      client.request(`/api/v1/admin/reports/${id}/${state === 'resolved' ? 'reopen' : 'resolve'}`, {
         method: 'POST',
       })
         .then(() => {
@@ -171,12 +173,13 @@ const patchMastodonReports = (reports: { id: string; state: string }[]) =>
           dispatch({ type: ADMIN_REPORTS_PATCH_FAIL, error, reports });
         }),
     ));
+  };
 
 const patchPleromaReports = (reports: { id: string; state: string }[]) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
-    api(getState)('/api/v1/pleroma/admin/reports', {
+    getClient(getState).request('/api/v1/pleroma/admin/reports', {
       method: 'PATCH',
-      body: JSON.stringify(reports),
+      body: reports,
     }).then(() => {
       dispatch({ type: ADMIN_REPORTS_PATCH_SUCCESS, reports });
     }).catch(error => {
@@ -214,7 +217,7 @@ const fetchMastodonUsers = (filters: string[], page: number, query: string | nul
     if (filters.includes('active')) params.active = true;
     if (filters.includes('need_approval')) params.pending = true;
 
-    return api(getState)(next || '/api/v1/admin/accounts', { params })
+    return getClient(getState).request(next || '/api/v1/admin/accounts', { params })
       .then((response) => {
         const accounts = response.json;
         const next = getNextLink(response);
@@ -237,7 +240,7 @@ const fetchPleromaUsers = (filters: string[], page: number, query?: string | nul
     const params: Record<string, any> = { filters: filters.join(), page, page_size: pageSize };
     if (query) params.query = query;
 
-    return api(getState)('/api/v1/pleroma/admin/users', { params })
+    return getClient(getState).request('/api/v1/pleroma/admin/users', { params })
       .then(({ json: { users, count, page_size: pageSize } }) => {
         dispatch(fetchRelationships(users.map((user: APIEntity) => user.id)));
         dispatch({ type: ADMIN_USERS_FETCH_SUCCESS, users, count, pageSize, filters, page });
@@ -264,14 +267,13 @@ const fetchUsers = (filters: string[] = [], page = 1, query?: string | null, pag
   };
 
 const deactivateMastodonUsers = (accountIds: string[], reportId?: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    Promise.all(accountIds.map(accountId => {
-      api(getState)(`/api/v1/admin/accounts/${accountId}/action`, {
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    const client = getClient(getState);
+
+    return Promise.all(accountIds.map(accountId => {
+      client.request(`/api/v1/admin/accounts/${accountId}/action`, {
         method: 'POST',
-        body: JSON.stringify({
-          type: 'disable',
-          report_id: reportId,
-        }),
+        body: { type: 'disable', report_id: reportId },
       })
         .then(() => {
           dispatch({ type: ADMIN_USERS_DEACTIVATE_SUCCESS, accountIds: [accountId] });
@@ -279,13 +281,14 @@ const deactivateMastodonUsers = (accountIds: string[], reportId?: string) =>
           dispatch({ type: ADMIN_USERS_DEACTIVATE_FAIL, error, accountIds: [accountId] });
         });
     }));
+  };
 
 const deactivatePleromaUsers = (accountIds: string[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const nicknames = accountIdsToAccts(getState(), accountIds);
-    return api(getState)('/api/v1/pleroma/admin/users/deactivate', {
+    return getClient(getState).request('/api/v1/pleroma/admin/users/deactivate', {
       method: 'PATCH',
-      body: JSON.stringify(nicknames),
+      body: nicknames,
     })
       .then(({ json: { users } }) => {
         dispatch({ type: ADMIN_USERS_DEACTIVATE_SUCCESS, users, accountIds });
@@ -314,8 +317,8 @@ const deleteUsers = (accountIds: string[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const nicknames = accountIdsToAccts(getState(), accountIds);
     dispatch({ type: ADMIN_USERS_DELETE_REQUEST, accountIds });
-    return api(getState)('/api/v1/pleroma/admin/users', {
-      method: 'DELETE', body: JSON.stringify({ nicknames }),
+    return getClient(getState).request('/api/v1/pleroma/admin/users', {
+      method: 'DELETE', body: { nicknames },
     }).then(({ json: nicknames }) => {
       dispatch({ type: ADMIN_USERS_DELETE_SUCCESS, nicknames, accountIds });
     }).catch(error => {
@@ -324,22 +327,23 @@ const deleteUsers = (accountIds: string[]) =>
   };
 
 const approveMastodonUsers = (accountIds: string[]) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    const client = getClient(getState);
     Promise.all(accountIds.map(accountId => {
-      api(getState)(`/api/v1/admin/accounts/${accountId}/approve`, { method: 'POST' })
+      client.request(`/api/v1/admin/accounts/${accountId}/approve`, { method: 'POST' })
         .then(({ json: user }) => {
           dispatch({ type: ADMIN_USERS_APPROVE_SUCCESS, users: [user], accountIds: [accountId] });
         }).catch(error => {
           dispatch({ type: ADMIN_USERS_APPROVE_FAIL, error, accountIds: [accountId] });
         });
     }));
+  };
 
 const approvePleromaUsers = (accountIds: string[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const nicknames = accountIdsToAccts(getState(), accountIds);
-    return api(getState)('/api/v1/pleroma/admin/users/approve', {
-      method: 'POST',
-      body: JSON.stringify({ nicknames }),
+    return getClient(getState).request('/api/v1/pleroma/admin/users/approve', {
+      method: 'POST', body: { nicknames },
     }).then(({ json: { users } }) => {
       dispatch({ type: ADMIN_USERS_APPROVE_SUCCESS, users, accountIds });
     }).catch(error => {
@@ -366,7 +370,7 @@ const approveUsers = (accountIds: string[]) =>
 const deleteStatus = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: ADMIN_STATUS_DELETE_REQUEST, id });
-    return api(getState)(`/api/v1/pleroma/admin/statuses/${id}`, { method: 'DELETE' })
+    return getClient(getState).request(`/api/v1/pleroma/admin/statuses/${id}`, { method: 'DELETE' })
       .then(() => {
         dispatch({ type: ADMIN_STATUS_DELETE_SUCCESS, id });
       }).catch(error => {
@@ -377,8 +381,8 @@ const deleteStatus = (id: string) =>
 const toggleStatusSensitivity = (id: string, sensitive: boolean) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: ADMIN_STATUS_TOGGLE_SENSITIVITY_REQUEST, id });
-    return api(getState)(`/api/v1/pleroma/admin/statuses/${id}`, {
-      method: 'PUT', body: JSON.stringify({ sensitive: !sensitive }),
+    return getClient(getState).request(`/api/v1/pleroma/admin/statuses/${id}`, {
+      method: 'PUT', body: { sensitive: !sensitive },
     }).then(() => {
       dispatch({ type: ADMIN_STATUS_TOGGLE_SENSITIVITY_SUCCESS, id });
     }).catch(error => {
@@ -390,9 +394,9 @@ const tagUsers = (accountIds: string[], tags: string[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const nicknames = accountIdsToAccts(getState(), accountIds);
     dispatch({ type: ADMIN_USERS_TAG_REQUEST, accountIds, tags });
-    return api(getState)('/api/v1/pleroma/admin/users/tag', {
+    return getClient(getState).request('/api/v1/pleroma/admin/users/tag', {
       method: 'PUT',
-      body: JSON.stringify({ nicknames, tags }),
+      body: { nicknames, tags },
     }).then(() => {
       dispatch({ type: ADMIN_USERS_TAG_SUCCESS, accountIds, tags });
     }).catch(error => {
@@ -410,9 +414,9 @@ const untagUsers = (accountIds: string[], tags: string[]) =>
     }
 
     dispatch({ type: ADMIN_USERS_UNTAG_REQUEST, accountIds, tags });
-    return api(getState)('/api/v1/pleroma/admin/users/tag', {
+    return getClient(getState).request('/api/v1/pleroma/admin/users/tag', {
       method: 'DELETE',
-      body: JSON.stringify({ nicknames, tags }),
+      body: { nicknames, tags },
     })
       .then(() => {
         dispatch({ type: ADMIN_USERS_UNTAG_SUCCESS, accountIds, tags });
@@ -443,11 +447,9 @@ const addPermission = (accountIds: string[], permissionGroup: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const nicknames = accountIdsToAccts(getState(), accountIds);
     dispatch({ type: ADMIN_ADD_PERMISSION_GROUP_REQUEST, accountIds, permissionGroup });
-    return api(getState)(`/api/v1/pleroma/admin/users/permission_group/${permissionGroup}`, {
-      method: 'POST',
-      body: JSON.stringify({ nicknames }),
-    })
-      .then(({ json: data }) => {
+    return getClient(getState).request(`/api/v1/pleroma/admin/users/permission_group/${permissionGroup}`, {
+      method: 'POST', body: { nicknames },
+    }).then(({ json: data }) => {
         dispatch({ type: ADMIN_ADD_PERMISSION_GROUP_SUCCESS, accountIds, permissionGroup, data });
       }).catch(error => {
         dispatch({ type: ADMIN_ADD_PERMISSION_GROUP_FAIL, error, accountIds, permissionGroup });
@@ -458,11 +460,9 @@ const removePermission = (accountIds: string[], permissionGroup: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const nicknames = accountIdsToAccts(getState(), accountIds);
     dispatch({ type: ADMIN_REMOVE_PERMISSION_GROUP_REQUEST, accountIds, permissionGroup });
-    return api(getState)(`/api/v1/pleroma/admin/users/permission_group/${permissionGroup}`, {
-      method: 'DELETE',
-      body: JSON.stringify({ nicknames }),
-    })
-      .then(({ json: data }) => {
+    return getClient(getState).request(`/api/v1/pleroma/admin/users/permission_group/${permissionGroup}`, {
+      method: 'DELETE', body: { nicknames },
+    }).then(({ json: data }) => {
         dispatch({ type: ADMIN_REMOVE_PERMISSION_GROUP_SUCCESS, accountIds, permissionGroup, data });
       }).catch(error => {
         dispatch({ type: ADMIN_REMOVE_PERMISSION_GROUP_FAIL, error, accountIds, permissionGroup });
@@ -545,7 +545,6 @@ const expandUserIndex = () =>
         dispatch({ type: ADMIN_USER_INDEX_EXPAND_FAIL });
       });
   };
-
 
 export {
   ADMIN_CONFIG_FETCH_REQUEST,

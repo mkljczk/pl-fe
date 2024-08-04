@@ -172,13 +172,6 @@ const getInstanceFeatures = (instance: Instance) => {
     ]),
 
     /**
-     * Ability to subscribe to notifications every time an account posts.
-     * @see POST /api/v1/pleroma/accounts/:id/subscribe
-     * @see POST /api/v1/pleroma/accounts/:id/unsubscribe
-     */
-    accountSubscriptions: v.software === PLEROMA && gte(v.version, '1.0.0'),
-
-    /**
      * Ability to manage announcements by admins.
      * @see GET /api/v1/pleroma/admin/announcements
      * @see GET /api/v1/pleroma/admin/announcements/:id
@@ -298,18 +291,6 @@ const getInstanceFeatures = (instance: Instance) => {
     chatsDelete: v.build === REBASED,
 
     /**
-     * Whether chat messages can accept a `media_id` attachment.
-     * @see POST /api/v1/pleroma/chats/:id/messages
-     */
-    chatsMedia: v.build === UNRELEASED,
-
-    /**
-     * Paginated chats API.
-     * @see GET /api/v2/pleroma/chats
-     */
-    chatsV2: v.software === PLEROMA && gte(v.version, '2.3.0'),
-
-    /**
      * Mastodon's newer solution for direct messaging.
      * @see {@link https://docs.joinmastodon.org/methods/conversations/}
      */
@@ -331,16 +312,6 @@ const getInstanceFeatures = (instance: Instance) => {
       features.includes('pleroma_custom_emoji_reactions'),
       features.includes('custom_emoji_reactions'),
       v.software === PLEROMA && gte(v.version, '2.5.50'),
-    ]),
-
-    /**
-     * Legacy DMs timeline where messages are displayed chronologically without groupings.
-     * @see GET /api/v1/timelines/direct
-     */
-    directTimeline: any([
-      v.software === FRIENDICA,
-      v.software === MASTODON && lt(v.compatVersion, '3.0.0'),
-      v.software === PLEROMA && gte(v.version, '0.9.9'),
     ]),
 
     /**
@@ -682,9 +653,11 @@ const getInstanceFeatures = (instance: Instance) => {
      */
     mediaV2: any([
       v.software === MASTODON && gte(v.compatVersion, '3.1.3'),
+      v.software === ICESHRIMP,
+      v.software === MITRA,
+      v.software === PLEROMA && gte(v.version, '2.1.0'),
+      v.software === TAKAHE,
       v.software === TOKI,
-      // Even though Pleroma supports these endpoints, it has disadvantages
-      // v.software === PLEROMA && gte(v.version, '2.1.0'),
     ]),
 
     /**
@@ -928,6 +901,8 @@ const getInstanceFeatures = (instance: Instance) => {
      * @see {@link https://docs.joinmastodon.org/methods/suggestions/}
      */
     suggestions: any([
+      v.software === FRIENDICA,
+      v.software === ICESHRIMP,
       v.software === MASTODON && gte(v.compatVersion, '2.4.3'),
       features.includes('v2_suggestions'),
     ]),

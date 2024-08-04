@@ -6,8 +6,9 @@ import { getFeatures } from 'soapbox/utils/features';
 import { formatBytes, getVideoDuration } from 'soapbox/utils/media';
 import resizeImage from 'soapbox/utils/resize-image';
 
-import api from '../api';
+import { getClient } from '../api';
 
+import type { UploadMediaParams } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
 
@@ -19,28 +20,13 @@ const messages = defineMessages({
 
 const noOp = (e: any) => {};
 
-const fetchMedia = (mediaId: string) =>
-  (dispatch: any, getState: () => RootState) => api(getState)(`/api/v1/media/${mediaId}`);
-
 const updateMedia = (mediaId: string, params: Record<string, any>) =>
-  (dispatch: any, getState: () => RootState) => api(getState)(`/api/v1/media/${mediaId}`, {
-    method: 'PUT',
-    body: JSON.stringify(params),
-  });
+  (dispatch: any, getState: () => RootState) =>
+    getClient(getState()).media.updateMedia(mediaId, params);
 
-const uploadMedia = (body: FormData, onUploadProgress: (e: ProgressEvent) => void = noOp) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const instance = state.instance;
-    const features = getFeatures(instance);
-
-    return api(getState)(features.mediaV2 ? '/api/v2/media' : '/api/v1/media', {
-      method: 'POST',
-      body,
-      headers: { 'Content-Type': '' },
-      onUploadProgress,
-    });
-  };
+const uploadMedia = (body: UploadMediaParams, onUploadProgress: (e: ProgressEvent) => void = noOp) =>
+  (dispatch: AppDispatch, getState: () => RootState) =>
+    getClient(getState()).media.uploadMedia(body, onUploadProgress);
 
 const uploadFile = (
   file: File,
@@ -85,18 +71,18 @@ const uploadFile = (
     // Account for disparity in size of original image and resized data
     changeTotal(resized.size - file.size);
 
-    return dispatch(uploadMedia(data, onProgress))
-      .then(({ status, json }) => {
+    return dispatch(uploadMedia({ file: resized }, onProgress))
+      .then((data) => {
         // If server-side processing of the media attachment has not completed yet,
         // poll the server until it is, before showing the media attachment as uploaded
-        if (status === 200) {
-          onSuccess(json);
-        } else if (status === 202) {
+        if (data.url) {
+          onSuccess(data);
+        } else if (data.url === null) {
           const poll = () => {
-            dispatch(fetchMedia(json.id)).then(({ status, data }) => {
-              if (status === 200) {
-                onSuccess(json);
-              } else if (status === 206) {
+            getClient(getState()).media.getMedia(data.id).then((data) => {
+              if (data.url) {
+                onSuccess(data);
+              } else if (data.url === null) {
                 setTimeout(() => poll(), 1000);
               }
             }).catch(error => onFail(error));
@@ -109,7 +95,6 @@ const uploadFile = (
 };
 
 export {
-  fetchMedia,
   updateMedia,
   uploadMedia,
   uploadFile,

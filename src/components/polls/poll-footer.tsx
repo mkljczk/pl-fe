@@ -25,7 +25,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected }): JSX
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const handleVote = () => dispatch(vote(poll.id, Object.keys(selected)));
+  const handleVote = () => dispatch(vote(poll.id, Object.keys(selected) as any as number[]));
 
   const handleRefresh: React.EventHandler<React.MouseEvent> = (e) => {
     dispatch(fetchPoll(poll.id));

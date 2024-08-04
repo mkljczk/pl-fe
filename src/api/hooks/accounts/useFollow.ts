@@ -1,9 +1,7 @@
 import { importEntities } from 'soapbox/entity-store/actions';
 import { Entities } from 'soapbox/entity-store/entities';
 import { useTransaction } from 'soapbox/entity-store/hooks';
-import { useAppDispatch, useLoggedIn } from 'soapbox/hooks';
-import { useApi } from 'soapbox/hooks/useApi';
-import { relationshipSchema } from 'soapbox/schemas';
+import { useAppDispatch, useClient, useLoggedIn } from 'soapbox/hooks';
 
 interface FollowOpts {
   reblogs?: boolean;
@@ -12,7 +10,7 @@ interface FollowOpts {
 }
 
 const useFollow = () => {
-  const api = useApi();
+  const client = useClient();
   const dispatch = useAppDispatch();
   const { isLoggedIn } = useLoggedIn();
   const { transaction } = useTransaction();
@@ -56,13 +54,9 @@ const useFollow = () => {
     followEffect(accountId);
 
     try {
-      const response = await api(`/api/v1/accounts/${accountId}/follow`, {
-        method: 'POST',
-        body: JSON.stringify(options),
-      });
-      const result = relationshipSchema.safeParse(response.json);
-      if (result.success) {
-        dispatch(importEntities([result.data], Entities.RELATIONSHIPS));
+      const response = await client.accounts.followAccount(accountId, options);
+      if (response.id) {
+        dispatch(importEntities([response], Entities.RELATIONSHIPS));
       }
     } catch (e) {
       unfollowEffect(accountId);
@@ -74,7 +68,7 @@ const useFollow = () => {
     unfollowEffect(accountId);
 
     try {
-      await api(`/api/v1/accounts/${accountId}/unfollow`, { method: 'POST' });
+      await client.accounts.unfollowAccount(accountId);
     } catch (e) {
       followEffect(accountId);
     }

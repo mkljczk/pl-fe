@@ -1,8 +1,8 @@
-
-import api, { getNextLink } from '../api';
+import { getClient } from '../api';
 
 import { importFetchedAccounts } from './importer';
 
+import type { Account, PaginatedResponse } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
 
@@ -16,22 +16,16 @@ const GROUP_UNBLOCK_FAIL    = 'GROUP_UNBLOCK_FAIL';
 
 const groupKick = (groupId: string, accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-
-    return api(getState)(`/api/v1/groups/${groupId}/kick`, {
-      method: 'POST',
-      body: JSON.stringify({ account_ids: [accountId] }),
-    });
+    return getClient(getState).experimental.groups.kickGroupUsers(groupId, [accountId]);
   };
 
 const fetchGroupBlocks = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchGroupBlocksRequest(id));
 
-    return api(getState)(`/api/v1/groups/${id}/blocks`).then(response => {
-      const next = getNextLink(response);
-
-      dispatch(importFetchedAccounts(response.json));
-      dispatch(fetchGroupBlocksSuccess(id, response.json, next || null));
+    return getClient(getState).experimental.groups.getGroupBlocks(id).then(response => {
+      dispatch(importFetchedAccounts(response.items));
+      dispatch(fetchGroupBlocksSuccess(id, response.items, response.next));
     }).catch(error => {
       dispatch(fetchGroupBlocksFail(id, error));
     });
@@ -42,7 +36,7 @@ const fetchGroupBlocksRequest = (id: string) => ({
   id,
 });
 
-const fetchGroupBlocksSuccess = (id: string, accounts: APIEntity[], next: string | null) => ({
+const fetchGroupBlocksSuccess = (id: string, accounts: APIEntity[], next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
   type: GROUP_BLOCKS_FETCH_SUCCESS,
   id,
   accounts,
@@ -60,9 +54,8 @@ const groupUnblock = (groupId: string, accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(groupUnblockRequest(groupId, accountId));
 
-    return api(getState)(`/api/v1/groups/${groupId}/blocks?account_ids[]=${accountId}`, {
-      method: 'DELETE',
-    }).then(() => dispatch(groupUnblockSuccess(groupId, accountId)))
+    return getClient(getState).experimental.groups.unblockGroupUsers(groupId, [accountId])
+      .then(() => dispatch(groupUnblockSuccess(groupId, accountId)))
       .catch(err => dispatch(groupUnblockFail(groupId, accountId, err)));
   };
 
@@ -84,7 +77,6 @@ const groupUnblockFail = (groupId: string, accountId: string, error: unknown) =>
   accountId,
   error,
 });
-
 
 export {
   GROUP_BLOCKS_FETCH_REQUEST,

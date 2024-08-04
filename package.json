@@ -16,10 +16,6 @@
   "bugs": {
     "url": "https://github.com/mkljczk/pl-fe/issues"
   },
-  "funding": {
-    "type": "lightning",
-    "url": "lightning:alex@alexgleason.me"
-  },
   "scripts": {
     "start": "npx vite serve",
     "dev": "${npm_execpath} run start",
@@ -100,6 +96,7 @@
     "@types/uuid": "^9.0.0",
     "@vitejs/plugin-react": "^4.0.4",
     "@webbtc/webln-types": "^3.0.0",
+    "async-dispatch": "^1.0.10",
     "autoprefixer": "^10.4.15",
     "babel-plugin-formatjs": "^10.5.6",
     "babel-plugin-preval": "^5.1.0",
@@ -137,6 +134,7 @@
     "multiselect-react-dropdown": "^2.0.25",
     "object-to-formdata": "^4.5.1",
     "path-browserify": "^1.0.1",
+    "pl-api": "file:../pl-api",
     "postcss": "^8.4.29",
     "process": "^0.11.10",
     "punycode": "^2.1.1",

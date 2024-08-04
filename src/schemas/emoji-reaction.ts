@@ -11,7 +11,6 @@ const baseEmojiReactionSchema = z.object({
 
 const customEmojiReactionSchema = baseEmojiReactionSchema.extend({
   name: z.string(),
-  /** Akkoma custom emoji reaction. */
   url: z.string().url(),
 });
 

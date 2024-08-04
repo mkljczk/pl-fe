@@ -3,10 +3,9 @@ import { createSelector } from 'reselect';
 import { getHost } from 'soapbox/actions/instance';
 import { normalizeSoapboxConfig } from 'soapbox/normalizers';
 import KVStore from 'soapbox/storage/kv-store';
-import { removeVS16s } from 'soapbox/utils/emoji';
 import { getFeatures } from 'soapbox/utils/features';
 
-import api, { staticFetch } from '../api';
+import { getClient, staticFetch } from '../api';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
@@ -29,12 +28,6 @@ const getSoapboxConfig = createSelector([
     if (soapbox.get('displayFqn') === undefined) {
       soapboxConfig.set('displayFqn', features.federating);
     }
-
-    // If RGI reacts aren't supported, strip VS16s
-    // https://git.pleroma.social/pleroma/pleroma/-/issues/2355
-    if (features.emojiReactsNonRGI) {
-      soapboxConfig.set('allowedEmoji', soapboxConfig.allowedEmoji.map(removeVS16s));
-    }
   });
 });
 
@@ -51,7 +44,7 @@ const rememberSoapboxConfig = (host: string | null) =>
 
 const fetchFrontendConfigurations = () =>
   (dispatch: AppDispatch, getState: () => RootState) =>
-    api(getState)('/api/pleroma/frontend_configurations')
+    getClient(getState).request('/api/pleroma/frontend_configurations')
       .then(({ json: data }) => data);
 
 /** Conditionally fetches Soapbox config depending on backend features */

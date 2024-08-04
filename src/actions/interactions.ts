@@ -4,12 +4,13 @@ import toast, { type IToastOptions } from 'soapbox/toast';
 import { isLoggedIn } from 'soapbox/utils/auth';
 import { getFeatures } from 'soapbox/utils/features';
 
-import api, { getNextLink } from '../api';
+import { getClient } from '../api';
 
 import { fetchRelationships } from './accounts';
 import { importFetchedAccounts, importFetchedStatus } from './importer';
 import { openModal } from './modals';
 
+import type { Account, PaginatedResponse } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity, Status as StatusEntity } from 'soapbox/types/entities';
 
@@ -79,6 +80,8 @@ const FAVOURITES_EXPAND_FAIL = 'FAVOURITES_EXPAND_FAIL' as const;
 const REBLOGS_EXPAND_SUCCESS = 'REBLOGS_EXPAND_SUCCESS' as const;
 const REBLOGS_EXPAND_FAIL = 'REBLOGS_EXPAND_FAIL' as const;
 
+type AccountListLink = () => Promise<PaginatedResponse<Account>>;
+
 const messages = defineMessages({
   bookmarkAdded: { id: 'status.bookmarked', defaultMessage: 'Bookmark added.' },
   bookmarkRemoved: { id: 'status.unbookmarked', defaultMessage: 'Bookmark removed.' },
@@ -93,10 +96,10 @@ const reblog = (status: StatusEntity) =>
 
     dispatch(reblogRequest(status));
 
-    api(getState)(`/api/v1/statuses/${status.id}/reblog`, { method: 'POST' }).then((response) => {
+    return getClient(getState()).statuses.reblogStatus(status.id).then((response) => {
       // The reblog API method returns a new status wrapped around the original. In this case we are only
       // interested in how the original is modified, hence passing it skipping the wrapper
-      dispatch(importFetchedStatus(response.json.reblog));
+      if (response.reblog) dispatch(importFetchedStatus(response.reblog));
       dispatch(reblogSuccess(status));
     }).catch(error => {
       dispatch(reblogFail(status, error));
@@ -109,7 +112,7 @@ const unreblog = (status: StatusEntity) =>
 
     dispatch(unreblogRequest(status));
 
-    api(getState)(`/api/v1/statuses/${status.id}/unreblog`, { method: 'POST' }).then(() => {
+    return getClient(getState()).statuses.unreblogStatus(status.id).then(() => {
       dispatch(unreblogSuccess(status));
     }).catch(error => {
       dispatch(unreblogFail(status, error));
@@ -169,7 +172,7 @@ const favourite = (status: StatusEntity) =>
 
     dispatch(favouriteRequest(status));
 
-    api(getState)(`/api/v1/statuses/${status.id}/favourite`, { method: 'POST' }).then(() => {
+    return getClient(getState()).statuses.favouriteStatus(status.id).then(() => {
       dispatch(favouriteSuccess(status));
     }).catch((error) => {
       dispatch(favouriteFail(status, error));
@@ -182,7 +185,7 @@ const unfavourite = (status: StatusEntity) =>
 
     dispatch(unfavouriteRequest(status));
 
-    api(getState)(`/api/v1/statuses/${status.id}/unfavourite`, { method: 'POST' }).then(() => {
+    return getClient(getState()).statuses.unfavouriteStatus(status.id).then(() => {
       dispatch(unfavouriteSuccess(status));
     }).catch(error => {
       dispatch(unfavouriteFail(status, error));
@@ -242,7 +245,7 @@ const dislike = (status: StatusEntity) =>
 
     dispatch(dislikeRequest(status));
 
-    api(getState)(`/api/friendica/statuses/${status.id}/dislike`, { method: 'POST' }).then(() => {
+    return getClient(getState).request(`/api/friendica/statuses/${status.id}/dislike`, { method: 'POST' }).then(() => {
       dispatch(dislikeSuccess(status));
     }).catch((error) => {
       dispatch(dislikeFail(status, error));
@@ -255,7 +258,7 @@ const undislike = (status: StatusEntity) =>
 
     dispatch(undislikeRequest(status));
 
-    api(getState)(`/api/friendica/statuses/${status.id}/undislike`, { method: 'POST' }).then(() => {
+    return getClient(getState).request(`/api/friendica/statuses/${status.id}/undislike`, { method: 'POST' }).then(() => {
       dispatch(undislikeSuccess(status));
     }).catch(error => {
       dispatch(undislikeFail(status, error));
@@ -318,17 +321,15 @@ const bookmark = (status: StatusEntity, folderId?: string) =>
 
     dispatch(bookmarkRequest(status));
 
-    return api(getState)(`/api/v1/statuses/${status.id}/bookmark`, {
-      method: 'POST',
-      body: folderId ? JSON.stringify({ folder_id: folderId }) : undefined,
-    }).then((response) => {
-      dispatch(importFetchedStatus(response.json));
-      dispatch(bookmarkSuccess(status, response.json));
+    return getClient(getState()).statuses.bookmarkStatus(status.id, folderId).then((response) => {
+      dispatch(importFetchedStatus(response));
+      dispatch(bookmarkSuccess(status, response));
 
       let opts: IToastOptions = {
         actionLabel: messages.view,
         actionLink: folderId ? `/bookmarks/${folderId}` : '/bookmarks/all',
       };
+
       if (features.bookmarkFolders && typeof folderId !== 'string') {
         opts = {
           actionLabel: messages.selectFolder,
@@ -348,9 +349,9 @@ const unbookmark = (status: StatusEntity) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(unbookmarkRequest(status));
 
-    api(getState)(`/api/v1/statuses/${status.id}/unbookmark`, { method: 'POST' }).then(response => {
-      dispatch(importFetchedStatus(response.json));
-      dispatch(unbookmarkSuccess(status, response.json));
+    return getClient(getState()).statuses.unbookmarkStatus(status.id).then(response => {
+      dispatch(importFetchedStatus(response));
+      dispatch(unbookmarkSuccess(status, response));
       toast.success(messages.bookmarkRemoved);
     }).catch(error => {
       dispatch(unbookmarkFail(status, error));
@@ -406,11 +407,10 @@ const fetchReblogs = (id: string) =>
 
     dispatch(fetchReblogsRequest(id));
 
-    api(getState)(`/api/v1/statuses/${id}/reblogged_by`).then(response => {
-      const next = getNextLink(response);
-      dispatch(importFetchedAccounts(response.json));
-      dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
-      dispatch(fetchReblogsSuccess(id, response.json, next || null));
+    return getClient(getState()).statuses.getRebloggedBy(id).then(response => {
+      dispatch(importFetchedAccounts(response.items));
+      dispatch(fetchRelationships(response.items.map((item) => item.id)));
+      dispatch(fetchReblogsSuccess(id, response.items, response.next));
     }).catch(error => {
       dispatch(fetchReblogsFail(id, error));
     });
@@ -421,7 +421,7 @@ const fetchReblogsRequest = (id: string) => ({
   id,
 });
 
-const fetchReblogsSuccess = (id: string, accounts: APIEntity[], next: string | null) => ({
+const fetchReblogsSuccess = (id: string, accounts: APIEntity[], next: AccountListLink | null) => ({
   type: REBLOGS_FETCH_SUCCESS,
   id,
   accounts,
@@ -434,19 +434,18 @@ const fetchReblogsFail = (id: string, error: unknown) => ({
   error,
 });
 
-const expandReblogs = (id: string, path: string) =>
+const expandReblogs = (id: string, next: AccountListLink) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    api(getState)(path).then(response => {
-      const next = getNextLink(response);
-      dispatch(importFetchedAccounts(response.json));
-      dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
-      dispatch(expandReblogsSuccess(id, response.json, next || null));
+    next().then(response => {
+      dispatch(importFetchedAccounts(response.items));
+      dispatch(fetchRelationships(response.items.map((item: APIEntity) => item.id)));
+      dispatch(expandReblogsSuccess(id, response.items, response.next));
     }).catch(error => {
       dispatch(expandReblogsFail(id, error));
     });
   };
 
-const expandReblogsSuccess = (id: string, accounts: APIEntity[], next: string | null) => ({
+const expandReblogsSuccess = (id: string, accounts: APIEntity[], next: AccountListLink | null) => ({
   type: REBLOGS_EXPAND_SUCCESS,
   id,
   accounts,
@@ -465,11 +464,10 @@ const fetchFavourites = (id: string) =>
 
     dispatch(fetchFavouritesRequest(id));
 
-    api(getState)(`/api/v1/statuses/${id}/favourited_by`).then(response => {
-      const next = getNextLink(response);
-      dispatch(importFetchedAccounts(response.json));
-      dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
-      dispatch(fetchFavouritesSuccess(id, response.json, next || null));
+    return getClient(getState()).statuses.getFavouritedBy(id).then(response => {
+      dispatch(importFetchedAccounts(response.items));
+      dispatch(fetchRelationships(response.items.map((item) => item.id)));
+      dispatch(fetchFavouritesSuccess(id, response.items, response.next));
     }).catch(error => {
       dispatch(fetchFavouritesFail(id, error));
     });
@@ -480,7 +478,7 @@ const fetchFavouritesRequest = (id: string) => ({
   id,
 });
 
-const fetchFavouritesSuccess = (id: string, accounts: APIEntity[], next: string | null) => ({
+const fetchFavouritesSuccess = (id: string, accounts: APIEntity[], next: AccountListLink | null) => ({
   type: FAVOURITES_FETCH_SUCCESS,
   id,
   accounts,
@@ -493,19 +491,18 @@ const fetchFavouritesFail = (id: string, error: unknown) => ({
   error,
 });
 
-const expandFavourites = (id: string, path: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    api(getState)(path).then(response => {
-      const next = getNextLink(response);
-      dispatch(importFetchedAccounts(response.json));
-      dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
-      dispatch(expandFavouritesSuccess(id, response.json, next || null));
+const expandFavourites = (id: string, next: AccountListLink) =>
+  (dispatch: AppDispatch) => {
+    next().then(response => {
+      dispatch(importFetchedAccounts(response.items));
+      dispatch(fetchRelationships(response.items.map((item) => item.id)));
+      dispatch(expandFavouritesSuccess(id, response.items, response.next));
     }).catch(error => {
       dispatch(expandFavouritesFail(id, error));
     });
   };
 
-const expandFavouritesSuccess = (id: string, accounts: APIEntity[], next: string | null) => ({
+const expandFavouritesSuccess = (id: string, accounts: APIEntity[], next: AccountListLink | null) => ({
   type: FAVOURITES_EXPAND_SUCCESS,
   id,
   accounts,
@@ -524,7 +521,7 @@ const fetchDislikes = (id: string) =>
 
     dispatch(fetchDislikesRequest(id));
 
-    api(getState)(`/api/friendica/statuses/${id}/disliked_by`).then(response => {
+    return getClient(getState).request(`/api/friendica/statuses/${id}/disliked_by`).then(response => {
       dispatch(importFetchedAccounts(response.json));
       dispatch(fetchRelationships(response.json.map((item: APIEntity) => item.id)));
       dispatch(fetchDislikesSuccess(id, response.json));
@@ -554,7 +551,7 @@ const fetchReactions = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchReactionsRequest(id));
 
-    api(getState)(`/api/v1/pleroma/statuses/${id}/reactions`).then(response => {
+    return getClient(getState).request(`/api/v1/pleroma/statuses/${id}/reactions`).then(response => {
       dispatch(importFetchedAccounts((response.json as APIEntity[]).map(({ accounts }) => accounts).flat()));
       dispatch(fetchReactionsSuccess(id, response.json));
     }).catch(error => {
@@ -585,8 +582,8 @@ const pin = (status: StatusEntity, accountId: string) =>
 
     dispatch(pinRequest(status, accountId));
 
-    api(getState)(`/api/v1/statuses/${status.id}/pin`, { method: 'POST' }).then(response => {
-      dispatch(importFetchedStatus(response.json));
+    return getClient(getState()).statuses.pinStatus(status.id).then(response => {
+      dispatch(importFetchedStatus(response));
       dispatch(pinSuccess(status, accountId));
     }).catch(error => {
       dispatch(pinFail(status, error, accountId));
@@ -621,8 +618,8 @@ const unpin = (status: StatusEntity, accountId: string) =>
 
     dispatch(unpinRequest(status, accountId));
 
-    api(getState)(`/api/v1/statuses/${status.id}/unpin`, { method: 'POST' }).then(response => {
-      dispatch(importFetchedStatus(response.json));
+    return getClient(getState()).statuses.unpinStatus(status.id).then(response => {
+      dispatch(importFetchedStatus(response));
       dispatch(unpinSuccess(status, accountId));
     }).catch(error => {
       dispatch(unpinFail(status, error, accountId));
@@ -668,7 +665,7 @@ const remoteInteraction = (ap_id: string, profile: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(remoteInteractionRequest(ap_id, profile));
 
-    return api(getState)('/api/v1/pleroma/remote_interaction', {
+    return getClient(getState).request('/api/v1/pleroma/remote_interaction', {
       method: 'POST',
       body: JSON.stringify({ ap_id, profile }),
     }).then(({ json: data }) => {

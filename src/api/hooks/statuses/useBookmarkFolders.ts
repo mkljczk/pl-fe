@@ -1,16 +1,16 @@
+import { useClient } from 'soapbox/hooks';
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntities } from 'soapbox/entity-store/hooks';
-import { useApi } from 'soapbox/hooks';
 import { useFeatures } from 'soapbox/hooks/useFeatures';
 import { bookmarkFolderSchema, type BookmarkFolder } from 'soapbox/schemas/bookmark-folder';
 
 const useBookmarkFolders = () => {
-  const api = useApi();
+  const client = useClient();
   const features = useFeatures();
 
   const { entities, ...result } = useEntities<BookmarkFolder>(
     [Entities.BOOKMARK_FOLDERS],
-    () => api('/api/v1/pleroma/bookmark_folders'),
+    () => client.request('/api/v1/pleroma/bookmark_folders'),
     { enabled: features.bookmarkFolders, schema: bookmarkFolderSchema },
   );
 

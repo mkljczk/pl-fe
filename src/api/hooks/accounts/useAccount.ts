@@ -3,8 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntity } from 'soapbox/entity-store/hooks';
-import { useFeatures, useLoggedIn } from 'soapbox/hooks';
-import { useApi } from 'soapbox/hooks/useApi';
+import { useClient, useFeatures, useLoggedIn } from 'soapbox/hooks';
 import { type Account, accountSchema } from 'soapbox/schemas';
 
 import { useRelationship } from './useRelationship';
@@ -14,7 +13,7 @@ interface UseAccountOpts {
 }
 
 const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
-  const api = useApi();
+  const client = useClient();
   const history = useHistory();
   const features = useFeatures();
   const { me } = useLoggedIn();
@@ -22,7 +21,7 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
 
   const { entity, isUnauthorized, ...result } = useEntity<Account>(
     [Entities.ACCOUNTS, accountId!],
-    () => api(`/api/v1/accounts/${accountId}`),
+    () => client.request(`/api/v1/accounts/${accountId}`),
     { schema: accountSchema, enabled: !!accountId },
   );
 

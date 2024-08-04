@@ -130,7 +130,7 @@ const SidebarNavigation = () => {
       );
     }
 
-    if (features.directTimeline || features.conversations) {
+    if (features.conversations) {
       return (
         <SidebarNavigationLink
           to='/messages'

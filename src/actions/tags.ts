@@ -1,5 +1,6 @@
-import api, { getNextLink } from '../api';
+import { getClient, getNextLink } from '../api';
 
+import type { PaginatedResponse, Tag } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
 
@@ -26,7 +27,7 @@ const FOLLOWED_HASHTAGS_EXPAND_FAIL    = 'FOLLOWED_HASHTAGS_EXPAND_FAIL';
 const fetchHashtag = (name: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(fetchHashtagRequest());
 
-  api(getState)(`/api/v1/tags/${name}`).then(({ json: data }) => {
+  return getClient(getState()).accounts.getTag(name).then((data) => {
     dispatch(fetchHashtagSuccess(name, data));
   }).catch(err => {
     dispatch(fetchHashtagFail(err));
@@ -51,7 +52,7 @@ const fetchHashtagFail = (error: unknown) => ({
 const followHashtag = (name: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(followHashtagRequest(name));
 
-  api(getState)(`/api/v1/tags/${name}/follow`, { method: 'POST' }).then(({ json: data }) => {
+  return getClient(getState()).accounts.followTag(name).then((data) => {
     dispatch(followHashtagSuccess(name, data));
   }).catch(err => {
     dispatch(followHashtagFail(name, err));
@@ -78,7 +79,7 @@ const followHashtagFail = (name: string, error: unknown) => ({
 const unfollowHashtag = (name: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(unfollowHashtagRequest(name));
 
-  api(getState)(`/api/v1/tags/${name}/unfollow`, { method: 'POST' }).then(({ json: data }) => {
+  return getClient(getState()).accounts.unfollowTag(name).then((data) => {
     dispatch(unfollowHashtagSuccess(name, data));
   }).catch(err => {
     dispatch(unfollowHashtagFail(name, err));
@@ -105,9 +106,8 @@ const unfollowHashtagFail = (name: string, error: unknown) => ({
 const fetchFollowedHashtags = () => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(fetchFollowedHashtagsRequest());
 
-  api(getState)('/api/v1/followed_tags').then(response => {
-    const next = getNextLink(response);
-    dispatch(fetchFollowedHashtagsSuccess(response.json, next || null));
+  return getClient(getState()).accounts.getFollowedTags().then(response => {
+    dispatch(fetchFollowedHashtagsSuccess(response.items, response.next));
   }).catch(err => {
     dispatch(fetchFollowedHashtagsFail(err));
   });
@@ -117,7 +117,7 @@ const fetchFollowedHashtagsRequest = () => ({
   type: FOLLOWED_HASHTAGS_FETCH_REQUEST,
 });
 
-const fetchFollowedHashtagsSuccess = (followed_tags: APIEntity[], next: string | null) => ({
+const fetchFollowedHashtagsSuccess = (followed_tags: APIEntity[], next: (() => Promise<PaginatedResponse<Tag>>) | null) => ({
   type: FOLLOWED_HASHTAGS_FETCH_SUCCESS,
   followed_tags,
   next,
@@ -129,17 +129,14 @@ const fetchFollowedHashtagsFail = (error: unknown) => ({
 });
 
 const expandFollowedHashtags = () => (dispatch: AppDispatch, getState: () => RootState) => {
-  const url = getState().followed_tags.next;
+  const next = getState().followed_tags.next;
 
-  if (url === null) {
-    return;
-  }
+  if (next === null) return;
 
   dispatch(expandFollowedHashtagsRequest());
 
-  api(getState)(url).then(response => {
-    const next = getNextLink(response);
-    dispatch(expandFollowedHashtagsSuccess(response.json, next || null));
+  return next().then(response => {
+    dispatch(expandFollowedHashtagsSuccess(response.items, response.next));
   }).catch(error => {
     dispatch(expandFollowedHashtagsFail(error));
   });
@@ -149,7 +146,7 @@ const expandFollowedHashtagsRequest = () => ({
   type: FOLLOWED_HASHTAGS_EXPAND_REQUEST,
 });
 
-const expandFollowedHashtagsSuccess = (followed_tags: APIEntity[], next: string | null) => ({
+const expandFollowedHashtagsSuccess = (followed_tags: APIEntity[], next: (() => Promise<PaginatedResponse<Tag>>) | null) => ({
   type: FOLLOWED_HASHTAGS_EXPAND_SUCCESS,
   followed_tags,
   next,
@@ -159,7 +156,6 @@ const expandFollowedHashtagsFail = (error: unknown) => ({
   type: FOLLOWED_HASHTAGS_EXPAND_FAIL,
   error,
 });
-
 
 export {
   HASHTAG_FETCH_REQUEST,

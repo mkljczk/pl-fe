@@ -1,12 +1,12 @@
 import { useTransaction } from 'soapbox/entity-store/hooks';
 import { EntityCallbacks } from 'soapbox/entity-store/hooks/types';
-import { useApi, useGetState } from 'soapbox/hooks';
+import { useClient, useGetState } from 'soapbox/hooks';
 import { accountIdsToAccts } from 'soapbox/selectors';
 
 import type { Account } from 'soapbox/schemas';
 
 const useVerify = () => {
-  const api = useApi();
+  const client = useClient();
   const getState = useGetState();
   const { transaction } = useTransaction();
 
@@ -34,9 +34,9 @@ const useVerify = () => {
     const accts = accountIdsToAccts(getState(), accountIds);
     verifyEffect(accountIds, true);
     try {
-      await api('/api/v1/pleroma/admin/users/tag', {
+      await client.request('/api/v1/pleroma/admin/users/tag', {
         method: 'PUT',
-        body: JSON.stringify({ nicknames: accts, tags: ['verified'] }),
+        body: { nicknames: accts, tags: ['verified'] },
       });
       callbacks?.onSuccess?.();
     } catch (e) {
@@ -49,9 +49,9 @@ const useVerify = () => {
     const accts = accountIdsToAccts(getState(), accountIds);
     verifyEffect(accountIds, false);
     try {
-      await api('/api/v1/pleroma/admin/users/tag', {
+      await client.request('/api/v1/pleroma/admin/users/tag', {
         method: 'DELETE',
-        body: JSON.stringify({ nicknames: accts, tags: ['verified'] }),
+        body: { nicknames: accts, tags: ['verified'] },
       });
       callbacks?.onSuccess?.();
     } catch (e) {

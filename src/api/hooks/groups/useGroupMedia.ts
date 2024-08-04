@@ -1,17 +1,17 @@
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntities } from 'soapbox/entity-store/hooks';
-import { useApi } from 'soapbox/hooks/useApi';
+import { useClient } from 'soapbox/hooks';
 import { normalizeStatus } from 'soapbox/normalizers';
 import { toSchema } from 'soapbox/utils/normalizers';
 
 const statusSchema = toSchema(normalizeStatus);
 
 const useGroupMedia = (groupId: string) => {
-  const api = useApi();
+  const client = useClient();
 
   return useEntities(
     [Entities.STATUSES, 'groupMedia', groupId],
-    () => api(`/api/v1/timelines/group/${groupId}?only_media=true`),
+    () => client.request(`/api/v1/timelines/group/${groupId}?only_media=true`),
     { schema: statusSchema })
   ;
 };

@@ -1,6 +1,6 @@
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntities } from 'soapbox/entity-store/hooks';
-import { useApi } from 'soapbox/hooks';
+import { useClient } from 'soapbox/hooks';
 import { Account, accountSchema } from 'soapbox/schemas';
 
 import { useRelationships } from './useRelationships';
@@ -32,31 +32,31 @@ const useAccountList = (listKey: string[], entityFn: EntityFn<void>, opts: useAc
 };
 
 const useBlocks = () => {
-  const api = useApi();
-  return useAccountList(['blocks'], () => api('/api/v1/blocks'));
+  const client = useClient();
+  return useAccountList(['blocks'], () => client.request('/api/v1/blocks'));
 };
 
 const useMutes = () => {
-  const api = useApi();
-  return useAccountList(['mutes'], () => api('/api/v1/mutes'));
+  const client = useClient();
+  return useAccountList(['mutes'], () => client.request('/api/v1/mutes'));
 };
 
 const useFollowing = (accountId: string | undefined) => {
-  const api = useApi();
+  const client = useClient();
 
   return useAccountList(
     [accountId!, 'following'],
-    () => api(`/api/v1/accounts/${accountId}/following`),
+    () => client.request(`/api/v1/accounts/${accountId}/following`),
     { enabled: !!accountId },
   );
 };
 
 const useFollowers = (accountId: string | undefined) => {
-  const api = useApi();
+  const client = useClient();
 
   return useAccountList(
     [accountId!, 'followers'],
-    () => api(`/api/v1/accounts/${accountId}/followers`),
+    () => client.request(`/api/v1/accounts/${accountId}/followers`),
     { enabled: !!accountId },
   );
 };

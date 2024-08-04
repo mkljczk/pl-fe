@@ -1,4 +1,3 @@
-import debounce from 'lodash/debounce';
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -17,19 +16,10 @@ const FollowRecommendations: React.FC = () => {
   const intl = useIntl();
 
   const suggestions = useAppSelector((state) => state.suggestions.items);
-  const hasMore = useAppSelector((state) => !!state.suggestions.next);
   const isLoading = useAppSelector((state) => state.suggestions.isLoading);
 
-  const handleLoadMore = debounce(() => {
-    if (isLoading) {
-      return null;
-    }
-
-    return dispatch(fetchSuggestions({ limit: 20 }));
-  }, 300);
-
   useEffect(() => {
-    dispatch(fetchSuggestions({ limit: 20 }));
+    dispatch(fetchSuggestions(20));
   }, []);
 
   if (suggestions.size === 0 && !isLoading) {
@@ -48,8 +38,6 @@ const FollowRecommendations: React.FC = () => {
         <ScrollableList
           isLoading={isLoading}
           scrollKey='suggestions'
-          onLoadMore={handleLoadMore}
-          hasMore={hasMore}
           itemClassName='pb-4'
         >
           {suggestions.map((suggestion) => (

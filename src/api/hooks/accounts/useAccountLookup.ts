@@ -3,8 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntityLookup } from 'soapbox/entity-store/hooks';
-import { useFeatures, useLoggedIn } from 'soapbox/hooks';
-import { useApi } from 'soapbox/hooks/useApi';
+import { useClient, useFeatures, useLoggedIn } from 'soapbox/hooks';
 import { type Account, accountSchema } from 'soapbox/schemas';
 
 import { useRelationship } from './useRelationship';
@@ -14,7 +13,7 @@ interface UseAccountLookupOpts {
 }
 
 const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts = {}) => {
-  const api = useApi();
+  const client = useClient();
   const features = useFeatures();
   const history = useHistory();
   const { me } = useLoggedIn();
@@ -23,7 +22,7 @@ const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts =
   const { entity: account, isUnauthorized, ...result } = useEntityLookup<Account>(
     Entities.ACCOUNTS,
     (account) => account.acct.toLowerCase() === acct?.toLowerCase(),
-    () => api(`/api/v1/accounts/lookup?acct=${acct}`),
+    () => client.request(`/api/v1/accounts/lookup?acct=${acct}`),
     { schema: accountSchema, enabled: !!acct },
   );
 

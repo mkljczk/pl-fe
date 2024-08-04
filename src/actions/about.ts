@@ -1,4 +1,4 @@
-import api from '../api';
+import { staticFetch } from '../api';
 
 import type { AnyAction } from 'redux';
 import type { RootState } from 'soapbox/store';
@@ -11,7 +11,7 @@ const fetchAboutPage = (slug = 'index', locale?: string) => (dispatch: React.Dis
   dispatch({ type: FETCH_ABOUT_PAGE_REQUEST, slug, locale });
 
   const filename = `${slug}${locale ? `.${locale}` : ''}.html`;
-  return api(getState)(`/instance/about/${filename}`)
+  return staticFetch(`/instance/about/${filename}`)
     .then(({ data: html }) => {
       dispatch({ type: FETCH_ABOUT_PAGE_SUCCESS, slug, locale, html });
       return html;

@@ -37,7 +37,6 @@ const configurationSchema = coerceObject({
   }).nullable().catch(null),
   chats: coerceObject({
     max_characters: z.number().catch(5000),
-    max_media_attachments: z.number().catch(1),
   }),
   groups: coerceObject({
     max_characters_description: z.number().catch(160),
@@ -79,7 +78,6 @@ const contactSchema = coerceObject({
   contact_account: accountSchema.optional().catch(undefined),
   email: z.string().email().catch(''),
 });
-
 
 const pleromaSchema = coerceObject({
   metadata: coerceObject({

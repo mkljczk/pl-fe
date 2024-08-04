@@ -6,6 +6,8 @@
  * @see module:soapbox/actions/oauth
  */
 
+import { PlApiClient } from 'pl-api';
+
 import { createApp } from 'soapbox/actions/apps';
 import { authLoggedIn, verifyCredentials, switchAccount } from 'soapbox/actions/auth';
 import { obtainOAuthToken } from 'soapbox/actions/oauth';
@@ -15,13 +17,11 @@ import sourceCode from 'soapbox/utils/code';
 import { getQuirks } from 'soapbox/utils/quirks';
 import { getInstanceScopes } from 'soapbox/utils/scopes';
 
-import { getFetch } from '../api';
-
 import type { AppDispatch, RootState } from 'soapbox/store';
 
-const fetchExternalInstance = (baseURL?: string) =>
-  getFetch(null, baseURL)('/api/v1/instance')
-    .then(({ json: instance }) => instanceSchema.parse(instance))
+const fetchExternalInstance = (baseURL: string) =>
+  (new PlApiClient(baseURL, undefined, { fetchInstance: false })).instance.getInstance()
+    .then(instance => instance)
     .catch(error => {
       if (error.response?.status === 401) {
         // Authenticated fetch is enabled.

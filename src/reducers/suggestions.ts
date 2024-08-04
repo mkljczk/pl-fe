@@ -7,9 +7,6 @@ import {
   SUGGESTIONS_FETCH_SUCCESS,
   SUGGESTIONS_FETCH_FAIL,
   SUGGESTIONS_DISMISS,
-  SUGGESTIONS_V2_FETCH_REQUEST,
-  SUGGESTIONS_V2_FETCH_SUCCESS,
-  SUGGESTIONS_V2_FETCH_FAIL,
 } from 'soapbox/actions/suggestions';
 
 import type { AnyAction } from 'redux';
@@ -22,31 +19,16 @@ const SuggestionRecord = ImmutableRecord({
 
 const ReducerRecord = ImmutableRecord({
   items: ImmutableOrderedSet<Suggestion>(),
-  next: null as string | null,
   isLoading: false,
 });
 
 type State = ReturnType<typeof ReducerRecord>;
 type Suggestion = ReturnType<typeof SuggestionRecord>;
-type APIEntities = Array<APIEntity>;
 
-// Convert a v1 account into a v2 suggestion
-const accountToSuggestion = (account: APIEntity) => ({
-  source: 'past_interactions',
-  account: account.id,
-});
-
-const importAccounts = (state: State, accounts: APIEntities) =>
-  state.withMutations(state => {
-    state.set('items', ImmutableOrderedSet(accounts.map(accountToSuggestion).map(suggestion => SuggestionRecord(suggestion))));
-    state.set('isLoading', false);
-  });
-
-const importSuggestions = (state: State, suggestions: APIEntities, next: string | null) =>
+const importSuggestions = (state: State, suggestions: Suggestion[]) =>
   state.withMutations(state => {
     state.update('items', items => items.concat(suggestions.map(x => ({ ...x, account: x.account.id })).map(suggestion => SuggestionRecord(suggestion))));
     state.set('isLoading', false);
-    state.set('next', next);
   });
 
 const dismissAccount = (state: State, accountId: string) =>
@@ -58,14 +40,10 @@ const dismissAccounts = (state: State, accountIds: string[]) =>
 const suggestionsReducer = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case SUGGESTIONS_FETCH_REQUEST:
-    case SUGGESTIONS_V2_FETCH_REQUEST:
       return state.set('isLoading', true);
     case SUGGESTIONS_FETCH_SUCCESS:
-      return importAccounts(state, action.accounts);
-    case SUGGESTIONS_V2_FETCH_SUCCESS:
-      return importSuggestions(state, action.suggestions, action.next);
+      return importSuggestions(state, action.suggestions);
     case SUGGESTIONS_FETCH_FAIL:
-    case SUGGESTIONS_V2_FETCH_FAIL:
       return state.set('isLoading', false);
     case SUGGESTIONS_DISMISS:
       return dismissAccount(state, action.id);

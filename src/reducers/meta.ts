@@ -1,6 +1,6 @@
 import { Record as ImmutableRecord } from 'immutable';
 
-import { fetchInstance } from 'soapbox/actions/instance';
+import { INSTANCE_FETCH_FAIL } from 'soapbox/actions/instance';
 import { SW_UPDATING } from 'soapbox/actions/sw';
 
 import type { AnyAction } from 'redux';
@@ -14,8 +14,8 @@ const ReducerRecord = ImmutableRecord({
 
 const meta = (state = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
-    case fetchInstance.rejected.type:
-      if (action.payload.response?.status === 404) {
+    case INSTANCE_FETCH_FAIL:
+      if (action.error?.status === 404) {
         return state.set('instance_fetch_failed', true);
       }
       return state;

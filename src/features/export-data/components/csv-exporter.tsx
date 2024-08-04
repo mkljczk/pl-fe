@@ -11,7 +11,7 @@ interface ICSVExporter {
     input_hint: MessageDescriptor;
     submit: MessageDescriptor;
   };
-  action: () => (dispatch: AppDispatch, getState: () => RootState) => Promise<void>;
+  action: () => (dispatch: AppDispatch, getState: () => RootState) => Promise<any>;
 }
 
 const CSVExporter: React.FC<ICSVExporter> = ({ messages, action }) => {

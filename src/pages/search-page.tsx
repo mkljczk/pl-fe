@@ -42,7 +42,6 @@ const SearchPage: React.FC<ISearchPage> = ({ children }) => {
           <WhoToFollowPanel limit={3} />
         )}
 
-
         <LinkFooter />
       </Layout.Aside>
     </>

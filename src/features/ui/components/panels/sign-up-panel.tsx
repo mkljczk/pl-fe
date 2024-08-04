@@ -14,7 +14,6 @@ import { isStandalone } from 'soapbox/utils/state';
 
 import type { PlfeResponse } from 'soapbox/api';
 
-
 const SignUpPanel = () => {
   const dispatch = useAppDispatch();
   const instance = useInstance();

@@ -1,4 +1,4 @@
-import api from '../api';
+import { getClient } from '../api';
 
 import { fetchRelationships } from './accounts';
 import { importFetchedAccounts } from './importer';
@@ -18,7 +18,7 @@ const fetchDirectory = (params: Record<string, any>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchDirectoryRequest());
 
-    api(getState)('/api/v1/directory', { params: { ...params, limit: 20 } }).then(({ json: data }) => {
+    return getClient(getState()).instance.profileDirectory({...params, limit: 20}).then((data) => {
       dispatch(importFetchedAccounts(data));
       dispatch(fetchDirectorySuccess(data));
       dispatch(fetchRelationships(data.map((x: APIEntity) => x.id)));
@@ -45,7 +45,7 @@ const expandDirectory = (params: Record<string, any>) =>
 
     const loadedItems = getState().user_lists.directory.items.size;
 
-    api(getState)('/api/v1/directory', { params: { ...params, offset: loadedItems, limit: 20 } }).then(({ json: data }) => {
+    return getClient(getState()).instance.profileDirectory({ ...params, offset: loadedItems, limit: 20 }).then((data) => {
       dispatch(importFetchedAccounts(data));
       dispatch(expandDirectorySuccess(data));
       dispatch(fetchRelationships(data.map((x: APIEntity) => x.id)));

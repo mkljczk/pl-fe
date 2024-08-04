@@ -1,7 +1,8 @@
 import { getFeatures } from 'soapbox/utils/features';
 
-import api, { getNextLink } from '../api';
+import { getClient, getNextLink } from '../api';
 
+import type { PaginatedResponse, ScheduledStatus } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
 
@@ -32,9 +33,8 @@ const fetchScheduledStatuses = () =>
 
     dispatch(fetchScheduledStatusesRequest());
 
-    api(getState)('/api/v1/scheduled_statuses').then(response => {
-      const next = getNextLink(response);
-      dispatch(fetchScheduledStatusesSuccess(response.json, next || null));
+    return getClient(getState()).scheduledStatuses.getScheduledStatuses().then(({ next, items }) => {
+      dispatch(fetchScheduledStatusesSuccess(items, next));
     }).catch(error => {
       dispatch(fetchScheduledStatusesFail(error));
     });
@@ -43,7 +43,7 @@ const fetchScheduledStatuses = () =>
 const cancelScheduledStatus = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: SCHEDULED_STATUS_CANCEL_REQUEST, id });
-    api(getState)(`/api/v1/scheduled_statuses/${id}`, { method: 'DELETE' }).then(({ json: data }) => {
+    return getClient(getState()).scheduledStatuses.cancelScheduledStatus(id).then((data) => {
       dispatch({ type: SCHEDULED_STATUS_CANCEL_SUCCESS, id, data });
     }).catch(error => {
       dispatch({ type: SCHEDULED_STATUS_CANCEL_FAIL, id, error });
@@ -54,7 +54,7 @@ const fetchScheduledStatusesRequest = () => ({
   type: SCHEDULED_STATUSES_FETCH_REQUEST,
 });
 
-const fetchScheduledStatusesSuccess = (statuses: APIEntity[], next: string | null) => ({
+const fetchScheduledStatusesSuccess = (statuses: APIEntity[], next: (() => Promise<PaginatedResponse<ScheduledStatus>>) | null) => ({
   type: SCHEDULED_STATUSES_FETCH_SUCCESS,
   statuses,
   next,
@@ -67,17 +67,16 @@ const fetchScheduledStatusesFail = (error: unknown) => ({
 
 const expandScheduledStatuses = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const url = getState().status_lists.get('scheduled_statuses')?.next || null;
+    const next = getState().status_lists.get('scheduled_statuses')?.next || null;
 
-    if (url === null || getState().status_lists.get('scheduled_statuses')?.isLoading) {
+    if (next === null || getState().status_lists.get('scheduled_statuses')?.isLoading) {
       return;
     }
 
     dispatch(expandScheduledStatusesRequest());
 
-    api(getState)(url).then(response => {
-      const next = getNextLink(response);
-      dispatch(expandScheduledStatusesSuccess(response.json, next || null));
+    next().then(response => {
+      dispatch(expandScheduledStatusesSuccess(response.items, response.next));
     }).catch(error => {
       dispatch(expandScheduledStatusesFail(error));
     });
@@ -87,7 +86,7 @@ const expandScheduledStatusesRequest = () => ({
   type: SCHEDULED_STATUSES_EXPAND_REQUEST,
 });
 
-const expandScheduledStatusesSuccess = (statuses: APIEntity[], next: string | null) => ({
+const expandScheduledStatusesSuccess = (statuses: APIEntity[], next: (() => Promise<PaginatedResponse<ScheduledStatus>>) | null) => ({
   type: SCHEDULED_STATUSES_EXPAND_SUCCESS,
   statuses,
   next,

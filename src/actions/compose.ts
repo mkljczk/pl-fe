@@ -1,12 +1,10 @@
-import { List as ImmutableList } from 'immutable';
 import throttle from 'lodash/throttle';
 import { defineMessages, IntlShape } from 'react-intl';
 
-import api from 'soapbox/api';
+import { getClient } from 'soapbox/api';
 import { isNativeEmoji } from 'soapbox/features/emoji';
 import emojiSearch from 'soapbox/features/emoji/search';
 import { Language } from 'soapbox/features/preferences';
-import { normalizeTag } from 'soapbox/normalizers';
 import { selectAccount, selectOwnAccount, makeGetAccount } from 'soapbox/selectors';
 import { tagHistory } from 'soapbox/settings';
 import toast from 'soapbox/toast';
@@ -22,11 +20,12 @@ import { getSettings } from './settings';
 import { createStatus } from './statuses';
 
 import type { EditorState } from 'lexical';
+import type { Tag } from 'pl-api';
 import type { AutoSuggestion } from 'soapbox/components/autosuggest-input';
 import type { Emoji } from 'soapbox/features/emoji';
 import type { Account, Group } from 'soapbox/schemas';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity, Status, Tag } from 'soapbox/types/entities';
+import type { APIEntity, Status } from 'soapbox/types/entities';
 import type { History } from 'soapbox/types/history';
 
 let cancelFetchComposeSuggestions = new AbortController();
@@ -510,7 +509,7 @@ const changeUploadCompose = (composeId: string, id: string, params: Record<strin
     dispatch(changeUploadComposeRequest(composeId));
 
     dispatch(updateMedia(id, params)).then(response => {
-      dispatch(changeUploadComposeSuccess(composeId, response.json));
+      dispatch(changeUploadComposeSuccess(composeId, response));
     }).catch(error => {
       dispatch(changeUploadComposeFail(composeId, id, error));
     });
@@ -568,21 +567,15 @@ const fetchComposeSuggestionsAccounts = throttle((dispatch, getState, composeId,
     cancelFetchComposeSuggestions = new AbortController();
   }
 
-  api(getState)('/api/v1/accounts/search', {
-    params: {
-      q: token.slice(1),
-      resolve: false,
-      limit: 10,
-    },
-    signal: cancelFetchComposeSuggestions.signal,
-  }).then(response => {
-    dispatch(importFetchedAccounts(response.json));
-    dispatch(readyComposeSuggestionsAccounts(composeId, token, response.json));
-  }).catch(error => {
-    if (!signal.aborted) {
-      toast.showAlertForError(error);
-    }
-  });
+  return getClient(getState()).accounts.searchAccounts(token.slice(1), { resolve: false, limit: 10 }) // WIP: signal
+    .then(response => {
+      dispatch(importFetchedAccounts(response));
+      dispatch(readyComposeSuggestionsAccounts(composeId, token, response));
+    }).catch(error => {
+      if (!signal.aborted) {
+        toast.showAlertForError(error);
+      }
+    });
 }, 200, { leading: true, trailing: true });
 
 const fetchComposeSuggestionsEmojis = (dispatch: AppDispatch, getState: () => RootState, composeId: string, token: string) => {
@@ -611,15 +604,8 @@ const fetchComposeSuggestionsTags = (dispatch: AppDispatch, getState: () => Root
     return dispatch(updateSuggestionTags(composeId, token, currentTrends));
   }
 
-  api(getState)('/api/v2/search', {
-    params: {
-      q: token.slice(1),
-      limit: 10,
-      type: 'hashtags',
-    },
-    signal: cancelFetchComposeSuggestions.signal,
-  }).then(response => {
-    dispatch(updateSuggestionTags(composeId, token, response.json?.hashtags.map(normalizeTag)));
+  return getClient(state).search.search(token.slice(1), { limit: 10, type: 'hashtags' }).then(response => { // TODO signals
+    dispatch(updateSuggestionTags(composeId, token, response.hashtags));
   }).catch(error => {
     if (!signal.aborted) {
       toast.showAlertForError(error);
@@ -702,7 +688,7 @@ const selectComposeSuggestion = (composeId: string, position: number, token: str
     dispatch(action);
   };
 
-const updateSuggestionTags = (composeId: string, token: string, tags: ImmutableList<Tag>) => ({
+const updateSuggestionTags = (composeId: string, token: string, tags: Array<Tag>) => ({
   type: COMPOSE_SUGGESTION_TAGS_UPDATE,
   id: composeId,
   token,

@@ -1,5 +1,5 @@
 import type { Entity } from '../types';
-import type { PlfeResponse } from 'soapbox/api';
+import type { PlApiResponse } from 'pl-api';
 import type z from 'zod';
 
 type EntitySchema<TEntity extends Entity = Entity> = z.ZodType<TEntity, z.ZodTypeDef, any>;
@@ -35,7 +35,7 @@ interface EntityCallbacks<Value, Error = unknown> {
  * Passed into hooks to make requests.
  * Must return a response.
  */
-type EntityFn<T> = (value: T) => Promise<PlfeResponse>
+type EntityFn<T> = (value: T) => Promise<PlApiResponse>
 
 export type {
   EntitySchema,

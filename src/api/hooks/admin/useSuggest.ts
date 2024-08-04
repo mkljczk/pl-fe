@@ -1,12 +1,12 @@
 import { useTransaction } from 'soapbox/entity-store/hooks';
 import { EntityCallbacks } from 'soapbox/entity-store/hooks/types';
-import { useApi, useGetState } from 'soapbox/hooks';
+import { useClient, useGetState } from 'soapbox/hooks';
 import { accountIdsToAccts } from 'soapbox/selectors';
 
 import type { Account } from 'soapbox/schemas';
 
 const useSuggest = () => {
-  const api = useApi();
+  const client = useClient();
   const getState = useGetState();
   const { transaction } = useTransaction();
 
@@ -29,9 +29,8 @@ const useSuggest = () => {
     const accts = accountIdsToAccts(getState(), accountIds);
     suggestEffect(accountIds, true);
     try {
-      await api('/api/v1/pleroma/admin/users/suggest', {
-        method: 'PATCH',
-        body: JSON.stringify({ nicknames: accts }),
+      await client.request('/api/v1/pleroma/admin/users/suggest', {
+        method: 'PATCH', body: { nicknames: accts },
       });
       callbacks?.onSuccess?.();
     } catch (e) {
@@ -44,9 +43,8 @@ const useSuggest = () => {
     const accts = accountIdsToAccts(getState(), accountIds);
     suggestEffect(accountIds, false);
     try {
-      await api('/api/v1/pleroma/admin/users/unsuggest', {
-        method: 'PATCH',
-        body: JSON.stringify({ nicknames: accts }),
+      await client.request('/api/v1/pleroma/admin/users/unsuggest', {
+        method: 'PATCH', body: { nicknames: accts },
       });
       callbacks?.onSuccess?.();
     } catch (e) {

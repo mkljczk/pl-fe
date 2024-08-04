@@ -1,4 +1,4 @@
-import api from 'soapbox/api';
+import { getClient } from 'soapbox/api';
 
 import { importFetchedAccounts } from './importer';
 
@@ -19,8 +19,8 @@ const fetchHistory = (statusId: string) =>
 
     dispatch(fetchHistoryRequest(statusId));
 
-    api(getState)(`/api/v1/statuses/${statusId}/history`).then(({ json: data }) => {
-      dispatch(importFetchedAccounts(data.map((x: APIEntity) => x.account)));
+    return getClient(getState()).statuses.getStatusHistory(statusId).then(data => {
+      dispatch(importFetchedAccounts(data.map((x) => x.account)));
       dispatch(fetchHistorySuccess(statusId, data));
     }).catch(error => dispatch(fetchHistoryFail(error)));
   };

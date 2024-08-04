@@ -91,7 +91,7 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
   const [notFound, setNotFound] = useState(false);
 
   const [title, setTitle] = useState('');
-  const [expiresIn, setExpiresIn] = useState<string | null>(null);
+  const [expiresIn, setExpiresIn] = useState<number | undefined>();
   const [homeTimeline, setHomeTimeline] = useState(true);
   const [publicTimeline, setPublicTimeline] = useState(false);
   const [notifications, setNotifications] = useState(false);
@@ -111,7 +111,7 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
   }), []);
 
   const handleSelectChange: React.ChangeEventHandler<HTMLSelectElement> = e => {
-    setExpiresIn(e.target.value);
+    setExpiresIn(+e.target.value || undefined);
   };
 
   const handleAddNew: React.FormEventHandler = e => {
@@ -189,15 +189,13 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
           />
         </FormGroup>
 
-        {features.filtersExpiration && (
-          <FormGroup labelText={intl.formatMessage(messages.expires)}>
-            <SelectDropdown
-              items={expirations}
-              defaultValue=''
-              onChange={handleSelectChange}
-            />
-          </FormGroup>
-        )}
+        <FormGroup labelText={intl.formatMessage(messages.expires)}>
+          <SelectDropdown
+            items={expirations}
+            defaultValue=''
+            onChange={handleSelectChange}
+          />
+        </FormGroup>
 
         <Stack>
           <Text size='sm' weight='medium'>

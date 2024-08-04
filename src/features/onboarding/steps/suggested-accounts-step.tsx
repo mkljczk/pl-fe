@@ -1,4 +1,3 @@
-import debounce from 'lodash/debounce';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -9,15 +8,7 @@ import AccountContainer from 'soapbox/containers/account-container';
 import { useOnboardingSuggestions } from 'soapbox/queries/suggestions';
 
 const SuggestedAccountsStep = ({ onNext }: { onNext: () => void }) => {
-  const { data, fetchNextPage, hasNextPage, isFetching } = useOnboardingSuggestions();
-
-  const handleLoadMore = debounce(() => {
-    if (isFetching) {
-      return null;
-    }
-
-    return fetchNextPage();
-  }, 300);
+  const { data, isFetching } = useOnboardingSuggestions();
 
   const renderSuggestions = () => {
     if (!data) {
@@ -29,8 +20,6 @@ const SuggestedAccountsStep = ({ onNext }: { onNext: () => void }) => {
         <ScrollableList
           isLoading={isFetching}
           scrollKey='suggestions'
-          onLoadMore={handleLoadMore}
-          hasMore={hasNextPage}
           useWindowScroll={false}
           style={{ height: 320 }}
         >

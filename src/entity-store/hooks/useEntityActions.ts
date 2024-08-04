@@ -1,4 +1,4 @@
-import { useApi } from 'soapbox/hooks/useApi';
+import { useClient } from 'soapbox/hooks';
 
 import { useCreateEntity } from './useCreateEntity';
 import { useDeleteEntity } from './useDeleteEntity';
@@ -22,22 +22,20 @@ const useEntityActions = <TEntity extends Entity = Entity, Data = any>(
   endpoints: EntityActionEndpoints,
   opts: UseEntityActionsOpts<TEntity> = {},
 ) => {
-  const api = useApi();
+  const client = useClient();
   const { entityType, path } = parseEntitiesPath(expandedPath);
 
   const { deleteEntity, isSubmitting: deleteSubmitting } =
-    useDeleteEntity(entityType, (entityId) => api(endpoints.delete!.replace(/:id/g, entityId), { method: 'DELETE' }));
+    useDeleteEntity(entityType, (entityId) => client.request(endpoints.delete!.replace(/:id/g, entityId), { method: 'DELETE' }));
 
   const { createEntity, isSubmitting: createSubmitting } =
-    useCreateEntity<TEntity, Data>(path, (data) => api(endpoints.post!, {
-      method: 'POST',
-      body: JSON.stringify(data),
+    useCreateEntity<TEntity, Data>(path, (data) => client.request(endpoints.post!, {
+      method: 'POST', body: data,
     }), opts);
 
   const { createEntity: updateEntity, isSubmitting: updateSubmitting } =
-    useCreateEntity<TEntity, Data>(path, (data) => api(endpoints.patch!, {
-      method: 'PATCH',
-      body: JSON.stringify(data),
+    useCreateEntity<TEntity, Data>(path, (data) => client.request(endpoints.patch!, {
+      method: 'PATCH', body: data,
     }), opts);
 
   return {

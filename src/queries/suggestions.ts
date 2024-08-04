@@ -1,71 +1,37 @@
-import { useInfiniteQuery, useMutation, keepPreviousData } from '@tanstack/react-query';
+import { useMutation, keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import { fetchRelationships } from 'soapbox/actions/accounts';
 import { importFetchedAccounts } from 'soapbox/actions/importer';
-import { getNextLink } from 'soapbox/api';
-import { useApi, useAppDispatch } from 'soapbox/hooks';
+import { useAppDispatch, useClient } from 'soapbox/hooks';
 
-import { PaginatedResult, removePageItem } from '../utils/queries';
-
-import type { IAccount } from './accounts';
-
-type Suggestion = {
-  source: 'staff';
-  account: IAccount;
-}
-
-type Result = {
-  account: string;
-}
-
-type PageParam = {
-  link?: string;
-}
+import { removePageItem } from '../utils/queries';
 
 const SuggestionKeys = {
   suggestions: ['suggestions'] as const,
 };
 
 const useSuggestions = () => {
-  const api = useApi();
+  const client = useClient();
   const dispatch = useAppDispatch();
 
-  const getV2Suggestions = async (pageParam: PageParam): Promise<PaginatedResult<Result>> => {
-    const endpoint = pageParam?.link || '/api/v2/suggestions';
-    const response = await api<Suggestion[]>(endpoint);
-    const hasMore = !!response.headers.get('link');
-    const nextLink = getNextLink(response);
+  const getSuggestions = async () => {
+    const response = await client.accounts.getSuggestions();
 
-    const accounts = response.json.map(({ account }) => account);
+    const accounts = response.map(({ account }) => account);
     const accountIds = accounts.map((account) => account.id);
     dispatch(importFetchedAccounts(accounts));
     dispatch(fetchRelationships(accountIds));
 
-    return {
-      result: response.json.map(x => ({ ...x, account: x.account.id })),
-      link: nextLink,
-      hasMore,
-    };
+    return response.map(x => ({ ...x, account: x.account.id }));
   };
 
-  const result = useInfiniteQuery({
+  const result = useQuery({
     queryKey: SuggestionKeys.suggestions,
-    queryFn: ({ pageParam }: any) => getV2Suggestions(pageParam),
+    queryFn: () => getSuggestions(),
     placeholderData: keepPreviousData,
-    initialPageParam: { nextLink: undefined },
-    getNextPageParam: (config) => {
-      if (config?.hasMore) {
-        return { nextLink: config?.link };
-      }
-
-      return undefined;
-    },
   });
 
-  const data: any = result.data?.pages.reduce<Suggestion[]>(
-    (prev: any, curr: any) => [...prev, ...curr.result],
-    [],
-  );
+  const data = result.data;
 
   return {
     ...result,
@@ -74,10 +40,10 @@ const useSuggestions = () => {
 };
 
 const useDismissSuggestion = () => {
-  const api = useApi();
+  const client = useClient();
 
   return useMutation({
-    mutationFn: (accountId: string) => api(`/api/v1/suggestions/${accountId}`, { method: 'DELETE' }),
+    mutationFn: (accountId: string) => client.accounts.dismissSuggestions(accountId),
     onMutate(accountId: string) {
       removePageItem(SuggestionKeys.suggestions, accountId, (o: any, n: any) => o.account === n);
     },
@@ -85,45 +51,27 @@ const useDismissSuggestion = () => {
 };
 
 const useOnboardingSuggestions = () => {
-  const api = useApi();
+  const client = useClient();
   const dispatch = useAppDispatch();
 
-  const getV2Suggestions = async (pageParam: any): Promise<{ data: Suggestion[]; link: string | undefined; hasMore: boolean }> => {
-    const link = pageParam?.link || '/api/v2/suggestions';
-    const response = await api<Suggestion[]>(link);
-    const hasMore = !!response.headers.get('link');
-    const nextLink = getNextLink(response);
+  const getSuggestions = async () => {
+    const response = await client.accounts.getSuggestions();
 
-    const accounts = response.json.map(({ account }) => account);
+    const accounts = response.map(({ account }) => account);
     const accountIds = accounts.map((account) => account.id);
     dispatch(importFetchedAccounts(accounts));
     dispatch(fetchRelationships(accountIds));
 
-    return {
-      data: response.json,
-      link: nextLink,
-      hasMore,
-    };
+    return response;
   };
 
-  const result = useInfiniteQuery({
+  const result = useQuery({
     queryKey: ['suggestions', 'v2'],
-    queryFn: ({ pageParam }) => getV2Suggestions(pageParam),
+    queryFn: () => getSuggestions(),
     placeholderData: keepPreviousData,
-    initialPageParam: { link: undefined as string | undefined },
-    getNextPageParam: (config) => {
-      if (config.hasMore) {
-        return { link: config.link };
-      }
-
-      return undefined;
-    },
   });
 
-  const data = result.data?.pages.reduce<Suggestion[]>(
-    (prev: Suggestion[], curr) => [...prev, ...curr.data],
-    [],
-  );
+  const data = result.data;
 
   return {
     ...result,

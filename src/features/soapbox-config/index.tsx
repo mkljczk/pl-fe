@@ -119,9 +119,7 @@ const SoapboxConfig: React.FC = () => {
     const file = e.target.files?.item(0);
 
     if (file) {
-      data.append('file', file);
-
-      dispatch(uploadMedia(data)).then(({ data }: any) => {
+      dispatch(uploadMedia({ file})).then((data: any) => {
         handleChange(path, () => data.url)(e);
       }).catch(console.error);
     }

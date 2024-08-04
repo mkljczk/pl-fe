@@ -1,26 +1,27 @@
-import api, { getNextLink } from '../api';
+import { getClient } from '../api';
 
 import { fetchRelationships } from './accounts';
 import { importFetchedAccounts, importFetchedStatuses } from './importer';
 
+import type { Search } from 'pl-api';
 import type { SearchFilter } from 'soapbox/reducers/search';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
 
-const SEARCH_CHANGE        = 'SEARCH_CHANGE';
-const SEARCH_CLEAR         = 'SEARCH_CLEAR';
-const SEARCH_SHOW          = 'SEARCH_SHOW';
+const SEARCH_CHANGE = 'SEARCH_CHANGE';
+const SEARCH_CLEAR = 'SEARCH_CLEAR';
+const SEARCH_SHOW = 'SEARCH_SHOW';
 const SEARCH_RESULTS_CLEAR = 'SEARCH_RESULTS_CLEAR';
 
 const SEARCH_FETCH_REQUEST = 'SEARCH_FETCH_REQUEST';
 const SEARCH_FETCH_SUCCESS = 'SEARCH_FETCH_SUCCESS';
-const SEARCH_FETCH_FAIL    = 'SEARCH_FETCH_FAIL';
+const SEARCH_FETCH_FAIL = 'SEARCH_FETCH_FAIL';
 
 const SEARCH_FILTER_SET = 'SEARCH_FILTER_SET';
 
 const SEARCH_EXPAND_REQUEST = 'SEARCH_EXPAND_REQUEST';
 const SEARCH_EXPAND_SUCCESS = 'SEARCH_EXPAND_SUCCESS';
-const SEARCH_EXPAND_FAIL    = 'SEARCH_EXPAND_FAIL';
+const SEARCH_EXPAND_FAIL = 'SEARCH_EXPAND_FAIL';
 
 const SEARCH_ACCOUNT_SET = 'SEARCH_ACCOUNT_SET';
 
@@ -63,29 +64,24 @@ const submitSearch = (filter?: SearchFilter) =>
     dispatch(fetchSearchRequest(value));
 
     const params: Record<string, any> = {
-      q: value,
       resolve: true,
       limit: 20,
-      type,
+      type: type as any,
     };
 
     if (accountId) params.account_id = accountId;
 
-    api(getState)('/api/v2/search', {
-      params,
-    }).then(response => {
-      if (response.json.accounts) {
-        dispatch(importFetchedAccounts(response.json.accounts));
+    return getClient(getState()).search.search(value, params).then(response => {
+      if (response.accounts) {
+        dispatch(importFetchedAccounts(response.accounts));
       }
 
-      if (response.json.statuses) {
-        dispatch(importFetchedStatuses(response.json.statuses));
+      if (response.statuses) {
+        dispatch(importFetchedStatuses(response.statuses));
       }
 
-      const next = getNextLink(response);
-
-      dispatch(fetchSearchSuccess(response.json, value, type, next || null));
-      dispatch(fetchRelationships(response.json.accounts.map((item: APIEntity) => item.id)));
+      dispatch(fetchSearchSuccess(response, value, type));
+      dispatch(fetchRelationships(response.accounts.map((item: APIEntity) => item.id)));
     }).catch(error => {
       dispatch(fetchSearchFail(error));
     });
@@ -96,12 +92,11 @@ const fetchSearchRequest = (value: string) => ({
   value,
 });
 
-const fetchSearchSuccess = (results: APIEntity[], searchTerm: string, searchType: SearchFilter, next: string | null) => ({
+const fetchSearchSuccess = (results: Search, searchTerm: string, searchType: SearchFilter) => ({
   type: SEARCH_FETCH_SUCCESS,
   results,
   searchTerm,
   searchType,
-  next,
 });
 
 const fetchSearchFail = (error: unknown) => ({
@@ -127,38 +122,24 @@ const expandSearch = (type: SearchFilter) => (dispatch: AppDispatch, getState: (
 
   dispatch(expandSearchRequest(type));
 
-  let url = getState().search.next as string;
-  let params: Record<string, any> = {};
+  let params: Record<string, any> = {
+    type,
+    offset,
+  };
+  if (accountId) params.account_id = accountId;
 
-  // if no URL was extracted from the Link header,
-  // fall back on querying with the offset
-  if (!url) {
-    url = '/api/v2/search';
-    params = {
-      q: value,
-      type,
-      offset,
-    };
-    if (accountId) params.account_id = accountId;
-  }
+  return getClient(getState()).search.search(value, params).then(response => {
 
-  api(getState)(url, {
-    params,
-  }).then(response => {
-    const data = response.json;
-
-    if (data.accounts) {
-      dispatch(importFetchedAccounts(data.accounts));
+    if (response.accounts) {
+      dispatch(importFetchedAccounts(response.accounts));
     }
 
-    if (data.statuses) {
-      dispatch(importFetchedStatuses(data.statuses));
+    if (response.statuses) {
+      dispatch(importFetchedStatuses(response.statuses));
     }
 
-    const next = getNextLink(response);
-
-    dispatch(expandSearchSuccess(data, value, type, next || null));
-    dispatch(fetchRelationships(data.accounts.map((item: APIEntity) => item.id)));
+    dispatch(expandSearchSuccess(response, value, type));
+    dispatch(fetchRelationships(response.accounts.map((item: APIEntity) => item.id)));
   }).catch(error => {
     dispatch(expandSearchFail(error));
   });
@@ -169,12 +150,11 @@ const expandSearchRequest = (searchType: SearchFilter) => ({
   searchType,
 });
 
-const expandSearchSuccess = (results: APIEntity[], searchTerm: string, searchType: SearchFilter, next: string | null) => ({
+const expandSearchSuccess = (results: Search, searchTerm: string, searchType: SearchFilter) => ({
   type: SEARCH_EXPAND_SUCCESS,
   results,
   searchTerm,
   searchType,
-  next,
 });
 
 const expandSearchFail = (error: unknown) => ({

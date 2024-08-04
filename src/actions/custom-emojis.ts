@@ -1,4 +1,4 @@
-import api from '../api';
+import { getClient } from '../api';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
@@ -14,8 +14,8 @@ const fetchCustomEmojis = () =>
 
     dispatch(fetchCustomEmojisRequest());
 
-    api(getState)('/api/v1/custom_emojis').then(response => {
-      dispatch(fetchCustomEmojisSuccess(response.json));
+    return getClient(getState()).instance.getCustomEmojis().then(response => {
+      dispatch(fetchCustomEmojisSuccess(response));
     }).catch(error => {
       dispatch(fetchCustomEmojisFail(error));
     });

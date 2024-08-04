@@ -1,8 +1,8 @@
 import { serialize } from 'object-to-formdata';
 
+import { useClient } from 'soapbox/hooks';
 import { Entities } from 'soapbox/entity-store/entities';
 import { useCreateEntity } from 'soapbox/entity-store/hooks';
-import { useApi } from 'soapbox/hooks/useApi';
 import { groupSchema } from 'soapbox/schemas';
 
 interface CreateGroupParams {
@@ -16,17 +16,14 @@ interface CreateGroupParams {
 }
 
 const useCreateGroup = () => {
-  const api = useApi();
+  const client = useClient();
 
-  const { createEntity, ...rest } = useCreateEntity([Entities.GROUPS, 'search', ''], (params: CreateGroupParams) => {
-    const formData = serialize(params, { indices: true });
-
-    return api('/api/v1/groups', {
+  const { createEntity, ...rest } = useCreateEntity([Entities.GROUPS, 'search', ''], (params: CreateGroupParams) =>
+    client.request('/api/v1/groups', {
       method: 'POST',
-      headers: { 'Content-Type': '' },
-      body: formData,
-    });
-  }, { schema: groupSchema });
+      contentType: '',
+      body: params,
+    }), { schema: groupSchema });
 
   return {
     createGroup: createEntity,

@@ -2,7 +2,7 @@ import IntlMessageFormat from 'intl-messageformat';
 import 'intl-pluralrules';
 import { defineMessages } from 'react-intl';
 
-import api, { getNextLink } from 'soapbox/api';
+import { getClient } from 'soapbox/api';
 import { getFilters, regexFromFilters } from 'soapbox/selectors';
 import { isLoggedIn } from 'soapbox/utils/auth';
 import { compareId } from 'soapbox/utils/comparators';
@@ -21,6 +21,7 @@ import {
 import { saveMarker } from './markers';
 import { getSettings, saveSettings } from './settings';
 
+import type { Account, Notification, PaginatedResponse } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
 
@@ -271,10 +272,9 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
 
     dispatch(expandNotificationsRequest(isLoadingMore));
 
-    return api(getState)('/api/v1/notifications', { params, signal: abortExpandNotifications.signal }).then(response => {
-      const next = getNextLink(response);
+    return getClient(state).notifications.getNotifications(params).then(response => { // WIP signal
 
-      const entries = (response.json as APIEntity[]).reduce((acc, item) => {
+      const entries = (response.items).reduce((acc, item) => {
         if (item.account?.id) {
           acc.accounts[item.account.id] = item.account;
         }
@@ -289,15 +289,15 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
         }
 
         return acc;
-      }, { accounts: {}, statuses: {} });
+      }, { accounts: {}, statuses: {} } as { accounts: Record<string, Account>; statuses: Record<string, Account> });
 
       dispatch(importFetchedAccounts(Object.values(entries.accounts)));
       dispatch(importFetchedStatuses(Object.values(entries.statuses)));
 
-      const deduplicatedNotifications = deduplicateNotifications(response.json);
+      const deduplicatedNotifications = deduplicateNotifications(response.items);
 
-      dispatch(expandNotificationsSuccess(deduplicatedNotifications, next || null, isLoadingMore));
-      fetchRelatedRelationships(dispatch, response.json);
+      dispatch(expandNotificationsSuccess(deduplicatedNotifications, response.next, isLoadingMore));
+      fetchRelatedRelationships(dispatch, response.items);
       done();
     }).catch(error => {
       dispatch(expandNotificationsFail(error, isLoadingMore));
@@ -310,7 +310,7 @@ const expandNotificationsRequest = (isLoadingMore: boolean) => ({
   skipLoading: !isLoadingMore,
 });
 
-const expandNotificationsSuccess = (notifications: APIEntity[], next: string | null, isLoadingMore: boolean) => ({
+const expandNotificationsSuccess = (notifications: APIEntity[], next: (() => Promise<PaginatedResponse<Notification>>) | null, isLoadingMore: boolean) => ({
   type: NOTIFICATIONS_EXPAND_SUCCESS,
   notifications,
   next,
@@ -322,17 +322,6 @@ const expandNotificationsFail = (error: unknown, isLoadingMore: boolean) => ({
   error,
   skipLoading: !isLoadingMore,
 });
-
-const clearNotifications = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
-
-    dispatch({
-      type: NOTIFICATIONS_CLEAR,
-    });
-
-    api(getState)('/api/v1/notifications/clear', { method: 'POST' });
-  };
 
 const scrollTopNotifications = (top: boolean) =>
   (dispatch: AppDispatch) => {
@@ -358,9 +347,9 @@ const setFilter = (filterType: FilterType, abort?: boolean) =>
 // https://git.pleroma.social/pleroma/pleroma/-/issues/2769
 const markReadPleroma = (max_id: string | number) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
-    api(getState)('/api/v1/pleroma/notifications/read', {
+    getClient(getState).request('/api/v1/pleroma/notifications/read', {
       method: 'POST',
-      body: JSON.stringify({ max_id }),
+      body: { max_id },
     });
 
 const markReadNotifications = () =>
@@ -414,7 +403,6 @@ export {
   expandNotificationsRequest,
   expandNotificationsSuccess,
   expandNotificationsFail,
-  clearNotifications,
   scrollTopNotifications,
   setFilter,
   markReadPleroma,

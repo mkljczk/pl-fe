@@ -1,4 +1,4 @@
-import api from '../api';
+import { getClient } from '../api';
 
 import { openModal } from './modals';
 
@@ -61,18 +61,13 @@ const submitReport = () =>
     dispatch(submitReportRequest());
     const { reports } = getState();
 
-    return api(getState)('/api/v1/reports', {
-      method: 'POST',
-      body: JSON.stringify({
-        account_id: reports.getIn(['new', 'account_id']),
-        status_ids: reports.getIn(['new', 'status_ids']),
-        message_ids: [reports.getIn(['new', 'chat_message', 'id'])].filter(Boolean),
-        group_id: reports.getIn(['new', 'group', 'id']),
-        rule_ids: reports.getIn(['new', 'rule_ids']),
-        comment: reports.getIn(['new', 'comment']),
-        forward: reports.getIn(['new', 'forward']),
-      }),
-    });
+    return getClient(getState()).accounts.reportAccount(reports.new.account_id!, {
+      status_ids: reports.new.status_ids.toArray(),
+      // group_id: reports.getIn(['new', 'group', 'id']),
+      rule_ids: reports.new.rule_ids.toArray(),
+      comment: reports.new.comment,
+      forward: reports.new.forward,
+    })
   };
 
 const submitReportRequest = () => ({

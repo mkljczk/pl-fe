@@ -35,7 +35,7 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
       );
     }
 
-    if (features.directTimeline || features.conversations) {
+    if (features.conversations) {
       return (
         <ThumbNavigationLink
           src={require('@tabler/icons/outline/mail.svg')}

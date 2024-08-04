@@ -1,18 +1,18 @@
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntities } from 'soapbox/entity-store/hooks';
-import { useApi } from 'soapbox/hooks';
+import { useClient } from 'soapbox/hooks';
 import { useFeatures } from 'soapbox/hooks/useFeatures';
 import { groupSchema, type Group } from 'soapbox/schemas/group';
 
 import { useGroupRelationships } from './useGroupRelationships';
 
 const useGroups = () => {
-  const api = useApi();
+  const client = useClient();
   const features = useFeatures();
 
   const { entities, ...result } = useEntities<Group>(
     [Entities.GROUPS, 'search', ''],
-    () => api('/api/v1/groups'),
+    () => client.request('/api/v1/groups'),
     { enabled: features.groups, schema: groupSchema },
   );
   const { relationships } = useGroupRelationships(

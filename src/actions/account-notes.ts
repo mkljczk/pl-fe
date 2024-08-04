@@ -1,4 +1,4 @@
-import api from '../api';
+import { getClient } from '../api';
 
 import type { AnyAction } from 'redux';
 import type { RootState } from 'soapbox/store';
@@ -11,12 +11,10 @@ const submitAccountNote = (id: string, value: string) =>
   (dispatch: React.Dispatch<AnyAction>, getState: () => RootState) => {
     dispatch(submitAccountNoteRequest());
 
-    return api(getState)(`/api/v1/accounts/${id}/note`, {
-      method: 'POST', body:
-      JSON.stringify({ comment: value }),
-    }).then(response => {
-      dispatch(submitAccountNoteSuccess(response.json));
-    }).catch(error => dispatch(submitAccountNoteFail(error)));
+    return getClient(getState).accounts.updateAccountNote(id, value)
+      .then(response => {
+        dispatch(submitAccountNoteSuccess(response));
+      }).catch(error => dispatch(submitAccountNoteFail(error)));
   };
 
 const submitAccountNoteRequest = () => ({

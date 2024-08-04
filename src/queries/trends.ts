@@ -1,17 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchTrendsSuccess } from 'soapbox/actions/trends';
-import { useApi, useAppDispatch } from 'soapbox/hooks';
+import { useAppDispatch, useClient } from 'soapbox/hooks';
 import { normalizeTag } from 'soapbox/normalizers';
 
 import type { Tag } from 'soapbox/types/entities';
 
 const useTrends = () => {
-  const api = useApi();
   const dispatch = useAppDispatch();
+  const client = useClient();
 
   const getTrends = async() => {
-    const { json: data } = await api<any[]>('/api/v1/trends');
+    const data = await client.trends.getTrendingTags();
 
     dispatch(fetchTrendsSuccess(data));
 

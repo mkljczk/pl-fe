@@ -1,4 +1,4 @@
-import api from '../api';
+import { getClient } from '../api';
 
 import { importFetchedPoll } from './importer';
 
@@ -13,14 +13,11 @@ const POLL_FETCH_REQUEST = 'POLL_FETCH_REQUEST';
 const POLL_FETCH_SUCCESS = 'POLL_FETCH_SUCCESS';
 const POLL_FETCH_FAIL    = 'POLL_FETCH_FAIL';
 
-const vote = (pollId: string, choices: string[]) =>
+const vote = (pollId: string, choices: number[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(voteRequest());
 
-    api(getState)(`/api/v1/polls/${pollId}/votes`, {
-      method: 'POST',
-      body: JSON.stringify({ choices }),
-    }).then(({ json: data }) => {
+    return getClient(getState()).polls.vote(pollId, choices).then((data) => {
       dispatch(importFetchedPoll(data));
       dispatch(voteSuccess(data));
     }).catch(err => dispatch(voteFail(err)));
@@ -30,8 +27,7 @@ const fetchPoll = (pollId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchPollRequest());
 
-    api(getState)(`/api/v1/polls/${pollId}`)
-      .then(({ json: data }) => {
+    return getClient(getState()).polls.getPoll(pollId).then((data) => {
         dispatch(importFetchedPoll(data));
         dispatch(fetchPollSuccess(data));
       })

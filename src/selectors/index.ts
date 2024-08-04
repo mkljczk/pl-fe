@@ -291,7 +291,6 @@ const getRemoteInstanceFederation = (state: RootState, host: string): HostFedera
   ) as HostFederation;
 };
 
-
 const makeGetHosts = () =>
   createSelector([getSimplePolicy], (simplePolicy) => {
     const { accept, reject_deletes, report_removal, ...rest } = simplePolicy;

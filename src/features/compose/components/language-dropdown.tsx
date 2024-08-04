@@ -51,7 +51,6 @@ const LanguageDropdown: React.FC<ILanguageDropdown> = ({ composeId }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState('');
 
-
   const { x, y, strategy, refs, middlewareData, placement } = useFloating<HTMLButtonElement>({
     placement: 'top',
     middleware: [

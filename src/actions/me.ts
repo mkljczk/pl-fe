@@ -5,7 +5,7 @@ import { setSentryAccount } from 'soapbox/sentry';
 import KVStore from 'soapbox/storage/kv-store';
 import { getAuthUserId, getAuthUserUrl } from 'soapbox/utils/auth';
 
-import api from '../api';
+import { getClient } from '../api';
 
 import { loadCredentials } from './auth';
 import { importFetchedAccount } from './importer';
@@ -72,23 +72,10 @@ const patchMe = (params: Record<string, any>, isFormData = false) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(patchMeRequest());
 
-    const headers: HeadersInit = isFormData ? { 'Content-Type': '' } : {};
-
-    let body: FormData | string;
-    if (isFormData) {
-      body = serialize(params, { indices: true });
-    } else {
-      body = JSON.stringify(params);
-    }
-
-    return api(getState)('/api/v1/accounts/update_credentials', {
-      method: 'PATCH',
-      body,
-      headers,
-    })
+    return getClient(getState()).accounts.updateCredentials(params)
       .then(response => {
-        persistAuthAccount(response.json, params);
-        dispatch(patchMeSuccess(response.json));
+        persistAuthAccount(response, params);
+        dispatch(patchMeSuccess(response));
       }).catch(error => {
         dispatch(patchMeFail(error));
         throw error;

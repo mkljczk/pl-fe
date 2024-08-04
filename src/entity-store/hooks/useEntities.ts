@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import z from 'zod';
 
 import { getNextLink, getPrevLink } from 'soapbox/api';
-import { useApi } from 'soapbox/hooks/useApi';
+import { useClient } from 'soapbox/hooks';
 import { useAppDispatch } from 'soapbox/hooks/useAppDispatch';
 import { useAppSelector } from 'soapbox/hooks/useAppSelector';
 import { useGetState } from 'soapbox/hooks/useGetState';
@@ -39,7 +39,7 @@ const useEntities = <TEntity extends Entity>(
   /** Additional options for the hook. */
   opts: UseEntitiesOpts<TEntity> = {},
 ) => {
-  const api = useApi();
+  const client = useClient();
   const dispatch = useAppDispatch();
   const getState = useGetState();
 
@@ -91,13 +91,13 @@ const useEntities = <TEntity extends Entity>(
 
   const fetchNextPage = async(): Promise<void> => {
     if (next) {
-      await fetchPage(() => api(next), 'end');
+      await fetchPage(() => client.request(next), 'end');
     }
   };
 
   const fetchPreviousPage = async(): Promise<void> => {
     if (prev) {
-      await fetchPage(() => api(prev), 'start');
+      await fetchPage(() => client.request(prev), 'start');
     }
   };
 

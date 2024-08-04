@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { useApi } from 'soapbox/hooks';
+import { useClient } from 'soapbox/hooks';
 
 type Embed = {
   type: string;
@@ -11,18 +11,18 @@ type Embed = {
   provider_url: string;
   cache_age: number;
   html: string;
-  width: number;
-  height: number;
+  width: number | null;
+  height: number | null;
 }
 
 /** Fetch OEmbed information for a status by its URL. */
 // https://github.com/mastodon/mastodon/blob/main/app/controllers/api/oembed_controller.rb
 // https://github.com/mastodon/mastodon/blob/main/app/serializers/oembed_serializer.rb
 const useEmbed = (url: string) => {
-  const api = useApi();
+  const client = useClient();
 
-  const getEmbed = async() => {
-    const { json: data } = await api('/api/oembed', { params: { url } });
+  const getEmbed = async () => {
+    const data = await client.oembed.getOembed(url);
     return data;
   };
 

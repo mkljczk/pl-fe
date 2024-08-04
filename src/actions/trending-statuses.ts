@@ -1,6 +1,6 @@
 import { getFeatures } from 'soapbox/utils/features';
 
-import api from '../api';
+import { getClient } from '../api';
 
 import { importFetchedStatuses } from './importer';
 
@@ -20,7 +20,8 @@ const fetchTrendingStatuses = () =>
     if (!features.trendingStatuses) return;
 
     dispatch({ type: TRENDING_STATUSES_FETCH_REQUEST });
-    return api(getState)('/api/v1/trends/statuses').then(({ json: statuses }) => {
+
+    return getClient(getState()).trends.getTrendingStatuses().then((statuses) => {
       dispatch(importFetchedStatuses(statuses));
       dispatch({ type: TRENDING_STATUSES_FETCH_SUCCESS, statuses });
       return statuses;

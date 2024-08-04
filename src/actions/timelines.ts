@@ -4,7 +4,7 @@ import { getSettings } from 'soapbox/actions/settings';
 import { normalizeStatus } from 'soapbox/normalizers';
 import { shouldFilter } from 'soapbox/utils/timelines';
 
-import api, { getNextLink, getPrevLink } from '../api';
+import { getClient, getNextLink, getPrevLink } from '../api';
 
 import { importFetchedStatus, importFetchedStatuses } from './importer';
 
@@ -189,7 +189,7 @@ const expandTimeline = (timelineId: string, path: string, params: Record<string,
 
     dispatch(expandTimelineRequest(timelineId, isLoadingMore));
 
-    return api(getState)(path, { params }).then(response => {
+    return getClient(getState).request(path, { params }).then(response => {
       dispatch(importFetchedStatuses(response.json));
 
       const statuses = deduplicateStatuses(response.json);
@@ -244,9 +244,6 @@ const expandCommunityTimeline = ({ url, maxId, onlyMedia }: Record<string, any> 
 
 const expandBubbleTimeline = ({ url, maxId, onlyMedia }: Record<string, any> = {}, intl?: IntlShape, done = noOp) =>
   expandTimeline(`bubble${onlyMedia ? ':media' : ''}`, url || '/api/v1/timelines/bubble', url ? {} : { max_id: maxId, only_media: !!onlyMedia }, intl, done);
-
-const expandDirectTimeline = ({ url, maxId }: Record<string, any> = {}, intl?: IntlShape, done = noOp) =>
-  expandTimeline('direct', url || '/api/v1/timelines/direct', url ? {} : { max_id: maxId }, intl, done);
 
 const expandAccountTimeline = (accountId: string, { url, maxId, withReplies }: Record<string, any> = {}, intl?: IntlShape) =>
   expandTimeline(`account:${accountId}${withReplies ? ':with_replies' : ''}`, url || `/api/v1/accounts/${accountId}/statuses`, url ? {} : { exclude_replies: !withReplies, max_id: maxId, with_muted: true }, intl);
@@ -358,7 +355,6 @@ export {
   expandRemoteTimeline,
   expandCommunityTimeline,
   expandBubbleTimeline,
-  expandDirectTimeline,
   expandAccountTimeline,
   expandAccountFeaturedTimeline,
   expandAccountMediaTimeline,

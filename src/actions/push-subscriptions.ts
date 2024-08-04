@@ -1,4 +1,4 @@
-import api from '../api';
+import { getClient } from '../api';
 
 const PUSH_SUBSCRIPTION_CREATE_REQUEST = 'PUSH_SUBSCRIPTION_CREATE_REQUEST';
 const PUSH_SUBSCRIPTION_CREATE_SUCCESS = 'PUSH_SUBSCRIPTION_CREATE_SUCCESS';
@@ -21,10 +21,8 @@ import type { AppDispatch, RootState } from 'soapbox/store';
 const createPushSubscription = (params: Record<string, any>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: PUSH_SUBSCRIPTION_CREATE_REQUEST, params });
-    return api(getState)('/api/v1/push/subscription', {
-      method: 'POST',
-      body: JSON.stringify(params),
-    }).then(({ json: subscription }) =>
+    return getClient(getState).pushNotifications.createSubscription(params)
+    .then((subscription) =>
       dispatch({ type: PUSH_SUBSCRIPTION_CREATE_SUCCESS, params, subscription }),
     ).catch(error =>
       dispatch({ type: PUSH_SUBSCRIPTION_CREATE_FAIL, params, error }),
@@ -34,7 +32,7 @@ const createPushSubscription = (params: Record<string, any>) =>
 const fetchPushSubscription = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: PUSH_SUBSCRIPTION_FETCH_REQUEST });
-    return api(getState)('/api/v1/push/subscription').then(({ json: subscription }) =>
+    return getClient(getState).pushNotifications.getSubscription().then((subscription) =>
       dispatch({ type: PUSH_SUBSCRIPTION_FETCH_SUCCESS, subscription }),
     ).catch(error =>
       dispatch({ type: PUSH_SUBSCRIPTION_FETCH_FAIL, error }),
@@ -44,10 +42,7 @@ const fetchPushSubscription = () =>
 const updatePushSubscription = (params: Record<string, any>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: PUSH_SUBSCRIPTION_UPDATE_REQUEST, params });
-    return api(getState)('/api/v1/push/subscription', {
-      method: 'PUT',
-      body: JSON.stringify(params),
-    }).then(({ json: subscription }) =>
+    return getClient(getState).pushNotifications.updateSubscription(params).then((subscription) =>
       dispatch({ type: PUSH_SUBSCRIPTION_UPDATE_SUCCESS, params, subscription }),
     ).catch(error =>
       dispatch({ type: PUSH_SUBSCRIPTION_UPDATE_FAIL, params, error }),
@@ -57,7 +52,7 @@ const updatePushSubscription = (params: Record<string, any>) =>
 const deletePushSubscription = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: PUSH_SUBSCRIPTION_DELETE_REQUEST });
-    return api(getState)('/api/v1/push/subscription', { method: 'DELETE' }).then(() =>
+    return getClient(getState).pushNotifications.deleteSubscription().then(() =>
       dispatch({ type: PUSH_SUBSCRIPTION_DELETE_SUCCESS }),
     ).catch(error =>
       dispatch({ type: PUSH_SUBSCRIPTION_DELETE_FAIL, error }),

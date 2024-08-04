@@ -38,7 +38,7 @@ const Poll: React.FC<IPoll> = ({ id, status }): JSX.Element | null => {
       ap_id: status?.url,
     }));
 
-  const handleVote = (selectedId: number) => dispatch(vote(id, [String(selectedId)]));
+  const handleVote = (selectedId: number) => dispatch(vote(id, [selectedId]));
 
   const toggleOption = (value: number) => {
     if (isLoggedIn) {

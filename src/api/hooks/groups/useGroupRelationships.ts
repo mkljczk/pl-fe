@@ -1,14 +1,14 @@
 import { Entities } from 'soapbox/entity-store/entities';
 import { useBatchedEntities } from 'soapbox/entity-store/hooks/useBatchedEntities';
-import { useApi, useLoggedIn } from 'soapbox/hooks';
+import { useClient, useLoggedIn } from 'soapbox/hooks';
 import { type GroupRelationship, groupRelationshipSchema } from 'soapbox/schemas';
 
 const useGroupRelationships = (listKey: string[], ids: string[]) => {
-  const api = useApi();
+  const client = useClient();
   const { isLoggedIn } = useLoggedIn();
 
   const fetchGroupRelationships = (ids: string[]) =>
-    api('/api/v1/groups/relationships', { params: { id: ids } });
+    client.request('/api/v1/groups/relationships', { params: { id: ids } });
 
   const { entityMap: relationships, ...result } = useBatchedEntities<GroupRelationship>(
     [Entities.RELATIONSHIPS, ...listKey],

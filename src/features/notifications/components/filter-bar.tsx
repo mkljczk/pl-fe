@@ -56,7 +56,7 @@ const NotificationFilterBar = () => {
       action: onClick('mention'),
       name: 'mention',
     });
-    if (features.accountNotifies || features.accountSubscriptions) items.push({
+    if (features.accountNotifies) items.push({
       text: <Icon className='h-4 w-4' src={require('@tabler/icons/outline/bell-ringing.svg')} />,
       title: intl.formatMessage(messages.statuses),
       action: onClick('status'),

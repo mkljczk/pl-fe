@@ -1,6 +1,6 @@
 import { isLoggedIn } from 'soapbox/utils/auth';
 
-import api, { getNextLink } from '../api';
+import { getClient } from '../api';
 
 import {
   importFetchedAccounts,
@@ -8,6 +8,7 @@ import {
   importFetchedStatus,
 } from './importer';
 
+import type { Conversation, PaginatedResponse } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
 
@@ -37,7 +38,7 @@ const markConversationRead = (conversationId: string) => (dispatch: AppDispatch,
     id: conversationId,
   });
 
-  api(getState)(`/api/v1/conversations/${conversationId}/read`, { method: 'POST' });
+  return getClient(getState).timelines.markConversationRead(conversationId);
 };
 
 const expandConversations = ({ maxId }: Record<string, any> = {}) => (dispatch: AppDispatch, getState: () => RootState) => {
@@ -53,13 +54,11 @@ const expandConversations = ({ maxId }: Record<string, any> = {}) => (dispatch: 
 
   const isLoadingRecent = !!params.since_id;
 
-  api(getState)('/api/v1/conversations', { params })
+  return getClient(getState).timelines.getConversations(params)
     .then(response => {
-      const next = getNextLink(response);
-
-      dispatch(importFetchedAccounts(response.json.reduce((aggr: Array<APIEntity>, item: APIEntity) => aggr.concat(item.accounts), [])));
-      dispatch(importFetchedStatuses(response.json.map((item: Record<string, any>) => item.last_status).filter((x?: APIEntity) => !!x)));
-      dispatch(expandConversationsSuccess(response.json, next || null, isLoadingRecent));
+      dispatch(importFetchedAccounts(response.items.reduce((aggr: Array<APIEntity>, item: APIEntity) => aggr.concat(item.accounts), [])));
+      dispatch(importFetchedStatuses(response.items.map((item: Record<string, any>) => item.last_status).filter((x?: APIEntity) => !!x)));
+      dispatch(expandConversationsSuccess(response.items, response.next, isLoadingRecent));
     })
     .catch(err => dispatch(expandConversationsFail(err)));
 };
@@ -68,7 +67,11 @@ const expandConversationsRequest = () => ({
   type: CONVERSATIONS_FETCH_REQUEST,
 });
 
-const expandConversationsSuccess = (conversations: APIEntity[], next: string | null, isLoadingRecent: boolean) => ({
+const expandConversationsSuccess = (
+  conversations: APIEntity[],
+  next: (() => Promise<PaginatedResponse<Conversation>>) | null,
+  isLoadingRecent: boolean,
+) => ({
   type: CONVERSATIONS_FETCH_SUCCESS,
   conversations,
   next,

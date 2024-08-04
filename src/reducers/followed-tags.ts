@@ -10,13 +10,14 @@ import {
 } from 'soapbox/actions/tags';
 import { normalizeTag } from 'soapbox/normalizers';
 
+import type { PaginatedResponse, Tag } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { APIEntity, Tag } from 'soapbox/types/entities';
+import type { APIEntity,  } from 'soapbox/types/entities';
 
 const ReducerRecord = ImmutableRecord({
   items: ImmutableList<Tag>(),
   isLoading: false,
-  next: null,
+  next: null as (() => Promise<PaginatedResponse<Tag>>) | null,
 });
 
 const followed_tags = (state = ReducerRecord(), action: AnyAction) => {

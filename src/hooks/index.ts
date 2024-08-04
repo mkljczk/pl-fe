@@ -1,7 +1,7 @@
-export { useApi } from './useApi';
 export { useAppDispatch } from './useAppDispatch';
 export { useAppSelector } from './useAppSelector';
 export { useClickOutside } from './useClickOutside';
+export { useClient } from './useClient';
 export { useCompose } from './useCompose';
 export { useDebounce } from './useDebounce';
 export { useDraggedFiles } from './useDraggedFiles';

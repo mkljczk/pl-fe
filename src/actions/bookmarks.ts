@@ -1,9 +1,10 @@
-import api, { getNextLink } from '../api';
+import { getClient, getNextLink } from '../api';
 
 import { importFetchedStatuses } from './importer';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
+import type { PaginatedResponse, Status } from 'pl-api';
 
 const BOOKMARKED_STATUSES_FETCH_REQUEST = 'BOOKMARKED_STATUSES_FETCH_REQUEST';
 const BOOKMARKED_STATUSES_FETCH_SUCCESS = 'BOOKMARKED_STATUSES_FETCH_SUCCESS';
@@ -23,10 +24,9 @@ const fetchBookmarkedStatuses = (folderId?: string) =>
 
     dispatch(fetchBookmarkedStatusesRequest(folderId));
 
-    return api(getState)(`/api/v1/bookmarks${folderId ? `?folder_id=${folderId}` : ''}`).then(response => {
-      const next = getNextLink(response);
-      dispatch(importFetchedStatuses(response.json));
-      return dispatch(fetchBookmarkedStatusesSuccess(response.json, next || null, folderId));
+    return getClient(getState()).accounts.getBookmarks({ folder_id: folderId }).then(response => {
+      dispatch(importFetchedStatuses(response.items));
+      return dispatch(fetchBookmarkedStatusesSuccess(response.items, response.next, folderId));
     }).catch(error => {
       dispatch(fetchBookmarkedStatusesFail(error, folderId));
     });
@@ -37,7 +37,7 @@ const fetchBookmarkedStatusesRequest = (folderId?: string) => ({
   folderId,
 });
 
-const fetchBookmarkedStatusesSuccess = (statuses: APIEntity[], next: string | null, folderId?: string) => ({
+const fetchBookmarkedStatusesSuccess = (statuses: APIEntity[], next: (() => Promise<PaginatedResponse<Status>>) | null, folderId?: string) => ({
   type: BOOKMARKED_STATUSES_FETCH_SUCCESS,
   statuses,
   next,
@@ -53,18 +53,17 @@ const fetchBookmarkedStatusesFail = (error: unknown, folderId?: string) => ({
 const expandBookmarkedStatuses = (folderId?: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const list = folderId ? `bookmarks:${folderId}` : 'bookmarks';
-    const url = getState().status_lists.get(list)?.next || null;
+    const next = getState().status_lists.get(list)?.next || null;
 
-    if (url === null || getState().status_lists.get(list)?.isLoading) {
+    if (next === null || getState().status_lists.get(list)?.isLoading) {
       return dispatch(noOp);
     }
 
     dispatch(expandBookmarkedStatusesRequest(folderId));
 
-    return api(getState)(url).then(response => {
-      const next = getNextLink(response);
-      dispatch(importFetchedStatuses(response.json));
-      return dispatch(expandBookmarkedStatusesSuccess(response.json, next || null, folderId));
+    return next().then(response => {
+      dispatch(importFetchedStatuses(response.items));
+      return dispatch(expandBookmarkedStatusesSuccess(response.items, response.next, folderId));
     }).catch(error => {
       dispatch(expandBookmarkedStatusesFail(error, folderId));
     });
@@ -75,7 +74,7 @@ const expandBookmarkedStatusesRequest = (folderId?: string) => ({
   folderId,
 });
 
-const expandBookmarkedStatusesSuccess = (statuses: APIEntity[], next: string | null, folderId?: string) => ({
+const expandBookmarkedStatusesSuccess = (statuses: APIEntity[], next: (() => Promise<PaginatedResponse<Status>>) | null, folderId?: string) => ({
   type: BOOKMARKED_STATUSES_EXPAND_SUCCESS,
   statuses,
   next,

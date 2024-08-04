@@ -50,7 +50,6 @@ import {
   HomeTimeline,
   Followers,
   Following,
-  DirectTimeline,
   Conversations,
   HashtagTimeline,
   Notifications,
@@ -181,10 +180,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
       {features.federating && <WrappedRoute path='/timeline/:instance' exact page={RemoteInstancePage} component={RemoteTimeline} content={children} />}
 
       {features.conversations && <WrappedRoute path='/conversations' page={DefaultPage} component={Conversations} content={children} />}
-      {features.directTimeline && <WrappedRoute path='/messages' page={DefaultPage} component={DirectTimeline} content={children} />}
-      {(features.conversations && !features.directTimeline) && (
-        <WrappedRoute path='/messages' page={DefaultPage} component={Conversations} content={children} />
-      )}
+      {features.conversations && <Redirect from='/messages' to='/conversations' />}
 
       {/* Mastodon web routes */}
       <Redirect from='/web/:path1/:path2/:path3' to='/:path1/:path2/:path3' />

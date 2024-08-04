@@ -1,8 +1,6 @@
-import { serialize } from 'object-to-formdata';
-
 import { Entities } from 'soapbox/entity-store/entities';
 import { useCreateEntity } from 'soapbox/entity-store/hooks';
-import { useApi } from 'soapbox/hooks/useApi';
+import { useClient } from 'soapbox/hooks';
 import { groupSchema } from 'soapbox/schemas';
 
 interface UpdateGroupParams {
@@ -15,19 +13,14 @@ interface UpdateGroupParams {
 }
 
 const useUpdateGroup = (groupId: string) => {
-  const api = useApi();
+  const client = useClient();
 
-  const { createEntity, ...rest } = useCreateEntity([Entities.GROUPS], (params: UpdateGroupParams) => {
-    const formData = serialize(params, { indices: true });
-
-    Object.entries(params).forEach(([key, value]) => formData.append(key, value));
-
-    return api(`/api/v1/groups/${groupId}`, {
+  const { createEntity, ...rest } = useCreateEntity([Entities.GROUPS], (params: UpdateGroupParams) =>
+    client.request(`/api/v1/groups/${groupId}`, {
       method: 'PUT',
-      headers: { 'Content-Type': '' },
-      body: formData,
-    });
-  }, { schema: groupSchema });
+      contentType: '',
+      body: params,
+    }), { schema: groupSchema });
 
   return {
     updateGroup: createEntity,

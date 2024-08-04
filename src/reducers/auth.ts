@@ -1,10 +1,11 @@
 import { List as ImmutableList, Map as ImmutableMap, Record as ImmutableRecord, fromJS } from 'immutable';
 import trim from 'lodash/trim';
+import { PlApiClient } from 'pl-api';
 
 import { MASTODON_PRELOAD_IMPORT } from 'soapbox/actions/preload';
 import * as BuildConfig from 'soapbox/build-config';
 import KVStore from 'soapbox/storage/kv-store';
-import { validId, isURL } from 'soapbox/utils/auth';
+import { validId, isURL, parseBaseURL } from 'soapbox/utils/auth';
 
 import {
   AUTH_APP_CREATED,
@@ -20,6 +21,8 @@ import { ME_FETCH_SKIP } from '../actions/me';
 import type { AnyAction } from 'redux';
 import type { PlfeResponse } from 'soapbox/api';
 import type { APIEntity, Account as AccountEntity } from 'soapbox/types/entities';
+
+const backendUrl = (isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : '');
 
 const AuthAppRecord = ImmutableRecord({
   access_token: null as string | null,
@@ -56,6 +59,7 @@ const ReducerRecord = ImmutableRecord({
   tokens: ImmutableMap<string, AuthToken>(),
   users: ImmutableMap<string, AuthUser>(),
   me: null as string | null,
+  client: null as any as PlApiClient,
 });
 
 type AuthToken = ReturnType<typeof AuthTokenRecord>;
@@ -85,11 +89,12 @@ const getLocalState = () => {
     tokens: ImmutableMap(Object.entries(state.tokens).map(([key, value]) => [key, AuthTokenRecord(value as any)])),
     users: ImmutableMap(Object.entries(state.users).map(([key, value]) => [key, AuthUserRecord(value as any)])),
     me: state.me,
+    client: new PlApiClient(parseBaseURL(state.me) || backendUrl, state.users[state.me]?.access_token),
   });
 };
 
 const sessionUser = getSessionUser();
-const localState = getLocalState();fromJS(JSON.parse(localStorage.getItem(STORAGE_KEY)!));
+const localState = getLocalState();
 
 // Checks if the user has an ID and access token
 const validUser = (user?: AuthUser) => {
@@ -222,6 +227,11 @@ const importCredentials = (state: State, token: string, account: APIEntity) =>
     state.setIn(['tokens', token, 'account'], account.id);
     state.setIn(['tokens', token, 'me'], account.url);
     state.update('users', users => users.filterNot(userMismatch(token, account)));
+    state.update('client', client =>
+      client.baseURL === parseBaseURL(account.url)
+        ? (client.accessToken = token, client)
+        : new PlApiClient(parseBaseURL(account.url) || backendUrl, token),
+    );
     state.update('me', me => me || account.url);
     upgradeNonUrlId(state, account);
   });
@@ -307,7 +317,13 @@ const reducer = (state: State, action: AnyAction) => {
     case VERIFY_CREDENTIALS_FAIL:
       return deleteForbiddenToken(state, action.error, action.token);
     case SWITCH_ACCOUNT:
-      return state.set('me', action.account.url);
+      return state
+        .set('me', action.account.url)
+        .update('client', client =>
+          client.baseURL === parseBaseURL(action.account.url)
+            ? (client.accessToken = action.account.access_token, client)
+            : new PlApiClient(parseBaseURL(action.account.url) || backendUrl, action.account.access_token),
+        );
     case ME_FETCH_SKIP:
       return state.set('me', null);
     case MASTODON_PRELOAD_IMPORT:

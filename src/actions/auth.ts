@@ -5,8 +5,8 @@
  * @see module:soapbox/actions/apps
  * @see module:soapbox/actions/oauth
  * @see module:soapbox/actions/security
- */
-
+*/
+import { PlApiClient } from 'pl-api';
 import { defineMessages } from 'react-intl';
 
 import { createAccount } from 'soapbox/actions/accounts';
@@ -14,6 +14,7 @@ import { createApp } from 'soapbox/actions/apps';
 import { fetchMeSuccess, fetchMeFail } from 'soapbox/actions/me';
 import { obtainOAuthToken, revokeOAuthToken } from 'soapbox/actions/oauth';
 import { startOnboarding } from 'soapbox/actions/onboarding';
+import * as BuildConfig from 'soapbox/build-config';
 import { custom } from 'soapbox/custom';
 import { queryClient } from 'soapbox/queries/client';
 import { selectAccount } from 'soapbox/selectors';
@@ -26,7 +27,7 @@ import { normalizeUsername } from 'soapbox/utils/input';
 import { getScopes } from 'soapbox/utils/scopes';
 import { isStandalone } from 'soapbox/utils/state';
 
-import api, { type PlfeResponse, getFetch } from '../api';
+import { type PlfeResponse, getClient } from '../api';
 
 import { importFetchedAccount } from './importer';
 
@@ -124,10 +125,13 @@ const createUserToken = (username: string, password: string) =>
 
 const otpVerify = (code: string, mfa_token: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const app = getState().auth.app;
-    return api(getState, 'app')('/oauth/mfa/challenge', {
+    const state = getState();
+    const app = state.auth.app;
+    const baseUrl = parseBaseURL(state.me) || BuildConfig.BACKEND_URL;
+    const client = new PlApiClient(baseUrl, app.access_token!, { fetchInstance: false });
+    return client.request('/oauth/mfa/challenge', {
       method: 'POST',
-      body: JSON.stringify({
+      body: {
         client_id: app.client_id,
         client_secret: app.client_secret,
         mfa_token: mfa_token,
@@ -135,17 +139,19 @@ const otpVerify = (code: string, mfa_token: string) =>
         challenge_type: 'totp',
         redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
         scope: getScopes(getState()),
-      }),
+      },
     }).then(({ json: token }) => dispatch(authLoggedIn(token)));
   };
 
-const verifyCredentials = (token: string, accountUrl?: string) => {
-  const baseURL = parseBaseURL(accountUrl);
+const verifyCredentials = (token: string, accountUrl?: string) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    const baseURL = parseBaseURL(accountUrl);
 
-  return (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: VERIFY_CREDENTIALS_REQUEST, token });
 
-    return getFetch(token, baseURL)('/api/v1/accounts/verify_credentials').then(({ json: account }) => {
+    const client = new PlApiClient(baseURL, token, { fetchInstance: false });
+
+    return client.accounts.verifyCredentials().then((account) => {
       dispatch(importFetchedAccount(account));
       dispatch({ type: VERIFY_CREDENTIALS_SUCCESS, token, account });
       if (account.id === getState().me) dispatch(fetchMeSuccess(account));
@@ -165,7 +171,6 @@ const verifyCredentials = (token: string, accountUrl?: string) => {
       }
     });
   };
-};
 
 const rememberAuthAccount = (accountUrl: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -201,7 +206,7 @@ const logIn = (username: string, password: string) =>
   });
 
 const deleteSession = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => api(getState)('/api/sign_out', { method: 'DELETE' });
+  (dispatch: AppDispatch, getState: () => RootState) => getClient(getState).request('/api/sign_out', { method: 'DELETE' });
 
 const logOut = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -267,7 +272,7 @@ const register = (params: Record<string, any>) =>
   };
 
 const fetchCaptcha = () =>
-  (_dispatch: AppDispatch, getState: () => RootState) => api(getState)('/api/pleroma/captcha');
+  (_dispatch: AppDispatch, getState: () => RootState) => getClient(getState).request('/api/pleroma/captcha');
 
 const authLoggedIn = (token: Record<string, string | number>) =>
   (dispatch: AppDispatch) => {

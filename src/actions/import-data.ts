@@ -2,7 +2,7 @@ import { defineMessages } from 'react-intl';
 
 import toast from 'soapbox/toast';
 
-import api from '../api';
+import { getClient } from '../api';
 
 import type { RootState } from 'soapbox/store';
 
@@ -41,9 +41,8 @@ const messages = defineMessages({
 const importFollows = (params: FormData) =>
   (dispatch: React.Dispatch<ImportDataActions>, getState: () => RootState) => {
     dispatch({ type: IMPORT_FOLLOWS_REQUEST });
-    return api(getState)('/api/pleroma/follow_import', {
-      method: 'POST',
-      body: JSON.stringify(params),
+    return getClient(getState).request('/api/pleroma/follow_import', {
+      method: 'POST', body: params,
     }).then(response => {
       toast.success(messages.followersSuccess);
       dispatch({ type: IMPORT_FOLLOWS_SUCCESS, config: response.json });
@@ -55,9 +54,8 @@ const importFollows = (params: FormData) =>
 const importBlocks = (params: FormData) =>
   (dispatch: React.Dispatch<ImportDataActions>, getState: () => RootState) => {
     dispatch({ type: IMPORT_BLOCKS_REQUEST });
-    return api(getState)('/api/pleroma/blocks_import', {
-      method: 'POST',
-      body: JSON.stringify(params),
+    return getClient(getState).request('/api/pleroma/blocks_import', {
+      method: 'POST', body: params,
     }).then(response => {
       toast.success(messages.blocksSuccess);
       dispatch({ type: IMPORT_BLOCKS_SUCCESS, config: response.json });
@@ -69,9 +67,8 @@ const importBlocks = (params: FormData) =>
 const importMutes = (params: FormData) =>
   (dispatch: React.Dispatch<ImportDataActions>, getState: () => RootState) => {
     dispatch({ type: IMPORT_MUTES_REQUEST });
-    return api(getState)('/api/pleroma/mutes_import', {
-      method: 'POST',
-      body: JSON.stringify(params),
+    return getClient(getState).request('/api/pleroma/mutes_import', {
+      method: 'POST', body: params,
     }).then(response => {
       toast.success(messages.mutesSuccess);
       dispatch({ type: IMPORT_MUTES_SUCCESS, config: response.json });

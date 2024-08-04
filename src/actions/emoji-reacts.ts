@@ -2,7 +2,7 @@ import { List as ImmutableList } from 'immutable';
 
 import { isLoggedIn } from 'soapbox/utils/auth';
 
-import api from '../api';
+import { getClient } from '../api';
 
 import { importFetchedAccounts, importFetchedStatus } from './importer';
 import { favourite, unfavourite } from './interactions';
@@ -59,7 +59,7 @@ const fetchEmojiReacts = (id: string, emoji: string) =>
       ? `/api/v1/pleroma/statuses/${id}/reactions/${emoji}`
       : `/api/v1/pleroma/statuses/${id}/reactions`;
 
-    return api(getState)(url).then(response => {
+    return getClient(getState).request(url).then(response => {
       response.json.forEach((emojiReact: APIEntity) => {
         dispatch(importFetchedAccounts(emojiReact.accounts));
       });
@@ -75,7 +75,7 @@ const emojiReact = (status: Status, emoji: string, custom?: string) =>
 
     dispatch(emojiReactRequest(status, emoji, custom));
 
-    return api(getState)(`/api/v1/pleroma/statuses/${status.id}/reactions/${emoji}`, {
+    return getClient(getState).request(`/api/v1/pleroma/statuses/${status.id}/reactions/${emoji}`, {
       method: 'PUT',
     }).then((response) => {
       dispatch(importFetchedStatus(response.json));
@@ -91,7 +91,7 @@ const unEmojiReact = (status: Status, emoji: string) =>
 
     dispatch(unEmojiReactRequest(status, emoji));
 
-    return api(getState)(`/api/v1/pleroma/statuses/${status.id}/reactions/${emoji}`, {
+    return getClient(getState).request(`/api/v1/pleroma/statuses/${status.id}/reactions/${emoji}`, {
       method: 'DELETE',
 
     }).then(response => {

@@ -54,10 +54,11 @@ import {
   NOTIFICATIONS_UPDATE,
 } from 'soapbox/actions/notifications';
 
+import type { Account, PaginatedResponse } from 'pl-api';
 import type { APIEntity } from 'soapbox/types/entities';
 
 const ListRecord = ImmutableRecord({
-  next: null as string | null,
+  next: null as (() => Promise<PaginatedResponse<Account>>) | null,
   items: ImmutableOrderedSet<string>(),
   isLoading: false,
 });
@@ -115,13 +116,13 @@ type Items = ImmutableOrderedSet<string>;
 type NestedListPath = ['followers' | 'following' | 'reblogged_by' | 'favourited_by' | 'disliked_by' | 'reactions' | 'pinned' | 'birthday_reminders' | 'familiar_followers' | 'event_participations' | 'event_participation_requests' | 'membership_requests' | 'group_blocks', string];
 type ListPath = ['follow_requests' | 'mutes' | 'directory'];
 
-const normalizeList = (state: State, path: NestedListPath | ListPath, accounts: APIEntity[], next?: string | null) =>
+const normalizeList = (state: State, path: NestedListPath | ListPath, accounts: APIEntity[], next?: (() => any) | null) =>
   state.setIn(path, ListRecord({
     next,
     items: ImmutableOrderedSet(accounts.map(item => item.id)),
   }));
 
-const appendToList = (state: State, path: NestedListPath | ListPath, accounts: APIEntity[], next: string | null) =>
+const appendToList = (state: State, path: NestedListPath | ListPath, accounts: APIEntity[], next: (() => any) | null) =>
   state.updateIn(path, map => (map as List)
     .set('next', next)
     .set('isLoading', false)

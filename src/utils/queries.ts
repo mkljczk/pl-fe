@@ -1,11 +1,12 @@
 import { queryClient } from 'soapbox/queries/client';
 
 import type { InfiniteData, QueryKey } from '@tanstack/react-query';
+import type { PaginatedResponse } from 'pl-api';
 
 interface PaginatedResult<T> {
   result: T[];
   hasMore: boolean;
-  link?: string;
+  next?: () => Promise<PaginatedResponse<any>> | null;
 }
 
 interface Entity {

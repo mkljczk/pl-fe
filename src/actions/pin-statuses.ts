@@ -1,6 +1,6 @@
 import { isLoggedIn } from 'soapbox/utils/auth';
 
-import api from '../api';
+import { getClient } from '../api';
 
 import { importFetchedStatuses } from './importer';
 
@@ -18,9 +18,9 @@ const fetchPinnedStatuses = () =>
 
     dispatch(fetchPinnedStatusesRequest());
 
-    api(getState)(`/api/v1/accounts/${me}/statuses`, { params: { pinned: true } }).then(response => {
-      dispatch(importFetchedStatuses(response.json));
-      dispatch(fetchPinnedStatusesSuccess(response.json, null));
+    return getClient(getState()).accounts.getAccountStatuses(me as string, { pinned: true }).then(response => {
+      dispatch(importFetchedStatuses(response.items));
+      dispatch(fetchPinnedStatusesSuccess(response.items, null));
     }).catch(error => {
       dispatch(fetchPinnedStatusesFail(error));
     });

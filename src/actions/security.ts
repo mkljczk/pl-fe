@@ -4,7 +4,7 @@
  * @see module:soapbox/actions/auth
  */
 
-import api from 'soapbox/api';
+import { getClient } from 'soapbox/api';
 import toast from 'soapbox/toast';
 import { getLoggedInAccount } from 'soapbox/utils/auth';
 import { GOTOSOCIAL, parseVersion } from 'soapbox/utils/features';
@@ -49,7 +49,7 @@ const MOVE_ACCOUNT_FAIL    = 'MOVE_ACCOUNT_FAIL';
 const fetchOAuthTokens = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FETCH_TOKENS_REQUEST });
-    return api(getState)('/api/oauth_tokens').then(({ json: tokens }) => {
+    return getClient(getState).request('/api/oauth_tokens').then(({ json: tokens }) => {
       dispatch({ type: FETCH_TOKENS_SUCCESS, tokens });
     }).catch(() => {
       dispatch({ type: FETCH_TOKENS_FAIL });
@@ -59,7 +59,7 @@ const fetchOAuthTokens = () =>
 const revokeOAuthTokenById = (id: number) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: REVOKE_TOKEN_REQUEST, id });
-    return api(getState)(`/api/oauth_tokens/${id}`, { method: 'DELETE' }).then(() => {
+    return getClient(getState).request(`/api/oauth_tokens/${id}`, { method: 'DELETE' }).then(() => {
       dispatch({ type: REVOKE_TOKEN_SUCCESS, id });
     }).catch(() => {
       dispatch({ type: REVOKE_TOKEN_FAIL, id });
@@ -74,12 +74,12 @@ const changePassword = (oldPassword: string, newPassword: string, confirmation: 
     const v = parseVersion(instance.version);
 
     if (v.software === GOTOSOCIAL) {
-      return api(getState)('/api/v1/user/password_change', {
+      return getClient(getState).request('/api/v1/user/password_change', {
         method: 'POST',
-        body: JSON.stringify({
+        body: {
           old_password: oldPassword,
           new_password: newPassword,
-        }),
+        },
       }).then(response => {
         dispatch({ type: CHANGE_PASSWORD_SUCCESS, response });
       }).catch(error => {
@@ -87,13 +87,13 @@ const changePassword = (oldPassword: string, newPassword: string, confirmation: 
         throw error;
       });
     } else {
-      return api(getState)('/api/pleroma/change_password', {
+      return getClient(getState).request('/api/pleroma/change_password', {
         method: 'POST',
-        body: JSON.stringify({
+        body: {
           password: oldPassword,
           new_password: newPassword,
           new_password_confirmation: confirmation,
-        }),
+        },
       }).then(response => {
         if (response.json.error) throw response.json.error; // This endpoint returns HTTP 200 even on failure
         dispatch({ type: CHANGE_PASSWORD_SUCCESS, response });
@@ -115,9 +115,8 @@ const resetPassword = (usernameOrEmail: string) =>
         ? { email: input }
         : { nickname: input, username: input };
 
-    return api(getState)('/auth/password', {
-      method: 'POST',
-      body: JSON.stringify(params),
+    return getClient(getState).request('/auth/password', {
+      method: 'POST', body: params,
     }).then(() => {
       dispatch({ type: RESET_PASSWORD_SUCCESS });
     }).catch(error => {
@@ -133,12 +132,12 @@ const changeEmail = (email: string, password: string) =>
     const instance = state.instance;
     const v = parseVersion(instance.version);
 
-    return api(getState)(v.software === GOTOSOCIAL ? '/api/v1/user/email_change' : '/api/pleroma/change_email', {
+    return getClient(getState).request(v.software === GOTOSOCIAL ? '/api/v1/user/email_change' : '/api/pleroma/change_email', {
       method: 'POST',
-      body: JSON.stringify({
+      body: {
         [v.software === GOTOSOCIAL ? 'new_email' : 'email']: email,
         password,
-      }),
+      },
     }).then(response => {
       if (response.json.error) throw response.json.error; // This endpoint returns HTTP 200 even on failure
       dispatch({ type: CHANGE_EMAIL_SUCCESS, email, response });
@@ -157,9 +156,8 @@ const deleteAccount = (password: string) =>
     const v = parseVersion(instance.version);
 
     dispatch({ type: DELETE_ACCOUNT_REQUEST });
-    return api(getState)(v.software === GOTOSOCIAL ? '/api/v1/accounts/delete' : '/api/pleroma/delete_account', {
-      method: 'POST',
-      body: JSON.stringify({ password }),
+    return getClient(getState).request(v.software === GOTOSOCIAL ? '/api/v1/accounts/delete' : '/api/pleroma/delete_account', {
+      method: 'POST', body: { password },
     }).then(response => {
       if (response.json.error) throw response.json.error; // This endpoint returns HTTP 200 even on failure
       dispatch({ type: DELETE_ACCOUNT_SUCCESS, response });
@@ -174,12 +172,9 @@ const deleteAccount = (password: string) =>
 const moveAccount = (targetAccount: string, password: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: MOVE_ACCOUNT_REQUEST });
-    return api(getState)('/api/pleroma/move_account', {
+    return getClient(getState).request('/api/pleroma/move_account', {
       method: 'POST',
-      body: JSON.stringify({
-        password,
-        target_account: targetAccount,
-      }),
+      body: { password, target_account: targetAccount },
     }).then(response => {
       if (response.json.error) throw response.json.error; // This endpoint returns HTTP 200 even on failure
       dispatch({ type: MOVE_ACCOUNT_SUCCESS, response });

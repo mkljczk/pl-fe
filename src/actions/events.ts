@@ -1,6 +1,6 @@
 import { defineMessages, IntlShape } from 'react-intl';
 
-import api, { getNextLink } from 'soapbox/api';
+import { getClient, getNextLink } from 'soapbox/api';
 import toast from 'soapbox/toast';
 
 import { importFetchedAccounts, importFetchedStatus, importFetchedStatuses } from './importer';
@@ -97,7 +97,7 @@ const messages = defineMessages({
 const locationSearch = (query: string, signal?: AbortSignal) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: LOCATION_SEARCH_REQUEST, query });
-    return api(getState)('/api/v1/pleroma/search/location', { params: { q: query }, signal }).then(({ json: locations }) => {
+    return getClient(getState).request('/api/v1/pleroma/search/location', { params: { q: query }, signal }).then(({ json: locations }) => {
       dispatch({ type: LOCATION_SEARCH_SUCCESS, locations });
       return locations;
     }).catch(error => {
@@ -223,9 +223,9 @@ const submitEvent = () =>
     if (banner)   params.banner_id   = banner.id;
     if (location) params.location_id = location.origin_id;
 
-    return api(getState)(id === null ? '/api/v1/pleroma/events' : `/api/v1/pleroma/events/${id}`, {
+    return getClient(getState).request(id === null ? '/api/v1/pleroma/events' : `/api/v1/pleroma/events/${id}`, {
       method: id === null ? 'POST' : 'PUT',
-      body: JSON.stringify(params),
+      body: params,
     }).then(({ json: data }) => {
       dispatch(closeModal('COMPOSE_EVENT'));
       dispatch(importFetchedStatus(data));
@@ -266,11 +266,9 @@ const joinEvent = (id: string, participationMessage?: string) =>
 
     dispatch(joinEventRequest(status));
 
-    return api(getState)(`/api/v1/pleroma/events/${id}/join`, {
+    return getClient(getState).request(`/api/v1/pleroma/events/${id}/join`, {
       method: 'POST',
-      body: JSON.stringify({
-        participation_message: participationMessage,
-      }),
+      body: { participation_message: participationMessage },
     }).then(({ json: data }) => {
       dispatch(importFetchedStatus(data));
       dispatch(joinEventSuccess(data));
@@ -313,7 +311,7 @@ const leaveEvent = (id: string) =>
 
     dispatch(leaveEventRequest(status));
 
-    return api(getState)(`/api/v1/pleroma/events/${id}/leave`, {
+    return getClient(getState).request(`/api/v1/pleroma/events/${id}/leave`, {
       method: 'POST',
     }).then(({ json: data }) => {
       dispatch(importFetchedStatus(data));
@@ -343,7 +341,7 @@ const fetchEventParticipations = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchEventParticipationsRequest(id));
 
-    return api(getState)(`/api/v1/pleroma/events/${id}/participations`).then(response => {
+    return getClient(getState).request(`/api/v1/pleroma/events/${id}/participations`).then(response => {
       const next = getNextLink(response);
       dispatch(importFetchedAccounts(response.json));
       return dispatch(fetchEventParticipationsSuccess(id, response.json, next || null));
@@ -372,18 +370,17 @@ const fetchEventParticipationsFail = (id: string, error: unknown) => ({
 
 const expandEventParticipations = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const url = getState().user_lists.event_participations.get(id)?.next || null;
+    const next = getState().user_lists.event_participations.get(id)?.next || null;
 
-    if (url === null) {
+    if (next === null) {
       return dispatch(noOp);
     }
 
     dispatch(expandEventParticipationsRequest(id));
 
-    return api(getState)(url).then(response => {
-      const next = getNextLink(response);
-      dispatch(importFetchedAccounts(response.json));
-      return dispatch(expandEventParticipationsSuccess(id, response.json, next || null));
+    return next().then(response => {
+      dispatch(importFetchedAccounts(response.items));
+      return dispatch(expandEventParticipationsSuccess(id, response.items, response.next || null));
     }).catch(error => {
       dispatch(expandEventParticipationsFail(id, error));
     });
@@ -411,7 +408,7 @@ const fetchEventParticipationRequests = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchEventParticipationRequestsRequest(id));
 
-    return api(getState)(`/api/v1/pleroma/events/${id}/participation_requests`).then(response => {
+    return getClient(getState).request(`/api/v1/pleroma/events/${id}/participation_requests`).then(response => {
       const next = getNextLink(response);
       dispatch(importFetchedAccounts(response.json.map(({ account }: APIEntity) => account)));
       return dispatch(fetchEventParticipationRequestsSuccess(id, response.json, next || null));
@@ -448,7 +445,7 @@ const expandEventParticipationRequests = (id: string) =>
 
     dispatch(expandEventParticipationRequestsRequest(id));
 
-    return api(getState)(url).then(response => {
+    return getClient(getState).request(url).then(response => {
       const next = getNextLink(response);
       dispatch(importFetchedAccounts(response.json.map(({ account }: APIEntity) => account)));
       return dispatch(expandEventParticipationRequestsSuccess(id, response.json, next || null));
@@ -479,7 +476,7 @@ const authorizeEventParticipationRequest = (id: string, accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(authorizeEventParticipationRequestRequest(id, accountId));
 
-    return api(getState)(`/api/v1/pleroma/events/${id}/participation_requests/${accountId}/authorize`, {
+    return getClient(getState).request(`/api/v1/pleroma/events/${id}/participation_requests/${accountId}/authorize`, {
       method: 'POST',
     }).then(() => {
       dispatch(authorizeEventParticipationRequestSuccess(id, accountId));
@@ -510,7 +507,7 @@ const rejectEventParticipationRequest = (id: string, accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(rejectEventParticipationRequestRequest(id, accountId));
 
-    return api(getState)(`/api/v1/pleroma/events/${id}/participation_requests/${accountId}/reject`, {
+    return getClient(getState).request(`/api/v1/pleroma/events/${id}/participation_requests/${accountId}/reject`, {
       method: 'POST',
     }).then(() => {
       dispatch(rejectEventParticipationRequestSuccess(id, accountId));
@@ -539,7 +536,7 @@ const rejectEventParticipationRequestFail = (id: string, accountId: string, erro
 
 const fetchEventIcs = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
-    api(getState)(`/api/v1/pleroma/events/${id}/ics`);
+    getClient(getState).request(`/api/v1/pleroma/events/${id}/ics`);
 
 const cancelEventCompose = () => ({
   type: EVENT_COMPOSE_CANCEL,
@@ -557,13 +554,13 @@ const editEvent = (id: string) => (dispatch: AppDispatch, getState: () => RootSt
 
   dispatch({ type: STATUS_FETCH_SOURCE_REQUEST });
 
-  api(getState)(`/api/v1/statuses/${id}/source`).then(response => {
+  return getClient(getState()).statuses.getStatusSource(id).then(response => {
     dispatch({ type: STATUS_FETCH_SOURCE_SUCCESS });
     dispatch({
       type: EVENT_FORM_SET,
       status,
-      text: response.json.text,
-      location: response.json.location,
+      text: response.text,
+      location: response.location,
     });
     dispatch(openModal('COMPOSE_EVENT'));
   }).catch(error => {
@@ -579,13 +576,14 @@ const fetchRecentEvents = () =>
 
     dispatch({ type: RECENT_EVENTS_FETCH_REQUEST });
 
-    api(getState)('/api/v1/timelines/public?only_events=true').then(response => {
-      const next = getNextLink(response);
-      dispatch(importFetchedStatuses(response.json));
+    return getClient(getState()).timelines.publicTimeline({
+      only_events: true
+    }).then(response => {
+      dispatch(importFetchedStatuses(response.items));
       dispatch({
         type: RECENT_EVENTS_FETCH_SUCCESS,
-        statuses: response.json,
-        next: next || null,
+        statuses: response.items,
+        next: response.next,
       });
     }).catch(error => {
       dispatch({ type: RECENT_EVENTS_FETCH_FAIL, error });
@@ -600,7 +598,7 @@ const fetchJoinedEvents = () =>
 
     dispatch({ type: JOINED_EVENTS_FETCH_REQUEST });
 
-    api(getState)('/api/v1/pleroma/events/joined_events').then(response => {
+    getClient(getState).request('/api/v1/pleroma/events/joined_events').then(response => {
       const next = getNextLink(response);
       dispatch(importFetchedStatuses(response.json));
       dispatch({

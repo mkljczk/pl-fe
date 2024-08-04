@@ -66,11 +66,12 @@ import {
   SCHEDULED_STATUS_CANCEL_SUCCESS,
 } from '../actions/scheduled-statuses';
 
+import type { PaginatedResponse, Status } from 'pl-api';
 import type { AnyAction } from 'redux';
 import type { APIEntity, Status as StatusEntity } from 'soapbox/types/entities';
 
 const StatusListRecord = ImmutableRecord({
-  next: null as string | null,
+  next: null as (() => Promise<PaginatedResponse<Status>>) | null,
   loaded: false,
   isLoading: null as boolean | null,
   items: ImmutableOrderedSet<string>(),
@@ -97,7 +98,7 @@ const getStatusIds = (statuses: APIEntity[] = []) => (
 const setLoading = (state: State, listType: string, loading: boolean) =>
   state.update(listType, StatusListRecord(), listMap => listMap.set('isLoading', loading));
 
-const normalizeList = (state: State, listType: string, statuses: APIEntity[], next: string | null) =>
+const normalizeList = (state: State, listType: string, statuses: APIEntity[], next: (() => Promise<PaginatedResponse<Status>>) | null) =>
   state.update(listType, StatusListRecord(), listMap => listMap.withMutations(map => {
     map.set('next', next);
     map.set('loaded', true);
@@ -105,7 +106,7 @@ const normalizeList = (state: State, listType: string, statuses: APIEntity[], ne
     map.set('items', getStatusIds(statuses));
   }));
 
-const appendToList = (state: State, listType: string, statuses: APIEntity[], next: string | null) => {
+const appendToList = (state: State, listType: string, statuses: APIEntity[], next: (() => Promise<PaginatedResponse<Status>>) | null) => {
   const newIds = getStatusIds(statuses);
 
   return state.update(listType, StatusListRecord(), listMap => listMap.withMutations(map => {

@@ -9,7 +9,6 @@ export const PublicTimeline = lazy(() => import('soapbox/features/public-timelin
 export const RemoteTimeline = lazy(() => import('soapbox/features/remote-timeline'));
 export const CommunityTimeline = lazy(() => import('soapbox/features/community-timeline'));
 export const HashtagTimeline = lazy(() => import('soapbox/features/hashtag-timeline'));
-export const DirectTimeline = lazy(() => import('soapbox/features/direct-timeline'));
 export const Conversations = lazy(() => import('soapbox/features/conversations'));
 export const ListTimeline = lazy(() => import('soapbox/features/list-timeline'));
 export const Lists = lazy(() => import('soapbox/features/lists'));

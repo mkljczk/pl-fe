@@ -5,7 +5,7 @@ import { importFetchedAccount, importFetchedAccounts } from 'soapbox/actions/imp
 import { getNextLink } from 'soapbox/api';
 import { ChatWidgetScreens, useChatContext } from 'soapbox/contexts/chat-context';
 import { useStatContext } from 'soapbox/contexts/stat-context';
-import { useApi, useAppDispatch, useAppSelector, useFeatures, useLoggedIn, useOwnAccount } from 'soapbox/hooks';
+import { useAppDispatch, useAppSelector, useClient, useFeatures, useLoggedIn, useOwnAccount } from 'soapbox/hooks';
 import { normalizeChatMessage } from 'soapbox/normalizers';
 import { ChatMessage } from 'soapbox/types/entities';
 import { reOrderChatListItems } from 'soapbox/utils/chats';
@@ -37,13 +37,13 @@ const ChatKeys = {
 };
 
 const useChatMessages = (chat: IChat) => {
-  const api = useApi();
+  const client = useClient();
   const isBlocked = useAppSelector((state) => state.getIn(['relationships', chat.account.id, 'blocked_by']));
 
   const getChatMessages = async (chatId: string, pageParam?: any): Promise<PaginatedResult<ChatMessage>> => {
     const nextPageLink = pageParam?.link;
     const uri = nextPageLink || `/api/v1/pleroma/chats/${chatId}/messages`;
-    const response = await api<any[]>(uri);
+    const response = await client.request<any[]>(uri);
     const { json: data } = response;
 
     const link = getNextLink(response);
@@ -82,7 +82,7 @@ const useChatMessages = (chat: IChat) => {
 };
 
 const useChats = () => {
-  const api = useApi();
+  const client = useClient();
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const { setUnreadChatsCount } = useStatContext();
@@ -90,10 +90,9 @@ const useChats = () => {
   const { me } = useLoggedIn();
 
   const getChats = async (pageParam?: any): Promise<PaginatedResult<IChat>> => {
-    const endpoint = features.chatsV2 ? '/api/v2/pleroma/chats' : '/api/v1/pleroma/chats';
     const nextPageLink = pageParam?.link;
-    const uri = nextPageLink || endpoint;
-    const response = await api<IChat[]>(uri);
+    const uri = nextPageLink || '/api/v2/pleroma/chats';
+    const response = await client.request<IChat[]>(uri);
     const { json: data } = response;
 
     const link = getNextLink(response);
@@ -134,19 +133,20 @@ const useChats = () => {
     data,
   };
 
-  const getOrCreateChatByAccountId = (accountId: string) => api<IChat>(`/api/v1/pleroma/chats/by-account-id/${accountId}`, { method: 'POST' });
+  const getOrCreateChatByAccountId = (accountId: string) =>
+    client.request<IChat>(`/api/v1/pleroma/chats/by-account-id/${accountId}`, { method: 'POST' });
 
   return { chatsQuery, getOrCreateChatByAccountId };
 };
 
 const useChat = (chatId?: string) => {
-  const api = useApi();
+  const client = useClient();
   const dispatch = useAppDispatch();
   const fetchRelationships = useFetchRelationships();
 
   const getChat = async () => {
     if (chatId) {
-      const { json: data } = await api(`/api/v1/pleroma/chats/${chatId}`);
+      const { json: data } = await client.request(`/api/v1/pleroma/chats/${chatId}`);
 
       fetchRelationships.mutate({ accountIds: [data.account.id] });
       dispatch(importFetchedAccount(data.account));
@@ -165,15 +165,14 @@ const useChat = (chatId?: string) => {
 
 const useChatActions = (chatId: string) => {
   const { account } = useOwnAccount();
-  const api = useApi();
-  // const dispatch = useAppDispatch();
+  const client = useClient();
 
   const { setUnreadChatsCount } = useStatContext();
 
   const { chat, changeScreen } = useChatContext();
 
   const markChatAsRead = async (lastReadId: string) =>
-    api<IChat>(`/api/v1/pleroma/chats/${chatId}/read`, { body: JSON.stringify({ last_read_id: lastReadId }) })
+    client.request<IChat>(`/api/v1/pleroma/chats/${chatId}/read`, { body: { last_read_id: lastReadId } })
       .then(({ json: data }) => {
         updatePageItem(['chats', 'search'], data, (o, n) => o.id === n.id);
         const queryData = queryClient.getQueryData<InfiniteData<PaginatedResult<unknown>>>(['chats', 'search']);
@@ -194,14 +193,10 @@ const useChatActions = (chatId: string) => {
       .catch(() => null);
 
   const createChatMessage = useMutation({
-    mutationFn: ({ chatId, content, mediaIds }: { chatId: string; content: string; mediaIds?: string[] }) =>
-      api<ChatMessage>(`/api/v1/pleroma/chats/${chatId}/messages`, {
+    mutationFn: ({ chatId, content, mediaId }: { chatId: string; content: string; mediaId?: string }) =>
+      client.request<ChatMessage>(`/api/v1/pleroma/chats/${chatId}/messages`, {
         method: 'POST',
-        body: JSON.stringify({
-          content,
-          media_id: (mediaIds && mediaIds.length === 1) ? mediaIds[0] : undefined, // Pleroma backwards-compat
-          media_ids: mediaIds,
-        }),
+        body: { content, media_id: mediaId },
       }),
     retry: false,
     onMutate: async (variables) => {
@@ -260,10 +255,10 @@ const useChatActions = (chatId: string) => {
     },
   });
   const deleteChatMessage = (chatMessageId: string) =>
-    api<IChat>(`/api/v1/pleroma/chats/${chatId}/messages/${chatMessageId}`, { method: 'DELETE' });
+    client.request<IChat>(`/api/v1/pleroma/chats/${chatId}/messages/${chatMessageId}`, { method: 'DELETE' });
 
   const deleteChat = useMutation({
-    mutationFn: () => api<IChat>(`/api/v1/pleroma/chats/${chatId}`, { method: 'DELETE' }),
+    mutationFn: () => client.request<IChat>(`/api/v1/pleroma/chats/${chatId}`, { method: 'DELETE' }),
     onSuccess() {
       changeScreen(ChatWidgetScreens.INBOX);
       queryClient.invalidateQueries({ queryKey: ChatKeys.chatMessages(chatId) });

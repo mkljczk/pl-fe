@@ -1,9 +1,9 @@
 // Loosely adapted from twitter-interaction-circles, licensed under MIT License
 // https://github.com/duiker101/twitter-interaction-circles
-import api, { getNextLink } from 'soapbox/api';
+import { getClient } from 'soapbox/api';
 
+import type { PaginatedResponse, Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
 interface Interaction {
   acct: string;
@@ -21,8 +21,8 @@ const processCircle = (setProgress: (progress: {
   async (dispatch: AppDispatch, getState: () => RootState) => {
     setProgress({ state: 'pending', progress: 0 });
 
-    const fetch = api(getState);
-    const me = getState().me;
+    const client = getClient(getState());
+    const me = getState().me as string;
 
     const interactions: Record<string, Interaction> = {};
 
@@ -36,11 +36,10 @@ const processCircle = (setProgress: (progress: {
       };
     };
 
-    const fetchStatuses = async (url = `/api/v1/accounts/${me}/statuses?with_muted=true&limit=40`) => {
-      const response = await fetch<APIEntity[]>(url);
-      const next = getNextLink(response);
+    const fetchStatuses = async (next?: () => Promise<PaginatedResponse<Status>>) => {
+      const response = await (next?.() || client.accounts.getAccountStatuses(me, { limit: 40 }));
 
-      response.json.forEach((status) => {
+      response.items.forEach((status) => {
         if (status.reblog) {
           if (status.reblog.account.id === me) return;
 
@@ -61,14 +60,13 @@ const processCircle = (setProgress: (progress: {
         }
       });
 
-      return next;
+      return response.next;
     };
 
-    const fetchFavourites = async (url = '/api/v1/favourites?limit=40') => {
-      const response = await fetch<APIEntity[]>(url);
-      const next = getNextLink(response);
+    const fetchFavourites = async (next?: () => Promise<PaginatedResponse<Status>>) => { // limit 40
+      const response = await (next?.() || client.accounts.getFavourites({ limit: 40 }));
 
-      response.json.forEach((status) => {
+      response.items.forEach((status) => {
         if (status.account.id === me) return;
 
         initInteraction(status.account.id);
@@ -80,19 +78,19 @@ const processCircle = (setProgress: (progress: {
         interaction.avatar_description = status.account.avatar_description;
       });
 
-      return next;
+      return response.next;
     };
 
-    for (let link: string | undefined, i = 0; i < 20; i++) {
-      link = await fetchStatuses(link);
+    for (let next: (() => Promise<PaginatedResponse<Status>>) | null | undefined, i = 0; i < 20; i++) {
+      next = await fetchStatuses(next);
       setProgress({ state: 'fetchingStatuses', progress: (i / 20) * 40 });
-      if (!link) break;
+      if (!next) break;
     }
 
-    for (let link: string | undefined, i = 0; i < 20; i++) {
-      link = await fetchFavourites(link);
+    for (let next: (() => Promise<PaginatedResponse<Status>>) | null | undefined, i = 0; i < 20; i++) {
+      next = await fetchFavourites(next);
       setProgress({ state: 'fetchingFavourites', progress: 40 + (i / 20) * 40 });
-      if (!link) break;
+      if (!next) break;
     }
 
     const result = await Promise.all(Object.entries(interactions).map(([id, { acct, avatar, avatar_description, favourites, reblogs, replies }]) => {
@@ -103,7 +101,7 @@ const processCircle = (setProgress: (progress: {
 
       if (interaction.acct) return interaction;
 
-      const { json: account } = await fetch<APIEntity>(`/api/v1/accounts/${interaction.id}`);
+      const account = await client.accounts.getAccount(interaction.id);
 
       interaction.acct = account.acct;
       interaction.avatar = account.avatar_static || account.avatar;

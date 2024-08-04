@@ -1,6 +1,6 @@
 import { AppDispatch, RootState } from 'soapbox/store';
 
-import api from '../api';
+import { getClient } from '../api';
 
 import { fetchRelationships } from './accounts';
 import { importFetchedAccounts } from './importer';
@@ -17,9 +17,9 @@ const fetchAccountFamiliarFollowers = (accountId: string) => (dispatch: AppDispa
     id: accountId,
   });
 
-  api(getState)(`/api/v1/accounts/familiar_followers?id=${accountId}`)
-    .then(({ json: data }) => {
-      const accounts = data.find(({ id }: { id: string }) => id === accountId).accounts;
+  getClient(getState()).accounts.getFamiliarFollowers([accountId])
+    .then((data) => {
+      const accounts = data.find(({ id }: { id: string }) => id === accountId)!.accounts;
 
       dispatch(importFetchedAccounts(accounts));
       dispatch(fetchRelationships(accounts.map((item: APIEntity) => item.id)));

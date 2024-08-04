@@ -7,10 +7,11 @@ import {
 } from '../actions/domain-blocks';
 
 import type { AnyAction } from 'redux';
+import type { PaginatedResponse } from 'pl-api';
 
 const BlocksRecord = ImmutableRecord({
   items: ImmutableOrderedSet<string>(),
-  next: null as string | null,
+  next: null as (() => Promise<PaginatedResponse<string>>) | null,
 });
 
 const ReducerRecord = ImmutableRecord({

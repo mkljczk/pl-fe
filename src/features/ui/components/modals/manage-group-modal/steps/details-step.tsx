@@ -54,7 +54,6 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
 
   const handleImageClear = (property: keyof CreateGroupParams) => () => onChange({ [property]: undefined });
 
-
   return (
     <Form>
       <div className='relative mb-12 flex'>

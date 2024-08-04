@@ -2,9 +2,8 @@ import { defineMessages } from 'react-intl';
 
 import toast from 'soapbox/toast';
 import { isLoggedIn } from 'soapbox/utils/auth';
-import { getFeatures } from 'soapbox/utils/features';
 
-import api from '../api';
+import { getClient } from '../api';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 
@@ -35,97 +34,23 @@ const messages = defineMessages({
 
 type FilterKeywords = { keyword: string; whole_word: boolean }[];
 
-const fetchFiltersV1 = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({
-      type: FILTERS_FETCH_REQUEST,
-      skipLoading: true,
-    });
-
-    return api(getState)('/api/v1/filters')
-      .then(({ json: data }) => dispatch({
-        type: FILTERS_FETCH_SUCCESS,
-        filters: data,
-        skipLoading: true,
-      }))
-      .catch(err => dispatch({
-        type: FILTERS_FETCH_FAIL,
-        err,
-        skipLoading: true,
-        skipAlert: true,
-      }));
-  };
-
-const fetchFiltersV2 = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({
-      type: FILTERS_FETCH_REQUEST,
-      skipLoading: true,
-    });
-
-    return api(getState)('/api/v2/filters')
-      .then(({ json: data }) => dispatch({
-        type: FILTERS_FETCH_SUCCESS,
-        filters: data,
-        skipLoading: true,
-      }))
-      .catch(err => dispatch({
-        type: FILTERS_FETCH_FAIL,
-        err,
-        skipLoading: true,
-        skipAlert: true,
-      }));
-  };
-
 const fetchFilters = (fromFiltersPage = false) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
-    const state = getState();
-    const instance = state.instance;
-    const features = getFeatures(instance);
-
-    if (features.filtersV2 && fromFiltersPage) return dispatch(fetchFiltersV2());
-
-    if (features.filters) return dispatch(fetchFiltersV1());
-  };
-
-const fetchFilterV1 = (id: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({
-      type: FILTER_FETCH_REQUEST,
+      type: FILTERS_FETCH_REQUEST,
       skipLoading: true,
     });
 
-    return api(getState)(`/api/v1/filters/${id}`)
-      .then(({ json: data }) => dispatch({
-        type: FILTER_FETCH_SUCCESS,
-        filter: data,
+    return getClient(getState).filtering.getFilters()
+      .then((data) => dispatch({
+        type: FILTERS_FETCH_SUCCESS,
+        filters: data,
         skipLoading: true,
       }))
       .catch(err => dispatch({
-        type: FILTER_FETCH_FAIL,
-        err,
-        skipLoading: true,
-        skipAlert: true,
-      }));
-  };
-
-const fetchFilterV2 = (id: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({
-      type: FILTER_FETCH_REQUEST,
-      skipLoading: true,
-    });
-
-    return api(getState)(`/api/v2/filters/${id}`)
-      .then(({ json: data }) => dispatch({
-        type: FILTER_FETCH_SUCCESS,
-        filter: data,
-        skipLoading: true,
-      }))
-      .catch(err => dispatch({
-        type: FILTER_FETCH_FAIL,
+        type: FILTERS_FETCH_FAIL,
         err,
         skipLoading: true,
         skipAlert: true,
@@ -134,148 +59,70 @@ const fetchFilterV2 = (id: string) =>
 
 const fetchFilter = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const instance = state.instance;
-    const features = getFeatures(instance);
+    dispatch({
+      type: FILTER_FETCH_REQUEST,
+      skipLoading: true,
+    });
 
-    if (features.filtersV2) return dispatch(fetchFilterV2(id));
-
-    if (features.filters) return dispatch(fetchFilterV1(id));
+    return getClient(getState).filtering.getFilter(id)
+      .then((data) => dispatch({
+        type: FILTER_FETCH_SUCCESS,
+        filter: data,
+        skipLoading: true,
+      }))
+      .catch(err => dispatch({
+        type: FILTER_FETCH_FAIL,
+        err,
+        skipLoading: true,
+        skipAlert: true,
+      }));
   };
 
-const createFilterV1 = (title: string, expires_in: string | null, context: Array<string>, hide: boolean, keywords: FilterKeywords) =>
+const createFilter = (title: string, expires_in: number | undefined, context: Array<string>, hide: boolean, keywords_attributes: FilterKeywords) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FILTERS_CREATE_REQUEST });
-    return api(getState)('/api/v1/filters', {
-      method: 'POST',
-      body: JSON.stringify({
-        phrase: keywords[0].keyword,
-        context,
-        irreversible: hide,
-        whole_word: keywords[0].whole_word,
-        expires_in,
-      }),
+
+    return getClient(getState).filtering.createFilter({
+      title,
+      context,
+      filter_action: hide ? 'hide' : 'warn',
+      expires_in,
+      keywords_attributes,
     }).then(response => {
-      dispatch({ type: FILTERS_CREATE_SUCCESS, filter: response.json });
+      dispatch({ type: FILTERS_CREATE_SUCCESS, filter: response });
       toast.success(messages.added);
     }).catch(error => {
       dispatch({ type: FILTERS_CREATE_FAIL, error });
     });
   };
 
-const createFilterV2 = (title: string, expires_in: string | null, context: Array<string>, hide: boolean, keywords_attributes: FilterKeywords) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: FILTERS_CREATE_REQUEST });
-    return api(getState)('/api/v2/filters', {
-      method: 'POST',
-      body: JSON.stringify({
-        title,
-        context,
-        filter_action: hide ? 'hide' : 'warn',
-        expires_in,
-        keywords_attributes,
-      }),
-    }).then(response => {
-      dispatch({ type: FILTERS_CREATE_SUCCESS, filter: response.json });
-      toast.success(messages.added);
-    }).catch(error => {
-      dispatch({ type: FILTERS_CREATE_FAIL, error });
-    });
-  };
-
-const createFilter = (title: string, expires_in: string | null, context: Array<string>, hide: boolean, keywords: FilterKeywords) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const instance = state.instance;
-    const features = getFeatures(instance);
-
-    if (features.filtersV2) return dispatch(createFilterV2(title, expires_in, context, hide, keywords));
-
-    return dispatch(createFilterV1(title, expires_in, context, hide, keywords));
-  };
-
-const updateFilterV1 = (id: string, title: string, expires_in: string | null, context: Array<string>, hide: boolean, keywords: FilterKeywords) =>
+const updateFilter = (id: string, title: string, expires_in: number | undefined, context: Array<string>, hide: boolean, keywords_attributes: FilterKeywords) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FILTERS_UPDATE_REQUEST });
-    return api(getState)(`/api/v1/filters/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        phrase: keywords[0].keyword,
-        context,
-        irreversible: hide,
-        whole_word: keywords[0].whole_word,
-        expires_in,
-      }),
+
+    return getClient(getState).filtering.updateFilter(id, {
+      title,
+      context,
+      filter_action: hide ? 'hide' : 'warn',
+      expires_in,
+      keywords_attributes,
     }).then(response => {
-      dispatch({ type: FILTERS_UPDATE_SUCCESS, filter: response.json });
+      dispatch({ type: FILTERS_UPDATE_SUCCESS, filter: response });
       toast.success(messages.added);
     }).catch(error => {
       dispatch({ type: FILTERS_UPDATE_FAIL, error });
-    });
-  };
-
-const updateFilterV2 = (id: string, title: string, expires_in: string | null, context: Array<string>, hide: boolean, keywords_attributes: FilterKeywords) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: FILTERS_UPDATE_REQUEST });
-    return api(getState)(`/api/v2/filters/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        title,
-        context,
-        filter_action: hide ? 'hide' : 'warn',
-        expires_in,
-        keywords_attributes,
-      }),
-    }).then(response => {
-      dispatch({ type: FILTERS_UPDATE_SUCCESS, filter: response.json });
-      toast.success(messages.added);
-    }).catch(error => {
-      dispatch({ type: FILTERS_UPDATE_FAIL, error });
-    });
-  };
-
-const updateFilter = (id: string, title: string, expires_in: string | null, context: Array<string>, hide: boolean, keywords: FilterKeywords) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const instance = state.instance;
-    const features = getFeatures(instance);
-
-    if (features.filtersV2) return dispatch(updateFilterV2(id, title, expires_in, context, hide, keywords));
-
-    return dispatch(updateFilterV1(id, title, expires_in, context, hide, keywords));
-  };
-
-const deleteFilterV1 = (id: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: FILTERS_DELETE_REQUEST });
-    return api(getState)(`/api/v1/filters/${id}`, { method: 'DELETE' }).then(response => {
-      dispatch({ type: FILTERS_DELETE_SUCCESS, filter: response.json });
-      toast.success(messages.removed);
-    }).catch(error => {
-      dispatch({ type: FILTERS_DELETE_FAIL, error });
-    });
-  };
-
-const deleteFilterV2 = (id: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: FILTERS_DELETE_REQUEST });
-    return api(getState)(`/api/v2/filters/${id}`, { method: 'DELETE' }).then(response => {
-      dispatch({ type: FILTERS_DELETE_SUCCESS, filter: response.json });
-      toast.success(messages.removed);
-    }).catch(error => {
-      dispatch({ type: FILTERS_DELETE_FAIL, error });
     });
   };
 
 const deleteFilter = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const instance = state.instance;
-    const features = getFeatures(instance);
-
-    if (features.filtersV2) return dispatch(deleteFilterV2(id));
-
-    return dispatch(deleteFilterV1(id));
+    dispatch({ type: FILTERS_DELETE_REQUEST });
+    return getClient(getState).filtering.deleteFilter(id).then(response => {
+      dispatch({ type: FILTERS_DELETE_SUCCESS, filter: response });
+      toast.success(messages.removed);
+    }).catch(error => {
+      dispatch({ type: FILTERS_DELETE_FAIL, error });
+    });
   };
 
 export {
