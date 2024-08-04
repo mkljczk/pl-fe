@@ -103,7 +103,7 @@ const getStream = (
     reconnected: ((this: WebSocket, ev: Event) => any);
   },
 ) => {
-  const params = [ `stream=${stream}` ];
+  const params = [ `access_token=${accessToken}`, `stream=${stream}` ];
 
   const ws = new WebSocketClient(`${streamingAPIBaseURL}/api/v1/streaming/?${params.join('&')}`, accessToken as any);
 
