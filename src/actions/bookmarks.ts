@@ -1,10 +1,10 @@
-import { getClient, getNextLink } from '../api';
+import { getClient } from '../api';
 
 import { importFetchedStatuses } from './importer';
 
+import type { PaginatedResponse, Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
-import type { PaginatedResponse, Status } from 'pl-api';
 
 const BOOKMARKED_STATUSES_FETCH_REQUEST = 'BOOKMARKED_STATUSES_FETCH_REQUEST';
 const BOOKMARKED_STATUSES_FETCH_SUCCESS = 'BOOKMARKED_STATUSES_FETCH_SUCCESS';
@@ -24,7 +24,7 @@ const fetchBookmarkedStatuses = (folderId?: string) =>
 
     dispatch(fetchBookmarkedStatusesRequest(folderId));
 
-    return getClient(getState()).accounts.getBookmarks({ folder_id: folderId }).then(response => {
+    return getClient(getState()).myAccount.getBookmarks({ folder_id: folderId }).then(response => {
       dispatch(importFetchedStatuses(response.items));
       return dispatch(fetchBookmarkedStatusesSuccess(response.items, response.next, folderId));
     }).catch(error => {

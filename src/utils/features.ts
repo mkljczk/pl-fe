@@ -6,7 +6,8 @@ import lt from 'semver/functions/lt';
 import semverParse from 'semver/functions/parse';
 
 import { custom } from 'soapbox/custom';
-import { type Instance } from 'soapbox/schemas';
+
+import type { Instance } from 'pl-api';
 
 /** Import custom overrides, if exists */
 const overrides = custom('features');

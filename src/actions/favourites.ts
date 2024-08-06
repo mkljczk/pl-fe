@@ -1,6 +1,6 @@
 import { isLoggedIn } from 'soapbox/utils/auth';
 
-import { getClient, getNextLink } from '../api';
+import { getClient } from '../api';
 
 import { importFetchedStatuses } from './importer';
 
@@ -34,7 +34,7 @@ const fetchFavouritedStatuses = () =>
 
     dispatch(fetchFavouritedStatusesRequest());
 
-    return getClient(getState()).accounts.getFavourites().then(response => {
+    return getClient(getState()).myAccount.getFavourites().then(response => {
       dispatch(importFetchedStatuses(response.items));
       dispatch(fetchFavouritedStatusesSuccess(response.items, response.next));
     }).catch(error => {
@@ -105,10 +105,9 @@ const fetchAccountFavouritedStatuses = (accountId: string) =>
 
     dispatch(fetchAccountFavouritedStatusesRequest(accountId));
 
-    return getClient(getState).request(`/api/v1/pleroma/accounts/${accountId}/favourites`).then(response => {
-      const next = getNextLink(response);
-      dispatch(importFetchedStatuses(response.json));
-      dispatch(fetchAccountFavouritedStatusesSuccess(accountId, response.json, next || null));
+    return getClient(getState).accounts.getAccountFavourites(accountId).then(response => {
+      dispatch(importFetchedStatuses(response.items));
+      dispatch(fetchAccountFavouritedStatusesSuccess(accountId, response.items, response.next));
     }).catch(error => {
       dispatch(fetchAccountFavouritedStatusesFail(accountId, error));
     });
@@ -120,7 +119,7 @@ const fetchAccountFavouritedStatusesRequest = (accountId: string) => ({
   skipLoading: true,
 });
 
-const fetchAccountFavouritedStatusesSuccess = (accountId: string, statuses: APIEntity, next: string | null) => ({
+const fetchAccountFavouritedStatusesSuccess = (accountId: string, statuses: APIEntity, next: (() => Promise<PaginatedResponse<Status>>) | null) => ({
   type: ACCOUNT_FAVOURITED_STATUSES_FETCH_SUCCESS,
   accountId,
   statuses,
@@ -139,18 +138,17 @@ const expandAccountFavouritedStatuses = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
-    const url = getState().status_lists.get(`favourites:${accountId}`)?.next || null;
+    const next = getState().status_lists.get(`favourites:${accountId}`)?.next || null;
 
-    if (url === null || getState().status_lists.get(`favourites:${accountId}`)?.isLoading) {
+    if (next === null || getState().status_lists.get(`favourites:${accountId}`)?.isLoading) {
       return;
     }
 
     dispatch(expandAccountFavouritedStatusesRequest(accountId));
 
-    return getClient(getState).request(url).then(response => {
-      const next = getNextLink(response);
-      dispatch(importFetchedStatuses(response.json));
-      dispatch(expandAccountFavouritedStatusesSuccess(accountId, response.json, next || null));
+    return next().then(response => {
+      dispatch(importFetchedStatuses(response.items));
+      dispatch(expandAccountFavouritedStatusesSuccess(accountId, response.items, response.next));
     }).catch(error => {
       dispatch(expandAccountFavouritedStatusesFail(accountId, error));
     });
@@ -161,7 +159,7 @@ const expandAccountFavouritedStatusesRequest = (accountId: string) => ({
   accountId,
 });
 
-const expandAccountFavouritedStatusesSuccess = (accountId: string, statuses: APIEntity[], next: string | null) => ({
+const expandAccountFavouritedStatusesSuccess = (accountId: string, statuses: APIEntity[], next: (() => Promise<PaginatedResponse<Status>>) | null) => ({
   type: ACCOUNT_FAVOURITED_STATUSES_EXPAND_SUCCESS,
   accountId,
   statuses,

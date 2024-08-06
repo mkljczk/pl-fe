@@ -48,12 +48,12 @@ const MAX_QUEUED_NOTIFICATIONS = 40;
 const FILTER_TYPES = {
   all: undefined,
   mention: ['mention'],
-  favourite: ['favourite', 'pleroma:emoji_reaction'],
+  favourite: ['favourite', 'emoji_reaction'],
   reblog: ['reblog'],
   poll: ['poll'],
   status: ['status'],
   follow: ['follow', 'follow_request'],
-  events: ['pleroma:event_reminder', 'pleroma:participation_request', 'pleroma:participation_accepted'],
+  events: ['event_reminder', 'participation_request', 'participation_accepted'],
 };
 
 type FilterType = keyof typeof FILTER_TYPES;
@@ -189,10 +189,10 @@ const STATUS_NOTIFICATION_TYPES = [
   'favourite',
   'reblog',
   // WIP separate notifications for each reaction?
-  // 'pleroma:emoji_reaction',
-  'pleroma:event_reminder',
-  'pleroma:participation_accepted',
-  'pleroma:participation_request',
+  // 'emoji_reaction',
+  'event_reminder',
+  'participation_accepted',
+  'participation_request',
 ];
 
 const deduplicateNotifications = (notifications: any[]) => {
@@ -272,7 +272,8 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
 
     dispatch(expandNotificationsRequest(isLoadingMore));
 
-    return getClient(state).notifications.getNotifications(params).then(response => { // WIP signal
+    return getClient(state).notifications.getNotifications(params, { signal: abortExpandNotifications.signal }).then(response => {
+      console.log(response);
 
       const entries = (response.items).reduce((acc, item) => {
         if (item.account?.id) {
@@ -280,7 +281,7 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
         }
 
         // Used by Move notification
-        if (item.target?.id) {
+        if (item.type === 'move' && item.target.id) {
           acc.accounts[item.target.id] = item.target;
         }
 
@@ -300,6 +301,7 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
       fetchRelatedRelationships(dispatch, response.items);
       done();
     }).catch(error => {
+      console.log(error);
       dispatch(expandNotificationsFail(error, isLoadingMore));
       done();
     });

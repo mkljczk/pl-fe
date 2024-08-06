@@ -6,7 +6,7 @@
  * @see module:soapbox/actions/auth
  */
 
-import { PlApiClient } from 'pl-api';
+import { PlApiClient, type GetTokenParams, type RevokeTokenParams } from 'pl-api';
 
 import * as BuildConfig from 'soapbox/build-config';
 import { getBaseURL } from 'soapbox/utils/state';
@@ -21,7 +21,7 @@ const OAUTH_TOKEN_REVOKE_REQUEST = 'OAUTH_TOKEN_REVOKE_REQUEST';
 const OAUTH_TOKEN_REVOKE_SUCCESS = 'OAUTH_TOKEN_REVOKE_SUCCESS';
 const OAUTH_TOKEN_REVOKE_FAIL    = 'OAUTH_TOKEN_REVOKE_FAIL';
 
-const obtainOAuthToken = (params: Record<string, string | undefined>, baseURL?: string) =>
+const obtainOAuthToken = (params: GetTokenParams, baseURL?: string) =>
   (dispatch: AppDispatch) => {
     dispatch({ type: OAUTH_TOKEN_CREATE_REQUEST, params });
     const client = new PlApiClient(baseURL || BuildConfig.BACKEND_URL || '', undefined, { fetchInstance: false });
@@ -35,7 +35,7 @@ const obtainOAuthToken = (params: Record<string, string | undefined>, baseURL?: 
     });
   };
 
-const revokeOAuthToken = (params: Record<string, string>) =>
+const revokeOAuthToken = (params: RevokeTokenParams) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: OAUTH_TOKEN_REVOKE_REQUEST, params });
     const baseURL = getBaseURL(getState());

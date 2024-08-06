@@ -22,6 +22,7 @@ const AttachmentRecord = ImmutableRecord({
   remote_url: null as string | null,
   type: 'unknown',
   url: '',
+  mime_type: null as string | null,
 
   // Internal fields
   // TODO: Remove these? They're set in selectors/index.js

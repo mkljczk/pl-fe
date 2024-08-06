@@ -1,4 +1,4 @@
-import { getClient, getNextLink } from '../api';
+import { getClient } from '../api';
 
 import { importFetchedStatuses } from './importer';
 
@@ -25,14 +25,13 @@ const fetchStatusQuotes = (statusId: string) =>
       type: STATUS_QUOTES_FETCH_REQUEST,
     });
 
-    return getClient(getState).request(`/api/v1/pleroma/statuses/${statusId}/quotes`).then(response => {
-      const next = getNextLink(response);
-      dispatch(importFetchedStatuses(response.json));
+    return getClient(getState).statuses.getStatusQuotes(statusId).then(response => {
+      dispatch(importFetchedStatuses(response.items));
       return dispatch({
         type: STATUS_QUOTES_FETCH_SUCCESS,
         statusId,
-        statuses: response.json,
-        next: next || null,
+        statuses: response.items,
+        next: response.next,
       });
     }).catch(error => {
       dispatch({
@@ -45,9 +44,9 @@ const fetchStatusQuotes = (statusId: string) =>
 
 const expandStatusQuotes = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const url = getState().status_lists.getIn([`quotes:${statusId}`, 'next'], null) as string | null;
+    const next = getState().status_lists.get(`quotes:${statusId}`)?.next || null;
 
-    if (url === null || getState().status_lists.getIn([`quotes:${statusId}`, 'isLoading'])) {
+    if (next === null || getState().status_lists.getIn([`quotes:${statusId}`, 'isLoading'])) {
       return dispatch(noOp);
     }
 
@@ -56,14 +55,13 @@ const expandStatusQuotes = (statusId: string) =>
       statusId,
     });
 
-    return getClient(getState).request(url).then(response => {
-      const next = getNextLink(response);
-      dispatch(importFetchedStatuses(response.json));
+    return next().then(response => {
+      dispatch(importFetchedStatuses(response.items));
       dispatch({
         type: STATUS_QUOTES_EXPAND_SUCCESS,
         statusId,
-        statuses: response.json,
-        next: next || null,
+        statuses: response.items,
+        next: response.next,
       });
     }).catch(error => {
       dispatch({

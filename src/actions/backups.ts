@@ -13,7 +13,8 @@ const BACKUPS_CREATE_FAIL    = 'BACKUPS_CREATE_FAIL';
 const fetchBackups = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: BACKUPS_FETCH_REQUEST });
-    return getClient(getState).request('/api/v1/pleroma/backups').then(({ json: backups }) =>
+
+    return getClient(getState).settings.getBackups().then((backups) =>
       dispatch({ type: BACKUPS_FETCH_SUCCESS, backups }),
     ).catch(error => {
       dispatch({ type: BACKUPS_FETCH_FAIL, error });
@@ -23,7 +24,7 @@ const fetchBackups = () =>
 const createBackup = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: BACKUPS_CREATE_REQUEST });
-    return getClient(getState).request('/api/v1/pleroma/backups').then(({ json: backups }) =>
+    return getClient(getState).settings.createBackup().then((backups) =>
       dispatch({ type: BACKUPS_CREATE_SUCCESS, backups }),
     ).catch(error => {
       dispatch({ type: BACKUPS_CREATE_FAIL, error });

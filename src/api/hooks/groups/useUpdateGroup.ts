@@ -15,12 +15,11 @@ interface UpdateGroupParams {
 const useUpdateGroup = (groupId: string) => {
   const client = useClient();
 
-  const { createEntity, ...rest } = useCreateEntity([Entities.GROUPS], (params: UpdateGroupParams) =>
-    client.request(`/api/v1/groups/${groupId}`, {
-      method: 'PUT',
-      contentType: '',
-      body: params,
-    }), { schema: groupSchema });
+  const { createEntity, ...rest } = useCreateEntity(
+    [Entities.GROUPS],
+    (params: UpdateGroupParams) => client.experimental.groups.updateGroup(groupId, params),
+    { schema: groupSchema },
+  );
 
   return {
     updateGroup: createEntity,

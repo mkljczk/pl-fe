@@ -1,5 +1,8 @@
 import { getClient } from '../api';
 
+import type { CreatePushNotificationsSubscriptionParams } from 'pl-api';
+import type { AppDispatch, RootState } from 'soapbox/store';
+
 const PUSH_SUBSCRIPTION_CREATE_REQUEST = 'PUSH_SUBSCRIPTION_CREATE_REQUEST';
 const PUSH_SUBSCRIPTION_CREATE_SUCCESS = 'PUSH_SUBSCRIPTION_CREATE_SUCCESS';
 const PUSH_SUBSCRIPTION_CREATE_FAIL    = 'PUSH_SUBSCRIPTION_CREATE_FAIL';
@@ -16,9 +19,7 @@ const PUSH_SUBSCRIPTION_DELETE_REQUEST = 'PUSH_SUBSCRIPTION_DELETE_REQUEST';
 const PUSH_SUBSCRIPTION_DELETE_SUCCESS = 'PUSH_SUBSCRIPTION_DELETE_SUCCESS';
 const PUSH_SUBSCRIPTION_DELETE_FAIL    = 'PUSH_SUBSCRIPTION_DELETE_FAIL';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
-
-const createPushSubscription = (params: Record<string, any>) =>
+const createPushSubscription = (params: CreatePushNotificationsSubscriptionParams) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: PUSH_SUBSCRIPTION_CREATE_REQUEST, params });
     return getClient(getState).pushNotifications.createSubscription(params)

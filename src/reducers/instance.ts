@@ -75,7 +75,7 @@ const getHost = (instance: { domain: string }) => {
   }
 };
 
-const persistInstance = ({ instance }: { instance: { domain: string } }, host: string | null = getHost(instance)) => {
+const persistInstance = (instance: { domain: string }, host: string | null = getHost(instance)) => {
   if (host) {
     KVStore.setItem(`instance:${host}`, instance).catch(console.error);
   }
@@ -89,7 +89,7 @@ const handleInstanceFetchFail = (state: Instance, error: Record<string, any>) =>
   }
 };
 
-const instance = (state = initialState, action: AnyAction) => {
+const instance = (state = initialState, action: AnyAction): Instance => {
   switch (action.type) {
     case PLEROMA_PRELOAD_IMPORT:
       return preloadImport(state, action, '/api/v1/instance');

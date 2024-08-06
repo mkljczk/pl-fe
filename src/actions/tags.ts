@@ -1,4 +1,4 @@
-import { getClient, getNextLink } from '../api';
+import { getClient } from '../api';
 
 import type { PaginatedResponse, Tag } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
@@ -27,7 +27,7 @@ const FOLLOWED_HASHTAGS_EXPAND_FAIL    = 'FOLLOWED_HASHTAGS_EXPAND_FAIL';
 const fetchHashtag = (name: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(fetchHashtagRequest());
 
-  return getClient(getState()).accounts.getTag(name).then((data) => {
+  return getClient(getState()).myAccount.getTag(name).then((data) => {
     dispatch(fetchHashtagSuccess(name, data));
   }).catch(err => {
     dispatch(fetchHashtagFail(err));
@@ -52,7 +52,7 @@ const fetchHashtagFail = (error: unknown) => ({
 const followHashtag = (name: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(followHashtagRequest(name));
 
-  return getClient(getState()).accounts.followTag(name).then((data) => {
+  return getClient(getState()).myAccount.followTag(name).then((data) => {
     dispatch(followHashtagSuccess(name, data));
   }).catch(err => {
     dispatch(followHashtagFail(name, err));
@@ -79,7 +79,7 @@ const followHashtagFail = (name: string, error: unknown) => ({
 const unfollowHashtag = (name: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(unfollowHashtagRequest(name));
 
-  return getClient(getState()).accounts.unfollowTag(name).then((data) => {
+  return getClient(getState()).myAccount.unfollowTag(name).then((data) => {
     dispatch(unfollowHashtagSuccess(name, data));
   }).catch(err => {
     dispatch(unfollowHashtagFail(name, err));
@@ -106,7 +106,7 @@ const unfollowHashtagFail = (name: string, error: unknown) => ({
 const fetchFollowedHashtags = () => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(fetchFollowedHashtagsRequest());
 
-  return getClient(getState()).accounts.getFollowedTags().then(response => {
+  return getClient(getState()).myAccount.getFollowedTags().then(response => {
     dispatch(fetchFollowedHashtagsSuccess(response.items, response.next));
   }).catch(err => {
     dispatch(fetchFollowedHashtagsFail(err));

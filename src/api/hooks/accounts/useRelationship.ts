@@ -2,8 +2,8 @@ import { z } from 'zod';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntity } from 'soapbox/entity-store/hooks';
-import { type Relationship, relationshipSchema } from 'soapbox/schemas';
 import { useClient } from 'soapbox/hooks';
+import { type Relationship, relationshipSchema } from 'soapbox/schemas';
 
 interface UseRelationshipOpts {
   enabled?: boolean;
@@ -15,7 +15,7 @@ const useRelationship = (accountId: string | undefined, opts: UseRelationshipOpt
 
   const { entity: relationship, ...result } = useEntity<Relationship>(
     [Entities.RELATIONSHIPS, accountId!],
-    () => client.request(`/api/v1/accounts/relationships?id[]=${accountId}`),
+    () => client.accounts.getRelationships([accountId]),
     {
       enabled: enabled && !!accountId,
       schema: z.array(relationshipSchema).nonempty().transform(arr => arr[0]),

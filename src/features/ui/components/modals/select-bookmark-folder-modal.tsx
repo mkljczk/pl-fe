@@ -21,7 +21,7 @@ const SelectBookmarkFolderModal: React.FC<ISelectBookmarkFolderModal> = ({ statu
   const status = useAppSelector(state => getStatus(state, { id: statusId })) as StatusEntity;
   const dispatch = useAppDispatch();
 
-  const [selectedFolder, setSelectedFolder] = useState(status.pleroma.get('bookmark_folder'));
+  const [selectedFolder, setSelectedFolder] = useState(status.bookmark_folder);
 
   const { isFetching, bookmarkFolders } = useBookmarkFolders();
 

@@ -16,7 +16,7 @@ const useGroupMembershipRequests = (groupId: string) => {
 
   const { entities, invalidate, fetchEntities, ...rest } = useEntities(
     path,
-    () => client.request(`/api/v1/groups/${groupId}/membership_requests`),
+    () => client.experimental.groups.getGroupMembershipRequests(groupId),
     {
       schema: accountSchema,
       enabled: relationship?.role === GroupRoles.OWNER || relationship?.role === GroupRoles.ADMIN,
@@ -24,13 +24,13 @@ const useGroupMembershipRequests = (groupId: string) => {
   );
 
   const { dismissEntity: authorize } = useDismissEntity(path, async (accountId: string) => {
-    const response = await client.request(`/api/v1/groups/${groupId}/membership_requests/${accountId}/authorize`, { method: 'POST' });
+    const response = await client.experimental.groups.acceptGroupMembershipRequest(groupId, accountId);
     invalidate();
     return response;
   });
 
   const { dismissEntity: reject } = useDismissEntity(path, async (accountId: string) => {
-    const response = await client.request(`/api/v1/groups/${groupId}/membership_requests/${accountId}/reject`, { method: 'POST' });
+    const response = await client.experimental.groups.rejectGroupMembershipRequest(groupId, accountId);
     invalidate();
     return response;
   });

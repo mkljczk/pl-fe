@@ -12,7 +12,7 @@ const useGroups = () => {
 
   const { entities, ...result } = useEntities<Group>(
     [Entities.GROUPS, 'search', ''],
-    () => client.request('/api/v1/groups'),
+    () => client.experimental.groups.getGroups(),
     { enabled: features.groups, schema: groupSchema },
   );
   const { relationships } = useGroupRelationships(

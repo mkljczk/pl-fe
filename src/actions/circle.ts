@@ -36,7 +36,7 @@ const processCircle = (setProgress: (progress: {
       };
     };
 
-    const fetchStatuses = async (next?: () => Promise<PaginatedResponse<Status>>) => {
+    const fetchStatuses = async (next: (() => Promise<PaginatedResponse<Status>>) | null) => {
       const response = await (next?.() || client.accounts.getAccountStatuses(me, { limit: 40 }));
 
       response.items.forEach((status) => {
@@ -63,8 +63,8 @@ const processCircle = (setProgress: (progress: {
       return response.next;
     };
 
-    const fetchFavourites = async (next?: () => Promise<PaginatedResponse<Status>>) => { // limit 40
-      const response = await (next?.() || client.accounts.getFavourites({ limit: 40 }));
+    const fetchFavourites = async (next: (() => Promise<PaginatedResponse<Status>>) | null) => { // limit 40
+      const response = await (next?.() || client.myAccount.getFavourites({ limit: 40 }));
 
       response.items.forEach((status) => {
         if (status.account.id === me) return;
@@ -81,13 +81,13 @@ const processCircle = (setProgress: (progress: {
       return response.next;
     };
 
-    for (let next: (() => Promise<PaginatedResponse<Status>>) | null | undefined, i = 0; i < 20; i++) {
+    for (let next: (() => Promise<PaginatedResponse<Status>>) | null = null, i = 0; i < 20; i++) {
       next = await fetchStatuses(next);
       setProgress({ state: 'fetchingStatuses', progress: (i / 20) * 40 });
       if (!next) break;
     }
 
-    for (let next: (() => Promise<PaginatedResponse<Status>>) | null | undefined, i = 0; i < 20; i++) {
+    for (let next: (() => Promise<PaginatedResponse<Status>>) | null = null, i = 0; i < 20; i++) {
       next = await fetchFavourites(next);
       setProgress({ state: 'fetchingFavourites', progress: 40 + (i / 20) * 40 });
       if (!next) break;

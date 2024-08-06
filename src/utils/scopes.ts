@@ -1,7 +1,7 @@
 
 import { PLEROMA, parseVersion } from './features';
 
-import type { Instance } from 'soapbox/schemas';
+import type { Instance } from 'pl-api';
 import type { RootState } from 'soapbox/store';
 
 /**

@@ -71,7 +71,7 @@ const ReactionRecord = ImmutableRecord({
 });
 
 const ReactionListRecord = ImmutableRecord({
-  next: null as string | null,
+  next: null as (() => Promise<PaginatedResponse<Reaction>>) | null,
   items: ImmutableOrderedSet<Reaction>(),
   isLoading: false,
 });
@@ -82,7 +82,7 @@ const ParticipationRequestRecord = ImmutableRecord({
 });
 
 const ParticipationRequestListRecord = ImmutableRecord({
-  next: null as string | null,
+  next: null as (() => Promise<PaginatedResponse<any>>) | null,
   items: ImmutableOrderedSet<ParticipationRequest>(),
   isLoading: false,
 });

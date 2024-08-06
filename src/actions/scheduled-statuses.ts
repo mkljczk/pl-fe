@@ -1,6 +1,6 @@
 import { getFeatures } from 'soapbox/utils/features';
 
-import { getClient, getNextLink } from '../api';
+import { getClient } from '../api';
 
 import type { PaginatedResponse, ScheduledStatus } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
@@ -67,7 +67,7 @@ const fetchScheduledStatusesFail = (error: unknown) => ({
 
 const expandScheduledStatuses = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const next = getState().status_lists.get('scheduled_statuses')?.next || null;
+    const next = getState().status_lists.get('scheduled_statuses')?.next as any as () => Promise<PaginatedResponse<ScheduledStatus>> || null;
 
     if (next === null || getState().status_lists.get('scheduled_statuses')?.isLoading) {
       return;

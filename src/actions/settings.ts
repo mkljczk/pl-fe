@@ -80,7 +80,7 @@ const defaultSettings = ImmutableMap({
       mention: false,
       poll: false,
       move: false,
-      'pleroma:emoji_reaction': false,
+      emoji_reaction: false,
     }),
   }),
 

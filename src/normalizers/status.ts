@@ -48,6 +48,7 @@ const StatusRecord = ImmutableRecord({
   application: null as ImmutableMap<string, any> | null,
   approval_status: 'approved' as StatusApprovalStatus,
   bookmarked: false,
+  bookmark_folder: null as string | null,
   card: null as Card | null,
   content: '',
   content_map: null as ImmutableMap<string, string> | null,
@@ -71,6 +72,8 @@ const StatusRecord = ImmutableRecord({
   pleroma: ImmutableMap<string, any>(),
   poll: null as EmbeddedEntity<Poll>,
   quote: null as EmbeddedEntity<any>,
+  quote_url: null as string | null,
+  quote_visible: null as boolean | null,
   quotes_count: 0,
   reactions: null as ImmutableList<EmojiReaction> | null,
   reblog: null as EmbeddedEntity<any>,
@@ -183,17 +186,14 @@ const addSelfMention = (status: ImmutableMap<string, any>) => {
 // Move the quote to the top-level
 const fixQuote = (status: ImmutableMap<string, any>) =>
   status.withMutations(status => {
-    status.update('quote', quote => quote || status.getIn(['pleroma', 'quote']) || null);
-    status.deleteIn(['pleroma', 'quote']);
-    status.update('quotes_count', quotes_count => quotes_count || status.getIn(['pleroma', 'quotes_count'], 0));
-    status.deleteIn(['pleroma', 'quotes_count']);
+    status.update('quote', quote => quote || null);
+    status.update('quotes_count', quotes_count => quotes_count || 0);
   });
 
 // Move the translation to the top-level
 const fixTranslation = (status: ImmutableMap<string, any>) => {
   return status.withMutations(status => {
-    status.update('translation', translation => translation || status.getIn(['pleroma', 'translation']) || null);
-    status.deleteIn(['pleroma', 'translation']);
+    status.update('translation', translation => translation || null);
   });
 };
 
@@ -206,7 +206,7 @@ const fixSensitivity = (status: ImmutableMap<string, any>) => {
 
 // Normalize event
 const normalizeEvent = (status: ImmutableMap<string, any>) => {
-  if (status.getIn(['pleroma', 'event'])) {
+  if (status.get('event')) {
     const firstAttachment = status.get('media_attachments').first();
     let banner = null;
     let mediaAttachments = status.get('media_attachments');
@@ -216,11 +216,11 @@ const normalizeEvent = (status: ImmutableMap<string, any>) => {
       mediaAttachments = mediaAttachments.shift();
     }
 
-    const links = mediaAttachments.filter((attachment: Attachment) => attachment.pleroma.get('mime_type') === 'text/html');
-    mediaAttachments = mediaAttachments.filter((attachment: Attachment) => attachment.pleroma.get('mime_type') !== 'text/html');
+    const links = mediaAttachments.filter((attachment: Attachment) => attachment.get('mime_type') === 'text/html');
+    mediaAttachments = mediaAttachments.filter((attachment: Attachment) => attachment.get('mime_type') !== 'text/html');
 
     const event = EventRecord(
-      (status.getIn(['pleroma', 'event']) as ImmutableMap<string, any>)
+      (status.get('event') as ImmutableMap<string, any>)
         .set('banner', banner)
         .set('links', links),
     );
@@ -233,7 +233,7 @@ const normalizeEvent = (status: ImmutableMap<string, any>) => {
 
 /** Normalize emojis. */
 const normalizeEmojis = (status: ImmutableMap<string, any>) => {
-  const data = ImmutableList<ImmutableMap<string, any>>(status.getIn(['pleroma', 'emoji_reactions']) || status.get('reactions'));
+  const data = ImmutableList<ImmutableMap<string, any>>(status.get('emoji_reactions') || status.get('reactions'));
   const reactions = filteredArray(emojiReactionSchema).parse(data.toJS());
 
   if (reactions) {
@@ -289,7 +289,7 @@ const parseAccounts = (status: ImmutableMap<string, any>) => {
 
 const parseGroup = (status: ImmutableMap<string, any>) => {
   try {
-    const group = groupSchema.parse(status.get('group', status.getIn(['pleroma', 'group'])).toJS());
+    const group = groupSchema.parse(status.get('group').toJS());
     return status.set('group', group);
   } catch (_e) {
     return status.set('group', null);

@@ -6,12 +6,11 @@
  * @see module:soapbox/actions/oauth
  */
 
-import { PlApiClient } from 'pl-api';
+import { instanceSchema, PlApiClient, type Instance } from 'pl-api';
 
 import { createApp } from 'soapbox/actions/apps';
 import { authLoggedIn, verifyCredentials, switchAccount } from 'soapbox/actions/auth';
 import { obtainOAuthToken } from 'soapbox/actions/oauth';
-import { instanceSchema, type Instance } from 'soapbox/schemas';
 import { parseBaseURL } from 'soapbox/utils/auth';
 import sourceCode from 'soapbox/utils/code';
 import { getQuirks } from 'soapbox/utils/quirks';
@@ -84,7 +83,7 @@ const loginWithCode = (code: string) =>
     const baseURL = localStorage.getItem('plfe:external:baseurl')!;
     const scope   = localStorage.getItem('plfe:external:scopes')!;
 
-    const params: Record<string, string> = {
+    const params = {
       client_id,
       client_secret,
       redirect_uri,
@@ -94,9 +93,9 @@ const loginWithCode = (code: string) =>
     };
 
     return dispatch(obtainOAuthToken(params, baseURL))
-      .then((token: Record<string, string | number>) => dispatch(authLoggedIn(token)))
-      .then(({ access_token }: any) => dispatch(verifyCredentials(access_token as string, baseURL)))
-      .then((account: { id: string }) => dispatch(switchAccount(account.id)))
+      .then((token) => dispatch(authLoggedIn(token)))
+      .then(({ access_token }) => dispatch(verifyCredentials(access_token as string, baseURL)))
+      .then((account) => dispatch(switchAccount(account.id)))
       .then(() => window.location.href = '/');
   };
 

@@ -147,7 +147,7 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
   }, [status]);
 
   const renderLinks = useCallback(() => {
-    if (!status.event?.links.size) return null;
+    if (!status.event?.links?.size) return null;
 
     return (
       <Stack space={1}>
@@ -189,7 +189,7 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
 
       <StatusMedia status={status} />
 
-      {status.quote && status.pleroma.get('quote_visible', true) && (
+      {status.quote && (status.quote_visible ?? true) && (
         <QuotedStatus statusId={status.quote as string} />
       )}
 

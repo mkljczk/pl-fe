@@ -6,7 +6,7 @@
  * @see module:soapbox/actions/oauth
  * @see module:soapbox/actions/security
 */
-import { PlApiClient } from 'pl-api';
+import { PlApiClient, type CreateAccountParams, type Token } from 'pl-api';
 import { defineMessages } from 'react-intl';
 
 import { createAccount } from 'soapbox/actions/accounts';
@@ -120,7 +120,7 @@ const createUserToken = (username: string, password: string) =>
     };
 
     return dispatch(obtainOAuthToken(params))
-      .then((token: Record<string, string | number>) => dispatch(authLoggedIn(token)));
+      .then((token) => dispatch(authLoggedIn(token)));
   };
 
 const otpVerify = (code: string, mfa_token: string) =>
@@ -145,13 +145,13 @@ const otpVerify = (code: string, mfa_token: string) =>
 
 const verifyCredentials = (token: string, accountUrl?: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const baseURL = parseBaseURL(accountUrl);
+    const baseURL = parseBaseURL(accountUrl) || BuildConfig.BACKEND_URL;
 
     dispatch({ type: VERIFY_CREDENTIALS_REQUEST, token });
 
     const client = new PlApiClient(baseURL, token, { fetchInstance: false });
 
-    return client.accounts.verifyCredentials().then((account) => {
+    return client.settings.verifyCredentials().then((account) => {
       dispatch(importFetchedAccount(account));
       dispatch({ type: VERIFY_CREDENTIALS_SUCCESS, token, account });
       if (account.id === getState().me) dispatch(fetchMeSuccess(account));
@@ -259,13 +259,13 @@ const fetchOwnAccounts = () =>
     });
   };
 
-const register = (params: Record<string, any>) =>
+const register = (params: CreateAccountParams) =>
   (dispatch: AppDispatch) => {
     params.fullname = params.username;
 
     return dispatch(createAppAndToken())
       .then(() => dispatch(createAccount(params)))
-      .then(({ token }: { token: Record<string, string | number> }) => {
+      .then(({ token }: { token: Token }) => {
         dispatch(startOnboarding());
         return dispatch(authLoggedIn(token));
       });
@@ -274,7 +274,7 @@ const register = (params: Record<string, any>) =>
 const fetchCaptcha = () =>
   (_dispatch: AppDispatch, getState: () => RootState) => getClient(getState).request('/api/pleroma/captcha');
 
-const authLoggedIn = (token: Record<string, string | number>) =>
+const authLoggedIn = (token: Token) =>
   (dispatch: AppDispatch) => {
     dispatch({ type: AUTH_LOGGED_IN, token });
     return token;

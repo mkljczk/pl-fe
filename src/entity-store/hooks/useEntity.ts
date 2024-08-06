@@ -24,7 +24,7 @@ interface UseEntityOpts<TEntity extends Entity> {
 
 const useEntity = <TEntity extends Entity>(
   path: EntityPath,
-  entityFn: EntityFn<void>,
+  entityFn: EntityFn<TEntity>,
   opts: UseEntityOpts<TEntity> = {},
 ) => {
   const [isFetching, setPromise] = useLoading(true);
@@ -46,7 +46,7 @@ const useEntity = <TEntity extends Entity>(
   const fetchEntity = async () => {
     try {
       const response = await setPromise(entityFn());
-      const entity = schema.parse(response.json);
+      const entity = schema.parse(response);
       dispatch(importEntities([entity], entityType));
     } catch (e) {
       setError(e);

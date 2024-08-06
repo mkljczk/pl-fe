@@ -278,7 +278,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     const account = status.account;
 
     getOrCreateChatByAccountId(account.id)
-      .then(({ json: chat }) => history.push(`/chats/${chat.id}`))
+      .then((chat) => history.push(`/chats/${chat.id}`))
       .catch(() => {});
   };
 
@@ -429,7 +429,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
 
     if (features.bookmarkFolders && fromBookmarks) {
       menu.push({
-        text: intl.formatMessage(status.pleroma.get('bookmark_folder') ? messages.bookmarkChangeFolder : messages.bookmarkSetFolder),
+        text: intl.formatMessage(status.bookmark_folder ? messages.bookmarkChangeFolder : messages.bookmarkSetFolder),
         action: handleBookmarkFolderClick,
         icon: require('@tabler/icons/outline/folders.svg'),
       });

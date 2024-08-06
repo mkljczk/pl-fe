@@ -567,7 +567,7 @@ const fetchComposeSuggestionsAccounts = throttle((dispatch, getState, composeId,
     cancelFetchComposeSuggestions = new AbortController();
   }
 
-  return getClient(getState()).accounts.searchAccounts(token.slice(1), { resolve: false, limit: 10 }) // WIP: signal
+  return getClient(getState()).accounts.searchAccounts(token.slice(1), { resolve: false, limit: 10 }, { signal })
     .then(response => {
       dispatch(importFetchedAccounts(response));
       dispatch(readyComposeSuggestionsAccounts(composeId, token, response));

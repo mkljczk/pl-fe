@@ -7,8 +7,7 @@ const useRelationships = (listKey: string[], ids: string[]) => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
 
-  const fetchRelationships = (ids: string[]) =>
-    client.request('/api/v1/accounts/relationships', { params: { ids } });
+  const fetchRelationships = (ids: string[]) => client.accounts.getRelationships(ids);
 
   const { entityMap: relationships, ...result } = useBatchedEntities<Relationship>(
     [Entities.RELATIONSHIPS, ...listKey],

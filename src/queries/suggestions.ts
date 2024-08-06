@@ -15,7 +15,7 @@ const useSuggestions = () => {
   const dispatch = useAppDispatch();
 
   const getSuggestions = async () => {
-    const response = await client.accounts.getSuggestions();
+    const response = await client.myAccount.getSuggestions();
 
     const accounts = response.map(({ account }) => account);
     const accountIds = accounts.map((account) => account.id);
@@ -43,7 +43,7 @@ const useDismissSuggestion = () => {
   const client = useClient();
 
   return useMutation({
-    mutationFn: (accountId: string) => client.accounts.dismissSuggestions(accountId),
+    mutationFn: (accountId: string) => client.myAccount.dismissSuggestions(accountId),
     onMutate(accountId: string) {
       removePageItem(SuggestionKeys.suggestions, accountId, (o: any, n: any) => o.account === n);
     },
@@ -55,7 +55,7 @@ const useOnboardingSuggestions = () => {
   const dispatch = useAppDispatch();
 
   const getSuggestions = async () => {
-    const response = await client.accounts.getSuggestions();
+    const response = await client.myAccount.getSuggestions();
 
     const accounts = response.map(({ account }) => account);
     const accountIds = accounts.map((account) => account.id);

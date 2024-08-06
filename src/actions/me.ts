@@ -10,7 +10,7 @@ import { getClient } from '../api';
 import { loadCredentials } from './auth';
 import { importFetchedAccount } from './importer';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
 
@@ -72,7 +72,7 @@ const patchMe = (params: Record<string, any>, isFormData = false) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(patchMeRequest());
 
-    return getClient(getState()).accounts.updateCredentials(params)
+    return getClient(getState()).settings.updateCredentials(params)
       .then(response => {
         persistAuthAccount(response, params);
         dispatch(patchMeSuccess(response));

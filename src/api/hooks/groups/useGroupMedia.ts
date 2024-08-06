@@ -11,7 +11,7 @@ const useGroupMedia = (groupId: string) => {
 
   return useEntities(
     [Entities.STATUSES, 'groupMedia', groupId],
-    () => client.request(`/api/v1/timelines/group/${groupId}?only_media=true`),
+    () => client.timelines.groupTimeline(groupId, { only_media: true }),
     { schema: statusSchema })
   ;
 };

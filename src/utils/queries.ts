@@ -24,9 +24,9 @@ const deduplicateById = <T extends Entity>(entities: T[]): T[] => {
 };
 
 /** Flatten paginated results into a single array. */
-const flattenPages = <T>(queryData: InfiniteData<PaginatedResult<T>> | undefined) => {
+const flattenPages = <T>(queryData: InfiniteData<PaginatedResult<T> | PaginatedResponse<T>> | undefined) => {
   const data = queryData?.pages.reduce<T[]>(
-    (prev: T[], curr) => [...prev, ...curr.result],
+    (prev: T[], curr) => [...prev, ...((curr as any).result || (curr as any).items)],
     [],
   );
 

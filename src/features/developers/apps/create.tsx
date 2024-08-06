@@ -7,6 +7,8 @@ import { Column, Button, Form, FormActions, FormGroup, Input, Stack, Text, Texta
 import { useAppDispatch, useOwnAccount } from 'soapbox/hooks';
 import { getBaseURL } from 'soapbox/utils/accounts';
 
+import type { Token } from 'pl-api';
+
 const messages = defineMessages({
   heading: { id: 'column.app_create', defaultMessage: 'Create app' },
   namePlaceholder: { id: 'app_create.name_placeholder', defaultMessage: 'e.g. \'Soapbox\'' },
@@ -28,7 +30,7 @@ const CreateApp: React.FC = () => {
   const { account } = useOwnAccount();
 
   const [app, setApp] = useState<Record<string, any> | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<Token | null>(null);
   const [isLoading, setLoading] = useState(false);
   const [params, setParams] = useState<Params>(BLANK_PARAMS);
 

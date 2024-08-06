@@ -7,7 +7,6 @@ import { getFeatures } from 'soapbox/utils/features';
 import { getClient } from '../api';
 
 import { importFetchedAccounts } from './importer';
-import { patchMeSuccess } from './me';
 
 import type { Account } from 'soapbox/schemas';
 import type { AppDispatch, RootState } from 'soapbox/store';
@@ -35,18 +34,11 @@ const messages = defineMessages({
 
 const fetchAliases = (dispatch: AppDispatch, getState: () => RootState) => {
   if (!isLoggedIn(getState)) return;
-  const state = getState();
-
-  const instance = state.instance;
-  const features = getFeatures(instance);
-
-  if (!features.accountMoving) return;
-
   dispatch(fetchAliasesRequest());
 
-  return getClient(getState).request('/api/pleroma/aliases')
+  return getClient(getState).settings.getAccountAliases()
     .then(response => {
-      dispatch(fetchAliasesSuccess(response.json.aliases));
+      dispatch(fetchAliasesSuccess(response.aliases));
     })
     .catch(err => dispatch(fetchAliasesFail(err)));
 };
@@ -99,31 +91,13 @@ const addToAliases = (account: Account) =>
     const instance = state.instance;
     const features = getFeatures(instance);
 
-    if (!features.accountMoving) {
-      const me = state.me as string;
-      const alsoKnownAs = state.accounts_meta[me]?.pleroma?.also_known_as ?? [];
-
-      dispatch(addToAliasesRequest());
-
-      return getClient(getState()).accounts.updateCredentials({ also_known_as: [...alsoKnownAs, account.pleroma?.ap_id] })
-        .then((response => {
-          toast.success(messages.createSuccess);
-          dispatch(addToAliasesSuccess);
-          dispatch(patchMeSuccess(response));
-        }))
-        .catch(err => dispatch(addToAliasesFail(err)));
-
-    }
-
     dispatch(addToAliasesRequest());
 
-    return getClient(getState).request('/api/pleroma/aliases', {
-      method: 'PUT', body: { alias: account.acct },
-    }).then(() => {
-        toast.success(messages.createSuccess);
-        dispatch(addToAliasesSuccess);
-        dispatch(fetchAliases);
-      })
+    return getClient(getState).settings.addAccountAlias(account.acct).then(() => {
+      toast.success(messages.createSuccess);
+      dispatch(addToAliasesSuccess);
+      dispatch(fetchAliases);
+    })
       .catch(err => dispatch(fetchAliasesFail(err)));
   };
 
@@ -143,39 +117,13 @@ const addToAliasesFail = (error: unknown) => ({
 const removeFromAliases = (account: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
-    const state = getState();
-
-    const instance = state.instance;
-    const features = getFeatures(instance);
-
-    if (!features.accountMoving) {
-      const me = state.me as string;
-      const alsoKnownAs = state.accounts_meta[me]?.pleroma?.also_known_as ?? [];
-
-      dispatch(removeFromAliasesRequest());
-
-      return getClient(getState()).accounts.updateCredentials({
-        also_known_as: alsoKnownAs.filter((id: string) => id !== account),
-      }).then(response => {
-          toast.success(messages.removeSuccess);
-          dispatch(removeFromAliasesSuccess);
-          dispatch(patchMeSuccess(response));
-        })
-        .catch(err => dispatch(removeFromAliasesFail(err)));
-
-      return;
-    }
-
     dispatch(addToAliasesRequest());
 
-    return getClient(getState).request('/api/pleroma/aliases', {
-      method: 'DELETE', body: { alias: account },
-    }).then(() => {
-        toast.success(messages.removeSuccess);
-        dispatch(removeFromAliasesSuccess);
-        dispatch(fetchAliases);
-      })
-      .catch(err => dispatch(fetchAliasesFail(err)));
+    return getClient(getState).settings.deleteAccountAlias(account).then(() => {
+      toast.success(messages.removeSuccess);
+      dispatch(removeFromAliasesSuccess);
+      dispatch(fetchAliases);
+    }).catch(err => dispatch(fetchAliasesFail(err)));
   };
 
 const removeFromAliasesRequest = () => ({

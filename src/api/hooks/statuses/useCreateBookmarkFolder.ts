@@ -14,10 +14,7 @@ const useCreateBookmarkFolder = () => {
   const { createEntity, ...rest } = useCreateEntity(
     [Entities.BOOKMARK_FOLDERS],
     (params: CreateBookmarkFolderParams) =>
-      client.request('/api/v1/pleroma/bookmark_folders', {
-        method: 'POST',
-        body: JSON.stringify(params),
-      }),
+      client.myAccount.createBookmarkFolder(params),
     { schema: bookmarkFolderSchema },
   );
 

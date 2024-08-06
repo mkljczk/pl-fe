@@ -245,7 +245,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
     { icon: require('@tabler/icons/outline/lock.svg'), value: 'private', text: intl.formatMessage(messages.private_short), meta: intl.formatMessage(messages.private_long) },
     features.mutualsOnlyStatuses ? { icon: require('@tabler/icons/outline/users-group.svg'), value: 'mutuals_only', text: intl.formatMessage(messages.mutuals_only_short), meta: intl.formatMessage(messages.mutuals_only_long) } : undefined,
     { icon: require('@tabler/icons/outline/mail.svg'), value: 'direct', text: intl.formatMessage(messages.direct_short), meta: intl.formatMessage(messages.direct_long) },
-    features.localOnlyStatuses && v.software === PLEROMA ? { icon: require('@tabler/icons/outline/affiliate.svg'), value: 'local', text: intl.formatMessage(messages.local_short), meta: intl.formatMessage(messages.local_long) } : undefined,
+    features.visibilityLocalOnly ? { icon: require('@tabler/icons/outline/affiliate.svg'), value: 'local', text: intl.formatMessage(messages.local_short), meta: intl.formatMessage(messages.local_long) } : undefined,
   ].filter((option): option is Option => !!option);
 
   const onChange = (value: string | null) => value && dispatch(changeComposeVisibility(composeId, value));
@@ -352,7 +352,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
           onClose={handleClose}
           onChange={onChange}
           placement={placement}
-          showFederated={features.localOnlyStatuses && v.software === GOTOSOCIAL}
+          showFederated={features.localOnlyStatuses}
           federated={compose.federated}
           onChangeFederated={onChangeFederated}
         />

@@ -551,9 +551,9 @@ const fetchReactions = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchReactionsRequest(id));
 
-    return getClient(getState).request(`/api/v1/pleroma/statuses/${id}/reactions`).then(response => {
-      dispatch(importFetchedAccounts((response.json as APIEntity[]).map(({ accounts }) => accounts).flat()));
-      dispatch(fetchReactionsSuccess(id, response.json));
+    return getClient(getState).statuses.getStatusReactions(id).then(response => {
+      dispatch(importFetchedAccounts((response).map(({ accounts }) => accounts).flat()));
+      dispatch(fetchReactionsSuccess(id, response));
     }).catch(error => {
       dispatch(fetchReactionsFail(id, error));
     });

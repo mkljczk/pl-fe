@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 
 import { parseVersion, MITRA } from './features';
 
-import type { Instance } from 'soapbox/schemas';
+import type { Instance } from 'pl-api';
 
 /** For solving bugs between API implementations. */
 const getQuirks = createSelector([

@@ -25,7 +25,7 @@ const fetchSuggestions = (limit = 50) =>
     if (client.features.suggestions) {
       dispatch({ type: SUGGESTIONS_FETCH_REQUEST, skipLoading: true });
 
-      return getClient(getState).accounts.getSuggestions(limit).then((suggestions) => {
+      return getClient(getState).myAccount.getSuggestions(limit).then((suggestions) => {
         const accounts = suggestions.map(({ account }) => account);
 
         dispatch(importFetchedAccounts(accounts));
@@ -56,7 +56,7 @@ const dismissSuggestion = (accountId: string) =>
       id: accountId,
     });
 
-    return getClient(getState).accounts.dismissSuggestions(accountId);
+    return getClient(getState).myAccount.dismissSuggestions(accountId);
   };
 
 export {

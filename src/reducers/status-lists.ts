@@ -135,7 +135,7 @@ const maybeAppendScheduledStatus = (state: State, status: APIEntity) => {
 
 const addBookmarkToLists = (state: State, status: APIEntity) => {
   state = prependOneToList(state, 'bookmarks', status);
-  const folderId = status.pleroma.bookmark_folder;
+  const folderId = status.bookmark_folder;
   if (folderId) {
     return prependOneToList(state, `bookmarks:${folderId}`, status);
   }
@@ -144,7 +144,7 @@ const addBookmarkToLists = (state: State, status: APIEntity) => {
 
 const removeBookmarkFromLists = (state: State, status: StatusEntity) => {
   state = removeOneFromList(state, 'bookmarks', status);
-  const folderId = status.pleroma.get('bookmark_folder');
+  const folderId = status.bookmark_folder;
   if (folderId) {
     return removeOneFromList(state, `bookmarks:${folderId}`, status);
   }

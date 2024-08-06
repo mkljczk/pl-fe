@@ -104,7 +104,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleExportClick = () => {
-    dispatch(fetchEventIcs(status.id)).then(({ data }) => {
+    dispatch(fetchEventIcs(status.id)).then((data) => {
       download(data, 'calendar.ics');
     }).catch(() => {});
   };
@@ -152,7 +152,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
   const handleChatClick = () => {
     getOrCreateChatByAccountId(account.id)
-      .then(({ json: chat }) => history.push(`/chats/${chat.id}`))
+      .then((chat) => history.push(`/chats/${chat.id}`))
       .catch(() => {});
   };
 

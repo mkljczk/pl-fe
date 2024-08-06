@@ -33,12 +33,12 @@ const useAccountList = (listKey: string[], entityFn: EntityFn<void>, opts: useAc
 
 const useBlocks = () => {
   const client = useClient();
-  return useAccountList(['blocks'], () => client.request('/api/v1/blocks'));
+  return useAccountList(['blocks'], () => client.filtering.getBlocks());
 };
 
 const useMutes = () => {
   const client = useClient();
-  return useAccountList(['mutes'], () => client.request('/api/v1/mutes'));
+  return useAccountList(['mutes'], () => client.filtering.getMutes());
 };
 
 const useFollowing = (accountId: string | undefined) => {
@@ -46,7 +46,7 @@ const useFollowing = (accountId: string | undefined) => {
 
   return useAccountList(
     [accountId!, 'following'],
-    () => client.request(`/api/v1/accounts/${accountId}/following`),
+    () => client.accounts.getAccountFollowing(accountId),
     { enabled: !!accountId },
   );
 };
@@ -56,7 +56,7 @@ const useFollowers = (accountId: string | undefined) => {
 
   return useAccountList(
     [accountId!, 'followers'],
-    () => client.request(`/api/v1/accounts/${accountId}/followers`),
+    () => client.accounts.getAccountFollowers(accountId),
     { enabled: !!accountId },
   );
 };

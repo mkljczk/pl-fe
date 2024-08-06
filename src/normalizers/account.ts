@@ -53,10 +53,10 @@ const AccountRecord = ImmutableRecord({
   verified: false,
 
   // Internal fields
-  admin: false,
+  is_admin: false,
+  is_moderator: false,
   display_name_html: '',
   domain: '',
-  moderator: false,
   note_emojified: '',
   note_plain: '',
   relationship: null as Relationship | null,
@@ -125,16 +125,6 @@ const normalizeEmojis = (entity: ImmutableMap<string, any>) => {
   return entity.set('emojis', emojis);
 };
 
-/** Normalize Pleroma/Fedibird birthday */
-const normalizeBirthday = (account: ImmutableMap<string, any>) => {
-  const birthday = [
-    account.getIn(['pleroma', 'birthday']),
-    account.getIn(['other_settings', 'birthday']),
-  ].find(Boolean);
-
-  return account.set('birthday', birthday);
-};
-
 /** Get Pleroma tags */
 const getTags = (account: ImmutableMap<string, any>): ImmutableList<any> => {
   const tags = account.getIn(['pleroma', 'tags']);
@@ -155,14 +145,6 @@ const normalizeDonor = (account: ImmutableMap<string, any>) => {
   const updated = tags.includes('donor') ? tags.push('badge:donor') : tags;
   return account.setIn(['pleroma', 'tags'], updated);
 };
-
-/** Normalize Fedibird/Pleroma location */
-const normalizeLocation = (account: ImmutableMap<string, any>) =>
-  account.update('location', location => [
-    location,
-    account.getIn(['pleroma', 'location']),
-    account.getIn(['other_settings', 'location']),
-  ].find(Boolean));
 
 /** Set username from acct, if applicable */
 const fixUsername = (account: ImmutableMap<string, any>) => {
@@ -227,36 +209,21 @@ const normalizeFqn = (account: ImmutableMap<string, any>) => {
   return account.set('fqn', fqn);
 };
 
-const normalizeFavicon = (account: ImmutableMap<string, any>) => {
-  const favicon = account.getIn(['pleroma', 'favicon']) || '';
-  return account.set('favicon', favicon);
-};
-
 const addDomain = (account: ImmutableMap<string, any>) => {
   const domain = account.get('fqn', '').split('@')[1] || '';
   return account.set('domain', domain);
 };
 
 const addStaffFields = (account: ImmutableMap<string, any>) => {
-  const admin = account.getIn(['pleroma', 'is_admin']) === true;
-  const moderator = account.getIn(['pleroma', 'is_moderator']) === true;
-  const staff = admin || moderator;
+  const staff = account.get('is_admin') || account.get('is_moderator');
 
-  return account.merge({
-    admin,
-    moderator,
-    staff,
-  });
+  return account.merge({ staff });
 };
 
 const normalizeDiscoverable = (account: ImmutableMap<string, any>) => {
   const discoverable = Boolean(account.get('discoverable') || account.getIn(['source', 'pleroma', 'discoverable']));
   return account.set('discoverable', discoverable);
 };
-
-/** Normalize message acceptance. */
-const normalizeMessageAcceptance = (account: ImmutableMap<string, any>) =>
-  account.set('accepts_chat_messages', account.getIn(['pleroma', 'accepts_chat_messages']));
 
 /** Normalize undefined/null birthday to empty string. */
 const fixBirthday = (account: ImmutableMap<string, any>) => {
@@ -282,12 +249,8 @@ const normalizeAccount = (account: Record<string, any>) => AccountRecord(
     normalizeFields(account);
     normalizeVerified(account);
     normalizeDonor(account);
-    normalizeBirthday(account);
-    normalizeLocation(account);
     normalizeFqn(account);
-    normalizeFavicon(account);
     normalizeDiscoverable(account);
-    normalizeMessageAcceptance(account);
     addDomain(account);
     addStaffFields(account);
     fixUsername(account);

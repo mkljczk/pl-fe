@@ -9,7 +9,7 @@ const useGroupMembers = (groupId: string, role: GroupRoles) => {
 
   const { entities, ...result } = useEntities<GroupMember>(
     [Entities.GROUP_MEMBERSHIPS, groupId, role],
-    () => client.request(`/api/v1/groups/${groupId}/memberships?role=${role}`),
+    () => client.experimental.groups.getGroupMemberships(groupId, role),
     { schema: groupMemberSchema },
   );
 

@@ -49,12 +49,12 @@ const icons: Record<NotificationType, string> = {
   status: require('@tabler/icons/outline/bell-ringing.svg'),
   poll: require('@tabler/icons/outline/chart-bar.svg'),
   move: require('@tabler/icons/outline/briefcase.svg'),
-  'pleroma:chat_mention': require('@tabler/icons/outline/messages.svg'),
-  'pleroma:emoji_reaction': require('@tabler/icons/outline/mood-happy.svg'),
+  chat_mention: require('@tabler/icons/outline/messages.svg'),
+  emoji_reaction: require('@tabler/icons/outline/mood-happy.svg'),
   update: require('@tabler/icons/outline/pencil.svg'),
-  'pleroma:event_reminder': require('@tabler/icons/outline/calendar-time.svg'),
-  'pleroma:participation_request': require('@tabler/icons/outline/calendar-event.svg'),
-  'pleroma:participation_accepted': require('@tabler/icons/outline/calendar-event.svg'),
+  event_reminder: require('@tabler/icons/outline/calendar-time.svg'),
+  participation_request: require('@tabler/icons/outline/calendar-event.svg'),
+  participation_accepted: require('@tabler/icons/outline/calendar-event.svg'),
 };
 
 const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
@@ -90,11 +90,11 @@ const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
     id: 'notification.move',
     defaultMessage: '{name} moved to {targetName}',
   },
-  'pleroma:chat_mention': {
+  chat_mention: {
     id: 'notification.pleroma:chat_mention',
     defaultMessage: '{name} sent you a message',
   },
-  'pleroma:emoji_reaction': {
+  emoji_reaction: {
     id: 'notification.pleroma:emoji_reaction',
     defaultMessage: '{name} reacted to your post',
   },
@@ -102,15 +102,15 @@ const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
     id: 'notification.update',
     defaultMessage: '{name} edited a post you interacted with',
   },
-  'pleroma:event_reminder': {
+  event_reminder: {
     id: 'notification.pleroma:event_reminder',
     defaultMessage: 'An event you are participating in starts soon',
   },
-  'pleroma:participation_request': {
+  participation_request: {
     id: 'notification.pleroma:participation_request',
     defaultMessage: '{name} wants to join your event',
   },
-  'pleroma:participation_accepted': {
+  participation_accepted: {
     id: 'notification.pleroma:participation_accepted',
     defaultMessage: 'You were accepted to join the event',
   },
@@ -257,7 +257,7 @@ const Notification: React.FC<INotification> = (props) => {
   };
 
   const renderIcon = (): React.ReactNode => {
-    if (type === 'pleroma:emoji_reaction' && notification.emoji) {
+    if (type === 'emoji_reaction' && notification.emoji) {
       return (
         <Emoji
           emoji={notification.emoji}
@@ -305,10 +305,10 @@ const Notification: React.FC<INotification> = (props) => {
       case 'status':
       case 'poll':
       case 'update':
-      case 'pleroma:emoji_reaction':
-      case 'pleroma:event_reminder':
-      case 'pleroma:participation_accepted':
-      case 'pleroma:participation_request':
+      case 'emoji_reaction':
+      case 'event_reminder':
+      case 'participation_accepted':
+      case 'participation_request':
         return status && typeof status === 'object' ? (
           <StatusContainer
             id={status.id}

@@ -2,7 +2,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { openModal } from 'soapbox/actions/modals';
-import { useCancelMembershipRequest, useJoinGroup, useLeaveGroup } from 'soapbox/api/hooks';
+import { useJoinGroup, useLeaveGroup } from 'soapbox/api/hooks';
 import { Button } from 'soapbox/components/ui';
 import { importEntities } from 'soapbox/entity-store/actions';
 import { Entities } from 'soapbox/entity-store/entities';
@@ -31,7 +31,6 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
 
   const joinGroup = useJoinGroup(group);
   const leaveGroup = useLeaveGroup(group);
-  const cancelRequest = useCancelMembershipRequest(group);
 
   const isRequested = group.relationship?.requested;
   const isNonMember = !group.relationship?.member && !isRequested;
@@ -69,7 +68,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
       }),
     }));
 
-  const onCancelRequest = () => cancelRequest.mutate({}, {
+  const onCancelRequest = () => leaveGroup.mutate(group.relationship?.id as string, {
     onSuccess() {
       const entity = {
         ...group.relationship as GroupRelationship,
@@ -109,7 +108,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
       <Button
         theme='secondary'
         onClick={onCancelRequest}
-        disabled={cancelRequest.isSubmitting}
+        disabled={leaveGroup.isSubmitting}
       >
         <FormattedMessage id='group.cancel_request' defaultMessage='Cancel request' />
       </Button>

@@ -10,6 +10,7 @@ import { openModal } from './modals';
 import { getSettings } from './settings';
 import { deleteFromTimelines } from './timelines';
 
+import type { CreateStatusParams } from 'pl-api';
 import type { IntlShape } from 'react-intl';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity, Status } from 'soapbox/types/entities';
@@ -57,42 +58,42 @@ const STATUS_LANGUAGE_CHANGE = 'STATUS_LANGUAGE_CHANGE';
 const statusExists = (getState: () => RootState, statusId: string) =>
   (getState().statuses.get(statusId) || null) !== null;
 
-const createStatus = (params: Record<string, any>, idempotencyKey: string, statusId: string | null) =>
+const createStatus = (params: CreateStatusParams, idempotencyKey: string, statusId: string | null) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: STATUS_CREATE_REQUEST, params, idempotencyKey, editing: !!statusId });
 
     return (statusId === null ? getClient(getState()).statuses.createStatus(params) : getClient(getState()).statuses.editStatus(statusId, params))
       .then((status) => {
       // The backend might still be processing the rich media attachment
-      if (!status.card && shouldHaveCard(status)) {
-        status.expectsCard = true;
-      }
+        if (!status.card && shouldHaveCard(status)) {
+          status.expectsCard = true;
+        }
 
-      dispatch(importFetchedStatus(status, idempotencyKey));
-      dispatch({ type: STATUS_CREATE_SUCCESS, status, params, idempotencyKey, editing: !!statusId });
+        dispatch(importFetchedStatus(status, idempotencyKey));
+        dispatch({ type: STATUS_CREATE_SUCCESS, status, params, idempotencyKey, editing: !!statusId });
 
-      // Poll the backend for the updated card
-      if (status.expectsCard) {
-        const delay = 1000;
+        // Poll the backend for the updated card
+        if (status.expectsCard) {
+          const delay = 1000;
 
-        const poll = (retries = 5) => {
-          return getClient(getState()).statuses.getStatus(status.id).then(response => {
-            if (response.card) {
-              dispatch(importFetchedStatus(response));
-            } else if (retries > 0 && response) {
-              setTimeout(() => poll(retries - 1), delay);
-            }
-          }).catch(console.error);
-        };
+          const poll = (retries = 5) => {
+            return getClient(getState()).statuses.getStatus(status.id).then(response => {
+              if (response.card) {
+                dispatch(importFetchedStatus(response));
+              } else if (retries > 0 && response) {
+                setTimeout(() => poll(retries - 1), delay);
+              }
+            }).catch(console.error);
+          };
 
-        setTimeout(() => poll(), delay);
-      }
+          setTimeout(() => poll(), delay);
+        }
 
-      return status;
-    }).catch(error => {
-      dispatch({ type: STATUS_CREATE_FAIL, error, params, idempotencyKey, editing: !!statusId });
-      throw error;
-    });
+        return status;
+      }).catch(error => {
+        dispatch({ type: STATUS_CREATE_FAIL, error, params, idempotencyKey, editing: !!statusId });
+        throw error;
+      });
   };
 
 const editStatus = (id: string) => (dispatch: AppDispatch, getState: () => RootState) => {
@@ -146,14 +147,14 @@ const deleteStatus = (id: string, withRedraft = false) =>
     dispatch({ type: STATUS_DELETE_REQUEST, params: status });
 
     return getClient(getState()).statuses.deleteStatus(id).then(response => {
-        dispatch({ type: STATUS_DELETE_SUCCESS, id });
-        dispatch(deleteFromTimelines(id));
+      dispatch({ type: STATUS_DELETE_SUCCESS, id });
+      dispatch(deleteFromTimelines(id));
 
-        if (withRedraft) {
-          dispatch(setComposeToStatus(status, response.text || '', response.spoiler_text, response.pleroma?.content_type, withRedraft));
-          dispatch(openModal('COMPOSE'));
-        }
-      })
+      if (withRedraft) {
+        dispatch(setComposeToStatus(status, response.text || '', response.spoiler_text, response.content_type, withRedraft));
+        dispatch(openModal('COMPOSE'));
+      }
+    })
       .catch(error => {
         dispatch({ type: STATUS_DELETE_FAIL, params: status, error });
       });

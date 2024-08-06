@@ -23,7 +23,7 @@ interface UseBatchedEntitiesOpts<TEntity extends Entity> {
 const useBatchedEntities = <TEntity extends Entity>(
   expandedPath: ExpandedEntitiesPath,
   ids: string[],
-  entityFn: EntityFn<string[]>,
+  entityFn: EntityFn<TEntity[]>,
   opts: UseBatchedEntitiesOpts<TEntity> = {},
 ) => {
   const getState = useGetState();
@@ -54,10 +54,10 @@ const useBatchedEntities = <TEntity extends Entity>(
     dispatch(entitiesFetchRequest(entityType, listKey));
     try {
       const response = await entityFn(filteredIds);
-      const entities = filteredArray(schema).parse(response.json);
+      const entities = filteredArray(schema).parse(response);
       dispatch(entitiesFetchSuccess(entities, entityType, listKey, 'end', {
-        next: undefined,
-        prev: undefined,
+        next: null,
+        prev: null,
         totalCount: undefined,
         fetching: false,
         fetched: true,

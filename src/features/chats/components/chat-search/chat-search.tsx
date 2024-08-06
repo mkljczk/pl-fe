@@ -52,9 +52,9 @@ const ChatSearch = (props: IChatSearch) => {
     },
     onSuccess: (response) => {
       if (isMainPage) {
-        history.push(`/chats/${response.json.id}`);
+        history.push(`/chats/${response.id}`);
       } else {
-        changeScreen(ChatWidgetScreens.CHAT, response.json.id);
+        changeScreen(ChatWidgetScreens.CHAT, response.id);
       }
 
       queryClient.invalidateQueries({ queryKey: ['chats', 'search'] });

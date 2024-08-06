@@ -129,7 +129,6 @@ const expandSearch = (type: SearchFilter) => (dispatch: AppDispatch, getState: (
   if (accountId) params.account_id = accountId;
 
   return getClient(getState()).search.search(value, params).then(response => {
-
     if (response.accounts) {
       dispatch(importFetchedAccounts(response.accounts));
     }

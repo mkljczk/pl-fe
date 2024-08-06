@@ -13,7 +13,7 @@ import {
 } from './importer';
 
 import type { Map as ImmutableMap } from 'immutable';
-import type { Account, PaginatedResponse } from 'pl-api';
+import type { Account, CreateAccountParams, PaginatedResponse } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity, Status } from 'soapbox/types/entities';
 import type { History } from 'soapbox/types/history';
@@ -119,10 +119,10 @@ const maybeRedirectLogin = (error: { response: PlfeResponse }, history?: History
 
 const noOp = () => new Promise(f => f(undefined));
 
-const createAccount = (params: Record<string, any>) =>
+const createAccount = (params: CreateAccountParams) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: ACCOUNT_CREATE_REQUEST, params });
-    return getClient(getState()).accounts.createAccount(params).then((token) =>
+    return getClient(getState()).settings.createAccount(params).then((token) =>
       dispatch({ type: ACCOUNT_CREATE_SUCCESS, params, token }),
     ).catch(error => {
       dispatch({ type: ACCOUNT_CREATE_FAIL, error, params });
@@ -215,7 +215,7 @@ const blockAccount = (id: string) =>
 
     dispatch(blockAccountRequest(id));
 
-    return getClient(getState()).accounts.blockAccount(id)
+    return getClient(getState()).filtering.blockAccount(id)
       .then(response => {
         dispatch(importEntities([response], Entities.RELATIONSHIPS));
         // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
@@ -229,7 +229,7 @@ const unblockAccount = (id: string) =>
 
     dispatch(unblockAccountRequest(id));
 
-    return getClient(getState()).accounts.unblockAccount(id)
+    return getClient(getState()).filtering.unblockAccount(id)
       .then(response => {
         dispatch(importEntities([response], Entities.RELATIONSHIPS));
         return dispatch(unblockAccountSuccess(response));
@@ -291,7 +291,7 @@ const muteAccount = (id: string, notifications?: boolean, duration = 0) =>
       }
     }
 
-    return client.accounts.muteAccount(id, params)
+    return client.filtering.muteAccount(id, params)
       .then(response => {
         dispatch(importEntities([response], Entities.RELATIONSHIPS));
         // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
@@ -306,7 +306,7 @@ const unmuteAccount = (id: string) =>
 
     dispatch(unmuteAccountRequest(id));
 
-    return getClient(getState()).accounts.unmuteAccount(id)
+    return getClient(getState()).filtering.unmuteAccount(id)
       .then(response => {
         dispatch(importEntities([response], Entities.RELATIONSHIPS));
         return dispatch(unmuteAccountSuccess(response));
@@ -558,7 +558,7 @@ const fetchFollowRequests = () =>
 
     dispatch(fetchFollowRequestsRequest());
 
-    return getClient(getState()).accounts.getFollowRequests()
+    return getClient(getState()).myAccount.getFollowRequests()
       .then(response => {
         dispatch(importFetchedAccounts(response.items));
         dispatch(fetchFollowRequestsSuccess(response.items, response.next));
@@ -618,7 +618,7 @@ const authorizeFollowRequest = (id: string) =>
 
     dispatch(authorizeFollowRequestRequest(id));
 
-    return getClient(getState()).accounts.acceptFollowRequest(id)
+    return getClient(getState()).myAccount.acceptFollowRequest(id)
       .then(() => dispatch(authorizeFollowRequestSuccess(id)))
       .catch(error => dispatch(authorizeFollowRequestFail(id, error)));
   };
@@ -645,7 +645,7 @@ const rejectFollowRequest = (id: string) =>
 
     dispatch(rejectFollowRequestRequest(id));
 
-    return getClient(getState()).accounts.rejectFollowRequest(id)
+    return getClient(getState()).myAccount.rejectFollowRequest(id)
       .then(() => dispatch(rejectFollowRequestSuccess(id)))
       .catch(error => dispatch(rejectFollowRequestFail(id, error)));
   };
@@ -740,9 +740,9 @@ const fetchPinnedAccounts = (id: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchPinnedAccountsRequest(id));
 
-    return getClient(getState).request(`/api/v1/pleroma/accounts/${id}/endorsements`).then(response => {
-      dispatch(importFetchedAccounts(response.json));
-      dispatch(fetchPinnedAccountsSuccess(id, response.json, null));
+    return getClient(getState).accounts.getAccountEndorsements(id).then(response => {
+      dispatch(importFetchedAccounts(response));
+      dispatch(fetchPinnedAccountsSuccess(id, response, null));
     }).catch(error => {
       dispatch(fetchPinnedAccountsFail(id, error));
     });
@@ -801,16 +801,16 @@ const fetchBirthdayReminders = (month: number, day: number) =>
 
     dispatch({ type: BIRTHDAY_REMINDERS_FETCH_REQUEST, day, month, id: me });
 
-    return getClient(getState).request('/api/v1/pleroma/birthdays', { params: { day, month } }).then(response => {
-      dispatch(importFetchedAccounts(response.json));
+    return getClient(getState).accounts.getBirthdays(day, month).then(response => {
+      dispatch(importFetchedAccounts(response));
       dispatch({
         type: BIRTHDAY_REMINDERS_FETCH_SUCCESS,
-        accounts: response.json,
+        accounts: response,
         day,
         month,
         id: me,
       });
-    }).catch(error => {
+    }).catch(() => {
       dispatch({ type: BIRTHDAY_REMINDERS_FETCH_FAIL, day, month, id: me });
     });
   };

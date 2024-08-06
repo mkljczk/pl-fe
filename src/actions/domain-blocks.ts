@@ -1,7 +1,7 @@
 import { Entities } from 'soapbox/entity-store/entities';
 import { isLoggedIn } from 'soapbox/utils/auth';
 
-import { getClient, getNextLink } from '../api';
+import { getClient } from '../api';
 
 import type { PaginatedResponse } from 'pl-api';
 import type { EntityStore } from 'soapbox/entity-store/types';

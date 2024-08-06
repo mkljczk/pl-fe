@@ -21,7 +21,7 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
 
   const { entity, isUnauthorized, ...result } = useEntity<Account>(
     [Entities.ACCOUNTS, accountId!],
-    () => client.request(`/api/v1/accounts/${accountId}`),
+    () => client.accounts.getAccount(accountId!),
     { schema: accountSchema, enabled: !!accountId },
   );
 

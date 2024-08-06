@@ -100,7 +100,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       toast.error(data?.error);
     },
     onSuccess: (response) => {
-      history.push(`/chats/${response.json.id}`);
+      history.push(`/chats/${response.id}`);
       queryClient.invalidateQueries({
         queryKey: ['chats', 'search'],
       });

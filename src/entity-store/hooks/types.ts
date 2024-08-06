@@ -35,7 +35,7 @@ interface EntityCallbacks<Value, Error = unknown> {
  * Passed into hooks to make requests.
  * Must return a response.
  */
-type EntityFn<T> = (value: T) => Promise<PlApiResponse>
+type EntityFn<T> = (value: T) => Promise<T>
 
 export type {
   EntitySchema,

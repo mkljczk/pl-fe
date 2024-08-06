@@ -26,7 +26,7 @@ const updateMedia = (mediaId: string, params: Record<string, any>) =>
 
 const uploadMedia = (body: UploadMediaParams, onUploadProgress: (e: ProgressEvent) => void = noOp) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState()).media.uploadMedia(body, onUploadProgress);
+    getClient(getState()).media.uploadMedia(body, { onUploadProgress });
 
 const uploadFile = (
   file: File,

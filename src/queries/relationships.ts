@@ -9,12 +9,10 @@ const useFetchRelationships = () => {
 
   return useMutation({
     mutationFn: ({ accountIds }: { accountIds: string[]}) => {
-      const ids = accountIds.map((id) => `id[]=${id}`).join('&');
-
-      return client.request(`/api/v1/accounts/relationships?${ids}`);
+      return client.accounts.getRelationships(accountIds);
     },
     onSuccess(response) {
-      dispatch(fetchRelationshipsSuccess(response.json));
+      dispatch(fetchRelationshipsSuccess(response));
     },
     onError(error) {
       dispatch(fetchRelationshipsFail(error));

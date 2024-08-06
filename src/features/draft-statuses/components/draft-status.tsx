@@ -35,7 +35,7 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
   let quote;
 
   if (status.quote) {
-    if (status.pleroma.get('quote_visible', true) === false) {
+    if ((status.quote_visible ?? true) === false) {
       quote = (
         <div className='quoted-status-tombstone'>
           <p><FormattedMessage id='statuses.quote_tombstone' defaultMessage='Post is unavailable.' /></p>

@@ -1,13 +1,11 @@
 import { useEffect } from 'react';
 import z from 'zod';
 
-import { getNextLink, getPrevLink } from 'soapbox/api';
 import { useClient } from 'soapbox/hooks';
 import { useAppDispatch } from 'soapbox/hooks/useAppDispatch';
 import { useAppSelector } from 'soapbox/hooks/useAppSelector';
 import { useGetState } from 'soapbox/hooks/useGetState';
 import { filteredArray } from 'soapbox/schemas/utils';
-import { realNumberSchema } from 'soapbox/utils/numbers';
 
 import { entitiesFetchFail, entitiesFetchRequest, entitiesFetchSuccess, invalidateEntityList } from '../actions';
 import { selectEntities, selectListState, useListState } from '../selectors';
@@ -16,6 +14,7 @@ import { parseEntitiesPath } from './utils';
 
 import type { EntityFn, EntitySchema, ExpandedEntitiesPath } from './types';
 import type { Entity } from '../types';
+import type { PaginatedResponse } from 'pl-api';
 
 /** Additional options for the hook. */
 interface UseEntitiesOpts<TEntity extends Entity> {
@@ -58,7 +57,7 @@ const useEntities = <TEntity extends Entity>(
   const next = useListState(path, 'next');
   const prev = useListState(path, 'prev');
 
-  const fetchPage = async(req: EntityFn<void>, pos: 'start' | 'end', overwrite = false): Promise<void> => {
+  const fetchPage = async(req: () => Promise<PaginatedResponse<any>>, pos: 'start' | 'end', overwrite = false): Promise<void> => {
     // Get `isFetching` state from the store again to prevent race conditions.
     const isFetching = selectListState(getState(), path, 'fetching');
     if (isFetching) return;
@@ -66,14 +65,12 @@ const useEntities = <TEntity extends Entity>(
     dispatch(entitiesFetchRequest(entityType, listKey));
     try {
       const response = await req();
-      const entities = filteredArray(schema).parse(response.json);
-      const parsedCount = realNumberSchema.safeParse(response.headers.get('x-total-count'));
-      const totalCount = parsedCount.success ? parsedCount.data : undefined;
+      const entities = filteredArray(schema).parse(response);
 
       dispatch(entitiesFetchSuccess(entities, entityType, listKey, pos, {
-        next: getNextLink(response),
-        prev: getPrevLink(response),
-        totalCount: Number(totalCount) >= entities.length ? totalCount : undefined,
+        next: response.next,
+        prev: response.previous,
+        totalCount: undefined,
         fetching: false,
         fetched: true,
         error: null,
@@ -91,13 +88,13 @@ const useEntities = <TEntity extends Entity>(
 
   const fetchNextPage = async(): Promise<void> => {
     if (next) {
-      await fetchPage(() => client.request(next), 'end');
+      await fetchPage(() => next(), 'end');
     }
   };
 
   const fetchPreviousPage = async(): Promise<void> => {
     if (prev) {
-      await fetchPage(() => client.request(prev), 'start');
+      await fetchPage(() => prev(), 'start');
     }
   };
 

@@ -8,17 +8,17 @@ const NOTIFICATION_TYPES = [
   'poll',
   'status',
   'move',
-  'pleroma:chat_mention',
-  'pleroma:emoji_reaction',
+  'chat_mention',
+  'emoji_reaction',
   'update',
-  'pleroma:event_reminder',
-  'pleroma:participation_request',
-  'pleroma:participation_accepted',
+  'event_reminder',
+  'participation_request',
+  'participation_accepted',
 ] as const;
 
 /** Notification types to exclude from the "All" filter by default. */
 const EXCLUDE_TYPES = [
-  'pleroma:chat_mention',
+  'chat_mention',
 ] as const;
 
 type NotificationType = typeof NOTIFICATION_TYPES[number];
