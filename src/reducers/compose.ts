@@ -69,6 +69,7 @@ import { TIMELINE_DELETE, TimelineAction } from '../actions/timelines';
 import { normalizeAttachment } from '../normalizers/attachment';
 import { unescapeHTML } from '../utils/html';
 
+import type { Tag } from 'pl-api';
 import type { Emoji } from 'soapbox/features/emoji';
 import type { Language } from 'soapbox/features/preferences';
 import type {
@@ -76,7 +77,6 @@ import type {
   Attachment as AttachmentEntity,
   Status,
   Status as StatusEntity,
-  Tag,
 } from 'soapbox/types/entities';
 
 const getResetFileKey = () => Math.floor((Math.random() * 0x10000));
@@ -202,12 +202,12 @@ const insertSuggestion = (compose: Compose, position: number, token: string | nu
     map.set('idempotencyKey', uuid());
   });
 
-const updateSuggestionTags = (compose: Compose, token: string, tags: ImmutableList<Tag>) => {
+const updateSuggestionTags = (compose: Compose, token: string, tags: Tag[]) => {
   const prefix = token.slice(1);
 
   return compose.merge({
     suggestions: ImmutableList(tags
-      .filter((tag) => tag.get('name').toLowerCase().startsWith(prefix.toLowerCase()))
+      .filter((tag) => tag.name.toLowerCase().startsWith(prefix.toLowerCase()))
       .slice(0, 4)
       .map((tag) => '#' + tag.name)),
     suggestion_token: token,

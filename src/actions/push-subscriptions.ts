@@ -23,11 +23,11 @@ const createPushSubscription = (params: CreatePushNotificationsSubscriptionParam
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: PUSH_SUBSCRIPTION_CREATE_REQUEST, params });
     return getClient(getState).pushNotifications.createSubscription(params)
-    .then((subscription) =>
-      dispatch({ type: PUSH_SUBSCRIPTION_CREATE_SUCCESS, params, subscription }),
-    ).catch(error =>
-      dispatch({ type: PUSH_SUBSCRIPTION_CREATE_FAIL, params, error }),
-    );
+      .then((subscription) =>
+        dispatch({ type: PUSH_SUBSCRIPTION_CREATE_SUCCESS, params, subscription }),
+      ).catch(error =>
+        dispatch({ type: PUSH_SUBSCRIPTION_CREATE_FAIL, params, error }),
+      );
   };
 
 const fetchPushSubscription = () =>

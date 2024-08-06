@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useClient } from 'soapbox/hooks';
 
+import { useClient } from 'soapbox/hooks';
 import { moderationLogEntrySchema, type ModerationLogEntry } from 'soapbox/schemas';
 
 interface ModerationLogResult {

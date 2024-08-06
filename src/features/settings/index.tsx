@@ -148,13 +148,13 @@ const Settings = () => {
                   <ListItem label={intl.formatMessage(messages.exportData)} to='/settings/export' />
                 )}
 
-                {features.backups && (
+                {features.accountBackups && (
                   <ListItem label={intl.formatMessage(messages.backups)} to='/settings/backups' />
                 )}
 
                 {features.federating && (features.accountMoving ? (
                   <ListItem label={intl.formatMessage(messages.accountMigration)} to='/settings/migration' />
-                ) : features.accountAliases && (
+                ) : features.manageAccountAliases && (
                   <ListItem label={intl.formatMessage(messages.accountAliases)} to='/settings/aliases' />
                 ))}
 

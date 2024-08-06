@@ -2,7 +2,6 @@ import { defineMessages, type IntlShape } from 'react-intl';
 
 import toast from 'soapbox/toast';
 import { isLoggedIn } from 'soapbox/utils/auth';
-import { getFeatures } from 'soapbox/utils/features';
 import { formatBytes, getVideoDuration } from 'soapbox/utils/media';
 import resizeImage from 'soapbox/utils/resize-image';
 

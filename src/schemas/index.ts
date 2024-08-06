@@ -1,5 +1,3 @@
-import { notificationSchema } from 'pl-api';
-
 export { accountSchema, type Account } from './account';
 export { announcementSchema, adminAnnouncementSchema, type Announcement, type AdminAnnouncement } from './announcement';
 export { announcementReactionSchema, type AnnouncementReaction } from './announcement-reaction';

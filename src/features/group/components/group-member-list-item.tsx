@@ -80,7 +80,7 @@ const GroupMemberListItem = (props: IGroupMemberListItem) => {
       message: intl.formatMessage(messages.blockFromGroupMessage, { name: account?.username }),
       confirm: intl.formatMessage(messages.blockConfirm),
       onConfirm: () => {
-        blockGroupMember({ account_ids: [member.account.id] }, {
+        blockGroupMember([member.account.id], {
           onSuccess() {
             dispatch(deleteEntities([member.id], Entities.GROUP_MEMBERSHIPS));
             toast.success(intl.formatMessage(messages.blocked, { name: account?.acct }));
@@ -97,7 +97,7 @@ const GroupMemberListItem = (props: IGroupMemberListItem) => {
       confirm: intl.formatMessage(messages.promoteConfirm),
       confirmationTheme: 'primary',
       onConfirm: () => {
-        promoteGroupMember({ role: GroupRoles.ADMIN, account_ids: [account?.id] }, {
+        promoteGroupMember({ role: GroupRoles.ADMIN, account_ids: [member.account.id] }, {
           onSuccess() {
             toast.success(
               intl.formatMessage(messages.promotedToAdmin, { name: account?.acct }),
@@ -109,7 +109,7 @@ const GroupMemberListItem = (props: IGroupMemberListItem) => {
   };
 
   const handleUserAssignment = () => {
-    demoteGroupMember({ role: GroupRoles.USER, account_ids: [account?.id] }, {
+    demoteGroupMember({ role: GroupRoles.USER, account_ids: [member.account.id] }, {
       onSuccess() {
         toast.success(intl.formatMessage(messages.demotedToUser, { name: account?.acct }));
       },

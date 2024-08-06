@@ -215,12 +215,12 @@ const submitEvent = () =>
     const params: CreateEventParams = {
       name,
       status,
-      start_time: startTime,
+      start_time: startTime.toISOString(),
       join_mode: joinMode,
       content_type: 'text/markdown',
     };
 
-    if (endTime) params.end_time = endTime;
+    if (endTime) params.end_time = endTime?.toISOString();
     if (banner) params.banner_id = banner.id;
     if (location) params.location_id = location.origin_id;
 

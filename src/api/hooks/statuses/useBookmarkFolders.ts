@@ -1,6 +1,6 @@
-import { useClient } from 'soapbox/hooks';
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntities } from 'soapbox/entity-store/hooks';
+import { useClient } from 'soapbox/hooks';
 import { useFeatures } from 'soapbox/hooks/useFeatures';
 import { bookmarkFolderSchema, type BookmarkFolder } from 'soapbox/schemas/bookmark-folder';
 

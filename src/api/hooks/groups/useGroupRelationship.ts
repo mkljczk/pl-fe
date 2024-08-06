@@ -10,7 +10,7 @@ const useGroupRelationship = (groupId: string | undefined) => {
 
   const { entity: groupRelationship, ...result } = useEntity<GroupRelationship>(
     [Entities.GROUP_RELATIONSHIPS, groupId!],
-    () => client.experimental.groups.getGroupRelationships([groupId]),
+    () => client.experimental.groups.getGroupRelationships([groupId!]),
     {
       enabled: !!groupId,
       schema: z.array(groupRelationshipSchema).nonempty().transform(arr => arr[0]),

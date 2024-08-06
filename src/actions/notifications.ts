@@ -273,8 +273,6 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
     dispatch(expandNotificationsRequest(isLoadingMore));
 
     return getClient(state).notifications.getNotifications(params, { signal: abortExpandNotifications.signal }).then(response => {
-      console.log(response);
-
       const entries = (response.items).reduce((acc, item) => {
         if (item.account?.id) {
           acc.accounts[item.account.id] = item.account;
@@ -301,7 +299,6 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
       fetchRelatedRelationships(dispatch, response.items);
       done();
     }).catch(error => {
-      console.log(error);
       dispatch(expandNotificationsFail(error, isLoadingMore));
       done();
     });

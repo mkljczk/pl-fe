@@ -67,7 +67,7 @@ const submitReport = () =>
       rule_ids: reports.new.rule_ids.toArray(),
       comment: reports.new.comment,
       forward: reports.new.forward,
-    })
+    });
   };
 
 const submitReportRequest = () => ({

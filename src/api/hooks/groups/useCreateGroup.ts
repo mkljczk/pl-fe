@@ -1,5 +1,3 @@
-import { serialize } from 'object-to-formdata';
-
 import { Entities } from 'soapbox/entity-store/entities';
 import { useCreateEntity } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';

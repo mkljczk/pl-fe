@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
+import { useClient } from 'soapbox/hooks';
 import { queryClient } from 'soapbox/queries/client';
 import { adminAnnouncementSchema, type AdminAnnouncement } from 'soapbox/schemas';
 
 import { useAnnouncements as useUserAnnouncements } from '../announcements';
-import { useClient } from 'soapbox/hooks';
 
 interface CreateAnnouncementParams {
   content: string;

@@ -115,11 +115,10 @@ const SoapboxConfig: React.FC = () => {
   };
 
   const handleFileChange = (path: ConfigPath): React.ChangeEventHandler<HTMLInputElement> => e => {
-    const data = new FormData();
     const file = e.target.files?.item(0);
 
     if (file) {
-      dispatch(uploadMedia({ file})).then((data: any) => {
+      dispatch(uploadMedia({ file })).then((data: any) => {
         handleChange(path, () => data.url)(e);
       }).catch(console.error);
     }

@@ -6,8 +6,8 @@ import {
   DOMAIN_UNBLOCK_SUCCESS,
 } from '../actions/domain-blocks';
 
-import type { AnyAction } from 'redux';
 import type { PaginatedResponse } from 'pl-api';
+import type { AnyAction } from 'redux';
 
 const BlocksRecord = ImmutableRecord({
   items: ImmutableOrderedSet<string>(),

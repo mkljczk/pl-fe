@@ -1,12 +1,15 @@
 import { Entities } from 'soapbox/entity-store/entities';
-import { useEntityActions } from 'soapbox/entity-store/hooks';
+import { useCreateEntity } from 'soapbox/entity-store/hooks';
+import { useClient } from 'soapbox/hooks';
 
-import type { Account, Group, GroupMember } from 'soapbox/schemas';
+import type { Account, Group } from 'soapbox/schemas';
 
 const useBlockGroupMember = (group: Group, account: Account) => {
-  const { createEntity } = useEntityActions<GroupMember>(
+  const client = useClient();
+
+  const { createEntity } = useCreateEntity(
     [Entities.GROUP_MEMBERSHIPS, account.id],
-    { post: `/api/v1/groups/${group?.id}/blocks` },
+    (accountIds: string[]) => client.experimental.groups.blockGroupUsers(group.id, accountIds),
   );
 
   return createEntity;

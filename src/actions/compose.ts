@@ -599,7 +599,7 @@ const fetchComposeSuggestionsTags = (dispatch: AppDispatch, getState: () => Root
   const { trends } = getFeatures(instance);
 
   if (trends) {
-    const currentTrends = state.trends.items;
+    const currentTrends = state.trends.items.toArray();
 
     return dispatch(updateSuggestionTags(composeId, token, currentTrends));
   }

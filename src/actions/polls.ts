@@ -28,10 +28,9 @@ const fetchPoll = (pollId: string) =>
     dispatch(fetchPollRequest());
 
     return getClient(getState()).polls.getPoll(pollId).then((data) => {
-        dispatch(importFetchedPoll(data));
-        dispatch(fetchPollSuccess(data));
-      })
-      .catch(err => dispatch(fetchPollFail(err)));
+      dispatch(importFetchedPoll(data));
+      dispatch(fetchPollSuccess(data));
+    }).catch(err => dispatch(fetchPollFail(err)));
   };
 
 const voteRequest = () => ({

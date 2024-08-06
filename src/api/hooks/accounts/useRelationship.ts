@@ -15,7 +15,7 @@ const useRelationship = (accountId: string | undefined, opts: UseRelationshipOpt
 
   const { entity: relationship, ...result } = useEntity<Relationship>(
     [Entities.RELATIONSHIPS, accountId!],
-    () => client.accounts.getRelationships([accountId]),
+    () => client.accounts.getRelationships([accountId!]),
     {
       enabled: enabled && !!accountId,
       schema: z.array(relationshipSchema).nonempty().transform(arr => arr[0]),

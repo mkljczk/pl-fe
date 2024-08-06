@@ -12,6 +12,7 @@ import toast from 'soapbox/toast';
 
 import { SelectDropdown } from '../forms';
 
+import type { FilterContext } from 'pl-api';
 import type { StreamfieldComponent } from 'soapbox/components/ui/streamfield/streamfield';
 
 interface IFilterField {
@@ -116,7 +117,7 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
 
   const handleAddNew: React.FormEventHandler = e => {
     e.preventDefault();
-    const context: Array<string> = [];
+    const context: Array<FilterContext> = [];
 
     if (homeTimeline) {
       context.push('home');

@@ -6,7 +6,7 @@
  * @see module:soapbox/actions/auth
  */
 
-import { PlApiClient } from 'pl-api';
+import { PlApiClient, type CreateApplicationParams } from 'pl-api';
 
 import * as BuildConfig from 'soapbox/build-config';
 
@@ -16,7 +16,7 @@ const APP_CREATE_REQUEST = 'APP_CREATE_REQUEST';
 const APP_CREATE_SUCCESS = 'APP_CREATE_SUCCESS';
 const APP_CREATE_FAIL    = 'APP_CREATE_FAIL';
 
-const createApp = (params?: Record<string, string>, baseURL?: string) =>
+const createApp = (params: CreateApplicationParams, baseURL?: string) =>
   (dispatch: React.Dispatch<AnyAction>) => {
     dispatch({ type: APP_CREATE_REQUEST, params });
 

@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useClient } from 'soapbox/hooks';
 
+import { useClient } from 'soapbox/hooks';
 import { queryClient } from 'soapbox/queries/client';
 import { domainSchema, type Domain } from 'soapbox/schemas';
 

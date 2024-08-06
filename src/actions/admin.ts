@@ -329,7 +329,7 @@ const deleteUsers = (accountIds: string[]) =>
 const approveMastodonUsers = (accountIds: string[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const client = getClient(getState);
-    Promise.all(accountIds.map(accountId => {
+    return Promise.all(accountIds.map(accountId => {
       client.request(`/api/v1/admin/accounts/${accountId}/approve`, { method: 'POST' })
         .then(({ json: user }) => {
           dispatch({ type: ADMIN_USERS_APPROVE_SUCCESS, users: [user], accountIds: [accountId] });
@@ -450,10 +450,10 @@ const addPermission = (accountIds: string[], permissionGroup: string) =>
     return getClient(getState).request(`/api/v1/pleroma/admin/users/permission_group/${permissionGroup}`, {
       method: 'POST', body: { nicknames },
     }).then(({ json: data }) => {
-        dispatch({ type: ADMIN_ADD_PERMISSION_GROUP_SUCCESS, accountIds, permissionGroup, data });
-      }).catch(error => {
-        dispatch({ type: ADMIN_ADD_PERMISSION_GROUP_FAIL, error, accountIds, permissionGroup });
-      });
+      dispatch({ type: ADMIN_ADD_PERMISSION_GROUP_SUCCESS, accountIds, permissionGroup, data });
+    }).catch(error => {
+      dispatch({ type: ADMIN_ADD_PERMISSION_GROUP_FAIL, error, accountIds, permissionGroup });
+    });
   };
 
 const removePermission = (accountIds: string[], permissionGroup: string) =>
@@ -463,10 +463,10 @@ const removePermission = (accountIds: string[], permissionGroup: string) =>
     return getClient(getState).request(`/api/v1/pleroma/admin/users/permission_group/${permissionGroup}`, {
       method: 'DELETE', body: { nicknames },
     }).then(({ json: data }) => {
-        dispatch({ type: ADMIN_REMOVE_PERMISSION_GROUP_SUCCESS, accountIds, permissionGroup, data });
-      }).catch(error => {
-        dispatch({ type: ADMIN_REMOVE_PERMISSION_GROUP_FAIL, error, accountIds, permissionGroup });
-      });
+      dispatch({ type: ADMIN_REMOVE_PERMISSION_GROUP_SUCCESS, accountIds, permissionGroup, data });
+    }).catch(error => {
+      dispatch({ type: ADMIN_REMOVE_PERMISSION_GROUP_FAIL, error, accountIds, permissionGroup });
+    });
   };
 
 const promoteToAdmin = (accountId: string) =>

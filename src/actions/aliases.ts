@@ -2,7 +2,6 @@ import { defineMessages } from 'react-intl';
 
 import toast from 'soapbox/toast';
 import { isLoggedIn } from 'soapbox/utils/auth';
-import { getFeatures } from 'soapbox/utils/features';
 
 import { getClient } from '../api';
 
@@ -86,11 +85,6 @@ const changeAliasesSuggestions = (value: string) => ({
 const addToAliases = (account: Account) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
-    const state = getState();
-
-    const instance = state.instance;
-    const features = getFeatures(instance);
-
     dispatch(addToAliasesRequest());
 
     return getClient(getState).settings.addAccountAlias(account.acct).then(() => {

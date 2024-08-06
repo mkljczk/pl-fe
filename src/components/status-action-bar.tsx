@@ -360,7 +360,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       message: intl.formatMessage(messages.groupBlockFromGroupMessage, { name: status.account.username }),
       confirm: intl.formatMessage(messages.groupBlockConfirm),
       onConfirm: () => {
-        blockGroupMember({ account_ids: [status.account.id] }, {
+        blockGroupMember([status.account.id], {
           onSuccess() {
             toast.success(intl.formatMessage(messages.blocked, { name: account?.acct }));
           },

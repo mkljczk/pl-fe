@@ -1,5 +1,3 @@
-import { serialize } from 'object-to-formdata';
-
 import { selectAccount } from 'soapbox/selectors';
 import { setSentryAccount } from 'soapbox/sentry';
 import KVStore from 'soapbox/storage/kv-store';
@@ -68,11 +66,11 @@ const persistAuthAccount = (account: APIEntity, params: Record<string, any>) => 
   }
 };
 
-const patchMe = (params: Record<string, any>, isFormData = false) =>
+const patchMe = (params: Record<string, any>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(patchMeRequest());
 
-    return getClient(getState()).settings.updateCredentials(params)
+    return getClient(getState).settings.updateCredentials(params)
       .then(response => {
         persistAuthAccount(response, params);
         dispatch(patchMeSuccess(response));

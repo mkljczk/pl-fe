@@ -10,9 +10,8 @@ import { changeComposeFederated, changeComposeVisibility } from 'soapbox/actions
 import { closeModal, openModal } from 'soapbox/actions/modals';
 import Icon from 'soapbox/components/icon';
 import { Button, Toggle } from 'soapbox/components/ui';
-import { useAppDispatch, useCompose, useFeatures, useInstance } from 'soapbox/hooks';
+import { useAppDispatch, useCompose, useFeatures } from 'soapbox/hooks';
 import { userTouching } from 'soapbox/is-mobile';
-import { GOTOSOCIAL, parseVersion, PLEROMA } from 'soapbox/utils/features';
 
 import Motion from '../../ui/util/optional-motion';
 
@@ -226,10 +225,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   const intl = useIntl();
   const node = useRef<HTMLDivElement>(null);
   const activeElement = useRef<HTMLElement | null>(null);
-  const instance = useInstance();
   const features = useFeatures();
-
-  const v = parseVersion(instance.version);
 
   const compose = useCompose(composeId);
 
@@ -243,7 +239,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
     { icon: require('@tabler/icons/outline/world.svg'), value: 'public', text: intl.formatMessage(messages.public_short), meta: intl.formatMessage(messages.public_long) },
     { icon: require('@tabler/icons/outline/lock-open.svg'), value: 'unlisted', text: intl.formatMessage(messages.unlisted_short), meta: intl.formatMessage(messages.unlisted_long) },
     { icon: require('@tabler/icons/outline/lock.svg'), value: 'private', text: intl.formatMessage(messages.private_short), meta: intl.formatMessage(messages.private_long) },
-    features.mutualsOnlyStatuses ? { icon: require('@tabler/icons/outline/users-group.svg'), value: 'mutuals_only', text: intl.formatMessage(messages.mutuals_only_short), meta: intl.formatMessage(messages.mutuals_only_long) } : undefined,
+    features.visibilityMutualsOnly ? { icon: require('@tabler/icons/outline/users-group.svg'), value: 'mutuals_only', text: intl.formatMessage(messages.mutuals_only_short), meta: intl.formatMessage(messages.mutuals_only_long) } : undefined,
     { icon: require('@tabler/icons/outline/mail.svg'), value: 'direct', text: intl.formatMessage(messages.direct_short), meta: intl.formatMessage(messages.direct_long) },
     features.visibilityLocalOnly ? { icon: require('@tabler/icons/outline/affiliate.svg'), value: 'local', text: intl.formatMessage(messages.local_short), meta: intl.formatMessage(messages.local_long) } : undefined,
   ].filter((option): option is Option => !!option);

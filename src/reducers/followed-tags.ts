@@ -12,7 +12,7 @@ import { normalizeTag } from 'soapbox/normalizers';
 
 import type { PaginatedResponse, Tag } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { APIEntity,  } from 'soapbox/types/entities';
+import type { APIEntity  } from 'soapbox/types/entities';
 
 const ReducerRecord = ImmutableRecord({
   items: ImmutableList<Tag>(),

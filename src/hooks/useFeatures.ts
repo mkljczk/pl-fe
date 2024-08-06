@@ -1,4 +1,4 @@
-import { getFeatures, Features } from 'soapbox/utils/features';
+import { getFeatures, Features } from 'pl-api';
 
 import { useInstance } from './useInstance';
 

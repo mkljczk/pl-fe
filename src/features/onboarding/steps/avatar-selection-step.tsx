@@ -46,7 +46,7 @@ const AvatarSelectionStep = ({ onNext }: { onNext: () => void }) => {
       formData.append('avatar', rawFile);
       const credentials = dispatch(patchMe(formData));
 
-      Promise.all([credentials]).then(() => {
+      return Promise.all([credentials]).then(() => {
         setDisabled(false);
         setSubmitting(false);
         onNext();

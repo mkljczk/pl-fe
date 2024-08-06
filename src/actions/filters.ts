@@ -5,6 +5,7 @@ import { isLoggedIn } from 'soapbox/utils/auth';
 
 import { getClient } from '../api';
 
+import type { FilterContext } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 
 const FILTERS_FETCH_REQUEST = 'FILTERS_FETCH_REQUEST';
@@ -78,7 +79,7 @@ const fetchFilter = (id: string) =>
       }));
   };
 
-const createFilter = (title: string, expires_in: number | undefined, context: Array<string>, hide: boolean, keywords_attributes: FilterKeywords) =>
+const createFilter = (title: string, expires_in: number | undefined, context: Array<FilterContext>, hide: boolean, keywords_attributes: FilterKeywords) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FILTERS_CREATE_REQUEST });
 
@@ -96,7 +97,7 @@ const createFilter = (title: string, expires_in: number | undefined, context: Ar
     });
   };
 
-const updateFilter = (id: string, title: string, expires_in: number | undefined, context: Array<string>, hide: boolean, keywords_attributes: FilterKeywords) =>
+const updateFilter = (id: string, title: string, expires_in: number | undefined, context: Array<FilterContext>, hide: boolean, keywords_attributes: FilterKeywords) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FILTERS_UPDATE_REQUEST });
 

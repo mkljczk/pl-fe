@@ -122,7 +122,7 @@ const expandSearch = (type: SearchFilter) => (dispatch: AppDispatch, getState: (
 
   dispatch(expandSearchRequest(type));
 
-  let params: Record<string, any> = {
+  const params: Record<string, any> = {
     type,
     offset,
   };

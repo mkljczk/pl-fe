@@ -1,3 +1,4 @@
+import { PLEROMA } from 'pl-api';
 import React, { ChangeEventHandler, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -10,9 +11,10 @@ import List, { ListItem } from 'soapbox/components/list';
 import MissingIndicator from 'soapbox/components/missing-indicator';
 import OutlineBox from 'soapbox/components/outline-box';
 import { Button, Text, HStack, Modal, Stack, Toggle } from 'soapbox/components/ui';
-import { useAppDispatch, useFeatures, useOwnAccount } from 'soapbox/hooks';
+import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 import { getBadges } from 'soapbox/utils/badges';
+import { parseVersion } from 'soapbox/utils/features';
 
 import BadgeInput from './badge-input';
 import StaffRolePicker from './staff-role-picker';
@@ -38,7 +40,8 @@ interface IAccountModerationModal {
 const AccountModerationModal: React.FC<IAccountModerationModal> = ({ onClose, accountId }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-
+  
+  const { software } = useAppSelector((state) => parseVersion(state.instance.version));
   const { suggest, unsuggest } = useSuggest();
   const { verify, unverify } = useVerify();
   const { account: ownAccount } = useOwnAccount();
@@ -170,7 +173,7 @@ const AccountModerationModal: React.FC<IAccountModerationModal> = ({ onClose, ac
           />
         </Text>
 
-        {features.adminFE && (
+        {software === PLEROMA && (
           <HStack justifyContent='center'>
             <Button icon={require('@tabler/icons/outline/external-link.svg')} size='sm' theme='secondary' onClick={handleAdminFE}>
               <FormattedMessage id='account_moderation_modal.admin_fe' defaultMessage='Open in AdminFE' />

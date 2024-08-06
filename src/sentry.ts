@@ -1,8 +1,8 @@
 import { NODE_ENV } from 'soapbox/build-config';
 import sourceCode from 'soapbox/utils/code';
 
-import type { Account } from 'pl-api';
 import type { CaptureContext, UserFeedback } from '@sentry/types';
+import type { Account } from 'pl-api';
 import type { SetOptional } from 'type-fest';
 
 /** Start Sentry. */

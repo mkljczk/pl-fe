@@ -46,7 +46,7 @@ const useFollowing = (accountId: string | undefined) => {
 
   return useAccountList(
     [accountId!, 'following'],
-    () => client.accounts.getAccountFollowing(accountId),
+    () => client.accounts.getAccountFollowing(accountId!),
     { enabled: !!accountId },
   );
 };
@@ -56,7 +56,7 @@ const useFollowers = (accountId: string | undefined) => {
 
   return useAccountList(
     [accountId!, 'followers'],
-    () => client.accounts.getAccountFollowers(accountId),
+    () => client.accounts.getAccountFollowers(accountId!),
     { enabled: !!accountId },
   );
 };

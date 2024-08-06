@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import z from 'zod';
 
-import { useClient } from 'soapbox/hooks';
 import { useAppDispatch } from 'soapbox/hooks/useAppDispatch';
 import { useAppSelector } from 'soapbox/hooks/useAppSelector';
 import { useGetState } from 'soapbox/hooks/useGetState';
@@ -38,7 +37,6 @@ const useEntities = <TEntity extends Entity>(
   /** Additional options for the hook. */
   opts: UseEntitiesOpts<TEntity> = {},
 ) => {
-  const client = useClient();
   const dispatch = useAppDispatch();
   const getState = useGetState();
 

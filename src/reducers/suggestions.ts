@@ -10,7 +10,6 @@ import {
 } from 'soapbox/actions/suggestions';
 
 import type { AnyAction } from 'redux';
-import type { APIEntity } from 'soapbox/types/entities';
 
 const SuggestionRecord = ImmutableRecord({
   source: '',

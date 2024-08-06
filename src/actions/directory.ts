@@ -18,7 +18,7 @@ const fetchDirectory = (params: Record<string, any>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchDirectoryRequest());
 
-    return getClient(getState()).instance.profileDirectory({...params, limit: 20}).then((data) => {
+    return getClient(getState()).instance.profileDirectory({ ...params, limit: 20 }).then((data) => {
       dispatch(importFetchedAccounts(data));
       dispatch(fetchDirectorySuccess(data));
       dispatch(fetchRelationships(data.map((x: APIEntity) => x.id)));
