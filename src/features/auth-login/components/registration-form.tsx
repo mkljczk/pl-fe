@@ -13,6 +13,8 @@ import { Checkbox, Form, FormGroup, FormActions, Button, Input, Textarea, Select
 import CaptchaField from 'soapbox/features/auth-login/components/captcha';
 import { useAppDispatch, useSettings, useFeatures, useInstance } from 'soapbox/hooks';
 
+import type { CreateAccountParams } from 'pl-api';
+
 const messages = defineMessages({
   username: { id: 'registration.fields.username_placeholder', defaultMessage: 'Username' },
   username_hint: { id: 'registration.fields.username_hint', defaultMessage: 'Only letters, numbers, and underscores are allowed.' },
@@ -53,7 +55,13 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
 
   const [captchaLoading, setCaptchaLoading] = useState(true);
   const [submissionLoading, setSubmissionLoading] = useState(false);
-  const [params, setParams] = useState(ImmutableMap<string, any>());
+  const [params, setParams] = useState<CreateAccountParams>({
+    username: '',
+    email: '',
+    password: '',
+    agreement: false,
+    locale: '',
+  });
   const [captchaIdempotencyKey, setCaptchaIdempotencyKey] = useState(uuidv4());
   const [usernameUnavailable, setUsernameUnavailable] = useState(false);
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -61,39 +69,35 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
 
   const controller = useRef(new AbortController());
 
-  const updateParams = (map: any) => {
-    setParams(params.merge(ImmutableMap(map)));
-  };
-
   const onInputChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = e => {
-    updateParams({ [e.target.name]: e.target.value });
+    setParams(params => ({ ...params,  [e.target.name]: e.target.value }));
   };
 
   const onUsernameChange: React.ChangeEventHandler<HTMLInputElement> = e => {
-    updateParams({ username: e.target.value });
+    setParams(params => ({ ...params, username: e.target.value }));
     setUsernameUnavailable(false);
     controller.current.abort();
     controller.current = new AbortController();
 
-    const domain = params.get('domain');
+    const domain = params.domain;
     usernameAvailable(e.target.value, domain ? domains!.find(({ id }) => id === domain)?.domain : undefined);
   };
 
   const onDomainChange: React.ChangeEventHandler<HTMLSelectElement> = e => {
-    updateParams({ domain: e.target.value || null });
+    setParams(params => ({ ...params, domain: e.target.value || undefined }));
     setUsernameUnavailable(false);
 
     controller.current.abort();
     controller.current = new AbortController();
 
-    const username = params.get('username');
+    const username = params.username;
     if (username) {
       usernameAvailable(username, domains!.find(({ id }) => id === e.target.value)?.domain);
     }
   };
 
   const onCheckboxChange: React.ChangeEventHandler<HTMLInputElement> = e => {
-    updateParams({ [e.target.name]: e.target.checked });
+    setParams(params => ({ ...params, [e.target.name]: e.target.checked }));
   };
 
   const onPasswordChange: React.ChangeEventHandler<HTMLInputElement> = e => {
@@ -106,7 +110,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   };
 
   const onPasswordConfirmChange: React.ChangeEventHandler<HTMLInputElement> = e => {
-    const password = params.get('password', '');
+    const password = params.password || '';
     const passwordConfirmation = e.target.value;
     setPasswordConfirmation(passwordConfirmation);
 
@@ -120,7 +124,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   };
 
   const onBirthdayChange = (birthday: string) => {
-    updateParams({ birthday });
+    setParams(params => ({ ...params, birthday }));
   };
 
   const launchModal = () => {
@@ -129,7 +133,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
         <FormattedMessage
           id='confirmations.register.needs_confirmation'
           defaultMessage='Please check your inbox at {email} for confirmation instructions. You will need to verify your email address to continue.'
-          values={{ email: <strong>{params.get('email')}</strong> }}
+          values={{ email: <strong>{params.email}</strong> }}
         /></p>}
       {needsApproval && <p>
         <FormattedMessage
@@ -160,7 +164,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
     }
   };
 
-  const passwordsMatch = () => params.get('password', '') === passwordConfirmation;
+  const passwordsMatch = () => params.password === passwordConfirmation;
 
   const usernameAvailable = useCallback(debounce((username, domain?: string) => {
     if (!supportsAccountLookup) return;
@@ -186,19 +190,18 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
       return;
     }
 
-    const normalParams = params.withMutations(params => {
-      // Locale for confirmation email
-      params.set('locale', locale);
+    const normalParams = {
+      ...params,
+      locale,
+    };
 
-      // Pleroma invites
-      if (inviteToken) {
-        params.set('token', inviteToken);
-      }
-    });
+    if (inviteToken) {
+      params.token = inviteToken;
+    }
 
     setSubmissionLoading(true);
 
-    dispatch(register(normalParams.toJS()))
+    dispatch(register(normalParams))
       .then(postRegisterAction)
       .catch(() => {
         setSubmissionLoading(false);
@@ -212,10 +215,11 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
 
   const onFetchCaptcha = (captcha: ImmutableMap<string, any>) => {
     setCaptchaLoading(false);
-    updateParams({
+    setParams(params => ({
+      ...params,
       captcha_token: captcha.get('token'),
       captcha_answer_data: captcha.get('answer_data'),
-    });
+    }));
   };
 
   const onFetchCaptchaFail = () => {
@@ -224,7 +228,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
 
   const refreshCaptcha = () => {
     setCaptchaIdempotencyKey(uuidv4());
-    updateParams({ captcha_solution: '' });
+    setParams(params => ({ ...params, captcha_solution: '' }));
   };
 
   const isLoading = captchaLoading || submissionLoading;
@@ -247,7 +251,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
               pattern='^[a-zA-Z\d_-]+'
               icon={require('@tabler/icons/outline/at.svg')}
               onChange={onUsernameChange}
-              value={params.get('username', '')}
+              value={params.username}
               required
             />
           </FormGroup>
@@ -256,7 +260,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
             <FormGroup>
               <Select
                 onChange={onDomainChange}
-                value={params.get('domain')}
+                value={params.domain}
               >
                 {domains.map(({ id, domain }) => (
                   <option key={id} value={id}>{domain}</option>
@@ -273,7 +277,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
             autoCorrect='off'
             autoCapitalize='off'
             onChange={onInputChange}
-            value={params.get('email', '')}
+            value={params.email}
             required
           />
 
@@ -285,7 +289,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
             autoCorrect='off'
             autoCapitalize='off'
             onChange={onPasswordChange}
-            value={params.get('password', '')}
+            value={params.password}
             required
           />
 
@@ -308,7 +312,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
 
           {birthdayRequired && (
             <BirthdayInput
-              value={params.get('birthday')}
+              value={params.birthday || ''}
               onChange={onBirthdayChange}
               required
             />
@@ -323,7 +327,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
                 placeholder={intl.formatMessage(messages.reasonHint)}
                 maxLength={500}
                 onChange={onInputChange}
-                value={params.get('reason', '')}
+                value={params.reason || ''}
                 autoGrow
                 required
               />
@@ -337,7 +341,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
             onClick={onCaptchaClick}
             idempotencyKey={captchaIdempotencyKey}
             name='captcha_solution'
-            value={params.get('captcha_solution', '')}
+            value={params.captcha_solution || ''}
           />
 
           <FormGroup
@@ -346,7 +350,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
             <Checkbox
               name='agreement'
               onChange={onCheckboxChange}
-              checked={params.get('agreement', false)}
+              checked={params.agreement}
               required
             />
           </FormGroup>
@@ -356,7 +360,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
               <Checkbox
                 name='accepts_email_list'
                 onChange={onCheckboxChange}
-                checked={params.get('accepts_email_list', false)}
+                checked={params.accepts_email_list}
               />
             </FormGroup>
           )}

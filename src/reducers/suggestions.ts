@@ -9,6 +9,7 @@ import {
   SUGGESTIONS_DISMISS,
 } from 'soapbox/actions/suggestions';
 
+import type { Suggestion as SuggestionEntity } from 'pl-api';
 import type { AnyAction } from 'redux';
 
 const SuggestionRecord = ImmutableRecord({
@@ -24,7 +25,7 @@ const ReducerRecord = ImmutableRecord({
 type State = ReturnType<typeof ReducerRecord>;
 type Suggestion = ReturnType<typeof SuggestionRecord>;
 
-const importSuggestions = (state: State, suggestions: Suggestion[]) =>
+const importSuggestions = (state: State, suggestions: SuggestionEntity[]) =>
   state.withMutations(state => {
     state.update('items', items => items.concat(suggestions.map(x => ({ ...x, account: x.account.id })).map(suggestion => SuggestionRecord(suggestion))));
     state.set('isLoading', false);

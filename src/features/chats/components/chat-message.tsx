@@ -11,11 +11,12 @@ import { HStack, Icon, Stack, Text } from 'soapbox/components/ui';
 import emojify from 'soapbox/features/emoji';
 import { MediaGallery } from 'soapbox/features/ui/util/async-components';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { ChatKeys, IChat, useChatActions } from 'soapbox/queries/chats';
+import { ChatKeys, useChatActions } from 'soapbox/queries/chats';
 import { queryClient } from 'soapbox/queries/client';
 import { stripHTML } from 'soapbox/utils/html';
 import { onlyEmoji } from 'soapbox/utils/rich-content';
 
+import type { Chat } from 'pl-api';
 import type { Menu as IMenu } from 'soapbox/components/dropdown-menu';
 import type { ChatMessage as ChatMessageEntity } from 'soapbox/types/entities';
 
@@ -43,7 +44,7 @@ const parseContent = (chatMessage: ChatMessageEntity) => {
 };
 
 interface IChatMessage {
-  chat: IChat;
+  chat: Chat;
   chatMessage: ChatMessageEntity;
 }
 

@@ -9,7 +9,7 @@ import AnnouncementContent from './announcement-content';
 import ReactionsBar from './reactions-bar';
 
 import type { Map as ImmutableMap } from 'immutable';
-import type { Announcement as AnnouncementEntity } from 'soapbox/schemas';
+import type { Announcement as AnnouncementEntity } from 'soapbox/api/hooks/announcements/useAnnouncements';
 
 interface IAnnouncement {
   announcement: AnnouncementEntity;

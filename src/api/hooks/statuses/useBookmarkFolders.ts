@@ -10,7 +10,7 @@ const useBookmarkFolders = () => {
 
   const { entities, ...result } = useEntities<BookmarkFolder>(
     [Entities.BOOKMARK_FOLDERS],
-    () => client.myAccount.getBookmarkFolders,
+    () => client.myAccount.getBookmarkFolders(),
     { enabled: features.bookmarkFolders, schema: bookmarkFolderSchema },
   );
 

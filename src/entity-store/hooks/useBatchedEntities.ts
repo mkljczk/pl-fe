@@ -23,7 +23,7 @@ interface UseBatchedEntitiesOpts<TEntity extends Entity> {
 const useBatchedEntities = <TEntity extends Entity>(
   expandedPath: ExpandedEntitiesPath,
   ids: string[],
-  entityFn: EntityFn<TEntity[]>,
+  entityFn: EntityFn<string[]>,
   opts: UseBatchedEntitiesOpts<TEntity> = {},
 ) => {
   const getState = useGetState();

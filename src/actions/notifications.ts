@@ -283,7 +283,10 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
           acc.accounts[item.target.id] = item.target;
         }
 
+        // TODO actually check for type
+        // @ts-ignore
         if (item.status?.id) {
+          // @ts-ignore
           acc.statuses[item.status.id] = item.status;
         }
 

@@ -31,7 +31,7 @@ const AnnouncementsPanel = () => {
     <Widget title={<FormattedMessage id='announcements.title' defaultMessage='Announcements' />}>
       <Card className='relative black:rounded-xl black:border black:border-gray-800' size='md' variant='rounded'>
         <ReactSwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
-          {announcements!.map((announcement) => (
+          {announcements.map((announcement) => (
             <Announcement
               key={announcement.id}
               announcement={announcement}

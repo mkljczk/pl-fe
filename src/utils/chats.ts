@@ -1,13 +1,15 @@
-import { InfiniteData } from '@tanstack/react-query';
 import sumBy from 'lodash/sumBy';
 
 import { normalizeChatMessage } from 'soapbox/normalizers';
 import { ChatKeys } from 'soapbox/queries/chats';
 import { queryClient } from 'soapbox/queries/client';
-import { Chat, ChatMessage } from 'soapbox/types/entities';
 
 import { compareDate } from './comparators';
-import { appendPageItem, flattenPages, PaginatedResult, sortQueryData, updatePageItem } from './queries';
+import { appendPageItem, flattenPages, sortQueryData, updatePageItem } from './queries';
+
+import type { InfiniteData } from '@tanstack/react-query';
+import type { Chat, PaginatedResponse } from 'pl-api';
+import type { ChatMessage } from 'soapbox/types/entities';
 
 interface ChatPayload extends Omit<Chat, 'last_message'> {
   last_message: ChatMessage | null;
@@ -38,7 +40,7 @@ const reOrderChatListItems = () => {
  */
 const checkIfChatExists = (chatId: string) => {
   const currentChats = flattenPages(
-    queryClient.getQueryData<InfiniteData<PaginatedResult<Chat>>>(['chats', 'search']),
+    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(['chats', 'search']),
   );
 
   return currentChats?.find((chat: Chat) => chat.id === chatId);
@@ -78,17 +80,10 @@ const updateChatListItem = (newChat: ChatPayload) => {
 /** Get unread chats count. */
 const getUnreadChatsCount = (): number => {
   const chats = flattenPages(
-    queryClient.getQueryData<InfiniteData<PaginatedResult<Chat>>>(['chats', 'search']),
+    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(['chats', 'search']),
   );
 
   return sumBy(chats, chat => chat.unread);
 };
 
-/** Update the query cache for an individual Chat Message */
-const updateChatMessage = (chatMessage: ChatMessage) => updatePageItem(
-  ChatKeys.chatMessages(chatMessage.chat_id),
-  normalizeChatMessage(chatMessage),
-  (o, n) => o.id === n.id,
-);
-
-export { updateChatListItem, updateChatMessage, getUnreadChatsCount, reOrderChatListItems };
+export { updateChatListItem, getUnreadChatsCount, reOrderChatListItems };

@@ -20,7 +20,7 @@ import { getSettings } from './settings';
 import { createStatus } from './statuses';
 
 import type { EditorState } from 'lexical';
-import type { Tag } from 'pl-api';
+import type { CreateStatusParams, Tag } from 'pl-api';
 import type { AutoSuggestion } from 'soapbox/components/autosuggest-input';
 import type { Emoji } from 'soapbox/features/emoji';
 import type { Account, Group } from 'soapbox/schemas';
@@ -373,21 +373,30 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
     const idempotencyKey = compose.idempotencyKey;
     const contentType = compose.content_type === 'wysiwyg' ? 'text/markdown' : compose.content_type;
 
-    const params: Record<string, any> = {
+    const params: CreateStatusParams = {
       status,
-      in_reply_to_id: compose.in_reply_to,
-      quote_id: compose.quote,
-      media_ids: media.map(item => item.id),
+      in_reply_to_id: compose.in_reply_to || undefined,
+      quote_id: compose.quote || undefined,
+      media_ids: media.map(item => item.id).toArray(),
       sensitive: compose.sensitive,
       spoiler_text: compose.spoiler_text,
       visibility: compose.privacy,
       content_type: contentType,
-      poll: compose.poll,
-      scheduled_at: compose.schedule,
-      language: compose.language || compose.suggested_language,
-      to,
+      scheduled_at: compose.schedule?.toISOString(),
+      language: compose.language || compose.suggested_language || undefined,
+      to: to.size ? to.toArray() : undefined,
       federated: compose.federated,
     };
+
+    if (compose.poll) {
+      params.poll = {
+        options: compose.poll.options.toArray(),
+        expires_in: compose.poll.expires_in,
+        multiple: compose.poll.multiple,
+        hide_totals: compose.poll.hide_totals,
+        options_map: compose.poll.options_map.toJS(),
+      };
+    }
 
     if (compose.language && compose.textMap.size) {
       params.status_map = compose.textMap.toJS();
@@ -398,14 +407,13 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
         params.spoiler_text_map[compose.language] = compose.spoiler_text;
       }
 
-      if (params.poll) {
-        const poll = params.poll.toJS();
-        poll.options.forEach((option: any, index: number) => poll.options_map[index][compose.language!] = option);
-        params.poll = poll;
+      const poll = params.poll;
+      if (poll?.options_map) {
+        poll.options.forEach((option: any, index: number) => poll.options_map![index][compose.language!] = option);
       }
     }
 
-    if (compose.privacy === 'group') {
+    if (compose.privacy === 'group' && compose.group_id) {
       params.group_id = compose.group_id;
     }
 

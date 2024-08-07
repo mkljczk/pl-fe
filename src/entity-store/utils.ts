@@ -37,8 +37,8 @@ const createList = (): EntityList => ({
 
 /** Create an empty entity list state. */
 const createListState = (): EntityListState => ({
-  next: undefined,
-  prev: undefined,
+  next: null,
+  prev: null,
   totalCount: 0,
   error: null,
   fetched: false,

@@ -3,7 +3,9 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import { toggleMainWindow } from 'soapbox/actions/chats';
 import { useAppDispatch, useSettings } from 'soapbox/hooks';
-import { IChat, useChat } from 'soapbox/queries/chats';
+import { useChat } from 'soapbox/queries/chats';
+
+import type { Chat } from 'pl-api';
 
 const ChatContext = createContext<any>({
   isOpen: false,
@@ -69,7 +71,7 @@ const ChatProvider: React.FC<IChatProvider> = ({ children }) => {
 };
 
 interface IChatContext {
-  chat: IChat | null;
+  chat: Chat | null;
   isOpen: boolean;
   isUsingMainChatPage?: boolean;
   toggleChatPane(): void;

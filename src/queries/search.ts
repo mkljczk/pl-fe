@@ -23,7 +23,7 @@ const useAccountSearch = (q: string) => {
     placeholderData: keepPreviousData,
     initialPageParam: {},
     getNextPageParam: () => {
-      if (queryInfo.data[queryInfo.data.length - 1].length !== 10) {
+      if (queryInfo.data?.pages[queryInfo.data.pages.length - 1].length !== 10) {
         return {};
       }
 

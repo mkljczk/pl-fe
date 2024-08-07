@@ -132,7 +132,7 @@ const Settings = () => {
           <Preferences />
         </CardBody>
 
-        {(features.security || features.accountAliases) && (
+        {(features.security || features.manageAccountAliases) && (
           <>
             <CardHeader>
               <CardTitle title={intl.formatMessage(messages.other)} />

@@ -4,7 +4,7 @@ import { useClient } from 'soapbox/hooks';
 import { groupSchema } from 'soapbox/schemas';
 
 interface CreateGroupParams {
-  display_name?: string;
+  display_name: string;
   note?: string;
   avatar?: File;
   header?: File;

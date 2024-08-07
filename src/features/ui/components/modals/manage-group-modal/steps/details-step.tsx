@@ -1,13 +1,14 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { CreateGroupParams } from 'soapbox/api/hooks';
 import { Form, FormGroup, Input, Textarea } from 'soapbox/components/ui';
 import AvatarPicker from 'soapbox/features/edit-profile/components/avatar-picker';
 import HeaderPicker from 'soapbox/features/edit-profile/components/header-picker';
 import { useAppSelector, useInstance } from 'soapbox/hooks';
 import { usePreview } from 'soapbox/hooks/forms';
 import resizeImage from 'soapbox/utils/resize-image';
+
+import type { CreateGroupParams } from 'pl-api';
 
 const messages = defineMessages({
   groupNamePlaceholder: { id: 'manage_group.fields.name_placeholder', defaultMessage: 'Group Name' },
@@ -17,7 +18,7 @@ const messages = defineMessages({
 
 interface IDetailsStep {
   params: CreateGroupParams;
-  onChange(params: CreateGroupParams): void;
+  onChange: (params: CreateGroupParams) => void;
 }
 
 const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
@@ -52,7 +53,10 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
       }
     };
 
-  const handleImageClear = (property: keyof CreateGroupParams) => () => onChange({ [property]: undefined });
+  const handleImageClear = (property: keyof CreateGroupParams) => () => onChange({
+    ...params,
+    [property]: undefined,
+  });
 
   return (
     <Form>

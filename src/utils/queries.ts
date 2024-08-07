@@ -3,12 +3,6 @@ import { queryClient } from 'soapbox/queries/client';
 import type { InfiniteData, QueryKey } from '@tanstack/react-query';
 import type { PaginatedResponse } from 'pl-api';
 
-interface PaginatedResult<T> {
-  result: T[];
-  hasMore: boolean;
-  next?: () => Promise<PaginatedResponse<any>> | null;
-}
-
 interface Entity {
   id: string;
 }
@@ -24,7 +18,7 @@ const deduplicateById = <T extends Entity>(entities: T[]): T[] => {
 };
 
 /** Flatten paginated results into a single array. */
-const flattenPages = <T>(queryData: InfiniteData<PaginatedResult<T> | PaginatedResponse<T>> | undefined) => {
+const flattenPages = <T>(queryData: InfiniteData<PaginatedResponse<T>> | undefined) => {
   const data = queryData?.pages.reduce<T[]>(
     (prev: T[], curr) => [...prev, ...((curr as any).result || (curr as any).items)],
     [],
@@ -39,10 +33,10 @@ const flattenPages = <T>(queryData: InfiniteData<PaginatedResult<T> | PaginatedR
 
 /** Traverse pages and update the item inside if found. */
 const updatePageItem = <T>(queryKey: QueryKey, newItem: T, isItem: (item: T, newItem: T) => boolean) => {
-  queryClient.setQueriesData<InfiniteData<PaginatedResult<T>>>({ queryKey }, (data) => {
+  queryClient.setQueriesData<InfiniteData<PaginatedResponse<T>>>({ queryKey }, (data) => {
     if (data) {
       const pages = data.pages.map(page => {
-        const result = page.result.map(item => isItem(item, newItem) ? newItem : item);
+        const result = page.items.map(item => isItem(item, newItem) ? newItem : item);
         return { ...page, result };
       });
       return { ...data, pages };
@@ -52,10 +46,10 @@ const updatePageItem = <T>(queryKey: QueryKey, newItem: T, isItem: (item: T, new
 
 /** Insert the new item at the beginning of the first page. */
 const appendPageItem = <T>(queryKey: QueryKey, newItem: T) => {
-  queryClient.setQueryData<InfiniteData<PaginatedResult<T>>>(queryKey, (data) => {
+  queryClient.setQueryData<InfiniteData<PaginatedResponse<T>>>(queryKey, (data) => {
     if (data) {
       const pages = [...data.pages];
-      pages[0] = { ...pages[0], result: [newItem, ...pages[0].result] };
+      pages[0] = { ...pages[0], items: [newItem, ...pages[0].items] };
       return { ...data, pages };
     }
   });
@@ -63,11 +57,11 @@ const appendPageItem = <T>(queryKey: QueryKey, newItem: T) => {
 
 /** Remove an item inside if found. */
 const removePageItem = <T>(queryKey: QueryKey, itemToRemove: T, isItem: (item: T, newItem: T) => boolean) => {
-  queryClient.setQueriesData<InfiniteData<PaginatedResult<T>>>({ queryKey }, (data) => {
+  queryClient.setQueriesData<InfiniteData<PaginatedResponse<T>>>({ queryKey }, (data) => {
     if (data) {
       const pages = data.pages.map(page => {
-        const result = page.result.filter(item => !isItem(item, itemToRemove));
-        return { ...page, result };
+        const items = page.items.filter(item => !isItem(item, itemToRemove));
+        return { ...page, items };
       });
       return { ...data, pages };
     }
@@ -88,7 +82,7 @@ const paginateQueryData = <T>(array: T[] | undefined) =>
   }, []);
 
 const sortQueryData = <T>(queryKey: QueryKey, comparator: (a: T, b: T) => number) => {
-  queryClient.setQueryData<InfiniteData<PaginatedResult<T>>>(queryKey, (prevResult) => {
+  queryClient.setQueryData<InfiniteData<PaginatedResponse<T>>>(queryKey, (prevResult) => {
     if (prevResult) {
       const nextResult = { ...prevResult };
       const flattenedQueryData = flattenPages(nextResult);
@@ -106,7 +100,6 @@ const sortQueryData = <T>(queryKey: QueryKey, comparator: (a: T, b: T) => number
 };
 
 export {
-  type PaginatedResult,
   flattenPages,
   updatePageItem,
   appendPageItem,

@@ -20,7 +20,7 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
   const status = useAppSelector<StatusEntity | null>(state => getStatus(state, { id: compose.in_reply_to! }));
   const to = compose.to;
 
-  if (!features.explicitAddressing || !status || !to) {
+  if (!features.createStatusExplicitAddressing || !status || !to) {
     return null;
   }
 

@@ -64,16 +64,14 @@ const createStatus = (params: CreateStatusParams, idempotencyKey: string, status
 
     return (statusId === null ? getClient(getState()).statuses.createStatus(params) : getClient(getState()).statuses.editStatus(statusId, params))
       .then((status) => {
-      // The backend might still be processing the rich media attachment
-        if (!status.card && shouldHaveCard(status)) {
-          status.expectsCard = true;
-        }
+        // The backend might still be processing the rich media attachment
+        const expectsCard = !status.card && shouldHaveCard(status);
 
-        dispatch(importFetchedStatus(status, idempotencyKey));
+        dispatch(importFetchedStatus({ ...status, expectsCard }, idempotencyKey));
         dispatch({ type: STATUS_CREATE_SUCCESS, status, params, idempotencyKey, editing: !!statusId });
 
         // Poll the backend for the updated card
-        if (status.expectsCard) {
+        if (expectsCard) {
           const delay = 1000;
 
           const poll = (retries = 5) => {

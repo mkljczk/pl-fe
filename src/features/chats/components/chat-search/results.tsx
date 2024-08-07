@@ -6,7 +6,7 @@ import { Avatar, HStack, Stack, Text } from 'soapbox/components/ui';
 import VerificationBadge from 'soapbox/components/verification-badge';
 import useAccountSearch from 'soapbox/queries/search';
 
-import type { Account } from 'soapbox/types/entities';
+import type { Account } from 'pl-api';
 
 interface IResults {
   accountSearchResult: ReturnType<typeof useAccountSearch>;

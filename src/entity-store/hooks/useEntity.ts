@@ -24,7 +24,7 @@ interface UseEntityOpts<TEntity extends Entity> {
 
 const useEntity = <TEntity extends Entity>(
   path: EntityPath,
-  entityFn: EntityFn<TEntity>,
+  entityFn: EntityFn<void>,
   opts: UseEntityOpts<TEntity> = {},
 ) => {
   const [isFetching, setPromise] = useLoading(true);

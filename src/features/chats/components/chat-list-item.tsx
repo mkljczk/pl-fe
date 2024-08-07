@@ -9,8 +9,9 @@ import { Avatar, HStack, IconButton, Stack, Text } from 'soapbox/components/ui';
 import VerificationBadge from 'soapbox/components/verification-badge';
 import { useChatContext } from 'soapbox/contexts/chat-context';
 import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
-import { IChat, useChatActions } from 'soapbox/queries/chats';
+import { useChatActions } from 'soapbox/queries/chats';
 
+import type { Chat } from 'pl-api';
 import type { Menu } from 'soapbox/components/dropdown-menu';
 
 const messages = defineMessages({
@@ -23,7 +24,7 @@ const messages = defineMessages({
 });
 
 interface IChatListItemInterface {
-  chat: IChat;
+  chat: Chat;
   onClick: (chat: any) => void;
 }
 

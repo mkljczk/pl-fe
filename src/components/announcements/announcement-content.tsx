@@ -3,10 +3,11 @@ import { useHistory } from 'react-router-dom';
 
 import { getTextDirection } from 'soapbox/utils/rtl';
 
-import type { Announcement as AnnouncementEntity, Mention as MentionEntity } from 'soapbox/schemas';
+import type { Announcement } from 'soapbox/api/hooks/announcements/useAnnouncements';
+import type { Mention as MentionEntity } from 'soapbox/schemas';
 
 interface IAnnouncementContent {
-  announcement: AnnouncementEntity;
+  announcement: Announcement;
 }
 
 const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) => {

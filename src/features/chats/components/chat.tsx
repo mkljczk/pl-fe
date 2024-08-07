@@ -6,12 +6,13 @@ import { uploadMedia } from 'soapbox/actions/media';
 import { Stack } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
 import { normalizeAttachment } from 'soapbox/normalizers';
-import { IChat, useChatActions } from 'soapbox/queries/chats';
+import { useChatActions } from 'soapbox/queries/chats';
 import toast from 'soapbox/toast';
 
 import ChatComposer from './chat-composer';
 import ChatMessageList from './chat-message-list';
 
+import type { Chat as ChatEntity } from 'pl-api';
 import type { PlfeResponse } from 'soapbox/api';
 import type { Attachment } from 'soapbox/types/entities';
 
@@ -23,7 +24,7 @@ const messages = defineMessages({
 });
 
 interface ChatInterface {
-  chat: IChat;
+  chat: ChatEntity;
   inputRef?: MutableRefObject<HTMLTextAreaElement | null>;
   className?: string;
 }

@@ -86,6 +86,7 @@ const PollRecord = ImmutableRecord({
   options_map: ImmutableList<ImmutableMap<Language, string>>([ImmutableMap(), ImmutableMap()]),
   expires_in: 24 * 3600,
   multiple: false,
+  hide_totals: false,
 });
 
 const ReducerCompose = ImmutableRecord({

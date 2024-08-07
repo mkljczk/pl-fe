@@ -7,42 +7,36 @@ import { useStatContext } from 'soapbox/contexts/stat-context';
 import { useAppDispatch, useAppSelector, useClient, useFeatures, useLoggedIn, useOwnAccount } from 'soapbox/hooks';
 import { normalizeChatMessage } from 'soapbox/normalizers';
 import { reOrderChatListItems } from 'soapbox/utils/chats';
-import { flattenPages, PaginatedResult, updatePageItem } from 'soapbox/utils/queries';
+import { flattenPages, updatePageItem } from 'soapbox/utils/queries';
 
 import { queryClient } from './client';
 import { useFetchRelationships } from './relationships';
 
-import type { Chat, ChatMessage, PaginatedResponse } from 'pl-api';
-import type { Account } from 'soapbox/schemas';
+import type { Chat, ChatMessage as BaseChatMessage, PaginatedResponse } from 'pl-api';
 
-interface IChat {
-  account: Account;
-  created_at: string;
-  id: string;
-  last_message: null | {
-    account_id: string;
-    chat_id: string;
-    content: string;
-    created_at: string;
-    id: string;
-    unread: boolean;
-  };
-  unread: number;
-}
+const transformChatMessage = (chatMessage: BaseChatMessage) => ({
+  ...chatMessage,
+  pending: false as boolean,
+});
+
+type ChatMessage = ReturnType<typeof transformChatMessage>;
 
 const ChatKeys = {
   chat: (chatId?: string) => ['chats', 'chat', chatId] as const,
   chatMessages: (chatId: string) => ['chats', 'messages', chatId] as const,
 };
 
-const useChatMessages = (chat: IChat) => {
+const useChatMessages = (chat: Chat) => {
   const client = useClient();
   const isBlocked = useAppSelector((state) => state.getIn(['relationships', chat.account.id, 'blocked_by']));
 
-  const getChatMessages = async (chatId: string, pageParam?: Pick<PaginatedResponse<ChatMessage>, 'next'>): Promise<PaginatedResponse<ChatMessage>> => {
+  const getChatMessages = async (chatId: string, pageParam?: Pick<PaginatedResponse<BaseChatMessage>, 'next'>) => {
     const response = await (pageParam?.next ? pageParam.next() : client.chats.getChatMessages(chatId));
 
-    return response;
+    return {
+      ...response,
+      items: response.items.map(transformChatMessage),
+    };
   };
 
   const queryInfo = useInfiniteQuery({
@@ -51,11 +45,11 @@ const useChatMessages = (chat: IChat) => {
     enabled: !isBlocked,
     gcTime: 0,
     staleTime: 0,
-    initialPageParam: { next: null as (() => Promise<PaginatedResponse<ChatMessage>>) | null },
+    initialPageParam: { next: null as (() => Promise<PaginatedResponse<BaseChatMessage>>) | null },
     getNextPageParam: (config) => config,
   });
 
-  const data = flattenPages(queryInfo.data)?.reverse();
+  const data = flattenPages<ChatMessage>(queryInfo.data as any)?.reverse();
 
   return {
     ...queryInfo,
@@ -142,7 +136,7 @@ const useChatActions = (chatId: string) => {
     client.chats.markChatAsRead(chatId, lastReadId)
       .then((data) => {
         updatePageItem(['chats', 'search'], data, (o, n) => o.id === n.id);
-        const queryData = queryClient.getQueryData<InfiniteData<PaginatedResult<unknown>>>(['chats', 'search']);
+        const queryData = queryClient.getQueryData<InfiniteData<PaginatedResponse<unknown>>>(['chats', 'search']);
 
         if (queryData) {
           const flattenedQueryData: any = flattenPages(queryData)?.map((chat: any) => {
@@ -152,7 +146,7 @@ const useChatActions = (chatId: string) => {
               return chat;
             }
           });
-          setUnreadChatsCount(sumBy(flattenedQueryData, (chat: IChat) => chat.unread));
+          setUnreadChatsCount(sumBy(flattenedQueryData, (chat: Chat) => chat.unread));
         }
 
         return data;
@@ -238,4 +232,4 @@ const useChatActions = (chatId: string) => {
   };
 };
 
-export { type IChat, ChatKeys, useChat, useChatActions, useChats, useChatMessages };
+export { ChatKeys, useChat, useChatActions, useChats, useChatMessages, type ChatMessage };

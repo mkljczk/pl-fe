@@ -3,9 +3,10 @@ import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { CardTitle, HStack, IconButton, Stack } from 'soapbox/components/ui';
-import { IChat } from 'soapbox/queries/chats';
 
 import ChatList from '../../chat-list';
+
+import type { Chat } from 'pl-api';
 
 const messages = defineMessages({
   title: { id: 'column.chats', defaultMessage: 'Chats' },
@@ -15,7 +16,7 @@ const ChatPageSidebar = () => {
   const intl = useIntl();
   const history = useHistory();
 
-  const handleClickChat = (chat: IChat) => {
+  const handleClickChat = (chat: Chat) => {
     history.push(`/chats/${chat.id}`);
   };
 

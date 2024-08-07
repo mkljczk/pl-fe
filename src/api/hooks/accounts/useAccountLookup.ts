@@ -22,7 +22,7 @@ const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts =
   const { entity: account, isUnauthorized, ...result } = useEntityLookup<Account>(
     Entities.ACCOUNTS,
     (account) => account.acct.toLowerCase() === acct?.toLowerCase(),
-    () => client.accounts.lookupAccount(acct),
+    () => client.accounts.lookupAccount(acct!),
     { schema: accountSchema, enabled: !!acct },
   );
 

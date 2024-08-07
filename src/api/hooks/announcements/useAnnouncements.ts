@@ -1,8 +1,25 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { announcementReactionSchema, announcementSchema, type Announcement, type AnnouncementReaction } from 'pl-api';
+import { announcementReactionSchema, type Announcement as BaseAnnouncement, type AnnouncementReaction } from 'pl-api';
 
+import emojify from 'soapbox/features/emoji';
 import { useClient } from 'soapbox/hooks';
 import { queryClient } from 'soapbox/queries/client';
+import { makeCustomEmojiMap } from 'soapbox/schemas/utils';
+
+interface Announcement extends BaseAnnouncement {
+  contentHtml: string;
+}
+
+const transformAnnouncement = (announcement: BaseAnnouncement) => {
+  const emojiMap = makeCustomEmojiMap(announcement.emojis);
+
+  const contentHtml = emojify(announcement.content, emojiMap);
+
+  return {
+    ...announcement,
+    contentHtml,
+  };
+};
 
 const updateReaction = (reaction: AnnouncementReaction, count: number, me?: boolean, overwrite?: boolean) => announcementReactionSchema.parse({
   ...reaction,
@@ -25,7 +42,7 @@ const useAnnouncements = () => {
 
   const getAnnouncements = async () => {
     const data = await client.announcements.getAnnouncements();
-    return data;
+    return data.map(transformAnnouncement);
   };
 
   const { data, ...result } = useQuery<ReadonlyArray<Announcement>>({
@@ -42,18 +59,18 @@ const useAnnouncements = () => {
     retry: false,
     onMutate: ({ announcementId: id, name }) => {
       queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map(value => value.id !== id ? value : announcementSchema.parse({
+        prevResult.map(value => value.id !== id ? value : {
           ...value,
           reactions: updateReactions(value.reactions, name, 1, true),
-        })),
+        }),
       );
     },
     onError: (_, { announcementId: id, name }) => {
       queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map(value => value.id !== id ? value : announcementSchema.parse({
+        prevResult.map(value => value.id !== id ? value : {
           ...value,
           reactions: updateReactions(value.reactions, name, -1, false),
-        })),
+        }),
       );
     },
   });
@@ -66,18 +83,18 @@ const useAnnouncements = () => {
     retry: false,
     onMutate: ({ announcementId: id, name }) => {
       queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map(value => value.id !== id ? value : announcementSchema.parse({
+        prevResult.map(value => value.id !== id ? value : {
           ...value,
           reactions: updateReactions(value.reactions, name, -1, false),
-        })),
+        }),
       );
     },
     onError: (_, { announcementId: id, name }) => {
       queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map(value => value.id !== id ? value : announcementSchema.parse({
+        prevResult.map(value => value.id !== id ? value : {
           ...value,
           reactions: updateReactions(value.reactions, name, 1, true),
-        })),
+        }),
       );
     },
   });
@@ -93,4 +110,4 @@ const useAnnouncements = () => {
 const compareAnnouncements = (a: Announcement, b: Announcement): number =>
   new Date(a.starts_at || a.published_at).getDate() - new Date(b.starts_at || b.published_at).getDate();
 
-export { updateReactions, useAnnouncements };
+export { updateReactions, useAnnouncements, type Announcement };

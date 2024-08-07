@@ -5,7 +5,7 @@ import z from 'zod';
  * https://docs.joinmastodon.org/entities/CustomEmoji/
  */
 const customEmojiSchema = z.object({
-  category: z.string().catch(''),
+  category: z.string().nullable().catch(null),
   shortcode: z.string(),
   static_url: z.string().catch(''),
   url: z.string(),
