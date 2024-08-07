@@ -8390,8 +8390,10 @@ pkg-types@^1.0.3:
     mlly "^1.2.0"
     pathe "^1.1.0"
 
-"pl-api@file:../pl-api":
-  version "0.0.1"
+pl-api@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.0.2.tgz#b717ed27e0f8ba716457728d0472aba30b7461cf"
+  integrity sha512-TGHH6StmkwVBs0PZk4zB1N66VRncANtGgDbhoc+9ca+HIRYux7HuGsVXyoOY9xKrNPRu4WYk+AeaNYTMcnuCIQ==
   dependencies:
     blurhash "^2.0.5"
     http-link-header "^1.1.3"
