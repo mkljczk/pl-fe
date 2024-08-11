@@ -8,67 +8,57 @@ import {
   importFetchedStatus,
 } from './importer';
 
-import type { Conversation, PaginatedResponse } from 'pl-api';
+import type { Account, Conversation, PaginatedResponse, Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const CONVERSATIONS_MOUNT   = 'CONVERSATIONS_MOUNT';
-const CONVERSATIONS_UNMOUNT = 'CONVERSATIONS_UNMOUNT';
+const CONVERSATIONS_MOUNT = 'CONVERSATIONS_MOUNT' as const;
+const CONVERSATIONS_UNMOUNT = 'CONVERSATIONS_UNMOUNT' as const;
 
-const CONVERSATIONS_FETCH_REQUEST = 'CONVERSATIONS_FETCH_REQUEST';
-const CONVERSATIONS_FETCH_SUCCESS = 'CONVERSATIONS_FETCH_SUCCESS';
-const CONVERSATIONS_FETCH_FAIL    = 'CONVERSATIONS_FETCH_FAIL';
-const CONVERSATIONS_UPDATE        = 'CONVERSATIONS_UPDATE';
+const CONVERSATIONS_FETCH_REQUEST = 'CONVERSATIONS_FETCH_REQUEST' as const;
+const CONVERSATIONS_FETCH_SUCCESS = 'CONVERSATIONS_FETCH_SUCCESS' as const;
+const CONVERSATIONS_FETCH_FAIL = 'CONVERSATIONS_FETCH_FAIL' as const;
+const CONVERSATIONS_UPDATE = 'CONVERSATIONS_UPDATE' as const;
 
-const CONVERSATIONS_READ = 'CONVERSATIONS_READ';
+const CONVERSATIONS_READ = 'CONVERSATIONS_READ' as const;
 
-const mountConversations = () => ({
-  type: CONVERSATIONS_MOUNT,
-});
+const mountConversations = () => ({ type: CONVERSATIONS_MOUNT });
 
-const unmountConversations = () => ({
-  type: CONVERSATIONS_UNMOUNT,
-});
+const unmountConversations = () => ({ type: CONVERSATIONS_UNMOUNT });
 
 const markConversationRead = (conversationId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   if (!isLoggedIn(getState)) return;
 
   dispatch({
     type: CONVERSATIONS_READ,
-    id: conversationId,
+    conversationId,
   });
 
   return getClient(getState).timelines.markConversationRead(conversationId);
 };
 
-const expandConversations = ({ maxId }: Record<string, any> = {}) => (dispatch: AppDispatch, getState: () => RootState) => {
+const expandConversations = (expand = true) => (dispatch: AppDispatch, getState: () => RootState) => {
   if (!isLoggedIn(getState)) return;
+  const state = getState();
 
   dispatch(expandConversationsRequest());
 
-  const params: Record<string, any> = { max_id: maxId };
+  const isLoadingRecent = !!state.conversations.next;
 
-  if (!maxId) {
-    params.since_id = getState().conversations.items.getIn([0, 'id']);
-  }
+  if (isLoadingRecent && !expand) return;
 
-  const isLoadingRecent = !!params.since_id;
-
-  return getClient(getState).timelines.getConversations(params)
+  return (state.conversations.next?.() || getClient(state).timelines.getConversations())
     .then(response => {
-      dispatch(importFetchedAccounts(response.items.reduce((aggr: Array<APIEntity>, item: APIEntity) => aggr.concat(item.accounts), [])));
-      dispatch(importFetchedStatuses(response.items.map((item: Record<string, any>) => item.last_status).filter((x?: APIEntity) => !!x)));
+      dispatch(importFetchedAccounts(response.items.reduce((aggr: Array<Account>, item) => aggr.concat(item.accounts), [])));
+      dispatch(importFetchedStatuses(response.items.map((item) => item.last_status).filter((x): x is Status => x !== null)));
       dispatch(expandConversationsSuccess(response.items, response.next, isLoadingRecent));
     })
     .catch(err => dispatch(expandConversationsFail(err)));
 };
 
-const expandConversationsRequest = () => ({
-  type: CONVERSATIONS_FETCH_REQUEST,
-});
+const expandConversationsRequest = () => ({ type: CONVERSATIONS_FETCH_REQUEST });
 
 const expandConversationsSuccess = (
-  conversations: APIEntity[],
+  conversations: Conversation[],
   next: (() => Promise<PaginatedResponse<Conversation>>) | null,
   isLoadingRecent: boolean,
 ) => ({
@@ -83,7 +73,7 @@ const expandConversationsFail = (error: unknown) => ({
   error,
 });
 
-const updateConversations = (conversation: APIEntity) => (dispatch: AppDispatch) => {
+const updateConversations = (conversation: Conversation) => (dispatch: AppDispatch) => {
   dispatch(importFetchedAccounts(conversation.accounts));
 
   if (conversation.last_status) {

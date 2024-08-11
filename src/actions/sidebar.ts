@@ -1,4 +1,4 @@
-const SIDEBAR_OPEN  = 'SIDEBAR_OPEN';
+const SIDEBAR_OPEN = 'SIDEBAR_OPEN';
 const SIDEBAR_CLOSE = 'SIDEBAR_CLOSE';
 
 const openSidebar = () => ({

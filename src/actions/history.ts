@@ -2,27 +2,25 @@ import { getClient } from 'soapbox/api';
 
 import { importFetchedAccounts } from './importer';
 
+import type { StatusEdit } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const HISTORY_FETCH_REQUEST = 'HISTORY_FETCH_REQUEST';
-const HISTORY_FETCH_SUCCESS = 'HISTORY_FETCH_SUCCESS';
-const HISTORY_FETCH_FAIL    = 'HISTORY_FETCH_FAIL';
+const HISTORY_FETCH_REQUEST = 'HISTORY_FETCH_REQUEST' as const;
+const HISTORY_FETCH_SUCCESS = 'HISTORY_FETCH_SUCCESS' as const;
+const HISTORY_FETCH_FAIL = 'HISTORY_FETCH_FAIL' as const;
 
 const fetchHistory = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const loading = getState().history.getIn([statusId, 'loading']);
 
-    if (loading) {
-      return;
-    }
+    if (loading) return;
 
     dispatch(fetchHistoryRequest(statusId));
 
     return getClient(getState()).statuses.getStatusHistory(statusId).then(data => {
       dispatch(importFetchedAccounts(data.map((x) => x.account)));
       dispatch(fetchHistorySuccess(statusId, data));
-    }).catch(error => dispatch(fetchHistoryFail(error)));
+    }).catch(error => dispatch(fetchHistoryFail(statusId, error)));
   };
 
 const fetchHistoryRequest = (statusId: string) => ({
@@ -30,16 +28,19 @@ const fetchHistoryRequest = (statusId: string) => ({
   statusId,
 });
 
-const fetchHistorySuccess = (statusId: String, history: APIEntity[]) => ({
+const fetchHistorySuccess = (statusId: string, history: Array<StatusEdit>) => ({
   type: HISTORY_FETCH_SUCCESS,
   statusId,
   history,
 });
 
-const fetchHistoryFail = (error: unknown) => ({
+const fetchHistoryFail = (statusId: string, error: unknown) => ({
   type: HISTORY_FETCH_FAIL,
+  statusId,
   error,
 });
+
+type HistoryAction = ReturnType<typeof fetchHistoryRequest> | ReturnType<typeof fetchHistorySuccess> | ReturnType<typeof fetchHistoryFail>;
 
 export {
   HISTORY_FETCH_REQUEST,
@@ -49,4 +50,5 @@ export {
   fetchHistoryRequest,
   fetchHistorySuccess,
   fetchHistoryFail,
+  type HistoryAction,
 };

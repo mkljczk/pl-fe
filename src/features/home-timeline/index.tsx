@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { expandHomeTimeline } from 'soapbox/actions/timelines';
+import { fetchHomeTimeline } from 'soapbox/actions/timelines';
 import PullToRefresh from 'soapbox/components/pull-to-refresh';
 import { Column, Stack, Text } from 'soapbox/components/ui';
 import Timeline from 'soapbox/features/ui/components/timeline';
@@ -24,10 +24,9 @@ const HomeTimeline: React.FC = () => {
   const isMobile = useIsMobile();
 
   const isPartial = useAppSelector(state => state.timelines.get('home')?.isPartial === true);
-  const next = useAppSelector(state => state.timelines.get('home')?.next);
 
   const handleLoadMore = (maxId: string) => {
-    dispatch(expandHomeTimeline({ url: next, maxId }, intl));
+    dispatch(fetchHomeTimeline(true));
   };
 
   // Mastodon generates the feed in Redis, and can return a partial timeline
@@ -35,7 +34,7 @@ const HomeTimeline: React.FC = () => {
   const checkIfReloadNeeded = () => {
     if (isPartial) {
       polling.current = setInterval(() => {
-        dispatch(expandHomeTimeline({}, intl));
+        dispatch(fetchHomeTimeline());
       }, 3000);
     } else {
       stopPolling();
@@ -49,7 +48,7 @@ const HomeTimeline: React.FC = () => {
     }
   };
 
-  const handleRefresh = () => dispatch(expandHomeTimeline({}, intl));
+  const handleRefresh = () => dispatch(fetchHomeTimeline(true));
 
   useEffect(() => {
     checkIfReloadNeeded();

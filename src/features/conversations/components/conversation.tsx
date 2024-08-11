@@ -22,7 +22,7 @@ const Conversation: React.FC<IConversation> = ({ conversationId, onMoveUp, onMov
     return {
       accounts: conversation.accounts.map((accountId: string) => selectAccount(state, accountId)!),
       unread: conversation.unread,
-      lastStatusId: conversation.last_status || null,
+      lastStatusId: conversation.last_status,
     };
   });
 

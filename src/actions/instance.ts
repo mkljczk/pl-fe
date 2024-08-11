@@ -2,10 +2,11 @@ import { getAuthUserUrl, getMeUrl } from 'soapbox/utils/auth';
 
 import { getClient } from '../api';
 
+import type { Instance } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 
-const INSTANCE_FETCH_FAIL = 'INSTANCE_FETCH_FAIL' as const;
 const INSTANCE_FETCH_SUCCESS = 'INSTANCE_FETCH_SUCCESS' as const;
+const INSTANCE_FETCH_FAIL = 'INSTANCE_FETCH_FAIL' as const;
 
 /** Figure out the appropriate instance to fetch depending on the state */
 const getHost = (state: RootState) => {
@@ -18,19 +19,35 @@ const getHost = (state: RootState) => {
   }
 };
 
+interface InstanceFetchSuccessAction {
+  type: typeof INSTANCE_FETCH_SUCCESS;
+  instance: Instance;
+}
+
+interface InstanceFetchFailAction {
+  type: typeof INSTANCE_FETCH_FAIL;
+  error: any;
+}
+
 const fetchInstance = () => async (dispatch: AppDispatch, getState: () => RootState) => {
   try {
     const instance = await getClient(getState).instance.getInstance();
 
-    dispatch({ type: INSTANCE_FETCH_SUCCESS, instance });
+    const action: InstanceFetchSuccessAction = { type: INSTANCE_FETCH_SUCCESS, instance };
+    dispatch(action);
   } catch (error) {
     dispatch({ type: INSTANCE_FETCH_FAIL, error });
   }
 };
 
+type InstanceAction =
+  InstanceFetchSuccessAction
+  | InstanceFetchFailAction
+
 export {
-  INSTANCE_FETCH_FAIL,
   INSTANCE_FETCH_SUCCESS,
+  INSTANCE_FETCH_FAIL,
   getHost,
   fetchInstance,
+  type InstanceAction,
 };

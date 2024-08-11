@@ -7,9 +7,8 @@ import resizeImage from 'soapbox/utils/resize-image';
 
 import { getClient } from '../api';
 
-import type { UploadMediaParams } from 'pl-api';
+import type { MediaAttachment, UploadMediaParams } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   exceededImageSizeLimit: { id: 'upload_error.image_size_limit', defaultMessage: 'Image exceeds the current file size limit ({limit})' },
@@ -30,7 +29,7 @@ const uploadMedia = (body: UploadMediaParams, onUploadProgress: (e: ProgressEven
 const uploadFile = (
   file: File,
   intl: IntlShape,
-  onSuccess: (data: APIEntity) => void = () => {},
+  onSuccess: (data: MediaAttachment) => void = () => {},
   onFail: (error: unknown) => void = () => {},
   onProgress: (e: ProgressEvent) => void = () => {},
   changeTotal: (value: number) => void = () => {},

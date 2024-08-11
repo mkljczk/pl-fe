@@ -7,17 +7,17 @@ import toast from 'soapbox/toast';
 import type { Account, PaginatedResponse } from 'pl-api';
 import type { RootState } from 'soapbox/store';
 
-const EXPORT_FOLLOWS_REQUEST = 'EXPORT_FOLLOWS_REQUEST';
-const EXPORT_FOLLOWS_SUCCESS = 'EXPORT_FOLLOWS_SUCCESS';
-const EXPORT_FOLLOWS_FAIL    = 'EXPORT_FOLLOWS_FAIL';
+const EXPORT_FOLLOWS_REQUEST = 'EXPORT_FOLLOWS_REQUEST' as const;
+const EXPORT_FOLLOWS_SUCCESS = 'EXPORT_FOLLOWS_SUCCESS' as const;
+const EXPORT_FOLLOWS_FAIL = 'EXPORT_FOLLOWS_FAIL' as const;
 
-const EXPORT_BLOCKS_REQUEST = 'EXPORT_BLOCKS_REQUEST';
-const EXPORT_BLOCKS_SUCCESS = 'EXPORT_BLOCKS_SUCCESS';
-const EXPORT_BLOCKS_FAIL    = 'EXPORT_BLOCKS_FAIL';
+const EXPORT_BLOCKS_REQUEST = 'EXPORT_BLOCKS_REQUEST' as const;
+const EXPORT_BLOCKS_SUCCESS = 'EXPORT_BLOCKS_SUCCESS' as const;
+const EXPORT_BLOCKS_FAIL = 'EXPORT_BLOCKS_FAIL' as const;
 
-const EXPORT_MUTES_REQUEST = 'EXPORT_MUTES_REQUEST';
-const EXPORT_MUTES_SUCCESS = 'EXPORT_MUTES_SUCCESS';
-const EXPORT_MUTES_FAIL    = 'EXPORT_MUTES_FAIL';
+const EXPORT_MUTES_REQUEST = 'EXPORT_MUTES_REQUEST' as const;
+const EXPORT_MUTES_SUCCESS = 'EXPORT_MUTES_SUCCESS' as const;
+const EXPORT_MUTES_FAIL = 'EXPORT_MUTES_FAIL' as const;
 
 const messages = defineMessages({
   blocksSuccess: { id: 'export_data.success.blocks', defaultMessage: 'Blocks exported successfully' },
@@ -25,7 +25,7 @@ const messages = defineMessages({
   mutesSuccess: { id: 'export_data.success.mutes', defaultMessage: 'Mutes exported successfully' },
 });
 
-type ExportDataActions = {
+type ExportDataAction = {
   type: typeof EXPORT_FOLLOWS_REQUEST
   | typeof EXPORT_FOLLOWS_SUCCESS
   | typeof EXPORT_FOLLOWS_FAIL
@@ -61,7 +61,7 @@ const listAccounts = async (response: PaginatedResponse<Account>) => {
   return Array.from(new Set(accounts));
 };
 
-const exportFollows = () => async (dispatch: React.Dispatch<ExportDataActions>, getState: () => RootState) => {
+const exportFollows = () => async (dispatch: React.Dispatch<ExportDataAction>, getState: () => RootState) => {
   dispatch({ type: EXPORT_FOLLOWS_REQUEST });
   const me = getState().me;
   if (!me) return;
@@ -80,7 +80,7 @@ const exportFollows = () => async (dispatch: React.Dispatch<ExportDataActions>, 
     });
 };
 
-const exportBlocks = () => (dispatch: React.Dispatch<ExportDataActions>, getState: () => RootState) => {
+const exportBlocks = () => (dispatch: React.Dispatch<ExportDataAction>, getState: () => RootState) => {
   dispatch({ type: EXPORT_BLOCKS_REQUEST });
   return getClient(getState()).filtering.getBlocks({ limit: 40 })
     .then(listAccounts)
@@ -94,7 +94,7 @@ const exportBlocks = () => (dispatch: React.Dispatch<ExportDataActions>, getStat
     });
 };
 
-const exportMutes = () => (dispatch: React.Dispatch<ExportDataActions>, getState: () => RootState) => {
+const exportMutes = () => (dispatch: React.Dispatch<ExportDataAction>, getState: () => RootState) => {
   dispatch({ type: EXPORT_MUTES_REQUEST });
   return getClient(getState()).filtering.getMutes({ limit: 40 })
     .then(listAccounts)
@@ -121,4 +121,5 @@ export {
   exportFollows,
   exportBlocks,
   exportMutes,
+  type ExportDataAction,
 };

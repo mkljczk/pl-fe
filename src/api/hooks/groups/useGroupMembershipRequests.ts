@@ -1,8 +1,9 @@
+import { accountSchema, GroupRoles } from 'pl-api';
+
 import { Entities } from 'soapbox/entity-store/entities';
 import { useDismissEntity, useEntities } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';
-import { accountSchema } from 'soapbox/schemas';
-import { GroupRoles } from 'soapbox/schemas/group-member';
+import { normalizeAccount } from 'soapbox/normalizers';
 
 import { useGroupRelationship } from './useGroupRelationship';
 
@@ -19,6 +20,7 @@ const useGroupMembershipRequests = (groupId: string) => {
     () => client.experimental.groups.getGroupMembershipRequests(groupId),
     {
       schema: accountSchema,
+      transform: normalizeAccount,
       enabled: relationship?.role === GroupRoles.OWNER || relationship?.role === GroupRoles.ADMIN,
     },
   );

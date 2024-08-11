@@ -10,7 +10,7 @@ import { isLoggedIn } from 'soapbox/utils/auth';
 import type { AppDispatch, RootState } from 'soapbox/store';
 
 const SETTING_CHANGE = 'SETTING_CHANGE' as const;
-const SETTING_SAVE   = 'SETTING_SAVE' as const;
+const SETTING_SAVE = 'SETTING_SAVE' as const;
 const SETTINGS_UPDATE = 'SETTINGS_UPDATE' as const;
 
 const FE_NAME = 'pl_fe';
@@ -84,7 +84,7 @@ const defaultSettings = ImmutableMap({
     }),
   }),
 
-  community: ImmutableMap({
+  'public:local': ImmutableMap({
     shows: ImmutableMap({
       reblog: false,
       reply: true,

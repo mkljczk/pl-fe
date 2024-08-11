@@ -1,25 +1,17 @@
 import { InfiniteData, keepPreviousData, useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 import sumBy from 'lodash/sumBy';
+import { type Chat, type ChatMessage as BaseChatMessage, type PaginatedResponse, chatMessageSchema } from 'pl-api';
 
 import { importFetchedAccount, importFetchedAccounts } from 'soapbox/actions/importer';
 import { ChatWidgetScreens, useChatContext } from 'soapbox/contexts/chat-context';
 import { useStatContext } from 'soapbox/contexts/stat-context';
 import { useAppDispatch, useAppSelector, useClient, useFeatures, useLoggedIn, useOwnAccount } from 'soapbox/hooks';
-import { normalizeChatMessage } from 'soapbox/normalizers';
+import { type ChatMessage, normalizeChatMessage } from 'soapbox/normalizers';
 import { reOrderChatListItems } from 'soapbox/utils/chats';
 import { flattenPages, updatePageItem } from 'soapbox/utils/queries';
 
 import { queryClient } from './client';
 import { useFetchRelationships } from './relationships';
-
-import type { Chat, ChatMessage as BaseChatMessage, PaginatedResponse } from 'pl-api';
-
-const transformChatMessage = (chatMessage: BaseChatMessage) => ({
-  ...chatMessage,
-  pending: false as boolean,
-});
-
-type ChatMessage = ReturnType<typeof transformChatMessage>;
 
 const ChatKeys = {
   chat: (chatId?: string) => ['chats', 'chat', chatId] as const,
@@ -35,7 +27,7 @@ const useChatMessages = (chat: Chat) => {
 
     return {
       ...response,
-      items: response.items.map(transformChatMessage),
+      items: response.items.map(normalizeChatMessage),
     };
   };
 
@@ -49,7 +41,7 @@ const useChatMessages = (chat: Chat) => {
     getNextPageParam: (config) => config,
   });
 
-  const data = flattenPages<ChatMessage>(queryInfo.data as any)?.reverse();
+  const data = flattenPages<ChatMessage>(queryInfo.data as any)?.toReversed();
 
   return {
     ...queryInfo,
@@ -177,12 +169,14 @@ const useChatActions = (chatId: string) => {
               ...page,
               result: [
                 normalizeChatMessage({
-                  content: variables.content,
-                  id: pendingId,
-                  created_at: new Date(),
-                  account_id: account?.id,
+                  ...chatMessageSchema.parse({
+                    content: variables.content,
+                    id: pendingId,
+                    created_at: new Date(),
+                    account_id: account?.id,
+                    unread: true,
+                  }),
                   pending: true,
-                  unread: true,
                 }),
                 ...page.result,
               ],
@@ -232,4 +226,4 @@ const useChatActions = (chatId: string) => {
   };
 };
 
-export { ChatKeys, useChat, useChatActions, useChats, useChatMessages, type ChatMessage };
+export { ChatKeys, useChat, useChatActions, useChats, useChatMessages };

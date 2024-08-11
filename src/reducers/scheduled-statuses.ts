@@ -38,7 +38,7 @@ const importStatus = (state: State, { params, ...status }: APIEntity) => {
 const importStatuses = (state: State, statuses: APIEntity[]) =>
   state.withMutations(mutable => statuses.forEach(status => importStatus(mutable, status)));
 
-const deleteStatus = (state: State, id: string) => state.delete(id);
+const deleteStatus = (state: State, statusId: string) => state.delete(statusId);
 
 const scheduled_statuses = (state: State = initialState, action: AnyAction) => {
   switch (action.type) {
@@ -50,7 +50,7 @@ const scheduled_statuses = (state: State = initialState, action: AnyAction) => {
       return importStatuses(state, action.statuses);
     case SCHEDULED_STATUS_CANCEL_REQUEST:
     case SCHEDULED_STATUS_CANCEL_SUCCESS:
-      return deleteStatus(state, action.id);
+      return deleteStatus(state, action.statusId);
     default:
       return state;
   }

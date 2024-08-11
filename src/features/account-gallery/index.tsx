@@ -1,20 +1,20 @@
 import { List as ImmutableList } from 'immutable';
 import React, { useEffect, useRef } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
 import { openModal } from 'soapbox/actions/modals';
-import { expandAccountMediaTimeline } from 'soapbox/actions/timelines';
+import { fetchAccountTimeline } from 'soapbox/actions/timelines';
 import { useAccountLookup } from 'soapbox/api/hooks';
 import LoadMore from 'soapbox/components/load-more';
 import MissingIndicator from 'soapbox/components/missing-indicator';
 import { Column, Spinner } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { getAccountGallery } from 'soapbox/selectors';
+import { type AccountGalleryAttachment, getAccountGallery } from 'soapbox/selectors';
 
 import MediaItem from './components/media-item';
 
-import type { Attachment, Status } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/types/entities';
 
 interface ILoadMoreMedia {
   maxId: string | null;
@@ -33,7 +33,6 @@ const LoadMoreMedia: React.FC<ILoadMoreMedia> = ({ maxId, onLoadMore }) => {
 
 const AccountGallery = () => {
   const dispatch = useAppDispatch();
-  const intl = useIntl();
   const { username } = useParams<{ username: string }>();
 
   const {
@@ -42,22 +41,21 @@ const AccountGallery = () => {
     isUnavailable,
   } = useAccountLookup(username, { withRelationship: true });
 
-  const attachments: ImmutableList<Attachment> = useAppSelector((state) => account ? getAccountGallery(state, account.id) : ImmutableList());
+  const attachments: ImmutableList<AccountGalleryAttachment> = useAppSelector((state) => account ? getAccountGallery(state, account.id) : ImmutableList());
   const isLoading = useAppSelector((state) => state.timelines.get(`account:${account?.id}:media`)?.isLoading);
   const hasMore = useAppSelector((state) => state.timelines.get(`account:${account?.id}:media`)?.hasMore);
-  const next = useAppSelector(state => state.timelines.get(`account:${account?.id}:media`)?.next);
 
   const node = useRef<HTMLDivElement>(null);
 
   const handleScrollToBottom = () => {
     if (hasMore) {
-      handleLoadMore(attachments.size > 0 ? attachments.last()!.status.id : undefined);
+      handleLoadMore(attachments.size > 0 ? attachments.last()!.status.id : null);
     }
   };
 
   const handleLoadMore = (maxId: string | null) => {
     if (account) {
-      dispatch(expandAccountMediaTimeline(account.id, { url: next, maxId }, intl));
+      dispatch(fetchAccountTimeline(account.id, { only_media: true }, true));
     }
   };
 
@@ -66,7 +64,7 @@ const AccountGallery = () => {
     handleScrollToBottom();
   };
 
-  const handleOpenMedia = (attachment: Attachment) => {
+  const handleOpenMedia = (attachment: AccountGalleryAttachment) => {
     if (attachment.type === 'video') {
       dispatch(openModal('VIDEO', { media: attachment, status: attachment.status, account: attachment.account }));
     } else {
@@ -79,7 +77,7 @@ const AccountGallery = () => {
 
   useEffect(() => {
     if (account) {
-      dispatch(expandAccountMediaTimeline(account.id, {}, intl));
+      dispatch(fetchAccountTimeline(account.id, { only_media: true, limit: 40 }));
     }
   }, [account?.id]);
 

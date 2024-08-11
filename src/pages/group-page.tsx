@@ -50,10 +50,10 @@ const GroupPage: React.FC<IGroupPage> = ({ params, children }) => {
   const match = useRouteMatch();
   const { account: me } = useOwnAccount();
 
-  const id = params?.groupId || '';
+  const groupId = params?.groupId || '';
 
-  const { group } = useGroup(id);
-  const { accounts: pending } = useGroupMembershipRequests(id);
+  const { group } = useGroup(groupId);
+  const { accounts: pending } = useGroupMembershipRequests(groupId);
 
   const isMember = !!group?.relationship?.member;
   const isPrivate = group?.locked;
@@ -62,26 +62,26 @@ const GroupPage: React.FC<IGroupPage> = ({ params, children }) => {
     const items = [];
     items.push({
       text: intl.formatMessage(messages.all),
-      to: `/groups/${id}`,
+      to: `/groups/${groupId}`,
       name: '/groups/:groupId',
     });
 
     items.push(
       {
         text: intl.formatMessage(messages.media),
-        to: `/groups/${id}/media`,
+        to: `/groups/${groupId}/media`,
         name: '/groups/:groupId/media',
       },
       {
         text: intl.formatMessage(messages.members),
-        to: `/groups/${id}/members`,
+        to: `/groups/${groupId}/members`,
         name: '/groups/:groupId/members',
         count: pending.length,
       },
     );
 
     return items;
-  }, [pending.length, id]);
+  }, [pending.length, groupId]);
 
   const renderChildren = () => {
     if (!isMember && isPrivate) {
@@ -98,7 +98,7 @@ const GroupPage: React.FC<IGroupPage> = ({ params, children }) => {
           <GroupHeader group={group} />
 
           <Tabs
-            key={`group-tabs-${id}`}
+            key={`group-tabs-${groupId}`}
             items={tabItems}
             activeItem={match.path}
           />

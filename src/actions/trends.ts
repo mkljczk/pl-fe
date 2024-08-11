@@ -1,11 +1,10 @@
-import type { APIEntity } from 'soapbox/types/entities';
+import type { Tag } from 'pl-api';
 
 const TRENDS_FETCH_SUCCESS = 'TRENDS_FETCH_SUCCESS';
 
-const fetchTrendsSuccess = (tags: APIEntity[]) => ({
+const fetchTrendsSuccess = (tags: Array<Tag>) => ({
   type: TRENDS_FETCH_SUCCESS,
   tags,
-  skipLoading: true,
 });
 
 export {

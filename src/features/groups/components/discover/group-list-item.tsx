@@ -5,11 +5,12 @@ import { Link } from 'react-router-dom';
 import GroupAvatar from 'soapbox/components/groups/group-avatar';
 import { HStack, Icon, Stack, Text } from 'soapbox/components/ui';
 import GroupActionButton from 'soapbox/features/group/components/group-action-button';
-import { Group as GroupEntity } from 'soapbox/types/entities';
 import { shortNumberFormat } from 'soapbox/utils/numbers';
 
+import type { Group } from 'soapbox/normalizers';
+
 interface IGroupListItem {
-  group: GroupEntity;
+  group: Pick<Group, 'id' | 'avatar' | 'avatar_description' | 'display_name_html' | 'locked' | 'members_count' | 'relationship'>;
   withJoinAction?: boolean;
 }
 

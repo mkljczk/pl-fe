@@ -16,7 +16,7 @@ import type {
   SerializedLexicalNode,
   Spread,
 } from 'lexical';
-import type { Mention as MentionEntity } from 'soapbox/schemas';
+import type { Mention as MentionEntity } from 'pl-api';
 
 type SerializedMentionNode = Spread<{
   mention: MentionEntity;

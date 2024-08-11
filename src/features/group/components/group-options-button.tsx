@@ -1,3 +1,4 @@
+import { GroupRoles, type Group } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -6,10 +7,7 @@ import { useLeaveGroup } from 'soapbox/api/hooks';
 import DropdownMenu, { Menu } from 'soapbox/components/dropdown-menu';
 import { IconButton } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
-import { GroupRoles } from 'soapbox/schemas/group-member';
 import toast from 'soapbox/toast';
-
-import type { Group } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   confirmationConfirm: { id: 'confirmations.leave_group.confirm', defaultMessage: 'Leave' },
@@ -21,7 +19,7 @@ const messages = defineMessages({
 });
 
 interface IGroupActionButton {
-  group: Group;
+  group: Pick<Group, 'id' | 'display_name' | 'url' | 'relationship'>;
 }
 
 const GroupOptionsButton = ({ group }: IGroupActionButton) => {

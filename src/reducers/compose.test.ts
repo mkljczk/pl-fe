@@ -332,7 +332,6 @@ describe('compose reducer', () => {
       type: actions.COMPOSE_UPLOAD_SUCCESS,
       id: 'home',
       media: media,
-      skipLoading: true,
     };
     expect(reducer(state, action as any).toJS().home).toMatchObject({
       is_uploading: false,

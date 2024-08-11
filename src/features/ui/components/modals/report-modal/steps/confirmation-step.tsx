@@ -5,7 +5,7 @@ import { getSoapboxConfig } from 'soapbox/actions/soapbox';
 import { Stack, Text } from 'soapbox/components/ui';
 import { useAppSelector } from 'soapbox/hooks';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   accountEntity: { id: 'report.confirmation.entity.account', defaultMessage: 'account' },

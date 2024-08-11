@@ -1,16 +1,13 @@
 import { List as ImmutableList } from 'immutable';
 
-import { normalizeFilter } from 'soapbox/normalizers';
-
 import { FILTERS_FETCH_SUCCESS } from '../actions/filters';
 
+import type { Filter } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { APIEntity, Filter as FilterEntity } from 'soapbox/types/entities';
 
-type State = ImmutableList<FilterEntity>;
+type State = ImmutableList<Filter>;
 
-const importFilters = (_state: State, filters: APIEntity[]): State =>
-  ImmutableList(filters.map((filter) => normalizeFilter(filter)));
+const importFilters = (_state: State, filters: Array<Filter>): State => ImmutableList(filters);
 
 const filters = (state: State = ImmutableList(), action: AnyAction): State => {
   switch (action.type) {

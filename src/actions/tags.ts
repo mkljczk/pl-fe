@@ -2,27 +2,26 @@ import { getClient } from '../api';
 
 import type { PaginatedResponse, Tag } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const HASHTAG_FETCH_REQUEST = 'HASHTAG_FETCH_REQUEST';
-const HASHTAG_FETCH_SUCCESS = 'HASHTAG_FETCH_SUCCESS';
-const HASHTAG_FETCH_FAIL    = 'HASHTAG_FETCH_FAIL';
+const HASHTAG_FETCH_REQUEST = 'HASHTAG_FETCH_REQUEST' as const;
+const HASHTAG_FETCH_SUCCESS = 'HASHTAG_FETCH_SUCCESS' as const;
+const HASHTAG_FETCH_FAIL = 'HASHTAG_FETCH_FAIL' as const;
 
-const HASHTAG_FOLLOW_REQUEST = 'HASHTAG_FOLLOW_REQUEST';
-const HASHTAG_FOLLOW_SUCCESS = 'HASHTAG_FOLLOW_SUCCESS';
-const HASHTAG_FOLLOW_FAIL    = 'HASHTAG_FOLLOW_FAIL';
+const HASHTAG_FOLLOW_REQUEST = 'HASHTAG_FOLLOW_REQUEST' as const;
+const HASHTAG_FOLLOW_SUCCESS = 'HASHTAG_FOLLOW_SUCCESS' as const;
+const HASHTAG_FOLLOW_FAIL = 'HASHTAG_FOLLOW_FAIL' as const;
 
-const HASHTAG_UNFOLLOW_REQUEST = 'HASHTAG_UNFOLLOW_REQUEST';
-const HASHTAG_UNFOLLOW_SUCCESS = 'HASHTAG_UNFOLLOW_SUCCESS';
-const HASHTAG_UNFOLLOW_FAIL    = 'HASHTAG_UNFOLLOW_FAIL';
+const HASHTAG_UNFOLLOW_REQUEST = 'HASHTAG_UNFOLLOW_REQUEST' as const;
+const HASHTAG_UNFOLLOW_SUCCESS = 'HASHTAG_UNFOLLOW_SUCCESS' as const;
+const HASHTAG_UNFOLLOW_FAIL = 'HASHTAG_UNFOLLOW_FAIL' as const;
 
-const FOLLOWED_HASHTAGS_FETCH_REQUEST = 'FOLLOWED_HASHTAGS_FETCH_REQUEST';
-const FOLLOWED_HASHTAGS_FETCH_SUCCESS = 'FOLLOWED_HASHTAGS_FETCH_SUCCESS';
-const FOLLOWED_HASHTAGS_FETCH_FAIL    = 'FOLLOWED_HASHTAGS_FETCH_FAIL';
+const FOLLOWED_HASHTAGS_FETCH_REQUEST = 'FOLLOWED_HASHTAGS_FETCH_REQUEST' as const;
+const FOLLOWED_HASHTAGS_FETCH_SUCCESS = 'FOLLOWED_HASHTAGS_FETCH_SUCCESS' as const;
+const FOLLOWED_HASHTAGS_FETCH_FAIL = 'FOLLOWED_HASHTAGS_FETCH_FAIL' as const;
 
-const FOLLOWED_HASHTAGS_EXPAND_REQUEST = 'FOLLOWED_HASHTAGS_EXPAND_REQUEST';
-const FOLLOWED_HASHTAGS_EXPAND_SUCCESS = 'FOLLOWED_HASHTAGS_EXPAND_SUCCESS';
-const FOLLOWED_HASHTAGS_EXPAND_FAIL    = 'FOLLOWED_HASHTAGS_EXPAND_FAIL';
+const FOLLOWED_HASHTAGS_EXPAND_REQUEST = 'FOLLOWED_HASHTAGS_EXPAND_REQUEST' as const;
+const FOLLOWED_HASHTAGS_EXPAND_SUCCESS = 'FOLLOWED_HASHTAGS_EXPAND_SUCCESS' as const;
+const FOLLOWED_HASHTAGS_EXPAND_FAIL = 'FOLLOWED_HASHTAGS_EXPAND_FAIL' as const;
 
 const fetchHashtag = (name: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(fetchHashtagRequest());
@@ -38,7 +37,7 @@ const fetchHashtagRequest = () => ({
   type: HASHTAG_FETCH_REQUEST,
 });
 
-const fetchHashtagSuccess = (name: string, tag: APIEntity) => ({
+const fetchHashtagSuccess = (name: string, tag: Tag) => ({
   type: HASHTAG_FETCH_SUCCESS,
   name,
   tag,
@@ -64,7 +63,7 @@ const followHashtagRequest = (name: string) => ({
   name,
 });
 
-const followHashtagSuccess = (name: string, tag: APIEntity) => ({
+const followHashtagSuccess = (name: string, tag: Tag) => ({
   type: HASHTAG_FOLLOW_SUCCESS,
   name,
   tag,
@@ -91,7 +90,7 @@ const unfollowHashtagRequest = (name: string) => ({
   name,
 });
 
-const unfollowHashtagSuccess = (name: string, tag: APIEntity) => ({
+const unfollowHashtagSuccess = (name: string, tag: Tag) => ({
   type: HASHTAG_UNFOLLOW_SUCCESS,
   name,
   tag,
@@ -117,7 +116,7 @@ const fetchFollowedHashtagsRequest = () => ({
   type: FOLLOWED_HASHTAGS_FETCH_REQUEST,
 });
 
-const fetchFollowedHashtagsSuccess = (followed_tags: APIEntity[], next: (() => Promise<PaginatedResponse<Tag>>) | null) => ({
+const fetchFollowedHashtagsSuccess = (followed_tags: Array<Tag>, next: (() => Promise<PaginatedResponse<Tag>>) | null) => ({
   type: FOLLOWED_HASHTAGS_FETCH_SUCCESS,
   followed_tags,
   next,
@@ -146,7 +145,7 @@ const expandFollowedHashtagsRequest = () => ({
   type: FOLLOWED_HASHTAGS_EXPAND_REQUEST,
 });
 
-const expandFollowedHashtagsSuccess = (followed_tags: APIEntity[], next: (() => Promise<PaginatedResponse<Tag>>) | null) => ({
+const expandFollowedHashtagsSuccess = (followed_tags: Array<Tag>, next: (() => Promise<PaginatedResponse<Tag>>) | null) => ({
   type: FOLLOWED_HASHTAGS_EXPAND_SUCCESS,
   followed_tags,
   next,

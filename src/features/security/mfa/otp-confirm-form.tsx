@@ -35,7 +35,7 @@ const OtpConfirmForm: React.FC = () => {
   });
 
   useEffect(() => {
-    dispatch(setupMfa('totp')).then((data: any) => {
+    dispatch(setupMfa('totp')).then((data) => {
       setState((prevState) => ({ ...prevState, qrCodeURI: data.provisioning_uri, confirmKey: data.key }));
     }).catch(() => {
       toast.error(intl.formatMessage(messages.qrFail));
@@ -51,7 +51,7 @@ const OtpConfirmForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     setState((prevState) => ({ ...prevState, isLoading: true }));
 
-    dispatch(confirmMfa('totp', state.code, state.password) as any).then((r: any) => {
+    dispatch(confirmMfa('totp', state.code, state.password)).then((r) => {
       toast.success(intl.formatMessage(messages.mfaConfirmSuccess));
       history.push('../auth/edit');
     }).catch(() => {

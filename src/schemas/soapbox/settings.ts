@@ -55,7 +55,7 @@ const settingsSchema = z.object({
       onlyMedia: z.boolean().catch(false),
     }),
   }),
-  community: coerceObject({
+  'public:local': coerceObject({
     other: coerceObject({
       onlyMedia: z.boolean().catch(false),
     }),

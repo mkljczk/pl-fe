@@ -10,7 +10,7 @@ import { useChatActions, useChatMessages } from 'soapbox/queries/chats';
 import ChatMessage from './chat-message';
 
 import type { Chat } from 'pl-api';
-import type { ChatMessage as ChatMessageEntity } from 'soapbox/types/entities';
+import type { ChatMessage as ChatMessageEntity } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   today: { id: 'chats.dividers.today', defaultMessage: 'Today' },
@@ -95,7 +95,7 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
     setFirstItemIndex(nextFirstItemIndex);
   }, [lastChatMessage]);
 
-  const buildCachedMessages = () => {
+  const buildCachedMessages = (): Array<ChatMessageEntity | { type: 'divider'; text: string }> => {
     if (!chatMessages) {
       return [];
     }
@@ -242,7 +242,7 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
           followOutput='auto'
           itemContent={(index, chatMessage) => {
             if (chatMessage.type === 'divider') {
-              return renderDivider(index, chatMessage.text);
+              return renderDivider(index, (chatMessage as any).text);
             } else {
               return <ChatMessage chat={chat} chatMessage={chatMessage} />;
             }

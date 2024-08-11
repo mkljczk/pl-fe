@@ -6,23 +6,22 @@ import { importFetchedStatuses } from './importer';
 
 import type { PaginatedResponse, Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const FAVOURITED_STATUSES_FETCH_REQUEST = 'FAVOURITED_STATUSES_FETCH_REQUEST';
-const FAVOURITED_STATUSES_FETCH_SUCCESS = 'FAVOURITED_STATUSES_FETCH_SUCCESS';
-const FAVOURITED_STATUSES_FETCH_FAIL    = 'FAVOURITED_STATUSES_FETCH_FAIL';
+const FAVOURITED_STATUSES_FETCH_REQUEST = 'FAVOURITED_STATUSES_FETCH_REQUEST' as const;
+const FAVOURITED_STATUSES_FETCH_SUCCESS = 'FAVOURITED_STATUSES_FETCH_SUCCESS' as const;
+const FAVOURITED_STATUSES_FETCH_FAIL = 'FAVOURITED_STATUSES_FETCH_FAIL' as const;
 
-const FAVOURITED_STATUSES_EXPAND_REQUEST = 'FAVOURITED_STATUSES_EXPAND_REQUEST';
-const FAVOURITED_STATUSES_EXPAND_SUCCESS = 'FAVOURITED_STATUSES_EXPAND_SUCCESS';
-const FAVOURITED_STATUSES_EXPAND_FAIL    = 'FAVOURITED_STATUSES_EXPAND_FAIL';
+const FAVOURITED_STATUSES_EXPAND_REQUEST = 'FAVOURITED_STATUSES_EXPAND_REQUEST' as const;
+const FAVOURITED_STATUSES_EXPAND_SUCCESS = 'FAVOURITED_STATUSES_EXPAND_SUCCESS' as const;
+const FAVOURITED_STATUSES_EXPAND_FAIL = 'FAVOURITED_STATUSES_EXPAND_FAIL' as const;
 
-const ACCOUNT_FAVOURITED_STATUSES_FETCH_REQUEST = 'ACCOUNT_FAVOURITED_STATUSES_FETCH_REQUEST';
-const ACCOUNT_FAVOURITED_STATUSES_FETCH_SUCCESS = 'ACCOUNT_FAVOURITED_STATUSES_FETCH_SUCCESS';
-const ACCOUNT_FAVOURITED_STATUSES_FETCH_FAIL    = 'ACCOUNT_FAVOURITED_STATUSES_FETCH_FAIL';
+const ACCOUNT_FAVOURITED_STATUSES_FETCH_REQUEST = 'ACCOUNT_FAVOURITED_STATUSES_FETCH_REQUEST' as const;
+const ACCOUNT_FAVOURITED_STATUSES_FETCH_SUCCESS = 'ACCOUNT_FAVOURITED_STATUSES_FETCH_SUCCESS' as const;
+const ACCOUNT_FAVOURITED_STATUSES_FETCH_FAIL = 'ACCOUNT_FAVOURITED_STATUSES_FETCH_FAIL' as const;
 
-const ACCOUNT_FAVOURITED_STATUSES_EXPAND_REQUEST = 'ACCOUNT_FAVOURITED_STATUSES_EXPAND_REQUEST';
-const ACCOUNT_FAVOURITED_STATUSES_EXPAND_SUCCESS = 'ACCOUNT_FAVOURITED_STATUSES_EXPAND_SUCCESS';
-const ACCOUNT_FAVOURITED_STATUSES_EXPAND_FAIL    = 'ACCOUNT_FAVOURITED_STATUSES_EXPAND_FAIL';
+const ACCOUNT_FAVOURITED_STATUSES_EXPAND_REQUEST = 'ACCOUNT_FAVOURITED_STATUSES_EXPAND_REQUEST' as const;
+const ACCOUNT_FAVOURITED_STATUSES_EXPAND_SUCCESS = 'ACCOUNT_FAVOURITED_STATUSES_EXPAND_SUCCESS' as const;
+const ACCOUNT_FAVOURITED_STATUSES_EXPAND_FAIL = 'ACCOUNT_FAVOURITED_STATUSES_EXPAND_FAIL' as const;
 
 const fetchFavouritedStatuses = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -44,20 +43,17 @@ const fetchFavouritedStatuses = () =>
 
 const fetchFavouritedStatusesRequest = () => ({
   type: FAVOURITED_STATUSES_FETCH_REQUEST,
-  skipLoading: true,
 });
 
-const fetchFavouritedStatusesSuccess = (statuses: APIEntity[], next: (() => Promise<PaginatedResponse<Status>>) | null) => ({
+const fetchFavouritedStatusesSuccess = (statuses: Array<Status>, next: (() => Promise<PaginatedResponse<Status>>) | null) => ({
   type: FAVOURITED_STATUSES_FETCH_SUCCESS,
   statuses,
   next,
-  skipLoading: true,
 });
 
 const fetchFavouritedStatusesFail = (error: unknown) => ({
   type: FAVOURITED_STATUSES_FETCH_FAIL,
   error,
-  skipLoading: true,
 });
 
 const expandFavouritedStatuses = () =>
@@ -84,7 +80,7 @@ const expandFavouritedStatusesRequest = () => ({
   type: FAVOURITED_STATUSES_EXPAND_REQUEST,
 });
 
-const expandFavouritedStatusesSuccess = (statuses: APIEntity[], next: (() => Promise<PaginatedResponse<Status>>) | null) => ({
+const expandFavouritedStatusesSuccess = (statuses: Array<Status>, next: (() => Promise<PaginatedResponse<Status>>) | null) => ({
   type: FAVOURITED_STATUSES_EXPAND_SUCCESS,
   statuses,
   next,
@@ -116,22 +112,19 @@ const fetchAccountFavouritedStatuses = (accountId: string) =>
 const fetchAccountFavouritedStatusesRequest = (accountId: string) => ({
   type: ACCOUNT_FAVOURITED_STATUSES_FETCH_REQUEST,
   accountId,
-  skipLoading: true,
 });
 
-const fetchAccountFavouritedStatusesSuccess = (accountId: string, statuses: APIEntity, next: (() => Promise<PaginatedResponse<Status>>) | null) => ({
+const fetchAccountFavouritedStatusesSuccess = (accountId: string, statuses: Array<Status>, next: (() => Promise<PaginatedResponse<Status>>) | null) => ({
   type: ACCOUNT_FAVOURITED_STATUSES_FETCH_SUCCESS,
   accountId,
   statuses,
   next,
-  skipLoading: true,
 });
 
 const fetchAccountFavouritedStatusesFail = (accountId: string, error: unknown) => ({
   type: ACCOUNT_FAVOURITED_STATUSES_FETCH_FAIL,
   accountId,
   error,
-  skipLoading: true,
 });
 
 const expandAccountFavouritedStatuses = (accountId: string) =>
@@ -159,7 +152,7 @@ const expandAccountFavouritedStatusesRequest = (accountId: string) => ({
   accountId,
 });
 
-const expandAccountFavouritedStatusesSuccess = (accountId: string, statuses: APIEntity[], next: (() => Promise<PaginatedResponse<Status>>) | null) => ({
+const expandAccountFavouritedStatusesSuccess = (accountId: string, statuses: Array<Status>, next: (() => Promise<PaginatedResponse<Status>>) | null) => ({
   type: ACCOUNT_FAVOURITED_STATUSES_EXPAND_SUCCESS,
   accountId,
   statuses,
@@ -171,6 +164,20 @@ const expandAccountFavouritedStatusesFail = (accountId: string, error: unknown) 
   accountId,
   error,
 });
+
+type FavouritesAction =
+  ReturnType<typeof fetchFavouritedStatusesRequest>
+  | ReturnType<typeof fetchFavouritedStatusesSuccess>
+  | ReturnType<typeof fetchFavouritedStatusesFail>
+  | ReturnType<typeof expandFavouritedStatusesRequest>
+  | ReturnType<typeof expandFavouritedStatusesSuccess>
+  | ReturnType<typeof expandFavouritedStatusesFail>
+  | ReturnType<typeof fetchAccountFavouritedStatusesRequest>
+  | ReturnType<typeof fetchAccountFavouritedStatusesSuccess>
+  | ReturnType<typeof fetchAccountFavouritedStatusesFail>
+  | ReturnType<typeof expandAccountFavouritedStatusesRequest>
+  | ReturnType<typeof expandAccountFavouritedStatusesSuccess>
+  | ReturnType<typeof expandAccountFavouritedStatusesFail>;
 
 export {
   FAVOURITED_STATUSES_FETCH_REQUEST,
@@ -201,4 +208,5 @@ export {
   expandAccountFavouritedStatusesRequest,
   expandAccountFavouritedStatusesSuccess,
   expandAccountFavouritedStatusesFail,
+  type FavouritesAction,
 };

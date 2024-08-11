@@ -40,13 +40,13 @@ const Filters = () => {
   const handleFilterEdit = (id: string) => () => history.push(`/filters/${id}`);
 
   const handleFilterDelete = (id: string) => () => {
-    dispatch(deleteFilter(id)).then(() => dispatch(fetchFilters(true))).catch(() => {
+    dispatch(deleteFilter(id)).then(() => dispatch(fetchFilters())).catch(() => {
       toast.error(intl.formatMessage(messages.delete_error));
     });
   };
 
   useEffect(() => {
-    dispatch(fetchFilters(true));
+    dispatch(fetchFilters());
   }, []);
 
   const emptyMessage = <FormattedMessage id='empty_column.filters' defaultMessage="You haven't created any muted words yet." />;

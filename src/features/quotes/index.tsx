@@ -32,9 +32,7 @@ const Quotes: React.FC = () => {
     dispatch(fetchStatusQuotes(statusId));
   }, [statusId]);
 
-  const handleRefresh = async() => {
-    await dispatch(fetchStatusQuotes(statusId));
-  };
+  const handleRefresh = () => dispatch(fetchStatusQuotes(statusId));
 
   const emptyMessage = <FormattedMessage id='empty_column.quotes' defaultMessage='This post has not been quoted yet.' />;
 

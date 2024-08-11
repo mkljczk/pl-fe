@@ -12,12 +12,11 @@ interface IDataImporter {
     input_hint: MessageDescriptor;
     submit: MessageDescriptor;
   };
-  action: (params: FormData) => (dispatch: AppDispatch, getState: () => RootState) => Promise<void>;
-  paramName?: string;
+  action: (list: File | string) => (dispatch: AppDispatch, getState: () => RootState) => Promise<void>;
   accept?: string;
 }
 
-const DataImporter: React.FC<IDataImporter> = ({ messages, action, paramName = 'list', accept = '.csv,text/csv' }) => {
+const DataImporter: React.FC<IDataImporter> = ({ messages, action, accept = '.csv,text/csv' }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -25,11 +24,8 @@ const DataImporter: React.FC<IDataImporter> = ({ messages, action, paramName = '
   const [file, setFile] = useState<File | null | undefined>(null);
 
   const handleSubmit: React.FormEventHandler = (event) => {
-    const params = new FormData();
-    params.append(paramName, file!);
-
     setIsLoading(true);
-    dispatch(action(params)).then(() => {
+    dispatch(action(file!)).then(() => {
       setIsLoading(false);
     }).catch(() => {
       setIsLoading(false);

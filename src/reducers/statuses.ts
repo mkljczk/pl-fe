@@ -1,12 +1,8 @@
-import escapeTextContentForBrowser from 'escape-html';
-import { Map as ImmutableMap, List as ImmutableList } from 'immutable';
-import DOMPurify from 'isomorphic-dompurify';
+import { Map as ImmutableMap } from 'immutable';
 
-import emojify from 'soapbox/features/emoji';
-import { normalizeStatus } from 'soapbox/normalizers';
+import { normalizeStatus, normalizeTranslation } from 'soapbox/normalizers';
 import { simulateEmojiReact, simulateUnEmojiReact } from 'soapbox/utils/emoji-reacts';
-import { stripCompatibilityFeatures, unescapeHTML } from 'soapbox/utils/html';
-import { makeEmojiMap, normalizeId } from 'soapbox/utils/normalizers';
+import { normalizeId } from 'soapbox/utils/normalizers';
 
 import {
   EMOJI_REACT_REQUEST,
@@ -49,152 +45,85 @@ import {
 } from '../actions/statuses';
 import { TIMELINE_DELETE } from '../actions/timelines';
 
+import type { Status as BaseStatus, Translation } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { APIEntity } from 'soapbox/types/entities';
-
-const domParser = new DOMParser();
 
 type StatusRecord = ReturnType<typeof normalizeStatus>;
-type APIEntities = Array<APIEntity>;
 
 type State = ImmutableMap<string, ReducerStatus>;
 
-interface ReducerStatus extends StatusRecord {
+interface ReducerStatus extends Omit<StatusRecord, 'reblog' | 'poll' | 'quote' | 'group'> {
   reblog: string | null;
   poll: string | null;
   quote: string | null;
+  group: string | null;
 }
 
-const minifyStatus = (status: StatusRecord): ReducerStatus =>
-  status.mergeWith((o, n) => n || o, {
-    reblog: normalizeId(status.getIn(['reblog', 'id'])),
-    poll: normalizeId(status.getIn(['poll', 'id'])),
-    quote: normalizeId(status.getIn(['quote', 'id'])),
-  }) as ReducerStatus;
-
-// Gets titles of poll options from status
-const getPollOptionTitles = ({ poll }: StatusRecord): readonly string[] => {
-  if (poll && typeof poll === 'object') {
-    return poll.options.map(({ title }) => title);
-  } else {
-    return [];
-  }
-};
-
-// Gets usernames of mentioned users from status
-const getMentionedUsernames = (status: StatusRecord): ImmutableList<string> =>
-  status.mentions.map(({ acct }) => `@${acct}`);
-
-// Creates search text from the status
-const buildSearchContent = (status: StatusRecord): string => {
-  const pollOptionTitles = getPollOptionTitles(status);
-  const mentionedUsernames = getMentionedUsernames(status);
-
-  const fields = ImmutableList([
-    status.spoiler_text,
-    status.content,
-  ]).concat(pollOptionTitles).concat(mentionedUsernames);
-
-  return unescapeHTML(fields.join('\n\n')) || '';
-};
-
-const calculateContent = (text: string, emojiMap: any) => DOMPurify.sanitize(stripCompatibilityFeatures(emojify(text, emojiMap)), { USE_PROFILES: { html: true } });
-const calculateSpoiler = (text: string, emojiMap: any) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { USE_PROFILES: { html: true } });
-
-// Only calculate these values when status first encountered
-// Otherwise keep the ones already in the reducer
-const calculateStatus = (
-  status: StatusRecord,
-  oldStatus?: StatusRecord,
-): StatusRecord => {
-  if (oldStatus && oldStatus.content === status.content && oldStatus.spoiler_text === status.spoiler_text) {
-    const {
-      search_index, contentHtml, spoilerHtml, contentMapHtml, spoilerMapHtml, hidden, translation, currentLanguage,
-    } = oldStatus;
-
-    return status.merge({
-      search_index, contentHtml, spoilerHtml, contentMapHtml, spoilerMapHtml, hidden, translation, currentLanguage,
-    });
-  } else {
-    const searchContent = buildSearchContent(status);
-    const emojiMap = makeEmojiMap(status.emojis);
-
-    return status.merge({
-      search_index: domParser.parseFromString(searchContent, 'text/html').documentElement.textContent || '',
-      contentHtml: calculateContent(status.content, emojiMap),
-      spoilerHtml: calculateSpoiler(status.spoiler_text, emojiMap),
-      contentMapHtml: status.content_map?.map(value => calculateContent(value, emojiMap)),
-      spoilerMapHtml: status.spoiler_text_map?.map(value => calculateSpoiler(value, emojiMap)),
-    });
-  }
-};
+const minifyStatus = (status: StatusRecord): ReducerStatus => ({
+  ...status,
+  reblog: normalizeId(status.reblog?.id),
+  poll: normalizeId(status.poll?.id),
+  quote: normalizeId(status.quote?.id),
+  group: normalizeId(status.group?.id),
+}) as ReducerStatus;
 
 // Check whether a status is a quote by secondary characteristics
 const isQuote = (status: StatusRecord) => Boolean(status.quote_url);
 
-// Preserve translation if an existing status already has it
-const fixTranslation = (status: StatusRecord, oldStatus?: StatusRecord): StatusRecord => {
-  if (oldStatus?.translation && !status.translation) {
-    return status
-      .set('translation', oldStatus.translation);
-  } else {
-    return status;
-  }
-};
-
 // Preserve quote if an existing status already has it
 const fixQuote = (status: StatusRecord, oldStatus?: StatusRecord): StatusRecord => {
   if (oldStatus && !status.quote && isQuote(status)) {
-    return status
-      .set('quote', oldStatus.quote)
-      .updateIn(['pleroma', 'quote_visible'], visible => visible || oldStatus.quote_visible);
+    return {
+      ...status,
+      quote: oldStatus.quote,
+      quote_visible: status.quote_visible || oldStatus.quote_visible,
+    };
   } else {
     return status;
   }
 };
 
-const fixStatus = (state: State, status: APIEntity): ReducerStatus => {
+const fixStatus = (state: State, status: BaseStatus): ReducerStatus => {
   const oldStatus = state.get(status.id);
 
-  return normalizeStatus(status).withMutations(status => {
-    fixTranslation(status, oldStatus);
-    fixQuote(status, oldStatus);
-    calculateStatus(status, oldStatus);
-    minifyStatus(status);
-  }) as ReducerStatus;
+  return minifyStatus(fixQuote(normalizeStatus(status, oldStatus)));
 };
 
-const importStatus = (state: State, status: APIEntity): State =>
+const importStatus = (state: State, status: BaseStatus): State =>
   state.set(status.id, fixStatus(state, status));
 
-const importStatuses = (state: State, statuses: APIEntities): State =>
+const importStatuses = (state: State, statuses: Array<BaseStatus>): State =>
   state.withMutations(mutable => statuses.forEach(status => importStatus(mutable, status)));
 
-const deleteStatus = (state: State, id: string, references: Array<string>) => {
+const deleteStatus = (state: State, statusId: string, references: Array<string>) => {
   references.forEach(ref => {
     state = deleteStatus(state, ref[0], []);
   });
 
-  return state.delete(id);
+  return state.delete(statusId);
 };
 
-const incrementReplyCount = (state: State, { in_reply_to_id, quote_id }: APIEntity) => {
-  if (in_reply_to_id) {
-    state = state.updateIn([in_reply_to_id, 'replies_count'], 0, count =>
-      typeof count === 'number' ? count + 1 : 0,
-    );
+const incrementReplyCount = (state: State, { in_reply_to_id, quote_id }: BaseStatus) => {
+  if (in_reply_to_id && state.has(in_reply_to_id)) {
+    const parent = state.get(in_reply_to_id)!;
+    state = state.set(in_reply_to_id, {
+      ...parent,
+      replies_count: (typeof parent.replies_count === 'number' ? parent.replies_count : 0) + 1,
+    });
   }
 
-  if (quote_id) {
-    state = state.updateIn([quote_id, 'quotes_count'], 0, count =>
-      typeof count === 'number' ? count + 1 : 0,
-    );
+  if (quote_id && state.has(quote_id)) {
+    const parent = state.get(quote_id)!;
+    state = state.set(quote_id, {
+      ...parent,
+      quotes_count: (typeof parent.quotes_count === 'number' ? parent.quotes_count : 0) + 1,
+    });
   }
 
   return state;
 };
 
-const decrementReplyCount = (state: State, { in_reply_to_id, quote_id }: APIEntity) => {
+const decrementReplyCount = (state: State, { in_reply_to_id, quote_id }: BaseStatus) => {
   if (in_reply_to_id) {
     state = state.updateIn([in_reply_to_id, 'replies_count'], 0, count =>
       typeof count === 'number' ? Math.max(0, count - 1) : 0,
@@ -221,10 +150,11 @@ const simulateFavourite = (
 
   const delta = favourited ? +1 : -1;
 
-  const updatedStatus = status.merge({
+  const updatedStatus = {
+    ...status,
     favourited,
     favourites_count: Math.max(0, status.favourites_count + delta),
-  });
+  };
 
   return state.set(statusId, updatedStatus);
 };
@@ -240,7 +170,8 @@ const simulateDislike = (
 
   const delta = disliked ? +1 : -1;
 
-  const updatedStatus = status.merge({
+  const updatedStatus = ({
+    ...status,
     disliked,
     dislikes_count: Math.max(0, status.dislikes_count + delta),
   });
@@ -248,22 +179,15 @@ const simulateDislike = (
   return state.set(statusId, updatedStatus);
 };
 
-interface Translation {
-  content: string;
-  detected_source_language: string;
-  provider: string;
-}
-
 /** Import translation from translation service into the store. */
 const importTranslation = (state: State, statusId: string, translation: Translation) => {
-  const map = ImmutableMap(translation);
+  const result = normalizeTranslation(translation, state.get(statusId)!);
 
-  const emojiMap = makeEmojiMap(state.get(statusId)!.emojis);
-
-  const result = map.set('content', stripCompatibilityFeatures(emojify(map.get('content', ''), emojiMap)));
-  return state
-    .setIn([statusId, 'translation'], result)
-    .setIn([statusId, 'translating'], false);
+  return state.update(statusId, undefined as any, (status) => ({
+    ...status,
+    translation: result,
+    translating: false,
+  }));
 };
 
 /** Delete translation from the store. */
@@ -282,44 +206,44 @@ const statuses = (state = initialState, action: AnyAction): State => {
     case STATUS_CREATE_FAIL:
       return action.editing ? state : decrementReplyCount(state, action.params);
     case FAVOURITE_REQUEST:
-      return simulateFavourite(state, action.status.id, true);
+      return simulateFavourite(state, action.statusId, true);
     case UNFAVOURITE_REQUEST:
-      return simulateFavourite(state, action.status.id, false);
+      return simulateFavourite(state, action.statusId, false);
     case DISLIKE_REQUEST:
-      return simulateDislike(state, action.status.id, true);
+      return simulateDislike(state, action.statusId, true);
     case UNDISLIKE_REQUEST:
-      return simulateDislike(state, action.status.id, false);
+      return simulateDislike(state, action.statusId, false);
     case EMOJI_REACT_REQUEST:
       return state
         .updateIn(
-          [action.status.id, 'reactions'],
+          [action.statusId, 'reactions'],
           emojiReacts => simulateEmojiReact(emojiReacts as any, action.emoji, action.custom),
         );
     case UNEMOJI_REACT_REQUEST:
       return state
         .updateIn(
-          [action.status.id, 'reactions'],
+          [action.statusId, 'reactions'],
           emojiReacts => simulateUnEmojiReact(emojiReacts as any, action.emoji),
         );
     case FAVOURITE_FAIL:
-      return state.get(action.status.id) === undefined ? state : state.setIn([action.status.id, 'favourited'], false);
+      return state.get(action.statusId) === undefined ? state : state.setIn([action.statusId, 'favourited'], false);
     case DISLIKE_FAIL:
-      return state.get(action.status.id) === undefined ? state : state.setIn([action.status.id, 'disliked'], false);
+      return state.get(action.statusId) === undefined ? state : state.setIn([action.statusId, 'disliked'], false);
     case REBLOG_REQUEST:
-      return state.setIn([action.status.id, 'reblogged'], true);
+      return state.setIn([action.statusId, 'reblogged'], true);
     case REBLOG_FAIL:
-      return state.get(action.status.id) === undefined ? state : state.setIn([action.status.id, 'reblogged'], false);
+      return state.get(action.statusId) === undefined ? state : state.setIn([action.statusId, 'reblogged'], false);
     case UNREBLOG_REQUEST:
-      return state.setIn([action.status.id, 'reblogged'], false);
+      return state.setIn([action.statusId, 'reblogged'], false);
     case UNREBLOG_FAIL:
-      return state.get(action.status.id) === undefined ? state : state.setIn([action.status.id, 'reblogged'], true);
+      return state.get(action.statusId) === undefined ? state : state.setIn([action.statusId, 'reblogged'], true);
     case STATUS_MUTE_SUCCESS:
-      return state.setIn([action.id, 'muted'], true);
+      return state.setIn([action.statusId, 'muted'], true);
     case STATUS_UNMUTE_SUCCESS:
-      return state.setIn([action.id, 'muted'], false);
+      return state.setIn([action.statusId, 'muted'], false);
     case STATUS_REVEAL:
       return state.withMutations(map => {
-        action.ids.forEach((id: string) => {
+        action.statusIds.forEach((id: string) => {
           if (!(state.get(id) === undefined)) {
             map.setIn([id, 'hidden'], false);
           }
@@ -327,7 +251,7 @@ const statuses = (state = initialState, action: AnyAction): State => {
       });
     case STATUS_HIDE:
       return state.withMutations(map => {
-        action.ids.forEach((id: string) => {
+        action.statusIds.forEach((id: string) => {
           if (!(state.get(id) === undefined)) {
             map.setIn([id, 'hidden'], true);
           }
@@ -338,28 +262,28 @@ const statuses = (state = initialState, action: AnyAction): State => {
     case STATUS_DELETE_FAIL:
       return incrementReplyCount(state, action.params);
     case STATUS_TRANSLATE_REQUEST:
-      return state.setIn([action.id, 'translating'], true);
+      return state.setIn([action.statusId, 'translating'], true);
     case STATUS_TRANSLATE_SUCCESS:
-      return importTranslation(state, action.id, action.translation);
+      return importTranslation(state, action.statusId, action.translation);
     case STATUS_TRANSLATE_FAIL:
       return state
-        .setIn([action.id, 'translating'], false)
-        .setIn([action.id, 'translation'], false);
+        .setIn([action.statusId, 'translating'], false)
+        .setIn([action.statusId, 'translation'], false);
     case STATUS_TRANSLATE_UNDO:
-      return deleteTranslation(state, action.id);
+      return deleteTranslation(state, action.statusId);
     case STATUS_UNFILTER:
-      return state.setIn([action.id, 'showFiltered'], false);
+      return state.setIn([action.statusId, 'showFiltered'], false);
     case STATUS_LANGUAGE_CHANGE:
-      return state.setIn([action.id, 'currentLanguage'], action.language);
+      return state.setIn([action.statusId, 'currentLanguage'], action.language);
     case TIMELINE_DELETE:
-      return deleteStatus(state, action.id, action.references);
+      return deleteStatus(state, action.statusId, action.references);
     case EVENT_JOIN_REQUEST:
-      return state.setIn([action.id, 'event', 'join_state'], 'pending');
+      return state.setIn([action.statusId, 'event', 'join_state'], 'pending');
     case EVENT_JOIN_FAIL:
     case EVENT_LEAVE_REQUEST:
-      return state.setIn([action.id, 'event', 'join_state'], null);
+      return state.setIn([action.statusId, 'event', 'join_state'], null);
     case EVENT_LEAVE_FAIL:
-      return state.setIn([action.id, 'event', 'join_state'], action.previousState);
+      return state.setIn([action.statusId, 'event', 'join_state'], action.previousState);
     default:
       return state;
   }
@@ -367,6 +291,5 @@ const statuses = (state = initialState, action: AnyAction): State => {
 
 export {
   type ReducerStatus,
-  calculateStatus,
   statuses as default,
 };

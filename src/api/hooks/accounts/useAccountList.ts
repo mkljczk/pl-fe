@@ -1,7 +1,9 @@
+import { accountSchema, type Account as BaseAccount } from 'pl-api';
+
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntities } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';
-import { Account, accountSchema } from 'soapbox/schemas';
+import { normalizeAccount, type Account } from 'soapbox/normalizers';
 
 import { useRelationships } from './useRelationships';
 
@@ -12,10 +14,10 @@ interface useAccountListOpts {
 }
 
 const useAccountList = (listKey: string[], entityFn: EntityFn<void>, opts: useAccountListOpts = {}) => {
-  const { entities, ...rest } = useEntities(
+  const { entities, ...rest } = useEntities<BaseAccount, Account>(
     [Entities.ACCOUNTS, ...listKey],
     entityFn,
-    { schema: accountSchema, enabled: opts.enabled },
+    { schema: accountSchema, enabled: opts.enabled, transform: normalizeAccount },
   );
 
   const { relationships } = useRelationships(

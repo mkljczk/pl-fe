@@ -16,7 +16,7 @@ import sourceCode from 'soapbox/utils/code';
 import { getQuirks } from 'soapbox/utils/quirks';
 import { getInstanceScopes } from 'soapbox/utils/scopes';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch } from 'soapbox/store';
 
 const fetchExternalInstance = (baseURL: string) =>
   (new PlApiClient(baseURL, undefined, { fetchInstance: false })).instance.getInstance()
@@ -32,7 +32,7 @@ const fetchExternalInstance = (baseURL: string) =>
     });
 
 const createExternalApp = (instance: Instance, baseURL?: string) =>
-  (dispatch: AppDispatch, _getState: () => RootState) => {
+  (dispatch: AppDispatch) => {
     // Mitra: skip creating the auth app
     if (getQuirks(instance).noApps) return new Promise(f => f({}));
 
@@ -47,7 +47,7 @@ const createExternalApp = (instance: Instance, baseURL?: string) =>
   };
 
 const externalAuthorize = (instance: Instance, baseURL: string) =>
-  (dispatch: AppDispatch, _getState: () => RootState) => {
+  (dispatch: AppDispatch) => {
     const scopes = getInstanceScopes(instance);
 
     return dispatch(createExternalApp(instance, baseURL)).then((app) => {
@@ -81,7 +81,7 @@ const loginWithCode = (code: string) =>
   (dispatch: AppDispatch) => {
     const { client_id, client_secret, redirect_uri } = JSON.parse(localStorage.getItem('plfe:external:app')!);
     const baseURL = localStorage.getItem('plfe:external:baseurl')!;
-    const scope   = localStorage.getItem('plfe:external:scopes')!;
+    const scope = localStorage.getItem('plfe:external:scopes')!;
 
     const params = {
       client_id,

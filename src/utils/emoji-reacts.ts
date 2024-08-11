@@ -1,6 +1,5 @@
 import { List as ImmutableList } from 'immutable';
-
-import { EmojiReaction, emojiReactionSchema } from 'soapbox/schemas';
+import { emojiReactionSchema, type EmojiReaction } from 'pl-api';
 
 // https://emojipedia.org/facebook
 // I've customized them.
@@ -13,28 +12,30 @@ const ALLOWED_EMOJI = ImmutableList([
   '😩',
 ]);
 
-const sortEmoji = (emojiReacts: ImmutableList<EmojiReaction>, allowedEmoji: ImmutableList<string>): ImmutableList<EmojiReaction> => (
+const sortEmoji = (emojiReacts: Array<EmojiReaction>, allowedEmoji: ImmutableList<string>): Array<EmojiReaction> => (
   emojiReacts
-    .sortBy(emojiReact =>
+    .toSorted(emojiReact =>
       -((emojiReact.count || 0) + Number(allowedEmoji.includes(emojiReact.name))))
 );
 
-const mergeEmojiFavourites = (emojiReacts: ImmutableList<EmojiReaction> | null, favouritesCount: number, favourited: boolean) => {
-  if (!emojiReacts) return ImmutableList([emojiReactionSchema.parse({ count: favouritesCount, me: favourited, name: '👍' })]);
+const mergeEmojiFavourites = (emojiReacts: Array<EmojiReaction> | null, favouritesCount: number, favourited: boolean) => {
+  if (!emojiReacts) return [emojiReactionSchema.parse({ count: favouritesCount, me: favourited, name: '👍' })];
   if (!favouritesCount) return emojiReacts;
   const likeIndex = emojiReacts.findIndex(emojiReact => emojiReact.name === '👍');
   if (likeIndex > -1) {
-    const likeCount = Number(emojiReacts.getIn([likeIndex, 'count']));
-    favourited = favourited || Boolean(emojiReacts.getIn([likeIndex, 'me'], false));
-    return emojiReacts
-      .setIn([likeIndex, 'count'], likeCount + favouritesCount)
-      .setIn([likeIndex, 'me'], favourited);
+    const likeCount = Number(emojiReacts[likeIndex].count);
+    favourited = favourited || Boolean(emojiReacts[likeIndex].me || false);
+    return emojiReacts.map((reaction, index) => index === likeIndex ? {
+      ...reaction,
+      count: likeCount + favouritesCount,
+      me: favourited,
+    } : reaction);
   } else {
-    return emojiReacts.push(emojiReactionSchema.parse({ count: favouritesCount, me: favourited, name: '👍' }));
+    return [...emojiReacts, emojiReactionSchema.parse({ count: favouritesCount, me: favourited, name: '👍' })];
   }
 };
 
-const reduceEmoji = (emojiReacts: ImmutableList<EmojiReaction> | null, favouritesCount: number, favourited: boolean, allowedEmoji = ALLOWED_EMOJI): ImmutableList<EmojiReaction> => (
+const reduceEmoji = (emojiReacts: Array<EmojiReaction> | null, favouritesCount: number, favourited: boolean, allowedEmoji = ALLOWED_EMOJI): Array<EmojiReaction> => (
   sortEmoji(
     mergeEmojiFavourites(emojiReacts, favouritesCount, favourited),
     allowedEmoji,
@@ -48,23 +49,22 @@ const getReactForStatus = (status: any, allowedEmoji = ALLOWED_EMOJI): EmojiReac
     status.favourites_count || 0,
     status.favourited,
     allowedEmoji,
-  ).filter(e => e.me === true)
-    .get(0);
+  ).filter(e => e.me === true)[0];
 
   return typeof result?.name === 'string' ? result : undefined;
 };
 
-const simulateEmojiReact = (emojiReacts: ImmutableList<EmojiReaction>, emoji: string, url?: string) => {
+const simulateEmojiReact = (emojiReacts: Array<EmojiReaction>, emoji: string, url?: string) => {
   const idx = emojiReacts.findIndex(e => e.name === emoji);
-  const emojiReact = emojiReacts.get(idx);
+  const emojiReact = emojiReacts[idx];
 
   if (idx > -1 && emojiReact) {
-    return emojiReacts.set(idx, emojiReactionSchema.parse({
+    return emojiReacts.map((reaction, id) => id === idx ? emojiReactionSchema.parse({
       ...emojiReact,
       count: (emojiReact.count || 0) + 1,
       me: true,
       url,
-    }));
+    }) : reaction);
   } else {
     return emojiReacts.push(emojiReactionSchema.parse({
       count: 1,
@@ -75,20 +75,20 @@ const simulateEmojiReact = (emojiReacts: ImmutableList<EmojiReaction>, emoji: st
   }
 };
 
-const simulateUnEmojiReact = (emojiReacts: ImmutableList<EmojiReaction>, emoji: string) => {
+const simulateUnEmojiReact = (emojiReacts: Array<EmojiReaction>, emoji: string) => {
   const idx = emojiReacts.findIndex(e =>
     e.name === emoji && e.me === true);
 
-  const emojiReact = emojiReacts.get(idx);
+  const emojiReact = emojiReacts[idx];
 
   if (emojiReact) {
     const newCount = (emojiReact.count || 1) - 1;
-    if (newCount < 1) return emojiReacts.delete(idx);
-    return emojiReacts.set(idx, emojiReactionSchema.parse({
+    if (newCount < 1) return emojiReacts.filter((_, id) => id !== idx);
+    return emojiReacts.map((reaction, id) => id === idx ? emojiReactionSchema.parse({
       ...emojiReact,
       count: (emojiReact.count || 1) - 1,
       me: false,
-    }));
+    }) : reaction);
   } else {
     return emojiReacts;
   }

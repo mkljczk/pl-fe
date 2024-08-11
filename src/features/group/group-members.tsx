@@ -1,16 +1,14 @@
 import clsx from 'clsx';
+import { GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
 
 import { useGroup, useGroupMembers, useGroupMembershipRequests } from 'soapbox/api/hooks';
 import { PendingItemsRow } from 'soapbox/components/pending-items-row';
 import ScrollableList from 'soapbox/components/scrollable-list';
-import { GroupRoles } from 'soapbox/schemas/group-member';
 
 import PlaceholderAccount from '../placeholder/components/placeholder-account';
 
 import GroupMemberListItem from './components/group-member-list-item';
-
-import type { Group } from 'soapbox/types/entities';
 
 interface IGroupMembers {
   params: { groupId: string };
@@ -56,7 +54,7 @@ const GroupMembers: React.FC<IGroupMembers> = (props) => {
       >
         {members.map((member) => (
           <GroupMemberListItem
-            group={group as Group}
+            group={group!}
             member={member}
             key={member.account.id}
           />

@@ -20,7 +20,7 @@ const Account: React.FC<IAccount> = ({ accountId }) => {
 
   if (!account) return null;
 
-  const birthday = account.pleroma?.birthday;
+  const birthday = account.birthday;
   if (!birthday) return null;
 
   const formattedBirthday = intl.formatDate(birthday, { day: 'numeric', month: 'short', year: 'numeric' });

@@ -2,7 +2,7 @@ import { AppDispatch } from 'soapbox/store';
 
 import type { ModalType } from 'soapbox/features/ui/components/modal-root';
 
-const MODAL_OPEN  = 'MODAL_OPEN';
+const MODAL_OPEN = 'MODAL_OPEN';
 const MODAL_CLOSE = 'MODAL_CLOSE';
 
 /** Open a modal of the given type */

@@ -16,7 +16,7 @@ const ConversationsList: React.FC = () => {
 
   const conversations = useAppSelector((state) => state.conversations.items);
   const isLoading = useAppSelector((state) => state.conversations.isLoading);
-  const hasMore = useAppSelector((state) => state.conversations.hasMore);
+  const hasMore = useAppSelector((state) => !!state.conversations.next);
 
   const getCurrentIndex = (id: string) => conversations.findIndex(x => x.id === id);
 
@@ -45,8 +45,7 @@ const ConversationsList: React.FC = () => {
   };
 
   const handleLoadOlder = debounce(() => {
-    const maxId = conversations.getIn([-1, 'id']);
-    if (maxId) dispatch(expandConversations({ maxId }));
+    if (hasMore) dispatch(expandConversations());
   }, 300, { leading: true });
 
   return (

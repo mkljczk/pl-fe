@@ -5,16 +5,14 @@ import { defineMessages, useIntl } from 'react-intl';
 import { uploadMedia } from 'soapbox/actions/media';
 import { Stack } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
-import { normalizeAttachment } from 'soapbox/normalizers';
 import { useChatActions } from 'soapbox/queries/chats';
 import toast from 'soapbox/toast';
 
 import ChatComposer from './chat-composer';
 import ChatMessageList from './chat-message-list';
 
-import type { Chat as ChatEntity } from 'pl-api';
+import type { Chat as ChatEntity, MediaAttachment } from 'pl-api';
 import type { PlfeResponse } from 'soapbox/api';
-import type { Attachment } from 'soapbox/types/entities';
 
 const fileKeyGen = (): number => Math.floor((Math.random() * 0x10000));
 
@@ -56,7 +54,7 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
   const { createChatMessage } = useChatActions(chat.id);
 
   const [content, setContent] = useState<string>('');
-  const [attachment, setAttachment] = useState<Attachment | null>(null);
+  const [attachment, setAttachment] = useState<MediaAttachment | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [resetContentKey, setResetContentKey] = useState<number>(fileKeyGen());
@@ -148,9 +146,7 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
     setUploading(true);
 
     dispatch(uploadMedia({ file: files[0] }, onUploadProgress)).then(response => {
-      const newAttachment = normalizeAttachment(response);
-
-      setAttachment(newAttachment);
+      setAttachment(response);
       setUploading(false);
     })
       .catch(() => setUploading(false));

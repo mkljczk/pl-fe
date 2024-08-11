@@ -1,14 +1,13 @@
+import { groupMemberSchema } from 'pl-api';
 import { z } from 'zod';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { useCreateEntity } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';
-import { groupMemberSchema } from 'soapbox/schemas';
 
-import type { GroupRole } from 'pl-api';
-import type { Group, GroupMember } from 'soapbox/schemas';
+import type { Group, GroupMember, GroupRole } from 'pl-api';
 
-const usePromoteGroupMember = (group: Group, groupMember: GroupMember) => {
+const usePromoteGroupMember = (group: Pick<Group, 'id'>, groupMember: Pick<GroupMember, 'id'>) => {
   const client = useClient();
 
   const { createEntity } = useCreateEntity(

@@ -4,7 +4,6 @@ import { z } from 'zod';
 
 import { useCreateGroup } from 'soapbox/api/hooks';
 import { Modal, Stack } from 'soapbox/components/ui';
-import { type Group } from 'soapbox/schemas';
 import toast from 'soapbox/toast';
 
 import ConfirmationStep from './steps/confirmation-step';
@@ -12,6 +11,7 @@ import DetailsStep from './steps/details-step';
 
 import type { CreateGroupParams } from 'pl-api';
 import type { PlfeResponse } from 'soapbox/api';
+import type { Group } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   next: { id: 'manage_group.next', defaultMessage: 'Next' },

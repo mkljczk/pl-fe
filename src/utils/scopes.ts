@@ -1,7 +1,6 @@
 
-import { PLEROMA, parseVersion } from './features';
+import { getFeatures, PLEROMA, type Instance } from 'pl-api';
 
-import type { Instance } from 'pl-api';
 import type { RootState } from 'soapbox/store';
 
 /**
@@ -9,7 +8,7 @@ import type { RootState } from 'soapbox/store';
  * Mastodon will refuse scopes it doesn't know, so care is needed.
  */
 const getInstanceScopes = (instance: Instance) => {
-  const v = parseVersion(instance.version);
+  const v = getFeatures(instance).version;
 
   switch (v.software) {
     case PLEROMA:

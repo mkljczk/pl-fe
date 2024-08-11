@@ -1,19 +1,18 @@
-import { Map as ImmutableMap } from 'immutable';
+import { statusSchema } from 'pl-api';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { normalizeStatus } from 'soapbox/normalizers/status';
-import { calculateStatus } from 'soapbox/reducers/statuses';
 
 import type { DraftStatus } from 'soapbox/reducers/draft-statuses';
 import type { RootState } from 'soapbox/store';
 
 const buildPoll = (draftStatus: DraftStatus) => {
   if (draftStatus.hasIn(['poll', 'options'])) {
-    return draftStatus.poll!
-      .set('id', `${draftStatus.draft_id}-poll`)
-      .update('options', (options: ImmutableMap<string, any>) =>
-        options.map((title: string) => ImmutableMap({ title })),
-      );
+    return {
+      ...draftStatus.poll!.toJS(),
+      id: `${draftStatus.draft_id}-poll`,
+      options: draftStatus.poll!.get('options').map((title: string) => ({ title })).toArray(),
+    };
   } else {
     return null;
   }
@@ -23,7 +22,7 @@ const buildStatus = (state: RootState, draftStatus: DraftStatus) => {
   const me = state.me as string;
   const account = state.entities[Entities.ACCOUNTS]?.store[me];
 
-  const status = ImmutableMap({
+  const status = statusSchema.parse({
     account,
     content: draftStatus.text.replace(new RegExp('\n', 'g'), '<br>'), /* eslint-disable-line no-control-regex */
     created_at: draftStatus.schedule,
@@ -39,7 +38,7 @@ const buildStatus = (state: RootState, draftStatus: DraftStatus) => {
     visibility: draftStatus.privacy,
   });
 
-  return calculateStatus(normalizeStatus(status));
+  return normalizeStatus(status);
 };
 
 export { buildStatus };

@@ -3,8 +3,8 @@ import { useHistory } from 'react-router-dom';
 
 import { getTextDirection } from 'soapbox/utils/rtl';
 
-import type { Announcement } from 'soapbox/api/hooks/announcements/useAnnouncements';
-import type { Mention as MentionEntity } from 'soapbox/schemas';
+import type { Mention as MentionEntity } from 'pl-api';
+import type { Announcement } from 'soapbox/normalizers';
 
 interface IAnnouncementContent {
   announcement: Announcement;

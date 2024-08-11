@@ -18,7 +18,7 @@ import {
 import { TIMELINE_DELETE } from '../actions/timelines';
 
 import type { AnyAction } from 'redux';
-import type { Status } from 'soapbox/schemas';
+import type { Status } from 'soapbox/normalizers';
 
 const ReducerRecord = ImmutableRecord({
   inReplyTos: ImmutableMap<string, string>(),
@@ -83,7 +83,7 @@ const getRootNode = (state: State, statusId: string, initialId = statusId): stri
 /** Route fromId to toId by inserting tombstones. */
 const connectNodes = (state: State, fromId: string, toId: string): State => {
   const fromRoot = getRootNode(state, fromId);
-  const toRoot   = getRootNode(state, toId);
+  const toRoot = getRootNode(state, toId);
 
   if (fromRoot !== toRoot) {
     return insertTombstone(state, toId, fromId);
@@ -130,28 +130,28 @@ const normalizeContext = (
 });
 
 /** Remove a status from the reducer. */
-const deleteStatus = (state: State, id: string): State =>
+const deleteStatus = (state: State, statusId: string): State =>
   state.withMutations(state => {
     // Delete from its parent's tree
-    const parentId = state.inReplyTos.get(id);
+    const parentId = state.inReplyTos.get(statusId);
     if (parentId) {
       const parentReplies = state.replies.get(parentId) || ImmutableOrderedSet();
-      const newParentReplies = parentReplies.delete(id);
+      const newParentReplies = parentReplies.delete(statusId);
       state.setIn(['replies', parentId], newParentReplies);
     }
 
     // Dereference children
-    const replies = state.replies.get(id) || ImmutableOrderedSet();
+    const replies = state.replies.get(statusId) || ImmutableOrderedSet();
     replies.forEach(reply => state.deleteIn(['inReplyTos', reply]));
 
-    state.deleteIn(['inReplyTos', id]);
-    state.deleteIn(['replies', id]);
+    state.deleteIn(['inReplyTos', statusId]);
+    state.deleteIn(['replies', statusId]);
   });
 
 /** Delete multiple statuses from the reducer. */
-const deleteStatuses = (state: State, ids: string[]): State =>
+const deleteStatuses = (state: State, statusIds: string[]): State =>
   state.withMutations(state => {
-    ids.forEach(id => deleteStatus(state, id));
+    statusIds.forEach(statusId => deleteStatus(state, statusId));
   });
 
 /** Delete statuses upon blocking or muting a user. */
@@ -200,9 +200,9 @@ const replies = (state = ReducerRecord(), action: AnyAction) => {
     case ACCOUNT_MUTE_SUCCESS:
       return filterContexts(state, action.relationship, action.statuses);
     case CONTEXT_FETCH_SUCCESS:
-      return normalizeContext(state, action.id, action.ancestors, action.descendants);
+      return normalizeContext(state, action.statusId, action.ancestors, action.descendants);
     case TIMELINE_DELETE:
-      return deleteStatuses(state, [action.id]);
+      return deleteStatuses(state, [action.statusId]);
     case STATUS_CREATE_REQUEST:
       return importPendingStatus(state, action.params, action.idempotencyKey);
     case STATUS_CREATE_SUCCESS:

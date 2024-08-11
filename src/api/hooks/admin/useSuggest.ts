@@ -3,7 +3,7 @@ import { EntityCallbacks } from 'soapbox/entity-store/hooks/types';
 import { useClient, useGetState } from 'soapbox/hooks';
 import { accountIdsToAccts } from 'soapbox/selectors';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 
 const useSuggest = () => {
   const client = useClient();
@@ -12,9 +12,7 @@ const useSuggest = () => {
 
   const suggestEffect = (accountIds: string[], suggested: boolean) => {
     const updater = (account: Account): Account => {
-      if (account.pleroma) {
-        account.pleroma.is_suggested = suggested;
-      }
+      account.is_suggested = suggested;
       return account;
     };
 

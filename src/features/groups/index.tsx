@@ -7,15 +7,12 @@ import { useGroups } from 'soapbox/api/hooks';
 import GroupCard from 'soapbox/components/group-card';
 import ScrollableList from 'soapbox/components/scrollable-list';
 import { Button, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { PERMISSION_CREATE_GROUPS, hasPermission } from 'soapbox/utils/permissions';
+import { useAppDispatch } from 'soapbox/hooks';
 
 import PlaceholderGroupCard from '../placeholder/components/placeholder-group-card';
 
 const Groups: React.FC = () => {
   const dispatch = useAppDispatch();
-
-  const canCreateGroup = useAppSelector((state) => hasPermission(state, PERMISSION_CREATE_GROUPS));
 
   const { groups, isLoading, hasNextPage, fetchNextPage } = useGroups();
 
@@ -45,21 +42,19 @@ const Groups: React.FC = () => {
         </Text>
       </Stack>
 
-      {canCreateGroup && (
-        <Button
-          className='self-center'
-          onClick={createGroup}
-          theme='secondary'
-        >
-          <FormattedMessage id='new_group_panel.action' defaultMessage='Create Group' />
-        </Button>
-      )}
+      <Button
+        className='self-center'
+        onClick={createGroup}
+        theme='secondary'
+      >
+        <FormattedMessage id='new_group_panel.action' defaultMessage='Create Group' />
+      </Button>
     </Stack>
   );
 
   return (
     <Stack space={4}>
-      {canCreateGroup && !(!isLoading && groups.length === 0) && (
+      {!(!isLoading && groups.length === 0) && (
         <Button
           className='xl:hidden'
           icon={require('@tabler/icons/outline/circles.svg')}

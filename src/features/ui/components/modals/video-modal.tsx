@@ -4,11 +4,12 @@ import { useHistory } from 'react-router-dom';
 
 import Video from 'soapbox/features/video';
 
-import type { Status, Account, Attachment } from 'soapbox/types/entities';
+import type { MediaAttachment } from 'pl-api';
+import type { Status, Account } from 'soapbox/types/entities';
 
 interface IVideoModal {
-  media: Attachment;
-  status: Status;
+  media: MediaAttachment;
+  status: Pick<Status, 'id' | 'url'>;
   account: Account;
   time: number;
   onClose: () => void;

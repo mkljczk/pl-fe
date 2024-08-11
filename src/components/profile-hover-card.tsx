@@ -19,17 +19,17 @@ import { showProfileHoverCard } from './hover-ref-wrapper';
 import { dateFormatOptions } from './relative-timestamp';
 import { Card, CardBody, HStack, Icon, Stack, Text } from './ui';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 import type { AppDispatch } from 'soapbox/store';
 
 const getBadges = (
-  account?: Pick<Account, 'admin' | 'moderator'>,
+  account?: Pick<Account, 'is_admin' | 'is_moderator'>,
 ): JSX.Element[] => {
   const badges = [];
 
-  if (account?.admin) {
+  if (account?.is_admin) {
     badges.push(<Badge key='admin' slug='admin' title={<FormattedMessage id='account_moderation_modal.roles.admin' defaultMessage='Admin' />} />);
-  } else if (account?.moderator) {
+  } else if (account?.is_moderator) {
     badges.push(<Badge key='moderator' slug='moderator' title={<FormattedMessage id='account_moderation_modal.roles.moderator' defaultMessage='Moderator' />} />);
   }
 

@@ -13,19 +13,20 @@ import type { Entity } from '../types';
 import type { PlfeResponse } from 'soapbox/api';
 
 /** Additional options for the hook. */
-interface UseEntityOpts<TEntity extends Entity> {
+interface UseEntityOpts<TEntity extends Entity, TTransformedEntity extends Entity> {
   /** A zod schema to parse the API entity. */
   schema?: EntitySchema<TEntity>;
   /** Whether to refetch this entity every time the hook mounts, even if it's already in the store. */
   refetch?: boolean;
   /** A flag to potentially disable sending requests to the API. */
   enabled?: boolean;
+  transform?: (schema: TEntity) => TTransformedEntity;
 }
 
-const useEntity = <TEntity extends Entity>(
+const useEntity = <TEntity extends Entity, TTransformedEntity extends Entity = TEntity>(
   path: EntityPath,
   entityFn: EntityFn<void>,
-  opts: UseEntityOpts<TEntity> = {},
+  opts: UseEntityOpts<TEntity, TTransformedEntity> = {},
 ) => {
   const [isFetching, setPromise] = useLoading(true);
   const [error, setError] = useState<unknown>();
@@ -37,7 +38,7 @@ const useEntity = <TEntity extends Entity>(
   const defaultSchema = z.custom<TEntity>();
   const schema = opts.schema || defaultSchema;
 
-  const entity = useAppSelector(state => selectEntity<TEntity>(state, entityType, entityId));
+  const entity = useAppSelector(state => selectEntity<TTransformedEntity>(state, entityType, entityId));
 
   const isEnabled = opts.enabled ?? true;
   const isLoading = isFetching && !entity;
@@ -46,7 +47,8 @@ const useEntity = <TEntity extends Entity>(
   const fetchEntity = async () => {
     try {
       const response = await setPromise(entityFn());
-      const entity = schema.parse(response);
+      let entity: TEntity | TTransformedEntity = schema.parse(response);
+      if (opts.transform) entity = opts.transform(entity);
       dispatch(importEntities([entity], entityType));
     } catch (e) {
       setError(e);

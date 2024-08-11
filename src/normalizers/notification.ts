@@ -1,44 +1,51 @@
-/**
- * Notification normalizer:
- * Converts API notifications into our internal format.
- * @see {@link https://docs.joinmastodon.org/entities/notification/}
- */
-import {
-  List as ImmutableList,
-  Map as ImmutableMap,
-  Record as ImmutableRecord,
-  fromJS,
-} from 'immutable';
+import { getNotificationStatus } from 'soapbox/features/notifications/components/notification';
 
-import type { Account, Status, EmbeddedEntity } from 'soapbox/types/entities';
+import type { Notification as BaseNotification } from 'pl-api';
 
-// https://docs.joinmastodon.org/entities/notification/
-const NotificationRecord = ImmutableRecord({
-  account: null as EmbeddedEntity<Account>,
-  accounts: null as ImmutableList<EmbeddedEntity<Account>> | null,
-  chat_message: null as ImmutableMap<string, any> | string | null, // pleroma:chat_mention
-  created_at: new Date(),
-  emoji: null as string | null, // pleroma:emoji_reaction
-  emoji_url: null as string | null, // pleroma:emoji_reaction
-  id: '',
-  status: null as EmbeddedEntity<Status>,
-  target: null as EmbeddedEntity<Account>, // move
-  type: '',
+const STATUS_NOTIFICATION_TYPES = [
+  'favourite',
+  'reblog',
+  'emoji_reaction',
+  'event_reminder',
+  'participation_accepted',
+  'participation_request',
+];
+
+const normalizeNotification = (notification: BaseNotification) => ({
+  accounts: [notification.account],
+  ...notification,
 });
 
-const normalizeType = (notification: ImmutableMap<string, any>) => {
-  if (notification.get('type') === 'group_mention') {
-    return notification.set('type', 'mention');
+const normalizeNotifications = (notifications: Array<BaseNotification>) => {
+  const deduplicatedNotifications: Notification[] = [];
+
+  for (const notification of notifications) {
+    if (STATUS_NOTIFICATION_TYPES.includes(notification.type)) {
+      const existingNotification = deduplicatedNotifications
+        .find(deduplicated =>
+          deduplicated.type === notification.type
+          && ((notification.type === 'emoji_reaction' && deduplicated.type === 'emoji_reaction') ? notification.emoji === deduplicated.emoji : true)
+          && getNotificationStatus(deduplicated)?.id === getNotificationStatus(notification)?.id,
+        );
+
+      if (existingNotification) {
+        if (existingNotification?.accounts) {
+          existingNotification.accounts.push(notification.account);
+        } else {
+          existingNotification.accounts = [existingNotification.account, notification.account];
+        }
+        existingNotification.id += '+' + notification.id;
+      } else {
+        deduplicatedNotifications.push(normalizeNotification(notification));
+      }
+    } else {
+      deduplicatedNotifications.push(normalizeNotification(notification));
+    }
   }
 
-  return notification;
+  return deduplicatedNotifications;
 };
 
-const normalizeNotification = (notification: Record<string, any>) => NotificationRecord(
-  ImmutableMap(fromJS(notification))
-    .withMutations((notification: ImmutableMap<string, any>) => {
-      normalizeType(notification);
-    }),
-);
+type Notification = ReturnType<typeof normalizeNotification>;
 
-export { NotificationRecord, normalizeNotification };
+export { normalizeNotification, normalizeNotifications, type Notification };

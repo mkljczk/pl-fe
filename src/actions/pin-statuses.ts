@@ -4,12 +4,12 @@ import { getClient } from '../api';
 
 import { importFetchedStatuses } from './importer';
 
+import type { Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const PINNED_STATUSES_FETCH_REQUEST = 'PINNED_STATUSES_FETCH_REQUEST';
-const PINNED_STATUSES_FETCH_SUCCESS = 'PINNED_STATUSES_FETCH_SUCCESS';
-const PINNED_STATUSES_FETCH_FAIL = 'PINNED_STATUSES_FETCH_FAIL';
+const PINNED_STATUSES_FETCH_REQUEST = 'PINNED_STATUSES_FETCH_REQUEST' as const;
+const PINNED_STATUSES_FETCH_SUCCESS = 'PINNED_STATUSES_FETCH_SUCCESS' as const;
+const PINNED_STATUSES_FETCH_FAIL = 'PINNED_STATUSES_FETCH_FAIL' as const;
 
 const fetchPinnedStatuses = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -30,7 +30,7 @@ const fetchPinnedStatusesRequest = () => ({
   type: PINNED_STATUSES_FETCH_REQUEST,
 });
 
-const fetchPinnedStatusesSuccess = (statuses: APIEntity[], next: string | null) => ({
+const fetchPinnedStatusesSuccess = (statuses: Array<Status>, next: string | null) => ({
   type: PINNED_STATUSES_FETCH_SUCCESS,
   statuses,
   next,
@@ -41,6 +41,11 @@ const fetchPinnedStatusesFail = (error: unknown) => ({
   error,
 });
 
+type PinStatusesAction =
+  ReturnType<typeof fetchPinnedStatusesRequest>
+  | ReturnType<typeof fetchPinnedStatusesSuccess>
+  | ReturnType<typeof fetchPinnedStatusesFail>;
+
 export {
   PINNED_STATUSES_FETCH_REQUEST,
   PINNED_STATUSES_FETCH_SUCCESS,
@@ -49,4 +54,5 @@ export {
   fetchPinnedStatusesRequest,
   fetchPinnedStatusesSuccess,
   fetchPinnedStatusesFail,
+  type PinStatusesAction,
 };

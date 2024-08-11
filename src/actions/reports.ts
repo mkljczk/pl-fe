@@ -2,23 +2,22 @@ import { getClient } from '../api';
 
 import { openModal } from './modals';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account, Status } from 'soapbox/normalizers';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { ChatMessage, Group, Status } from 'soapbox/types/entities';
 
-const REPORT_INIT   = 'REPORT_INIT';
-const REPORT_CANCEL = 'REPORT_CANCEL';
+const REPORT_INIT = 'REPORT_INIT' as const;
+const REPORT_CANCEL = 'REPORT_CANCEL' as const;
 
-const REPORT_SUBMIT_REQUEST = 'REPORT_SUBMIT_REQUEST';
-const REPORT_SUBMIT_SUCCESS = 'REPORT_SUBMIT_SUCCESS';
-const REPORT_SUBMIT_FAIL    = 'REPORT_SUBMIT_FAIL';
+const REPORT_SUBMIT_REQUEST = 'REPORT_SUBMIT_REQUEST' as const;
+const REPORT_SUBMIT_SUCCESS = 'REPORT_SUBMIT_SUCCESS' as const;
+const REPORT_SUBMIT_FAIL = 'REPORT_SUBMIT_FAIL' as const;
 
-const REPORT_STATUS_TOGGLE  = 'REPORT_STATUS_TOGGLE';
-const REPORT_COMMENT_CHANGE = 'REPORT_COMMENT_CHANGE';
-const REPORT_FORWARD_CHANGE = 'REPORT_FORWARD_CHANGE';
-const REPORT_BLOCK_CHANGE   = 'REPORT_BLOCK_CHANGE';
+const REPORT_STATUS_TOGGLE = 'REPORT_STATUS_TOGGLE' as const;
+const REPORT_COMMENT_CHANGE = 'REPORT_COMMENT_CHANGE' as const;
+const REPORT_FORWARD_CHANGE = 'REPORT_FORWARD_CHANGE' as const;
+const REPORT_BLOCK_CHANGE = 'REPORT_BLOCK_CHANGE' as const;
 
-const REPORT_RULE_CHANGE    = 'REPORT_RULE_CHANGE';
+const REPORT_RULE_CHANGE = 'REPORT_RULE_CHANGE' as const;
 
 enum ReportableEntities {
   ACCOUNT = 'ACCOUNT',
@@ -26,21 +25,17 @@ enum ReportableEntities {
 }
 
 type ReportedEntity = {
-  status?: Status;
-  chatMessage?: ChatMessage;
-  group?: Group;
+  status?: Pick<Status, 'id' | 'reblog'>;
 }
 
-const initReport = (entityType: ReportableEntities, account: Account, entities?: ReportedEntity) => (dispatch: AppDispatch) => {
-  const { status, chatMessage, group } = entities || {};
+const initReport = (entityType: ReportableEntities, account: Pick<Account, 'id'>, entities?: ReportedEntity) => (dispatch: AppDispatch) => {
+  const { status } = entities || {};
 
   dispatch({
     type: REPORT_INIT,
     entityType,
     account,
     status,
-    chatMessage,
-    group,
   });
 
   return dispatch(openModal('REPORT'));
@@ -63,7 +58,6 @@ const submitReport = () =>
 
     return getClient(getState()).accounts.reportAccount(reports.new.account_id!, {
       status_ids: reports.new.status_ids.toArray(),
-      // group_id: reports.getIn(['new', 'group', 'id']),
       rule_ids: reports.new.rule_ids.toArray(),
       comment: reports.new.comment,
       forward: reports.new.forward,

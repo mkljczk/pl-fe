@@ -8,8 +8,8 @@ import { getSettings } from 'soapbox/actions/settings';
 import { Button, HStack } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
 
+import type { Status as StatusEntity } from 'soapbox/normalizers';
 import type { DraftStatus } from 'soapbox/reducers/draft-statuses';
-import type { Status as StatusEntity } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.draft_status_delete.confirm', defaultMessage: 'Discard' },

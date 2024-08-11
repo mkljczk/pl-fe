@@ -4,9 +4,9 @@ import { useClient } from 'soapbox/hooks';
 
 import { useGroups } from './useGroups';
 
-import type { Group } from 'soapbox/schemas';
+import type { Group } from 'pl-api';
 
-const useJoinGroup = (group: Group) => {
+const useJoinGroup = (group: Pick<Group, 'id'>) => {
   const client = useClient();
   const { invalidate } = useGroups();
 

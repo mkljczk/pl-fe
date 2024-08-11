@@ -133,7 +133,7 @@ const SidebarNavigation = () => {
     if (features.conversations) {
       return (
         <SidebarNavigationLink
-          to='/messages'
+          to='/conversations'
           icon={require('@tabler/icons/outline/mail.svg')}
           text={<FormattedMessage id='navigation.direct_messages' defaultMessage='Messages' />}
         />
@@ -212,7 +212,7 @@ const SidebarNavigation = () => {
               text={<FormattedMessage id='tabs_bar.settings' defaultMessage='Settings' />}
             />
 
-            {account.staff && (
+            {account.is_admin || account.is_moderator && (
               <SidebarNavigationLink
                 to='/soapbox/admin'
                 icon={require('@tabler/icons/outline/dashboard.svg')}

@@ -19,7 +19,7 @@ const messages = defineMessages({
 });
 
 interface IEventPreview {
-  status: StatusEntity;
+  status: Pick<StatusEntity, 'id' | 'account' | 'event' | 'url'>;
   className?: string;
   hideAction?: boolean;
   floatingAction?: boolean;
@@ -80,7 +80,7 @@ const EventPreview: React.FC<IEventPreview> = ({ status, className, hideAction, 
             <HStack alignItems='center' space={2}>
               <Icon src={require('@tabler/icons/outline/map-pin.svg')} />
               <span>
-                {event.location.get('name')}
+                {event.location.name}
               </span>
             </HStack>
           )}

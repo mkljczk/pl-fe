@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { expandBubbleTimeline } from 'soapbox/actions/timelines';
+import { fetchBubbleTimeline } from 'soapbox/actions/timelines';
 import PullToRefresh from 'soapbox/components/pull-to-refresh';
 import { Column } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch, useSettings, useTheme } from 'soapbox/hooks';
+import { useAppDispatch, useSettings, useTheme } from 'soapbox/hooks';
 import { useIsMobile } from 'soapbox/hooks/useIsMobile';
 
 import Timeline from '../ui/components/timeline';
@@ -20,19 +20,18 @@ const BubbleTimeline = () => {
 
   const settings = useSettings();
   const onlyMedia = settings.bubble.other.onlyMedia;
-  const next = useAppSelector(state => state.timelines.get('bubble')?.next);
 
   const timelineId = 'bubble';
   const isMobile = useIsMobile();
 
-  const handleLoadMore = (maxId: string) => {
-    dispatch(expandBubbleTimeline({ url: next, maxId, onlyMedia }, intl));
+  const handleLoadMore = () => {
+    dispatch(fetchBubbleTimeline({ onlyMedia }, true));
   };
 
-  const handleRefresh = () => dispatch(expandBubbleTimeline({ onlyMedia }, intl));
+  const handleRefresh = () => dispatch(fetchBubbleTimeline({ onlyMedia }, true));
 
   useEffect(() => {
-    dispatch(expandBubbleTimeline({ onlyMedia }, intl));
+    dispatch(fetchBubbleTimeline({ onlyMedia }));
   }, [onlyMedia]);
 
   return (

@@ -41,8 +41,7 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
           src={require('@tabler/icons/outline/mail.svg')}
           activeSrc={require('@tabler/icons/filled/mail.svg')}
           text={<FormattedMessage id='navigation.direct_messages' defaultMessage='Messages' />}
-          to='/messages'
-          paths={['/messages', '/conversations']}
+          to='/conversations'
         />
       );
     }
@@ -97,7 +96,7 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
 
       {account && renderMessagesLink()}
 
-      {(account && account.staff) && (
+      {(account && (account.is_admin || account.is_moderator)) && (
         <ThumbNavigationLink
           src={require('@tabler/icons/outline/dashboard.svg')}
           text={<FormattedMessage id='navigation.dashboard' defaultMessage='Dashboard' />}

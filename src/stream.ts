@@ -2,18 +2,15 @@ import WebSocketClient from '@gamestdio/websocket';
 
 import { getAccessToken } from 'soapbox/utils/auth';
 
-import type { IntlShape } from 'react-intl';
 import type { AppDispatch, RootState } from 'soapbox/store';
 
 const randomIntUpTo = (max: number) => Math.floor(Math.random() * Math.floor(max));
 
 interface ConnectStreamCallbacks {
-  onConnect(): void;
-  onDisconnect(): void;
   onReceive(websocket: WebSocket, data: unknown): void;
 }
 
-type PollingRefreshFn = (dispatch: AppDispatch, intl?: IntlShape, done?: () => void) => void
+type PollingRefreshFn = (dispatch: AppDispatch, done?: () => void) => void
 
 const connectStream = (
   path: string,
@@ -22,13 +19,13 @@ const connectStream = (
 ) => (dispatch: AppDispatch, getState: () => RootState) => {
   const streamingAPIBaseURL = getState().instance.configuration.urls.streaming;
   const accessToken = getAccessToken(getState());
-  const { onConnect, onDisconnect, onReceive } = callbacks(dispatch, getState);
+  const { onReceive } = callbacks(dispatch, getState);
 
   let polling: NodeJS.Timeout | null = null;
 
   const setupPolling = () => {
     if (pollingRefresh) {
-      pollingRefresh(dispatch, undefined, () => {
+      pollingRefresh(dispatch, () => {
         polling = setTimeout(() => setupPolling(), 20000 + randomIntUpTo(20000));
       });
     }
@@ -51,16 +48,12 @@ const connectStream = (
         if (pollingRefresh) {
           clearPolling();
         }
-
-        onConnect();
       },
 
       disconnected() {
         if (pollingRefresh) {
           polling = setTimeout(() => setupPolling(), randomIntUpTo(40000));
         }
-
-        onDisconnect();
       },
 
       received(data) {
@@ -72,8 +65,6 @@ const connectStream = (
           clearPolling();
           pollingRefresh(dispatch);
         }
-
-        onConnect();
       },
 
     });
@@ -107,11 +98,11 @@ const getStream = (
 
   const ws = new WebSocketClient(`${streamingAPIBaseURL}/api/v1/streaming/?${params.join('&')}`, accessToken as any);
 
-  ws.onopen      = connected;
-  ws.onclose     = disconnected;
+  ws.onopen = connected;
+  ws.onclose = disconnected;
   ws.onreconnect = reconnected;
 
-  ws.onmessage   = (e) => {
+  ws.onmessage = (e) => {
     if (!e.data) return;
     try {
       received(JSON.parse(e.data));
@@ -124,7 +115,4 @@ const getStream = (
   return ws;
 };
 
-export {
-  connectStream,
-  getStream as default,
-};
+export { connectStream };

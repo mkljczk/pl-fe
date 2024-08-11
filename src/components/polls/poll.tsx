@@ -10,13 +10,13 @@ import { Stack, Text } from '../ui';
 import PollFooter from './poll-footer';
 import PollOption from './poll-option';
 
-import type { Status } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/normalizers';
 
 type Selected = Record<number, boolean>;
 
 interface IPoll {
   id: string;
-  status?: Status;
+  status?: Pick<Status, 'poll' | 'url' | 'currentLanguage'>;
 }
 
 const messages = defineMessages({

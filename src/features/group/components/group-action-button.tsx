@@ -1,3 +1,4 @@
+import { GroupRoles } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -7,13 +8,12 @@ import { Button } from 'soapbox/components/ui';
 import { importEntities } from 'soapbox/entity-store/actions';
 import { Entities } from 'soapbox/entity-store/entities';
 import { useAppDispatch } from 'soapbox/hooks';
-import { GroupRoles } from 'soapbox/schemas/group-member';
 import toast from 'soapbox/toast';
 
-import type { Group, GroupRelationship } from 'soapbox/types/entities';
+import type { Group, GroupRelationship } from 'pl-api';
 
 interface IGroupActionButton {
-  group: Group;
+  group: Pick<Group, 'id' | 'locked' | 'relationship'>;
 }
 
 const messages = defineMessages({
@@ -38,7 +38,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
   const isAdmin = group.relationship?.role === GroupRoles.ADMIN;
 
   const onJoinGroup = () => joinGroup.mutate({}, {
-    onSuccess(entity) {
+    onSuccess() {
       joinGroup.invalidate();
 
       toast.success(
@@ -61,7 +61,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
       message: intl.formatMessage(messages.confirmationMessage),
       confirm: intl.formatMessage(messages.confirmationConfirm),
       onConfirm: () => leaveGroup.mutate(group.relationship?.id as string, {
-        onSuccess(entity) {
+        onSuccess() {
           leaveGroup.invalidate();
           toast.success(intl.formatMessage(messages.leaveSuccess));
         },

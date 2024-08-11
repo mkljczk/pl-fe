@@ -9,6 +9,7 @@ import toast from 'soapbox/toast';
 const messages = defineMessages({
   updatePasswordSuccess: { id: 'security.update_password.success', defaultMessage: 'Password successfully updated.' },
   updatePasswordFail: { id: 'security.update_password.fail', defaultMessage: 'Update password failed.' },
+  passwordsNoMatch: { id: 'security.update_password.password_confirmation_no_match', defaultMessage: 'Passwords do not match.' },
   oldPasswordFieldLabel: { id: 'security.fields.old_password.label', defaultMessage: 'Current password' },
   newPasswordFieldLabel: { id: 'security.fields.new_password.label', defaultMessage: 'New password' },
   confirmationFieldLabel: { id: 'security.fields.password_confirmation.label', defaultMessage: 'New password (again)' },
@@ -37,8 +38,10 @@ const EditPassword = () => {
   }, []);
 
   const handleSubmit = React.useCallback(() => {
+    if (newPassword !== newPasswordConfirmation) return toast.error(intl.formatMessage(messages.passwordsNoMatch));
+
     setLoading(true);
-    dispatch(changePassword(currentPassword, newPassword, newPasswordConfirmation)).then(() => {
+    dispatch(changePassword(currentPassword, newPassword)).then(() => {
       resetState();
       toast.success(intl.formatMessage(messages.updatePasswordSuccess));
 
@@ -85,7 +88,7 @@ const EditPassword = () => {
             {intl.formatMessage(messages.cancel)}
           </Button>
 
-          <Button type='submit' theme='primary' disabled={isLoading}>
+          <Button type='submit' theme='primary' disabled={isLoading || newPassword !== newPasswordConfirmation}>
             {intl.formatMessage(messages.submit)}
           </Button>
         </FormActions>

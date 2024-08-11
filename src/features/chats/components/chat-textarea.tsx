@@ -1,13 +1,14 @@
 import React from 'react';
 
 import { HStack, Textarea } from 'soapbox/components/ui';
-import { Attachment } from 'soapbox/types/entities';
 
 import ChatPendingUpload from './chat-pending-upload';
 import ChatUpload from './chat-upload';
 
+import type { MediaAttachment } from 'pl-api';
+
 interface IChatTextarea extends React.ComponentProps<typeof Textarea> {
-  attachment?: Attachment | null;
+  attachment?: MediaAttachment | null;
   onDeleteAttachment?: () => void;
   uploading?: boolean;
   uploadProgress?: number;

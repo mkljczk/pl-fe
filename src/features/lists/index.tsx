@@ -21,7 +21,7 @@ const getOrderedLists = createSelector([(state: RootState) => state.lists], list
     return lists;
   }
 
-  return lists.toList().filter((item) => !!item).sort((a: any, b: any) => a.get('title').localeCompare(b.get('title')));
+  return lists.toList().filter((item) => !!item).sort((a, b) => a.title.localeCompare(b.title));
 });
 
 const Lists: React.FC = () => {

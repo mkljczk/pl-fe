@@ -5,7 +5,7 @@ import { Avatar, Divider, HStack, Stack, Text, Button } from 'soapbox/components
 import toast from 'soapbox/toast';
 import copy from 'soapbox/utils/copy';
 
-import type { Group } from 'soapbox/schemas';
+import type { Group } from 'soapbox/normalizers';
 
 interface IConfirmationStep {
   group: Group | null;
@@ -44,7 +44,7 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
           <label
             className='dark:sm:shadow-inset relative h-24 w-full cursor-pointer overflow-hidden rounded-lg bg-primary-100 text-primary-500 sm:h-36 sm:shadow dark:bg-gray-800 dark:text-accent-blue'
           >
-            {group.header && <img className='h-full w-full object-cover' src={group.header} alt='' />}
+            {group.header && <img className='h-full w-full object-cover' src={group.header} alt={group.header_description} />}
           </label>
 
           <label className='mx-auto -mt-10 cursor-pointer rounded-full bg-primary-500 ring-2 ring-white dark:ring-primary-900'>

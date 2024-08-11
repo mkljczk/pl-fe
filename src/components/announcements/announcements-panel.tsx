@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
+import { Map as ImmutableMap } from 'immutable';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import ReactSwipeableViews from 'react-swipeable-views';
@@ -11,9 +11,10 @@ import { useAppSelector } from 'soapbox/hooks';
 
 import Announcement from './announcement';
 
+import type { CustomEmoji } from 'pl-api';
 import type { RootState } from 'soapbox/store';
 
-const customEmojiMap = createSelector([(state: RootState) => state.custom_emojis], items => (items as ImmutableList<ImmutableMap<string, string>>).reduce((map, emoji) => map.set(emoji.get('shortcode')!, emoji), ImmutableMap<string, ImmutableMap<string, string>>()));
+const customEmojiMap = createSelector([(state: RootState) => state.custom_emojis], items => items.reduce((map, emoji) => map.set(emoji.shortcode, emoji), ImmutableMap<string, CustomEmoji>()));
 
 const AnnouncementsPanel = () => {
   const emojiMap = useAppSelector(state => customEmojiMap(state));
@@ -37,7 +38,7 @@ const AnnouncementsPanel = () => {
               announcement={announcement}
               emojiMap={emojiMap}
             />
-          )).reverse()}
+          )).toReversed()}
         </ReactSwipeableViews>
         {announcements.length > 1 && (
           <HStack space={2} alignItems='center' justifyContent='center' className='relative'>

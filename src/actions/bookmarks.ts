@@ -4,15 +4,14 @@ import { importFetchedStatuses } from './importer';
 
 import type { PaginatedResponse, Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const BOOKMARKED_STATUSES_FETCH_REQUEST = 'BOOKMARKED_STATUSES_FETCH_REQUEST';
-const BOOKMARKED_STATUSES_FETCH_SUCCESS = 'BOOKMARKED_STATUSES_FETCH_SUCCESS';
-const BOOKMARKED_STATUSES_FETCH_FAIL    = 'BOOKMARKED_STATUSES_FETCH_FAIL';
+const BOOKMARKED_STATUSES_FETCH_REQUEST = 'BOOKMARKED_STATUSES_FETCH_REQUEST' as const;
+const BOOKMARKED_STATUSES_FETCH_SUCCESS = 'BOOKMARKED_STATUSES_FETCH_SUCCESS' as const;
+const BOOKMARKED_STATUSES_FETCH_FAIL = 'BOOKMARKED_STATUSES_FETCH_FAIL' as const;
 
-const BOOKMARKED_STATUSES_EXPAND_REQUEST = 'BOOKMARKED_STATUSES_EXPAND_REQUEST';
-const BOOKMARKED_STATUSES_EXPAND_SUCCESS = 'BOOKMARKED_STATUSES_EXPAND_SUCCESS';
-const BOOKMARKED_STATUSES_EXPAND_FAIL    = 'BOOKMARKED_STATUSES_EXPAND_FAIL';
+const BOOKMARKED_STATUSES_EXPAND_REQUEST = 'BOOKMARKED_STATUSES_EXPAND_REQUEST' as const;
+const BOOKMARKED_STATUSES_EXPAND_SUCCESS = 'BOOKMARKED_STATUSES_EXPAND_SUCCESS' as const;
+const BOOKMARKED_STATUSES_EXPAND_FAIL = 'BOOKMARKED_STATUSES_EXPAND_FAIL' as const;
 
 const noOp = () => new Promise(f => f(undefined));
 
@@ -37,7 +36,7 @@ const fetchBookmarkedStatusesRequest = (folderId?: string) => ({
   folderId,
 });
 
-const fetchBookmarkedStatusesSuccess = (statuses: APIEntity[], next: (() => Promise<PaginatedResponse<Status>>) | null, folderId?: string) => ({
+const fetchBookmarkedStatusesSuccess = (statuses: Array<Status>, next: (() => Promise<PaginatedResponse<Status>>) | null, folderId?: string) => ({
   type: BOOKMARKED_STATUSES_FETCH_SUCCESS,
   statuses,
   next,
@@ -74,7 +73,7 @@ const expandBookmarkedStatusesRequest = (folderId?: string) => ({
   folderId,
 });
 
-const expandBookmarkedStatusesSuccess = (statuses: APIEntity[], next: (() => Promise<PaginatedResponse<Status>>) | null, folderId?: string) => ({
+const expandBookmarkedStatusesSuccess = (statuses: Array<Status>, next: (() => Promise<PaginatedResponse<Status>>) | null, folderId?: string) => ({
   type: BOOKMARKED_STATUSES_EXPAND_SUCCESS,
   statuses,
   next,
@@ -86,6 +85,15 @@ const expandBookmarkedStatusesFail = (error: unknown, folderId?: string) => ({
   error,
   folderId,
 });
+
+type BookmarksAction =
+  ReturnType<typeof fetchBookmarkedStatusesRequest>
+  | ReturnType<typeof fetchBookmarkedStatusesSuccess>
+  | ReturnType<typeof fetchBookmarkedStatusesFail>
+  | ReturnType<typeof expandBookmarkedStatuses>
+  | ReturnType<typeof expandBookmarkedStatusesRequest>
+  | ReturnType<typeof expandBookmarkedStatusesSuccess>
+  | ReturnType<typeof expandBookmarkedStatusesFail>;
 
 export {
   BOOKMARKED_STATUSES_FETCH_REQUEST,
@@ -102,4 +110,5 @@ export {
   expandBookmarkedStatusesRequest,
   expandBookmarkedStatusesSuccess,
   expandBookmarkedStatusesFail,
+  type BookmarksAction,
 };

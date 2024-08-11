@@ -1,27 +1,23 @@
-import { getFeatures } from 'soapbox/utils/features';
-
 import { getClient } from '../api';
 
 import { importFetchedStatuses } from './importer';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 
-const TRENDING_STATUSES_FETCH_REQUEST = 'TRENDING_STATUSES_FETCH_REQUEST';
-const TRENDING_STATUSES_FETCH_SUCCESS = 'TRENDING_STATUSES_FETCH_SUCCESS';
-const TRENDING_STATUSES_FETCH_FAIL    = 'TRENDING_STATUSES_FETCH_FAIL';
+const TRENDING_STATUSES_FETCH_REQUEST = 'TRENDING_STATUSES_FETCH_REQUEST' as const;
+const TRENDING_STATUSES_FETCH_SUCCESS = 'TRENDING_STATUSES_FETCH_SUCCESS' as const;
+const TRENDING_STATUSES_FETCH_FAIL = 'TRENDING_STATUSES_FETCH_FAIL' as const;
 
 const fetchTrendingStatuses = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
+    const client = getClient(state);
 
-    const instance = state.instance;
-    const features = getFeatures(instance);
-
-    if (!features.trendingStatuses) return;
+    if (!client.features.trendingStatuses) return;
 
     dispatch({ type: TRENDING_STATUSES_FETCH_REQUEST });
 
-    return getClient(getState()).trends.getTrendingStatuses().then((statuses) => {
+    return client.trends.getTrendingStatuses().then((statuses) => {
       dispatch(importFetchedStatuses(statuses));
       dispatch({ type: TRENDING_STATUSES_FETCH_SUCCESS, statuses });
       return statuses;

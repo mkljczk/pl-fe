@@ -1,6 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
 import clsx from 'clsx';
-import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 import escape from 'lodash/escape';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -16,9 +15,9 @@ import { queryClient } from 'soapbox/queries/client';
 import { stripHTML } from 'soapbox/utils/html';
 import { onlyEmoji } from 'soapbox/utils/rich-content';
 
-import type { Chat } from 'pl-api';
+import type { Chat, CustomEmoji } from 'pl-api';
 import type { Menu as IMenu } from 'soapbox/components/dropdown-menu';
-import type { ChatMessage as ChatMessageEntity } from 'soapbox/types/entities';
+import type { ChatMessage as ChatMessageEntity } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   copy: { id: 'chats.actions.copy', defaultMessage: 'Copy' },
@@ -29,8 +28,9 @@ const messages = defineMessages({
 
 const BIG_EMOJI_LIMIT = 3;
 
-const makeEmojiMap = (record: any) => record.get('emojis', ImmutableList()).reduce((map: ImmutableMap<string, any>, emoji: ImmutableMap<string, any>) =>
-  map.set(`:${emoji.get('shortcode')}:`, emoji), ImmutableMap());
+const makeEmojiMap = (record: ChatMessageEntity) =>
+  record.emojis.reduce((map: Record<string, CustomEmoji>, emoji: CustomEmoji) =>
+    (map[`:${emoji.shortcode}:`] = emoji, map), {});
 
 const parsePendingContent = (content: string) => escape(content).replace(/(?:\r\n|\r|\n)/g, '<br>');
 
@@ -40,7 +40,7 @@ const parseContent = (chatMessage: ChatMessageEntity) => {
   const deleting = chatMessage.deleting;
   const formatted = (pending && !deleting) ? parsePendingContent(content) : content;
   const emojiMap = makeEmojiMap(chatMessage);
-  return emojify(formatted, emojiMap.toJS());
+  return emojify(formatted, emojiMap);
 };
 
 interface IChatMessage {
@@ -82,7 +82,7 @@ const ChatMessage = (props: IChatMessage) => {
   };
 
   const maybeRenderMedia = (chatMessage: ChatMessageEntity) => {
-    if (!chatMessage.media_attachments.size) return null;
+    if (!chatMessage.attachment) return null;
 
     return (
       <MediaGallery
@@ -90,7 +90,7 @@ const ChatMessage = (props: IChatMessage) => {
           'rounded-br-sm': isMyMessage && content,
           'rounded-bl-sm': !isMyMessage && content,
         })}
-        media={chatMessage.media_attachments}
+        media={[chatMessage.attachment]}
         onOpenMedia={onOpenMedia}
         visible
       />
@@ -215,7 +215,7 @@ const ChatMessage = (props: IChatMessage) => {
             space={0.5}
             className={clsx({
               'max-w-[85%]': true,
-              'flex-1': !!chatMessage.media_attachments.size,
+              'flex-1': !!chatMessage.attachment,
               'order-3': isMyMessage,
               'order-1': !isMyMessage,
             })}
@@ -230,8 +230,8 @@ const ChatMessage = (props: IChatMessage) => {
                   className={
                     clsx({
                       'text-ellipsis break-words relative rounded-md py-2 px-3 max-w-full space-y-2 [&_.mention]:underline': true,
-                      'rounded-tr-sm': (!!chatMessage.media_attachments.size) && isMyMessage,
-                      'rounded-tl-sm': (!!chatMessage.media_attachments.size) && !isMyMessage,
+                      'rounded-tr-sm': (!!chatMessage.attachment) && isMyMessage,
+                      'rounded-tl-sm': (!!chatMessage.attachment) && !isMyMessage,
                       '[&_.mention]:text-primary-600 dark:[&_.mention]:text-accent-blue': !isMyMessage,
                       '[&_.mention]:text-white dark:[&_.mention]:white': isMyMessage,
                       'bg-primary-500 text-white': isMyMessage,

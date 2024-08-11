@@ -8,7 +8,7 @@ import GroupPrivacy from 'soapbox/features/group/components/group-privacy';
 
 import GroupAvatar from '../group-avatar';
 
-import type { Group } from 'soapbox/schemas';
+import type { Group } from 'soapbox/normalizers';
 
 interface IGroupPopoverContainer {
   children: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
@@ -54,7 +54,7 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
                 <img
                   className='absolute inset-0 h-full w-full rounded-t-lg object-cover'
                   src={group.header}
-                  alt=''
+                  alt={group.header_description}
                 />
               )}
             </Stack>

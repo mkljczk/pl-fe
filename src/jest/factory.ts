@@ -1,24 +1,26 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import {
   accountSchema,
-  cardSchema,
   groupMemberSchema,
   groupRelationshipSchema,
   groupSchema,
+  instanceSchema,
   relationshipSchema,
   statusSchema,
+  GroupRoles,
   type Account,
-  type Card,
   type Group,
   type GroupMember,
   type GroupRelationship,
+  type Instance,
   type Relationship,
   type Status,
-  Instance,
-  instanceSchema,
+} from 'pl-api';
+import { v4 as uuidv4 } from 'uuid';
+
+import {
+  cardSchema,
+  type Card,
 } from 'soapbox/schemas';
-import { GroupRoles } from 'soapbox/schemas/group-member';
 
 import type { PartialDeep } from 'type-fest';
 

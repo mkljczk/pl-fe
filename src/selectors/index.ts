@@ -13,22 +13,22 @@ import { type MRFSimple } from 'soapbox/schemas/pleroma';
 import { getDomain } from 'soapbox/utils/accounts';
 import { validId } from 'soapbox/utils/auth';
 import ConfigDB from 'soapbox/utils/config-db';
-import { getFeatures } from 'soapbox/utils/features';
 import { shouldFilter } from 'soapbox/utils/timelines';
 
+import type { Account as BaseAccount, Filter, MediaAttachment } from 'pl-api';
 import type { EntityStore } from 'soapbox/entity-store/types';
-import type { ContextType } from 'soapbox/normalizers/filter';
-import type { Account as AccountSchema } from 'soapbox/schemas';
+import type { Account, Group, Notification } from 'soapbox/normalizers';
+import type { MinifiedNotification } from 'soapbox/reducers/notifications';
+import type { ReducerStatus } from 'soapbox/reducers/statuses';
 import type { RootState } from 'soapbox/store';
-import type { Account, Filter as FilterEntity, Notification, Status } from 'soapbox/types/entities';
 
 const normalizeId = (id: any): string => typeof id === 'string' ? id : '';
 
 const selectAccount = (state: RootState, accountId: string) =>
-  state.entities[Entities.ACCOUNTS]?.store[accountId] as AccountSchema | undefined;
+  state.entities[Entities.ACCOUNTS]?.store[accountId] as Account | undefined;
 
-const selectAccounts = (state: RootState, accountIds: ImmutableList<string>) =>
-  accountIds.map(accountId => state.entities[Entities.ACCOUNTS]?.store[accountId] as AccountSchema | undefined);
+const selectAccounts = (state: RootState, accountIds: Array<string>) =>
+  accountIds.map(accountId => state.entities[Entities.ACCOUNTS]?.store[accountId] as Account | undefined);
 
 const selectOwnAccount = (state: RootState) => {
   if (state.me) {
@@ -36,11 +36,11 @@ const selectOwnAccount = (state: RootState) => {
   }
 };
 
-const accountIdsToAccts = (state: RootState, ids: string[]) => ids.map((id) => selectAccount(state, id)!.acct);
+const accountIdsToAccts = (state: RootState, accountIds: string[]) => accountIds.map((accountId) => selectAccount(state, accountId)!.acct);
 
-const getAccountBase         = (state: RootState, id: string) => state.entities[Entities.ACCOUNTS]?.store[id] as Account | undefined;
-const getAccountRelationship = (state: RootState, id: string) => state.relationships.get(id);
-const getAccountMeta         = (state: RootState, id: string) => state.accounts_meta[id];
+const getAccountBase = (state: RootState, accountId: string) => state.entities[Entities.ACCOUNTS]?.store[accountId] as Account | undefined;
+const getAccountRelationship = (state: RootState, accountId: string) => state.relationships.get(accountId);
+const getAccountMeta = (state: RootState, accountId: string) => state.accounts_meta[accountId];
 
 const makeGetAccount = () => createSelector([
   getAccountBase,
@@ -51,12 +51,11 @@ const makeGetAccount = () => createSelector([
   return {
     ...account,
     relationship,
-    source: meta?.source ?? account.source,
-    pleroma: meta?.pleroma ?? account.pleroma,
+    __meta: { meta, ...account.__meta },
   };
 });
 
-const toServerSideType = (columnType: string): ContextType => {
+const toServerSideType = (columnType: string): Filter['context'][0] => {
   switch (columnType) {
     case 'home':
     case 'notifications':
@@ -83,7 +82,7 @@ const getFilters = (state: RootState, query: FilterContext) =>
 const escapeRegExp = (string: string) =>
   string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 
-const regexFromFilters = (filters: ImmutableList<FilterEntity>) => {
+const regexFromFilters = (filters: ImmutableList<Filter>) => {
   if (filters.size === 0) return null;
 
   return new RegExp(filters.map(filter =>
@@ -105,9 +104,9 @@ const regexFromFilters = (filters: ImmutableList<FilterEntity>) => {
   ).join('|'), 'i');
 };
 
-const checkFiltered = (index: string, filters: ImmutableList<FilterEntity>) =>
-  filters.reduce((result, filter) =>
-    result.concat(filter.keywords.reduce((result, keyword) => {
+const checkFiltered = (index: string, filters: ImmutableList<Filter>) =>
+  filters.reduce((result: Array<string>, filter) =>
+    result.concat(filter.keywords.reduce((result: Array<string>, keyword) => {
       let expr = escapeRegExp(keyword.keyword);
 
       if (keyword.whole_word) {
@@ -124,22 +123,27 @@ const checkFiltered = (index: string, filters: ImmutableList<FilterEntity>) =>
 
       if (regex.test(index)) return result.concat(filter.title);
       return result;
-    }, ImmutableList<string>())), ImmutableList<string>());
+    }, [])), []);
 
 type APIStatus = { id: string; username?: string };
 
 const makeGetStatus = () => createSelector(
   [
-    (state: RootState, { id }: APIStatus) => state.statuses.get(id) as Status | undefined,
-    (state: RootState, { id }: APIStatus) => state.statuses.get(state.statuses.get(id)?.reblog || '') as Status | undefined,
+    (state: RootState, { id }: APIStatus) => state.statuses.get(id),
+    (state: RootState, { id }: APIStatus) => state.statuses.get(state.statuses.get(id)?.reblog || '', null),
+    (state: RootState, { id }: APIStatus) => {
+      const group = state.statuses.get(id)?.group;
+      if (group) return state.entities[Entities.GROUPS]?.store[group] as Group;
+      return undefined;
+    },
     (_state: RootState, { username }: APIStatus) => username,
     getFilters,
     (state: RootState) => state.me,
-    (state: RootState) => getFeatures(state.instance),
+    (state: RootState) => state.auth.client.features,
     (state: RootState) => getLocale(state, 'en'),
   ],
 
-  (statusBase, statusReblog, username, filters, me, features, locale) => {
+  (statusBase, statusReblog, statusGroup, username, filters, me, features, locale) => {
     if (!statusBase) return null;
     const { account } = statusBase;
     const accountUsername = account.acct;
@@ -149,33 +153,37 @@ const makeGetStatus = () => createSelector(
       return null;
     }
 
-    return statusBase.withMutations((map: Status) => {
-      map.set('reblog', statusReblog || null);
+    const filtered = features.filtersV2
+      ? statusBase.filtered
+      : features.filters && account.id !== me && checkFiltered(statusReblog?.search_index || statusBase.search_index || '', filters) || [];
 
-      if (map.currentLanguage === null && map.content_map?.size) {
-        let currentLanguage: string | null = null;
-        if (map.content_map.has(locale)) currentLanguage = locale;
-        else if (map.language && map.content_map.has(map.language)) currentLanguage = map.language;
-        else currentLanguage = map.content_map.keySeq().first();
-        map.set('currentLanguage', currentLanguage);
-      }
-
-      if ((features.filters) && account.id !== me) {
-        const filtered = checkFiltered(statusReblog?.search_index || statusBase.search_index, filters);
-
-        map.set('filtered', filtered);
-      }
-    });
+    return {
+      ...statusBase,
+      reblog: statusReblog || null,
+      group: statusGroup || null,
+      filtered,
+    };
+    // if (map.currentLanguage === null && map.content_map?.size) {
+    //   let currentLanguage: string | null = null;
+    //   if (map.content_map.has(locale)) currentLanguage = locale;
+    //   else if (map.language && map.content_map.has(map.language)) currentLanguage = map.language;
+    //   else currentLanguage = map.content_map.keySeq().first();
+    //   map.set('currentLanguage', currentLanguage);
+    // }
   },
 );
 
 const makeGetNotification = () => createSelector([
-  (_state: RootState, notification: Notification) => notification,
-  (state: RootState, notification: Notification) => selectAccount(state, normalizeId(notification.account)),
-  (state: RootState, notification: Notification) => selectAccount(state, normalizeId(notification.target)),
-  (state: RootState, notification: Notification) => state.statuses.get(normalizeId(notification.status)),
-  (state: RootState, notification: Notification) => notification.accounts ? selectAccounts(state, notification.accounts?.map(normalizeId)) : null,
-], (notification, account, target, status, accounts) => notification.merge({
+  (_state: RootState, notification: MinifiedNotification) => notification,
+  // @ts-ignore
+  (state: RootState, notification: MinifiedNotification) => selectAccount(state, normalizeId(notification.account)),
+  // @ts-ignore
+  (state: RootState, notification: MinifiedNotification) => selectAccount(state, normalizeId(notification.target)),
+  // @ts-ignore
+  (state: RootState, notification: MinifiedNotification) => state.statuses.get(normalizeId(notification.status)),
+  (state: RootState, notification: MinifiedNotification) => notification.accounts ? selectAccounts(state, notification.accounts?.map(normalizeId)) : null,
+], (notification, account, target, status, accounts): Notification => ({
+  ...notification,
   // @ts-ignore
   account: account || null,
   // @ts-ignore
@@ -186,17 +194,22 @@ const makeGetNotification = () => createSelector([
   accounts,
 }));
 
+type AccountGalleryAttachment = MediaAttachment & {
+  status: ReducerStatus;
+  account: BaseAccount;
+}
+
 const getAccountGallery = createSelector([
   (state: RootState, id: string) => state.timelines.get(`account:${id}:media`)?.items || ImmutableOrderedSet<string>(),
   (state: RootState) => state.statuses,
 ], (statusIds, statuses) =>
-  statusIds.reduce((medias: ImmutableList<any>, statusId: string) => {
+  statusIds.reduce((medias: ImmutableList<AccountGalleryAttachment>, statusId: string) => {
     const status = statuses.get(statusId);
     if (!status) return medias;
     if (status.reblog) return medias;
 
     return medias.concat(
-      status.media_attachments.map(media => media.merge({ status, account: status.account })));
+      status.media_attachments.map(media => ({ ...media, status, account: status.account })));
   }, ImmutableList()),
 );
 
@@ -210,7 +223,7 @@ const getGroupGallery = createSelector([
     if (status.reblog) return medias;
 
     return medias.concat(
-      status.media_attachments.map(media => media.merge({ status, account: status.account })));
+      status.media_attachments.map(media => ({ ...media, status, account: status.account })));
   }, ImmutableList()),
 );
 
@@ -254,7 +267,7 @@ const getAuthUserIds = createSelector(
   }, ImmutableOrderedSet<string>()));
 
 const makeGetOtherAccounts = () => createSelector([
-  (state: RootState) => state.entities[Entities.ACCOUNTS]?.store as EntityStore<AccountSchema>,
+  (state: RootState) => state.entities[Entities.ACCOUNTS]?.store as EntityStore<Account>,
   getAuthUserIds,
   (state: RootState) => state.me,
 ], (accounts, authUserIds, me) =>
@@ -274,9 +287,9 @@ const getSimplePolicy = createSelector([
 }));
 
 const getRemoteInstanceFavicon = (state: RootState, host: string) => {
-  const accounts = state.entities[Entities.ACCOUNTS]?.store as EntityStore<AccountSchema>;
+  const accounts = state.entities[Entities.ACCOUNTS]?.store as EntityStore<Account>;
   const account = Object.entries(accounts).find(([_, account]) => account && getDomain(account) === host)?.[1];
-  return account?.pleroma?.favicon;
+  return account?.favicon;
 };
 
 type HostFederation = {
@@ -346,6 +359,7 @@ export {
   regexFromFilters,
   makeGetStatus,
   makeGetNotification,
+  type AccountGalleryAttachment,
   getAccountGallery,
   getGroupGallery,
   makeGetReport,

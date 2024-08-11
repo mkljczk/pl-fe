@@ -2,6 +2,7 @@ import split from 'graphemesplit';
 
 import unicodeMapping from './mapping';
 
+import type { CustomEmoji as BaseCustomEmoji } from 'pl-api';
 import type { Emoji as EmojiMart, CustomEmoji as EmojiMartCustom } from 'soapbox/features/emoji/data';
 
 /*
@@ -198,12 +199,12 @@ const emojify = (str: string, customEmojis = {}) =>
     })
     .join('');
 
-const buildCustomEmojis = (customEmojis: any) => {
+const buildCustomEmojis = (customEmojis: Array<BaseCustomEmoji>) => {
   const emojis: EmojiMart<EmojiMartCustom>[] = [];
 
   customEmojis.forEach((emoji: any) => {
-    const shortcode = emoji.get('shortcode');
-    const url = emoji.get('static_url');
+    const shortcode = emoji.shortcode;
+    const url = emoji.static_url;
     const name = shortcode.replace(':', '');
 
     emojis.push({

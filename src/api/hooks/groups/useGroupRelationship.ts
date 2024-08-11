@@ -1,9 +1,9 @@
+import { type GroupRelationship, groupRelationshipSchema } from 'pl-api';
 import { z } from 'zod';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntity } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';
-import { type GroupRelationship, groupRelationshipSchema } from 'soapbox/schemas';
 
 const useGroupRelationship = (groupId: string | undefined) => {
   const client = useClient();

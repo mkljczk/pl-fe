@@ -1,6 +1,6 @@
 import range from 'lodash/range';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 
 const getDomainFromURL = (account: Pick<Account, 'url'>): string => {
   try {

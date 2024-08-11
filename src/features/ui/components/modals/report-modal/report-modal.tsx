@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { blockAccount } from 'soapbox/actions/accounts';
 import { submitReport, submitReportSuccess, submitReportFail, ReportableEntities } from 'soapbox/actions/reports';
-import { expandAccountTimeline } from 'soapbox/actions/timelines';
+import { fetchAccountTimeline } from 'soapbox/actions/timelines';
 import { useAccount } from 'soapbox/api/hooks';
 import AttachmentThumbs from 'soapbox/components/attachment-thumbs';
 import StatusContent from 'soapbox/components/status-content';
@@ -58,7 +58,7 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
         collapsable
       />
 
-      {status.media_attachments.size > 0 && (
+      {status.media_attachments.length > 0 && (
         <AttachmentThumbs
           media={status.media_attachments}
           sensitive={status.sensitive}
@@ -200,7 +200,7 @@ const ReportModal = ({ onClose }: IReportModal) => {
 
   useEffect(() => {
     if (account?.id) {
-      dispatch(expandAccountTimeline(account.id, { withReplies: true, maxId: null }, intl));
+      dispatch(fetchAccountTimeline(account.id, { exclude_replies: false }));
     }
   }, [account?.id]);
 

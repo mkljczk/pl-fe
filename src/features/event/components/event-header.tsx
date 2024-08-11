@@ -1,4 +1,3 @@
-import { List as ImmutableList } from 'immutable';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
@@ -28,7 +27,7 @@ import EventActionButton from '../components/event-action-button';
 import EventDate from '../components/event-date';
 
 import type { Menu as MenuType } from 'soapbox/components/dropdown-menu';
-import type { Status as StatusEntity } from 'soapbox/types/entities';
+import type { Status as StatusEntity } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   bannerHeader: { id: 'event.banner', defaultMessage: 'Event banner' },
@@ -75,8 +74,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const features = useFeatures();
   const { boostModal } = useSettings();
   const { account: ownAccount } = useOwnAccount();
-  const isStaff = ownAccount ? ownAccount.staff : false;
-  const isAdmin = ownAccount ? ownAccount.admin : false;
+  const isStaff = ownAccount ? ownAccount.is_admin || ownAccount.is_moderator : false;
+  const isAdmin = ownAccount ? ownAccount.is_admin : false;
 
   if (!status || !status.event) {
     return (
@@ -100,7 +99,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     e.preventDefault();
     e.stopPropagation();
 
-    dispatch(openModal('MEDIA', { media: ImmutableList([event.banner]) }));
+    dispatch(openModal('MEDIA', { media: [event.banner] }));
   };
 
   const handleExportClick = () => {
@@ -274,7 +273,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         icon: require('@tabler/icons/outline/at.svg'),
       });
 
-      if (status.getIn(['account', 'pleroma', 'accepts_chat_messages']) === true) {
+      if (status.account.accepts_chat_messages === true) {
         menu.push({
           text: intl.formatMessage(messages.chat, { name: username }),
           action: handleChatClick,
@@ -466,7 +465,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
             <HStack alignItems='center' space={2}>
               <Icon src={require('@tabler/icons/outline/map-pin.svg')} />
               <span>
-                {event.location.get('name')}
+                {event.location.name}
               </span>
             </HStack>
           )}

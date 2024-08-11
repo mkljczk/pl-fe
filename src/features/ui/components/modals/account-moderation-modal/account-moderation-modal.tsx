@@ -11,10 +11,9 @@ import List, { ListItem } from 'soapbox/components/list';
 import MissingIndicator from 'soapbox/components/missing-indicator';
 import OutlineBox from 'soapbox/components/outline-box';
 import { Button, Text, HStack, Modal, Stack, Toggle } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
+import { useAppDispatch, useFeatures, useOwnAccount } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 import { getBadges } from 'soapbox/utils/badges';
-import { parseVersion } from 'soapbox/utils/features';
 
 import BadgeInput from './badge-input';
 import StaffRolePicker from './staff-role-picker';
@@ -22,8 +21,6 @@ import StaffRolePicker from './staff-role-picker';
 const messages = defineMessages({
   userVerified: { id: 'admin.users.user_verified_message', defaultMessage: '@{acct} was verified' },
   userUnverified: { id: 'admin.users.user_unverified_message', defaultMessage: '@{acct} was unverified' },
-  setDonorSuccess: { id: 'admin.users.set_donor_message', defaultMessage: '@{acct} was set as a donor' },
-  removeDonorSuccess: { id: 'admin.users.remove_donor_message', defaultMessage: '@{acct} was removed as a donor' },
   userSuggested: { id: 'admin.users.user_suggested_message', defaultMessage: '@{acct} was suggested' },
   userUnsuggested: { id: 'admin.users.user_unsuggested_message', defaultMessage: '@{acct} was unsuggested' },
   badgesSaved: { id: 'admin.users.badges_saved_message', defaultMessage: 'Custom badges updated.' },
@@ -40,8 +37,7 @@ interface IAccountModerationModal {
 const AccountModerationModal: React.FC<IAccountModerationModal> = ({ onClose, accountId }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  
-  const { software } = useAppSelector((state) => parseVersion(state.instance.version));
+
   const { suggest, unsuggest } = useSuggest();
   const { verify, unverify } = useVerify();
   const { account: ownAccount } = useOwnAccount();
@@ -117,7 +113,7 @@ const AccountModerationModal: React.FC<IAccountModerationModal> = ({ onClose, ac
         </OutlineBox>
 
         <List>
-          {(ownAccount.admin && account.local) && (
+          {(ownAccount.is_admin && account.local) && (
             <ListItem label={<FormattedMessage id='account_moderation_modal.fields.account_role' defaultMessage='Staff level' />}>
               <div className='w-auto'>
                 <StaffRolePicker account={account} />
@@ -135,7 +131,7 @@ const AccountModerationModal: React.FC<IAccountModerationModal> = ({ onClose, ac
           {features.suggestionsV2 && (
             <ListItem label={<FormattedMessage id='account_moderation_modal.fields.suggested' defaultMessage='Suggested in people to follow' />}>
               <Toggle
-                checked={account.pleroma?.is_suggested === true}
+                checked={account.is_suggested === true}
                 onChange={handleSuggestedChange}
               />
             </ListItem>
@@ -173,7 +169,7 @@ const AccountModerationModal: React.FC<IAccountModerationModal> = ({ onClose, ac
           />
         </Text>
 
-        {software === PLEROMA && (
+        {features.version.software === PLEROMA && (
           <HStack justifyContent='center'>
             <Button icon={require('@tabler/icons/outline/external-link.svg')} size='sm' theme='secondary' onClick={handleAdminFE}>
               <FormattedMessage id='account_moderation_modal.admin_fe' defaultMessage='Open in AdminFE' />

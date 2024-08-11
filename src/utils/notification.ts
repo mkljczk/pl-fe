@@ -1,3 +1,5 @@
+import { type Notification } from 'pl-api';
+
 /** Notification types known to Soapbox. */
 const NOTIFICATION_TYPES = [
   'follow',
@@ -21,14 +23,10 @@ const EXCLUDE_TYPES = [
   'chat_mention',
 ] as const;
 
-type NotificationType = typeof NOTIFICATION_TYPES[number];
-
-/** Ensure the Notification is a valid, known type. */
-const validType = (type: string): type is NotificationType => NOTIFICATION_TYPES.includes(type as any);
+type NotificationType = Notification['type'];
 
 export {
   NOTIFICATION_TYPES,
   EXCLUDE_TYPES,
   NotificationType,
-  validType,
 };

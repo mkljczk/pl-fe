@@ -26,9 +26,9 @@ const processCircle = (setProgress: (progress: {
 
     const interactions: Record<string, Interaction> = {};
 
-    const initInteraction = (id: string) => {
-      if (interactions[id]) return;
-      interactions[id] = {
+    const initInteraction = (accountId: string) => {
+      if (interactions[accountId]) return;
+      interactions[accountId] = {
         acct: '',
         replies: 0,
         reblogs: 0,

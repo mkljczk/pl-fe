@@ -42,7 +42,7 @@ const Hashtag: React.FC<IHashtag> = ({ hashtag }) => {
           <Sparklines
             width={40}
             height={28}
-            data={hashtag.history.reverse().map((day) => +day.uses)}
+            data={hashtag.history.toReversed().map((day) => +day.uses)}
           >
             <SparklinesCurve style={{ fill: 'none' }} color='#818cf8' />
           </Sparklines>

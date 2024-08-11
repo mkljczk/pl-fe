@@ -6,7 +6,7 @@ import { Avatar, HStack } from 'soapbox/components/ui';
 import { useAppSelector } from 'soapbox/hooks';
 import { makeGetAccount } from 'soapbox/selectors';
 
-import type { Account } from 'soapbox/types/entities';
+import type { Account } from 'soapbox/normalizers';
 
 const getAccount = makeGetAccount();
 

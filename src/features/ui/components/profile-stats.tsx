@@ -6,7 +6,7 @@ import { HStack, Text } from 'soapbox/components/ui';
 import { useSettings } from 'soapbox/hooks';
 import { shortNumberFormat } from 'soapbox/utils/numbers';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   followers: { id: 'account.followers', defaultMessage: 'Followers' },

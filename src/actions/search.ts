@@ -6,24 +6,23 @@ import { importFetchedAccounts, importFetchedStatuses } from './importer';
 import type { Search } from 'pl-api';
 import type { SearchFilter } from 'soapbox/reducers/search';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const SEARCH_CHANGE = 'SEARCH_CHANGE';
-const SEARCH_CLEAR = 'SEARCH_CLEAR';
-const SEARCH_SHOW = 'SEARCH_SHOW';
-const SEARCH_RESULTS_CLEAR = 'SEARCH_RESULTS_CLEAR';
+const SEARCH_CHANGE = 'SEARCH_CHANGE' as const;
+const SEARCH_CLEAR = 'SEARCH_CLEAR' as const;
+const SEARCH_SHOW = 'SEARCH_SHOW' as const;
+const SEARCH_RESULTS_CLEAR = 'SEARCH_RESULTS_CLEAR' as const;
 
-const SEARCH_FETCH_REQUEST = 'SEARCH_FETCH_REQUEST';
-const SEARCH_FETCH_SUCCESS = 'SEARCH_FETCH_SUCCESS';
-const SEARCH_FETCH_FAIL = 'SEARCH_FETCH_FAIL';
+const SEARCH_FETCH_REQUEST = 'SEARCH_FETCH_REQUEST' as const;
+const SEARCH_FETCH_SUCCESS = 'SEARCH_FETCH_SUCCESS' as const;
+const SEARCH_FETCH_FAIL = 'SEARCH_FETCH_FAIL' as const;
 
-const SEARCH_FILTER_SET = 'SEARCH_FILTER_SET';
+const SEARCH_FILTER_SET = 'SEARCH_FILTER_SET' as const;
 
-const SEARCH_EXPAND_REQUEST = 'SEARCH_EXPAND_REQUEST';
-const SEARCH_EXPAND_SUCCESS = 'SEARCH_EXPAND_SUCCESS';
-const SEARCH_EXPAND_FAIL = 'SEARCH_EXPAND_FAIL';
+const SEARCH_EXPAND_REQUEST = 'SEARCH_EXPAND_REQUEST' as const;
+const SEARCH_EXPAND_SUCCESS = 'SEARCH_EXPAND_SUCCESS' as const;
+const SEARCH_EXPAND_FAIL = 'SEARCH_EXPAND_FAIL' as const;
 
-const SEARCH_ACCOUNT_SET = 'SEARCH_ACCOUNT_SET';
+const SEARCH_ACCOUNT_SET = 'SEARCH_ACCOUNT_SET' as const;
 
 const changeSearch = (value: string) =>
   (dispatch: AppDispatch) => {
@@ -81,7 +80,7 @@ const submitSearch = (filter?: SearchFilter) =>
       }
 
       dispatch(fetchSearchSuccess(response, value, type));
-      dispatch(fetchRelationships(response.accounts.map((item: APIEntity) => item.id)));
+      dispatch(fetchRelationships(response.accounts.map((item) => item.id)));
     }).catch(error => {
       dispatch(fetchSearchFail(error));
     });
@@ -116,8 +115,8 @@ const setFilter = (filterType: SearchFilter) =>
   };
 
 const expandSearch = (type: SearchFilter) => (dispatch: AppDispatch, getState: () => RootState) => {
-  const value     = getState().search.value;
-  const offset    = getState().search.results[type].size;
+  const value = getState().search.value;
+  const offset = getState().search.results[type].size;
   const accountId = getState().search.accountId;
 
   dispatch(expandSearchRequest(type));
@@ -138,7 +137,7 @@ const expandSearch = (type: SearchFilter) => (dispatch: AppDispatch, getState: (
     }
 
     dispatch(expandSearchSuccess(response, value, type));
-    dispatch(fetchRelationships(response.accounts.map((item: APIEntity) => item.id)));
+    dispatch(fetchRelationships(response.accounts.map((item) => item.id)));
   }).catch(error => {
     dispatch(expandSearchFail(error));
   });

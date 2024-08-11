@@ -11,14 +11,15 @@ import type { EntityCallbacks, EntityFn, EntitySchema, ExpandedEntitiesPath } fr
 import type { Entity } from '../types';
 import type { PlfeResponse } from 'soapbox/api';
 
-interface UseCreateEntityOpts<TEntity extends Entity = Entity> {
+interface UseCreateEntityOpts<TEntity extends Entity = Entity, TTransformedEntity extends Entity = TEntity> {
   schema?: EntitySchema<TEntity>;
+  transform?: (schema: TEntity) => TTransformedEntity;
 }
 
-const useCreateEntity = <TEntity extends Entity = Entity, Data = unknown>(
+const useCreateEntity = <TEntity extends Entity = Entity, TTransformedEntity extends Entity = TEntity, Data = unknown>(
   expandedPath: ExpandedEntitiesPath,
   entityFn: EntityFn<Data>,
-  opts: UseCreateEntityOpts<TEntity> = {},
+  opts: UseCreateEntityOpts<TEntity, TTransformedEntity> = {},
 ) => {
   const dispatch = useAppDispatch();
 
@@ -27,11 +28,12 @@ const useCreateEntity = <TEntity extends Entity = Entity, Data = unknown>(
 
   const createEntity = async (
     data: Data,
-    callbacks: EntityCallbacks<TEntity, { response?: PlfeResponse }> = {},
+    callbacks: EntityCallbacks<TEntity | TTransformedEntity, { response?: PlfeResponse }> = {},
   ): Promise<void> => {
     const result = await setPromise(entityFn(data));
     const schema = opts.schema || z.custom<TEntity>();
-    const entity = schema.parse(result.json);
+    let entity: TEntity | TTransformedEntity = schema.parse(result.json);
+    if (opts.transform) entity = opts.transform(entity);
 
     // TODO: optimistic updating
     dispatch(importEntities([entity], entityType, listKey, 'start'));

@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { List as ImmutableList } from 'immutable';
+import { GOTOSOCIAL, MASTODON, mediaAttachmentSchema } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
@@ -22,16 +22,14 @@ import MovedNote from 'soapbox/features/account-timeline/components/moved-note';
 import ActionButton from 'soapbox/features/ui/components/action-button';
 import SubscriptionButton from 'soapbox/features/ui/components/subscription-button';
 import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
-import { normalizeAttachment } from 'soapbox/normalizers';
 import { useChats } from 'soapbox/queries/chats';
 import { queryClient } from 'soapbox/queries/client';
-import { Account } from 'soapbox/schemas';
 import toast from 'soapbox/toast';
 import { isDefaultHeader } from 'soapbox/utils/accounts';
 import copy from 'soapbox/utils/copy';
-import { GOTOSOCIAL, MASTODON, parseVersion } from 'soapbox/utils/features';
 
 import type { PlfeResponse } from 'soapbox/api';
+import type { Account } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
@@ -89,7 +87,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const { account: ownAccount } = useOwnAccount();
   const { follow } = useFollow();
 
-  const { software } = useAppSelector((state) => parseVersion(state.instance.version));
+  const { software } = useAppSelector((state) => state.auth.client.features.version);
 
   const { getOrCreateChatByAccountId } = useChats();
 
@@ -235,11 +233,12 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const onAvatarClick = () => {
-    const avatar = normalizeAttachment({
+    const avatar = mediaAttachmentSchema.parse({
+      id: '',
       type: 'image',
       url: account.avatar,
     });
-    dispatch(openModal('MEDIA', { media: ImmutableList.of(avatar), index: 0 }));
+    dispatch(openModal('MEDIA', { media: [avatar], index: 0 }));
   };
 
   const handleAvatarClick: React.MouseEventHandler = (e) => {
@@ -250,11 +249,11 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const onHeaderClick = () => {
-    const header = normalizeAttachment({
+    const header = mediaAttachmentSchema.parse({
       type: 'image',
       url: account.header,
     });
-    dispatch(openModal('MEDIA', { media: ImmutableList.of(header), index: 0 }));
+    dispatch(openModal('MEDIA', { media: [header], index: 0 }));
   };
 
   const handleHeaderClick: React.MouseEventHandler = (e) => {
@@ -471,7 +470,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       }
     }
 
-    if (ownAccount.staff) {
+    if (ownAccount.is_admin || ownAccount.is_moderator) {
       menu.push(null);
 
       menu.push({
@@ -556,7 +555,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       return null;
     }
 
-    if (account.pleroma?.accepts_chat_messages) {
+    if (account.accepts_chat_messages) {
       return (
         <IconButton
           src={require('@tabler/icons/outline/messages.svg')}

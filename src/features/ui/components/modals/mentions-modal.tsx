@@ -20,7 +20,7 @@ const MentionsModal: React.FC<IMentionsModal> = ({ onClose, statusId }) => {
   const getStatus = useCallback(makeGetStatus(), []);
 
   const status = useAppSelector((state) => getStatus(state, { id: statusId }));
-  const accountIds = status ? ImmutableOrderedSet(status.mentions.map(m => m.get('id'))) : null;
+  const accountIds = status ? ImmutableOrderedSet(status.mentions.map(m => m.id)) : null;
 
   const fetchData = () => {
     dispatch(fetchStatusWithContext(statusId, intl));

@@ -4,48 +4,47 @@ import { importFetchedAccounts } from './importer';
 
 import type { Account, PaginatedResponse } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const GROUP_BLOCKS_FETCH_REQUEST = 'GROUP_BLOCKS_FETCH_REQUEST';
-const GROUP_BLOCKS_FETCH_SUCCESS = 'GROUP_BLOCKS_FETCH_SUCCESS';
-const GROUP_BLOCKS_FETCH_FAIL    = 'GROUP_BLOCKS_FETCH_FAIL';
+const GROUP_BLOCKS_FETCH_REQUEST = 'GROUP_BLOCKS_FETCH_REQUEST' as const;
+const GROUP_BLOCKS_FETCH_SUCCESS = 'GROUP_BLOCKS_FETCH_SUCCESS' as const;
+const GROUP_BLOCKS_FETCH_FAIL = 'GROUP_BLOCKS_FETCH_FAIL' as const;
 
-const GROUP_UNBLOCK_REQUEST = 'GROUP_UNBLOCK_REQUEST';
-const GROUP_UNBLOCK_SUCCESS = 'GROUP_UNBLOCK_SUCCESS';
-const GROUP_UNBLOCK_FAIL    = 'GROUP_UNBLOCK_FAIL';
+const GROUP_UNBLOCK_REQUEST = 'GROUP_UNBLOCK_REQUEST' as const;
+const GROUP_UNBLOCK_SUCCESS = 'GROUP_UNBLOCK_SUCCESS' as const;
+const GROUP_UNBLOCK_FAIL = 'GROUP_UNBLOCK_FAIL' as const;
 
 const groupKick = (groupId: string, accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     return getClient(getState).experimental.groups.kickGroupUsers(groupId, [accountId]);
   };
 
-const fetchGroupBlocks = (id: string) =>
+const fetchGroupBlocks = (groupId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(fetchGroupBlocksRequest(id));
+    dispatch(fetchGroupBlocksRequest(groupId));
 
-    return getClient(getState).experimental.groups.getGroupBlocks(id).then(response => {
+    return getClient(getState).experimental.groups.getGroupBlocks(groupId).then(response => {
       dispatch(importFetchedAccounts(response.items));
-      dispatch(fetchGroupBlocksSuccess(id, response.items, response.next));
+      dispatch(fetchGroupBlocksSuccess(groupId, response.items, response.next));
     }).catch(error => {
-      dispatch(fetchGroupBlocksFail(id, error));
+      dispatch(fetchGroupBlocksFail(groupId, error));
     });
   };
 
-const fetchGroupBlocksRequest = (id: string) => ({
+const fetchGroupBlocksRequest = (groupId: string) => ({
   type: GROUP_BLOCKS_FETCH_REQUEST,
-  id,
+  groupId,
 });
 
-const fetchGroupBlocksSuccess = (id: string, accounts: APIEntity[], next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
+const fetchGroupBlocksSuccess = (groupId: string, accounts: Array<Account>, next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
   type: GROUP_BLOCKS_FETCH_SUCCESS,
-  id,
+  groupId,
   accounts,
   next,
 });
 
-const fetchGroupBlocksFail = (id: string, error: unknown) => ({
+const fetchGroupBlocksFail = (groupId: string, error: unknown) => ({
   type: GROUP_BLOCKS_FETCH_FAIL,
-  id,
+  groupId,
   error,
   skipNotFound: true,
 });

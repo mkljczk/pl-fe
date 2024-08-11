@@ -5,24 +5,24 @@ import { getClient } from '../api';
 
 import type { PaginatedResponse } from 'pl-api';
 import type { EntityStore } from 'soapbox/entity-store/types';
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 import type { AppDispatch, RootState } from 'soapbox/store';
 
-const DOMAIN_BLOCK_REQUEST = 'DOMAIN_BLOCK_REQUEST';
-const DOMAIN_BLOCK_SUCCESS = 'DOMAIN_BLOCK_SUCCESS';
-const DOMAIN_BLOCK_FAIL    = 'DOMAIN_BLOCK_FAIL';
+const DOMAIN_BLOCK_REQUEST = 'DOMAIN_BLOCK_REQUEST' as const;
+const DOMAIN_BLOCK_SUCCESS = 'DOMAIN_BLOCK_SUCCESS' as const;
+const DOMAIN_BLOCK_FAIL = 'DOMAIN_BLOCK_FAIL' as const;
 
-const DOMAIN_UNBLOCK_REQUEST = 'DOMAIN_UNBLOCK_REQUEST';
-const DOMAIN_UNBLOCK_SUCCESS = 'DOMAIN_UNBLOCK_SUCCESS';
-const DOMAIN_UNBLOCK_FAIL    = 'DOMAIN_UNBLOCK_FAIL';
+const DOMAIN_UNBLOCK_REQUEST = 'DOMAIN_UNBLOCK_REQUEST' as const;
+const DOMAIN_UNBLOCK_SUCCESS = 'DOMAIN_UNBLOCK_SUCCESS' as const;
+const DOMAIN_UNBLOCK_FAIL = 'DOMAIN_UNBLOCK_FAIL' as const;
 
-const DOMAIN_BLOCKS_FETCH_REQUEST = 'DOMAIN_BLOCKS_FETCH_REQUEST';
-const DOMAIN_BLOCKS_FETCH_SUCCESS = 'DOMAIN_BLOCKS_FETCH_SUCCESS';
-const DOMAIN_BLOCKS_FETCH_FAIL    = 'DOMAIN_BLOCKS_FETCH_FAIL';
+const DOMAIN_BLOCKS_FETCH_REQUEST = 'DOMAIN_BLOCKS_FETCH_REQUEST' as const;
+const DOMAIN_BLOCKS_FETCH_SUCCESS = 'DOMAIN_BLOCKS_FETCH_SUCCESS' as const;
+const DOMAIN_BLOCKS_FETCH_FAIL = 'DOMAIN_BLOCKS_FETCH_FAIL' as const;
 
-const DOMAIN_BLOCKS_EXPAND_REQUEST = 'DOMAIN_BLOCKS_EXPAND_REQUEST';
-const DOMAIN_BLOCKS_EXPAND_SUCCESS = 'DOMAIN_BLOCKS_EXPAND_SUCCESS';
-const DOMAIN_BLOCKS_EXPAND_FAIL    = 'DOMAIN_BLOCKS_EXPAND_FAIL';
+const DOMAIN_BLOCKS_EXPAND_REQUEST = 'DOMAIN_BLOCKS_EXPAND_REQUEST' as const;
+const DOMAIN_BLOCKS_EXPAND_SUCCESS = 'DOMAIN_BLOCKS_EXPAND_SUCCESS' as const;
+const DOMAIN_BLOCKS_EXPAND_FAIL = 'DOMAIN_BLOCKS_EXPAND_FAIL' as const;
 
 const blockDomain = (domain: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -157,6 +157,20 @@ const expandDomainBlocksFail = (error: unknown) => ({
   error,
 });
 
+type DomainBlocksAction =
+  ReturnType<typeof blockDomainRequest>
+  | ReturnType<typeof blockDomainSuccess>
+  | ReturnType<typeof blockDomainFail>
+  | ReturnType<typeof unblockDomainRequest>
+  | ReturnType<typeof unblockDomainSuccess>
+  | ReturnType<typeof unblockDomainFail>
+  | ReturnType<typeof fetchDomainBlocksRequest>
+  | ReturnType<typeof fetchDomainBlocksSuccess>
+  | ReturnType<typeof fetchDomainBlocksFail>
+  | ReturnType<typeof expandDomainBlocksRequest>
+  | ReturnType<typeof expandDomainBlocksSuccess>
+  | ReturnType<typeof expandDomainBlocksFail>;
+
 export {
   DOMAIN_BLOCK_REQUEST,
   DOMAIN_BLOCK_SUCCESS,
@@ -186,4 +200,5 @@ export {
   expandDomainBlocksRequest,
   expandDomainBlocksSuccess,
   expandDomainBlocksFail,
+  type DomainBlocksAction,
 };

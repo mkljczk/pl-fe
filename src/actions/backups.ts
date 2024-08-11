@@ -2,13 +2,13 @@ import { getClient } from '../api';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 
-const BACKUPS_FETCH_REQUEST = 'BACKUPS_FETCH_REQUEST';
-const BACKUPS_FETCH_SUCCESS = 'BACKUPS_FETCH_SUCCESS';
-const BACKUPS_FETCH_FAIL    = 'BACKUPS_FETCH_FAIL';
+const BACKUPS_FETCH_REQUEST = 'BACKUPS_FETCH_REQUEST' as const;
+const BACKUPS_FETCH_SUCCESS = 'BACKUPS_FETCH_SUCCESS' as const;
+const BACKUPS_FETCH_FAIL = 'BACKUPS_FETCH_FAIL' as const;
 
-const BACKUPS_CREATE_REQUEST = 'BACKUPS_CREATE_REQUEST';
-const BACKUPS_CREATE_SUCCESS = 'BACKUPS_CREATE_SUCCESS';
-const BACKUPS_CREATE_FAIL    = 'BACKUPS_CREATE_FAIL';
+const BACKUPS_CREATE_REQUEST = 'BACKUPS_CREATE_REQUEST' as const;
+const BACKUPS_CREATE_SUCCESS = 'BACKUPS_CREATE_SUCCESS' as const;
+const BACKUPS_CREATE_FAIL = 'BACKUPS_CREATE_FAIL' as const;
 
 const fetchBackups = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {

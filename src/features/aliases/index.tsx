@@ -25,11 +25,11 @@ const Aliases = () => {
   const features = useFeatures();
   const { account } = useOwnAccount();
 
-  const aliases = useAppSelector((state) => {
+  const aliases = useAppSelector((state): Array<string> => {
     if (features.accountMoving) {
       return [...state.aliases.aliases.items];
     } else {
-      return account?.pleroma?.also_known_as ?? [];
+      return account?.__meta.pleroma?.also_known_as ?? [];
     }
   });
 

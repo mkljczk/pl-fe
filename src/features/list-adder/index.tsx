@@ -12,8 +12,8 @@ import NewListForm from '../lists/components/new-list-form';
 import List from './components/list';
 
 import type { List as ImmutableList } from 'immutable';
+import type { List as ListEntity } from 'pl-api';
 import type { RootState } from 'soapbox/store';
-import type { List as ListEntity } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   subheading: { id: 'lists.subheading', defaultMessage: 'Your lists' },

@@ -3,11 +3,11 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { changeSetting } from 'soapbox/actions/settings';
-import { expandPublicTimeline } from 'soapbox/actions/timelines';
+import { fetchPublicTimeline } from 'soapbox/actions/timelines';
 import { usePublicStream } from 'soapbox/api/hooks';
 import PullToRefresh from 'soapbox/components/pull-to-refresh';
 import { Accordion, Column } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch, useInstance, useSettings, useTheme } from 'soapbox/hooks';
+import { useAppDispatch, useInstance, useSettings, useTheme } from 'soapbox/hooks';
 import { useIsMobile } from 'soapbox/hooks/useIsMobile';
 
 import PinnedHostsPicker from '../remote-timeline/components/pinned-hosts-picker';
@@ -26,7 +26,6 @@ const CommunityTimeline = () => {
   const instance = useInstance();
   const settings = useSettings();
   const onlyMedia = settings.public.other.onlyMedia;
-  const next = useAppSelector(state => state.timelines.get('public')?.next);
 
   const timelineId = 'public';
   const isMobile = useIsMobile();
@@ -42,16 +41,16 @@ const CommunityTimeline = () => {
     dispatch(changeSetting(['explanationBox'], setting));
   };
 
-  const handleLoadMore = (maxId: string) => {
-    dispatch(expandPublicTimeline({ url: next, maxId, onlyMedia }, intl));
+  const handleLoadMore = () => {
+    dispatch(fetchPublicTimeline({ onlyMedia }, true));
   };
 
-  const handleRefresh = () => dispatch(expandPublicTimeline({ onlyMedia }, intl));
+  const handleRefresh = () => dispatch(fetchPublicTimeline({ onlyMedia }));
 
   usePublicStream({ onlyMedia });
 
   useEffect(() => {
-    dispatch(expandPublicTimeline({ onlyMedia }, intl));
+    dispatch(fetchPublicTimeline({ onlyMedia }, true));
   }, [onlyMedia]);
 
   return (

@@ -3,78 +3,77 @@ import { fetchRelationships } from 'soapbox/actions/accounts';
 import { importFetchedAccount, importFetchedAccounts, importFetchedStatuses } from 'soapbox/actions/importer';
 import { accountIdsToAccts } from 'soapbox/selectors';
 import { filterBadges, getTagDiff } from 'soapbox/utils/badges';
-import { getFeatures } from 'soapbox/utils/features';
 
 import { getClient, getNextLink } from '../api';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
 
-const ADMIN_CONFIG_FETCH_REQUEST = 'ADMIN_CONFIG_FETCH_REQUEST';
-const ADMIN_CONFIG_FETCH_SUCCESS = 'ADMIN_CONFIG_FETCH_SUCCESS';
-const ADMIN_CONFIG_FETCH_FAIL    = 'ADMIN_CONFIG_FETCH_FAIL';
+const ADMIN_CONFIG_FETCH_REQUEST = 'ADMIN_CONFIG_FETCH_REQUEST' as const;
+const ADMIN_CONFIG_FETCH_SUCCESS = 'ADMIN_CONFIG_FETCH_SUCCESS' as const;
+const ADMIN_CONFIG_FETCH_FAIL = 'ADMIN_CONFIG_FETCH_FAIL' as const;
 
-const ADMIN_CONFIG_UPDATE_REQUEST = 'ADMIN_CONFIG_UPDATE_REQUEST';
-const ADMIN_CONFIG_UPDATE_SUCCESS = 'ADMIN_CONFIG_UPDATE_SUCCESS';
-const ADMIN_CONFIG_UPDATE_FAIL    = 'ADMIN_CONFIG_UPDATE_FAIL';
+const ADMIN_CONFIG_UPDATE_REQUEST = 'ADMIN_CONFIG_UPDATE_REQUEST' as const;
+const ADMIN_CONFIG_UPDATE_SUCCESS = 'ADMIN_CONFIG_UPDATE_SUCCESS' as const;
+const ADMIN_CONFIG_UPDATE_FAIL = 'ADMIN_CONFIG_UPDATE_FAIL' as const;
 
-const ADMIN_REPORTS_FETCH_REQUEST = 'ADMIN_REPORTS_FETCH_REQUEST';
-const ADMIN_REPORTS_FETCH_SUCCESS = 'ADMIN_REPORTS_FETCH_SUCCESS';
-const ADMIN_REPORTS_FETCH_FAIL    = 'ADMIN_REPORTS_FETCH_FAIL';
+const ADMIN_REPORTS_FETCH_REQUEST = 'ADMIN_REPORTS_FETCH_REQUEST' as const;
+const ADMIN_REPORTS_FETCH_SUCCESS = 'ADMIN_REPORTS_FETCH_SUCCESS' as const;
+const ADMIN_REPORTS_FETCH_FAIL = 'ADMIN_REPORTS_FETCH_FAIL' as const;
 
-const ADMIN_REPORTS_PATCH_REQUEST = 'ADMIN_REPORTS_PATCH_REQUEST';
-const ADMIN_REPORTS_PATCH_SUCCESS = 'ADMIN_REPORTS_PATCH_SUCCESS';
-const ADMIN_REPORTS_PATCH_FAIL    = 'ADMIN_REPORTS_PATCH_FAIL';
+const ADMIN_REPORTS_PATCH_REQUEST = 'ADMIN_REPORTS_PATCH_REQUEST' as const;
+const ADMIN_REPORTS_PATCH_SUCCESS = 'ADMIN_REPORTS_PATCH_SUCCESS' as const;
+const ADMIN_REPORTS_PATCH_FAIL = 'ADMIN_REPORTS_PATCH_FAIL' as const;
 
-const ADMIN_USERS_FETCH_REQUEST = 'ADMIN_USERS_FETCH_REQUEST';
-const ADMIN_USERS_FETCH_SUCCESS = 'ADMIN_USERS_FETCH_SUCCESS';
-const ADMIN_USERS_FETCH_FAIL    = 'ADMIN_USERS_FETCH_FAIL';
+const ADMIN_USERS_FETCH_REQUEST = 'ADMIN_USERS_FETCH_REQUEST' as const;
+const ADMIN_USERS_FETCH_SUCCESS = 'ADMIN_USERS_FETCH_SUCCESS' as const;
+const ADMIN_USERS_FETCH_FAIL = 'ADMIN_USERS_FETCH_FAIL' as const;
 
-const ADMIN_USERS_DELETE_REQUEST = 'ADMIN_USERS_DELETE_REQUEST';
-const ADMIN_USERS_DELETE_SUCCESS = 'ADMIN_USERS_DELETE_SUCCESS';
-const ADMIN_USERS_DELETE_FAIL    = 'ADMIN_USERS_DELETE_FAIL';
+const ADMIN_USERS_DELETE_REQUEST = 'ADMIN_USERS_DELETE_REQUEST' as const;
+const ADMIN_USERS_DELETE_SUCCESS = 'ADMIN_USERS_DELETE_SUCCESS' as const;
+const ADMIN_USERS_DELETE_FAIL = 'ADMIN_USERS_DELETE_FAIL' as const;
 
-const ADMIN_USERS_APPROVE_REQUEST = 'ADMIN_USERS_APPROVE_REQUEST';
-const ADMIN_USERS_APPROVE_SUCCESS = 'ADMIN_USERS_APPROVE_SUCCESS';
-const ADMIN_USERS_APPROVE_FAIL    = 'ADMIN_USERS_APPROVE_FAIL';
+const ADMIN_USERS_APPROVE_REQUEST = 'ADMIN_USERS_APPROVE_REQUEST' as const;
+const ADMIN_USERS_APPROVE_SUCCESS = 'ADMIN_USERS_APPROVE_SUCCESS' as const;
+const ADMIN_USERS_APPROVE_FAIL = 'ADMIN_USERS_APPROVE_FAIL' as const;
 
-const ADMIN_USERS_DEACTIVATE_REQUEST = 'ADMIN_USERS_DEACTIVATE_REQUEST';
-const ADMIN_USERS_DEACTIVATE_SUCCESS = 'ADMIN_USERS_DEACTIVATE_SUCCESS';
-const ADMIN_USERS_DEACTIVATE_FAIL    = 'ADMIN_USERS_DEACTIVATE_FAIL';
+const ADMIN_USERS_DEACTIVATE_REQUEST = 'ADMIN_USERS_DEACTIVATE_REQUEST' as const;
+const ADMIN_USERS_DEACTIVATE_SUCCESS = 'ADMIN_USERS_DEACTIVATE_SUCCESS' as const;
+const ADMIN_USERS_DEACTIVATE_FAIL = 'ADMIN_USERS_DEACTIVATE_FAIL' as const;
 
-const ADMIN_STATUS_DELETE_REQUEST = 'ADMIN_STATUS_DELETE_REQUEST';
-const ADMIN_STATUS_DELETE_SUCCESS = 'ADMIN_STATUS_DELETE_SUCCESS';
-const ADMIN_STATUS_DELETE_FAIL    = 'ADMIN_STATUS_DELETE_FAIL';
+const ADMIN_STATUS_DELETE_REQUEST = 'ADMIN_STATUS_DELETE_REQUEST' as const;
+const ADMIN_STATUS_DELETE_SUCCESS = 'ADMIN_STATUS_DELETE_SUCCESS' as const;
+const ADMIN_STATUS_DELETE_FAIL = 'ADMIN_STATUS_DELETE_FAIL' as const;
 
-const ADMIN_STATUS_TOGGLE_SENSITIVITY_REQUEST = 'ADMIN_STATUS_TOGGLE_SENSITIVITY_REQUEST';
-const ADMIN_STATUS_TOGGLE_SENSITIVITY_SUCCESS = 'ADMIN_STATUS_TOGGLE_SENSITIVITY_SUCCESS';
-const ADMIN_STATUS_TOGGLE_SENSITIVITY_FAIL    = 'ADMIN_STATUS_TOGGLE_SENSITIVITY_FAIL';
+const ADMIN_STATUS_TOGGLE_SENSITIVITY_REQUEST = 'ADMIN_STATUS_TOGGLE_SENSITIVITY_REQUEST' as const;
+const ADMIN_STATUS_TOGGLE_SENSITIVITY_SUCCESS = 'ADMIN_STATUS_TOGGLE_SENSITIVITY_SUCCESS' as const;
+const ADMIN_STATUS_TOGGLE_SENSITIVITY_FAIL = 'ADMIN_STATUS_TOGGLE_SENSITIVITY_FAIL' as const;
 
-const ADMIN_USERS_TAG_REQUEST = 'ADMIN_USERS_TAG_REQUEST';
-const ADMIN_USERS_TAG_SUCCESS = 'ADMIN_USERS_TAG_SUCCESS';
-const ADMIN_USERS_TAG_FAIL    = 'ADMIN_USERS_TAG_FAIL';
+const ADMIN_USERS_TAG_REQUEST = 'ADMIN_USERS_TAG_REQUEST' as const;
+const ADMIN_USERS_TAG_SUCCESS = 'ADMIN_USERS_TAG_SUCCESS' as const;
+const ADMIN_USERS_TAG_FAIL = 'ADMIN_USERS_TAG_FAIL' as const;
 
-const ADMIN_USERS_UNTAG_REQUEST = 'ADMIN_USERS_UNTAG_REQUEST';
-const ADMIN_USERS_UNTAG_SUCCESS = 'ADMIN_USERS_UNTAG_SUCCESS';
-const ADMIN_USERS_UNTAG_FAIL    = 'ADMIN_USERS_UNTAG_FAIL';
+const ADMIN_USERS_UNTAG_REQUEST = 'ADMIN_USERS_UNTAG_REQUEST' as const;
+const ADMIN_USERS_UNTAG_SUCCESS = 'ADMIN_USERS_UNTAG_SUCCESS' as const;
+const ADMIN_USERS_UNTAG_FAIL = 'ADMIN_USERS_UNTAG_FAIL' as const;
 
-const ADMIN_ADD_PERMISSION_GROUP_REQUEST = 'ADMIN_ADD_PERMISSION_GROUP_REQUEST';
-const ADMIN_ADD_PERMISSION_GROUP_SUCCESS = 'ADMIN_ADD_PERMISSION_GROUP_SUCCESS';
-const ADMIN_ADD_PERMISSION_GROUP_FAIL    = 'ADMIN_ADD_PERMISSION_GROUP_FAIL';
+const ADMIN_ADD_PERMISSION_GROUP_REQUEST = 'ADMIN_ADD_PERMISSION_GROUP_REQUEST' as const;
+const ADMIN_ADD_PERMISSION_GROUP_SUCCESS = 'ADMIN_ADD_PERMISSION_GROUP_SUCCESS' as const;
+const ADMIN_ADD_PERMISSION_GROUP_FAIL = 'ADMIN_ADD_PERMISSION_GROUP_FAIL' as const;
 
-const ADMIN_REMOVE_PERMISSION_GROUP_REQUEST = 'ADMIN_REMOVE_PERMISSION_GROUP_REQUEST';
-const ADMIN_REMOVE_PERMISSION_GROUP_SUCCESS = 'ADMIN_REMOVE_PERMISSION_GROUP_SUCCESS';
-const ADMIN_REMOVE_PERMISSION_GROUP_FAIL    = 'ADMIN_REMOVE_PERMISSION_GROUP_FAIL';
+const ADMIN_REMOVE_PERMISSION_GROUP_REQUEST = 'ADMIN_REMOVE_PERMISSION_GROUP_REQUEST' as const;
+const ADMIN_REMOVE_PERMISSION_GROUP_SUCCESS = 'ADMIN_REMOVE_PERMISSION_GROUP_SUCCESS' as const;
+const ADMIN_REMOVE_PERMISSION_GROUP_FAIL = 'ADMIN_REMOVE_PERMISSION_GROUP_FAIL' as const;
 
-const ADMIN_USER_INDEX_EXPAND_FAIL    = 'ADMIN_USER_INDEX_EXPAND_FAIL';
-const ADMIN_USER_INDEX_EXPAND_REQUEST = 'ADMIN_USER_INDEX_EXPAND_REQUEST';
-const ADMIN_USER_INDEX_EXPAND_SUCCESS = 'ADMIN_USER_INDEX_EXPAND_SUCCESS';
+const ADMIN_USER_INDEX_EXPAND_FAIL = 'ADMIN_USER_INDEX_EXPAND_FAIL' as const;
+const ADMIN_USER_INDEX_EXPAND_REQUEST = 'ADMIN_USER_INDEX_EXPAND_REQUEST' as const;
+const ADMIN_USER_INDEX_EXPAND_SUCCESS = 'ADMIN_USER_INDEX_EXPAND_SUCCESS' as const;
 
-const ADMIN_USER_INDEX_FETCH_FAIL    = 'ADMIN_USER_INDEX_FETCH_FAIL';
-const ADMIN_USER_INDEX_FETCH_REQUEST = 'ADMIN_USER_INDEX_FETCH_REQUEST';
-const ADMIN_USER_INDEX_FETCH_SUCCESS = 'ADMIN_USER_INDEX_FETCH_SUCCESS';
+const ADMIN_USER_INDEX_FETCH_FAIL = 'ADMIN_USER_INDEX_FETCH_FAIL' as const;
+const ADMIN_USER_INDEX_FETCH_REQUEST = 'ADMIN_USER_INDEX_FETCH_REQUEST' as const;
+const ADMIN_USER_INDEX_FETCH_SUCCESS = 'ADMIN_USER_INDEX_FETCH_SUCCESS' as const;
 
-const ADMIN_USER_INDEX_QUERY_SET = 'ADMIN_USER_INDEX_QUERY_SET';
+const ADMIN_USER_INDEX_QUERY_SET = 'ADMIN_USER_INDEX_QUERY_SET' as const;
 
 const fetchConfig = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -99,7 +98,7 @@ const updateConfig = (configs: Record<string, any>[]) =>
   };
 
 const updateSoapboxConfig = (data: Record<string, any>) =>
-  (dispatch: AppDispatch, _getState: () => RootState) => {
+  (dispatch: AppDispatch) => {
     const params = [{
       group: ':pleroma',
       key: ':frontend_configurations',
@@ -143,8 +142,7 @@ const fetchReports = (params: Record<string, any> = {}) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
 
-    const instance = state.instance;
-    const features = getFeatures(instance);
+    const features = state.auth.client.features;
 
     dispatch({ type: ADMIN_REPORTS_FETCH_REQUEST, params });
 
@@ -190,8 +188,7 @@ const patchReports = (ids: string[], reportState: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
 
-    const instance = state.instance;
-    const features = getFeatures(instance);
+    const features = state.auth.client.features;
 
     const reports = ids.map(id => ({ id, state: reportState }));
 
@@ -254,8 +251,7 @@ const fetchUsers = (filters: string[] = [], page = 1, query?: string | null, pag
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
 
-    const instance = state.instance;
-    const features = getFeatures(instance);
+    const features = state.auth.client.features;
 
     dispatch({ type: ADMIN_USERS_FETCH_REQUEST, filters, page, pageSize });
 
@@ -301,8 +297,7 @@ const deactivateUsers = (accountIds: string[], reportId?: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
 
-    const instance = state.instance;
-    const features = getFeatures(instance);
+    const features = state.auth.client.features;
 
     dispatch({ type: ADMIN_USERS_DEACTIVATE_REQUEST, accountIds });
 
@@ -355,8 +350,7 @@ const approveUsers = (accountIds: string[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
 
-    const instance = state.instance;
-    const features = getFeatures(instance);
+    const features = state.auth.client.features;
 
     dispatch({ type: ADMIN_USERS_APPROVE_REQUEST, accountIds });
 
@@ -367,26 +361,26 @@ const approveUsers = (accountIds: string[]) =>
     }
   };
 
-const deleteStatus = (id: string) =>
+const deleteStatus = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: ADMIN_STATUS_DELETE_REQUEST, id });
-    return getClient(getState).request(`/api/v1/pleroma/admin/statuses/${id}`, { method: 'DELETE' })
+    dispatch({ type: ADMIN_STATUS_DELETE_REQUEST, statusId });
+    return getClient(getState).request(`/api/v1/pleroma/admin/statuses/${statusId}`, { method: 'DELETE' })
       .then(() => {
-        dispatch({ type: ADMIN_STATUS_DELETE_SUCCESS, id });
+        dispatch({ type: ADMIN_STATUS_DELETE_SUCCESS, statusId });
       }).catch(error => {
-        dispatch({ type: ADMIN_STATUS_DELETE_FAIL, error, id });
+        dispatch({ type: ADMIN_STATUS_DELETE_FAIL, error, statusId });
       });
   };
 
-const toggleStatusSensitivity = (id: string, sensitive: boolean) =>
+const toggleStatusSensitivity = (statusId: string, sensitive: boolean) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: ADMIN_STATUS_TOGGLE_SENSITIVITY_REQUEST, id });
-    return getClient(getState).request(`/api/v1/pleroma/admin/statuses/${id}`, {
+    dispatch({ type: ADMIN_STATUS_TOGGLE_SENSITIVITY_REQUEST, statusId });
+    return getClient(getState).request(`/api/v1/pleroma/admin/statuses/${statusId}`, {
       method: 'PUT', body: { sensitive: !sensitive },
     }).then(() => {
-      dispatch({ type: ADMIN_STATUS_TOGGLE_SENSITIVITY_SUCCESS, id });
+      dispatch({ type: ADMIN_STATUS_TOGGLE_SENSITIVITY_SUCCESS, statusId });
     }).catch(error => {
-      dispatch({ type: ADMIN_STATUS_TOGGLE_SENSITIVITY_FAIL, error, id });
+      dispatch({ type: ADMIN_STATUS_TOGGLE_SENSITIVITY_FAIL, error, statusId });
     });
   };
 
@@ -408,11 +402,6 @@ const untagUsers = (accountIds: string[], tags: string[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const nicknames = accountIdsToAccts(getState(), accountIds);
 
-    // Legacy: allow removing legacy 'donor' tags.
-    if (tags.includes('badge:donor')) {
-      tags = [...tags, 'donor'];
-    }
-
     dispatch({ type: ADMIN_USERS_UNTAG_REQUEST, accountIds, tags });
     return getClient(getState).request('/api/v1/pleroma/admin/users/tag', {
       method: 'DELETE',
@@ -430,8 +419,8 @@ const setTags = (accountId: string, oldTags: string[], newTags: string[]) =>
   async(dispatch: AppDispatch) => {
     const diff = getTagDiff(oldTags, newTags);
 
-    await dispatch(tagUsers([accountId], diff.added));
-    await dispatch(untagUsers([accountId], diff.removed));
+    if (diff.added.length) await dispatch(tagUsers([accountId], diff.added));
+    if (diff.removed.length) await dispatch(untagUsers([accountId], diff.removed));
   };
 
 /** Synchronizes badges to the backend. */
@@ -546,6 +535,18 @@ const expandUserIndex = () =>
       });
   };
 
+const getSubscribersCsv = () =>
+  (dispatch: any, getState: () => RootState) =>
+    getClient(getState).request('/api/v1/pleroma/admin/email_list/subscribers.csv', { contentType: '' });
+
+const getUnsubscribersCsv = () =>
+  (dispatch: any, getState: () => RootState) =>
+    getClient(getState).request('/api/v1/pleroma/admin/email_list/unsubscribers.csv', { contentType: '' });
+
+const getCombinedCsv = () =>
+  (dispatch: any, getState: () => RootState) =>
+    getClient(getState).request('/api/v1/pleroma/admin/email_list/combined.csv', { contentType: '' });
+
 export {
   ADMIN_CONFIG_FETCH_REQUEST,
   ADMIN_CONFIG_FETCH_SUCCESS,
@@ -620,4 +621,7 @@ export {
   setUserIndexQuery,
   fetchUserIndex,
   expandUserIndex,
+  getSubscribersCsv,
+  getUnsubscribersCsv,
+  getCombinedCsv,
 };

@@ -1,10 +1,9 @@
-import { List as ImmutableList, Record as ImmutableRecord } from 'immutable';
+import { Record as ImmutableRecord } from 'immutable';
+import { MediaAttachment } from 'pl-api';
 import React, { useState } from 'react';
 
-import type { Attachment as AttachmentEntity } from 'soapbox/types/entities';
-
 interface IPlaceholderMediaGallery {
-  media: ImmutableList<AttachmentEntity>;
+  media: Array<MediaAttachment>;
   defaultWidth?: number;
 }
 
@@ -81,11 +80,11 @@ const PlaceholderMediaGallery: React.FC<IPlaceholderMediaGallery> = ({ media, de
     return <div key={i} className='media-gallery__item animate-pulse bg-primary-200' style={{ position, float, left, top, right, bottom, height, width }} />;
   };
 
-  const sizeData = getSizeData(media.size);
+  const sizeData = getSizeData(media.length);
 
   return (
-    <div className='media-gallery media-gallery--placeholder' style={sizeData.get('style')} ref={handleRef}>
-      {media.take(4).map((_, i) => renderItem(sizeData.get('itemsDimensions')[i], i))}
+    <div className='media-gallery media-gallery--placeholder' style={sizeData.style} ref={handleRef}>
+      {media.slice(0, 4).map((_, i) => renderItem(sizeData.itemsDimensions[i], i))}
     </div>
   );
 };

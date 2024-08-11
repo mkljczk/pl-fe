@@ -3,14 +3,10 @@ import { Map as ImmutableMap, List as ImmutableList, fromJS } from 'immutable';
 import { type Instance, instanceSchema } from 'pl-api';
 
 import { ADMIN_CONFIG_UPDATE_REQUEST, ADMIN_CONFIG_UPDATE_SUCCESS } from 'soapbox/actions/admin';
-import { PLEROMA_PRELOAD_IMPORT } from 'soapbox/actions/preload';
+import { INSTANCE_FETCH_FAIL, INSTANCE_FETCH_SUCCESS, InstanceAction } from 'soapbox/actions/instance';
+import { PLEROMA_PRELOAD_IMPORT, type PreloadAction } from 'soapbox/actions/preload';
 import KVStore from 'soapbox/storage/kv-store';
 import ConfigDB from 'soapbox/utils/config-db';
-
-import {
-  INSTANCE_FETCH_FAIL,
-  INSTANCE_FETCH_SUCCESS,
-} from '../actions/instance';
 
 import type { AnyAction } from 'redux';
 
@@ -89,7 +85,7 @@ const handleInstanceFetchFail = (state: Instance, error: Record<string, any>) =>
   }
 };
 
-const instance = (state = initialState, action: AnyAction): Instance => {
+const instance = (state = initialState, action: AnyAction | InstanceAction | PreloadAction): Instance => {
   switch (action.type) {
     case PLEROMA_PRELOAD_IMPORT:
       return preloadImport(state, action, '/api/v1/instance');

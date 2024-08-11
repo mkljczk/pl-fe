@@ -1,7 +1,6 @@
 import { Map as ImmutableMap } from 'immutable';
 import get from 'lodash/get';
-
-import { type Relationship, relationshipSchema } from 'soapbox/schemas';
+import { type Relationship, relationshipSchema } from 'pl-api';
 
 import { ACCOUNT_NOTE_SUBMIT_SUCCESS } from '../actions/account-notes';
 import {

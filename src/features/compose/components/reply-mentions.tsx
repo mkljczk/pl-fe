@@ -18,7 +18,7 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
 
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector<StatusEntity | null>(state => getStatus(state, { id: compose.in_reply_to! }));
-  const to = compose.to;
+  const to = compose.to.toArray();
 
   if (!features.createStatusExplicitAddressing || !status || !to) {
     return null;
@@ -32,11 +32,11 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
     }));
   };
 
-  if (!compose.parent_reblogged_by && to.size === 0) {
+  if (!compose.parent_reblogged_by && to.length === 0) {
     return null;
   }
 
-  if (to.size === 0) {
+  if (to.length === 0) {
     return (
       <a href='#' className='mb-1 text-sm text-gray-700 dark:text-gray-600' onClick={handleClick}>
         <FormattedMessage
@@ -57,11 +57,11 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
         @{username}
       </span>
     );
-  }).toArray();
+  });
 
-  if (to.size > 2) {
+  if (to.length > 2) {
     accounts.push(
-      <FormattedMessage id='reply_mentions.more' defaultMessage='{count} more' values={{ count: to.size - 2 }} />,
+      <FormattedMessage id='reply_mentions.more' defaultMessage='{count} more' values={{ count: to.length - 2 }} />,
     );
   }
 

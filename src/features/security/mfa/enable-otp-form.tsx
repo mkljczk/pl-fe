@@ -26,7 +26,7 @@ const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupPr
   const [backupCodes, setBackupCodes] = useState<Array<string>>([]);
 
   useEffect(() => {
-    dispatch(fetchBackupCodes()).then(({ codes: backupCodes }: { codes: Array<string> }) => {
+    dispatch(fetchBackupCodes()).then(({ codes: backupCodes }) => {
       setBackupCodes(backupCodes);
     })
       .catch(() => {

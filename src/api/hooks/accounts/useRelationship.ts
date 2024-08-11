@@ -1,9 +1,9 @@
+import { type Relationship, relationshipSchema } from 'pl-api';
 import { z } from 'zod';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntity } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';
-import { type Relationship, relationshipSchema } from 'soapbox/schemas';
 
 interface UseRelationshipOpts {
   enabled?: boolean;

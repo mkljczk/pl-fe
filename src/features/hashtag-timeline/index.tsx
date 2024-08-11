@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { fetchHashtag, followHashtag, unfollowHashtag } from 'soapbox/actions/tags';
-import { expandHashtagTimeline, clearTimeline } from 'soapbox/actions/timelines';
+import { fetchHashtagTimeline, clearTimeline } from 'soapbox/actions/timelines';
 import { useHashtagStream } from 'soapbox/api/hooks';
 import List, { ListItem } from 'soapbox/components/list';
 import { Column, Toggle } from 'soapbox/components/ui';
@@ -17,43 +17,41 @@ interface IHashtagTimeline {
 }
 
 const HashtagTimeline: React.FC<IHashtagTimeline> = ({ params }) => {
-  const id = params?.id || '';
+  const tagId = params?.id || '';
 
   const features = useFeatures();
   const dispatch = useAppDispatch();
-  const intl = useIntl();
-  const tag = useAppSelector((state) => state.tags.get(id));
-  const next = useAppSelector(state => state.timelines.get(`hashtag:${id}`)?.next);
+  const tag = useAppSelector((state) => state.tags.get(tagId));
   const { isLoggedIn } = useLoggedIn();
   const theme = useTheme();
   const isMobile = useIsMobile();
 
-  const handleLoadMore = (maxId: string) => {
-    dispatch(expandHashtagTimeline(id, { url: next, maxId }, intl));
+  const handleLoadMore = () => {
+    dispatch(fetchHashtagTimeline(tagId, { }, true));
   };
 
   const handleFollow = () => {
     if (tag?.following) {
-      dispatch(unfollowHashtag(id));
+      dispatch(unfollowHashtag(tagId));
     } else {
-      dispatch(followHashtag(id));
+      dispatch(followHashtag(tagId));
     }
   };
 
-  useHashtagStream(id);
+  useHashtagStream(tagId);
 
   useEffect(() => {
-    dispatch(expandHashtagTimeline(id, {}, intl));
-    dispatch(fetchHashtag(id));
-  }, [id]);
+    dispatch(fetchHashtagTimeline(tagId));
+    dispatch(fetchHashtag(tagId));
+  }, [tagId]);
 
   useEffect(() => {
-    dispatch(clearTimeline(`hashtag:${id}`));
-    dispatch(expandHashtagTimeline(id));
-  }, [id]);
+    dispatch(clearTimeline(`hashtag:${tagId}`));
+    dispatch(fetchHashtagTimeline(tagId, {}, true));
+  }, [tagId]);
 
   return (
-    <Column label={`#${id}`} transparent={!isMobile}>
+    <Column label={`#${tagId}`} transparent={!isMobile}>
       {features.followHashtags && isLoggedIn && (
         <List>
           <ListItem
@@ -69,7 +67,7 @@ const HashtagTimeline: React.FC<IHashtagTimeline> = ({ params }) => {
       <Timeline
         className='black:p-0 black:sm:p-4'
         scrollKey='hashtag_timeline'
-        timelineId={`hashtag:${id}`}
+        timelineId={`hashtag:${tagId}`}
         onLoadMore={handleLoadMore}
         emptyMessage={<FormattedMessage id='empty_column.hashtag' defaultMessage='There is nothing in this hashtag yet.' />}
         divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}

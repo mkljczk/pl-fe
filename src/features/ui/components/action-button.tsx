@@ -14,7 +14,7 @@ import { useFollow } from 'soapbox/api/hooks';
 import { Button, HStack } from 'soapbox/components/ui';
 import { useAppDispatch, useFeatures, useLoggedIn } from 'soapbox/hooks';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },

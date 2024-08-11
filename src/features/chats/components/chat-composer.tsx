@@ -8,11 +8,11 @@ import { useChatContext } from 'soapbox/contexts/chat-context';
 import UploadButton from 'soapbox/features/compose/components/upload-button';
 import emojiSearch from 'soapbox/features/emoji/search';
 import { useAppDispatch, useAppSelector, useInstance } from 'soapbox/hooks';
-import { Attachment } from 'soapbox/types/entities';
 import { textAtCursorMatchesToken } from 'soapbox/utils/suggestions';
 
 import ChatTextarea from './chat-textarea';
 
+import type { MediaAttachment } from 'pl-api';
 import type { Emoji, NativeEmoji } from 'soapbox/features/emoji';
 
 const messages = defineMessages({
@@ -45,7 +45,7 @@ interface IChatComposer extends Pick<React.TextareaHTMLAttributes<HTMLTextAreaEl
   onSelectFile: (files: FileList, intl: IntlShape) => void;
   resetFileKey: number | null;
   resetContentKey: number | null;
-  attachment?: Attachment | null;
+  attachment?: MediaAttachment | null;
   onDeleteAttachment?: () => void;
   uploading?: boolean;
   uploadProgress?: number;

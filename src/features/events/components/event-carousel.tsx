@@ -20,7 +20,7 @@ const Event = ({ id }: { id: string }) => {
   return (
     <Link
       className='w-full px-1'
-      to={`/@${status.getIn(['account', 'acct'])}/events/${status.id}`}
+      to={`/@${status.account.acct}/events/${status.id}`}
     >
       <EventPreview status={status} floatingAction={false} />
     </Link>

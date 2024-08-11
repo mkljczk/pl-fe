@@ -1,11 +1,11 @@
 import { getClient } from '../api';
 
+import type { CustomEmoji } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const CUSTOM_EMOJIS_FETCH_REQUEST = 'CUSTOM_EMOJIS_FETCH_REQUEST';
-const CUSTOM_EMOJIS_FETCH_SUCCESS = 'CUSTOM_EMOJIS_FETCH_SUCCESS';
-const CUSTOM_EMOJIS_FETCH_FAIL = 'CUSTOM_EMOJIS_FETCH_FAIL';
+const CUSTOM_EMOJIS_FETCH_REQUEST = 'CUSTOM_EMOJIS_FETCH_REQUEST' as const;
+const CUSTOM_EMOJIS_FETCH_SUCCESS = 'CUSTOM_EMOJIS_FETCH_SUCCESS' as const;
+const CUSTOM_EMOJIS_FETCH_FAIL = 'CUSTOM_EMOJIS_FETCH_FAIL' as const;
 
 const fetchCustomEmojis = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -23,20 +23,22 @@ const fetchCustomEmojis = () =>
 
 const fetchCustomEmojisRequest = () => ({
   type: CUSTOM_EMOJIS_FETCH_REQUEST,
-  skipLoading: true,
 });
 
-const fetchCustomEmojisSuccess = (custom_emojis: APIEntity[]) => ({
+const fetchCustomEmojisSuccess = (custom_emojis: Array<CustomEmoji>) => ({
   type: CUSTOM_EMOJIS_FETCH_SUCCESS,
   custom_emojis,
-  skipLoading: true,
 });
 
 const fetchCustomEmojisFail = (error: unknown) => ({
   type: CUSTOM_EMOJIS_FETCH_FAIL,
   error,
-  skipLoading: true,
 });
+
+type CustomEmojisAction =
+  ReturnType<typeof fetchCustomEmojisRequest>
+  | ReturnType<typeof fetchCustomEmojisSuccess>
+  | ReturnType<typeof fetchCustomEmojisFail>;
 
 export {
   CUSTOM_EMOJIS_FETCH_REQUEST,
@@ -46,4 +48,5 @@ export {
   fetchCustomEmojisRequest,
   fetchCustomEmojisSuccess,
   fetchCustomEmojisFail,
+  type CustomEmojisAction,
 };

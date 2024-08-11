@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { fetchAccountByUsername } from 'soapbox/actions/accounts';
-import { expandAccountFeaturedTimeline, expandAccountTimeline } from 'soapbox/actions/timelines';
+import { fetchAccountTimeline } from 'soapbox/actions/timelines';
 import { useAccountLookup } from 'soapbox/api/hooks';
 import MissingIndicator from 'soapbox/components/missing-indicator';
 import StatusList from 'soapbox/components/status-list';
@@ -25,7 +25,6 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const settings = useSettings();
-  const intl = useIntl();
 
   const { account } = useAccountLookup(params.username, { withRelationship: true });
   const [accountLoading, setAccountLoading] = useState<boolean>(!account);
@@ -39,7 +38,6 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
   const unavailable = isBlocked && !features.blockersVisible;
   const isLoading = useAppSelector(state => state.getIn(['timelines', `account:${path}`, 'isLoading']) === true);
   const hasMore = useAppSelector(state => state.getIn(['timelines', `account:${path}`, 'hasMore']) === true);
-  const next = useAppSelector(state => state.timelines.get(`account:${path}`)?.next);
 
   const accountUsername = account?.username || params.username;
 
@@ -51,19 +49,19 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
 
   useEffect(() => {
     if (account && !withReplies) {
-      dispatch(expandAccountFeaturedTimeline(account.id, intl));
+      dispatch(fetchAccountTimeline(account.id, { pinned: true }));
     }
   }, [account?.id, withReplies]);
 
   useEffect(() => {
     if (account) {
-      dispatch(expandAccountTimeline(account.id, { withReplies }, intl));
+      dispatch(fetchAccountTimeline(account.id, { exclude_replies: !withReplies }));
     }
   }, [account?.id, withReplies]);
 
   const handleLoadMore = (maxId: string) => {
     if (account) {
-      dispatch(expandAccountTimeline(account.id, { url: next, maxId, withReplies }, intl));
+      dispatch(fetchAccountTimeline(account.id, { exclude_replies: !withReplies }, true));
     }
   };
 

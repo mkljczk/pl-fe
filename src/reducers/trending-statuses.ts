@@ -5,8 +5,8 @@ import {
   TRENDING_STATUSES_FETCH_SUCCESS,
 } from 'soapbox/actions/trending-statuses';
 
+import type { Status } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { APIEntity } from 'soapbox/types/entities';
 
 const ReducerRecord = ImmutableRecord({
   items: ImmutableOrderedSet<string>(),
@@ -14,11 +14,10 @@ const ReducerRecord = ImmutableRecord({
 });
 
 type State = ReturnType<typeof ReducerRecord>;
-type APIEntities = Array<APIEntity>;
 
-const toIds = (items: APIEntities) => ImmutableOrderedSet(items.map(item => item.id));
+const toIds = (items: Array<Status>) => ImmutableOrderedSet(items.map(item => item.id));
 
-const importStatuses = (state: State, statuses: APIEntities) =>
+const importStatuses = (state: State, statuses: Array<Status>) =>
   state.withMutations(state => {
     state.set('items', toIds(statuses));
     state.set('isLoading', false);

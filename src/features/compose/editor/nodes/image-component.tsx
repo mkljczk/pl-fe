@@ -8,7 +8,6 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { useLexicalNodeSelection } from '@lexical/react/useLexicalNodeSelection';
 import { mergeRegister } from '@lexical/utils';
 import clsx from 'clsx';
-import { List as ImmutableList } from 'immutable';
 import {
   $getNodeByKey,
   $getSelection,
@@ -23,6 +22,7 @@ import {
   KEY_ESCAPE_COMMAND,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
+import { mediaAttachmentSchema } from 'pl-api';
 import * as React from 'react';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
@@ -30,7 +30,6 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { openModal } from 'soapbox/actions/modals';
 import { HStack, Icon, IconButton } from 'soapbox/components/ui';
 import { useAppDispatch, useSettings } from 'soapbox/hooks';
-import { normalizeAttachment } from 'soapbox/normalizers';
 
 import { $isImageNode } from './image-node';
 
@@ -123,13 +122,14 @@ const ImageComponent = ({
   );
 
   const previewImage = () => {
-    const image = normalizeAttachment({
+    const image = mediaAttachmentSchema.parse({
+      id: '',
       type: 'image',
       url: src,
       altText,
     });
 
-    dispatch(openModal('MEDIA', { media: ImmutableList.of(image), index: 0 }));
+    dispatch(openModal('MEDIA', { media: [image], index: 0 }));
   };
 
   const onDelete = useCallback(

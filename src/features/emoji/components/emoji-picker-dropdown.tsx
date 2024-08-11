@@ -91,9 +91,9 @@ const getFrequentlyUsedEmojis = createSelector([
 
 const getCustomEmojis = createSelector([
   (state: RootState) => state.custom_emojis,
-], emojis => emojis.filter(e => e.get('visible_in_picker')).sort((a, b) => {
-  const aShort = a.get('shortcode')!.toLowerCase();
-  const bShort = b.get('shortcode')!.toLowerCase();
+], emojis => emojis.filter(e => e.visible_in_picker).toSorted((a, b) => {
+  const aShort = a.shortcode.toLowerCase();
+  const bShort = b.shortcode.toLowerCase();
 
   if (aShort < bShort) {
     return -1;

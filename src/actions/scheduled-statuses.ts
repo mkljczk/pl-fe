@@ -1,22 +1,19 @@
-import { getFeatures } from 'soapbox/utils/features';
-
 import { getClient } from '../api';
 
 import type { PaginatedResponse, ScheduledStatus } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const SCHEDULED_STATUSES_FETCH_REQUEST = 'SCHEDULED_STATUSES_FETCH_REQUEST';
-const SCHEDULED_STATUSES_FETCH_SUCCESS = 'SCHEDULED_STATUSES_FETCH_SUCCESS';
-const SCHEDULED_STATUSES_FETCH_FAIL    = 'SCHEDULED_STATUSES_FETCH_FAIL';
+const SCHEDULED_STATUSES_FETCH_REQUEST = 'SCHEDULED_STATUSES_FETCH_REQUEST' as const;
+const SCHEDULED_STATUSES_FETCH_SUCCESS = 'SCHEDULED_STATUSES_FETCH_SUCCESS' as const;
+const SCHEDULED_STATUSES_FETCH_FAIL = 'SCHEDULED_STATUSES_FETCH_FAIL' as const;
 
-const SCHEDULED_STATUSES_EXPAND_REQUEST = 'SCHEDULED_STATUSES_EXPAND_REQUEST';
-const SCHEDULED_STATUSES_EXPAND_SUCCESS = 'SCHEDULED_STATUSES_EXPAND_SUCCESS';
-const SCHEDULED_STATUSES_EXPAND_FAIL    = 'SCHEDULED_STATUSES_EXPAND_FAIL';
+const SCHEDULED_STATUSES_EXPAND_REQUEST = 'SCHEDULED_STATUSES_EXPAND_REQUEST' as const;
+const SCHEDULED_STATUSES_EXPAND_SUCCESS = 'SCHEDULED_STATUSES_EXPAND_SUCCESS' as const;
+const SCHEDULED_STATUSES_EXPAND_FAIL = 'SCHEDULED_STATUSES_EXPAND_FAIL' as const;
 
-const SCHEDULED_STATUS_CANCEL_REQUEST = 'SCHEDULED_STATUS_CANCEL_REQUEST';
-const SCHEDULED_STATUS_CANCEL_SUCCESS = 'SCHEDULED_STATUS_CANCEL_SUCCESS';
-const SCHEDULED_STATUS_CANCEL_FAIL    = 'SCHEDULED_STATUS_CANCEL_FAIL';
+const SCHEDULED_STATUS_CANCEL_REQUEST = 'SCHEDULED_STATUS_CANCEL_REQUEST' as const;
+const SCHEDULED_STATUS_CANCEL_SUCCESS = 'SCHEDULED_STATUS_CANCEL_SUCCESS' as const;
+const SCHEDULED_STATUS_CANCEL_FAIL = 'SCHEDULED_STATUS_CANCEL_FAIL' as const;
 
 const fetchScheduledStatuses = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -26,8 +23,7 @@ const fetchScheduledStatuses = () =>
       return;
     }
 
-    const instance = state.instance;
-    const features = getFeatures(instance);
+    const features = state.auth.client.features;
 
     if (!features.scheduledStatuses) return;
 
@@ -40,13 +36,13 @@ const fetchScheduledStatuses = () =>
     });
   };
 
-const cancelScheduledStatus = (id: string) =>
+const cancelScheduledStatus = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: SCHEDULED_STATUS_CANCEL_REQUEST, id });
-    return getClient(getState()).scheduledStatuses.cancelScheduledStatus(id).then((data) => {
-      dispatch({ type: SCHEDULED_STATUS_CANCEL_SUCCESS, id, data });
+    dispatch({ type: SCHEDULED_STATUS_CANCEL_REQUEST, statusId });
+    return getClient(getState()).scheduledStatuses.cancelScheduledStatus(statusId).then(() => {
+      dispatch({ type: SCHEDULED_STATUS_CANCEL_SUCCESS, statusId });
     }).catch(error => {
-      dispatch({ type: SCHEDULED_STATUS_CANCEL_FAIL, id, error });
+      dispatch({ type: SCHEDULED_STATUS_CANCEL_FAIL, statusId, error });
     });
   };
 
@@ -54,7 +50,7 @@ const fetchScheduledStatusesRequest = () => ({
   type: SCHEDULED_STATUSES_FETCH_REQUEST,
 });
 
-const fetchScheduledStatusesSuccess = (statuses: APIEntity[], next: (() => Promise<PaginatedResponse<ScheduledStatus>>) | null) => ({
+const fetchScheduledStatusesSuccess = (statuses: Array<ScheduledStatus>, next: (() => Promise<PaginatedResponse<ScheduledStatus>>) | null) => ({
   type: SCHEDULED_STATUSES_FETCH_SUCCESS,
   statuses,
   next,
@@ -86,7 +82,7 @@ const expandScheduledStatusesRequest = () => ({
   type: SCHEDULED_STATUSES_EXPAND_REQUEST,
 });
 
-const expandScheduledStatusesSuccess = (statuses: APIEntity[], next: (() => Promise<PaginatedResponse<ScheduledStatus>>) | null) => ({
+const expandScheduledStatusesSuccess = (statuses: Array<ScheduledStatus>, next: (() => Promise<PaginatedResponse<ScheduledStatus>>) | null) => ({
   type: SCHEDULED_STATUSES_EXPAND_SUCCESS,
   statuses,
   next,

@@ -142,25 +142,25 @@ const normalizeFollowRequest = (state: State, notification: APIEntity) =>
 const userLists = (state = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case FOLLOWERS_FETCH_SUCCESS:
-      return normalizeList(state, ['followers', action.id], action.accounts, action.next);
+      return normalizeList(state, ['followers', action.accountId], action.accounts, action.next);
     case FOLLOWERS_EXPAND_SUCCESS:
-      return appendToList(state, ['followers', action.id], action.accounts, action.next);
+      return appendToList(state, ['followers', action.accountId], action.accounts, action.next);
     case FOLLOWING_FETCH_SUCCESS:
-      return normalizeList(state, ['following', action.id], action.accounts, action.next);
+      return normalizeList(state, ['following', action.accountId], action.accounts, action.next);
     case FOLLOWING_EXPAND_SUCCESS:
-      return appendToList(state, ['following', action.id], action.accounts, action.next);
+      return appendToList(state, ['following', action.accountId], action.accounts, action.next);
     case REBLOGS_FETCH_SUCCESS:
-      return normalizeList(state, ['reblogged_by', action.id], action.accounts, action.next);
+      return normalizeList(state, ['reblogged_by', action.statusId], action.accounts, action.next);
     case REBLOGS_EXPAND_SUCCESS:
-      return appendToList(state, ['reblogged_by', action.id], action.accounts, action.next);
+      return appendToList(state, ['reblogged_by', action.statusId], action.accounts, action.next);
     case FAVOURITES_FETCH_SUCCESS:
-      return normalizeList(state, ['favourited_by', action.id], action.accounts, action.next);
+      return normalizeList(state, ['favourited_by', action.statusId], action.accounts, action.next);
     case FAVOURITES_EXPAND_SUCCESS:
-      return appendToList(state, ['favourited_by', action.id], action.accounts, action.next);
+      return appendToList(state, ['favourited_by', action.statusId], action.accounts, action.next);
     case DISLIKES_FETCH_SUCCESS:
-      return normalizeList(state, ['disliked_by', action.id], action.accounts);
+      return normalizeList(state, ['disliked_by', action.statusId], action.accounts);
     case REACTIONS_FETCH_SUCCESS:
-      return state.setIn(['reactions', action.id], ReactionListRecord({
+      return state.setIn(['reactions', action.statusId], ReactionListRecord({
         items: ImmutableOrderedSet<Reaction>(action.reactions.map(({ accounts, ...reaction }: APIEntity) => ReactionRecord({
           ...reaction,
           accounts: ImmutableOrderedSet(accounts.map((account: APIEntity) => account.id)),
@@ -174,7 +174,7 @@ const userLists = (state = ReducerRecord(), action: AnyAction) => {
       return appendToList(state, ['follow_requests'], action.accounts, action.next);
     case FOLLOW_REQUEST_AUTHORIZE_SUCCESS:
     case FOLLOW_REQUEST_REJECT_SUCCESS:
-      return removeFromList(state, ['follow_requests'], action.id);
+      return removeFromList(state, ['follow_requests'], action.accountId);
     case DIRECTORY_FETCH_SUCCESS:
       return normalizeList(state, ['directory'], action.accounts, action.next);
     case DIRECTORY_EXPAND_SUCCESS:
@@ -186,17 +186,17 @@ const userLists = (state = ReducerRecord(), action: AnyAction) => {
     case DIRECTORY_EXPAND_FAIL:
       return state.setIn(['directory', 'isLoading'], false);
     case PINNED_ACCOUNTS_FETCH_SUCCESS:
-      return normalizeList(state, ['pinned', action.id], action.accounts, action.next);
+      return normalizeList(state, ['pinned', action.accountId], action.accounts, action.next);
     case BIRTHDAY_REMINDERS_FETCH_SUCCESS:
-      return normalizeList(state, ['birthday_reminders', action.id], action.accounts, action.next);
+      return normalizeList(state, ['birthday_reminders', action.accountId], action.accounts, action.next);
     case FAMILIAR_FOLLOWERS_FETCH_SUCCESS:
-      return normalizeList(state, ['familiar_followers', action.id], action.accounts, action.next);
+      return normalizeList(state, ['familiar_followers', action.accountId], action.accounts, action.next);
     case EVENT_PARTICIPATIONS_FETCH_SUCCESS:
-      return normalizeList(state, ['event_participations', action.id], action.accounts, action.next);
+      return normalizeList(state, ['event_participations', action.statusId], action.accounts, action.next);
     case EVENT_PARTICIPATIONS_EXPAND_SUCCESS:
-      return appendToList(state, ['event_participations', action.id], action.accounts, action.next);
+      return appendToList(state, ['event_participations', action.statusId], action.accounts, action.next);
     case EVENT_PARTICIPATION_REQUESTS_FETCH_SUCCESS:
-      return state.setIn(['event_participation_requests', action.id], ParticipationRequestListRecord({
+      return state.setIn(['event_participation_requests', action.statusId], ParticipationRequestListRecord({
         next: action.next,
         items: ImmutableOrderedSet(action.participations.map(({ account, participation_message }: APIEntity) => ParticipationRequestRecord({
           account: account.id,
@@ -205,7 +205,7 @@ const userLists = (state = ReducerRecord(), action: AnyAction) => {
       }));
     case EVENT_PARTICIPATION_REQUESTS_EXPAND_SUCCESS:
       return state.updateIn(
-        ['event_participation_requests', action.id, 'items'],
+        ['event_participation_requests', action.statusId, 'items'],
         (items) => (items as ImmutableOrderedSet<ParticipationRequest>)
           .union(action.participations.map(({ account, participation_message }: APIEntity) => ParticipationRequestRecord({
             account: account.id,
@@ -215,15 +215,15 @@ const userLists = (state = ReducerRecord(), action: AnyAction) => {
     case EVENT_PARTICIPATION_REQUEST_AUTHORIZE_SUCCESS:
     case EVENT_PARTICIPATION_REQUEST_REJECT_SUCCESS:
       return state.updateIn(
-        ['event_participation_requests', action.id, 'items'],
+        ['event_participation_requests', action.statusId, 'items'],
         items => (items as ImmutableOrderedSet<ParticipationRequest>).filter(({ account }) => account !== action.accountId),
       );
     case GROUP_BLOCKS_FETCH_SUCCESS:
-      return normalizeList(state, ['group_blocks', action.id], action.accounts, action.next);
+      return normalizeList(state, ['group_blocks', action.groupId], action.accounts, action.next);
     case GROUP_BLOCKS_FETCH_REQUEST:
-      return state.setIn(['group_blocks', action.id, 'isLoading'], true);
+      return state.setIn(['group_blocks', action.groupId, 'isLoading'], true);
     case GROUP_BLOCKS_FETCH_FAIL:
-      return state.setIn(['group_blocks', action.id, 'isLoading'], false);
+      return state.setIn(['group_blocks', action.groupId, 'isLoading'], false);
     case GROUP_UNBLOCK_SUCCESS:
       return state.updateIn(['group_blocks', action.groupId, 'items'], list => (list as ImmutableOrderedSet<string>).filterNot(item => item === action.accountId));
     default:

@@ -1,7 +1,8 @@
+import { bookmarkFolderSchema } from 'pl-api';
+
 import { Entities } from 'soapbox/entity-store/entities';
 import { useCreateEntity } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';
-import { bookmarkFolderSchema } from 'soapbox/schemas/bookmark-folder';
 
 interface UpdateBookmarkFolderParams {
   name: string;

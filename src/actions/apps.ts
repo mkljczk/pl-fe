@@ -12,9 +12,9 @@ import * as BuildConfig from 'soapbox/build-config';
 
 import type { AnyAction } from 'redux';
 
-const APP_CREATE_REQUEST = 'APP_CREATE_REQUEST';
-const APP_CREATE_SUCCESS = 'APP_CREATE_SUCCESS';
-const APP_CREATE_FAIL    = 'APP_CREATE_FAIL';
+const APP_CREATE_REQUEST = 'APP_CREATE_REQUEST' as const;
+const APP_CREATE_SUCCESS = 'APP_CREATE_SUCCESS' as const;
+const APP_CREATE_FAIL = 'APP_CREATE_FAIL' as const;
 
 const createApp = (params: CreateApplicationParams, baseURL?: string) =>
   (dispatch: React.Dispatch<AnyAction>) => {

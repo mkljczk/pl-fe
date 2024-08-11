@@ -2,9 +2,10 @@ import { Entities } from 'soapbox/entity-store/entities';
 import { useCreateEntity } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';
 
-import type { Account, Group } from 'soapbox/schemas';
+import type { Group } from 'pl-api';
+import type { Account } from 'soapbox/normalizers';
 
-const useBlockGroupMember = (group: Group, account: Account) => {
+const useBlockGroupMember = (group: Pick<Group, 'id'>, account: Pick<Account, 'id'>) => {
   const client = useClient();
 
   const { createEntity } = useCreateEntity(

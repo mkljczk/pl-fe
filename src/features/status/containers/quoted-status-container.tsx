@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 
 import QuotedStatus from 'soapbox/components/quoted-status';
-import Tombstone from 'soapbox/components/tombstone';
 import { useAppSelector } from 'soapbox/hooks';
 import { makeGetStatus } from 'soapbox/selectors';
 
@@ -19,14 +18,8 @@ const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ statusId }) =
     return null;
   }
 
-  if (status.tombstone) {
-    return <Tombstone id={status.id} />;
-  }
-
   return (
-    <QuotedStatus
-      status={status}
-    />
+    <QuotedStatus status={status} />
   );
 };
 

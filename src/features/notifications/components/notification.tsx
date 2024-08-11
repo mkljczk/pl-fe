@@ -1,4 +1,3 @@
-import { List as ImmutableList } from 'immutable';
 import React, { useCallback } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage, IntlShape, MessageDescriptor } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
@@ -15,13 +14,15 @@ import StatusContainer from 'soapbox/containers/status-container';
 import { HotKeys } from 'soapbox/features/ui/components/hotkeys';
 import { useAppDispatch, useAppSelector, useInstance } from 'soapbox/hooks';
 import { makeGetNotification } from 'soapbox/selectors';
-import { NotificationType, validType } from 'soapbox/utils/notification';
+import { NotificationType } from 'soapbox/utils/notification';
 
+import type { Account, Notification as BaseNotification } from 'pl-api';
 import type { ScrollPosition } from 'soapbox/components/status';
-import type { Account as AccountEntity, Status as StatusEntity, Notification as NotificationEntity,
-} from 'soapbox/types/entities';
+import type { Notification as NotificationEntity } from 'soapbox/normalizers';
+import type { MinifiedNotification } from 'soapbox/reducers/notifications';
+import type { Status as StatusEntity } from 'soapbox/types/entities';
 
-const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: Date) => {
+const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: string) => {
   const output = [message];
 
   output.push(intl.formatDate(timestamp, { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }));
@@ -29,7 +30,7 @@ const notificationForScreenReader = (intl: IntlShape, message: string, timestamp
   return output.join(', ');
 };
 
-const buildLink = (account: AccountEntity): JSX.Element => (
+const buildLink = (account: Account): JSX.Element => (
   <bdi key={account.acct}>
     <Link
       className='font-bold text-gray-800 hover:underline dark:text-gray-200'
@@ -40,7 +41,7 @@ const buildLink = (account: AccountEntity): JSX.Element => (
   </bdi>
 );
 
-const icons: Record<NotificationType, string> = {
+const icons: Partial<Record<NotificationType, string>> = {
   follow: require('@tabler/icons/outline/user-plus.svg'),
   follow_request: require('@tabler/icons/outline/user-plus.svg'),
   mention: require('@tabler/icons/outline/at.svg'),
@@ -114,27 +115,40 @@ const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
     id: 'notification.pleroma:participation_accepted',
     defaultMessage: 'You were accepted to join the event',
   },
+  'admin.sign_up': {
+    id: 'notification.admin.sign_up',
+    defaultMessage: '{name} signed up',
+  },
+  'admin.report': {
+    id: 'notification.admin.report',
+    defaultMessage: '{name} reported {target}',
+  },
+  severed_relationships: {
+    id: 'notification.severed_relationships',
+    defaultMessage: 'Lost connections with {name}',
+  },
+  moderation_warning: {
+    id: 'notification.moderation_warning',
+    defaultMessage: 'You have received a moderation warning',
+  },
 });
 
 const buildMessage = (
   intl: IntlShape,
   type: NotificationType,
-  account: AccountEntity,
-  accounts: ImmutableList<AccountEntity> | null,
+  accounts: Array<Account>,
   targetName: string,
   instanceTitle: string,
 ): React.ReactNode => {
-  if (!accounts) accounts = accounts || ImmutableList([account]);
+  const renderedAccounts = accounts.slice(0, 2).map(account => buildLink(account)).filter(Boolean);
 
-  const renderedAccounts = accounts.slice(0, 2).map(account => buildLink(account)).toArray().filter(Boolean);
-
-  if (accounts.size > 2) {
+  if (accounts.length > 2) {
     renderedAccounts.push(
       <FormattedMessage
         key='more'
         id='notification.more'
         defaultMessage='{count, plural, one {# other} other {# others}}'
-        values={{ count: accounts.size - renderedAccounts.length }}
+        values={{ count: accounts.length - renderedAccounts.length }}
       />,
     );
   }
@@ -143,7 +157,7 @@ const buildMessage = (
     name: <FormattedList type='conjunction' value={renderedAccounts} />,
     targetName,
     instance: instanceTitle,
-    count: accounts.size,
+    count: accounts.length,
   });
 };
 
@@ -151,13 +165,20 @@ const avatarSize = 48;
 
 interface INotification {
   hidden?: boolean;
-  notification: NotificationEntity;
+  notification: MinifiedNotification;
   onMoveUp?: (notificationId: string) => void;
   onMoveDown?: (notificationId: string) => void;
   onReblog?: (status: StatusEntity, e?: KeyboardEvent) => void;
   getScrollPosition?: () => ScrollPosition | undefined;
   updateScrollBottom?: (bottom: number) => void;
 }
+
+const getNotificationStatus = (n: NotificationEntity | BaseNotification) => {
+  if (['mention', 'status', 'reblog', 'favourite', 'poll', 'update', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request'].includes(n.type))
+    // @ts-ignore
+    return n.status;
+  return null;
+};
 
 const Notification: React.FC<INotification> = (props) => {
   const { hidden = false, onMoveUp, onMoveDown } = props;
@@ -173,7 +194,8 @@ const Notification: React.FC<INotification> = (props) => {
   const instance = useInstance();
 
   const type = notification.type;
-  const { account, accounts, status } = notification;
+  const { account, accounts } = notification;
+  const status = getNotificationStatus(notification);
 
   const getHandlers = () => ({
     reply: handleMention,
@@ -265,7 +287,7 @@ const Notification: React.FC<INotification> = (props) => {
           className='h-4 w-4 flex-none'
         />
       );
-    } else if (validType(type)) {
+    } else if (icons[type]) {
       return (
         <Icon
           src={icons[type]}
@@ -278,7 +300,7 @@ const Notification: React.FC<INotification> = (props) => {
   };
 
   const renderContent = () => {
-    switch (type as NotificationType) {
+    switch (type) {
       case 'follow':
       case 'follow_request':
         return account && typeof account === 'object' ? (
@@ -325,13 +347,13 @@ const Notification: React.FC<INotification> = (props) => {
     }
   };
 
-  const targetName = notification.target && typeof notification.target === 'object' ? notification.target.acct : '';
+  const targetName = notification.type === 'move' ? notification.target.acct : '';
 
-  const message: React.ReactNode = validType(type) && account && typeof account === 'object'
-    ? buildMessage(intl, type, account, accounts as ImmutableList<AccountEntity>, targetName, instance.title)
+  const message: React.ReactNode = account && typeof account === 'object'
+    ? buildMessage(intl, type, accounts, targetName, instance.title)
     : null;
 
-  const ariaLabel = validType(type) ? (
+  const ariaLabel = (
     notificationForScreenReader(
       intl,
       intl.formatMessage(messages[type], {
@@ -340,7 +362,7 @@ const Notification: React.FC<INotification> = (props) => {
       }),
       notification.created_at,
     )
-  ) : '';
+  );
 
   return (
     <HotKeys handlers={getHandlers()} data-testid='notification'>
@@ -381,4 +403,4 @@ const Notification: React.FC<INotification> = (props) => {
   );
 };
 
-export { Notification as default };
+export { Notification as default, getNotificationStatus };

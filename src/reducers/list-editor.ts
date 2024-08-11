@@ -52,8 +52,8 @@ const listEditorReducer = (state: State = ReducerRecord(), action: AnyAction) =>
       return ReducerRecord();
     case LIST_EDITOR_SETUP:
       return state.withMutations(map => {
-        map.set('listId', action.list.get('id'));
-        map.set('title', action.list.get('title'));
+        map.set('listId', action.list.id);
+        map.set('title', action.list.title);
         map.set('isSubmitting', false);
       });
     case LIST_EDITOR_TITLE_CHANGE:

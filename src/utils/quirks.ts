@@ -1,13 +1,9 @@
-/* eslint sort-keys: "error" */
+import { getFeatures, MITRA, type Instance } from 'pl-api';
 import { createSelector } from 'reselect';
-
-import { parseVersion, MITRA } from './features';
-
-import type { Instance } from 'pl-api';
 
 /** For solving bugs between API implementations. */
 const getQuirks = createSelector([
-  (instance: Instance) => parseVersion(instance.version),
+  (instance: Instance) => getFeatures(instance).version,
 ], (v) => ({
   /**
    * Apps are not supported by the API, and should not be created during login or registration.

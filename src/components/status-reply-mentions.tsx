@@ -7,10 +7,10 @@ import HoverRefWrapper from 'soapbox/components/hover-ref-wrapper';
 import HoverStatusWrapper from 'soapbox/components/hover-status-wrapper';
 import { useAppDispatch } from 'soapbox/hooks';
 
-import type { Status } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/normalizers';
 
 interface IStatusReplyMentions {
-  status: Status;
+  status: Pick<Status, 'in_reply_to_id' | 'account' | 'id' | 'mentions'>;
   hoverable?: boolean;
 }
 
@@ -36,7 +36,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
 
   // The post is a reply, but it has no mentions.
   // Rare, but it can happen.
-  if (to.size === 0) {
+  if (to.length === 0) {
     return (
       <div className='mb-1 block text-sm text-gray-700 dark:text-gray-600'>
         <FormattedMessage
@@ -69,12 +69,12 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
     } else {
       return link;
     }
-  }).toArray();
+  });
 
-  if (to.size > 2) {
+  if (to.length > 2) {
     accounts.push(
       <span key='more' className='cursor-pointer hover:underline' role='button' onClick={handleOpenMentionsModal} tabIndex={0}>
-        <FormattedMessage id='reply_mentions.more' defaultMessage='{count} more' values={{ count: to.size - 2 }} />
+        <FormattedMessage id='reply_mentions.more' defaultMessage='{count} more' values={{ count: to.length - 2 }} />
       </span>,
     );
   }

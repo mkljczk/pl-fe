@@ -79,9 +79,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
 
   const parsedHtml = useMemo(
     (): string => translatable && status.translation
-      ? status.translation.get('content')!
+      ? status.translation.content!
       : (status.contentMapHtml && status.currentLanguage)
-        ? status.contentMapHtml.get(status.currentLanguage, status.contentHtml)
+        ? (status.contentMapHtml[status.currentLanguage] || status.contentHtml)
         : status.contentHtml,
     [status.contentHtml, status.translation, status.currentLanguage],
   );
@@ -174,8 +174,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
       output.push(<ReadMoreButton onClick={onClick} key='read-more' />);
     }
 
-    const hasPoll = status.poll && typeof status.poll === 'string';
-    if (hasPoll) {
+    let hasPoll = false;
+
+    if (status.poll && typeof status.poll === 'string') {
+      hasPoll = true;
       output.push(<Poll id={status.poll} key='poll' status={status} />);
     }
 

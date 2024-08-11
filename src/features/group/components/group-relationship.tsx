@@ -1,12 +1,11 @@
+import { GroupRoles, type Group } from 'pl-api';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { HStack, Icon, Text } from 'soapbox/components/ui';
-import { GroupRoles } from 'soapbox/schemas/group-member';
-import { Group } from 'soapbox/types/entities';
 
 interface IGroupRelationship {
-  group: Group;
+  group: Pick<Group, 'relationship'>;
 }
 
 const GroupRelationship = ({ group }: IGroupRelationship) => {

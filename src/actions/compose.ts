@@ -9,7 +9,6 @@ import { selectAccount, selectOwnAccount, makeGetAccount } from 'soapbox/selecto
 import { tagHistory } from 'soapbox/settings';
 import toast from 'soapbox/toast';
 import { isLoggedIn } from 'soapbox/utils/auth';
-import { getFeatures, parseVersion } from 'soapbox/utils/features';
 
 import { chooseEmoji } from './emojis';
 import { importFetchedAccounts } from './importer';
@@ -20,12 +19,11 @@ import { getSettings } from './settings';
 import { createStatus } from './statuses';
 
 import type { EditorState } from 'lexical';
-import type { CreateStatusParams, Tag } from 'pl-api';
+import type { Account as BaseAccount, BackendVersion, CreateStatusParams, Group, MediaAttachment, Status as BaseStatus, Tag, Poll } from 'pl-api';
 import type { AutoSuggestion } from 'soapbox/components/autosuggest-input';
 import type { Emoji } from 'soapbox/features/emoji';
-import type { Account, Group } from 'soapbox/schemas';
+import type { Account, Status } from 'soapbox/normalizers';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity, Status } from 'soapbox/types/entities';
 import type { History } from 'soapbox/types/history';
 
 let cancelFetchComposeSuggestions = new AbortController();
@@ -110,32 +108,34 @@ const messages = defineMessages({
 
 interface ComposeSetStatusAction {
   type: typeof COMPOSE_SET_STATUS;
-  id: string;
-  status: Status;
+  composeId: string;
+  status: Pick<BaseStatus, 'id' | 'account' | 'content' | 'group' | 'in_reply_to_id' | 'media_attachments' | 'mentions' | 'quote' | 'spoiler_text' | 'visibility'>;
+  poll?: Poll;
   rawText: string;
   explicitAddressing: boolean;
   spoilerText?: string;
   contentType?: string | false;
-  v: ReturnType<typeof parseVersion>;
+  v: BackendVersion;
   withRedraft?: boolean;
   draftId?: string;
   editorState?: string | null;
 }
 
-const setComposeToStatus = (status: Status, rawText: string, spoilerText?: string, contentType?: string | false, withRedraft?: boolean, draftId?: string, editorState?: string | null) =>
+const setComposeToStatus = (status: ComposeSetStatusAction['status'], poll: Poll, rawText: string, spoilerText?: string, contentType?: string | false, withRedraft?: boolean, draftId?: string, editorState?: string | null) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const { instance } = getState();
-    const { explicitAddressing } = getFeatures(instance);
+    const client = getClient(getState);
+    const { createStatusExplicitAddressing: explicitAddressing, version: v } = client.features;
 
     const action: ComposeSetStatusAction = {
       type: COMPOSE_SET_STATUS,
-      id: 'compose-modal',
+      composeId: 'compose-modal',
       status,
+      poll,
       rawText,
       explicitAddressing,
       spoilerText,
       contentType,
-      v: parseVersion(instance.version),
+      v,
       withRedraft,
       draftId,
       editorState,
@@ -146,25 +146,28 @@ const setComposeToStatus = (status: Status, rawText: string, spoilerText?: strin
 
 const changeCompose = (composeId: string, text: string) => ({
   type: COMPOSE_CHANGE,
-  id: composeId,
+  composeId,
   text: text,
 });
 
 interface ComposeReplyAction {
   type: typeof COMPOSE_REPLY;
-  id: string;
-  status: Status;
-  account: Account;
+  composeId: string;
+  status: Pick<Status, 'id' | 'account' | 'group' | 'mentions' | 'spoiler_text' | 'visibility'>;
+  account: Pick<Account, 'acct'>;
   explicitAddressing: boolean;
   preserveSpoilers: boolean;
-  rebloggedBy?: Account;
+  rebloggedBy?: Pick<Account, 'acct' | 'id'>;
 }
 
-const replyCompose = (status: Status, rebloggedBy?: Account) =>
+const replyCompose = (
+  status: ComposeReplyAction['status'],
+  rebloggedBy?: ComposeReplyAction['rebloggedBy'],
+) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const instance = state.instance;
-    const { explicitAddressing } = getFeatures(instance);
+    const client = getClient(state);
+    const { createStatusExplicitAddressing: explicitAddressing } = client.features;
     const preserveSpoilers = !!getSettings(state).get('preserveSpoilers');
     const account = selectOwnAccount(state);
 
@@ -172,7 +175,7 @@ const replyCompose = (status: Status, rebloggedBy?: Account) =>
 
     const action: ComposeReplyAction = {
       type: COMPOSE_REPLY,
-      id: 'compose-modal',
+      composeId: 'compose-modal',
       status: status,
       account,
       explicitAddressing,
@@ -186,26 +189,25 @@ const replyCompose = (status: Status, rebloggedBy?: Account) =>
 
 const cancelReplyCompose = () => ({
   type: COMPOSE_REPLY_CANCEL,
-  id: 'compose-modal',
+  composeId: 'compose-modal',
 });
 
 interface ComposeQuoteAction {
   type: typeof COMPOSE_QUOTE;
-  id: string;
-  status: Status;
-  account: Account | undefined;
+  composeId: string;
+  status: Pick<Status, 'id' | 'account' | 'visibility' | 'group'>;
+  account: Pick<Account, 'acct'> | undefined;
   explicitAddressing: boolean;
 }
 
-const quoteCompose = (status: Status) =>
+const quoteCompose = (status: ComposeQuoteAction['status']) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const instance = state.instance;
-    const { explicitAddressing } = getFeatures(instance);
+    const { createStatusExplicitAddressing: explicitAddressing } = state.auth.client.features;
 
     const action: ComposeQuoteAction = {
       type: COMPOSE_QUOTE,
-      id: 'compose-modal',
+      composeId: 'compose-modal',
       status: status,
       account: selectOwnAccount(state),
       explicitAddressing,
@@ -217,10 +219,10 @@ const quoteCompose = (status: Status) =>
 
 const cancelQuoteCompose = (composeId: string) => ({
   type: COMPOSE_QUOTE_CANCEL,
-  id: composeId,
+  composeId,
 });
 
-const groupComposeModal = (group: Group) =>
+const groupComposeModal = (group: Pick<Group, 'id'>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const composeId = `group:${group.id}`;
 
@@ -230,20 +232,20 @@ const groupComposeModal = (group: Group) =>
 
 const resetCompose = (composeId = 'compose-modal') => ({
   type: COMPOSE_RESET,
-  id: composeId,
+  composeId,
 });
 
 interface ComposeMentionAction {
   type: typeof COMPOSE_MENTION;
-  id: string;
-  account: Account;
+  composeId: string;
+  account: Pick<Account, 'acct'>;
 }
 
-const mentionCompose = (account: Account) =>
+const mentionCompose = (account: ComposeMentionAction['account']) =>
   (dispatch: AppDispatch) => {
     const action: ComposeMentionAction = {
       type: COMPOSE_MENTION,
-      id: 'compose-modal',
+      composeId: 'compose-modal',
       account: account,
     };
 
@@ -253,15 +255,15 @@ const mentionCompose = (account: Account) =>
 
 interface ComposeDirectAction {
   type: typeof COMPOSE_DIRECT;
-  id: string;
-  account: Account;
+  composeId: string;
+  account: Pick<Account, 'acct'>;
 }
 
-const directCompose = (account: Account) =>
+const directCompose = (account: ComposeDirectAction['account']) =>
   (dispatch: AppDispatch) => {
     const action: ComposeDirectAction = {
       type: COMPOSE_DIRECT,
-      id: 'compose-modal',
+      composeId: 'compose-modal',
       account,
     };
 
@@ -276,7 +278,7 @@ const directComposeById = (accountId: string) =>
 
     const action: ComposeDirectAction = {
       type: COMPOSE_DIRECT,
-      id: 'compose-modal',
+      composeId: 'compose-modal',
       account,
     };
 
@@ -284,7 +286,7 @@ const directComposeById = (accountId: string) =>
     dispatch(openModal('COMPOSE'));
   };
 
-const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, composeId: string, data: APIEntity, status: string, edit?: boolean) => {
+const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, composeId: string, data: BaseStatus, status: string, edit?: boolean) => {
   if (!dispatch || !getState) return;
 
   const state = getState();
@@ -419,7 +421,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
 
     return dispatch(createStatus(params, idempotencyKey, statusId)).then((data) => {
       if (!statusId && data.visibility === 'direct' && getState().conversations.mounted <= 0 && history) {
-        history.push('/messages');
+        history.push('/conversations');
       }
       handleComposeSubmit(dispatch, getState, composeId, data, status, !!statusId);
     }).catch((error) => {
@@ -429,12 +431,12 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
 
 const submitComposeRequest = (composeId: string) => ({
   type: COMPOSE_SUBMIT_REQUEST,
-  id: composeId,
+  composeId,
 });
 
-const submitComposeSuccess = (composeId: string, status: APIEntity, accountUrl: string, draftId?: string | null) => ({
+const submitComposeSuccess = (composeId: string, status: BaseStatus, accountUrl: string, draftId?: string | null) => ({
   type: COMPOSE_SUBMIT_SUCCESS,
-  id: composeId,
+  composeId,
   status: status,
   accountUrl,
   draftId,
@@ -442,8 +444,8 @@ const submitComposeSuccess = (composeId: string, status: APIEntity, accountUrl: 
 
 const submitComposeFail = (composeId: string, error: unknown) => ({
   type: COMPOSE_SUBMIT_FAIL,
-  id: composeId,
-  error: error,
+  composeId,
+  error,
 });
 
 const uploadCompose = (composeId: string, files: FileList, intl: IntlShape) =>
@@ -484,76 +486,70 @@ const uploadCompose = (composeId: string, files: FileList, intl: IntlShape) =>
 
 const uploadComposeRequest = (composeId: string) => ({
   type: COMPOSE_UPLOAD_REQUEST,
-  id: composeId,
-  skipLoading: true,
+  composeId,
 });
 
 const uploadComposeProgress = (composeId: string, loaded: number, total: number) => ({
   type: COMPOSE_UPLOAD_PROGRESS,
-  id: composeId,
-  loaded: loaded,
-  total: total,
+  composeId,
+  loaded,
+  total,
 });
 
-const uploadComposeSuccess = (composeId: string, media: APIEntity, file: File) => ({
+const uploadComposeSuccess = (composeId: string, media: MediaAttachment, file: File) => ({
   type: COMPOSE_UPLOAD_SUCCESS,
-  id: composeId,
-  media: media,
+  composeId,
+  media,
   file,
-  skipLoading: true,
 });
 
 const uploadComposeFail = (composeId: string, error: unknown) => ({
   type: COMPOSE_UPLOAD_FAIL,
-  id: composeId,
-  error: error,
-  skipLoading: true,
+  composeId,
+  error,
 });
 
-const changeUploadCompose = (composeId: string, id: string, params: Record<string, any>) =>
+const changeUploadCompose = (composeId: string, mediaId: string, params: Record<string, any>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
     dispatch(changeUploadComposeRequest(composeId));
 
-    dispatch(updateMedia(id, params)).then(response => {
+    dispatch(updateMedia(mediaId, params)).then(response => {
       dispatch(changeUploadComposeSuccess(composeId, response));
     }).catch(error => {
-      dispatch(changeUploadComposeFail(composeId, id, error));
+      dispatch(changeUploadComposeFail(composeId, mediaId, error));
     });
   };
 
 const changeUploadComposeRequest = (composeId: string) => ({
   type: COMPOSE_UPLOAD_CHANGE_REQUEST,
-  id: composeId,
-  skipLoading: true,
+  composeId,
 });
 
-const changeUploadComposeSuccess = (composeId: string, media: APIEntity) => ({
+const changeUploadComposeSuccess = (composeId: string, media: MediaAttachment) => ({
   type: COMPOSE_UPLOAD_CHANGE_SUCCESS,
-  id: composeId,
-  media: media,
-  skipLoading: true,
+  composeId,
+  media,
 });
 
-const changeUploadComposeFail = (composeId: string, id: string, error: unknown) => ({
+const changeUploadComposeFail = (composeId: string, mediaId: string, error: unknown) => ({
   type: COMPOSE_UPLOAD_CHANGE_FAIL,
   composeId,
-  id,
-  error: error,
-  skipLoading: true,
+  mediaId,
+  error,
 });
 
-const undoUploadCompose = (composeId: string, media_id: string) => ({
+const undoUploadCompose = (composeId: string, mediaId: string) => ({
   type: COMPOSE_UPLOAD_UNDO,
-  id: composeId,
-  media_id: media_id,
+  composeId,
+  mediaId,
 });
 
 const groupCompose = (composeId: string, groupId: string) => ({
   type: COMPOSE_GROUP_POST,
-  id: composeId,
-  group_id: groupId,
+  composeId,
+  groupId,
 });
 
 const clearComposeSuggestions = (composeId: string) => {
@@ -563,7 +559,7 @@ const clearComposeSuggestions = (composeId: string) => {
   }
   return {
     type: COMPOSE_SUGGESTIONS_CLEAR,
-    id: composeId,
+    composeId,
   };
 };
 
@@ -603,8 +599,7 @@ const fetchComposeSuggestionsTags = (dispatch: AppDispatch, getState: () => Root
 
   const state = getState();
 
-  const instance = state.instance;
-  const { trends } = getFeatures(instance);
+  const { trends } = state.auth.client.features;
 
   if (trends) {
     const currentTrends = state.trends.items.toArray();
@@ -638,29 +633,29 @@ const fetchComposeSuggestions = (composeId: string, token: string) =>
 
 interface ComposeSuggestionsReadyAction {
   type: typeof COMPOSE_SUGGESTIONS_READY;
-  id: string;
+  composeId: string;
   token: string;
   emojis?: Emoji[];
-  accounts?: APIEntity[];
+  accounts?: BaseAccount[];
 }
 
 const readyComposeSuggestionsEmojis = (composeId: string, token: string, emojis: Emoji[]) => ({
   type: COMPOSE_SUGGESTIONS_READY,
-  id: composeId,
+  composeId,
   token,
   emojis,
 });
 
-const readyComposeSuggestionsAccounts = (composeId: string, token: string, accounts: APIEntity[]) => ({
+const readyComposeSuggestionsAccounts = (composeId: string, token: string, accounts: BaseAccount[]) => ({
   type: COMPOSE_SUGGESTIONS_READY,
-  id: composeId,
+  composeId,
   token,
   accounts,
 });
 
 interface ComposeSuggestionSelectAction {
   type: typeof COMPOSE_SUGGESTION_SELECT;
-  id: string;
+  composeId: string;
   position: number;
   token: string | null;
   completion: string;
@@ -686,7 +681,7 @@ const selectComposeSuggestion = (composeId: string, position: number, token: str
 
     const action: ComposeSuggestionSelectAction = {
       type: COMPOSE_SUGGESTION_SELECT,
-      id: composeId,
+      composeId,
       position: startPosition,
       token,
       completion,
@@ -698,18 +693,18 @@ const selectComposeSuggestion = (composeId: string, position: number, token: str
 
 const updateSuggestionTags = (composeId: string, token: string, tags: Array<Tag>) => ({
   type: COMPOSE_SUGGESTION_TAGS_UPDATE,
-  id: composeId,
+  composeId,
   token,
   tags,
 });
 
 const updateTagHistory = (composeId: string, tags: string[]) => ({
   type: COMPOSE_TAG_HISTORY_UPDATE,
-  id: composeId,
+  composeId,
   tags,
 });
 
-const insertIntoTagHistory = (composeId: string, recognizedTags: APIEntity[], text: string) =>
+const insertIntoTagHistory = (composeId: string, recognizedTags: Array<Tag>, text: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const oldHistory = state.compose.get(composeId)!.tagHistory;
@@ -729,54 +724,54 @@ const insertIntoTagHistory = (composeId: string, recognizedTags: APIEntity[], te
 
 const changeComposeSpoilerness = (composeId: string) => ({
   type: COMPOSE_SPOILERNESS_CHANGE,
-  id: composeId,
+  composeId,
 });
 
 const changeComposeContentType = (composeId: string, value: string) => ({
   type: COMPOSE_TYPE_CHANGE,
-  id: composeId,
+  composeId,
   value,
 });
 
 const changeComposeSpoilerText = (composeId: string, text: string) => ({
   type: COMPOSE_SPOILER_TEXT_CHANGE,
-  id: composeId,
+  composeId,
   text,
 });
 
 const changeComposeVisibility = (composeId: string, value: string) => ({
   type: COMPOSE_VISIBILITY_CHANGE,
-  id: composeId,
+  composeId,
   value,
 });
 
 const changeComposeLanguage = (composeId: string, value: Language | null) => ({
   type: COMPOSE_LANGUAGE_CHANGE,
-  id: composeId,
+  composeId,
   value,
 });
 
 const changeComposeModifiedLanguage = (composeId: string, value: Language | null) => ({
   type: COMPOSE_MODIFIED_LANGUAGE_CHANGE,
-  id: composeId,
+  composeId,
   value,
 });
 
 const addComposeLanguage = (composeId: string, value: Language) => ({
   type: COMPOSE_LANGUAGE_ADD,
-  id: composeId,
+  composeId,
   value,
 });
 
 const deleteComposeLanguage = (composeId: string, value: Language) => ({
   type: COMPOSE_LANGUAGE_DELETE,
-  id: composeId,
+  composeId,
   value,
 });
 
 const insertEmojiCompose = (composeId: string, position: number, emoji: Emoji, needsSpace: boolean) => ({
   type: COMPOSE_EMOJI_INSERT,
-  id: composeId,
+  composeId,
   position,
   emoji,
   needsSpace,
@@ -784,52 +779,52 @@ const insertEmojiCompose = (composeId: string, position: number, emoji: Emoji, n
 
 const addPoll = (composeId: string) => ({
   type: COMPOSE_POLL_ADD,
-  id: composeId,
+  composeId,
 });
 
 const removePoll = (composeId: string) => ({
   type: COMPOSE_POLL_REMOVE,
-  id: composeId,
+  composeId,
 });
 
 const addSchedule = (composeId: string) => ({
   type: COMPOSE_SCHEDULE_ADD,
-  id: composeId,
+  composeId,
 });
 
 const setSchedule = (composeId: string, date: Date) => ({
   type: COMPOSE_SCHEDULE_SET,
-  id: composeId,
+  composeId,
   date: date,
 });
 
 const removeSchedule = (composeId: string) => ({
   type: COMPOSE_SCHEDULE_REMOVE,
-  id: composeId,
+  composeId,
 });
 
 const addPollOption = (composeId: string, title: string) => ({
   type: COMPOSE_POLL_OPTION_ADD,
-  id: composeId,
+  composeId,
   title,
 });
 
 const changePollOption = (composeId: string, index: number, title: string) => ({
   type: COMPOSE_POLL_OPTION_CHANGE,
-  id: composeId,
+  composeId,
   index,
   title,
 });
 
 const removePollOption = (composeId: string, index: number) => ({
   type: COMPOSE_POLL_OPTION_REMOVE,
-  id: composeId,
+  composeId,
   index,
 });
 
 const changePollSettings = (composeId: string, expiresIn?: number, isMultiple?: boolean) => ({
   type: COMPOSE_POLL_SETTINGS_CHANGE,
-  id: composeId,
+  composeId,
   expiresIn,
   isMultiple,
 });
@@ -843,7 +838,7 @@ const openComposeWithText = (composeId: string, text = '') =>
 
 interface ComposeAddToMentionsAction {
   type: typeof COMPOSE_ADD_TO_MENTIONS;
-  id: string;
+  composeId: string;
   account: string;
 }
 
@@ -855,7 +850,7 @@ const addToMentions = (composeId: string, accountId: string) =>
 
     const action: ComposeAddToMentionsAction = {
       type: COMPOSE_ADD_TO_MENTIONS,
-      id: composeId,
+      composeId,
       account: account.acct,
     };
 
@@ -864,7 +859,7 @@ const addToMentions = (composeId: string, accountId: string) =>
 
 interface ComposeRemoveFromMentionsAction {
   type: typeof COMPOSE_REMOVE_FROM_MENTIONS;
-  id: string;
+  composeId: string;
   account: string;
 }
 
@@ -876,7 +871,7 @@ const removeFromMentions = (composeId: string, accountId: string) =>
 
     const action: ComposeRemoveFromMentionsAction = {
       type: COMPOSE_REMOVE_FROM_MENTIONS,
-      id: composeId,
+      composeId,
       account: account.acct,
     };
 
@@ -885,21 +880,20 @@ const removeFromMentions = (composeId: string, accountId: string) =>
 
 interface ComposeEventReplyAction {
   type: typeof COMPOSE_EVENT_REPLY;
-  id: string;
-  status: Status;
-  account: Account;
+  composeId: string;
+  status: Pick<Status, 'id' | 'account' | 'mentions'>;
+  account: Pick<Account, 'acct'>;
   explicitAddressing: boolean;
 }
 
-const eventDiscussionCompose = (composeId: string, status: Status) =>
+const eventDiscussionCompose = (composeId: string, status: ComposeEventReplyAction['status']) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const instance = state.instance;
-    const { explicitAddressing } = getFeatures(instance);
+    const { createStatusExplicitAddressing: explicitAddressing } = state.auth.client.features;
 
     return dispatch({
       type: COMPOSE_EVENT_REPLY,
-      id: composeId,
+      composeId,
       status: status,
       account: selectOwnAccount(state),
       explicitAddressing,
@@ -908,33 +902,33 @@ const eventDiscussionCompose = (composeId: string, status: Status) =>
 
 const setEditorState = (composeId: string, editorState: EditorState | string | null, text?: string) => ({
   type: COMPOSE_EDITOR_STATE_SET,
-  id: composeId,
+  composeId,
   editorState,
   text,
 });
 
 const changeMediaOrder = (composeId: string, a: string, b: string) => ({
   type: COMPOSE_CHANGE_MEDIA_ORDER,
-  id: composeId,
+  composeId,
   a,
   b,
 });
 
 const addSuggestedQuote = (composeId: string, quoteId: string) => ({
   type: COMPOSE_ADD_SUGGESTED_QUOTE,
-  id: composeId,
+  composeId,
   quoteId,
 });
 
 const addSuggestedLanguage = (composeId: string, language: string) => ({
   type: COMPOSE_ADD_SUGGESTED_LANGUAGE,
-  id: composeId,
+  composeId,
   language,
 });
 
 const changeComposeFederated = (composeId: string) => ({
   type: COMPOSE_FEDERATED_CHANGE,
-  id: composeId,
+  composeId,
 });
 
 type ComposeAction =
@@ -989,7 +983,7 @@ type ComposeAction =
   | ReturnType<typeof changeMediaOrder>
   | ReturnType<typeof addSuggestedQuote>
   | ReturnType<typeof addSuggestedLanguage>
-  | ReturnType<typeof changeComposeFederated>
+  | ReturnType<typeof changeComposeFederated>;
 
 export {
   COMPOSE_CHANGE,

@@ -6,16 +6,16 @@ import { SelectDropdown } from 'soapbox/features/forms';
 import { useAppDispatch } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 
-import type { Account as AccountEntity } from 'soapbox/schemas';
+import type { Account as AccountEntity } from 'soapbox/normalizers';
 
 /** Staff role. */
 type AccountRole = 'user' | 'moderator' | 'admin';
 
 /** Get the highest staff role associated with the account. */
-const getRole = (account: Pick<AccountEntity, 'admin' | 'moderator'>): AccountRole => {
-  if (account.admin) {
+const getRole = (account: Pick<AccountEntity, 'is_admin' | 'is_moderator'>): AccountRole => {
+  if (account.is_admin) {
     return 'admin';
-  } else if (account.moderator) {
+  } else if (account.is_moderator) {
     return 'moderator';
   } else {
     return 'user';
@@ -34,7 +34,7 @@ const messages = defineMessages({
 
 interface IStaffRolePicker {
   /** Account whose role to change. */
-  account: Pick<AccountEntity, 'id' | 'acct' | 'admin' | 'moderator'>;
+  account: Pick<AccountEntity, 'id' | 'acct' | 'is_admin' | 'is_moderator'>;
 }
 
 /** Picker for setting the staff role of an account. */
@@ -57,7 +57,7 @@ const StaffRolePicker: React.FC<IStaffRolePicker> = ({ account }) => {
 
         if (role === 'admin') {
           message = messages.promotedToAdmin;
-        } else if (role === 'moderator' && account.admin) {
+        } else if (role === 'moderator' && account.is_admin) {
           message = messages.demotedToModerator;
         } else if (role === 'moderator') {
           message = messages.promotedToModerator;

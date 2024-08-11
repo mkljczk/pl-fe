@@ -46,7 +46,7 @@ const suggestionsReducer = (state: State = ReducerRecord(), action: AnyAction) =
     case SUGGESTIONS_FETCH_FAIL:
       return state.set('isLoading', false);
     case SUGGESTIONS_DISMISS:
-      return dismissAccount(state, action.id);
+      return dismissAccount(state, action.accountId);
     case ACCOUNT_BLOCK_SUCCESS:
     case ACCOUNT_MUTE_SUCCESS:
       return dismissAccount(state, action.relationship.id);

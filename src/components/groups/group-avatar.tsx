@@ -1,14 +1,11 @@
 import clsx from 'clsx';
+import { GroupRoles, type Group } from 'pl-api';
 import React from 'react';
-
-import { GroupRoles } from 'soapbox/schemas/group-member';
 
 import { Avatar } from '../ui';
 
-import type { Group } from 'soapbox/schemas';
-
 interface IGroupAvatar {
-  group: Group;
+  group: Pick<Group, 'avatar' | 'avatar_description' | 'relationship'>;
   size: number;
   withRing?: boolean;
 }

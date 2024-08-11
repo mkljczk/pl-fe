@@ -2,9 +2,9 @@ import { Entities } from 'soapbox/entity-store/entities';
 import { useDeleteEntity } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';
 
-import type { Group } from 'soapbox/schemas';
+import type { Group } from 'pl-api';
 
-const useDeleteGroupStatus = (group: Group, statusId: string) => {
+const useDeleteGroupStatus = (group: Pick<Group, 'id'>, statusId: string) => {
   const client = useClient();
   const { deleteEntity, isSubmitting } = useDeleteEntity(
     Entities.STATUSES,

@@ -19,8 +19,8 @@ import { makeGetStatus } from 'soapbox/selectors';
 
 import ImageLoader from '../image-loader';
 
-import type { List as ImmutableList } from 'immutable';
-import type { Attachment, Status } from 'soapbox/types/entities';
+import type { MediaAttachment } from 'pl-api';
+import type { Status } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
@@ -44,7 +44,7 @@ const containerStyle: React.CSSProperties = {
 };
 
 interface IMediaModal {
-  media: ImmutableList<Attachment>;
+  media: Array<MediaAttachment>;
   status?: Status;
   index: number;
   time?: number;
@@ -71,11 +71,11 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
   const [navigationHidden, setNavigationHidden] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(!status);
 
-  const hasMultipleImages = media.size > 1;
+  const hasMultipleImages = media.length > 1;
 
-  const handleSwipe = (index: number) => setIndex(index % media.size);
-  const handleNextClick = () => setIndex((getIndex() + 1) % media.size);
-  const handlePrevClick = () => setIndex((media.size + getIndex() - 1) % media.size);
+  const handleSwipe = (index: number) => setIndex(index % media.length);
+  const handleNextClick = () => setIndex((getIndex() + 1) % media.length);
+  const handlePrevClick = () => setIndex((media.length + getIndex() - 1) % media.length);
 
   const navigationHiddenClassName = navigationHidden ? 'pointer-events-none opacity-0' : '';
 
@@ -95,7 +95,7 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
   };
 
   const handleDownload = () => {
-    const mediaItem = hasMultipleImages ? media.get(index as number) : media.get(0);
+    const mediaItem = hasMultipleImages ? media[index as number] : media[0];
     window.open(mediaItem?.url);
   };
 
@@ -114,8 +114,11 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
   };
 
   const content = media.map((attachment, i) => {
-    const width  = (attachment.meta.getIn(['original', 'width']) || undefined) as number | undefined;
-    const height = (attachment.meta.getIn(['original', 'height']) || undefined) as number | undefined;
+    let width: number | undefined, height: number | undefined;
+    if (attachment.type === 'image' || attachment.type === 'gifv' || attachment.type === 'video') {
+      width = (attachment.meta?.original?.width);
+      height = (attachment.meta?.original?.height);
+    }
 
     const link = (status && (
       <a href={status.url} onClick={handleStatusClick}>
@@ -157,11 +160,11 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
         <Audio
           src={attachment.url}
           alt={attachment.description}
-          poster={attachment.preview_url !== attachment.url ? attachment.preview_url : (status?.getIn(['account', 'avatar_static'])) as string | undefined}
-          backgroundColor={attachment.meta.getIn(['colors', 'background']) as string | undefined}
-          foregroundColor={attachment.meta.getIn(['colors', 'foreground']) as string | undefined}
-          accentColor={attachment.meta.getIn(['colors', 'accent']) as string | undefined}
-          duration={attachment.meta.getIn(['original', 'duration'], 0) as number | undefined}
+          poster={attachment.preview_url !== attachment.url ? attachment.preview_url : (status?.account.avatar_static) as string | undefined}
+          backgroundColor={attachment.meta.colors?.background as string | undefined}
+          foregroundColor={attachment.meta.colors?.foreground as string | undefined}
+          accentColor={attachment.meta.colors?.accent as string | undefined}
+          duration={attachment.meta.original?.duration || 0}
           key={attachment.url}
         />
       );
@@ -181,7 +184,7 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
     }
 
     return null;
-  }).toArray();
+  });
 
   /** Fetch the status (and context) from the API. */
   const fetchData = () => dispatch(fetchStatusWithContext(status?.id as string, intl));

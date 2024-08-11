@@ -1,7 +1,9 @@
+import { groupSchema, type Group as BaseGroup } from 'pl-api';
+
 import { Entities } from 'soapbox/entity-store/entities';
 import { useCreateEntity } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';
-import { groupSchema } from 'soapbox/schemas';
+import { normalizeGroup, type Group } from 'soapbox/normalizers';
 
 interface CreateGroupParams {
   display_name: string;
@@ -16,10 +18,10 @@ interface CreateGroupParams {
 const useCreateGroup = () => {
   const client = useClient();
 
-  const { createEntity, ...rest } = useCreateEntity(
+  const { createEntity, ...rest } = useCreateEntity<BaseGroup, Group, CreateGroupParams>(
     [Entities.GROUPS, 'search', ''],
     (params: CreateGroupParams) => client.experimental.groups.createGroup(params),
-    { schema: groupSchema },
+    { schema: groupSchema, transform: normalizeGroup },
   );
 
   return {

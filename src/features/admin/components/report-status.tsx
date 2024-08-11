@@ -29,7 +29,7 @@ const ReportStatus: React.FC<IReportStatus> = ({ status }) => {
   };
 
   const makeMenu = () => {
-    const acct = status.getIn(['account', 'acct']);
+    const acct = status.account.acct;
 
     return [{
       text: intl.formatMessage(messages.viewStatus, { acct: `@${acct}` }),

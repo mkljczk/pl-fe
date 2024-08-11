@@ -65,7 +65,7 @@ type APIUser = { id: string; email: string; nickname: string; registration_reaso
 type Filter = 'local' | 'need_approval' | 'active';
 
 const FILTER_UNAPPROVED: Filter[] = ['local', 'need_approval'];
-const FILTER_LATEST: Filter[]     = ['local', 'active'];
+const FILTER_LATEST: Filter[]   = ['local', 'active'];
 
 const filtersMatch = (f1: string[], f2: string[]) => is(ImmutableSet(f1), ImmutableSet(f2));
 const toIds = (items: any[]) => items.map(item => item.id);

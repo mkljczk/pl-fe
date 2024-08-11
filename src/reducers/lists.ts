@@ -8,21 +8,17 @@ import {
   LIST_UPDATE_SUCCESS,
   LIST_DELETE_SUCCESS,
 } from 'soapbox/actions/lists';
-import { normalizeList } from 'soapbox/normalizers';
 
+import type { List } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { APIEntity } from 'soapbox/types/entities';
 
-type ListRecord = ReturnType<typeof normalizeList>;
-type APIEntities = Array<APIEntity>;
-
-type State = ImmutableMap<string, ListRecord | false>;
+type State = ImmutableMap<string, List | false>;
 
 const initialState: State = ImmutableMap();
 
-const importList = (state: State, list: APIEntity) => state.set(list.id, normalizeList(list));
+const importList = (state: State, list: List) => state.set(list.id, list);
 
-const importLists = (state: State, lists: APIEntities) => {
+const importLists = (state: State, lists: Array<List>) => {
   lists.forEach(list => {
     state = importList(state, list);
   });
@@ -40,7 +36,7 @@ const lists = (state: State = initialState, action: AnyAction) => {
       return importLists(state, action.lists);
     case LIST_DELETE_SUCCESS:
     case LIST_FETCH_FAIL:
-      return state.set(action.id, false);
+      return state.set(action.listId, false);
     default:
       return state;
   }

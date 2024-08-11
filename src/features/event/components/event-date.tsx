@@ -4,10 +4,10 @@ import { FormattedDate } from 'react-intl';
 import Icon from 'soapbox/components/icon';
 import { HStack } from 'soapbox/components/ui';
 
-import type { Status as StatusEntity } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/normalizers';
 
 interface IEventDate {
-  status: StatusEntity;
+  status: Pick<Status, 'event'>;
 }
 
 const EventDate: React.FC<IEventDate> = ({ status }) => {

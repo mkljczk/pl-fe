@@ -15,7 +15,7 @@ const messages = defineMessages({
 });
 
 interface IStatusLanguagePicker {
-  status: Status;
+  status: Pick<Status, 'id' | 'contentMapHtml' | 'currentLanguage'>;
   showLabel?: boolean;
 }
 
@@ -23,7 +23,7 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = ({ status, showLab
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  if (!status.contentMapHtml || status.contentMapHtml.isEmpty()) return null;
+  if (!status.contentMapHtml || !Object.keys(status.contentMapHtml).length) return null;
 
   const icon = <Icon className='h-5 w-5 text-gray-700 dark:text-gray-600' src={require('@tabler/icons/outline/language.svg')} />;
 
@@ -32,7 +32,7 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = ({ status, showLab
       <Text tag='span' theme='muted' size='sm'>&middot;</Text>
 
       <DropdownMenu
-        items={status.contentMapHtml.keySeq().toJS().map((language) => ({
+        items={Object.keys(status.contentMapHtml).map((language) => ({
           text: languages[language as Language] || language,
           action: () => dispatch(changeStatusLanguage(status.id, language)),
           active: language === status.currentLanguage,

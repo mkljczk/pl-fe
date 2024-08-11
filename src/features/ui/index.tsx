@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import React, { Suspense, lazy, useEffect, useRef } from 'react';
-import { useIntl } from 'react-intl';
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom';
 
 import { fetchFollowRequests } from 'soapbox/actions/accounts';
@@ -13,7 +12,7 @@ import { expandNotifications } from 'soapbox/actions/notifications';
 import { register as registerPushNotifications } from 'soapbox/actions/push-notifications';
 import { fetchScheduledStatuses } from 'soapbox/actions/scheduled-statuses';
 import { fetchSuggestionsForTimeline } from 'soapbox/actions/suggestions';
-import { expandHomeTimeline } from 'soapbox/actions/timelines';
+import { fetchHomeTimeline } from 'soapbox/actions/timelines';
 import { useUserStream } from 'soapbox/api/hooks';
 import SidebarNavigation from 'soapbox/components/sidebar-navigation';
 import ThumbNavigation from 'soapbox/components/thumb-navigation';
@@ -358,7 +357,6 @@ const UI: React.FC<IUI> = ({ children }) => {
   const { account } = useOwnAccount();
   const features = useFeatures();
   const vapidKey = useAppSelector(state => getVapidKey(state));
-  const intl = useIntl();
 
   const dropdownMenuIsOpen = useAppSelector(state => state.dropdown_menu.isOpen);
   const standalone = useAppSelector(isStandalone);
@@ -384,7 +382,7 @@ const UI: React.FC<IUI> = ({ children }) => {
 
     dispatch(fetchDraftStatuses());
 
-    dispatch(expandHomeTimeline({}, intl, () => {
+    dispatch(fetchHomeTimeline(false, () => {
       dispatch(fetchSuggestionsForTimeline());
     }));
 
@@ -393,12 +391,12 @@ const UI: React.FC<IUI> = ({ children }) => {
       .then(() => dispatch(fetchMarker(['notifications'])))
       .catch(console.error);
 
-    if (account.staff) {
+    if (account.is_admin || account.is_moderator) {
       dispatch(fetchReports({ resolved: false }));
       dispatch(fetchUsers(['local', 'need_approval']));
     }
 
-    if (account.admin) {
+    if (account.is_admin) {
       dispatch(fetchConfig());
     }
 

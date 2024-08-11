@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { deleteList, fetchList } from 'soapbox/actions/lists';
 import { openModal } from 'soapbox/actions/modals';
-import { expandListTimeline } from 'soapbox/actions/timelines';
+import { fetchListTimeline } from 'soapbox/actions/timelines';
 import { useListStream } from 'soapbox/api/hooks';
 import DropdownMenu from 'soapbox/components/dropdown-menu';
 import MissingIndicator from 'soapbox/components/missing-indicator';
@@ -30,17 +30,16 @@ const ListTimeline: React.FC = () => {
   const isMobile = useIsMobile();
 
   const list = useAppSelector((state) => state.lists.get(id));
-  const next = useAppSelector(state => state.timelines.get(`list:${id}`)?.next);
 
   useListStream(id);
 
   useEffect(() => {
     dispatch(fetchList(id));
-    dispatch(expandListTimeline(id, {}, intl));
+    dispatch(fetchListTimeline(id));
   }, [id]);
 
-  const handleLoadMore = (maxId: string) => {
-    dispatch(expandListTimeline(id, { url: next, maxId }, intl));
+  const handleLoadMore = () => {
+    dispatch(fetchListTimeline(id, true));
   };
 
   const handleEditClick = () => {
@@ -60,7 +59,7 @@ const ListTimeline: React.FC = () => {
     }));
   };
 
-  const title  = list ? list.title : id;
+  const title = list ? list.title : id;
 
   if (typeof list === 'undefined') {
     return (

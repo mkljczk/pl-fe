@@ -5,8 +5,8 @@ import { importFetchedAccounts } from './importer';
 
 import type { AppDispatch } from 'soapbox/store';
 
-const PLEROMA_PRELOAD_IMPORT  = 'PLEROMA_PRELOAD_IMPORT';
-const MASTODON_PRELOAD_IMPORT = 'MASTODON_PRELOAD_IMPORT';
+const PLEROMA_PRELOAD_IMPORT = 'PLEROMA_PRELOAD_IMPORT' as const;
+const MASTODON_PRELOAD_IMPORT = 'MASTODON_PRELOAD_IMPORT' as const;
 
 // https://git.pleroma.social/pleroma/pleroma-fe/-/merge_requests/1176/diffs
 const decodeUTF8Base64 = (data: string) => {
@@ -59,10 +59,16 @@ const preloadMastodon = (data: Record<string, any>) =>
     dispatch({ type: MASTODON_PRELOAD_IMPORT, data });
   };
 
+interface PreloadAction {
+  type: typeof PLEROMA_PRELOAD_IMPORT | typeof MASTODON_PRELOAD_IMPORT;
+  data: Record<string, any>;
+}
+
 export {
   PLEROMA_PRELOAD_IMPORT,
   MASTODON_PRELOAD_IMPORT,
   preload,
   preloadPleroma,
   preloadMastodon,
+  type PreloadAction,
 };

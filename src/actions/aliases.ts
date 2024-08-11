@@ -7,24 +7,25 @@ import { getClient } from '../api';
 
 import { importFetchedAccounts } from './importer';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account as BaseAccount } from 'pl-api';
+import type { Account } from 'soapbox/normalizers';
 import type { AppDispatch, RootState } from 'soapbox/store';
 
-const ALIASES_FETCH_REQUEST = 'ALIASES_FETCH_REQUEST';
-const ALIASES_FETCH_SUCCESS = 'ALIASES_FETCH_SUCCESS';
-const ALIASES_FETCH_FAIL    = 'ALIASES_FETCH_FAIL';
+const ALIASES_FETCH_REQUEST = 'ALIASES_FETCH_REQUEST' as const;
+const ALIASES_FETCH_SUCCESS = 'ALIASES_FETCH_SUCCESS' as const;
+const ALIASES_FETCH_FAIL = 'ALIASES_FETCH_FAIL' as const;
 
-const ALIASES_SUGGESTIONS_CHANGE = 'ALIASES_SUGGESTIONS_CHANGE';
-const ALIASES_SUGGESTIONS_READY  = 'ALIASES_SUGGESTIONS_READY';
-const ALIASES_SUGGESTIONS_CLEAR  = 'ALIASES_SUGGESTIONS_CLEAR';
+const ALIASES_SUGGESTIONS_CHANGE = 'ALIASES_SUGGESTIONS_CHANGE' as const;
+const ALIASES_SUGGESTIONS_READY = 'ALIASES_SUGGESTIONS_READY' as const;
+const ALIASES_SUGGESTIONS_CLEAR = 'ALIASES_SUGGESTIONS_CLEAR' as const;
 
-const ALIASES_ADD_REQUEST = 'ALIASES_ADD_REQUEST';
-const ALIASES_ADD_SUCCESS = 'ALIASES_ADD_SUCCESS';
-const ALIASES_ADD_FAIL    = 'ALIASES_ADD_FAIL';
+const ALIASES_ADD_REQUEST = 'ALIASES_ADD_REQUEST' as const;
+const ALIASES_ADD_SUCCESS = 'ALIASES_ADD_SUCCESS' as const;
+const ALIASES_ADD_FAIL = 'ALIASES_ADD_FAIL' as const;
 
-const ALIASES_REMOVE_REQUEST = 'ALIASES_REMOVE_REQUEST';
-const ALIASES_REMOVE_SUCCESS = 'ALIASES_REMOVE_SUCCESS';
-const ALIASES_REMOVE_FAIL    = 'ALIASES_REMOVE_FAIL';
+const ALIASES_REMOVE_REQUEST = 'ALIASES_REMOVE_REQUEST' as const;
+const ALIASES_REMOVE_SUCCESS = 'ALIASES_REMOVE_SUCCESS' as const;
+const ALIASES_REMOVE_FAIL = 'ALIASES_REMOVE_FAIL' as const;
 
 const messages = defineMessages({
   createSuccess: { id: 'aliases.success.add', defaultMessage: 'Account alias created successfully' },
@@ -46,7 +47,7 @@ const fetchAliasesRequest = () => ({
   type: ALIASES_FETCH_REQUEST,
 });
 
-const fetchAliasesSuccess = (aliases: unknown[]) => ({
+const fetchAliasesSuccess = (aliases: Array<string>) => ({
   type: ALIASES_FETCH_SUCCESS,
   value: aliases,
 });
@@ -67,7 +68,7 @@ const fetchAliasesSuggestions = (q: string) =>
       }).catch(error => toast.showAlertForError(error));
   };
 
-const fetchAliasesSuggestionsReady = (query: string, accounts: unknown[]) => ({
+const fetchAliasesSuggestionsReady = (query: string, accounts: BaseAccount[]) => ({
   type: ALIASES_SUGGESTIONS_READY,
   query,
   accounts,
@@ -133,6 +134,20 @@ const removeFromAliasesFail = (error: unknown) => ({
   error,
 });
 
+type AliasesAction =
+  ReturnType<typeof fetchAliasesRequest>
+  | ReturnType<typeof fetchAliasesSuccess>
+  | ReturnType<typeof fetchAliasesFail>
+  | ReturnType<typeof fetchAliasesSuggestionsReady>
+  | ReturnType<typeof clearAliasesSuggestions>
+  | ReturnType<typeof changeAliasesSuggestions>
+  | ReturnType<typeof addToAliasesRequest>
+  | ReturnType<typeof addToAliasesSuccess>
+  | ReturnType<typeof addToAliasesFail>
+  | ReturnType<typeof removeFromAliasesRequest>
+  | ReturnType<typeof removeFromAliasesSuccess>
+  | ReturnType<typeof removeFromAliasesFail>;
+
 export {
   ALIASES_FETCH_REQUEST,
   ALIASES_FETCH_SUCCESS,
@@ -162,4 +177,5 @@ export {
   removeFromAliasesRequest,
   removeFromAliasesSuccess,
   removeFromAliasesFail,
+  type AliasesAction,
 };

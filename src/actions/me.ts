@@ -8,18 +8,17 @@ import { getClient } from '../api';
 import { loadCredentials } from './auth';
 import { importFetchedAccount } from './importer';
 
-import type { Account } from 'pl-api';
+import type { CredentialAccount } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
 const ME_FETCH_REQUEST = 'ME_FETCH_REQUEST' as const;
 const ME_FETCH_SUCCESS = 'ME_FETCH_SUCCESS' as const;
-const ME_FETCH_FAIL    = 'ME_FETCH_FAIL' as const;
-const ME_FETCH_SKIP    = 'ME_FETCH_SKIP' as const;
+const ME_FETCH_FAIL = 'ME_FETCH_FAIL' as const;
+const ME_FETCH_SKIP = 'ME_FETCH_SKIP' as const;
 
 const ME_PATCH_REQUEST = 'ME_PATCH_REQUEST' as const;
 const ME_PATCH_SUCCESS = 'ME_PATCH_SUCCESS' as const;
-const ME_PATCH_FAIL    = 'ME_PATCH_FAIL' as const;
+const ME_PATCH_FAIL = 'ME_PATCH_FAIL' as const;
 
 const noOp = () => new Promise(f => f(undefined));
 
@@ -55,12 +54,10 @@ const fetchMe = () =>
   };
 
 /** Update the auth account in IndexedDB for Mastodon, etc. */
-const persistAuthAccount = (account: APIEntity, params: Record<string, any>) => {
+const persistAuthAccount = (account: CredentialAccount, params: Record<string, any>) => {
   if (account && account.url) {
-    if (!account.pleroma) account.pleroma = {};
-
-    if (!account.pleroma.settings_store) {
-      account.pleroma.settings_store = params.pleroma_settings_store || {};
+    if (!account.settings_store) {
+      account.settings_store = params.pleroma_settings_store || {};
     }
     KVStore.setItem(`authAccount:${account.url}`, account).catch(console.error);
   }
@@ -84,7 +81,7 @@ const fetchMeRequest = () => ({
   type: ME_FETCH_REQUEST,
 });
 
-const fetchMeSuccess = (account: Account) => {
+const fetchMeSuccess = (account: CredentialAccount) => {
   setSentryAccount(account);
 
   return {
@@ -93,7 +90,7 @@ const fetchMeSuccess = (account: Account) => {
   };
 };
 
-const fetchMeFail = (error: APIEntity) => ({
+const fetchMeFail = (error: unknown) => ({
   type: ME_FETCH_FAIL,
   error,
   skipAlert: true,
@@ -105,10 +102,10 @@ const patchMeRequest = () => ({
 
 interface MePatchSuccessAction {
   type: typeof ME_PATCH_SUCCESS;
-  me: APIEntity;
+  me: CredentialAccount;
 }
 
-const patchMeSuccess = (me: APIEntity) =>
+const patchMeSuccess = (me: CredentialAccount) =>
   (dispatch: AppDispatch) => {
     const action: MePatchSuccessAction = {
       type: ME_PATCH_SUCCESS,

@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -12,11 +13,10 @@ import { deleteEntities } from 'soapbox/entity-store/actions';
 import { Entities } from 'soapbox/entity-store/entities';
 import PlaceholderAccount from 'soapbox/features/placeholder/components/placeholder-account';
 import { useAppDispatch } from 'soapbox/hooks';
-import { GroupRoles } from 'soapbox/schemas/group-member';
 import toast from 'soapbox/toast';
 
+import type { Group, GroupMember } from 'pl-api';
 import type { Menu as IMenu } from 'soapbox/components/dropdown-menu';
-import type { Group, GroupMember } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   adminLimitTitle: { id: 'group.member.admin.limit.title', defaultMessage: 'Admin limit reached' },
@@ -40,7 +40,7 @@ const messages = defineMessages({
 
 interface IGroupMemberListItem {
   member: GroupMember;
-  group: Group;
+  group: Pick<Group, 'id' | 'relationship'>;
 }
 
 const GroupMemberListItem = (props: IGroupMemberListItem) => {

@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { Icon } from 'soapbox/components/ui';
 
-import type { Group } from 'soapbox/schemas';
+import type { Group } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   header: { id: 'group.header.alt', defaultMessage: 'Group header' },
@@ -41,7 +41,7 @@ const GroupHeaderImage: React.FC<IGroupHeaderImage> = ({ className, group }) => 
     <img
       className={className}
       src={group.header}
-      alt={intl.formatMessage(messages.header)}
+      alt={group.header_description || intl.formatMessage(messages.header)}
       onError={() => setIsHeaderMissing(true)}
     />
   );

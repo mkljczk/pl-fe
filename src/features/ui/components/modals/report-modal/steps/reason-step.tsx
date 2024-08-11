@@ -6,7 +6,7 @@ import { changeReportComment, changeReportRule } from 'soapbox/actions/reports';
 import { FormGroup, Stack, Text, Textarea } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector, useInstance } from 'soapbox/hooks';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   placeholder: { id: 'report.placeholder', defaultMessage: 'Additional comments' },

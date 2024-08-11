@@ -6,9 +6,6 @@ interface UseRemoteStreamOpts {
 }
 
 const useRemoteStream = ({ instance, onlyMedia }: UseRemoteStreamOpts) =>
-  useTimelineStream(
-    `remote${onlyMedia ? ':media' : ''}:${instance}`,
-    `public:remote${onlyMedia ? ':media' : ''}&instance=${instance}`,
-  );
+  useTimelineStream(`public:remote${onlyMedia ? ':media' : ''}`, { instance } as any);
 
 export { useRemoteStream };

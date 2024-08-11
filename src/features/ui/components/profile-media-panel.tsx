@@ -1,17 +1,16 @@
 import { List as ImmutableList } from 'immutable';
 import React, { useState, useEffect } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { openModal } from 'soapbox/actions/modals';
-import { expandAccountMediaTimeline } from 'soapbox/actions/timelines';
+import { fetchAccountTimeline } from 'soapbox/actions/timelines';
 import { Spinner, Text, Widget } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { getAccountGallery } from 'soapbox/selectors';
+import { type AccountGalleryAttachment, getAccountGallery } from 'soapbox/selectors';
 
 import MediaItem from '../../account-gallery/components/media-item';
 
-import type { Account } from 'soapbox/schemas';
-import type { Attachment } from 'soapbox/types/entities';
+import type { Account } from 'soapbox/normalizers';
 
 interface IProfileMediaPanel {
   account?: Account;
@@ -19,17 +18,16 @@ interface IProfileMediaPanel {
 
 const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
   const dispatch = useAppDispatch();
-  const intl = useIntl();
 
   const [loading, setLoading] = useState(true);
 
-  const attachments: ImmutableList<Attachment> = useAppSelector((state) => account ? getAccountGallery(state, account?.id) : ImmutableList());
+  const attachments: ImmutableList<AccountGalleryAttachment> = useAppSelector((state) => account ? getAccountGallery(state, account?.id) : ImmutableList());
 
-  const handleOpenMedia = (attachment: Attachment): void => {
+  const handleOpenMedia = (attachment: AccountGalleryAttachment): void => {
     if (attachment.type === 'video') {
       dispatch(openModal('VIDEO', { media: attachment, status: attachment.status }));
     } else {
-      const media = attachment.getIn(['status', 'media_attachments']) as ImmutableList<Attachment>;
+      const media = attachment.status.media_attachments;
       const index = media.findIndex(x => x.id === attachment.id);
 
       dispatch(openModal('MEDIA', { media, index, status: attachment.status }));
@@ -40,7 +38,7 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
     setLoading(true);
 
     if (account) {
-      dispatch(expandAccountMediaTimeline(account.id, {}, intl))
+      dispatch(fetchAccountTimeline(account.id, { only_media: true, limit: 40 }))
         // @ts-ignore yes it does
         .then(() => setLoading(false))
         .catch(() => {});
@@ -48,7 +46,7 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
   }, [account?.id]);
 
   const renderAttachments = () => {
-    const publicAttachments = attachments.filter(attachment => attachment.getIn(['status', 'visibility']) === 'public');
+    const publicAttachments = attachments.filter(attachment => attachment.status.visibility === 'public');
     const nineAttachments = publicAttachments.slice(0, 9);
 
     if (!nineAttachments.isEmpty()) {
@@ -56,7 +54,7 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
         <div className='grid grid-cols-3 gap-1'>
           {nineAttachments.map((attachment, _index) => (
             <MediaItem
-              key={`${attachment.getIn(['status', 'id'])}+${attachment.id}`}
+              key={`${attachment.status.id}+${attachment.id}`}
               attachment={attachment}
               onOpenMedia={handleOpenMedia}
             />

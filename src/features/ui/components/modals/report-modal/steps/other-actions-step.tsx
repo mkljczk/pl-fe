@@ -8,7 +8,7 @@ import StatusCheckBox from 'soapbox/features/report/components/status-check-box'
 import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
 import { getDomain } from 'soapbox/utils/accounts';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   addAdditionalStatuses: { id: 'report.other_actions.add_additional', defaultMessage: 'Would you like to add additional statuses to this report?' },

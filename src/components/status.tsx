@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { List as ImmutableList } from 'immutable';
 import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
@@ -23,7 +22,6 @@ import StatusMedia from './status-media';
 import StatusReplyMentions from './status-reply-mentions';
 import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 import StatusInfo from './statuses/status-info';
-import Tombstone from './tombstone';
 import { Card, Icon, Stack, Text } from './ui';
 
 import type { Status as StatusEntity } from 'soapbox/types/entities';
@@ -91,7 +89,7 @@ const Status: React.FC<IStatus> = (props) => {
   const statusUrl = `/@${actualStatus.account.acct}/posts/${actualStatus.id}`;
   const group = actualStatus.group;
 
-  const filtered = (status.filtered.size || actualStatus.filtered.size) > 0;
+  const filtered = (status.filtered?.length || actualStatus.filtered?.length) > 0;
 
   // Track height changes we know about to compensate scrolling.
   useEffect(() => {
@@ -125,7 +123,7 @@ const Status: React.FC<IStatus> = (props) => {
 
   const handleHotkeyOpenMedia = (e?: KeyboardEvent): void => {
     const status = actualStatus;
-    const firstAttachment = status.media_attachments.first();
+    const firstAttachment = status.media_attachments[0];
 
     e?.preventDefault();
 
@@ -189,7 +187,7 @@ const Status: React.FC<IStatus> = (props) => {
     _expandEmojiSelector();
   };
 
-  const handleUnfilter = () => dispatch(unfilterStatus(status.filtered.size ? status.id : actualStatus.id));
+  const handleUnfilter = () => dispatch(unfilterStatus(status.filtered.length ? status.id : actualStatus.id));
 
   const _expandEmojiSelector = (): void => {
     const firstEmoji: HTMLDivElement | null | undefined = node.current?.querySelector('.emoji-react-selector .emoji-react-selector__emoji');
@@ -238,7 +236,7 @@ const Status: React.FC<IStatus> = (props) => {
         />
       );
     } else if (isReblog) {
-      const accounts = status.accounts || ImmutableList([status.account]);
+      const accounts = status.accounts || [status.account];
 
       const renderedAccounts = accounts.slice(0, 2).map(account => !!account && (
         <Link key={account.acct} to={`/@${account.acct}`} className='hover:underline'>
@@ -251,14 +249,14 @@ const Status: React.FC<IStatus> = (props) => {
             />
           </bdi>
         </Link>
-      )).toArray().filter(Boolean);
+      ));
 
-      if (accounts.size > 2) {
+      if (accounts.length > 2) {
         renderedAccounts.push(
           <FormattedMessage
             id='notification.more'
             defaultMessage='{count, plural, one {# other} other {# others}}'
-            values={{ count: accounts.size - renderedAccounts.length }}
+            values={{ count: accounts.length - renderedAccounts.length }}
           />,
         );
       }
@@ -273,7 +271,7 @@ const Status: React.FC<IStatus> = (props) => {
               defaultMessage='{name} reposted'
               values={{
                 name: <FormattedList type='conjunction' value={renderedAccounts} />,
-                count: accounts.size,
+                count: accounts.length,
               }}
             />
           }
@@ -386,18 +384,6 @@ const Status: React.FC<IStatus> = (props) => {
     react: handleHotkeyReact,
   };
 
-  const isSoftDeleted = status.tombstone?.reason === 'deleted';
-
-  if (isSoftDeleted) {
-    return (
-      <Tombstone
-        id={status.id}
-        onMoveUp={(id) => onMoveUp ? onMoveUp(id) : null}
-        onMoveDown={(id) => onMoveDown ? onMoveDown(id) : null}
-      />
-    );
-  }
-
   return (
     <HotKeys handlers={handlers} data-testid='status'>
       <div
@@ -459,7 +445,7 @@ const Status: React.FC<IStatus> = (props) => {
 
                   <TranslateButton status={actualStatus} />
 
-                  {(quote || actualStatus.card || actualStatus.media_attachments.size > 0) && (
+                  {(quote || actualStatus.card || actualStatus.media_attachments.length > 0) && (
                     <Stack space={4}>
                       <StatusMedia
                         status={actualStatus}

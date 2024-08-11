@@ -7,17 +7,16 @@ import {
   HASHTAG_UNFOLLOW_REQUEST,
   HASHTAG_UNFOLLOW_FAIL,
 } from 'soapbox/actions/tags';
-import { normalizeTag } from 'soapbox/normalizers';
 
+import type { Tag } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { Tag } from 'soapbox/types/entities';
 
 const initialState = ImmutableMap<string, Tag>();
 
 const tags = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case HASHTAG_FETCH_SUCCESS:
-      return state.set(action.name, normalizeTag(action.tag));
+      return state.set(action.name, action.tag);
     case HASHTAG_FOLLOW_REQUEST:
     case HASHTAG_UNFOLLOW_FAIL:
       return state.setIn([action.name, 'following'], true);

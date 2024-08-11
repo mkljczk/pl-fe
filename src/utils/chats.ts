@@ -9,25 +9,20 @@ import { appendPageItem, flattenPages, sortQueryData, updatePageItem } from './q
 
 import type { InfiniteData } from '@tanstack/react-query';
 import type { Chat, PaginatedResponse } from 'pl-api';
-import type { ChatMessage } from 'soapbox/types/entities';
-
-interface ChatPayload extends Omit<Chat, 'last_message'> {
-  last_message: ChatMessage | null;
-}
 
 /**
  * Update the Chat entity inside the ChatSearch query.
  * @param newChat - Chat entity.
  */
-const updateChatInChatSearchQuery = (newChat: ChatPayload) => {
-  updatePageItem<ChatPayload>(['chats', 'search'], newChat as any, (o, n) => o.id === n.id);
+const updateChatInChatSearchQuery = (newChat: Chat) => {
+  updatePageItem<Chat>(['chats', 'search'], newChat as any, (o, n) => o.id === n.id);
 };
 
 /**
  * Re-order the ChatSearch query by the last message timestamp.
  */
 const reOrderChatListItems = () => {
-  sortQueryData<ChatPayload>(['chats', 'search'], (chatA, chatB) => compareDate(
+  sortQueryData<Chat>(['chats', 'search'], (chatA, chatB) => compareDate(
     chatA.last_message?.created_at as string,
     chatB.last_message?.created_at as string,
   ));
@@ -55,7 +50,7 @@ const invalidateChatSearchQuery = () => {
   });
 };
 
-const updateChatListItem = (newChat: ChatPayload) => {
+const updateChatListItem = (newChat: Chat) => {
   const { id: chatId, last_message: lastMessage } = newChat;
 
   const isChatAlreadyLoaded = checkIfChatExists(chatId);

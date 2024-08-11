@@ -1,14 +1,11 @@
+import { groupMemberSchema, type Group, type GroupMember, type GroupRole } from 'pl-api';
 import { z } from 'zod';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { useCreateEntity } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';
-import { groupMemberSchema } from 'soapbox/schemas';
 
-import type { GroupRole } from 'pl-api';
-import type { Group, GroupMember } from 'soapbox/schemas';
-
-const useDemoteGroupMember = (group: Group, groupMember: GroupMember) => {
+const useDemoteGroupMember = (group: Pick<Group, 'id'>, groupMember: Pick<GroupMember, 'id'>) => {
   const client = useClient();
 
   const { createEntity } = useCreateEntity(

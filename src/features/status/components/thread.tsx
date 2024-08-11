@@ -20,11 +20,12 @@ import { HotKeys } from 'soapbox/features/ui/components/hotkeys';
 import PendingStatus from 'soapbox/features/ui/components/pending-status';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 import { RootState } from 'soapbox/store';
-import { type Account, type Status } from 'soapbox/types/entities';
 import { textForScreenReader } from 'soapbox/utils/status';
 
 import DetailedStatus from './detailed-status';
 import ThreadStatus from './thread-status';
+
+import type { Account, Status } from 'soapbox/types/entities';
 
 const getAncestorsIds = createSelector([
   (_: RootState, statusId: string | undefined) => statusId,
@@ -151,17 +152,17 @@ const Thread = (props: IThread) => {
     });
   };
 
-  const handleMentionClick = (account: Account) => dispatch(mentionCompose(account));
+  const handleMentionClick = (account: Pick<Account, 'acct'>) => dispatch(mentionCompose(account));
 
   const handleHotkeyOpenMedia = (e?: KeyboardEvent) => {
     const media = status?.media_attachments;
 
     e?.preventDefault();
 
-    if (media && media.size) {
-      const firstAttachment = media.first()!;
+    if (media && media.length) {
+      const firstAttachment = media[0];
 
-      if (media.size === 1 && firstAttachment.type === 'video') {
+      if (media.length === 1 && firstAttachment.type === 'video') {
         dispatch(openModal('VIDEO', { media: firstAttachment, status: status }));
       } else {
         dispatch(openModal('MEDIA', { media, index: 0, status: status }));
@@ -198,7 +199,7 @@ const Thread = (props: IThread) => {
   };
 
   const handleHotkeyOpenProfile = () => {
-    history.push(`/@${status!.getIn(['account', 'acct'])}`);
+    history.push(`/@${status!.account.acct}`);
   };
 
   const handleHotkeyToggleSensitive = () => {

@@ -6,10 +6,10 @@ import { useAppDispatch, useAppSelector, useFeatures, useInstance, useSettings }
 
 import { HStack, Icon, Stack, Text } from './ui';
 
-import type { Status } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/normalizers';
 
 interface ITranslateButton {
-  status: Status;
+  status: Pick<Status, 'id' | 'account' | 'contentHtml' | 'contentMapHtml' | 'language' | 'translating' | 'translation' | 'visibility'>;
 }
 
 const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
@@ -31,7 +31,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
     target_languages: targetLanguages,
   } = instance.pleroma.metadata.translation;
 
-  const renderTranslate = (me || allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.contentHtml.length > 0 && status.language !== null && intl.locale !== status.language && !status.contentMapHtml?.has(intl.locale);
+  const renderTranslate = (me || allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.contentHtml.length > 0 && status.language !== null && intl.locale !== status.language && !status.contentMapHtml?.[intl.locale];
 
   const supportsLanguages = (!sourceLanguages || sourceLanguages.includes(status.language!)) && (!targetLanguages || targetLanguages.includes(intl.locale));
 
@@ -46,7 +46,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   };
 
   useEffect(() => {
-    if (settings.autoTranslate && features.translations && renderTranslate && supportsLanguages && status.translation !== false && !knownLanguages.includes(status.language)) {
+    if (settings.autoTranslate && features.translations && renderTranslate && supportsLanguages && status.translation !== false && status.language !== null && !knownLanguages.includes(status.language)) {
       setAutoTranslating(true);
       dispatch(translateStatus(status.id, intl.locale, true));
     }
@@ -81,7 +81,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
 
     const languageNames = new Intl.DisplayNames([intl.locale], { type: 'language' });
     const languageName = languageNames.of(status.language!);
-    const provider     = status.translation.get('provider');
+    const provider = status.translation.provider;
 
     return (
       <Stack space={3} alignItems='start'>

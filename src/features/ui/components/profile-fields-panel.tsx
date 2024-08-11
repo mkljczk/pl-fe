@@ -5,10 +5,10 @@ import { Widget, Stack } from 'soapbox/components/ui';
 
 import ProfileField from './profile-field';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 
 interface IProfileFieldsPanel {
-  account: Account;
+  account: Pick<Account, 'fields'>;
 }
 
 /** Custom profile fields for sidebar. */

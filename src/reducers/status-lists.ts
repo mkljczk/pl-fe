@@ -43,6 +43,7 @@ import {
   ACCOUNT_FAVOURITED_STATUSES_EXPAND_REQUEST,
   ACCOUNT_FAVOURITED_STATUSES_EXPAND_SUCCESS,
   ACCOUNT_FAVOURITED_STATUSES_EXPAND_FAIL,
+  type FavouritesAction,
 } from '../actions/favourites';
 import {
   FAVOURITE_SUCCESS,
@@ -51,9 +52,11 @@ import {
   UNBOOKMARK_SUCCESS,
   PIN_SUCCESS,
   UNPIN_SUCCESS,
+  type InteractionsAction,
 } from '../actions/interactions';
 import {
   PINNED_STATUSES_FETCH_SUCCESS,
+  type PinStatusesAction,
 } from '../actions/pin-statuses';
 import {
   SCHEDULED_STATUSES_FETCH_REQUEST,
@@ -151,7 +154,7 @@ const removeBookmarkFromLists = (state: State, status: StatusEntity) => {
   return state;
 };
 
-const statusLists = (state = initialState, action: AnyAction) => {
+const statusLists = (state = initialState, action: AnyAction | FavouritesAction | InteractionsAction | PinStatusesAction) => {
   switch (action.type) {
     case FAVOURITED_STATUSES_FETCH_REQUEST:
     case FAVOURITED_STATUSES_EXPAND_REQUEST:
@@ -188,7 +191,7 @@ const statusLists = (state = initialState, action: AnyAction) => {
     case UNFAVOURITE_SUCCESS:
       return removeOneFromList(state, 'favourites', action.status);
     case BOOKMARK_SUCCESS:
-      return addBookmarkToLists(state, action.response);
+      return addBookmarkToLists(state, action.status);
     case UNBOOKMARK_SUCCESS:
       return removeBookmarkFromLists(state, action.status);
     case PINNED_STATUSES_FETCH_SUCCESS:
@@ -209,7 +212,7 @@ const statusLists = (state = initialState, action: AnyAction) => {
       return appendToList(state, 'scheduled_statuses', action.statuses, action.next);
     case SCHEDULED_STATUS_CANCEL_REQUEST:
     case SCHEDULED_STATUS_CANCEL_SUCCESS:
-      return removeOneFromList(state, 'scheduled_statuses', action.id || action.status.id);
+      return removeOneFromList(state, 'scheduled_statuses', action.statusId);
     case STATUS_QUOTES_FETCH_REQUEST:
     case STATUS_QUOTES_EXPAND_REQUEST:
       return setLoading(state, `quotes:${action.statusId}`, true);

@@ -1,7 +1,9 @@
+import { groupSchema } from 'pl-api';
+
 import { Entities } from 'soapbox/entity-store/entities';
 import { useCreateEntity } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';
-import { groupSchema } from 'soapbox/schemas';
+import { normalizeGroup } from 'soapbox/normalizers';
 
 interface UpdateGroupParams {
   display_name?: string;
@@ -18,7 +20,7 @@ const useUpdateGroup = (groupId: string) => {
   const { createEntity, ...rest } = useCreateEntity(
     [Entities.GROUPS],
     (params: UpdateGroupParams) => client.experimental.groups.updateGroup(groupId, params),
-    { schema: groupSchema },
+    { schema: groupSchema, transform: normalizeGroup },
   );
 
   return {

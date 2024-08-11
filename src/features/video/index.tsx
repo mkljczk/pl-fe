@@ -28,7 +28,7 @@ const formatTime = (secondsNum: number): string => {
   let minutes: number | string = Math.floor((secondsNum - (hours * 3600)) / 60);
   let seconds: number | string = secondsNum - (hours * 3600) - (minutes * 60);
 
-  if (hours   < 10) hours   = '0' + hours;
+  if (hours   < 10) hours = '0' + hours;
   if (minutes < 10) minutes = '0' + minutes;
   if (seconds < 10) seconds = '0' + seconds;
 
@@ -50,15 +50,15 @@ const findElementPosition = (el: HTMLElement) => {
   }
 
   const docEl = document.documentElement;
-  const body  = document.body;
+  const body = document.body;
 
   const clientLeft = docEl.clientLeft || body.clientLeft || 0;
   const scrollLeft = window.pageXOffset || body.scrollLeft;
-  const left       = (box.left + scrollLeft) - clientLeft;
+  const left = (box.left + scrollLeft) - clientLeft;
 
   const clientTop = docEl.clientTop || body.clientTop || 0;
   const scrollTop = window.pageYOffset || body.scrollTop;
-  const top       = (box.top + scrollTop) - clientTop;
+  const top = (box.top + scrollTop) - clientTop;
 
   return {
     left: Math.round(left),
@@ -88,9 +88,9 @@ const getPointerPosition = (el: HTMLElement, event: MouseEvent & TouchEvent): Po
 };
 
 const fileNameFromURL = (str: string) => {
-  const url      = new URL(str);
+  const url = new URL(str);
   const pathname = url.pathname;
-  const index    = pathname.lastIndexOf('/');
+  const index = pathname.lastIndexOf('/');
 
   return pathname.substring(index + 1);
 };
@@ -107,7 +107,7 @@ interface IVideo {
   inline?: boolean;
   cacheWidth?: (width: number) => void;
   visible?: boolean;
-  blurhash?: string;
+  blurhash?: string | null;
   link?: React.ReactNode;
   aspectRatio?: number;
   displayMedia?: string;

@@ -1,3 +1,4 @@
+import { GroupRoles } from 'pl-api';
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -6,13 +7,12 @@ import Account from 'soapbox/components/account';
 import { AuthorizeRejectButtons } from 'soapbox/components/authorize-reject-buttons';
 import ScrollableList from 'soapbox/components/scrollable-list';
 import { Column, HStack, Spinner } from 'soapbox/components/ui';
-import { GroupRoles } from 'soapbox/schemas/group-member';
 import toast from 'soapbox/toast';
 
 import ColumnForbidden from '../ui/components/column-forbidden';
 
 import type { PlfeResponse } from 'soapbox/api';
-import type { Account as AccountEntity } from 'soapbox/schemas';
+import type { Account as AccountEntity } from 'soapbox/normalizers';
 
 type RouteParams = { groupId: string };
 
@@ -24,8 +24,8 @@ const messages = defineMessages({
 
 interface IMembershipRequest {
   account: AccountEntity;
-  onAuthorize(account: AccountEntity): Promise<unknown>;
-  onReject(account: AccountEntity): Promise<unknown>;
+  onAuthorize(account: AccountEntity): Promise<void>;
+  onReject(account: AccountEntity): Promise<void>;
 }
 
 const MembershipRequest: React.FC<IMembershipRequest> = ({ account, onAuthorize, onReject }) => {
@@ -54,13 +54,13 @@ interface IGroupMembershipRequests {
 }
 
 const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params }) => {
-  const id = params?.groupId;
+  const groupId = params?.groupId;
   const intl = useIntl();
 
-  const { group } = useGroup(id);
+  const { group } = useGroup(groupId);
 
-  const { accounts, authorize, reject, refetch, isLoading } = useGroupMembershipRequests(id);
-  const { invalidate } = useGroupMembers(id, GroupRoles.USER);
+  const { accounts, authorize, reject, refetch, isLoading } = useGroupMembershipRequests(groupId);
+  const { invalidate } = useGroupMembers(groupId, GroupRoles.USER);
 
   useEffect(() => () => {
     invalidate();

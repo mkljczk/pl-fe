@@ -1,6 +1,6 @@
 import { OrderedSet as ImmutableOrderedSet } from 'immutable';
 
-import type { Account } from 'soapbox/types/entities';
+import type { Account } from 'soapbox/normalizers';
 
 /** Convert a plain tag into a badge. */
 const tagToBadge = (tag: string) => `badge:${tag}`;
@@ -31,8 +31,8 @@ const getTagDiff = (oldTags: string[], newTags: string[]): TagDiff => {
 const filterBadges = (tags: string[]): string[] => tags.filter(tag => tag.startsWith('badge:'));
 
 /** Get badges from an account. */
-const getBadges = (account: Pick<Account, 'pleroma'>) => {
-  const tags = account?.pleroma?.tags ?? [];
+const getBadges = (account: Pick<Account, '__meta'>) => {
+  const tags = account.__meta.pleroma?.tags ?? [];
   return filterBadges(tags);
 };
 

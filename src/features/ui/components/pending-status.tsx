@@ -14,7 +14,7 @@ import { buildStatus } from '../util/pending-status-builder';
 
 import PollPreview from './poll-preview';
 
-import type { Poll as PollEntity, Status as StatusEntity } from 'soapbox/types/entities';
+import type { Status as StatusEntity } from 'soapbox/types/entities';
 
 const shouldHaveCard = (pendingStatus: StatusEntity) => Boolean(pendingStatus.content.match(/https?:\/\/\S*/));
 
@@ -30,7 +30,7 @@ interface IPendingStatusMedia {
 }
 
 const PendingStatusMedia: React.FC<IPendingStatusMedia> = ({ status }) => {
-  if (status.media_attachments && !status.media_attachments.isEmpty()) {
+  if (status.media_attachments && status.media_attachments.length) {
     return (
       <PlaceholderMediaGallery
         media={status.media_attachments}
@@ -87,7 +87,7 @@ const PendingStatus: React.FC<IPendingStatus> = ({ idempotencyKey, className, mu
 
               <PendingStatusMedia status={status} />
 
-              {status.poll && <PollPreview poll={status.poll as PollEntity} />}
+              {status.poll && <PollPreview poll={status.poll} />}
 
               {status.quote && <QuotedStatus statusId={status.quote as string} />}
             </Stack>

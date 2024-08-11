@@ -1,4 +1,4 @@
-type MessageJson   = Record<string, string>;
+type MessageJson = Record<string, string>;
 type MessageModule = { default: MessageJson };
 
 /** Import custom messages */

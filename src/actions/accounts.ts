@@ -1,8 +1,9 @@
+import { PLEROMA, type UpdateNotificationSettingsParams, type Account, type CreateAccountParams, type PaginatedResponse, type Relationship } from 'pl-api';
+
 import { importEntities } from 'soapbox/entity-store/actions';
 import { Entities } from 'soapbox/entity-store/entities';
 import { selectAccount } from 'soapbox/selectors';
 import { isLoggedIn } from 'soapbox/utils/auth';
-import { getFeatures, parseVersion, PLEROMA } from 'soapbox/utils/features';
 
 import { getClient, type PlfeResponse } from '../api';
 
@@ -13,102 +14,101 @@ import {
 } from './importer';
 
 import type { Map as ImmutableMap } from 'immutable';
-import type { Account, CreateAccountParams, PaginatedResponse } from 'pl-api';
+import type { ReducerStatus } from 'soapbox/reducers/statuses';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity, Status } from 'soapbox/types/entities';
 import type { History } from 'soapbox/types/history';
 
-const ACCOUNT_CREATE_REQUEST = 'ACCOUNT_CREATE_REQUEST';
-const ACCOUNT_CREATE_SUCCESS = 'ACCOUNT_CREATE_SUCCESS';
-const ACCOUNT_CREATE_FAIL    = 'ACCOUNT_CREATE_FAIL';
+const ACCOUNT_CREATE_REQUEST = 'ACCOUNT_CREATE_REQUEST' as const;
+const ACCOUNT_CREATE_SUCCESS = 'ACCOUNT_CREATE_SUCCESS' as const;
+const ACCOUNT_CREATE_FAIL = 'ACCOUNT_CREATE_FAIL' as const;
 
-const ACCOUNT_FETCH_REQUEST = 'ACCOUNT_FETCH_REQUEST';
-const ACCOUNT_FETCH_SUCCESS = 'ACCOUNT_FETCH_SUCCESS';
-const ACCOUNT_FETCH_FAIL    = 'ACCOUNT_FETCH_FAIL';
+const ACCOUNT_FETCH_REQUEST = 'ACCOUNT_FETCH_REQUEST' as const;
+const ACCOUNT_FETCH_SUCCESS = 'ACCOUNT_FETCH_SUCCESS' as const;
+const ACCOUNT_FETCH_FAIL = 'ACCOUNT_FETCH_FAIL' as const;
 
-const ACCOUNT_BLOCK_REQUEST = 'ACCOUNT_BLOCK_REQUEST';
-const ACCOUNT_BLOCK_SUCCESS = 'ACCOUNT_BLOCK_SUCCESS';
-const ACCOUNT_BLOCK_FAIL    = 'ACCOUNT_BLOCK_FAIL';
+const ACCOUNT_BLOCK_REQUEST = 'ACCOUNT_BLOCK_REQUEST' as const;
+const ACCOUNT_BLOCK_SUCCESS = 'ACCOUNT_BLOCK_SUCCESS' as const;
+const ACCOUNT_BLOCK_FAIL = 'ACCOUNT_BLOCK_FAIL' as const;
 
-const ACCOUNT_UNBLOCK_REQUEST = 'ACCOUNT_UNBLOCK_REQUEST';
-const ACCOUNT_UNBLOCK_SUCCESS = 'ACCOUNT_UNBLOCK_SUCCESS';
-const ACCOUNT_UNBLOCK_FAIL    = 'ACCOUNT_UNBLOCK_FAIL';
+const ACCOUNT_UNBLOCK_REQUEST = 'ACCOUNT_UNBLOCK_REQUEST' as const;
+const ACCOUNT_UNBLOCK_SUCCESS = 'ACCOUNT_UNBLOCK_SUCCESS' as const;
+const ACCOUNT_UNBLOCK_FAIL = 'ACCOUNT_UNBLOCK_FAIL' as const;
 
-const ACCOUNT_MUTE_REQUEST = 'ACCOUNT_MUTE_REQUEST';
-const ACCOUNT_MUTE_SUCCESS = 'ACCOUNT_MUTE_SUCCESS';
-const ACCOUNT_MUTE_FAIL    = 'ACCOUNT_MUTE_FAIL';
+const ACCOUNT_MUTE_REQUEST = 'ACCOUNT_MUTE_REQUEST' as const;
+const ACCOUNT_MUTE_SUCCESS = 'ACCOUNT_MUTE_SUCCESS' as const;
+const ACCOUNT_MUTE_FAIL = 'ACCOUNT_MUTE_FAIL' as const;
 
-const ACCOUNT_UNMUTE_REQUEST = 'ACCOUNT_UNMUTE_REQUEST';
-const ACCOUNT_UNMUTE_SUCCESS = 'ACCOUNT_UNMUTE_SUCCESS';
-const ACCOUNT_UNMUTE_FAIL    = 'ACCOUNT_UNMUTE_FAIL';
+const ACCOUNT_UNMUTE_REQUEST = 'ACCOUNT_UNMUTE_REQUEST' as const;
+const ACCOUNT_UNMUTE_SUCCESS = 'ACCOUNT_UNMUTE_SUCCESS' as const;
+const ACCOUNT_UNMUTE_FAIL = 'ACCOUNT_UNMUTE_FAIL' as const;
 
-const ACCOUNT_PIN_REQUEST = 'ACCOUNT_PIN_REQUEST';
-const ACCOUNT_PIN_SUCCESS = 'ACCOUNT_PIN_SUCCESS';
-const ACCOUNT_PIN_FAIL    = 'ACCOUNT_PIN_FAIL';
+const ACCOUNT_PIN_REQUEST = 'ACCOUNT_PIN_REQUEST' as const;
+const ACCOUNT_PIN_SUCCESS = 'ACCOUNT_PIN_SUCCESS' as const;
+const ACCOUNT_PIN_FAIL = 'ACCOUNT_PIN_FAIL' as const;
 
-const ACCOUNT_UNPIN_REQUEST = 'ACCOUNT_UNPIN_REQUEST';
-const ACCOUNT_UNPIN_SUCCESS = 'ACCOUNT_UNPIN_SUCCESS';
-const ACCOUNT_UNPIN_FAIL    = 'ACCOUNT_UNPIN_FAIL';
+const ACCOUNT_UNPIN_REQUEST = 'ACCOUNT_UNPIN_REQUEST' as const;
+const ACCOUNT_UNPIN_SUCCESS = 'ACCOUNT_UNPIN_SUCCESS' as const;
+const ACCOUNT_UNPIN_FAIL = 'ACCOUNT_UNPIN_FAIL' as const;
 
-const ACCOUNT_REMOVE_FROM_FOLLOWERS_REQUEST = 'ACCOUNT_REMOVE_FROM_FOLLOWERS_REQUEST';
-const ACCOUNT_REMOVE_FROM_FOLLOWERS_SUCCESS = 'ACCOUNT_REMOVE_FROM_FOLLOWERS_SUCCESS';
-const ACCOUNT_REMOVE_FROM_FOLLOWERS_FAIL    = 'ACCOUNT_REMOVE_FROM_FOLLOWERS_FAIL';
+const ACCOUNT_REMOVE_FROM_FOLLOWERS_REQUEST = 'ACCOUNT_REMOVE_FROM_FOLLOWERS_REQUEST' as const;
+const ACCOUNT_REMOVE_FROM_FOLLOWERS_SUCCESS = 'ACCOUNT_REMOVE_FROM_FOLLOWERS_SUCCESS' as const;
+const ACCOUNT_REMOVE_FROM_FOLLOWERS_FAIL = 'ACCOUNT_REMOVE_FROM_FOLLOWERS_FAIL' as const;
 
-const PINNED_ACCOUNTS_FETCH_REQUEST = 'PINNED_ACCOUNTS_FETCH_REQUEST';
-const PINNED_ACCOUNTS_FETCH_SUCCESS = 'PINNED_ACCOUNTS_FETCH_SUCCESS';
-const PINNED_ACCOUNTS_FETCH_FAIL = 'PINNED_ACCOUNTS_FETCH_FAIL';
+const PINNED_ACCOUNTS_FETCH_REQUEST = 'PINNED_ACCOUNTS_FETCH_REQUEST' as const;
+const PINNED_ACCOUNTS_FETCH_SUCCESS = 'PINNED_ACCOUNTS_FETCH_SUCCESS' as const;
+const PINNED_ACCOUNTS_FETCH_FAIL = 'PINNED_ACCOUNTS_FETCH_FAIL' as const;
 
-const ACCOUNT_SEARCH_REQUEST = 'ACCOUNT_SEARCH_REQUEST';
-const ACCOUNT_SEARCH_SUCCESS = 'ACCOUNT_SEARCH_SUCCESS';
-const ACCOUNT_SEARCH_FAIL    = 'ACCOUNT_SEARCH_FAIL';
+const ACCOUNT_SEARCH_REQUEST = 'ACCOUNT_SEARCH_REQUEST' as const;
+const ACCOUNT_SEARCH_SUCCESS = 'ACCOUNT_SEARCH_SUCCESS' as const;
+const ACCOUNT_SEARCH_FAIL = 'ACCOUNT_SEARCH_FAIL' as const;
 
-const ACCOUNT_LOOKUP_REQUEST = 'ACCOUNT_LOOKUP_REQUEST';
-const ACCOUNT_LOOKUP_SUCCESS = 'ACCOUNT_LOOKUP_SUCCESS';
-const ACCOUNT_LOOKUP_FAIL    = 'ACCOUNT_LOOKUP_FAIL';
+const ACCOUNT_LOOKUP_REQUEST = 'ACCOUNT_LOOKUP_REQUEST' as const;
+const ACCOUNT_LOOKUP_SUCCESS = 'ACCOUNT_LOOKUP_SUCCESS' as const;
+const ACCOUNT_LOOKUP_FAIL = 'ACCOUNT_LOOKUP_FAIL' as const;
 
-const FOLLOWERS_FETCH_REQUEST = 'FOLLOWERS_FETCH_REQUEST';
-const FOLLOWERS_FETCH_SUCCESS = 'FOLLOWERS_FETCH_SUCCESS';
-const FOLLOWERS_FETCH_FAIL    = 'FOLLOWERS_FETCH_FAIL';
+const FOLLOWERS_FETCH_REQUEST = 'FOLLOWERS_FETCH_REQUEST' as const;
+const FOLLOWERS_FETCH_SUCCESS = 'FOLLOWERS_FETCH_SUCCESS' as const;
+const FOLLOWERS_FETCH_FAIL = 'FOLLOWERS_FETCH_FAIL' as const;
 
-const FOLLOWERS_EXPAND_REQUEST = 'FOLLOWERS_EXPAND_REQUEST';
-const FOLLOWERS_EXPAND_SUCCESS = 'FOLLOWERS_EXPAND_SUCCESS';
-const FOLLOWERS_EXPAND_FAIL    = 'FOLLOWERS_EXPAND_FAIL';
+const FOLLOWERS_EXPAND_REQUEST = 'FOLLOWERS_EXPAND_REQUEST' as const;
+const FOLLOWERS_EXPAND_SUCCESS = 'FOLLOWERS_EXPAND_SUCCESS' as const;
+const FOLLOWERS_EXPAND_FAIL = 'FOLLOWERS_EXPAND_FAIL' as const;
 
-const FOLLOWING_FETCH_REQUEST = 'FOLLOWING_FETCH_REQUEST';
-const FOLLOWING_FETCH_SUCCESS = 'FOLLOWING_FETCH_SUCCESS';
-const FOLLOWING_FETCH_FAIL    = 'FOLLOWING_FETCH_FAIL';
+const FOLLOWING_FETCH_REQUEST = 'FOLLOWING_FETCH_REQUEST' as const;
+const FOLLOWING_FETCH_SUCCESS = 'FOLLOWING_FETCH_SUCCESS' as const;
+const FOLLOWING_FETCH_FAIL = 'FOLLOWING_FETCH_FAIL' as const;
 
-const FOLLOWING_EXPAND_REQUEST = 'FOLLOWING_EXPAND_REQUEST';
-const FOLLOWING_EXPAND_SUCCESS = 'FOLLOWING_EXPAND_SUCCESS';
-const FOLLOWING_EXPAND_FAIL    = 'FOLLOWING_EXPAND_FAIL';
+const FOLLOWING_EXPAND_REQUEST = 'FOLLOWING_EXPAND_REQUEST' as const;
+const FOLLOWING_EXPAND_SUCCESS = 'FOLLOWING_EXPAND_SUCCESS' as const;
+const FOLLOWING_EXPAND_FAIL = 'FOLLOWING_EXPAND_FAIL' as const;
 
-const RELATIONSHIPS_FETCH_REQUEST = 'RELATIONSHIPS_FETCH_REQUEST';
-const RELATIONSHIPS_FETCH_SUCCESS = 'RELATIONSHIPS_FETCH_SUCCESS';
-const RELATIONSHIPS_FETCH_FAIL    = 'RELATIONSHIPS_FETCH_FAIL';
+const RELATIONSHIPS_FETCH_REQUEST = 'RELATIONSHIPS_FETCH_REQUEST' as const;
+const RELATIONSHIPS_FETCH_SUCCESS = 'RELATIONSHIPS_FETCH_SUCCESS' as const;
+const RELATIONSHIPS_FETCH_FAIL = 'RELATIONSHIPS_FETCH_FAIL' as const;
 
-const FOLLOW_REQUESTS_FETCH_REQUEST = 'FOLLOW_REQUESTS_FETCH_REQUEST';
-const FOLLOW_REQUESTS_FETCH_SUCCESS = 'FOLLOW_REQUESTS_FETCH_SUCCESS';
-const FOLLOW_REQUESTS_FETCH_FAIL    = 'FOLLOW_REQUESTS_FETCH_FAIL';
+const FOLLOW_REQUESTS_FETCH_REQUEST = 'FOLLOW_REQUESTS_FETCH_REQUEST' as const;
+const FOLLOW_REQUESTS_FETCH_SUCCESS = 'FOLLOW_REQUESTS_FETCH_SUCCESS' as const;
+const FOLLOW_REQUESTS_FETCH_FAIL = 'FOLLOW_REQUESTS_FETCH_FAIL' as const;
 
-const FOLLOW_REQUESTS_EXPAND_REQUEST = 'FOLLOW_REQUESTS_EXPAND_REQUEST';
-const FOLLOW_REQUESTS_EXPAND_SUCCESS = 'FOLLOW_REQUESTS_EXPAND_SUCCESS';
-const FOLLOW_REQUESTS_EXPAND_FAIL    = 'FOLLOW_REQUESTS_EXPAND_FAIL';
+const FOLLOW_REQUESTS_EXPAND_REQUEST = 'FOLLOW_REQUESTS_EXPAND_REQUEST' as const;
+const FOLLOW_REQUESTS_EXPAND_SUCCESS = 'FOLLOW_REQUESTS_EXPAND_SUCCESS' as const;
+const FOLLOW_REQUESTS_EXPAND_FAIL = 'FOLLOW_REQUESTS_EXPAND_FAIL' as const;
 
-const FOLLOW_REQUEST_AUTHORIZE_REQUEST = 'FOLLOW_REQUEST_AUTHORIZE_REQUEST';
-const FOLLOW_REQUEST_AUTHORIZE_SUCCESS = 'FOLLOW_REQUEST_AUTHORIZE_SUCCESS';
-const FOLLOW_REQUEST_AUTHORIZE_FAIL    = 'FOLLOW_REQUEST_AUTHORIZE_FAIL';
+const FOLLOW_REQUEST_AUTHORIZE_REQUEST = 'FOLLOW_REQUEST_AUTHORIZE_REQUEST' as const;
+const FOLLOW_REQUEST_AUTHORIZE_SUCCESS = 'FOLLOW_REQUEST_AUTHORIZE_SUCCESS' as const;
+const FOLLOW_REQUEST_AUTHORIZE_FAIL = 'FOLLOW_REQUEST_AUTHORIZE_FAIL' as const;
 
-const FOLLOW_REQUEST_REJECT_REQUEST = 'FOLLOW_REQUEST_REJECT_REQUEST';
-const FOLLOW_REQUEST_REJECT_SUCCESS = 'FOLLOW_REQUEST_REJECT_SUCCESS';
-const FOLLOW_REQUEST_REJECT_FAIL    = 'FOLLOW_REQUEST_REJECT_FAIL';
+const FOLLOW_REQUEST_REJECT_REQUEST = 'FOLLOW_REQUEST_REJECT_REQUEST' as const;
+const FOLLOW_REQUEST_REJECT_SUCCESS = 'FOLLOW_REQUEST_REJECT_SUCCESS' as const;
+const FOLLOW_REQUEST_REJECT_FAIL = 'FOLLOW_REQUEST_REJECT_FAIL' as const;
 
-const NOTIFICATION_SETTINGS_REQUEST = 'NOTIFICATION_SETTINGS_REQUEST';
-const NOTIFICATION_SETTINGS_SUCCESS = 'NOTIFICATION_SETTINGS_SUCCESS';
-const NOTIFICATION_SETTINGS_FAIL    = 'NOTIFICATION_SETTINGS_FAIL';
+const NOTIFICATION_SETTINGS_REQUEST = 'NOTIFICATION_SETTINGS_REQUEST' as const;
+const NOTIFICATION_SETTINGS_SUCCESS = 'NOTIFICATION_SETTINGS_SUCCESS' as const;
+const NOTIFICATION_SETTINGS_FAIL = 'NOTIFICATION_SETTINGS_FAIL' as const;
 
-const BIRTHDAY_REMINDERS_FETCH_REQUEST = 'BIRTHDAY_REMINDERS_FETCH_REQUEST';
-const BIRTHDAY_REMINDERS_FETCH_SUCCESS = 'BIRTHDAY_REMINDERS_FETCH_SUCCESS';
-const BIRTHDAY_REMINDERS_FETCH_FAIL    = 'BIRTHDAY_REMINDERS_FETCH_FAIL';
+const BIRTHDAY_REMINDERS_FETCH_REQUEST = 'BIRTHDAY_REMINDERS_FETCH_REQUEST' as const;
+const BIRTHDAY_REMINDERS_FETCH_SUCCESS = 'BIRTHDAY_REMINDERS_FETCH_SUCCESS' as const;
+const BIRTHDAY_REMINDERS_FETCH_FAIL = 'BIRTHDAY_REMINDERS_FETCH_FAIL' as const;
 
 const maybeRedirectLogin = (error: { response: PlfeResponse }, history?: History) => {
   // The client is unauthorized - redirect to login.
@@ -130,32 +130,32 @@ const createAccount = (params: CreateAccountParams) =>
     });
   };
 
-const fetchAccount = (id: string) =>
+const fetchAccount = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(fetchRelationships([id]));
+    dispatch(fetchRelationships([accountId]));
 
-    const account = selectAccount(getState(), id);
+    const account = selectAccount(getState(), accountId);
 
     if (account) {
       return Promise.resolve(null);
     }
 
-    dispatch(fetchAccountRequest(id));
+    dispatch(fetchAccountRequest(accountId));
 
-    return getClient(getState()).accounts.getAccount(id)
+    return getClient(getState()).accounts.getAccount(accountId)
       .then(response => {
         dispatch(importFetchedAccount(response));
         dispatch(fetchAccountSuccess(response));
       })
       .catch(error => {
-        dispatch(fetchAccountFail(id, error));
+        dispatch(fetchAccountFail(accountId, error));
       });
   };
 
 const fetchAccountByUsername = (username: string, history?: History) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const { instance, me } = getState();
-    const features = getFeatures(instance);
+    const { auth, me } = getState();
+    const features = auth.client.features;
 
     if (features.accountByUsername && (me || !features.accountLookup)) {
       return getClient(getState()).accounts.getAccount(username).then(response => {
@@ -177,7 +177,7 @@ const fetchAccountByUsername = (username: string, history?: History) =>
       });
     } else {
       return getClient(getState()).accounts.searchAccounts(username, { resolve: true, limit: 1 }).then(accounts => {
-        const found = accounts.find((a: APIEntity) => a.acct === username);
+        const found = accounts.find((a) => a.acct === username);
 
         if (found) {
           dispatch(fetchRelationships([found.id]));
@@ -192,30 +192,30 @@ const fetchAccountByUsername = (username: string, history?: History) =>
     }
   };
 
-const fetchAccountRequest = (id: string) => ({
+const fetchAccountRequest = (accountId: string) => ({
   type: ACCOUNT_FETCH_REQUEST,
-  id,
+  accountId,
 });
 
-const fetchAccountSuccess = (account: APIEntity) => ({
+const fetchAccountSuccess = (account: Account) => ({
   type: ACCOUNT_FETCH_SUCCESS,
   account,
 });
 
-const fetchAccountFail = (id: string | null, error: unknown) => ({
+const fetchAccountFail = (accountId: string | null, error: unknown) => ({
   type: ACCOUNT_FETCH_FAIL,
-  id,
+  accountId,
   error,
   skipAlert: true,
 });
 
-const blockAccount = (id: string) =>
+const blockAccount = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    dispatch(blockAccountRequest(id));
+    dispatch(blockAccountRequest(accountId));
 
-    return getClient(getState()).filtering.blockAccount(id)
+    return getClient(getState).filtering.blockAccount(accountId)
       .then(response => {
         dispatch(importEntities([response], Entities.RELATIONSHIPS));
         // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
@@ -223,13 +223,13 @@ const blockAccount = (id: string) =>
       }).catch(error => dispatch(blockAccountFail(error)));
   };
 
-const unblockAccount = (id: string) =>
+const unblockAccount = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    dispatch(unblockAccountRequest(id));
+    dispatch(unblockAccountRequest(accountId));
 
-    return getClient(getState()).filtering.unblockAccount(id)
+    return getClient(getState).filtering.unblockAccount(accountId)
       .then(response => {
         dispatch(importEntities([response], Entities.RELATIONSHIPS));
         return dispatch(unblockAccountSuccess(response));
@@ -237,12 +237,12 @@ const unblockAccount = (id: string) =>
       .catch(error => dispatch(unblockAccountFail(error)));
   };
 
-const blockAccountRequest = (id: string) => ({
+const blockAccountRequest = (accountId: string) => ({
   type: ACCOUNT_BLOCK_REQUEST,
-  id,
+  accountId,
 });
 
-const blockAccountSuccess = (relationship: APIEntity, statuses: ImmutableMap<string, Status>) => ({
+const blockAccountSuccess = (relationship: Relationship, statuses: ImmutableMap<string, ReducerStatus>) => ({
   type: ACCOUNT_BLOCK_SUCCESS,
   relationship,
   statuses,
@@ -253,12 +253,12 @@ const blockAccountFail = (error: unknown) => ({
   error,
 });
 
-const unblockAccountRequest = (id: string) => ({
+const unblockAccountRequest = (accountId: string) => ({
   type: ACCOUNT_UNBLOCK_REQUEST,
-  id,
+  accountId,
 });
 
-const unblockAccountSuccess = (relationship: APIEntity) => ({
+const unblockAccountSuccess = (relationship: Relationship) => ({
   type: ACCOUNT_UNBLOCK_SUCCESS,
   relationship,
 });
@@ -268,21 +268,20 @@ const unblockAccountFail = (error: unknown) => ({
   error,
 });
 
-const muteAccount = (id: string, notifications?: boolean, duration = 0) =>
+const muteAccount = (accountId: string, notifications?: boolean, duration = 0) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
     const client = getClient(getState);
 
-    dispatch(muteAccountRequest(id));
+    dispatch(muteAccountRequest(accountId));
 
     const params: Record<string, any> = {
       notifications,
     };
 
     if (duration) {
-      const instance = client.instanceInformation;
-      const v = parseVersion(instance.version);
+      const v = client.features.version;
 
       if (v.software === PLEROMA) {
         params.expires_in = duration;
@@ -291,225 +290,227 @@ const muteAccount = (id: string, notifications?: boolean, duration = 0) =>
       }
     }
 
-    return client.filtering.muteAccount(id, params)
+    return client.filtering.muteAccount(accountId, params)
       .then(response => {
         dispatch(importEntities([response], Entities.RELATIONSHIPS));
         // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
         return dispatch(muteAccountSuccess(response, getState().statuses));
       })
-      .catch(error => dispatch(muteAccountFail(error)));
+      .catch(error => dispatch(muteAccountFail(accountId, error)));
   };
 
-const unmuteAccount = (id: string) =>
+const unmuteAccount = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    dispatch(unmuteAccountRequest(id));
+    dispatch(unmuteAccountRequest(accountId));
 
-    return getClient(getState()).filtering.unmuteAccount(id)
+    return getClient(getState()).filtering.unmuteAccount(accountId)
       .then(response => {
         dispatch(importEntities([response], Entities.RELATIONSHIPS));
         return dispatch(unmuteAccountSuccess(response));
       })
-      .catch(error => dispatch(unmuteAccountFail(error)));
+      .catch(error => dispatch(unmuteAccountFail(accountId, error)));
   };
 
-const muteAccountRequest = (id: string) => ({
+const muteAccountRequest = (accountId: string) => ({
   type: ACCOUNT_MUTE_REQUEST,
-  id,
+  accountId,
 });
 
-const muteAccountSuccess = (relationship: APIEntity, statuses: ImmutableMap<string, Status>) => ({
+const muteAccountSuccess = (relationship: Relationship, statuses: ImmutableMap<string, ReducerStatus>) => ({
   type: ACCOUNT_MUTE_SUCCESS,
   relationship,
   statuses,
 });
 
-const muteAccountFail = (error: unknown) => ({
+const muteAccountFail = (accountId: string, error: unknown) => ({
   type: ACCOUNT_MUTE_FAIL,
+  accountId,
   error,
 });
 
-const unmuteAccountRequest = (id: string) => ({
+const unmuteAccountRequest = (accountId: string) => ({
   type: ACCOUNT_UNMUTE_REQUEST,
-  id,
+  accountId,
 });
 
-const unmuteAccountSuccess = (relationship: APIEntity) => ({
+const unmuteAccountSuccess = (relationship: Relationship) => ({
   type: ACCOUNT_UNMUTE_SUCCESS,
   relationship,
 });
 
-const unmuteAccountFail = (error: unknown) => ({
+const unmuteAccountFail = (accountId: string, error: unknown) => ({
   type: ACCOUNT_UNMUTE_FAIL,
+  accountId,
   error,
 });
 
-const removeFromFollowers = (id: string) =>
+const removeFromFollowers = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    dispatch(removeFromFollowersRequest(id));
+    dispatch(removeFromFollowersRequest(accountId));
 
-    return getClient(getState()).accounts.removeAccountFromFollowers(id)
+    return getClient(getState()).accounts.removeAccountFromFollowers(accountId)
       .then(response => dispatch(removeFromFollowersSuccess(response)))
-      .catch(error => dispatch(removeFromFollowersFail(id, error)));
+      .catch(error => dispatch(removeFromFollowersFail(accountId, error)));
   };
 
-const removeFromFollowersRequest = (id: string) => ({
+const removeFromFollowersRequest = (accountId: string) => ({
   type: ACCOUNT_REMOVE_FROM_FOLLOWERS_REQUEST,
-  id,
+  accountId,
 });
 
-const removeFromFollowersSuccess = (relationship: APIEntity) => ({
+const removeFromFollowersSuccess = (relationship: Relationship) => ({
   type: ACCOUNT_REMOVE_FROM_FOLLOWERS_SUCCESS,
   relationship,
 });
 
-const removeFromFollowersFail = (id: string, error: unknown) => ({
+const removeFromFollowersFail = (accountId: string, error: unknown) => ({
   type: ACCOUNT_REMOVE_FROM_FOLLOWERS_FAIL,
-  id,
+  accountId,
   error,
 });
 
-const fetchFollowers = (id: string) =>
+const fetchFollowers = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(fetchFollowersRequest(id));
+    dispatch(fetchFollowersRequest(accountId));
 
-    return getClient(getState()).accounts.getAccountFollowers(id)
+    return getClient(getState()).accounts.getAccountFollowers(accountId)
       .then(response => {
         dispatch(importFetchedAccounts(response.items));
-        dispatch(fetchFollowersSuccess(id, response.items, response.next));
+        dispatch(fetchFollowersSuccess(accountId, response.items, response.next));
         dispatch(fetchRelationships(response.items.map((item) => item.id)));
       })
       .catch(error => {
-        dispatch(fetchFollowersFail(id, error));
+        dispatch(fetchFollowersFail(accountId, error));
       });
   };
 
-const fetchFollowersRequest = (id: string) => ({
+const fetchFollowersRequest = (accountId: string) => ({
   type: FOLLOWERS_FETCH_REQUEST,
-  id,
+  accountId,
 });
 
-const fetchFollowersSuccess = (id: string, accounts: APIEntity[], next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
+const fetchFollowersSuccess = (accountId: string, accounts: Array<Account>, next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
   type: FOLLOWERS_FETCH_SUCCESS,
-  id,
+  accountId,
   accounts,
   next,
 });
 
-const fetchFollowersFail = (id: string, error: unknown) => ({
+const fetchFollowersFail = (accountId: string, error: unknown) => ({
   type: FOLLOWERS_FETCH_FAIL,
-  id,
+  accountId,
   error,
 });
 
-const expandFollowers = (id: string) =>
+const expandFollowers = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    const next = getState().user_lists.followers.get(id)!.next;
+    const next = getState().user_lists.followers.get(accountId)!.next;
 
     if (next === null) return;
 
-    dispatch(expandFollowersRequest(id));
+    dispatch(expandFollowersRequest(accountId));
 
     next().then(response => {
       dispatch(importFetchedAccounts(response.items));
-      dispatch(expandFollowersSuccess(id, response.items, response.next));
-      dispatch(fetchRelationships(response.items.map((item: APIEntity) => item.id)));
+      dispatch(expandFollowersSuccess(accountId, response.items, response.next));
+      dispatch(fetchRelationships(response.items.map((item) => item.id)));
     })
       .catch(error => {
-        dispatch(expandFollowersFail(id, error));
+        dispatch(expandFollowersFail(accountId, error));
       });
   };
 
-const expandFollowersRequest = (id: string) => ({
+const expandFollowersRequest = (accountId: string) => ({
   type: FOLLOWERS_EXPAND_REQUEST,
-  id,
+  accountId,
 });
 
-const expandFollowersSuccess = (id: string, accounts: APIEntity[], next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
+const expandFollowersSuccess = (accountId: string, accounts: Array<Account>, next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
   type: FOLLOWERS_EXPAND_SUCCESS,
-  id,
+  accountId,
   accounts,
   next,
 });
 
-const expandFollowersFail = (id: string, error: unknown) => ({
+const expandFollowersFail = (accountId: string, error: unknown) => ({
   type: FOLLOWERS_EXPAND_FAIL,
-  id,
+  accountId,
   error,
 });
 
-const fetchFollowing = (id: string) =>
+const fetchFollowing = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(fetchFollowingRequest(id));
+    dispatch(fetchFollowingRequest(accountId));
 
-    return getClient(getState()).accounts.getAccountFollowing(id)
+    return getClient(getState()).accounts.getAccountFollowing(accountId)
       .then(response => {
         dispatch(importFetchedAccounts(response.items));
-        dispatch(fetchFollowingSuccess(id, response.items, response.next));
+        dispatch(fetchFollowingSuccess(accountId, response.items, response.next));
         dispatch(fetchRelationships(response.items.map((item) => item.id)));
       })
       .catch(error => {
-        dispatch(fetchFollowingFail(id, error));
+        dispatch(fetchFollowingFail(accountId, error));
       });
   };
 
-const fetchFollowingRequest = (id: string) => ({
+const fetchFollowingRequest = (accountId: string) => ({
   type: FOLLOWING_FETCH_REQUEST,
-  id,
+  accountId,
 });
 
-const fetchFollowingSuccess = (id: string, accounts: APIEntity[], next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
+const fetchFollowingSuccess = (accountId: string, accounts: Array<Account>, next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
   type: FOLLOWING_FETCH_SUCCESS,
-  id,
+  accountId,
   accounts,
   next,
 });
 
-const fetchFollowingFail = (id: string, error: unknown) => ({
+const fetchFollowingFail = (accountId: string, error: unknown) => ({
   type: FOLLOWING_FETCH_FAIL,
-  id,
+  accountId,
   error,
 });
 
-const expandFollowing = (id: string) =>
+const expandFollowing = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    const next = getState().user_lists.following.get(id)!.next;
+    const next = getState().user_lists.following.get(accountId)!.next;
 
     if (next === null) return;
 
-    dispatch(expandFollowingRequest(id));
+    dispatch(expandFollowingRequest(accountId));
 
     next().then(response => {
       dispatch(importFetchedAccounts(response.items));
-      dispatch(expandFollowingSuccess(id, response.items, response.next));
-      dispatch(fetchRelationships(response.items.map((item: APIEntity) => item.id)));
+      dispatch(expandFollowingSuccess(accountId, response.items, response.next));
+      dispatch(fetchRelationships(response.items.map((item) => item.id)));
     }).catch(error => {
-      dispatch(expandFollowingFail(id, error));
+      dispatch(expandFollowingFail(accountId, error));
     });
   };
 
-const expandFollowingRequest = (id: string) => ({
+const expandFollowingRequest = (accountId: string) => ({
   type: FOLLOWING_EXPAND_REQUEST,
-  id,
+  accountId,
 });
 
-const expandFollowingSuccess = (id: string, accounts: APIEntity[], next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
+const expandFollowingSuccess = (accountId: string, accounts: Array<Account>, next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
   type: FOLLOWING_EXPAND_SUCCESS,
-  id,
+  accountId,
   accounts,
   next,
 });
 
-const expandFollowingFail = (id: string, error: unknown) => ({
+const expandFollowingFail = (accountId: string, error: unknown) => ({
   type: FOLLOWING_EXPAND_FAIL,
-  id,
+  accountId,
   error,
 });
 
@@ -534,22 +535,19 @@ const fetchRelationships = (accountIds: string[]) =>
       .catch(error => dispatch(fetchRelationshipsFail(error)));
   };
 
-const fetchRelationshipsRequest = (ids: string[]) => ({
+const fetchRelationshipsRequest = (accountIds: string[]) => ({
   type: RELATIONSHIPS_FETCH_REQUEST,
-  ids,
-  skipLoading: true,
+  accountIds,
 });
 
-const fetchRelationshipsSuccess = (relationships: APIEntity[]) => ({
+const fetchRelationshipsSuccess = (relationships: Array<Relationship>) => ({
   type: RELATIONSHIPS_FETCH_SUCCESS,
   relationships,
-  skipLoading: true,
 });
 
 const fetchRelationshipsFail = (error: unknown) => ({
   type: RELATIONSHIPS_FETCH_FAIL,
   error,
-  skipLoading: true,
 });
 
 const fetchFollowRequests = () =>
@@ -570,7 +568,7 @@ const fetchFollowRequestsRequest = () => ({
   type: FOLLOW_REQUESTS_FETCH_REQUEST,
 });
 
-const fetchFollowRequestsSuccess = (accounts: APIEntity[], next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
+const fetchFollowRequestsSuccess = (accounts: Array<Account>, next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
   type: FOLLOW_REQUESTS_FETCH_SUCCESS,
   accounts,
   next,
@@ -601,7 +599,7 @@ const expandFollowRequestsRequest = () => ({
   type: FOLLOW_REQUESTS_EXPAND_REQUEST,
 });
 
-const expandFollowRequestsSuccess = (accounts: APIEntity[], next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
+const expandFollowRequestsSuccess = (accounts: Array<Account>, next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
   type: FOLLOW_REQUESTS_EXPAND_SUCCESS,
   accounts,
   next,
@@ -612,93 +610,90 @@ const expandFollowRequestsFail = (error: unknown) => ({
   error,
 });
 
-const authorizeFollowRequest = (id: string) =>
+const authorizeFollowRequest = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    dispatch(authorizeFollowRequestRequest(id));
+    dispatch(authorizeFollowRequestRequest(accountId));
 
-    return getClient(getState()).myAccount.acceptFollowRequest(id)
-      .then(() => dispatch(authorizeFollowRequestSuccess(id)))
-      .catch(error => dispatch(authorizeFollowRequestFail(id, error)));
+    return getClient(getState()).myAccount.acceptFollowRequest(accountId)
+      .then(() => dispatch(authorizeFollowRequestSuccess(accountId)))
+      .catch(error => dispatch(authorizeFollowRequestFail(accountId, error)));
   };
 
-const authorizeFollowRequestRequest = (id: string) => ({
+const authorizeFollowRequestRequest = (accountId: string) => ({
   type: FOLLOW_REQUEST_AUTHORIZE_REQUEST,
-  id,
+  accountId,
 });
 
-const authorizeFollowRequestSuccess = (id: string) => ({
+const authorizeFollowRequestSuccess = (accountId: string) => ({
   type: FOLLOW_REQUEST_AUTHORIZE_SUCCESS,
-  id,
+  accountId,
 });
 
-const authorizeFollowRequestFail = (id: string, error: unknown) => ({
+const authorizeFollowRequestFail = (accountId: string, error: unknown) => ({
   type: FOLLOW_REQUEST_AUTHORIZE_FAIL,
-  id,
+  accountId,
   error,
 });
 
-const rejectFollowRequest = (id: string) =>
+const rejectFollowRequest = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
-    dispatch(rejectFollowRequestRequest(id));
+    dispatch(rejectFollowRequestRequest(accountId));
 
-    return getClient(getState()).myAccount.rejectFollowRequest(id)
-      .then(() => dispatch(rejectFollowRequestSuccess(id)))
-      .catch(error => dispatch(rejectFollowRequestFail(id, error)));
+    return getClient(getState()).myAccount.rejectFollowRequest(accountId)
+      .then(() => dispatch(rejectFollowRequestSuccess(accountId)))
+      .catch(error => dispatch(rejectFollowRequestFail(accountId, error)));
   };
 
-const rejectFollowRequestRequest = (id: string) => ({
+const rejectFollowRequestRequest = (accountId: string) => ({
   type: FOLLOW_REQUEST_REJECT_REQUEST,
-  id,
+  accountId,
 });
 
-const rejectFollowRequestSuccess = (id: string) => ({
+const rejectFollowRequestSuccess = (accountId: string) => ({
   type: FOLLOW_REQUEST_REJECT_SUCCESS,
-  id,
+  accountId,
 });
 
-const rejectFollowRequestFail = (id: string, error: unknown) => ({
+const rejectFollowRequestFail = (accountId: string, error: unknown) => ({
   type: FOLLOW_REQUEST_REJECT_FAIL,
-  id,
+  accountId,
   error,
 });
 
-const pinAccount = (id: string) =>
+const pinAccount = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return dispatch(noOp);
 
-    dispatch(pinAccountRequest(id));
+    dispatch(pinAccountRequest(accountId));
 
-    return getClient(getState()).accounts.pinAccount(id).then(response => {
+    return getClient(getState).accounts.pinAccount(accountId).then(response => {
       dispatch(pinAccountSuccess(response));
     }).catch(error => {
       dispatch(pinAccountFail(error));
     });
   };
 
-const unpinAccount = (id: string) =>
+const unpinAccount = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return dispatch(noOp);
 
-    dispatch(unpinAccountRequest(id));
+    dispatch(unpinAccountRequest(accountId));
 
-    return getClient(getState()).accounts.unpinAccount(id).then(response => {
+    return getClient(getState).accounts.unpinAccount(accountId).then(response => {
       dispatch(unpinAccountSuccess(response));
     }).catch(error => {
       dispatch(unpinAccountFail(error));
     });
   };
 
-const updateNotificationSettings = (params: Record<string, any>) =>
+const updateNotificationSettings = (params: UpdateNotificationSettingsParams) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: NOTIFICATION_SETTINGS_REQUEST, params });
-    return getClient(getState).request('/api/pleroma/notification_settings', {
-      method: 'PUT',
-      body: params,
-    }).then(({ json: data }) => {
+    return getClient(getState).settings.updateNotificationSettings(params).then((data) => {
       dispatch({ type: NOTIFICATION_SETTINGS_SUCCESS, params, data });
     }).catch(error => {
       dispatch({ type: NOTIFICATION_SETTINGS_FAIL, params, error });
@@ -706,12 +701,12 @@ const updateNotificationSettings = (params: Record<string, any>) =>
     });
   };
 
-const pinAccountRequest = (id: string) => ({
+const pinAccountRequest = (accountId: string) => ({
   type: ACCOUNT_PIN_REQUEST,
-  id,
+  accountId,
 });
 
-const pinAccountSuccess = (relationship: APIEntity) => ({
+const pinAccountSuccess = (relationship: Relationship) => ({
   type: ACCOUNT_PIN_SUCCESS,
   relationship,
 });
@@ -721,12 +716,12 @@ const pinAccountFail = (error: unknown) => ({
   error,
 });
 
-const unpinAccountRequest = (id: string) => ({
+const unpinAccountRequest = (accountId: string) => ({
   type: ACCOUNT_UNPIN_REQUEST,
-  id,
+  accountId,
 });
 
-const unpinAccountSuccess = (relationship: APIEntity) => ({
+const unpinAccountSuccess = (relationship: Relationship) => ({
   type: ACCOUNT_UNPIN_SUCCESS,
   relationship,
 });
@@ -736,33 +731,33 @@ const unpinAccountFail = (error: unknown) => ({
   error,
 });
 
-const fetchPinnedAccounts = (id: string) =>
+const fetchPinnedAccounts = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(fetchPinnedAccountsRequest(id));
+    dispatch(fetchPinnedAccountsRequest(accountId));
 
-    return getClient(getState).accounts.getAccountEndorsements(id).then(response => {
+    return getClient(getState).accounts.getAccountEndorsements(accountId).then(response => {
       dispatch(importFetchedAccounts(response));
-      dispatch(fetchPinnedAccountsSuccess(id, response, null));
+      dispatch(fetchPinnedAccountsSuccess(accountId, response, null));
     }).catch(error => {
-      dispatch(fetchPinnedAccountsFail(id, error));
+      dispatch(fetchPinnedAccountsFail(accountId, error));
     });
   };
 
-const fetchPinnedAccountsRequest = (id: string) => ({
+const fetchPinnedAccountsRequest = (accountId: string) => ({
   type: PINNED_ACCOUNTS_FETCH_REQUEST,
-  id,
+  accountId,
 });
 
-const fetchPinnedAccountsSuccess = (id: string, accounts: APIEntity[], next: string | null) => ({
+const fetchPinnedAccountsSuccess = (accountId: string, accounts: Array<Account>, next: string | null) => ({
   type: PINNED_ACCOUNTS_FETCH_SUCCESS,
-  id,
+  accountId,
   accounts,
   next,
 });
 
-const fetchPinnedAccountsFail = (id: string, error: unknown) => ({
+const fetchPinnedAccountsFail = (accountId: string, error: unknown) => ({
   type: PINNED_ACCOUNTS_FETCH_FAIL,
-  id,
+  accountId,
   error,
 });
 
@@ -799,7 +794,7 @@ const fetchBirthdayReminders = (month: number, day: number) =>
 
     const me = getState().me;
 
-    dispatch({ type: BIRTHDAY_REMINDERS_FETCH_REQUEST, day, month, id: me });
+    dispatch({ type: BIRTHDAY_REMINDERS_FETCH_REQUEST, day, month, accountId: me });
 
     return getClient(getState).accounts.getBirthdays(day, month).then(response => {
       dispatch(importFetchedAccounts(response));
@@ -808,10 +803,10 @@ const fetchBirthdayReminders = (month: number, day: number) =>
         accounts: response,
         day,
         month,
-        id: me,
+        accountId: me,
       });
     }).catch(() => {
-      dispatch({ type: BIRTHDAY_REMINDERS_FETCH_FAIL, day, month, id: me });
+      dispatch({ type: BIRTHDAY_REMINDERS_FETCH_FAIL, day, month, accountId: me });
     });
   };
 
