@@ -546,7 +546,6 @@ const expandUserIndex = () =>
       });
   };
 
-
 export {
   ADMIN_CONFIG_FETCH_REQUEST,
   ADMIN_CONFIG_FETCH_SUCCESS,

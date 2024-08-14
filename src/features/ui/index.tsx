@@ -39,7 +39,6 @@ import { getVapidKey } from 'soapbox/utils/auth';
 import { isStandalone } from 'soapbox/utils/state';
 
 import BackgroundShapes from './components/background-shapes';
-import FloatingActionButton from './components/floating-action-button';
 import {
   Status,
   CommunityTimeline,
@@ -450,11 +449,6 @@ const UI: React.FC<IUI> = ({ children }) => {
     dispatch(registerPushNotifications());
   }, [vapidKey]);
 
-  const shouldHideFAB = (): boolean => {
-    const path = location.pathname;
-    return Boolean(path.match(/^\/posts\/|^\/search|^\/getting-started|^\/chats/));
-  };
-
   // Wait for login to succeed or fail
   if (me === null) return null;
 
@@ -483,12 +477,6 @@ const UI: React.FC<IUI> = ({ children }) => {
               {children}
             </SwitchingColumnsArea>
           </Layout>
-
-          {(me && !shouldHideFAB()) && (
-            <div className='fixed bottom-24 right-4 z-40 transition-all lg:hidden rtl:left-4 rtl:right-auto'>
-              <FloatingActionButton />
-            </div>
-          )}
 
           <Suspense>
             <SidebarMenu />

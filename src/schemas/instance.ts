@@ -80,7 +80,6 @@ const contactSchema = coerceObject({
   email: z.string().email().catch(''),
 });
 
-
 const pleromaSchema = coerceObject({
   metadata: coerceObject({
     account_activation_required: z.boolean().catch(false),

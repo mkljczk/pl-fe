@@ -28,6 +28,7 @@ const messages = defineMessages({
   groups: { id: 'column.groups', defaultMessage: 'Groups' },
   events: { id: 'column.events', defaultMessage: 'Events' },
   developers: { id: 'navigation.developers', defaultMessage: 'Developers' },
+  dashboard: { id: 'navigation.dashboard', defaultMessage: 'Dashboard' },
   drafts: { id: 'navigation.drafts', defaultMessage: 'Drafts' },
   addAccount: { id: 'profile_dropdown.add_account', defaultMessage: 'Add an existing account' },
   followRequests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
@@ -83,6 +84,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   const settings = useAppSelector((state) => getSettings(state));
   const followRequestsCount = useAppSelector((state) => state.user_lists.follow_requests.items.count());
   const draftCount = useAppSelector((state) => state.draft_statuses.size);
+  // const dashboardCount = useAppSelector((state) => state.admin.openReports.count() + state.admin.awaitingApproval.count());
   const [sidebarVisible, setSidebarVisible] = useState(sidebarOpen);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
@@ -335,6 +337,16 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                         icon={require('@tabler/icons/outline/code.svg')}
                         text={intl.formatMessage(messages.developers)}
                         onClick={onClose}
+                      />
+                    )}
+
+                    {account.staff && (
+                      <SidebarLink
+                        to='/dashboard'
+                        icon={require('@tabler/icons/outline/dashboard.svg')}
+                        text={intl.formatMessage(messages.dashboard)}
+                        onClick={onClose}
+                        // count={dashboardCount} WIP
                       />
                     )}
 

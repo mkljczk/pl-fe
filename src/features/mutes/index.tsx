@@ -10,7 +10,6 @@ const messages = defineMessages({
   heading: { id: 'column.mutes', defaultMessage: 'Mutes' },
 });
 
-
 const Mutes: React.FC = () => {
   const intl = useIntl();
 

@@ -85,7 +85,6 @@ const groupUnblockFail = (groupId: string, accountId: string, error: unknown) =>
   error,
 });
 
-
 export {
   GROUP_BLOCKS_FETCH_REQUEST,
   GROUP_BLOCKS_FETCH_SUCCESS,
