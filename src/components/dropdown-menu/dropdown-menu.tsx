@@ -243,7 +243,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
       history.push(pathname, { ...(state as any), soapboxDropdownKey: dropdownHistoryKey.current });
 
       unlistenHistory.current = history.listen(({ state }, action) => {
-        if (!(state as any)?.soapboxModalKey) {
+        if (!(state as any)?.soapboxDropdownKey) {
           handleClose();
         } else if (action === 'POP') {
           handleClose(false);
