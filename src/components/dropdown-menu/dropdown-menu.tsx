@@ -86,9 +86,6 @@ const DropdownMenu = (props: IDropdownMenu) => {
     }
   };
 
-  /**
-   * On mobile screens, let's replace the Popper dropdown with a Modal.
-   */
   const handleOpen = () => {
     dispatch(openDropdownMenu());
     setIsOpen(true);
