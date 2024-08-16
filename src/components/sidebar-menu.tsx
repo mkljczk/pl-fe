@@ -9,7 +9,7 @@ import { getSettings } from 'soapbox/actions/settings';
 import { closeSidebar } from 'soapbox/actions/sidebar';
 import { useAccount } from 'soapbox/api/hooks';
 import Account from 'soapbox/components/account';
-import { Stack, Divider, HStack, Icon, IconButton, Text } from 'soapbox/components/ui';
+import { Stack, Divider, HStack, Icon, Text } from 'soapbox/components/ui';
 import ProfileStats from 'soapbox/features/ui/components/profile-stats';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance } from 'soapbox/hooks';
 import { makeGetOtherAccounts } from 'soapbox/selectors';
@@ -28,6 +28,7 @@ const messages = defineMessages({
   groups: { id: 'column.groups', defaultMessage: 'Groups' },
   events: { id: 'column.events', defaultMessage: 'Events' },
   developers: { id: 'navigation.developers', defaultMessage: 'Developers' },
+  dashboard: { id: 'navigation.dashboard', defaultMessage: 'Dashboard' },
   drafts: { id: 'navigation.drafts', defaultMessage: 'Drafts' },
   addAccount: { id: 'profile_dropdown.add_account', defaultMessage: 'Add an existing account' },
   followRequests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
@@ -83,6 +84,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   const settings = useAppSelector((state) => getSettings(state));
   const followRequestsCount = useAppSelector((state) => state.user_lists.follow_requests.items.count());
   const draftCount = useAppSelector((state) => state.draft_statuses.size);
+  // const dashboardCount = useAppSelector((state) => state.admin.openReports.count() + state.admin.awaitingApproval.count());
   const [sidebarVisible, setSidebarVisible] = useState(sidebarOpen);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
@@ -91,7 +93,6 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;
 
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const closeButtonRef = React.useRef(null);
 
   const [switcher, setSwitcher] = React.useState(false);
 
@@ -148,6 +149,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   }, []);
 
   useEffect(() => {
+    if (sidebarOpen) containerRef.current?.querySelector('a')?.focus();
     setTimeout(() => setSidebarVisible(sidebarOpen), sidebarOpen ? 0 : 150);
   }, [sidebarOpen]);
 
@@ -169,7 +171,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
       <div
         className={clsx('fixed inset-0 bg-gray-500 black:bg-gray-900 no-reduce-motion:transition-opacity dark:bg-gray-700', {
           'opacity-0': !(sidebarVisible && sidebarOpen),
-          'opacity-90': (sidebarVisible && sidebarOpen),
+          'opacity-40': (sidebarVisible && sidebarOpen),
         })}
         role='button'
         onClick={handleClose}
@@ -181,21 +183,12 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
       >
         <div
           className={
-            clsx({
-              'flex flex-col flex-1 bg-white black:bg-black dark:bg-primary-900 -translate-x-full rtl:translate-x-full w-full max-w-xs no-reduce-motion:transition-transform ease-in-out': true,
-              '!translate-x-0': sidebarVisible && sidebarOpen,
+            clsx('rtl:r-2 fixed bottom-[60px] left-2 flex max-h-[calc(100dvh-68px)] w-full max-w-xs flex-1 origin-bottom-left flex-col rounded-xl bg-white shadow-lg ease-in-out black:bg-black no-reduce-motion:transition-transform rtl:right-2 rtl:origin-bottom-right dark:border dark:border-gray-800 dark:bg-primary-900 dark:shadow-none', {
+              'scale-100': sidebarVisible && sidebarOpen,
+              'scale-0': !(sidebarVisible && sidebarOpen),
             })
           }
         >
-          <IconButton
-            title={intl.formatMessage(messages.close)}
-            onClick={handleClose}
-            src={require('@tabler/icons/outline/x.svg')}
-            ref={closeButtonRef}
-            iconClassName='h-6 w-6'
-            className='absolute right-0 top-0 -mr-11 mt-2 text-gray-600 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300'
-          />
-
           <div className='relative h-full w-full overflow-auto overflow-y-scroll'>
             <div className='p-4'>
               {account ? (
@@ -338,6 +331,16 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       />
                     )}
 
+                    {account.staff && (
+                      <SidebarLink
+                        to='/dashboard'
+                        icon={require('@tabler/icons/outline/dashboard.svg')}
+                        text={intl.formatMessage(messages.dashboard)}
+                        onClick={onClose}
+                        // count={dashboardCount} WIP
+                      />
+                    )}
+
                     <Divider />
 
                     <SidebarLink
@@ -427,13 +430,6 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
             </div>
           </div>
         </div>
-
-        {/* Dummy element to keep Close Icon visible */}
-        <div
-          aria-hidden
-          className='w-14 shrink-0'
-          onClick={handleClose}
-        />
       </div>
     </div>
   );
