@@ -69,8 +69,8 @@ import { unescapeHTML } from '../utils/html';
 
 import type { Emoji } from 'soapbox/features/emoji';
 import type { Language } from 'soapbox/features/preferences';
-import type { Account } from 'soapbox/normalizers';
-import type { APIEntity, Status, Status as StatusEntity } from 'soapbox/types/entities';
+import type { Account, Status } from 'soapbox/normalizers';
+import type { APIEntity } from 'soapbox/types/entities';
 
 const getResetFileKey = () => Math.floor((Math.random() * 0x10000));
 
@@ -147,7 +147,7 @@ const statusToMentionsArray = (status: Pick<Status, 'account' | 'mentions'>, acc
     .delete(account.acct);
 };
 
-const statusToMentionsAccountIdsArray = (status: Pick<StatusEntity, 'mentions' | 'account'>, account: Pick<Account, 'id'>, parentRebloggedBy?: string | null) => {
+const statusToMentionsAccountIdsArray = (status: Pick<Status, 'mentions' | 'account'>, account: Pick<Account, 'id'>, parentRebloggedBy?: string | null) => {
   const mentions = status.mentions.map((m) => m.id);
 
   return ImmutableOrderedSet<string>([status.account.id])

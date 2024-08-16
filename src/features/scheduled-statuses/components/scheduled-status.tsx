@@ -13,8 +13,6 @@ import { buildStatus } from '../builder';
 
 import ScheduledStatusActionBar from './scheduled-status-action-bar';
 
-import type { Status as StatusEntity } from 'soapbox/types/entities';
-
 interface IScheduledStatus {
   statusId: string;
 }
@@ -24,7 +22,7 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ statusId, ...other }) => 
     const scheduledStatus = state.scheduled_statuses.get(statusId);
     if (!scheduledStatus) return null;
     return buildStatus(state, scheduledStatus);
-  }) as StatusEntity | null;
+  });
 
   if (!status) return null;
 

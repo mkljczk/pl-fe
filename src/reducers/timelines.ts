@@ -30,10 +30,9 @@ import {
 } from '../actions/timelines';
 
 import type { ReducerStatus } from './statuses';
-import type { PaginatedResponse, Status as BaseStatus } from 'pl-api';
+import type { PaginatedResponse, Status as BaseStatus, Relationship } from 'pl-api';
 import type { AnyAction } from 'redux';
 import type { ImportPosition } from 'soapbox/entity-store/types';
-import type { APIEntity, Status } from 'soapbox/types/entities';
 
 const TRUNCATE_LIMIT = 40;
 const TRUNCATE_SIZE = 20;
@@ -187,10 +186,10 @@ const updateTop = (state: State, timelineId: string, top: boolean) =>
   }));
 
 const isReblogOf = (reblog: Pick<ReducerStatus, 'reblog'>, status: Pick<ReducerStatus, 'id'>) => reblog.reblog === status.id;
-const statusToReference = (status: Pick<Status, 'id' | 'account'>) => [status.id, status.account];
+const statusToReference = (status: Pick<ReducerStatus, 'id' | 'account'>) => [status.id, status.account];
 
 const buildReferencesTo = (
-  statuses: ImmutableMap<string, Pick<ReducerStatus, 'id' | 'account' | 'reblog'>>,
+  statuses: ImmutableMap<string, ReducerStatus>,
   status: Pick<ReducerStatus, 'id'>,
 ) => (
   statuses
@@ -204,12 +203,12 @@ const buildReferencesTo = (
 //       statuses.getIn([statusId, 'account']) === relationship.id,
 //     ));
 
-const filterTimelines = (state: State, relationship: APIEntity, statuses: ImmutableMap<string, ReducerStatus>) =>
+const filterTimelines = (state: State, relationship: Relationship, statuses: ImmutableMap<string, ReducerStatus>) =>
   state.withMutations(state => {
     statuses.forEach(status => {
-      if (status.account !== relationship.id) return;
+      if (status.account.id !== relationship.id) return;
       const references = buildReferencesTo(statuses, status);
-      deleteStatus(state, status.id, status.account!.id, references, relationship.id);
+      deleteStatus(state, status.id, status.account.id, references, relationship.id);
     });
   });
 
@@ -236,10 +235,10 @@ const timelineDequeue = (state: State, timelineId: string) => {
 //     timeline.set('items', addStatusId(items, null));
 // }));
 
-const getTimelinesForStatus = (status: APIEntity) => {
+const getTimelinesForStatus = (status: Pick<BaseStatus, 'visibility' | 'group'>) => {
   switch (status.visibility) {
     case 'group':
-      return [`group:${status.group?.id || status.group_id}`];
+      return [`group:${status.group?.id}`];
     case 'direct':
       return ['direct'];
     case 'public':
@@ -261,7 +260,7 @@ const replaceId = (ids: ImmutableOrderedSet<string>, oldId: string, newId: strin
   }
 };
 
-const importPendingStatus = (state: State, params: APIEntity, idempotencyKey: string) => {
+const importPendingStatus = (state: State, params: BaseStatus, idempotencyKey: string) => {
   const statusId = `末pending-${idempotencyKey}`;
 
   return state.withMutations(state => {
@@ -285,7 +284,7 @@ const replacePendingStatus = (state: State, idempotencyKey: string, newId: strin
   });
 };
 
-const importStatus = (state: State, status: APIEntity, idempotencyKey: string) =>
+const importStatus = (state: State, status: BaseStatus, idempotencyKey: string) =>
   state.withMutations(state => {
     replacePendingStatus(state, idempotencyKey, status.id);
 

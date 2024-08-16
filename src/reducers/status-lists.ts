@@ -69,9 +69,8 @@ import {
   SCHEDULED_STATUS_CANCEL_SUCCESS,
 } from '../actions/scheduled-statuses';
 
-import type { PaginatedResponse, Status } from 'pl-api';
+import type { PaginatedResponse, ScheduledStatus, Status } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { APIEntity, Status as StatusEntity } from 'soapbox/types/entities';
 
 const StatusListRecord = ImmutableRecord({
   next: null as (() => Promise<PaginatedResponse<Status>>) | null,
@@ -92,16 +91,16 @@ const initialState: State = ImmutableMap({
   joined_events: StatusListRecord(),
 });
 
-const getStatusId = (status: string | APIEntity) => typeof status === 'string' ? status : status.id;
+const getStatusId = (status: string | Pick<Status, 'id'>) => typeof status === 'string' ? status : status.id;
 
-const getStatusIds = (statuses: APIEntity[] = []) => (
+const getStatusIds = (statuses: Array<string | Pick<Status, 'id'>> = []) => (
   ImmutableOrderedSet(statuses.map(getStatusId))
 );
 
 const setLoading = (state: State, listType: string, loading: boolean) =>
   state.update(listType, StatusListRecord(), listMap => listMap.set('isLoading', loading));
 
-const normalizeList = (state: State, listType: string, statuses: APIEntity[], next: (() => Promise<PaginatedResponse<Status>>) | null) =>
+const normalizeList = (state: State, listType: string, statuses: Array<string | Pick<Status, 'id'>>, next: (() => Promise<PaginatedResponse<Status>>) | null) =>
   state.update(listType, StatusListRecord(), listMap => listMap.withMutations(map => {
     map.set('next', next);
     map.set('loaded', true);
@@ -109,7 +108,7 @@ const normalizeList = (state: State, listType: string, statuses: APIEntity[], ne
     map.set('items', getStatusIds(statuses));
   }));
 
-const appendToList = (state: State, listType: string, statuses: APIEntity[], next: (() => Promise<PaginatedResponse<Status>>) | null) => {
+const appendToList = (state: State, listType: string, statuses: Array<string | Pick<Status, 'id'>>, next: (() => Promise<PaginatedResponse<Status>>) | null) => {
   const newIds = getStatusIds(statuses);
 
   return state.update(listType, StatusListRecord(), listMap => listMap.withMutations(map => {
@@ -119,24 +118,24 @@ const appendToList = (state: State, listType: string, statuses: APIEntity[], nex
   }));
 };
 
-const prependOneToList = (state: State, listType: string, status: APIEntity) => {
+const prependOneToList = (state: State, listType: string, status: string | Pick<Status, 'id'>) => {
   const statusId = getStatusId(status);
   return state.update(listType, StatusListRecord(), listMap => listMap.update('items', items =>
     ImmutableOrderedSet([statusId]).union(items as ImmutableOrderedSet<string>),
   ));
 };
 
-const removeOneFromList = (state: State, listType: string, status: APIEntity) => {
+const removeOneFromList = (state: State, listType: string, status: string | Pick<Status, 'id'>) => {
   const statusId = getStatusId(status);
   return state.update(listType, StatusListRecord(), listMap => listMap.update('items', items => items.delete(statusId)));
 };
 
-const maybeAppendScheduledStatus = (state: State, status: APIEntity) => {
+const maybeAppendScheduledStatus = (state: State, status: Pick<ScheduledStatus | Status, 'id' | 'scheduled_at'>) => {
   if (!status.scheduled_at) return state;
   return prependOneToList(state, 'scheduled_statuses', getStatusId(status));
 };
 
-const addBookmarkToLists = (state: State, status: APIEntity) => {
+const addBookmarkToLists = (state: State, status: Pick<Status, 'id' | 'bookmark_folder'>) => {
   state = prependOneToList(state, 'bookmarks', status);
   const folderId = status.bookmark_folder;
   if (folderId) {
@@ -145,7 +144,7 @@ const addBookmarkToLists = (state: State, status: APIEntity) => {
   return state;
 };
 
-const removeBookmarkFromLists = (state: State, status: StatusEntity) => {
+const removeBookmarkFromLists = (state: State, status: Pick<Status, 'id' | 'bookmark_folder'>) => {
   state = removeOneFromList(state, 'bookmarks', status);
   const folderId = status.bookmark_folder;
   if (folderId) {

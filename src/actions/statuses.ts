@@ -62,7 +62,7 @@ const createStatus = (params: CreateStatusParams, idempotencyKey: string, status
     return (statusId === null ? getClient(getState()).statuses.createStatus(params) : getClient(getState()).statuses.editStatus(statusId, params))
       .then((status) => {
         // The backend might still be processing the rich media attachment
-        const expectsCard = !status.card && shouldHaveCard(status);
+        const expectsCard = status.scheduled_at === null && !status.card && shouldHaveCard(status);
 
         dispatch(importFetchedStatus({ ...status, expectsCard } as BaseStatus, idempotencyKey));
         dispatch({ type: STATUS_CREATE_SUCCESS, status, params, idempotencyKey, editing: !!statusId });

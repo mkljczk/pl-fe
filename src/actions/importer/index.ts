@@ -100,6 +100,7 @@ const importFetchedStatus = (status: BaseStatus, idempotencyKey?: string) =>
 // or a repost can appear of a deleted account. Skip these statuses.
 const isBroken = (status: BaseStatus) => {
   try {
+    if (status.scheduled_at !== null) return true;
     // Skip empty accounts
     // https://gitlab.com/soapbox-pub/soapbox/-/issues/424
     if (!status.account.id) return true;

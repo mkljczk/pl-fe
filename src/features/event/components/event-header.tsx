@@ -27,7 +27,7 @@ import EventActionButton from '../components/event-action-button';
 import EventDate from '../components/event-date';
 
 import type { Menu as MenuType } from 'soapbox/components/dropdown-menu';
-import type { Status as StatusEntity } from 'soapbox/normalizers';
+import type { Status } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   bannerHeader: { id: 'event.banner', defaultMessage: 'Event banner' },
@@ -61,7 +61,7 @@ const messages = defineMessages({
 });
 
 interface IEventHeader {
-  status?: StatusEntity;
+  status?: Pick<Status, 'id' | 'account' | 'bookmarked' | 'event' | 'group' | 'pinned' | 'reblog' | 'reblogged' | 'sensitive' | 'uri' | 'url' | 'visibility'>;
 }
 
 const EventHeader: React.FC<IEventHeader> = ({ status }) => {

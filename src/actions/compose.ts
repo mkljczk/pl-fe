@@ -19,7 +19,7 @@ import { getSettings } from './settings';
 import { createStatus } from './statuses';
 
 import type { EditorState } from 'lexical';
-import type { Account as BaseAccount, BackendVersion, CreateStatusParams, Group, MediaAttachment, Status as BaseStatus, Tag, Poll } from 'pl-api';
+import type { Account as BaseAccount, BackendVersion, CreateStatusParams, Group, MediaAttachment, Status as BaseStatus, Tag, Poll, ScheduledStatus } from 'pl-api';
 import type { AutoSuggestion } from 'soapbox/components/autosuggest-input';
 import type { Emoji } from 'soapbox/features/emoji';
 import type { Account, Status } from 'soapbox/normalizers';
@@ -99,6 +99,7 @@ const messages = defineMessages({
   scheduleError: { id: 'compose.invalid_schedule', defaultMessage: 'You must schedule a post at least 5 minutes out.' },
   success: { id: 'compose.submit_success', defaultMessage: 'Your post was sent!' },
   editSuccess: { id: 'compose.edit_success', defaultMessage: 'Your post was edited' },
+  scheduledSuccess: { id: 'compose.scheduled_success', defaultMessage: 'Your post was scheduled' },
   uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
   uploadErrorPoll: { id: 'upload_error.poll', defaultMessage: 'File upload not allowed with polls.' },
   view: { id: 'toast.view', defaultMessage: 'View' },
@@ -176,11 +177,11 @@ const replyCompose = (
     const action: ComposeReplyAction = {
       type: COMPOSE_REPLY,
       composeId: 'compose-modal',
-      status: status,
+      status,
       account,
       explicitAddressing,
       preserveSpoilers,
-      rebloggedBy: rebloggedBy,
+      rebloggedBy,
     };
 
     dispatch(action);
@@ -208,7 +209,7 @@ const quoteCompose = (status: ComposeQuoteAction['status']) =>
     const action: ComposeQuoteAction = {
       type: COMPOSE_QUOTE,
       composeId: 'compose-modal',
-      status: status,
+      status,
       account: selectOwnAccount(state),
       explicitAddressing,
     };
@@ -286,7 +287,7 @@ const directComposeById = (accountId: string) =>
     dispatch(openModal('COMPOSE'));
   };
 
-const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, composeId: string, data: BaseStatus, status: string, edit?: boolean) => {
+const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, composeId: string, data: BaseStatus | ScheduledStatus, status: string, edit?: boolean) => {
   if (!dispatch || !getState) return;
 
   const state = getState();
@@ -294,12 +295,19 @@ const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, c
   const accountUrl = getAccount(state, state.me as string)!.url;
   const draftId = getState().compose.get(composeId)!.draft_id;
 
-  dispatch(insertIntoTagHistory(composeId, data.tags || [], status));
-  dispatch(submitComposeSuccess(composeId, { ...data }, accountUrl, draftId));
-  toast.success(edit ? messages.editSuccess : messages.success, {
-    actionLabel: messages.view,
-    actionLink: `/@${data.account.acct}/posts/${data.id}`,
-  });
+  dispatch(submitComposeSuccess(composeId, data, accountUrl, draftId));
+  if (data.scheduled_at === null) {
+    dispatch(insertIntoTagHistory(composeId, data.tags || [], status));
+    toast.success(edit ? messages.editSuccess : messages.success, {
+      actionLabel: messages.view,
+      actionLink: `/@${data.account.acct}/posts/${data.id}`,
+    });
+  } else {
+    toast.success(messages.scheduledSuccess, {
+      actionLabel: messages.view,
+      actionLink: '/scheduled_statuses',
+    });
+  }
 };
 
 const needsDescriptions = (state: RootState, composeId: string) => {
@@ -420,7 +428,8 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
     }
 
     return dispatch(createStatus(params, idempotencyKey, statusId)).then((data) => {
-      if (!statusId && data.visibility === 'direct' && getState().conversations.mounted <= 0 && history) {
+      console.log(data);
+      if (!statusId && data.scheduled_at === null && data.visibility === 'direct' && getState().conversations.mounted <= 0 && history) {
         history.push('/conversations');
       }
       handleComposeSubmit(dispatch, getState, composeId, data, status, !!statusId);
@@ -434,10 +443,10 @@ const submitComposeRequest = (composeId: string) => ({
   composeId,
 });
 
-const submitComposeSuccess = (composeId: string, status: BaseStatus, accountUrl: string, draftId?: string | null) => ({
+const submitComposeSuccess = (composeId: string, status: BaseStatus | ScheduledStatus, accountUrl: string, draftId?: string | null) => ({
   type: COMPOSE_SUBMIT_SUCCESS,
   composeId,
-  status: status,
+  status,
   accountUrl,
   draftId,
 });
@@ -894,7 +903,7 @@ const eventDiscussionCompose = (composeId: string, status: ComposeEventReplyActi
     return dispatch({
       type: COMPOSE_EVENT_REPLY,
       composeId,
-      status: status,
+      status,
       account: selectOwnAccount(state),
       explicitAddressing,
     });

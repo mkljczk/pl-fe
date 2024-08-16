@@ -136,6 +136,7 @@ const makeGetStatus = () => createSelector(
       if (group) return state.entities[Entities.GROUPS]?.store[group] as Group;
       return undefined;
     },
+    (state: RootState, { id }: APIStatus) => state.polls.get(id) || null,
     (_state: RootState, { username }: APIStatus) => username,
     getFilters,
     (state: RootState) => state.me,
@@ -143,7 +144,7 @@ const makeGetStatus = () => createSelector(
     (state: RootState) => getLocale(state, 'en'),
   ],
 
-  (statusBase, statusReblog, statusGroup, username, filters, me, features, locale) => {
+  (statusBase, statusReblog, statusGroup, poll, username, filters, me, features, locale) => {
     if (!statusBase) return null;
     const { account } = statusBase;
     const accountUsername = account.acct;
@@ -161,6 +162,7 @@ const makeGetStatus = () => createSelector(
       ...statusBase,
       reblog: statusReblog || null,
       group: statusGroup || null,
+      poll,
       filtered,
     };
     // if (map.currentLanguage === null && map.content_map?.size) {

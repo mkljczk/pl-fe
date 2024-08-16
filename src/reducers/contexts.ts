@@ -17,8 +17,8 @@ import {
 } from '../actions/statuses';
 import { TIMELINE_DELETE } from '../actions/timelines';
 
+import type { Status } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { Status } from 'soapbox/normalizers';
 
 const ReducerRecord = ImmutableRecord({
   inReplyTos: ImmutableMap<string, string>(),
@@ -27,14 +27,8 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-/** Minimal status fields needed to process context. */
-type ContextStatus = {
-  id: string;
-  in_reply_to_id: string | null;
-}
-
 /** Import a single status into the reducer, setting replies and replyTos. */
-const importStatus = (state: State, status: ContextStatus, idempotencyKey?: string): State => {
+const importStatus = (state: State, status: Pick<Status, 'id' | 'in_reply_to_id'>, idempotencyKey?: string): State => {
   const { id, in_reply_to_id: inReplyToId } = status;
   if (!inReplyToId) return state;
 
@@ -52,7 +46,7 @@ const importStatus = (state: State, status: ContextStatus, idempotencyKey?: stri
 };
 
 /** Import multiple statuses into the state. */
-const importStatuses = (state: State, statuses: ContextStatus[]): State =>
+const importStatuses = (state: State, statuses: Array<Pick<Status, 'id' | 'in_reply_to_id'>>): State =>
   state.withMutations(state => {
     statuses.forEach(status => importStatus(state, status));
   });
@@ -93,7 +87,7 @@ const connectNodes = (state: State, fromId: string, toId: string): State => {
 };
 
 /** Import a branch of ancestors or descendants, in relation to statusId. */
-const importBranch = (state: State, statuses: ContextStatus[], statusId?: string): State =>
+const importBranch = (state: State, statuses: Array<Pick<Status, 'id' | 'in_reply_to_id'>>, statusId?: string): State =>
   state.withMutations(state => {
     statuses.forEach((status, i) => {
       const prevId = statusId && i === 0 ? statusId : (statuses[i - 1] || {}).id;
@@ -118,8 +112,8 @@ const importBranch = (state: State, statuses: ContextStatus[], statusId?: string
 const normalizeContext = (
   state: State,
   id: string,
-  ancestors: ContextStatus[],
-  descendants: ContextStatus[],
+  ancestors: Array<Pick<Status, 'id' | 'in_reply_to_id'>>,
+  descendants: Array<Pick<Status, 'id' | 'in_reply_to_id'>>,
 ) => state.withMutations(state => {
   importBranch(state, ancestors);
   importBranch(state, descendants, id);
@@ -171,14 +165,14 @@ const filterContexts = (
 };
 
 /** Add a fake status ID for a pending status. */
-const importPendingStatus = (state: State, params: ContextStatus, idempotencyKey: string): State => {
+const importPendingStatus = (state: State, params: Pick<Status, 'id' | 'in_reply_to_id'>, idempotencyKey: string): State => {
   const id = `末pending-${idempotencyKey}`;
   const { in_reply_to_id } = params;
   return importStatus(state, { id, in_reply_to_id });
 };
 
 /** Delete a pending status from the reducer. */
-const deletePendingStatus = (state: State, params: ContextStatus, idempotencyKey: string): State => {
+const deletePendingStatus = (state: State, params: Pick<Status, 'id' | 'in_reply_to_id'>, idempotencyKey: string): State => {
   const id = `末pending-${idempotencyKey}`;
   const { in_reply_to_id: inReplyToId } = params;
 
