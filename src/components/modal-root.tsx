@@ -8,7 +8,7 @@ import { cancelReplyCompose } from 'soapbox/actions/compose';
 import { saveDraftStatus } from 'soapbox/actions/draft-statuses';
 import { cancelEventCompose } from 'soapbox/actions/events';
 import { openModal, closeModal } from 'soapbox/actions/modals';
-import { useAppDispatch, usePrevious } from 'soapbox/hooks';
+import { useAppDispatch, useAppSelector, usePrevious } from 'soapbox/hooks';
 
 import type { ModalType } from 'soapbox/features/ui/components/modal-root';
 import type { ReducerCompose } from 'soapbox/reducers/compose';
@@ -49,6 +49,8 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   const dispatch = useAppDispatch();
 
   const [revealed, setRevealed] = useState(!!children);
+  const isDropdownOpen = useAppSelector(state => state.dropdown_menu.isOpen);
+  const wasDropdownOpen = usePrevious(isDropdownOpen);
 
   const ref = useRef<HTMLDivElement>(null);
   const activeElement = useRef<HTMLDivElement | null>(revealed ? document.activeElement as HTMLDivElement | null : null);
@@ -56,7 +58,6 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   const unlistenHistory = useRef<ReturnType<typeof history.listen>>();
 
   const prevChildren = usePrevious(children);
-  const prevType = usePrevious(type);
 
   const visible = !!children;
 
@@ -158,7 +159,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
     });
   };
 
-  const handleModalClose = (type: string) => {
+  const handleModalClose = () => {
     if (unlistenHistory.current) {
       unlistenHistory.current();
     }
@@ -206,7 +207,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
       activeElement.current = null;
       getSiblings().forEach(sibling => (sibling as HTMLDivElement).removeAttribute('inert'));
 
-      handleModalClose(prevType!);
+      handleModalClose();
     }
 
     if (children) {
@@ -217,6 +218,15 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
       ensureHistoryBuffer();
     }
   }, [children]);
+
+  useEffect(() => {
+    if (isDropdownOpen && unlistenHistory.current) {
+      unlistenHistory.current();
+    } else if (!isDropdownOpen && wasDropdownOpen) {
+      // TODO find a better solution
+      setTimeout(() => handleModalOpen(), 100);
+    }
+  }, [isDropdownOpen]);
 
   if (!visible) {
     return (

@@ -24,9 +24,14 @@ const closeModal = (type?: ModalType) => ({
   modalType: type,
 });
 
+type ModalsAction =
+  ReturnType<typeof openModalSuccess>
+  | ReturnType<typeof closeModal>;
+
 export {
   MODAL_OPEN,
   MODAL_CLOSE,
   openModal,
   closeModal,
+  type ModalsAction,
 };

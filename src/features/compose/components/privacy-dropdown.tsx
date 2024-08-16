@@ -1,6 +1,5 @@
 import clsx from 'clsx';
-import { supportsPassiveEvents } from 'detect-passive-events';
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
 import { changeComposeFederated, changeComposeVisibility } from 'soapbox/actions/compose';
@@ -28,8 +27,6 @@ const messages = defineMessages({
   local: { id: 'privacy.local', defaultMessage: '{privacy} (local-only)' },
 });
 
-const listenerOptions = supportsPassiveEvents ? { passive: true } : false;
-
 interface Option {
   icon: string;
   value: string;
@@ -53,12 +50,6 @@ const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({
 }) => {
   const node = useRef<HTMLUListElement>(null);
   const focusedItem = useRef<HTMLLIElement>(null);
-
-  const handleDocumentClick = (e: MouseEvent | TouchEvent) => {
-    if (node.current && !node.current.contains(e.target as HTMLElement)) {
-      onClose();
-    }
-  };
 
   const handleKeyDown: React.KeyboardEventHandler = e => {
     const index = [...e.currentTarget.parentElement!.children].indexOf(e.currentTarget);
@@ -112,18 +103,6 @@ const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({
       onChange(value);
     }
   };
-
-  useEffect(() => {
-    document.addEventListener('click', handleDocumentClick, false);
-    document.addEventListener('touchend', handleDocumentClick, listenerOptions);
-
-    focusedItem.current?.focus({ preventScroll: true });
-
-    return () => {
-      document.removeEventListener('click', handleDocumentClick, false);
-      document.removeEventListener('touchend', handleDocumentClick);
-    };
-  }, []);
 
   return (
     <ul ref={node}>

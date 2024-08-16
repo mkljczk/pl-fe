@@ -111,6 +111,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
     const { state } = history.location;
     if (goBack && state && (state as any).soapboxDropdownKey === dropdownHistoryKey.current) {
       history.goBack();
+      (history.location.state as any).soapboxDropdownKey = true;
     }
 
     closeDropdownMenu();
@@ -145,6 +146,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
   const handleDocumentClick = (event: Event) => {
     if (refs.floating.current && !refs.floating.current.contains(event.target as Node)) {
       handleClose();
+      event.stopPropagation();
     }
   };
 
@@ -244,7 +246,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
 
       unlistenHistory.current = history.listen(({ state }, action) => {
         if (!(state as any)?.soapboxDropdownKey) {
-          handleClose();
+          handleClose(false);
         } else if (action === 'POP') {
           handleClose(false);
         }
