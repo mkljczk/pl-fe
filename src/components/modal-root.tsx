@@ -227,8 +227,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   return (
     <div
       ref={ref}
-      className={clsx({
-        'fixed top-0 left-0 z-[100] w-full h-full overflow-x-hidden overflow-y-auto': true,
+      className={clsx('fixed left-0 top-0 z-[100] h-full w-full overflow-y-auto overflow-x-hidden transition-opacity ease-in-out', {
         'pointer-events-none': !visible,
       })}
       style={{ opacity: revealed ? 1 : 0 }}

@@ -8,6 +8,7 @@ import {
   useLocale,
   useAppSelector,
 } from 'soapbox/hooks';
+import { userTouching } from 'soapbox/is-mobile';
 import { normalizeSoapboxConfig } from 'soapbox/normalizers';
 import { startSentry } from 'soapbox/sentry';
 import { generateThemeCss } from 'soapbox/utils/theme';
@@ -25,7 +26,7 @@ const SoapboxHead: React.FC<ISoapboxHead> = ({ children }) => {
   const soapboxConfig = useSoapboxConfig();
   const theme = useTheme();
 
-  const withModals = useAppSelector((state) => !state.modals.isEmpty());
+  const withModals = useAppSelector((state) => !state.modals.isEmpty() || (state.dropdown_menu.isOpen && userTouching.matches));
 
   const themeCss = generateThemeCss(demo ? normalizeSoapboxConfig({ brandColor: '#0482d8' }) : soapboxConfig);
   const dsn = soapboxConfig.sentryDsn;
