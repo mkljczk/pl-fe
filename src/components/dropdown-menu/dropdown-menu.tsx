@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { useHistory } from 'react-router-dom';
 
 import { closeDropdownMenu as closeDropdownMenuRedux, openDropdownMenu } from 'soapbox/actions/dropdown-menu';
 import { useAppDispatch } from 'soapbox/hooks';
@@ -47,6 +48,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
   } = props;
 
   const dispatch = useAppDispatch();
+  const history = useHistory();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isDisplayed, setIsDisplayed] = useState<boolean>(false);
@@ -54,6 +56,8 @@ const DropdownMenu = (props: IDropdownMenu) => {
   const touching = userTouching.matches;
 
   const arrowRef = useRef<HTMLDivElement>(null);
+  const dropdownHistoryKey = useRef<number>();
+  const unlistenHistory = useRef<ReturnType<typeof history.listen>>();
 
   const { x, y, strategy, refs, middlewareData, placement } = useFloating<HTMLButtonElement>({
     placement: initialPlacement,
@@ -97,8 +101,17 @@ const DropdownMenu = (props: IDropdownMenu) => {
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (goBack: any = true) => {
     (refs.reference.current as HTMLButtonElement)?.focus();
+
+    if (unlistenHistory.current) {
+      unlistenHistory.current();
+      unlistenHistory.current = undefined;
+    }
+    const { state } = history.location;
+    if (goBack && state && (state as any).soapboxDropdownKey === dropdownHistoryKey.current) {
+      history.goBack();
+    }
 
     closeDropdownMenu();
     setIsOpen(false);
@@ -221,6 +234,22 @@ const DropdownMenu = (props: IDropdownMenu) => {
 
   useEffect(() => {
     setTimeout(() => setIsDisplayed(isOpen), isOpen ? 0 : 150);
+
+    if (isOpen && touching) {
+      const { pathname, state } = history.location;
+
+      dropdownHistoryKey.current = Date.now();
+
+      history.push(pathname, { ...(state as any), soapboxDropdownKey: dropdownHistoryKey.current });
+
+      unlistenHistory.current = history.listen(({ state }, action) => {
+        if (!(state as any)?.soapboxModalKey) {
+          handleClose();
+        } else if (action === 'POP') {
+          handleClose(false);
+        }
+      });
+    }
   }, [isOpen]);
 
   if (items?.length === 0 && !Component) {
@@ -284,7 +313,6 @@ const DropdownMenu = (props: IDropdownMenu) => {
                 'opacity-60': (isOpen && isDisplayed),
               })}
               role='button'
-              onClick={handleClose}
             />
           )}
           <div
