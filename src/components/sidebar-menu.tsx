@@ -9,7 +9,7 @@ import { getSettings } from 'soapbox/actions/settings';
 import { closeSidebar } from 'soapbox/actions/sidebar';
 import { useAccount } from 'soapbox/api/hooks';
 import Account from 'soapbox/components/account';
-import { Stack, Divider, HStack, Icon, IconButton, Text } from 'soapbox/components/ui';
+import { Stack, Divider, HStack, Icon, Text } from 'soapbox/components/ui';
 import ProfileStats from 'soapbox/features/ui/components/profile-stats';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance } from 'soapbox/hooks';
 import { makeGetOtherAccounts } from 'soapbox/selectors';
@@ -93,7 +93,6 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;
 
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const closeButtonRef = React.useRef(null);
 
   const [switcher, setSwitcher] = React.useState(false);
 
@@ -171,7 +170,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
       <div
         className={clsx('fixed inset-0 bg-gray-500 black:bg-gray-900 no-reduce-motion:transition-opacity dark:bg-gray-700', {
           'opacity-0': !(sidebarVisible && sidebarOpen),
-          'opacity-90': (sidebarVisible && sidebarOpen),
+          'opacity-40': (sidebarVisible && sidebarOpen),
         })}
         role='button'
         onClick={handleClose}
@@ -184,20 +183,11 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
         <div
           className={
             clsx({
-              'flex flex-col flex-1 bg-white black:bg-black dark:bg-primary-900 -translate-x-full rtl:translate-x-full w-full max-w-xs no-reduce-motion:transition-transform ease-in-out': true,
+              'flex flex-col flex-1 bg-white black:bg-black dark:bg-primary-900 -translate-x-full rtl:translate-x-full w-full max-w-xs no-reduce-motion:transition-transform ease-in-out left-2 bottom-[60px] max-h-[calc(100vh-68px)] fixed rounded-xl dark:border dark:border-gray-800 shadow-lg dark:shadow-none': true,
               '!translate-x-0': sidebarVisible && sidebarOpen,
             })
           }
         >
-          <IconButton
-            title={intl.formatMessage(messages.close)}
-            onClick={handleClose}
-            src={require('@tabler/icons/outline/x.svg')}
-            ref={closeButtonRef}
-            iconClassName='h-6 w-6'
-            className='absolute right-0 top-0 -mr-11 mt-2 text-gray-600 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300'
-          />
-
           <div className='relative h-full w-full overflow-auto overflow-y-scroll'>
             <div className='p-4'>
               {account ? (
@@ -439,13 +429,6 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
             </div>
           </div>
         </div>
-
-        {/* Dummy element to keep Close Icon visible */}
-        <div
-          aria-hidden
-          className='w-14 shrink-0'
-          onClick={handleClose}
-        />
       </div>
     </div>
   );
