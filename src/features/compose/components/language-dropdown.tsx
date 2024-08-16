@@ -52,39 +52,6 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
     textMap,
   } = useCompose(composeId);
 
-  const handleOptionKeyDown: React.KeyboardEventHandler = e => {
-    const value = e.currentTarget.getAttribute('data-index');
-    const index = results.findIndex(([key]) => key === value);
-    let element: ChildNode | null | undefined = null;
-
-    switch (e.key) {
-      case 'Escape':
-        handleClose();
-        break;
-      case 'Enter':
-        handleOptionClick(e);
-        break;
-      case 'ArrowDown':
-        element = node.current?.childNodes[index + 1] || node.current?.firstChild;
-        break;
-      case 'ArrowUp':
-        element = node.current?.childNodes[index - 1] || node.current?.lastChild;
-        break;
-      case 'Home':
-        element = node.current?.firstChild;
-        break;
-      case 'End':
-        element = node.current?.lastChild;
-        break;
-    }
-
-    if (element) {
-      (element as HTMLElement).focus();
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  };
-
   const handleOptionClick: React.EventHandler<any> = (e: MouseEvent | KeyboardEvent) => {
     const value = (e.currentTarget as HTMLElement)?.getAttribute('data-index') as Language;
 
@@ -207,7 +174,6 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
               tabIndex={0}
               key={code}
               data-index={code}
-              onKeyDown={handleOptionKeyDown}
               onClick={handleOptionClick}
               className={clsx(
                 'flex w-full gap-2 p-2.5 text-left text-sm text-gray-700 dark:text-gray-400',

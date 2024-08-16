@@ -312,7 +312,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
                 <li className='p-2 px-3'>
                   <button
                     className='flex w-full appearance-none place-content-center items-center justify-center rounded-full border border-gray-700 bg-transparent p-2 text-sm font-medium text-gray-700 transition-all hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:border-gray-500 dark:text-gray-500'
-                    onClick={onClose}
+                    onClick={handleClose}
                   >
                     <FormattedMessage id='lightbox.close' defaultMessage='Close' />
                   </button>
