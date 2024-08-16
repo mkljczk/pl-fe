@@ -11,10 +11,10 @@ import { deleteStatusModal, toggleStatusSensitivityModal } from 'soapbox/actions
 import { initMuteModal } from 'soapbox/actions/mutes';
 import { initReport, ReportableEntities } from 'soapbox/actions/reports';
 import { deleteStatus } from 'soapbox/actions/statuses';
+import DropdownMenu, { type Menu as MenuType } from 'soapbox/components/dropdown-menu';
 import Icon from 'soapbox/components/icon';
 import StillImage from 'soapbox/components/still-image';
-import { Button, HStack, IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuLink, MenuList, Stack, Text } from 'soapbox/components/ui';
-import SvgIcon from 'soapbox/components/ui/icon/svg-icon';
+import { Button, HStack, IconButton, Stack, Text } from 'soapbox/components/ui';
 import VerificationBadge from 'soapbox/components/verification-badge';
 import { useAppDispatch, useFeatures, useOwnAccount, useSettings } from 'soapbox/hooks';
 import { useChats } from 'soapbox/queries/chats';
@@ -26,7 +26,6 @@ import PlaceholderEventHeader from '../../placeholder/components/placeholder-eve
 import EventActionButton from '../components/event-action-button';
 import EventDate from '../components/event-date';
 
-import type { Menu as MenuType } from 'soapbox/components/dropdown-menu';
 import type { Status } from 'soapbox/normalizers';
 
 const messages = defineMessages({
@@ -378,39 +377,17 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       <Stack space={2}>
         <HStack className='w-full' alignItems='start' space={2}>
           <Text className='grow' size='lg' weight='bold'>{event.name}</Text>
-          <Menu>
-            <MenuButton
-              as={IconButton}
+
+          <DropdownMenu items={makeMenu()} placement='bottom-end'>
+            <IconButton
               src={require('@tabler/icons/outline/dots.svg')}
               theme='outlined'
               className='h-[30px] px-2'
               iconClassName='h-4 w-4'
               children={null}
             />
+          </DropdownMenu>
 
-            <MenuList>
-              {makeMenu().map((menuItem, idx) => {
-                if (typeof menuItem?.text === 'undefined') {
-                  return <MenuDivider key={idx} />;
-                } else {
-                  const Comp = (menuItem.href ? MenuLink : MenuItem) as any;
-                  const itemProps = menuItem.href ? { href: menuItem.href, target: menuItem.target || '_self' } : { onSelect: menuItem.action };
-
-                  return (
-                    <Comp key={idx} {...itemProps} className='group'>
-                      <div className='flex items-center'>
-                        {menuItem.icon && (
-                          <SvgIcon src={menuItem.icon} className='mr-3 h-5 w-5 flex-none text-gray-400 group-hover:text-gray-500' />
-                        )}
-
-                        <div className='truncate'>{menuItem.text}</div>
-                      </div>
-                    </Comp>
-                  );
-                }
-              })}
-            </MenuList>
-          </Menu>
           {account.id === ownAccount?.id ? (
             <Button
               size='sm'

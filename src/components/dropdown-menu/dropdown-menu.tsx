@@ -2,10 +2,10 @@ import { offset, Placement, useFloating, flip, arrow, shift } from '@floating-ui
 import clsx from 'clsx';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { closeDropdownMenu as closeDropdownMenuRedux, openDropdownMenu } from 'soapbox/actions/dropdown-menu';
-import { closeModal, openModal } from 'soapbox/actions/modals';
 import { useAppDispatch } from 'soapbox/hooks';
 import { userTouching } from 'soapbox/is-mobile';
 
@@ -20,7 +20,8 @@ type Menu = Array<MenuItem | null>;
 interface IDropdownMenu {
   children?: React.ReactElement;
   disabled?: boolean;
-  items: Menu;
+  items?: Menu;
+  component?: React.FC<{ handleClose: () => any }>;
   onClose?: () => void;
   onOpen?: () => void;
   onShiftClick?: React.EventHandler<React.MouseEvent | React.KeyboardEvent>;
@@ -37,13 +38,13 @@ const DropdownMenu = (props: IDropdownMenu) => {
     children,
     disabled,
     items,
+    component: Component,
     onClose,
     onOpen,
     onShiftClick,
     placement: initialPlacement = 'top',
     src = require('@tabler/icons/outline/dots.svg'),
     title = 'Menu',
-    ...filteredProps
   } = props;
 
   const dispatch = useAppDispatch();
@@ -52,7 +53,11 @@ const DropdownMenu = (props: IDropdownMenu) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isDisplayed, setIsDisplayed] = useState<boolean>(false);
 
+  const touching = userTouching.matches;
+
   const arrowRef = useRef<HTMLDivElement>(null);
+  const dropdownHistoryKey = useRef<number>();
+  const unlistenHistory = useRef<ReturnType<typeof history.listen>>();
 
   const { x, y, strategy, refs, middlewareData, placement } = useFloating<HTMLButtonElement>({
     placement: initialPlacement,
@@ -87,37 +92,30 @@ const DropdownMenu = (props: IDropdownMenu) => {
     }
   };
 
-  /**
-   * On mobile screens, let's replace the Popper dropdown with a Modal.
-   */
   const handleOpen = () => {
-    if (userTouching.matches) {
-      dispatch(
-        openModal('ACTIONS', {
-          status: filteredProps.status,
-          actions: items,
-          onClick: handleItemClick,
-        }),
-      );
-    } else {
-      dispatch(openDropdownMenu());
-      setIsOpen(true);
-    }
+    dispatch(openDropdownMenu());
+    setIsOpen(true);
 
     if (onOpen) {
       onOpen();
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (goBack: any = true) => {
     (refs.reference.current as HTMLButtonElement)?.focus();
 
-    if (userTouching.matches) {
-      dispatch(closeModal('ACTIONS'));
-    } else {
-      closeDropdownMenu();
-      setIsOpen(false);
+    if (unlistenHistory.current) {
+      unlistenHistory.current();
+      unlistenHistory.current = undefined;
     }
+    const { state } = history.location;
+    if (goBack && state && (state as any).soapboxDropdownKey === dropdownHistoryKey.current) {
+      history.goBack();
+      (history.location.state as any).soapboxDropdownKey = true;
+    }
+
+    closeDropdownMenu();
+    setIsOpen(false);
 
     if (onClose) {
       onClose();
@@ -145,36 +143,17 @@ const DropdownMenu = (props: IDropdownMenu) => {
     }
   };
 
-  const handleItemClick: React.EventHandler<React.MouseEvent> = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const i = Number(event.currentTarget.getAttribute('data-index'));
-    const item = items[i];
-    if (!item) return;
-
-    const { action, to } = item;
-
-    handleClose();
-
-    if (typeof action === 'function') {
-      action(event);
-    } else if (to) {
-      dispatch(closeModal('MEDIA'));
-      history.push(to);
-    }
-  };
-
   const handleDocumentClick = (event: Event) => {
     if (refs.floating.current && !refs.floating.current.contains(event.target as Node)) {
       handleClose();
+      event.stopPropagation();
     }
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (!refs.floating.current) return;
 
-    const items = Array.from(refs.floating.current.getElementsByTagName('a'));
+    const items = Array.from(refs.floating.current.querySelectorAll('a, button'));
     const index = items.indexOf(document.activeElement as any);
 
     let element = null;
@@ -205,7 +184,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
     }
 
     if (element) {
-      element.focus();
+      (element as HTMLAnchorElement).focus();
       e.preventDefault();
       e.stopPropagation();
     }
@@ -257,13 +236,51 @@ const DropdownMenu = (props: IDropdownMenu) => {
 
   useEffect(() => {
     setTimeout(() => setIsDisplayed(isOpen), isOpen ? 0 : 150);
+
+    if (isOpen && touching) {
+      const { pathname, state } = history.location;
+
+      dropdownHistoryKey.current = Date.now();
+
+      history.push(pathname, { ...(state as any), soapboxDropdownKey: dropdownHistoryKey.current });
+
+      unlistenHistory.current = history.listen(({ state }, action) => {
+        if (!(state as any)?.soapboxDropdownKey) {
+          handleClose(false);
+        } else if (action === 'POP') {
+          handleClose(false);
+        }
+      });
+    }
   }, [isOpen]);
 
-  if (items.length === 0) {
+  if (items?.length === 0 && !Component) {
     return null;
   }
 
-  const autoFocus = !items.some((item) => item?.active);
+  const autoFocus = items && !items.some((item) => item?.active);
+
+  const getClassName = () => {
+    const className = clsx('z-[1001] bg-white py-1 shadow-lg ease-in-out focus:outline-none black:bg-black no-reduce-motion:transition-all dark:bg-gray-900 dark:ring-2 dark:ring-primary-700', touching ? clsx({
+      'overflow-auto fixed left-0 right-0 mx-auto w-[calc(100vw-2rem)] max-w-lg max-h-[calc(100dvh-1rem)] rounded-t-xl duration-200': true,
+      'bottom-0 opacity-100': isDisplayed && isOpen,
+      '-bottom-32 opacity-0': !(isDisplayed && isOpen),
+    }) : clsx({
+      'rounded-md min-w-56 max-w-sm duration-100': true,
+      'scale-0': !(isDisplayed && isOpen),
+      'scale-100': isDisplayed && isOpen,
+      'origin-bottom': placement === 'top',
+      'origin-left': placement === 'right',
+      'origin-top': placement === 'bottom',
+      'origin-right': placement === 'left',
+      'origin-bottom-left': placement === 'top-start',
+      'origin-bottom-right': placement === 'top-end',
+      'origin-top-left': placement === 'bottom-start',
+      'origin-top-right': placement === 'bottom-end',
+    }));
+
+    return className;
+  };
 
   return (
     <>
@@ -291,31 +308,28 @@ const DropdownMenu = (props: IDropdownMenu) => {
 
       {isOpen || isDisplayed ? (
         <Portal>
+          {touching && (
+            <div
+              className={clsx('fixed inset-0 z-[1000] bg-gray-500 black:bg-gray-900 no-reduce-motion:transition-opacity dark:bg-gray-700', {
+                'opacity-0': !(isOpen && isDisplayed),
+                'opacity-60': (isOpen && isDisplayed),
+              })}
+              role='button'
+            />
+          )}
           <div
             data-testid='dropdown-menu'
+            className={getClassName()}
             ref={refs.setFloating}
-            className={
-              clsx('z-[1001] w-56 rounded-md bg-white py-1 shadow-lg duration-100 ease-in-out focus:outline-none black:bg-black no-reduce-motion:transition-transform dark:bg-gray-900 dark:ring-2 dark:ring-primary-700', {
-                'scale-0': !(isDisplayed && isOpen),
-                'scale-100': (isDisplayed && isOpen),
-                'origin-bottom': placement === 'top',
-                'origin-left': placement === 'right',
-                'origin-top': placement === 'bottom',
-                'origin-right': placement === 'left',
-                'origin-bottom-left': placement === 'top-start',
-                'origin-bottom-right': placement === 'top-end',
-                'origin-top-left': placement === 'bottom-start',
-                'origin-top-right': placement === 'bottom-end',
-              })
-            }
-            style={{
+            style={touching ? undefined : {
               position: strategy,
               top: y ?? 0,
               left: x ?? 0,
             }}
           >
+            {Component && <Component handleClose={handleClose} />}
             <ul>
-              {items.map((item, idx) => (
+              {items?.map((item, idx) => (
                 <DropdownMenuItem
                   key={idx}
                   item={item}
@@ -324,14 +338,26 @@ const DropdownMenu = (props: IDropdownMenu) => {
                   autoFocus={autoFocus}
                 />
               ))}
+              {touching && (
+                <li className='p-2 px-3'>
+                  <button
+                    className='flex w-full appearance-none place-content-center items-center justify-center rounded-full border border-gray-700 bg-transparent p-2 text-sm font-medium text-gray-700 transition-all hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:border-gray-500 dark:text-gray-500'
+                    onClick={handleClose}
+                  >
+                    <FormattedMessage id='lightbox.close' defaultMessage='Close' />
+                  </button>
+                </li>
+              )}
             </ul>
 
             {/* Arrow */}
-            <div
-              ref={arrowRef}
-              style={arrowProps}
-              className='pointer-events-none absolute z-[-1] h-3 w-3 bg-white black:bg-black dark:bg-gray-900'
-            />
+            {!touching && (
+              <div
+                ref={arrowRef}
+                style={arrowProps}
+                className='pointer-events-none absolute z-[-1] h-3 w-3 bg-white black:bg-black dark:bg-gray-900'
+              />
+            )}
           </div>
         </Portal>
       ) : null}

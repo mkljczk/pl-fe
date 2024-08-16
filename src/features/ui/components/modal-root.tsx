@@ -96,42 +96,24 @@ interface IModalRoot {
   onClose: (type?: ModalType) => void;
 }
 
-class ModalRoot extends React.PureComponent<IModalRoot> {
+const ModalRoot: React.FC<IModalRoot> = ({ onClose, props, type }) => {
+  const renderLoading = (modalId: string) => !['MEDIA', 'VIDEO', 'BOOST', 'CONFIRM', 'ACTIONS'].includes(modalId) ? <ModalLoading /> : null;
 
-  getSnapshotBeforeUpdate() {
-    return { visible: !!this.props.type };
-  }
-
-  componentDidUpdate(prevProps: IModalRoot, prevState: any, { visible }: any) {
-    if (visible) {
-      document.body.classList.add('with-modals');
-    } else {
-      document.body.classList.remove('with-modals');
-    }
-  }
-
-  renderLoading = (modalId: string) => !['MEDIA', 'VIDEO', 'BOOST', 'CONFIRM', 'ACTIONS'].includes(modalId) ? <ModalLoading /> : null;
-
-  onClickClose = (_?: ModalType) => {
-    const { onClose, type } = this.props;
+  const onClickClose = (_?: ModalType) => {
     onClose(type);
   };
 
-  render() {
-    const { type, props } = this.props;
-    const Component = type ? MODAL_COMPONENTS[type] : null;
+  const Component = type ? MODAL_COMPONENTS[type] : null;
 
-    return (
-      <Base onClose={this.onClickClose} type={type}>
-        {(Component && !!type) && (
-          <Suspense fallback={this.renderLoading(type)}>
-            <Component {...props} onClose={this.onClickClose} />
-          </Suspense>
-        )}
-      </Base>
-    );
-  }
-
-}
+  return (
+    <Base onClose={onClickClose} type={type}>
+      {(Component && !!type) && (
+        <Suspense fallback={renderLoading(type)}>
+          <Component {...props} onClose={onClickClose} />
+        </Suspense>
+      )}
+    </Base>
+  );
+};
 
 export { type ModalType, ModalRoot as default };

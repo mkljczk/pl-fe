@@ -38,7 +38,8 @@ const SoapboxMount = () => {
 
   // @ts-ignore: I don't actually know what these should be, lol
   const shouldUpdateScroll = (prevRouterProps, { location }) =>
-    !(location.state?.soapboxModalKey && location.state?.soapboxModalKey !== prevRouterProps?.location?.state?.soapboxModalKey);
+    !(location.state?.soapboxModalKey && location.state?.soapboxModalKey !== prevRouterProps?.location?.state?.soapboxModalKey)
+    && !(location.state?.soapboxDropdownKey && location.state?.soapboxDropdownKey !== prevRouterProps?.location?.state?.soapboxDropdownKey);
 
   return (
     <SiteErrorBoundary>
