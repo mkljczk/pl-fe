@@ -265,8 +265,6 @@ const DropdownMenu = (props: IDropdownMenu) => {
 
   const autoFocus = !items.some((item) => item?.active);
 
-  console.log(placement);
-
   return (
     <>
       {children ? (
