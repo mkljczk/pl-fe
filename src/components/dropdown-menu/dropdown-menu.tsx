@@ -50,6 +50,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
   const history = useHistory();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isDisplayed, setIsDisplayed] = useState<boolean>(false);
 
   const arrowRef = useRef<HTMLDivElement>(null);
 
@@ -254,11 +255,17 @@ const DropdownMenu = (props: IDropdownMenu) => {
     }
   }, [isOpen, refs.floating.current]);
 
+  useEffect(() => {
+    setTimeout(() => setIsDisplayed(isOpen), isOpen ? 0 : 150);
+  }, [isOpen]);
+
   if (items.length === 0) {
     return null;
   }
 
   const autoFocus = !items.some((item) => item?.active);
+
+  console.log(placement);
 
   return (
     <>
@@ -284,14 +291,23 @@ const DropdownMenu = (props: IDropdownMenu) => {
         />
       )}
 
-      {isOpen ? (
+      {isOpen || isDisplayed ? (
         <Portal>
           <div
             data-testid='dropdown-menu'
             ref={refs.setFloating}
             className={
-              clsx('z-[1001] w-56 rounded-md bg-white py-1 shadow-lg transition-opacity duration-100 focus:outline-none black:bg-black dark:bg-gray-900 dark:ring-2 dark:ring-primary-700', {
-                'opacity-0 pointer-events-none': !isOpen,
+              clsx('z-[1001] w-56 rounded-md bg-white py-1 shadow-lg duration-100 ease-in-out focus:outline-none black:bg-black no-reduce-motion:transition-transform dark:bg-gray-900 dark:ring-2 dark:ring-primary-700', {
+                'scale-0': !(isDisplayed && isOpen),
+                'scale-100': (isDisplayed && isOpen),
+                'origin-bottom': placement === 'top',
+                'origin-left': placement === 'right',
+                'origin-top': placement === 'bottom',
+                'origin-right': placement === 'left',
+                'origin-bottom-left': placement === 'top-start',
+                'origin-bottom-right': placement === 'top-end',
+                'origin-top-left': placement === 'bottom-start',
+                'origin-top-right': placement === 'bottom-end',
               })
             }
             style={{
