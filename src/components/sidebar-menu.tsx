@@ -149,6 +149,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   }, []);
 
   useEffect(() => {
+    if (sidebarOpen) containerRef.current?.querySelector('a')?.focus();
     setTimeout(() => setSidebarVisible(sidebarOpen), sidebarOpen ? 0 : 150);
   }, [sidebarOpen]);
 
@@ -183,8 +184,9 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
         <div
           className={
             clsx({
-              'flex flex-col flex-1 bg-white black:bg-black dark:bg-primary-900 -translate-x-full rtl:translate-x-full w-full max-w-xs no-reduce-motion:transition-transform ease-in-out left-2 bottom-[60px] max-h-[calc(100vh-68px)] fixed rounded-xl dark:border dark:border-gray-800 shadow-lg dark:shadow-none': true,
-              '!translate-x-0': sidebarVisible && sidebarOpen,
+              'fixed bottom-[60px] left-2 flex max-h-[calc(100vh-68px)] w-full max-w-xs flex-1 origin-bottom-left flex-col rounded-xl bg-white shadow-lg ease-in-out black:bg-black no-reduce-motion:transition-transform dark:border dark:border-gray-800 dark:bg-primary-900 dark:shadow-none': true,
+              'scale-100': sidebarVisible && sidebarOpen,
+              'scale-0': !(sidebarVisible && sidebarOpen),
             })
           }
         >
