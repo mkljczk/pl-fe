@@ -9,6 +9,7 @@ import { saveDraftStatus } from 'soapbox/actions/draft-statuses';
 import { cancelEventCompose } from 'soapbox/actions/events';
 import { openModal, closeModal } from 'soapbox/actions/modals';
 import { useAppDispatch, useAppSelector, usePrevious } from 'soapbox/hooks';
+import { userTouching } from 'soapbox/is-mobile';
 
 import type { ModalType } from 'soapbox/features/ui/components/modal-root';
 import type { ReducerCompose } from 'soapbox/reducers/compose';
@@ -220,6 +221,8 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   }, [children]);
 
   useEffect(() => {
+    if (!userTouching.matches) return;
+
     if (isDropdownOpen && unlistenHistory.current) {
       unlistenHistory.current();
     } else if (!isDropdownOpen && wasDropdownOpen) {
