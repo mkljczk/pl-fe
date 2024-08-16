@@ -279,7 +279,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
             <div
               className={clsx('fixed inset-0 z-[1000] bg-gray-500 black:bg-gray-900 no-reduce-motion:transition-opacity dark:bg-gray-700', {
                 'opacity-0': !(isOpen && isDisplayed),
-                'opacity-40': (isOpen && isDisplayed),
+                'opacity-60': (isOpen && isDisplayed),
               })}
               role='button'
               onClick={handleClose}
@@ -306,7 +306,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
                 />
               ))}
               {touching && (
-                <li className='p-2'>
+                <li className='p-2 px-3'>
                   <button
                     className='flex w-full appearance-none place-content-center items-center justify-center rounded-full border border-gray-700 bg-transparent p-2 text-sm font-medium text-gray-700 transition-all hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:border-gray-500 dark:text-gray-500'
                     onClick={onClose}

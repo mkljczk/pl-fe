@@ -105,16 +105,21 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
 
   const handleSwitchAccount = (account: AccountEntity): React.MouseEventHandler => (e) => {
     e.preventDefault();
+    e.stopPropagation();
+
     dispatch(switchAccount(account.id));
   };
 
   const onClickLogOut: React.MouseEventHandler = (e) => {
     e.preventDefault();
+    e.stopPropagation();
+
     dispatch(logOut());
   };
 
   const handleSwitcherClick: React.MouseEventHandler = (e) => {
     e.preventDefault();
+    e.stopPropagation();
 
     setSwitcher((prevState) => (!prevState));
   };
