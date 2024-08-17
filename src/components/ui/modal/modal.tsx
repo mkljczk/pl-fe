@@ -84,12 +84,10 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
 }, ref) => {
   const intl = useIntl();
   const buttonRef = React.useRef<HTMLButtonElement>(null);
-  const firstRender = React.useRef(true);
+  const [firstRender, setFirstRender] = React.useState(true);
 
   React.useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-    }
+    setFirstRender(false);
   }, []);
 
   React.useEffect(() => {
@@ -103,8 +101,8 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
       ref={ref}
       data-testid='modal'
       className={clsx(className, 'pointer-events-auto relative mx-auto block w-full rounded-2xl bg-white p-6 text-start align-middle text-gray-900 shadow-xl transition-all ease-in-out black:bg-black dark:bg-primary-900 dark:text-gray-100', widths[width], {
-        'bottom-0': !firstRender.current,
-        '-bottom-32': firstRender.current,
+        'bottom-0': !firstRender,
+        '-bottom-32': firstRender,
       })}
     >
       <div className='w-full justify-between sm:flex sm:items-start'>
