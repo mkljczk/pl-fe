@@ -109,7 +109,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
       unlistenHistory.current = undefined;
     }
     const { state } = history.location;
-    if (goBack && state && (state as any).soapboxDropdownKey === dropdownHistoryKey.current) {
+    if (goBack && (state as any).soapboxDropdownKey && (state as any).soapboxDropdownKey === dropdownHistoryKey.current) {
       history.goBack();
       (history.location.state as any).soapboxDropdownKey = true;
     }
