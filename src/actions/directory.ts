@@ -1,27 +1,27 @@
-import api from '../api';
+import { getClient } from '../api';
 
 import { fetchRelationships } from './accounts';
 import { importFetchedAccounts } from './importer';
 
+import type { Account, ProfileDirectoryParams } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const DIRECTORY_FETCH_REQUEST = 'DIRECTORY_FETCH_REQUEST';
-const DIRECTORY_FETCH_SUCCESS = 'DIRECTORY_FETCH_SUCCESS';
-const DIRECTORY_FETCH_FAIL    = 'DIRECTORY_FETCH_FAIL';
+const DIRECTORY_FETCH_REQUEST = 'DIRECTORY_FETCH_REQUEST' as const;
+const DIRECTORY_FETCH_SUCCESS = 'DIRECTORY_FETCH_SUCCESS' as const;
+const DIRECTORY_FETCH_FAIL = 'DIRECTORY_FETCH_FAIL' as const;
 
-const DIRECTORY_EXPAND_REQUEST = 'DIRECTORY_EXPAND_REQUEST';
-const DIRECTORY_EXPAND_SUCCESS = 'DIRECTORY_EXPAND_SUCCESS';
-const DIRECTORY_EXPAND_FAIL    = 'DIRECTORY_EXPAND_FAIL';
+const DIRECTORY_EXPAND_REQUEST = 'DIRECTORY_EXPAND_REQUEST' as const;
+const DIRECTORY_EXPAND_SUCCESS = 'DIRECTORY_EXPAND_SUCCESS' as const;
+const DIRECTORY_EXPAND_FAIL = 'DIRECTORY_EXPAND_FAIL' as const;
 
-const fetchDirectory = (params: Record<string, any>) =>
+const fetchDirectory = (params: ProfileDirectoryParams) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchDirectoryRequest());
 
-    api(getState)('/api/v1/directory', { params: { ...params, limit: 20 } }).then(({ json: data }) => {
+    return getClient(getState()).instance.profileDirectory({ ...params, limit: 20 }).then((data) => {
       dispatch(importFetchedAccounts(data));
       dispatch(fetchDirectorySuccess(data));
-      dispatch(fetchRelationships(data.map((x: APIEntity) => x.id)));
+      dispatch(fetchRelationships(data.map((x) => x.id)));
     }).catch(error => dispatch(fetchDirectoryFail(error)));
   };
 
@@ -29,7 +29,7 @@ const fetchDirectoryRequest = () => ({
   type: DIRECTORY_FETCH_REQUEST,
 });
 
-const fetchDirectorySuccess = (accounts: APIEntity[]) => ({
+const fetchDirectorySuccess = (accounts: Array<Account>) => ({
   type: DIRECTORY_FETCH_SUCCESS,
   accounts,
 });
@@ -45,10 +45,10 @@ const expandDirectory = (params: Record<string, any>) =>
 
     const loadedItems = getState().user_lists.directory.items.size;
 
-    api(getState)('/api/v1/directory', { params: { ...params, offset: loadedItems, limit: 20 } }).then(({ json: data }) => {
+    return getClient(getState()).instance.profileDirectory({ ...params, offset: loadedItems, limit: 20 }).then((data) => {
       dispatch(importFetchedAccounts(data));
       dispatch(expandDirectorySuccess(data));
-      dispatch(fetchRelationships(data.map((x: APIEntity) => x.id)));
+      dispatch(fetchRelationships(data.map((x) => x.id)));
     }).catch(error => dispatch(expandDirectoryFail(error)));
   };
 
@@ -56,7 +56,7 @@ const expandDirectoryRequest = () => ({
   type: DIRECTORY_EXPAND_REQUEST,
 });
 
-const expandDirectorySuccess = (accounts: APIEntity[]) => ({
+const expandDirectorySuccess = (accounts: Array<Account>) => ({
   type: DIRECTORY_EXPAND_SUCCESS,
   accounts,
 });

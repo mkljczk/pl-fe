@@ -8,12 +8,12 @@ import unicodeMapping from 'soapbox/features/emoji/mapping';
 import Emoji from './emoji';
 
 import type { Map as ImmutableMap } from 'immutable';
-import type { AnnouncementReaction } from 'soapbox/schemas';
+import type { AnnouncementReaction, CustomEmoji } from 'pl-api';
 
 interface IReaction {
   announcementId: string;
   reaction: AnnouncementReaction;
-  emojiMap: ImmutableMap<string, ImmutableMap<string, string>>;
+  emojiMap: ImmutableMap<string, CustomEmoji>;
   style: React.CSSProperties;
 }
 

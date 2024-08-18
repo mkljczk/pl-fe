@@ -43,6 +43,7 @@ import {
   ACCOUNT_FAVOURITED_STATUSES_EXPAND_REQUEST,
   ACCOUNT_FAVOURITED_STATUSES_EXPAND_SUCCESS,
   ACCOUNT_FAVOURITED_STATUSES_EXPAND_FAIL,
+  type FavouritesAction,
 } from '../actions/favourites';
 import {
   FAVOURITE_SUCCESS,
@@ -51,9 +52,11 @@ import {
   UNBOOKMARK_SUCCESS,
   PIN_SUCCESS,
   UNPIN_SUCCESS,
+  type InteractionsAction,
 } from '../actions/interactions';
 import {
   PINNED_STATUSES_FETCH_SUCCESS,
+  type PinStatusesAction,
 } from '../actions/pin-statuses';
 import {
   SCHEDULED_STATUSES_FETCH_REQUEST,
@@ -66,11 +69,11 @@ import {
   SCHEDULED_STATUS_CANCEL_SUCCESS,
 } from '../actions/scheduled-statuses';
 
+import type { PaginatedResponse, ScheduledStatus, Status } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { APIEntity, Status as StatusEntity } from 'soapbox/types/entities';
 
 const StatusListRecord = ImmutableRecord({
-  next: null as string | null,
+  next: null as (() => Promise<PaginatedResponse<Status>>) | null,
   loaded: false,
   isLoading: null as boolean | null,
   items: ImmutableOrderedSet<string>(),
@@ -88,16 +91,16 @@ const initialState: State = ImmutableMap({
   joined_events: StatusListRecord(),
 });
 
-const getStatusId = (status: string | APIEntity) => typeof status === 'string' ? status : status.id;
+const getStatusId = (status: string | Pick<Status, 'id'>) => typeof status === 'string' ? status : status.id;
 
-const getStatusIds = (statuses: APIEntity[] = []) => (
+const getStatusIds = (statuses: Array<string | Pick<Status, 'id'>> = []) => (
   ImmutableOrderedSet(statuses.map(getStatusId))
 );
 
 const setLoading = (state: State, listType: string, loading: boolean) =>
   state.update(listType, StatusListRecord(), listMap => listMap.set('isLoading', loading));
 
-const normalizeList = (state: State, listType: string, statuses: APIEntity[], next: string | null) =>
+const normalizeList = (state: State, listType: string, statuses: Array<string | Pick<Status, 'id'>>, next: (() => Promise<PaginatedResponse<Status>>) | null) =>
   state.update(listType, StatusListRecord(), listMap => listMap.withMutations(map => {
     map.set('next', next);
     map.set('loaded', true);
@@ -105,7 +108,7 @@ const normalizeList = (state: State, listType: string, statuses: APIEntity[], ne
     map.set('items', getStatusIds(statuses));
   }));
 
-const appendToList = (state: State, listType: string, statuses: APIEntity[], next: string | null) => {
+const appendToList = (state: State, listType: string, statuses: Array<string | Pick<Status, 'id'>>, next: (() => Promise<PaginatedResponse<Status>>) | null) => {
   const newIds = getStatusIds(statuses);
 
   return state.update(listType, StatusListRecord(), listMap => listMap.withMutations(map => {
@@ -115,42 +118,42 @@ const appendToList = (state: State, listType: string, statuses: APIEntity[], nex
   }));
 };
 
-const prependOneToList = (state: State, listType: string, status: APIEntity) => {
+const prependOneToList = (state: State, listType: string, status: string | Pick<Status, 'id'>) => {
   const statusId = getStatusId(status);
   return state.update(listType, StatusListRecord(), listMap => listMap.update('items', items =>
     ImmutableOrderedSet([statusId]).union(items as ImmutableOrderedSet<string>),
   ));
 };
 
-const removeOneFromList = (state: State, listType: string, status: APIEntity) => {
+const removeOneFromList = (state: State, listType: string, status: string | Pick<Status, 'id'>) => {
   const statusId = getStatusId(status);
   return state.update(listType, StatusListRecord(), listMap => listMap.update('items', items => items.delete(statusId)));
 };
 
-const maybeAppendScheduledStatus = (state: State, status: APIEntity) => {
+const maybeAppendScheduledStatus = (state: State, status: Pick<ScheduledStatus | Status, 'id' | 'scheduled_at'>) => {
   if (!status.scheduled_at) return state;
   return prependOneToList(state, 'scheduled_statuses', getStatusId(status));
 };
 
-const addBookmarkToLists = (state: State, status: APIEntity) => {
+const addBookmarkToLists = (state: State, status: Pick<Status, 'id' | 'bookmark_folder'>) => {
   state = prependOneToList(state, 'bookmarks', status);
-  const folderId = status.pleroma.bookmark_folder;
+  const folderId = status.bookmark_folder;
   if (folderId) {
     return prependOneToList(state, `bookmarks:${folderId}`, status);
   }
   return state;
 };
 
-const removeBookmarkFromLists = (state: State, status: StatusEntity) => {
+const removeBookmarkFromLists = (state: State, status: Pick<Status, 'id' | 'bookmark_folder'>) => {
   state = removeOneFromList(state, 'bookmarks', status);
-  const folderId = status.pleroma.get('bookmark_folder');
+  const folderId = status.bookmark_folder;
   if (folderId) {
     return removeOneFromList(state, `bookmarks:${folderId}`, status);
   }
   return state;
 };
 
-const statusLists = (state = initialState, action: AnyAction) => {
+const statusLists = (state = initialState, action: AnyAction | FavouritesAction | InteractionsAction | PinStatusesAction) => {
   switch (action.type) {
     case FAVOURITED_STATUSES_FETCH_REQUEST:
     case FAVOURITED_STATUSES_EXPAND_REQUEST:
@@ -187,7 +190,7 @@ const statusLists = (state = initialState, action: AnyAction) => {
     case UNFAVOURITE_SUCCESS:
       return removeOneFromList(state, 'favourites', action.status);
     case BOOKMARK_SUCCESS:
-      return addBookmarkToLists(state, action.response);
+      return addBookmarkToLists(state, action.status);
     case UNBOOKMARK_SUCCESS:
       return removeBookmarkFromLists(state, action.status);
     case PINNED_STATUSES_FETCH_SUCCESS:
@@ -208,7 +211,7 @@ const statusLists = (state = initialState, action: AnyAction) => {
       return appendToList(state, 'scheduled_statuses', action.statuses, action.next);
     case SCHEDULED_STATUS_CANCEL_REQUEST:
     case SCHEDULED_STATUS_CANCEL_SUCCESS:
-      return removeOneFromList(state, 'scheduled_statuses', action.id || action.status.id);
+      return removeOneFromList(state, 'scheduled_statuses', action.statusId);
     case STATUS_QUOTES_FETCH_REQUEST:
     case STATUS_QUOTES_EXPAND_REQUEST:
       return setLoading(state, `quotes:${action.statusId}`, true);

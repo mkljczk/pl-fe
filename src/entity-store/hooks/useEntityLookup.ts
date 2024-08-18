@@ -16,16 +16,16 @@ import type { PlfeResponse } from 'soapbox/api';
 /** Entities will be filtered through this function until it returns true. */
 type LookupFn<TEntity extends Entity> = (entity: TEntity) => boolean
 
-const useEntityLookup = <TEntity extends Entity>(
+const useEntityLookup = <TEntity extends Entity, TTransformedEntity extends Entity = TEntity>(
   entityType: string,
-  lookupFn: LookupFn<TEntity>,
+  lookupFn: LookupFn<TTransformedEntity>,
   entityFn: EntityFn<void>,
-  opts: UseEntityOpts<TEntity> = {},
+  opts: UseEntityOpts<TEntity, TTransformedEntity> = {},
 ) => {
   const { schema = z.custom<TEntity>() } = opts;
 
   const dispatch = useAppDispatch();
-  const [fetchedEntity, setFetchedEntity] = useState<TEntity | undefined>();
+  const [fetchedEntity, setFetchedEntity] = useState<TTransformedEntity | undefined>();
   const [isFetching, setPromise] = useLoading(true);
   const [error, setError] = useState<unknown>();
 
@@ -37,7 +37,8 @@ const useEntityLookup = <TEntity extends Entity>(
     try {
       const response = await setPromise(entityFn());
       const entity = schema.parse(response.json);
-      setFetchedEntity(entity);
+      const transformedEntity = opts.transform ? opts.transform(entity) : entity;
+      setFetchedEntity(transformedEntity as TTransformedEntity);
       dispatch(importEntities([entity], entityType));
     } catch (e) {
       setError(e);

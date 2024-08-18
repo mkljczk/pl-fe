@@ -1,19 +1,18 @@
+import { type Relationship, relationshipSchema } from 'pl-api';
+
 import { Entities } from 'soapbox/entity-store/entities';
 import { useBatchedEntities } from 'soapbox/entity-store/hooks/useBatchedEntities';
-import { useLoggedIn } from 'soapbox/hooks';
-import { useApi } from 'soapbox/hooks/useApi';
-import { type Relationship, relationshipSchema } from 'soapbox/schemas';
+import { useClient, useLoggedIn } from 'soapbox/hooks';
 
-const useRelationships = (listKey: string[], ids: string[]) => {
-  const api = useApi();
+const useRelationships = (listKey: string[], accountIds: string[]) => {
+  const client = useClient();
   const { isLoggedIn } = useLoggedIn();
 
-  const fetchRelationships = (ids: string[]) =>
-    api('/api/v1/accounts/relationships', { params: { ids } });
+  const fetchRelationships = (accountIds: string[]) => client.accounts.getRelationships(accountIds);
 
   const { entityMap: relationships, ...result } = useBatchedEntities<Relationship>(
     [Entities.RELATIONSHIPS, ...listKey],
-    ids,
+    accountIds,
     fetchRelationships,
     { schema: relationshipSchema, enabled: isLoggedIn },
   );

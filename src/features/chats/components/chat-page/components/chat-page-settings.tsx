@@ -31,7 +31,7 @@ const ChatPageSettings = () => {
   const updateCredentials = useUpdateCredentials();
 
   const [data, setData] = useState<FormData>({
-    accepts_chat_messages: account?.pleroma?.accepts_chat_messages === true,
+    accepts_chat_messages: account?.accepts_chat_messages === true,
   });
 
   const onToggleChange = (key: string[], checked: boolean) => {

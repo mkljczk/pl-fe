@@ -5,8 +5,8 @@
  * @see module:soapbox/actions/apps
  * @see module:soapbox/actions/oauth
  * @see module:soapbox/actions/security
- */
-
+*/
+import { credentialAccountSchema, PlApiClient, type CreateAccountParams, type Token } from 'pl-api';
 import { defineMessages } from 'react-intl';
 
 import { createAccount } from 'soapbox/actions/accounts';
@@ -14,6 +14,7 @@ import { createApp } from 'soapbox/actions/apps';
 import { fetchMeSuccess, fetchMeFail } from 'soapbox/actions/me';
 import { obtainOAuthToken, revokeOAuthToken } from 'soapbox/actions/oauth';
 import { startOnboarding } from 'soapbox/actions/onboarding';
+import * as BuildConfig from 'soapbox/build-config';
 import { custom } from 'soapbox/custom';
 import { queryClient } from 'soapbox/queries/client';
 import { selectAccount } from 'soapbox/selectors';
@@ -26,26 +27,26 @@ import { normalizeUsername } from 'soapbox/utils/input';
 import { getScopes } from 'soapbox/utils/scopes';
 import { isStandalone } from 'soapbox/utils/state';
 
-import api, { type PlfeResponse, getFetch } from '../api';
+import { type PlfeResponse, getClient } from '../api';
 
 import { importFetchedAccount } from './importer';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 
-const SWITCH_ACCOUNT = 'SWITCH_ACCOUNT';
+const SWITCH_ACCOUNT = 'SWITCH_ACCOUNT' as const;
 
-const AUTH_APP_CREATED    = 'AUTH_APP_CREATED';
-const AUTH_APP_AUTHORIZED = 'AUTH_APP_AUTHORIZED';
-const AUTH_LOGGED_IN      = 'AUTH_LOGGED_IN';
-const AUTH_LOGGED_OUT     = 'AUTH_LOGGED_OUT';
+const AUTH_APP_CREATED = 'AUTH_APP_CREATED' as const;
+const AUTH_APP_AUTHORIZED = 'AUTH_APP_AUTHORIZED' as const;
+const AUTH_LOGGED_IN = 'AUTH_LOGGED_IN' as const;
+const AUTH_LOGGED_OUT = 'AUTH_LOGGED_OUT' as const;
 
-const VERIFY_CREDENTIALS_REQUEST = 'VERIFY_CREDENTIALS_REQUEST';
-const VERIFY_CREDENTIALS_SUCCESS = 'VERIFY_CREDENTIALS_SUCCESS';
-const VERIFY_CREDENTIALS_FAIL    = 'VERIFY_CREDENTIALS_FAIL';
+const VERIFY_CREDENTIALS_REQUEST = 'VERIFY_CREDENTIALS_REQUEST' as const;
+const VERIFY_CREDENTIALS_SUCCESS = 'VERIFY_CREDENTIALS_SUCCESS' as const;
+const VERIFY_CREDENTIALS_FAIL = 'VERIFY_CREDENTIALS_FAIL' as const;
 
-const AUTH_ACCOUNT_REMEMBER_REQUEST = 'AUTH_ACCOUNT_REMEMBER_REQUEST';
-const AUTH_ACCOUNT_REMEMBER_SUCCESS = 'AUTH_ACCOUNT_REMEMBER_SUCCESS';
-const AUTH_ACCOUNT_REMEMBER_FAIL    = 'AUTH_ACCOUNT_REMEMBER_FAIL';
+const AUTH_ACCOUNT_REMEMBER_REQUEST = 'AUTH_ACCOUNT_REMEMBER_REQUEST' as const;
+const AUTH_ACCOUNT_REMEMBER_SUCCESS = 'AUTH_ACCOUNT_REMEMBER_SUCCESS' as const;
+const AUTH_ACCOUNT_REMEMBER_FAIL = 'AUTH_ACCOUNT_REMEMBER_FAIL' as const;
 
 const customApp = custom('app');
 
@@ -92,8 +93,8 @@ const createAppToken = () =>
     const app = getState().auth.app;
 
     const params = {
-      client_id:     app.client_id!,
-      client_secret: app.client_secret!,
+      client_id:     app?.client_id!,
+      client_secret: app?.client_secret!,
       redirect_uri:  'urn:ietf:wg:oauth:2.0:oob',
       grant_type:    'client_credentials',
       scope:         getScopes(getState()),
@@ -109,8 +110,8 @@ const createUserToken = (username: string, password: string) =>
     const app = getState().auth.app;
 
     const params = {
-      client_id:     app.client_id!,
-      client_secret: app.client_secret!,
+      client_id:     app?.client_id!,
+      client_secret: app?.client_secret!,
       redirect_uri:  'urn:ietf:wg:oauth:2.0:oob',
       grant_type:    'password',
       username:      username,
@@ -119,33 +120,35 @@ const createUserToken = (username: string, password: string) =>
     };
 
     return dispatch(obtainOAuthToken(params))
-      .then((token: Record<string, string | number>) => dispatch(authLoggedIn(token)));
+      .then((token) => dispatch(authLoggedIn(token)));
   };
 
 const otpVerify = (code: string, mfa_token: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const app = getState().auth.app;
-    return api(getState, 'app')('/oauth/mfa/challenge', {
-      method: 'POST',
-      body: JSON.stringify({
-        client_id: app.client_id,
-        client_secret: app.client_secret,
-        mfa_token: mfa_token,
-        code: code,
-        challenge_type: 'totp',
-        redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
-        scope: getScopes(getState()),
-      }),
-    }).then(({ json: token }) => dispatch(authLoggedIn(token)));
+    const state = getState();
+    const app = state.auth.app;
+    const baseUrl = parseBaseURL(state.me) || BuildConfig.BACKEND_URL;
+    const client = new PlApiClient(baseUrl, undefined, { fetchInstance: false });
+    return client.oauth.mfaChallenge({
+      client_id: app?.client_id!,
+      client_secret: app?.client_secret!,
+      mfa_token: mfa_token,
+      code: code,
+      challenge_type: 'totp',
+      // redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
+      // scope: getScopes(getState()),
+    }).then((token) => dispatch(authLoggedIn(token)));
   };
 
-const verifyCredentials = (token: string, accountUrl?: string) => {
-  const baseURL = parseBaseURL(accountUrl);
+const verifyCredentials = (token: string, accountUrl?: string) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    const baseURL = parseBaseURL(accountUrl) || BuildConfig.BACKEND_URL;
 
-  return (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: VERIFY_CREDENTIALS_REQUEST, token });
 
-    return getFetch(token, baseURL)('/api/v1/accounts/verify_credentials').then(({ json: account }) => {
+    const client = new PlApiClient(baseURL, token, { fetchInstance: false });
+
+    return client.settings.verifyCredentials().then((account) => {
       dispatch(importFetchedAccount(account));
       dispatch({ type: VERIFY_CREDENTIALS_SUCCESS, token, account });
       if (account.id === getState().me) dispatch(fetchMeSuccess(account));
@@ -154,10 +157,11 @@ const verifyCredentials = (token: string, accountUrl?: string) => {
       if (error?.response?.status === 403 && error?.response?.json?.id) {
         // The user is waitlisted
         const account = error.response.json;
-        dispatch(importFetchedAccount(account));
-        dispatch({ type: VERIFY_CREDENTIALS_SUCCESS, token, account });
-        if (account.id === getState().me) dispatch(fetchMeSuccess(account));
-        return account;
+        const parsedAccount = credentialAccountSchema.parse(error.response.json);
+        dispatch(importFetchedAccount(parsedAccount));
+        dispatch({ type: VERIFY_CREDENTIALS_SUCCESS, token, account: parsedAccount });
+        if (account.id === getState().me) dispatch(fetchMeSuccess(parsedAccount));
+        return parsedAccount;
       } else {
         if (getState().me === null) dispatch(fetchMeFail(error));
         dispatch({ type: VERIFY_CREDENTIALS_FAIL, token, error });
@@ -165,7 +169,6 @@ const verifyCredentials = (token: string, accountUrl?: string) => {
       }
     });
   };
-};
 
 const rememberAuthAccount = (accountUrl: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -200,9 +203,6 @@ const logIn = (username: string, password: string) =>
     throw error;
   });
 
-const deleteSession = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => api(getState)('/api/sign_out', { method: 'DELETE' });
-
 const logOut = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
@@ -212,8 +212,8 @@ const logOut = () =>
     if (!account) return dispatch(noOp);
 
     const params = {
-      client_id: state.auth.app.client_id!,
-      client_secret: state.auth.app.client_secret!,
+      client_id: state.auth.app?.client_id!,
+      client_secret: state.auth.app?.client_secret!,
       token: state.auth.users.get(account.url)!.access_token,
     };
 
@@ -254,22 +254,22 @@ const fetchOwnAccounts = () =>
     });
   };
 
-const register = (params: Record<string, any>) =>
+const register = (params: CreateAccountParams) =>
   (dispatch: AppDispatch) => {
     params.fullname = params.username;
 
     return dispatch(createAppAndToken())
       .then(() => dispatch(createAccount(params)))
-      .then(({ token }: { token: Record<string, string | number> }) => {
+      .then(({ token }: { token: Token }) => {
         dispatch(startOnboarding());
         return dispatch(authLoggedIn(token));
       });
   };
 
 const fetchCaptcha = () =>
-  (_dispatch: AppDispatch, getState: () => RootState) => api(getState)('/api/pleroma/captcha');
+  (_dispatch: AppDispatch, getState: () => RootState) => getClient(getState).oauth.getCaptcha();
 
-const authLoggedIn = (token: Record<string, string | number>) =>
+const authLoggedIn = (token: Token) =>
   (dispatch: AppDispatch) => {
     dispatch({ type: AUTH_LOGGED_IN, token });
     return token;
@@ -293,7 +293,6 @@ export {
   rememberAuthAccount,
   loadCredentials,
   logIn,
-  deleteSession,
   logOut,
   switchAccount,
   fetchOwnAccounts,

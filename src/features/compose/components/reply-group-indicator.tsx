@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import Link from 'soapbox/components/link';
 import { Text } from 'soapbox/components/ui';
 import { useAppSelector } from 'soapbox/hooks';
-import { Group } from 'soapbox/schemas';
 import { makeGetStatus } from 'soapbox/selectors';
 
 interface IReplyGroupIndicator {
@@ -17,7 +16,7 @@ const ReplyGroupIndicator = (props: IReplyGroupIndicator) => {
   const getStatus = useCallback(makeGetStatus(), []);
 
   const status = useAppSelector((state) => getStatus(state, { id: state.compose.get(composeId)?.in_reply_to! }));
-  const group = status?.group as Group;
+  const group = status?.group;
 
   if (!group) {
     return null;

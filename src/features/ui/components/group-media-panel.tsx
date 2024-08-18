@@ -1,16 +1,16 @@
 import { List as ImmutableList } from 'immutable';
 import React, { useState, useEffect } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { openModal } from 'soapbox/actions/modals';
-import { expandGroupMediaTimeline } from 'soapbox/actions/timelines';
+import { fetchGroupTimeline } from 'soapbox/actions/timelines';
 import { Spinner, Text, Widget } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { getGroupGallery } from 'soapbox/selectors';
+import { type AccountGalleryAttachment, getGroupGallery } from 'soapbox/selectors';
 
 import MediaItem from '../../account-gallery/components/media-item';
 
-import type { Attachment, Group } from 'soapbox/types/entities';
+import type { Group } from 'soapbox/normalizers';
 
 interface IGroupMediaPanel {
   group?: Group;
@@ -18,23 +18,22 @@ interface IGroupMediaPanel {
 
 const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
   const dispatch = useAppDispatch();
-  const intl = useIntl();
 
   const [loading, setLoading] = useState(true);
 
   const isMember = !!group?.relationship?.member;
   const isPrivate = group?.locked;
 
-  const attachments: ImmutableList<Attachment> = useAppSelector((state) => group ? getGroupGallery(state, group?.id) : ImmutableList());
+  const attachments: ImmutableList<AccountGalleryAttachment> = useAppSelector((state) => group ? getGroupGallery(state, group?.id) : ImmutableList());
 
-  const handleOpenMedia = (attachment: Attachment): void => {
+  const handleOpenMedia = (attachment: AccountGalleryAttachment): void => {
     if (attachment.type === 'video') {
       dispatch(openModal('VIDEO', { media: attachment, status: attachment.status }));
     } else {
-      const media = attachment.getIn(['status', 'media_attachments']) as ImmutableList<Attachment>;
+      const media = attachment.status.media_attachments;
       const index = media.findIndex(x => x.id === attachment.id);
 
-      dispatch(openModal('MEDIA', { media, index, status: attachment.status, account: attachment.account }));
+      dispatch(openModal('MEDIA', { media, index, statusId: attachment.status.id }));
     }
   };
 
@@ -42,7 +41,7 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
     setLoading(true);
 
     if (group && (isMember || !isPrivate)) {
-      dispatch(expandGroupMediaTimeline(group.id, {}, intl))
+      dispatch(fetchGroupTimeline(group.id, { only_media: true, limit: 40 }))
       // @ts-ignore
         .then(() => setLoading(false))
         .catch(() => {});
@@ -57,7 +56,7 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
         <div className='grid grid-cols-3 gap-1'>
           {nineAttachments.map((attachment, _index) => (
             <MediaItem
-              key={`${attachment.getIn(['status', 'id'])}+${attachment.id}`}
+              key={`${attachment.status.id}+${attachment.id}`}
               attachment={attachment}
               onOpenMedia={handleOpenMedia}
             />

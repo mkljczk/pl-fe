@@ -8,10 +8,10 @@ import { HStack, Text, Emoji } from 'soapbox/components/ui';
 import { useAppSelector, useSoapboxConfig, useFeatures, useAppDispatch } from 'soapbox/hooks';
 import { reduceEmoji } from 'soapbox/utils/emoji-reacts';
 
-import type { Status } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/normalizers';
 
 interface IStatusInteractionBar {
-  status: Status;
+  status: Pick<Status, 'id' | 'account' | 'dislikes_count' | 'emoji_reactions' | 'favourited' | 'favourites_count' | 'reblogs_count' | 'quotes_count'>;
 }
 
 const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.Element | null => {
@@ -56,7 +56,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
   };
 
   const getNormalizedReacts = () => reduceEmoji(
-    status.reactions,
+    status.emoji_reactions,
     status.favourites_count,
     status.favourited,
     allowedEmoji,
@@ -88,7 +88,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
   const getQuotes = () => {
     if (status.quotes_count) {
       return (
-        <InteractionCounter count={status.quotes_count} to={`/@${status.getIn(['account', 'acct'])}/posts/${status.id}/quotes`}>
+        <InteractionCounter count={status.quotes_count} to={`/@${status.account.acct}/posts/${status.id}/quotes`}>
           <FormattedMessage
             id='status.interactions.quotes'
             defaultMessage='{count, plural, one {Quote} other {Quotes}}'
@@ -136,7 +136,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
 
     if (dislikesCount) {
       return (
-        <InteractionCounter count={status.favourites_count} onClick={features.exposableReactions ? handleOpenDislikesModal : undefined}>
+        <InteractionCounter count={status.dislikes_count} onClick={features.exposableReactions ? handleOpenDislikesModal : undefined}>
           <FormattedMessage
             id='status.interactions.dislikes'
             defaultMessage='{count, plural, one {Dislike} other {Dislikes}}'
@@ -169,7 +169,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
       return (
         <InteractionCounter count={count} onClick={features.exposableReactions ? handleClick : undefined}>
           <HStack space={0.5} alignItems='center'>
-            {emojiReacts.take(3).map((e, i) => {
+            {emojiReacts.slice(0, 3).map((e, i) => {
               return (
                 <Emoji
                   key={i}

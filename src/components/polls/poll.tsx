@@ -10,13 +10,13 @@ import { Stack, Text } from '../ui';
 import PollFooter from './poll-footer';
 import PollOption from './poll-option';
 
-import type { Status } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/normalizers';
 
 type Selected = Record<number, boolean>;
 
 interface IPoll {
   id: string;
-  status?: Status;
+  status?: Pick<Status, 'url' | 'currentLanguage'>;
 }
 
 const messages = defineMessages({
@@ -38,7 +38,7 @@ const Poll: React.FC<IPoll> = ({ id, status }): JSX.Element | null => {
       ap_id: status?.url,
     }));
 
-  const handleVote = (selectedId: number) => dispatch(vote(id, [String(selectedId)]));
+  const handleVote = (selectedId: number) => dispatch(vote(id, [selectedId]));
 
   const toggleOption = (value: number) => {
     if (isLoggedIn) {

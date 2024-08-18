@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 import { otpVerify, verifyCredentials, switchAccount } from 'soapbox/actions/auth';
 import { BigCard } from 'soapbox/components/big-card';
-import { Button, Form, FormActions, FormGroup, Input } from 'soapbox/components/ui';
+import { Button, Card, CardBody, CardHeader, CardTitle, Form, FormActions, FormGroup, Input } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
 
 const messages = defineMessages({
@@ -15,9 +15,10 @@ const messages = defineMessages({
 
 interface IOtpAuthForm {
   mfa_token: string;
+  small?: boolean;
 }
 
-const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token }) => {
+const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token, small }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -47,33 +48,50 @@ const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token }) => {
 
   if (shouldRedirect) return <Redirect to='/' />;
 
+  const form = (
+    <Form onSubmit={handleSubmit}>
+      <FormGroup
+        labelText={intl.formatMessage(messages.otpCodeLabel)}
+        hintText={intl.formatMessage(messages.otpCodeHint)}
+        errors={codeError ? [intl.formatMessage(messages.otpLoginFail)] : []}
+      >
+        <Input
+          name='code'
+          type='text'
+          autoComplete='off'
+          autoFocus
+          required
+        />
+      </FormGroup>
+
+      <FormActions>
+        <Button
+          theme='primary'
+          type='submit'
+          disabled={isLoading}
+        >
+          <FormattedMessage id='login.sign_in' defaultMessage='Sign in' />
+        </Button>
+      </FormActions>
+    </Form>
+  );
+
+  if (small) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle title={<FormattedMessage id='login.otp_log_in' defaultMessage='OTP Login' />} />
+        </CardHeader>
+        <CardBody>
+          {form}
+        </CardBody>
+      </Card>
+    );
+  }
+
   return (
     <BigCard title={<FormattedMessage id='login.otp_log_in' defaultMessage='OTP Login' />}>
-      <Form onSubmit={handleSubmit}>
-        <FormGroup
-          labelText={intl.formatMessage(messages.otpCodeLabel)}
-          hintText={intl.formatMessage(messages.otpCodeHint)}
-          errors={codeError ? [intl.formatMessage(messages.otpLoginFail)] : []}
-        >
-          <Input
-            name='code'
-            type='text'
-            autoComplete='off'
-            autoFocus
-            required
-          />
-        </FormGroup>
-
-        <FormActions>
-          <Button
-            theme='primary'
-            type='submit'
-            disabled={isLoading}
-          >
-            <FormattedMessage id='login.sign_in' defaultMessage='Sign in' />
-          </Button>
-        </FormActions>
-      </Form>
+      {form}
     </BigCard>
   );
 };

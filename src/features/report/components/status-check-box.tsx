@@ -20,17 +20,17 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled }) => {
 
   const onToggle: React.ChangeEventHandler<HTMLInputElement> = (e) => dispatch(toggleStatusReport(id, e.target.checked));
 
-  if (!status || status.reblog) {
+  if (!status || status.reblog_id) {
     return null;
   }
 
   let media;
 
-  if (status.media_attachments.size > 0) {
+  if (status.media_attachments.length > 0) {
     if (status.media_attachments.some(item => item.type === 'unknown')) {
       // Do nothing
-    } else if (status.media_attachments.get(0)?.type === 'video') {
-      const video = status.media_attachments.get(0);
+    } else if (status.media_attachments[0]?.type === 'video') {
+      const video = status.media_attachments[0];
 
       if (video) {
         media = (
@@ -39,15 +39,15 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled }) => {
             blurhash={video.blurhash}
             src={video.url}
             alt={video.description}
-            aspectRatio={video.meta.getIn(['original', 'aspect']) as number | undefined}
+            aspectRatio={video.meta.original?.aspect as number | undefined}
             width={239}
             height={110}
             inline
           />
         );
       }
-    } else if (status.media_attachments.get(0)?.type === 'audio') {
-      const audio = status.media_attachments.get(0);
+    } else if (status.media_attachments[0]?.type === 'audio') {
+      const audio = status.media_attachments[0];
 
       if (audio) {
         media = (

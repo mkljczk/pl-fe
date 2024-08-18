@@ -1,11 +1,14 @@
-import { getFeatures, Features } from 'soapbox/utils/features';
+import { Features } from 'pl-api';
 
+import { useAppSelector } from './useAppSelector';
 import { useInstance } from './useInstance';
 
 /** Get features for the current instance. */
 const useFeatures = (): Features => {
-  const instance = useInstance();
-  return getFeatures(instance);
+  useInstance();
+  const features = useAppSelector(state => state.auth.client.features);
+
+  return features;
 };
 
 export { useFeatures };

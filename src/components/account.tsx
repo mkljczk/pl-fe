@@ -13,11 +13,11 @@ import Badge from './badge';
 import RelativeTimestamp from './relative-timestamp';
 import { Avatar, Emoji, HStack, Icon, IconButton, Stack, Text } from './ui';
 
+import type { Account as AccountSchema } from 'soapbox/normalizers';
 import type { StatusApprovalStatus } from 'soapbox/normalizers/status';
-import type { Account as AccountSchema } from 'soapbox/schemas';
 
 interface IInstanceFavicon {
-  account: AccountSchema;
+  account: Pick<AccountSchema, 'domain' | 'favicon'>;
   disabled?: boolean;
 }
 
@@ -41,7 +41,7 @@ const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
     }
   };
 
-  if (!account.pleroma?.favicon) {
+  if (!account.favicon) {
     return null;
   }
 
@@ -51,7 +51,7 @@ const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
       onClick={handleClick}
       disabled={disabled}
     >
-      <img src={account.pleroma.favicon} alt='' title={account.domain} className='max-h-full w-full' />
+      <img src={account.favicon} alt='' title={account.domain} className='max-h-full w-full' />
     </button>
   );
 };
@@ -91,7 +91,7 @@ interface IAccount {
   withLinkToProfile?: boolean;
   withRelationship?: boolean;
   showEdit?: boolean;
-  approvalStatus?: StatusApprovalStatus;
+  approvalStatus?: StatusApprovalStatus | null;
   emoji?: string;
   emojiUrl?: string;
   note?: string;
@@ -224,7 +224,7 @@ const Account = ({
               <HStack alignItems='center' space={1}>
                 <Text theme='muted' size='sm' direction='ltr' truncate>@{username}</Text>
 
-                {account.pleroma?.favicon && (
+                {account.favicon && (
                   <InstanceFavicon account={account} disabled={!withLinkToProfile} />
                 )}
 
@@ -288,7 +288,7 @@ const Account = ({
               <HStack alignItems='center' space={1}>
                 <Text theme='muted' size='sm' direction='ltr' truncate>@{username}</Text>
 
-                {account.pleroma?.favicon && (
+                {account.favicon && (
                   <InstanceFavicon account={account} disabled={!withLinkToProfile} />
                 )}
 

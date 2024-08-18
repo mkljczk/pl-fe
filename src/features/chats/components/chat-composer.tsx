@@ -7,12 +7,12 @@ import { Button, Combobox, ComboboxInput, ComboboxList, ComboboxOption, Combobox
 import { useChatContext } from 'soapbox/contexts/chat-context';
 import UploadButton from 'soapbox/features/compose/components/upload-button';
 import emojiSearch from 'soapbox/features/emoji/search';
-import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
-import { Attachment } from 'soapbox/types/entities';
+import { useAppDispatch, useAppSelector, useInstance } from 'soapbox/hooks';
 import { textAtCursorMatchesToken } from 'soapbox/utils/suggestions';
 
 import ChatTextarea from './chat-textarea';
 
+import type { MediaAttachment } from 'pl-api';
 import type { Emoji, NativeEmoji } from 'soapbox/features/emoji';
 
 const messages = defineMessages({
@@ -45,9 +45,9 @@ interface IChatComposer extends Pick<React.TextareaHTMLAttributes<HTMLTextAreaEl
   onSelectFile: (files: FileList, intl: IntlShape) => void;
   resetFileKey: number | null;
   resetContentKey: number | null;
-  attachments?: Attachment[];
-  onDeleteAttachment?: (i: number) => void;
-  uploadCount?: number;
+  attachment?: MediaAttachment | null;
+  onDeleteAttachment?: () => void;
+  uploading?: boolean;
   uploadProgress?: number;
 }
 
@@ -63,29 +63,25 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
   resetFileKey,
   resetContentKey,
   onPaste,
-  attachments = [],
+  attachment,
   onDeleteAttachment,
-  uploadCount = 0,
+  uploading,
   uploadProgress,
 }, ref) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const features = useFeatures();
 
   const { chat } = useChatContext();
 
   const isBlocked = useAppSelector((state) => state.getIn(['relationships', chat?.account?.id, 'blocked_by']));
   const isBlocking = useAppSelector((state) => state.getIn(['relationships', chat?.account?.id, 'blocking']));
-  const maxCharacterCount = useAppSelector((state) => state.instance.configuration.chats.max_characters);
-  const attachmentLimit = useAppSelector(state => state.instance.configuration.chats.max_media_attachments);
+  const maxCharacterCount = useInstance().configuration.chats.max_characters;
 
   const [suggestions, setSuggestions] = useState<Suggestion>(initialSuggestionState);
   const isSuggestionsAvailable = suggestions.list.length > 0;
 
-  const isUploading = uploadCount > 0;
-  const hasAttachment = attachments.length > 0;
   const isOverCharacterLimit = maxCharacterCount && value?.length > maxCharacterCount;
-  const isSubmitDisabled = disabled || isUploading || isOverCharacterLimit || (value.length === 0 && !hasAttachment);
+  const isSubmitDisabled = disabled || uploading || isOverCharacterLimit || (value.length === 0 && !attachment);
 
   const overLimitText = maxCharacterCount ? maxCharacterCount - value?.length : '';
 
@@ -170,17 +166,15 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
       <div className='h-5' />
 
       <HStack alignItems='stretch' justifyContent='between' space={4}>
-        {features.chatsMedia && (
-          <Stack justifyContent='end' alignItems='center' className='mb-1.5 w-10'>
-            <UploadButton
-              onSelectFile={onSelectFile}
-              resetFileKey={resetFileKey}
-              iconClassName='h-5 w-5'
-              className='text-primary-500'
-              disabled={isUploading || (attachments.length >= attachmentLimit)}
-            />
-          </Stack>
-        )}
+        <Stack justifyContent='end' alignItems='center' className='mb-1.5 w-10'>
+          <UploadButton
+            onSelectFile={onSelectFile}
+            resetFileKey={resetFileKey}
+            iconClassName='h-5 w-5'
+            className='text-primary-500'
+            disabled={uploading || !!attachment}
+          />
+        </Stack>
 
         <Stack grow>
           <Combobox onSelect={onSelectComboboxOption}>
@@ -198,9 +192,9 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
               autoGrow
               maxRows={5}
               disabled={disabled}
-              attachments={attachments}
+              attachment={attachment}
               onDeleteAttachment={onDeleteAttachment}
-              uploadCount={uploadCount}
+              uploading={uploading}
               uploadProgress={uploadProgress}
             />
             {isSuggestionsAvailable ? (

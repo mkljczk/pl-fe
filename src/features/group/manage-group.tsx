@@ -1,3 +1,4 @@
+import { GroupRoles } from 'pl-api';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
@@ -7,7 +8,6 @@ import { useDeleteGroup, useGroup } from 'soapbox/api/hooks';
 import List, { ListItem } from 'soapbox/components/list';
 import { CardBody, CardHeader, CardTitle, Column, Spinner, Text } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
-import { GroupRoles } from 'soapbox/schemas/group-member';
 import toast from 'soapbox/toast';
 
 import ColumnForbidden from '../ui/components/column-forbidden';

@@ -8,6 +8,7 @@ import { DatePicker } from 'soapbox/features/ui/util/async-components';
 import { useAppDispatch } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 
+import type { ModalType } from '../modal-root';
 import type { AdminAnnouncement } from 'soapbox/schemas';
 
 const messages = defineMessages({
@@ -20,7 +21,7 @@ const messages = defineMessages({
 });
 
 interface IEditAnnouncementModal {
-  onClose: (type?: string) => void;
+  onClose: (type?: ModalType) => void;
   announcement?: AdminAnnouncement;
 }
 

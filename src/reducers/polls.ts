@@ -1,29 +1,16 @@
 import { Map as ImmutableMap } from 'immutable';
 
 import { POLLS_IMPORT } from 'soapbox/actions/importer';
-import { normalizeStatus } from 'soapbox/normalizers/status';
+import { normalizePoll } from 'soapbox/normalizers';
 
+import type { Status } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { Poll, APIEntity, EmbeddedEntity } from 'soapbox/types/entities';
 
-type State = ImmutableMap<string, Poll>;
+type State = ImmutableMap<string, ReturnType<typeof normalizePoll>>;
 
-// HOTFIX: Convert the poll into a fake status to normalize it...
-// TODO: get rid of POLLS_IMPORT and use STATUS_IMPORT here.
-const normalizePoll = (poll: any): EmbeddedEntity<Poll> => {
-  const status = { poll };
-  return normalizeStatus(status).poll;
-};
-
-const importPolls = (state: State, polls: Array<APIEntity>) =>
+const importPolls = (state: State, polls: Array<Exclude<Status['poll'], null>>) =>
   state.withMutations(map =>
-    polls.forEach(poll => {
-      const normalPoll = normalizePoll(poll);
-
-      if (normalPoll && typeof normalPoll === 'object') {
-        map.set(normalPoll.id, normalPoll);
-      }
-    }),
+    polls.forEach(poll => map.set(poll.id, normalizePoll(poll))),
   );
 
 const initialState: State = ImmutableMap();

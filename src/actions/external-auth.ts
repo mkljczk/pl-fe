@@ -6,22 +6,21 @@
  * @see module:soapbox/actions/oauth
  */
 
+import { instanceSchema, PlApiClient, type Instance } from 'pl-api';
+
 import { createApp } from 'soapbox/actions/apps';
 import { authLoggedIn, verifyCredentials, switchAccount } from 'soapbox/actions/auth';
 import { obtainOAuthToken } from 'soapbox/actions/oauth';
-import { instanceSchema, type Instance } from 'soapbox/schemas';
 import { parseBaseURL } from 'soapbox/utils/auth';
 import sourceCode from 'soapbox/utils/code';
 import { getQuirks } from 'soapbox/utils/quirks';
 import { getInstanceScopes } from 'soapbox/utils/scopes';
 
-import { getFetch } from '../api';
+import type { AppDispatch } from 'soapbox/store';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
-
-const fetchExternalInstance = (baseURL?: string) =>
-  getFetch(null, baseURL)('/api/v1/instance')
-    .then(({ json: instance }) => instanceSchema.parse(instance))
+const fetchExternalInstance = (baseURL: string) =>
+  (new PlApiClient(baseURL, undefined, { fetchInstance: false })).instance.getInstance()
+    .then(instance => instance)
     .catch(error => {
       if (error.response?.status === 401) {
         // Authenticated fetch is enabled.
@@ -33,7 +32,7 @@ const fetchExternalInstance = (baseURL?: string) =>
     });
 
 const createExternalApp = (instance: Instance, baseURL?: string) =>
-  (dispatch: AppDispatch, _getState: () => RootState) => {
+  (dispatch: AppDispatch) => {
     // Mitra: skip creating the auth app
     if (getQuirks(instance).noApps) return new Promise(f => f({}));
 
@@ -48,7 +47,7 @@ const createExternalApp = (instance: Instance, baseURL?: string) =>
   };
 
 const externalAuthorize = (instance: Instance, baseURL: string) =>
-  (dispatch: AppDispatch, _getState: () => RootState) => {
+  (dispatch: AppDispatch) => {
     const scopes = getInstanceScopes(instance);
 
     return dispatch(createExternalApp(instance, baseURL)).then((app) => {
@@ -82,9 +81,9 @@ const loginWithCode = (code: string) =>
   (dispatch: AppDispatch) => {
     const { client_id, client_secret, redirect_uri } = JSON.parse(localStorage.getItem('plfe:external:app')!);
     const baseURL = localStorage.getItem('plfe:external:baseurl')!;
-    const scope   = localStorage.getItem('plfe:external:scopes')!;
+    const scope = localStorage.getItem('plfe:external:scopes')!;
 
-    const params: Record<string, string> = {
+    const params = {
       client_id,
       client_secret,
       redirect_uri,
@@ -94,9 +93,9 @@ const loginWithCode = (code: string) =>
     };
 
     return dispatch(obtainOAuthToken(params, baseURL))
-      .then((token: Record<string, string | number>) => dispatch(authLoggedIn(token)))
-      .then(({ access_token }: any) => dispatch(verifyCredentials(access_token as string, baseURL)))
-      .then((account: { id: string }) => dispatch(switchAccount(account.id)))
+      .then((token) => dispatch(authLoggedIn(token)))
+      .then(({ access_token }) => dispatch(verifyCredentials(access_token as string, baseURL)))
+      .then((account) => dispatch(switchAccount(account.id)))
       .then(() => window.location.href = '/');
   };
 

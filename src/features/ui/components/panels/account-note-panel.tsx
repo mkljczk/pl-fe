@@ -6,12 +6,12 @@ import { submitAccountNote } from 'soapbox/actions/account-notes';
 import { HStack, Text, Textarea, Widget } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
-import type { Account as AccountEntity } from 'soapbox/schemas';
+import type { Account as AccountEntity } from 'soapbox/normalizers';
 import type { AppDispatch } from 'soapbox/store';
 
 const onSave = debounce(
-  (dispatch: AppDispatch, id: string, value: string, callback: () => void) =>
-    dispatch(submitAccountNote(id, value)).then(() => callback()),
+  (dispatch: AppDispatch, accountId: string, value: string, callback: () => void) =>
+    dispatch(submitAccountNote(accountId, value)).then(() => callback()),
   900,
 );
 
@@ -21,7 +21,7 @@ const messages = defineMessages({
 });
 
 interface IAccountNotePanel {
-  account: AccountEntity;
+  account: Pick<AccountEntity, 'id' | 'relationship'>;
 }
 
 const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {

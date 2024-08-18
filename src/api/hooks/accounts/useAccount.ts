@@ -1,11 +1,11 @@
+import { type Account as BaseAccount, accountSchema } from 'pl-api';
 import { useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntity } from 'soapbox/entity-store/hooks';
-import { useFeatures, useLoggedIn } from 'soapbox/hooks';
-import { useApi } from 'soapbox/hooks/useApi';
-import { type Account, accountSchema } from 'soapbox/schemas';
+import { useAppSelector, useClient, useFeatures, useLoggedIn } from 'soapbox/hooks';
+import { type Account, normalizeAccount } from 'soapbox/normalizers';
 
 import { useRelationship } from './useRelationship';
 
@@ -14,17 +14,19 @@ interface UseAccountOpts {
 }
 
 const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
-  const api = useApi();
+  const client = useClient();
   const history = useHistory();
   const features = useFeatures();
   const { me } = useLoggedIn();
   const { withRelationship } = opts;
 
-  const { entity, isUnauthorized, ...result } = useEntity<Account>(
+  const { entity, isUnauthorized, ...result } = useEntity<BaseAccount, Account>(
     [Entities.ACCOUNTS, accountId!],
-    () => api(`/api/v1/accounts/${accountId}`),
-    { schema: accountSchema, enabled: !!accountId },
+    () => client.accounts.getAccount(accountId!),
+    { schema: accountSchema, enabled: !!accountId, transform: normalizeAccount },
   );
+
+  const meta = useAppSelector((state) => accountId && state.accounts_meta[accountId] || {});
 
   const {
     relationship,
@@ -35,7 +37,7 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
   const isUnavailable = (me === entity?.id) ? false : (isBlocked && !features.blockersVisible);
 
   const account = useMemo(
-    () => entity ? { ...entity, relationship } : undefined,
+    () => entity ? { ...entity, relationship, __meta: { meta, ...entity.__meta } } : undefined,
     [entity, relationship],
   );
 

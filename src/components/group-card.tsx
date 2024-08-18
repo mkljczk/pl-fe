@@ -8,7 +8,7 @@ import GroupRelationship from 'soapbox/features/group/components/group-relations
 import GroupAvatar from './groups/group-avatar';
 import { HStack, Stack, Text } from './ui';
 
-import type { Group as GroupEntity } from 'soapbox/types/entities';
+import type { Group as GroupEntity } from 'soapbox/normalizers';
 
 interface IGroupCard {
   group: GroupEntity;

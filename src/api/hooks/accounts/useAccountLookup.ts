@@ -1,11 +1,11 @@
+import { accountSchema, type Account as BaseAccount } from 'pl-api';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntityLookup } from 'soapbox/entity-store/hooks';
-import { useFeatures, useLoggedIn } from 'soapbox/hooks';
-import { useApi } from 'soapbox/hooks/useApi';
-import { type Account, accountSchema } from 'soapbox/schemas';
+import { useClient, useFeatures, useLoggedIn } from 'soapbox/hooks';
+import { type Account, normalizeAccount } from 'soapbox/normalizers';
 
 import { useRelationship } from './useRelationship';
 
@@ -14,17 +14,17 @@ interface UseAccountLookupOpts {
 }
 
 const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts = {}) => {
-  const api = useApi();
+  const client = useClient();
   const features = useFeatures();
   const history = useHistory();
   const { me } = useLoggedIn();
   const { withRelationship } = opts;
 
-  const { entity: account, isUnauthorized, ...result } = useEntityLookup<Account>(
+  const { entity: account, isUnauthorized, ...result } = useEntityLookup<BaseAccount, Account>(
     Entities.ACCOUNTS,
     (account) => account.acct.toLowerCase() === acct?.toLowerCase(),
-    () => api(`/api/v1/accounts/lookup?acct=${acct}`),
-    { schema: accountSchema, enabled: !!acct },
+    () => client.accounts.lookupAccount(acct!),
+    { schema: accountSchema, enabled: !!acct, transform: normalizeAccount },
   );
 
   const {

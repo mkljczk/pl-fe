@@ -1,19 +1,21 @@
+import { groupSchema, type Group as BaseGroup } from 'pl-api';
+
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntities } from 'soapbox/entity-store/hooks';
-import { useApi } from 'soapbox/hooks';
+import { useClient } from 'soapbox/hooks';
 import { useFeatures } from 'soapbox/hooks/useFeatures';
-import { groupSchema, type Group } from 'soapbox/schemas/group';
+import { normalizeGroup, type Group } from 'soapbox/normalizers';
 
 import { useGroupRelationships } from './useGroupRelationships';
 
 const useGroups = () => {
-  const api = useApi();
+  const client = useClient();
   const features = useFeatures();
 
-  const { entities, ...result } = useEntities<Group>(
+  const { entities, ...result } = useEntities<BaseGroup, Group>(
     [Entities.GROUPS, 'search', ''],
-    () => api('/api/v1/groups'),
-    { enabled: features.groups, schema: groupSchema },
+    () => client.experimental.groups.getGroups(),
+    { enabled: features.groups, schema: groupSchema, transform: normalizeGroup },
   );
   const { relationships } = useGroupRelationships(
     ['search', ''],

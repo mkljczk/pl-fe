@@ -5,11 +5,12 @@ import { Components, Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 import { Avatar, Button, Divider, Spinner, Stack, Text } from 'soapbox/components/ui';
 import PlaceholderChatMessage from 'soapbox/features/placeholder/components/placeholder-chat-message';
 import { useAppSelector } from 'soapbox/hooks';
-import { IChat, useChatActions, useChatMessages } from 'soapbox/queries/chats';
+import { useChatActions, useChatMessages } from 'soapbox/queries/chats';
 
 import ChatMessage from './chat-message';
 
-import type { ChatMessage as ChatMessageEntity } from 'soapbox/types/entities';
+import type { Chat } from 'pl-api';
+import type { ChatMessage as ChatMessageEntity } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   today: { id: 'chats.dividers.today', defaultMessage: 'Today' },
@@ -21,7 +22,7 @@ const messages = defineMessages({
 
 type TimeFormat = 'today' | 'date';
 
-const timeChange = (prev: ChatMessageEntity, curr: ChatMessageEntity): TimeFormat | null => {
+const timeChange = (prev: Pick<ChatMessageEntity, 'created_at'>, curr: Pick<ChatMessageEntity, 'created_at'>): TimeFormat | null => {
   const prevDate = new Date(prev.created_at).getDate();
   const currDate = new Date(curr.created_at).getDate();
   const nowDate = new Date().getDate();
@@ -57,7 +58,7 @@ const Scroller: Components['Scroller'] = React.forwardRef((props, ref) => {
 
 interface IChatMessageList {
   /** Chat the messages are being rendered from. */
-  chat: IChat;
+  chat: Chat;
 }
 
 /** Scrollable list of chat messages. */
@@ -94,7 +95,7 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
     setFirstItemIndex(nextFirstItemIndex);
   }, [lastChatMessage]);
 
-  const buildCachedMessages = () => {
+  const buildCachedMessages = (): Array<ChatMessageEntity | { type: 'divider'; text: string }> => {
     if (!chatMessages) {
       return [];
     }
@@ -241,7 +242,7 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
           followOutput='auto'
           itemContent={(index, chatMessage) => {
             if (chatMessage.type === 'divider') {
-              return renderDivider(index, chatMessage.text);
+              return renderDivider(index, (chatMessage as any).text);
             } else {
               return <ChatMessage chat={chat} chatMessage={chatMessage} />;
             }

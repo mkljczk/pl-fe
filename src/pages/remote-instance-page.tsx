@@ -34,7 +34,7 @@ const RemoteInstancePage: React.FC<IRemoteInstancePage> = ({ children, params })
       <Layout.Aside>
         <PromoPanel />
         <InstanceInfoPanel host={host} />
-        {(disclosed || account?.admin) && (
+        {(disclosed || account?.is_admin) && (
           <InstanceModerationPanel host={host} />
         )}
         <LinkFooter />

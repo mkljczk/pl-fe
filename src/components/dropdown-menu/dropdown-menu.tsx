@@ -13,8 +13,6 @@ import { IconButton, Portal } from '../ui';
 
 import DropdownMenuItem, { MenuItem } from './dropdown-menu-item';
 
-import type { Status } from 'soapbox/types/entities';
-
 type Menu = Array<MenuItem | null>;
 
 interface IDropdownMenu {
@@ -27,7 +25,6 @@ interface IDropdownMenu {
   onShiftClick?: React.EventHandler<React.MouseEvent | React.KeyboardEvent>;
   placement?: Placement;
   src?: string;
-  status?: Status;
   title?: string;
 }
 

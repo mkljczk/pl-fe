@@ -8,10 +8,10 @@ import AccountContainer from 'soapbox/containers/account-container';
 import { WhoToFollowPanel } from 'soapbox/features/ui/util/async-components';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 
 interface IPinnedAccountsPanel {
-  account: Account;
+  account: Pick<Account, 'id' | 'display_name_html'>;
   limit: number;
 }
 

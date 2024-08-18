@@ -1,18 +1,13 @@
 import { isIntegerId } from 'soapbox/utils/numbers';
 
 import type { IntlShape } from 'react-intl';
-import type { Status } from 'soapbox/schemas';
+import type { Status } from 'soapbox/normalizers';
 
 /** Get the initial visibility of media attachments from user settings. */
-const defaultMediaVisibility = <T extends { reblog: T | string | null } & Pick<Status, 'visibility' | 'sensitive'>>(
-  status: T | undefined | null,
+const defaultMediaVisibility = (
+  status: Pick<Status, 'sensitive'>,
   displayMedia: string,
-): boolean => {
-  if (!status) return false;
-  status = getActualStatus(status);
-
-  return (displayMedia !== 'hide_all' && !status.sensitive || displayMedia === 'show_all');
-};
+): boolean => (displayMedia !== 'hide_all' && !status.sensitive || displayMedia === 'show_all');
 
 /** Grab the first external link from a status. */
 const getFirstExternalLink = (status: Pick<Status, 'content'>): HTMLAnchorElement | null => {
@@ -62,7 +57,7 @@ const textForScreenReader = (
 };
 
 /** Get reblogged status if any, otherwise return the original status. */
-const getActualStatus = <T extends { reblog: T | string | null }>(status: T): T => {
+const getActualStatus = <T extends { reblog: T | null }>(status: T): Omit<T, 'reblog'> => {
   if (status?.reblog && typeof status?.reblog === 'object') {
     return status.reblog;
   } else {

@@ -1,6 +1,4 @@
-import { OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord, fromJS } from 'immutable';
-
-import { normalizeTag } from 'soapbox/normalizers';
+import { OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord } from 'immutable';
 
 import {
   COMPOSE_MENTION,
@@ -21,8 +19,9 @@ import {
   SEARCH_RESULTS_CLEAR,
 } from '../actions/search';
 
+import type { Search, Tag } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { APIEntity, Tag } from 'soapbox/types/entities';
+import type { APIEntity } from 'soapbox/types/entities';
 
 const ResultsRecord = ImmutableRecord({
   accounts: ImmutableOrderedSet<string>(),
@@ -56,14 +55,14 @@ type SearchFilter = 'accounts' | 'statuses' | 'groups' | 'hashtags';
 
 const toIds = (items: APIEntities = []) => ImmutableOrderedSet(items.map(item => item.id));
 
-const importResults = (state: State, results: APIEntity, searchTerm: string, searchType: SearchFilter, next: string | null) =>
+const importResults = (state: State, results: Search, searchTerm: string, searchType: SearchFilter, next: string | null) =>
   state.withMutations(state => {
     if (state.value === searchTerm && state.filter === searchType) {
       state.set('results', ResultsRecord({
         accounts: toIds(results.accounts),
         statuses: toIds(results.statuses),
         groups: toIds(results.groups),
-        hashtags: ImmutableOrderedSet(results.hashtags.map(normalizeTag)), // it's a list of records
+        hashtags: ImmutableOrderedSet(results.hashtags), // it's a list of records
         accountsHasMore: results.accounts.length >= 20,
         statusesHasMore: results.statuses.length >= 20,
         groupsHasMore: results.groups?.length >= 20,
@@ -89,7 +88,7 @@ const paginateResults = (state: State, searchType: SearchFilter, results: APIEnt
         const data = results[searchType];
         // Hashtags are a list of maps. Others are IDs.
         if (searchType === 'hashtags') {
-          return (items as ImmutableOrderedSet<string>).concat((fromJS(data) as Record<string, any>).map(normalizeTag));
+          return (items as ImmutableOrderedSet<Tag>).concat(data);
         } else {
           return (items as ImmutableOrderedSet<string>).concat(toIds(data));
         }

@@ -55,7 +55,7 @@ const Notifications = () => {
 
   const handleLoadOlder = useCallback(debounce(() => {
     const last = notifications.last();
-    dispatch(expandNotifications({ maxId: last && last.get('id') }));
+    dispatch(expandNotifications({ maxId: last && last.id }));
   }, 300, { leading: true }), [notifications]);
 
   const handleScrollToTop = useCallback(debounce(() => {
@@ -67,12 +67,12 @@ const Notifications = () => {
   }, 100), []);
 
   const handleMoveUp = (id: string) => {
-    const elementIndex = notifications.findIndex(item => item !== null && item.get('id') === id) - 1;
+    const elementIndex = notifications.findIndex(item => item !== null && item.id === id) - 1;
     _selectChild(elementIndex);
   };
 
   const handleMoveDown = (id: string) => {
-    const elementIndex = notifications.findIndex(item => item !== null && item.get('id') === id) + 1;
+    const elementIndex = notifications.findIndex(item => item !== null && item.id === id) + 1;
     _selectChild(elementIndex);
   };
 

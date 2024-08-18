@@ -8,8 +8,8 @@ import { getSettings } from 'soapbox/actions/settings';
 import { Button, HStack } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
 
+import type { Status as StatusEntity } from 'soapbox/normalizers';
 import type { DraftStatus } from 'soapbox/reducers/draft-statuses';
-import type { Status as StatusEntity } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.draft_status_delete.confirm', defaultMessage: 'Discard' },
@@ -46,7 +46,7 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
   };
 
   const handleEditClick = () => {
-    dispatch(setComposeToStatus(status, source.text, source.spoiler_text, source.content_type, false, source.draft_id, source.editorState));
+    dispatch(setComposeToStatus(status, status.poll, source.text, source.spoiler_text, source.content_type, false, source.draft_id, source.editorState));
     dispatch(openModal('COMPOSE'));
   };
 

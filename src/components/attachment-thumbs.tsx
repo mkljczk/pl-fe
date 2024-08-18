@@ -4,11 +4,10 @@ import { openModal } from 'soapbox/actions/modals';
 import { MediaGallery } from 'soapbox/features/ui/util/async-components';
 import { useAppDispatch } from 'soapbox/hooks';
 
-import type { List as ImmutableList } from 'immutable';
-import type { Attachment } from 'soapbox/types/entities';
+import type { MediaAttachment } from 'pl-api';
 
 interface IAttachmentThumbs {
-  media: ImmutableList<Attachment>;
+  media: Array<MediaAttachment>;
   onClick?(): void;
   sensitive?: boolean;
 }
@@ -18,7 +17,7 @@ const AttachmentThumbs = (props: IAttachmentThumbs) => {
   const dispatch = useAppDispatch();
 
   const fallback = <div className='media-gallery--compact' />;
-  const onOpenMedia = (media: ImmutableList<Attachment>, index: number) => dispatch(openModal('MEDIA', { media, index }));
+  const onOpenMedia = (media: Array<MediaAttachment>, index: number) => dispatch(openModal('MEDIA', { media, index }));
 
   return (
     <div className='relative'>

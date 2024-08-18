@@ -47,7 +47,7 @@ const LabelInputContainer: React.FC<ILabelInputContainer> = ({ label, hint, chil
   const [id] = useState(uuidv4());
   const childrenWithProps = React.Children.map(children, child => (
     // @ts-ignore: not sure how to get the right type here
-    React.cloneElement(child, { id: id, key: id })
+    React.cloneElement(child, { id, key: id })
   ));
 
   return (

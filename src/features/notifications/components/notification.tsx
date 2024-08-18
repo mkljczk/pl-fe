@@ -1,4 +1,3 @@
-import { List as ImmutableList } from 'immutable';
 import React, { useCallback } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage, IntlShape, MessageDescriptor } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
@@ -15,13 +14,14 @@ import StatusContainer from 'soapbox/containers/status-container';
 import { HotKeys } from 'soapbox/features/ui/components/hotkeys';
 import { useAppDispatch, useAppSelector, useInstance } from 'soapbox/hooks';
 import { makeGetNotification } from 'soapbox/selectors';
-import { NotificationType, validType } from 'soapbox/utils/notification';
+import { NotificationType } from 'soapbox/utils/notification';
 
+import type { Notification as BaseNotification } from 'pl-api';
 import type { ScrollPosition } from 'soapbox/components/status';
-import type { Account as AccountEntity, Status as StatusEntity, Notification as NotificationEntity,
-} from 'soapbox/types/entities';
+import type { Account, Notification as NotificationEntity, Status as StatusEntity } from 'soapbox/normalizers';
+import type { MinifiedNotification } from 'soapbox/reducers/notifications';
 
-const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: Date) => {
+const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: string) => {
   const output = [message];
 
   output.push(intl.formatDate(timestamp, { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }));
@@ -29,7 +29,7 @@ const notificationForScreenReader = (intl: IntlShape, message: string, timestamp
   return output.join(', ');
 };
 
-const buildLink = (account: AccountEntity): JSX.Element => (
+const buildLink = (account: Pick<Account, 'acct' | 'display_name_html'>): JSX.Element => (
   <bdi key={account.acct}>
     <Link
       className='font-bold text-gray-800 hover:underline dark:text-gray-200'
@@ -40,7 +40,7 @@ const buildLink = (account: AccountEntity): JSX.Element => (
   </bdi>
 );
 
-const icons: Record<NotificationType, string> = {
+const icons: Partial<Record<NotificationType, string>> = {
   follow: require('@tabler/icons/outline/user-plus.svg'),
   follow_request: require('@tabler/icons/outline/user-plus.svg'),
   mention: require('@tabler/icons/outline/at.svg'),
@@ -49,12 +49,12 @@ const icons: Record<NotificationType, string> = {
   status: require('@tabler/icons/outline/bell-ringing.svg'),
   poll: require('@tabler/icons/outline/chart-bar.svg'),
   move: require('@tabler/icons/outline/briefcase.svg'),
-  'pleroma:chat_mention': require('@tabler/icons/outline/messages.svg'),
-  'pleroma:emoji_reaction': require('@tabler/icons/outline/mood-happy.svg'),
+  chat_mention: require('@tabler/icons/outline/messages.svg'),
+  emoji_reaction: require('@tabler/icons/outline/mood-happy.svg'),
   update: require('@tabler/icons/outline/pencil.svg'),
-  'pleroma:event_reminder': require('@tabler/icons/outline/calendar-time.svg'),
-  'pleroma:participation_request': require('@tabler/icons/outline/calendar-event.svg'),
-  'pleroma:participation_accepted': require('@tabler/icons/outline/calendar-event.svg'),
+  event_reminder: require('@tabler/icons/outline/calendar-time.svg'),
+  participation_request: require('@tabler/icons/outline/calendar-event.svg'),
+  participation_accepted: require('@tabler/icons/outline/calendar-event.svg'),
 };
 
 const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
@@ -90,11 +90,11 @@ const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
     id: 'notification.move',
     defaultMessage: '{name} moved to {targetName}',
   },
-  'pleroma:chat_mention': {
+  chat_mention: {
     id: 'notification.pleroma:chat_mention',
     defaultMessage: '{name} sent you a message',
   },
-  'pleroma:emoji_reaction': {
+  emoji_reaction: {
     id: 'notification.pleroma:emoji_reaction',
     defaultMessage: '{name} reacted to your post',
   },
@@ -102,39 +102,52 @@ const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
     id: 'notification.update',
     defaultMessage: '{name} edited a post you interacted with',
   },
-  'pleroma:event_reminder': {
+  event_reminder: {
     id: 'notification.pleroma:event_reminder',
     defaultMessage: 'An event you are participating in starts soon',
   },
-  'pleroma:participation_request': {
+  participation_request: {
     id: 'notification.pleroma:participation_request',
     defaultMessage: '{name} wants to join your event',
   },
-  'pleroma:participation_accepted': {
+  participation_accepted: {
     id: 'notification.pleroma:participation_accepted',
     defaultMessage: 'You were accepted to join the event',
+  },
+  'admin.sign_up': {
+    id: 'notification.admin.sign_up',
+    defaultMessage: '{name} signed up',
+  },
+  'admin.report': {
+    id: 'notification.admin.report',
+    defaultMessage: '{name} reported {target}',
+  },
+  severed_relationships: {
+    id: 'notification.severed_relationships',
+    defaultMessage: 'Lost connections with {name}',
+  },
+  moderation_warning: {
+    id: 'notification.moderation_warning',
+    defaultMessage: 'You have received a moderation warning',
   },
 });
 
 const buildMessage = (
   intl: IntlShape,
   type: NotificationType,
-  account: AccountEntity,
-  accounts: ImmutableList<AccountEntity> | null,
+  accounts: Array<Pick<Account, 'acct' | 'display_name_html'>>,
   targetName: string,
   instanceTitle: string,
 ): React.ReactNode => {
-  if (!accounts) accounts = accounts || ImmutableList([account]);
+  const renderedAccounts = accounts.slice(0, 2).map(account => buildLink(account)).filter(Boolean);
 
-  const renderedAccounts = accounts.slice(0, 2).map(account => buildLink(account)).toArray().filter(Boolean);
-
-  if (accounts.size > 2) {
+  if (accounts.length > 2) {
     renderedAccounts.push(
       <FormattedMessage
         key='more'
         id='notification.more'
         defaultMessage='{count, plural, one {# other} other {# others}}'
-        values={{ count: accounts.size - renderedAccounts.length }}
+        values={{ count: accounts.length - renderedAccounts.length }}
       />,
     );
   }
@@ -143,7 +156,7 @@ const buildMessage = (
     name: <FormattedList type='conjunction' value={renderedAccounts} />,
     targetName,
     instance: instanceTitle,
-    count: accounts.size,
+    count: accounts.length,
   });
 };
 
@@ -151,13 +164,20 @@ const avatarSize = 48;
 
 interface INotification {
   hidden?: boolean;
-  notification: NotificationEntity;
+  notification: MinifiedNotification;
   onMoveUp?: (notificationId: string) => void;
   onMoveDown?: (notificationId: string) => void;
   onReblog?: (status: StatusEntity, e?: KeyboardEvent) => void;
   getScrollPosition?: () => ScrollPosition | undefined;
   updateScrollBottom?: (bottom: number) => void;
 }
+
+const getNotificationStatus = (n: NotificationEntity | BaseNotification) => {
+  if (['mention', 'status', 'reblog', 'favourite', 'poll', 'update', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request'].includes(n.type))
+    // @ts-ignore
+    return n.status;
+  return null;
+};
 
 const Notification: React.FC<INotification> = (props) => {
   const { hidden = false, onMoveUp, onMoveDown } = props;
@@ -173,7 +193,8 @@ const Notification: React.FC<INotification> = (props) => {
   const instance = useInstance();
 
   const type = notification.type;
-  const { account, accounts, status } = notification;
+  const { account, accounts } = notification;
+  const status = getNotificationStatus(notification);
 
   const getHandlers = () => ({
     reply: handleMention,
@@ -257,7 +278,7 @@ const Notification: React.FC<INotification> = (props) => {
   };
 
   const renderIcon = (): React.ReactNode => {
-    if (type === 'pleroma:emoji_reaction' && notification.emoji) {
+    if (type === 'emoji_reaction' && notification.emoji) {
       return (
         <Emoji
           emoji={notification.emoji}
@@ -265,10 +286,10 @@ const Notification: React.FC<INotification> = (props) => {
           className='h-4 w-4 flex-none'
         />
       );
-    } else if (validType(type)) {
+    } else if (icons[type]) {
       return (
         <Icon
-          src={icons[type]}
+          src={icons[type]!}
           className='flex-none text-primary-600 dark:text-primary-400'
         />
       );
@@ -278,7 +299,7 @@ const Notification: React.FC<INotification> = (props) => {
   };
 
   const renderContent = () => {
-    switch (type as NotificationType) {
+    switch (type) {
       case 'follow':
       case 'follow_request':
         return account && typeof account === 'object' ? (
@@ -305,10 +326,10 @@ const Notification: React.FC<INotification> = (props) => {
       case 'status':
       case 'poll':
       case 'update':
-      case 'pleroma:emoji_reaction':
-      case 'pleroma:event_reminder':
-      case 'pleroma:participation_accepted':
-      case 'pleroma:participation_request':
+      case 'emoji_reaction':
+      case 'event_reminder':
+      case 'participation_accepted':
+      case 'participation_request':
         return status && typeof status === 'object' ? (
           <StatusContainer
             id={status.id}
@@ -325,13 +346,13 @@ const Notification: React.FC<INotification> = (props) => {
     }
   };
 
-  const targetName = notification.target && typeof notification.target === 'object' ? notification.target.acct : '';
+  const targetName = notification.type === 'move' ? notification.target.acct : '';
 
-  const message: React.ReactNode = validType(type) && account && typeof account === 'object'
-    ? buildMessage(intl, type, account, accounts as ImmutableList<AccountEntity>, targetName, instance.title)
+  const message: React.ReactNode = account && typeof account === 'object'
+    ? buildMessage(intl, type, accounts, targetName, instance.title)
     : null;
 
-  const ariaLabel = validType(type) ? (
+  const ariaLabel = (
     notificationForScreenReader(
       intl,
       intl.formatMessage(messages[type], {
@@ -340,7 +361,7 @@ const Notification: React.FC<INotification> = (props) => {
       }),
       notification.created_at,
     )
-  ) : '';
+  );
 
   return (
     <HotKeys handlers={getHandlers()} data-testid='notification'>
@@ -381,4 +402,4 @@ const Notification: React.FC<INotification> = (props) => {
   );
 };
 
-export { Notification as default };
+export { Notification as default, getNotificationStatus };

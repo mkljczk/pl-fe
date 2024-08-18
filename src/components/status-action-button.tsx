@@ -6,7 +6,7 @@ import { useSettings } from 'soapbox/hooks';
 
 import AnimatedNumber from './animated-number';
 
-import type { EmojiReaction } from 'soapbox/schemas';
+import type { EmojiReaction } from 'pl-api';
 
 const COLORS = {
   accent: 'accent',

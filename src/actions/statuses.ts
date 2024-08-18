@@ -1,8 +1,7 @@
 import { isLoggedIn } from 'soapbox/utils/auth';
-import { getFeatures } from 'soapbox/utils/features';
 import { shouldHaveCard } from 'soapbox/utils/status';
 
-import api from '../api';
+import { getClient } from '../api';
 
 import { setComposeToStatus } from './compose';
 import { importFetchedStatus, importFetchedStatuses } from './importer';
@@ -10,173 +9,159 @@ import { openModal } from './modals';
 import { getSettings } from './settings';
 import { deleteFromTimelines } from './timelines';
 
+import type { CreateStatusParams, Status as BaseStatus } from 'pl-api';
 import type { IntlShape } from 'react-intl';
+import type { Status } from 'soapbox/normalizers';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity, Status } from 'soapbox/types/entities';
+import type { APIEntity } from 'soapbox/types/entities';
 
-const STATUS_CREATE_REQUEST = 'STATUS_CREATE_REQUEST';
-const STATUS_CREATE_SUCCESS = 'STATUS_CREATE_SUCCESS';
-const STATUS_CREATE_FAIL = 'STATUS_CREATE_FAIL';
+const STATUS_CREATE_REQUEST = 'STATUS_CREATE_REQUEST' as const;
+const STATUS_CREATE_SUCCESS = 'STATUS_CREATE_SUCCESS' as const;
+const STATUS_CREATE_FAIL = 'STATUS_CREATE_FAIL' as const;
 
-const STATUS_FETCH_SOURCE_REQUEST = 'STATUS_FETCH_SOURCE_REQUEST';
-const STATUS_FETCH_SOURCE_SUCCESS = 'STATUS_FETCH_SOURCE_SUCCESS';
-const STATUS_FETCH_SOURCE_FAIL = 'STATUS_FETCH_SOURCE_FAIL';
+const STATUS_FETCH_SOURCE_REQUEST = 'STATUS_FETCH_SOURCE_REQUEST' as const;
+const STATUS_FETCH_SOURCE_SUCCESS = 'STATUS_FETCH_SOURCE_SUCCESS' as const;
+const STATUS_FETCH_SOURCE_FAIL = 'STATUS_FETCH_SOURCE_FAIL' as const;
 
-const STATUS_FETCH_REQUEST = 'STATUS_FETCH_REQUEST';
-const STATUS_FETCH_SUCCESS = 'STATUS_FETCH_SUCCESS';
-const STATUS_FETCH_FAIL = 'STATUS_FETCH_FAIL';
+const STATUS_FETCH_REQUEST = 'STATUS_FETCH_REQUEST' as const;
+const STATUS_FETCH_SUCCESS = 'STATUS_FETCH_SUCCESS' as const;
+const STATUS_FETCH_FAIL = 'STATUS_FETCH_FAIL' as const;
 
-const STATUS_DELETE_REQUEST = 'STATUS_DELETE_REQUEST';
-const STATUS_DELETE_SUCCESS = 'STATUS_DELETE_SUCCESS';
-const STATUS_DELETE_FAIL = 'STATUS_DELETE_FAIL';
+const STATUS_DELETE_REQUEST = 'STATUS_DELETE_REQUEST' as const;
+const STATUS_DELETE_SUCCESS = 'STATUS_DELETE_SUCCESS' as const;
+const STATUS_DELETE_FAIL = 'STATUS_DELETE_FAIL' as const;
 
-const CONTEXT_FETCH_REQUEST = 'CONTEXT_FETCH_REQUEST';
-const CONTEXT_FETCH_SUCCESS = 'CONTEXT_FETCH_SUCCESS';
-const CONTEXT_FETCH_FAIL = 'CONTEXT_FETCH_FAIL';
+const CONTEXT_FETCH_REQUEST = 'CONTEXT_FETCH_REQUEST' as const;
+const CONTEXT_FETCH_SUCCESS = 'CONTEXT_FETCH_SUCCESS' as const;
+const CONTEXT_FETCH_FAIL = 'CONTEXT_FETCH_FAIL' as const;
 
-const STATUS_MUTE_REQUEST = 'STATUS_MUTE_REQUEST';
-const STATUS_MUTE_SUCCESS = 'STATUS_MUTE_SUCCESS';
-const STATUS_MUTE_FAIL = 'STATUS_MUTE_FAIL';
+const STATUS_MUTE_REQUEST = 'STATUS_MUTE_REQUEST' as const;
+const STATUS_MUTE_SUCCESS = 'STATUS_MUTE_SUCCESS' as const;
+const STATUS_MUTE_FAIL = 'STATUS_MUTE_FAIL' as const;
 
-const STATUS_UNMUTE_REQUEST = 'STATUS_UNMUTE_REQUEST';
-const STATUS_UNMUTE_SUCCESS = 'STATUS_UNMUTE_SUCCESS';
-const STATUS_UNMUTE_FAIL = 'STATUS_UNMUTE_FAIL';
+const STATUS_UNMUTE_REQUEST = 'STATUS_UNMUTE_REQUEST' as const;
+const STATUS_UNMUTE_SUCCESS = 'STATUS_UNMUTE_SUCCESS' as const;
+const STATUS_UNMUTE_FAIL = 'STATUS_UNMUTE_FAIL' as const;
 
-const STATUS_REVEAL = 'STATUS_REVEAL';
-const STATUS_HIDE = 'STATUS_HIDE';
+const STATUS_REVEAL = 'STATUS_REVEAL' as const;
+const STATUS_HIDE = 'STATUS_HIDE' as const;
 
-const STATUS_TRANSLATE_REQUEST = 'STATUS_TRANSLATE_REQUEST';
-const STATUS_TRANSLATE_SUCCESS = 'STATUS_TRANSLATE_SUCCESS';
-const STATUS_TRANSLATE_FAIL = 'STATUS_TRANSLATE_FAIL';
-const STATUS_TRANSLATE_UNDO = 'STATUS_TRANSLATE_UNDO';
+const STATUS_TRANSLATE_REQUEST = 'STATUS_TRANSLATE_REQUEST' as const;
+const STATUS_TRANSLATE_SUCCESS = 'STATUS_TRANSLATE_SUCCESS' as const;
+const STATUS_TRANSLATE_FAIL = 'STATUS_TRANSLATE_FAIL' as const;
+const STATUS_TRANSLATE_UNDO = 'STATUS_TRANSLATE_UNDO' as const;
 
-const STATUS_UNFILTER = 'STATUS_UNFILTER';
+const STATUS_UNFILTER = 'STATUS_UNFILTER' as const;
 
-const STATUS_LANGUAGE_CHANGE = 'STATUS_LANGUAGE_CHANGE';
+const STATUS_LANGUAGE_CHANGE = 'STATUS_LANGUAGE_CHANGE' as const;
 
-const statusExists = (getState: () => RootState, statusId: string) =>
-  (getState().statuses.get(statusId) || null) !== null;
-
-const createStatus = (params: Record<string, any>, idempotencyKey: string, statusId: string | null) =>
+const createStatus = (params: CreateStatusParams, idempotencyKey: string, statusId: string | null) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: STATUS_CREATE_REQUEST, params, idempotencyKey, editing: !!statusId });
 
-    return api(getState)(statusId === null ? '/api/v1/statuses' : `/api/v1/statuses/${statusId}`, {
-      method: statusId === null ? 'POST' : 'PUT',
-      body: JSON.stringify(params),
-      headers: { 'Idempotency-Key': idempotencyKey },
-    }).then(({ json: status }) => {
-      // The backend might still be processing the rich media attachment
-      if (!status.card && shouldHaveCard(status)) {
-        status.expectsCard = true;
-      }
+    return (statusId === null ? getClient(getState()).statuses.createStatus(params) : getClient(getState()).statuses.editStatus(statusId, params))
+      .then((status) => {
+        // The backend might still be processing the rich media attachment
+        const expectsCard = status.scheduled_at === null && !status.card && shouldHaveCard(status);
 
-      dispatch(importFetchedStatus(status, idempotencyKey));
-      dispatch({ type: STATUS_CREATE_SUCCESS, status, params, idempotencyKey, editing: !!statusId });
+        if (status.scheduled_at === null) dispatch(importFetchedStatus({ ...status, expectsCard }, idempotencyKey));
+        dispatch({ type: STATUS_CREATE_SUCCESS, status, params, idempotencyKey, editing: !!statusId });
 
-      // Poll the backend for the updated card
-      if (status.expectsCard) {
-        const delay = 1000;
+        // Poll the backend for the updated card
+        if (expectsCard) {
+          const delay = 1000;
 
-        const poll = (retries = 5) => {
-          api(getState)(`/api/v1/statuses/${status.id}`).then(response => {
-            if (response.json?.card) {
-              dispatch(importFetchedStatus(response.json));
-            } else if (retries > 0 && response.status === 200) {
-              setTimeout(() => poll(retries - 1), delay);
-            }
-          }).catch(console.error);
-        };
+          const poll = (retries = 5) => {
+            return getClient(getState()).statuses.getStatus(status.id).then(response => {
+              if (response.card) {
+                dispatch(importFetchedStatus(response));
+              } else if (retries > 0 && response) {
+                setTimeout(() => poll(retries - 1), delay);
+              }
+            }).catch(console.error);
+          };
 
-        setTimeout(() => poll(), delay);
-      }
+          setTimeout(() => poll(), delay);
+        }
 
-      return status;
-    }).catch(error => {
-      dispatch({ type: STATUS_CREATE_FAIL, error, params, idempotencyKey, editing: !!statusId });
-      throw error;
-    });
+        return status;
+      }).catch(error => {
+        dispatch({ type: STATUS_CREATE_FAIL, error, params, idempotencyKey, editing: !!statusId });
+        throw error;
+      });
   };
 
-const editStatus = (id: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  let status = getState().statuses.get(id)!;
+const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+  const state = getState();
 
-  if (status.poll) {
-    status = status.set('poll', getState().polls.get(status.poll) as any);
-  }
+  const status = state.statuses.get(statusId)!;
+  const poll = status.poll_id ? state.polls.get(status.poll_id) : undefined;
 
   dispatch({ type: STATUS_FETCH_SOURCE_REQUEST });
 
-  api(getState)(`/api/v1/statuses/${id}/source`).then(response => {
+  return getClient(state).statuses.getStatusSource(statusId).then(response => {
     dispatch({ type: STATUS_FETCH_SOURCE_SUCCESS });
-    dispatch(setComposeToStatus(status, response.json.text, response.json.spoiler_text, response.json.content_type, false));
+    dispatch(setComposeToStatus(status, poll, response.text, response.spoiler_text, response.content_type, false));
     dispatch(openModal('COMPOSE'));
   }).catch(error => {
     dispatch({ type: STATUS_FETCH_SOURCE_FAIL, error });
-
   });
 };
 
-const fetchStatus = (id: string, intl?: IntlShape) =>
+const fetchStatus = (statusId: string, intl?: IntlShape) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const skipLoading = statusExists(getState, id);
+    dispatch({ type: STATUS_FETCH_REQUEST, statusId });
 
-    dispatch({ type: STATUS_FETCH_REQUEST, id, skipLoading });
+    const params = intl && getSettings(getState()).get('autoTranslate') ? {
+      language: intl.locale,
+    } : undefined;
 
-    const params = new URLSearchParams();
-    if (intl && getSettings(getState()).get('autoTranslate')) {
-      params.set('language', intl.locale);
-    }
-
-    return api(getState)(`/api/v1/statuses/${id}`, { params }).then(({ json: status }) => {
+    return getClient(getState()).statuses.getStatus(statusId, params).then(status => {
       dispatch(importFetchedStatus(status));
-      dispatch({ type: STATUS_FETCH_SUCCESS, status, skipLoading });
+      dispatch({ type: STATUS_FETCH_SUCCESS, status });
       return status;
     }).catch(error => {
-      dispatch({ type: STATUS_FETCH_FAIL, id, error, skipLoading, skipAlert: true });
+      dispatch({ type: STATUS_FETCH_FAIL, statusId, error, skipAlert: true });
     });
   };
 
-const deleteStatus = (id: string, withRedraft = false) =>
+const deleteStatus = (statusId: string, withRedraft = false) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    let status = getState().statuses.get(id)!;
+    const state = getState();
 
-    if (status.poll) {
-      status = status.set('poll', getState().polls.get(status.poll) as any);
-    }
+    const status = state.statuses.get(statusId)!;
+    const poll = status.poll_id ? state.polls.get(status.poll_id) : undefined;
 
     dispatch({ type: STATUS_DELETE_REQUEST, params: status });
 
-    return api(getState)(`/api/v1/statuses/${id}`, { method: 'DELETE' })
-      .then(response => {
-        dispatch({ type: STATUS_DELETE_SUCCESS, id });
-        dispatch(deleteFromTimelines(id));
+    return getClient(state).statuses.deleteStatus(statusId).then(response => {
+      dispatch({ type: STATUS_DELETE_SUCCESS, statusId });
+      dispatch(deleteFromTimelines(statusId));
 
-        if (withRedraft) {
-          dispatch(setComposeToStatus(status, response.json.text, response.json.spoiler_text, response.json.pleroma?.content_type, withRedraft));
-          dispatch(openModal('COMPOSE'));
-        }
-      })
+      if (withRedraft) {
+        dispatch(setComposeToStatus(status, poll, response.text || '', response.spoiler_text, response.content_type, withRedraft));
+        dispatch(openModal('COMPOSE'));
+      }
+    })
       .catch(error => {
         dispatch({ type: STATUS_DELETE_FAIL, params: status, error });
       });
   };
 
-const updateStatus = (status: APIEntity) => (dispatch: AppDispatch) =>
+const updateStatus = (status: BaseStatus) => (dispatch: AppDispatch) =>
   dispatch(importFetchedStatus(status));
 
-const fetchContext = (id: string, intl?: IntlShape) =>
+const fetchContext = (statusId: string, intl?: IntlShape) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: CONTEXT_FETCH_REQUEST, id });
+    dispatch({ type: CONTEXT_FETCH_REQUEST, statusId });
 
-    const params = new URLSearchParams();
-    if (intl && getSettings(getState()).get('autoTranslate')) {
-      params.set('language', intl.locale);
-    }
+    const params = intl && getSettings(getState()).get('autoTranslate') ? {
+      language: intl.locale,
+    } : undefined;
 
-    return api(getState)(`/api/v1/statuses/${id}/context`, { params }).then(({ json: context }) => {
+    return getClient(getState()).statuses.getContext(statusId, params).then(context => {
       if (Array.isArray(context)) {
         // Mitra: returns a list of statuses
         dispatch(importFetchedStatuses(context));
@@ -185,52 +170,52 @@ const fetchContext = (id: string, intl?: IntlShape) =>
         const { ancestors, descendants } = context;
         const statuses = ancestors.concat(descendants);
         dispatch(importFetchedStatuses(statuses));
-        dispatch({ type: CONTEXT_FETCH_SUCCESS, id, ancestors, descendants });
+        dispatch({ type: CONTEXT_FETCH_SUCCESS, statusId, ancestors, descendants });
       } else {
         throw context;
       }
       return context;
     }).catch(error => {
       if (error.response?.status === 404) {
-        dispatch(deleteFromTimelines(id));
+        dispatch(deleteFromTimelines(statusId));
       }
 
-      dispatch({ type: CONTEXT_FETCH_FAIL, id, error, skipAlert: true });
+      dispatch({ type: CONTEXT_FETCH_FAIL, statusId, error, skipAlert: true });
     });
   };
 
-const fetchStatusWithContext = (id: string, intl?: IntlShape) =>
+const fetchStatusWithContext = (statusId: string, intl?: IntlShape) =>
   async (dispatch: AppDispatch) => Promise.all([
-    dispatch(fetchContext(id, intl)),
-    dispatch(fetchStatus(id, intl)),
+    dispatch(fetchContext(statusId, intl)),
+    dispatch(fetchStatus(statusId, intl)),
   ]);
 
-const muteStatus = (id: string) =>
+const muteStatus = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
-    dispatch({ type: STATUS_MUTE_REQUEST, id });
-    api(getState)(`/api/v1/statuses/${id}/mute`, { method: 'POST' }).then(() => {
-      dispatch({ type: STATUS_MUTE_SUCCESS, id });
+    dispatch({ type: STATUS_MUTE_REQUEST, statusId });
+    return getClient(getState()).statuses.muteStatus(statusId).then((status) => {
+      dispatch({ type: STATUS_MUTE_SUCCESS, statusId });
     }).catch(error => {
-      dispatch({ type: STATUS_MUTE_FAIL, id, error });
+      dispatch({ type: STATUS_MUTE_FAIL, statusId, error });
     });
   };
 
-const unmuteStatus = (id: string) =>
+const unmuteStatus = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
-    dispatch({ type: STATUS_UNMUTE_REQUEST, id });
-    api(getState)(`/api/v1/statuses/${id}/unmute`, { method: 'POST' }).then(() => {
-      dispatch({ type: STATUS_UNMUTE_SUCCESS, id });
+    dispatch({ type: STATUS_UNMUTE_REQUEST, statusId });
+    return getClient(getState()).statuses.unmuteStatus(statusId).then(() => {
+      dispatch({ type: STATUS_UNMUTE_SUCCESS, statusId });
     }).catch(error => {
-      dispatch({ type: STATUS_UNMUTE_FAIL, id, error });
+      dispatch({ type: STATUS_UNMUTE_FAIL, statusId, error });
     });
   };
 
-const toggleMuteStatus = (status: Status) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const toggleMuteStatus = (status: Pick<Status, 'id' | 'muted'>) =>
+  (dispatch: AppDispatch) => {
     if (status.muted) {
       dispatch(unmuteStatus(status.id));
     } else {
@@ -238,29 +223,29 @@ const toggleMuteStatus = (status: Status) =>
     }
   };
 
-const hideStatus = (ids: string[] | string) => {
-  if (!Array.isArray(ids)) {
-    ids = [ids];
+const hideStatus = (statusIds: string[] | string) => {
+  if (!Array.isArray(statusIds)) {
+    statusIds = [statusIds];
   }
 
   return {
     type: STATUS_HIDE,
-    ids,
+    statusIds,
   };
 };
 
-const revealStatus = (ids: string[] | string) => {
-  if (!Array.isArray(ids)) {
-    ids = [ids];
+const revealStatus = (statusIds: string[] | string) => {
+  if (!Array.isArray(statusIds)) {
+    statusIds = [statusIds];
   }
 
   return {
     type: STATUS_REVEAL,
-    ids,
+    statusIds,
   };
 };
 
-const toggleStatusHidden = (status: Status) => {
+const toggleStatusHidden = (status: Pick<Status, 'id' | 'hidden'>) => {
   if (status.hidden) {
     return revealStatus(status.id);
   } else {
@@ -271,89 +256,83 @@ const toggleStatusHidden = (status: Status) => {
 let TRANSLATIONS_QUEUE: Set<string> = new Set();
 let TRANSLATIONS_TIMEOUT: NodeJS.Timeout | null = null;
 
-const translateStatus = (id: string, targetLanguage?: string, lazy?: boolean) =>
+const translateStatus = (statusId: string, targetLanguage?: string, lazy?: boolean) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const features = getFeatures(getState().instance);
+    const client = getClient(getState);
+    const features = client.features;
 
-    dispatch({ type: STATUS_TRANSLATE_REQUEST, id });
+    dispatch({ type: STATUS_TRANSLATE_REQUEST, statusId });
 
     const handleTranslateMany = () => {
       const copy = [...TRANSLATIONS_QUEUE];
       TRANSLATIONS_QUEUE = new Set();
       if (TRANSLATIONS_TIMEOUT) clearTimeout(TRANSLATIONS_TIMEOUT);
 
-      api(getState)('/api/v1/pl/statuses/translate', {
-        method: 'POST',
-        body: JSON.stringify({
-          ids: copy,
-          target_language: targetLanguage,
-        }),
+      return client.request('/api/v1/pl/statuses/translate', {
+        method: 'POST', body: { ids: copy, lang: targetLanguage },
       }).then((response) => {
         response.json.forEach((translation: APIEntity) => {
           dispatch({
             type: STATUS_TRANSLATE_SUCCESS,
-            id: translation.id,
+            statusId: translation.id,
             translation: translation,
           });
 
           copy
             .filter((statusId) => !response.json.some(({ id }: APIEntity) => id === statusId))
-            .forEach((id) => dispatch({
+            .forEach((statusId) => dispatch({
               type: STATUS_TRANSLATE_FAIL,
-              id,
+              statusId,
             }));
         });
       }).catch(error => {
         dispatch({
           type: STATUS_TRANSLATE_FAIL,
-          id,
+          statusId,
           error,
         });
       });
     };
 
     if (features.lazyTranslations && lazy) {
-      TRANSLATIONS_QUEUE.add(id);
+      TRANSLATIONS_QUEUE.add(statusId);
 
       if (TRANSLATIONS_TIMEOUT) clearTimeout(TRANSLATIONS_TIMEOUT);
       TRANSLATIONS_TIMEOUT = setTimeout(() => handleTranslateMany(), 3000);
     } else if (features.lazyTranslations && TRANSLATIONS_QUEUE.size) {
-      TRANSLATIONS_QUEUE.add(id);
+      TRANSLATIONS_QUEUE.add(statusId);
 
       handleTranslateMany();
     } else {
-      api(getState)(`/api/v1/statuses/${id}/translate`, {
-        body: JSON.stringify({ target_language: targetLanguage }),
-        method: 'POST',
-      }).then(response => {
+      return client.statuses.translateStatus(statusId, targetLanguage).then(response => {
         dispatch({
           type: STATUS_TRANSLATE_SUCCESS,
-          id,
-          translation: response.json,
+          statusId,
+          translation: response,
         });
       }).catch(error => {
         dispatch({
           type: STATUS_TRANSLATE_FAIL,
-          id,
+          statusId,
           error,
         });
       });
     }
   };
 
-const undoStatusTranslation = (id: string) => ({
+const undoStatusTranslation = (statusId: string) => ({
   type: STATUS_TRANSLATE_UNDO,
-  id,
+  statusId,
 });
 
-const unfilterStatus = (id: string) => ({
+const unfilterStatus = (statusId: string) => ({
   type: STATUS_UNFILTER,
-  id,
+  statusId,
 });
 
-const changeStatusLanguage = (id: string, language: string) => ({
+const changeStatusLanguage = (statusId: string, language: string) => ({
   type: STATUS_LANGUAGE_CHANGE,
-  id,
+  statusId,
   language,
 });
 

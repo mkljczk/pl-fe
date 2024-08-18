@@ -16,7 +16,6 @@ interface IAutosuggestAccountInput {
   onSelected: (accountId: string) => void;
   autoFocus?: boolean;
   value: string;
-  limit?: number;
   className?: string;
   autoSelect?: boolean;
   menu?: Menu;
@@ -28,7 +27,6 @@ const AutosuggestAccountInput: React.FC<IAutosuggestAccountInput> = ({
   onChange,
   onSelected,
   value = '',
-  limit = 4,
   ...rest
 }) => {
   const dispatch = useAppDispatch();
@@ -45,15 +43,13 @@ const AutosuggestAccountInput: React.FC<IAutosuggestAccountInput> = ({
   };
 
   const handleAccountSearch = useCallback(throttle((q) => {
-    const params = { q, limit, resolve: false };
-
-    dispatch(accountSearch(params, controller.current.signal))
+    dispatch(accountSearch(q, controller.current.signal))
       .then((accounts: { id: string }[]) => {
         const accountIds = accounts.map(account => account.id);
         setAccountIds(ImmutableOrderedSet(accountIds));
       })
       .catch(noOp);
-  }, 900, { leading: true, trailing: true }), [limit]);
+  }, 900, { leading: true, trailing: true }), []);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
     refreshCancelToken();

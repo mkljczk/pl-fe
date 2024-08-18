@@ -1,10 +1,10 @@
 import userEvent from '@testing-library/user-event';
+import { GroupRoles } from 'pl-api';
 import React from 'react';
 
 import { __stub } from 'soapbox/api';
 import { buildGroup, buildGroupMember, buildGroupRelationship } from 'soapbox/jest/factory';
 import { render, screen, waitFor } from 'soapbox/jest/test-helpers';
-import { GroupRoles } from 'soapbox/schemas/group-member';
 
 import GroupMemberListItem from './group-member-list-item';
 

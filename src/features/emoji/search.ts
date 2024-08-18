@@ -1,9 +1,9 @@
 import Index from '@akryum/flexsearch-es';
-import { Map as ImmutableMap, List as ImmutableList } from 'immutable';
 
 import data from './data';
 
 import type { Emoji } from './index';
+import type { CustomEmoji } from 'pl-api';
 
 // @ts-ignore Wrong default export.
 const index: Index.Index = new Index({
@@ -40,21 +40,21 @@ const addCustomToPool = (customEmojis: any[]) => {
 // we can share an index by prefixing custom emojis with 'c' and native with 'n'
 const search = (
   str: string, { maxResults = 5 }: searchOptions = {},
-  custom_emojis?: ImmutableList<ImmutableMap<string, string>>,
+  custom_emojis?: Array<CustomEmoji>,
 ): Emoji[] => index.search(str, maxResults)
   .flatMap((id) => {
     if (typeof id !== 'string') return;
 
     if (id[0] === 'c' && custom_emojis) {
       const index = Number(id.slice(1));
-      const custom = custom_emojis.get(index);
+      const custom = custom_emojis[index];
 
       if (custom) {
         return {
-          id: custom.get('shortcode', ''),
-          colons: ':' + custom.get('shortcode', '') + ':',
+          id: custom.shortcode,
+          colons: ':' + custom.shortcode + ':',
           custom: true,
-          imageUrl: custom.get('static_url', ''),
+          imageUrl: custom.static_url,
         };
       }
     }

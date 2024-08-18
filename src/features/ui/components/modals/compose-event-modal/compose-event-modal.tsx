@@ -29,6 +29,8 @@ import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
 import UploadButton from './upload-button';
 
+import type { ModalType } from '../../modal-root';
+
 const messages = defineMessages({
   eventNamePlaceholder: { id: 'compose_event.fields.name_placeholder', defaultMessage: 'Name' },
   eventDescriptionPlaceholder: { id: 'compose_event.fields.description_placeholder', defaultMessage: 'Description' },
@@ -86,7 +88,7 @@ const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
 };
 
 interface IComposeEventModal {
-  onClose: (type?: string) => void;
+  onClose: (type?: ModalType) => void;
 }
 
 const ComposeEventModal: React.FC<IComposeEventModal> = ({ onClose }) => {
@@ -105,7 +107,7 @@ const ComposeEventModal: React.FC<IComposeEventModal> = ({ onClose }) => {
   const approvalRequired = useAppSelector((state) => state.compose_event.approval_required);
   const location = useAppSelector((state) => state.compose_event.location);
 
-  const id = useAppSelector((state) => state.compose_event.id);
+  const statusId = useAppSelector((state) => state.compose_event.id);
 
   const isSubmitting = useAppSelector((state) => state.compose_event.is_submitting);
 
@@ -138,10 +140,10 @@ const ComposeEventModal: React.FC<IComposeEventModal> = ({ onClose }) => {
       if (checkEventComposeContent(getState().compose_event)) {
         dispatch(openModal('CONFIRM', {
           icon: require('@tabler/icons/outline/trash.svg'),
-          heading: id
+          heading: statusId
             ? <FormattedMessage id='confirmations.cancel_event_editing.heading' defaultMessage='Cancel event editing' />
             : <FormattedMessage id='confirmations.delete_event.heading' defaultMessage='Delete event' />,
-          message: id
+          message: statusId
             ? <FormattedMessage id='confirmations.cancel_event_editing.message' defaultMessage='Are you sure you want to cancel editing this event? All changes will be lost.' />
             : <FormattedMessage id='confirmations.delete_event.message' defaultMessage='Are you sure you want to delete this event?' />,
           confirm: intl.formatMessage(messages.confirm),
@@ -169,10 +171,10 @@ const ComposeEventModal: React.FC<IComposeEventModal> = ({ onClose }) => {
     dispatch(submitEvent());
   };
 
-  const accounts = useAppSelector((state) => state.user_lists.event_participation_requests.get(id!)?.items);
+  const accounts = useAppSelector((state) => state.user_lists.event_participation_requests.get(statusId!)?.items);
 
   useEffect(() => {
-    if (id) dispatch(fetchEventParticipationRequests(id));
+    if (statusId) dispatch(fetchEventParticipationRequests(statusId));
   }, []);
 
   const renderLocation = () => location && (
@@ -291,7 +293,7 @@ const ComposeEventModal: React.FC<IComposeEventModal> = ({ onClose }) => {
           />
         </FormGroup>
       )}
-      {!id && (
+      {!statusId && (
         <HStack alignItems='center' space={2}>
           <Toggle
             checked={approvalRequired}
@@ -308,7 +310,7 @@ const ComposeEventModal: React.FC<IComposeEventModal> = ({ onClose }) => {
     <Stack space={3}>
       {accounts.size > 0 ? (
         accounts.map(({ account, participation_message }) =>
-          <Account key={account} eventId={id!} id={account} participationMessage={participation_message} />,
+          <Account key={account} eventId={statusId!} id={account} participationMessage={participation_message} />,
         )
       ) : (
         <FormattedMessage id='empty_column.event_participant_requests' defaultMessage='There are no pending event participation requests.' />
@@ -318,18 +320,18 @@ const ComposeEventModal: React.FC<IComposeEventModal> = ({ onClose }) => {
 
   return (
     <Modal
-      title={id
+      title={statusId
         ? <FormattedMessage id='navigation_bar.compose_event' defaultMessage='Manage event' />
         : <FormattedMessage id='navigation_bar.create_event' defaultMessage='Create new event' />}
       confirmationAction={tab === 'edit' ? handleSubmit : undefined}
-      confirmationText={id
+      confirmationText={statusId
         ? <FormattedMessage id='compose_event.update' defaultMessage='Update' />
         : <FormattedMessage id='compose_event.create' defaultMessage='Create' />}
       confirmationDisabled={isSubmitting}
       onClose={onClickClose}
     >
       <Stack space={2}>
-        {id && renderTabs()}
+        {statusId && renderTabs()}
         {body}
       </Stack>
     </Modal>

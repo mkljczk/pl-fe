@@ -1,14 +1,14 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { useApi } from 'soapbox/hooks';
+import { useClient } from 'soapbox/hooks';
 import { queryClient } from 'soapbox/queries/client';
 import { relaySchema, type Relay } from 'soapbox/schemas';
 
 const useRelays = () => {
-  const api = useApi();
+  const client = useClient();
 
   const getRelays = async () => {
-    const { json: data } = await api<{ relays: Relay[] }>('/api/v1/pleroma/admin/relay');
+    const { json: data } = await client.request<{ relays: Relay[] }>('/api/v1/pleroma/admin/relay');
 
     const normalizedData = data.relays?.map((relay) => relaySchema.parse(relay));
     return normalizedData;
@@ -24,7 +24,7 @@ const useRelays = () => {
     mutate: followRelay,
     isPending: isPendingFollow,
   } = useMutation({
-    mutationFn: (relayUrl: string) => api('/api/v1/pleroma/admin/relays', {
+    mutationFn: (relayUrl: string) => client.request('/api/v1/pleroma/admin/relays', {
       method: 'POST',
       body: JSON.stringify({ relay_url: relayUrl }),
     }),
@@ -39,7 +39,7 @@ const useRelays = () => {
     mutate: unfollowRelay,
     isPending: isPendingUnfollow,
   } = useMutation({
-    mutationFn: (relayUrl: string) => api('/api/v1/pleroma/admin/relays', {
+    mutationFn: (relayUrl: string) => client.request('/api/v1/pleroma/admin/relays', {
       method: 'DELETE',
       body: JSON.stringify({ relay_url: relayUrl }),
     }),

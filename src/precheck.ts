@@ -4,7 +4,7 @@
  */
 
 /** Whether pre-rendered data exists in Pleroma's format. */
-const hasPrerenderPleroma  = Boolean(document.getElementById('initial-results'));
+const hasPrerenderPleroma = Boolean(document.getElementById('initial-results'));
 
 /** Whether pre-rendered data exists in Mastodon's format. */
 const hasPrerenderMastodon = Boolean(document.getElementById('initial-state'));

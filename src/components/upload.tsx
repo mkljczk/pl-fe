@@ -8,7 +8,6 @@ import presentationIcon from '@tabler/icons/outline/presentation.svg';
 import xIcon from '@tabler/icons/outline/x.svg';
 import zoomInIcon from '@tabler/icons/outline/zoom-in.svg';
 import clsx from 'clsx';
-import { List as ImmutableList } from 'immutable';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { spring } from 'react-motion';
@@ -19,7 +18,8 @@ import Blurhash from 'soapbox/components/blurhash';
 import { HStack, Icon, IconButton } from 'soapbox/components/ui';
 import Motion from 'soapbox/features/ui/util/optional-motion';
 import { useAppDispatch, useSettings } from 'soapbox/hooks';
-import { Attachment } from 'soapbox/types/entities';
+
+import type { MediaAttachment } from 'pl-api';
 
 const MIMETYPE_ICONS: Record<string, string> = {
   'application/x-freearc': fileZipIcon,
@@ -63,7 +63,7 @@ const messages = defineMessages({
 });
 
 interface IUpload extends Pick<React.HTMLAttributes<HTMLDivElement>, 'onDragStart' | 'onDragEnter' | 'onDragEnd'> {
-  media: Attachment;
+  media: MediaAttachment;
   onSubmit?(): void;
   onDelete?(): void;
   onDescriptionChange?(description: string): void;
@@ -135,17 +135,17 @@ const Upload: React.FC<IUpload> = ({
   };
 
   const handleOpenModal = () => {
-    dispatch(openModal('MEDIA', { media: ImmutableList.of(media), index: 0 }));
+    dispatch(openModal('MEDIA', { media: [media], index: 0 }));
   };
 
   const active = hovered || focused;
   const description = dirtyDescription || (dirtyDescription !== '' && media.description) || '';
-  const focusX = media.meta.getIn(['focus', 'x']) as number | undefined;
-  const focusY = media.meta.getIn(['focus', 'y']) as number | undefined;
+  const focusX = media.type === 'image' && media.meta?.focus?.x || undefined;
+  const focusY = media.type === 'image' && media.meta?.focus?.y || undefined;
   const x = focusX ? ((focusX / 2) + .5) * 100 : undefined;
   const y = focusY ? ((focusY / -2) + .5) * 100 : undefined;
   const mediaType = media.type;
-  const mimeType = media.pleroma.get('mime_type') as string | undefined;
+  const mimeType = media.mime_type as string | undefined;
 
   const uploadIcon = mediaType === 'unknown' && (
     <Icon

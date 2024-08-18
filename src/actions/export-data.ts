@@ -1,22 +1,23 @@
 import { defineMessages } from 'react-intl';
 
-import api, { type PlfeResponse, getLinks } from 'soapbox/api';
+import { getClient } from 'soapbox/api';
 import { normalizeAccount } from 'soapbox/normalizers';
 import toast from 'soapbox/toast';
 
+import type { Account, PaginatedResponse } from 'pl-api';
 import type { RootState } from 'soapbox/store';
 
-const EXPORT_FOLLOWS_REQUEST = 'EXPORT_FOLLOWS_REQUEST';
-const EXPORT_FOLLOWS_SUCCESS = 'EXPORT_FOLLOWS_SUCCESS';
-const EXPORT_FOLLOWS_FAIL    = 'EXPORT_FOLLOWS_FAIL';
+const EXPORT_FOLLOWS_REQUEST = 'EXPORT_FOLLOWS_REQUEST' as const;
+const EXPORT_FOLLOWS_SUCCESS = 'EXPORT_FOLLOWS_SUCCESS' as const;
+const EXPORT_FOLLOWS_FAIL = 'EXPORT_FOLLOWS_FAIL' as const;
 
-const EXPORT_BLOCKS_REQUEST = 'EXPORT_BLOCKS_REQUEST';
-const EXPORT_BLOCKS_SUCCESS = 'EXPORT_BLOCKS_SUCCESS';
-const EXPORT_BLOCKS_FAIL    = 'EXPORT_BLOCKS_FAIL';
+const EXPORT_BLOCKS_REQUEST = 'EXPORT_BLOCKS_REQUEST' as const;
+const EXPORT_BLOCKS_SUCCESS = 'EXPORT_BLOCKS_SUCCESS' as const;
+const EXPORT_BLOCKS_FAIL = 'EXPORT_BLOCKS_FAIL' as const;
 
-const EXPORT_MUTES_REQUEST = 'EXPORT_MUTES_REQUEST';
-const EXPORT_MUTES_SUCCESS = 'EXPORT_MUTES_SUCCESS';
-const EXPORT_MUTES_FAIL    = 'EXPORT_MUTES_FAIL';
+const EXPORT_MUTES_REQUEST = 'EXPORT_MUTES_REQUEST' as const;
+const EXPORT_MUTES_SUCCESS = 'EXPORT_MUTES_SUCCESS' as const;
+const EXPORT_MUTES_FAIL = 'EXPORT_MUTES_FAIL' as const;
 
 const messages = defineMessages({
   blocksSuccess: { id: 'export_data.success.blocks', defaultMessage: 'Blocks exported successfully' },
@@ -24,7 +25,7 @@ const messages = defineMessages({
   mutesSuccess: { id: 'export_data.success.mutes', defaultMessage: 'Mutes exported successfully' },
 });
 
-type ExportDataActions = {
+type ExportDataAction = {
   type: typeof EXPORT_FOLLOWS_REQUEST
   | typeof EXPORT_FOLLOWS_SUCCESS
   | typeof EXPORT_FOLLOWS_FAIL
@@ -48,25 +49,25 @@ const fileExport = (content: string, fileName: string) => {
   document.body.removeChild(fileToDownload);
 };
 
-const listAccounts = (getState: () => RootState) => async(apiResponse: PlfeResponse) => {
-  const followings = apiResponse.json;
+const listAccounts = async (response: PaginatedResponse<Account>) => {
+  const followings = response.items;
   let accounts = [];
-  let next = getLinks(apiResponse).refs.find(link => link.rel === 'next');
-  while (next) {
-    apiResponse = await api(getState)(next.uri);
-    next = getLinks(apiResponse).refs.find(link => link.rel === 'next');
-    Array.prototype.push.apply(followings, apiResponse.json);
+  while (response.next) {
+    response = await response.next();
+    Array.prototype.push.apply(followings, response.items);
   }
 
   accounts = followings.map((account: any) => normalizeAccount(account).fqn);
   return Array.from(new Set(accounts));
 };
 
-const exportFollows = () => (dispatch: React.Dispatch<ExportDataActions>, getState: () => RootState) => {
+const exportFollows = () => async (dispatch: React.Dispatch<ExportDataAction>, getState: () => RootState) => {
   dispatch({ type: EXPORT_FOLLOWS_REQUEST });
   const me = getState().me;
-  return api(getState)(`/api/v1/accounts/${me}/following?limit=40`)
-    .then(listAccounts(getState))
+  if (!me) return;
+
+  return getClient(getState()).accounts.getAccountFollowing(me, { limit: 40 })
+    .then(listAccounts)
     .then((followings) => {
       followings = followings.map(fqn => fqn + ',true');
       followings.unshift('Account address,Show boosts');
@@ -79,10 +80,10 @@ const exportFollows = () => (dispatch: React.Dispatch<ExportDataActions>, getSta
     });
 };
 
-const exportBlocks = () => (dispatch: React.Dispatch<ExportDataActions>, getState: () => RootState) => {
+const exportBlocks = () => (dispatch: React.Dispatch<ExportDataAction>, getState: () => RootState) => {
   dispatch({ type: EXPORT_BLOCKS_REQUEST });
-  return api(getState)('/api/v1/blocks?limit=40')
-    .then(listAccounts(getState))
+  return getClient(getState()).filtering.getBlocks({ limit: 40 })
+    .then(listAccounts)
     .then((blocks) => {
       fileExport(blocks.join('\n'), 'export_block.csv');
 
@@ -93,10 +94,10 @@ const exportBlocks = () => (dispatch: React.Dispatch<ExportDataActions>, getStat
     });
 };
 
-const exportMutes = () => (dispatch: React.Dispatch<ExportDataActions>, getState: () => RootState) => {
+const exportMutes = () => (dispatch: React.Dispatch<ExportDataAction>, getState: () => RootState) => {
   dispatch({ type: EXPORT_MUTES_REQUEST });
-  return api(getState)('/api/v1/mutes?limit=40')
-    .then(listAccounts(getState))
+  return getClient(getState()).filtering.getMutes({ limit: 40 })
+    .then(listAccounts)
     .then((mutes) => {
       fileExport(mutes.join('\n'), 'export_mutes.csv');
 
@@ -120,4 +121,5 @@ export {
   exportFollows,
   exportBlocks,
   exportMutes,
+  type ExportDataAction,
 };

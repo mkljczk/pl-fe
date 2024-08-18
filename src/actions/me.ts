@@ -1,27 +1,24 @@
-import { serialize } from 'object-to-formdata';
-
 import { selectAccount } from 'soapbox/selectors';
 import { setSentryAccount } from 'soapbox/sentry';
 import KVStore from 'soapbox/storage/kv-store';
 import { getAuthUserId, getAuthUserUrl } from 'soapbox/utils/auth';
 
-import api from '../api';
+import { getClient } from '../api';
 
 import { loadCredentials } from './auth';
 import { importFetchedAccount } from './importer';
 
-import type { Account } from 'soapbox/schemas';
+import type { CredentialAccount } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
 const ME_FETCH_REQUEST = 'ME_FETCH_REQUEST' as const;
 const ME_FETCH_SUCCESS = 'ME_FETCH_SUCCESS' as const;
-const ME_FETCH_FAIL    = 'ME_FETCH_FAIL' as const;
-const ME_FETCH_SKIP    = 'ME_FETCH_SKIP' as const;
+const ME_FETCH_FAIL = 'ME_FETCH_FAIL' as const;
+const ME_FETCH_SKIP = 'ME_FETCH_SKIP' as const;
 
 const ME_PATCH_REQUEST = 'ME_PATCH_REQUEST' as const;
 const ME_PATCH_SUCCESS = 'ME_PATCH_SUCCESS' as const;
-const ME_PATCH_FAIL    = 'ME_PATCH_FAIL' as const;
+const ME_PATCH_FAIL = 'ME_PATCH_FAIL' as const;
 
 const noOp = () => new Promise(f => f(undefined));
 
@@ -57,38 +54,23 @@ const fetchMe = () =>
   };
 
 /** Update the auth account in IndexedDB for Mastodon, etc. */
-const persistAuthAccount = (account: APIEntity, params: Record<string, any>) => {
+const persistAuthAccount = (account: CredentialAccount, params: Record<string, any>) => {
   if (account && account.url) {
-    if (!account.pleroma) account.pleroma = {};
-
-    if (!account.pleroma.settings_store) {
-      account.pleroma.settings_store = params.pleroma_settings_store || {};
+    if (!account.settings_store) {
+      account.settings_store = params.pleroma_settings_store || {};
     }
     KVStore.setItem(`authAccount:${account.url}`, account).catch(console.error);
   }
 };
 
-const patchMe = (params: Record<string, any>, isFormData = false) =>
+const patchMe = (params: Record<string, any>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(patchMeRequest());
 
-    const headers: HeadersInit = isFormData ? { 'Content-Type': '' } : {};
-
-    let body: FormData | string;
-    if (isFormData) {
-      body = serialize(params, { indices: true });
-    } else {
-      body = JSON.stringify(params);
-    }
-
-    return api(getState)('/api/v1/accounts/update_credentials', {
-      method: 'PATCH',
-      body,
-      headers,
-    })
+    return getClient(getState).settings.updateCredentials(params)
       .then(response => {
-        persistAuthAccount(response.json, params);
-        dispatch(patchMeSuccess(response.json));
+        persistAuthAccount(response, params);
+        dispatch(patchMeSuccess(response));
       }).catch(error => {
         dispatch(patchMeFail(error));
         throw error;
@@ -99,7 +81,7 @@ const fetchMeRequest = () => ({
   type: ME_FETCH_REQUEST,
 });
 
-const fetchMeSuccess = (account: Account) => {
+const fetchMeSuccess = (account: CredentialAccount) => {
   setSentryAccount(account);
 
   return {
@@ -108,7 +90,7 @@ const fetchMeSuccess = (account: Account) => {
   };
 };
 
-const fetchMeFail = (error: APIEntity) => ({
+const fetchMeFail = (error: unknown) => ({
   type: ME_FETCH_FAIL,
   error,
   skipAlert: true,
@@ -120,10 +102,10 @@ const patchMeRequest = () => ({
 
 interface MePatchSuccessAction {
   type: typeof ME_PATCH_SUCCESS;
-  me: APIEntity;
+  me: CredentialAccount;
 }
 
-const patchMeSuccess = (me: APIEntity) =>
+const patchMeSuccess = (me: CredentialAccount) =>
   (dispatch: AppDispatch) => {
     const action: MePatchSuccessAction = {
       type: ME_PATCH_SUCCESS,

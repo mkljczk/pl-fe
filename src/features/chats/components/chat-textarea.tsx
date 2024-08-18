@@ -1,36 +1,28 @@
 import React from 'react';
 
 import { HStack, Textarea } from 'soapbox/components/ui';
-import { Attachment } from 'soapbox/types/entities';
 
 import ChatPendingUpload from './chat-pending-upload';
 import ChatUpload from './chat-upload';
 
+import type { MediaAttachment } from 'pl-api';
+
 interface IChatTextarea extends React.ComponentProps<typeof Textarea> {
-  attachments?: Attachment[];
-  onDeleteAttachment?: (i: number) => void;
-  uploadCount?: number;
+  attachment?: MediaAttachment | null;
+  onDeleteAttachment?: () => void;
+  uploading?: boolean;
   uploadProgress?: number;
 }
 
 /** Custom textarea for chats. */
 const ChatTextarea: React.FC<IChatTextarea> = React.forwardRef(({
-  attachments,
+  attachment,
   onDeleteAttachment,
-  uploadCount = 0,
+  uploading,
   uploadProgress = 0,
   ...rest
-}, ref) => {
-  const isUploading = uploadCount > 0;
-
-  const handleDeleteAttachment = (i: number) => () => {
-    if (onDeleteAttachment) {
-      onDeleteAttachment(i);
-    }
-  };
-
-  return (
-    <div className={`
+}, ref) => (
+  <div className={`
       block
       w-full
       rounded-md border border-gray-400
@@ -41,30 +33,29 @@ const ChatTextarea: React.FC<IChatTextarea> = React.forwardRef(({
       dark:bg-gray-800 dark:text-gray-100 dark:ring-1 dark:ring-gray-800 dark:placeholder:text-gray-600
       dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500
     `}
-    >
-      {(!!attachments?.length || isUploading) && (
-        <HStack className='-ml-2 -mt-2 p-3 pb-0' wrap>
-          {attachments?.map((attachment, i) => (
-            <div className='ml-2 mt-2 flex'>
-              <ChatUpload
-                key={attachment.id}
-                attachment={attachment}
-                onDelete={handleDeleteAttachment(i)}
-              />
-            </div>
-          ))}
+  >
+    {(attachment || uploading) && (
+      <HStack className='-ml-2 -mt-2 p-3 pb-0' wrap>
+        {attachment && (
+          <div className='ml-2 mt-2 flex'>
+            <ChatUpload
+              key={attachment.id}
+              attachment={attachment}
+              onDelete={onDeleteAttachment}
+            />
+          </div>
+        )}
 
-          {Array.from(Array(uploadCount)).map(() => (
-            <div className='ml-2 mt-2 flex'>
-              <ChatPendingUpload progress={uploadProgress} />
-            </div>
-          ))}
-        </HStack>
-      )}
+        {uploading && (
+          <div className='ml-2 mt-2 flex'>
+            <ChatPendingUpload progress={uploadProgress} />
+          </div>
+        )}
+      </HStack>
+    )}
 
-      <Textarea ref={ref} theme='transparent' {...rest} />
-    </div>
-  );
-});
+    <Textarea ref={ref} theme='transparent' {...rest} />
+  </div>
+));
 
 export { ChatTextarea as default };

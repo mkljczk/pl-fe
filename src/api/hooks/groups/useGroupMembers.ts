@@ -1,17 +1,17 @@
+import { groupMemberSchema, type GroupMember as BaseGroupMember, type GroupRoles } from 'pl-api';
+
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntities } from 'soapbox/entity-store/hooks';
-import { GroupMember, groupMemberSchema } from 'soapbox/schemas';
-import { GroupRoles } from 'soapbox/schemas/group-member';
-
-import { useApi } from '../../../hooks/useApi';
+import { useClient } from 'soapbox/hooks';
+import { normalizeGroupMember, type GroupMember } from 'soapbox/normalizers';
 
 const useGroupMembers = (groupId: string, role: GroupRoles) => {
-  const api = useApi();
+  const client = useClient();
 
-  const { entities, ...result } = useEntities<GroupMember>(
+  const { entities, ...result } = useEntities<BaseGroupMember, GroupMember>(
     [Entities.GROUP_MEMBERSHIPS, groupId, role],
-    () => api(`/api/v1/groups/${groupId}/memberships?role=${role}`),
-    { schema: groupMemberSchema },
+    () => client.experimental.groups.getGroupMemberships(groupId, role),
+    { schema: groupMemberSchema, transform: normalizeGroupMember },
   );
 
   return {

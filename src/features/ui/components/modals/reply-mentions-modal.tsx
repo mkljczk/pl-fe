@@ -2,28 +2,27 @@ import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { Modal } from 'soapbox/components/ui';
+import Account from 'soapbox/features/reply-mentions/account';
 import { useAppSelector, useCompose, useOwnAccount } from 'soapbox/hooks';
 import { statusToMentionsAccountIdsArray } from 'soapbox/reducers/compose';
 import { makeGetStatus } from 'soapbox/selectors';
 
-import Account from '../../../reply-mentions/account';
-
-import type { Account as AccountEntity, Status as StatusEntity } from 'soapbox/types/entities';
+import type { ModalType } from '../modal-root';
 
 interface IReplyMentionsModal {
   composeId: string;
-  onClose: (string: string) => void;
+  onClose: (type: ModalType) => void;
 }
 
 const ReplyMentionsModal: React.FC<IReplyMentionsModal> = ({ composeId, onClose }) => {
   const compose = useCompose(composeId);
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector<StatusEntity | null>(state => getStatus(state, { id: compose.in_reply_to! }));
+  const status = useAppSelector(state => getStatus(state, { id: compose.in_reply_to! }));
   const { account } = useOwnAccount();
 
   const mentions = statusToMentionsAccountIdsArray(status!, account!, compose.parent_reblogged_by);
-  const author = (status?.account as AccountEntity).id;
+  const author = status?.account.id;
 
   const onClickClose = () => {
     onClose('REPLY_MENTIONS');

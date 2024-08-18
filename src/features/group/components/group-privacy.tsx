@@ -2,10 +2,10 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { HStack, Icon, Popover, Stack, Text } from 'soapbox/components/ui';
-import { Group } from 'soapbox/types/entities';
+import { Group } from 'soapbox/normalizers';
 
 interface IGroupPolicy {
-  group: Group;
+  group: Pick<Group, 'locked'>;
 }
 
 const GroupPrivacy = ({ group }: IGroupPolicy) => (

@@ -1,15 +1,15 @@
 import { isLoggedIn } from 'soapbox/utils/auth';
 
-import api from '../api';
+import { getClient } from '../api';
 
 import { importFetchedStatuses } from './importer';
 
+import type { Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const PINNED_STATUSES_FETCH_REQUEST = 'PINNED_STATUSES_FETCH_REQUEST';
-const PINNED_STATUSES_FETCH_SUCCESS = 'PINNED_STATUSES_FETCH_SUCCESS';
-const PINNED_STATUSES_FETCH_FAIL = 'PINNED_STATUSES_FETCH_FAIL';
+const PINNED_STATUSES_FETCH_REQUEST = 'PINNED_STATUSES_FETCH_REQUEST' as const;
+const PINNED_STATUSES_FETCH_SUCCESS = 'PINNED_STATUSES_FETCH_SUCCESS' as const;
+const PINNED_STATUSES_FETCH_FAIL = 'PINNED_STATUSES_FETCH_FAIL' as const;
 
 const fetchPinnedStatuses = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -18,9 +18,9 @@ const fetchPinnedStatuses = () =>
 
     dispatch(fetchPinnedStatusesRequest());
 
-    api(getState)(`/api/v1/accounts/${me}/statuses`, { params: { pinned: true } }).then(response => {
-      dispatch(importFetchedStatuses(response.json));
-      dispatch(fetchPinnedStatusesSuccess(response.json, null));
+    return getClient(getState()).accounts.getAccountStatuses(me as string, { pinned: true }).then(response => {
+      dispatch(importFetchedStatuses(response.items));
+      dispatch(fetchPinnedStatusesSuccess(response.items, null));
     }).catch(error => {
       dispatch(fetchPinnedStatusesFail(error));
     });
@@ -30,7 +30,7 @@ const fetchPinnedStatusesRequest = () => ({
   type: PINNED_STATUSES_FETCH_REQUEST,
 });
 
-const fetchPinnedStatusesSuccess = (statuses: APIEntity[], next: string | null) => ({
+const fetchPinnedStatusesSuccess = (statuses: Array<Status>, next: string | null) => ({
   type: PINNED_STATUSES_FETCH_SUCCESS,
   statuses,
   next,
@@ -41,6 +41,11 @@ const fetchPinnedStatusesFail = (error: unknown) => ({
   error,
 });
 
+type PinStatusesAction =
+  ReturnType<typeof fetchPinnedStatusesRequest>
+  | ReturnType<typeof fetchPinnedStatusesSuccess>
+  | ReturnType<typeof fetchPinnedStatusesFail>;
+
 export {
   PINNED_STATUSES_FETCH_REQUEST,
   PINNED_STATUSES_FETCH_SUCCESS,
@@ -49,4 +54,5 @@ export {
   fetchPinnedStatusesRequest,
   fetchPinnedStatusesSuccess,
   fetchPinnedStatusesFail,
+  type PinStatusesAction,
 };

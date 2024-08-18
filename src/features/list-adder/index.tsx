@@ -11,9 +11,10 @@ import NewListForm from '../lists/components/new-list-form';
 
 import List from './components/list';
 
+import type { ModalType } from '../ui/components/modal-root';
 import type { List as ImmutableList } from 'immutable';
+import type { List as ListEntity } from 'pl-api';
 import type { RootState } from 'soapbox/store';
-import type { List as ListEntity } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   subheading: { id: 'lists.subheading', defaultMessage: 'Your lists' },
@@ -31,7 +32,7 @@ const getOrderedLists = createSelector([(state: RootState) => state.lists], list
 
 interface IListAdder {
   accountId: string;
-  onClose: (type: string) => void;
+  onClose: (type: ModalType) => void;
 }
 
 const ListAdder: React.FC<IListAdder> = ({ accountId, onClose }) => {

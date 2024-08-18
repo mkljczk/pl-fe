@@ -1,16 +1,16 @@
-import api, { getNextLink } from '../api';
+import { getClient } from '../api';
 
 import { importFetchedStatuses } from './importer';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 
-const STATUS_QUOTES_FETCH_REQUEST = 'STATUS_QUOTES_FETCH_REQUEST';
-const STATUS_QUOTES_FETCH_SUCCESS = 'STATUS_QUOTES_FETCH_SUCCESS';
-const STATUS_QUOTES_FETCH_FAIL    = 'STATUS_QUOTES_FETCH_FAIL';
+const STATUS_QUOTES_FETCH_REQUEST = 'STATUS_QUOTES_FETCH_REQUEST' as const;
+const STATUS_QUOTES_FETCH_SUCCESS = 'STATUS_QUOTES_FETCH_SUCCESS' as const;
+const STATUS_QUOTES_FETCH_FAIL = 'STATUS_QUOTES_FETCH_FAIL' as const;
 
-const STATUS_QUOTES_EXPAND_REQUEST = 'STATUS_QUOTES_EXPAND_REQUEST';
-const STATUS_QUOTES_EXPAND_SUCCESS = 'STATUS_QUOTES_EXPAND_SUCCESS';
-const STATUS_QUOTES_EXPAND_FAIL    = 'STATUS_QUOTES_EXPAND_FAIL';
+const STATUS_QUOTES_EXPAND_REQUEST = 'STATUS_QUOTES_EXPAND_REQUEST' as const;
+const STATUS_QUOTES_EXPAND_SUCCESS = 'STATUS_QUOTES_EXPAND_SUCCESS' as const;
+const STATUS_QUOTES_EXPAND_FAIL = 'STATUS_QUOTES_EXPAND_FAIL' as const;
 
 const noOp = () => new Promise(f => f(null));
 
@@ -25,14 +25,13 @@ const fetchStatusQuotes = (statusId: string) =>
       type: STATUS_QUOTES_FETCH_REQUEST,
     });
 
-    return api(getState)(`/api/v1/pleroma/statuses/${statusId}/quotes`).then(response => {
-      const next = getNextLink(response);
-      dispatch(importFetchedStatuses(response.json));
+    return getClient(getState).statuses.getStatusQuotes(statusId).then(response => {
+      dispatch(importFetchedStatuses(response.items));
       return dispatch({
         type: STATUS_QUOTES_FETCH_SUCCESS,
         statusId,
-        statuses: response.json,
-        next: next || null,
+        statuses: response.items,
+        next: response.next,
       });
     }).catch(error => {
       dispatch({
@@ -45,9 +44,9 @@ const fetchStatusQuotes = (statusId: string) =>
 
 const expandStatusQuotes = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const url = getState().status_lists.getIn([`quotes:${statusId}`, 'next'], null) as string | null;
+    const next = getState().status_lists.get(`quotes:${statusId}`)?.next || null;
 
-    if (url === null || getState().status_lists.getIn([`quotes:${statusId}`, 'isLoading'])) {
+    if (next === null || getState().status_lists.getIn([`quotes:${statusId}`, 'isLoading'])) {
       return dispatch(noOp);
     }
 
@@ -56,14 +55,13 @@ const expandStatusQuotes = (statusId: string) =>
       statusId,
     });
 
-    return api(getState)(url).then(response => {
-      const next = getNextLink(response);
-      dispatch(importFetchedStatuses(response.json));
+    return next().then(response => {
+      dispatch(importFetchedStatuses(response.items));
       dispatch({
         type: STATUS_QUOTES_EXPAND_SUCCESS,
         statusId,
-        statuses: response.json,
-        next: next || null,
+        statuses: response.items,
+        next: response.next,
       });
     }).catch(error => {
       dispatch({

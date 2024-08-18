@@ -3,13 +3,14 @@ import { FormattedMessage } from 'react-intl';
 
 import { Modal, Stack, Textarea } from 'soapbox/components/ui';
 
+import type { ModalType } from '../modal-root';
 import type { ButtonThemes } from 'soapbox/components/ui/button/useButtonStyles';
 
 interface ITextFieldModal {
   heading: React.ReactNode;
   placeholder?: string;
   confirm: React.ReactNode;
-  onClose: (type: string) => void;
+  onClose: (type: ModalType) => void;
   onConfirm: (value?: string) => void;
   onCancel: () => void;
   confirmationTheme?: ButtonThemes;

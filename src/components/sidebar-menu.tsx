@@ -15,7 +15,7 @@ import { useAppDispatch, useAppSelector, useFeatures, useInstance } from 'soapbo
 import { makeGetOtherAccounts } from 'soapbox/selectors';
 
 import type { List as ImmutableList } from 'immutable';
-import type { Account as AccountEntity } from 'soapbox/types/entities';
+import type { Account as AccountEntity } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   profile: { id: 'account.profile', defaultMessage: 'Profile' },
@@ -336,7 +336,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       />
                     )}
 
-                    {account.staff && (
+                    {(account.is_admin || account.is_moderator) && (
                       <SidebarLink
                         to='/dashboard'
                         icon={require('@tabler/icons/outline/dashboard.svg')}

@@ -10,6 +10,7 @@ import AccountContainer from 'soapbox/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 import { ReactionRecord } from 'soapbox/reducers/user-lists';
 
+import type { ModalType } from '../modal-root';
 import type { Item } from 'soapbox/components/ui/tabs/tabs';
 
 const messages = defineMessages({
@@ -23,7 +24,7 @@ interface IAccountWithReaction {
 }
 
 interface IReactionsModal {
-  onClose: (string: string) => void;
+  onClose: (type: ModalType) => void;
   statusId: string;
   reaction?: string;
 }

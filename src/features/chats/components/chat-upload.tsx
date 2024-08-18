@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { List as ImmutableList } from 'immutable';
 import React from 'react';
 
 import { openModal } from 'soapbox/actions/modals';
@@ -9,10 +8,10 @@ import { useAppDispatch } from 'soapbox/hooks';
 
 import ChatUploadPreview from './chat-upload-preview';
 
-import type { Attachment } from 'soapbox/types/entities';
+import type { MediaAttachment } from 'pl-api';
 
 interface IChatUpload {
-  attachment: Attachment;
+  attachment: MediaAttachment;
   onDelete?(): void;
 }
 
@@ -22,7 +21,7 @@ const ChatUpload: React.FC<IChatUpload> = ({ attachment, onDelete }) => {
   const clickable = attachment.type !== 'unknown';
 
   const handleOpenModal = () => {
-    dispatch(openModal('MEDIA', { media: ImmutableList.of(attachment), index: 0 }));
+    dispatch(openModal('MEDIA', { media: [attachment], index: 0 }));
   };
 
   return (

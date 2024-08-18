@@ -1,14 +1,13 @@
 import { openModal } from './modals';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 import type { AppDispatch } from 'soapbox/store';
-import type { Account as AccountEntity } from 'soapbox/types/entities';
 
 const MUTES_INIT_MODAL = 'MUTES_INIT_MODAL';
 const MUTES_TOGGLE_HIDE_NOTIFICATIONS = 'MUTES_TOGGLE_HIDE_NOTIFICATIONS';
 const MUTES_CHANGE_DURATION = 'MUTES_CHANGE_DURATION';
 
-const initMuteModal = (account: AccountEntity | Account) =>
+const initMuteModal = (account: Account) =>
   (dispatch: AppDispatch) => {
     dispatch({
       type: MUTES_INIT_MODAL,

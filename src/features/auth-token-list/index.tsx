@@ -5,7 +5,8 @@ import { openModal } from 'soapbox/actions/modals';
 import { fetchOAuthTokens, revokeOAuthTokenById } from 'soapbox/actions/security';
 import { Button, Card, CardBody, CardHeader, CardTitle, Column, HStack, Spinner, Stack, Text } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { Token } from 'soapbox/reducers/security';
+
+import type { OauthToken } from 'pl-api';
 
 const messages = defineMessages({
   header: { id: 'security.headers.tokens', defaultMessage: 'Sessions' },
@@ -16,7 +17,7 @@ const messages = defineMessages({
 });
 
 interface IAuthToken {
-  token: Token;
+  token: OauthToken;
   isCurrent: boolean;
 }
 
@@ -72,7 +73,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
 const AuthTokenList: React.FC = () => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
-  const tokens = useAppSelector(state => state.security.get('tokens').reverse());
+  const tokens = useAppSelector(state => state.security.get('tokens').toReversed());
   const currentTokenId = useAppSelector(state => {
     const currentToken = state.auth.tokens.valueSeq().find((token) => token.me === state.auth.me);
 

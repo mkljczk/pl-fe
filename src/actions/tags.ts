@@ -1,32 +1,32 @@
-import api, { getNextLink } from '../api';
+import { getClient } from '../api';
 
+import type { PaginatedResponse, Tag } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const HASHTAG_FETCH_REQUEST = 'HASHTAG_FETCH_REQUEST';
-const HASHTAG_FETCH_SUCCESS = 'HASHTAG_FETCH_SUCCESS';
-const HASHTAG_FETCH_FAIL    = 'HASHTAG_FETCH_FAIL';
+const HASHTAG_FETCH_REQUEST = 'HASHTAG_FETCH_REQUEST' as const;
+const HASHTAG_FETCH_SUCCESS = 'HASHTAG_FETCH_SUCCESS' as const;
+const HASHTAG_FETCH_FAIL = 'HASHTAG_FETCH_FAIL' as const;
 
-const HASHTAG_FOLLOW_REQUEST = 'HASHTAG_FOLLOW_REQUEST';
-const HASHTAG_FOLLOW_SUCCESS = 'HASHTAG_FOLLOW_SUCCESS';
-const HASHTAG_FOLLOW_FAIL    = 'HASHTAG_FOLLOW_FAIL';
+const HASHTAG_FOLLOW_REQUEST = 'HASHTAG_FOLLOW_REQUEST' as const;
+const HASHTAG_FOLLOW_SUCCESS = 'HASHTAG_FOLLOW_SUCCESS' as const;
+const HASHTAG_FOLLOW_FAIL = 'HASHTAG_FOLLOW_FAIL' as const;
 
-const HASHTAG_UNFOLLOW_REQUEST = 'HASHTAG_UNFOLLOW_REQUEST';
-const HASHTAG_UNFOLLOW_SUCCESS = 'HASHTAG_UNFOLLOW_SUCCESS';
-const HASHTAG_UNFOLLOW_FAIL    = 'HASHTAG_UNFOLLOW_FAIL';
+const HASHTAG_UNFOLLOW_REQUEST = 'HASHTAG_UNFOLLOW_REQUEST' as const;
+const HASHTAG_UNFOLLOW_SUCCESS = 'HASHTAG_UNFOLLOW_SUCCESS' as const;
+const HASHTAG_UNFOLLOW_FAIL = 'HASHTAG_UNFOLLOW_FAIL' as const;
 
-const FOLLOWED_HASHTAGS_FETCH_REQUEST = 'FOLLOWED_HASHTAGS_FETCH_REQUEST';
-const FOLLOWED_HASHTAGS_FETCH_SUCCESS = 'FOLLOWED_HASHTAGS_FETCH_SUCCESS';
-const FOLLOWED_HASHTAGS_FETCH_FAIL    = 'FOLLOWED_HASHTAGS_FETCH_FAIL';
+const FOLLOWED_HASHTAGS_FETCH_REQUEST = 'FOLLOWED_HASHTAGS_FETCH_REQUEST' as const;
+const FOLLOWED_HASHTAGS_FETCH_SUCCESS = 'FOLLOWED_HASHTAGS_FETCH_SUCCESS' as const;
+const FOLLOWED_HASHTAGS_FETCH_FAIL = 'FOLLOWED_HASHTAGS_FETCH_FAIL' as const;
 
-const FOLLOWED_HASHTAGS_EXPAND_REQUEST = 'FOLLOWED_HASHTAGS_EXPAND_REQUEST';
-const FOLLOWED_HASHTAGS_EXPAND_SUCCESS = 'FOLLOWED_HASHTAGS_EXPAND_SUCCESS';
-const FOLLOWED_HASHTAGS_EXPAND_FAIL    = 'FOLLOWED_HASHTAGS_EXPAND_FAIL';
+const FOLLOWED_HASHTAGS_EXPAND_REQUEST = 'FOLLOWED_HASHTAGS_EXPAND_REQUEST' as const;
+const FOLLOWED_HASHTAGS_EXPAND_SUCCESS = 'FOLLOWED_HASHTAGS_EXPAND_SUCCESS' as const;
+const FOLLOWED_HASHTAGS_EXPAND_FAIL = 'FOLLOWED_HASHTAGS_EXPAND_FAIL' as const;
 
 const fetchHashtag = (name: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(fetchHashtagRequest());
 
-  api(getState)(`/api/v1/tags/${name}`).then(({ json: data }) => {
+  return getClient(getState()).myAccount.getTag(name).then((data) => {
     dispatch(fetchHashtagSuccess(name, data));
   }).catch(err => {
     dispatch(fetchHashtagFail(err));
@@ -37,7 +37,7 @@ const fetchHashtagRequest = () => ({
   type: HASHTAG_FETCH_REQUEST,
 });
 
-const fetchHashtagSuccess = (name: string, tag: APIEntity) => ({
+const fetchHashtagSuccess = (name: string, tag: Tag) => ({
   type: HASHTAG_FETCH_SUCCESS,
   name,
   tag,
@@ -51,7 +51,7 @@ const fetchHashtagFail = (error: unknown) => ({
 const followHashtag = (name: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(followHashtagRequest(name));
 
-  api(getState)(`/api/v1/tags/${name}/follow`, { method: 'POST' }).then(({ json: data }) => {
+  return getClient(getState()).myAccount.followTag(name).then((data) => {
     dispatch(followHashtagSuccess(name, data));
   }).catch(err => {
     dispatch(followHashtagFail(name, err));
@@ -63,7 +63,7 @@ const followHashtagRequest = (name: string) => ({
   name,
 });
 
-const followHashtagSuccess = (name: string, tag: APIEntity) => ({
+const followHashtagSuccess = (name: string, tag: Tag) => ({
   type: HASHTAG_FOLLOW_SUCCESS,
   name,
   tag,
@@ -78,7 +78,7 @@ const followHashtagFail = (name: string, error: unknown) => ({
 const unfollowHashtag = (name: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(unfollowHashtagRequest(name));
 
-  api(getState)(`/api/v1/tags/${name}/unfollow`, { method: 'POST' }).then(({ json: data }) => {
+  return getClient(getState()).myAccount.unfollowTag(name).then((data) => {
     dispatch(unfollowHashtagSuccess(name, data));
   }).catch(err => {
     dispatch(unfollowHashtagFail(name, err));
@@ -90,7 +90,7 @@ const unfollowHashtagRequest = (name: string) => ({
   name,
 });
 
-const unfollowHashtagSuccess = (name: string, tag: APIEntity) => ({
+const unfollowHashtagSuccess = (name: string, tag: Tag) => ({
   type: HASHTAG_UNFOLLOW_SUCCESS,
   name,
   tag,
@@ -105,9 +105,8 @@ const unfollowHashtagFail = (name: string, error: unknown) => ({
 const fetchFollowedHashtags = () => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(fetchFollowedHashtagsRequest());
 
-  api(getState)('/api/v1/followed_tags').then(response => {
-    const next = getNextLink(response);
-    dispatch(fetchFollowedHashtagsSuccess(response.json, next || null));
+  return getClient(getState()).myAccount.getFollowedTags().then(response => {
+    dispatch(fetchFollowedHashtagsSuccess(response.items, response.next));
   }).catch(err => {
     dispatch(fetchFollowedHashtagsFail(err));
   });
@@ -117,7 +116,7 @@ const fetchFollowedHashtagsRequest = () => ({
   type: FOLLOWED_HASHTAGS_FETCH_REQUEST,
 });
 
-const fetchFollowedHashtagsSuccess = (followed_tags: APIEntity[], next: string | null) => ({
+const fetchFollowedHashtagsSuccess = (followed_tags: Array<Tag>, next: (() => Promise<PaginatedResponse<Tag>>) | null) => ({
   type: FOLLOWED_HASHTAGS_FETCH_SUCCESS,
   followed_tags,
   next,
@@ -129,17 +128,14 @@ const fetchFollowedHashtagsFail = (error: unknown) => ({
 });
 
 const expandFollowedHashtags = () => (dispatch: AppDispatch, getState: () => RootState) => {
-  const url = getState().followed_tags.next;
+  const next = getState().followed_tags.next;
 
-  if (url === null) {
-    return;
-  }
+  if (next === null) return;
 
   dispatch(expandFollowedHashtagsRequest());
 
-  api(getState)(url).then(response => {
-    const next = getNextLink(response);
-    dispatch(expandFollowedHashtagsSuccess(response.json, next || null));
+  return next().then(response => {
+    dispatch(expandFollowedHashtagsSuccess(response.items, response.next));
   }).catch(error => {
     dispatch(expandFollowedHashtagsFail(error));
   });
@@ -149,7 +145,7 @@ const expandFollowedHashtagsRequest = () => ({
   type: FOLLOWED_HASHTAGS_EXPAND_REQUEST,
 });
 
-const expandFollowedHashtagsSuccess = (followed_tags: APIEntity[], next: string | null) => ({
+const expandFollowedHashtagsSuccess = (followed_tags: Array<Tag>, next: (() => Promise<PaginatedResponse<Tag>>) | null) => ({
   type: FOLLOWED_HASHTAGS_EXPAND_SUCCESS,
   followed_tags,
   next,

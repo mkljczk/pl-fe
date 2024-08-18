@@ -9,11 +9,12 @@ import NewFolderForm from 'soapbox/features/bookmark-folders/components/new-fold
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 import { makeGetStatus } from 'soapbox/selectors';
 
-import type { Status as StatusEntity } from 'soapbox/types/entities';
+import type { ModalType } from '../modal-root';
+import type { Status as StatusEntity } from 'soapbox/normalizers';
 
 interface ISelectBookmarkFolderModal {
   statusId: string;
-  onClose: (type: string) => void;
+  onClose: (type: ModalType) => void;
 }
 
 const SelectBookmarkFolderModal: React.FC<ISelectBookmarkFolderModal> = ({ statusId, onClose }) => {
@@ -21,7 +22,7 @@ const SelectBookmarkFolderModal: React.FC<ISelectBookmarkFolderModal> = ({ statu
   const status = useAppSelector(state => getStatus(state, { id: statusId })) as StatusEntity;
   const dispatch = useAppDispatch();
 
-  const [selectedFolder, setSelectedFolder] = useState(status.pleroma.get('bookmark_folder'));
+  const [selectedFolder, setSelectedFolder] = useState(status.bookmark_folder);
 
   const { isFetching, bookmarkFolders } = useBookmarkFolders();
 

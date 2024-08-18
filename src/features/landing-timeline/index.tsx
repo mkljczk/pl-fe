@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
-import { expandCommunityTimeline } from 'soapbox/actions/timelines';
+import { fetchPublicTimeline } from 'soapbox/actions/timelines';
 import { useCommunityStream } from 'soapbox/api/hooks';
 import PullToRefresh from 'soapbox/components/pull-to-refresh';
 import { Column } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch, useInstance, useTheme } from 'soapbox/hooks';
+import { useAppDispatch, useInstance, useTheme } from 'soapbox/hooks';
 import { useIsMobile } from 'soapbox/hooks/useIsMobile';
 
 import AboutPage from '../about';
@@ -16,32 +16,26 @@ import { SiteBanner } from './components/site-banner';
 const LandingTimeline = () => {
   const dispatch = useAppDispatch();
   const instance = useInstance();
-  const intl = useIntl();
   const theme = useTheme();
   const isMobile = useIsMobile();
 
   const timelineEnabled = !instance.pleroma.metadata.restrict_unauthenticated.timelines.local;
-  const next = useAppSelector(state => state.timelines.get('community')?.next);
 
-  const timelineId = 'community';
+  const timelineId = 'public:local';
 
-  const handleLoadMore = (maxId: string) => {
-    if (timelineEnabled) {
-      dispatch(expandCommunityTimeline({ url: next, maxId }, intl));
-    }
+  const handleLoadMore = () => {
+    dispatch(fetchPublicTimeline({ local: true }, true));
   };
 
-  const handleRefresh = async () => {
-    if (timelineEnabled) {
-      return dispatch(expandCommunityTimeline({}, intl));
-    }
+  const handleRefresh = () => {
+    return dispatch(fetchPublicTimeline({ local: true }));
   };
 
   useCommunityStream({ enabled: timelineEnabled });
 
   useEffect(() => {
     if (timelineEnabled) {
-      dispatch(expandCommunityTimeline({}, intl));
+      dispatch(fetchPublicTimeline({ local: true }));
     }
   }, []);
 

@@ -4,7 +4,7 @@ import React, { useRef, useEffect } from 'react';
 interface IBlurhash {
   /** Hash to render */
   hash: string | null | undefined;
-  /**  Width of the blurred region in pixels. Defaults to 32. */
+  /** Width of the blurred region in pixels. Defaults to 32. */
   width?: number;
   /** Height of the blurred region in pixels. Defaults to width. */
   height?: number;

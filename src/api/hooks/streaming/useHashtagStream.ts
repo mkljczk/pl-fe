@@ -1,5 +1,5 @@
 import { useTimelineStream } from './useTimelineStream';
 
-const useHashtagStream = (tag: string) => useTimelineStream(`hashtag:${tag}`, `hashtag&tag=${tag}`);
+const useHashtagStream = (tag: string) => useTimelineStream('hashtag', { tag });
 
 export { useHashtagStream };

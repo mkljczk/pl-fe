@@ -46,7 +46,7 @@ import {
 import ModalLoading from './modal-loading';
 
 /* eslint sort-keys: "error" */
-const MODAL_COMPONENTS: Record<string, React.LazyExoticComponent<any>> = {
+const MODAL_COMPONENTS = {
   'ACCOUNT_MODERATION': AccountModerationModal,
   'ACTIONS': ActionsModal,
   'BIRTHDAYS': BirthdaysModal,
@@ -103,7 +103,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ onClose, props, type }) => {
     onClose(type);
   };
 
-  const Component = type ? MODAL_COMPONENTS[type] : null;
+  const Component = type ? (MODAL_COMPONENTS as Record<keyof typeof MODAL_COMPONENTS, React.LazyExoticComponent<any>>)[type] : null;
 
   return (
     <Base onClose={onClickClose} type={type}>

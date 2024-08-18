@@ -7,8 +7,10 @@ import { Modal, Spinner } from 'soapbox/components/ui';
 import AccountContainer from 'soapbox/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
+import type { ModalType } from '../modal-root';
+
 interface IEventParticipantsModal {
-  onClose: (type: string) => void;
+  onClose: (type: ModalType) => void;
   statusId: string;
 }
 

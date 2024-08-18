@@ -6,7 +6,7 @@ import Markup from 'soapbox/components/markup';
 import { HStack, Icon } from 'soapbox/components/ui';
 import { CryptoAddress, LightningAddress } from 'soapbox/features/ui/util/async-components';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 
 const getTicker = (value: string): string => (value.match(/\$([a-zA-Z]*)/i) || [])[1];
 const isTicker = (value: string): boolean => Boolean(getTicker(value));

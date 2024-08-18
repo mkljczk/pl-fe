@@ -10,7 +10,7 @@ interface IBadge {
 }
 /** Badge to display on a user's profile. */
 const Badge: React.FC<IBadge> = ({ title, slug, color }) => {
-  const fallback = !['patron', 'admin', 'moderator', 'opaque', 'badge:donor'].includes(slug);
+  const fallback = !['patron', 'admin', 'moderator', 'opaque'].includes(slug);
 
   const isDark = useMemo(() => {
     if (!color) return false;
@@ -30,7 +30,6 @@ const Badge: React.FC<IBadge> = ({ title, slug, color }) => {
         'bg-gray-800 text-gray-900': !isDark,
       } : {
         'bg-fuchsia-700 text-white': slug === 'patron',
-        'bg-emerald-800 text-white': slug === 'badge:donor',
         'bg-black text-white': slug === 'admin',
         'bg-cyan-600 text-white': slug === 'moderator',
         'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100': fallback,

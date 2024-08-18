@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { useApi } from 'soapbox/hooks';
+import { useClient } from 'soapbox/hooks';
 import { moderationLogEntrySchema, type ModerationLogEntry } from 'soapbox/schemas';
 
 interface ModerationLogResult {
@@ -11,10 +11,10 @@ interface ModerationLogResult {
 const flattenPages = (pages?: ModerationLogResult[]): ModerationLogEntry[] => (pages || []).map(({ items }) => items).flat();
 
 const useModerationLog = () => {
-  const api = useApi();
+  const client = useClient();
 
   const getModerationLog = async (page: number): Promise<ModerationLogResult> => {
-    const { json: data } = await api<ModerationLogResult>('/api/v1/pleroma/admin/moderation_log', { params: { page } });
+    const { json: data } = await client.request<ModerationLogResult>('/api/v1/pleroma/admin/moderation_log', { params: { page } });
 
     const normalizedData = data.items.map((domain) => moderationLogEntrySchema.parse(domain));
 

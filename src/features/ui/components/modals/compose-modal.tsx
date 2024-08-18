@@ -11,6 +11,8 @@ import { useAppDispatch, useCompose, useDraggedFiles } from 'soapbox/hooks';
 
 import ComposeForm from '../../../compose/components/compose-form';
 
+import type { ModalType } from '../modal-root';
+
 const messages = defineMessages({
   confirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },
   cancelEditing: { id: 'confirmations.cancel_editing.confirm', defaultMessage: 'Cancel editing' },
@@ -18,7 +20,7 @@ const messages = defineMessages({
 });
 
 interface IComposeModal {
-  onClose: (type?: string) => void;
+  onClose: (type?: ModalType) => void;
   composeId?: string;
 }
 

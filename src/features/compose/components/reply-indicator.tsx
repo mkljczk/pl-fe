@@ -7,11 +7,11 @@ import { Stack } from 'soapbox/components/ui';
 import AccountContainer from 'soapbox/containers/account-container';
 import { getTextDirection } from 'soapbox/utils/rtl';
 
-import type { Status } from 'soapbox/types/entities';
+import type { Account, Status } from 'soapbox/normalizers';
 
 interface IReplyIndicator {
   className?: string;
-  status?: Status;
+  status?: Pick<Status, | 'contentHtml' | 'created_at' | 'media_attachments' | 'search_index' | 'sensitive'> & { account: Pick<Account, 'id'> };
   onCancel?: () => void;
   hideActions: boolean;
 }
@@ -39,7 +39,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({ className, status, hideActi
     <Stack space={2} className={clsx('max-h-72 overflow-y-auto rounded-lg bg-gray-100 p-4 black:bg-gray-900 dark:bg-gray-800', className)}>
       <AccountContainer
         {...actions}
-        id={status.getIn(['account', 'id']) as string}
+        id={status.account.id}
         timestamp={status.created_at}
         showProfileHoverCard={false}
         withLinkToProfile={false}
@@ -53,7 +53,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({ className, status, hideActi
         direction={getTextDirection(status.search_index)}
       />
 
-      {status.media_attachments.size > 0 && (
+      {status.media_attachments.length > 0 && (
         <AttachmentThumbs
           media={status.media_attachments}
           sensitive={status.sensitive}

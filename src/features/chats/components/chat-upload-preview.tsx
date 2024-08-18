@@ -3,13 +3,13 @@ import React from 'react';
 import { Icon } from 'soapbox/components/ui';
 import { MIMETYPE_ICONS } from 'soapbox/components/upload';
 
-import type { Attachment } from 'soapbox/types/entities';
+import type { MediaAttachment } from 'pl-api';
 
 const defaultIcon = require('@tabler/icons/outline/paperclip.svg');
 
 interface IChatUploadPreview {
   className?: string;
-  attachment: Attachment;
+  attachment: MediaAttachment;
 }
 
 /**
@@ -17,7 +17,7 @@ interface IChatUploadPreview {
  * It fills its container and is expected to be sized by its parent.
  */
 const ChatUploadPreview: React.FC<IChatUploadPreview> = ({ className, attachment }) => {
-  const mimeType = attachment.pleroma.get('mime_type') as string | undefined;
+  const mimeType = attachment.mime_type as string | undefined;
 
   switch (attachment.type) {
     case 'image':

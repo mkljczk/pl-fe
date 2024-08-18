@@ -1,22 +1,24 @@
+import { type Group as BaseGroup, groupSchema } from 'pl-api';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntity } from 'soapbox/entity-store/hooks';
-import { useApi } from 'soapbox/hooks';
-import { type Group, groupSchema } from 'soapbox/schemas';
+import { useClient } from 'soapbox/hooks';
+import { normalizeGroup, type Group } from 'soapbox/normalizers';
 
 import { useGroupRelationship } from './useGroupRelationship';
 
 const useGroup = (groupId: string, refetch = true) => {
-  const api = useApi();
+  const client = useClient();
   const history = useHistory();
 
-  const { entity: group, isUnauthorized, ...result } = useEntity<Group>(
+  const { entity: group, isUnauthorized, ...result } = useEntity<BaseGroup, Group>(
     [Entities.GROUPS, groupId],
-    () => api(`/api/v1/groups/${groupId}`),
+    () => client.experimental.groups.getGroup(groupId),
     {
       schema: groupSchema,
+      transform: normalizeGroup,
       refetch,
       enabled: !!groupId,
     },

@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { useApi } from 'soapbox/hooks';
+import { useClient } from 'soapbox/hooks';
 import { queryClient } from 'soapbox/queries/client';
 import { adminAnnouncementSchema, type AdminAnnouncement } from 'soapbox/schemas';
 
@@ -18,11 +18,11 @@ interface UpdateAnnouncementParams extends CreateAnnouncementParams {
 }
 
 const useAnnouncements = () => {
-  const api = useApi();
+  const client = useClient();
   const userAnnouncements = useUserAnnouncements();
 
   const getAnnouncements = async () => {
-    const { json: data } = await api<AdminAnnouncement[]>('/api/v1/pleroma/admin/announcements');
+    const { json: data } = await client.request<AdminAnnouncement[]>('/api/v1/pleroma/admin/announcements');
 
     const normalizedData = data.map((announcement) => adminAnnouncementSchema.parse(announcement));
     return normalizedData;
@@ -38,9 +38,8 @@ const useAnnouncements = () => {
     mutate: createAnnouncement,
     isPending: isCreating,
   } = useMutation({
-    mutationFn: (params: CreateAnnouncementParams) => api('/api/v1/pleroma/admin/announcements', {
-      method: 'POST',
-      body: JSON.stringify(params),
+    mutationFn: (params: CreateAnnouncementParams) => client.request('/api/v1/pleroma/admin/announcements', {
+      method: 'POST', body: params,
     }),
     retry: false,
     onSuccess: ({ json: data }) =>
@@ -54,9 +53,8 @@ const useAnnouncements = () => {
     mutate: updateAnnouncement,
     isPending: isUpdating,
   } = useMutation({
-    mutationFn: ({ id, ...params }: UpdateAnnouncementParams) => api(`/api/v1/pleroma/admin/announcements/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(params),
+    mutationFn: ({ id, ...params }: UpdateAnnouncementParams) => client.request(`/api/v1/pleroma/admin/announcements/${id}`, {
+      method: 'PATCH', body: params,
     }),
     retry: false,
     onSuccess: ({ json: data }) =>
@@ -70,7 +68,7 @@ const useAnnouncements = () => {
     mutate: deleteAnnouncement,
     isPending: isDeleting,
   } = useMutation({
-    mutationFn: (id: string) => api(`/api/v1/pleroma/admin/announcements/${id}`, { method: 'DELETE' }),
+    mutationFn: (id: string) => client.request(`/api/v1/pleroma/admin/announcements/${id}`, { method: 'DELETE' }),
     retry: false,
     onSuccess: (_, id) =>
       queryClient.setQueryData(['admin', 'announcements'], (prevResult: ReadonlyArray<AdminAnnouncement>) =>

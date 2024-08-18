@@ -10,6 +10,8 @@ import Preferences from '../preferences';
 
 import MessagesSettings from './components/messages-settings';
 
+const any = (arr: Array<any>): boolean => arr.some(Boolean);
+
 const messages = defineMessages({
   accountAliases: { id: 'navigation_bar.account_aliases', defaultMessage: 'Account aliases' },
   accountMigration: { id: 'settings.account_migration', defaultMessage: 'Move Account' },
@@ -45,10 +47,10 @@ const Settings = () => {
   const features = useFeatures();
   const { account } = useOwnAccount();
 
-  const isMfaEnabled = mfa.getIn(['settings', 'totp']);
+  const isMfaEnabled = mfa.settings?.totp;
 
   useEffect(() => {
-    if (features.security) dispatch(fetchMfa());
+    if (features.manageMfa) dispatch(fetchMfa());
   }, [dispatch]);
 
   if (!account) return null;
@@ -83,7 +85,12 @@ const Settings = () => {
           </List>
         </CardBody>
 
-        {(features.security || features.sessions) && (
+        {any([
+          features.changeEmail,
+          features.changePassword,
+          features.manageMfa,
+          features.sessions,
+        ]) && (
           <>
             <CardHeader>
               <CardTitle title={intl.formatMessage(messages.security)} />
@@ -91,10 +98,10 @@ const Settings = () => {
 
             <CardBody>
               <List>
-                {features.security && (
+                {features.changeEmail && <ListItem label={intl.formatMessage(messages.changeEmail)} to='/settings/email' />}
+                {features.changePassword && <ListItem label={intl.formatMessage(messages.changePassword)} to='/settings/password' />}
+                {features.manageMfa && (
                   <>
-                    <ListItem label={intl.formatMessage(messages.changeEmail)} to='/settings/email' />
-                    <ListItem label={intl.formatMessage(messages.changePassword)} to='/settings/password' />
                     <ListItem label={intl.formatMessage(messages.configureMfa)} to='/settings/mfa'>
                       <span>
                         {isMfaEnabled ?
@@ -132,7 +139,14 @@ const Settings = () => {
           <Preferences />
         </CardBody>
 
-        {(features.security || features.accountAliases) && (
+        {any([
+          features.importData,
+          features.exportData,
+          features.accountBackups,
+          features.federating && features.accountMoving,
+          features.federating && features.manageAccountAliases,
+          features.deleteAccount,
+        ]) && (
           <>
             <CardHeader>
               <CardTitle title={intl.formatMessage(messages.other)} />
@@ -148,17 +162,17 @@ const Settings = () => {
                   <ListItem label={intl.formatMessage(messages.exportData)} to='/settings/export' />
                 )}
 
-                {features.backups && (
+                {features.accountBackups && (
                   <ListItem label={intl.formatMessage(messages.backups)} to='/settings/backups' />
                 )}
 
                 {features.federating && (features.accountMoving ? (
                   <ListItem label={intl.formatMessage(messages.accountMigration)} to='/settings/migration' />
-                ) : features.accountAliases && (
+                ) : features.manageAccountAliases && (
                   <ListItem label={intl.formatMessage(messages.accountAliases)} to='/settings/aliases' />
                 ))}
 
-                {features.security && (
+                {features.deleteAccount && (
                   <ListItem label={<Text theme='danger'>{intl.formatMessage(messages.deleteAccount)}</Text>} to='/settings/account' />
                 )}
               </List>

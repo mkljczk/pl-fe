@@ -1,8 +1,9 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { announcementReactionSchema, type AnnouncementReaction } from 'pl-api';
 
-import { useApi } from 'soapbox/hooks';
+import { useClient } from 'soapbox/hooks';
+import { type Announcement, normalizeAnnouncement } from 'soapbox/normalizers';
 import { queryClient } from 'soapbox/queries/client';
-import { announcementReactionSchema, announcementSchema, type Announcement, type AnnouncementReaction } from 'soapbox/schemas';
 
 const updateReaction = (reaction: AnnouncementReaction, count: number, me?: boolean, overwrite?: boolean) => announcementReactionSchema.parse({
   ...reaction,
@@ -21,13 +22,11 @@ const updateReactions = (reactions: AnnouncementReaction[], name: string, count:
 };
 
 const useAnnouncements = () => {
-  const api = useApi();
+  const client = useClient();
 
   const getAnnouncements = async () => {
-    const { json: data } = await api<Announcement[]>('/api/v1/announcements');
-
-    const normalizedData = data?.map((announcement) => announcementSchema.parse(announcement));
-    return normalizedData;
+    const data = await client.announcements.getAnnouncements();
+    return data.map(normalizeAnnouncement);
   };
 
   const { data, ...result } = useQuery<ReadonlyArray<Announcement>>({
@@ -40,22 +39,22 @@ const useAnnouncements = () => {
     mutate: addReaction,
   } = useMutation({
     mutationFn: ({ announcementId, name }: { announcementId: string; name: string }) =>
-      api(`/api/v1/announcements/${announcementId}/reactions/${name}`, { method: 'PUT' }),
+      client.announcements.addAnnouncementReaction(announcementId, name),
     retry: false,
     onMutate: ({ announcementId: id, name }) => {
       queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map(value => value.id !== id ? value : announcementSchema.parse({
+        prevResult.map(value => value.id !== id ? value : {
           ...value,
           reactions: updateReactions(value.reactions, name, 1, true),
-        })),
+        }),
       );
     },
     onError: (_, { announcementId: id, name }) => {
       queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map(value => value.id !== id ? value : announcementSchema.parse({
+        prevResult.map(value => value.id !== id ? value : {
           ...value,
           reactions: updateReactions(value.reactions, name, -1, false),
-        })),
+        }),
       );
     },
   });
@@ -64,22 +63,22 @@ const useAnnouncements = () => {
     mutate: removeReaction,
   } = useMutation({
     mutationFn: ({ announcementId, name }: { announcementId: string; name: string }) =>
-      api<Announcement>(`/api/v1/announcements/${announcementId}/reactions/${name}`, { method: 'DELETE' }),
+      client.announcements.deleteAnnouncementReaction(announcementId, name),
     retry: false,
     onMutate: ({ announcementId: id, name }) => {
       queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map(value => value.id !== id ? value : announcementSchema.parse({
+        prevResult.map(value => value.id !== id ? value : {
           ...value,
           reactions: updateReactions(value.reactions, name, -1, false),
-        })),
+        }),
       );
     },
     onError: (_, { announcementId: id, name }) => {
       queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map(value => value.id !== id ? value : announcementSchema.parse({
+        prevResult.map(value => value.id !== id ? value : {
           ...value,
           reactions: updateReactions(value.reactions, name, 1, true),
-        })),
+        }),
       );
     },
   });

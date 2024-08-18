@@ -15,8 +15,8 @@ import { buildStatus } from '../builder';
 
 import DraftStatusActionBar from './draft-status-action-bar';
 
+import type { Status as StatusEntity } from 'soapbox/normalizers';
 import type { DraftStatus as DraftStatusType } from 'soapbox/reducers/draft-statuses';
-import type { Poll as PollEntity, Status as StatusEntity } from 'soapbox/types/entities';
 
 interface IDraftStatus {
   draftStatus: DraftStatusType;
@@ -34,15 +34,15 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
 
   let quote;
 
-  if (status.quote) {
-    if (status.pleroma.get('quote_visible', true) === false) {
+  if (status.quote_id) {
+    if ((status.quote_visible ?? true) === false) {
       quote = (
         <div className='quoted-status-tombstone'>
           <p><FormattedMessage id='statuses.quote_tombstone' defaultMessage='Post is unavailable.' /></p>
         </div>
       );
     } else {
-      quote = <QuotedStatus statusId={status.quote as string} />;
+      quote = <QuotedStatus statusId={status.quote_id} />;
     }
   }
 
@@ -69,7 +69,7 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
             collapsable
           />
 
-          {status.media_attachments.size > 0 && (
+          {status.media_attachments.length > 0 && (
             <AttachmentThumbs
               media={status.media_attachments}
               sensitive={status.sensitive}
@@ -78,7 +78,7 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
 
           {quote}
 
-          {status.poll && <PollPreview poll={status.poll as PollEntity} />}
+          {status.poll && <PollPreview poll={status.poll} />}
         </Stack>
       </div>
     </div>

@@ -7,7 +7,7 @@ import { useAppDispatch, useSettings } from 'soapbox/hooks';
 
 import { Button, HStack, Text } from '../ui';
 
-import type { Status as StatusEntity } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   delete: { id: 'status.delete', defaultMessage: 'Delete' },
@@ -21,7 +21,7 @@ const messages = defineMessages({
 });
 
 interface ISensitiveContentOverlay {
-  status: StatusEntity;
+  status: Pick<Status, 'id' | 'sensitive' | 'hidden' | 'media_attachments' | 'currentLanguage' | 'spoilerHtml' | 'spoilerMapHtml' | 'spoiler_text'>;
 }
 
 const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveContentOverlay>((props, ref) => {
@@ -33,11 +33,11 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
 
   let visible = !status.sensitive;
 
-  if (status.hidden !== null) visible = status.hidden;
+  if (status.hidden !== null) visible = !status.hidden;
   else if (displayMedia === 'show_all') visible = true;
-  else if (displayMedia === 'hide_all' && status.media_attachments.size) visible = false;
+  else if (displayMedia === 'hide_all' && status.media_attachments.length) visible = false;
 
-  const showHideButton = status.sensitive || (status.media_attachments.size && displayMedia === 'hide_all');
+  const showHideButton = status.sensitive || (status.media_attachments.length && displayMedia === 'hide_all');
 
   const toggleVisibility = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -48,7 +48,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
   if (visible && !showHideButton) return null;
 
   const spoilerText = status.currentLanguage
-    ? status.spoilerMapHtml!.get(status.currentLanguage, status.spoilerHtml)
+    ? status.spoilerMapHtml![status.currentLanguage] || status.spoilerHtml
     : status.spoilerHtml;
 
   return (

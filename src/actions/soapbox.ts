@@ -3,24 +3,22 @@ import { createSelector } from 'reselect';
 import { getHost } from 'soapbox/actions/instance';
 import { normalizeSoapboxConfig } from 'soapbox/normalizers';
 import KVStore from 'soapbox/storage/kv-store';
-import { removeVS16s } from 'soapbox/utils/emoji';
-import { getFeatures } from 'soapbox/utils/features';
 
-import api, { staticFetch } from '../api';
+import { getClient, staticFetch } from '../api';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { APIEntity } from 'soapbox/types/entities';
 
-const SOAPBOX_CONFIG_REQUEST_SUCCESS = 'SOAPBOX_CONFIG_REQUEST_SUCCESS';
-const SOAPBOX_CONFIG_REQUEST_FAIL    = 'SOAPBOX_CONFIG_REQUEST_FAIL';
+const SOAPBOX_CONFIG_REQUEST_SUCCESS = 'SOAPBOX_CONFIG_REQUEST_SUCCESS' as const;
+const SOAPBOX_CONFIG_REQUEST_FAIL = 'SOAPBOX_CONFIG_REQUEST_FAIL' as const;
 
-const SOAPBOX_CONFIG_REMEMBER_REQUEST = 'SOAPBOX_CONFIG_REMEMBER_REQUEST';
-const SOAPBOX_CONFIG_REMEMBER_SUCCESS = 'SOAPBOX_CONFIG_REMEMBER_SUCCESS';
-const SOAPBOX_CONFIG_REMEMBER_FAIL    = 'SOAPBOX_CONFIG_REMEMBER_FAIL';
+const SOAPBOX_CONFIG_REMEMBER_REQUEST = 'SOAPBOX_CONFIG_REMEMBER_REQUEST' as const;
+const SOAPBOX_CONFIG_REMEMBER_SUCCESS = 'SOAPBOX_CONFIG_REMEMBER_SUCCESS' as const;
+const SOAPBOX_CONFIG_REMEMBER_FAIL = 'SOAPBOX_CONFIG_REMEMBER_FAIL' as const;
 
 const getSoapboxConfig = createSelector([
   (state: RootState) => state.soapbox,
-  (state: RootState) => getFeatures(state.instance),
+  (state: RootState) => state.auth.client.features,
 ], (soapbox, features) => {
   // Do some additional normalization with the state
   return normalizeSoapboxConfig(soapbox).withMutations(soapboxConfig => {
@@ -28,12 +26,6 @@ const getSoapboxConfig = createSelector([
     // If displayFqn isn't set, infer it from federation
     if (soapbox.get('displayFqn') === undefined) {
       soapboxConfig.set('displayFqn', features.federating);
-    }
-
-    // If RGI reacts aren't supported, strip VS16s
-    // https://git.pleroma.social/pleroma/pleroma/-/issues/2355
-    if (features.emojiReactsNonRGI) {
-      soapboxConfig.set('allowedEmoji', soapboxConfig.allowedEmoji.map(removeVS16s));
     }
   });
 });
@@ -51,13 +43,12 @@ const rememberSoapboxConfig = (host: string | null) =>
 
 const fetchFrontendConfigurations = () =>
   (dispatch: AppDispatch, getState: () => RootState) =>
-    api(getState)('/api/pleroma/frontend_configurations')
-      .then(({ json: data }) => data);
+    getClient(getState).instance.getFrontendConfigurations();
 
 /** Conditionally fetches Soapbox config depending on backend features */
 const fetchSoapboxConfig = (host: string | null) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const features = getFeatures(getState().instance);
+    const features = getState().auth.client.features;
 
     if (features.frontendConfigurations) {
       return dispatch(fetchFrontendConfigurations()).then(data => {

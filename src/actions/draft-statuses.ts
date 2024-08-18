@@ -8,7 +8,7 @@ import type { AppDispatch, RootState } from 'soapbox/store';
 const DRAFT_STATUSES_FETCH_SUCCESS = 'DRAFT_STATUSES_FETCH_SUCCESS';
 
 const PERSIST_DRAFT_STATUS = 'PERSIST_DRAFT_STATUS';
-const CANCEL_DRAFT_STATUS  = 'DELETE_DRAFT_STATUS';
+const CANCEL_DRAFT_STATUS = 'DELETE_DRAFT_STATUS';
 
 const getAccount = makeGetAccount();
 
@@ -44,14 +44,14 @@ const saveDraftStatus = (composeId: string) =>
     });
   };
 
-const cancelDraftStatus = (id: string) =>
+const cancelDraftStatus = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const accountUrl = getAccount(state, state.me as string)!.url;
 
     dispatch({
       type: CANCEL_DRAFT_STATUS,
-      id,
+      statusId,
       accountUrl,
     });
   };

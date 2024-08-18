@@ -12,7 +12,7 @@ import ProfileFamiliarFollowers from './profile-familiar-followers';
 import ProfileField from './profile-field';
 import ProfileStats from './profile-stats';
 
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   linkVerifiedOn: { id: 'account.link_verified_on', defaultMessage: 'Ownership of this link was checked on {date}' },
@@ -35,9 +35,9 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   const ownAccount = account?.id === me;
 
   const getStaffBadge = (): React.ReactNode => {
-    if (account?.admin) {
+    if (account?.is_admin) {
       return <Badge slug='admin' title={<FormattedMessage id='account_moderation_modal.roles.admin' defaultMessage='Admin' />} key='staff' />;
-    } else if (account?.moderator) {
+    } else if (account?.is_moderator) {
       return <Badge slug='moderator' title={<FormattedMessage id='account_moderation_modal.roles.moderator' defaultMessage='Moderator' />} key='staff' />;
     } else {
       return null;
@@ -71,7 +71,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   };
 
   const renderBirthday = (): React.ReactNode => {
-    const birthday = account?.pleroma?.birthday;
+    const birthday = account?.birthday;
     if (!birthday) return null;
 
     const formattedBirthday = intl.formatDate(birthday, { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' });
@@ -115,7 +115,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
     );
   }
 
-  const deactivated = account.pleroma?.deactivated ?? false;
+  const deactivated = account.deactivated ?? false;
   const displayNameHtml = deactivated ? { __html: intl.formatMessage(messages.deactivated) } : { __html: account.display_name_html };
   const memberSinceDate = intl.formatDate(account.created_at, { month: 'long', year: 'numeric' });
   const badges = getBadges();

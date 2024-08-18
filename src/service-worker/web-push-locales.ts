@@ -8,8 +8,8 @@ filenames.forEach(filename => {
   if (!filename.match(/\.json$/) || filename.match(/defaultMessages|whitelist/)) return;
 
   const content = fs.readFileSync(path.resolve(__dirname, `../locales/${filename}`), 'utf-8');
-  const full    = JSON.parse(content) as Record<string, string>;
-  const locale  = filename.split('.')[0];
+  const full  = JSON.parse(content) as Record<string, string>;
+  const locale = filename.split('.')[0];
 
   filtered[locale] = {
     'notification.favourite': full['notification.favourite'] || '',

@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Stack } from 'soapbox/components/ui';
 import { ChatWidgetScreens, useChatContext } from 'soapbox/contexts/chat-context';
 import { useStatContext } from 'soapbox/contexts/stat-context';
-import { IChat, useChats } from 'soapbox/queries/chats';
+import { useChats } from 'soapbox/queries/chats';
 
 import ChatList from '../chat-list';
 import ChatSearch from '../chat-search/chat-search';
@@ -16,13 +16,15 @@ import { Pane } from '../ui';
 
 import Blankslate from './blankslate';
 
+import type { Chat } from 'pl-api';
+
 const ChatPane = () => {
   const { unreadChatsCount } = useStatContext();
 
   const { screen, changeScreen, isOpen, toggleChatPane } = useChatContext();
   const { chatsQuery: { data: chats, isLoading } } = useChats();
 
-  const handleClickChat = (nextChat: IChat) => {
+  const handleClickChat = (nextChat: Chat) => {
     changeScreen(ChatWidgetScreens.CHAT, nextChat.id);
   };
 

@@ -1,7 +1,8 @@
+import { bookmarkFolderSchema } from 'pl-api';
+
 import { Entities } from 'soapbox/entity-store/entities';
 import { useCreateEntity } from 'soapbox/entity-store/hooks';
-import { useApi } from 'soapbox/hooks';
-import { bookmarkFolderSchema } from 'soapbox/schemas/bookmark-folder';
+import { useClient } from 'soapbox/hooks';
 
 interface UpdateBookmarkFolderParams {
   name: string;
@@ -9,15 +10,12 @@ interface UpdateBookmarkFolderParams {
 }
 
 const useUpdateBookmarkFolder = (folderId: string) => {
-  const api = useApi();
+  const client = useClient();
 
   const { createEntity, ...rest } = useCreateEntity(
     [Entities.BOOKMARK_FOLDERS],
     (params: UpdateBookmarkFolderParams) =>
-      api(`/api/v1/pleroma/bookmark_folders/${folderId}`, {
-        method: 'PATCH',
-        body: JSON.stringify(params),
-      }),
+      client.myAccount.updateBookmarkFolder(folderId, params),
     { schema: bookmarkFolderSchema },
   );
 

@@ -1,13 +1,12 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { getSubscribersCsv, getUnsubscribersCsv, getCombinedCsv } from 'soapbox/actions/email-list';
+import { getSubscribersCsv, getUnsubscribersCsv, getCombinedCsv } from 'soapbox/actions/admin';
 import List, { ListItem } from 'soapbox/components/list';
 import { CardTitle, Icon, IconButton, Stack } from 'soapbox/components/ui';
 import { useAppDispatch, useOwnAccount, useFeatures, useInstance } from 'soapbox/hooks';
 import sourceCode from 'soapbox/utils/code';
 import { download } from 'soapbox/utils/download';
-import { parseVersion } from 'soapbox/utils/features';
 
 import { DashCounter, DashCounters } from '../components/dashcounter';
 import RegistrationModePicker from '../components/registration-mode-picker';
@@ -39,7 +38,7 @@ const Dashboard: React.FC = () => {
     e.preventDefault();
   };
 
-  const v = parseVersion(instance.version);
+  const v = features.version;
 
   const {
     user_count: userCount,
@@ -81,7 +80,7 @@ const Dashboard: React.FC = () => {
       </DashCounters>
 
       <List>
-        {account.admin && (
+        {account.is_admin && (
           <ListItem
             to='/soapbox/config'
             label={<FormattedMessage id='navigation_bar.soapbox_config' defaultMessage='Soapbox config' />}
@@ -115,7 +114,7 @@ const Dashboard: React.FC = () => {
         )}
       </List>
 
-      {account.admin && (
+      {account.is_admin && (
         <>
           <CardTitle
             title={<FormattedMessage id='admin.dashboard.registration_mode_label' defaultMessage='Registrations' />}
@@ -150,7 +149,7 @@ const Dashboard: React.FC = () => {
         </ListItem>
       </List>
 
-      {(features.emailList && account.admin) && (
+      {(features.emailList && account.is_admin) && (
         <>
           <CardTitle
             title={<FormattedMessage id='admin.dashwidgets.email_list_header' defaultMessage='Email list' />}

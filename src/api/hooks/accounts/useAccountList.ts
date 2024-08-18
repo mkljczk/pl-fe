@@ -1,7 +1,9 @@
+import { accountSchema, mutedAccountSchema, type Account as BaseAccount } from 'pl-api';
+
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntities } from 'soapbox/entity-store/hooks';
-import { useApi } from 'soapbox/hooks';
-import { Account, accountSchema } from 'soapbox/schemas';
+import { useClient } from 'soapbox/hooks';
+import { normalizeAccount, type Account } from 'soapbox/normalizers';
 
 import { useRelationships } from './useRelationships';
 
@@ -12,10 +14,10 @@ interface useAccountListOpts {
 }
 
 const useAccountList = (listKey: string[], entityFn: EntityFn<void>, opts: useAccountListOpts = {}) => {
-  const { entities, ...rest } = useEntities(
+  const { entities, ...rest } = useEntities<BaseAccount, Account>(
     [Entities.ACCOUNTS, ...listKey],
     entityFn,
-    { schema: accountSchema, enabled: opts.enabled },
+    { schema: listKey[0] === 'mutes' ? mutedAccountSchema : accountSchema, enabled: opts.enabled, transform: normalizeAccount },
   );
 
   const { relationships } = useRelationships(
@@ -32,31 +34,31 @@ const useAccountList = (listKey: string[], entityFn: EntityFn<void>, opts: useAc
 };
 
 const useBlocks = () => {
-  const api = useApi();
-  return useAccountList(['blocks'], () => api('/api/v1/blocks'));
+  const client = useClient();
+  return useAccountList(['blocks'], () => client.filtering.getBlocks());
 };
 
 const useMutes = () => {
-  const api = useApi();
-  return useAccountList(['mutes'], () => api('/api/v1/mutes'));
+  const client = useClient();
+  return useAccountList(['mutes'], () => client.filtering.getMutes());
 };
 
 const useFollowing = (accountId: string | undefined) => {
-  const api = useApi();
+  const client = useClient();
 
   return useAccountList(
     [accountId!, 'following'],
-    () => api(`/api/v1/accounts/${accountId}/following`),
+    () => client.accounts.getAccountFollowing(accountId!),
     { enabled: !!accountId },
   );
 };
 
 const useFollowers = (accountId: string | undefined) => {
-  const api = useApi();
+  const client = useClient();
 
   return useAccountList(
     [accountId!, 'followers'],
-    () => api(`/api/v1/accounts/${accountId}/followers`),
+    () => client.accounts.getAccountFollowers(accountId!),
     { enabled: !!accountId },
   );
 };

@@ -25,7 +25,7 @@ const StillImage: React.FC<IStillImage> = ({ alt, className, src, style, letterb
   const { autoPlayGif } = useSettings();
 
   const canvas = useRef<HTMLCanvasElement>(null);
-  const img    = useRef<HTMLImageElement>(null);
+  const img = useRef<HTMLImageElement>(null);
 
   const hoverToPlay = (
     src && !autoPlayGif && (src.endsWith('.gif') || src.startsWith('blob:'))
@@ -33,7 +33,7 @@ const StillImage: React.FC<IStillImage> = ({ alt, className, src, style, letterb
 
   const handleImageLoad = () => {
     if (hoverToPlay && canvas.current && img.current) {
-      canvas.current.width  = img.current.naturalWidth;
+      canvas.current.width = img.current.naturalWidth;
       canvas.current.height = img.current.naturalHeight;
       canvas.current.getContext('2d')?.drawImage(img.current, 0, 0);
     }

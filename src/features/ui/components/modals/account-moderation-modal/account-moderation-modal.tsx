@@ -1,3 +1,4 @@
+import { PLEROMA } from 'pl-api';
 import React, { ChangeEventHandler, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -17,11 +18,11 @@ import { getBadges } from 'soapbox/utils/badges';
 import BadgeInput from './badge-input';
 import StaffRolePicker from './staff-role-picker';
 
+import type { ModalType } from '../../modal-root';
+
 const messages = defineMessages({
   userVerified: { id: 'admin.users.user_verified_message', defaultMessage: '@{acct} was verified' },
   userUnverified: { id: 'admin.users.user_unverified_message', defaultMessage: '@{acct} was unverified' },
-  setDonorSuccess: { id: 'admin.users.set_donor_message', defaultMessage: '@{acct} was set as a donor' },
-  removeDonorSuccess: { id: 'admin.users.remove_donor_message', defaultMessage: '@{acct} was removed as a donor' },
   userSuggested: { id: 'admin.users.user_suggested_message', defaultMessage: '@{acct} was suggested' },
   userUnsuggested: { id: 'admin.users.user_unsuggested_message', defaultMessage: '@{acct} was unsuggested' },
   badgesSaved: { id: 'admin.users.badges_saved_message', defaultMessage: 'Custom badges updated.' },
@@ -29,7 +30,7 @@ const messages = defineMessages({
 
 interface IAccountModerationModal {
   /** Action to close the modal. */
-  onClose: (type: string) => void;
+  onClose: (type: ModalType) => void;
   /** ID of the account to moderate. */
   accountId: string;
 }
@@ -114,7 +115,7 @@ const AccountModerationModal: React.FC<IAccountModerationModal> = ({ onClose, ac
         </OutlineBox>
 
         <List>
-          {(ownAccount.admin && account.local) && (
+          {(ownAccount.is_admin && account.local) && (
             <ListItem label={<FormattedMessage id='account_moderation_modal.fields.account_role' defaultMessage='Staff level' />}>
               <div className='w-auto'>
                 <StaffRolePicker account={account} />
@@ -132,7 +133,7 @@ const AccountModerationModal: React.FC<IAccountModerationModal> = ({ onClose, ac
           {features.suggestionsV2 && (
             <ListItem label={<FormattedMessage id='account_moderation_modal.fields.suggested' defaultMessage='Suggested in people to follow' />}>
               <Toggle
-                checked={account.pleroma?.is_suggested === true}
+                checked={account.is_suggested === true}
                 onChange={handleSuggestedChange}
               />
             </ListItem>
@@ -170,7 +171,7 @@ const AccountModerationModal: React.FC<IAccountModerationModal> = ({ onClose, ac
           />
         </Text>
 
-        {features.adminFE && (
+        {features.version.software === PLEROMA && (
           <HStack justifyContent='center'>
             <Button icon={require('@tabler/icons/outline/external-link.svg')} size='sm' theme='secondary' onClick={handleAdminFE}>
               <FormattedMessage id='account_moderation_modal.admin_fe' defaultMessage='Open in AdminFE' />

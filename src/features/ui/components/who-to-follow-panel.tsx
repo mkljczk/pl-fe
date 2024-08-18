@@ -7,7 +7,7 @@ import AccountContainer from 'soapbox/containers/account-container';
 import PlaceholderSidebarSuggestions from 'soapbox/features/placeholder/components/placeholder-sidebar-suggestions';
 import { useDismissSuggestion, useSuggestions } from 'soapbox/queries/suggestions';
 
-import type { Account as AccountEntity } from 'soapbox/types/entities';
+import type { Account as AccountEntity } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   dismissSuggestion: { id: 'suggestions.dismiss', defaultMessage: 'Dismiss suggestion' },

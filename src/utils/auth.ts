@@ -28,8 +28,6 @@ const getLoggedInAccount = (state: RootState) => selectOwnAccount(state);
 
 const isLoggedIn = (getState: () => RootState) => validId(getState().me);
 
-const getAppToken = (state: RootState) => state.auth.app.access_token as string;
-
 const getUserToken = (state: RootState, accountId?: string | false | null) => {
   if (!accountId) return;
   const accountUrl = selectAccount(state, accountId)?.url;
@@ -62,7 +60,7 @@ const getAuthUserUrl = (state: RootState) => {
 
 /** Get the VAPID public key. */
 const getVapidKey = (state: RootState) =>
-  state.auth.app.vapid_key || state.instance.pleroma.vapid_public_key;
+  state.auth.app?.vapid_key || state.instance.pleroma.vapid_public_key;
 
 const getMeUrl = (state: RootState) => selectOwnAccount(state)?.url;
 
@@ -72,7 +70,6 @@ export {
   parseBaseURL,
   getLoggedInAccount,
   isLoggedIn,
-  getAppToken,
   getUserToken,
   getAccessToken,
   getAuthUserId,

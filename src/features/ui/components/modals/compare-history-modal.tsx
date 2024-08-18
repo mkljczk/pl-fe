@@ -1,5 +1,3 @@
-import clsx from 'clsx';
-import { List as ImmutableList } from 'immutable';
 import React, { useEffect } from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
@@ -8,10 +6,10 @@ import AttachmentThumbs from 'soapbox/components/attachment-thumbs';
 import { HStack, Modal, Spinner, Stack, Text } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
-import type { StatusEdit as StatusEditEntity } from 'soapbox/types/entities';
+import type { ModalType } from '../modal-root';
 
 interface ICompareHistoryModal {
-  onClose: (string: string) => void;
+  onClose: (type: ModalType) => void;
   statusId: string;
 }
 
@@ -19,8 +17,7 @@ const CompareHistoryModal: React.FC<ICompareHistoryModal> = ({ onClose, statusId
   const dispatch = useAppDispatch();
 
   const loading = useAppSelector(state => state.history.getIn([statusId, 'loading']));
-  // @ts-ignore
-  const versions = useAppSelector<ImmutableList<StatusEditEntity>>(state => state.history.getIn([statusId, 'items']));
+  const versions = useAppSelector(state => state.history.get(statusId)?.items);
 
   const onClickClose = () => {
     onClose('COMPARE_HISTORY');
@@ -57,14 +54,12 @@ const CompareHistoryModal: React.FC<ICompareHistoryModal> = ({ onClose, statusId
               {poll && (
                 <div className='poll'>
                   <Stack>
-                    {version.poll.options.map((option: any) => (
+                    {poll.options.map((option: any) => (
                       <HStack alignItems='center' className='p-1 text-gray-900 dark:text-gray-300'>
                         <span
-                          className={clsx('mr-2.5 inline-block h-4 w-4 flex-none rounded-full border border-solid border-primary-600', {
-                            'rounded': poll.multiple,
-                          })}
+                          className='mr-2.5 inline-block h-4 w-4 flex-none rounded-full border border-solid border-primary-600'
                           tabIndex={0}
-                          role={poll.multiple ? 'checkbox' : 'radio'}
+                          role='radio'
                         />
 
                         <span dangerouslySetInnerHTML={{ __html: option.title_emojified }} />
@@ -74,7 +69,7 @@ const CompareHistoryModal: React.FC<ICompareHistoryModal> = ({ onClose, statusId
                 </div>
               )}
 
-              {version.media_attachments.size > 0 && (
+              {version.media_attachments.length > 0 && (
                 <AttachmentThumbs media={version.media_attachments} />
               )}
 

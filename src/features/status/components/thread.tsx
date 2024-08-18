@@ -6,8 +6,8 @@ import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import { type VirtuosoHandle } from 'react-virtuoso';
 
-import { mentionCompose, replyCompose } from 'soapbox/actions/compose';
-import { favourite, reblog, unfavourite, unreblog } from 'soapbox/actions/interactions';
+import { type ComposeReplyAction, mentionCompose, replyCompose } from 'soapbox/actions/compose';
+import { reblog, toggleFavourite, unreblog } from 'soapbox/actions/interactions';
 import { openModal } from 'soapbox/actions/modals';
 import { getSettings } from 'soapbox/actions/settings';
 import { toggleStatusHidden } from 'soapbox/actions/statuses';
@@ -20,11 +20,13 @@ import { HotKeys } from 'soapbox/features/ui/components/hotkeys';
 import PendingStatus from 'soapbox/features/ui/components/pending-status';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 import { RootState } from 'soapbox/store';
-import { type Account, type Status } from 'soapbox/types/entities';
 import { textForScreenReader } from 'soapbox/utils/status';
 
 import DetailedStatus from './detailed-status';
 import ThreadStatus from './thread-status';
+
+import type { Account, Status } from 'soapbox/normalizers';
+import type { SelectedStatus } from 'soapbox/selectors';
 
 const getAncestorsIds = createSelector([
   (_: RootState, statusId: string | undefined) => statusId,
@@ -73,7 +75,7 @@ const getDescendantsIds = createSelector([
 });
 
 interface IThread {
-  status: Status;
+  status: SelectedStatus;
   withMedia?: boolean;
   useWindowScroll?: boolean;
   itemClassName?: string;
@@ -124,19 +126,15 @@ const Thread = (props: IThread) => {
     }
   };
 
-  const handleFavouriteClick = (status: Status) => {
-    if (status.favourited) {
-      dispatch(unfavourite(status));
-    } else {
-      dispatch(favourite(status));
-    }
+  const handleFavouriteClick = (status: SelectedStatus) => {
+    dispatch(toggleFavourite(status));
   };
 
-  const handleReplyClick = (status: Status) => dispatch(replyCompose(status));
+  const handleReplyClick = (status: ComposeReplyAction['status']) => dispatch(replyCompose(status));
 
-  const handleModalReblog = (status: Status) => dispatch(reblog(status));
+  const handleModalReblog = (status: SelectedStatus) => dispatch(reblog(status));
 
-  const handleReblogClick = (status: Status, e?: React.MouseEvent) => {
+  const handleReblogClick = (status: SelectedStatus, e?: React.MouseEvent) => {
     dispatch((_, getState) => {
       const boostModal = getSettings(getState()).get('boostModal');
       if (status.reblogged) {
@@ -151,20 +149,20 @@ const Thread = (props: IThread) => {
     });
   };
 
-  const handleMentionClick = (account: Account) => dispatch(mentionCompose(account));
+  const handleMentionClick = (account: Pick<Account, 'acct'>) => dispatch(mentionCompose(account));
 
   const handleHotkeyOpenMedia = (e?: KeyboardEvent) => {
     const media = status?.media_attachments;
 
     e?.preventDefault();
 
-    if (media && media.size) {
-      const firstAttachment = media.first()!;
+    if (media && media.length) {
+      const firstAttachment = media[0];
 
-      if (media.size === 1 && firstAttachment.type === 'video') {
+      if (media.length === 1 && firstAttachment.type === 'video') {
         dispatch(openModal('VIDEO', { media: firstAttachment, status: status }));
       } else {
-        dispatch(openModal('MEDIA', { media, index: 0, status: status }));
+        dispatch(openModal('MEDIA', { media, index: 0, statusId: status.id }));
       }
     }
   };
@@ -198,7 +196,7 @@ const Thread = (props: IThread) => {
   };
 
   const handleHotkeyOpenProfile = () => {
-    history.push(`/@${status!.getIn(['account', 'acct'])}`);
+    history.push(`/@${status!.account.acct}`);
   };
 
   const handleHotkeyToggleSensitive = () => {
@@ -300,7 +298,7 @@ const Thread = (props: IThread) => {
     setTimeout(() => statusRef.current?.querySelector<HTMLDivElement>('.detailed-actualStatus')?.focus(), 0);
   }, [status.id, ancestorsIds.size]);
 
-  const handleOpenCompareHistoryModal = (status: Status) => {
+  const handleOpenCompareHistoryModal = (status: Pick<Status, 'id'>) => {
     dispatch(openModal('COMPARE_HISTORY', {
       statusId: status.id,
     }));

@@ -1,4 +1,5 @@
 import pick from 'lodash/pick';
+import { GOTOSOCIAL } from 'pl-api';
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -22,13 +23,12 @@ import { useAppDispatch, useOwnAccount, useFeatures, useInstance, useAppSelector
 import { useImageField } from 'soapbox/hooks/forms';
 import toast from 'soapbox/toast';
 import { isDefaultAvatar, isDefaultHeader } from 'soapbox/utils/accounts';
-import { GOTOSOCIAL, parseVersion } from 'soapbox/utils/features';
 
 import AvatarPicker from './components/avatar-picker';
 import HeaderPicker from './components/header-picker';
 
 import type { StreamfieldComponent } from 'soapbox/components/ui/streamfield/streamfield';
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 
 const nonDefaultAvatar = (url: string | undefined) => url && isDefaultAvatar(url) ? undefined : url;
 const nonDefaultHeader = (url: string | undefined) => url && isDefaultHeader(url) ? undefined : url;
@@ -37,8 +37,8 @@ const nonDefaultHeader = (url: string | undefined) => url && isDefaultHeader(url
  * Whether the user is hiding their follows and/or followers.
  * Pleroma's config is granular, but we simplify it into one setting.
  */
-const hidesNetwork = ({ pleroma }: Account): boolean => Boolean(
-  pleroma?.hide_followers && pleroma?.hide_follows && pleroma?.hide_followers_count && pleroma?.hide_follows_count,
+const hidesNetwork = ({ __meta }: Account): boolean => Boolean(
+  __meta.pleroma?.hide_followers && __meta.pleroma?.hide_follows && __meta.pleroma?.hide_followers_count && __meta.pleroma?.hide_follows_count,
 );
 
 const messages = defineMessages({
@@ -130,15 +130,15 @@ const accountToCredentials = (account: Account): AccountCredentials => {
 
   return {
     ...(pick(account, ['discoverable', 'bot', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections'])),
-    note: account.source?.note ?? '',
-    fields_attributes: [...account.source?.fields ?? []],
-    stranger_notifications: account.pleroma?.notification_settings?.block_from_strangers === true,
-    accepts_email_list: account.pleroma?.accepts_email_list === true,
+    note: account.__meta.source?.note ?? '',
+    fields_attributes: [...account.__meta.source?.fields ?? []],
+    stranger_notifications: account.__meta.pleroma?.notification_settings?.block_from_strangers === true,
+    accepts_email_list: account.__meta.pleroma.accepts_email_list === true,
     hide_followers: hideNetwork,
     hide_follows: hideNetwork,
     hide_followers_count: hideNetwork,
     hide_follows_count: hideNetwork,
-    birthday: account.pleroma?.birthday ?? undefined,
+    birthday: account.birthday ?? undefined,
   };
 };
 
@@ -174,7 +174,6 @@ const EditProfile: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const instance = useInstance();
-  const { software } = parseVersion(instance.version);
 
   const { account } = useOwnAccount();
   const features = useFeatures();
@@ -197,7 +196,7 @@ const EditProfile: React.FC = () => {
   useEffect(() => {
     if (account) {
       const credentials = accountToCredentials(account);
-      const strangerNotifications = account.pleroma?.notification_settings?.block_from_strangers === true;
+      const strangerNotifications = account.__meta.pleroma?.notification_settings?.block_from_strangers === true;
       setData(credentials);
       setMuteStrangers(strangerNotifications);
     }
@@ -216,7 +215,7 @@ const EditProfile: React.FC = () => {
     if (header.file !== undefined) params.header = header.file || '';
     if (avatar.file !== undefined) params.avatar = avatar.file || '';
 
-    promises.push(dispatch(patchMe(params, true)));
+    promises.push(dispatch(patchMe(params)));
 
     if (features.muteStrangers) {
       promises.push(
@@ -259,7 +258,7 @@ const EditProfile: React.FC = () => {
     const hide = e.target.checked;
     setData(prevData => ({
       ...prevData,
-      ...(software === GOTOSOCIAL ? { hide_collections: hide } : {
+      ...(features.version.software === GOTOSOCIAL ? { hide_collections: hide } : {
         hide_followers: hide,
         hide_follows: hide,
         hide_followers_count: hide,
@@ -376,7 +375,7 @@ const EditProfile: React.FC = () => {
               hint={<FormattedMessage id='edit_profile.hints.hide_network' defaultMessage='Who you follow and who follows you will not be shown on your profile' />}
             >
               <Toggle
-                checked={account ? (software === GOTOSOCIAL ? data.hide_collections : (data.hide_followers && data.hide_follows && data.hide_followers_count && data.hide_follows_count)) : false}
+                checked={account ? (features.version.software === GOTOSOCIAL ? data.hide_collections : (data.hide_followers && data.hide_follows && data.hide_followers_count && data.hide_follows_count)) : false}
                 onChange={handleHideNetworkChange}
               />
             </ListItem>
@@ -430,7 +429,7 @@ const EditProfile: React.FC = () => {
             </ListItem>
           )}
 
-          {features.rssFeeds && software === GOTOSOCIAL && (
+          {features.rssFeeds && features.version.software === GOTOSOCIAL && (
             <ListItem
               label={<FormattedMessage id='edit_profile.fields.rss_label' defaultMessage='Enable RSS feed for public posts' />}
             >

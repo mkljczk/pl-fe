@@ -16,10 +16,6 @@
   "bugs": {
     "url": "https://github.com/mkljczk/pl-fe/issues"
   },
-  "funding": {
-    "type": "lightning",
-    "url": "lightning:alex@alexgleason.me"
-  },
   "scripts": {
     "start": "npx vite serve",
     "dev": "${npm_execpath} run start",
@@ -123,7 +119,7 @@
     "html-react-parser": "^5.0.0",
     "http-link-header": "^1.0.2",
     "immer": "^10.0.0",
-    "immutable": "^4.2.1",
+    "immutable": "^4.3.7",
     "intersection-observer": "^0.12.2",
     "intl-messageformat": "10.5.11",
     "intl-pluralrules": "^2.0.0",
@@ -137,6 +133,7 @@
     "multiselect-react-dropdown": "^2.0.25",
     "object-to-formdata": "^4.5.1",
     "path-browserify": "^1.0.1",
+    "pl-api": "^0.0.5",
     "postcss": "^8.4.29",
     "process": "^0.11.10",
     "punycode": "^2.1.1",
@@ -185,7 +182,7 @@
     "vite-plugin-require": "^1.1.10",
     "vite-plugin-static-copy": "^1.0.0",
     "wicg-inert": "^3.1.1",
-    "zod": "^3.22.4"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@formatjs/cli": "^6.2.0",

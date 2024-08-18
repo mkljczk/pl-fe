@@ -1,21 +1,18 @@
 import clsx from 'clsx';
-import { List as ImmutableList } from 'immutable';
+import { type MediaAttachment, type PreviewCard as CardEntity, mediaAttachmentSchema } from 'pl-api';
 import React, { useState, useEffect } from 'react';
 
 import Blurhash from 'soapbox/components/blurhash';
 import { HStack, Stack, Text, Icon } from 'soapbox/components/ui';
-import { normalizeAttachment } from 'soapbox/normalizers';
 import { addAutoPlay } from 'soapbox/utils/media';
 import { getTextDirection } from 'soapbox/utils/rtl';
-
-import type { Card as CardEntity, Attachment } from 'soapbox/types/entities';
 
 /** Props for `PreviewCard`. */
 interface IPreviewCard {
   card: CardEntity;
   maxTitle?: number;
   maxDescription?: number;
-  onOpenMedia: (attachments: ImmutableList<Attachment>, index: number) => void;
+  onOpenMedia: (attachments: Array<MediaAttachment>, index: number) => void;
   compact?: boolean;
   defaultWidth?: number;
   cacheWidth?: (width: number) => void;
@@ -46,7 +43,8 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   const trimmedDescription = trim(card.description, maxDescription);
 
   const handlePhotoClick = () => {
-    const attachment = normalizeAttachment({
+    const attachment = mediaAttachmentSchema.parse({
+      id: '',
       type: 'image',
       url: card.embed_url,
       description: trimmedTitle,
@@ -58,7 +56,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
       },
     });
 
-    onOpenMedia(ImmutableList([attachment]), 0);
+    onOpenMedia([attachment], 0);
   };
 
   const handleEmbedClick: React.MouseEventHandler = (e) => {

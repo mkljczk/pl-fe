@@ -1,7 +1,8 @@
+import { type BookmarkFolder } from 'pl-api';
+
 import { Entities } from 'soapbox/entity-store/entities';
 import { selectEntity } from 'soapbox/entity-store/selectors';
 import { useAppSelector } from 'soapbox/hooks';
-import { type BookmarkFolder } from 'soapbox/schemas/bookmark-folder';
 
 import { useBookmarkFolders } from './useBookmarkFolders';
 

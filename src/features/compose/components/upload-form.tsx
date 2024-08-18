@@ -8,8 +8,6 @@ import { useAppDispatch, useCompose } from 'soapbox/hooks';
 import Upload from './upload';
 import UploadProgress from './upload-progress';
 
-import type { Attachment as AttachmentEntity } from 'soapbox/types/entities';
-
 interface IUploadForm {
   composeId: string;
   onSubmit(): void;
@@ -18,7 +16,7 @@ interface IUploadForm {
 const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
   const dispatch = useAppDispatch();
 
-  const mediaIds = useCompose(composeId).media_attachments.map((item: AttachmentEntity) => item.id);
+  const mediaIds = useCompose(composeId).media_attachments.map((item) => item.id);
 
   const dragItem = useRef<string | null>();
   const dragOverItem = useRef<string | null>();

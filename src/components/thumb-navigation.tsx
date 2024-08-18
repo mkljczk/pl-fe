@@ -51,14 +51,13 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
       );
     }
 
-    if (features.directTimeline || features.conversations) {
+    if (features.conversations) {
       return (
         <ThumbNavigationLink
           src={require('@tabler/icons/outline/mail.svg')}
           activeSrc={require('@tabler/icons/filled/mail.svg')}
           text={<FormattedMessage id='navigation.direct_messages' defaultMessage='Messages' />}
-          to='/messages'
-          paths={['/messages', '/conversations']}
+          to='/conversations'
         />
       );
     }

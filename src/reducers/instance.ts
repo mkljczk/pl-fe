@@ -1,32 +1,20 @@
 import { produce } from 'immer';
 import { Map as ImmutableMap, List as ImmutableList, fromJS } from 'immutable';
+import { type Instance, instanceSchema } from 'pl-api';
 
 import { ADMIN_CONFIG_UPDATE_REQUEST, ADMIN_CONFIG_UPDATE_SUCCESS } from 'soapbox/actions/admin';
-import { PLEROMA_PRELOAD_IMPORT } from 'soapbox/actions/preload';
-import { type Instance, instanceSchema } from 'soapbox/schemas';
+import { INSTANCE_FETCH_FAIL, INSTANCE_FETCH_SUCCESS, InstanceAction } from 'soapbox/actions/instance';
+import { PLEROMA_PRELOAD_IMPORT, type PreloadAction } from 'soapbox/actions/preload';
 import KVStore from 'soapbox/storage/kv-store';
 import ConfigDB from 'soapbox/utils/config-db';
 
-import {
-  fetchInstance,
-  fetchInstanceV2,
-} from '../actions/instance';
-
 import type { AnyAction } from 'redux';
-import type { APIEntity } from 'soapbox/types/entities';
 
 const initialState: Instance = instanceSchema.parse({});
 
-const importInstance = (_state: Instance, instance: APIEntity): Instance => instanceSchema.parse(instance);
-
-const importInstanceV2 = (state: Instance, data: APIEntity): Instance => {
-  const instance = instanceSchema.parse(data);
-  return { ...instance, stats: state.stats };
-};
-
 const preloadImport = (state: Instance, action: Record<string, any>, path: string) => {
   const instance = action.data[path];
-  return instance ? importInstance(state, instance) : state;
+  return instance ? instanceSchema.parse(instance) : state;
 };
 
 const getConfigValue = (instanceConfig: ImmutableMap<string, any>, key: string) => {
@@ -70,8 +58,8 @@ const handleAuthFetch = (state: Instance) => {
   };
 };
 
-const getHost = (instance: { uri?: string; domain?: string }) => {
-  const domain = instance.uri || instance.domain as string;
+const getHost = (instance: { domain: string }) => {
+  const domain = instance.domain;
   try {
     return new URL(domain).host;
   } catch {
@@ -83,15 +71,9 @@ const getHost = (instance: { uri?: string; domain?: string }) => {
   }
 };
 
-const persistInstance = ({ instance }: { instance: { uri: string } }, host: string | null = getHost(instance)) => {
+const persistInstance = (instance: { domain: string }, host: string | null = getHost(instance)) => {
   if (host) {
     KVStore.setItem(`instance:${host}`, instance).catch(console.error);
-  }
-};
-
-const persistInstanceV2 = ({ instance }: { instance: { domain: string } }, host: string | null = getHost(instance)) => {
-  if (host) {
-    KVStore.setItem(`instanceV2:${host}`, instance).catch(console.error);
   }
 };
 
@@ -103,17 +85,14 @@ const handleInstanceFetchFail = (state: Instance, error: Record<string, any>) =>
   }
 };
 
-const instance = (state = initialState, action: AnyAction) => {
+const instance = (state = initialState, action: AnyAction | InstanceAction | PreloadAction): Instance => {
   switch (action.type) {
     case PLEROMA_PRELOAD_IMPORT:
       return preloadImport(state, action, '/api/v1/instance');
-    case fetchInstance.fulfilled.type:
-      persistInstance(action.payload);
-      return importInstance(state, action.payload.instance);
-    case fetchInstanceV2.fulfilled.type:
-      persistInstanceV2(action.payload);
-      return importInstanceV2(state, action.payload.instance);
-    case fetchInstance.rejected.type:
+    case INSTANCE_FETCH_SUCCESS:
+      persistInstance(action.instance);
+      return action.instance;
+    case INSTANCE_FETCH_FAIL:
       return handleInstanceFetchFail(state, action.error);
     case ADMIN_CONFIG_UPDATE_REQUEST:
     case ADMIN_CONFIG_UPDATE_SUCCESS:

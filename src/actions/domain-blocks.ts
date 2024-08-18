@@ -1,27 +1,28 @@
 import { Entities } from 'soapbox/entity-store/entities';
 import { isLoggedIn } from 'soapbox/utils/auth';
 
-import api, { getNextLink } from '../api';
+import { getClient } from '../api';
 
+import type { PaginatedResponse } from 'pl-api';
 import type { EntityStore } from 'soapbox/entity-store/types';
-import type { Account } from 'soapbox/schemas';
+import type { Account } from 'soapbox/normalizers';
 import type { AppDispatch, RootState } from 'soapbox/store';
 
-const DOMAIN_BLOCK_REQUEST = 'DOMAIN_BLOCK_REQUEST';
-const DOMAIN_BLOCK_SUCCESS = 'DOMAIN_BLOCK_SUCCESS';
-const DOMAIN_BLOCK_FAIL    = 'DOMAIN_BLOCK_FAIL';
+const DOMAIN_BLOCK_REQUEST = 'DOMAIN_BLOCK_REQUEST' as const;
+const DOMAIN_BLOCK_SUCCESS = 'DOMAIN_BLOCK_SUCCESS' as const;
+const DOMAIN_BLOCK_FAIL = 'DOMAIN_BLOCK_FAIL' as const;
 
-const DOMAIN_UNBLOCK_REQUEST = 'DOMAIN_UNBLOCK_REQUEST';
-const DOMAIN_UNBLOCK_SUCCESS = 'DOMAIN_UNBLOCK_SUCCESS';
-const DOMAIN_UNBLOCK_FAIL    = 'DOMAIN_UNBLOCK_FAIL';
+const DOMAIN_UNBLOCK_REQUEST = 'DOMAIN_UNBLOCK_REQUEST' as const;
+const DOMAIN_UNBLOCK_SUCCESS = 'DOMAIN_UNBLOCK_SUCCESS' as const;
+const DOMAIN_UNBLOCK_FAIL = 'DOMAIN_UNBLOCK_FAIL' as const;
 
-const DOMAIN_BLOCKS_FETCH_REQUEST = 'DOMAIN_BLOCKS_FETCH_REQUEST';
-const DOMAIN_BLOCKS_FETCH_SUCCESS = 'DOMAIN_BLOCKS_FETCH_SUCCESS';
-const DOMAIN_BLOCKS_FETCH_FAIL    = 'DOMAIN_BLOCKS_FETCH_FAIL';
+const DOMAIN_BLOCKS_FETCH_REQUEST = 'DOMAIN_BLOCKS_FETCH_REQUEST' as const;
+const DOMAIN_BLOCKS_FETCH_SUCCESS = 'DOMAIN_BLOCKS_FETCH_SUCCESS' as const;
+const DOMAIN_BLOCKS_FETCH_FAIL = 'DOMAIN_BLOCKS_FETCH_FAIL' as const;
 
-const DOMAIN_BLOCKS_EXPAND_REQUEST = 'DOMAIN_BLOCKS_EXPAND_REQUEST';
-const DOMAIN_BLOCKS_EXPAND_SUCCESS = 'DOMAIN_BLOCKS_EXPAND_SUCCESS';
-const DOMAIN_BLOCKS_EXPAND_FAIL    = 'DOMAIN_BLOCKS_EXPAND_FAIL';
+const DOMAIN_BLOCKS_EXPAND_REQUEST = 'DOMAIN_BLOCKS_EXPAND_REQUEST' as const;
+const DOMAIN_BLOCKS_EXPAND_SUCCESS = 'DOMAIN_BLOCKS_EXPAND_SUCCESS' as const;
+const DOMAIN_BLOCKS_EXPAND_FAIL = 'DOMAIN_BLOCKS_EXPAND_FAIL' as const;
 
 const blockDomain = (domain: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -29,10 +30,7 @@ const blockDomain = (domain: string) =>
 
     dispatch(blockDomainRequest(domain));
 
-    api(getState)('/api/v1/domain_blocks', {
-      method: 'POST',
-      body: JSON.stringify(domain),
-    }).then(() => {
+    return getClient(getState).filtering.blockDomain(domain).then(() => {
       const accounts = selectAccountsByDomain(getState(), domain);
       if (!accounts) return;
       dispatch(blockDomainSuccess(domain, accounts));
@@ -64,11 +62,7 @@ const unblockDomain = (domain: string) =>
 
     dispatch(unblockDomainRequest(domain));
 
-    api(getState)('/api/v1/domain_blocks', {
-      method: 'DELETE',
-      params: { domain },
-      body: JSON.stringify({ domain }),
-    }).then(() => {
+    return getClient(getState).filtering.unblockDomain(domain).then(() => {
       const accounts = selectAccountsByDomain(getState(), domain);
       if (!accounts) return;
       dispatch(unblockDomainSuccess(domain, accounts));
@@ -100,9 +94,8 @@ const fetchDomainBlocks = () =>
 
     dispatch(fetchDomainBlocksRequest());
 
-    api(getState)('/api/v1/domain_blocks').then(response => {
-      const next = getNextLink(response);
-      dispatch(fetchDomainBlocksSuccess(response.json, next || null));
+    return getClient(getState).filtering.getDomainBlocks().then(response => {
+      dispatch(fetchDomainBlocksSuccess(response.items, response.next));
     }).catch(err => {
       dispatch(fetchDomainBlocksFail(err));
     });
@@ -112,7 +105,7 @@ const fetchDomainBlocksRequest = () => ({
   type: DOMAIN_BLOCKS_FETCH_REQUEST,
 });
 
-const fetchDomainBlocksSuccess = (domains: string[], next: string | null) => ({
+const fetchDomainBlocksSuccess = (domains: string[], next: (() => Promise<PaginatedResponse<string>>) | null) => ({
   type: DOMAIN_BLOCKS_FETCH_SUCCESS,
   domains,
   next,
@@ -127,17 +120,14 @@ const expandDomainBlocks = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
-    const url = getState().domain_lists.blocks.next;
+    const next = getState().domain_lists.blocks.next;
 
-    if (!url) {
-      return;
-    }
+    if (!next) return;
 
     dispatch(expandDomainBlocksRequest());
 
-    api(getState)(url).then(response => {
-      const next = getNextLink(response);
-      dispatch(expandDomainBlocksSuccess(response.json, next || null));
+    next().then(response => {
+      dispatch(expandDomainBlocksSuccess(response.items, response.next));
     }).catch(err => {
       dispatch(expandDomainBlocksFail(err));
     });
@@ -156,7 +146,7 @@ const expandDomainBlocksRequest = () => ({
   type: DOMAIN_BLOCKS_EXPAND_REQUEST,
 });
 
-const expandDomainBlocksSuccess = (domains: string[], next: string | null) => ({
+const expandDomainBlocksSuccess = (domains: string[], next: (() => Promise<PaginatedResponse<string>>) | null) => ({
   type: DOMAIN_BLOCKS_EXPAND_SUCCESS,
   domains,
   next,
@@ -166,6 +156,20 @@ const expandDomainBlocksFail = (error: unknown) => ({
   type: DOMAIN_BLOCKS_EXPAND_FAIL,
   error,
 });
+
+type DomainBlocksAction =
+  ReturnType<typeof blockDomainRequest>
+  | ReturnType<typeof blockDomainSuccess>
+  | ReturnType<typeof blockDomainFail>
+  | ReturnType<typeof unblockDomainRequest>
+  | ReturnType<typeof unblockDomainSuccess>
+  | ReturnType<typeof unblockDomainFail>
+  | ReturnType<typeof fetchDomainBlocksRequest>
+  | ReturnType<typeof fetchDomainBlocksSuccess>
+  | ReturnType<typeof fetchDomainBlocksFail>
+  | ReturnType<typeof expandDomainBlocksRequest>
+  | ReturnType<typeof expandDomainBlocksSuccess>
+  | ReturnType<typeof expandDomainBlocksFail>;
 
 export {
   DOMAIN_BLOCK_REQUEST,
@@ -196,4 +200,5 @@ export {
   expandDomainBlocksRequest,
   expandDomainBlocksSuccess,
   expandDomainBlocksFail,
+  type DomainBlocksAction,
 };

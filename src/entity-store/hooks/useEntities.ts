@@ -1,13 +1,10 @@
 import { useEffect } from 'react';
 import z from 'zod';
 
-import { getNextLink, getPrevLink } from 'soapbox/api';
-import { useApi } from 'soapbox/hooks/useApi';
 import { useAppDispatch } from 'soapbox/hooks/useAppDispatch';
 import { useAppSelector } from 'soapbox/hooks/useAppSelector';
 import { useGetState } from 'soapbox/hooks/useGetState';
 import { filteredArray } from 'soapbox/schemas/utils';
-import { realNumberSchema } from 'soapbox/utils/numbers';
 
 import { entitiesFetchFail, entitiesFetchRequest, entitiesFetchSuccess, invalidateEntityList } from '../actions';
 import { selectEntities, selectListState, useListState } from '../selectors';
@@ -16,9 +13,10 @@ import { parseEntitiesPath } from './utils';
 
 import type { EntityFn, EntitySchema, ExpandedEntitiesPath } from './types';
 import type { Entity } from '../types';
+import type { PaginatedResponse } from 'pl-api';
 
 /** Additional options for the hook. */
-interface UseEntitiesOpts<TEntity extends Entity> {
+interface UseEntitiesOpts<TEntity extends Entity, TTransformedEntity extends Entity> {
   /** A zod schema to parse the API entities. */
   schema?: EntitySchema<TEntity>;
   /**
@@ -28,23 +26,23 @@ interface UseEntitiesOpts<TEntity extends Entity> {
   staleTime?: number;
   /** A flag to potentially disable sending requests to the API. */
   enabled?: boolean;
+  transform?: (schema: TEntity) => TTransformedEntity;
 }
 
 /** A hook for fetching and displaying API entities. */
-const useEntities = <TEntity extends Entity>(
+const useEntities = <TEntity extends Entity, TTransformedEntity extends Entity = TEntity>(
   /** Tells us where to find/store the entity in the cache. */
   expandedPath: ExpandedEntitiesPath,
   /** API route to GET, eg `'/api/v1/notifications'`. If undefined, nothing will be fetched. */
   entityFn: EntityFn<void>,
   /** Additional options for the hook. */
-  opts: UseEntitiesOpts<TEntity> = {},
+  opts: UseEntitiesOpts<TEntity, TTransformedEntity> = {},
 ) => {
-  const api = useApi();
   const dispatch = useAppDispatch();
   const getState = useGetState();
 
   const { entityType, listKey, path } = parseEntitiesPath(expandedPath);
-  const entities = useAppSelector(state => selectEntities<TEntity>(state, path));
+  const entities = useAppSelector(state => selectEntities<TTransformedEntity>(state, path));
   const schema = opts.schema || z.custom<TEntity>();
 
   const isEnabled = opts.enabled ?? true;
@@ -58,7 +56,7 @@ const useEntities = <TEntity extends Entity>(
   const next = useListState(path, 'next');
   const prev = useListState(path, 'prev');
 
-  const fetchPage = async(req: EntityFn<void>, pos: 'start' | 'end', overwrite = false): Promise<void> => {
+  const fetchPage = async(req: () => Promise<PaginatedResponse<any>>, pos: 'start' | 'end', overwrite = false): Promise<void> => {
     // Get `isFetching` state from the store again to prevent race conditions.
     const isFetching = selectListState(getState(), path, 'fetching');
     if (isFetching) return;
@@ -66,14 +64,13 @@ const useEntities = <TEntity extends Entity>(
     dispatch(entitiesFetchRequest(entityType, listKey));
     try {
       const response = await req();
-      const entities = filteredArray(schema).parse(response.json);
-      const parsedCount = realNumberSchema.safeParse(response.headers.get('x-total-count'));
-      const totalCount = parsedCount.success ? parsedCount.data : undefined;
+      const entities = filteredArray(schema).parse(response);
+      const transformedEntities = opts.transform && entities.map(opts.transform);
 
-      dispatch(entitiesFetchSuccess(entities, entityType, listKey, pos, {
-        next: getNextLink(response),
-        prev: getPrevLink(response),
-        totalCount: Number(totalCount) >= entities.length ? totalCount : undefined,
+      dispatch(entitiesFetchSuccess(transformedEntities || entities, entityType, listKey, pos, {
+        next: response.next,
+        prev: response.previous,
+        totalCount: undefined,
         fetching: false,
         fetched: true,
         error: null,
@@ -91,13 +88,13 @@ const useEntities = <TEntity extends Entity>(
 
   const fetchNextPage = async(): Promise<void> => {
     if (next) {
-      await fetchPage(() => api(next), 'end');
+      await fetchPage(() => next(), 'end');
     }
   };
 
   const fetchPreviousPage = async(): Promise<void> => {
     if (prev) {
-      await fetchPage(() => api(prev), 'start');
+      await fetchPage(() => prev(), 'start');
     }
   };
 

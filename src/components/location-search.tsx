@@ -73,7 +73,6 @@ const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
         setLocationIds(ImmutableOrderedSet(locationIds));
       })
       .catch(noOp);
-
   }, 900, { leading: true, trailing: true }), []);
 
   useEffect(() => {

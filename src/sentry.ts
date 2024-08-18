@@ -1,8 +1,8 @@
 import { NODE_ENV } from 'soapbox/build-config';
 import sourceCode from 'soapbox/utils/code';
 
-import type { Account } from './schemas';
 import type { CaptureContext, UserFeedback } from '@sentry/types';
+import type { Account } from 'pl-api';
 import type { SetOptional } from 'type-fest';
 
 /** Start Sentry. */
@@ -46,7 +46,7 @@ const startSentry = async (dsn: string): Promise<void> => {
 };
 
 /** Associate the account with Sentry events. */
-const setSentryAccount = async (account: Account): Promise<void> => {
+const setSentryAccount = async (account: Pick<Account, 'id' | 'acct' | 'url'>): Promise<void> => {
   const Sentry = await import('@sentry/react');
 
   Sentry.setUser({

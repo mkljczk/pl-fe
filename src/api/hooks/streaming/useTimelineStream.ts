@@ -1,38 +1,83 @@
 import { useEffect, useRef } from 'react';
 
-import { connectTimelineStream } from 'soapbox/actions/streaming';
-import { useAppDispatch, useAppSelector, useInstance } from 'soapbox/hooks';
+import { useAppSelector, useClient, useInstance } from 'soapbox/hooks';
 import { getAccessToken } from 'soapbox/utils/auth';
 
-const useTimelineStream = (...args: Parameters<typeof connectTimelineStream>) => {
-  // TODO: get rid of streaming.ts and move the actual opts here.
-  const [timelineId, path] = args;
-  const { enabled = true } = args[4] ?? {};
+import type { StreamingEvent } from 'pl-api';
 
-  const dispatch = useAppDispatch();
+const useTimelineStream = (stream: string, params: { list?: string; tag?: string } = {}, enabled = true, listener?: (event: StreamingEvent) => any) => {
+  const firstUpdate = useRef(true);
+
+  const client = useClient();
+
   const instance = useInstance();
-  const stream = useRef<(() => void) | null>(null);
+  const socket = useRef<({
+    listen: (listener: any, stream?: string) => number;
+    unlisten: (listener: any) => void;
+    subscribe: (stream: string, params?: {
+        list?: string;
+        tag?: string;
+    }) => void;
+    unsubscribe: (stream: string, params?: {
+        list?: string;
+        tag?: string;
+    }) => void;
+    close: () => void;
+  }) | null>(null);
 
   const accessToken = useAppSelector(getAccessToken);
   const streamingUrl = instance.configuration.urls.streaming;
 
-  const connect = () => {
-    if (enabled && streamingUrl && !stream.current) {
-      stream.current = dispatch(connectTimelineStream(...args));
+  const connect = async () => {
+    if (!socket.current) {
+      socket.current = client.streaming.connect();
+
+      socket.current.subscribe(stream, params);
+      if (listener) socket.current.listen(listener);
     }
   };
 
   const disconnect = () => {
-    if (stream.current) {
-      stream.current();
-      stream.current = null;
+    if (socket.current) {
+      socket.current.close();
+      socket.current = null;
     }
   };
 
   useEffect(() => {
-    connect();
-    return disconnect;
-  }, [accessToken, streamingUrl, timelineId, path, enabled]);
+    socket.current?.subscribe(stream, params);
+
+    return () => socket.current?.unsubscribe(stream, params);
+  }, [stream, params.list, params.tag, enabled]);
+
+  useEffect(() => {
+    if (enabled) {
+      connect();
+
+      return () => {
+        if (listener) socket.current?.unlisten(listener);
+      };
+    }
+  }, [enabled]);
+
+  useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+    } else {
+      disconnect();
+      connect();
+
+      return () => {
+        if (listener) socket.current?.unlisten(listener);
+      };
+    }
+  }, [accessToken, streamingUrl]);
+
+  useEffect(() => {
+    if (!enabled) {
+      disconnect();
+    }
+  }, [enabled]);
 
   return {
     disconnect,

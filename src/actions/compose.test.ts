@@ -45,8 +45,8 @@ describe('uploadCompose()', () => {
       } as unknown as IntlShape;
 
       const expectedActions = [
-        { type: 'COMPOSE_UPLOAD_REQUEST', id: 'home', skipLoading: true },
-        { type: 'COMPOSE_UPLOAD_FAIL', id: 'home', error: true, skipLoading: true },
+        { type: 'COMPOSE_UPLOAD_REQUEST', id: 'home' },
+        { type: 'COMPOSE_UPLOAD_FAIL', id: 'home', error: true },
       ];
 
       await store.dispatch(uploadCompose('home', files, mockIntl));
@@ -91,8 +91,8 @@ describe('uploadCompose()', () => {
       } as unknown as IntlShape;
 
       const expectedActions = [
-        { type: 'COMPOSE_UPLOAD_REQUEST', id: 'home', skipLoading: true },
-        { type: 'COMPOSE_UPLOAD_FAIL', id: 'home', error: true, skipLoading: true },
+        { type: 'COMPOSE_UPLOAD_REQUEST', id: 'home' },
+        { type: 'COMPOSE_UPLOAD_FAIL', id: 'home', error: true },
       ];
 
       await store.dispatch(uploadCompose('home', files, mockIntl));

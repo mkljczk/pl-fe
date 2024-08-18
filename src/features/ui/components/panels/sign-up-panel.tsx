@@ -65,7 +65,7 @@ const SignUpPanel = () => {
     return <Redirect to={redirectUri} />;
   }
 
-  if (mfaAuthNeeded) return <OtpAuthForm mfa_token={mfaToken} />;
+  if (mfaAuthNeeded) return <OtpAuthForm mfa_token={mfaToken} small />;
 
   if (me) return null;
 

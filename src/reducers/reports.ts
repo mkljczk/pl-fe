@@ -15,15 +15,12 @@ import {
 } from '../actions/reports';
 
 import type { AnyAction } from 'redux';
-import type { ChatMessage, Group } from 'soapbox/types/entities';
 
 const NewReportRecord = ImmutableRecord({
   isSubmitting: false,
   entityType: '' as ReportableEntities,
   account_id: null as string | null,
   status_ids: ImmutableSet<string>(),
-  chat_message: null as null | ChatMessage,
-  group: null as null | Group,
   comment: '',
   forward: false,
   block: false,
@@ -44,16 +41,8 @@ const reports = (state: State = ReducerRecord(), action: AnyAction) => {
         map.setIn(['new', 'account_id'], action.account.id);
         map.setIn(['new', 'entityType'], action.entityType);
 
-        if (action.chatMessage) {
-          map.setIn(['new', 'chat_message'], action.chatMessage);
-        }
-
-        if (action.group) {
-          map.setIn(['new', 'group'], action.group);
-        }
-
         if (state.new.account_id !== action.account.id) {
-          map.setIn(['new', 'status_ids'], action.status ? ImmutableSet([action.status.reblog?.id || action.status.id]) : ImmutableSet());
+          map.setIn(['new', 'status_ids'], action.status ? ImmutableSet([action.status.reblog_id || action.status.id]) : ImmutableSet());
           map.setIn(['new', 'comment'], '');
         } else if (action.status) {
           map.updateIn(['new', 'status_ids'], set => (set as ImmutableSet<string>).add(action.status.reblog?.id || action.status.id));
@@ -90,7 +79,6 @@ const reports = (state: State = ReducerRecord(), action: AnyAction) => {
       return state.withMutations(map => {
         map.setIn(['new', 'account_id'], null);
         map.setIn(['new', 'status_ids'], ImmutableSet());
-        map.setIn(['new', 'chat_message'], null);
         map.setIn(['new', 'comment'], '');
         map.setIn(['new', 'isSubmitting'], false);
         map.setIn(['new', 'rule_ids'], ImmutableSet());

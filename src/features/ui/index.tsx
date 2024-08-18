@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import React, { Suspense, lazy, useEffect, useRef } from 'react';
-import { useIntl } from 'react-intl';
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom';
 
 import { fetchFollowRequests } from 'soapbox/actions/accounts';
@@ -13,7 +12,7 @@ import { expandNotifications } from 'soapbox/actions/notifications';
 import { register as registerPushNotifications } from 'soapbox/actions/push-notifications';
 import { fetchScheduledStatuses } from 'soapbox/actions/scheduled-statuses';
 import { fetchSuggestionsForTimeline } from 'soapbox/actions/suggestions';
-import { expandHomeTimeline } from 'soapbox/actions/timelines';
+import { fetchHomeTimeline } from 'soapbox/actions/timelines';
 import { useUserStream } from 'soapbox/api/hooks';
 import SidebarNavigation from 'soapbox/components/sidebar-navigation';
 import ThumbNavigation from 'soapbox/components/thumb-navigation';
@@ -49,7 +48,6 @@ import {
   HomeTimeline,
   Followers,
   Following,
-  DirectTimeline,
   Conversations,
   HashtagTimeline,
   Notifications,
@@ -180,10 +178,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
       {features.federating && <WrappedRoute path='/timeline/:instance' exact page={RemoteInstancePage} component={RemoteTimeline} content={children} />}
 
       {features.conversations && <WrappedRoute path='/conversations' page={DefaultPage} component={Conversations} content={children} />}
-      {features.directTimeline && <WrappedRoute path='/messages' page={DefaultPage} component={DirectTimeline} content={children} />}
-      {(features.conversations && !features.directTimeline) && (
-        <WrappedRoute path='/messages' page={DefaultPage} component={Conversations} content={children} />
-      )}
+      {features.conversations && <Redirect from='/messages' to='/conversations' />}
 
       {/* Mastodon web routes */}
       <Redirect from='/web/:path1/:path2/:path3' to='/:path1/:path2/:path3' />
@@ -294,9 +289,9 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
       <WrappedRoute path='/settings/profile' page={DefaultPage} component={EditProfile} content={children} />
       {features.exportData && <WrappedRoute path='/settings/export' page={DefaultPage} component={ExportData} content={children} />}
       {features.importData && <WrappedRoute path='/settings/import' page={DefaultPage} component={ImportData} content={children} />}
-      {features.accountAliases && <WrappedRoute path='/settings/aliases' page={DefaultPage} component={Aliases} content={children} />}
+      {features.manageAccountAliases && <WrappedRoute path='/settings/aliases' page={DefaultPage} component={Aliases} content={children} />}
       {features.accountMoving && <WrappedRoute path='/settings/migration' page={DefaultPage} component={Migration} content={children} />}
-      {features.backups && <WrappedRoute path='/settings/backups' page={DefaultPage} component={Backups} content={children} />}
+      {features.accountBackups && <WrappedRoute path='/settings/backups' page={DefaultPage} component={Backups} content={children} />}
       <WrappedRoute path='/settings/email' page={DefaultPage} component={EditEmail} content={children} />
       <WrappedRoute path='/settings/password' page={DefaultPage} component={EditPassword} content={children} />
       <WrappedRoute path='/settings/account' page={DefaultPage} component={DeleteAccount} content={children} />
@@ -361,7 +356,6 @@ const UI: React.FC<IUI> = ({ children }) => {
   const { account } = useOwnAccount();
   const features = useFeatures();
   const vapidKey = useAppSelector(state => getVapidKey(state));
-  const intl = useIntl();
 
   const dropdownMenuIsOpen = useAppSelector(state => state.dropdown_menu.isOpen);
   const standalone = useAppSelector(isStandalone);
@@ -387,7 +381,7 @@ const UI: React.FC<IUI> = ({ children }) => {
 
     dispatch(fetchDraftStatuses());
 
-    dispatch(expandHomeTimeline({}, intl, () => {
+    dispatch(fetchHomeTimeline(false, () => {
       dispatch(fetchSuggestionsForTimeline());
     }));
 
@@ -396,12 +390,12 @@ const UI: React.FC<IUI> = ({ children }) => {
       .then(() => dispatch(fetchMarker(['notifications'])))
       .catch(console.error);
 
-    if (account.staff) {
+    if (account.is_admin || account.is_moderator) {
       dispatch(fetchReports({ resolved: false }));
       dispatch(fetchUsers(['local', 'need_approval']));
     }
 
-    if (account.admin) {
+    if (account.is_admin) {
       dispatch(fetchConfig());
     }
 

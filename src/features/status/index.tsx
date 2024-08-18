@@ -70,7 +70,7 @@ const StatusDetails: React.FC<IStatusDetails> = (props) => {
 
   if (status?.event) {
     return (
-      <Redirect to={`/@${status.getIn(['account', 'acct'])}/events/${status.id}`} />
+      <Redirect to={`/@${status.account.acct}/events/${status.id}`} />
     );
   }
 

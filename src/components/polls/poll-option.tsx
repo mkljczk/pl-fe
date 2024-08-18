@@ -5,10 +5,7 @@ import { Motion, presets, spring } from 'react-motion';
 
 import { HStack, Icon, Text } from '../ui';
 
-import type {
-  Poll as PollEntity,
-  PollOption as PollOptionEntity,
-} from 'soapbox/types/entities';
+import type { Poll } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   voted: { id: 'poll.voted', defaultMessage: 'You voted for this answer' },
@@ -94,8 +91,8 @@ const PollOptionText: React.FC<IPollOptionText> = ({ poll, option, index, active
 };
 
 interface IPollOption {
-  poll: PollEntity;
-  option: PollOptionEntity;
+  poll: Poll;
+  option: Poll['options'][number];
   index: number;
   showResults?: boolean;
   active: boolean;

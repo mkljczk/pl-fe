@@ -17,15 +17,15 @@ import ComposeForm from '../compose/components/compose-form';
 import { getDescendantsIds } from '../status/components/thread';
 import ThreadStatus from '../status/components/thread-status';
 
+import type { MediaAttachment } from 'pl-api';
 import type { VirtuosoHandle } from 'react-virtuoso';
-import type { Attachment as AttachmentEntity } from 'soapbox/types/entities';
 
 type RouteParams = { statusId: string };
 
 interface IEventDiscussion {
   params: RouteParams;
-  onOpenMedia: (media: ImmutableList<AttachmentEntity>, index: number) => void;
-  onOpenVideo: (video: AttachmentEntity, time: number) => void;
+  onOpenMedia: (media: Array<MediaAttachment>, index: number) => void;
+  onOpenVideo: (video: MediaAttachment, time: number) => void;
 }
 
 const EventDiscussion: React.FC<IEventDiscussion> = (props) => {

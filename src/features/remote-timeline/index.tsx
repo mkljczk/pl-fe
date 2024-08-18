@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { expandRemoteTimeline } from 'soapbox/actions/timelines';
+import { fetchPublicTimeline } from 'soapbox/actions/timelines';
 import { useRemoteStream } from 'soapbox/api/hooks';
 import IconButton from 'soapbox/components/icon-button';
 import { Column, HStack, Text } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch, useSettings, useTheme } from 'soapbox/hooks';
+import { useAppDispatch, useSettings, useTheme } from 'soapbox/hooks';
 import { useIsMobile } from 'soapbox/hooks/useIsMobile';
 
 import Timeline from '../ui/components/timeline';
@@ -23,7 +23,6 @@ interface IRemoteTimeline {
 const RemoteTimeline: React.FC<IRemoteTimeline> = ({ params }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const intl = useIntl();
   const theme = useTheme();
 
   const instance = params?.instance as string;
@@ -31,7 +30,6 @@ const RemoteTimeline: React.FC<IRemoteTimeline> = ({ params }) => {
 
   const timelineId = 'remote';
   const onlyMedia = settings.remote.other.onlyMedia;
-  const next = useAppSelector(state => state.timelines.get('remote')?.next);
 
   const pinned = settings.remote_timeline.pinnedHosts.includes(instance);
   const isMobile = useIsMobile();
@@ -40,14 +38,14 @@ const RemoteTimeline: React.FC<IRemoteTimeline> = ({ params }) => {
     history.push('/timeline/fediverse');
   };
 
-  const handleLoadMore = (maxId: string) => {
-    dispatch(expandRemoteTimeline(instance, { url: next, maxId, onlyMedia }, intl));
+  const handleLoadMore = () => {
+    dispatch(fetchPublicTimeline({ onlyMedia, instance }, true));
   };
 
   useRemoteStream({ instance, onlyMedia });
 
   useEffect(() => {
-    dispatch(expandRemoteTimeline(instance, { onlyMedia, maxId: undefined }, intl));
+    dispatch(fetchPublicTimeline({ onlyMedia, instance }));
   }, [onlyMedia]);
 
   return (

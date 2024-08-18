@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
 import NewListForm from './components/new-list-form';
 
+import type { List as ListEntity } from 'pl-api';
 import type { RootState } from 'soapbox/store';
 
 const messages = defineMessages({
@@ -21,7 +22,7 @@ const getOrderedLists = createSelector([(state: RootState) => state.lists], list
     return lists;
   }
 
-  return lists.toList().filter((item) => !!item).sort((a: any, b: any) => a.get('title').localeCompare(b.get('title')));
+  return lists.toList().filter((item): item is ListEntity => !!item).sort((a, b) => a.title.localeCompare(b.title));
 });
 
 const Lists: React.FC = () => {

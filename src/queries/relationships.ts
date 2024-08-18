@@ -1,20 +1,18 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { fetchRelationshipsFail, fetchRelationshipsSuccess } from 'soapbox/actions/accounts';
-import { useApi, useAppDispatch } from 'soapbox/hooks';
+import { useAppDispatch, useClient } from 'soapbox/hooks';
 
 const useFetchRelationships = () => {
-  const api = useApi();
+  const client = useClient();
   const dispatch = useAppDispatch();
 
   return useMutation({
     mutationFn: ({ accountIds }: { accountIds: string[]}) => {
-      const ids = accountIds.map((id) => `id[]=${id}`).join('&');
-
-      return api(`/api/v1/accounts/relationships?${ids}`);
+      return client.accounts.getRelationships(accountIds);
     },
     onSuccess(response) {
-      dispatch(fetchRelationshipsSuccess(response.json));
+      dispatch(fetchRelationshipsSuccess(response));
     },
     onError(error) {
       dispatch(fetchRelationshipsFail(error));

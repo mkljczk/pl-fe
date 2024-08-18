@@ -44,7 +44,7 @@ const unsubscribe = ({ registration, subscription }: {
 
 const sendSubscriptionToBackend = (subscription: PushSubscription, me: Me) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const alerts = getState().push_notifications.alerts.toJS();
+    const alerts = getState().push_notifications.alerts.toJS() as Record<string, boolean>;
     const params = { subscription, data: { alerts } };
 
     if (me) {

@@ -9,13 +9,13 @@ import { useSettings } from 'soapbox/hooks';
 import Reaction from './reaction';
 
 import type { Map as ImmutableMap } from 'immutable';
+import type { AnnouncementReaction, CustomEmoji } from 'pl-api';
 import type { Emoji, NativeEmoji } from 'soapbox/features/emoji';
-import type { AnnouncementReaction } from 'soapbox/schemas';
 
 interface IReactionsBar {
   announcementId: string;
-  reactions: AnnouncementReaction[];
-  emojiMap: ImmutableMap<string, ImmutableMap<string, string>>;
+  reactions: Array<AnnouncementReaction>;
+  emojiMap: ImmutableMap<string, CustomEmoji>;
 }
 
 const ReactionsBar: React.FC<IReactionsBar> = ({ announcementId, reactions, emojiMap }) => {

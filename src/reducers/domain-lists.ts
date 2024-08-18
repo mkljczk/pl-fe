@@ -4,13 +4,14 @@ import {
   DOMAIN_BLOCKS_FETCH_SUCCESS,
   DOMAIN_BLOCKS_EXPAND_SUCCESS,
   DOMAIN_UNBLOCK_SUCCESS,
+  type DomainBlocksAction,
 } from '../actions/domain-blocks';
 
-import type { AnyAction } from 'redux';
+import type { PaginatedResponse } from 'pl-api';
 
 const BlocksRecord = ImmutableRecord({
   items: ImmutableOrderedSet<string>(),
-  next: null as string | null,
+  next: null as (() => Promise<PaginatedResponse<string>>) | null,
 });
 
 const ReducerRecord = ImmutableRecord({
@@ -19,7 +20,7 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-const domainLists = (state: State = ReducerRecord(), action: AnyAction) => {
+const domainLists = (state: State = ReducerRecord(), action: DomainBlocksAction) => {
   switch (action.type) {
     case DOMAIN_BLOCKS_FETCH_SUCCESS:
       return state.setIn(['blocks', 'items'], ImmutableOrderedSet(action.domains)).setIn(['blocks', 'next'], action.next);

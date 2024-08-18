@@ -1,7 +1,7 @@
 import { Map as ImmutableMap, List as ImmutableList } from 'immutable';
+import { statusSchema } from 'pl-api';
 
 import { normalizeStatus } from 'soapbox/normalizers/status';
-import { calculateStatus } from 'soapbox/reducers/statuses';
 import { makeGetAccount } from 'soapbox/selectors';
 
 import type { PendingStatus } from 'soapbox/reducers/pending-statuses';
@@ -32,21 +32,21 @@ const buildStatus = (state: RootState, pendingStatus: PendingStatus, idempotency
   const account = getAccount(state, me);
   const inReplyToId = pendingStatus.in_reply_to_id;
 
-  const status = ImmutableMap({
+  const status = {
     account,
     content: pendingStatus.status.replace(new RegExp('\n', 'g'), '<br>'), /* eslint-disable-line no-control-regex */
     id: `末pending-${idempotencyKey}`,
     in_reply_to_account_id: state.statuses.getIn([inReplyToId, 'account'], null),
     in_reply_to_id: inReplyToId,
-    media_attachments: (pendingStatus.media_ids || ImmutableList()).map((id: string) => ImmutableMap({ id })),
+    media_attachments: (pendingStatus.media_ids || ImmutableList()).map((id: string) => ({ id })),
     mentions: buildMentions(pendingStatus),
     poll: buildPoll(pendingStatus),
-    quote: pendingStatus.quote_id,
+    quote: pendingStatus.quote_id ? state.statuses.get(pendingStatus.quote_id) : null,
     sensitive: pendingStatus.sensitive,
     visibility: pendingStatus.visibility,
-  });
+  };
 
-  return calculateStatus(normalizeStatus(status));
+  return normalizeStatus(statusSchema.parse(status));
 };
 
 export { buildStatus };

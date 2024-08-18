@@ -217,7 +217,6 @@ describe('fetchAccountByUsername()', () => {
         expect(actions[0]).toEqual({
           type: 'RELATIONSHIPS_FETCH_REQUEST',
           ids: ['123'],
-          skipLoading: true,
         });
         expect(actions[1].type).toEqual('ACCOUNTS_IMPORT');
         expect(actions[2].type).toEqual('ACCOUNT_FETCH_SUCCESS');
@@ -341,7 +340,6 @@ describe('fetchAccountByUsername()', () => {
         expect(actions[3]).toEqual({
           type: 'RELATIONSHIPS_FETCH_REQUEST',
           ids: [ '123' ],
-          skipLoading: true,
         });
         expect(actions[4].type).toEqual('ACCOUNT_FETCH_SUCCESS');
       });
@@ -1215,12 +1213,8 @@ describe('fetchRelationships()', () => {
 
       it('should dispatch the correct actions', async() => {
         const expectedActions = [
-          { type: 'RELATIONSHIPS_FETCH_REQUEST', ids: [id], skipLoading: true },
-          {
-            type: 'RELATIONSHIPS_FETCH_SUCCESS',
-            relationships: [],
-            skipLoading: true,
-          },
+          { type: 'RELATIONSHIPS_FETCH_REQUEST', ids: [id] },
+          { type: 'RELATIONSHIPS_FETCH_SUCCESS', relationships: [] },
         ];
         await store.dispatch(fetchRelationships([id]));
         const actions = store.getActions();
@@ -1240,8 +1234,8 @@ describe('fetchRelationships()', () => {
 
       it('should dispatch the correct actions', async() => {
         const expectedActions = [
-          { type: 'RELATIONSHIPS_FETCH_REQUEST', ids: [id], skipLoading: true },
-          { type: 'RELATIONSHIPS_FETCH_FAIL', skipLoading: true, error: new Error('Network Error') },
+          { type: 'RELATIONSHIPS_FETCH_REQUEST', ids: [id] },
+          { type: 'RELATIONSHIPS_FETCH_FAIL', error: new Error('Network Error') },
         ];
         await store.dispatch(fetchRelationships([id]));
         const actions = store.getActions();

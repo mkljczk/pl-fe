@@ -8,11 +8,13 @@ import AccountContainer from 'soapbox/containers/account-container';
 import { useAppSelector } from 'soapbox/hooks';
 import { makeGetAccount } from 'soapbox/selectors';
 
+import type { ModalType } from '../modal-root';
+
 const getAccount = makeGetAccount();
 
 interface IFamiliarFollowersModal {
   accountId: string;
-  onClose: (string: string) => void;
+  onClose: (type: ModalType) => void;
 }
 
 const FamiliarFollowersModal = ({ accountId, onClose }: IFamiliarFollowersModal) => {
@@ -47,7 +49,13 @@ const FamiliarFollowersModal = ({ accountId, onClose }: IFamiliarFollowersModal)
 
   return (
     <Modal
-      title={<FormattedMessage id='column.familiar_followers' defaultMessage='People you know following {name}' values={{ name: <span dangerouslySetInnerHTML={{ __html: account?.display_name_html || '' }} /> }} />}
+      title={
+        <FormattedMessage
+          id='column.familiar_followers'
+          defaultMessage='People you know following {name}'
+          values={{ name: <span dangerouslySetInnerHTML={{ __html: account?.display_name_html || '' }} /> }}
+        />
+      }
       onClose={onClickClose}
     >
       {body}

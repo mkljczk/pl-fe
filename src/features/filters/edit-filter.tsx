@@ -7,11 +7,11 @@ import List, { ListItem } from 'soapbox/components/list';
 import MissingIndicator from 'soapbox/components/missing-indicator';
 import { Button, Column, Form, FormActions, FormGroup, HStack, Input, Stack, Streamfield, Text, Toggle } from 'soapbox/components/ui';
 import { useAppDispatch, useFeatures } from 'soapbox/hooks';
-import { normalizeFilter } from 'soapbox/normalizers';
 import toast from 'soapbox/toast';
 
 import { SelectDropdown } from '../forms';
 
+import type { FilterContext } from 'pl-api';
 import type { StreamfieldComponent } from 'soapbox/components/ui/streamfield/streamfield';
 
 interface IFilterField {
@@ -91,7 +91,7 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
   const [notFound, setNotFound] = useState(false);
 
   const [title, setTitle] = useState('');
-  const [expiresIn, setExpiresIn] = useState<string | null>(null);
+  const [expiresIn, setExpiresIn] = useState<number | undefined>();
   const [homeTimeline, setHomeTimeline] = useState(true);
   const [publicTimeline, setPublicTimeline] = useState(false);
   const [notifications, setNotifications] = useState(false);
@@ -111,12 +111,12 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
   }), []);
 
   const handleSelectChange: React.ChangeEventHandler<HTMLSelectElement> = e => {
-    setExpiresIn(e.target.value);
+    setExpiresIn(+e.target.value || undefined);
   };
 
   const handleAddNew: React.FormEventHandler = e => {
     e.preventDefault();
-    const context: Array<string> = [];
+    const context: Array<FilterContext> = [];
 
     if (homeTimeline) {
       context.push('home');
@@ -154,10 +154,8 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
   useEffect(() => {
     if (params.id) {
       setLoading(true);
-      dispatch(fetchFilter(params.id))?.then((res: any) => {
-        if (res.filter) {
-          const filter = normalizeFilter(res.filter);
-
+      dispatch(fetchFilter(params.id))?.then((filter) => {
+        if (filter) {
           setTitle(filter.title);
           setHomeTimeline(filter.context.includes('home'));
           setPublicTimeline(filter.context.includes('public'));
@@ -165,7 +163,7 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
           setConversations(filter.context.includes('thread'));
           setAccounts(filter.context.includes('account'));
           setHide(filter.filter_action === 'hide');
-          setKeywords(filter.keywords.toJS());
+          setKeywords(filter.keywords);
         } else {
           setNotFound(true);
         }
@@ -176,28 +174,41 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
 
   if (notFound) return <MissingIndicator />;
 
+  const keywordsField = (
+    <Streamfield
+      label={intl.formatMessage(messages.keywords)}
+      component={FilterField}
+      values={keywords}
+      onChange={handleChangeKeyword}
+      onAddItem={handleAddKeyword}
+      onRemoveItem={handleRemoveKeyword}
+      minItems={1}
+      maxItems={features.filtersV2 ? Infinity : 1}
+    />
+  );
+
   return (
     <Column className='filter-settings-panel' label={intl.formatMessage(messages.subheading_add_new)}>
       <Form onSubmit={handleAddNew}>
-        <FormGroup labelText={intl.formatMessage(messages.title)}>
-          <Input
-            required
-            type='text'
-            name='title'
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </FormGroup>
-
-        {features.filtersExpiration && (
-          <FormGroup labelText={intl.formatMessage(messages.expires)}>
-            <SelectDropdown
-              items={expirations}
-              defaultValue=''
-              onChange={handleSelectChange}
+        {features.filtersV2 ? (
+          <FormGroup labelText={intl.formatMessage(messages.title)}>
+            <Input
+              required
+              type='text'
+              name='title'
+              value={title}
+              onChange={({ target }) => setTitle(target.value)}
             />
           </FormGroup>
-        )}
+        ) : keywordsField}
+
+        <FormGroup labelText={intl.formatMessage(messages.expires)}>
+          <SelectDropdown
+            items={expirations}
+            defaultValue=''
+            onChange={handleSelectChange}
+          />
+        </FormGroup>
 
         <Stack>
           <Text size='sm' weight='medium'>
@@ -255,16 +266,7 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
           </ListItem>
         </List>
 
-        <Streamfield
-          label={intl.formatMessage(messages.keywords)}
-          component={FilterField}
-          values={keywords}
-          onChange={handleChangeKeyword}
-          onAddItem={handleAddKeyword}
-          onRemoveItem={handleRemoveKeyword}
-          minItems={1}
-          maxItems={features.filtersV2 ? Infinity : 1}
-        />
+        {features.filtersV2 && keywordsField}
 
         <FormActions>
           <Button type='submit' theme='primary' disabled={loading}>

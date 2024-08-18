@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { expandCommunityTimeline } from 'soapbox/actions/timelines';
+import { fetchPublicTimeline } from 'soapbox/actions/timelines';
 import { useCommunityStream } from 'soapbox/api/hooks';
 import PullToRefresh from 'soapbox/components/pull-to-refresh';
 import { Column } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch, useSettings, useTheme } from 'soapbox/hooks';
+import { useAppDispatch, useSettings, useTheme } from 'soapbox/hooks';
 import { useIsMobile } from 'soapbox/hooks/useIsMobile';
 
 import Timeline from '../ui/components/timeline';
@@ -20,22 +20,21 @@ const CommunityTimeline = () => {
   const theme = useTheme();
 
   const settings = useSettings();
-  const onlyMedia = settings.community.other.onlyMedia;
-  const next = useAppSelector(state => state.timelines.get('community')?.next);
+  const onlyMedia = settings['public:local'].other.onlyMedia;
 
-  const timelineId = 'community';
+  const timelineId = 'public:local';
   const isMobile = useIsMobile();
 
-  const handleLoadMore = (maxId: string) => {
-    dispatch(expandCommunityTimeline({ url: next, maxId, onlyMedia }, intl));
+  const handleLoadMore = () => {
+    dispatch(fetchPublicTimeline({ onlyMedia, local: true }, true));
   };
 
-  const handleRefresh = () => dispatch(expandCommunityTimeline({ onlyMedia }, intl));
+  const handleRefresh = () => dispatch(fetchPublicTimeline({ onlyMedia, local: true }));
 
   useCommunityStream({ onlyMedia });
 
   useEffect(() => {
-    dispatch(expandCommunityTimeline({ onlyMedia }));
+    dispatch(fetchPublicTimeline({ onlyMedia, local: true }));
   }, [onlyMedia]);
 
   return (

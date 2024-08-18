@@ -1,31 +1,28 @@
-import { InfiniteData } from '@tanstack/react-query';
 import sumBy from 'lodash/sumBy';
 
 import { normalizeChatMessage } from 'soapbox/normalizers';
 import { ChatKeys } from 'soapbox/queries/chats';
 import { queryClient } from 'soapbox/queries/client';
-import { Chat, ChatMessage } from 'soapbox/types/entities';
 
 import { compareDate } from './comparators';
-import { appendPageItem, flattenPages, PaginatedResult, sortQueryData, updatePageItem } from './queries';
+import { appendPageItem, flattenPages, sortQueryData, updatePageItem } from './queries';
 
-interface ChatPayload extends Omit<Chat, 'last_message'> {
-  last_message: ChatMessage | null;
-}
+import type { InfiniteData } from '@tanstack/react-query';
+import type { Chat, PaginatedResponse } from 'pl-api';
 
 /**
  * Update the Chat entity inside the ChatSearch query.
  * @param newChat - Chat entity.
  */
-const updateChatInChatSearchQuery = (newChat: ChatPayload) => {
-  updatePageItem<ChatPayload>(['chats', 'search'], newChat as any, (o, n) => o.id === n.id);
+const updateChatInChatSearchQuery = (newChat: Chat) => {
+  updatePageItem<Chat>(['chats', 'search'], newChat as any, (o, n) => o.id === n.id);
 };
 
 /**
  * Re-order the ChatSearch query by the last message timestamp.
  */
 const reOrderChatListItems = () => {
-  sortQueryData<ChatPayload>(['chats', 'search'], (chatA, chatB) => compareDate(
+  sortQueryData<Chat>(['chats', 'search'], (chatA, chatB) => compareDate(
     chatA.last_message?.created_at as string,
     chatB.last_message?.created_at as string,
   ));
@@ -38,7 +35,7 @@ const reOrderChatListItems = () => {
  */
 const checkIfChatExists = (chatId: string) => {
   const currentChats = flattenPages(
-    queryClient.getQueryData<InfiniteData<PaginatedResult<Chat>>>(['chats', 'search']),
+    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(['chats', 'search']),
   );
 
   return currentChats?.find((chat: Chat) => chat.id === chatId);
@@ -53,7 +50,7 @@ const invalidateChatSearchQuery = () => {
   });
 };
 
-const updateChatListItem = (newChat: ChatPayload) => {
+const updateChatListItem = (newChat: Chat) => {
   const { id: chatId, last_message: lastMessage } = newChat;
 
   const isChatAlreadyLoaded = checkIfChatExists(chatId);
@@ -78,17 +75,10 @@ const updateChatListItem = (newChat: ChatPayload) => {
 /** Get unread chats count. */
 const getUnreadChatsCount = (): number => {
   const chats = flattenPages(
-    queryClient.getQueryData<InfiniteData<PaginatedResult<Chat>>>(['chats', 'search']),
+    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(['chats', 'search']),
   );
 
   return sumBy(chats, chat => chat.unread);
 };
 
-/** Update the query cache for an individual Chat Message */
-const updateChatMessage = (chatMessage: ChatMessage) => updatePageItem(
-  ChatKeys.chatMessages(chatMessage.chat_id),
-  normalizeChatMessage(chatMessage),
-  (o, n) => o.id === n.id,
-);
-
-export { updateChatListItem, updateChatMessage, getUnreadChatsCount, reOrderChatListItems };
+export { updateChatListItem, getUnreadChatsCount, reOrderChatListItems };

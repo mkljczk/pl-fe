@@ -3,7 +3,6 @@ import {
   List as ImmutableList,
   OrderedSet as ImmutableOrderedSet,
   Record as ImmutableRecord,
-  fromJS,
 } from 'immutable';
 import sample from 'lodash/sample';
 
@@ -23,8 +22,6 @@ import {
   TIMELINE_EXPAND_SUCCESS,
   TIMELINE_EXPAND_REQUEST,
   TIMELINE_EXPAND_FAIL,
-  TIMELINE_CONNECT,
-  TIMELINE_DISCONNECT,
   TIMELINE_UPDATE_QUEUE,
   TIMELINE_DEQUEUE,
   MAX_QUEUED_ITEMS,
@@ -32,21 +29,21 @@ import {
   TIMELINE_INSERT,
 } from '../actions/timelines';
 
+import type { Status } from '../normalizers';
+import type { PaginatedResponse, Status as BaseStatus, Relationship } from 'pl-api';
 import type { AnyAction } from 'redux';
 import type { ImportPosition } from 'soapbox/entity-store/types';
-import type { APIEntity, Status } from 'soapbox/types/entities';
 
 const TRUNCATE_LIMIT = 40;
 const TRUNCATE_SIZE = 20;
 
 const TimelineRecord = ImmutableRecord({
   unread: 0,
-  online: false,
   top: true,
   isLoading: false,
   hasMore: true,
-  next: undefined as string | undefined,
-  prev: undefined as string | undefined,
+  next: null as (() => Promise<PaginatedResponse<BaseStatus>>) | null,
+  prev: null as (() => Promise<PaginatedResponse<BaseStatus>>) | null,
   items: ImmutableOrderedSet<string>(),
   queuedItems: ImmutableOrderedSet<string>(), //max= MAX_QUEUED_ITEMS
   totalQueuedItemsCount: 0, //used for queuedItems overflow for MAX_QUEUED_ITEMS+
@@ -59,8 +56,8 @@ const initialState = ImmutableMap<string, Timeline>();
 type State = ImmutableMap<string, Timeline>;
 type Timeline = ReturnType<typeof TimelineRecord>;
 
-const getStatusIds = (statuses: ImmutableList<ImmutableMap<string, any>> = ImmutableList()) => (
-  statuses.map(status => status.get('id')).toOrderedSet()
+const getStatusIds = (statuses: Array<Pick<BaseStatus, 'id'>> = []) => (
+  ImmutableOrderedSet(statuses.map(status => status.id))
 );
 
 const mergeStatusIds = (oldIds = ImmutableOrderedSet<string>(), newIds = ImmutableOrderedSet<string>()) => (
@@ -88,9 +85,9 @@ const setFailed = (state: State, timelineId: string, failed: boolean) =>
 const expandNormalizedTimeline = (
   state: State,
   timelineId: string,
-  statuses: ImmutableList<ImmutableMap<string, any>>,
-  next: string | undefined,
-  prev: string | undefined,
+  statuses: Array<BaseStatus>,
+  next: (() => Promise<PaginatedResponse<BaseStatus>>) | null,
+  prev: (() => Promise<PaginatedResponse<BaseStatus>>) | null,
   isPartial: boolean,
   isLoadingRecent: boolean,
   pos: ImportPosition = 'end',
@@ -188,10 +185,13 @@ const updateTop = (state: State, timelineId: string, top: boolean) =>
     timeline.set('top', top);
   }));
 
-const isReblogOf = (reblog: Status, status: Status) => reblog.reblog === status.id;
-const statusToReference = (status: Status) => [status.id, status.account];
+const isReblogOf = (reblog: Pick<Status, 'reblog_id'>, status: Pick<Status, 'id'>) => reblog.reblog_id === status.id;
+const statusToReference = (status: Pick<Status, 'id' | 'account'>) => [status.id, status.account];
 
-const buildReferencesTo = (statuses: ImmutableMap<string, Status>, status: Status) => (
+const buildReferencesTo = (
+  statuses: ImmutableMap<string, Pick<Status, 'id' | 'account' | 'reblog_id'>>,
+  status: Pick<Status, 'id'>,
+) => (
   statuses
     .filter(reblog => isReblogOf(reblog, status))
     .map(statusToReference) as ImmutableMap<string, [string, string]>
@@ -203,12 +203,12 @@ const buildReferencesTo = (statuses: ImmutableMap<string, Status>, status: Statu
 //       statuses.getIn([statusId, 'account']) === relationship.id,
 //     ));
 
-const filterTimelines = (state: State, relationship: APIEntity, statuses: ImmutableMap<string, Status>) =>
+const filterTimelines = (state: State, relationship: Relationship, statuses: ImmutableMap<string, Pick<Status, 'id' | 'account' | 'reblog_id'>>) =>
   state.withMutations(state => {
     statuses.forEach(status => {
-      if (status.account !== relationship.id) return;
+      if (status.account.id !== relationship.id) return;
       const references = buildReferencesTo(statuses, status);
-      deleteStatus(state, status.id, status.account!.id, references, relationship.id);
+      deleteStatus(state, status.id, status.account.id, references, relationship.id);
     });
   });
 
@@ -228,29 +228,21 @@ const timelineDequeue = (state: State, timelineId: string) => {
   }));
 };
 
-const timelineConnect = (state: State, timelineId: string) =>
-  state.update(timelineId, TimelineRecord(), timeline => timeline.set('online', true));
+// const timelineDisconnect = (state: State, timelineId: string) =>
+//   state.update(timelineId, TimelineRecord(), timeline => timeline.withMutations(timeline => {
+//     This is causing problems. Disable for now.
+//     https://gitlab.com/soapbox-pub/soapbox/-/issues/716
+//     timeline.set('items', addStatusId(items, null));
+// }));
 
-const timelineDisconnect = (state: State, timelineId: string) =>
-  state.update(timelineId, TimelineRecord(), timeline => timeline.withMutations(timeline => {
-    timeline.set('online', false);
-
-    const items = timeline.get('items', ImmutableOrderedSet());
-    if (items.isEmpty()) return;
-
-    // This is causing problems. Disable for now.
-    // https://gitlab.com/soapbox-pub/soapbox/-/issues/716
-    // timeline.set('items', addStatusId(items, null));
-  }));
-
-const getTimelinesForStatus = (status: APIEntity) => {
+const getTimelinesForStatus = (status: Pick<BaseStatus, 'visibility' | 'group'>) => {
   switch (status.visibility) {
     case 'group':
-      return [`group:${status.group?.id || status.group_id}`];
+      return [`group:${status.group?.id}`];
     case 'direct':
       return ['direct'];
     case 'public':
-      return ['home', 'community', 'public', 'bubble'];
+      return ['home', 'public:local', 'public', 'bubble'];
     default:
       return ['home'];
   }
@@ -268,7 +260,7 @@ const replaceId = (ids: ImmutableOrderedSet<string>, oldId: string, newId: strin
   }
 };
 
-const importPendingStatus = (state: State, params: APIEntity, idempotencyKey: string) => {
+const importPendingStatus = (state: State, params: BaseStatus, idempotencyKey: string) => {
   const statusId = `末pending-${idempotencyKey}`;
 
   return state.withMutations(state => {
@@ -292,7 +284,7 @@ const replacePendingStatus = (state: State, idempotencyKey: string, newId: strin
   });
 };
 
-const importStatus = (state: State, status: APIEntity, idempotencyKey: string) =>
+const importStatus = (state: State, status: BaseStatus, idempotencyKey: string) =>
   state.withMutations(state => {
     replacePendingStatus(state, idempotencyKey, status.id);
 
@@ -324,7 +316,7 @@ const timelines = (state: State = initialState, action: AnyAction) => {
       return expandNormalizedTimeline(
         state,
         action.timeline,
-        fromJS(action.statuses) as ImmutableList<ImmutableMap<string, any>>,
+        action.statuses,
         action.next,
         action.prev,
         action.partial,
@@ -337,7 +329,7 @@ const timelines = (state: State = initialState, action: AnyAction) => {
     case TIMELINE_DEQUEUE:
       return timelineDequeue(state, action.timeline);
     case TIMELINE_DELETE:
-      return deleteStatus(state, action.id, action.accountId, action.references, action.reblogOf);
+      return deleteStatus(state, action.statusId, action.accountId, action.references, action.reblogOf);
     case TIMELINE_CLEAR:
       return clearTimeline(state, action.timeline);
     case ACCOUNT_BLOCK_SUCCESS:
@@ -347,10 +339,6 @@ const timelines = (state: State = initialState, action: AnyAction) => {
     //   return filterTimeline(state, 'home', action.relationship, action.statuses);
     case TIMELINE_SCROLL_TOP:
       return updateTop(state, action.timeline, action.top);
-    case TIMELINE_CONNECT:
-      return timelineConnect(state, action.timeline);
-    case TIMELINE_DISCONNECT:
-      return timelineDisconnect(state, action.timeline);
     case TIMELINE_INSERT:
       return state.update(action.timeline, TimelineRecord(), timeline => timeline.withMutations(timeline => {
         timeline.update('items', oldIds => {
@@ -371,12 +359,12 @@ const timelines = (state: State = initialState, action: AnyAction) => {
     case PIN_SUCCESS:
       return state.updateIn(
         [`account:${action.accountId}:pinned`, 'items'],
-        ids => ImmutableOrderedSet([action.status.id]).union(ids as ImmutableOrderedSet<string>),
+        ids => ImmutableOrderedSet([action.statusId]).union(ids as ImmutableOrderedSet<string>),
       );
     case UNPIN_SUCCESS:
       return state.updateIn(
         [`account:${action.accountId}:pinned`, 'items'],
-        ids => (ids as ImmutableOrderedSet<string>).delete(action.status.id),
+        ids => (ids as ImmutableOrderedSet<string>).delete(action.statusId),
       );
     default:
       return state;

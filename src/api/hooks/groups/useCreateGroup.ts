@@ -1,12 +1,12 @@
-import { serialize } from 'object-to-formdata';
+import { groupSchema, type Group as BaseGroup } from 'pl-api';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { useCreateEntity } from 'soapbox/entity-store/hooks';
-import { useApi } from 'soapbox/hooks/useApi';
-import { groupSchema } from 'soapbox/schemas';
+import { useClient } from 'soapbox/hooks';
+import { normalizeGroup, type Group } from 'soapbox/normalizers';
 
 interface CreateGroupParams {
-  display_name?: string;
+  display_name: string;
   note?: string;
   avatar?: File;
   header?: File;
@@ -16,17 +16,13 @@ interface CreateGroupParams {
 }
 
 const useCreateGroup = () => {
-  const api = useApi();
+  const client = useClient();
 
-  const { createEntity, ...rest } = useCreateEntity([Entities.GROUPS, 'search', ''], (params: CreateGroupParams) => {
-    const formData = serialize(params, { indices: true });
-
-    return api('/api/v1/groups', {
-      method: 'POST',
-      headers: { 'Content-Type': '' },
-      body: formData,
-    });
-  }, { schema: groupSchema });
+  const { createEntity, ...rest } = useCreateEntity<BaseGroup, Group, CreateGroupParams>(
+    [Entities.GROUPS, 'search', ''],
+    (params: CreateGroupParams) => client.experimental.groups.createGroup(params),
+    { schema: groupSchema, transform: normalizeGroup },
+  );
 
   return {
     createGroup: createEntity,

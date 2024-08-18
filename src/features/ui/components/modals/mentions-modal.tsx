@@ -9,8 +9,10 @@ import AccountContainer from 'soapbox/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 import { makeGetStatus } from 'soapbox/selectors';
 
+import type { ModalType } from '../modal-root';
+
 interface IMentionsModal {
-  onClose: (type: string) => void;
+  onClose: (type: ModalType) => void;
   statusId: string;
 }
 
@@ -20,7 +22,7 @@ const MentionsModal: React.FC<IMentionsModal> = ({ onClose, statusId }) => {
   const getStatus = useCallback(makeGetStatus(), []);
 
   const status = useAppSelector((state) => getStatus(state, { id: statusId }));
-  const accountIds = status ? ImmutableOrderedSet(status.mentions.map(m => m.get('id'))) : null;
+  const accountIds = status ? ImmutableOrderedSet(status.mentions.map(m => m.id)) : null;
 
   const fetchData = () => {
     dispatch(fetchStatusWithContext(statusId, intl));

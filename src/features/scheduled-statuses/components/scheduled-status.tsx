@@ -13,8 +13,6 @@ import { buildStatus } from '../builder';
 
 import ScheduledStatusActionBar from './scheduled-status-action-bar';
 
-import type { Poll as PollEntity, Status as StatusEntity } from 'soapbox/types/entities';
-
 interface IScheduledStatus {
   statusId: string;
 }
@@ -24,7 +22,7 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ statusId, ...other }) => 
     const scheduledStatus = state.scheduled_statuses.get(statusId);
     if (!scheduledStatus) return null;
     return buildStatus(state, scheduledStatus);
-  }) as StatusEntity | null;
+  });
 
   if (!status) return null;
 
@@ -53,14 +51,14 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ statusId, ...other }) => 
             collapsable
           />
 
-          {status.media_attachments.size > 0 && (
+          {status.media_attachments.length > 0 && (
             <AttachmentThumbs
               media={status.media_attachments}
               sensitive={status.sensitive}
             />
           )}
 
-          {status.poll && <PollPreview poll={status.poll as PollEntity} />}
+          {status.poll && <PollPreview poll={status.poll} />}
         </Stack>
       </div>
     </div>

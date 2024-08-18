@@ -5,10 +5,11 @@ import { useSettings } from 'soapbox/hooks';
 import { joinPublicPath } from 'soapbox/utils/static';
 
 import type { Map as ImmutableMap } from 'immutable';
+import type { CustomEmoji } from 'pl-api';
 
 interface IEmoji {
   emoji: string;
-  emojiMap: ImmutableMap<string, ImmutableMap<string, string>>;
+  emojiMap: ImmutableMap<string, CustomEmoji>;
   hovered: boolean;
 }
 
@@ -31,7 +32,7 @@ const Emoji: React.FC<IEmoji> = ({ emoji, emojiMap, hovered }) => {
       />
     );
   } else if (emojiMap.get(emoji as any)) {
-    const filename  = (autoPlayGif || hovered) ? emojiMap.getIn([emoji, 'url']) : emojiMap.getIn([emoji, 'static_url']);
+    const filename = (autoPlayGif || hovered) ? emojiMap.getIn([emoji, 'url']) : emojiMap.getIn([emoji, 'static_url']);
     const shortCode = `:${emoji}:`;
 
     return (

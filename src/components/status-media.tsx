@@ -8,12 +8,12 @@ import { MediaGallery, Video, Audio } from 'soapbox/features/ui/util/async-compo
 import { useAppDispatch, useSettings } from 'soapbox/hooks';
 import { defaultMediaVisibility } from 'soapbox/utils/status';
 
-import type { List as ImmutableList } from 'immutable';
-import type { Status, Attachment } from 'soapbox/types/entities';
+import type { MediaAttachment } from 'pl-api';
+import type { Status } from 'soapbox/normalizers';
 
 interface IStatusMedia {
   /** Status entity to render media for. */
-  status: Status;
+  status: Pick<Status, 'id' | 'account' | 'card' | 'expectsCard' | 'hidden' | 'media_attachments' | 'quote_id' | 'sensitive' | 'spoiler_text' | 'visibility'>;
   /** Whether to display compact media. */
   muted?: boolean;
   /** Callback when compact media is clicked. */
@@ -32,10 +32,10 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   const dispatch = useAppDispatch();
   const { displayMedia } = useSettings();
 
-  const visible = showMedia || (status.hidden === null ? defaultMediaVisibility(status, displayMedia) : status.hidden);
+  const visible = showMedia || (status.hidden === null ? defaultMediaVisibility(status, displayMedia) : !status.hidden);
 
-  const size = status.media_attachments.size;
-  const firstAttachment = status.media_attachments.first();
+  const size = status.media_attachments.length;
+  const firstAttachment = status.media_attachments[0];
 
   let media: JSX.Element | null = null;
 
@@ -49,8 +49,8 @@ const StatusMedia: React.FC<IStatusMedia> = ({
     <div className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat' style={{ height: '285px' }} />
   );
 
-  const openMedia = (media: ImmutableList<Attachment>, index: number) => {
-    dispatch(openModal('MEDIA', { media, status, index }));
+  const openMedia = (media: Array<MediaAttachment>, index: number) => {
+    dispatch(openModal('MEDIA', { media, statusId: status.id, index }));
   };
 
   if (size > 0 && firstAttachment) {
@@ -72,7 +72,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
             blurhash={video.blurhash}
             src={video.url}
             alt={video.description}
-            aspectRatio={Number(video.meta.getIn(['original', 'aspect']))}
+            aspectRatio={Number(video.meta.original?.aspect)}
             height={285}
             visible={visible}
             inline
@@ -87,11 +87,11 @@ const StatusMedia: React.FC<IStatusMedia> = ({
           <Audio
             src={attachment.url}
             alt={attachment.description}
-            poster={attachment.preview_url !== attachment.url ? attachment.preview_url : status.getIn(['account', 'avatar_static']) as string | undefined}
-            backgroundColor={attachment.meta.getIn(['colors', 'background']) as string | undefined}
-            foregroundColor={attachment.meta.getIn(['colors', 'foreground']) as string | undefined}
-            accentColor={attachment.meta.getIn(['colors', 'accent']) as string | undefined}
-            duration={attachment.meta.getIn(['original', 'duration'], 0) as number | undefined}
+            poster={attachment.preview_url !== attachment.url ? attachment.preview_url : status.account.avatar_static}
+            backgroundColor={attachment.meta.colors?.background}
+            foregroundColor={attachment.meta.colors?.foreground}
+            accentColor={attachment.meta.colors?.accent}
+            duration={attachment.meta.original?.duration || 0}
             height={263}
           />
         </Suspense>
@@ -109,7 +109,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
         </Suspense>
       );
     }
-  } else if (status.spoiler_text.length === 0 && !status.quote && status.card) {
+  } else if (status.spoiler_text.length === 0 && !status.quote_id && status.card) {
     media = (
       <PreviewCard
         onOpenMedia={openMedia}

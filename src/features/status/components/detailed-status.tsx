@@ -12,16 +12,16 @@ import StatusInfo from 'soapbox/components/statuses/status-info';
 import TranslateButton from 'soapbox/components/translate-button';
 import { HStack, Icon, Stack, Text } from 'soapbox/components/ui';
 import QuotedStatus from 'soapbox/features/status/containers/quoted-status-container';
-import { getActualStatus } from 'soapbox/utils/status';
 
 import StatusInteractionBar from './status-interaction-bar';
 
-import type { Group, Status as StatusEntity } from 'soapbox/types/entities';
+import type { Status as StatusEntity } from 'soapbox/normalizers';
+import type { SelectedStatus } from 'soapbox/selectors';
 
 interface IDetailedStatus {
-  status: StatusEntity;
+  status: SelectedStatus;
   withMedia?: boolean;
-  onOpenCompareHistoryModal: (status: StatusEntity) => void;
+  onOpenCompareHistoryModal: (status: Pick<StatusEntity, 'id'>) => void;
 }
 
 const DetailedStatus: React.FC<IDetailedStatus> = ({
@@ -67,7 +67,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                     <Link to={`/groups/${status.group.id}`} className='hover:underline'>
                       <bdi className='truncate'>
                         <strong className='text-gray-800 dark:text-gray-200'>
-                          <span dangerouslySetInnerHTML={{ __html: (status.group as Group).display_name_html }} />
+                          <span dangerouslySetInnerHTML={{ __html: status.group.display_name_html }} />
                         </strong>
                       </bdi>
                     </Link>
@@ -81,7 +81,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
     }
   };
 
-  const actualStatus = getActualStatus(status);
+  const actualStatus = status?.reblog || status;
   if (!actualStatus) return null;
   const { account } = actualStatus;
   if (!account || typeof account !== 'object') return null;
@@ -90,15 +90,15 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
   let quote;
 
-  if (actualStatus.quote) {
-    if (actualStatus.pleroma.get('quote_visible', true) === false) {
+  if (actualStatus.quote_id) {
+    if (actualStatus.quote_visible === false) {
       quote = (
         <div className='quoted-actualStatus-tombstone'>
           <p><FormattedMessage id='status.quote_tombstone' defaultMessage='Post is unavailable.' /></p>
         </div>
       );
     } else {
-      quote = <QuotedStatus statusId={actualStatus.quote as string} />;
+      quote = <QuotedStatus statusId={actualStatus.quote_id} />;
     }
   }
 
@@ -143,7 +143,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
             <TranslateButton status={actualStatus} />
 
-            {(withMedia && (quote || actualStatus.card || actualStatus.media_attachments.size > 0)) && (
+            {(withMedia && (quote || actualStatus.card || actualStatus.media_attachments.length > 0)) && (
               <Stack space={4}>
                 <StatusMedia status={actualStatus} />
 

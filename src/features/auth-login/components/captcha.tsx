@@ -41,7 +41,7 @@ const CaptchaField: React.FC<ICaptchaField> = ({
 
   const getCaptcha = () => {
     dispatch(fetchCaptcha()).then((response) => {
-      const captcha = ImmutableMap<string, any>(response.json);
+      const captcha = ImmutableMap(response);
       setCaptcha(captcha);
       onFetch(captcha);
     }).catch((error: Error) => {

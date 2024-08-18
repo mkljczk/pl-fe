@@ -5,7 +5,7 @@ import Account from 'soapbox/components/account';
 import Icon from 'soapbox/components/icon';
 import { HStack, Text } from 'soapbox/components/ui';
 
-import type { Account as AccountEntity } from 'soapbox/schemas';
+import type { Account as AccountEntity } from 'soapbox/normalizers';
 
 interface IMovedNote {
   from: AccountEntity;

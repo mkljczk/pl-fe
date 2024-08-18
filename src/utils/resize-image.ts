@@ -66,7 +66,7 @@ const dropOrientationIfNeeded = (orientation: number) => new Promise<number>(res
 //       [255, 255, 255, 255,  255, 0, 0, 255,  0, 255, 0, 255,  0, 0, 255, 255];
 //     const img = new Image();
 //     img.onload = () => {
-//       const canvas  = document.createElement('canvas');
+//       const canvas = document.createElement('canvas');
 //       const context = canvas.getContext('2d');
 //       context?.drawImage(img, 0, 0, 2, 2);
 //       const imageData = context?.getImageData(0, 0, 2, 2);
@@ -100,7 +100,7 @@ const getImageUrl = (inputFile: File) => new Promise<string>((resolve, reject) =
 
   const reader = new FileReader();
   reader.onerror = (...args) => reject(...args);
-  reader.onload  = ({ target }) => resolve((target?.result || '') as string);
+  reader.onload = ({ target }) => resolve((target?.result || '') as string);
 
   reader.readAsDataURL(inputFile);
 });
@@ -111,7 +111,7 @@ const loadImage = (inputFile: File) => new Promise<HTMLImageElement>((resolve, r
     const img = new Image();
 
     img.onerror = (...args) => reject([...args]);
-    img.onload  = () => resolve(img);
+    img.onload = () => resolve(img);
 
     img.src = url;
   }).catch(reject);
@@ -157,10 +157,10 @@ const processImage = (
   const canvas = document.createElement('canvas');
 
   if (4 < orientation && orientation < 9) {
-    canvas.width  = height;
+    canvas.width = height;
     canvas.height = width;
   } else {
-    canvas.width  = width;
+    canvas.width = width;
     canvas.height = height;
   }
 
@@ -200,7 +200,7 @@ const resizeImage = (
   const { width, height } = img;
   const type = inputFile.type || 'image/png';
 
-  const newWidth  = Math.round(Math.sqrt(maxPixels * (width / height)));
+  const newWidth = Math.round(Math.sqrt(maxPixels * (width / height)));
   const newHeight = Math.round(Math.sqrt(maxPixels * (height / width)));
 
   // Skip canvas reliability check for now (it's unreliable)

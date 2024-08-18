@@ -1,27 +1,24 @@
-import { List as ImmutableList, Map as ImmutableMap, fromJS } from 'immutable';
-
 import { buildCustomEmojis } from 'soapbox/features/emoji';
 import emojiData from 'soapbox/features/emoji/data';
 import { addCustomToPool } from 'soapbox/features/emoji/search';
 
-import { CUSTOM_EMOJIS_FETCH_SUCCESS } from '../actions/custom-emojis';
+import { CUSTOM_EMOJIS_FETCH_SUCCESS, type CustomEmojisAction } from '../actions/custom-emojis';
 
-import type { AnyAction } from 'redux';
-import type { APIEntity } from 'soapbox/types/entities';
+import type { CustomEmoji } from 'pl-api';
 
-const initialState = ImmutableList<ImmutableMap<string, string>>();
+const initialState: Array<CustomEmoji> = [];
 
 // Populate custom emojis for composer autosuggest
-const autosuggestPopulate = (emojis: ImmutableList<ImmutableMap<string, string>>) => {
+const autosuggestPopulate = (emojis: Array<CustomEmoji>) => {
   addCustomToPool(buildCustomEmojis(emojis));
 };
 
-const importEmojis = (customEmojis: APIEntity[]) => {
-  const emojis = (fromJS(customEmojis) as ImmutableList<ImmutableMap<string, string>>).filter((emoji) => {
+const importEmojis = (customEmojis: Array<CustomEmoji>) => {
+  const emojis = customEmojis.filter((emoji) => {
     // If a custom emoji has the shortcode of a Unicode emoji, skip it.
     // Otherwise it breaks EmojiMart.
     // https://gitlab.com/soapbox-pub/soapbox/-/issues/610
-    const shortcode = emoji.get('shortcode', '').toLowerCase();
+    const shortcode = emoji.shortcode.toLowerCase();
     return !emojiData.emojis[shortcode];
   });
 
@@ -29,7 +26,7 @@ const importEmojis = (customEmojis: APIEntity[]) => {
   return emojis;
 };
 
-const custom_emojis = (state = initialState, action: AnyAction) => {
+const custom_emojis = (state = initialState, action: CustomEmojisAction) => {
   if (action.type === CUSTOM_EMOJIS_FETCH_SUCCESS) {
     return importEmojis(action.custom_emojis);
   }

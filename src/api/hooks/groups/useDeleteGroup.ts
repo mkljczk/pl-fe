@@ -1,12 +1,13 @@
 import { Entities } from 'soapbox/entity-store/entities';
-import { useEntityActions } from 'soapbox/entity-store/hooks';
-
-import type { Group } from 'soapbox/schemas';
+import { useDeleteEntity } from 'soapbox/entity-store/hooks';
+import { useClient } from 'soapbox/hooks';
 
 const useDeleteGroup = () => {
-  const { deleteEntity, isSubmitting } = useEntityActions<Group>(
-    [Entities.GROUPS],
-    { delete: '/api/v1/groups/:id' },
+  const client = useClient();
+
+  const { deleteEntity, isSubmitting } = useDeleteEntity(
+    Entities.GROUPS,
+    (groupId: string) => client.experimental.groups.deleteGroup(groupId),
   );
 
   return {

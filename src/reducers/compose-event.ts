@@ -1,4 +1,4 @@
-import { fromJS, Record as ImmutableRecord } from 'immutable';
+import { Record as ImmutableRecord } from 'immutable';
 import { AnyAction } from 'redux';
 
 import {
@@ -20,21 +20,17 @@ import {
   EVENT_COMPOSE_CANCEL,
   EVENT_FORM_SET,
 } from 'soapbox/actions/events';
-import { normalizeAttachment, normalizeLocation } from 'soapbox/normalizers';
 
-import type {
-  Attachment as AttachmentEntity,
-  Location as LocationEntity,
-} from 'soapbox/types/entities';
+import type { Location, MediaAttachment } from 'pl-api';
 
 const ReducerRecord = ImmutableRecord({
   name: '',
   status: '',
-  location: null as LocationEntity | null,
+  location: null as Location | null,
   start_time: new Date(),
   end_time: null as Date | null,
   approval_required: false,
-  banner: null as AttachmentEntity | null,
+  banner: null as MediaAttachment | null,
   progress: 0,
   is_uploading: false,
   is_submitting: false,
@@ -72,7 +68,7 @@ const compose_event = (state = ReducerRecord(), action: AnyAction): State => {
       return state.set('is_uploading', true);
     case EVENT_BANNER_UPLOAD_SUCCESS:
       return state
-        .set('banner', normalizeAttachment(fromJS(action.media)))
+        .set('banner', action.media)
         .set('is_uploading', false);
     case EVENT_BANNER_UPLOAD_FAIL:
       return state.set('is_uploading', false);
@@ -95,7 +91,7 @@ const compose_event = (state = ReducerRecord(), action: AnyAction): State => {
         end_time: action.status.event.end_time ? new Date(action.status.event.end_time) : null,
         approval_required: action.status.event.join_mode !== 'free',
         banner: action.status.event.banner || null,
-        location: action.location ? normalizeLocation(action.location) : null,
+        location: action.location || null,
         progress: 0,
         is_uploading: false,
         is_submitting: false,

@@ -9,11 +9,12 @@ import AnnouncementContent from './announcement-content';
 import ReactionsBar from './reactions-bar';
 
 import type { Map as ImmutableMap } from 'immutable';
-import type { Announcement as AnnouncementEntity } from 'soapbox/schemas';
+import type { CustomEmoji } from 'pl-api';
+import type { Announcement as AnnouncementEntity } from 'soapbox/normalizers';
 
 interface IAnnouncement {
   announcement: AnnouncementEntity;
-  emojiMap: ImmutableMap<string, ImmutableMap<string, string>>;
+  emojiMap: ImmutableMap<string, CustomEmoji>;
 }
 
 const Announcement: React.FC<IAnnouncement> = ({ announcement, emojiMap }) => {

@@ -7,14 +7,14 @@ import { shortNumberFormat } from '../utils/numbers';
 
 import { HStack, Stack, Text } from './ui';
 
-import type { Tag } from 'soapbox/types/entities';
+import type { Tag } from 'pl-api';
 
 interface IHashtag {
   hashtag: Tag;
 }
 
 const Hashtag: React.FC<IHashtag> = ({ hashtag }) => {
-  const count = Number(hashtag.history?.get(0)?.accounts);
+  const count = Number(hashtag.history?.[0]?.accounts);
 
   return (
     <HStack alignItems='center' justifyContent='between' data-testid='hashtag'>
@@ -42,7 +42,7 @@ const Hashtag: React.FC<IHashtag> = ({ hashtag }) => {
           <Sparklines
             width={40}
             height={28}
-            data={hashtag.history.reverse().map((day) => +day.uses).toArray()}
+            data={hashtag.history.toReversed().map((day) => +day.uses)}
           >
             <SparklinesCurve style={{ fill: 'none' }} color='#818cf8' />
           </Sparklines>

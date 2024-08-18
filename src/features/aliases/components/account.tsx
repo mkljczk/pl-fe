@@ -25,7 +25,7 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
   const me = useAppSelector((state) => state.me);
   const { account } = useAccount(accountId);
 
-  const apId = account?.pleroma?.ap_id;
+  const apId = account?.ap_id;
   const name = features.accountMoving ? account?.acct : apId;
   const added = name ? aliases.includes(name) : false;
 

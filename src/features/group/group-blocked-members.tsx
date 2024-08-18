@@ -58,14 +58,14 @@ const GroupBlockedMembers: React.FC<IGroupBlockedMembers> = ({ params }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const id = params?.groupId;
+  const groupId = params?.groupId;
 
-  const { group } = useGroup(id);
-  const accountIds = useAppSelector((state) => state.user_lists.group_blocks.get(id)?.items);
+  const { group } = useGroup(groupId);
+  const accountIds = useAppSelector((state) => state.user_lists.group_blocks.get(groupId)?.items);
 
   useEffect(() => {
-    dispatch(fetchGroupBlocks(id));
-  }, [id]);
+    dispatch(fetchGroupBlocks(groupId));
+  }, [groupId]);
 
   if (!group || !group.relationship || !accountIds) {
     return (
@@ -89,7 +89,7 @@ const GroupBlockedMembers: React.FC<IGroupBlockedMembers> = ({ params }) => {
         emptyMessageCard={false}
       >
         {accountIds.map((accountId) =>
-          <BlockedMember key={accountId} accountId={accountId} groupId={id} />,
+          <BlockedMember key={accountId} accountId={accountId} groupId={groupId} />,
         )}
       </ScrollableList>
     </Column>

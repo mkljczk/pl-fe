@@ -38,7 +38,7 @@ const LoginPage = () => {
   const handleSubmit: React.FormEventHandler = (event) => {
     const { username, password } = getFormData(event.target as HTMLFormElement);
     dispatch(logIn(username, password))
-      .then(({ access_token }) => dispatch(verifyCredentials(access_token as string)))
+      .then(({ access_token }) => dispatch(verifyCredentials(access_token)))
       // Refetch the instance for authenticated fetch
       .then(async (account) => {
         await dispatch(fetchInstance());

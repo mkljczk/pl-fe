@@ -3,329 +3,185 @@
  * Converts API statuses into our internal format.
  * @see {@link https://docs.joinmastodon.org/entities/status/}
  */
-import {
-  Map as ImmutableMap,
-  List as ImmutableList,
-  Record as ImmutableRecord,
-  fromJS,
-} from 'immutable';
+import escapeTextContentForBrowser from 'escape-html';
+import DOMPurify from 'isomorphic-dompurify';
+import { type Account as BaseAccount, type Status as BaseStatus, type MediaAttachment, mentionSchema, type Translation } from 'pl-api';
 
-import { normalizeAttachment } from 'soapbox/normalizers/attachment';
-import { normalizeEmoji } from 'soapbox/normalizers/emoji';
-import { normalizeMention } from 'soapbox/normalizers/mention';
-import { accountSchema, cardSchema, emojiReactionSchema, groupSchema, pollSchema, tombstoneSchema } from 'soapbox/schemas';
-import { filteredArray } from 'soapbox/schemas/utils';
-import { maybeFromJS } from 'soapbox/utils/normalizers';
+import emojify from 'soapbox/features/emoji';
+import { stripCompatibilityFeatures, unescapeHTML } from 'soapbox/utils/html';
+import { makeEmojiMap } from 'soapbox/utils/normalizers';
 
-import type { Account, Attachment, Card, Emoji, Group, Mention, Poll, EmbeddedEntity, EmojiReaction } from 'soapbox/types/entities';
+import { normalizeAccount } from './account';
+import { normalizeGroup } from './group';
+import { normalizePoll } from './poll';
 
-type StatusApprovalStatus = 'pending' | 'approval' | 'rejected';
+const domParser = new DOMParser();
+
+type StatusApprovalStatus = Exclude<BaseStatus['approval_status'], null>;
 type StatusVisibility = 'public' | 'unlisted' | 'private' | 'direct' | 'group' | 'mutuals_only' | 'local';
 
-type EventJoinMode = 'free' | 'restricted' | 'invite';
-type EventJoinState = 'pending' | 'reject' | 'accept';
+type CalculatedValues = {
+  search_index: string;
+  contentHtml: string;
+  spoilerHtml: string;
+  contentMapHtml?: Record<string, string>;
+  spoilerMapHtml?: Record<string, string>;
+  hidden?: boolean;
+  translation?: Translation | null | false;
+  currentLanguage?: string;
+};
 
-const EventRecord = ImmutableRecord({
-  name: '',
-  start_time: null as string | null,
-  end_time: null as string | null,
-  join_mode: null as EventJoinMode | null,
-  participants_count: 0,
-  location: null as ImmutableMap<string, any> | null,
-  join_state: null as EventJoinState | null,
-  banner: null as Attachment | null,
-  links: ImmutableList<Attachment>(),
-});
+type OldStatus = Pick<BaseStatus, 'content' | 'spoiler_text'> & CalculatedValues;
 
-interface Tombstone {
-  reason: 'deleted';
-}
-
-// https://docs.joinmastodon.org/entities/status/
-const StatusRecord = ImmutableRecord({
-  account: null as unknown as Account,
-  accounts: null as ImmutableList<Account> | null,
-  application: null as ImmutableMap<string, any> | null,
-  approval_status: 'approved' as StatusApprovalStatus,
-  bookmarked: false,
-  card: null as Card | null,
-  content: '',
-  content_map: null as ImmutableMap<string, string> | null,
-  created_at: '',
-  dislikes_count: 0,
-  disliked: false,
-  edited_at: null as string | null,
-  emojis: ImmutableList<Emoji>(),
-  favourited: false,
-  favourites_count: 0,
-  filtered: ImmutableList<string>(),
-  group: null as Group | null,
-  in_reply_to_account_id: null as string | null,
-  in_reply_to_id: null as string | null,
-  id: '',
-  language: null as string | null,
-  media_attachments: ImmutableList<Attachment>(),
-  mentions: ImmutableList<Mention>(),
-  muted: false,
-  pinned: false,
-  pleroma: ImmutableMap<string, any>(),
-  poll: null as EmbeddedEntity<Poll>,
-  quote: null as EmbeddedEntity<any>,
-  quotes_count: 0,
-  reactions: null as ImmutableList<EmojiReaction> | null,
-  reblog: null as EmbeddedEntity<any>,
-  reblogged: false,
-  reblogs_count: 0,
-  replies_count: 0,
-  sensitive: false,
-  spoiler_text: '',
-  spoiler_text_map: null as ImmutableMap<string, string> | null,
-  tags: ImmutableList<ImmutableMap<string, any>>(),
-  tombstone: null as Tombstone | null,
-  uri: '',
-  url: '',
-  visibility: 'public' as StatusVisibility,
-  event: null as ReturnType<typeof EventRecord> | null,
-
-  // Internal fields
-  contentHtml: '',
-  spoilerHtml: '',
-  contentMapHtml: null as ImmutableMap<string, string> | null,
-  spoilerMapHtml: null as ImmutableMap<string, string> | null,
-  expectsCard: false,
-  hidden: null as boolean | null,
-  search_index: '',
-  showFiltered: true,
-  translation: null as ImmutableMap<string, string> | null | false,
-  translating: false,
-  currentLanguage: null as string | null,
-});
-
-const normalizeAttachments = (status: ImmutableMap<string, any>) =>
-  status.update('media_attachments', ImmutableList(), attachments =>
-    attachments.map(normalizeAttachment),
-  );
-
-const normalizeMentions = (status: ImmutableMap<string, any>) =>
-  status.update('mentions', ImmutableList(), mentions =>
-    mentions.map(normalizeMention),
-  );
-
-// Normalize emoji reactions
-const normalizeReactions = (entity: ImmutableMap<string, any>) =>
-  entity.update('emojis', ImmutableList(), emojis =>
-    emojis.map(normalizeEmoji),
-  );
-
-// Normalize the poll in the status, if applicable
-const normalizeStatusPoll = (status: ImmutableMap<string, any>) => {
-  try {
-    const poll = pollSchema.parse(status.get('poll').toJS());
-    return status.set('poll', poll);
-  } catch (_e) {
-    return status.set('poll', null);
+// Gets titles of poll options from status
+const getPollOptionTitles = ({ poll }: Pick<BaseStatus, 'poll'>): readonly string[] => {
+  if (poll && typeof poll === 'object') {
+    return poll.options.map(({ title }) => title);
+  } else {
+    return [];
   }
 };
 
-const normalizeTombstone = (status: ImmutableMap<string, any>) => {
-  try {
-    const tombstone = tombstoneSchema.parse(status.get('tombstone').toJS());
-    return status.set('tombstone', tombstone);
-  } catch (_e) {
-    return status.set('tombstone', null);
+// Gets usernames of mentioned users from status
+const getMentionedUsernames = (status: Pick<BaseStatus, 'mentions'>): Array<string> =>
+  status.mentions.map(({ acct }) => `@${acct}`);
+
+// Creates search text from the status
+const buildSearchContent = (status: Pick<BaseStatus, 'poll' | 'mentions' | 'spoiler_text' | 'content'>): string => {
+  const pollOptionTitles = getPollOptionTitles(status);
+  const mentionedUsernames = getMentionedUsernames(status);
+
+  const fields = [
+    status.spoiler_text,
+    status.content,
+    ...pollOptionTitles,
+    ...mentionedUsernames,
+  ];
+
+  return unescapeHTML(fields.join('\n\n')) || '';
+};
+
+const calculateContent = (text: string, emojiMap: any) => DOMPurify.sanitize(stripCompatibilityFeatures(emojify(text, emojiMap)), { USE_PROFILES: { html: true } });
+const calculateSpoiler = (text: string, emojiMap: any) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { USE_PROFILES: { html: true } });
+
+const calculateStatus = (status: BaseStatus, oldStatus?: OldStatus): CalculatedValues => {
+  if (oldStatus && oldStatus.content === status.content && oldStatus.spoiler_text === status.spoiler_text) {
+    const {
+      search_index, contentHtml, spoilerHtml, contentMapHtml, spoilerMapHtml, hidden, translation, currentLanguage,
+    } = oldStatus;
+
+    return {
+      search_index, contentHtml, spoilerHtml, contentMapHtml, spoilerMapHtml, hidden, translation, currentLanguage,
+    };
+  } else {
+    const searchContent = buildSearchContent(status);
+    const emojiMap = makeEmojiMap(status.emojis);
+
+    return {
+      search_index: domParser.parseFromString(searchContent, 'text/html').documentElement.textContent || '',
+      contentHtml: calculateContent(status.content, emojiMap),
+      spoilerHtml: calculateSpoiler(status.spoiler_text, emojiMap),
+      contentMapHtml: status.content_map
+        ? Object.fromEntries(Object.entries(status.content_map)?.map(([key, value]) => [key, calculateContent(value, emojiMap)]))
+        : undefined,
+      spoilerMapHtml: status.spoiler_text_map
+        ? Object.fromEntries(Object.entries(status.spoiler_text_map).map(([key, value]) => [key, calculateSpoiler(value, emojiMap)]))
+        : undefined,
+    };
   }
 };
 
-// Normalize card
-const normalizeStatusCard = (status: ImmutableMap<string, any>) => {
-  try {
-    const card = cardSchema.parse(status.get('card').toJS());
-    return status.set('card', card);
-  } catch (e) {
-    return status.set('card', null);
-  }
-};
-
-// Fix order of mentions
-const fixMentionsOrder = (status: ImmutableMap<string, any>) => {
-  const mentions = status.get('mentions', ImmutableList());
-  const inReplyToAccountId = status.get('in_reply_to_account_id');
+const normalizeStatus = (status: BaseStatus & {
+  accounts?: Array<BaseAccount>;
+}, oldStatus?: OldStatus) => {
+  const calculated = calculateStatus(status, oldStatus);
 
   // Sort the replied-to mention to the top
-  const sorted = mentions.sort((a: ImmutableMap<string, any>, _b: ImmutableMap<string, any>) => {
-    if (a.get('id') === inReplyToAccountId) {
+  let mentions = status.mentions.toSorted((a, _b) => {
+    if (a.id === status.in_reply_to_account_id) {
       return -1;
     } else {
       return 0;
     }
   });
 
-  return status.set('mentions', sorted);
-};
+  // Add self to mentions if it's a reply to self
+  const isSelfReply = status.account.id === status.in_reply_to_account_id;
+  const hasSelfMention = status.account.id === status.mentions[0]?.id;
 
-// Add self to mentions if it's a reply to self
-const addSelfMention = (status: ImmutableMap<string, any>) => {
-  const accountId = status.getIn(['account', 'id']);
-
-  const isSelfReply = accountId === status.get('in_reply_to_account_id');
-  const hasSelfMention = accountId === status.getIn(['mentions', 0, 'id']);
-
-  if (isSelfReply && !hasSelfMention && accountId) {
-    const mention = normalizeMention(status.get('account'));
-    return status.update('mentions', ImmutableList(), mentions => (
-      ImmutableList([mention]).concat(mentions)
-    ));
-  } else {
-    return status;
+  if (isSelfReply && !hasSelfMention) {
+    const selfMention = mentionSchema.parse(status.account);
+    mentions = [selfMention, ...mentions];
   }
-};
 
-// Move the quote to the top-level
-const fixQuote = (status: ImmutableMap<string, any>) =>
-  status.withMutations(status => {
-    status.update('quote', quote => quote || status.getIn(['pleroma', 'quote']) || null);
-    status.deleteIn(['pleroma', 'quote']);
-    status.update('quotes_count', quotes_count => quotes_count || status.getIn(['pleroma', 'quotes_count'], 0));
-    status.deleteIn(['pleroma', 'quotes_count']);
-  });
+  // If the status contains spoiler text, treat it as sensitive.
+  const sensitive = !!status.spoiler_text || status.sensitive;
 
-// Move the translation to the top-level
-const fixTranslation = (status: ImmutableMap<string, any>) => {
-  return status.withMutations(status => {
-    status.update('translation', translation => translation || status.getIn(['pleroma', 'translation']) || null);
-    status.deleteIn(['pleroma', 'translation']);
-  });
-};
+  // Normalize event
+  let event: BaseStatus['event'] & ({
+    banner: MediaAttachment | null;
+    links: Array<MediaAttachment>;
+  } | null) = null;
+  let media_attachments = status.media_attachments;
 
-/** If the status contains spoiler text, treat it as sensitive. */
-const fixSensitivity = (status: ImmutableMap<string, any>) => {
-  if (status.get('spoiler_text')) {
-    status.set('sensitive', true);
-  }
-};
+  // Normalize poll
+  const poll = status.poll ? normalizePoll(status.poll) : null;
 
-// Normalize event
-const normalizeEvent = (status: ImmutableMap<string, any>) => {
-  if (status.getIn(['pleroma', 'event'])) {
-    const firstAttachment = status.get('media_attachments').first();
-    let banner = null;
-    let mediaAttachments = status.get('media_attachments');
+  if (status.event) {
+    const firstAttachment = status.media_attachments[0];
+    let banner: MediaAttachment | null = null;
 
-    if (firstAttachment && firstAttachment.description === 'Banner' && firstAttachment.type === 'image') {
-      banner = normalizeAttachment(firstAttachment);
-      mediaAttachments = mediaAttachments.shift();
+    if (firstAttachment?.description === 'Banner' && firstAttachment.type === 'image') {
+      banner = firstAttachment;
+      media_attachments = media_attachments.slice(1);
     }
 
-    const links = mediaAttachments.filter((attachment: Attachment) => attachment.pleroma.get('mime_type') === 'text/html');
-    mediaAttachments = mediaAttachments.filter((attachment: Attachment) => attachment.pleroma.get('mime_type') !== 'text/html');
+    const links = media_attachments.filter(attachment => attachment.mime_type === 'text/html');
+    media_attachments = media_attachments.filter(attachment => attachment.mime_type !== 'text/html');
 
-    const event = EventRecord(
-      (status.getIn(['pleroma', 'event']) as ImmutableMap<string, any>)
-        .set('banner', banner)
-        .set('links', links),
-    );
-
-    status
-      .set('event', event)
-      .set('media_attachments', mediaAttachments);
-  }
-};
-
-/** Normalize emojis. */
-const normalizeEmojis = (status: ImmutableMap<string, any>) => {
-  const data = ImmutableList<ImmutableMap<string, any>>(status.getIn(['pleroma', 'emoji_reactions']) || status.get('reactions'));
-  const reactions = filteredArray(emojiReactionSchema).parse(data.toJS());
-
-  if (reactions) {
-    status.set('reactions', ImmutableList(reactions));
-  }
-};
-
-/** Rewrite `<p></p>` to empty string. */
-const fixContent = (status: ImmutableMap<string, any>) => {
-  if (status.get('content') === '<p></p>') {
-    return status.set('content', '');
-  } else {
-    return status;
-  }
-};
-
-const normalizeFilterResults = (status: ImmutableMap<string, any>) =>
-  status.update('filtered', ImmutableList(), filterResults =>
-    filterResults.map((filterResult: ImmutableMap<string, any>) =>
-      filterResult.getIn(['filter', 'title']),
-    ),
-  );
-
-const normalizeDislikes = (status: ImmutableMap<string, any>) => {
-  if (status.get('friendica')) {
-    return status
-      .set('dislikes_count', status.getIn(['friendica', 'dislikes_count']))
-      .set('disliked', status.getIn(['friendica', 'disliked']));
+    event = {
+      ...status.event,
+      banner,
+      links,
+    };
   }
 
-  return status;
+  // Normalize group
+  const group = status.group ? normalizeGroup(status.group) : null;
+
+  return {
+    account_id: status.account.id,
+    reblog_id: status.reblog?.id || null,
+    poll_id: status.poll?.id || null,
+    quote_id: status.quote?.id || null,
+    group_id: status.group?.id || null,
+    translating: false,
+    expectsCard: false,
+    showFiltered: null as null | boolean,
+    ...status,
+    account: normalizeAccount(status.account),
+    accounts: status.accounts?.map(normalizeAccount),
+    mentions,
+    sensitive,
+    hidden: sensitive,
+    /** Rewrite `<p></p>` to empty string. */
+    content: status.content === '<p></p>' ? '' : status.content,
+    filtered: status.filtered?.map(result => result.filter.title),
+    event,
+    poll,
+    group,
+    media_attachments,
+    ...calculated,
+    translation: (status.translation || calculated.translation || null) as Translation | null | false,
+    // quote: status.quote ? normalizeStatus(status.quote as any) : null,
+  };
 };
 
-const parseAccount = (status: ImmutableMap<string, any>) => {
-  try {
-    const account = accountSchema.parse(maybeFromJS(status.get('account')));
-    return status.set('account', account);
-  } catch (_e) {
-    return status.set('account', null);
-  }
-};
-
-const parseAccounts = (status: ImmutableMap<string, any>) => {
-  try {
-    if (status.get('accounts')) {
-      const accounts = status.get('accounts').map((account: ImmutableMap<string, any>) => accountSchema.parse(maybeFromJS(account)));
-      return status.set('accounts', accounts);
-    }
-  } catch (_e) {
-    return status.set('accounts', null);
-  }
-};
-
-const parseGroup = (status: ImmutableMap<string, any>) => {
-  try {
-    const group = groupSchema.parse(status.get('group', status.getIn(['pleroma', 'group'])).toJS());
-    return status.set('group', group);
-  } catch (_e) {
-    return status.set('group', null);
-  }
-};
-
-const normalizeStatus = (status: Record<string, any>) => StatusRecord(
-  ImmutableMap(fromJS(status)).withMutations(status => {
-    normalizeAttachments(status);
-    normalizeMentions(status);
-    normalizeEmojis(status);
-    normalizeStatusPoll(status);
-    normalizeStatusCard(status);
-    fixMentionsOrder(status);
-    addSelfMention(status);
-    fixQuote(status);
-    fixTranslation(status);
-    fixSensitivity(status);
-    normalizeEvent(status);
-    normalizeReactions(status);
-    fixContent(status);
-    normalizeFilterResults(status);
-    normalizeDislikes(status);
-    normalizeTombstone(status);
-    parseAccount(status);
-    parseAccounts(status);
-    parseGroup(status);
-  }),
-);
+type Status = ReturnType<typeof normalizeStatus>;
 
 export {
   type StatusApprovalStatus,
   type StatusVisibility,
-  type EventJoinMode,
-  type EventJoinState,
-  EventRecord,
-  StatusRecord,
   normalizeStatus,
+  type Status,
 };

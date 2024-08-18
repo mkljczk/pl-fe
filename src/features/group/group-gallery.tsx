@@ -10,7 +10,8 @@ import { useAppDispatch } from 'soapbox/hooks';
 
 import MediaItem from '../account-gallery/components/media-item';
 
-import type { Attachment, Status } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/normalizers';
+import type { AccountGalleryAttachment } from 'soapbox/selectors';
 
 interface IGroupGallery {
   params: { groupId: string };
@@ -31,19 +32,19 @@ const GroupGallery: React.FC<IGroupGallery> = (props) => {
     hasNextPage,
   } = useGroupMedia(groupId);
 
-  const attachments = statuses.reduce<Attachment[]>((result, status) => {
-    result.push(...status.media_attachments.map((a) => a.set('status', status)));
+  const attachments = statuses.reduce<AccountGalleryAttachment[]>((result, status) => {
+    result.push(...status.media_attachments.map((a) => ({ ...a, status: status as any, account: status.account })));
     return result;
   }, []);
 
-  const handleOpenMedia = (attachment: Attachment) => {
+  const handleOpenMedia = (attachment: AccountGalleryAttachment) => {
     if (attachment.type === 'video') {
       dispatch(openModal('VIDEO', { media: attachment, status: attachment.status, account: attachment.account }));
     } else {
       const media = (attachment.status as Status).media_attachments;
       const index = media.findIndex((x) => x.id === attachment.id);
 
-      dispatch(openModal('MEDIA', { media, index, status: attachment.status }));
+      dispatch(openModal('MEDIA', { media, index, statusId: attachment.status.id }));
     }
   };
 

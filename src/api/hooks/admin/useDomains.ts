@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { useApi } from 'soapbox/hooks';
+import { useClient } from 'soapbox/hooks';
 import { queryClient } from 'soapbox/queries/client';
 import { domainSchema, type Domain } from 'soapbox/schemas';
 
@@ -15,10 +15,10 @@ interface UpdateDomainParams {
 }
 
 const useDomains = () => {
-  const api = useApi();
+  const client = useClient();
 
   const getDomains = async () => {
-    const { json: data } = await api<Domain[]>('/api/v1/pleroma/admin/domains');
+    const { json: data } = await client.request<Domain[]>('/api/v1/pleroma/admin/domains');
 
     const normalizedData = data.map((domain) => domainSchema.parse(domain));
     return normalizedData;
@@ -34,9 +34,8 @@ const useDomains = () => {
     mutate: createDomain,
     isPending: isCreating,
   } = useMutation({
-    mutationFn: (params: CreateDomainParams) => api('/api/v1/pleroma/admin/domains', {
-      method: 'POST',
-      body: JSON.stringify(params),
+    mutationFn: (params: CreateDomainParams) => client.request('/api/v1/pleroma/admin/domains', {
+      method: 'POST', body: params,
     }),
     retry: false,
     onSuccess: ({ data }) =>
@@ -49,9 +48,8 @@ const useDomains = () => {
     mutate: updateDomain,
     isPending: isUpdating,
   } = useMutation({
-    mutationFn: ({ id, ...params }: UpdateDomainParams) => api(`/api/v1/pleroma/admin/domains/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(params),
+    mutationFn: ({ id, ...params }: UpdateDomainParams) => client.request(`/api/v1/pleroma/admin/domains/${id}`, {
+      method: 'PATCH', body: params,
     }),
     retry: false,
     onSuccess: ({ json: data }) =>
@@ -64,7 +62,7 @@ const useDomains = () => {
     mutate: deleteDomain,
     isPending: isDeleting,
   } = useMutation({
-    mutationFn: (id: string) => api(`/api/v1/pleroma/admin/domains/${id}`, { method: 'DELETE' }),
+    mutationFn: (id: string) => client.request(`/api/v1/pleroma/admin/domains/${id}`, { method: 'DELETE' }),
     retry: false,
     onSuccess: (_, id) =>
       queryClient.setQueryData(['admin', 'domains'], (prevResult: ReadonlyArray<Domain>) =>

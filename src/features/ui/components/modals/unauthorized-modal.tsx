@@ -8,6 +8,8 @@ import { useAppSelector, useAppDispatch, useFeatures, useInstance, useRegistrati
 import { selectAccount } from 'soapbox/selectors';
 import toast from 'soapbox/toast';
 
+import type { ModalType } from '../modal-root';
+
 const messages = defineMessages({
   accountPlaceholder: { id: 'remote_interaction.account_placeholder', defaultMessage: 'Enter your username@domain you want to act from' },
   userNotFoundError: { id: 'remote_interaction.user_not_found_error', defaultMessage: 'Couldn\'t find given user' },
@@ -17,7 +19,7 @@ interface IUnauthorizedModal {
   /** Unauthorized action type. */
   action: 'FOLLOW' | 'REPLY' | 'REBLOG' | 'FAVOURITE' | 'DISLIKE' | 'POLL_VOTE' | 'JOIN';
   /** Close event handler. */
-  onClose: (modalType: string) => void;
+  onClose: (modalType: ModalType) => void;
   /** ActivityPub ID of the account OR status being acted upon. */
   ap_id?: string;
   /** Account ID of the account being acted upon. */

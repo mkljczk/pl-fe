@@ -14,7 +14,8 @@ import toast from 'soapbox/toast';
 import ReportStatus from './report-status';
 
 import type { List as ImmutableList } from 'immutable';
-import type { Account, AdminReport, Status } from 'soapbox/types/entities';
+import type { Account, Status } from 'soapbox/normalizers';
+import type { AdminReport } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   reportClosed: { id: 'admin.reports.report_closed_message', defaultMessage: 'Report on @{name} was closed' },

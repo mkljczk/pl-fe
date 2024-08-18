@@ -1,19 +1,16 @@
 import { Map as ImmutableMap } from 'immutable';
+import { Location } from 'pl-api';
 import { AnyAction } from 'redux';
 
 import { LOCATION_SEARCH_SUCCESS } from 'soapbox/actions/events';
-import { normalizeLocation } from 'soapbox/normalizers/location';
 
-import type { APIEntity } from 'soapbox/types/entities';
-
-type LocationRecord = ReturnType<typeof normalizeLocation>;
-type State = ImmutableMap<any, LocationRecord>;
+type State = ImmutableMap<any, Location>;
 
 const initialState: State = ImmutableMap();
 
-const normalizeLocations = (state: State, locations: APIEntity[]) =>
+const normalizeLocations = (state: State, locations: Array<Location>) =>
   locations.reduce(
-    (state: State, location: APIEntity) => state.set(location.origin_id, normalizeLocation(location)),
+    (state: State, location: Location) => state.set(location.origin_id, location),
     state,
   );
 

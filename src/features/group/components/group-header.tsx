@@ -1,4 +1,4 @@
-import { List as ImmutableList } from 'immutable';
+import { mediaAttachmentSchema } from 'pl-api';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -7,7 +7,6 @@ import GroupAvatar from 'soapbox/components/groups/group-avatar';
 import StillImage from 'soapbox/components/still-image';
 import { HStack, Icon, Stack, Text } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
-import { normalizeAttachment } from 'soapbox/normalizers';
 import { isDefaultHeader } from 'soapbox/utils/accounts';
 
 import GroupActionButton from './group-action-button';
@@ -16,7 +15,7 @@ import GroupOptionsButton from './group-options-button';
 import GroupPrivacy from './group-privacy';
 import GroupRelationship from './group-relationship';
 
-import type { Group } from 'soapbox/types/entities';
+import type { Group } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   header: { id: 'group.header.alt', defaultMessage: 'Group header' },
@@ -53,11 +52,12 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
   }
 
   const onAvatarClick = () => {
-    const avatar = normalizeAttachment({
+    const avatar = mediaAttachmentSchema.parse({
+      id: '',
       type: 'image',
       url: group.avatar,
     });
-    dispatch(openModal('MEDIA', { media: ImmutableList.of(avatar), index: 0 }));
+    dispatch(openModal('MEDIA', { media: [avatar], index: 0 }));
   };
 
   const handleAvatarClick: React.MouseEventHandler = (e) => {
@@ -68,11 +68,12 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
   };
 
   const onHeaderClick = () => {
-    const header = normalizeAttachment({
+    const header = mediaAttachmentSchema.parse({
+      id: '',
       type: 'image',
       url: group.header,
     });
-    dispatch(openModal('MEDIA', { media: ImmutableList.of(header), index: 0 }));
+    dispatch(openModal('MEDIA', { media: [header], index: 0 }));
   };
 
   const handleHeaderClick: React.MouseEventHandler = (e) => {
@@ -89,7 +90,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
       header = (
         <StillImage
           src={group.header}
-          alt={intl.formatMessage(messages.header)}
+          alt={group.header_description || intl.formatMessage(messages.header)}
           className='relative h-32 w-full bg-gray-200 object-center black:rounded-t-none md:rounded-t-xl lg:h-52 dark:bg-gray-900/50'
           onError={() => setIsHeaderMissing(true)}
         />

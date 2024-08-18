@@ -5,10 +5,8 @@ import {
   ALIASES_SUGGESTIONS_CLEAR,
   ALIASES_SUGGESTIONS_CHANGE,
   ALIASES_FETCH_SUCCESS,
+  AliasesAction,
 } from '../actions/aliases';
-
-import type { AnyAction } from 'redux';
-import type { APIEntity } from 'soapbox/types/entities';
 
 const ReducerRecord = ImmutableRecord({
   aliases: ImmutableRecord({
@@ -22,7 +20,7 @@ const ReducerRecord = ImmutableRecord({
   })(),
 });
 
-const aliasesReducer = (state = ReducerRecord(), action: AnyAction) => {
+const aliasesReducer = (state = ReducerRecord(), action: AliasesAction) => {
   switch (action.type) {
     case ALIASES_FETCH_SUCCESS:
       return state
@@ -33,7 +31,7 @@ const aliasesReducer = (state = ReducerRecord(), action: AnyAction) => {
         .setIn(['suggestions', 'loaded'], false);
     case ALIASES_SUGGESTIONS_READY:
       return state
-        .setIn(['suggestions', 'items'], ImmutableList(action.accounts.map((item: APIEntity) => item.id)))
+        .setIn(['suggestions', 'items'], ImmutableList(action.accounts.map((item) => item.id)))
         .setIn(['suggestions', 'loaded'], true);
     case ALIASES_SUGGESTIONS_CLEAR:
       return state.update('suggestions', suggestions => suggestions.withMutations(map => {

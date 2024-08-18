@@ -1,4 +1,5 @@
 import { List as ImmutableList, Record as ImmutableRecord } from 'immutable';
+import pick from 'lodash/pick';
 
 import {
   CONVERSATIONS_MOUNT,
@@ -11,38 +12,31 @@ import {
 } from '../actions/conversations';
 import { compareDate } from '../utils/comparators';
 
+import type { Conversation, PaginatedResponse } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { APIEntity } from 'soapbox/types/entities';
-
-const ConversationRecord = ImmutableRecord({
-  id: '',
-  unread: false,
-  accounts: ImmutableList<string>(),
-  last_status: null as string | null,
-  last_status_created_at: null as string | null,
-});
 
 const ReducerRecord = ImmutableRecord({
-  items: ImmutableList<Conversation>(),
+  items: ImmutableList<MinifiedConversation>(),
   isLoading: false,
   hasMore: true,
+  next: null as (() => Promise<PaginatedResponse<Conversation>>) | null,
   mounted: 0,
 });
 
 type State = ReturnType<typeof ReducerRecord>;
-type Conversation = ReturnType<typeof ConversationRecord>;
 
-const conversationToMap = (item: APIEntity) => ConversationRecord({
-  id: item.id,
-  unread: item.unread,
-  accounts: ImmutableList(item.accounts.map((a: APIEntity) => a.id)),
-  last_status: item.last_status ? item.last_status.id : null,
-  last_status_created_at: item.last_status ? item.last_status.created_at : null,
+const minifyConversation = (conversation: Conversation) => ({
+  ...(pick(conversation, ['id', 'unread'])),
+  accounts: conversation.accounts.map(a => a.id),
+  last_status: conversation.last_status?.id || null,
+  last_status_created_at: conversation.last_status?.created_at || null,
 });
 
-const updateConversation = (state: State, item: APIEntity) => state.update('items', list => {
-  const index   = list.findIndex(x => x.get('id') === item.id);
-  const newItem = conversationToMap(item);
+type MinifiedConversation = ReturnType<typeof minifyConversation>;
+
+const updateConversation = (state: State, item: Conversation) => state.update('items', list => {
+  const index = list.findIndex(x => x.id === item.id);
+  const newItem = minifyConversation(item);
 
   if (index === -1) {
     return list.unshift(newItem);
@@ -51,14 +45,14 @@ const updateConversation = (state: State, item: APIEntity) => state.update('item
   }
 });
 
-const expandNormalizedConversations = (state: State, conversations: APIEntity[], next: string | null, isLoadingRecent?: boolean) => {
-  let items = ImmutableList(conversations.map(conversationToMap));
+const expandNormalizedConversations = (state: State, conversations: Conversation[], next: (() => Promise<PaginatedResponse<Conversation>>) | null, isLoadingRecent?: boolean) => {
+  let items = ImmutableList(conversations.map(minifyConversation));
 
   return state.withMutations(mutable => {
     if (!items.isEmpty()) {
       mutable.update('items', list => {
         list = list.map(oldItem => {
-          const newItemIndex = items.findIndex(x => x.get('id') === oldItem.get('id'));
+          const newItemIndex = items.findIndex(x => x.id === oldItem.id);
 
           if (newItemIndex === -1) {
             return oldItem;
@@ -72,7 +66,7 @@ const expandNormalizedConversations = (state: State, conversations: APIEntity[],
 
         list = list.concat(items);
 
-        return list.sortBy(x => x.get('last_status_created_at'), (a, b) => {
+        return list.sortBy(x => x.last_status_created_at, (a, b) => {
           if (a === null || b === null) {
             return -1;
           }
@@ -86,6 +80,7 @@ const expandNormalizedConversations = (state: State, conversations: APIEntity[],
       mutable.set('hasMore', false);
     }
 
+    mutable.set('next', next);
     mutable.set('isLoading', false);
   });
 };
@@ -106,8 +101,8 @@ const conversations = (state = ReducerRecord(), action: AnyAction) => {
       return state.update('mounted', count => count - 1);
     case CONVERSATIONS_READ:
       return state.update('items', list => list.map(item => {
-        if (item.get('id') === action.id) {
-          return item.set('unread', false);
+        if (item.id === action.conversationId) {
+          return { ...item, unread: false };
         }
 
         return item;

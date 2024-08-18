@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -12,11 +13,10 @@ import { deleteEntities } from 'soapbox/entity-store/actions';
 import { Entities } from 'soapbox/entity-store/entities';
 import PlaceholderAccount from 'soapbox/features/placeholder/components/placeholder-account';
 import { useAppDispatch } from 'soapbox/hooks';
-import { GroupRoles } from 'soapbox/schemas/group-member';
 import toast from 'soapbox/toast';
 
 import type { Menu as IMenu } from 'soapbox/components/dropdown-menu';
-import type { Group, GroupMember } from 'soapbox/types/entities';
+import type { Group, GroupMember } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   adminLimitTitle: { id: 'group.member.admin.limit.title', defaultMessage: 'Admin limit reached' },
@@ -40,7 +40,7 @@ const messages = defineMessages({
 
 interface IGroupMemberListItem {
   member: GroupMember;
-  group: Group;
+  group: Pick<Group, 'id' | 'relationship'>;
 }
 
 const GroupMemberListItem = (props: IGroupMemberListItem) => {
@@ -80,7 +80,7 @@ const GroupMemberListItem = (props: IGroupMemberListItem) => {
       message: intl.formatMessage(messages.blockFromGroupMessage, { name: account?.username }),
       confirm: intl.formatMessage(messages.blockConfirm),
       onConfirm: () => {
-        blockGroupMember({ account_ids: [member.account.id] }, {
+        blockGroupMember([member.account.id], {
           onSuccess() {
             dispatch(deleteEntities([member.id], Entities.GROUP_MEMBERSHIPS));
             toast.success(intl.formatMessage(messages.blocked, { name: account?.acct }));
@@ -97,7 +97,7 @@ const GroupMemberListItem = (props: IGroupMemberListItem) => {
       confirm: intl.formatMessage(messages.promoteConfirm),
       confirmationTheme: 'primary',
       onConfirm: () => {
-        promoteGroupMember({ role: GroupRoles.ADMIN, account_ids: [account?.id] }, {
+        promoteGroupMember({ role: GroupRoles.ADMIN, account_ids: [member.account.id] }, {
           onSuccess() {
             toast.success(
               intl.formatMessage(messages.promotedToAdmin, { name: account?.acct }),
@@ -109,7 +109,7 @@ const GroupMemberListItem = (props: IGroupMemberListItem) => {
   };
 
   const handleUserAssignment = () => {
-    demoteGroupMember({ role: GroupRoles.USER, account_ids: [account?.id] }, {
+    demoteGroupMember({ role: GroupRoles.USER, account_ids: [member.account.id] }, {
       onSuccess() {
         toast.success(intl.formatMessage(messages.demotedToUser, { name: account?.acct }));
       },

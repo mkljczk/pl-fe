@@ -3,10 +3,11 @@ import React from 'react';
 
 import PollOption from 'soapbox/components/polls/poll-option';
 import { Stack } from 'soapbox/components/ui';
-import { Poll as PollEntity } from 'soapbox/types/entities';
+
+import type { Poll } from 'soapbox/normalizers/poll';
 
 interface IPollPreview {
-  poll: PollEntity;
+  poll: Poll;
 }
 
 const PollPreview: React.FC<IPollPreview> = ({ poll }) => {

@@ -82,8 +82,8 @@ const WrappedRoute: React.FC<IWrappedRoute> = ({
   const authorized = [
     account || publicRoute,
     developerOnly ? isDeveloper : true,
-    staffOnly ? account && account.staff : true,
-    adminOnly ? account && account.admin : true,
+    staffOnly ? account && (account.is_admin || account.is_moderator) : true,
+    adminOnly ? account && account.is_admin : true,
   ].every(c => c);
 
   if (!authorized) {

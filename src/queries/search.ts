@@ -1,51 +1,37 @@
 import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 
-import { getNextLink } from 'soapbox/api';
-import { useApi } from 'soapbox/hooks';
-import { Account } from 'soapbox/types/entities';
-import { flattenPages, PaginatedResult } from 'soapbox/utils/queries';
+import { useClient } from 'soapbox/hooks';
+
+import type { Account } from 'pl-api';
 
 const useAccountSearch = (q: string) => {
-  const api = useApi();
+  const client = useClient();
 
-  const getAccountSearch = async(q: string, pageParam: { link?: string }): Promise<PaginatedResult<Account>> => {
-    const nextPageLink = pageParam?.link;
-    const uri = nextPageLink || '/api/v1/accounts/search';
-
-    const response = await api(uri, {
-      params: {
-        q,
-        limit: 10,
-        followers: true,
-      },
+  const getAccountSearch = async(q: string): Promise<Account[]> => {
+    const response = await client.accounts.searchAccounts(q, {
+      limit: 10,
+      following: true,
+      offset: data?.length,
     });
-    const { json: data } = response;
 
-    const link = getNextLink(response);
-    const hasMore = !!link;
-
-    return {
-      result: data,
-      link,
-      hasMore,
-    };
+    return response;
   };
 
   const queryInfo = useInfiniteQuery({
     queryKey: ['search', 'accounts', q],
-    queryFn: ({ pageParam }) => getAccountSearch(q, pageParam),
+    queryFn: () => getAccountSearch(q),
     placeholderData: keepPreviousData,
-    initialPageParam: { link: undefined as string | undefined },
-    getNextPageParam: (config) => {
-      if (config.hasMore) {
-        return { link: config.link };
+    initialPageParam: {},
+    getNextPageParam: () => {
+      if (queryInfo.data?.pages[queryInfo.data.pages.length - 1].length !== 10) {
+        return {};
       }
 
       return undefined;
     },
   });
 
-  const data = flattenPages(queryInfo.data);
+  const data = queryInfo.data?.pages.flat();
 
   return {
     ...queryInfo,

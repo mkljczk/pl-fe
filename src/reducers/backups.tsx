@@ -1,30 +1,20 @@
-import { Map as ImmutableMap, Record as ImmutableRecord } from 'immutable';
+import { Map as ImmutableMap } from 'immutable';
 
 import {
   BACKUPS_FETCH_SUCCESS,
   BACKUPS_CREATE_SUCCESS,
 } from '../actions/backups';
 
+import type { Backup } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const BackupRecord = ImmutableRecord({
-  id: null as number | null,
-  content_type: '',
-  url: '',
-  file_size: null as number | null,
-  processed: false,
-  inserted_at: '',
-});
-
-type Backup = ReturnType<typeof BackupRecord>;
 type State = ImmutableMap<string, Backup>;
 
 const initialState: State = ImmutableMap();
 
-const importBackup = (state: State, backup: APIEntity) => state.set(backup.inserted_at, BackupRecord(backup));
+const importBackup = (state: State, backup: Backup) => state.set(backup.inserted_at, backup);
 
-const importBackups = (state: State, backups: APIEntity[]) => state.withMutations(mutable => {
+const importBackups = (state: State, backups: Array<Backup>) => state.withMutations(mutable => {
   backups.forEach(backup => importBackup(mutable, backup));
 });
 
@@ -39,7 +29,5 @@ const backups = (state = initialState, action: AnyAction) => {
 };
 
 export {
-  BackupRecord,
-  type Backup,
   backups as default,
 };

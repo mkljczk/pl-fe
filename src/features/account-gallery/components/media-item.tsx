@@ -7,11 +7,11 @@ import StillImage from 'soapbox/components/still-image';
 import { useSettings } from 'soapbox/hooks';
 import { isIOS } from 'soapbox/is-mobile';
 
-import type { Attachment } from 'soapbox/types/entities';
+import type { AccountGalleryAttachment } from 'soapbox/selectors';
 
 interface IMediaItem {
-  attachment: Attachment;
-  onOpenMedia: (attachment: Attachment) => void;
+  attachment: AccountGalleryAttachment;
+  onOpenMedia: (attachment: AccountGalleryAttachment) => void;
 }
 
 const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia }) => {
@@ -48,7 +48,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia }) => {
   };
 
   const status = attachment.status;
-  const title  = status.spoiler_text || attachment.description;
+  const title = status.spoiler_text || attachment.description;
 
   let thumbnail: React.ReactNode = '';
   let icon;
@@ -56,8 +56,8 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia }) => {
   if (attachment.type === 'unknown') {
     // Skip
   } else if (attachment.type === 'image') {
-    const focusX = Number(attachment.meta.getIn(['focus', 'x'])) || 0;
-    const focusY = Number(attachment.meta.getIn(['focus', 'y'])) || 0;
+    const focusX = Number(attachment.meta?.focus?.x) || 0;
+    const focusY = Number(attachment.meta?.focus?.y) || 0;
     const x = ((focusX /  2) + .5) * 100;
     const y = ((focusY / -2) + .5) * 100;
 

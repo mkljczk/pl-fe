@@ -6,8 +6,7 @@ import { changeComposeFederated, changeComposeVisibility } from 'soapbox/actions
 import DropdownMenu from 'soapbox/components/dropdown-menu';
 import Icon from 'soapbox/components/icon';
 import { Button, Toggle } from 'soapbox/components/ui';
-import { useAppDispatch, useCompose, useFeatures, useInstance } from 'soapbox/hooks';
-import { GOTOSOCIAL, parseVersion, PLEROMA } from 'soapbox/utils/features';
+import { useAppDispatch, useCompose, useFeatures } from 'soapbox/hooks';
 
 const messages = defineMessages({
   public_short: { id: 'privacy.public.short', defaultMessage: 'Public' },
@@ -177,10 +176,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
 }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
-  const instance = useInstance();
   const features = useFeatures();
-
-  const v = parseVersion(instance.version);
 
   const compose = useCompose(composeId);
 
@@ -191,9 +187,9 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
     { icon: require('@tabler/icons/outline/world.svg'), value: 'public', text: intl.formatMessage(messages.public_short), meta: intl.formatMessage(messages.public_long) },
     { icon: require('@tabler/icons/outline/lock-open.svg'), value: 'unlisted', text: intl.formatMessage(messages.unlisted_short), meta: intl.formatMessage(messages.unlisted_long) },
     { icon: require('@tabler/icons/outline/lock.svg'), value: 'private', text: intl.formatMessage(messages.private_short), meta: intl.formatMessage(messages.private_long) },
-    features.mutualsOnlyStatuses ? { icon: require('@tabler/icons/outline/users-group.svg'), value: 'mutuals_only', text: intl.formatMessage(messages.mutuals_only_short), meta: intl.formatMessage(messages.mutuals_only_long) } : undefined,
+    features.visibilityMutualsOnly ? { icon: require('@tabler/icons/outline/users-group.svg'), value: 'mutuals_only', text: intl.formatMessage(messages.mutuals_only_short), meta: intl.formatMessage(messages.mutuals_only_long) } : undefined,
     { icon: require('@tabler/icons/outline/mail.svg'), value: 'direct', text: intl.formatMessage(messages.direct_short), meta: intl.formatMessage(messages.direct_long) },
-    features.localOnlyStatuses && v.software === PLEROMA ? { icon: require('@tabler/icons/outline/affiliate.svg'), value: 'local', text: intl.formatMessage(messages.local_short), meta: intl.formatMessage(messages.local_long) } : undefined,
+    features.visibilityLocalOnly ? { icon: require('@tabler/icons/outline/affiliate.svg'), value: 'local', text: intl.formatMessage(messages.local_short), meta: intl.formatMessage(messages.local_long) } : undefined,
   ].filter((option): option is Option => !!option);
 
   const onChange = (value: string | null) => value && dispatch(changeComposeVisibility(composeId, value));
@@ -214,7 +210,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
           value={value}
           onClose={handleClose}
           onChange={onChange}
-          showFederated={features.localOnlyStatuses && v.software === GOTOSOCIAL}
+          showFederated={features.localOnlyStatuses}
           federated={compose.federated}
           onChangeFederated={onChangeFederated}
         />

@@ -6,6 +6,8 @@ import SiteLogo from 'soapbox/components/site-logo';
 import { Text, Button, Icon, Modal } from 'soapbox/components/ui';
 import { useRegistrationStatus, useSoapboxConfig } from 'soapbox/hooks';
 
+import type { ModalType } from '../modal-root';
+
 const messages = defineMessages({
   helpCenter: { id: 'landing_page_modal.help_center', defaultMessage: 'Help Center' },
   login: { id: 'header.login.label', defaultMessage: 'Log in' },
@@ -13,7 +15,7 @@ const messages = defineMessages({
 });
 
 interface ILandingPageModal {
-  onClose: (type: string) => void;
+  onClose: (type: ModalType) => void;
 }
 
 /** Login and links to display from the hamburger menu of the homepage. */

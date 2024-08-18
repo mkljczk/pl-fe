@@ -1,6 +1,5 @@
 import clsx from 'clsx';
-import { List as ImmutableList } from 'immutable';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -12,8 +11,9 @@ import TranslateButton from 'soapbox/components/translate-button';
 import AccountContainer from 'soapbox/containers/account-container';
 import QuotedStatus from 'soapbox/features/status/containers/quoted-status-container';
 import { HotKeys } from 'soapbox/features/ui/components/hotkeys';
-import { useAppDispatch, useSettings } from 'soapbox/hooks';
-import { textForScreenReader, getActualStatus } from 'soapbox/utils/status';
+import { useAppDispatch, useAppSelector, useSettings } from 'soapbox/hooks';
+import { makeGetStatus, type SelectedStatus } from 'soapbox/selectors';
+import { textForScreenReader } from 'soapbox/utils/status';
 
 import EventPreview from './event-preview';
 import StatusActionBar from './status-action-bar';
@@ -23,10 +23,7 @@ import StatusMedia from './status-media';
 import StatusReplyMentions from './status-reply-mentions';
 import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 import StatusInfo from './statuses/status-info';
-import Tombstone from './tombstone';
 import { Card, Icon, Stack, Text } from './ui';
-
-import type { Status as StatusEntity } from 'soapbox/types/entities';
 
 // Defined in components/scrollable-list
 type ScrollPosition = { height: number; top: number };
@@ -38,7 +35,7 @@ const messages = defineMessages({
 interface IStatus {
   id?: string;
   avatarSize?: number;
-  status: StatusEntity;
+  status: SelectedStatus;
   onClick?: () => void;
   muted?: boolean;
   hidden?: boolean;
@@ -86,12 +83,14 @@ const Status: React.FC<IStatus> = (props) => {
 
   const [minHeight, setMinHeight] = useState(208);
 
-  const actualStatus = getActualStatus(status);
-  const isReblog = status.reblog && typeof status.reblog === 'object';
+  const getStatus = useCallback(makeGetStatus(), []);
+  const actualStatus = useAppSelector(state => status.reblog_id && getStatus(state, { id: status.reblog_id }) || status)!;
+
+  const isReblog = status.reblog_id;
   const statusUrl = `/@${actualStatus.account.acct}/posts/${actualStatus.id}`;
   const group = actualStatus.group;
 
-  const filtered = (status.filtered.size || actualStatus.filtered.size) > 0;
+  const filtered = (status.filtered?.length || actualStatus.filtered?.length) > 0;
 
   // Track height changes we know about to compensate scrolling.
   useEffect(() => {
@@ -125,7 +124,7 @@ const Status: React.FC<IStatus> = (props) => {
 
   const handleHotkeyOpenMedia = (e?: KeyboardEvent): void => {
     const status = actualStatus;
-    const firstAttachment = status.media_attachments.first();
+    const firstAttachment = status.media_attachments[0];
 
     e?.preventDefault();
 
@@ -133,14 +132,14 @@ const Status: React.FC<IStatus> = (props) => {
       if (firstAttachment.type === 'video') {
         dispatch(openModal('VIDEO', { status, media: firstAttachment, time: 0 }));
       } else {
-        dispatch(openModal('MEDIA', { status, media: status.media_attachments, index: 0 }));
+        dispatch(openModal('MEDIA', { statusId: status.id, media: status.media_attachments, index: 0 }));
       }
     }
   };
 
   const handleHotkeyReply = (e?: KeyboardEvent): void => {
     e?.preventDefault();
-    dispatch(replyCompose(actualStatus, status.reblog && typeof status.reblog === 'object' ? status.account : undefined));
+    dispatch(replyCompose(actualStatus, status.reblog_id ? status.account : undefined));
   };
 
   const handleHotkeyFavourite = (): void => {
@@ -189,7 +188,7 @@ const Status: React.FC<IStatus> = (props) => {
     _expandEmojiSelector();
   };
 
-  const handleUnfilter = () => dispatch(unfilterStatus(status.filtered.size ? status.id : actualStatus.id));
+  const handleUnfilter = () => dispatch(unfilterStatus(status.filtered.length ? status.id : actualStatus.id));
 
   const _expandEmojiSelector = (): void => {
     const firstEmoji: HTMLDivElement | null | undefined = node.current?.querySelector('.emoji-react-selector .emoji-react-selector__emoji');
@@ -238,7 +237,7 @@ const Status: React.FC<IStatus> = (props) => {
         />
       );
     } else if (isReblog) {
-      const accounts = status.accounts || ImmutableList([status.account]);
+      const accounts = status.accounts || [status.account];
 
       const renderedAccounts = accounts.slice(0, 2).map(account => !!account && (
         <Link key={account.acct} to={`/@${account.acct}`} className='hover:underline'>
@@ -251,14 +250,14 @@ const Status: React.FC<IStatus> = (props) => {
             />
           </bdi>
         </Link>
-      )).toArray().filter(Boolean);
+      ));
 
-      if (accounts.size > 2) {
+      if (accounts.length > 2) {
         renderedAccounts.push(
           <FormattedMessage
             id='notification.more'
             defaultMessage='{count, plural, one {# other} other {# others}}'
-            values={{ count: accounts.size - renderedAccounts.length }}
+            values={{ count: accounts.length - renderedAccounts.length }}
           />,
         );
       }
@@ -273,7 +272,7 @@ const Status: React.FC<IStatus> = (props) => {
               defaultMessage='{name} reposted'
               values={{
                 name: <FormattedList type='conjunction' value={renderedAccounts} />,
-                count: accounts.size,
+                count: accounts.length,
               }}
             />
           }
@@ -329,7 +328,7 @@ const Status: React.FC<IStatus> = (props) => {
     );
   }
 
-  if (filtered && status.showFiltered) {
+  if (filtered && status.showFiltered !== false) {
     const minHandlers = muted ? undefined : {
       moveUp: handleHotkeyMoveUp,
       moveDown: handleHotkeyMoveDown,
@@ -351,7 +350,7 @@ const Status: React.FC<IStatus> = (props) => {
   }
 
   let rebloggedByText;
-  if (status.reblog && typeof status.reblog === 'object') {
+  if (status.reblog_id === 'object') {
     rebloggedByText = intl.formatMessage(
       messages.reblogged_by,
       { name: status.account.acct },
@@ -360,15 +359,15 @@ const Status: React.FC<IStatus> = (props) => {
 
   let quote;
 
-  if (actualStatus.quote) {
-    if (actualStatus.pleroma.get('quote_visible', true) === false) {
+  if (actualStatus.quote_id) {
+    if ((actualStatus.quote_visible ?? true) === false) {
       quote = (
         <div className='quoted-status-tombstone'>
           <p><FormattedMessage id='statuses.quote_tombstone' defaultMessage='Post is unavailable.' /></p>
         </div>
       );
     } else {
-      quote = <QuotedStatus statusId={actualStatus.quote as string} />;
+      quote = <QuotedStatus statusId={actualStatus.quote_id} />;
     }
   }
 
@@ -385,18 +384,6 @@ const Status: React.FC<IStatus> = (props) => {
     openMedia: handleHotkeyOpenMedia,
     react: handleHotkeyReact,
   };
-
-  const isSoftDeleted = status.tombstone?.reason === 'deleted';
-
-  if (isSoftDeleted) {
-    return (
-      <Tombstone
-        id={status.id}
-        onMoveUp={(id) => onMoveUp ? onMoveUp(id) : null}
-        onMoveDown={(id) => onMoveDown ? onMoveDown(id) : null}
-      />
-    );
-  }
 
   return (
     <HotKeys handlers={handlers} data-testid='status'>
@@ -459,7 +446,7 @@ const Status: React.FC<IStatus> = (props) => {
 
                   <TranslateButton status={actualStatus} />
 
-                  {(quote || actualStatus.card || actualStatus.media_attachments.size > 0) && (
+                  {(quote || actualStatus.card || actualStatus.media_attachments.length > 0) && (
                     <Stack space={4}>
                       <StatusMedia
                         status={actualStatus}

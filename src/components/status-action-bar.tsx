@@ -1,3 +1,4 @@
+import { GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory, useRouteMatch } from 'react-router-dom';
@@ -22,7 +23,6 @@ import { HStack } from 'soapbox/components/ui';
 import { languages } from 'soapbox/features/preferences';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance, useOwnAccount, useSettings, useSoapboxConfig } from 'soapbox/hooks';
 import { useChats } from 'soapbox/queries/chats';
-import { GroupRoles } from 'soapbox/schemas/group-member';
 import toast from 'soapbox/toast';
 import copy from 'soapbox/utils/copy';
 import { getReactForStatus, reduceEmoji } from 'soapbox/utils/emoji-reacts';
@@ -30,7 +30,8 @@ import { getReactForStatus, reduceEmoji } from 'soapbox/utils/emoji-reacts';
 import GroupPopover from './groups/popover/group-popover';
 
 import type { Menu } from 'soapbox/components/dropdown-menu';
-import type { Account, Group, Status } from 'soapbox/types/entities';
+import type { Account, Group } from 'soapbox/normalizers';
+import type { SelectedStatus } from 'soapbox/selectors';
 
 const messages = defineMessages({
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
@@ -103,7 +104,7 @@ const messages = defineMessages({
 });
 
 interface IStatusActionBar {
-  status: Status;
+  status: SelectedStatus;
   rebloggedBy?: Account;
   withLabels?: boolean;
   expandable?: boolean;
@@ -132,7 +133,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const { getOrCreateChatByAccountId } = useChats();
 
   const me = useAppSelector(state => state.me);
-  const { groupRelationship } = useGroupRelationship(status.group?.id);
+  const { groupRelationship } = useGroupRelationship(status.group_id || undefined);
   const features = useFeatures();
   const instance = useInstance();
   const { autoTranslate, boostModal, deleteModal, knownLanguages } = useSettings();
@@ -155,8 +156,8 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const { allowedEmoji } = soapboxConfig;
 
   const { account } = useOwnAccount();
-  const isStaff = account ? account.staff : false;
-  const isAdmin = account ? account.admin : false;
+  const isStaff = account ? account.is_admin || account.is_moderator : false;
+  const isAdmin = account ? account.is_admin : false;
 
   if (!status) {
     return null;
@@ -278,7 +279,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     const account = status.account;
 
     getOrCreateChatByAccountId(account.id)
-      .then(({ json: chat }) => history.push(`/chats/${chat.id}`))
+      .then((chat) => history.push(`/chats/${chat.id}`))
       .catch(() => {});
   };
 
@@ -360,7 +361,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       message: intl.formatMessage(messages.groupBlockFromGroupMessage, { name: status.account.username }),
       confirm: intl.formatMessage(messages.groupBlockConfirm),
       onConfirm: () => {
-        blockGroupMember({ account_ids: [status.account.id] }, {
+        blockGroupMember([status.account.id], {
           onSuccess() {
             toast.success(intl.formatMessage(messages.blocked, { name: account?.acct }));
           },
@@ -429,7 +430,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
 
     if (features.bookmarkFolders && fromBookmarks) {
       menu.push({
-        text: intl.formatMessage(status.pleroma.get('bookmark_folder') ? messages.bookmarkChangeFolder : messages.bookmarkSetFolder),
+        text: intl.formatMessage(status.bookmark_folder ? messages.bookmarkChangeFolder : messages.bookmarkSetFolder),
         action: handleBookmarkFolderClick,
         icon: require('@tabler/icons/outline/folders.svg'),
       });
@@ -499,7 +500,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
         icon: require('@tabler/icons/outline/at.svg'),
       });
 
-      if (status.account.pleroma?.accepts_chat_messages === true) {
+      if (status.account.accepts_chat_messages === true) {
         menu.push({
           text: intl.formatMessage(messages.chat, { name: username }),
           action: handleChatClick,
@@ -627,8 +628,8 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const reblogCount = status.reblogs_count;
   const favouriteCount = status.favourites_count;
 
-  const emojiReactCount = status.reactions ? reduceEmoji(
-    status.reactions,
+  const emojiReactCount = status.emoji_reactions ? reduceEmoji(
+    status.emoji_reactions,
     favouriteCount,
     status.favourited,
     allowedEmoji,
@@ -758,7 +759,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
         ) : (
           <StatusActionButton
             title={intl.formatMessage(messages.favourite)}
-            icon={features.dislikes ? require('@tabler/icons/outline/thumb-up.svg') : require('@tabler/icons/outline/heart.svg')}
+            icon={features.statusDislikes ? require('@tabler/icons/outline/thumb-up.svg') : require('@tabler/icons/outline/heart.svg')}
             color='accent'
             filled
             onClick={handleFavouriteClick}
@@ -769,7 +770,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
           />
         )}
 
-        {features.dislikes && (
+        {features.statusDislikes && (
           <StatusActionButton
             title={intl.formatMessage(messages.disfavourite)}
             icon={require('@tabler/icons/outline/thumb-down.svg')}
@@ -792,7 +793,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
           />
         )}
 
-        <DropdownMenu items={menu} status={status}>
+        <DropdownMenu items={menu}>
           <StatusActionButton
             title={intl.formatMessage(messages.more)}
             icon={require('@tabler/icons/outline/dots.svg')}

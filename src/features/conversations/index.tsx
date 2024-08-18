@@ -23,7 +23,7 @@ const ConversationsTimeline = () => {
 
   useEffect(() => {
     dispatch(mountConversations());
-    dispatch(expandConversations());
+    dispatch(expandConversations(false));
 
     return () => {
       dispatch(unmountConversations());

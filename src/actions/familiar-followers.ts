@@ -1,37 +1,35 @@
 import { AppDispatch, RootState } from 'soapbox/store';
 
-import api from '../api';
+import { getClient } from '../api';
 
 import { fetchRelationships } from './accounts';
 import { importFetchedAccounts } from './importer';
 
-import type { APIEntity } from 'soapbox/types/entities';
-
-const FAMILIAR_FOLLOWERS_FETCH_REQUEST = 'FAMILIAR_FOLLOWERS_FETCH_REQUEST';
-const FAMILIAR_FOLLOWERS_FETCH_SUCCESS = 'FAMILIAR_FOLLOWERS_FETCH_SUCCESS';
-const FAMILIAR_FOLLOWERS_FETCH_FAIL    = 'FAMILIAR_FOLLOWERS_FETCH_FAIL';
+const FAMILIAR_FOLLOWERS_FETCH_REQUEST = 'FAMILIAR_FOLLOWERS_FETCH_REQUEST' as const;
+const FAMILIAR_FOLLOWERS_FETCH_SUCCESS = 'FAMILIAR_FOLLOWERS_FETCH_SUCCESS' as const;
+const FAMILIAR_FOLLOWERS_FETCH_FAIL = 'FAMILIAR_FOLLOWERS_FETCH_FAIL' as const;
 
 const fetchAccountFamiliarFollowers = (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch({
     type: FAMILIAR_FOLLOWERS_FETCH_REQUEST,
-    id: accountId,
+    accountId,
   });
 
-  api(getState)(`/api/v1/accounts/familiar_followers?id=${accountId}`)
-    .then(({ json: data }) => {
-      const accounts = data.find(({ id }: { id: string }) => id === accountId).accounts;
+  getClient(getState()).accounts.getFamiliarFollowers([accountId])
+    .then((data) => {
+      const accounts = data.find(({ id }: { id: string }) => id === accountId)!.accounts;
 
       dispatch(importFetchedAccounts(accounts));
-      dispatch(fetchRelationships(accounts.map((item: APIEntity) => item.id)));
+      dispatch(fetchRelationships(accounts.map((item) => item.id)));
       dispatch({
         type: FAMILIAR_FOLLOWERS_FETCH_SUCCESS,
-        id: accountId,
+        accountId,
         accounts,
       });
     })
     .catch(error => dispatch({
       type: FAMILIAR_FOLLOWERS_FETCH_FAIL,
-      id: accountId,
+      accountId,
       error,
       skipAlert: true,
     }));

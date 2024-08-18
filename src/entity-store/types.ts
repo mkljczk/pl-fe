@@ -1,3 +1,5 @@
+import type { PaginatedResponse } from 'pl-api';
+
 /** A Mastodon API entity. */
 interface Entity {
   /** Unique ID for the entity (usually the primary key in the database). */
@@ -20,9 +22,9 @@ interface EntityList {
 /** Fetch state for an entity list. */
 interface EntityListState {
   /** Next URL for pagination, if any. */
-  next: string | undefined;
+  next: (() => Promise<PaginatedResponse<any>>) | null;
   /** Previous URL for pagination, if any. */
-  prev: string | undefined;
+  prev: (() => Promise<PaginatedResponse<any>>) | null;
   /** Total number of items according to the API. */
   totalCount: number | undefined;
   /** Error returned from the API, if any. */

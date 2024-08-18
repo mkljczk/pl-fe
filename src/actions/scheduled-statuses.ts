@@ -1,21 +1,19 @@
-import { getFeatures } from 'soapbox/utils/features';
+import { getClient } from '../api';
 
-import api, { getNextLink } from '../api';
-
+import type { PaginatedResponse, ScheduledStatus } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
-import type { APIEntity } from 'soapbox/types/entities';
 
-const SCHEDULED_STATUSES_FETCH_REQUEST = 'SCHEDULED_STATUSES_FETCH_REQUEST';
-const SCHEDULED_STATUSES_FETCH_SUCCESS = 'SCHEDULED_STATUSES_FETCH_SUCCESS';
-const SCHEDULED_STATUSES_FETCH_FAIL    = 'SCHEDULED_STATUSES_FETCH_FAIL';
+const SCHEDULED_STATUSES_FETCH_REQUEST = 'SCHEDULED_STATUSES_FETCH_REQUEST' as const;
+const SCHEDULED_STATUSES_FETCH_SUCCESS = 'SCHEDULED_STATUSES_FETCH_SUCCESS' as const;
+const SCHEDULED_STATUSES_FETCH_FAIL = 'SCHEDULED_STATUSES_FETCH_FAIL' as const;
 
-const SCHEDULED_STATUSES_EXPAND_REQUEST = 'SCHEDULED_STATUSES_EXPAND_REQUEST';
-const SCHEDULED_STATUSES_EXPAND_SUCCESS = 'SCHEDULED_STATUSES_EXPAND_SUCCESS';
-const SCHEDULED_STATUSES_EXPAND_FAIL    = 'SCHEDULED_STATUSES_EXPAND_FAIL';
+const SCHEDULED_STATUSES_EXPAND_REQUEST = 'SCHEDULED_STATUSES_EXPAND_REQUEST' as const;
+const SCHEDULED_STATUSES_EXPAND_SUCCESS = 'SCHEDULED_STATUSES_EXPAND_SUCCESS' as const;
+const SCHEDULED_STATUSES_EXPAND_FAIL = 'SCHEDULED_STATUSES_EXPAND_FAIL' as const;
 
-const SCHEDULED_STATUS_CANCEL_REQUEST = 'SCHEDULED_STATUS_CANCEL_REQUEST';
-const SCHEDULED_STATUS_CANCEL_SUCCESS = 'SCHEDULED_STATUS_CANCEL_SUCCESS';
-const SCHEDULED_STATUS_CANCEL_FAIL    = 'SCHEDULED_STATUS_CANCEL_FAIL';
+const SCHEDULED_STATUS_CANCEL_REQUEST = 'SCHEDULED_STATUS_CANCEL_REQUEST' as const;
+const SCHEDULED_STATUS_CANCEL_SUCCESS = 'SCHEDULED_STATUS_CANCEL_SUCCESS' as const;
+const SCHEDULED_STATUS_CANCEL_FAIL = 'SCHEDULED_STATUS_CANCEL_FAIL' as const;
 
 const fetchScheduledStatuses = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -25,28 +23,26 @@ const fetchScheduledStatuses = () =>
       return;
     }
 
-    const instance = state.instance;
-    const features = getFeatures(instance);
+    const features = state.auth.client.features;
 
     if (!features.scheduledStatuses) return;
 
     dispatch(fetchScheduledStatusesRequest());
 
-    api(getState)('/api/v1/scheduled_statuses').then(response => {
-      const next = getNextLink(response);
-      dispatch(fetchScheduledStatusesSuccess(response.json, next || null));
+    return getClient(getState()).scheduledStatuses.getScheduledStatuses().then(({ next, items }) => {
+      dispatch(fetchScheduledStatusesSuccess(items, next));
     }).catch(error => {
       dispatch(fetchScheduledStatusesFail(error));
     });
   };
 
-const cancelScheduledStatus = (id: string) =>
+const cancelScheduledStatus = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: SCHEDULED_STATUS_CANCEL_REQUEST, id });
-    api(getState)(`/api/v1/scheduled_statuses/${id}`, { method: 'DELETE' }).then(({ json: data }) => {
-      dispatch({ type: SCHEDULED_STATUS_CANCEL_SUCCESS, id, data });
+    dispatch({ type: SCHEDULED_STATUS_CANCEL_REQUEST, statusId });
+    return getClient(getState()).scheduledStatuses.cancelScheduledStatus(statusId).then(() => {
+      dispatch({ type: SCHEDULED_STATUS_CANCEL_SUCCESS, statusId });
     }).catch(error => {
-      dispatch({ type: SCHEDULED_STATUS_CANCEL_FAIL, id, error });
+      dispatch({ type: SCHEDULED_STATUS_CANCEL_FAIL, statusId, error });
     });
   };
 
@@ -54,7 +50,7 @@ const fetchScheduledStatusesRequest = () => ({
   type: SCHEDULED_STATUSES_FETCH_REQUEST,
 });
 
-const fetchScheduledStatusesSuccess = (statuses: APIEntity[], next: string | null) => ({
+const fetchScheduledStatusesSuccess = (statuses: Array<ScheduledStatus>, next: (() => Promise<PaginatedResponse<ScheduledStatus>>) | null) => ({
   type: SCHEDULED_STATUSES_FETCH_SUCCESS,
   statuses,
   next,
@@ -67,17 +63,16 @@ const fetchScheduledStatusesFail = (error: unknown) => ({
 
 const expandScheduledStatuses = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const url = getState().status_lists.get('scheduled_statuses')?.next || null;
+    const next = getState().status_lists.get('scheduled_statuses')?.next as any as () => Promise<PaginatedResponse<ScheduledStatus>> || null;
 
-    if (url === null || getState().status_lists.get('scheduled_statuses')?.isLoading) {
+    if (next === null || getState().status_lists.get('scheduled_statuses')?.isLoading) {
       return;
     }
 
     dispatch(expandScheduledStatusesRequest());
 
-    api(getState)(url).then(response => {
-      const next = getNextLink(response);
-      dispatch(expandScheduledStatusesSuccess(response.json, next || null));
+    next().then(response => {
+      dispatch(expandScheduledStatusesSuccess(response.items, response.next));
     }).catch(error => {
       dispatch(expandScheduledStatusesFail(error));
     });
@@ -87,7 +82,7 @@ const expandScheduledStatusesRequest = () => ({
   type: SCHEDULED_STATUSES_EXPAND_REQUEST,
 });
 
-const expandScheduledStatusesSuccess = (statuses: APIEntity[], next: string | null) => ({
+const expandScheduledStatusesSuccess = (statuses: Array<ScheduledStatus>, next: (() => Promise<PaginatedResponse<ScheduledStatus>>) | null) => ({
   type: SCHEDULED_STATUSES_EXPAND_SUCCESS,
   statuses,
   next,

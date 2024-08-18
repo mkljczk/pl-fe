@@ -1,7 +1,6 @@
 import { Map as ImmutableMap } from 'immutable';
 import get from 'lodash/get';
-
-import { type Relationship, relationshipSchema } from 'soapbox/schemas';
+import { type Relationship, relationshipSchema } from 'pl-api';
 
 import { ACCOUNT_NOTE_SUBMIT_SUCCESS } from '../actions/account-notes';
 import {
@@ -9,8 +8,6 @@ import {
   ACCOUNT_UNBLOCK_SUCCESS,
   ACCOUNT_MUTE_SUCCESS,
   ACCOUNT_UNMUTE_SUCCESS,
-  ACCOUNT_SUBSCRIBE_SUCCESS,
-  ACCOUNT_UNSUBSCRIBE_SUCCESS,
   ACCOUNT_PIN_SUCCESS,
   ACCOUNT_UNPIN_SUCCESS,
   ACCOUNT_REMOVE_FROM_FOLLOWERS_SUCCESS,
@@ -75,8 +72,6 @@ const relationships = (state: State = ImmutableMap<string, Relationship>(), acti
     case ACCOUNT_UNBLOCK_SUCCESS:
     case ACCOUNT_MUTE_SUCCESS:
     case ACCOUNT_UNMUTE_SUCCESS:
-    case ACCOUNT_SUBSCRIBE_SUCCESS:
-    case ACCOUNT_UNSUBSCRIBE_SUCCESS:
     case ACCOUNT_PIN_SUCCESS:
     case ACCOUNT_UNPIN_SUCCESS:
     case ACCOUNT_NOTE_SUBMIT_SUCCESS:

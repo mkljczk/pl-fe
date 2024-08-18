@@ -1,10 +1,13 @@
 import { Entities } from 'soapbox/entity-store/entities';
-import { useEntityActions } from 'soapbox/entity-store/hooks';
+import { useDeleteEntity } from 'soapbox/entity-store/hooks';
+import { useClient } from 'soapbox/hooks';
 
 const useDeleteBookmarkFolder = () => {
-  const { deleteEntity, isSubmitting } = useEntityActions(
-    [Entities.BOOKMARK_FOLDERS],
-    { delete: '/api/v1/pleroma/bookmark_folders/:id' },
+  const client = useClient();
+
+  const { deleteEntity, isSubmitting } = useDeleteEntity(
+    Entities.BOOKMARK_FOLDERS,
+    (folderId: string) => client.myAccount.deleteBookmarkFolder(folderId),
   );
 
   return {
