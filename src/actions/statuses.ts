@@ -105,7 +105,6 @@ const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () =>
     dispatch(openModal('COMPOSE'));
   }).catch(error => {
     dispatch({ type: STATUS_FETCH_SOURCE_FAIL, error });
-
   });
 };
 

@@ -181,7 +181,6 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
           setUsernameUnavailable(false);
         }
       });
-
   }, 1000, { trailing: true }), []);
 
   const onSubmit: React.FormEventHandler = () => {

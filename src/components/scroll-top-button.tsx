@@ -52,7 +52,6 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
 
     setScrolled(scrollTop > threshold);
     setScrolledTop(scrollTop <= autoloadThreshold);
-
   }, 150, { trailing: true }), [threshold, autoloadThreshold]);
 
   /** Scroll to top and trigger `onClick`. */
