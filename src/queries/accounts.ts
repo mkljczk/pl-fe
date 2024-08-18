@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { patchMeSuccess } from 'soapbox/actions/me';
-import { useAppDispatch, useClient, useOwnAccount } from 'soapbox/hooks';
+import { useAppDispatch, useClient } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 
 type IAccount = {
@@ -33,18 +33,19 @@ type UpdateCredentialsData = {
 }
 
 const useUpdateCredentials = () => {
-  const { account } = useOwnAccount();
+  // const { account } = useOwnAccount();
   const client = useClient();
   const dispatch = useAppDispatch();
 
   return useMutation({
     mutationFn: (data: UpdateCredentialsData) => client.settings.updateCredentials(data),
-    onMutate(variables) {
-      const cachedAccount = account;
-      dispatch(patchMeSuccess({ ...account, ...variables }));
+    // TODO: What is it intended to do?
+    // onMutate(variables) {
+    //   const cachedAccount = account;
+    //   dispatch(patchMeSuccess({ ...account, ...variables }));
 
-      return { cachedAccount };
-    },
+    //   return { cachedAccount };
+    // },
     onSuccess(response) {
       dispatch(patchMeSuccess(response));
       toast.success('Chat Settings updated successfully');
