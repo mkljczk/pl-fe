@@ -8,8 +8,6 @@ const isNumber = (value: unknown): value is number => typeof value === 'number' 
 /** The input is a number and is not NaN. */
 const realNumberSchema = z.coerce.number().refine(n => !isNaN(n));
 
-const secondsToDays = (seconds: number) => Math.floor(seconds / (3600 * 24));
-
 const roundDown = (num: number) => {
   if (num >= 100 && num < 1000) {
     num = Math.floor(num);
@@ -58,7 +56,6 @@ const isIntegerId = (id: string): boolean => new RegExp(/^-?[0-9]+$/g).test(id);
 export {
   isNumber,
   realNumberSchema,
-  secondsToDays,
   roundDown,
   shortNumberFormat,
   isIntegerId,

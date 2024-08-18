@@ -56,15 +56,6 @@ const textForScreenReader = (
   return values.join(', ');
 };
 
-/** Get reblogged status if any, otherwise return the original status. */
-const getActualStatus = <T extends { reblog: T | null }>(status: T): Omit<T, 'reblog'> => {
-  if (status?.reblog && typeof status?.reblog === 'object') {
-    return status.reblog;
-  } else {
-    return status;
-  }
-};
-
 const getStatusIdsFromLinksInContent = (content: string): string[] => {
   const urls = content.match(RegExp(`${window.location.origin}/@([a-z\\d_-]+(?:@[^@\\s]+)?)/posts/[a-z0-9]+(?!\\S)`, 'gi'));
 
@@ -81,6 +72,5 @@ export {
   shouldHaveCard,
   hasIntegerMediaIds,
   textForScreenReader,
-  getActualStatus,
   getStatusIdsFromLinksInContent,
 };

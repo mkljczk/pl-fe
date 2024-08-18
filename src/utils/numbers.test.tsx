@@ -2,7 +2,7 @@ import React from 'react';
 
 import { render, screen } from 'soapbox/jest/test-helpers';
 
-import { isIntegerId, secondsToDays, shortNumberFormat } from './numbers';
+import { isIntegerId, shortNumberFormat } from './numbers';
 
 test('isIntegerId()', () => {
   expect(isIntegerId('0')).toBe(true);
@@ -14,14 +14,6 @@ test('isIntegerId()', () => {
   expect(isIntegerId(null as any)).toBe(false);
   expect(isIntegerId(undefined as any)).toBe(false);
 });
-
-test('secondsToDays', () => {
-  expect(secondsToDays(604800)).toEqual(7);
-  expect(secondsToDays(1209600)).toEqual(14);
-  expect(secondsToDays(2592000)).toEqual(30);
-  expect(secondsToDays(7776000)).toEqual(90);
-});
-
 describe('shortNumberFormat', () => {
   test('handles non-numbers', () => {
     render(<div data-testid='num'>{shortNumberFormat('not-number')}</div>, undefined, null);

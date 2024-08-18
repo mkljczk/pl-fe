@@ -4,6 +4,7 @@ import {
   groupRelationshipSchema,
   groupSchema,
   instanceSchema,
+  previewCardSchema,
   relationshipSchema,
   statusSchema,
   GroupRoles,
@@ -12,15 +13,11 @@ import {
   type GroupMember,
   type GroupRelationship,
   type Instance,
+  type PreviewCard,
   type Relationship,
   type Status,
 } from 'pl-api';
 import { v4 as uuidv4 } from 'uuid';
-
-import {
-  cardSchema,
-  type Card,
-} from 'soapbox/schemas';
 
 import type { PartialDeep } from 'type-fest';
 
@@ -33,8 +30,8 @@ const buildAccount = (props: PartialDeep<Account> = {}): Account =>
     url: `https://soapbox.test/users/${uuidv4()}`,
   }, props));
 
-const buildCard = (props: PartialDeep<Card> = {}): Card =>
-  cardSchema.parse(Object.assign({
+const buildCard = (props: PartialDeep<PreviewCard> = {}): PreviewCard =>
+  previewCardSchema.parse(Object.assign({
     url: 'https://soapbox.test',
   }, props));
 

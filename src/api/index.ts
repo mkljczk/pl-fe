@@ -21,9 +21,6 @@ const getLinks = (response: Pick<Response, 'headers'>): LinkHeader =>
 const getNextLink = (response: Pick<Response, 'headers'>): string | undefined =>
   getLinks(response).refs.find(link => link.rel === 'next')?.uri;
 
-const getPrevLink = (response: Pick<Response, 'headers'>): string | undefined =>
-  getLinks(response).refs.find(link => link.rel === 'prev')?.uri;
-
 /**
   * Dumb client for grabbing static files.
   * It uses FE_SUBDIRECTORY and parses JSON if possible.
@@ -58,7 +55,6 @@ export {
   type PlfeResponse,
   getLinks,
   getNextLink,
-  getPrevLink,
   staticFetch,
   getClient,
 };
