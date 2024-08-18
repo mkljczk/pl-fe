@@ -42,7 +42,7 @@ const reports = (state: State = ReducerRecord(), action: AnyAction) => {
         map.setIn(['new', 'entityType'], action.entityType);
 
         if (state.new.account_id !== action.account.id) {
-          map.setIn(['new', 'status_ids'], action.status ? ImmutableSet([action.status.reblog?.id || action.status.id]) : ImmutableSet());
+          map.setIn(['new', 'status_ids'], action.status ? ImmutableSet([action.status.reblog_id || action.status.id]) : ImmutableSet());
           map.setIn(['new', 'comment'], '');
         } else if (action.status) {
           map.updateIn(['new', 'status_ids'], set => (set as ImmutableSet<string>).add(action.status.reblog?.id || action.status.id));

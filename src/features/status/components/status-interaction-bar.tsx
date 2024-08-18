@@ -11,7 +11,7 @@ import { reduceEmoji } from 'soapbox/utils/emoji-reacts';
 import type { Status } from 'soapbox/normalizers';
 
 interface IStatusInteractionBar {
-  status: Status;
+  status: Pick<Status, 'id' | 'account' | 'dislikes_count' | 'emoji_reactions' | 'favourited' | 'favourites_count' | 'reblogs_count' | 'quotes_count'>;
 }
 
 const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.Element | null => {
@@ -136,7 +136,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
 
     if (dislikesCount) {
       return (
-        <InteractionCounter count={status.favourites_count} onClick={features.exposableReactions ? handleOpenDislikesModal : undefined}>
+        <InteractionCounter count={status.dislikes_count} onClick={features.exposableReactions ? handleOpenDislikesModal : undefined}>
           <FormattedMessage
             id='status.interactions.dislikes'
             defaultMessage='{count, plural, one {Dislike} other {Dislikes}}'

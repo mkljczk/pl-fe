@@ -29,7 +29,7 @@ import {
   TIMELINE_INSERT,
 } from '../actions/timelines';
 
-import type { ReducerStatus } from './statuses';
+import type { Status } from '../normalizers';
 import type { PaginatedResponse, Status as BaseStatus, Relationship } from 'pl-api';
 import type { AnyAction } from 'redux';
 import type { ImportPosition } from 'soapbox/entity-store/types';
@@ -185,12 +185,12 @@ const updateTop = (state: State, timelineId: string, top: boolean) =>
     timeline.set('top', top);
   }));
 
-const isReblogOf = (reblog: Pick<ReducerStatus, 'reblog'>, status: Pick<ReducerStatus, 'id'>) => reblog.reblog === status.id;
-const statusToReference = (status: Pick<ReducerStatus, 'id' | 'account'>) => [status.id, status.account];
+const isReblogOf = (reblog: Pick<Status, 'reblog_id'>, status: Pick<Status, 'id'>) => reblog.reblog_id === status.id;
+const statusToReference = (status: Pick<Status, 'id' | 'account'>) => [status.id, status.account];
 
 const buildReferencesTo = (
-  statuses: ImmutableMap<string, ReducerStatus>,
-  status: Pick<ReducerStatus, 'id'>,
+  statuses: ImmutableMap<string, Pick<Status, 'id' | 'account' | 'reblog_id'>>,
+  status: Pick<Status, 'id'>,
 ) => (
   statuses
     .filter(reblog => isReblogOf(reblog, status))
@@ -203,7 +203,7 @@ const buildReferencesTo = (
 //       statuses.getIn([statusId, 'account']) === relationship.id,
 //     ));
 
-const filterTimelines = (state: State, relationship: Relationship, statuses: ImmutableMap<string, ReducerStatus>) =>
+const filterTimelines = (state: State, relationship: Relationship, statuses: ImmutableMap<string, Pick<Status, 'id' | 'account' | 'reblog_id'>>) =>
   state.withMutations(state => {
     statuses.forEach(status => {
       if (status.account.id !== relationship.id) return;

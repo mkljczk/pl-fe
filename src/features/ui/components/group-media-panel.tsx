@@ -33,7 +33,7 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
       const media = attachment.status.media_attachments;
       const index = media.findIndex(x => x.id === attachment.id);
 
-      dispatch(openModal('MEDIA', { media, index, status: attachment.status, account: attachment.account }));
+      dispatch(openModal('MEDIA', { media, index, statusId: attachment.status.id }));
     }
   };
 

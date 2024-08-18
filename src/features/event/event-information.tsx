@@ -189,8 +189,8 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
 
       <StatusMedia status={status} />
 
-      {status.quote && (status.quote_visible ?? true) && (
-        <QuotedStatus statusId={status.quote as string} />
+      {status.quote_id && (status.quote_visible ?? true) && (
+        <QuotedStatus statusId={status.quote_id} />
       )}
 
       {renderEventLocation()}

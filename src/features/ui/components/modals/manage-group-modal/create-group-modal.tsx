@@ -9,6 +9,7 @@ import toast from 'soapbox/toast';
 import ConfirmationStep from './steps/confirmation-step';
 import DetailsStep from './steps/details-step';
 
+import type { ModalType } from '../../modal-root';
 import type { CreateGroupParams } from 'pl-api';
 import type { PlfeResponse } from 'soapbox/api';
 import type { Group } from 'soapbox/normalizers';
@@ -25,7 +26,7 @@ enum Steps {
 }
 
 interface ICreateGroupModal {
-  onClose: (type?: string) => void;
+  onClose: (type?: ModalType) => void;
 }
 
 const CreateGroupModal: React.FC<ICreateGroupModal> = ({ onClose }) => {
@@ -40,7 +41,7 @@ const CreateGroupModal: React.FC<ICreateGroupModal> = ({ onClose }) => {
   const { createGroup, isSubmitting } = useCreateGroup();
 
   const handleClose = () => {
-    onClose('MANAGE_GROUP');
+    onClose('CREATE_GROUP');
   };
 
   const confirmationText = useMemo(() => {

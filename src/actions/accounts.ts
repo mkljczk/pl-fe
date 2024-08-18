@@ -14,7 +14,7 @@ import {
 } from './importer';
 
 import type { Map as ImmutableMap } from 'immutable';
-import type { ReducerStatus } from 'soapbox/reducers/statuses';
+import type { MinifiedStatus } from 'soapbox/reducers/statuses';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { History } from 'soapbox/types/history';
 
@@ -242,7 +242,7 @@ const blockAccountRequest = (accountId: string) => ({
   accountId,
 });
 
-const blockAccountSuccess = (relationship: Relationship, statuses: ImmutableMap<string, ReducerStatus>) => ({
+const blockAccountSuccess = (relationship: Relationship, statuses: ImmutableMap<string, MinifiedStatus>) => ({
   type: ACCOUNT_BLOCK_SUCCESS,
   relationship,
   statuses,
@@ -318,7 +318,7 @@ const muteAccountRequest = (accountId: string) => ({
   accountId,
 });
 
-const muteAccountSuccess = (relationship: Relationship, statuses: ImmutableMap<string, ReducerStatus>) => ({
+const muteAccountSuccess = (relationship: Relationship, statuses: ImmutableMap<string, MinifiedStatus>) => ({
   type: ACCOUNT_MUTE_SUCCESS,
   relationship,
   statuses,
@@ -764,7 +764,7 @@ const fetchPinnedAccountsFail = (accountId: string, error: unknown) => ({
 const accountSearch = (q: string, signal?: AbortSignal) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: ACCOUNT_SEARCH_REQUEST, params: { q } });
-    return getClient(getState()).accounts.searchAccounts(q, { resolve: false, limit: 4, following: true }).then((accounts) => {
+    return getClient(getState()).accounts.searchAccounts(q, { resolve: false, limit: 4, following: true }, { signal }).then((accounts) => {
       dispatch(importFetchedAccounts(accounts));
       dispatch({ type: ACCOUNT_SEARCH_SUCCESS, accounts });
       return accounts;
@@ -777,8 +777,7 @@ const accountSearch = (q: string, signal?: AbortSignal) =>
 const accountLookup = (acct: string, signal?: AbortSignal) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: ACCOUNT_LOOKUP_REQUEST, acct });
-    // TODO signal
-    return getClient(getState()).accounts.lookupAccount(acct).then((account) => {
+    return getClient(getState()).accounts.lookupAccount(acct, { signal }).then((account) => {
       if (account && account.id) dispatch(importFetchedAccount(account));
       dispatch({ type: ACCOUNT_LOOKUP_SUCCESS, account });
       return account;

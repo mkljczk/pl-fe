@@ -22,7 +22,6 @@ const buildStatus = (state: RootState, scheduledStatus: ScheduledStatus) => {
     url: `/scheduled_statuses/${scheduledStatus.id}`,
     visibility: scheduledStatus.params.visibility,
   });
-  console.log(scheduledStatus.params);
 
   return normalizeStatus(status);
 };

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { Entities } from 'soapbox/entity-store/entities';
 import { useCreateEntity } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';
-import { normalizeGroupMember } from 'soapbox/normalizers/group-member';
+import { normalizeGroupMember } from 'soapbox/normalizers';
 
 import type { Group, GroupMember, GroupRole } from 'pl-api';
 

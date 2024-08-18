@@ -9,8 +9,10 @@ import AccountContainer from 'soapbox/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 import { makeGetStatus } from 'soapbox/selectors';
 
+import type { ModalType } from '../modal-root';
+
 interface IMentionsModal {
-  onClose: (type: string) => void;
+  onClose: (type: ModalType) => void;
   statusId: string;
 }
 

@@ -6,8 +6,10 @@ import AttachmentThumbs from 'soapbox/components/attachment-thumbs';
 import { HStack, Modal, Spinner, Stack, Text } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
+import type { ModalType } from '../modal-root';
+
 interface ICompareHistoryModal {
-  onClose: (string: string) => void;
+  onClose: (type: ModalType) => void;
   statusId: string;
 }
 

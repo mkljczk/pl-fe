@@ -60,7 +60,7 @@ const messages = defineMessages({
 });
 
 interface IEventHeader {
-  status?: Pick<Status, 'id' | 'account' | 'bookmarked' | 'event' | 'group' | 'pinned' | 'reblog' | 'reblogged' | 'sensitive' | 'uri' | 'url' | 'visibility'>;
+  status?: Pick<Status, 'id' | 'account' | 'bookmarked' | 'event' | 'group_id' | 'pinned' | 'reblog_id' | 'reblogged' | 'sensitive' | 'uri' | 'url' | 'visibility'>;
 }
 
 const EventHeader: React.FC<IEventHeader> = ({ status }) => {
@@ -98,7 +98,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     e.preventDefault();
     e.stopPropagation();
 
-    dispatch(openModal('MEDIA', { media: [event.banner] }));
+    dispatch(openModal('MEDIA', { media: [event.banner!], index: 0 }));
   };
 
   const handleExportClick = () => {

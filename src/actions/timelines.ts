@@ -32,7 +32,11 @@ const processTimelineUpdate = (timeline: string, status: BaseStatus, accept: ((s
     const hasPendingStatuses = !getState().pending_statuses.isEmpty();
 
     const columnSettings = getSettings(getState()).get(timeline, ImmutableMap());
-    const shouldSkipQueue = shouldFilter(status, columnSettings as any);
+    const shouldSkipQueue = shouldFilter({
+      in_reply_to_id: status.in_reply_to_id,
+      visibility: status.visibility,
+      reblog_id: status.reblog?.id || null,
+    }, columnSettings as any);
 
     if (ownStatus && hasPendingStatuses) {
       // WebSockets push statuses without the Idempotency-Key,
@@ -114,7 +118,7 @@ interface TimelineDeleteAction {
 const deleteFromTimelines = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const accountId = getState().statuses.get(statusId)?.account?.id!;
-    const references = getState().statuses.filter(status => status.reblog === statusId).map(status => [status.id, status.account.id] as const);
+    const references = getState().statuses.filter(status => status.reblog_id === statusId).map(status => [status.id, status.account.id] as const);
     const reblogOf = getState().statuses.getIn([statusId, 'reblog'], null);
 
     const action: TimelineDeleteAction = {

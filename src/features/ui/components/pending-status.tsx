@@ -89,7 +89,7 @@ const PendingStatus: React.FC<IPendingStatus> = ({ idempotencyKey, className, mu
 
               {status.poll && <PollPreview poll={status.poll} />}
 
-              {status.quote && <QuotedStatus statusId={status.quote.id} />}
+              {status.quote_id && <QuotedStatus statusId={status.quote_id} />}
             </Stack>
           </div>
 

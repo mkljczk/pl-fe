@@ -64,7 +64,7 @@ const createStatus = (params: CreateStatusParams, idempotencyKey: string, status
         // The backend might still be processing the rich media attachment
         const expectsCard = status.scheduled_at === null && !status.card && shouldHaveCard(status);
 
-        dispatch(importFetchedStatus({ ...status, expectsCard } as BaseStatus, idempotencyKey));
+        if (status.scheduled_at === null) dispatch(importFetchedStatus({ ...status, expectsCard }, idempotencyKey));
         dispatch({ type: STATUS_CREATE_SUCCESS, status, params, idempotencyKey, editing: !!statusId });
 
         // Poll the backend for the updated card
@@ -95,7 +95,7 @@ const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () =>
   const state = getState();
 
   const status = state.statuses.get(statusId)!;
-  const poll = status.poll ? state.polls.get(status.poll) : undefined;
+  const poll = status.poll_id ? state.polls.get(status.poll_id) : undefined;
 
   dispatch({ type: STATUS_FETCH_SOURCE_REQUEST });
 
@@ -133,7 +133,7 @@ const deleteStatus = (statusId: string, withRedraft = false) =>
     const state = getState();
 
     const status = state.statuses.get(statusId)!;
-    const poll = status.poll ? state.polls.get(status.poll) : undefined;
+    const poll = status.poll_id ? state.polls.get(status.poll_id) : undefined;
 
     dispatch({ type: STATUS_DELETE_REQUEST, params: status });
 

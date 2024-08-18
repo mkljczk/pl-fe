@@ -1,5 +1,7 @@
 import { getNotificationStatus } from 'soapbox/features/notifications/components/notification';
 
+import { normalizeAccount } from './account';
+
 import type { Notification as BaseNotification } from 'pl-api';
 
 const STATUS_NOTIFICATION_TYPES = [
@@ -12,8 +14,9 @@ const STATUS_NOTIFICATION_TYPES = [
 ];
 
 const normalizeNotification = (notification: BaseNotification) => ({
-  accounts: [notification.account],
   ...notification,
+  account: normalizeAccount(notification.account),
+  accounts: [normalizeAccount(notification.account)],
 });
 
 const normalizeNotifications = (notifications: Array<BaseNotification>) => {
@@ -30,9 +33,9 @@ const normalizeNotifications = (notifications: Array<BaseNotification>) => {
 
       if (existingNotification) {
         if (existingNotification?.accounts) {
-          existingNotification.accounts.push(notification.account);
+          existingNotification.accounts.push(normalizeAccount(notification.account));
         } else {
-          existingNotification.accounts = [existingNotification.account, notification.account];
+          existingNotification.accounts = [existingNotification.account, normalizeAccount(notification.account)];
         }
         existingNotification.id += '+' + notification.id;
       } else {

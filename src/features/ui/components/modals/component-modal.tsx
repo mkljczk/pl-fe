@@ -2,10 +2,12 @@ import React from 'react';
 
 import { Modal } from 'soapbox/components/ui';
 
+import type { ModalType } from '../modal-root';
+
 interface IComponentModal {
-  onClose: (type?: string) => void;
+  onClose: (type?: ModalType) => void;
   component: React.ComponentType<{
-    onClose: (type?: string) => void;
+    onClose: (type?: ModalType) => void;
   }>;
   componentProps: Record<any, any>;
 }

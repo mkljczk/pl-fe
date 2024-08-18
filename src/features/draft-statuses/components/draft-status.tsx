@@ -34,7 +34,7 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
 
   let quote;
 
-  if (status.quote) {
+  if (status.quote_id) {
     if ((status.quote_visible ?? true) === false) {
       quote = (
         <div className='quoted-status-tombstone'>
@@ -42,7 +42,7 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
         </div>
       );
     } else {
-      quote = <QuotedStatus statusId={status.quote as string} />;
+      quote = <QuotedStatus statusId={status.quote_id} />;
     }
   }
 

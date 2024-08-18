@@ -29,7 +29,7 @@ const notificationForScreenReader = (intl: IntlShape, message: string, timestamp
   return output.join(', ');
 };
 
-const buildLink = (account: Account): JSX.Element => (
+const buildLink = (account: Pick<Account, 'acct' | 'display_name_html'>): JSX.Element => (
   <bdi key={account.acct}>
     <Link
       className='font-bold text-gray-800 hover:underline dark:text-gray-200'
@@ -135,7 +135,7 @@ const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
 const buildMessage = (
   intl: IntlShape,
   type: NotificationType,
-  accounts: Array<Account>,
+  accounts: Array<Pick<Account, 'acct' | 'display_name_html'>>,
   targetName: string,
   instanceTitle: string,
 ): React.ReactNode => {

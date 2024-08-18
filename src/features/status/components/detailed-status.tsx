@@ -12,16 +12,16 @@ import StatusInfo from 'soapbox/components/statuses/status-info';
 import TranslateButton from 'soapbox/components/translate-button';
 import { HStack, Icon, Stack, Text } from 'soapbox/components/ui';
 import QuotedStatus from 'soapbox/features/status/containers/quoted-status-container';
-import { getActualStatus } from 'soapbox/utils/status';
 
 import StatusInteractionBar from './status-interaction-bar';
 
 import type { Status as StatusEntity } from 'soapbox/normalizers';
+import type { SelectedStatus } from 'soapbox/selectors';
 
 interface IDetailedStatus {
-  status: StatusEntity;
+  status: SelectedStatus;
   withMedia?: boolean;
-  onOpenCompareHistoryModal: (status: StatusEntity) => void;
+  onOpenCompareHistoryModal: (status: Pick<StatusEntity, 'id'>) => void;
 }
 
 const DetailedStatus: React.FC<IDetailedStatus> = ({
@@ -81,7 +81,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
     }
   };
 
-  const actualStatus = getActualStatus<StatusEntity>(status);
+  const actualStatus = status?.reblog || status;
   if (!actualStatus) return null;
   const { account } = actualStatus;
   if (!account || typeof account !== 'object') return null;
@@ -90,7 +90,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
   let quote;
 
-  if (actualStatus.quote) {
+  if (actualStatus.quote_id) {
     if (actualStatus.quote_visible === false) {
       quote = (
         <div className='quoted-actualStatus-tombstone'>
@@ -98,7 +98,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
         </div>
       );
     } else {
-      quote = <QuotedStatus statusId={actualStatus.quote as string} />;
+      quote = <QuotedStatus statusId={actualStatus.quote_id} />;
     }
   }
 

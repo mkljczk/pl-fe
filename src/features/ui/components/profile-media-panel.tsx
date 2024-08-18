@@ -30,7 +30,7 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
       const media = attachment.status.media_attachments;
       const index = media.findIndex(x => x.id === attachment.id);
 
-      dispatch(openModal('MEDIA', { media, index, status: attachment.status }));
+      dispatch(openModal('MEDIA', { media, index, statusId: attachment.status.id }));
     }
   };
 

@@ -1,4 +1,4 @@
-import { pollSchema } from './poll';
+// import { pollSchema } from './poll';
 
 describe('normalizePoll()', () => {
   it('adds base fields', () => {

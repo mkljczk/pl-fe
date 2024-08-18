@@ -6,8 +6,10 @@ import { Modal, Spinner } from 'soapbox/components/ui';
 import Account from 'soapbox/features/birthdays/account';
 import { useAppSelector } from 'soapbox/hooks';
 
+import type { ModalType } from '../modal-root';
+
 interface IBirthdaysModal {
-  onClose: (string: string) => void;
+  onClose: (type: ModalType) => void;
 }
 
 const BirthdaysModal = ({ onClose }: IBirthdaysModal) => {

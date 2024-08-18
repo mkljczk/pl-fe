@@ -13,7 +13,7 @@ import {
 } from './statuses';
 
 import type { Account, CreateEventParams, MediaAttachment, PaginatedResponse, Status } from 'pl-api';
-import type { ReducerStatus } from 'soapbox/reducers/statuses';
+import type { MinifiedStatus } from 'soapbox/reducers/statuses';
 import type { AppDispatch, RootState } from 'soapbox/store';
 
 const LOCATION_SEARCH_REQUEST = 'LOCATION_SEARCH_REQUEST' as const;
@@ -539,7 +539,7 @@ const cancelEventCompose = () => ({
 
 interface EventFormSetAction {
   type: typeof EVENT_FORM_SET;
-  status: ReducerStatus;
+  status: MinifiedStatus;
   text: string;
   location: Record<string, any>;
 }

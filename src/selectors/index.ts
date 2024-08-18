@@ -19,7 +19,7 @@ import type { Account as BaseAccount, Filter, MediaAttachment } from 'pl-api';
 import type { EntityStore } from 'soapbox/entity-store/types';
 import type { Account, Group, Notification } from 'soapbox/normalizers';
 import type { MinifiedNotification } from 'soapbox/reducers/notifications';
-import type { ReducerStatus } from 'soapbox/reducers/statuses';
+import type { MinifiedStatus } from 'soapbox/reducers/statuses';
 import type { RootState } from 'soapbox/store';
 
 const normalizeId = (id: any): string => typeof id === 'string' ? id : '';
@@ -130,9 +130,10 @@ type APIStatus = { id: string; username?: string };
 const makeGetStatus = () => createSelector(
   [
     (state: RootState, { id }: APIStatus) => state.statuses.get(id),
-    (state: RootState, { id }: APIStatus) => state.statuses.get(state.statuses.get(id)?.reblog || '', null),
+    (state: RootState, { id }: APIStatus) => state.statuses.get(state.statuses.get(id)?.reblog_id || '', null),
+    (state: RootState, { id }: APIStatus) => state.statuses.get(state.statuses.get(id)?.quote_id || '', null),
     (state: RootState, { id }: APIStatus) => {
-      const group = state.statuses.get(id)?.group;
+      const group = state.statuses.get(id)?.group_id;
       if (group) return state.entities[Entities.GROUPS]?.store[group] as Group;
       return undefined;
     },
@@ -144,7 +145,7 @@ const makeGetStatus = () => createSelector(
     (state: RootState) => getLocale(state, 'en'),
   ],
 
-  (statusBase, statusReblog, statusGroup, poll, username, filters, me, features, locale) => {
+  (statusBase, statusReblog, statusQuote, statusGroup, poll, username, filters, me, features, locale) => {
     if (!statusBase) return null;
     const { account } = statusBase;
     const accountUsername = account.acct;
@@ -161,6 +162,7 @@ const makeGetStatus = () => createSelector(
     return {
       ...statusBase,
       reblog: statusReblog || null,
+      quote: statusQuote || null,
       group: statusGroup || null,
       poll,
       filtered,
@@ -174,6 +176,8 @@ const makeGetStatus = () => createSelector(
     // }
   },
 );
+
+type SelectedStatus = Exclude<ReturnType<ReturnType<typeof makeGetStatus>>, null>;
 
 const makeGetNotification = () => createSelector([
   (_state: RootState, notification: MinifiedNotification) => notification,
@@ -197,7 +201,7 @@ const makeGetNotification = () => createSelector([
 }));
 
 type AccountGalleryAttachment = MediaAttachment & {
-  status: ReducerStatus;
+  status: MinifiedStatus;
   account: BaseAccount;
 }
 
@@ -208,7 +212,7 @@ const getAccountGallery = createSelector([
   statusIds.reduce((medias: ImmutableList<AccountGalleryAttachment>, statusId: string) => {
     const status = statuses.get(statusId);
     if (!status) return medias;
-    if (status.reblog) return medias;
+    if (status.reblog_id) return medias;
 
     return medias.concat(
       status.media_attachments.map(media => ({ ...media, status, account: status.account })));
@@ -222,7 +226,7 @@ const getGroupGallery = createSelector([
   statusIds.reduce((medias: ImmutableList<any>, statusId: string) => {
     const status = statuses.get(statusId);
     if (!status) return medias;
-    if (status.reblog) return medias;
+    if (status.reblog_id) return medias;
 
     return medias.concat(
       status.media_attachments.map(media => ({ ...media, status, account: status.account })));
@@ -360,6 +364,7 @@ export {
   getFilters,
   regexFromFilters,
   makeGetStatus,
+  type SelectedStatus,
   makeGetNotification,
   type AccountGalleryAttachment,
   getAccountGallery,

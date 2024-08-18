@@ -37,7 +37,7 @@ const importGroups = (data: Array<Group>) => (dispatch: AppDispatch) => {
   }
 };
 
-const importStatus = (status: BaseStatus, idempotencyKey?: string) => ({ type: STATUS_IMPORT, status, idempotencyKey });
+const importStatus = (status: BaseStatus & { expectsCard?: boolean }, idempotencyKey?: string) => ({ type: STATUS_IMPORT, status, idempotencyKey });
 
 const importStatuses = (statuses: Array<BaseStatus>) => ({ type: STATUSES_IMPORT, statuses });
 
@@ -64,7 +64,7 @@ const importFetchedAccounts = (accounts: Array<BaseAccount>) => {
   return importAccounts(normalAccounts);
 };
 
-const importFetchedStatus = (status: BaseStatus, idempotencyKey?: string) =>
+const importFetchedStatus = (status: BaseStatus & { expectsCard?: boolean }, idempotencyKey?: string) =>
   (dispatch: AppDispatch) => {
     // Skip broken statuses
     if (isBroken(status)) return;

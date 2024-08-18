@@ -1,7 +1,7 @@
 import { statusSchema } from 'pl-api';
 
 import { Entities } from 'soapbox/entity-store/entities';
-import { normalizeStatus } from 'soapbox/normalizers/status';
+import { normalizeStatus } from 'soapbox/normalizers';
 
 import type { DraftStatus } from 'soapbox/reducers/draft-statuses';
 import type { RootState } from 'soapbox/store';

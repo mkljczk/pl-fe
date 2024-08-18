@@ -18,6 +18,8 @@ import { getBadges } from 'soapbox/utils/badges';
 import BadgeInput from './badge-input';
 import StaffRolePicker from './staff-role-picker';
 
+import type { ModalType } from '../../modal-root';
+
 const messages = defineMessages({
   userVerified: { id: 'admin.users.user_verified_message', defaultMessage: '@{acct} was verified' },
   userUnverified: { id: 'admin.users.user_unverified_message', defaultMessage: '@{acct} was unverified' },
@@ -28,7 +30,7 @@ const messages = defineMessages({
 
 interface IAccountModerationModal {
   /** Action to close the modal. */
-  onClose: (type: string) => void;
+  onClose: (type: ModalType) => void;
   /** ID of the account to moderate. */
   accountId: string;
 }

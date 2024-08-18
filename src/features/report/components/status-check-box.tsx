@@ -20,7 +20,7 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled }) => {
 
   const onToggle: React.ChangeEventHandler<HTMLInputElement> = (e) => dispatch(toggleStatusReport(id, e.target.checked));
 
-  if (!status || status.reblog) {
+  if (!status || status.reblog_id) {
     return null;
   }
 

@@ -14,7 +14,7 @@ import StatusContent from './status-content';
 import StatusReplyMentions from './status-reply-mentions';
 import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 
-import type { ReducerStatus as StatusEntity } from 'soapbox/reducers/statuses';
+import type { SelectedStatus } from 'soapbox/selectors';
 
 const messages = defineMessages({
   cancel: { id: 'reply_indicator.cancel', defaultMessage: 'Cancel' },
@@ -22,7 +22,7 @@ const messages = defineMessages({
 
 interface IQuotedStatus {
   /** The quoted status entity. */
-  status?: StatusEntity;
+  status?: SelectedStatus;
   /** Callback when cancelled (during compose). */
   onCancel?: Function;
   /** Whether the status is shown in the post composer. */
@@ -120,7 +120,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
                 collapsable
               />
 
-              {status.quote && <QuotedStatusIndicator statusId={status.quote as string} />}
+              {status.quote_id && <QuotedStatusIndicator statusId={status.quote_id} />}
 
               {status.media_attachments.length > 0 && (
                 <StatusMedia status={status} muted={compose} />

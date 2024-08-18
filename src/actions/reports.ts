@@ -25,7 +25,7 @@ enum ReportableEntities {
 }
 
 type ReportedEntity = {
-  status?: Pick<Status, 'id' | 'reblog'>;
+  status?: Pick<Status, 'id' | 'reblog_id'>;
 }
 
 const initReport = (entityType: ReportableEntities, account: Pick<Account, 'id'>, entities?: ReportedEntity) => (dispatch: AppDispatch) => {

@@ -3,11 +3,11 @@ import { Map as ImmutableMap, type Collection } from 'immutable';
 import type { Status } from 'soapbox/normalizers';
 
 const shouldFilter = (
-  status: Pick<Status, 'in_reply_to_id' | 'visibility'> & { reblog: unknown },
+  status: Pick<Status, 'in_reply_to_id' | 'visibility' | 'reblog_id'>,
   columnSettings: Collection<any, any>,
 ) => {
   const shows = ImmutableMap({
-    reblog: status.reblog !== null,
+    reblog: status.reblog_id !== null,
     reply: status.in_reply_to_id !== null,
     direct: status.visibility === 'direct',
   });

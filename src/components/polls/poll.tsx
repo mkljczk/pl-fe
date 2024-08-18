@@ -16,7 +16,7 @@ type Selected = Record<number, boolean>;
 
 interface IPoll {
   id: string;
-  status?: Pick<Status, 'poll' | 'url' | 'currentLanguage'>;
+  status?: Pick<Status, 'url' | 'currentLanguage'>;
 }
 
 const messages = defineMessages({

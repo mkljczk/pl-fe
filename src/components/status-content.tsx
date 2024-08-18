@@ -15,7 +15,8 @@ import Markup from './markup';
 import Poll from './polls/poll';
 
 import type { Sizes } from 'soapbox/components/ui/text/text';
-import type { Status } from 'soapbox/normalizers';
+// import type { Status } from 'soapbox/normalizers';
+import type { MinifiedStatus } from 'soapbox/reducers/statuses';
 
 const MAX_HEIGHT = 642; // 20px * 32 (+ 2px padding at the top)
 const BIG_EMOJI_LIMIT = 10;
@@ -33,7 +34,7 @@ const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick }) => (
 );
 
 interface IStatusContent {
-  status: Status;
+  status: MinifiedStatus;
   onClick?: () => void;
   collapsable?: boolean;
   translatable?: boolean;
@@ -176,9 +177,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
 
     let hasPoll = false;
 
-    if (status.poll && typeof status.poll === 'string') {
+    if (status.poll_id) {
       hasPoll = true;
-      output.push(<Poll id={status.poll} key='poll' status={status} />);
+      output.push(<Poll id={status.poll_id} key='poll' status={status} />);
     }
 
     return <div className={clsx({ 'bg-gray-100 dark:bg-primary-800 rounded-md p-4': hasPoll })}>{output}</div>;
@@ -199,8 +200,8 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
       </Markup>,
     ];
 
-    if (status.poll && typeof status.poll === 'string') {
-      output.push(<Poll id={status.poll} key='poll' status={status} />);
+    if (status.poll_id) {
+      output.push(<Poll id={status.poll_id} key='poll' status={status} />);
     }
 
     return <>{output}</>;

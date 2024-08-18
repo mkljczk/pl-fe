@@ -13,7 +13,7 @@ import type { Status } from 'soapbox/normalizers';
 
 interface IStatusMedia {
   /** Status entity to render media for. */
-  status: Status;
+  status: Pick<Status, 'id' | 'account' | 'card' | 'expectsCard' | 'hidden' | 'media_attachments' | 'quote_id' | 'sensitive' | 'spoiler_text' | 'visibility'>;
   /** Whether to display compact media. */
   muted?: boolean;
   /** Callback when compact media is clicked. */
@@ -50,7 +50,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   );
 
   const openMedia = (media: Array<MediaAttachment>, index: number) => {
-    dispatch(openModal('MEDIA', { media, status, index }));
+    dispatch(openModal('MEDIA', { media, statusId: status.id, index }));
   };
 
   if (size > 0 && firstAttachment) {
@@ -109,7 +109,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
         </Suspense>
       );
     }
-  } else if (status.spoiler_text.length === 0 && !status.quote && status.card) {
+  } else if (status.spoiler_text.length === 0 && !status.quote_id && status.card) {
     media = (
       <PreviewCard
         onOpenMedia={openMedia}

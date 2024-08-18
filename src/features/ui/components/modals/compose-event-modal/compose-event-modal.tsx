@@ -29,6 +29,8 @@ import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
 import UploadButton from './upload-button';
 
+import type { ModalType } from '../../modal-root';
+
 const messages = defineMessages({
   eventNamePlaceholder: { id: 'compose_event.fields.name_placeholder', defaultMessage: 'Name' },
   eventDescriptionPlaceholder: { id: 'compose_event.fields.description_placeholder', defaultMessage: 'Description' },
@@ -86,7 +88,7 @@ const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
 };
 
 interface IComposeEventModal {
-  onClose: (type?: string) => void;
+  onClose: (type?: ModalType) => void;
 }
 
 const ComposeEventModal: React.FC<IComposeEventModal> = ({ onClose }) => {

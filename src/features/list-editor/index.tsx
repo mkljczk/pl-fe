@@ -9,6 +9,8 @@ import Account from './components/account';
 import EditListForm from './components/edit-list-form';
 import Search from './components/search';
 
+import type { ModalType } from '../ui/components/modal-root';
+
 const messages = defineMessages({
   changeTitle: { id: 'lists.edit.submit', defaultMessage: 'Change title' },
   addToList: { id: 'lists.account.add', defaultMessage: 'Add to list' },
@@ -18,7 +20,7 @@ const messages = defineMessages({
 
 interface IListEditor {
   listId: string;
-  onClose: (type: string) => void;
+  onClose: (type: ModalType) => void;
 }
 
 const ListEditor: React.FC<IListEditor> = ({ listId, onClose }) => {

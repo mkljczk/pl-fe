@@ -5,8 +5,10 @@ import { closeModal } from 'soapbox/actions/modals';
 import { useDomains } from 'soapbox/api/hooks/admin';
 import { Form, FormGroup, HStack, Input, Modal, Stack, Text, Toggle } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
-import { Domain } from 'soapbox/schemas';
 import toast from 'soapbox/toast';
+
+import type { ModalType } from '../modal-root';
+import type{ Domain } from 'soapbox/schemas';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_domain.save', defaultMessage: 'Save' },
@@ -16,7 +18,7 @@ const messages = defineMessages({
 });
 
 interface IEditDomainModal {
-  onClose: (type?: string) => void;
+  onClose: (type?: ModalType) => void;
   domainId?: string;
 }
 

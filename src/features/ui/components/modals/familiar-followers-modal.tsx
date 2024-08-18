@@ -8,11 +8,13 @@ import AccountContainer from 'soapbox/containers/account-container';
 import { useAppSelector } from 'soapbox/hooks';
 import { makeGetAccount } from 'soapbox/selectors';
 
+import type { ModalType } from '../modal-root';
+
 const getAccount = makeGetAccount();
 
 interface IFamiliarFollowersModal {
   accountId: string;
-  onClose: (string: string) => void;
+  onClose: (type: ModalType) => void;
 }
 
 const FamiliarFollowersModal = ({ accountId, onClose }: IFamiliarFollowersModal) => {

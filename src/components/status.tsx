@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -11,8 +11,9 @@ import TranslateButton from 'soapbox/components/translate-button';
 import AccountContainer from 'soapbox/containers/account-container';
 import QuotedStatus from 'soapbox/features/status/containers/quoted-status-container';
 import { HotKeys } from 'soapbox/features/ui/components/hotkeys';
-import { useAppDispatch, useSettings } from 'soapbox/hooks';
-import { textForScreenReader, getActualStatus } from 'soapbox/utils/status';
+import { useAppDispatch, useAppSelector, useSettings } from 'soapbox/hooks';
+import { makeGetStatus, type SelectedStatus } from 'soapbox/selectors';
+import { textForScreenReader } from 'soapbox/utils/status';
 
 import EventPreview from './event-preview';
 import StatusActionBar from './status-action-bar';
@@ -24,8 +25,6 @@ import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 import StatusInfo from './statuses/status-info';
 import { Card, Icon, Stack, Text } from './ui';
 
-import type { Status as StatusEntity } from 'soapbox/normalizers';
-
 // Defined in components/scrollable-list
 type ScrollPosition = { height: number; top: number };
 
@@ -36,7 +35,7 @@ const messages = defineMessages({
 interface IStatus {
   id?: string;
   avatarSize?: number;
-  status: StatusEntity;
+  status: SelectedStatus;
   onClick?: () => void;
   muted?: boolean;
   hidden?: boolean;
@@ -84,8 +83,10 @@ const Status: React.FC<IStatus> = (props) => {
 
   const [minHeight, setMinHeight] = useState(208);
 
-  const actualStatus = getActualStatus<StatusEntity>(status);
-  const isReblog = status.reblog && typeof status.reblog === 'object';
+  const getStatus = useCallback(makeGetStatus(), []);
+  const actualStatus = useAppSelector(state => status.reblog_id && getStatus(state, { id: status.reblog_id }) || status)!;
+
+  const isReblog = status.reblog_id;
   const statusUrl = `/@${actualStatus.account.acct}/posts/${actualStatus.id}`;
   const group = actualStatus.group;
 
@@ -131,14 +132,14 @@ const Status: React.FC<IStatus> = (props) => {
       if (firstAttachment.type === 'video') {
         dispatch(openModal('VIDEO', { status, media: firstAttachment, time: 0 }));
       } else {
-        dispatch(openModal('MEDIA', { status, media: status.media_attachments, index: 0 }));
+        dispatch(openModal('MEDIA', { statusId: status.id, media: status.media_attachments, index: 0 }));
       }
     }
   };
 
   const handleHotkeyReply = (e?: KeyboardEvent): void => {
     e?.preventDefault();
-    dispatch(replyCompose(actualStatus, status.reblog && typeof status.reblog === 'object' ? status.account : undefined));
+    dispatch(replyCompose(actualStatus, status.reblog_id ? status.account : undefined));
   };
 
   const handleHotkeyFavourite = (): void => {
@@ -327,7 +328,7 @@ const Status: React.FC<IStatus> = (props) => {
     );
   }
 
-  if (filtered && status.showFiltered) {
+  if (filtered && status.showFiltered !== false) {
     const minHandlers = muted ? undefined : {
       moveUp: handleHotkeyMoveUp,
       moveDown: handleHotkeyMoveDown,
@@ -349,7 +350,7 @@ const Status: React.FC<IStatus> = (props) => {
   }
 
   let rebloggedByText;
-  if (status.reblog && typeof status.reblog === 'object') {
+  if (status.reblog_id === 'object') {
     rebloggedByText = intl.formatMessage(
       messages.reblogged_by,
       { name: status.account.acct },
@@ -358,7 +359,7 @@ const Status: React.FC<IStatus> = (props) => {
 
   let quote;
 
-  if (actualStatus.quote) {
+  if (actualStatus.quote_id) {
     if ((actualStatus.quote_visible ?? true) === false) {
       quote = (
         <div className='quoted-status-tombstone'>
@@ -366,7 +367,7 @@ const Status: React.FC<IStatus> = (props) => {
         </div>
       );
     } else {
-      quote = <QuotedStatus statusId={actualStatus.quote as string} />;
+      quote = <QuotedStatus statusId={actualStatus.quote_id} />;
     }
   }
 

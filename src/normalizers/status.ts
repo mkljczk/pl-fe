@@ -93,11 +93,6 @@ const calculateStatus = (status: BaseStatus, oldStatus?: OldStatus): CalculatedV
 
 const normalizeStatus = (status: BaseStatus & {
   accounts?: Array<BaseAccount>;
-  // search_index?: string;
-  // contentHtml?: string;
-  // spoilerHtml?: string;
-  // contentMapHtml?: Record<string, any>;
-  // spoilerMapHtml?: Record<string, any>;
 }, oldStatus?: OldStatus) => {
   const calculated = calculateStatus(status, oldStatus);
 
@@ -155,8 +150,14 @@ const normalizeStatus = (status: BaseStatus & {
   const group = status.group ? normalizeGroup(status.group) : null;
 
   return {
+    account_id: status.account.id,
+    reblog_id: status.reblog?.id || null,
+    poll_id: status.poll?.id || null,
+    quote_id: status.quote?.id || null,
+    group_id: status.group?.id || null,
     translating: false,
     expectsCard: false,
+    showFiltered: null as null | boolean,
     ...status,
     account: normalizeAccount(status.account),
     accounts: status.accounts?.map(normalizeAccount),
@@ -172,6 +173,7 @@ const normalizeStatus = (status: BaseStatus & {
     media_attachments,
     ...calculated,
     translation: (status.translation || calculated.translation || null) as Translation | null | false,
+    // quote: status.quote ? normalizeStatus(status.quote as any) : null,
   };
 };
 

@@ -30,7 +30,8 @@ import { getReactForStatus, reduceEmoji } from 'soapbox/utils/emoji-reacts';
 import GroupPopover from './groups/popover/group-popover';
 
 import type { Menu } from 'soapbox/components/dropdown-menu';
-import type { Account, Group, Status } from 'soapbox/normalizers';
+import type { Account, Group } from 'soapbox/normalizers';
+import type { SelectedStatus } from 'soapbox/selectors';
 
 const messages = defineMessages({
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
@@ -103,7 +104,7 @@ const messages = defineMessages({
 });
 
 interface IStatusActionBar {
-  status: Status;
+  status: SelectedStatus;
   rebloggedBy?: Account;
   withLabels?: boolean;
   expandable?: boolean;
@@ -132,7 +133,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const { getOrCreateChatByAccountId } = useChats();
 
   const me = useAppSelector(state => state.me);
-  const { groupRelationship } = useGroupRelationship(status.group?.id);
+  const { groupRelationship } = useGroupRelationship(status.group_id || undefined);
   const features = useFeatures();
   const instance = useInstance();
   const { autoTranslate, boostModal, deleteModal, knownLanguages } = useSettings();
@@ -792,7 +793,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
           />
         )}
 
-        <DropdownMenu items={menu} status={status}>
+        <DropdownMenu items={menu}>
           <StatusActionButton
             title={intl.formatMessage(messages.more)}
             icon={require('@tabler/icons/outline/dots.svg')}

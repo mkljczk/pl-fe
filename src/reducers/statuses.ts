@@ -1,8 +1,8 @@
 import { Map as ImmutableMap } from 'immutable';
+import omit from 'lodash/omit';
 
-import { normalizeStatus, normalizeTranslation } from 'soapbox/normalizers';
+import { normalizeStatus, normalizeTranslation, Status as StatusRecord } from 'soapbox/normalizers';
 import { simulateEmojiReact, simulateUnEmojiReact } from 'soapbox/utils/emoji-reacts';
-import { normalizeId } from 'soapbox/utils/normalizers';
 
 import {
   EMOJI_REACT_REQUEST,
@@ -48,24 +48,11 @@ import { TIMELINE_DELETE } from '../actions/timelines';
 import type { Status as BaseStatus, Translation } from 'pl-api';
 import type { AnyAction } from 'redux';
 
-type StatusRecord = ReturnType<typeof normalizeStatus>;
+type State = ImmutableMap<string, MinifiedStatus>;
 
-type State = ImmutableMap<string, ReducerStatus>;
+type MinifiedStatus = ReturnType<typeof minifyStatus>;
 
-interface ReducerStatus extends Omit<StatusRecord, 'reblog' | 'poll' | 'quote' | 'group'> {
-  reblog: string | null;
-  poll: string | null;
-  quote: string | null;
-  group: string | null;
-}
-
-const minifyStatus = (status: StatusRecord): ReducerStatus => ({
-  ...status,
-  reblog: normalizeId(status.reblog?.id),
-  poll: normalizeId(status.poll?.id),
-  quote: normalizeId(status.quote?.id),
-  group: normalizeId(status.group?.id),
-}) as ReducerStatus;
+const minifyStatus = (status: StatusRecord) => omit(status, ['reblog', 'poll', 'quote', 'group']);
 
 // Check whether a status is a quote by secondary characteristics
 const isQuote = (status: StatusRecord) => Boolean(status.quote_url);
@@ -83,7 +70,7 @@ const fixQuote = (status: StatusRecord, oldStatus?: StatusRecord): StatusRecord 
   }
 };
 
-const fixStatus = (state: State, status: BaseStatus): ReducerStatus => {
+const fixStatus = (state: State, status: BaseStatus): MinifiedStatus => {
   const oldStatus = state.get(status.id);
 
   return minifyStatus(fixQuote(normalizeStatus(status, oldStatus)));
@@ -103,7 +90,7 @@ const deleteStatus = (state: State, statusId: string, references: Array<string>)
   return state.delete(statusId);
 };
 
-const incrementReplyCount = (state: State, { in_reply_to_id, quote_id }: BaseStatus) => {
+const incrementReplyCount = (state: State, { in_reply_to_id, quote }: BaseStatus) => {
   if (in_reply_to_id && state.has(in_reply_to_id)) {
     const parent = state.get(in_reply_to_id)!;
     state = state.set(in_reply_to_id, {
@@ -112,9 +99,9 @@ const incrementReplyCount = (state: State, { in_reply_to_id, quote_id }: BaseSta
     });
   }
 
-  if (quote_id && state.has(quote_id)) {
-    const parent = state.get(quote_id)!;
-    state = state.set(quote_id, {
+  if (quote?.id && state.has(quote.id)) {
+    const parent = state.get(quote.id)!;
+    state = state.set(quote.id, {
       ...parent,
       quotes_count: (typeof parent.quotes_count === 'number' ? parent.quotes_count : 0) + 1,
     });
@@ -123,15 +110,15 @@ const incrementReplyCount = (state: State, { in_reply_to_id, quote_id }: BaseSta
   return state;
 };
 
-const decrementReplyCount = (state: State, { in_reply_to_id, quote_id }: BaseStatus) => {
+const decrementReplyCount = (state: State, { in_reply_to_id, quote }: BaseStatus) => {
   if (in_reply_to_id) {
     state = state.updateIn([in_reply_to_id, 'replies_count'], 0, count =>
       typeof count === 'number' ? Math.max(0, count - 1) : 0,
     );
   }
 
-  if (quote_id) {
-    state = state.updateIn([quote_id, 'quotes_count'], 0, count =>
+  if (quote?.id) {
+    state = state.updateIn([quote.id, 'quotes_count'], 0, count =>
       typeof count === 'number' ? Math.max(0, count - 1) : 0,
     );
   }
@@ -290,6 +277,6 @@ const statuses = (state = initialState, action: AnyAction): State => {
 };
 
 export {
-  type ReducerStatus,
+  type MinifiedStatus,
   statuses as default,
 };

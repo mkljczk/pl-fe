@@ -15,8 +15,8 @@ import PlaceholderAccount from 'soapbox/features/placeholder/components/placehol
 import { useAppDispatch } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 
-import type { Group, GroupMember } from 'pl-api';
 import type { Menu as IMenu } from 'soapbox/components/dropdown-menu';
+import type { Group, GroupMember } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   adminLimitTitle: { id: 'group.member.admin.limit.title', defaultMessage: 'Admin limit reached' },

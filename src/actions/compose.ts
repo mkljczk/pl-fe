@@ -23,7 +23,6 @@ import type { Account as BaseAccount, BackendVersion, CreateStatusParams, Group,
 import type { AutoSuggestion } from 'soapbox/components/autosuggest-input';
 import type { Emoji } from 'soapbox/features/emoji';
 import type { Account, Status } from 'soapbox/normalizers';
-import type { ReducerStatus } from 'soapbox/reducers/statuses';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { History } from 'soapbox/types/history';
 
@@ -111,7 +110,7 @@ const messages = defineMessages({
 interface ComposeSetStatusAction {
   type: typeof COMPOSE_SET_STATUS;
   composeId: string;
-  status: Pick<Status | ReducerStatus, 'id' | 'account' | 'content' | 'group' | 'in_reply_to_id' | 'media_attachments' | 'mentions' | 'quote' | 'spoiler_text' | 'visibility'>;
+  status: Pick<Status, 'id' | 'account' | 'content' | 'group_id' | 'in_reply_to_id' | 'media_attachments' | 'mentions' | 'quote_id' | 'spoiler_text' | 'visibility'>;
   poll?: Poll | null;
   rawText: string;
   explicitAddressing: boolean;
@@ -123,7 +122,16 @@ interface ComposeSetStatusAction {
   editorState?: string | null;
 }
 
-const setComposeToStatus = (status: ComposeSetStatusAction['status'], poll: Poll | null, rawText: string, spoilerText?: string, contentType?: string | false, withRedraft?: boolean, draftId?: string, editorState?: string | null) =>
+const setComposeToStatus = (
+  status: ComposeSetStatusAction['status'],
+  poll: Poll | null | undefined,
+  rawText: string,
+  spoilerText?: string,
+  contentType?: string | false,
+  withRedraft?: boolean,
+  draftId?: string,
+  editorState?: string | null,
+) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const client = getClient(getState);
     const { createStatusExplicitAddressing: explicitAddressing, version: v } = client.features;
@@ -155,7 +163,7 @@ const changeCompose = (composeId: string, text: string) => ({
 interface ComposeReplyAction {
   type: typeof COMPOSE_REPLY;
   composeId: string;
-  status: Pick<Status | ReducerStatus, 'id' | 'account' | 'group' | 'mentions' | 'spoiler_text' | 'visibility'>;
+  status: Pick<Status, 'id' | 'account' | 'group_id' | 'mentions' | 'spoiler_text' | 'visibility'>;
   account: Pick<Account, 'acct'>;
   explicitAddressing: boolean;
   preserveSpoilers: boolean;
@@ -197,7 +205,7 @@ const cancelReplyCompose = () => ({
 interface ComposeQuoteAction {
   type: typeof COMPOSE_QUOTE;
   composeId: string;
-  status: Pick<Status | ReducerStatus, 'id' | 'account' | 'visibility' | 'group'>;
+  status: Pick<Status, 'id' | 'account' | 'visibility' | 'group_id'>;
   account: Pick<Account, 'acct'> | undefined;
   explicitAddressing: boolean;
 }
@@ -429,7 +437,6 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
     }
 
     return dispatch(createStatus(params, idempotencyKey, statusId)).then((data) => {
-      console.log(data);
       if (!statusId && data.scheduled_at === null && data.visibility === 'direct' && getState().conversations.mounted <= 0 && history) {
         history.push('/conversations');
       }
@@ -617,7 +624,7 @@ const fetchComposeSuggestionsTags = (dispatch: AppDispatch, getState: () => Root
     return dispatch(updateSuggestionTags(composeId, token, currentTrends));
   }
 
-  return getClient(state).search.search(token.slice(1), { limit: 10, type: 'hashtags' }).then(response => { // TODO signals
+  return getClient(state).search.search(token.slice(1), { limit: 10, type: 'hashtags' }, { signal }).then(response => {
     dispatch(updateSuggestionTags(composeId, token, response.hashtags));
   }).catch(error => {
     if (!signal.aborted) {
@@ -1110,5 +1117,6 @@ export {
   addSuggestedQuote,
   addSuggestedLanguage,
   changeComposeFederated,
+  type ComposeReplyAction,
   type ComposeAction,
 };

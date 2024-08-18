@@ -2,15 +2,16 @@ import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { Modal } from 'soapbox/components/ui';
+import Account from 'soapbox/features/reply-mentions/account';
 import { useAppSelector, useCompose, useOwnAccount } from 'soapbox/hooks';
 import { statusToMentionsAccountIdsArray } from 'soapbox/reducers/compose';
 import { makeGetStatus } from 'soapbox/selectors';
 
-import Account from '../../../reply-mentions/account';
+import type { ModalType } from '../modal-root';
 
 interface IReplyMentionsModal {
   composeId: string;
-  onClose: (string: string) => void;
+  onClose: (type: ModalType) => void;
 }
 
 const ReplyMentionsModal: React.FC<IReplyMentionsModal> = ({ composeId, onClose }) => {

@@ -6,8 +6,8 @@ import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import { type VirtuosoHandle } from 'react-virtuoso';
 
-import { mentionCompose, replyCompose } from 'soapbox/actions/compose';
-import { favourite, reblog, unfavourite, unreblog } from 'soapbox/actions/interactions';
+import { type ComposeReplyAction, mentionCompose, replyCompose } from 'soapbox/actions/compose';
+import { reblog, toggleFavourite, unreblog } from 'soapbox/actions/interactions';
 import { openModal } from 'soapbox/actions/modals';
 import { getSettings } from 'soapbox/actions/settings';
 import { toggleStatusHidden } from 'soapbox/actions/statuses';
@@ -26,6 +26,7 @@ import DetailedStatus from './detailed-status';
 import ThreadStatus from './thread-status';
 
 import type { Account, Status } from 'soapbox/normalizers';
+import type { SelectedStatus } from 'soapbox/selectors';
 
 const getAncestorsIds = createSelector([
   (_: RootState, statusId: string | undefined) => statusId,
@@ -74,7 +75,7 @@ const getDescendantsIds = createSelector([
 });
 
 interface IThread {
-  status: Status;
+  status: SelectedStatus;
   withMedia?: boolean;
   useWindowScroll?: boolean;
   itemClassName?: string;
@@ -125,19 +126,15 @@ const Thread = (props: IThread) => {
     }
   };
 
-  const handleFavouriteClick = (status: Status) => {
-    if (status.favourited) {
-      dispatch(unfavourite(status));
-    } else {
-      dispatch(favourite(status));
-    }
+  const handleFavouriteClick = (status: SelectedStatus) => {
+    dispatch(toggleFavourite(status));
   };
 
-  const handleReplyClick = (status: Status) => dispatch(replyCompose(status));
+  const handleReplyClick = (status: ComposeReplyAction['status']) => dispatch(replyCompose(status));
 
-  const handleModalReblog = (status: Status) => dispatch(reblog(status));
+  const handleModalReblog = (status: SelectedStatus) => dispatch(reblog(status));
 
-  const handleReblogClick = (status: Status, e?: React.MouseEvent) => {
+  const handleReblogClick = (status: SelectedStatus, e?: React.MouseEvent) => {
     dispatch((_, getState) => {
       const boostModal = getSettings(getState()).get('boostModal');
       if (status.reblogged) {
@@ -165,7 +162,7 @@ const Thread = (props: IThread) => {
       if (media.length === 1 && firstAttachment.type === 'video') {
         dispatch(openModal('VIDEO', { media: firstAttachment, status: status }));
       } else {
-        dispatch(openModal('MEDIA', { media, index: 0, status: status }));
+        dispatch(openModal('MEDIA', { media, index: 0, statusId: status.id }));
       }
     }
   };
@@ -301,7 +298,7 @@ const Thread = (props: IThread) => {
     setTimeout(() => statusRef.current?.querySelector<HTMLDivElement>('.detailed-actualStatus')?.focus(), 0);
   }, [status.id, ancestorsIds.size]);
 
-  const handleOpenCompareHistoryModal = (status: Status) => {
+  const handleOpenCompareHistoryModal = (status: Pick<Status, 'id'>) => {
     dispatch(openModal('COMPARE_HISTORY', {
       statusId: status.id,
     }));

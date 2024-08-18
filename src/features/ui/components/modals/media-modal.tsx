@@ -20,7 +20,6 @@ import { makeGetStatus } from 'soapbox/selectors';
 import ImageLoader from '../image-loader';
 
 import type { MediaAttachment } from 'pl-api';
-import type { Status } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
@@ -45,7 +44,7 @@ const containerStyle: React.CSSProperties = {
 
 interface IMediaModal {
   media: Array<MediaAttachment>;
-  status?: Status;
+  statusId?: string;
   index: number;
   time?: number;
   onClose(): void;
@@ -54,7 +53,7 @@ interface IMediaModal {
 const MediaModal: React.FC<IMediaModal> = (props) => {
   const {
     media,
-    status,
+    statusId,
     onClose,
     time = 0,
   } = props;
@@ -64,7 +63,7 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
   const intl = useIntl();
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const actualStatus = useAppSelector((state) => getStatus(state, { id: status?.id as string }));
+  const status = useAppSelector((state) => getStatus(state, { id: statusId as string }));
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
   const [index, setIndex] = useState<number | null>(null);
@@ -206,12 +205,12 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
     };
   }, [index]);
 
-  if (status) {
-    if (!actualStatus && isLoaded) {
+  if (statusId) {
+    if (isLoaded) {
       return (
         <MissingIndicator />
       );
-    } else if (!actualStatus) {
+    } else if (!status) {
       return <PlaceholderStatus />;
     }
   }
@@ -314,13 +313,13 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
             )}
           </div>
 
-          {actualStatus && (
+          {status && (
             <HStack
               justifyContent='center'
               className={clsx('flex-[0_0_60px] transition-opacity', navigationHiddenClassName)}
             >
               <StatusActionBar
-                status={actualStatus}
+                status={status}
                 space='md'
                 statusActionButtonTheme='inverse'
               />
@@ -328,7 +327,7 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
           )}
         </Stack>
 
-        {actualStatus && (
+        {status && (
           <div
             className={
               clsx('-right-96 hidden bg-white transition-all xl:fixed xl:inset-y-0 xl:right-0 xl:flex xl:w-96 xl:flex-col', {
@@ -337,7 +336,7 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
             }
           >
             <Thread
-              status={actualStatus}
+              status={status}
               withMedia={false}
               useWindowScroll={false}
               itemClassName='px-4'

@@ -4,8 +4,10 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useRules } from 'soapbox/api/hooks/admin';
 import { Form, FormGroup, Input, Modal } from 'soapbox/components/ui';
 import { useTextField } from 'soapbox/hooks/forms';
-import { type AdminRule } from 'soapbox/schemas';
 import toast from 'soapbox/toast';
+
+import type { ModalType } from '../modal-root';
+import type{ AdminRule } from 'soapbox/schemas';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_rule.save', defaultMessage: 'Save' },
@@ -16,7 +18,7 @@ const messages = defineMessages({
 });
 
 interface IEditRuleModal {
-  onClose: (type?: string) => void;
+  onClose: (type?: ModalType) => void;
   rule?: AdminRule;
 }
 

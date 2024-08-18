@@ -8,6 +8,8 @@ import { makeGetStatus } from 'soapbox/selectors';
 
 import 'leaflet/dist/leaflet.css';
 
+import type { ModalType } from '../modal-root';
+
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
@@ -15,7 +17,7 @@ L.Icon.Default.mergeOptions({
 });
 
 interface IEventMapModal {
-  onClose: (type: string) => void;
+  onClose: (type: ModalType) => void;
   statusId: string;
 }
 
