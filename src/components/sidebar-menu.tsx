@@ -338,7 +338,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
 
                     {(account.is_admin || account.is_moderator) && (
                       <SidebarLink
-                        to='/dashboard'
+                        to='/admin'
                         icon={require('@tabler/icons/outline/dashboard.svg')}
                         text={intl.formatMessage(messages.dashboard)}
                         onClick={onClose}

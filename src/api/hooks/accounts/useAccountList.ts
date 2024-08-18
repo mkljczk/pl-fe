@@ -1,9 +1,10 @@
-import { accountSchema, mutedAccountSchema, type Account as BaseAccount } from 'pl-api';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { PaginatedResponse, type Account as BaseAccount } from 'pl-api';
 
 import { Entities } from 'soapbox/entity-store/entities';
-import { useEntities } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';
-import { normalizeAccount, type Account } from 'soapbox/normalizers';
+import { type Account, normalizeAccount } from 'soapbox/normalizers';
+import { flattenPages } from 'soapbox/utils/queries';
 
 import { useRelationships } from './useRelationships';
 
@@ -14,23 +15,36 @@ interface useAccountListOpts {
 }
 
 const useAccountList = (listKey: string[], entityFn: EntityFn<void>, opts: useAccountListOpts = {}) => {
-  const { entities, ...rest } = useEntities<BaseAccount, Account>(
-    [Entities.ACCOUNTS, ...listKey],
-    entityFn,
-    { schema: listKey[0] === 'mutes' ? mutedAccountSchema : accountSchema, enabled: opts.enabled, transform: normalizeAccount },
-  );
+  const getAccounts = async (pageParam?: Pick<PaginatedResponse<BaseAccount>, 'next'>) => {
+    const response = await (pageParam?.next ? pageParam.next() : entityFn()) as PaginatedResponse<BaseAccount>;
+
+    return {
+      ...response,
+      items: response.items.map(normalizeAccount),
+    };
+  };
+
+  const queryInfo = useInfiniteQuery({
+    queryKey: [Entities.ACCOUNTS, ...listKey],
+    queryFn: ({ pageParam }) => getAccounts(pageParam),
+    enabled: true,
+    initialPageParam: { next: null as (() => Promise<PaginatedResponse<BaseAccount>>) | null },
+    getNextPageParam: (config) => config.next ? config : undefined,
+  });
+
+  const data = flattenPages<Account>(queryInfo.data as any)?.toReversed() || [];
 
   const { relationships } = useRelationships(
     listKey,
-    entities.map(({ id }) => id),
+    data.map(({ id }) => id),
   );
 
-  const accounts: Account[] = entities.map((account) => ({
+  const accounts = data.map((account) => ({
     ...account,
     relationship: relationships[account.id],
   }));
 
-  return { accounts, ...rest };
+  return { accounts, ...queryInfo };
 };
 
 const useBlocks = () => {

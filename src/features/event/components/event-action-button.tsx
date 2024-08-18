@@ -87,6 +87,7 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
 
   return (
     <Button
+      className='min-w-max'
       size='sm'
       theme={theme}
       icon={buttonIcon}

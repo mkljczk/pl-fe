@@ -50,7 +50,7 @@ const fetchOAuthTokens = () =>
     dispatch({ type: FETCH_TOKENS_REQUEST });
     return getClient(getState).settings.getOauthTokens().then((tokens) => {
       dispatch({ type: FETCH_TOKENS_SUCCESS, tokens });
-    }).catch(() => {
+    }).catch((e) => {
       dispatch({ type: FETCH_TOKENS_FAIL });
     });
   };

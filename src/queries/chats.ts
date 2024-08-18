@@ -38,7 +38,7 @@ const useChatMessages = (chat: Chat) => {
     gcTime: 0,
     staleTime: 0,
     initialPageParam: { next: null as (() => Promise<PaginatedResponse<BaseChatMessage>>) | null },
-    getNextPageParam: (config) => config,
+    getNextPageParam: (config) => config.next ? config : undefined,
   });
 
   const data = flattenPages<ChatMessage>(queryInfo.data as any)?.toReversed();
@@ -76,7 +76,7 @@ const useChats = () => {
     placeholderData: keepPreviousData,
     enabled: features.chats && !!me,
     initialPageParam: { next: null as (() => Promise<PaginatedResponse<Chat>>) | null },
-    getNextPageParam: (config) => config,
+    getNextPageParam: (config) => config.next ? config : undefined,
   });
 
   const data = flattenPages(queryInfo.data);
