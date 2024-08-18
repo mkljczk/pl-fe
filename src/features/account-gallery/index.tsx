@@ -14,8 +14,6 @@ import { type AccountGalleryAttachment, getAccountGallery } from 'soapbox/select
 
 import MediaItem from './components/media-item';
 
-import type { Status } from 'soapbox/types/entities';
-
 interface ILoadMoreMedia {
   maxId: string | null;
   onLoadMore: (value: string | null) => void;
@@ -68,7 +66,7 @@ const AccountGallery = () => {
     if (attachment.type === 'video') {
       dispatch(openModal('VIDEO', { media: attachment, status: attachment.status, account: attachment.account }));
     } else {
-      const media = (attachment.status as Status).media_attachments;
+      const media = attachment.status.media_attachments;
       const index = media.findIndex((x) => x.id === attachment.id);
 
       dispatch(openModal('MEDIA', { media, index, status: attachment.status }));

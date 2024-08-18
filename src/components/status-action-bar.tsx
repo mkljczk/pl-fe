@@ -30,8 +30,7 @@ import { getReactForStatus, reduceEmoji } from 'soapbox/utils/emoji-reacts';
 import GroupPopover from './groups/popover/group-popover';
 
 import type { Menu } from 'soapbox/components/dropdown-menu';
-import type { Account, Group } from 'soapbox/normalizers';
-import type { Status } from 'soapbox/types/entities';
+import type { Account, Group, Status } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },

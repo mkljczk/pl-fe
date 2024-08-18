@@ -16,11 +16,10 @@ import { useAppDispatch, useAppSelector, useInstance } from 'soapbox/hooks';
 import { makeGetNotification } from 'soapbox/selectors';
 import { NotificationType } from 'soapbox/utils/notification';
 
-import type { Account, Notification as BaseNotification } from 'pl-api';
+import type { Notification as BaseNotification } from 'pl-api';
 import type { ScrollPosition } from 'soapbox/components/status';
-import type { Notification as NotificationEntity } from 'soapbox/normalizers';
+import type { Account, Notification as NotificationEntity, Status as StatusEntity } from 'soapbox/normalizers';
 import type { MinifiedNotification } from 'soapbox/reducers/notifications';
-import type { Status as StatusEntity } from 'soapbox/types/entities';
 
 const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: string) => {
   const output = [message];
@@ -290,7 +289,7 @@ const Notification: React.FC<INotification> = (props) => {
     } else if (icons[type]) {
       return (
         <Icon
-          src={icons[type]}
+          src={icons[type]!}
           className='flex-none text-primary-600 dark:text-primary-400'
         />
       );

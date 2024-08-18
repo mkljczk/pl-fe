@@ -5,7 +5,7 @@ import { openModal } from 'soapbox/actions/modals';
 import { useAppDispatch, useAppSelector, useCompose, useFeatures } from 'soapbox/hooks';
 import { makeGetStatus } from 'soapbox/selectors';
 
-import type { Status as StatusEntity } from 'soapbox/types/entities';
+import type { Status as StatusEntity } from 'soapbox/normalizers';
 
 interface IReplyMentions {
   composeId: string;

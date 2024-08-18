@@ -8,7 +8,7 @@ import { useAppDispatch } from 'soapbox/hooks';
 import DropdownMenu from './dropdown-menu';
 import { HStack, Icon, Text } from './ui';
 
-import type { Status } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   languageVersions: { id: 'status.language_versions', defaultMessage: 'The post has multiple language versions.' },

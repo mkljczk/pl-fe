@@ -8,7 +8,8 @@ import StatusMedia from 'soapbox/components/status-media';
 import { HStack, Stack } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
 
-import type { AdminReport, Status } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/normalizers';
+import type { AdminReport } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   viewStatus: { id: 'admin.reports.actions.view_status', defaultMessage: 'View post' },

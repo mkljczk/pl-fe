@@ -41,7 +41,7 @@ const buildStatus = (state: RootState, pendingStatus: PendingStatus, idempotency
     media_attachments: (pendingStatus.media_ids || ImmutableList()).map((id: string) => ({ id })),
     mentions: buildMentions(pendingStatus),
     poll: buildPoll(pendingStatus),
-    quote: pendingStatus.quote_id,
+    quote: pendingStatus.quote_id ? state.statuses.get(pendingStatus.quote_id) : null,
     sensitive: pendingStatus.sensitive,
     visibility: pendingStatus.visibility,
   };

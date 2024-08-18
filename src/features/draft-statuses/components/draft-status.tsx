@@ -15,8 +15,8 @@ import { buildStatus } from '../builder';
 
 import DraftStatusActionBar from './draft-status-action-bar';
 
+import type { Status as StatusEntity } from 'soapbox/normalizers';
 import type { DraftStatus as DraftStatusType } from 'soapbox/reducers/draft-statuses';
-import type { Status as StatusEntity } from 'soapbox/types/entities';
 
 interface IDraftStatus {
   draftStatus: DraftStatusType;

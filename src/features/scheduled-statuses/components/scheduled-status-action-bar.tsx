@@ -7,7 +7,7 @@ import { getSettings } from 'soapbox/actions/settings';
 import { Button, HStack } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
 
-import type { Status as StatusEntity } from 'soapbox/types/entities';
+import type { Status as StatusEntity } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   cancel: { id: 'scheduled_status.cancel', defaultMessage: 'Cancel' },

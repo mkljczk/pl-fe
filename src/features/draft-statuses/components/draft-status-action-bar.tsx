@@ -46,7 +46,7 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
   };
 
   const handleEditClick = () => {
-    dispatch(setComposeToStatus(status, source.text, source.spoiler_text, source.content_type, false, source.draft_id, source.editorState));
+    dispatch(setComposeToStatus(status, status.poll, source.text, source.spoiler_text, source.content_type, false, source.draft_id, source.editorState));
     dispatch(openModal('COMPOSE'));
   };
 

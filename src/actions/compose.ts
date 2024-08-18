@@ -23,6 +23,7 @@ import type { Account as BaseAccount, BackendVersion, CreateStatusParams, Group,
 import type { AutoSuggestion } from 'soapbox/components/autosuggest-input';
 import type { Emoji } from 'soapbox/features/emoji';
 import type { Account, Status } from 'soapbox/normalizers';
+import type { ReducerStatus } from 'soapbox/reducers/statuses';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { History } from 'soapbox/types/history';
 
@@ -110,8 +111,8 @@ const messages = defineMessages({
 interface ComposeSetStatusAction {
   type: typeof COMPOSE_SET_STATUS;
   composeId: string;
-  status: Pick<BaseStatus, 'id' | 'account' | 'content' | 'group' | 'in_reply_to_id' | 'media_attachments' | 'mentions' | 'quote' | 'spoiler_text' | 'visibility'>;
-  poll?: Poll;
+  status: Pick<Status | ReducerStatus, 'id' | 'account' | 'content' | 'group' | 'in_reply_to_id' | 'media_attachments' | 'mentions' | 'quote' | 'spoiler_text' | 'visibility'>;
+  poll?: Poll | null;
   rawText: string;
   explicitAddressing: boolean;
   spoilerText?: string;
@@ -122,7 +123,7 @@ interface ComposeSetStatusAction {
   editorState?: string | null;
 }
 
-const setComposeToStatus = (status: ComposeSetStatusAction['status'], poll: Poll, rawText: string, spoilerText?: string, contentType?: string | false, withRedraft?: boolean, draftId?: string, editorState?: string | null) =>
+const setComposeToStatus = (status: ComposeSetStatusAction['status'], poll: Poll | null, rawText: string, spoilerText?: string, contentType?: string | false, withRedraft?: boolean, draftId?: string, editorState?: string | null) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const client = getClient(getState);
     const { createStatusExplicitAddressing: explicitAddressing, version: v } = client.features;
@@ -154,7 +155,7 @@ const changeCompose = (composeId: string, text: string) => ({
 interface ComposeReplyAction {
   type: typeof COMPOSE_REPLY;
   composeId: string;
-  status: Pick<Status, 'id' | 'account' | 'group' | 'mentions' | 'spoiler_text' | 'visibility'>;
+  status: Pick<Status | ReducerStatus, 'id' | 'account' | 'group' | 'mentions' | 'spoiler_text' | 'visibility'>;
   account: Pick<Account, 'acct'>;
   explicitAddressing: boolean;
   preserveSpoilers: boolean;
@@ -196,7 +197,7 @@ const cancelReplyCompose = () => ({
 interface ComposeQuoteAction {
   type: typeof COMPOSE_QUOTE;
   composeId: string;
-  status: Pick<Status, 'id' | 'account' | 'visibility' | 'group'>;
+  status: Pick<Status | ReducerStatus, 'id' | 'account' | 'visibility' | 'group'>;
   account: Pick<Account, 'acct'> | undefined;
   explicitAddressing: boolean;
 }

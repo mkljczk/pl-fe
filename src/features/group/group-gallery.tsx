@@ -10,8 +10,8 @@ import { useAppDispatch } from 'soapbox/hooks';
 
 import MediaItem from '../account-gallery/components/media-item';
 
+import type { Status } from 'soapbox/normalizers';
 import type { AccountGalleryAttachment } from 'soapbox/selectors';
-import type { Status } from 'soapbox/types/entities';
 
 interface IGroupGallery {
   params: { groupId: string };

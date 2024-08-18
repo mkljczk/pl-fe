@@ -9,7 +9,7 @@ import NewFolderForm from 'soapbox/features/bookmark-folders/components/new-fold
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 import { makeGetStatus } from 'soapbox/selectors';
 
-import type { Status as StatusEntity } from 'soapbox/types/entities';
+import type { Status as StatusEntity } from 'soapbox/normalizers';
 
 interface ISelectBookmarkFolderModal {
   statusId: string;

@@ -28,7 +28,7 @@ const useCreateEntity = <TEntity extends Entity = Entity, TTransformedEntity ext
 
   const createEntity = async (
     data: Data,
-    callbacks: EntityCallbacks<TEntity | TTransformedEntity, { response?: PlfeResponse }> = {},
+    callbacks: EntityCallbacks<TTransformedEntity, { response?: PlfeResponse }> = {},
   ): Promise<void> => {
     const result = await setPromise(entityFn(data));
     const schema = opts.schema || z.custom<TEntity>();
@@ -39,7 +39,7 @@ const useCreateEntity = <TEntity extends Entity = Entity, TTransformedEntity ext
     dispatch(importEntities([entity], entityType, listKey, 'start'));
 
     if (callbacks.onSuccess) {
-      callbacks.onSuccess(entity);
+      callbacks.onSuccess(entity as TTransformedEntity);
     }
   };
 

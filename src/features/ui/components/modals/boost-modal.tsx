@@ -5,7 +5,7 @@ import Icon from 'soapbox/components/icon';
 import { Modal, Stack, Text } from 'soapbox/components/ui';
 import ReplyIndicator from 'soapbox/features/compose/components/reply-indicator';
 
-import type { Status as StatusEntity } from 'soapbox/types/entities';
+import type { Status as StatusEntity } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   cancel_reblog: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
@@ -14,7 +14,7 @@ const messages = defineMessages({
 
 interface IBoostModal {
   status: StatusEntity;
-  onReblog: (status: StatusEntity) => void;
+  onReblog: (status: Pick<StatusEntity, 'id' | 'reblogged'>) => void;
   onClose: () => void;
 }
 

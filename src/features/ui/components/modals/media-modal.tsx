@@ -20,7 +20,7 @@ import { makeGetStatus } from 'soapbox/selectors';
 import ImageLoader from '../image-loader';
 
 import type { MediaAttachment } from 'pl-api';
-import type { Status } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },

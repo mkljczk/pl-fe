@@ -1,10 +1,10 @@
-import { groupSchema, type Group } from 'pl-api';
+import { groupSchema, type Group as BaseGroup } from 'pl-api';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntities } from 'soapbox/entity-store/hooks';
 import { useClient } from 'soapbox/hooks';
 import { useFeatures } from 'soapbox/hooks/useFeatures';
-import { normalizeGroup } from 'soapbox/normalizers';
+import { normalizeGroup, type Group } from 'soapbox/normalizers';
 
 import { useGroupRelationships } from './useGroupRelationships';
 
@@ -12,7 +12,7 @@ const useGroups = () => {
   const client = useClient();
   const features = useFeatures();
 
-  const { entities, ...result } = useEntities<Group>(
+  const { entities, ...result } = useEntities<BaseGroup, Group>(
     [Entities.GROUPS, 'search', ''],
     () => client.experimental.groups.getGroups(),
     { enabled: features.groups, schema: groupSchema, transform: normalizeGroup },

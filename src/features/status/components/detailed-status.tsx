@@ -16,7 +16,7 @@ import { getActualStatus } from 'soapbox/utils/status';
 
 import StatusInteractionBar from './status-interaction-bar';
 
-import type { Status as StatusEntity } from 'soapbox/types/entities';
+import type { Status as StatusEntity } from 'soapbox/normalizers';
 
 interface IDetailedStatus {
   status: StatusEntity;
@@ -81,7 +81,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
     }
   };
 
-  const actualStatus = getActualStatus(status);
+  const actualStatus = getActualStatus<StatusEntity>(status);
   if (!actualStatus) return null;
   const { account } = actualStatus;
   if (!account || typeof account !== 'object') return null;

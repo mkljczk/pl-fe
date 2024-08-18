@@ -15,7 +15,7 @@ import Markup from './markup';
 import Poll from './polls/poll';
 
 import type { Sizes } from 'soapbox/components/ui/text/text';
-import type { Status } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/normalizers';
 
 const MAX_HEIGHT = 642; // 20px * 32 (+ 2px padding at the top)
 const BIG_EMOJI_LIMIT = 10;

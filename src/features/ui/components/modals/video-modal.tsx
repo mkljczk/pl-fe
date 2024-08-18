@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import Video from 'soapbox/features/video';
 
 import type { MediaAttachment } from 'pl-api';
-import type { Status, Account } from 'soapbox/types/entities';
+import type { Account, Status } from 'soapbox/normalizers';
 
 interface IVideoModal {
   media: MediaAttachment;

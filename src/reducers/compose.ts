@@ -331,7 +331,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
           ? statusToMentionsArray(action.status, action.account, action.rebloggedBy)
           : ImmutableOrderedSet<string>();
 
-        map.set('group_id', action.status.group?.id as string);
+        map.set('group_id', typeof action.status.group === 'string' ? action.status.group : action.status.group?.id || null);
         map.set('in_reply_to', action.status.id);
         map.set('to', to);
         map.set('parent_reblogged_by', action.rebloggedBy?.id || null);
@@ -371,7 +371,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
         map.set('spoiler_text', '');
 
         if (action.status.visibility === 'group') {
-          map.set('group_id', action.status.group?.id as string);
+          map.set('group_id', typeof action.status.group === 'string' ? action.status.group : action.status.group?.id || null);
           map.set('privacy', 'group');
         }
       }));
@@ -474,8 +474,8 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
         map.set('caretPosition', null);
         map.set('idempotencyKey', uuid());
         map.set('content_type', action.contentType || 'text/plain');
-        map.set('quote', action.status.quote?.id as string);
-        map.set('group_id', action.status.group?.id as string);
+        map.set('quote', typeof action.status.quote === 'string' ? action.status.quote : action.status.quote?.id || null);
+        map.set('group_id', typeof action.status.group === 'string' ? action.status.group : action.status.group?.id || null);
 
         if (action.v?.software === PLEROMA && action.withRedraft && hasIntegerMediaIds(action.status)) {
           map.set('media_attachments', ImmutableList());

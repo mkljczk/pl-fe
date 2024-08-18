@@ -8,7 +8,7 @@ import { HStack, Text, Emoji } from 'soapbox/components/ui';
 import { useAppSelector, useSoapboxConfig, useFeatures, useAppDispatch } from 'soapbox/hooks';
 import { reduceEmoji } from 'soapbox/utils/emoji-reacts';
 
-import type { Status } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/normalizers';
 
 interface IStatusInteractionBar {
   status: Status;

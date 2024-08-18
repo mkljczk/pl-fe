@@ -1,4 +1,4 @@
-import { accountSchema, type Account as BaseAccount } from 'pl-api';
+import { accountSchema, mutedAccountSchema, type Account as BaseAccount } from 'pl-api';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { useEntities } from 'soapbox/entity-store/hooks';
@@ -17,7 +17,7 @@ const useAccountList = (listKey: string[], entityFn: EntityFn<void>, opts: useAc
   const { entities, ...rest } = useEntities<BaseAccount, Account>(
     [Entities.ACCOUNTS, ...listKey],
     entityFn,
-    { schema: accountSchema, enabled: opts.enabled, transform: normalizeAccount },
+    { schema: listKey[0] === 'mutes' ? mutedAccountSchema : accountSchema, enabled: opts.enabled, transform: normalizeAccount },
   );
 
   const { relationships } = useRelationships(

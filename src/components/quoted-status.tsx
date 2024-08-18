@@ -14,7 +14,7 @@ import StatusContent from './status-content';
 import StatusReplyMentions from './status-reply-mentions';
 import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 
-import type { Status as StatusEntity } from 'soapbox/types/entities';
+import type { ReducerStatus as StatusEntity } from 'soapbox/reducers/statuses';
 
 const messages = defineMessages({
   cancel: { id: 'reply_indicator.cancel', defaultMessage: 'Cancel' },

@@ -14,7 +14,7 @@ import { buildStatus } from '../util/pending-status-builder';
 
 import PollPreview from './poll-preview';
 
-import type { Status as StatusEntity } from 'soapbox/types/entities';
+import type { Status as StatusEntity } from 'soapbox/normalizers';
 
 const shouldHaveCard = (pendingStatus: StatusEntity) => Boolean(pendingStatus.content.match(/https?:\/\/\S*/));
 
@@ -47,7 +47,7 @@ const PendingStatus: React.FC<IPendingStatus> = ({ idempotencyKey, className, mu
   const status = useAppSelector((state) => {
     const pendingStatus = state.pending_statuses.get(idempotencyKey);
     return pendingStatus ? buildStatus(state, pendingStatus, idempotencyKey) : null;
-  }) as StatusEntity | null;
+  });
 
   if (!status) return null;
   if (!status.account) return null;
@@ -89,7 +89,7 @@ const PendingStatus: React.FC<IPendingStatus> = ({ idempotencyKey, className, mu
 
               {status.poll && <PollPreview poll={status.poll} />}
 
-              {status.quote && <QuotedStatus statusId={status.quote as string} />}
+              {status.quote && <QuotedStatus statusId={status.quote.id} />}
             </Stack>
           </div>
 

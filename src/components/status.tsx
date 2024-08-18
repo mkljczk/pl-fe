@@ -24,7 +24,7 @@ import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 import StatusInfo from './statuses/status-info';
 import { Card, Icon, Stack, Text } from './ui';
 
-import type { Status as StatusEntity } from 'soapbox/types/entities';
+import type { Status as StatusEntity } from 'soapbox/normalizers';
 
 // Defined in components/scrollable-list
 type ScrollPosition = { height: number; top: number };
@@ -84,7 +84,7 @@ const Status: React.FC<IStatus> = (props) => {
 
   const [minHeight, setMinHeight] = useState(208);
 
-  const actualStatus = getActualStatus(status);
+  const actualStatus = getActualStatus<StatusEntity>(status);
   const isReblog = status.reblog && typeof status.reblog === 'object';
   const statusUrl = `/@${actualStatus.account.acct}/posts/${actualStatus.id}`;
   const group = actualStatus.group;

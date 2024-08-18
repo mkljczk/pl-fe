@@ -1,13 +1,11 @@
 import clsx from 'clsx';
-import { type MediaAttachment, mediaAttachmentSchema } from 'pl-api';
+import { type MediaAttachment, type PreviewCard as CardEntity, mediaAttachmentSchema } from 'pl-api';
 import React, { useState, useEffect } from 'react';
 
 import Blurhash from 'soapbox/components/blurhash';
 import { HStack, Stack, Text, Icon } from 'soapbox/components/ui';
 import { addAutoPlay } from 'soapbox/utils/media';
 import { getTextDirection } from 'soapbox/utils/rtl';
-
-import type { Card as CardEntity } from 'soapbox/types/entities';
 
 /** Props for `PreviewCard`. */
 interface IPreviewCard {

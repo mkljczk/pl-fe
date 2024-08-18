@@ -12,7 +12,7 @@ import QuotedStatus from 'soapbox/features/status/containers/quoted-status-conta
 import { useAppDispatch, useAppSelector, useSoapboxConfig } from 'soapbox/hooks';
 import { makeGetStatus } from 'soapbox/selectors';
 
-import type { Status as StatusEntity } from 'soapbox/types/entities';
+import type { Status as StatusEntity } from 'soapbox/normalizers';
 
 type RouteParams = { statusId: string };
 

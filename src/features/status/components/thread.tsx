@@ -25,7 +25,7 @@ import { textForScreenReader } from 'soapbox/utils/status';
 import DetailedStatus from './detailed-status';
 import ThreadStatus from './thread-status';
 
-import type { Account, Status } from 'soapbox/types/entities';
+import type { Account, Status } from 'soapbox/normalizers';
 
 const getAncestorsIds = createSelector([
   (_: RootState, statusId: string | undefined) => statusId,

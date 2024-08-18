@@ -6,7 +6,7 @@ import { IconButton } from 'soapbox/components/ui';
 import { useFeatures } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 
-import type { Account as AccountEntity } from 'soapbox/types/entities';
+import type { Account as AccountEntity } from 'soapbox/normalizers';
 
 const messages = defineMessages({
   subscribe: { id: 'account.subscribe', defaultMessage: 'Subscribe to notifications from @{name}' },

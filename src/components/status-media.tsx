@@ -9,7 +9,7 @@ import { useAppDispatch, useSettings } from 'soapbox/hooks';
 import { defaultMediaVisibility } from 'soapbox/utils/status';
 
 import type { MediaAttachment } from 'pl-api';
-import type { Status } from 'soapbox/types/entities';
+import type { Status } from 'soapbox/normalizers';
 
 interface IStatusMedia {
   /** Status entity to render media for. */
