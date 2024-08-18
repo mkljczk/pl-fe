@@ -15,7 +15,6 @@ import type { PlfeResponse } from 'soapbox/api';
 import type { Group } from 'soapbox/normalizers';
 
 const messages = defineMessages({
-  next: { id: 'manage_group.next', defaultMessage: 'Next' },
   create: { id: 'manage_group.create', defaultMessage: 'Create Group' },
   done: { id: 'manage_group.done', defaultMessage: 'Done' },
 });
