@@ -763,9 +763,9 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
             color='accent'
             filled
             onClick={handleFavouriteClick}
-            active={Boolean(meEmojiName)}
+            active={status.favourited}
             count={favouriteCount}
-            text={withLabels ? meEmojiTitle : undefined}
+            text={withLabels ? intl.formatMessage(status.favourited ? messages.reactionLike : messages.favourite) : undefined}
             theme={statusActionButtonTheme}
           />
         )}
