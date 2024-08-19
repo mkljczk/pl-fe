@@ -775,6 +775,7 @@
   "export_data.hints.follows": "Uzyskaj plik CSV zawierający listę obserwowanych kont",
   "export_data.hints.mutes": "Uzyskaj plik CSV zawierający listę wyciszonych kont",
   "export_data.mutes_label": "Wyciszenia",
+  "import_data.overwrite": "Zastąp zamiast dodawać",
   "export_data.success.blocks": "Pomyślnie eksportowano blokady",
   "export_data.success.followers": "Pomyślnie eksportowano obserwujących",
   "export_data.success.mutes": "Pomyślnie eksportowano wyciszenia",

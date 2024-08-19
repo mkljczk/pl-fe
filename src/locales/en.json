@@ -887,6 +887,7 @@
   "import_data.hints.follows": "CSV file containing a list of followed accounts",
   "import_data.hints.mutes": "CSV file containing a list of muted accounts",
   "import_data.mutes_label": "Mutes",
+  "import_data.overwrite": "Overwrite instead of appending",
   "import_data.success.blocks": "Blocks imported successfully",
   "import_data.success.followers": "Followers imported successfully",
   "import_data.success.mutes": "Mutes imported successfully",
