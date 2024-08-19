@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-type SystemTheme = 'light' | 'dark';
+type SystemTheme = 'light' | 'black';
 
 /** Get the system color scheme of the system. */
 const useSystemTheme = (): SystemTheme => {
@@ -29,7 +29,7 @@ const useSystemTheme = (): SystemTheme => {
     };
   }, []);
 
-  return dark ? 'dark' : 'light';
+  return dark ? 'black' : 'light';
 };
 
 export { useSystemTheme };

@@ -21,7 +21,7 @@ const SitePreview: React.FC<ISitePreview> = ({ soapbox }) => {
   const userTheme = settings.get('themeMode');
   const systemTheme = useSystemTheme();
 
-  const dark = ['dark', 'black'].includes(userTheme as string) || (userTheme === 'system' && systemTheme === 'dark');
+  const dark = ['dark', 'black'].includes(userTheme as string) || (userTheme === 'system' && systemTheme === 'black');
 
   const bodyClass = clsx(
     'site-preview',
