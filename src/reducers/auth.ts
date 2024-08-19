@@ -35,7 +35,7 @@ const ReducerRecord = ImmutableRecord({
   tokens: ImmutableMap<string, Token>(),
   users: ImmutableMap<string, AuthUser>(),
   me: null as string | null,
-  client: null as any as PlApiClient,
+  client: new PlApiClient(backendUrl) as any as PlApiClient,
 });
 
 type AuthUser = ReturnType<typeof AuthUserRecord>;

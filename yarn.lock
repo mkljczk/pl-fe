@@ -8390,10 +8390,10 @@ pkg-types@^1.0.3:
     mlly "^1.2.0"
     pathe "^1.1.0"
 
-pl-api@^0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.0.7.tgz#603dbe8d0c2b8ec0e500fe5eae26e30d77f958ba"
-  integrity sha512-8Wh+uIyfcHhLLOT9s8i/Rjh/vcmjio7OEqNsUbYpJD/9n4TgW1zj/hOImlqGFDhGVdteAUx9cVr4jjQbLhtG/A==
+pl-api@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.0.8.tgz#8ccf422da7116fdf93e6d642b59e44e8ee7b978b"
+  integrity sha512-OJs0S4Z8bIgXJj/2U+BKX0hCyBnOcTn2I2IwRMfVXe7a+KetiF/loO4CslXh30d+0qN/vyYKg4X2/9jzJ56sgQ==
   dependencies:
     blurhash "^2.0.5"
     http-link-header "^1.1.3"
