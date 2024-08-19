@@ -75,7 +75,7 @@ interface IAccount {
   actionIcon?: string;
   actionTitle?: string;
   /** Override other actions for specificity like mute/unmute. */
-  actionType?: 'muting' | 'blocking' | 'follow_request';
+  actionType?: 'muting' | 'blocking' | 'follow_request' | 'biting';
   avatarSize?: number;
   hidden?: boolean;
   hideActions?: boolean;

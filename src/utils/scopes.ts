@@ -1,5 +1,5 @@
 
-import { getFeatures, PLEROMA, type Instance } from 'pl-api';
+import { getFeatures, PLEROMA, TOKI, type Instance } from 'pl-api';
 
 import type { RootState } from 'soapbox/store';
 
@@ -11,6 +11,8 @@ const getInstanceScopes = (instance: Instance) => {
   const v = getFeatures(instance).version;
 
   switch (v.software) {
+    case TOKI:
+      return 'read write follow push write:bites';
     case PLEROMA:
       return 'read write follow push admin';
     default:

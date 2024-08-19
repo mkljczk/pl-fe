@@ -8,11 +8,13 @@ import {
   unmuteAccount,
   authorizeFollowRequest,
   rejectFollowRequest,
+  biteAccount,
 } from 'soapbox/actions/accounts';
 import { openModal } from 'soapbox/actions/modals';
 import { useFollow } from 'soapbox/api/hooks';
 import { Button, HStack } from 'soapbox/components/ui';
 import { useAppDispatch, useFeatures, useLoggedIn } from 'soapbox/hooks';
+import toast from 'soapbox/toast';
 
 import type { Account } from 'soapbox/normalizers';
 
@@ -30,13 +32,16 @@ const messages = defineMessages({
   unmute: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' },
   authorize: { id: 'follow_request.authorize', defaultMessage: 'Authorize' },
   reject: { id: 'follow_request.reject', defaultMessage: 'Reject' },
+  bite: { id: 'account.bite', defaultMessage: 'Bite @{name}' },
+  userBit: { id: 'account.bite.success', defaultMessage: 'You have bit @{acct}' },
+  userBiteFail: { id: 'account.bite.fail', defaultMessage: 'Failed to bite @{acct}' },
 });
 
 interface IActionButton {
   /** Target account for the action. */
   account: Account;
   /** Type of action to prioritize, eg on Blocks and Mutes pages. */
-  actionType?: 'muting' | 'blocking' | 'follow_request';
+  actionType?: 'muting' | 'blocking' | 'follow_request' | 'biting';
   /** Displays shorter text on the "Awaiting approval" button. */
   small?: boolean;
 }
@@ -86,6 +91,12 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
     dispatch(rejectFollowRequest(account.id));
   };
 
+  const handleBite = () => {
+    dispatch(biteAccount(account.id))
+      .then(() => toast.success(intl.formatMessage(messages.userBit, { acct: account.acct })))
+      .catch(() => toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct })));
+  };
+
   const handleRemoteFollow = () => {
     dispatch(openModal('UNAUTHORIZED', {
       action: 'FOLLOW',
@@ -122,6 +133,21 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
         size='sm'
         text={text}
         onClick={handleBlock}
+      />
+    );
+  };
+
+  /** Handles actionType='blocking' */
+  const bitingAction = () => {
+    const text = intl.formatMessage(messages.bite, { name: account.username });
+
+    return (
+      <Button
+        theme='secondary'
+        size='sm'
+        text={text}
+        onClick={handleBite}
+        icon={require('@tabler/icons/outline/pacman.svg')}
       />
     );
   };
@@ -201,6 +227,8 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
         return blockingAction();
       } else if (actionType === 'follow_request') {
         return followRequestAction();
+      } else if (actionType === 'biting') {
+        return bitingAction();
       }
     }
 

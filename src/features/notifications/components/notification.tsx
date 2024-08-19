@@ -55,6 +55,7 @@ const icons: Partial<Record<NotificationType, string>> = {
   event_reminder: require('@tabler/icons/outline/calendar-time.svg'),
   participation_request: require('@tabler/icons/outline/calendar-event.svg'),
   participation_accepted: require('@tabler/icons/outline/calendar-event.svg'),
+  bite: require('@tabler/icons/outline/pacman.svg'),
 };
 
 const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
@@ -129,6 +130,10 @@ const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
   moderation_warning: {
     id: 'notification.moderation_warning',
     defaultMessage: 'You have received a moderation warning',
+  },
+  bite: {
+    id: 'notification.bite',
+    defaultMessage: '{name} has bit you',
   },
 });
 
@@ -308,6 +313,16 @@ const Notification: React.FC<INotification> = (props) => {
             hidden={hidden}
             avatarSize={avatarSize}
             actionType='follow_request'
+            withRelationship
+          />
+        ) : null;
+      case 'bite':
+        return account && typeof account === 'object' ? (
+          <AccountContainer
+            id={account.id}
+            hidden={hidden}
+            avatarSize={avatarSize}
+            actionType='biting'
             withRelationship
           />
         ) : null;

@@ -110,6 +110,10 @@ const BIRTHDAY_REMINDERS_FETCH_REQUEST = 'BIRTHDAY_REMINDERS_FETCH_REQUEST' as c
 const BIRTHDAY_REMINDERS_FETCH_SUCCESS = 'BIRTHDAY_REMINDERS_FETCH_SUCCESS' as const;
 const BIRTHDAY_REMINDERS_FETCH_FAIL = 'BIRTHDAY_REMINDERS_FETCH_FAIL' as const;
 
+const ACCOUNT_BITE_REQUEST = 'ACCOUNT_BITE_REQUEST' as const;
+const ACCOUNT_BITE_SUCCESS = 'ACCOUNT_BITE_SUCCESS' as const;
+const ACCOUNT_BITE_FAIL = 'ACCOUNT_BITE_FAIL' as const;
+
 const maybeRedirectLogin = (error: { response: PlfeResponse }, history?: History) => {
   // The client is unauthorized - redirect to login.
   if (history && error?.response?.status === 401) {
@@ -809,6 +813,37 @@ const fetchBirthdayReminders = (month: number, day: number) =>
     });
   };
 
+const biteAccount = (accountId: string) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    const client = getClient(getState);
+
+    dispatch(biteAccountRequest(accountId));
+
+    return client.accounts.biteAccount(accountId)
+      .then(() => {
+        return dispatch(biteAccountSuccess(accountId));
+      })
+      .catch(error => {
+        dispatch(biteAccountFail(accountId, error));
+        throw error;
+      });
+  };
+
+const biteAccountRequest = (accountId: string) => ({
+  type: ACCOUNT_BITE_REQUEST,
+  accountId,
+});
+
+const biteAccountSuccess = (accountId: string) => ({
+  type: ACCOUNT_BITE_SUCCESS,
+});
+
+const biteAccountFail = (accountId: string, error: unknown) => ({
+  type: ACCOUNT_BITE_FAIL,
+  accountId,
+  error,
+});
+
 export {
   ACCOUNT_CREATE_REQUEST,
   ACCOUNT_CREATE_SUCCESS,
@@ -879,6 +914,9 @@ export {
   BIRTHDAY_REMINDERS_FETCH_REQUEST,
   BIRTHDAY_REMINDERS_FETCH_SUCCESS,
   BIRTHDAY_REMINDERS_FETCH_FAIL,
+  ACCOUNT_BITE_REQUEST,
+  ACCOUNT_BITE_SUCCESS,
+  ACCOUNT_BITE_FAIL,
   createAccount,
   fetchAccount,
   fetchAccountByUsername,
@@ -957,4 +995,8 @@ export {
   accountSearch,
   accountLookup,
   fetchBirthdayReminders,
+  biteAccount,
+  biteAccountRequest,
+  biteAccountSuccess,
+  biteAccountFail,
 };

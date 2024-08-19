@@ -4,7 +4,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { blockAccount, pinAccount, removeFromFollowers, unblockAccount, unmuteAccount, unpinAccount } from 'soapbox/actions/accounts';
+import { biteAccount, blockAccount, pinAccount, removeFromFollowers, unblockAccount, unmuteAccount, unpinAccount } from 'soapbox/actions/accounts';
 import { mentionCompose, directCompose } from 'soapbox/actions/compose';
 import { blockDomain, unblockDomain } from 'soapbox/actions/domain-blocks';
 import { openModal } from 'soapbox/actions/modals';
@@ -57,6 +57,7 @@ const messages = defineMessages({
   mutes: { id: 'navigation_bar.mutes', defaultMessage: 'Mutes' },
   endorse: { id: 'account.endorse', defaultMessage: 'Feature on profile' },
   unendorse: { id: 'account.unendorse', defaultMessage: 'Don\'t feature on profile' },
+  bite: { id: 'account.bite', defaultMessage: 'Bite @{name}' },
   removeFromFollowers: { id: 'account.remove_from_followers', defaultMessage: 'Remove this follower' },
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
   add_or_remove_from_list: { id: 'account.add_or_remove_from_list', defaultMessage: 'Add or Remove from lists' },
@@ -69,6 +70,8 @@ const messages = defineMessages({
   removeFromFollowersConfirm: { id: 'confirmations.remove_from_followers.confirm', defaultMessage: 'Remove' },
   userEndorsed: { id: 'account.endorse.success', defaultMessage: 'You are now featuring @{acct} on your profile' },
   userUnendorsed: { id: 'account.unendorse.success', defaultMessage: 'You are no longer featuring @{acct}' },
+  userBit: { id: 'account.bite.success', defaultMessage: 'You have bit @{acct}' },
+  userBiteFail: { id: 'account.bite.fail', defaultMessage: 'Failed to bite @{acct}' },
   profileExternal: { id: 'account.profile_external', defaultMessage: 'View profile on {domain}' },
   header: { id: 'account.header.alt', defaultMessage: 'Profile header' },
   subscribeFeed: { id: 'account.rss_feed', defaultMessage: 'Subscribe to RSS feed' },
@@ -170,6 +173,12 @@ const Header: React.FC<IHeader> = ({ account }) => {
         .then(() => toast.success(intl.formatMessage(messages.userEndorsed, { acct: account.acct })))
         .catch(() => { });
     }
+  };
+
+  const onBite = () => {
+    dispatch(biteAccount(account.id))
+      .then(() => toast.success(intl.formatMessage(messages.userBit, { acct: account.acct })))
+      .catch(() => toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct })));
   };
 
   const onReport = () => {
@@ -402,6 +411,14 @@ const Header: React.FC<IHeader> = ({ account }) => {
           text: intl.formatMessage(messages.add_or_remove_from_list),
           action: onAddToList,
           icon: require('@tabler/icons/outline/list.svg'),
+        });
+      }
+
+      if (features.bites) {
+        menu.push({
+          text: intl.formatMessage(messages.bite, { name: account.username }),
+          action: onBite,
+          icon: require('@tabler/icons/outline/pacman.svg'),
         });
       }
 

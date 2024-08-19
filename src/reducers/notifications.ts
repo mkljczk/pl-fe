@@ -68,7 +68,7 @@ const minifyNotification = (notification: Notification) => {
     created_at: string;
     id: string;
   } & (
-    | { type: 'follow' | 'follow_request' | 'admin.sign_up' }
+    | { type: 'follow' | 'follow_request' | 'admin.sign_up' | 'bite' }
     | {
       type: 'mention' | 'status' | 'reblog' | 'favourite' | 'poll' | 'update' | 'event_reminder';
       status: string;

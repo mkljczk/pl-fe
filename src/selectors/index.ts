@@ -279,7 +279,7 @@ const makeGetOtherAccounts = () => createSelector([
 ], (accounts, authUserIds, me) =>
   authUserIds.reduce((list: ImmutableList<any>, id: string) => {
     if (id === me) return list;
-    const account = accounts[id];
+    const account = accounts?.[id];
     return account ? list.push(account) : list;
   }, ImmutableList()),
 );

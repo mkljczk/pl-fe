@@ -29,7 +29,7 @@ const useTimelineStream = (stream: string, params: { list?: string; tag?: string
   const streamingUrl = instance.configuration.urls.streaming;
 
   const connect = async () => {
-    if (!socket.current) {
+    if (!socket.current && streamingUrl) {
       socket.current = client.streaming.connect();
 
       socket.current.subscribe(stream, params);
