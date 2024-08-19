@@ -20,7 +20,7 @@ const createApp = (params: CreateApplicationParams, baseURL?: string) =>
   (dispatch: React.Dispatch<AnyAction>) => {
     dispatch({ type: APP_CREATE_REQUEST, params });
 
-    const client = new PlApiClient(baseURL || BuildConfig.BACKEND_URL || '', undefined, { fetchInstance: false });
+    const client = new PlApiClient(baseURL || BuildConfig.BACKEND_URL || '');
     return client.apps.createApplication(params).then((app) => {
       dispatch({ type: APP_CREATE_SUCCESS, params, app });
       return app as Record<string, string>;

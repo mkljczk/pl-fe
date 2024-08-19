@@ -19,7 +19,7 @@ import { getInstanceScopes } from 'soapbox/utils/scopes';
 import type { AppDispatch } from 'soapbox/store';
 
 const fetchExternalInstance = (baseURL: string) =>
-  (new PlApiClient(baseURL, undefined, { fetchInstance: false })).instance.getInstance()
+  (new PlApiClient(baseURL)).instance.getInstance()
     .then(instance => instance)
     .catch(error => {
       if (error.response?.status === 401) {

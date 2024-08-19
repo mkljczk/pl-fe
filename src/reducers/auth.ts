@@ -35,7 +35,7 @@ const ReducerRecord = ImmutableRecord({
   tokens: ImmutableMap<string, Token>(),
   users: ImmutableMap<string, AuthUser>(),
   me: null as string | null,
-  client: new PlApiClient(backendUrl) as any as PlApiClient,
+  client: new PlApiClient(backendUrl),
 });
 
 type AuthUser = ReturnType<typeof AuthUserRecord>;
@@ -60,7 +60,7 @@ const getLocalState = () => {
   if (!state) return undefined;
 
   return ReducerRecord({
-    app: applicationSchema.parse(state.app),
+    app: state.app && applicationSchema.parse(state.app),
     tokens: ImmutableMap(Object.entries(state.tokens).map(([key, value]) => [key, tokenSchema.parse(value)])),
     users: ImmutableMap(Object.entries(state.users).map(([key, value]) => [key, AuthUserRecord(value as any)])),
     me: state.me,

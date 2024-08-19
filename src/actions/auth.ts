@@ -128,7 +128,7 @@ const otpVerify = (code: string, mfa_token: string) =>
     const state = getState();
     const app = state.auth.app;
     const baseUrl = parseBaseURL(state.me) || BuildConfig.BACKEND_URL;
-    const client = new PlApiClient(baseUrl, undefined, { fetchInstance: false });
+    const client = new PlApiClient(baseUrl);
     return client.oauth.mfaChallenge({
       client_id: app?.client_id!,
       client_secret: app?.client_secret!,
@@ -146,7 +146,7 @@ const verifyCredentials = (token: string, accountUrl?: string) =>
 
     dispatch({ type: VERIFY_CREDENTIALS_REQUEST, token });
 
-    const client = new PlApiClient(baseURL, token, { fetchInstance: false });
+    const client = new PlApiClient(baseURL, token);
 
     return client.settings.verifyCredentials().then((account) => {
       dispatch(importFetchedAccount(account));

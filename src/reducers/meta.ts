@@ -13,7 +13,7 @@ const ReducerRecord = ImmutableRecord({
 const meta = (state = ReducerRecord(), action: InstanceAction | SwAction) => {
   switch (action.type) {
     case INSTANCE_FETCH_FAIL:
-      if (action.error?.status === 404) {
+      if (action.error?.response?.status === 404) {
         return state.set('instance_fetch_failed', true);
       }
       return state;
