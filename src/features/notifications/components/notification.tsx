@@ -8,6 +8,7 @@ import { openModal } from 'soapbox/actions/modals';
 import { getSettings } from 'soapbox/actions/settings';
 import { toggleStatusHidden } from 'soapbox/actions/statuses';
 import Icon from 'soapbox/components/icon';
+import RelativeTimestamp from 'soapbox/components/relative-timestamp';
 import { HStack, Text, Emoji } from 'soapbox/components/ui';
 import AccountContainer from 'soapbox/containers/account-container';
 import StatusContainer from 'soapbox/containers/status-container';
@@ -405,6 +406,19 @@ const Notification: React.FC<INotification> = (props) => {
                   {message}
                 </Text>
               </div>
+
+              {!['mention', 'status'].includes(notification.type) && (
+                <div className='ml-auto'>
+                  <Text
+                    theme='muted'
+                    size='xs'
+                    truncate
+                    data-testid='message'
+                  >
+                    <RelativeTimestamp timestamp={notification.created_at} theme='muted' size='sm' className='whitespace-nowrap' />
+                  </Text>
+                </div>
+              )}
             </HStack>
           </div>
 
