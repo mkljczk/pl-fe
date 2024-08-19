@@ -140,7 +140,9 @@ const Settings = () => {
         </CardBody>
 
         {any([
-          features.importData,
+          features.importBlocks,
+          features.importFollows,
+          features.importMutes,
           features.exportData,
           features.accountBackups,
           features.federating && features.accountMoving,
@@ -154,7 +156,7 @@ const Settings = () => {
 
             <CardBody>
               <List>
-                {features.importData && (
+                {(features.importBlocks || features.importFollows || features.importMutes) && (
                   <ListItem label={intl.formatMessage(messages.importData)} to='/settings/import' />
                 )}
 

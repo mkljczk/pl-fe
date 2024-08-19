@@ -7,6 +7,7 @@ import {
   importMutes,
 } from 'soapbox/actions/import-data';
 import { Column } from 'soapbox/components/ui';
+import { useFeatures } from 'soapbox/hooks';
 
 import DataImporter from './components/data-importer';
 
@@ -35,12 +36,13 @@ const muteMessages = defineMessages({
 
 const ImportData = () => {
   const intl = useIntl();
+  const features = useFeatures();
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <DataImporter action={importFollows} messages={followMessages} />
-      <DataImporter action={importBlocks} messages={blockMessages} />
-      <DataImporter action={importMutes} messages={muteMessages} />
+      {features.importFollows && <DataImporter action={importFollows} messages={followMessages} allowOverwrite />}
+      {features.importBlocks && <DataImporter action={importBlocks} messages={blockMessages} allowOverwrite />}
+      {features.importMutes && <DataImporter action={importMutes} messages={muteMessages} />}
     </Column>
   );
 };

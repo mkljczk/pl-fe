@@ -133,7 +133,7 @@ const accountToCredentials = (account: Account): AccountCredentials => {
     note: account.__meta.source?.note ?? '',
     fields_attributes: [...account.__meta.source?.fields ?? []],
     stranger_notifications: account.__meta.pleroma?.notification_settings?.block_from_strangers === true,
-    accepts_email_list: account.__meta.pleroma.accepts_email_list === true,
+    accepts_email_list: account.__meta.pleroma?.accepts_email_list === true,
     hide_followers: hideNetwork,
     hide_follows: hideNetwork,
     hide_followers_count: hideNetwork,

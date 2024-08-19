@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { MessageDescriptor, useIntl } from 'react-intl';
+import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 
-import { Button, FileInput, Form, FormActions, FormGroup, Text } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import List, { ListItem } from 'soapbox/components/list';
+import { Button, FileInput, Form, FormActions, FormGroup, Text, Toggle } from 'soapbox/components/ui';
+import { useAppDispatch, useFeatures } from 'soapbox/hooks';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 
@@ -12,20 +13,23 @@ interface IDataImporter {
     input_hint: MessageDescriptor;
     submit: MessageDescriptor;
   };
-  action: (list: File | string) => (dispatch: AppDispatch, getState: () => RootState) => Promise<void>;
+  action: (list: File | string, overwrite?: boolean) => (dispatch: AppDispatch, getState: () => RootState) => Promise<void>;
   accept?: string;
+  allowOverwrite?: boolean;
 }
 
-const DataImporter: React.FC<IDataImporter> = ({ messages, action, accept = '.csv,text/csv' }) => {
+const DataImporter: React.FC<IDataImporter> = ({ messages, action, accept = '.csv,text/csv', allowOverwrite }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
+  const features = useFeatures();
 
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null | undefined>(null);
+  const [overwrite, setOverwrite] = useState(false);
 
   const handleSubmit: React.FormEventHandler = (event) => {
     setIsLoading(true);
-    dispatch(action(file!)).then(() => {
+    dispatch(action(file!, overwrite)).then(() => {
       setIsLoading(false);
     }).catch(() => {
       setIsLoading(false);
@@ -51,6 +55,20 @@ const DataImporter: React.FC<IDataImporter> = ({ messages, action, accept = '.cs
           required
         />
       </FormGroup>
+
+      {features.importOverwrite && (
+        <List>
+          <ListItem
+            label={<FormattedMessage id='import_data.overwrite' defaultMessage='Overwrite instead of appending' />}
+          >
+            <Toggle
+              checked={overwrite}
+              onChange={({ target }) => setOverwrite(target.checked)}
+            />
+          </ListItem>
+        </List>
+      )}
+
       <FormActions>
         <Button type='submit' theme='primary' disabled={isLoading}>
           {intl.formatMessage(messages.submit)}

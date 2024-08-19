@@ -38,10 +38,10 @@ const messages = defineMessages({
   mutesSuccess: { id: 'import_data.success.mutes', defaultMessage: 'Mutes imported successfully' },
 });
 
-const importFollows = (list: File | string) =>
+const importFollows = (list: File | string, overwrite?: boolean) =>
   (dispatch: React.Dispatch<ImportDataActions>, getState: () => RootState) => {
     dispatch({ type: IMPORT_FOLLOWS_REQUEST });
-    return getClient(getState).settings.importFollows(list).then(response => {
+    return getClient(getState).settings.importFollows(list, overwrite ? 'overwrite' : 'merge').then(response => {
       toast.success(messages.followersSuccess);
       dispatch({ type: IMPORT_FOLLOWS_SUCCESS, response });
     }).catch(error => {
@@ -49,10 +49,10 @@ const importFollows = (list: File | string) =>
     });
   };
 
-const importBlocks = (list: File | string) =>
+const importBlocks = (list: File | string, overwrite?: boolean) =>
   (dispatch: React.Dispatch<ImportDataActions>, getState: () => RootState) => {
     dispatch({ type: IMPORT_BLOCKS_REQUEST });
-    return getClient(getState).settings.importBlocks(list).then(response => {
+    return getClient(getState).settings.importBlocks(list, overwrite ? 'overwrite' : 'merge').then(response => {
       toast.success(messages.blocksSuccess);
       dispatch({ type: IMPORT_BLOCKS_SUCCESS, response });
     }).catch(error => {
