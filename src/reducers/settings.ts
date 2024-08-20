@@ -27,7 +27,6 @@ const updateFrequentLanguages = (state: State, language: string) =>
 
 const importSettings = (state: State, account: APIEntity) => {
   account = fromJS(account);
-  console.log(account.toJS());
   const prefs = account.getIn(['__meta', 'pleroma', 'settings_store', FE_NAME], ImmutableMap());
   return state.merge(prefs) as State;
 };
