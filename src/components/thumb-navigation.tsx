@@ -65,6 +65,15 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
     return null;
   };
 
+  const composeButton = (
+    <button className='flex flex-1 flex-col items-center px-1.5 py-3.5 text-lg text-gray-600' onClick={handleOpenComposeModal}>
+      <Icon
+        src={require('@tabler/icons/outline/square-rounded-plus.svg')}
+        className='h-6 w-6 text-gray-600 black:text-white'
+      />
+    </button>
+  );
+
   return (
     <div className='fixed inset-x-0 bottom-0 z-50 flex w-full overflow-x-auto border-t border-solid border-gray-200 bg-white/90 shadow-2xl backdrop-blur-md black:bg-black/80 lg:hidden dark:border-gray-800 dark:bg-primary-900/90'>
       <button className='flex flex-1 flex-col items-center px-2 py-4 text-lg text-gray-600' onClick={handleOpenSidebar}>
@@ -82,7 +91,7 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
         exact
       />
 
-      {features.groups && (
+      {/* {features.groups && (
         <ThumbNavigationLink
           src={require('@tabler/icons/outline/circles.svg')}
           activeSrc={require('@tabler/icons/filled/circles.svg')}
@@ -90,7 +99,9 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
           to='/groups'
           exact
         />
-      )}
+      )} */}
+
+      {account && !(features.chats || features.conversations) && composeButton}
 
       <ThumbNavigationLink
         src={require('@tabler/icons/outline/search.svg')}
@@ -112,14 +123,7 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
 
       {account && renderMessagesLink()}
 
-      {account && (
-        <button className='flex flex-1 flex-col items-center px-1.5 py-3.5 text-lg text-gray-600' onClick={handleOpenComposeModal}>
-          <Icon
-            src={require('@tabler/icons/outline/square-rounded-plus.svg')}
-            className='h-6 w-6 text-gray-600 black:text-white'
-          />
-        </button>
-      )}
+      {account && (features.chats || features.conversations) && composeButton}
     </div>
   );
 };
