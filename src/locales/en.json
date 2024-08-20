@@ -1305,6 +1305,7 @@
   "search_results.accounts": "People",
   "search_results.filter_message": "You are searching for posts from @{acct}.",
   "search_results.hashtags": "Hashtags",
+  "search_results.links": "News",
   "search_results.statuses": "Posts",
   "security.codes.fail": "Failed to fetch backup codes",
   "security.confirm.fail": "Incorrect code or password. Try again.",

@@ -1305,6 +1305,7 @@
   "search_results.accounts": "Ludzie",
   "search_results.filter_message": "Szukasz wpisów autorstwa @{acct}.",
   "search_results.hashtags": "Hashtagi",
+  "search_results.links": "Aktualności",
   "search_results.statuses": "Wpisy",
   "security.codes.fail": "Nie udało się uzyskać zapasowych kodów",
   "security.confirm.fail": "Nieprawidłowy kod lub hasło. Spróbuj ponownie.",

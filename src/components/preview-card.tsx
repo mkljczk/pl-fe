@@ -159,6 +159,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
         height: horizontal ? height : undefined,
       }}
       className='status-card__image-image'
+      title={card.image_description || undefined}
     />
   );
 

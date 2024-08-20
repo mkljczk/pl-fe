@@ -51,7 +51,7 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 type APIEntities = Array<APIEntity>;
-type SearchFilter = 'accounts' | 'statuses' | 'groups' | 'hashtags';
+type SearchFilter = 'accounts' | 'statuses' | 'groups' | 'hashtags' | 'links';
 
 const toIds = (items: APIEntities = []) => ImmutableOrderedSet(items.map(item => item.id));
 

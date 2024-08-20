@@ -115,6 +115,7 @@ const setFilter = (filterType: SearchFilter) =>
   };
 
 const expandSearch = (type: SearchFilter) => (dispatch: AppDispatch, getState: () => RootState) => {
+  if (type === 'links') return;
   const value = getState().search.value;
   const offset = getState().search.results[type].size;
   const accountId = getState().search.accountId;

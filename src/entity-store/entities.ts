@@ -1,4 +1,4 @@
-import type { BookmarkFolder, GroupMember, GroupRelationship, Relationship } from 'pl-api';
+import type { BookmarkFolder, GroupMember, GroupRelationship, Relationship, TrendsLink } from 'pl-api';
 import type { Account, Group, Status } from 'soapbox/normalizers';
 import type * as Schemas from 'soapbox/schemas';
 
@@ -14,6 +14,7 @@ enum Entities {
   RELAYS = 'Relays',
   RULES = 'Rules',
   STATUSES = 'Statuses',
+  TRENDS_LINKS = 'TrendsLinks',
 }
 
 interface EntityTypes {
@@ -27,6 +28,7 @@ interface EntityTypes {
   [Entities.RELAYS]: Schemas.Relay;
   [Entities.RULES]: Schemas.AdminRule;
   [Entities.STATUSES]: Status;
+  [Entities.TRENDS_LINKS]: TrendsLink;
 }
 
 export { Entities, type EntityTypes };
