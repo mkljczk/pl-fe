@@ -217,11 +217,15 @@ const statuses = (state = initialState, action: AnyAction): State => {
     case DISLIKE_FAIL:
       return state.get(action.statusId) === undefined ? state : state.setIn([action.statusId, 'disliked'], false);
     case REBLOG_REQUEST:
-      return state.setIn([action.statusId, 'reblogged'], true);
+      return state
+        .updateIn([action.statusId, 'reblogs_count'], 0, (count) => typeof count === 'number' ? count + 1 : 1)
+        .setIn([action.statusId, 'reblogged'], true);
     case REBLOG_FAIL:
       return state.get(action.statusId) === undefined ? state : state.setIn([action.statusId, 'reblogged'], false);
     case UNREBLOG_REQUEST:
-      return state.setIn([action.statusId, 'reblogged'], false);
+      return state
+        .updateIn([action.statusId, 'reblogs_count'], 0, (count) => typeof count === 'number' ? Math.max(0, count - 1) : 0)
+        .setIn([action.statusId, 'reblogged'], false);
     case UNREBLOG_FAIL:
       return state.get(action.statusId) === undefined ? state : state.setIn([action.statusId, 'reblogged'], true);
     case STATUS_MUTE_SUCCESS:

@@ -110,8 +110,8 @@ const unreblog = (status: Pick<Status, 'id'>) =>
 
     dispatch(unreblogRequest(status.id));
 
-    return getClient(getState()).statuses.unreblogStatus(status.id).then(() => {
-      dispatch(unreblogSuccess(status.id));
+    return getClient(getState()).statuses.unreblogStatus(status.id).then((status) => {
+      dispatch(unreblogSuccess(status));
     }).catch(error => {
       dispatch(unreblogFail(status.id, error));
     });
@@ -148,9 +148,10 @@ const unreblogRequest = (statusId: string) => ({
   statusId,
 });
 
-const unreblogSuccess = (statusId: string) => ({
+const unreblogSuccess = (status: Status) => ({
   type: UNREBLOG_SUCCESS,
-  statusId,
+  status,
+  statusId: status.id,
 });
 
 const unreblogFail = (statusId: string, error: unknown) => ({
