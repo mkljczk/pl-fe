@@ -150,7 +150,9 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   const handleModalOpen = () => {
     modalHistoryKey.current = Date.now();
     unlistenHistory.current = history.listen(({ state }, action) => {
-      if (!(state as any)?.soapboxModalKey) {
+      if ((state as any)?.soapboxDropdownKey) {
+        return;
+      } else if (!(state as any)?.soapboxModalKey) {
         onClose();
       } else if (action === 'POP') {
         handleOnClose();
