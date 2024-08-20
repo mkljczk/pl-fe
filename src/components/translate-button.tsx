@@ -46,7 +46,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   };
 
   useEffect(() => {
-    if (settings.autoTranslate && features.translations && renderTranslate && supportsLanguages && status.translation !== false && status.language !== null && !knownLanguages.includes(status.language)) {
+    if (!status.translation && settings.autoTranslate && features.translations && renderTranslate && supportsLanguages && status.translation !== false && status.language !== null && !knownLanguages.includes(status.language)) {
       setAutoTranslating(true);
       dispatch(translateStatus(status.id, intl.locale, true));
     }

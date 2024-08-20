@@ -64,6 +64,7 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
 
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector((state) => getStatus(state, { id: statusId as string }));
+  console.log(statusId, status);
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
   const [index, setIndex] = useState<number | null>(null);
@@ -206,7 +207,7 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
   }, [index]);
 
   if (statusId) {
-    if (isLoaded) {
+    if (!isLoaded) {
       return (
         <MissingIndicator />
       );
