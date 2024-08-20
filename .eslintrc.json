@@ -95,6 +95,7 @@
     ],
     "keyword-spacing": "error",
     "dot-notation": "error",
+    "eol-last": ["error", "always"],
     "eqeqeq": "error",
     "indent": [
       "error",
