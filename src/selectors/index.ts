@@ -22,7 +22,7 @@ import type { MinifiedNotification } from 'soapbox/reducers/notifications';
 import type { MinifiedStatus } from 'soapbox/reducers/statuses';
 import type { RootState } from 'soapbox/store';
 
-const normalizeId = (id: any): string => typeof id === 'string' ? id : '';
+const normalizeId = (id: any): string => typeof id === 'string' ? id : typeof id === 'object' ? normalizeId(id.id) : '';
 
 const selectAccount = (state: RootState, accountId: string) =>
   state.entities[Entities.ACCOUNTS]?.store[accountId] as Account | undefined;
@@ -182,12 +182,12 @@ type SelectedStatus = Exclude<ReturnType<ReturnType<typeof makeGetStatus>>, null
 const makeGetNotification = () => createSelector([
   (_state: RootState, notification: MinifiedNotification) => notification,
   // @ts-ignore
-  (state: RootState, notification: MinifiedNotification) => selectAccount(state, normalizeId(notification.account)),
+  (state: RootState, notification: MinifiedNotification) => selectAccount(state, normalizeId(notification.account_id)),
   // @ts-ignore
-  (state: RootState, notification: MinifiedNotification) => selectAccount(state, normalizeId(notification.target)),
+  (state: RootState, notification: MinifiedNotification) => selectAccount(state, normalizeId(notification.target_id)),
   // @ts-ignore
-  (state: RootState, notification: MinifiedNotification) => state.statuses.get(normalizeId(notification.status)),
-  (state: RootState, notification: MinifiedNotification) => notification.accounts ? selectAccounts(state, notification.accounts?.map(normalizeId)) : null,
+  (state: RootState, notification: MinifiedNotification) => state.statuses.get(normalizeId(notification.status_id)),
+  (state: RootState, notification: MinifiedNotification) => notification.account_ids ? selectAccounts(state, notification.account_ids?.map(normalizeId)) : null,
 ], (notification, account, target, status, accounts): Notification => ({
   ...notification,
   // @ts-ignore

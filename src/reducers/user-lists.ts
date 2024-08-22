@@ -54,7 +54,7 @@ import {
   NOTIFICATIONS_UPDATE,
 } from 'soapbox/actions/notifications';
 
-import type { Account, PaginatedResponse } from 'pl-api';
+import type { Account, Notification, PaginatedResponse } from 'pl-api';
 import type { APIEntity } from 'soapbox/types/entities';
 
 const ListRecord = ImmutableRecord({
@@ -134,7 +134,7 @@ const removeFromList = (state: State, path: NestedListPath | ListPath, accountId
     (map as List).update('items', list => (list as Items).filterNot(item => item === accountId)),
   );
 
-const normalizeFollowRequest = (state: State, notification: APIEntity) =>
+const normalizeFollowRequest = (state: State, notification: Notification) =>
   state.updateIn(['follow_requests', 'items'], list =>
     ImmutableOrderedSet([notification.account.id]).union(list as Items),
   );

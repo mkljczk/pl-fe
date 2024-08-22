@@ -16,7 +16,9 @@ const STATUS_NOTIFICATION_TYPES = [
 const normalizeNotification = (notification: BaseNotification) => ({
   ...notification,
   account: normalizeAccount(notification.account),
+  account_id: notification.account.id,
   accounts: [normalizeAccount(notification.account)],
+  account_ids: [notification.account.id],
 });
 
 const normalizeNotifications = (notifications: Array<BaseNotification>) => {

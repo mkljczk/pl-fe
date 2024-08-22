@@ -1,4 +1,5 @@
 import { Record as ImmutableRecord, OrderedMap as ImmutableOrderedMap } from 'immutable';
+import omit from 'lodash/omit';
 
 import {
   ACCOUNT_BLOCK_SUCCESS,
@@ -63,15 +64,15 @@ const comparator = (a: Pick<Notification, 'id'>, b: Pick<Notification, 'id'>) =>
 const minifyNotification = (notification: Notification) => {
   // @ts-ignore
   const minifiedNotification: {
-    account: string;
-    accounts: string[];
+    account_id: string;
+    account_ids: string[];
     created_at: string;
     id: string;
   } & (
     | { type: 'follow' | 'follow_request' | 'admin.sign_up' | 'bite' }
     | {
       type: 'mention' | 'status' | 'reblog' | 'favourite' | 'poll' | 'update' | 'event_reminder';
-      status: string;
+      status_id: string;
      }
     | {
       type: 'admin.report';
@@ -87,40 +88,36 @@ const minifyNotification = (notification: Notification) => {
     }
     | {
       type: 'move';
-      target: string;
+      target_id: string;
     }
     | {
       type: 'emoji_reaction';
       emoji: string;
       emoji_url: string | null;
-      status: string;
+      status_id: string;
     }
     | {
       type: 'chat_mention';
-      chat_message: string;
+      chat_message_id: string;
     }
     | {
       type: 'participation_accepted' | 'participation_request';
-      status: string;
+      status_id: string;
       participation_message: string | null;
     }
   ) = {
-    ...notification,
-    account: notification.account.id,
-    accounts: notification.accounts.map(({ id }) => id),
+    ...omit(notification, ['account', 'accounts']),
     created_at: notification.created_at,
     id: notification.id,
     type: notification.type,
   };
 
   // @ts-ignore
-  minifiedNotification.status = notification.status?.id;
+  if (notification.status) minifiedNotification.status_id = notification.status.id;
   // @ts-ignore
-  minifiedNotification.target = notification.target?.id;
+  if (notification.target) minifiedNotification.target_id = notification.target.id;
   // @ts-ignore
-  minifiedNotification.status = notification.status?.id;
-  // @ts-ignore
-  minifiedNotification.chat_message = notification.chat_message?.id;
+  if (notification.chat_message) minifiedNotification.chat_message_id = notification.chat_message.id;
 
   return minifiedNotification;
 };
@@ -163,10 +160,10 @@ const expandNormalizedNotifications = (state: State, notifications: Notification
 };
 
 const filterNotifications = (state: State, relationship: Relationship) =>
-  state.update('items', map => map.filterNot(item => item !== null && item.accounts.includes(relationship.id)));
+  state.update('items', map => map.filterNot(item => item !== null && item.account_ids.includes(relationship.id)));
 
 const filterNotificationIds = (state: State, accountIds: Array<string>, type?: string) => {
-  const helper = (list: ImmutableOrderedMap<string, MinifiedNotification>) => list.filterNot(item => item !== null && accountIds.includes(item.accounts[0]) && (type === undefined || type === item.type));
+  const helper = (list: ImmutableOrderedMap<string, MinifiedNotification>) => list.filterNot(item => item !== null && accountIds.includes(item.account_ids[0]) && (type === undefined || type === item.type));
   return state.update('items', helper);
 };
 
