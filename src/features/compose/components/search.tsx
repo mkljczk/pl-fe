@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
@@ -134,16 +134,6 @@ const Search = (props: ISearch) => {
     componentProps.menu = makeMenu();
     componentProps.autoSelect = false;
   }
-
-  useEffect(() => () => {
-    const newPath = history.location.pathname;
-    const shouldPersistSearch = !!newPath.match(/@.+\/posts\/[a-zA-Z0-9]+/g)
-        || !!newPath.match(/\/tags\/.+/g);
-
-    if (!shouldPersistSearch) {
-      dispatch(changeSearch(''));
-    }
-  }, []);
 
   return (
     <div
