@@ -66,6 +66,14 @@ const expandDirectoryFail = (error: unknown) => ({
   error,
 });
 
+type DirectoryAction =
+  | ReturnType<typeof fetchDirectoryRequest>
+  | ReturnType<typeof fetchDirectorySuccess>
+  | ReturnType<typeof fetchDirectoryFail>
+  | ReturnType<typeof expandDirectoryRequest>
+  | ReturnType<typeof expandDirectorySuccess>
+  | ReturnType<typeof expandDirectoryFail>;
+
 export {
   DIRECTORY_FETCH_REQUEST,
   DIRECTORY_FETCH_SUCCESS,
@@ -81,4 +89,5 @@ export {
   expandDirectoryRequest,
   expandDirectorySuccess,
   expandDirectoryFail,
+  type DirectoryAction,
 };

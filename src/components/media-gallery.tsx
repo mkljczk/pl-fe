@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { MediaAttachment } from 'pl-api';
 import React, { useState, useRef, useLayoutEffect } from 'react';
 
 import Blurhash from 'soapbox/components/blurhash';
@@ -13,6 +12,7 @@ import { isIOS } from '../is-mobile';
 import { isPanoramic, isPortrait, isNonConformingRatio, minimumAspectRatio, maximumAspectRatio } from '../utils/media-aspect-ratio';
 
 import type { Property } from 'csstype';
+import type { MediaAttachment } from 'pl-api';
 
 const ATTACHMENT_LIMIT = 4;
 const MAX_FILENAME_LENGTH = 45;

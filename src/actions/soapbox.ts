@@ -22,7 +22,6 @@ const getSoapboxConfig = createSelector([
 ], (soapbox, features) => {
   // Do some additional normalization with the state
   return normalizeSoapboxConfig(soapbox).withMutations(soapboxConfig => {
-
     // If displayFqn isn't set, infer it from federation
     if (soapbox.get('displayFqn') === undefined) {
       soapboxConfig.set('displayFqn', features.federating);

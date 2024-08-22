@@ -1,5 +1,4 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { PaginatedResponse, type Account as BaseAccount } from 'pl-api';
 
 import { Entities } from 'soapbox/entity-store/entities';
 import { useClient } from 'soapbox/hooks';
@@ -8,13 +7,10 @@ import { flattenPages } from 'soapbox/utils/queries';
 
 import { useRelationships } from './useRelationships';
 
+import type { PaginatedResponse, Account as BaseAccount } from 'pl-api';
 import type { EntityFn } from 'soapbox/entity-store/hooks/types';
 
-interface useAccountListOpts {
-  enabled?: boolean;
-}
-
-const useAccountList = (listKey: string[], entityFn: EntityFn<void>, opts: useAccountListOpts = {}) => {
+const useAccountList = (listKey: string[], entityFn: EntityFn<void>) => {
   const getAccounts = async (pageParam?: Pick<PaginatedResponse<BaseAccount>, 'next'>) => {
     const response = await (pageParam?.next ? pageParam.next() : entityFn()) as PaginatedResponse<BaseAccount>;
 
@@ -63,7 +59,6 @@ const useFollowing = (accountId: string | undefined) => {
   return useAccountList(
     [accountId!, 'following'],
     () => client.accounts.getAccountFollowing(accountId!),
-    { enabled: !!accountId },
   );
 };
 
@@ -73,7 +68,6 @@ const useFollowers = (accountId: string | undefined) => {
   return useAccountList(
     [accountId!, 'followers'],
     () => client.accounts.getAccountFollowers(accountId!),
-    { enabled: !!accountId },
   );
 };
 

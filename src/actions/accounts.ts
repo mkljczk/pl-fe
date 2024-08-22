@@ -10,7 +10,6 @@ import { getClient, type PlfeResponse } from '../api';
 import {
   importFetchedAccount,
   importFetchedAccounts,
-  importErrorWhileFetchingAccountByUsername,
 } from './importer';
 
 import type { Map as ImmutableMap } from 'immutable';
@@ -168,7 +167,6 @@ const fetchAccountByUsername = (username: string, history?: History) =>
         dispatch(fetchAccountSuccess(response));
       }).catch(error => {
         dispatch(fetchAccountFail(null, error));
-        dispatch(importErrorWhileFetchingAccountByUsername(username));
       });
     } else if (features.accountLookup) {
       return dispatch(accountLookup(username)).then(account => {
@@ -176,7 +174,6 @@ const fetchAccountByUsername = (username: string, history?: History) =>
         dispatch(fetchAccountSuccess(account));
       }).catch(error => {
         dispatch(fetchAccountFail(null, error));
-        dispatch(importErrorWhileFetchingAccountByUsername(username));
         maybeRedirectLogin(error, history);
       });
     } else {
@@ -191,7 +188,6 @@ const fetchAccountByUsername = (username: string, history?: History) =>
         }
       }).catch(error => {
         dispatch(fetchAccountFail(null, error));
-        dispatch(importErrorWhileFetchingAccountByUsername(username));
       });
     }
   };

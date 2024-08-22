@@ -25,7 +25,7 @@ const TIMELINE_INSERT = 'TIMELINE_INSERT' as const;
 
 const MAX_QUEUED_ITEMS = 40;
 
-const processTimelineUpdate = (timeline: string, status: BaseStatus, accept: ((status: BaseStatus) => boolean) | null = null) =>
+const processTimelineUpdate = (timeline: string, status: BaseStatus) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const me = getState().me;
     const ownStatus = status.account?.id === me;
@@ -48,26 +48,19 @@ const processTimelineUpdate = (timeline: string, status: BaseStatus, accept: ((s
     dispatch(importFetchedStatus(status));
 
     if (shouldSkipQueue) {
-      dispatch(updateTimeline(timeline, status.id, accept));
+      dispatch(updateTimeline(timeline, status.id));
     } else {
-      dispatch(updateTimelineQueue(timeline, status.id, accept));
+      dispatch(updateTimelineQueue(timeline, status.id));
     }
   };
 
-const updateTimeline = (timeline: string, statusId: string, accept: ((status: BaseStatus) => boolean) | null) =>
-  (dispatch: AppDispatch) => {
-    // if (typeof accept === 'function' && !accept(status)) {
-    //   return;
-    // }
+const updateTimeline = (timeline: string, statusId: string) => ({
+  type: TIMELINE_UPDATE,
+  timeline,
+  statusId,
+});
 
-    dispatch({
-      type: TIMELINE_UPDATE,
-      timeline,
-      statusId,
-    });
-  };
-
-const updateTimelineQueue = (timeline: string, statusId: string, accept: ((status: BaseStatus) => boolean) | null) =>
+const updateTimelineQueue = (timeline: string, statusId: string) =>
   (dispatch: AppDispatch) => {
     // if (typeof accept === 'function' && !accept(status)) {
     //   return;

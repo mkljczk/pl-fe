@@ -1,9 +1,8 @@
-import { accountSchema, groupSchema, type Account as BaseAccount, type Group, type Poll, type Status as BaseStatus } from 'pl-api';
+import { type Account as BaseAccount, type Group, type Poll, type Status as BaseStatus } from 'pl-api';
 
 import { importEntities } from 'soapbox/entity-store/actions';
 import { Entities } from 'soapbox/entity-store/entities';
 import { normalizeAccount, normalizeGroup } from 'soapbox/normalizers';
-import { filteredArray } from 'soapbox/schemas/utils';
 
 import type { AppDispatch } from 'soapbox/store';
 
@@ -12,14 +11,13 @@ const ACCOUNTS_IMPORT = 'ACCOUNTS_IMPORT';
 const STATUS_IMPORT = 'STATUS_IMPORT';
 const STATUSES_IMPORT = 'STATUSES_IMPORT';
 const POLLS_IMPORT = 'POLLS_IMPORT';
-const ACCOUNT_FETCH_FAIL_FOR_USERNAME_LOOKUP = 'ACCOUNT_FETCH_FAIL_FOR_USERNAME_LOOKUP';
 
 const importAccount = (data: BaseAccount) => importAccounts([data]);
 
 const importAccounts = (data: Array<BaseAccount>) => (dispatch: AppDispatch) => {
   dispatch({ type: ACCOUNTS_IMPORT, accounts: data });
   try {
-    const accounts = filteredArray(accountSchema).parse(data).map(normalizeAccount);
+    const accounts = data.map(normalizeAccount);
     dispatch(importEntities(accounts, Entities.ACCOUNTS));
   } catch (e) {
     //
@@ -30,7 +28,7 @@ const importGroup = (data: Group) => importGroups([data]);
 
 const importGroups = (data: Array<Group>) => (dispatch: AppDispatch) => {
   try {
-    const groups = filteredArray(groupSchema).parse(data).map(normalizeGroup);
+    const groups = data.map(normalizeGroup);
     dispatch(importEntities(groups, Entities.GROUPS));
   } catch (e) {
     //
@@ -155,16 +153,12 @@ const importFetchedPoll = (poll: Poll) =>
     dispatch(importPolls([poll]));
   };
 
-const importErrorWhileFetchingAccountByUsername = (username: string) =>
-  ({ type: ACCOUNT_FETCH_FAIL_FOR_USERNAME_LOOKUP, username });
-
 export {
   ACCOUNT_IMPORT,
   ACCOUNTS_IMPORT,
   STATUS_IMPORT,
   STATUSES_IMPORT,
   POLLS_IMPORT,
-  ACCOUNT_FETCH_FAIL_FOR_USERNAME_LOOKUP,
   importAccount,
   importAccounts,
   importGroup,
@@ -177,5 +171,4 @@ export {
   importFetchedStatus,
   importFetchedStatuses,
   importFetchedPoll,
-  importErrorWhileFetchingAccountByUsername,
 };

@@ -24,6 +24,7 @@ import {
   DIRECTORY_EXPAND_REQUEST,
   DIRECTORY_EXPAND_SUCCESS,
   DIRECTORY_EXPAND_FAIL,
+  DirectoryAction,
 } from 'soapbox/actions/directory';
 import {
   EVENT_PARTICIPATIONS_EXPAND_SUCCESS,
@@ -116,13 +117,13 @@ type Items = ImmutableOrderedSet<string>;
 type NestedListPath = ['followers' | 'following' | 'reblogged_by' | 'favourited_by' | 'disliked_by' | 'reactions' | 'pinned' | 'birthday_reminders' | 'familiar_followers' | 'event_participations' | 'event_participation_requests' | 'membership_requests' | 'group_blocks', string];
 type ListPath = ['follow_requests' | 'mutes' | 'directory'];
 
-const normalizeList = (state: State, path: NestedListPath | ListPath, accounts: APIEntity[], next?: (() => any) | null) =>
+const normalizeList = (state: State, path: NestedListPath | ListPath, accounts: Array<Pick<Account, 'id'>>, next?: (() => any) | null) =>
   state.setIn(path, ListRecord({
     next,
     items: ImmutableOrderedSet(accounts.map(item => item.id)),
   }));
 
-const appendToList = (state: State, path: NestedListPath | ListPath, accounts: APIEntity[], next: (() => any) | null) =>
+const appendToList = (state: State, path: NestedListPath | ListPath, accounts: Array<Pick<Account, 'id'>>, next: (() => any) | null) =>
   state.updateIn(path, map => (map as List)
     .set('next', next)
     .set('isLoading', false)
@@ -139,7 +140,7 @@ const normalizeFollowRequest = (state: State, notification: Notification) =>
     ImmutableOrderedSet([notification.account.id]).union(list as Items),
   );
 
-const userLists = (state = ReducerRecord(), action: AnyAction) => {
+const userLists = (state = ReducerRecord(), action: DirectoryAction | AnyAction) => {
   switch (action.type) {
     case FOLLOWERS_FETCH_SUCCESS:
       return normalizeList(state, ['followers', action.accountId], action.accounts, action.next);
@@ -176,9 +177,9 @@ const userLists = (state = ReducerRecord(), action: AnyAction) => {
     case FOLLOW_REQUEST_REJECT_SUCCESS:
       return removeFromList(state, ['follow_requests'], action.accountId);
     case DIRECTORY_FETCH_SUCCESS:
-      return normalizeList(state, ['directory'], action.accounts, action.next);
+      return normalizeList(state, ['directory'], action.accounts);
     case DIRECTORY_EXPAND_SUCCESS:
-      return appendToList(state, ['directory'], action.accounts, action.next);
+      return appendToList(state, ['directory'], action.accounts, null);
     case DIRECTORY_FETCH_REQUEST:
     case DIRECTORY_EXPAND_REQUEST:
       return state.setIn(['directory', 'isLoading'], true);

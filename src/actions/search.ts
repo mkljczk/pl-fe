@@ -130,7 +130,7 @@ const expandSearchRequest = (searchType: SearchFilter) => ({
   searchType,
 });
 
-const expandSearchSuccess = (results: Search, searchTerm: string, searchType: SearchFilter) => ({
+const expandSearchSuccess = (results: Search, searchTerm: string, searchType: Exclude<SearchFilter, 'links'>) => ({
   type: SEARCH_EXPAND_SUCCESS,
   results,
   searchTerm,

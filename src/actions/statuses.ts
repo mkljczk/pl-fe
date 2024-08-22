@@ -162,11 +162,7 @@ const fetchContext = (statusId: string, intl?: IntlShape) =>
     } : undefined;
 
     return getClient(getState()).statuses.getContext(statusId, params).then(context => {
-      if (Array.isArray(context)) {
-        // Mitra: returns a list of statuses
-        dispatch(importFetchedStatuses(context));
-      } else if (typeof context === 'object') {
-        // Standard Mastodon API returns a map with `ancestors` and `descendants`
+      if (typeof context === 'object') {
         const { ancestors, descendants } = context;
         const statuses = ancestors.concat(descendants);
         dispatch(importFetchedStatuses(statuses));

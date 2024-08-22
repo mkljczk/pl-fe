@@ -67,8 +67,6 @@ const ModalRoot: React.FC = () => {
   }));
 
   const onClickClose = (type?: ModalType) => {
-    if (!type) return;
-
     switch (type) {
       case 'COMPOSE':
         dispatch(cancelReplyCompose());

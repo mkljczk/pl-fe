@@ -21,7 +21,6 @@ import {
 } from '../actions/search';
 
 import type { Search, Tag } from 'pl-api';
-import type { APIEntity } from 'soapbox/types/entities';
 
 const ResultsRecord = ImmutableRecord({
   accounts: ImmutableOrderedSet<string>(),
@@ -48,10 +47,9 @@ const ReducerRecord = ImmutableRecord({
 });
 
 type State = ReturnType<typeof ReducerRecord>;
-type APIEntities = Array<APIEntity>;
 type SearchFilter = 'accounts' | 'statuses' | 'groups' | 'hashtags' | 'links';
 
-const toIds = (items: APIEntities = []) => ImmutableOrderedSet(items.map(item => item.id));
+const toIds = (items: Array<{ id: string }> = []) => ImmutableOrderedSet(items.map(item => item.id));
 
 const importResults = (state: State, results: Search, searchTerm: string, searchType: SearchFilter) =>
   state.withMutations(state => {
@@ -75,7 +73,7 @@ const importResults = (state: State, results: Search, searchTerm: string, search
     }
   });
 
-const paginateResults = (state: State, searchType: SearchFilter, results: APIEntity, searchTerm: string) =>
+const paginateResults = (state: State, searchType: Exclude<SearchFilter, 'links'>, results: Search, searchTerm: string) =>
   state.withMutations(state => {
     if (state.submittedValue === searchTerm) {
       state.setIn(['results', `${searchType}HasMore`], results[searchType].length >= 20);
@@ -84,9 +82,9 @@ const paginateResults = (state: State, searchType: SearchFilter, results: APIEnt
         const data = results[searchType];
         // Hashtags are a list of maps. Others are IDs.
         if (searchType === 'hashtags') {
-          return (items as ImmutableOrderedSet<Tag>).concat(data);
+          return (items as ImmutableOrderedSet<Tag>).concat(data as Search['hashtags']);
         } else {
-          return (items as ImmutableOrderedSet<string>).concat(toIds(data));
+          return (items as ImmutableOrderedSet<string>).concat(toIds(data as Search['accounts']));
         }
       });
     }
