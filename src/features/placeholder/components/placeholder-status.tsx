@@ -12,7 +12,7 @@ interface IPlaceholderStatus {
 }
 
 /** Fake status to display while data is loading. */
-const PlaceholderStatus: React.FC<IPlaceholderStatus> = React.memo(({ variant }) => (
+const PlaceholderStatus: React.FC<IPlaceholderStatus> = React.memo(({ variant = 'rounded' }) => (
   <div
     className={clsx({
       'status-placeholder bg-white black:bg-black dark:bg-primary-900': true,
