@@ -2,7 +2,7 @@
 
 ## Differences compared to Soapbox
 
-- **Broader compatibility**: The compatibility matrix has been updated to support more features on various backends. Support for features specific to GoToSocial and Akkoma has been added, more are coming soon.
+- **Broader compatibility**: The compatibility matrix has been updated to support more features on various backends. Support for features specific to Mitra, Toki, GoToSocial and Akkoma has been added, more are coming soon.
 - **WYSIWYG status composer**: You can use the WYSIWYG editor for advanced text formatting on any backend with Markdown support.
 - **Language detection**: When you write a post, the language gets detected automatically with great accuracy. You can always select it manually.
 - **Drafts**: You can save a post you are working on and finish it later. Drafts are only stored locally and work with any backend.

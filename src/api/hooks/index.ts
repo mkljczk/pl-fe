@@ -28,6 +28,9 @@ export { useLeaveGroup } from './groups/useLeaveGroup';
 export { usePromoteGroupMember } from './groups/usePromoteGroupMember';
 export { useUpdateGroup } from './groups/useUpdateGroup';
 
+// Instance
+export { useTranslationLanguages } from './instance/useTranslationLanguages';
+
 // Statuses
 export { useBookmarkFolders } from './statuses/useBookmarkFolders';
 export { useBookmarkFolder } from './statuses/useBookmarkFolder';

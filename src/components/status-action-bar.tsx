@@ -14,7 +14,7 @@ import { initReport, ReportableEntities } from 'soapbox/actions/reports';
 import { changeSetting } from 'soapbox/actions/settings';
 import { deleteStatus, editStatus, toggleMuteStatus, translateStatus, undoStatusTranslation } from 'soapbox/actions/statuses';
 import { deleteFromTimelines } from 'soapbox/actions/timelines';
-import { useBlockGroupMember, useGroup, useGroupRelationship } from 'soapbox/api/hooks';
+import { useBlockGroupMember, useGroup, useGroupRelationship, useTranslationLanguages } from 'soapbox/api/hooks';
 import { useDeleteGroupStatus } from 'soapbox/api/hooks/groups/useDeleteGroupStatus';
 import DropdownMenu from 'soapbox/components/dropdown-menu';
 import StatusActionButton from 'soapbox/components/status-action-button';
@@ -140,16 +140,16 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const { autoTranslate, boostModal, deleteModal, knownLanguages } = useSettings();
   const soapboxConfig = useSoapboxConfig();
 
+  const { translationLanguages } = useTranslationLanguages();
+
   const autoTranslating = useMemo(() => {
     const {
       allow_remote: allowRemote,
       allow_unauthenticated: allowUnauthenticated,
-      source_languages: sourceLanguages,
-      target_languages: targetLanguages,
     } = instance.pleroma.metadata.translation;
 
     const renderTranslate = (me || allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.contentHtml.length > 0 && status.language !== null && !knownLanguages.includes(status.language);
-    const supportsLanguages = (!sourceLanguages || sourceLanguages.includes(status.language!)) && (!targetLanguages || targetLanguages.includes(intl.locale));
+    const supportsLanguages = (translationLanguages[status.language!]?.includes(intl.locale));
 
     return autoTranslate && features.translations && renderTranslate && supportsLanguages;
   }, [me, status, autoTranslate]);

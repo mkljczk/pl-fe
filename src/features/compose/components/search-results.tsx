@@ -47,7 +47,6 @@ const SearchResults = () => {
   const filterByAccount = useAppSelector((state) => state.search.accountId || undefined);
   const { trendingLinks } = useTrendingLinks();
   const { account } = useAccount(filterByAccount);
-  useAppSelector((state) => console.log(state.search.toJS()));
 
   const handleLoadMore = () => dispatch(expandSearch(selectedFilter));
 
@@ -218,8 +217,6 @@ const SearchResults = () => {
     }
   }
   
-  console.log(submitted, loaded, selectedFilter);
-
   return (
     <>
       {filterByAccount ? (

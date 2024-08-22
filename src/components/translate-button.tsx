@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { translateStatus, undoStatusTranslation } from 'soapbox/actions/statuses';
+import { useTranslationLanguages } from 'soapbox/api/hooks';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance, useSettings } from 'soapbox/hooks';
 
 import { HStack, Icon, Stack, Text } from './ui';
@@ -23,17 +24,16 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   const knownLanguages = autoTranslate ? [...settings.knownLanguages, intl.locale] : [intl.locale];
 
   const me = useAppSelector((state) => state.me);
+  const { translationLanguages } = useTranslationLanguages();
 
   const {
     allow_remote: allowRemote,
     allow_unauthenticated: allowUnauthenticated,
-    source_languages: sourceLanguages,
-    target_languages: targetLanguages,
   } = instance.pleroma.metadata.translation;
 
   const renderTranslate = (me || allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.contentHtml.length > 0 && status.language !== null && intl.locale !== status.language && !status.contentMapHtml?.[intl.locale];
 
-  const supportsLanguages = (!sourceLanguages || sourceLanguages.includes(status.language!)) && (!targetLanguages || targetLanguages.includes(intl.locale));
+  const supportsLanguages = (translationLanguages[status.language!]?.includes(intl.locale));
 
   const handleTranslate: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
