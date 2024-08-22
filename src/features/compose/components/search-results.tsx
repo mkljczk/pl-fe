@@ -47,12 +47,13 @@ const SearchResults = () => {
   const filterByAccount = useAppSelector((state) => state.search.accountId || undefined);
   const { trendingLinks } = useTrendingLinks();
   const { account } = useAccount(filterByAccount);
+  useAppSelector((state) => console.log(state.search.toJS()));
 
   const handleLoadMore = () => dispatch(expandSearch(selectedFilter));
 
   const handleUnsetAccount = () => dispatch(setSearchAccount(null));
 
-  const selectFilter = (newActiveFilter: SearchFilter) => dispatch(setFilter(newActiveFilter));
+  const selectFilter = (newActiveFilter: SearchFilter) => dispatch(setFilter(value, newActiveFilter));
 
   const renderFilterBar = () => {
     const items = [];
@@ -207,6 +208,8 @@ const SearchResults = () => {
   }
 
   if (selectedFilter === 'links') {
+    loaded = true;
+
     if (submitted) {
       selectFilter('accounts');
       setTabKey(key => ++key);
@@ -214,6 +217,8 @@ const SearchResults = () => {
       searchResults = ImmutableList(trendingLinks.map(trendingLink => <TrendingLink trendingLink={trendingLink} />));
     }
   }
+  
+  console.log(submitted, loaded, selectedFilter);
 
   return (
     <>

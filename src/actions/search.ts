@@ -7,7 +7,6 @@ import type { Search } from 'pl-api';
 import type { SearchFilter } from 'soapbox/reducers/search';
 import type { AppDispatch, RootState } from 'soapbox/store';
 
-const SEARCH_CHANGE = 'SEARCH_CHANGE' as const;
 const SEARCH_CLEAR = 'SEARCH_CLEAR' as const;
 const SEARCH_SHOW = 'SEARCH_SHOW' as const;
 const SEARCH_RESULTS_CLEAR = 'SEARCH_RESULTS_CLEAR' as const;
@@ -24,23 +23,6 @@ const SEARCH_EXPAND_FAIL = 'SEARCH_EXPAND_FAIL' as const;
 
 const SEARCH_ACCOUNT_SET = 'SEARCH_ACCOUNT_SET' as const;
 
-const changeSearch = (value: string) =>
-  (dispatch: AppDispatch) => {
-    // If backspaced all the way, clear the search
-    if (value.length === 0) {
-      dispatch(clearSearchResults());
-      return dispatch({
-        type: SEARCH_CHANGE,
-        value,
-      });
-    } else {
-      return dispatch({
-        type: SEARCH_CHANGE,
-        value,
-      });
-    }
-  };
-
 const clearSearch = () => ({
   type: SEARCH_CLEAR,
 });
@@ -49,9 +31,8 @@ const clearSearchResults = () => ({
   type: SEARCH_RESULTS_CLEAR,
 });
 
-const submitSearch = (filter?: SearchFilter) =>
+const submitSearch = (value: string, filter?: SearchFilter) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const value = getState().search.value;
     const type = filter || getState().search.filter || 'accounts';
     const accountId = getState().search.accountId;
 
@@ -103,11 +84,11 @@ const fetchSearchFail = (error: unknown) => ({
   error,
 });
 
-const setFilter = (filterType: SearchFilter) =>
+const setFilter = (value: string, filterType: SearchFilter) =>
   (dispatch: AppDispatch) => {
-    dispatch(submitSearch(filterType));
+    dispatch(submitSearch(value, filterType));
 
-    dispatch({
+    return dispatch({
       type: SEARCH_FILTER_SET,
       path: ['search', 'filter'],
       value: filterType,
@@ -116,7 +97,7 @@ const setFilter = (filterType: SearchFilter) =>
 
 const expandSearch = (type: SearchFilter) => (dispatch: AppDispatch, getState: () => RootState) => {
   if (type === 'links') return;
-  const value = getState().search.value;
+  const value = getState().search.submittedValue;
   const offset = getState().search.results[type].size;
   const accountId = getState().search.accountId;
 
@@ -170,8 +151,24 @@ const setSearchAccount = (accountId: string | null) => ({
   accountId,
 });
 
+type SearchAction =
+  | ReturnType<typeof clearSearch>
+  | ReturnType<typeof clearSearchResults>
+  | ReturnType<typeof fetchSearchRequest>
+  | ReturnType<typeof fetchSearchSuccess>
+  | ReturnType<typeof fetchSearchFail>
+  | ReturnType<typeof expandSearchRequest>
+  | ReturnType<typeof expandSearchSuccess>
+  | ReturnType<typeof expandSearchFail>
+  | {
+    type: typeof SEARCH_FILTER_SET;
+    path: (['search', 'filter']);
+    value: SearchFilter;
+  }
+  | ReturnType<typeof showSearch>
+  | ReturnType<typeof setSearchAccount>
+
 export {
-  SEARCH_CHANGE,
   SEARCH_CLEAR,
   SEARCH_SHOW,
   SEARCH_RESULTS_CLEAR,
@@ -183,7 +180,6 @@ export {
   SEARCH_EXPAND_SUCCESS,
   SEARCH_EXPAND_FAIL,
   SEARCH_ACCOUNT_SET,
-  changeSearch,
   clearSearch,
   clearSearchResults,
   submitSearch,
@@ -197,4 +193,5 @@ export {
   expandSearchFail,
   showSearch,
   setSearchAccount,
+  type SearchAction,
 };

@@ -163,8 +163,10 @@ const deduplicateStatuses = (statuses: any[]) => {
 };
 
 const handleTimelineExpand = (timelineId: string, fn: Promise<PaginatedResponse<BaseStatus>>, isLoadingRecent: boolean, done = noOp) =>
-  (dispatch: AppDispatch) =>
-    fn.then(response => {
+  (dispatch: AppDispatch) => {
+    dispatch(expandTimelineRequest(timelineId));
+
+    return fn.then(response => {
       dispatch(importFetchedStatuses(response.items));
 
       const statuses = deduplicateStatuses(response.items);
@@ -183,6 +185,7 @@ const handleTimelineExpand = (timelineId: string, fn: Promise<PaginatedResponse<
       dispatch(expandTimelineFail(timelineId, error));
       done();
     });
+  };
 
 const fetchHomeTimeline = (expand = false, done = noOp) =>
   (dispatch: AppDispatch, getState: () => RootState) => {

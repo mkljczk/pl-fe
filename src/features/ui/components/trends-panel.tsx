@@ -27,7 +27,7 @@ const TrendsPanel = ({ limit }: ITrendsPanel) => {
   const { data: trends, isFetching } = useTrends();
 
   const setHashtagsFilter = () => {
-    dispatch(setFilter('hashtags'));
+    dispatch(setFilter('', 'hashtags'));
   };
 
   if (!isFetching && !trends?.length) {

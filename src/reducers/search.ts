@@ -5,9 +5,9 @@ import {
   COMPOSE_REPLY,
   COMPOSE_DIRECT,
   COMPOSE_QUOTE,
+  type ComposeAction,
 } from '../actions/compose';
 import {
-  SEARCH_CHANGE,
   SEARCH_CLEAR,
   SEARCH_FETCH_REQUEST,
   SEARCH_FETCH_SUCCESS,
@@ -17,10 +17,10 @@ import {
   SEARCH_EXPAND_SUCCESS,
   SEARCH_ACCOUNT_SET,
   SEARCH_RESULTS_CLEAR,
+  type SearchAction,
 } from '../actions/search';
 
 import type { Search, Tag } from 'pl-api';
-import type { AnyAction } from 'redux';
 import type { APIEntity } from 'soapbox/types/entities';
 
 const ResultsRecord = ImmutableRecord({
@@ -39,14 +39,12 @@ const ResultsRecord = ImmutableRecord({
 });
 
 const ReducerRecord = ImmutableRecord({
-  value: '',
   submitted: false,
   submittedValue: '',
   hidden: false,
   results: ResultsRecord(),
   filter: 'accounts' as SearchFilter,
   accountId: null as string | null,
-  next: null as string | null,
 });
 
 type State = ReturnType<typeof ReducerRecord>;
@@ -55,18 +53,18 @@ type SearchFilter = 'accounts' | 'statuses' | 'groups' | 'hashtags' | 'links';
 
 const toIds = (items: APIEntities = []) => ImmutableOrderedSet(items.map(item => item.id));
 
-const importResults = (state: State, results: Search, searchTerm: string, searchType: SearchFilter, next: string | null) =>
+const importResults = (state: State, results: Search, searchTerm: string, searchType: SearchFilter) =>
   state.withMutations(state => {
-    if (state.value === searchTerm && state.filter === searchType) {
+    if (state.submittedValue === searchTerm && state.filter === searchType) {
       state.set('results', ResultsRecord({
         accounts: toIds(results.accounts),
         statuses: toIds(results.statuses),
         groups: toIds(results.groups),
         hashtags: ImmutableOrderedSet(results.hashtags), // it's a list of records
-        accountsHasMore: results.accounts.length >= 20,
-        statusesHasMore: results.statuses.length >= 20,
-        groupsHasMore: results.groups?.length >= 20,
-        hashtagsHasMore: results.hashtags.length >= 20,
+        accountsHasMore: results.accounts.length !== 0,
+        statusesHasMore: results.statuses.length !== 0,
+        groupsHasMore: results.groups?.length !== 0,
+        hashtagsHasMore: results.hashtags.length !== 0,
         accountsLoaded: true,
         statusesLoaded: true,
         groupsLoaded: true,
@@ -74,16 +72,14 @@ const importResults = (state: State, results: Search, searchTerm: string, search
       }));
 
       state.set('submitted', true);
-      state.set('next', next);
     }
   });
 
-const paginateResults = (state: State, searchType: SearchFilter, results: APIEntity, searchTerm: string, next: string | null) =>
+const paginateResults = (state: State, searchType: SearchFilter, results: APIEntity, searchTerm: string) =>
   state.withMutations(state => {
-    if (state.value === searchTerm) {
+    if (state.submittedValue === searchTerm) {
       state.setIn(['results', `${searchType}HasMore`], results[searchType].length >= 20);
       state.setIn(['results', `${searchType}Loaded`], true);
-      state.set('next', next);
       state.updateIn(['results', searchType], items => {
         const data = results[searchType];
         // Hashtags are a list of maps. Others are IDs.
@@ -103,15 +99,12 @@ const handleSubmitted = (state: State, value: string) =>
     state.set('submittedValue', value);
   });
 
-const search = (state = ReducerRecord(), action: AnyAction) => {
+const search = (state = ReducerRecord(), action: SearchAction | ComposeAction) => {
   switch (action.type) {
-    case SEARCH_CHANGE:
-      return state.set('value', action.value);
     case SEARCH_CLEAR:
       return ReducerRecord();
     case SEARCH_RESULTS_CLEAR:
       return state.merge({
-        value: '',
         results: ResultsRecord(),
         submitted: false,
         submittedValue: '',
@@ -126,13 +119,13 @@ const search = (state = ReducerRecord(), action: AnyAction) => {
     case SEARCH_FETCH_REQUEST:
       return handleSubmitted(state, action.value);
     case SEARCH_FETCH_SUCCESS:
-      return importResults(state, action.results, action.searchTerm, action.searchType, action.next);
+      return importResults(state, action.results, action.searchTerm, action.searchType);
     case SEARCH_FILTER_SET:
       return state.set('filter', action.value);
     case SEARCH_EXPAND_REQUEST:
       return state.setIn(['results', `${action.searchType}Loaded`], false);
     case SEARCH_EXPAND_SUCCESS:
-      return paginateResults(state, action.searchType, action.results, action.searchTerm, action.next);
+      return paginateResults(state, action.searchType, action.results, action.searchTerm);
     case SEARCH_ACCOUNT_SET:
       if (!action.accountId) return state.merge({
         results: ResultsRecord(),

@@ -1,11 +1,10 @@
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import {
-  changeSearch,
   clearSearch,
   clearSearchResults,
   setSearchAccount,
@@ -41,6 +40,8 @@ interface ISearch {
 }
 
 const Search = (props: ISearch) => {
+  const submittedValue = useAppSelector((state) => state.search.submittedValue);
+  const [value, setValue] = useState(submittedValue);
   const {
     autoFocus = false,
     autoSubmit = false,
@@ -52,20 +53,19 @@ const Search = (props: ISearch) => {
   const history = useHistory();
   const intl = useIntl();
 
-  const value = useAppSelector((state) => state.search.value);
   const submitted = useAppSelector((state) => state.search.submitted);
 
-  const debouncedSubmit = useCallback(debounce(() => {
-    dispatch(submitSearch());
+  const debouncedSubmit = useCallback(debounce((value: string) => {
+    dispatch(submitSearch(value));
   }, 900), []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
-    dispatch(changeSearch(value));
+    setValue(value);
 
     if (autoSubmit) {
-      debouncedSubmit();
+      debouncedSubmit(value);
     }
   };
 
@@ -80,11 +80,11 @@ const Search = (props: ISearch) => {
   const handleSubmit = () => {
     if (openInRoute) {
       dispatch(setSearchAccount(null));
-      dispatch(submitSearch());
+      dispatch(submitSearch(value));
 
       history.push('/search');
     } else {
-      dispatch(submitSearch());
+      dispatch(submitSearch(value));
     }
   };
 
@@ -128,6 +128,10 @@ const Search = (props: ISearch) => {
     theme: 'search',
     className: 'pr-10 rtl:pl-10 rtl:pr-3',
   };
+
+  useEffect(() => {
+    if (value !== submittedValue) setValue(submittedValue);
+  }, [submittedValue]);
 
   if (autosuggest) {
     componentProps.onSelected = handleSelected;

@@ -1,6 +1,6 @@
 import { List as ImmutableList, Map as ImmutableMap, OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord, fromJS } from 'immutable';
 
-import { COMPOSE_SUBMIT_SUCCESS } from 'soapbox/actions/compose';
+import { COMPOSE_SUBMIT_SUCCESS, type ComposeAction } from 'soapbox/actions/compose';
 import { DRAFT_STATUSES_FETCH_SUCCESS, PERSIST_DRAFT_STATUS, CANCEL_DRAFT_STATUS } from 'soapbox/actions/draft-statuses';
 import KVStore from 'soapbox/storage/kv-store';
 
@@ -48,7 +48,7 @@ const persistState = (state: State, accountUrl: string) => {
   return state;
 };
 
-const scheduled_statuses = (state: State = initialState, action: AnyAction) => {
+const scheduled_statuses = (state: State = initialState, action: AnyAction | ComposeAction) => {
   switch (action.type) {
     case DRAFT_STATUSES_FETCH_SUCCESS:
       return importStatuses(state, action.statuses);
