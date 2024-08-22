@@ -1,24 +1,32 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import Video from 'soapbox/features/video';
+import { useAppSelector } from 'soapbox/hooks';
+import { makeGetStatus } from 'soapbox/selectors';
 
+import type { BaseModalProps } from '../modal-root';
 import type { MediaAttachment } from 'pl-api';
-import type { Account, Status } from 'soapbox/normalizers';
+import type { Account } from 'soapbox/normalizers';
 
-interface IVideoModal {
+
+type VideoModalProps = {
   media: MediaAttachment;
-  status: Pick<Status, 'id' | 'url'>;
-  account: Account;
-  time: number;
-  onClose: () => void;
-}
+  statusId: string;
+  account?: Pick<Account, 'id' | 'acct'>;
+  time?: number;
+};
 
-const VideoModal: React.FC<IVideoModal> = ({ status, account, media, time, onClose }) => {
+const VideoModal: React.FC<VideoModalProps & BaseModalProps> = ({ statusId, account, media, time }) => {
+  const getStatus = useCallback(makeGetStatus(), []);
+
+  const status = useAppSelector(state => getStatus(state, { id: statusId }))!;
   const history = useHistory();
 
   const handleStatusClick: React.MouseEventHandler = e => {
+    if (!account) return;
+
     if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
       e.preventDefault();
       history.push(`/@${account.acct}/posts/${status.id}`);
@@ -48,4 +56,4 @@ const VideoModal: React.FC<IVideoModal> = ({ status, account, media, time, onClo
   );
 };
 
-export { VideoModal as default };
+export { type VideoModalProps, VideoModal as default };

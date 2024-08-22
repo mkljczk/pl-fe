@@ -19,6 +19,7 @@ import { makeGetStatus } from 'soapbox/selectors';
 
 import ImageLoader from '../image-loader';
 
+import type { BaseModalProps } from '../modal-root';
 import type { MediaAttachment } from 'pl-api';
 
 const messages = defineMessages({
@@ -42,15 +43,14 @@ const containerStyle: React.CSSProperties = {
   alignItems: 'center', // center vertically
 };
 
-interface IMediaModal {
+interface MediaModalProps {
   media: Array<MediaAttachment>;
   statusId?: string;
   index: number;
   time?: number;
-  onClose(): void;
 }
 
-const MediaModal: React.FC<IMediaModal> = (props) => {
+const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   const {
     media,
     statusId,
@@ -245,7 +245,7 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
             <IconButton
               title={intl.formatMessage(messages.close)}
               src={require('@tabler/icons/outline/x.svg')}
-              onClick={onClose}
+              onClick={() => onClose()}
               theme='dark'
               className='!p-1.5 hover:scale-105 hover:bg-gray-900'
               iconClassName='h-5 w-5'
@@ -348,4 +348,4 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
   );
 };
 
-export { MediaModal as default };
+export { type MediaModalProps, MediaModal as default };

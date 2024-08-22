@@ -47,10 +47,10 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
 
     dispatch(openModal('TEXT_FIELD', {
       heading: intl.formatMessage(messages.changeHeaderDescriptionHeading),
-      message: intl.formatMessage(messages.changeHeaderDescriptionPlaceholder),
+      placeholder: intl.formatMessage(messages.changeHeaderDescriptionPlaceholder),
       confirm: intl.formatMessage(messages.changeHeaderDescriptionConfirm),
-      onConfirm: (description: string) => {
-        onChangeDescription?.(description);
+      onConfirm: (description?: string) => {
+        onChangeDescription?.(description || '');
       },
       text: description,
     }));

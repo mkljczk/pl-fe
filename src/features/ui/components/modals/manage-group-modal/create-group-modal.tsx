@@ -9,7 +9,7 @@ import toast from 'soapbox/toast';
 import ConfirmationStep from './steps/confirmation-step';
 import DetailsStep from './steps/details-step';
 
-import type { ModalType } from '../../modal-root';
+import type { BaseModalProps } from '../../modal-root';
 import type { CreateGroupParams } from 'pl-api';
 import type { PlfeResponse } from 'soapbox/api';
 import type { Group } from 'soapbox/normalizers';
@@ -23,12 +23,7 @@ enum Steps {
   ONE = 'ONE',
   TWO = 'TWO',
 }
-
-interface ICreateGroupModal {
-  onClose: (type?: ModalType) => void;
-}
-
-const CreateGroupModal: React.FC<ICreateGroupModal> = ({ onClose }) => {
+const CreateGroupModal: React.FC<BaseModalProps> = ({ onClose }) => {
   const intl = useIntl();
 
   const [group, setGroup] = useState<Group | null>(null);

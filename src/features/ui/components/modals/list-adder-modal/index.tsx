@@ -5,15 +5,14 @@ import { createSelector } from 'reselect';
 import { setupListAdder, resetListAdder } from 'soapbox/actions/lists';
 import { CardHeader, CardTitle, Modal } from 'soapbox/components/ui';
 import AccountContainer from 'soapbox/containers/account-container';
+import NewListForm from 'soapbox/features/lists/components/new-list-form';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-
-import NewListForm from '../lists/components/new-list-form';
 
 import List from './components/list';
 
-import type { ModalType } from '../ui/components/modal-root';
 import type { List as ImmutableList } from 'immutable';
 import type { List as ListEntity } from 'pl-api';
+import type { BaseModalProps } from 'soapbox/features/ui/components/modal-root';
 import type { RootState } from 'soapbox/store';
 
 const messages = defineMessages({
@@ -30,12 +29,11 @@ const getOrderedLists = createSelector([(state: RootState) => state.lists], list
   return lists.toList().filter(item => !!item).sort((a, b) => (a as ListEntity).title.localeCompare((b as ListEntity).title)) as ImmutableList<ListEntity>;
 });
 
-interface IListAdder {
+interface ListAdderModalProps {
   accountId: string;
-  onClose: (type: ModalType) => void;
 }
 
-const ListAdder: React.FC<IListAdder> = ({ accountId, onClose }) => {
+const ListAdderModal: React.FC<BaseModalProps & ListAdderModalProps> = ({ accountId, onClose }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -79,4 +77,4 @@ const ListAdder: React.FC<IListAdder> = ({ accountId, onClose }) => {
   );
 };
 
-export { ListAdder as default };
+export { type ListAdderModalProps, ListAdderModal as default };

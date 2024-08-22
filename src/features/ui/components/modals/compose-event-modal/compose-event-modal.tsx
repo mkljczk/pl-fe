@@ -29,7 +29,7 @@ import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
 import UploadButton from './upload-button';
 
-import type { ModalType } from '../../modal-root';
+import type { BaseModalProps } from '../../modal-root';
 
 const messages = defineMessages({
   eventNamePlaceholder: { id: 'compose_event.fields.name_placeholder', defaultMessage: 'Name' },
@@ -87,11 +87,7 @@ const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
   );
 };
 
-interface IComposeEventModal {
-  onClose: (type?: ModalType) => void;
-}
-
-const ComposeEventModal: React.FC<IComposeEventModal> = ({ onClose }) => {
+const ComposeEventModal: React.FC<BaseModalProps> = ({ onClose }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -139,7 +135,6 @@ const ComposeEventModal: React.FC<IComposeEventModal> = ({ onClose }) => {
     dispatch((dispatch, getState) => {
       if (checkEventComposeContent(getState().compose_event)) {
         dispatch(openModal('CONFIRM', {
-          icon: require('@tabler/icons/outline/trash.svg'),
           heading: statusId
             ? <FormattedMessage id='confirmations.cancel_event_editing.heading' defaultMessage='Cancel event editing' />
             : <FormattedMessage id='confirmations.delete_event.heading' defaultMessage='Delete event' />,

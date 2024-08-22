@@ -5,17 +5,11 @@ import { getSoapboxConfig } from 'soapbox/actions/soapbox';
 import { Stack, Text } from 'soapbox/components/ui';
 import { useAppSelector } from 'soapbox/hooks';
 
-import type { Account } from 'soapbox/normalizers';
-
 const messages = defineMessages({
   accountEntity: { id: 'report.confirmation.entity.account', defaultMessage: 'account' },
   title: { id: 'report.confirmation.title', defaultMessage: 'Thanks for submitting your report.' },
   content: { id: 'report.confirmation.content', defaultMessage: 'If we find that this {entity} is violating the {link} we will take further action on the matter.' },
 });
-
-interface IConfirmationStep {
-  account?: Account;
-}
 
 const termsOfServiceText = (<FormattedMessage
   id='shared.tos'
@@ -32,7 +26,7 @@ const renderTermsOfServiceLink = (href: string) => (
   </a>
 );
 
-const ConfirmationStep: React.FC<IConfirmationStep> = () => {
+const ConfirmationStep: React.FC = () => {
   const intl = useIntl();
   const links = useAppSelector((state) => getSoapboxConfig(state).get('links') as any);
 

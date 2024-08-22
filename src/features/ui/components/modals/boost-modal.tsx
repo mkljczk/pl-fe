@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from 'soapbox/components/icon';
 import { Modal, Stack, Text } from 'soapbox/components/ui';
 import ReplyIndicator from 'soapbox/features/compose/components/reply-indicator';
+import { useAppSelector } from 'soapbox/hooks';
+import { makeGetStatus } from 'soapbox/selectors';
 
+import type { BaseModalProps } from '../modal-root';
 import type { Status as StatusEntity } from 'soapbox/normalizers';
 
 const messages = defineMessages({
@@ -12,14 +15,16 @@ const messages = defineMessages({
   reblog: { id: 'status.reblog', defaultMessage: 'Repost' },
 });
 
-interface IBoostModal {
-  status: StatusEntity;
+interface BoostModalProps {
+  statusId: string;
   onReblog: (status: Pick<StatusEntity, 'id' | 'reblogged'>) => void;
-  onClose: () => void;
 }
 
-const BoostModal: React.FC<IBoostModal> = ({ status, onReblog, onClose }) => {
+const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({ statusId, onReblog, onClose }) => {
+  const getStatus = useCallback(makeGetStatus(), []);
+
   const intl = useIntl();
+  const status = useAppSelector(state => getStatus(state, { id: statusId }))!;
 
   const handleReblog = () => {
     onReblog(status);
@@ -45,4 +50,4 @@ const BoostModal: React.FC<IBoostModal> = ({ status, onReblog, onClose }) => {
   );
 };
 
-export { BoostModal as default };
+export { type BoostModalProps, BoostModal as default };

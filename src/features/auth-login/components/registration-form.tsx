@@ -143,7 +143,6 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
     </>);
 
     dispatch(openModal('CONFIRM', {
-      icon: require('@tabler/icons/outline/check.svg'),
       heading: needsConfirmation
         ? intl.formatMessage(messages.needsConfirmationHeader)
         : needsApproval
@@ -151,6 +150,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
           : undefined,
       message,
       confirm: intl.formatMessage(messages.close),
+      onConfirm: () => {},
     }));
   };
 

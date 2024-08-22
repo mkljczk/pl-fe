@@ -132,7 +132,7 @@ const Thread = (props: IThread) => {
 
   const handleReplyClick = (status: ComposeReplyAction['status']) => dispatch(replyCompose(status));
 
-  const handleModalReblog = (status: SelectedStatus) => dispatch(reblog(status));
+  const handleModalReblog = (status: Pick<SelectedStatus, 'id'>) => dispatch(reblog(status));
 
   const handleReblogClick = (status: SelectedStatus, e?: React.MouseEvent) => {
     dispatch((_, getState) => {
@@ -143,7 +143,7 @@ const Thread = (props: IThread) => {
         if ((e && e.shiftKey) || !boostModal) {
           handleModalReblog(status);
         } else {
-          dispatch(openModal('BOOST', { status, onReblog: handleModalReblog }));
+          dispatch(openModal('BOOST', { statusId: status.id, onReblog: handleModalReblog }));
         }
       }
     });
@@ -160,7 +160,7 @@ const Thread = (props: IThread) => {
       const firstAttachment = media[0];
 
       if (media.length === 1 && firstAttachment.type === 'video') {
-        dispatch(openModal('VIDEO', { media: firstAttachment, status: status }));
+        dispatch(openModal('VIDEO', { media: firstAttachment, statusId: status.id }));
       } else {
         dispatch(openModal('MEDIA', { media, index: 0, statusId: status.id }));
       }

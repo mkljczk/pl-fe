@@ -6,13 +6,9 @@ import { Modal, Spinner } from 'soapbox/components/ui';
 import Account from 'soapbox/features/birthdays/account';
 import { useAppSelector } from 'soapbox/hooks';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 
-interface IBirthdaysModal {
-  onClose: (type: ModalType) => void;
-}
-
-const BirthdaysModal = ({ onClose }: IBirthdaysModal) => {
+const BirthdaysModal = ({ onClose }: BaseModalProps) => {
   const accountIds = useAppSelector(state => state.user_lists.birthday_reminders.get(state.me as string)?.items);
 
   const onClickClose = () => {

@@ -25,7 +25,7 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
 
   const handleOpenMedia = (attachment: AccountGalleryAttachment): void => {
     if (attachment.type === 'video') {
-      dispatch(openModal('VIDEO', { media: attachment, status: attachment.status }));
+      dispatch(openModal('VIDEO', { media: attachment, statusId: attachment.status.id }));
     } else {
       const media = attachment.status.media_attachments;
       const index = media.findIndex(x => x.id === attachment.id);

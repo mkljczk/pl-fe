@@ -2,20 +2,17 @@ import React from 'react';
 
 import { Modal } from 'soapbox/components/ui';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 
-interface IComponentModal {
-  onClose: (type?: ModalType) => void;
-  component: React.ComponentType<{
-    onClose: (type?: ModalType) => void;
-  }>;
+interface ComponentModalProps {
+  component: React.ComponentType<BaseModalProps>;
   componentProps: Record<any, any>;
 }
 
-const ComponentModal: React.FC<IComponentModal> = ({ onClose, component: Component, componentProps = {} }) => (
+const ComponentModal: React.FC<BaseModalProps & ComponentModalProps> = ({ onClose, component: Component, componentProps = {} }) => (
   <Modal onClose={onClose} title=''>
     <Component onClose={onClose} {...componentProps} />
   </Modal>
 );
 
-export { ComponentModal as default };
+export { ComponentModal as default, type ComponentModalProps };

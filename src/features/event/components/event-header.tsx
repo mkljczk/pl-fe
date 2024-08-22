@@ -122,7 +122,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     if (!boostModal) {
       modalReblog();
     } else {
-      dispatch(openModal('BOOST', { status, onReblog: modalReblog }));
+      dispatch(openModal('BOOST', { statusId: status.id, onReblog: modalReblog }));
     }
   };
 
@@ -136,7 +136,6 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
   const handleDeleteClick = () => {
     dispatch(openModal('CONFIRM', {
-      icon: require('@tabler/icons/outline/trash.svg'),
       heading: intl.formatMessage(messages.deleteHeading),
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
@@ -164,7 +163,6 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
   const handleBlockClick = () => {
     dispatch(openModal('CONFIRM', {
-      icon: require('@tabler/icons/outline/ban.svg'),
       heading: <FormattedMessage id='confirmations.block.heading' defaultMessage='Block @{name}' values={{ name: account.acct }} />,
       message: <FormattedMessage id='confirmations.block.message' defaultMessage='Are you sure you want to block {name}?' values={{ name: <strong>@{account.acct}</strong> }} />,
       confirm: intl.formatMessage(messages.blockConfirm),

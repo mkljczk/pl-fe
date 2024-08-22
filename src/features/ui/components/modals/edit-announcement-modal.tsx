@@ -8,7 +8,7 @@ import { DatePicker } from 'soapbox/features/ui/util/async-components';
 import { useAppDispatch } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 import type { AdminAnnouncement } from 'soapbox/schemas';
 
 const messages = defineMessages({
@@ -20,12 +20,11 @@ const messages = defineMessages({
   announcementUpdateSuccess: { id: 'admin.edit_announcement.updated', defaultMessage: 'Announcement edited' },
 });
 
-interface IEditAnnouncementModal {
-  onClose: (type?: ModalType) => void;
+interface EditAnnouncementModalProps {
   announcement?: AdminAnnouncement;
 }
 
-const EditAnnouncementModal: React.FC<IEditAnnouncementModal> = ({ onClose, announcement }) => {
+const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProps> = ({ onClose, announcement }) => {
   const dispatch = useAppDispatch();
   const { createAnnouncement, updateAnnouncement } = useAnnouncements();
   const intl = useIntl();
@@ -139,4 +138,4 @@ const EditAnnouncementModal: React.FC<IEditAnnouncementModal> = ({ onClose, anno
   );
 };
 
-export { EditAnnouncementModal as default };
+export { EditAnnouncementModal as default, type EditAnnouncementModalProps };

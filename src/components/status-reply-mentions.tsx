@@ -10,7 +10,7 @@ import { useAppDispatch } from 'soapbox/hooks';
 import type { Status } from 'soapbox/normalizers';
 
 interface IStatusReplyMentions {
-  status: Pick<Status, 'in_reply_to_id' | 'account' | 'id' | 'mentions'>;
+  status: Pick<Status, 'in_reply_to_id' | 'id' | 'mentions'>;
   hoverable?: boolean;
 }
 
@@ -20,12 +20,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
   const handleOpenMentionsModal: React.MouseEventHandler<HTMLSpanElement> = (e) => {
     e.stopPropagation();
 
-    const account = status.account;
-
-    dispatch(openModal('MENTIONS', {
-      username: account.acct,
-      statusId: status.id,
-    }));
+    dispatch(openModal('MENTIONS', { statusId: status.id }));
   };
 
   if (!status.in_reply_to_id) {

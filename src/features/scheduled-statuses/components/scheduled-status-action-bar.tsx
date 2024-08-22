@@ -33,7 +33,6 @@ const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({ status 
         dispatch(cancelScheduledStatus(status.id));
       } else {
         dispatch(openModal('CONFIRM', {
-          icon: require('@tabler/icons/outline/calendar-stats.svg'),
           heading: intl.formatMessage(messages.deleteHeading),
           message: intl.formatMessage(messages.deleteMessage),
           confirm: intl.formatMessage(messages.deleteConfirm),

@@ -7,14 +7,13 @@ import { useAppSelector, useCompose, useOwnAccount } from 'soapbox/hooks';
 import { statusToMentionsAccountIdsArray } from 'soapbox/reducers/compose';
 import { makeGetStatus } from 'soapbox/selectors';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 
-interface IReplyMentionsModal {
+interface ReplyMentionsModalProps {
   composeId: string;
-  onClose: (type: ModalType) => void;
 }
 
-const ReplyMentionsModal: React.FC<IReplyMentionsModal> = ({ composeId, onClose }) => {
+const ReplyMentionsModal: React.FC<BaseModalProps & ReplyMentionsModalProps> = ({ composeId, onClose }) => {
   const compose = useCompose(composeId);
 
   const getStatus = useCallback(makeGetStatus(), []);
@@ -42,4 +41,4 @@ const ReplyMentionsModal: React.FC<IReplyMentionsModal> = ({ composeId, onClose 
   );
 };
 
-export { ReplyMentionsModal as default };
+export { ReplyMentionsModal as default, type ReplyMentionsModalProps };

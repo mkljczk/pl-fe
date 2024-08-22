@@ -30,6 +30,7 @@ import { getReactForStatus, reduceEmoji } from 'soapbox/utils/emoji-reacts';
 import GroupPopover from './groups/popover/group-popover';
 
 import type { Menu } from 'soapbox/components/dropdown-menu';
+import type { UnauthorizedModalAction } from 'soapbox/features/ui/components/modals/unauthorized-modal';
 import type { Account, Group } from 'soapbox/normalizers';
 import type { SelectedStatus } from 'soapbox/selectors';
 
@@ -163,7 +164,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     return null;
   }
 
-  const onOpenUnauthorizedModal = (action?: string) => {
+  const onOpenUnauthorizedModal = (action?: UnauthorizedModalAction) => {
     dispatch(openModal('UNAUTHORIZED', {
       action,
       ap_id: status.url,
@@ -219,7 +220,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       if ((e && e.shiftKey) || !boostModal) {
         modalReblog();
       } else {
-        dispatch(openModal('BOOST', { status, onReblog: modalReblog }));
+        dispatch(openModal('BOOST', { statusId: status.id, onReblog: modalReblog }));
       }
     } else {
       onOpenUnauthorizedModal('REBLOG');
@@ -240,7 +241,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
         dispatch(deleteStatus(status.id, withRedraft));
       } else {
         dispatch(openModal('CONFIRM', {
-          icon: withRedraft ? require('@tabler/icons/outline/edit.svg') : require('@tabler/icons/outline/trash.svg'),
           heading: intl.formatMessage(withRedraft ? messages.redraftHeading : messages.deleteHeading),
           message: intl.formatMessage(withRedraft ? messages.redraftMessage : messages.deleteMessage),
           confirm: intl.formatMessage(withRedraft ? messages.redraftConfirm : messages.deleteConfirm),
@@ -291,7 +291,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     const account = status.account;
 
     dispatch(openModal('CONFIRM', {
-      icon: require('@tabler/icons/outline/ban.svg'),
       heading: <FormattedMessage id='confirmations.block.heading' defaultMessage='Block @{name}' values={{ name: account.acct }} />,
       message: <FormattedMessage id='confirmations.block.message' defaultMessage='Are you sure you want to block {name}?' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
       confirm: intl.formatMessage(messages.blockConfirm),

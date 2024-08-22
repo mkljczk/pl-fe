@@ -12,7 +12,7 @@ import { useAppDispatch, useClickOutside } from 'soapbox/hooks';
 import { useTextField } from 'soapbox/hooks/forms';
 import toast from 'soapbox/toast';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 import type { Emoji as EmojiType } from 'soapbox/features/emoji';
 
 const messages = defineMessages({
@@ -86,12 +86,11 @@ const EmojiPicker: React.FC<IEmojiPicker> = ({ emoji, emojiUrl, ...props }) => {
   );
 };
 
-interface IEditBookmarkFolderModal {
+interface EditBookmarkFolderModalProps {
   folderId: string;
-  onClose: (type: ModalType) => void;
 }
 
-const EditBookmarkFolderModal: React.FC<IEditBookmarkFolderModal> = ({ folderId, onClose }) => {
+const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModalProps> = ({ folderId, onClose }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -160,4 +159,4 @@ const EditBookmarkFolderModal: React.FC<IEditBookmarkFolderModal> = ({ folderId,
   );
 };
 
-export { EditBookmarkFolderModal as default };
+export { EditBookmarkFolderModal as default, type EditBookmarkFolderModalProps };

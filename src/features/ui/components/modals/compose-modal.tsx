@@ -11,7 +11,7 @@ import { useAppDispatch, useCompose, useDraggedFiles } from 'soapbox/hooks';
 
 import ComposeForm from '../../../compose/components/compose-form';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 
 const messages = defineMessages({
   confirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },
@@ -19,12 +19,11 @@ const messages = defineMessages({
   saveDraft: { id: 'confirmations.cancel_editing.save_draft', defaultMessage: 'Save draft' },
 });
 
-interface IComposeModal {
-  onClose: (type?: ModalType) => void;
+interface ComposeModalProps {
   composeId?: string;
 }
 
-const ComposeModal: React.FC<IComposeModal> = ({ onClose, composeId = 'compose-modal' }) => {
+const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, composeId = 'compose-modal' }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const node = useRef<HTMLDivElement>(null);
@@ -39,7 +38,6 @@ const ComposeModal: React.FC<IComposeModal> = ({ onClose, composeId = 'compose-m
   const onClickClose = () => {
     if (checkComposeContent(compose)) {
       dispatch(openModal('CONFIRM', {
-        icon: require('@tabler/icons/outline/trash.svg'),
         heading: statusId
           ? <FormattedMessage id='confirmations.cancel_editing.heading' defaultMessage='Cancel post editing' />
           : <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />,
@@ -96,4 +94,4 @@ const ComposeModal: React.FC<IComposeModal> = ({ onClose, composeId = 'compose-m
   );
 };
 
-export { ComposeModal as default };
+export { type ComposeModalProps, ComposeModal as default };

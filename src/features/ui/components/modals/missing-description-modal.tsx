@@ -3,18 +3,19 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { Modal } from 'soapbox/components/ui';
 
+import type { BaseModalProps } from '../modal-root';
+
 const messages = defineMessages({
   modalTitle: { id: 'missing_description_modal.text', defaultMessage: 'You have not entered a description for all attachments. Continue anyway?' },
   post: { id: 'missing_description_modal.continue', defaultMessage: 'Post' },
   cancel: { id: 'missing_description_modal.cancel', defaultMessage: 'Cancel' },
 });
 
-interface IMissingDescriptionModal {
-  onClose: () => void;
+interface MissingDescriptionModalProps {
   onContinue: () => void;
 }
 
-const MissingDescriptionModal: React.FC<IMissingDescriptionModal> = ({ onClose, onContinue }) => {
+const MissingDescriptionModal: React.FC<BaseModalProps & MissingDescriptionModalProps> = ({ onClose, onContinue }) => {
   const intl = useIntl();
 
   return (
@@ -33,4 +34,4 @@ const MissingDescriptionModal: React.FC<IMissingDescriptionModal> = ({ onClose, 
   );
 };
 
-export { MissingDescriptionModal as default };
+export { MissingDescriptionModal as default, type MissingDescriptionModalProps };

@@ -256,7 +256,7 @@ const Notification: React.FC<INotification> = (props) => {
           if (e?.shiftKey || !boostModal) {
             dispatch(reblog(status));
           } else {
-            dispatch(openModal('BOOST', { status, onReblog: (status: StatusEntity) => {
+            dispatch(openModal('BOOST', { statusId: status.id, onReblog: (status) => {
               dispatch(reblog(status));
             } }));
           }

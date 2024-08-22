@@ -4,23 +4,22 @@ import { FormattedMessage } from 'react-intl';
 import List, { ListItem } from 'soapbox/components/list';
 import { Modal, Stack, Text, Toggle } from 'soapbox/components/ui';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 import type { ButtonThemes } from 'soapbox/components/ui/button/useButtonStyles';
 
-interface IConfirmationModal {
-  heading: React.ReactNode;
+interface ConfirmationModalProps {
+  heading?: React.ReactNode;
   message: React.ReactNode;
   confirm: React.ReactNode;
-  onClose: (type: ModalType) => void;
   onConfirm: () => void;
-  secondary: React.ReactNode;
+  secondary?: React.ReactNode;
   onSecondary?: () => void;
-  onCancel: () => void;
-  checkbox?: JSX.Element;
+  onCancel?: () => void;
+  checkbox?: string | false;
   confirmationTheme?: ButtonThemes;
 }
 
-const ConfirmationModal: React.FC<IConfirmationModal> = ({
+const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
   heading,
   message,
   confirm,
@@ -58,7 +57,7 @@ const ConfirmationModal: React.FC<IConfirmationModal> = ({
       title={heading}
       confirmationAction={handleClick}
       confirmationText={confirm}
-      confirmationDisabled={checkbox && !checked}
+      confirmationDisabled={!!checkbox && !checked}
       confirmationTheme={confirmationTheme}
       cancelText={<FormattedMessage id='confirmation_modal.cancel' defaultMessage='Cancel' />}
       cancelAction={handleCancel}
@@ -86,4 +85,4 @@ const ConfirmationModal: React.FC<IConfirmationModal> = ({
   );
 };
 
-export { ConfirmationModal as default };
+export { ConfirmationModal as default, type ConfirmationModalProps };

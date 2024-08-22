@@ -130,7 +130,7 @@ const Status: React.FC<IStatus> = (props) => {
 
     if (firstAttachment) {
       if (firstAttachment.type === 'video') {
-        dispatch(openModal('VIDEO', { status, media: firstAttachment, time: 0 }));
+        dispatch(openModal('VIDEO', { statusId: status.id, media: firstAttachment, time: 0 }));
       } else {
         dispatch(openModal('MEDIA', { statusId: status.id, media: status.media_attachments, index: 0 }));
       }
@@ -151,7 +151,7 @@ const Status: React.FC<IStatus> = (props) => {
     if ((e && e.shiftKey) || !boostModal) {
       modalReblog();
     } else {
-      dispatch(openModal('BOOST', { status: actualStatus, onReblog: modalReblog }));
+      dispatch(openModal('BOOST', { statusId: actualStatus.id, onReblog: modalReblog }));
     }
   };
 

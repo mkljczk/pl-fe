@@ -10,8 +10,9 @@ import type { ButtonThemes } from 'soapbox/components/ui/button/useButtonStyles'
 import type { Status as StatusEntity } from 'soapbox/normalizers';
 
 const messages = defineMessages({
-  leaveConfirm: { id: 'confirmations.leave_event.confirm', defaultMessage: 'Leave event' },
+  leaveHeading: { id: 'confirmations.leave_event.heading', defaultMessage: 'Leave event' },
   leaveMessage: { id: 'confirmations.leave_event.message', defaultMessage: 'If you want to rejoin the event, the request will be manually reviewed again. Are you sure you want to proceed?' },
+  leaveConfirm: { id: 'confirmations.leave_event.confirm', defaultMessage: 'Leave event' },
 });
 
 interface IEventAction {
@@ -44,6 +45,7 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
 
     if (event.join_mode === 'restricted') {
       dispatch(openModal('CONFIRM', {
+        heading: intl.formatMessage(messages.leaveHeading),
         message: intl.formatMessage(messages.leaveMessage),
         confirm: intl.formatMessage(messages.leaveConfirm),
         onConfirm: () => dispatch(leaveEvent(status.id)),

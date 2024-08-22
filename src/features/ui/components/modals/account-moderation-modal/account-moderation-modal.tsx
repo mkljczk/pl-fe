@@ -18,7 +18,7 @@ import { getBadges } from 'soapbox/utils/badges';
 import BadgeInput from './badge-input';
 import StaffRolePicker from './staff-role-picker';
 
-import type { ModalType } from '../../modal-root';
+import type { BaseModalProps } from '../../modal-root';
 
 const messages = defineMessages({
   userVerified: { id: 'admin.users.user_verified_message', defaultMessage: '@{acct} was verified' },
@@ -28,15 +28,13 @@ const messages = defineMessages({
   badgesSaved: { id: 'admin.users.badges_saved_message', defaultMessage: 'Custom badges updated.' },
 });
 
-interface IAccountModerationModal {
-  /** Action to close the modal. */
-  onClose: (type: ModalType) => void;
+interface AccountModerationModalProps {
   /** ID of the account to moderate. */
   accountId: string;
 }
 
 /** Moderator actions against accounts. */
-const AccountModerationModal: React.FC<IAccountModerationModal> = ({ onClose, accountId }) => {
+const AccountModerationModal: React.FC<AccountModerationModalProps & BaseModalProps> = ({ onClose, accountId }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -183,4 +181,4 @@ const AccountModerationModal: React.FC<IAccountModerationModal> = ({ onClose, ac
   );
 };
 
-export { AccountModerationModal as default };
+export { type AccountModerationModalProps, AccountModerationModal as default };

@@ -3,21 +3,20 @@ import { FormattedMessage } from 'react-intl';
 
 import { Modal, Stack, Textarea } from 'soapbox/components/ui';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 import type { ButtonThemes } from 'soapbox/components/ui/button/useButtonStyles';
 
-interface ITextFieldModal {
+interface TextFieldModalProps {
   heading: React.ReactNode;
   placeholder?: string;
   confirm: React.ReactNode;
-  onClose: (type: ModalType) => void;
   onConfirm: (value?: string) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
   confirmationTheme?: ButtonThemes;
   text?: string;
 }
 
-const TextFieldModal: React.FC<ITextFieldModal> = ({
+const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
   heading,
   placeholder,
   confirm,
@@ -60,4 +59,4 @@ const TextFieldModal: React.FC<ITextFieldModal> = ({
   );
 };
 
-export { TextFieldModal as default };
+export { type TextFieldModalProps, TextFieldModal as default };

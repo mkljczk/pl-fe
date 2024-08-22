@@ -9,14 +9,13 @@ import AccountContainer from 'soapbox/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 import { makeGetStatus } from 'soapbox/selectors';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 
-interface IMentionsModal {
-  onClose: (type: ModalType) => void;
+interface MentionsModalProps {
   statusId: string;
 }
 
-const MentionsModal: React.FC<IMentionsModal> = ({ onClose, statusId }) => {
+const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose, statusId }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const getStatus = useCallback(makeGetStatus(), []);
@@ -64,4 +63,4 @@ const MentionsModal: React.FC<IMentionsModal> = ({ onClose, statusId }) => {
   );
 };
 
-export { MentionsModal as default };
+export { MentionsModal as default, type MentionsModalProps };

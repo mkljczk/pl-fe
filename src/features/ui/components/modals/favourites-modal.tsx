@@ -7,14 +7,13 @@ import { Modal, Spinner } from 'soapbox/components/ui';
 import AccountContainer from 'soapbox/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 
-interface IFavouritesModal {
-  onClose: (type: ModalType) => void;
+interface FavouritesModalProps {
   statusId: string;
 }
 
-const FavouritesModal: React.FC<IFavouritesModal> = ({ onClose, statusId }) => {
+const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onClose, statusId }) => {
   const dispatch = useAppDispatch();
 
   const accountIds = useAppSelector((state) => state.user_lists.favourited_by.get(statusId)?.items);
@@ -73,4 +72,4 @@ const FavouritesModal: React.FC<IFavouritesModal> = ({ onClose, statusId }) => {
   );
 };
 
-export { FavouritesModal as default };
+export { FavouritesModal as default, type FavouritesModalProps };

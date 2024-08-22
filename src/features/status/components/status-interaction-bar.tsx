@@ -28,31 +28,19 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
   };
 
   const onOpenReblogsModal = (username: string, statusId: string): void => {
-    dispatch(openModal('REBLOGS', {
-      username,
-      statusId,
-    }));
+    dispatch(openModal('REBLOGS', { statusId }));
   };
 
   const onOpenFavouritesModal = (username: string, statusId: string): void => {
-    dispatch(openModal('FAVOURITES', {
-      username,
-      statusId,
-    }));
+    dispatch(openModal('FAVOURITES', { statusId }));
   };
 
   const onOpenDislikesModal = (username: string, statusId: string): void => {
-    dispatch(openModal('DISLIKES', {
-      username,
-      statusId,
-    }));
+    dispatch(openModal('DISLIKES', { statusId }));
   };
 
   const onOpenReactionsModal = (username: string, statusId: string): void => {
-    dispatch(openModal('REACTIONS', {
-      username,
-      statusId,
-    }));
+    dispatch(openModal('REACTIONS', { statusId }));
   };
 
   const getNormalizedReacts = () => reduceEmoji(

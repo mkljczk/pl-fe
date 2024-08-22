@@ -8,16 +8,15 @@ import AccountContainer from 'soapbox/containers/account-container';
 import { useAppSelector } from 'soapbox/hooks';
 import { makeGetAccount } from 'soapbox/selectors';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 
 const getAccount = makeGetAccount();
 
-interface IFamiliarFollowersModal {
+interface FamiliarFollowersModalProps {
   accountId: string;
-  onClose: (type: ModalType) => void;
 }
 
-const FamiliarFollowersModal = ({ accountId, onClose }: IFamiliarFollowersModal) => {
+const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalProps> = ({ accountId, onClose }) => {
   const account = useAppSelector(state => getAccount(state, accountId));
   const familiarFollowerIds: ImmutableOrderedSet<string> = useAppSelector(state => state.user_lists.familiar_followers.get(accountId)?.items || ImmutableOrderedSet());
 
@@ -63,4 +62,4 @@ const FamiliarFollowersModal = ({ accountId, onClose }: IFamiliarFollowersModal)
   );
 };
 
-export { FamiliarFollowersModal as default };
+export { FamiliarFollowersModal as default, type FamiliarFollowersModalProps };

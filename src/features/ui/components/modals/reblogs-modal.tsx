@@ -8,14 +8,13 @@ import { Modal, Spinner } from 'soapbox/components/ui';
 import AccountContainer from 'soapbox/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 
-interface IReblogsModal {
-  onClose: (type: ModalType) => void;
+interface ReblogsModalProps {
   statusId: string;
 }
 
-const ReblogsModal: React.FC<IReblogsModal> = ({ onClose, statusId }) => {
+const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, statusId }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const accountIds = useAppSelector((state) => state.user_lists.reblogged_by.get(statusId)?.items);
@@ -75,4 +74,4 @@ const ReblogsModal: React.FC<IReblogsModal> = ({ onClose, statusId }) => {
   );
 };
 
-export { ReblogsModal as default };
+export { ReblogsModal as default, type ReblogsModalProps };

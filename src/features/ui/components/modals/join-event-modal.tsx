@@ -6,17 +6,19 @@ import { closeModal } from 'soapbox/actions/modals';
 import { FormGroup, Modal, Textarea } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
 
+import { BaseModalProps } from '../modal-root';
+
 const messages = defineMessages({
   hint: { id: 'join_event.hint', defaultMessage: 'You can tell the organizer why do you want to participate in this event:' },
   placeholder: { id: 'join_event.placeholder', defaultMessage: 'Message to organizer' },
   join: { id: 'join_event.join', defaultMessage: 'Request join' },
 });
 
-interface IJoinEventModal {
+interface JoinEventModalProps {
   statusId: string;
 }
 
-const JoinEventModal: React.FC<IJoinEventModal> = ({ statusId }) => {
+const JoinEventModal: React.FC<BaseModalProps & JoinEventModalProps> = ({ statusId }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -66,4 +68,4 @@ const JoinEventModal: React.FC<IJoinEventModal> = ({ statusId }) => {
   );
 };
 
-export { JoinEventModal as default };
+export { JoinEventModal as default, type JoinEventModalProps };

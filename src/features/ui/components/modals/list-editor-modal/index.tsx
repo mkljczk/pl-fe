@@ -9,7 +9,7 @@ import Account from './components/account';
 import EditListForm from './components/edit-list-form';
 import Search from './components/search';
 
-import type { ModalType } from '../ui/components/modal-root';
+import type { BaseModalProps } from '../../modal-root';
 
 const messages = defineMessages({
   changeTitle: { id: 'lists.edit.submit', defaultMessage: 'Change title' },
@@ -18,12 +18,11 @@ const messages = defineMessages({
   editList: { id: 'lists.edit', defaultMessage: 'Edit list' },
 });
 
-interface IListEditor {
+interface ListEditorModalProps {
   listId: string;
-  onClose: (type: ModalType) => void;
 }
 
-const ListEditor: React.FC<IListEditor> = ({ listId, onClose }) => {
+const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ listId, onClose }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -76,4 +75,4 @@ const ListEditor: React.FC<IListEditor> = ({ listId, onClose }) => {
   );
 };
 
-export { ListEditor as default };
+export { ListEditorModal as default, type ListEditorModalProps };

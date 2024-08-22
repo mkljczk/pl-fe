@@ -7,14 +7,13 @@ import { Modal, Spinner } from 'soapbox/components/ui';
 import AccountContainer from 'soapbox/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 
-interface IEventParticipantsModal {
-  onClose: (type: ModalType) => void;
+interface EventParticipantsModalProps {
   statusId: string;
 }
 
-const EventParticipantsModal: React.FC<IEventParticipantsModal> = ({ onClose, statusId }) => {
+const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalProps> = ({ onClose, statusId }) => {
   const dispatch = useAppDispatch();
 
   const accountIds = useAppSelector((state) => state.user_lists.event_participations.get(statusId)?.items);
@@ -62,4 +61,4 @@ const EventParticipantsModal: React.FC<IEventParticipantsModal> = ({ onClose, st
   );
 };
 
-export { EventParticipantsModal as default };
+export { EventParticipantsModal as default, type EventParticipantsModalProps };

@@ -30,8 +30,9 @@ const messages = defineMessages({
   groupModDemote: { id: 'group.group_mod_demote', defaultMessage: 'Remove {role} role' },
   groupModKick: { id: 'group.group_mod_kick', defaultMessage: 'Kick @{name} from group' },
   groupModPromoteMod: { id: 'group.group_mod_promote_mod', defaultMessage: 'Assign {role} role' },
-  kickConfirm: { id: 'confirmations.kick_from_group.confirm', defaultMessage: 'Kick' },
+  kickFromGroupHeading: { id: 'confirmations.kick_from_group.heading', defaultMessage: 'Kick @{name}' },
   kickFromGroupMessage: { id: 'confirmations.kick_from_group.message', defaultMessage: 'Are you sure you want to kick @{name} from this group?' },
+  kickConfirm: { id: 'confirmations.kick_from_group.confirm', defaultMessage: 'Kick' },
   kicked: { id: 'group.group_mod_kick.success', defaultMessage: 'Kicked @{name} from group' },
   promoteConfirm: { id: 'group.promote.admin.confirmation.title', defaultMessage: 'Assign admin role' },
   promoteConfirmMessage: { id: 'group.promote.admin.confirmation.message', defaultMessage: 'Are you sure you want to assign the admin role to @{name}?' },
@@ -66,6 +67,7 @@ const GroupMemberListItem = (props: IGroupMemberListItem) => {
 
   const handleKickFromGroup = () => {
     dispatch(openModal('CONFIRM', {
+      heading: intl.formatMessage(messages.kickFromGroupHeading, { name: account?.username }),
       message: intl.formatMessage(messages.kickFromGroupMessage, { name: account?.username }),
       confirm: intl.formatMessage(messages.kickConfirm),
       onConfirm: () => dispatch(groupKick(group.id, account?.id as string)).then(() =>

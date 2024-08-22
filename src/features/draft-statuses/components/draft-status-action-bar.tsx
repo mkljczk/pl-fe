@@ -35,7 +35,6 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
         dispatch(cancelDraftStatus(source.draft_id));
       } else {
         dispatch(openModal('CONFIRM', {
-          icon: require('@tabler/icons/outline/calendar-stats.svg'),
           heading: intl.formatMessage(messages.deleteHeading),
           message: intl.formatMessage(messages.deleteMessage),
           confirm: intl.formatMessage(messages.deleteConfirm),

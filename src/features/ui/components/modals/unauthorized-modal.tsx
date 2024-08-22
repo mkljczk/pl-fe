@@ -8,18 +8,18 @@ import { useAppSelector, useAppDispatch, useFeatures, useInstance, useRegistrati
 import { selectAccount } from 'soapbox/selectors';
 import toast from 'soapbox/toast';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 
 const messages = defineMessages({
   accountPlaceholder: { id: 'remote_interaction.account_placeholder', defaultMessage: 'Enter your username@domain you want to act from' },
   userNotFoundError: { id: 'remote_interaction.user_not_found_error', defaultMessage: 'Couldn\'t find given user' },
 });
 
-interface IUnauthorizedModal {
+type UnauthorizedModalAction = 'FOLLOW' | 'REPLY' | 'REBLOG' | 'FAVOURITE' | 'DISLIKE' | 'POLL_VOTE' | 'JOIN';
+
+interface UnauthorizedModalProps {
   /** Unauthorized action type. */
-  action: 'FOLLOW' | 'REPLY' | 'REBLOG' | 'FAVOURITE' | 'DISLIKE' | 'POLL_VOTE' | 'JOIN';
-  /** Close event handler. */
-  onClose: (modalType: ModalType) => void;
+  action?: UnauthorizedModalAction;
   /** ActivityPub ID of the account OR status being acted upon. */
   ap_id?: string;
   /** Account ID of the account being acted upon. */
@@ -27,7 +27,7 @@ interface IUnauthorizedModal {
 }
 
 /** Modal to display when a logged-out user tries to do something that requires login. */
-const UnauthorizedModal: React.FC<IUnauthorizedModal> = ({ action, onClose, account: accountId, ap_id: apId }) => {
+const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({ action, onClose, account: accountId, ap_id: apId }) => {
   const intl = useIntl();
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -158,4 +158,4 @@ const UnauthorizedModal: React.FC<IUnauthorizedModal> = ({ action, onClose, acco
   );
 };
 
-export { UnauthorizedModal as default };
+export { type UnauthorizedModalAction, type UnauthorizedModalProps, UnauthorizedModal as default };

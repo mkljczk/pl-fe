@@ -6,14 +6,13 @@ import AttachmentThumbs from 'soapbox/components/attachment-thumbs';
 import { HStack, Modal, Spinner, Stack, Text } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 
-interface ICompareHistoryModal {
-  onClose: (type: ModalType) => void;
+interface CompareHistoryModalProps {
   statusId: string;
 }
 
-const CompareHistoryModal: React.FC<ICompareHistoryModal> = ({ onClose, statusId }) => {
+const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> = ({ onClose, statusId }) => {
   const dispatch = useAppDispatch();
 
   const loading = useAppSelector(state => state.history.getIn([statusId, 'loading']));
@@ -93,4 +92,4 @@ const CompareHistoryModal: React.FC<ICompareHistoryModal> = ({ onClose, statusId
   );
 };
 
-export { CompareHistoryModal as default };
+export { type CompareHistoryModalProps, CompareHistoryModal as default };

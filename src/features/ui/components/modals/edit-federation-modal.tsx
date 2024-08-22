@@ -8,6 +8,8 @@ import { useAppSelector, useAppDispatch } from 'soapbox/hooks';
 import { makeGetRemoteInstance } from 'soapbox/selectors';
 import toast from 'soapbox/toast';
 
+import type { BaseModalProps } from '../modal-root';
+
 const messages = defineMessages({
   mediaRemoval: { id: 'edit_federation.media_removal', defaultMessage: 'Strip media' },
   forceNsfw: { id: 'edit_federation.force_nsfw', defaultMessage: 'Force attachments to be marked sensitive' },
@@ -17,13 +19,12 @@ const messages = defineMessages({
   success: { id: 'edit_federation.success', defaultMessage: '{host} federation was updated' },
 });
 
-interface IEditFederationModal {
+interface EditFederationModalProps {
   host: string;
-  onClose: () => void;
 }
 
 /** Modal for moderators to edit federation with a remote instance. */
-const EditFederationModal: React.FC<IEditFederationModal> = ({ host, onClose }) => {
+const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> = ({ host, onClose }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -127,4 +128,4 @@ const EditFederationModal: React.FC<IEditFederationModal> = ({ host, onClose }) 
   );
 };
 
-export { EditFederationModal as default };
+export { EditFederationModal as default, type EditFederationModalProps };

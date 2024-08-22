@@ -19,7 +19,7 @@ const messages = defineMessages({
 });
 
 interface IOtherActionsStep {
-  account: Account;
+  account: Pick<Account, 'id' | 'acct' | 'local' | 'url'>;
 }
 
 const OtherActionsStep = ({ account }: IOtherActionsStep) => {

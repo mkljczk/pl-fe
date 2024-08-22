@@ -40,10 +40,10 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
 
     dispatch(openModal('TEXT_FIELD', {
       heading: intl.formatMessage(messages.changeDescriptionHeading),
-      message: intl.formatMessage(messages.changeDescriptionPlaceholder),
+      placeholder: intl.formatMessage(messages.changeDescriptionPlaceholder),
       confirm: intl.formatMessage(messages.changeDescriptionConfirm),
-      onConfirm: (description: string) => {
-        onChangeDescription?.(description);
+      onConfirm: (description?: string) => {
+        onChangeDescription?.(description || '');
       },
       text: description,
     }));

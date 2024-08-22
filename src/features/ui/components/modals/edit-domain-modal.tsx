@@ -7,8 +7,8 @@ import { Form, FormGroup, HStack, Input, Modal, Stack, Text, Toggle } from 'soap
 import { useAppDispatch } from 'soapbox/hooks';
 import toast from 'soapbox/toast';
 
-import type { ModalType } from '../modal-root';
-import type{ Domain } from 'soapbox/schemas';
+import type { BaseModalProps } from '../modal-root';
+import type { Domain } from 'soapbox/schemas';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_domain.save', defaultMessage: 'Save' },
@@ -17,12 +17,11 @@ const messages = defineMessages({
   domainUpdateSuccess: { id: 'admin.edit_domain.updated', defaultMessage: 'Domain edited' },
 });
 
-interface IEditDomainModal {
-  onClose: (type?: ModalType) => void;
+interface EditDomainModalProps {
   domainId?: string;
 }
 
-const EditDomainModal: React.FC<IEditDomainModal> = ({ onClose, domainId }) => {
+const EditDomainModal: React.FC<BaseModalProps & EditDomainModalProps> = ({ onClose, domainId }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -101,4 +100,4 @@ const EditDomainModal: React.FC<IEditDomainModal> = ({ onClose, domainId }) => {
   );
 };
 
-export { EditDomainModal as default };
+export { EditDomainModal as default, type EditDomainModalProps };

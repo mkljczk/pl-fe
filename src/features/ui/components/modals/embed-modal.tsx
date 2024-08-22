@@ -8,12 +8,14 @@ import { Modal, Stack, Text, Divider } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
 import useEmbed from 'soapbox/queries/embed';
 
-interface IEmbedModal {
+import type { BaseModalProps } from '../modal-root';
+
+interface EmbedModalProps {
   url: string;
   onError: (error: any) => void;
 }
 
-const EmbedModal: React.FC<IEmbedModal> = ({ url, onError }) => {
+const EmbedModal: React.FC<BaseModalProps & EmbedModalProps> = ({ url, onError }) => {
   const dispatch = useAppDispatch();
   const { data: embed, error, isError } = useEmbed(url);
 
@@ -54,4 +56,4 @@ const EmbedModal: React.FC<IEmbedModal> = ({ url, onError }) => {
   );
 };
 
-export { EmbedModal as default };
+export { EmbedModal as default, type EmbedModalProps };

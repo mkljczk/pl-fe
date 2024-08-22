@@ -4,9 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Modal } from 'soapbox/components/ui';
 import { useFeatures } from 'soapbox/hooks';
 
-interface IHotkeysModal {
-  onClose: () => void;
-}
+import type { BaseModalProps } from '../modal-root';
 
 const Hotkey: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <kbd className='rounded-md border border-solid border-primary-200 bg-primary-50 px-1.5 py-1 font-sans text-xs dark:border-gray-700 dark:bg-gray-800'>
@@ -20,7 +18,7 @@ const TableCell: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   </td>
 );
 
-const HotkeysModal: React.FC<IHotkeysModal> = ({ onClose }) => {
+const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
   const features = useFeatures();
 
   return (

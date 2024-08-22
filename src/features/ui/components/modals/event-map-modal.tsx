@@ -8,7 +8,7 @@ import { makeGetStatus } from 'soapbox/selectors';
 
 import 'leaflet/dist/leaflet.css';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
@@ -16,12 +16,11 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-interface IEventMapModal {
-  onClose: (type: ModalType) => void;
+interface EventMapModalProps {
   statusId: string;
 }
 
-const EventMapModal: React.FC<IEventMapModal> = ({ onClose, statusId }) => {
+const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose, statusId }) => {
   const { tileServer, tileServerAttribution } = useSoapboxConfig();
 
   const getStatus = useCallback(makeGetStatus(), []);
@@ -72,4 +71,4 @@ const EventMapModal: React.FC<IEventMapModal> = ({ onClose, statusId }) => {
   );
 };
 
-export { EventMapModal as default };
+export { EventMapModal as default, type EventMapModalProps };

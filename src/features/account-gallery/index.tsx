@@ -64,7 +64,7 @@ const AccountGallery = () => {
 
   const handleOpenMedia = (attachment: AccountGalleryAttachment) => {
     if (attachment.type === 'video') {
-      dispatch(openModal('VIDEO', { media: attachment, status: attachment.status, account: attachment.account }));
+      dispatch(openModal('VIDEO', { media: attachment, statusId: attachment.status.id, account: attachment.account }));
     } else {
       const media = attachment.status.media_attachments;
       const index = media.findIndex((x) => x.id === attachment.id);

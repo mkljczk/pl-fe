@@ -7,14 +7,13 @@ import { Modal, Spinner } from 'soapbox/components/ui';
 import AccountContainer from 'soapbox/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 
-interface IDislikesModal {
-  onClose: (type: ModalType) => void;
+interface DislikesModalProps {
   statusId: string;
 }
 
-const DislikesModal: React.FC<IDislikesModal> = ({ onClose, statusId }) => {
+const DislikesModal: React.FC<BaseModalProps & DislikesModalProps> = ({ onClose, statusId }) => {
   const dispatch = useAppDispatch();
 
   const accountIds = useAppSelector((state) => state.user_lists.disliked_by.get(statusId)?.items);
@@ -62,4 +61,4 @@ const DislikesModal: React.FC<IDislikesModal> = ({ onClose, statusId }) => {
   );
 };
 
-export { DislikesModal as default };
+export { DislikesModal as default, type DislikesModalProps };

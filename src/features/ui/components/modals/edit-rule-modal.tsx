@@ -6,8 +6,8 @@ import { Form, FormGroup, Input, Modal } from 'soapbox/components/ui';
 import { useTextField } from 'soapbox/hooks/forms';
 import toast from 'soapbox/toast';
 
-import type { ModalType } from '../modal-root';
-import type{ AdminRule } from 'soapbox/schemas';
+import type { BaseModalProps } from '../modal-root';
+import type { AdminRule } from 'soapbox/schemas';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_rule.save', defaultMessage: 'Save' },
@@ -17,12 +17,11 @@ const messages = defineMessages({
   ruleUpdateSuccess: { id: 'admin.edit_rule.updated', defaultMessage: 'Rule edited' },
 });
 
-interface IEditRuleModal {
-  onClose: (type?: ModalType) => void;
+interface EditRuleModalProps {
   rule?: AdminRule;
 }
 
-const EditRuleModal: React.FC<IEditRuleModal> = ({ onClose, rule }) => {
+const EditRuleModal: React.FC<BaseModalProps & EditRuleModalProps> = ({ onClose, rule }) => {
   const intl = useIntl();
 
   const { createRule, updateRule } = useRules();
@@ -91,4 +90,4 @@ const EditRuleModal: React.FC<IEditRuleModal> = ({ onClose, rule }) => {
   );
 };
 
-export { EditRuleModal as default };
+export { EditRuleModal as default, type EditRuleModalProps };

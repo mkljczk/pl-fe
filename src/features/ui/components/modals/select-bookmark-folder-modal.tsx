@@ -9,15 +9,14 @@ import NewFolderForm from 'soapbox/features/bookmark-folders/components/new-fold
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 import { makeGetStatus } from 'soapbox/selectors';
 
-import type { ModalType } from '../modal-root';
+import type { BaseModalProps } from '../modal-root';
 import type { Status as StatusEntity } from 'soapbox/normalizers';
 
-interface ISelectBookmarkFolderModal {
+interface SelectBookmarkFolderModalProps {
   statusId: string;
-  onClose: (type: ModalType) => void;
 }
 
-const SelectBookmarkFolderModal: React.FC<ISelectBookmarkFolderModal> = ({ statusId, onClose }) => {
+const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseModalProps> = ({ statusId, onClose }) => {
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector(state => getStatus(state, { id: statusId })) as StatusEntity;
   const dispatch = useAppDispatch();
@@ -95,4 +94,4 @@ const SelectBookmarkFolderModal: React.FC<ISelectBookmarkFolderModal> = ({ statu
   );
 };
 
-export { SelectBookmarkFolderModal as default };
+export { type SelectBookmarkFolderModalProps, SelectBookmarkFolderModal as default };

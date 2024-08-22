@@ -15,6 +15,8 @@ import ConfirmationStep from './steps/confirmation-step';
 import OtherActionsStep from './steps/other-actions-step';
 import ReasonStep from './steps/reason-step';
 
+import type { BaseModalProps } from '../../modal-root';
+
 const messages = defineMessages({
   blankslate: { id: 'report.reason.blankslate', defaultMessage: 'You have removed all statuses from being selected.' },
   done: { id: 'report.done', defaultMessage: 'Done' },
@@ -68,11 +70,7 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
   );
 };
 
-interface IReportModal {
-  onClose: () => void;
-}
-
-const ReportModal = ({ onClose }: IReportModal) => {
+const ReportModal = ({ onClose }: BaseModalProps) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 

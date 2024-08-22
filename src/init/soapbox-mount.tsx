@@ -8,10 +8,7 @@ import { ScrollContext } from 'react-router-scroll-4';
 import * as BuildConfig from 'soapbox/build-config';
 import LoadingScreen from 'soapbox/components/loading-screen';
 import SiteErrorBoundary from 'soapbox/components/site-error-boundary';
-import {
-  ModalContainer,
-  OnboardingWizard,
-} from 'soapbox/features/ui/util/async-components';
+import { ModalRoot, OnboardingWizard } from 'soapbox/features/ui/util/async-components';
 import {
   useAppSelector,
   useLoggedIn,
@@ -71,7 +68,7 @@ const SoapboxMount = () => {
                 </Suspense>
 
                 <Suspense>
-                  <ModalContainer />
+                  <ModalRoot />
                 </Suspense>
 
                 {(gdpr && !isLoggedIn) && (
