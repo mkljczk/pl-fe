@@ -114,9 +114,6 @@ const normalizeStatus = (status: BaseStatus & {
     mentions = [selfMention, ...mentions];
   }
 
-  // If the status contains spoiler text, treat it as sensitive.
-  const sensitive = !!status.spoiler_text || status.sensitive;
-
   // Normalize event
   let event: BaseStatus['event'] & ({
     banner: MediaAttachment | null;
@@ -162,8 +159,7 @@ const normalizeStatus = (status: BaseStatus & {
     account: normalizeAccount(status.account),
     accounts: status.accounts?.map(normalizeAccount),
     mentions,
-    sensitive,
-    hidden: sensitive,
+    hidden: status.sensitive,
     /** Rewrite `<p></p>` to empty string. */
     content: status.content === '<p></p>' ? '' : status.content,
     filtered: status.filtered?.map(result => result.filter.title),

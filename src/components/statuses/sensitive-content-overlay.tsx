@@ -21,7 +21,7 @@ const messages = defineMessages({
 });
 
 interface ISensitiveContentOverlay {
-  status: Pick<Status, 'id' | 'sensitive' | 'hidden' | 'media_attachments' | 'currentLanguage' | 'spoilerHtml' | 'spoilerMapHtml' | 'spoiler_text'>;
+  status: Pick<Status, 'id' | 'sensitive' | 'hidden' | 'media_attachments' | 'currentLanguage'>;
 }
 
 const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveContentOverlay>((props, ref) => {
@@ -46,10 +46,6 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
   };
 
   if (visible && !showHideButton) return null;
-
-  const spoilerText = status.currentLanguage
-    ? status.spoilerMapHtml![status.currentLanguage] || status.spoilerHtml
-    : status.spoilerHtml;
 
   return (
     <div
@@ -79,14 +75,6 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
               <Text theme='white' size='sm' weight='medium'>
                 {intl.formatMessage(messages.sensitiveSubtitle)}
               </Text>
-
-              {status.spoiler_text && (
-                <div className='py-4 italic'>
-                  <Text className='line-clamp-6' theme='white' size='md' weight='medium'>
-                    &ldquo;<span dangerouslySetInnerHTML={{ __html: spoilerText }} />&rdquo;
-                  </Text>
-                </div>
-              )}
             </div>
 
             <HStack alignItems='center' justifyContent='center' space={2}>

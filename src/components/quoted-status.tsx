@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { MouseEventHandler, useEffect, useRef, useState } from 'react';
+import React, { MouseEventHandler } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
@@ -33,16 +33,6 @@ interface IQuotedStatus {
 const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) => {
   const intl = useIntl();
   const history = useHistory();
-
-  const overlay = useRef<HTMLDivElement>(null);
-
-  const [minHeight, setMinHeight] = useState(208);
-
-  useEffect(() => {
-    if (overlay.current) {
-      setMinHeight(overlay.current.getBoundingClientRect().height);
-    }
-  }, [overlay.current]);
 
   const handleExpandClick: MouseEventHandler<HTMLDivElement> = (e) => {
     if (!status) return;
@@ -105,15 +95,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
         <StatusReplyMentions status={status} hoverable={false} />
 
         {status.event ? <EventPreview status={status} hideAction /> : (
-          <Stack
-            className='relative z-0'
-            style={{ minHeight: status.sensitive ? Math.max(minHeight, 208) + 12 : undefined }}
-          >
-            <SensitiveContentOverlay
-              status={status}
-              ref={overlay}
-            />
-
+          <Stack className='relative z-0'>
             <Stack space={4}>
               <StatusContent
                 status={status}
@@ -122,9 +104,14 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
 
               {status.quote_id && <QuotedStatusIndicator statusId={status.quote_id} />}
 
-              {status.media_attachments.length > 0 && (
-                <StatusMedia status={status} muted={compose} />
-              )}
+              <div className='relative'>
+                <SensitiveContentOverlay
+                  status={status}
+                />
+                {status.media_attachments.length > 0 && (
+                  <StatusMedia status={status} muted={compose} />
+                )}
+              </div>
             </Stack>
           </Stack>
         )}

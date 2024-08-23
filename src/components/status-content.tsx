@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import Icon from 'soapbox/components/icon';
+import { Text } from 'soapbox/components/ui';
 import { onlyEmoji as isOnlyEmoji } from 'soapbox/utils/rich-content';
 
 import { getTextDirection } from '../utils/rtl';
@@ -15,7 +16,6 @@ import Markup from './markup';
 import Poll from './polls/poll';
 
 import type { Sizes } from 'soapbox/components/ui/text/text';
-// import type { Status } from 'soapbox/normalizers';
 import type { MinifiedStatus } from 'soapbox/reducers/statuses';
 
 const MAX_HEIGHT = 642; // 20px * 32 (+ 2px padding at the top)
@@ -156,8 +156,22 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     'leading-normal big-emoji': onlyEmoji,
   });
 
+  const spoilerText = status.spoilerMapHtml && status.currentLanguage
+    ? status.spoilerMapHtml[status.currentLanguage] || status.spoilerHtml
+    : status.spoilerHtml;
+
+  const output = [];
+
+  if (spoilerText) {
+    output.push(
+      <Text className='mb-2' size='2xl' weight='medium'>
+        <span dangerouslySetInnerHTML={{ __html: spoilerText }} />
+      </Text>,
+    );
+  }
+
   if (onClick) {
-    const output = [
+    output.push(
       <Markup
         ref={node}
         tabIndex={0}
@@ -169,7 +183,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
       >
         {content}
       </Markup>,
-    ];
+    );
 
     if (collapsed) {
       output.push(<ReadMoreButton onClick={onClick} key='read-more' />);
@@ -184,7 +198,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
 
     return <div className={clsx({ 'bg-gray-100 dark:bg-primary-800 rounded-md p-4': hasPoll })}>{output}</div>;
   } else {
-    const output = [
+    output.push(
       <Markup
         ref={node}
         tabIndex={0}
@@ -198,7 +212,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
       >
         {content}
       </Markup>,
-    ];
+    );
 
     if (status.poll_id) {
       output.push(<Poll id={status.poll_id} key='poll' status={status} />);

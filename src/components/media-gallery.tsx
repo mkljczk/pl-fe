@@ -55,7 +55,6 @@ interface IItem {
   size: number;
   onClick: (index: number) => void;
   displayWidth?: number;
-  visible: boolean;
   dimensions: Dimensions;
   last?: boolean;
   total: number;
@@ -66,7 +65,6 @@ const Item: React.FC<IItem> = ({
   index,
   onClick,
   standalone = false,
-  visible,
   dimensions,
   last,
   total,
@@ -266,19 +264,17 @@ const Item: React.FC<IItem> = ({
         hash={attachment.blurhash}
         className='media-gallery__preview'
       />
-      {visible && thumbnail}
+      {thumbnail}
     </div>
   );
 };
 
 interface IMediaGallery {
-  sensitive?: boolean;
   media: Array<MediaAttachment>;
   height?: number;
   onOpenMedia: (media: Array<MediaAttachment>, index: number) => void;
   defaultWidth?: number;
   cacheWidth?: (width: number) => void;
-  visible?: boolean;
   displayMedia?: string;
   compact?: boolean;
   className?: string;
@@ -538,7 +534,6 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
       index={i}
       size={sizeData.size}
       displayWidth={sizeData.width}
-      visible={!!props.visible}
       dimensions={sizeData.itemsDimensions[i]}
       last={i === ATTACHMENT_LIMIT - 1}
       total={media.length}

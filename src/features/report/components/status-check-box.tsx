@@ -61,7 +61,6 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled }) => {
       media = (
         <MediaGallery
           media={status.media_attachments}
-          sensitive={status.sensitive}
           height={110}
           onOpenMedia={noop}
           visible

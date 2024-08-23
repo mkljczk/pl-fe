@@ -206,7 +206,7 @@ type AccountGalleryAttachment = MediaAttachment & {
 }
 
 const getAccountGallery = createSelector([
-  (state: RootState, id: string) => state.timelines.get(`account:${id}:media`)?.items || ImmutableOrderedSet<string>(),
+  (state: RootState, id: string) => state.timelines.get(`account:${id}:with_replies:media`)?.items || ImmutableOrderedSet<string>(),
   (state: RootState) => state.statuses,
 ], (statusIds, statuses) =>
   statusIds.reduce((medias: ImmutableList<AccountGalleryAttachment>, statusId: string) => {

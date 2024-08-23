@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
@@ -31,15 +31,6 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
   const intl = useIntl();
 
   const node = useRef<HTMLDivElement>(null);
-  const overlay = useRef<HTMLDivElement>(null);
-
-  const [minHeight, setMinHeight] = useState(208);
-
-  useEffect(() => {
-    if (overlay.current) {
-      setMinHeight(overlay.current.getBoundingClientRect().height);
-    }
-  }, [overlay.current]);
 
   const handleOpenCompareHistoryModal = () => {
     onOpenCompareHistoryModal(status);
@@ -124,15 +115,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
         <StatusReplyMentions status={actualStatus} />
 
-        <Stack
-          className='relative z-0'
-          style={{ minHeight: actualStatus.sensitive ? Math.max(minHeight, 208) + 12 : undefined }}
-        >
-          <SensitiveContentOverlay
-            status={status}
-            ref={overlay}
-          />
-
+        <Stack className='relative z-0'>
           <Stack space={4}>
             <StatusContent
               status={actualStatus}
@@ -143,7 +126,9 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
             <TranslateButton status={actualStatus} />
 
             {(withMedia && (quote || actualStatus.card || actualStatus.media_attachments.length > 0)) && (
-              <Stack space={4}>
+              <Stack space={4} className='relative'>
+                <SensitiveContentOverlay status={status} />
+
                 <StatusMedia status={actualStatus} />
 
                 {quote}

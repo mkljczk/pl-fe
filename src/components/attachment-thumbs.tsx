@@ -13,7 +13,7 @@ interface IAttachmentThumbs {
 }
 
 const AttachmentThumbs = (props: IAttachmentThumbs) => {
-  const { media, onClick, sensitive } = props;
+  const { media, onClick } = props;
   const dispatch = useAppDispatch();
 
   const fallback = <div className='media-gallery--compact' />;
@@ -27,8 +27,6 @@ const AttachmentThumbs = (props: IAttachmentThumbs) => {
           onOpenMedia={onOpenMedia}
           height={50}
           compact
-          sensitive={sensitive}
-          visible
         />
       </Suspense>
 

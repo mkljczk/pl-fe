@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -79,9 +79,6 @@ const Status: React.FC<IStatus> = (props) => {
   const { boostModal } = useSettings();
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
-  const overlay = useRef<HTMLDivElement>(null);
-
-  const [minHeight, setMinHeight] = useState(208);
 
   const getStatus = useCallback(makeGetStatus(), []);
   const actualStatus = useAppSelector(state => status.reblog_id && getStatus(state, { id: status.reblog_id }) || status)!;
@@ -96,12 +93,6 @@ const Status: React.FC<IStatus> = (props) => {
   useEffect(() => {
     didShowCard.current = Boolean(!muted && !hidden && status?.card);
   }, []);
-
-  useEffect(() => {
-    if (overlay.current) {
-      setMinHeight(overlay.current.getBoundingClientRect().height);
-    }
-  }, [overlay.current]);
 
   const handleClick = (e?: React.MouseEvent): void => {
     e?.stopPropagation();
@@ -426,15 +417,7 @@ const Status: React.FC<IStatus> = (props) => {
           <div className='status__content-wrapper'>
             <StatusReplyMentions status={actualStatus} hoverable={hoverable} />
 
-            <Stack
-              className='relative z-0'
-              style={{ minHeight: actualStatus.sensitive ? Math.max(minHeight, 208) + 12 : undefined }}
-            >
-              <SensitiveContentOverlay
-                status={actualStatus}
-                ref={overlay}
-              />
-
+            <Stack className='relative z-0'>
               {actualStatus.event ? <EventPreview className='shadow-xl' status={actualStatus} /> : (
                 <Stack space={4}>
                   <StatusContent
@@ -447,7 +430,8 @@ const Status: React.FC<IStatus> = (props) => {
                   <TranslateButton status={actualStatus} />
 
                   {(quote || actualStatus.card || actualStatus.media_attachments.length > 0) && (
-                    <Stack space={4}>
+                    <Stack space={4} className='relative'>
+                      <SensitiveContentOverlay status={actualStatus} />
                       <StatusMedia
                         status={actualStatus}
                         muted={muted}

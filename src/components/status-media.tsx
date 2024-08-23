@@ -59,7 +59,6 @@ const StatusMedia: React.FC<IStatusMedia> = ({
         <AttachmentThumbs
           media={status.media_attachments}
           onClick={onClick}
-          sensitive={status.sensitive}
         />
       );
     } else if (size === 1 && firstAttachment.type === 'video') {
@@ -101,10 +100,8 @@ const StatusMedia: React.FC<IStatusMedia> = ({
         <Suspense fallback={renderLoadingMediaGallery()}>
           <MediaGallery
             media={status.media_attachments}
-            sensitive={status.sensitive}
             height={285}
             onOpenMedia={openMedia}
-            visible={visible}
           />
         </Suspense>
       );
