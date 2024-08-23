@@ -12,11 +12,10 @@ import {
   selectComposeSuggestion,
   uploadCompose,
 } from 'soapbox/actions/compose';
-import AutosuggestInput, { AutoSuggestion } from 'soapbox/components/autosuggest-input';
 import { Button, HStack, Stack } from 'soapbox/components/ui';
 import EmojiPickerDropdown from 'soapbox/features/emoji/containers/emoji-picker-dropdown-container';
 import { ComposeEditor } from 'soapbox/features/ui/util/async-components';
-import { useAppDispatch, useAppSelector, useCompose, useDraggedFiles, useFeatures, useInstance, usePrevious } from 'soapbox/hooks';
+import { useAppDispatch, useAppSelector, useCompose, useDraggedFiles, useFeatures, useInstance } from 'soapbox/hooks';
 
 import QuotedStatusContainer from '../containers/quoted-status-container';
 import ReplyIndicatorContainer from '../containers/reply-indicator-container';
@@ -41,6 +40,7 @@ import UploadForm from './upload-form';
 import VisualCharacterCounter from './visual-character-counter';
 import Warning from './warning';
 
+import type { AutoSuggestion } from 'soapbox/components/autosuggest-input';
 import type { Emoji } from 'soapbox/features/emoji';
 
 const messages = defineMessages({
@@ -77,7 +77,6 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   const features = useFeatures();
 
   const {
-    spoiler,
     spoiler_text: spoilerText,
     privacy,
     is_submitting: isSubmitting,
@@ -90,17 +89,13 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     modified_language: modifiedLanguage,
   } = compose;
 
-  const prevSpoiler = usePrevious(spoiler);
-
   const hasPoll = !!compose.poll;
   const isEditing = compose.id !== null;
   const anyMedia = compose.media_attachments.size > 0;
 
   const [composeFocused, setComposeFocused] = useState(false);
 
-  const firstRender = useRef(true);
   const formRef = useRef<HTMLDivElement>(null);
-  const spoilerTextRef = useRef<AutosuggestInput>(null);
   const editorRef = useRef<LexicalEditor>(null);
 
   const { isDraggedOver } = useDraggedFiles(formRef);
@@ -171,10 +166,6 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     dispatch(uploadCompose(id, files, intl));
   };
 
-  const focusSpoilerInput = () => {
-    spoilerTextRef.current?.input?.focus();
-  };
-
   useEffect(() => {
     document.addEventListener('click', handleClick, true);
 
@@ -182,16 +173,6 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       document.removeEventListener('click', handleClick, true);
     };
   }, []);
-
-  useEffect(() => {
-    if (spoiler && firstRender.current) {
-      firstRender.current = false;
-    } else if (!spoiler && prevSpoiler) {
-      //
-    } else if (spoiler && !prevSpoiler) {
-      focusSpoilerInput();
-    }
-  }, [spoiler]);
 
   const renderButtons = useCallback(() => (
     <HStack alignItems='center' space={2}>
@@ -207,14 +188,6 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     <Stack space={4} className='font-[inherit] text-sm text-gray-900'>
       <UploadForm composeId={id} onSubmit={handleSubmit} />
       <PollForm composeId={id} />
-
-      <SpoilerInput
-        composeId={id}
-        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={onSuggestionsClearRequested}
-        onSuggestionSelected={onSpoilerSuggestionSelected}
-        ref={spoilerTextRef}
-      />
 
       <ScheduleForm composeId={id} />
     </Stack>
@@ -279,6 +252,13 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
           {selectButtons}
         </HStack>
       )}
+
+      <SpoilerInput
+        composeId={id}
+        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+        onSuggestionsClearRequested={onSuggestionsClearRequested}
+        onSuggestionSelected={onSpoilerSuggestionSelected}
+      />
 
       <div>
         <Suspense>

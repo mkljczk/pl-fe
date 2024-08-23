@@ -92,7 +92,6 @@ const ChatMessage = (props: IChatMessage) => {
         })}
         media={[chatMessage.attachment]}
         onOpenMedia={onOpenMedia}
-        visible
       />
     );
   };

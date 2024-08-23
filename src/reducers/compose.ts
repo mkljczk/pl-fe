@@ -105,7 +105,6 @@ const ReducerCompose = ImmutableRecord({
   resetFileKey: null as number | null,
   schedule: null as Date | null,
   sensitive: false,
-  spoiler: false,
   spoiler_text: '',
   spoilerTextMap: ImmutableMap<Language, string>(),
   suggestions: ImmutableList<string>(),
@@ -165,7 +164,7 @@ const appendMedia = (compose: Compose, media: MediaAttachment, defaultSensitive?
     map.set('resetFileKey', Math.floor((Math.random() * 0x10000)));
     map.set('idempotencyKey', uuid());
 
-    if (prevSize === 0 && (defaultSensitive || compose.spoiler)) {
+    if (prevSize === 0 && (defaultSensitive || compose.sensitive)) {
       map.set('sensitive', true);
     }
   });
@@ -293,9 +292,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
       }));
     case COMPOSE_SPOILERNESS_CHANGE:
       return updateCompose(state, action.composeId, compose => compose.withMutations(map => {
-        map.set('spoiler_text', '');
-        map.set('spoiler', !compose.spoiler);
-        map.set('sensitive', !compose.spoiler);
+        map.set('sensitive', !compose.sensitive);
         map.set('idempotencyKey', uuid());
       }));
     case COMPOSE_SPOILER_TEXT_CHANGE:
@@ -342,7 +339,6 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
         map.set('idempotencyKey', uuid());
         map.set('content_type', defaultCompose.content_type);
         if (action.preserveSpoilers && action.status.spoiler_text) {
-          map.set('spoiler', true);
           map.set('sensitive', true);
           map.set('spoiler_text', action.status.spoiler_text);
         }
@@ -367,7 +363,6 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
         map.set('caretPosition', null);
         map.set('idempotencyKey', uuid());
         map.set('content_type', defaultCompose.content_type);
-        map.set('spoiler', false);
         map.set('spoiler_text', '');
 
         if (action.status.visibility === 'group') {
@@ -484,10 +479,8 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
         }
 
         if (action.status.spoiler_text.length > 0) {
-          map.set('spoiler', true);
           map.set('spoiler_text', action.status.spoiler_text);
         } else {
-          map.set('spoiler', false);
           map.set('spoiler_text', '');
         }
 

@@ -7,8 +7,8 @@ import { useAppDispatch, useCompose } from 'soapbox/hooks';
 import ComposeFormButton from './compose-form-button';
 
 const messages = defineMessages({
-  marked: { id: 'compose_form.spoiler.marked', defaultMessage: 'Text is hidden behind warning' },
-  unmarked: { id: 'compose_form.spoiler.unmarked', defaultMessage: 'Text is not hidden' },
+  marked: { id: 'compose_form.spoiler.marked', defaultMessage: 'Media is marked as sensitive' },
+  unmarked: { id: 'compose_form.spoiler.unmarked', defaultMessage: 'Media is not marked as sensitive' },
 });
 
 interface ISpoilerButton {
@@ -19,7 +19,7 @@ const SpoilerButton: React.FC<ISpoilerButton> = ({ composeId }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const active = useCompose(composeId).spoiler;
+  const active = useCompose(composeId).sensitive;
 
   const onClick = () =>
     dispatch(changeComposeSpoilerness(composeId));

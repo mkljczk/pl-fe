@@ -63,7 +63,6 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled }) => {
           media={status.media_attachments}
           height={110}
           onOpenMedia={noop}
-          visible
         />
       );
     }

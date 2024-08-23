@@ -188,7 +188,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
 
   if (spoilerText) {
     output.push(
-      <Text className='mb-2' size='2xl' weight='medium'>
+      <Text size='2xl' weight='medium'>
         <span dangerouslySetInnerHTML={{ __html: spoilerText }} />
         {expandable && (
           <Button
