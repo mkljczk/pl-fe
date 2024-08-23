@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { translateStatus, undoStatusTranslation } from 'soapbox/actions/statuses';
@@ -19,7 +19,6 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   const features = useFeatures();
   const instance = useInstance();
   const settings = useSettings();
-  const [autoTranslating, setAutoTranslating] = useState(false);
   const autoTranslate = settings.autoTranslate;
   const knownLanguages = autoTranslate ? [...settings.knownLanguages, intl.locale] : [intl.locale];
 
@@ -46,15 +45,12 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   };
 
   useEffect(() => {
-    if (!status.translation && settings.autoTranslate && features.translations && renderTranslate && supportsLanguages && status.translation !== false && status.language !== null && !knownLanguages.includes(status.language)) {
-      setAutoTranslating(true);
+    if (status.translation === null && settings.autoTranslate && features.translations && renderTranslate && supportsLanguages && status.translation !== false && status.language !== null && !knownLanguages.includes(status.language)) {
       dispatch(translateStatus(status.id, intl.locale, true));
     }
   }, []);
 
   if (!features.translations || !renderTranslate || !supportsLanguages || status.translation === false) return null;
-
-  if (settings.autoTranslate && !status.translating) return null;
 
   const button = (
     <button className='w-fit' onClick={handleTranslate}>
@@ -77,8 +73,6 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   );
 
   if (status.translation) {
-    if (autoTranslating) return null;
-
     const languageNames = new Intl.DisplayNames([intl.locale], { type: 'language' });
     const languageName = languageNames.of(status.language!);
     const provider = status.translation.provider;

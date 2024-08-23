@@ -12,32 +12,22 @@ import type { APIEntity } from 'soapbox/types/entities';
 const SOAPBOX_CONFIG_REQUEST_SUCCESS = 'SOAPBOX_CONFIG_REQUEST_SUCCESS' as const;
 const SOAPBOX_CONFIG_REQUEST_FAIL = 'SOAPBOX_CONFIG_REQUEST_FAIL' as const;
 
-const SOAPBOX_CONFIG_REMEMBER_REQUEST = 'SOAPBOX_CONFIG_REMEMBER_REQUEST' as const;
 const SOAPBOX_CONFIG_REMEMBER_SUCCESS = 'SOAPBOX_CONFIG_REMEMBER_SUCCESS' as const;
-const SOAPBOX_CONFIG_REMEMBER_FAIL = 'SOAPBOX_CONFIG_REMEMBER_FAIL' as const;
 
 const getSoapboxConfig = createSelector([
   (state: RootState) => state.soapbox,
   (state: RootState) => state.auth.client.features,
 ], (soapbox, features) => {
   // Do some additional normalization with the state
-  return normalizeSoapboxConfig(soapbox).withMutations(soapboxConfig => {
-    // If displayFqn isn't set, infer it from federation
-    if (soapbox.get('displayFqn') === undefined) {
-      soapboxConfig.set('displayFqn', features.federating);
-    }
-  });
+  return normalizeSoapboxConfig(soapbox);
 });
 
 const rememberSoapboxConfig = (host: string | null) =>
   (dispatch: AppDispatch) => {
-    dispatch({ type: SOAPBOX_CONFIG_REMEMBER_REQUEST, host });
     return KVStore.getItemOrError(`soapbox_config:${host}`).then(soapboxConfig => {
       dispatch({ type: SOAPBOX_CONFIG_REMEMBER_SUCCESS, host, soapboxConfig });
       return soapboxConfig;
-    }).catch(error => {
-      dispatch({ type: SOAPBOX_CONFIG_REMEMBER_FAIL, host, error, skipAlert: true });
-    });
+    }).catch(() => {});
   };
 
 const fetchFrontendConfigurations = () =>
@@ -107,9 +97,7 @@ const isObject = (o: any) => o instanceof Object && o.constructor === Object;
 export {
   SOAPBOX_CONFIG_REQUEST_SUCCESS,
   SOAPBOX_CONFIG_REQUEST_FAIL,
-  SOAPBOX_CONFIG_REMEMBER_REQUEST,
   SOAPBOX_CONFIG_REMEMBER_SUCCESS,
-  SOAPBOX_CONFIG_REMEMBER_FAIL,
   getSoapboxConfig,
   rememberSoapboxConfig,
   fetchFrontendConfigurations,

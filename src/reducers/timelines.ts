@@ -162,7 +162,7 @@ const shouldDelete = (timelineId: string, excludeAccount?: string) => {
   return true;
 };
 
-const deleteStatus = (state: State, statusId: string, accountId: string, references: ImmutableMap<string, [string, string]> | Array<[string, string]>, excludeAccount?: string) =>
+const deleteStatus = (state: State, statusId: string, references: ImmutableMap<string, [string, string]> | Array<[string, string]>, excludeAccount?: string) =>
   state.withMutations(state => {
     state.keySeq().forEach(timelineId => {
       if (shouldDelete(timelineId, excludeAccount)) {
@@ -173,7 +173,7 @@ const deleteStatus = (state: State, statusId: string, accountId: string, referen
 
     // Remove reblogs of deleted status
     references.forEach(ref => {
-      deleteStatus(state, ref[0], ref[1], [], excludeAccount);
+      deleteStatus(state, ref[0], [], excludeAccount);
     });
   });
 
@@ -208,7 +208,7 @@ const filterTimelines = (state: State, relationship: Relationship, statuses: Imm
     statuses.forEach(status => {
       if (status.account.id !== relationship.id) return;
       const references = buildReferencesTo(statuses, status);
-      deleteStatus(state, status.id, status.account.id, references, relationship.id);
+      deleteStatus(state, status.id, references, relationship.id);
     });
   });
 
@@ -329,7 +329,7 @@ const timelines = (state: State = initialState, action: AnyAction) => {
     case TIMELINE_DEQUEUE:
       return timelineDequeue(state, action.timeline);
     case TIMELINE_DELETE:
-      return deleteStatus(state, action.statusId, action.accountId, action.references, action.reblogOf);
+      return deleteStatus(state, action.statusId, action.references, action.reblogOf);
     case TIMELINE_CLEAR:
       return clearTimeline(state, action.timeline);
     case ACCOUNT_BLOCK_SUCCESS:

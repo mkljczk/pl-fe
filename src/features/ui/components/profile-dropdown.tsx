@@ -1,14 +1,14 @@
-import { useFloating } from '@floating-ui/react';
 import clsx from 'clsx';
 import throttle from 'lodash/throttle';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { fetchOwnAccounts, logOut, switchAccount } from 'soapbox/actions/auth';
 import Account from 'soapbox/components/account';
+import DropdownMenu from 'soapbox/components/dropdown-menu';
 import { MenuDivider } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useClickOutside, useFeatures } from 'soapbox/hooks';
+import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
 import { makeGetAccount } from 'soapbox/selectors';
 
 import ThemeToggle from './theme-toggle';
@@ -41,8 +41,6 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   const features = useFeatures();
   const intl = useIntl();
 
-  const [visible, setVisible] = useState(false);
-  const { x, y, strategy, refs } = useFloating<HTMLButtonElement>({ placement: 'bottom-end' });
   const authUsers = useAppSelector((state) => state.auth.users);
   const otherAccounts = useAppSelector((state) => authUsers.map((authUser: any) => getAccount(state, authUser.id)!));
 
@@ -62,7 +60,7 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
     <Account account={account} showProfileHoverCard={false} withLinkToProfile={false} hideActions />
   );
 
-  const menu: IMenuItem[] = useMemo(() => {
+  const ProfileDropdownMenu = useMemo(() => {
     const menu: IMenuItem[] = [];
 
     menu.push({ text: renderAccount(account), to: `/@${account.acct}` });
@@ -93,47 +91,30 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
       icon: require('@tabler/icons/outline/logout.svg'),
     });
 
-    return menu;
+    return () => (
+      <>
+        {menu.map((menuItem, i) => (
+          <MenuItem key={i} menuItem={menuItem} />
+        ))}
+      </>
+    );
   }, [account, authUsers, features]);
-
-  const toggleVisible = () => setVisible(!visible);
 
   useEffect(() => {
     fetchOwnAccountThrottled();
   }, [account, authUsers]);
 
-  useClickOutside(refs, () => {
-    setVisible(false);
-  });
-
   return (
-    <>
+    <DropdownMenu
+      component={ProfileDropdownMenu}
+    >
       <button
         className='w-full rounded-full focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:ring-gray-800 dark:ring-offset-0 dark:focus:ring-primary-500'
         type='button'
-        ref={refs.setReference}
-        onClick={toggleVisible}
       >
         {children}
       </button>
-
-      {visible && (
-        <div
-          ref={refs.setFloating}
-          className='z-[1003] mt-2 max-w-xs rounded-md bg-white shadow-lg focus:outline-none black:bg-black dark:bg-gray-900 dark:ring-2 dark:ring-primary-700'
-          style={{
-            position: strategy,
-            top: y ?? 0,
-            left: x ?? 0,
-            width: 'max-content',
-          }}
-        >
-          {menu.map((menuItem, i) => (
-            <MenuItem key={i} menuItem={menuItem} />
-          ))}
-        </div>
-      )}
-    </>
+    </DropdownMenu>
   );
 };
 

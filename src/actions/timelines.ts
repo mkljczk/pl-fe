@@ -105,14 +105,14 @@ interface TimelineDeleteAction {
   statusId: string;
   accountId: string;
   references: ImmutableMap<string, readonly [statusId: string, accountId: string]>;
-  reblogOf: unknown;
+  reblogOf: string | null;
 }
 
 const deleteFromTimelines = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const accountId = getState().statuses.get(statusId)?.account?.id!;
     const references = getState().statuses.filter(status => status.reblog_id === statusId).map(status => [status.id, status.account.id] as const);
-    const reblogOf = getState().statuses.getIn([statusId, 'reblog'], null);
+    const reblogOf = getState().statuses.get(statusId)?.reblog_id || null;
 
     const action: TimelineDeleteAction = {
       type: TIMELINE_DELETE,
@@ -125,9 +125,7 @@ const deleteFromTimelines = (statusId: string) =>
     dispatch(action);
   };
 
-const clearTimeline = (timeline: string) =>
-  (dispatch: AppDispatch) =>
-    dispatch({ type: TIMELINE_CLEAR, timeline });
+const clearTimeline = (timeline: string) => ({ type: TIMELINE_CLEAR, timeline });
 
 const noOp = () => { };
 

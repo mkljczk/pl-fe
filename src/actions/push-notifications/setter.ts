@@ -1,9 +1,7 @@
-import type { AnyAction } from 'redux';
-
-const SET_BROWSER_SUPPORT = 'PUSH_NOTIFICATIONS_SET_BROWSER_SUPPORT';
-const SET_SUBSCRIPTION = 'PUSH_NOTIFICATIONS_SET_SUBSCRIPTION';
-const CLEAR_SUBSCRIPTION = 'PUSH_NOTIFICATIONS_CLEAR_SUBSCRIPTION';
-const SET_ALERTS = 'PUSH_NOTIFICATIONS_SET_ALERTS';
+const SET_BROWSER_SUPPORT = 'PUSH_NOTIFICATIONS_SET_BROWSER_SUPPORT' as const;
+const SET_SUBSCRIPTION = 'PUSH_NOTIFICATIONS_SET_SUBSCRIPTION' as const;
+const CLEAR_SUBSCRIPTION = 'PUSH_NOTIFICATIONS_CLEAR_SUBSCRIPTION' as const;
+const SET_ALERTS = 'PUSH_NOTIFICATIONS_SET_ALERTS' as const;
 
 const setBrowserSupport = (value: boolean) => ({
   type: SET_BROWSER_SUPPORT,
@@ -19,13 +17,17 @@ const clearSubscription = () => ({
   type: CLEAR_SUBSCRIPTION,
 });
 
-const setAlerts = (path: Array<string>, value: any) =>
-  (dispatch: React.Dispatch<AnyAction>) =>
-    dispatch({
-      type: SET_ALERTS,
-      path,
-      value,
-    });
+const setAlerts = (path: Array<string>, value: any) => ({
+  type: SET_ALERTS,
+  path,
+  value,
+});
+
+type SetterAction =
+  | ReturnType<typeof setBrowserSupport>
+  | ReturnType<typeof setSubscription>
+  | ReturnType<typeof clearSubscription>
+  | ReturnType<typeof setAlerts>;
 
 export {
   SET_BROWSER_SUPPORT,
@@ -36,4 +38,5 @@ export {
   setSubscription,
   clearSubscription,
   setAlerts,
+  type SetterAction,
 };

@@ -103,6 +103,7 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
         })}
         listClassName='max-w-full'
         itemClassName='pb-3'
+        style={{ height: '80vh' }}
       >
         {accounts.map((account) =>
           <AccountContainer key={`${account.id}-${account.reaction}`} id={account.id} emoji={account.reaction} emojiUrl={account.reactionUrl} />,

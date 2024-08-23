@@ -332,6 +332,11 @@ const changeStatusLanguage = (statusId: string, language: string) => ({
   language,
 });
 
+type StatusesAction =
+  | ReturnType<typeof undoStatusTranslation>
+  | ReturnType<typeof unfilterStatus>
+  | ReturnType<typeof changeStatusLanguage>;
+
 export {
   STATUS_CREATE_REQUEST,
   STATUS_CREATE_SUCCESS,
@@ -379,4 +384,5 @@ export {
   undoStatusTranslation,
   unfilterStatus,
   changeStatusLanguage,
+  type StatusesAction,
 };

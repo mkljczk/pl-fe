@@ -23,7 +23,7 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = ({ status, showLab
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  if (!status.contentMapHtml || !Object.keys(status.contentMapHtml).length) return null;
+  if (!status.contentMapHtml || Object.keys(status.contentMapHtml).length < 2) return null;
 
   const icon = <Icon className='h-5 w-5 text-gray-700 dark:text-gray-600' src={require('@tabler/icons/outline/language.svg')} />;
 

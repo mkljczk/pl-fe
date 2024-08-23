@@ -2,7 +2,7 @@ import { Map as ImmutableMap, Record as ImmutableRecord } from 'immutable';
 
 import { SET_BROWSER_SUPPORT, SET_SUBSCRIPTION, CLEAR_SUBSCRIPTION, SET_ALERTS } from '../actions/push-notifications';
 
-import type { AnyAction } from 'redux';
+import type { SetterAction } from 'soapbox/actions/push-notifications/setter';
 
 const SubscriptionRecord = ImmutableRecord({
   id: '',
@@ -25,7 +25,7 @@ const ReducerRecord = ImmutableRecord({
 
 type Subscription = ReturnType<typeof SubscriptionRecord>;
 
-const push_subscriptions = (state = ReducerRecord(), action: AnyAction) => {
+const push_subscriptions = (state = ReducerRecord(), action: SetterAction) => {
   switch (action.type) {
     case SET_SUBSCRIPTION:
       return state
