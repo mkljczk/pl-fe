@@ -59,7 +59,7 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
     }
   }, [account?.id, withReplies]);
 
-  const handleLoadMore = (maxId: string) => {
+  const handleLoadMore = () => {
     if (account) {
       dispatch(fetchAccountTimeline(account.id, { exclude_replies: !withReplies }, true));
     }

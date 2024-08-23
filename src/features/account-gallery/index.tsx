@@ -47,11 +47,11 @@ const AccountGallery = () => {
 
   const handleScrollToBottom = () => {
     if (hasMore) {
-      handleLoadMore(attachments.size > 0 ? attachments.last()!.status.id : null);
+      handleLoadMore();
     }
   };
 
-  const handleLoadMore = (maxId: string | null) => {
+  const handleLoadMore = () => {
     if (account) {
       dispatch(fetchAccountTimeline(account.id, { only_media: true }, true));
     }

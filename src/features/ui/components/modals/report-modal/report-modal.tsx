@@ -126,7 +126,7 @@ const ReportModal = ({ onClose }: BaseModalProps) => {
   const cancelAction = () => {
     switch (currentStep) {
       case Steps.ONE:
-        onClose();
+        onClose('REPORT');
         break;
       case Steps.TWO:
         setCurrentStep(Steps.ONE);
@@ -159,7 +159,7 @@ const ReportModal = ({ onClose }: BaseModalProps) => {
         break;
       case Steps.THREE:
         dispatch(submitReportSuccess());
-        onClose();
+        onClose('REPORT');
         break;
       default:
         break;

@@ -81,14 +81,12 @@ interface IThread {
   itemClassName?: string;
 }
 
-const Thread = (props: IThread) => {
-  const {
-    itemClassName,
-    status,
-    useWindowScroll = true,
-    withMedia = true,
-  } = props;
-
+const Thread: React.FC<IThread> = ({
+  itemClassName,
+  status,
+  useWindowScroll = true,
+  withMedia = true,
+}) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const intl = useIntl();

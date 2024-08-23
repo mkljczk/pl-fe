@@ -15,13 +15,12 @@ import QuotedStatus from 'soapbox/features/status/containers/quoted-status-conta
 
 import StatusInteractionBar from './status-interaction-bar';
 
-import type { Status as StatusEntity } from 'soapbox/normalizers';
 import type { SelectedStatus } from 'soapbox/selectors';
 
 interface IDetailedStatus {
   status: SelectedStatus;
   withMedia?: boolean;
-  onOpenCompareHistoryModal: (status: Pick<StatusEntity, 'id'>) => void;
+  onOpenCompareHistoryModal: (status: Pick<SelectedStatus, 'id'>) => void;
 }
 
 const DetailedStatus: React.FC<IDetailedStatus> = ({

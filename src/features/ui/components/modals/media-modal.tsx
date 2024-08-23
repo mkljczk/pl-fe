@@ -63,7 +63,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   const intl = useIntl();
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector((state) => getStatus(state, { id: statusId as string }));
+  const status = useAppSelector((state) => statusId ? getStatus(state, { id: statusId }) : undefined);
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
   const [index, setIndex] = useState<number | null>(null);
@@ -185,16 +185,15 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     return null;
   });
 
-  /** Fetch the status (and context) from the API. */
-  const fetchData = () => dispatch(fetchStatusWithContext(status?.id as string, intl));
-
   // Load data.
   useEffect(() => {
-    fetchData().then(() => {
-      setIsLoaded(true);
-    }).catch(() => {
-      setIsLoaded(true);
-    });
+    if (status?.id) {
+      dispatch(fetchStatusWithContext(status.id, intl)).then(() => {
+        setIsLoaded(true);
+      }).catch(() => {
+        setIsLoaded(true);
+      });
+    }
   }, [status?.id]);
 
   useEffect(() => {
@@ -245,7 +244,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             <IconButton
               title={intl.formatMessage(messages.close)}
               src={require('@tabler/icons/outline/x.svg')}
-              onClick={() => onClose()}
+              onClick={() => onClose('MEDIA')}
               theme='dark'
               className='!p-1.5 hover:scale-105 hover:bg-gray-900'
               iconClassName='h-5 w-5'

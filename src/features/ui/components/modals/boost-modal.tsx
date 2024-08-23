@@ -28,7 +28,7 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({ statusId, onRe
 
   const handleReblog = () => {
     onReblog(status);
-    onClose();
+    onClose('BOOST');
   };
 
   const buttonText = status.reblogged ? messages.cancel_reblog : messages.reblog;

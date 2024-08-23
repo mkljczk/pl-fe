@@ -41,13 +41,9 @@ const HashtagTimeline: React.FC<IHashtagTimeline> = ({ params }) => {
   useHashtagStream(tagId);
 
   useEffect(() => {
-    dispatch(fetchHashtagTimeline(tagId));
-    dispatch(fetchHashtag(tagId));
-  }, [tagId]);
-
-  useEffect(() => {
     dispatch(clearTimeline(`hashtag:${tagId}`));
-    dispatch(fetchHashtagTimeline(tagId, {}, true));
+    dispatch(fetchHashtag(tagId));
+    dispatch(fetchHashtagTimeline(tagId));
   }, [tagId]);
 
   return (

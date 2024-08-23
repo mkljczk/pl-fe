@@ -57,7 +57,7 @@ const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> =
       .then(() => toast.success(intl.formatMessage(messages.success, { host })))
       .catch(() => {});
 
-    onClose();
+    onClose('EDIT_FEDERATION');
   };
 
   const {
