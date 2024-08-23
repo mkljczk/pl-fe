@@ -107,7 +107,7 @@ const normalizeStatus = (status: BaseStatus & {
 
   // Add self to mentions if it's a reply to self
   const isSelfReply = status.account.id === status.in_reply_to_account_id;
-  const hasSelfMention = status.account.id === status.mentions[0]?.id;
+  const hasSelfMention = status.mentions.some(mention => status.account.id === mention.id);
 
   if (isSelfReply && !hasSelfMention) {
     const selfMention = mentionSchema.parse(status.account);
