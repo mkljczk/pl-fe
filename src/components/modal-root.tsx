@@ -227,7 +227,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
       unlistenHistory.current();
     } else if (!isDropdownOpen && wasDropdownOpen) {
       // TODO find a better solution
-      setTimeout(() => handleModalOpen(), 100);
+      setTimeout(() => handleModalOpen(), 50);
     }
   }, [isDropdownOpen]);
 

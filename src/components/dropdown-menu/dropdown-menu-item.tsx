@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { userTouching } from 'soapbox/is-mobile';
+
 import { Counter, Icon } from '../ui';
 
 interface MenuItem {
@@ -21,7 +23,7 @@ interface MenuItem {
 interface IDropdownMenuItem {
   index: number;
   item: MenuItem | null;
-  onClick?(): void;
+  onClick?(goBack?: boolean): void;
   autoFocus?: boolean;
 }
 
@@ -35,14 +37,18 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus }: IDropdownMenuItem
 
     if (!item) return;
 
-    if (onClick) onClick();
+    if (onClick) onClick(!(item.to && userTouching.matches));
 
     if (item.to) {
       event.preventDefault();
-      history.push(item.to);
+      if (userTouching.matches) {
+        history.replace(item.to);
+      } else history.push(item.to);
     } else if (typeof item.action === 'function') {
+      const action = item.action;
       event.preventDefault();
-      item.action(event);
+      // TODO
+      setTimeout(() => action(event), userTouching.matches ? 10 : 0);
     }
   };
 
