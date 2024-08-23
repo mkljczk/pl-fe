@@ -30,6 +30,7 @@ const defaultSettings = ImmutableMap({
   underlineLinks: false,
   autoPlayGif: true,
   displayMedia: 'default',
+  displaySpoilers: false,
   unfollowModal: true,
   boostModal: false,
   deleteModal: true,

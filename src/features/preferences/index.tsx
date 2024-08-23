@@ -153,6 +153,10 @@ const Preferences = () => {
           />
         </ListItem>
 
+        <ListItem label={<FormattedMessage id='preferences.fields.spoilers_display_label' defaultMessage='Automatically expand text behind spoilers' />}>
+          <SettingToggle settings={settings} settingPath={['displaySpoilers']} onChange={onToggleChange} />
+        </ListItem>
+
         <ListItem label={<FormattedMessage id='preferences.fields.media_display_label' defaultMessage='Sensitive content' />}>
           <SelectDropdown
             className='max-w-[200px]'

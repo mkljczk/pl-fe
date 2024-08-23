@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { toggleStatusHidden } from 'soapbox/actions/statuses';
+import { toggleStatusMediaHidden } from 'soapbox/actions/statuses';
 import { useAppDispatch, useSettings } from 'soapbox/hooks';
 
 import { Button, HStack, Text } from '../ui';
@@ -42,7 +42,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
   const toggleVisibility = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
 
-    dispatch(toggleStatusHidden(status));
+    dispatch(toggleStatusMediaHidden(status));
   };
 
   if (visible && !showHideButton) return null;

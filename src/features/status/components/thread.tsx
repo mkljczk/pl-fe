@@ -10,7 +10,7 @@ import { type ComposeReplyAction, mentionCompose, replyCompose } from 'soapbox/a
 import { reblog, toggleFavourite, unreblog } from 'soapbox/actions/interactions';
 import { openModal } from 'soapbox/actions/modals';
 import { getSettings } from 'soapbox/actions/settings';
-import { toggleStatusHidden } from 'soapbox/actions/statuses';
+import { toggleStatusMediaHidden } from 'soapbox/actions/statuses';
 import ScrollableList from 'soapbox/components/scrollable-list';
 import StatusActionBar from 'soapbox/components/status-action-bar';
 import Tombstone from 'soapbox/components/tombstone';
@@ -198,7 +198,7 @@ const Thread: React.FC<IThread> = ({
   };
 
   const handleHotkeyToggleSensitive = () => {
-    dispatch(toggleStatusHidden(status));
+    dispatch(toggleStatusMediaHidden(status));
   };
 
   const handleMoveUp = (id: string) => {

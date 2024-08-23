@@ -6,7 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { mentionCompose, replyCompose } from 'soapbox/actions/compose';
 import { toggleFavourite, toggleReblog } from 'soapbox/actions/interactions';
 import { openModal } from 'soapbox/actions/modals';
-import { toggleStatusHidden, unfilterStatus } from 'soapbox/actions/statuses';
+import { toggleStatusMediaHidden, unfilterStatus } from 'soapbox/actions/statuses';
 import TranslateButton from 'soapbox/components/translate-button';
 import AccountContainer from 'soapbox/containers/account-container';
 import QuotedStatus from 'soapbox/features/status/containers/quoted-status-container';
@@ -172,7 +172,7 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   const handleHotkeyToggleSensitive = (): void => {
-    dispatch(toggleStatusHidden(actualStatus));
+    dispatch(toggleStatusMediaHidden(actualStatus));
   };
 
   const handleHotkeyReact = (): void => {

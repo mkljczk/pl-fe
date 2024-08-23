@@ -43,8 +43,11 @@ const STATUS_UNMUTE_REQUEST = 'STATUS_UNMUTE_REQUEST' as const;
 const STATUS_UNMUTE_SUCCESS = 'STATUS_UNMUTE_SUCCESS' as const;
 const STATUS_UNMUTE_FAIL = 'STATUS_UNMUTE_FAIL' as const;
 
-const STATUS_REVEAL = 'STATUS_REVEAL' as const;
-const STATUS_HIDE = 'STATUS_HIDE' as const;
+const STATUS_REVEAL_MEDIA = 'STATUS_REVEAL_MEDIA' as const;
+const STATUS_HIDE_MEDIA = 'STATUS_HIDE_MEDIA' as const;
+
+const STATUS_EXPAND_SPOILER = 'STATUS_EXPAND_SPOILER' as const;
+const STATUS_COLLAPSE_SPOILER = 'STATUS_COLLAPSE_SPOILER' as const;
 
 const STATUS_TRANSLATE_REQUEST = 'STATUS_TRANSLATE_REQUEST' as const;
 const STATUS_TRANSLATE_SUCCESS = 'STATUS_TRANSLATE_SUCCESS' as const;
@@ -219,33 +222,63 @@ const toggleMuteStatus = (status: Pick<Status, 'id' | 'muted'>) =>
     }
   };
 
-const hideStatus = (statusIds: string[] | string) => {
+const hideStatusMedia = (statusIds: string[] | string) => {
   if (!Array.isArray(statusIds)) {
     statusIds = [statusIds];
   }
 
   return {
-    type: STATUS_HIDE,
+    type: STATUS_HIDE_MEDIA,
     statusIds,
   };
 };
 
-const revealStatus = (statusIds: string[] | string) => {
+const revealStatusMedia = (statusIds: string[] | string) => {
   if (!Array.isArray(statusIds)) {
     statusIds = [statusIds];
   }
 
   return {
-    type: STATUS_REVEAL,
+    type: STATUS_REVEAL_MEDIA,
     statusIds,
   };
 };
 
-const toggleStatusHidden = (status: Pick<Status, 'id' | 'hidden'>) => {
+const toggleStatusMediaHidden = (status: Pick<Status, 'id' | 'hidden'>) => {
   if (status.hidden) {
-    return revealStatus(status.id);
+    return revealStatusMedia(status.id);
   } else {
-    return hideStatus(status.id);
+    return hideStatusMedia(status.id);
+  }
+};
+
+const collapseStatusSpoiler = (statusIds: string[] | string) => {
+  if (!Array.isArray(statusIds)) {
+    statusIds = [statusIds];
+  }
+
+  return {
+    type: STATUS_COLLAPSE_SPOILER,
+    statusIds,
+  };
+};
+
+const expandStatusSpoiler = (statusIds: string[] | string) => {
+  if (!Array.isArray(statusIds)) {
+    statusIds = [statusIds];
+  }
+
+  return {
+    type: STATUS_EXPAND_SPOILER,
+    statusIds,
+  };
+};
+
+const toggleStatusSpoilerExpanded = (status: Pick<Status, 'id' | 'expanded'>) => {
+  if (status.expanded) {
+    return collapseStatusSpoiler(status.id);
+  } else {
+    return expandStatusSpoiler(status.id);
   }
 };
 
@@ -359,8 +392,10 @@ export {
   STATUS_UNMUTE_REQUEST,
   STATUS_UNMUTE_SUCCESS,
   STATUS_UNMUTE_FAIL,
-  STATUS_REVEAL,
-  STATUS_HIDE,
+  STATUS_REVEAL_MEDIA,
+  STATUS_HIDE_MEDIA,
+  STATUS_EXPAND_SPOILER,
+  STATUS_COLLAPSE_SPOILER,
   STATUS_TRANSLATE_REQUEST,
   STATUS_TRANSLATE_SUCCESS,
   STATUS_TRANSLATE_FAIL,
@@ -377,9 +412,12 @@ export {
   muteStatus,
   unmuteStatus,
   toggleMuteStatus,
-  hideStatus,
-  revealStatus,
-  toggleStatusHidden,
+  hideStatusMedia,
+  revealStatusMedia,
+  toggleStatusMediaHidden,
+  expandStatusSpoiler,
+  collapseStatusSpoiler,
+  toggleStatusSpoilerExpanded,
   translateStatus,
   undoStatusTranslation,
   unfilterStatus,

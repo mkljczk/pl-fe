@@ -6,7 +6,7 @@ import { mentionCompose } from 'soapbox/actions/compose';
 import { reblog, favourite, unreblog, unfavourite } from 'soapbox/actions/interactions';
 import { openModal } from 'soapbox/actions/modals';
 import { getSettings } from 'soapbox/actions/settings';
-import { toggleStatusHidden } from 'soapbox/actions/statuses';
+import { toggleStatusMediaHidden } from 'soapbox/actions/statuses';
 import Icon from 'soapbox/components/icon';
 import RelativeTimestamp from 'soapbox/components/relative-timestamp';
 import { HStack, Text, Emoji } from 'soapbox/components/ui';
@@ -267,7 +267,7 @@ const Notification: React.FC<INotification> = (props) => {
 
   const handleHotkeyToggleSensitive = useCallback((e?: KeyboardEvent) => {
     if (status && typeof status === 'object') {
-      dispatch(toggleStatusHidden(status));
+      dispatch(toggleStatusMediaHidden(status));
     }
   }, [status]);
 

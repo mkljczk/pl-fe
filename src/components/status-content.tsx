@@ -1,11 +1,13 @@
 import clsx from 'clsx';
 import parse, { Element, type HTMLReactParserOptions, domToReact, type DOMNode } from 'html-react-parser';
 import React, { useState, useRef, useLayoutEffect, useMemo } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
+import { toggleStatusSpoilerExpanded } from 'soapbox/actions/statuses';
 import Icon from 'soapbox/components/icon';
-import { Text } from 'soapbox/components/ui';
+import { Button, Text } from 'soapbox/components/ui';
+import { useAppDispatch, useSettings } from 'soapbox/hooks';
 import { onlyEmoji as isOnlyEmoji } from 'soapbox/utils/rich-content';
 
 import { getTextDirection } from '../utils/rtl';
@@ -18,8 +20,13 @@ import Poll from './polls/poll';
 import type { Sizes } from 'soapbox/components/ui/text/text';
 import type { MinifiedStatus } from 'soapbox/reducers/statuses';
 
-const MAX_HEIGHT = 642; // 20px * 32 (+ 2px padding at the top)
+const MAX_HEIGHT = 322; // 20px * 16 (+ 2px padding at the top)
 const BIG_EMOJI_LIMIT = 10;
+
+const messages = defineMessages({
+  collapse: { id: 'status.spoiler.collapse', defaultMessage: 'Collapse' },
+  expand: { id: 'status.spoiler.expand', defaultMessage: 'Expand' },
+});
 
 interface IReadMoreButton {
   onClick: React.MouseEventHandler;
@@ -27,10 +34,13 @@ interface IReadMoreButton {
 
 /** Button to expand a truncated status (due to too much content) */
 const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick }) => (
-  <button className='flex items-center border-0 bg-transparent p-0 pt-2 text-gray-900 hover:underline active:underline dark:text-gray-300' onClick={onClick}>
-    <FormattedMessage id='status.read_more' defaultMessage='Read more' />
-    <Icon className='inline-block h-5 w-5' src={require('@tabler/icons/outline/chevron-right.svg')} />
-  </button>
+  <div className='relative'>
+    <div className='absolute -top-16 h-16 w-full bg-gradient-to-b from-transparent to-white black:to-black dark:to-primary-900' />
+    <button className='flex items-center border-0 bg-transparent p-0 pt-2 text-gray-900 hover:underline active:underline dark:text-gray-300' onClick={onClick}>
+      <FormattedMessage id='status.read_more' defaultMessage='Read more' />
+      <Icon className='inline-block h-5 w-5' src={require('@tabler/icons/outline/chevron-right.svg')} />
+    </button>
+  </div>
 );
 
 interface IStatusContent {
@@ -49,6 +59,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   translatable,
   textSize = 'md',
 }) => {
+  const intl = useIntl();
+  const dispatch = useAppDispatch();
+  const { displaySpoilers } = useSettings();
+
   const [collapsed, setCollapsed] = useState(false);
   const [onlyEmoji, setOnlyEmoji] = useState(false);
 
@@ -71,6 +85,13 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     if (only !== onlyEmoji) {
       setOnlyEmoji(only);
     }
+  };
+
+  const toggleExpanded: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    dispatch(toggleStatusSpoilerExpanded(status));
   };
 
   useLayoutEffect(() => {
@@ -152,7 +173,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   const className = clsx(baseClassName, {
     'cursor-pointer': onClick,
     'whitespace-normal': withSpoiler,
-    'max-h-[300px]': collapsed,
+    'max-h-[200px]': collapsed,
     'leading-normal big-emoji': onlyEmoji,
   });
 
@@ -160,15 +181,32 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     ? status.spoilerMapHtml[status.currentLanguage] || status.spoilerHtml
     : status.spoilerHtml;
 
+  const expandable = !displaySpoilers;
+  const expanded = !withSpoiler || status.expanded || false;
+
   const output = [];
 
   if (spoilerText) {
     output.push(
       <Text className='mb-2' size='2xl' weight='medium'>
         <span dangerouslySetInnerHTML={{ __html: spoilerText }} />
+        {expandable && (
+          <Button
+            className='ml-2 align-middle'
+            type='button'
+            theme='muted'
+            size='xs'
+            onClick={toggleExpanded}
+            icon={expanded ? require('@tabler/icons/outline/chevron-up.svg') : require('@tabler/icons/outline/chevron-down.svg')} 
+          >
+            {intl.formatMessage(expanded ? messages.collapse : messages.expand)}
+          </Button>
+        )}
       </Text>,
     );
   }
+
+  if (expandable && !expanded) return <>{output}</>;
 
   if (onClick) {
     output.push(

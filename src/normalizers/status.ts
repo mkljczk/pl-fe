@@ -26,7 +26,8 @@ type CalculatedValues = {
   spoilerHtml: string;
   contentMapHtml?: Record<string, string>;
   spoilerMapHtml?: Record<string, string>;
-  hidden?: boolean;
+  expanded?: boolean | null;
+  hidden?: boolean | null;
   translation?: Translation | null | false;
   currentLanguage?: string;
 };
@@ -67,11 +68,11 @@ const calculateSpoiler = (text: string, emojiMap: any) => DOMPurify.sanitize(emo
 const calculateStatus = (status: BaseStatus, oldStatus?: OldStatus): CalculatedValues => {
   if (oldStatus && oldStatus.content === status.content && oldStatus.spoiler_text === status.spoiler_text) {
     const {
-      search_index, contentHtml, spoilerHtml, contentMapHtml, spoilerMapHtml, hidden, translation, currentLanguage,
+      search_index, contentHtml, spoilerHtml, contentMapHtml, spoilerMapHtml, hidden, expanded, translation, currentLanguage,
     } = oldStatus;
 
     return {
-      search_index, contentHtml, spoilerHtml, contentMapHtml, spoilerMapHtml, hidden, translation, currentLanguage,
+      search_index, contentHtml, spoilerHtml, contentMapHtml, spoilerMapHtml, hidden, expanded, translation, currentLanguage,
     };
   } else {
     const searchContent = buildSearchContent(status);
@@ -159,7 +160,8 @@ const normalizeStatus = (status: BaseStatus & {
     account: normalizeAccount(status.account),
     accounts: status.accounts?.map(normalizeAccount),
     mentions,
-    hidden: status.sensitive,
+    expanded: null,
+    hidden: null,
     /** Rewrite `<p></p>` to empty string. */
     content: status.content === '<p></p>' ? '' : status.content,
     filtered: status.filtered?.map(result => result.filter.title),

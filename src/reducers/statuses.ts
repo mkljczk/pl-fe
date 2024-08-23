@@ -32,9 +32,9 @@ import {
   STATUS_CREATE_FAIL,
   STATUS_DELETE_REQUEST,
   STATUS_DELETE_FAIL,
-  STATUS_HIDE,
+  STATUS_HIDE_MEDIA,
   STATUS_MUTE_SUCCESS,
-  STATUS_REVEAL,
+  STATUS_REVEAL_MEDIA,
   STATUS_TRANSLATE_FAIL,
   STATUS_TRANSLATE_REQUEST,
   STATUS_TRANSLATE_SUCCESS,
@@ -42,6 +42,8 @@ import {
   STATUS_UNFILTER,
   STATUS_UNMUTE_SUCCESS,
   STATUS_LANGUAGE_CHANGE,
+  STATUS_COLLAPSE_SPOILER,
+  STATUS_EXPAND_SPOILER,
 } from '../actions/statuses';
 import { TIMELINE_DELETE } from '../actions/timelines';
 
@@ -232,7 +234,7 @@ const statuses = (state = initialState, action: AnyAction): State => {
       return state.setIn([action.statusId, 'muted'], true);
     case STATUS_UNMUTE_SUCCESS:
       return state.setIn([action.statusId, 'muted'], false);
-    case STATUS_REVEAL:
+    case STATUS_REVEAL_MEDIA:
       return state.withMutations(map => {
         action.statusIds.forEach((id: string) => {
           if (!(state.get(id) === undefined)) {
@@ -240,11 +242,27 @@ const statuses = (state = initialState, action: AnyAction): State => {
           }
         });
       });
-    case STATUS_HIDE:
+    case STATUS_HIDE_MEDIA:
       return state.withMutations(map => {
         action.statusIds.forEach((id: string) => {
           if (!(state.get(id) === undefined)) {
             map.setIn([id, 'hidden'], true);
+          }
+        });
+      });
+    case STATUS_EXPAND_SPOILER:
+      return state.withMutations(map => {
+        action.statusIds.forEach((id: string) => {
+          if (!(state.get(id) === undefined)) {
+            map.setIn([id, 'expanded'], true);
+          }
+        });
+      });
+    case STATUS_COLLAPSE_SPOILER:
+      return state.withMutations(map => {
+        action.statusIds.forEach((id: string) => {
+          if (!(state.get(id) === undefined)) {
+            map.setIn([id, 'expanded'], false);
           }
         });
       });
