@@ -1,6 +1,8 @@
 import { List as ImmutableList } from 'immutable';
 import { emojiReactionSchema, type EmojiReaction } from 'pl-api';
 
+import type { Status } from 'soapbox/normalizers';
+
 // https://emojipedia.org/facebook
 // I've customized them.
 const ALLOWED_EMOJI = ImmutableList([
@@ -41,11 +43,14 @@ const reduceEmoji = (emojiReacts: Array<EmojiReaction> | null, favouritesCount: 
     allowedEmoji,
   ));
 
-const getReactForStatus = (status: any, allowedEmoji = ALLOWED_EMOJI): EmojiReaction | undefined => {
-  if (!status.reactions) return;
+const getReactForStatus = (
+  status: Pick<Status, 'emoji_reactions' | 'favourited' | 'favourites_count'>,
+  allowedEmoji = ALLOWED_EMOJI,
+): EmojiReaction | undefined => {
+  if (!status.emoji_reactions) return;
 
   const result = reduceEmoji(
-    status.reactions,
+    status.emoji_reactions,
     status.favourites_count || 0,
     status.favourited,
     allowedEmoji,
