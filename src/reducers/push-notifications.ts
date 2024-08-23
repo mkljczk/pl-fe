@@ -5,7 +5,7 @@ import { SET_BROWSER_SUPPORT, SET_SUBSCRIPTION, CLEAR_SUBSCRIPTION, SET_ALERTS }
 import type { SetterAction } from 'soapbox/actions/push-notifications/setter';
 
 const SubscriptionRecord = ImmutableRecord({
-  id: '',
+  id: 0,
   endpoint: '',
 });
 

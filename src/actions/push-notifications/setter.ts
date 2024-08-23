@@ -1,3 +1,5 @@
+import type { WebPushSubscription } from 'pl-api';
+
 const SET_BROWSER_SUPPORT = 'PUSH_NOTIFICATIONS_SET_BROWSER_SUPPORT' as const;
 const SET_SUBSCRIPTION = 'PUSH_NOTIFICATIONS_SET_SUBSCRIPTION' as const;
 const CLEAR_SUBSCRIPTION = 'PUSH_NOTIFICATIONS_CLEAR_SUBSCRIPTION' as const;
@@ -8,7 +10,7 @@ const setBrowserSupport = (value: boolean) => ({
   value,
 });
 
-const setSubscription = (subscription: PushSubscription) => ({
+const setSubscription = (subscription: WebPushSubscription) => ({
   type: SET_SUBSCRIPTION,
   subscription,
 });
