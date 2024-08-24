@@ -17,14 +17,14 @@ import { makeGetStatus } from 'soapbox/selectors';
 
 const getStatus = makeGetStatus();
 
-interface IEventPage {
+interface IEventLayout {
   params?: {
     statusId?: string;
   };
   children: React.ReactNode;
 }
 
-const EventPage: React.FC<IEventPage> = ({ params, children }) => {
+const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
   const me = useAppSelector(state => state.me);
   const features = useFeatures();
 
@@ -96,4 +96,4 @@ const EventPage: React.FC<IEventPage> = ({ params, children }) => {
   );
 };
 
-export { EventPage as default };
+export { EventLayout as default };

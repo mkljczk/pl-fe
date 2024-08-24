@@ -1,7 +1,4 @@
-import {
-  AdminAccountRecord,
-  AdminReportRecord,
-} from 'soapbox/normalizers';
+import { AdminAccountRecord, AdminReportRecord } from 'soapbox/normalizers';
 
 type AdminAccount = ReturnType<typeof AdminAccountRecord>;
 type AdminReport = ReturnType<typeof AdminReportRecord>;

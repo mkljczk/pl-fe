@@ -1,6 +1,5 @@
 import IntlMessageFormat from 'intl-messageformat';
 import 'intl-pluralrules';
-import { type Account, type Notification as BaseNotification, type PaginatedResponse, type Status } from 'pl-api';
 import { defineMessages } from 'react-intl';
 
 import { getClient } from 'soapbox/api';
@@ -23,6 +22,7 @@ import {
 import { saveMarker } from './markers';
 import { getSettings, saveSettings } from './settings';
 
+import type { Account, Notification as BaseNotification, PaginatedResponse, Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 
 const NOTIFICATIONS_UPDATE = 'NOTIFICATIONS_UPDATE' as const;

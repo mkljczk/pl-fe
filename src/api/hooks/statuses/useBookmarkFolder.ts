@@ -1,10 +1,10 @@
-import { type BookmarkFolder } from 'pl-api';
-
 import { Entities } from 'soapbox/entity-store/entities';
 import { selectEntity } from 'soapbox/entity-store/selectors';
 import { useAppSelector } from 'soapbox/hooks';
 
 import { useBookmarkFolders } from './useBookmarkFolders';
+
+import type{ BookmarkFolder } from 'pl-api';
 
 const useBookmarkFolder = (folderId?: string) => {
   const {

@@ -5,10 +5,7 @@ import { usePopper } from 'react-popper';
 import { useHistory } from 'react-router-dom';
 
 import { fetchRelationships } from 'soapbox/actions/accounts';
-import {
-  closeProfileHoverCard,
-  updateProfileHoverCard,
-} from 'soapbox/actions/profile-hover-card';
+import { closeProfileHoverCard, updateProfileHoverCard } from 'soapbox/actions/profile-hover-card';
 import { useAccount } from 'soapbox/api/hooks';
 import Badge from 'soapbox/components/badge';
 import ActionButton from 'soapbox/features/ui/components/action-button';

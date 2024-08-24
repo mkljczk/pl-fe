@@ -3,10 +3,7 @@ import debounce from 'lodash/debounce';
 import React, { useRef } from 'react';
 
 import { fetchAccount } from 'soapbox/actions/accounts';
-import {
-  openProfileHoverCard,
-  closeProfileHoverCard,
-} from 'soapbox/actions/profile-hover-card';
+import { openProfileHoverCard, closeProfileHoverCard } from 'soapbox/actions/profile-hover-card';
 import { useAppDispatch } from 'soapbox/hooks';
 import { isMobile } from 'soapbox/is-mobile';
 

@@ -8,16 +8,18 @@ import {
   CtaBanner,
 } from 'soapbox/features/ui/util/async-components';
 import { useAppSelector, useFeatures } from 'soapbox/hooks';
+import { isStandalone } from 'soapbox/utils/state';
 
 import { Layout } from '../components/ui';
 
-interface IStatusPage {
+interface IExternalLoginLayout {
   children: React.ReactNode;
 }
 
-const StatusPage: React.FC<IStatusPage> = ({ children }) => {
+const ExternalLoginLayout: React.FC<IExternalLoginLayout> = ({ children }) => {
   const me = useAppSelector(state => state.me);
   const features = useFeatures();
+  const standalone = useAppSelector(isStandalone);
 
   return (
     <>
@@ -30,7 +32,7 @@ const StatusPage: React.FC<IStatusPage> = ({ children }) => {
       </Layout.Main>
 
       <Layout.Aside>
-        {!me && (
+        {!me && !standalone && (
           <SignUpPanel />
         )}
         {features.trends && (
@@ -39,10 +41,10 @@ const StatusPage: React.FC<IStatusPage> = ({ children }) => {
         {me && features.suggestions && (
           <WhoToFollowPanel limit={3} />
         )}
-        <LinkFooter />
+        <LinkFooter key='link-footer' />
       </Layout.Aside>
     </>
   );
 };
 
-export { StatusPage as default };
+export { ExternalLoginLayout as default };

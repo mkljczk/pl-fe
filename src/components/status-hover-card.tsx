@@ -4,10 +4,7 @@ import { useIntl } from 'react-intl';
 import { usePopper } from 'react-popper';
 import { useHistory } from 'react-router-dom';
 
-import {
-  closeStatusHoverCard,
-  updateStatusHoverCard,
-} from 'soapbox/actions/status-hover-card';
+import { closeStatusHoverCard, updateStatusHoverCard } from 'soapbox/actions/status-hover-card';
 import { fetchStatus } from 'soapbox/actions/statuses';
 import StatusContainer from 'soapbox/containers/status-container';
 import { useAppSelector, useAppDispatch } from 'soapbox/hooks';

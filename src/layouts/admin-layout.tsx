@@ -1,17 +1,15 @@
 import React from 'react';
 
 import { Layout } from 'soapbox/components/ui';
-import {
-  LatestAccountsPanel,
-} from 'soapbox/features/ui/util/async-components';
+import { LatestAccountsPanel } from 'soapbox/features/ui/util/async-components';
 
 import LinkFooter from '../features/ui/components/link-footer';
 
-interface IAdminPage {
+interface IAdminLayout {
   children: React.ReactNode;
 }
 
-const AdminPage: React.FC<IAdminPage> = ({ children }) => (
+const AdminLayout: React.FC<IAdminLayout> = ({ children }) => (
   <>
     <Layout.Main>
       {children}
@@ -24,4 +22,4 @@ const AdminPage: React.FC<IAdminPage> = ({ children }) => (
   </>
 );
 
-export { AdminPage as default };
+export { AdminLayout as default };

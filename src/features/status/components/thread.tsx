@@ -4,7 +4,6 @@ import { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immuta
 import React, { useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
-import { type VirtuosoHandle } from 'react-virtuoso';
 
 import { type ComposeReplyAction, mentionCompose, replyCompose } from 'soapbox/actions/compose';
 import { reblog, toggleFavourite, unreblog } from 'soapbox/actions/interactions';
@@ -25,6 +24,7 @@ import { textForScreenReader } from 'soapbox/utils/status';
 import DetailedStatus from './detailed-status';
 import ThreadStatus from './thread-status';
 
+import type { VirtuosoHandle } from 'react-virtuoso';
 import type { Account, Status } from 'soapbox/normalizers';
 import type { SelectedStatus } from 'soapbox/selectors';
 

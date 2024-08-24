@@ -18,22 +18,22 @@ import SidebarNavigation from 'soapbox/components/sidebar-navigation';
 import ThumbNavigation from 'soapbox/components/thumb-navigation';
 import { Layout } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector, useOwnAccount, useSoapboxConfig, useFeatures, useDraggedFiles, useInstance, useLoggedIn } from 'soapbox/hooks';
-import AdminPage from 'soapbox/pages/admin-page';
-import ChatsPage from 'soapbox/pages/chats-page';
-import DefaultPage from 'soapbox/pages/default-page';
-import EmptyPage from 'soapbox/pages/empty-page';
-import EventPage from 'soapbox/pages/event-page';
-import EventsPage from 'soapbox/pages/events-page';
-import ExternalLoginPage from 'soapbox/pages/external-login-page';
-import GroupPage from 'soapbox/pages/group-page';
-import GroupsPage from 'soapbox/pages/groups-page';
-import HomePage from 'soapbox/pages/home-page';
-import LandingPage from 'soapbox/pages/landing-page';
-import ManageGroupsPage from 'soapbox/pages/manage-groups-page';
-import ProfilePage from 'soapbox/pages/profile-page';
-import RemoteInstancePage from 'soapbox/pages/remote-instance-page';
-import SearchPage from 'soapbox/pages/search-page';
-import StatusPage from 'soapbox/pages/status-page';
+import AdminLayout from 'soapbox/layouts/admin-layout';
+import ChatsLayout from 'soapbox/layouts/chats-layout';
+import DefaultLayout from 'soapbox/layouts/default-layout';
+import EmptyLayout from 'soapbox/layouts/empty-layout';
+import EventLayout from 'soapbox/layouts/event-layout';
+import EventsLayout from 'soapbox/layouts/events-layout';
+import ExternalLoginLayout from 'soapbox/layouts/external-login-layout';
+import GroupLayout from 'soapbox/layouts/group-layout';
+import GroupsLayout from 'soapbox/layouts/groups-layout';
+import HomeLayout from 'soapbox/layouts/home-layout';
+import LandingLayout from 'soapbox/layouts/landing-layout';
+import ManageGroupsLayout from 'soapbox/layouts/manage-groups-layout';
+import ProfileLayout from 'soapbox/layouts/profile-layout';
+import RemoteInstanceLayout from 'soapbox/layouts/remote-instance-layout';
+import SearchLayout from 'soapbox/layouts/search-layout';
+import StatusLayout from 'soapbox/layouts/status-layout';
 import { getVapidKey } from 'soapbox/utils/auth';
 import { isStandalone } from 'soapbox/utils/state';
 
@@ -160,24 +160,24 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
     <Switch>
       {standalone && <Redirect from='/' to='/login/external' exact />}
 
-      <WrappedRoute path='/logout' page={EmptyPage} component={LogoutPage} publicRoute exact />
+      <WrappedRoute path='/logout' layout={EmptyLayout} component={LogoutPage} publicRoute exact />
 
       {isLoggedIn ? (
-        <WrappedRoute path='/' exact page={HomePage} component={HomeTimeline} content={children} />
+        <WrappedRoute path='/' exact layout={HomeLayout} component={HomeTimeline} content={children} />
       ) : (
-        <WrappedRoute path='/' exact page={LandingPage} component={LandingTimeline} content={children} publicRoute />
+        <WrappedRoute path='/' exact layout={LandingLayout} component={LandingTimeline} content={children} publicRoute />
       )}
 
       {/*
         NOTE: we cannot nest routes in a fragment
         https://stackoverflow.com/a/68637108
       */}
-      {features.federating && <WrappedRoute path='/timeline/local' exact page={HomePage} component={CommunityTimeline} content={children} publicRoute />}
-      {features.federating && <WrappedRoute path='/timeline/fediverse' exact page={HomePage} component={PublicTimeline} content={children} publicRoute />}
-      {features.bubbleTimeline && <WrappedRoute path='/timeline/bubble' exact page={HomePage} component={BubbleTimeline} content={children} publicRoute />}
-      {features.federating && <WrappedRoute path='/timeline/:instance' exact page={RemoteInstancePage} component={RemoteTimeline} content={children} />}
+      {features.federating && <WrappedRoute path='/timeline/local' exact layout={HomeLayout} component={CommunityTimeline} content={children} publicRoute />}
+      {features.federating && <WrappedRoute path='/timeline/fediverse' exact layout={HomeLayout} component={PublicTimeline} content={children} publicRoute />}
+      {features.bubbleTimeline && <WrappedRoute path='/timeline/bubble' exact layout={HomeLayout} component={BubbleTimeline} content={children} publicRoute />}
+      {features.federating && <WrappedRoute path='/timeline/:instance' exact layout={RemoteInstanceLayout} component={RemoteTimeline} content={children} />}
 
-      {features.conversations && <WrappedRoute path='/conversations' page={DefaultPage} component={Conversations} content={children} />}
+      {features.conversations && <WrappedRoute path='/conversations' layout={DefaultLayout} component={Conversations} content={children} />}
       {features.conversations && <Redirect from='/messages' to='/conversations' />}
 
       {/* Mastodon web routes */}
@@ -195,7 +195,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
       <Redirect from='/main/friends' to='/' />
       <Redirect from='/tag/:id' to='/tags/:id' />
       <Redirect from='/user-settings' to='/settings/profile' />
-      <WrappedRoute path='/notice/:statusId' publicRoute exact page={DefaultPage} component={Status} content={children} />
+      <WrappedRoute path='/notice/:statusId' publicRoute exact layout={DefaultLayout} component={Status} content={children} />
       <Redirect from='/users/:username/statuses/:statusId' to='/@:username/posts/:statusId' />
       <Redirect from='/users/:username/chats' to='/chats' />
       <Redirect from='/users/:username' to='/@:username' />
@@ -226,120 +226,120 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
       <Redirect from='/auth/password/new' to='/reset-password' />
       <Redirect from='/auth/password/edit' to={`/edit-password${search}`} />
 
-      <WrappedRoute path='/tags/:id' publicRoute page={DefaultPage} component={HashtagTimeline} content={children} />
+      <WrappedRoute path='/tags/:id' publicRoute layout={DefaultLayout} component={HashtagTimeline} content={children} />
 
-      {features.lists && <WrappedRoute path='/lists' page={DefaultPage} component={Lists} content={children} />}
-      {features.lists && <WrappedRoute path='/list/:id' page={DefaultPage} component={ListTimeline} content={children} />}
-      {features.bookmarks && <WrappedRoute path='/bookmarks/all' page={DefaultPage} component={Bookmarks} content={children} />}
-      {features.bookmarks && <WrappedRoute path='/bookmarks/:id' page={DefaultPage} component={Bookmarks} content={children} />}
-      <WrappedRoute path='/bookmarks' page={DefaultPage} component={BookmarkFolders} content={children} />
+      {features.lists && <WrappedRoute path='/lists' layout={DefaultLayout} component={Lists} content={children} />}
+      {features.lists && <WrappedRoute path='/list/:id' layout={DefaultLayout} component={ListTimeline} content={children} />}
+      {features.bookmarks && <WrappedRoute path='/bookmarks/all' layout={DefaultLayout} component={Bookmarks} content={children} />}
+      {features.bookmarks && <WrappedRoute path='/bookmarks/:id' layout={DefaultLayout} component={Bookmarks} content={children} />}
+      <WrappedRoute path='/bookmarks' layout={DefaultLayout} component={BookmarkFolders} content={children} />
 
-      <WrappedRoute path='/notifications' page={DefaultPage} component={Notifications} content={children} />
+      <WrappedRoute path='/notifications' layout={DefaultLayout} component={Notifications} content={children} />
 
-      <WrappedRoute path='/search' page={SearchPage} component={Search} content={children} publicRoute />
-      {features.suggestions && <WrappedRoute path='/suggestions' publicRoute page={DefaultPage} component={FollowRecommendations} content={children} />}
-      {features.profileDirectory && <WrappedRoute path='/directory' publicRoute page={DefaultPage} component={Directory} content={children} />}
-      {features.events && <WrappedRoute path='/events' page={EventsPage} component={Events} content={children} />}
+      <WrappedRoute path='/search' layout={SearchLayout} component={Search} content={children} publicRoute />
+      {features.suggestions && <WrappedRoute path='/suggestions' publicRoute layout={DefaultLayout} component={FollowRecommendations} content={children} />}
+      {features.profileDirectory && <WrappedRoute path='/directory' publicRoute layout={DefaultLayout} component={Directory} content={children} />}
+      {features.events && <WrappedRoute path='/events' layout={EventsLayout} component={Events} content={children} />}
 
-      {features.chats && <WrappedRoute path='/chats' exact page={ChatsPage} component={ChatIndex} content={children} />}
-      {features.chats && <WrappedRoute path='/chats/new' page={ChatsPage} component={ChatIndex} content={children} />}
-      {features.chats && <WrappedRoute path='/chats/settings' page={ChatsPage} component={ChatIndex} content={children} />}
-      {features.chats && <WrappedRoute path='/chats/:chatId' page={ChatsPage} component={ChatIndex} content={children} />}
+      {features.chats && <WrappedRoute path='/chats' exact layout={ChatsLayout} component={ChatIndex} content={children} />}
+      {features.chats && <WrappedRoute path='/chats/new' layout={ChatsLayout} component={ChatIndex} content={children} />}
+      {features.chats && <WrappedRoute path='/chats/settings' layout={ChatsLayout} component={ChatIndex} content={children} />}
+      {features.chats && <WrappedRoute path='/chats/:chatId' layout={ChatsLayout} component={ChatIndex} content={children} />}
 
-      <WrappedRoute path='/follow_requests' page={DefaultPage} component={FollowRequests} content={children} />
-      <WrappedRoute path='/blocks' page={DefaultPage} component={Blocks} content={children} />
-      {features.federating && <WrappedRoute path='/domain_blocks' page={DefaultPage} component={DomainBlocks} content={children} />}
-      <WrappedRoute path='/mutes' page={DefaultPage} component={Mutes} content={children} />
-      {(features.filters || features.filtersV2) && <WrappedRoute path='/filters/new' page={DefaultPage} component={EditFilter} content={children} />}
-      {(features.filters || features.filtersV2) && <WrappedRoute path='/filters/:id' page={DefaultPage} component={EditFilter} content={children} />}
-      {(features.filters || features.filtersV2) && <WrappedRoute path='/filters' page={DefaultPage} component={Filters} content={children} />}
-      {(features.followedHashtagsList) && <WrappedRoute path='/followed_tags' page={DefaultPage} component={FollowedTags} content={children} />}
-      <WrappedRoute path='/@:username' publicRoute exact component={AccountTimeline} page={ProfilePage} content={children} />
-      <WrappedRoute path='/@:username/with_replies' publicRoute={!authenticatedProfile} component={AccountTimeline} page={ProfilePage} content={children} componentParams={{ withReplies: true }} />
-      <WrappedRoute path='/@:username/followers' publicRoute={!authenticatedProfile} component={Followers} page={ProfilePage} content={children} />
-      <WrappedRoute path='/@:username/following' publicRoute={!authenticatedProfile} component={Following} page={ProfilePage} content={children} />
-      <WrappedRoute path='/@:username/media' publicRoute={!authenticatedProfile} component={AccountGallery} page={ProfilePage} content={children} />
-      <WrappedRoute path='/@:username/tagged/:tag' exact component={AccountTimeline} page={ProfilePage} content={children} />
-      <WrappedRoute path='/@:username/favorites' component={FavouritedStatuses} page={ProfilePage} content={children} />
-      <WrappedRoute path='/@:username/pins' component={PinnedStatuses} page={ProfilePage} content={children} />
-      <WrappedRoute path='/@:username/posts/:statusId' publicRoute exact page={StatusPage} component={Status} content={children} />
-      <WrappedRoute path='/@:username/posts/:statusId/quotes' publicRoute page={StatusPage} component={Quotes} content={children} />
-      {features.events && <WrappedRoute path='/@:username/events/:statusId' publicRoute exact page={EventPage} component={EventInformation} content={children} />}
-      {features.events && <WrappedRoute path='/@:username/events/:statusId/discussion' publicRoute exact page={EventPage} component={EventDiscussion} content={children} />}
+      <WrappedRoute path='/follow_requests' layout={DefaultLayout} component={FollowRequests} content={children} />
+      <WrappedRoute path='/blocks' layout={DefaultLayout} component={Blocks} content={children} />
+      {features.federating && <WrappedRoute path='/domain_blocks' layout={DefaultLayout} component={DomainBlocks} content={children} />}
+      <WrappedRoute path='/mutes' layout={DefaultLayout} component={Mutes} content={children} />
+      {(features.filters || features.filtersV2) && <WrappedRoute path='/filters/new' layout={DefaultLayout} component={EditFilter} content={children} />}
+      {(features.filters || features.filtersV2) && <WrappedRoute path='/filters/:id' layout={DefaultLayout} component={EditFilter} content={children} />}
+      {(features.filters || features.filtersV2) && <WrappedRoute path='/filters' layout={DefaultLayout} component={Filters} content={children} />}
+      {(features.followedHashtagsList) && <WrappedRoute path='/followed_tags' layout={DefaultLayout} component={FollowedTags} content={children} />}
+      <WrappedRoute path='/@:username' publicRoute exact layout={ProfileLayout} component={AccountTimeline} content={children} />
+      <WrappedRoute path='/@:username/with_replies' publicRoute={!authenticatedProfile} layout={ProfileLayout} component={AccountTimeline} content={children} componentParams={{ withReplies: true }} />
+      <WrappedRoute path='/@:username/followers' publicRoute={!authenticatedProfile} layout={ProfileLayout} component={Followers} content={children} />
+      <WrappedRoute path='/@:username/following' publicRoute={!authenticatedProfile} layout={ProfileLayout} component={Following} content={children} />
+      <WrappedRoute path='/@:username/media' publicRoute={!authenticatedProfile} layout={ProfileLayout} component={AccountGallery} content={children} />
+      <WrappedRoute path='/@:username/tagged/:tag' exact layout={ProfileLayout} component={AccountTimeline} content={children} />
+      <WrappedRoute path='/@:username/favorites' layout={ProfileLayout} component={FavouritedStatuses} content={children} />
+      <WrappedRoute path='/@:username/pins' layout={ProfileLayout} component={PinnedStatuses} content={children} />
+      <WrappedRoute path='/@:username/posts/:statusId' publicRoute exact layout={StatusLayout} component={Status} content={children} />
+      <WrappedRoute path='/@:username/posts/:statusId/quotes' publicRoute layout={StatusLayout} component={Quotes} content={children} />
+      {features.events && <WrappedRoute path='/@:username/events/:statusId' publicRoute exact layout={EventLayout} component={EventInformation} content={children} />}
+      {features.events && <WrappedRoute path='/@:username/events/:statusId/discussion' publicRoute exact layout={EventLayout} component={EventDiscussion} content={children} />}
       <Redirect from='/@:username/:statusId' to='/@:username/posts/:statusId' />
-      <WrappedRoute path='/posts/:statusId' publicRoute exact page={DefaultPage} component={Status} content={children} />
+      <WrappedRoute path='/posts/:statusId' publicRoute exact layout={DefaultLayout} component={Status} content={children} />
 
-      {features.groups && <WrappedRoute path='/groups' exact page={GroupsPage} component={Groups} content={children} />}
-      {features.groups && <WrappedRoute path='/groups/:groupId' exact page={GroupPage} component={GroupTimeline} content={children} />}
-      {features.groups && <WrappedRoute path='/groups/:groupId/members' exact page={GroupPage} component={GroupMembers} content={children} />}
-      {features.groups && <WrappedRoute path='/groups/:groupId/media' publicRoute={!authenticatedProfile} component={GroupGallery} page={GroupPage} content={children} />}
-      {features.groups && <WrappedRoute path='/groups/:groupId/manage' exact page={ManageGroupsPage} component={ManageGroup} content={children} />}
-      {features.groups && <WrappedRoute path='/groups/:groupId/manage/edit' exact page={ManageGroupsPage} component={EditGroup} content={children} />}
-      {features.groups && <WrappedRoute path='/groups/:groupId/manage/blocks' exact page={ManageGroupsPage} component={GroupBlockedMembers} content={children} />}
-      {features.groups && <WrappedRoute path='/groups/:groupId/manage/requests' exact page={ManageGroupsPage} component={GroupMembershipRequests} content={children} />}
-      {features.groups && <WrappedRoute path='/groups/:groupId/posts/:statusId' exact page={StatusPage} component={Status} content={children} />}
+      {features.groups && <WrappedRoute path='/groups' exact layout={GroupsLayout} component={Groups} content={children} />}
+      {features.groups && <WrappedRoute path='/groups/:groupId' exact layout={GroupLayout} component={GroupTimeline} content={children} />}
+      {features.groups && <WrappedRoute path='/groups/:groupId/members' exact layout={GroupLayout} component={GroupMembers} content={children} />}
+      {features.groups && <WrappedRoute path='/groups/:groupId/media' publicRoute={!authenticatedProfile} layout={GroupLayout} component={GroupGallery} content={children} />}
+      {features.groups && <WrappedRoute path='/groups/:groupId/manage' exact layout={ManageGroupsLayout} component={ManageGroup} content={children} />}
+      {features.groups && <WrappedRoute path='/groups/:groupId/manage/edit' exact layout={ManageGroupsLayout} component={EditGroup} content={children} />}
+      {features.groups && <WrappedRoute path='/groups/:groupId/manage/blocks' exact layout={ManageGroupsLayout} component={GroupBlockedMembers} content={children} />}
+      {features.groups && <WrappedRoute path='/groups/:groupId/manage/requests' exact layout={ManageGroupsLayout} component={GroupMembershipRequests} content={children} />}
+      {features.groups && <WrappedRoute path='/groups/:groupId/posts/:statusId' exact layout={StatusLayout} component={Status} content={children} />}
 
-      <WrappedRoute path='/statuses/new' page={DefaultPage} component={NewStatus} content={children} exact />
-      <WrappedRoute path='/statuses/:statusId' exact page={StatusPage} component={Status} content={children} />
-      {features.scheduledStatuses && <WrappedRoute path='/scheduled_statuses' page={DefaultPage} component={ScheduledStatuses} content={children} />}
-      <WrappedRoute path='/draft_statuses' page={DefaultPage} component={DraftStatuses} content={children} />
+      <WrappedRoute path='/statuses/new' layout={DefaultLayout} component={NewStatus} content={children} exact />
+      <WrappedRoute path='/statuses/:statusId' exact layout={StatusLayout} component={Status} content={children} />
+      {features.scheduledStatuses && <WrappedRoute path='/scheduled_statuses' layout={DefaultLayout} component={ScheduledStatuses} content={children} />}
+      <WrappedRoute path='/draft_statuses' layout={DefaultLayout} component={DraftStatuses} content={children} />
 
-      <WrappedRoute path='/circle' page={DefaultPage} component={Circle} content={children} />
+      <WrappedRoute path='/circle' layout={DefaultLayout} component={Circle} content={children} />
 
-      <WrappedRoute path='/settings/profile' page={DefaultPage} component={EditProfile} content={children} />
-      {features.exportData && <WrappedRoute path='/settings/export' page={DefaultPage} component={ExportData} content={children} />}
-      {(features.importBlocks || features.importFollows || features.importMutes) && <WrappedRoute path='/settings/import' page={DefaultPage} component={ImportData} content={children} />}
-      {features.manageAccountAliases && <WrappedRoute path='/settings/aliases' page={DefaultPage} component={Aliases} content={children} />}
-      {features.accountMoving && <WrappedRoute path='/settings/migration' page={DefaultPage} component={Migration} content={children} />}
-      {features.accountBackups && <WrappedRoute path='/settings/backups' page={DefaultPage} component={Backups} content={children} />}
-      <WrappedRoute path='/settings/email' page={DefaultPage} component={EditEmail} content={children} />
-      <WrappedRoute path='/settings/password' page={DefaultPage} component={EditPassword} content={children} />
-      <WrappedRoute path='/settings/account' page={DefaultPage} component={DeleteAccount} content={children} />
-      <WrappedRoute path='/settings/mfa' page={DefaultPage} component={MfaForm} exact />
-      <WrappedRoute path='/settings/tokens' page={DefaultPage} component={AuthTokenList} content={children} />
-      <WrappedRoute path='/settings' page={DefaultPage} component={Settings} content={children} />
-      <WrappedRoute path='/soapbox/config' adminOnly page={DefaultPage} component={SoapboxConfig} content={children} />
+      <WrappedRoute path='/settings/profile' layout={DefaultLayout} component={EditProfile} content={children} />
+      {features.exportData && <WrappedRoute path='/settings/export' layout={DefaultLayout} component={ExportData} content={children} />}
+      {(features.importBlocks || features.importFollows || features.importMutes) && <WrappedRoute path='/settings/import' layout={DefaultLayout} component={ImportData} content={children} />}
+      {features.manageAccountAliases && <WrappedRoute path='/settings/aliases' layout={DefaultLayout} component={Aliases} content={children} />}
+      {features.accountMoving && <WrappedRoute path='/settings/migration' layout={DefaultLayout} component={Migration} content={children} />}
+      {features.accountBackups && <WrappedRoute path='/settings/backups' layout={DefaultLayout} component={Backups} content={children} />}
+      <WrappedRoute path='/settings/email' layout={DefaultLayout} component={EditEmail} content={children} />
+      <WrappedRoute path='/settings/password' layout={DefaultLayout} component={EditPassword} content={children} />
+      <WrappedRoute path='/settings/account' layout={DefaultLayout} component={DeleteAccount} content={children} />
+      <WrappedRoute path='/settings/mfa' layout={DefaultLayout} component={MfaForm} exact />
+      <WrappedRoute path='/settings/tokens' layout={DefaultLayout} component={AuthTokenList} content={children} />
+      <WrappedRoute path='/settings' layout={DefaultLayout} component={Settings} content={children} />
+      <WrappedRoute path='/soapbox/config' adminOnly layout={DefaultLayout} component={SoapboxConfig} content={children} />
 
-      <WrappedRoute path='/soapbox/admin' staffOnly page={AdminPage} component={Dashboard} content={children} exact />
-      <WrappedRoute path='/soapbox/admin/approval' staffOnly page={AdminPage} component={Dashboard} content={children} exact />
-      <WrappedRoute path='/soapbox/admin/reports' staffOnly page={AdminPage} component={Dashboard} content={children} exact />
-      <WrappedRoute path='/soapbox/admin/log' staffOnly page={AdminPage} component={ModerationLog} content={children} exact />
-      <WrappedRoute path='/soapbox/admin/users' staffOnly page={AdminPage} component={UserIndex} content={children} exact />
-      <WrappedRoute path='/soapbox/admin/theme' staffOnly page={AdminPage} component={ThemeEditor} content={children} exact />
-      <WrappedRoute path='/soapbox/admin/relays' staffOnly page={AdminPage} component={Relays} content={children} exact />
-      {features.adminAnnouncements && <WrappedRoute path='/soapbox/admin/announcements' staffOnly page={AdminPage} component={Announcements} content={children} exact />}
-      {features.domains && <WrappedRoute path='/soapbox/admin/domains' staffOnly page={AdminPage} component={Domains} content={children} exact />}
-      {features.adminRules && <WrappedRoute path='/soapbox/admin/rules' staffOnly page={AdminPage} component={Rules} content={children} exact />}
-      <WrappedRoute path='/info' page={EmptyPage} component={ServerInfo} content={children} />
+      <WrappedRoute path='/soapbox/admin' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
+      <WrappedRoute path='/soapbox/admin/approval' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
+      <WrappedRoute path='/soapbox/admin/reports' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
+      <WrappedRoute path='/soapbox/admin/log' staffOnly layout={AdminLayout} component={ModerationLog} content={children} exact />
+      <WrappedRoute path='/soapbox/admin/users' staffOnly layout={AdminLayout} component={UserIndex} content={children} exact />
+      <WrappedRoute path='/soapbox/admin/theme' staffOnly layout={AdminLayout} component={ThemeEditor} content={children} exact />
+      <WrappedRoute path='/soapbox/admin/relays' staffOnly layout={AdminLayout} component={Relays} content={children} exact />
+      {features.adminAnnouncements && <WrappedRoute path='/soapbox/admin/announcements' staffOnly layout={AdminLayout} component={Announcements} content={children} exact />}
+      {features.domains && <WrappedRoute path='/soapbox/admin/domains' staffOnly layout={AdminLayout} component={Domains} content={children} exact />}
+      {features.adminRules && <WrappedRoute path='/soapbox/admin/rules' staffOnly layout={AdminLayout} component={Rules} content={children} exact />}
+      <WrappedRoute path='/info' layout={EmptyLayout} component={ServerInfo} content={children} />
 
-      <WrappedRoute path='/developers/apps/create' developerOnly page={DefaultPage} component={CreateApp} content={children} />
-      <WrappedRoute path='/developers/settings_store' developerOnly page={DefaultPage} component={SettingsStore} content={children} />
-      <WrappedRoute path='/developers/timeline' developerOnly page={DefaultPage} component={TestTimeline} content={children} />
-      <WrappedRoute path='/developers/sw' developerOnly page={DefaultPage} component={ServiceWorkerInfo} content={children} />
-      <WrappedRoute path='/developers' page={DefaultPage} component={Developers} content={children} />
-      <WrappedRoute path='/error/network' developerOnly page={EmptyPage} component={lazy(() => Promise.reject(new TypeError('Failed to fetch dynamically imported module: TEST')))} content={children} />
-      <WrappedRoute path='/error' developerOnly page={EmptyPage} component={IntentionalError} content={children} />
+      <WrappedRoute path='/developers/apps/create' developerOnly layout={DefaultLayout} component={CreateApp} content={children} />
+      <WrappedRoute path='/developers/settings_store' developerOnly layout={DefaultLayout} component={SettingsStore} content={children} />
+      <WrappedRoute path='/developers/timeline' developerOnly layout={DefaultLayout} component={TestTimeline} content={children} />
+      <WrappedRoute path='/developers/sw' developerOnly layout={DefaultLayout} component={ServiceWorkerInfo} content={children} />
+      <WrappedRoute path='/developers' layout={DefaultLayout} component={Developers} content={children} />
+      <WrappedRoute path='/error/network' developerOnly layout={EmptyLayout} component={lazy(() => Promise.reject(new TypeError('Failed to fetch dynamically imported module: TEST')))} content={children} />
+      <WrappedRoute path='/error' developerOnly layout={EmptyLayout} component={IntentionalError} content={children} />
 
-      {hasCrypto && <WrappedRoute path='/donate/crypto' publicRoute page={DefaultPage} component={CryptoDonate} content={children} />}
-      {features.federating && <WrappedRoute path='/federation_restrictions' publicRoute page={DefaultPage} component={FederationRestrictions} content={children} />}
+      {hasCrypto && <WrappedRoute path='/donate/crypto' publicRoute layout={DefaultLayout} component={CryptoDonate} content={children} />}
+      {features.federating && <WrappedRoute path='/federation_restrictions' publicRoute layout={DefaultLayout} component={FederationRestrictions} content={children} />}
 
-      <WrappedRoute path='/share' page={DefaultPage} component={Share} content={children} exact />
+      <WrappedRoute path='/share' layout={DefaultLayout} component={Share} content={children} exact />
 
-      <WrappedRoute path='/about/:slug?' page={DefaultPage} component={AboutPage} publicRoute exact />
+      <WrappedRoute path='/about/:slug?' layout={DefaultLayout} component={AboutPage} publicRoute exact />
 
       {(features.accountCreation && instance.registrations.enabled) && (
-        <WrappedRoute path='/signup' page={EmptyPage} component={RegistrationPage} publicRoute exact />
+        <WrappedRoute path='/signup' layout={EmptyLayout} component={RegistrationPage} publicRoute exact />
       )}
 
-      <WrappedRoute path='/login/external' page={ExternalLoginPage} component={ExternalLogin} publicRoute exact />
-      <WrappedRoute path='/login/add' page={DefaultPage} component={LoginPage} publicRoute exact />
-      <WrappedRoute path='/login' page={DefaultPage} component={LoginPage} publicRoute exact />
-      <WrappedRoute path='/reset-password' page={DefaultPage} component={PasswordReset} publicRoute exact />
-      <WrappedRoute path='/invite/:token' page={DefaultPage} component={RegisterInvite} publicRoute exact />
+      <WrappedRoute path='/login/external' layout={ExternalLoginLayout} component={ExternalLogin} publicRoute exact />
+      <WrappedRoute path='/login/add' layout={DefaultLayout} component={LoginPage} publicRoute exact />
+      <WrappedRoute path='/login' layout={DefaultLayout} component={LoginPage} publicRoute exact />
+      <WrappedRoute path='/reset-password' layout={DefaultLayout} component={PasswordReset} publicRoute exact />
+      <WrappedRoute path='/invite/:token' layout={DefaultLayout} component={RegisterInvite} publicRoute exact />
       <Redirect from='/auth/password/new' to='/reset-password' />
       <Redirect from='/auth/password/edit' to={`/edit-password${search}`} />
 
-      <WrappedRoute page={EmptyPage} component={GenericNotFound} content={children} />
+      <WrappedRoute layout={EmptyLayout} component={GenericNotFound} content={children} />
     </Switch>
   );
 };

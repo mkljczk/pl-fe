@@ -70,7 +70,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const controller = useRef(new AbortController());
 
   const onInputChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = e => {
-    setParams(params => ({ ...params,  [e.target.name]: e.target.value }));
+    setParams(params => ({ ...params, [e.target.name]: e.target.value }));
   };
 
   const onUsernameChange: React.ChangeEventHandler<HTMLInputElement> = e => {

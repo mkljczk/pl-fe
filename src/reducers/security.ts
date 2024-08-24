@@ -5,10 +5,7 @@ import {
   MFA_CONFIRM_SUCCESS,
   MFA_DISABLE_SUCCESS,
 } from '../actions/mfa';
-import {
-  FETCH_TOKENS_SUCCESS,
-  REVOKE_TOKEN_SUCCESS,
-} from '../actions/security';
+import { FETCH_TOKENS_SUCCESS, REVOKE_TOKEN_SUCCESS } from '../actions/security';
 
 import type { OauthToken } from 'pl-api';
 import type { AnyAction } from 'redux';

@@ -54,10 +54,7 @@ import {
   UNPIN_SUCCESS,
   type InteractionsAction,
 } from '../actions/interactions';
-import {
-  PINNED_STATUSES_FETCH_SUCCESS,
-  type PinStatusesAction,
-} from '../actions/pin-statuses';
+import { PINNED_STATUSES_FETCH_SUCCESS, type PinStatusesAction } from '../actions/pin-statuses';
 import {
   SCHEDULED_STATUSES_FETCH_REQUEST,
   SCHEDULED_STATUSES_FETCH_SUCCESS,

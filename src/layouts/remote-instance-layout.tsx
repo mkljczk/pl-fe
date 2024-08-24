@@ -11,15 +11,15 @@ import { federationRestrictionsDisclosed } from 'soapbox/utils/state';
 
 import { Layout } from '../components/ui';
 
-interface IRemoteInstancePage {
+interface IRemoteInstanceLayout {
   params?: {
     instance?: string;
   };
   children: React.ReactNode;
 }
 
-/** Page for viewing a remote instance timeline. */
-const RemoteInstancePage: React.FC<IRemoteInstancePage> = ({ children, params }) => {
+/** Layout for viewing a remote instance timeline. */
+const RemoteInstanceLayout: React.FC<IRemoteInstanceLayout> = ({ children, params }) => {
   const host = params!.instance!;
 
   const { account } = useOwnAccount();
@@ -43,4 +43,4 @@ const RemoteInstancePage: React.FC<IRemoteInstancePage> = ({ children, params })
   );
 };
 
-export { RemoteInstancePage as default };
+export { RemoteInstanceLayout as default };

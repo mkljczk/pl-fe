@@ -20,9 +20,7 @@ import {
   $isHeadingNode,
   HeadingTagType,
 } from '@lexical/rich-text';
-import {
-  $setBlocksType,
-} from '@lexical/selection';
+import { $setBlocksType } from '@lexical/selection';
 import { $findMatchingParent, $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
 import clsx from 'clsx';
 import {

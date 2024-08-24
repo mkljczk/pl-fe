@@ -1,4 +1,4 @@
-import { type Notification } from 'pl-api';
+import type { Notification } from 'pl-api';
 
 /** Notification types known to Soapbox. */
 const NOTIFICATION_TYPES = [

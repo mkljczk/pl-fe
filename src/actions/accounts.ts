@@ -7,10 +7,7 @@ import { isLoggedIn } from 'soapbox/utils/auth';
 
 import { getClient, type PlfeResponse } from '../api';
 
-import {
-  importFetchedAccount,
-  importFetchedAccounts,
-} from './importer';
+import { importFetchedAccount, importFetchedAccounts } from './importer';
 
 import type { Map as ImmutableMap } from 'immutable';
 import type { MinifiedStatus } from 'soapbox/reducers/statuses';

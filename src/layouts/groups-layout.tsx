@@ -1,26 +1,31 @@
 import React from 'react';
 
-import { Layout } from 'soapbox/components/ui';
+import { Column, Layout } from 'soapbox/components/ui';
 import LinkFooter from 'soapbox/features/ui/components/link-footer';
 import { MyGroupsPanel, NewGroupPanel } from 'soapbox/features/ui/util/async-components';
 
-interface IGroupsPage {
+interface IGroupsLayout {
   children: React.ReactNode;
 }
 
-/** Page to display groups. */
-const ManageGroupsPage: React.FC<IGroupsPage> = ({ children }) => (
+/** Layout to display groups. */
+const GroupsLayout: React.FC<IGroupsLayout> = ({ children }) => (
   <>
     <Layout.Main>
-      {children}
+      <Column withHeader={false}>
+        <div className='space-y-4'>
+          {children}
+        </div>
+      </Column>
     </Layout.Main>
 
     <Layout.Aside>
       <NewGroupPanel />
       <MyGroupsPanel />
+
       <LinkFooter />
     </Layout.Aside>
   </>
 );
 
-export { ManageGroupsPage as default };
+export { GroupsLayout as default };

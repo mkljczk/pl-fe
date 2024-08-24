@@ -24,23 +24,23 @@ const ALLOWED_EMOJI = ImmutableList([
 describe('sortEmoji', () => {
   describe('with an unsorted list of emoji', () => {
     const emojiReacts = ImmutableList([
-      { 'count': 7,  'me': true, 'name': '😃' },
-      { 'count': 7,  'me': true, 'name': '😯' },
-      { 'count': 3,  'me': true, 'name': '😢' },
-      { 'count': 1,  'me': true, 'name': '😡' },
+      { 'count': 7, 'me': true, 'name': '😃' },
+      { 'count': 7, 'me': true, 'name': '😯' },
+      { 'count': 3, 'me': true, 'name': '😢' },
+      { 'count': 1, 'me': true, 'name': '😡' },
       { 'count': 20, 'me': true, 'name': '👍' },
-      { 'count': 7,  'me': true, 'name': '😂' },
+      { 'count': 7, 'me': true, 'name': '😂' },
       { 'count': 15, 'me': true, 'name': '❤' },
     ].map((react) => emojiReactionSchema.parse(react)));
     it('sorts the emoji by count', () => {
       expect(sortEmoji(emojiReacts, ALLOWED_EMOJI)).toEqual(fromJS([
         { 'count': 20, 'me': true, 'name': '👍' },
         { 'count': 15, 'me': true, 'name': '❤' },
-        { 'count': 7,  'me': true, 'name': '😯' },
-        { 'count': 7,  'me': true, 'name': '😂' },
-        { 'count': 7,  'me': true, 'name': '😃' },
-        { 'count': 3,  'me': true, 'name': '😢' },
-        { 'count': 1,  'me': true, 'name': '😡' },
+        { 'count': 7, 'me': true, 'name': '😯' },
+        { 'count': 7, 'me': true, 'name': '😂' },
+        { 'count': 7, 'me': true, 'name': '😃' },
+        { 'count': 3, 'me': true, 'name': '😢' },
+        { 'count': 1, 'me': true, 'name': '😡' },
       ]));
     });
   });
@@ -54,13 +54,13 @@ describe('mergeEmojiFavourites', () => {
     const emojiReacts = ImmutableList([
       { 'count': 20, 'me': false, 'name': '👍', 'url': undefined },
       { 'count': 15, 'me': false, 'name': '❤', 'url': undefined },
-      { 'count': 7,  'me': false, 'name': '😯', 'url': undefined },
+      { 'count': 7, 'me': false, 'name': '😯', 'url': undefined },
     ].map((react) => emojiReactionSchema.parse(react)));
     it('combines 👍 reacts with favourites', () => {
       expect(mergeEmojiFavourites(emojiReacts, favouritesCount, favourited)).toEqual(fromJS([
-        { 'count': 32, 'me': true,  'name': '👍', 'url': undefined },
+        { 'count': 32, 'me': true, 'name': '👍', 'url': undefined },
         { 'count': 15, 'me': false, 'name': '❤', 'url': undefined },
-        { 'count': 7,  'me': false, 'name': '😯', 'url': undefined },
+        { 'count': 7, 'me': false, 'name': '😯', 'url': undefined },
       ]));
     });
   });
@@ -68,19 +68,19 @@ describe('mergeEmojiFavourites', () => {
   describe('without existing 👍 reacts', () => {
     const emojiReacts = ImmutableList([
       { 'count': 15, 'me': false, 'name': '❤' },
-      { 'count': 7,  'me': false, 'name': '😯' },
+      { 'count': 7, 'me': false, 'name': '😯' },
     ].map((react) => emojiReactionSchema.parse(react)));
     it('adds 👍 reacts to the map equaling favourite count', () => {
       expect(mergeEmojiFavourites(emojiReacts, favouritesCount, favourited)).toEqual(fromJS([
         { 'count': 15, 'me': false, 'name': '❤' },
-        { 'count': 7,  'me': false, 'name': '😯' },
-        { 'count': 12, 'me': true,  'name': '👍' },
+        { 'count': 7, 'me': false, 'name': '😯' },
+        { 'count': 12, 'me': true, 'name': '👍' },
       ]));
     });
     it('does not add 👍 reacts when there are no favourites', () => {
       expect(mergeEmojiFavourites(emojiReacts, 0, false)).toEqual(fromJS([
-        { 'count': 15, 'me': false,  'name': '❤' },
-        { 'count': 7,  'me': false,  'name': '😯' },
+        { 'count': 15, 'me': false, 'name': '❤' },
+        { 'count': 7, 'me': false, 'name': '😯' },
       ]));
     });
   });
@@ -89,29 +89,29 @@ describe('mergeEmojiFavourites', () => {
 describe('reduceEmoji', () => {
   describe('with a clusterfuck of emoji', () => {
     const emojiReacts = ImmutableList([
-      { 'count': 1,  'me': false, 'name': '😡' },
-      { 'count': 1,  'me': true,  'name': '🔪' },
-      { 'count': 7,  'me': true,  'name': '😯' },
-      { 'count': 3,  'me': false, 'name': '😢' },
-      { 'count': 1,  'me': true,  'name': '🌵' },
-      { 'count': 20, 'me': true,  'name': '👍' },
-      { 'count': 7,  'me': false, 'name': '😂' },
-      { 'count': 15, 'me': true,  'name': '❤' },
-      { 'count': 1,  'me': false, 'name': '👀' },
-      { 'count': 1,  'me': false, 'name': '🍩' },
+      { 'count': 1, 'me': false, 'name': '😡' },
+      { 'count': 1, 'me': true, 'name': '🔪' },
+      { 'count': 7, 'me': true, 'name': '😯' },
+      { 'count': 3, 'me': false, 'name': '😢' },
+      { 'count': 1, 'me': true, 'name': '🌵' },
+      { 'count': 20, 'me': true, 'name': '👍' },
+      { 'count': 7, 'me': false, 'name': '😂' },
+      { 'count': 15, 'me': true, 'name': '❤' },
+      { 'count': 1, 'me': false, 'name': '👀' },
+      { 'count': 1, 'me': false, 'name': '🍩' },
     ].map((react) => emojiReactionSchema.parse(react)));
     it('sorts, filters, and combines emoji and favourites', () => {
       expect(reduceEmoji(emojiReacts, 7, true, ALLOWED_EMOJI)).toEqual(fromJS([
-        { 'count': 27, 'me': true,  'name': '👍' },
-        { 'count': 15, 'me': true,  'name': '❤' },
-        { 'count': 7,  'me': true,  'name': '😯' },
-        { 'count': 7,  'me': false, 'name': '😂' },
-        { 'count': 3,  'me': false, 'name': '😢' },
-        { 'count': 1,  'me': false, 'name': '😡' },
-        { 'count': 1,  'me': true,  'name': '🔪' },
-        { 'count': 1,  'me': true,  'name': '🌵' },
-        { 'count': 1,  'me': false, 'name': '👀' },
-        { 'count': 1,  'me': false, 'name': '🍩' },
+        { 'count': 27, 'me': true, 'name': '👍' },
+        { 'count': 15, 'me': true, 'name': '❤' },
+        { 'count': 7, 'me': true, 'name': '😯' },
+        { 'count': 7, 'me': false, 'name': '😂' },
+        { 'count': 3, 'me': false, 'name': '😢' },
+        { 'count': 1, 'me': false, 'name': '😡' },
+        { 'count': 1, 'me': true, 'name': '🔪' },
+        { 'count': 1, 'me': true, 'name': '🌵' },
+        { 'count': 1, 'me': false, 'name': '👀' },
+        { 'count': 1, 'me': false, 'name': '🍩' },
       ]));
     });
   });
@@ -124,9 +124,9 @@ describe('getReactForStatus', () => {
       pleroma: {
         emoji_reactions: [
           { 'count': 20, 'me': false, 'name': '👍' },
-          { 'count': 15, 'me': true,  'name': '❤' },
-          { 'count': 7,  'me': true,  'name': '😯' },
-          { 'count': 7,  'me': false, 'name': '😂' },
+          { 'count': 15, 'me': true, 'name': '❤' },
+          { 'count': 7, 'me': true, 'name': '😯' },
+          { 'count': 7, 'me': false, 'name': '😂' },
         ],
       },
     }));
@@ -145,10 +145,10 @@ describe('getReactForStatus', () => {
 
   it('returns undefined when a status has no valid reacts (or favourites)', () => {
     const status = normalizeStatus(fromJS([
-      { 'count': 1,  'me': true,  'name': '🔪' },
-      { 'count': 1,  'me': true,  'name': '🌵' },
-      { 'count': 1,  'me': false, 'name': '👀' },
-      { 'count': 1,  'me': false, 'name': '🍩' },
+      { 'count': 1, 'me': true, 'name': '🔪' },
+      { 'count': 1, 'me': true, 'name': '🌵' },
+      { 'count': 1, 'me': false, 'name': '👀' },
+      { 'count': 1, 'me': false, 'name': '🍩' },
     ]));
     expect(getReactForStatus(status)).toEqual(undefined);
   });
@@ -162,7 +162,7 @@ describe('simulateEmojiReact', () => {
     ].map((react) => emojiReactionSchema.parse(react)));
     expect(simulateEmojiReact(emojiReacts, '❤')).toEqual(fromJS([
       { 'count': 2, 'me': false, 'name': '👍', 'url': undefined },
-      { 'count': 3, 'me': true,  'name': '❤', 'url': undefined },
+      { 'count': 3, 'me': true, 'name': '❤', 'url': undefined },
     ]));
   });
 
@@ -174,7 +174,7 @@ describe('simulateEmojiReact', () => {
     expect(simulateEmojiReact(emojiReacts, '😯')).toEqual(fromJS([
       { 'count': 2, 'me': false, 'name': '👍', 'url': undefined },
       { 'count': 2, 'me': false, 'name': '❤', 'url': undefined },
-      { 'count': 1, 'me': true,  'name': '😯', 'url': undefined },
+      { 'count': 1, 'me': true, 'name': '😯', 'url': undefined },
     ]));
   });
 
@@ -185,8 +185,8 @@ describe('simulateEmojiReact', () => {
     ].map((react) => emojiReactionSchema.parse(react)));
     expect(simulateEmojiReact(emojiReacts, 'soapbox', 'https://gleasonator.com/emoji/Gleasonator/soapbox.png')).toEqual(fromJS([
       { 'count': 2, 'me': false, 'name': '👍', 'url': undefined },
-      { 'count': 2, 'me': false,  'name': '❤', 'url': undefined },
-      { 'count': 1, 'me': true,  'name': 'soapbox', 'url': 'https://gleasonator.com/emoji/Gleasonator/soapbox.png' },
+      { 'count': 2, 'me': false, 'name': '❤', 'url': undefined },
+      { 'count': 1, 'me': true, 'name': 'soapbox', 'url': 'https://gleasonator.com/emoji/Gleasonator/soapbox.png' },
     ]));
   });
 });
@@ -199,7 +199,7 @@ describe('simulateUnEmojiReact', () => {
     ].map((react) => emojiReactionSchema.parse(react)));
     expect(simulateUnEmojiReact(emojiReacts, '❤')).toEqual(fromJS([
       { 'count': 2, 'me': false, 'name': '👍' },
-      { 'count': 2, 'me': false,  'name': '❤' },
+      { 'count': 2, 'me': false, 'name': '❤' },
     ]));
   });
 
@@ -207,7 +207,7 @@ describe('simulateUnEmojiReact', () => {
     const emojiReacts = ImmutableList([
       { 'count': 2, 'me': false, 'name': '👍' },
       { 'count': 2, 'me': false, 'name': '❤' },
-      { 'count': 1, 'me': true,  'name': '😯' },
+      { 'count': 1, 'me': true, 'name': '😯' },
     ].map((react) => emojiReactionSchema.parse(react)));
     expect(simulateUnEmojiReact(emojiReacts, '😯')).toEqual(fromJS([
       { 'count': 2, 'me': false, 'name': '👍' },
@@ -219,7 +219,7 @@ describe('simulateUnEmojiReact', () => {
     const emojiReacts = ImmutableList([
       { 'count': 2, 'me': false, 'name': '👍' },
       { 'count': 2, 'me': false, 'name': '❤' },
-      { 'count': 1, 'me': true,  'name': 'soapbox', 'url': 'https://gleasonator.com/emoji/Gleasonator/soapbox.png' },
+      { 'count': 1, 'me': true, 'name': 'soapbox', 'url': 'https://gleasonator.com/emoji/Gleasonator/soapbox.png' },
     ].map((react) => emojiReactionSchema.parse(react)));
     expect(simulateUnEmojiReact(emojiReacts, 'soapbox')).toEqual(fromJS([
       { 'count': 2, 'me': false, 'name': '👍' },

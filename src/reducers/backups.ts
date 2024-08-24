@@ -1,9 +1,6 @@
 import { Map as ImmutableMap } from 'immutable';
 
-import {
-  BACKUPS_FETCH_SUCCESS,
-  BACKUPS_CREATE_SUCCESS,
-} from '../actions/backups';
+import { BACKUPS_FETCH_SUCCESS, BACKUPS_CREATE_SUCCESS } from '../actions/backups';
 
 import type { Backup } from 'pl-api';
 import type { AnyAction } from 'redux';

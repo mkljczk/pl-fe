@@ -1,6 +1,5 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $createRemarkExport } from '@mkljczk/lexical-remark';
-import { type LanguageIdentificationModel } from 'fasttext.wasm.js/dist/models/language-identification/common.js';
 import { $getRoot } from 'lexical';
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
@@ -10,6 +9,8 @@ import { addSuggestedLanguage, addSuggestedQuote, setEditorState } from 'soapbox
 import { fetchStatus } from 'soapbox/actions/statuses';
 import { useAppDispatch, useFeatures } from 'soapbox/hooks';
 import { getStatusIdsFromLinksInContent } from 'soapbox/utils/status';
+
+import type { LanguageIdentificationModel } from 'fasttext.wasm.js/dist/models/language-identification/common.js';
 
 let lidModel: LanguageIdentificationModel;
 

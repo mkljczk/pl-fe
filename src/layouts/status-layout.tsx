@@ -11,11 +11,11 @@ import { useAppSelector, useFeatures } from 'soapbox/hooks';
 
 import { Layout } from '../components/ui';
 
-interface ISearchPage {
+interface IStatusLayout {
   children: React.ReactNode;
 }
 
-const SearchPage: React.FC<ISearchPage> = ({ children }) => {
+const StatusLayout: React.FC<IStatusLayout> = ({ children }) => {
   const me = useAppSelector(state => state.me);
   const features = useFeatures();
 
@@ -33,19 +33,16 @@ const SearchPage: React.FC<ISearchPage> = ({ children }) => {
         {!me && (
           <SignUpPanel />
         )}
-
         {features.trends && (
           <TrendsPanel limit={5} />
         )}
-
         {me && features.suggestions && (
           <WhoToFollowPanel limit={3} />
         )}
-
         <LinkFooter />
       </Layout.Aside>
     </>
   );
 };
 
-export { SearchPage as default };
+export { StatusLayout as default };

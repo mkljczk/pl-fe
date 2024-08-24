@@ -1,10 +1,11 @@
 import aspectRatioPlugin from '@tailwindcss/aspect-ratio';
 import formsPlugin from '@tailwindcss/forms';
 import typographyPlugin from '@tailwindcss/typography';
-import { type Config } from 'tailwindcss';
 import plugin from 'tailwindcss/plugin';
 
 import { parseColorMatrix } from './tailwind/colors';
+
+import type { Config } from 'tailwindcss';
 
 const blackVariantPlugin = plugin(({ addVariant }) => addVariant('black', '.black &'));
 const reducedMotionPlugin = plugin(({ addVariant }) => addVariant('no-reduce-motion', '.no-reduce-motion &'));

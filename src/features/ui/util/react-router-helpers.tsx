@@ -9,14 +9,14 @@ import ColumnForbidden from '../components/column-forbidden';
 import ColumnLoading from '../components/column-loading';
 import ErrorColumn from '../components/error-column';
 
-type PageProps = {
+type LayoutProps = {
   params?: MatchType['params'];
   children: React.ReactNode;
 };
 
 interface IWrappedRoute extends RouteProps {
   component: React.LazyExoticComponent<any>;
-  page: React.ComponentType<PageProps>;
+  layout: React.ComponentType<LayoutProps>;
   content?: React.ReactNode;
   componentParams?: Record<string, any>;
   publicRoute?: boolean;
@@ -27,7 +27,7 @@ interface IWrappedRoute extends RouteProps {
 
 const WrappedRoute: React.FC<IWrappedRoute> = ({
   component: Component,
-  page: Page,
+  layout: Layout,
   content,
   componentParams = {},
   publicRoute = false,
@@ -44,11 +44,11 @@ const WrappedRoute: React.FC<IWrappedRoute> = ({
   const renderComponent = ({ match }: RouteComponentProps) => (
     <ErrorBoundary FallbackComponent={FallbackError}>
       <Suspense fallback={<FallbackLoading />}>
-        <Page params={match.params} {...componentParams}>
+        <Layout params={match.params} {...componentParams}>
           <Component params={match.params} {...componentParams}>
             {content}
           </Component>
-        </Page>
+        </Layout>
       </Suspense>
     </ErrorBoundary>
   );

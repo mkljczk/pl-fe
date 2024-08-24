@@ -1,34 +1,42 @@
 import React from 'react';
 
-import { Layout } from 'soapbox/components/ui';
 import LinkFooter from 'soapbox/features/ui/components/link-footer';
 import {
   WhoToFollowPanel,
   TrendsPanel,
-  NewEventPanel,
+  SignUpPanel,
+  CtaBanner,
 } from 'soapbox/features/ui/util/async-components';
-import { useFeatures } from 'soapbox/hooks';
+import { useAppSelector, useFeatures } from 'soapbox/hooks';
 
-interface IEventsPage {
+import { Layout } from '../components/ui';
+
+interface IDefaultLayout {
   children: React.ReactNode;
 }
 
-/** Page to display events list. */
-const EventsPage: React.FC<IEventsPage> = ({ children }) => {
+const DefaultLayout: React.FC<IDefaultLayout> = ({ children }) => {
+  const me = useAppSelector(state => state.me);
   const features = useFeatures();
 
   return (
     <>
       <Layout.Main>
         {children}
+
+        {!me && (
+          <CtaBanner />
+        )}
       </Layout.Main>
 
       <Layout.Aside>
-        <NewEventPanel />
+        {!me && (
+          <SignUpPanel />
+        )}
         {features.trends && (
           <TrendsPanel limit={5} />
         )}
-        {features.suggestions && (
+        {me && features.suggestions && (
           <WhoToFollowPanel limit={3} />
         )}
         <LinkFooter key='link-footer' />
@@ -37,4 +45,4 @@ const EventsPage: React.FC<IEventsPage> = ({ children }) => {
   );
 };
 
-export { EventsPage as default };
+export { DefaultLayout as default };

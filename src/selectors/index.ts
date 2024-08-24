@@ -9,7 +9,6 @@ import { createSelector } from 'reselect';
 
 import { getLocale, getSettings } from 'soapbox/actions/settings';
 import { Entities } from 'soapbox/entity-store/entities';
-import { type MRFSimple } from 'soapbox/schemas/pleroma';
 import { getDomain } from 'soapbox/utils/accounts';
 import { validId } from 'soapbox/utils/auth';
 import ConfigDB from 'soapbox/utils/config-db';
@@ -20,6 +19,7 @@ import type { EntityStore } from 'soapbox/entity-store/types';
 import type { Account, Group, Notification } from 'soapbox/normalizers';
 import type { MinifiedNotification } from 'soapbox/reducers/notifications';
 import type { MinifiedStatus } from 'soapbox/reducers/statuses';
+import type { MRFSimple } from 'soapbox/schemas/pleroma';
 import type { RootState } from 'soapbox/store';
 
 const normalizeId = (id: any): string => typeof id === 'string' ? id : typeof id === 'object' ? normalizeId(id.id) : '';

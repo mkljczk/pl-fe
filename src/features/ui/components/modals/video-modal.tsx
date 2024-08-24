@@ -10,7 +10,6 @@ import type { BaseModalProps } from '../modal-root';
 import type { MediaAttachment } from 'pl-api';
 import type { Account } from 'soapbox/normalizers';
 
-
 type VideoModalProps = {
   media: MediaAttachment;
   statusId: string;

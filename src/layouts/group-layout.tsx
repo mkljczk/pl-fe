@@ -19,7 +19,7 @@ const messages = defineMessages({
   media: { id: 'group.tabs.media', defaultMessage: 'Media' },
 });
 
-interface IGroupPage {
+interface IGroupLayout {
   params?: {
     groupId?: string;
   };
@@ -44,8 +44,8 @@ const PrivacyBlankslate = () => (
   </Stack>
 );
 
-/** Page to display a group. */
-const GroupPage: React.FC<IGroupPage> = ({ params, children }) => {
+/** Layout to display a group. */
+const GroupLayout: React.FC<IGroupLayout> = ({ params, children }) => {
   const intl = useIntl();
   const match = useRouteMatch();
   const { account: me } = useOwnAccount();
@@ -122,4 +122,4 @@ const GroupPage: React.FC<IGroupPage> = ({ params, children }) => {
   );
 };
 
-export { GroupPage as default };
+export { GroupLayout as default };

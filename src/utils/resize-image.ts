@@ -1,3 +1,5 @@
+import { checkCanvasExtractPermission } from './favicon-service';
+
 /* eslint-disable no-case-declarations */
 const DEFAULT_MAX_PIXELS = 1920 * 1080;
 
@@ -44,47 +46,6 @@ const dropOrientationIfNeeded = (orientation: number) => new Promise<number>(res
       img.src = testImageURL;
   }
 });
-
-// /**
-//  *Some browsers don't allow reading from a canvas and instead return all-white
-//  * or randomized data. Use a pre-defined image to check if reading the canvas
-//  * works.
-//  */
-// const checkCanvasReliability = () => new Promise<void>((resolve, reject) => {
-//   switch(_browser_quirks['canvas-read-unreliable']) {
-//   case true:
-//     reject('Canvas reading unreliable');
-//     break;
-//   case false:
-//     resolve();
-//     break;
-//   default:
-//     // 2×2 GIF with white, red, green and blue pixels
-//     const testImageURL =
-//       'data:image/gif;base64,R0lGODdhAgACAKEDAAAA//8AAAD/AP///ywAAAAAAgACAAACA1wEBQA7';
-//     const refData =
-//       [255, 255, 255, 255,  255, 0, 0, 255,  0, 255, 0, 255,  0, 0, 255, 255];
-//     const img = new Image();
-//     img.onload = () => {
-//       const canvas = document.createElement('canvas');
-//       const context = canvas.getContext('2d');
-//       context?.drawImage(img, 0, 0, 2, 2);
-//       const imageData = context?.getImageData(0, 0, 2, 2);
-//       if (imageData?.data.every((x, i) => refData[i] === x)) {
-//         _browser_quirks['canvas-read-unreliable'] = false;
-//         resolve();
-//       } else {
-//         _browser_quirks['canvas-read-unreliable'] = true;
-//         reject('Canvas reading unreliable');
-//       }
-//     };
-//     img.onerror = () => {
-//       _browser_quirks['canvas-read-unreliable'] = true;
-//       reject('Failed to load test image');
-//     };
-//     img.src = testImageURL;
-//   }
-// });
 
 /** Convert the file into a local blob URL. */
 const getImageUrl = (inputFile: File) => new Promise<string>((resolve, reject) => {
@@ -203,9 +164,8 @@ const resizeImage = (
   const newWidth = Math.round(Math.sqrt(maxPixels * (width / height)));
   const newHeight = Math.round(Math.sqrt(maxPixels * (height / width)));
 
-  // Skip canvas reliability check for now (it's unreliable)
-  // checkCanvasReliability()
-  //   .then(getOrientation(img, type))
+  if (!checkCanvasExtractPermission()) return reject();
+
   getOrientation(img, type)
     .then(orientation => processImage(img, {
       width: newWidth,

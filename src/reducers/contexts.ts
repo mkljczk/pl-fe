@@ -6,10 +6,7 @@ import {
 
 import { STATUS_IMPORT, STATUSES_IMPORT } from 'soapbox/actions/importer';
 
-import {
-  ACCOUNT_BLOCK_SUCCESS,
-  ACCOUNT_MUTE_SUCCESS,
-} from '../actions/accounts';
+import { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS } from '../actions/accounts';
 import {
   CONTEXT_FETCH_SUCCESS,
   STATUS_CREATE_REQUEST,

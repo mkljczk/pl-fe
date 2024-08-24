@@ -19,15 +19,15 @@ import {
 import { useAppSelector, useFeatures, useSoapboxConfig } from 'soapbox/hooks';
 import { getAcct } from 'soapbox/utils/accounts';
 
-interface IProfilePage {
+interface IProfileLayout {
   params?: {
     username?: string;
   };
   children: React.ReactNode;
 }
 
-/** Page to display a user's profile. */
-const ProfilePage: React.FC<IProfilePage> = ({ params, children }) => {
+/** Layout to display a user's profile. */
+const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
   const history = useHistory();
   const username = params?.username || '';
 
@@ -129,4 +129,4 @@ const ProfilePage: React.FC<IProfilePage> = ({ params, children }) => {
   );
 };
 
-export { ProfilePage as default };
+export { ProfileLayout as default };

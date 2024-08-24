@@ -96,4 +96,4 @@ const createFaviconService = () => {
 
 const FaviconService = createFaviconService();
 
-export { FaviconService as default };
+export { checkCanvasExtractPermission, FaviconService as default };

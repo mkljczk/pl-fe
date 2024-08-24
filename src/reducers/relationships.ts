@@ -13,14 +13,8 @@ import {
   ACCOUNT_REMOVE_FROM_FOLLOWERS_SUCCESS,
   RELATIONSHIPS_FETCH_SUCCESS,
 } from '../actions/accounts';
-import {
-  DOMAIN_BLOCK_SUCCESS,
-  DOMAIN_UNBLOCK_SUCCESS,
-} from '../actions/domain-blocks';
-import {
-  ACCOUNT_IMPORT,
-  ACCOUNTS_IMPORT,
-} from '../actions/importer';
+import { DOMAIN_BLOCK_SUCCESS, DOMAIN_UNBLOCK_SUCCESS } from '../actions/domain-blocks';
+import { ACCOUNT_IMPORT, ACCOUNTS_IMPORT } from '../actions/importer';
 
 import type { AnyAction } from 'redux';
 import type { APIEntity } from 'soapbox/types/entities';

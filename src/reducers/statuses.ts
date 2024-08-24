@@ -4,10 +4,7 @@ import omit from 'lodash/omit';
 import { normalizeStatus, normalizeTranslation, Status as StatusRecord } from 'soapbox/normalizers';
 import { simulateEmojiReact, simulateUnEmojiReact } from 'soapbox/utils/emoji-reacts';
 
-import {
-  EMOJI_REACT_REQUEST,
-  UNEMOJI_REACT_REQUEST,
-} from '../actions/emoji-reacts';
+import { EMOJI_REACT_REQUEST, UNEMOJI_REACT_REQUEST } from '../actions/emoji-reacts';
 import {
   EVENT_JOIN_REQUEST,
   EVENT_JOIN_FAIL,

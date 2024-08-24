@@ -6,15 +6,9 @@ import {
 } from 'immutable';
 import sample from 'lodash/sample';
 
-import {
-  ACCOUNT_BLOCK_SUCCESS,
-  ACCOUNT_MUTE_SUCCESS,
-} from '../actions/accounts';
+import { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS } from '../actions/accounts';
 import { PIN_SUCCESS, UNPIN_SUCCESS } from '../actions/interactions';
-import {
-  STATUS_CREATE_REQUEST,
-  STATUS_CREATE_SUCCESS,
-} from '../actions/statuses';
+import { STATUS_CREATE_REQUEST, STATUS_CREATE_SUCCESS } from '../actions/statuses';
 import {
   TIMELINE_UPDATE,
   TIMELINE_DELETE,

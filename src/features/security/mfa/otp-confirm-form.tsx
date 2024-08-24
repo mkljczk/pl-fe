@@ -3,10 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import {
-  setupMfa,
-  confirmMfa,
-} from 'soapbox/actions/mfa';
+import { setupMfa, confirmMfa } from 'soapbox/actions/mfa';
 import { Button, Form, FormActions, FormGroup, Input, Stack, Text } from 'soapbox/components/ui';
 import { useAppDispatch } from 'soapbox/hooks';
 import toast from 'soapbox/toast';

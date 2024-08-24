@@ -2,11 +2,11 @@ import React from 'react';
 
 import { Layout } from '../components/ui';
 
-interface IEmptyPage {
+interface IEmptyLayout {
   children: React.ReactNode;
 }
 
-const EmptyPage: React.FC<IEmptyPage> = ({ children }) => (
+const EmptyLayout: React.FC<IEmptyLayout> = ({ children }) => (
   <>
     <Layout.Main>
       {children}
@@ -16,4 +16,4 @@ const EmptyPage: React.FC<IEmptyPage> = ({ children }) => (
   </>
 );
 
-export { EmptyPage as default };
+export { EmptyLayout as default };

@@ -1,9 +1,8 @@
-import { type Account as BaseAccount, type Group, type Poll, type Status as BaseStatus } from 'pl-api';
-
 import { importEntities } from 'soapbox/entity-store/actions';
 import { Entities } from 'soapbox/entity-store/entities';
 import { normalizeAccount, normalizeGroup } from 'soapbox/normalizers';
 
+import type { Account as BaseAccount, Group, Poll, Status as BaseStatus } from 'pl-api';
 import type { AppDispatch } from 'soapbox/store';
 
 const ACCOUNT_IMPORT = 'ACCOUNT_IMPORT';

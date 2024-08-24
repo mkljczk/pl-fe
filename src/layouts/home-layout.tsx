@@ -21,11 +21,11 @@ import { useIsMobile } from 'soapbox/hooks/useIsMobile';
 import { Avatar, Card, CardBody, HStack, Layout } from '../components/ui';
 import ComposeForm from '../features/compose/components/compose-form';
 
-interface IHomePage {
+interface IHomeLayout {
   children: React.ReactNode;
 }
 
-const HomePage: React.FC<IHomePage> = ({ children }) => {
+const HomeLayout: React.FC<IHomeLayout> = ({ children }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -114,4 +114,4 @@ const HomePage: React.FC<IHomePage> = ({ children }) => {
   );
 };
 
-export { HomePage as default };
+export { HomeLayout as default };

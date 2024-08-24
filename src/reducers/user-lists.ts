@@ -34,9 +34,7 @@ import {
   EVENT_PARTICIPATION_REQUEST_AUTHORIZE_SUCCESS,
   EVENT_PARTICIPATION_REQUEST_REJECT_SUCCESS,
 } from 'soapbox/actions/events';
-import {
-  FAMILIAR_FOLLOWERS_FETCH_SUCCESS,
-} from 'soapbox/actions/familiar-followers';
+import { FAMILIAR_FOLLOWERS_FETCH_SUCCESS } from 'soapbox/actions/familiar-followers';
 import {
   GROUP_BLOCKS_FETCH_REQUEST,
   GROUP_BLOCKS_FETCH_SUCCESS,
@@ -51,9 +49,7 @@ import {
   DISLIKES_FETCH_SUCCESS,
   REACTIONS_FETCH_SUCCESS,
 } from 'soapbox/actions/interactions';
-import {
-  NOTIFICATIONS_UPDATE,
-} from 'soapbox/actions/notifications';
+import { NOTIFICATIONS_UPDATE } from 'soapbox/actions/notifications';
 
 import type { Account, Notification, PaginatedResponse } from 'pl-api';
 import type { APIEntity } from 'soapbox/types/entities';

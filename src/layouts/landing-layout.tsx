@@ -2,28 +2,25 @@ import React from 'react';
 
 import LinkFooter from 'soapbox/features/ui/components/link-footer';
 import {
-  WhoToFollowPanel,
   TrendsPanel,
   SignUpPanel,
   CtaBanner,
 } from 'soapbox/features/ui/util/async-components';
 import { useAppSelector, useFeatures } from 'soapbox/hooks';
-import { isStandalone } from 'soapbox/utils/state';
 
 import { Layout } from '../components/ui';
 
-interface IExternalLoginPage {
+interface ILandingLayout {
   children: React.ReactNode;
 }
 
-const ExternalLoginPage: React.FC<IExternalLoginPage> = ({ children }) => {
+const LandingLayout: React.FC<ILandingLayout> = ({ children }) => {
   const me = useAppSelector(state => state.me);
   const features = useFeatures();
-  const standalone = useAppSelector(isStandalone);
 
   return (
     <>
-      <Layout.Main>
+      <Layout.Main className='space-y-3 pt-3 sm:pt-0 dark:divide-gray-800'>
         {children}
 
         {!me && (
@@ -32,19 +29,16 @@ const ExternalLoginPage: React.FC<IExternalLoginPage> = ({ children }) => {
       </Layout.Main>
 
       <Layout.Aside>
-        {!me && !standalone && (
+        {!me && (
           <SignUpPanel />
         )}
         {features.trends && (
           <TrendsPanel limit={5} />
         )}
-        {me && features.suggestions && (
-          <WhoToFollowPanel limit={3} />
-        )}
-        <LinkFooter key='link-footer' />
+        <LinkFooter />
       </Layout.Aside>
     </>
   );
 };
 
-export { ExternalLoginPage as default };
+export { LandingLayout as default };
