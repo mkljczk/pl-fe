@@ -100,87 +100,84 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
     <div
       ref={ref}
       data-testid='modal'
-      className={clsx(className, 'pointer-events-auto relative mx-auto block w-full rounded-2xl bg-white p-6 text-start align-middle text-gray-900 shadow-xl transition-all ease-in-out black:bg-black dark:bg-primary-900 dark:text-gray-100', widths[width], {
+      className={clsx(className, 'pointer-events-auto relative mx-auto flex max-h-[90vh] w-full flex-col overflow-auto rounded-2xl bg-white text-start align-middle text-gray-900 shadow-xl transition-all ease-in-out black:bg-black md:max-h-[80vh] dark:bg-primary-900 dark:text-gray-100', widths[width], {
         'bottom-0': !firstRender,
         '-bottom-32': firstRender,
       })}
     >
-      <div className='w-full justify-between sm:flex sm:items-start'>
-        <div className='w-full'>
-          {title && (
-            <div
-              className={clsx('flex w-full items-center gap-2', {
-                'flex-row-reverse': closePosition === 'left',
-              })}
-            >
-              {onBack && (
-                <IconButton
-                  src={require('@tabler/icons/outline/arrow-left.svg')}
-                  title={intl.formatMessage(messages.back)}
-                  onClick={onBack}
-                  className='text-gray-500 hover:text-gray-700 rtl:rotate-180 dark:text-gray-300 dark:hover:text-gray-200'
-                />
-              )}
+      {title && (
+        <div className='sticky top-0 z-10 bg-white/75 p-6 pb-2 backdrop-blur black:bg-black/80 dark:bg-primary-900/75'>
+          <div
+            className={clsx('flex w-full items-center gap-2', {
+              'flex-row-reverse': closePosition === 'left',
+            })}
+          >
+            {onBack && (
+              <IconButton
+                src={require('@tabler/icons/outline/arrow-left.svg')}
+                title={intl.formatMessage(messages.back)}
+                onClick={onBack}
+                className='text-gray-500 hover:text-gray-700 rtl:rotate-180 dark:text-gray-300 dark:hover:text-gray-200'
+              />
+            )}
 
-              <h3 className='grow truncate text-lg font-bold leading-6 text-gray-900 dark:text-white'>
-                {title}
-              </h3>
+            <h3 className='grow truncate text-lg font-bold leading-6 text-gray-900 dark:text-white'>
+              {title}
+            </h3>
 
-              {onClose && (
-                <IconButton
-                  src={closeIcon}
-                  title={intl.formatMessage(messages.close)}
-                  onClick={onClose}
-                  className='text-gray-500 hover:text-gray-700 rtl:rotate-180 dark:text-gray-300 dark:hover:text-gray-200'
-                />
-              )}
-            </div>
-          )}
-
-          {title ? (
-            <div className='mt-2 w-full'>
-              {children}
-            </div>
-          ) : children}
-        </div>
-      </div>
-
-      {confirmationAction && (
-        <HStack className='mt-5' justifyContent='between' data-testid='modal-actions'>
-          <div className={clsx({ 'grow': !confirmationFullWidth })}>
-            {cancelAction && (
-              <Button
-                theme='tertiary'
-                onClick={cancelAction}
-              >
-                {cancelText || <FormattedMessage id='common.cancel' defaultMessage='Cancel' />}
-              </Button>
+            {onClose && (
+              <IconButton
+                src={closeIcon}
+                title={intl.formatMessage(messages.close)}
+                onClick={onClose}
+                className='text-gray-500 hover:text-gray-700 rtl:rotate-180 dark:text-gray-300 dark:hover:text-gray-200'
+              />
             )}
           </div>
-
-          <HStack space={2} className={clsx({ 'grow': confirmationFullWidth })}>
-            {secondaryAction && (
-              <Button
-                theme='secondary'
-                onClick={secondaryAction}
-                disabled={secondaryDisabled}
-              >
-                {secondaryText}
-              </Button>
-            )}
-
-            <Button
-              theme={confirmationTheme || 'primary'}
-              onClick={confirmationAction}
-              disabled={confirmationDisabled}
-              ref={buttonRef}
-              block={confirmationFullWidth}
-            >
-              {confirmationText}
-            </Button>
-          </HStack>
-        </HStack>
+        </div>
       )}
+      <div className={clsx('p-6', { 'pt-0': title })}>
+        <div className='w-full'>
+          {children}
+        </div>
+
+        {confirmationAction && (
+          <HStack className='mt-5' justifyContent='between' data-testid='modal-actions'>
+            <div className={clsx({ 'grow': !confirmationFullWidth })}>
+              {cancelAction && (
+                <Button
+                  theme='tertiary'
+                  onClick={cancelAction}
+                >
+                  {cancelText || <FormattedMessage id='common.cancel' defaultMessage='Cancel' />}
+                </Button>
+              )}
+            </div>
+
+            <HStack space={2} className={clsx({ 'grow': confirmationFullWidth })}>
+              {secondaryAction && (
+                <Button
+                  theme='secondary'
+                  onClick={secondaryAction}
+                  disabled={secondaryDisabled}
+                >
+                  {secondaryText}
+                </Button>
+              )}
+
+              <Button
+                theme={confirmationTheme || 'primary'}
+                onClick={confirmationAction}
+                disabled={confirmationDisabled}
+                ref={buttonRef}
+                block={confirmationFullWidth}
+              >
+                {confirmationText}
+              </Button>
+            </HStack>
+          </HStack>
+        )}
+      </div>
     </div>
   );
 });
