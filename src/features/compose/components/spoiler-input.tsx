@@ -7,7 +7,6 @@ import { useAppDispatch, useCompose } from 'soapbox/hooks';
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Subject (optional)' },
-
 });
 
 interface ISpoilerInput extends Pick<IAutosuggestInput, 'onSuggestionsFetchRequested' | 'onSuggestionsClearRequested' | 'onSuggestionSelected'> {

@@ -3,7 +3,7 @@ import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 
 import List, { ListItem } from 'soapbox/components/list';
 import { Button, FileInput, Form, FormActions, FormGroup, Text, Toggle } from 'soapbox/components/ui';
-import { useAppDispatch, useFeatures } from 'soapbox/hooks';
+import { useAppDispatch } from 'soapbox/hooks';
 
 import type { AppDispatch, RootState } from 'soapbox/store';
 
@@ -13,7 +13,7 @@ interface IDataImporter {
     input_hint: MessageDescriptor;
     submit: MessageDescriptor;
   };
-  action: (list: File | string, overwrite?: boolean) => (dispatch: AppDispatch, getState: () => RootState) => Promise<void>;
+  action: (list: File, overwrite?: boolean) => (dispatch: AppDispatch, getState: () => RootState) => Promise<void>;
   accept?: string;
   allowOverwrite?: boolean;
 }
@@ -21,7 +21,6 @@ interface IDataImporter {
 const DataImporter: React.FC<IDataImporter> = ({ messages, action, accept = '.csv,text/csv', allowOverwrite }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
-  const features = useFeatures();
 
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null | undefined>(null);
@@ -56,7 +55,7 @@ const DataImporter: React.FC<IDataImporter> = ({ messages, action, accept = '.cs
         />
       </FormGroup>
 
-      {features.importOverwrite && (
+      {allowOverwrite && (
         <List>
           <ListItem
             label={<FormattedMessage id='import_data.overwrite' defaultMessage='Overwrite instead of appending' />}

@@ -105,9 +105,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
               {status.quote_id && <QuotedStatusIndicator statusId={status.quote_id} />}
 
               <div className='relative'>
-                <SensitiveContentOverlay
-                  status={status}
-                />
+                <SensitiveContentOverlay status={status} />
                 {status.media_attachments.length > 0 && (
                   <StatusMedia status={status} muted={compose} />
                 )}

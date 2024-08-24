@@ -167,6 +167,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     },
   };
 
+  const spoilerText = status.spoilerMapHtml && status.currentLanguage
+    ? status.spoilerMapHtml[status.currentLanguage] || status.spoilerHtml
+    : status.spoilerHtml;
+
   const content = parse(parsedHtml, options);
 
   const direction = getTextDirection(status.search_index);
@@ -176,10 +180,6 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     'max-h-[200px]': collapsed,
     'leading-normal big-emoji': onlyEmoji,
   });
-
-  const spoilerText = status.spoilerMapHtml && status.currentLanguage
-    ? status.spoilerMapHtml[status.currentLanguage] || status.spoilerHtml
-    : status.spoilerHtml;
 
   const expandable = !displaySpoilers;
   const expanded = !withSpoiler || status.expanded || false;

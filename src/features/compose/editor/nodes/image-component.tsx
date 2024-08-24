@@ -1,7 +1,7 @@
 /**
  * This source code is derived from code from Meta Platforms, Inc.
  * and affiliates, licensed under the MIT license located in the
- * LICENSE file in the /app/soapbox/features/compose/editor directory.
+ * LICENSE file in the /src/features/compose/editor directory.
  */
 
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
@@ -306,7 +306,7 @@ const ImageComponent = ({
   return (
     <Suspense fallback={null}>
       <>
-        <div className='relative' draggable={draggable} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onClick={handleClick}  role='button'>
+        <div className='relative' draggable={draggable} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onClick={handleClick} role='button'>
           <HStack className='absolute right-2 top-2 z-10' space={2}>
             <IconButton
               onClick={previewImage}

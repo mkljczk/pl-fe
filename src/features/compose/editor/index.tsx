@@ -184,12 +184,14 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
           contentEditable={
             <div onFocus={onFocus} onPaste={handlePaste} ref={onRef}>
               <ContentEditable
-                className={clsx('relative z-10 text-[1rem] outline-none transition-[min-height] motion-reduce:transition-none',
+                className={clsx(
+                  'relative z-10 text-[1rem] outline-none transition-[min-height] motion-reduce:transition-none',
                   editableClassName,
                   {
                     'min-h-[39px]': condensed,
                     'min-h-[99px]': !condensed,
-                  })}
+                  },
+                )}
               />
             </div>
           }

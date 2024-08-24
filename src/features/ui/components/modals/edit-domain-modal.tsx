@@ -12,7 +12,7 @@ import type { Domain } from 'soapbox/schemas';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_domain.save', defaultMessage: 'Save' },
-  domainPlaceholder: { id: 'admin.edit_domain.fields.domain_placeholder', defaultMessage: 'Identity domain name' },
+  domainPlaceholder: { id: 'admin.edit_domain.fields.domain_placeholder', defaultMessage: 'Domain name' },
   domainCreateSuccess: { id: 'admin.edit_domain.created', defaultMessage: 'Domain created' },
   domainUpdateSuccess: { id: 'admin.edit_domain.updated', defaultMessage: 'Domain edited' },
 });

@@ -19,8 +19,8 @@ interface IStatePlugin {
 }
 
 const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
+  const dispatch = useAppDispatch();
   const [editor] = useLexicalComposerContext();
   const features = useFeatures();
 

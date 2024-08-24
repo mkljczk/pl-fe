@@ -29,8 +29,8 @@ interface IEventDiscussion {
 }
 
 const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
+  const dispatch = useAppDispatch();
 
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector(state => getStatus(state, { id: props.params.statusId }));

@@ -269,7 +269,7 @@ const ComposeEventModal: React.FC<BaseModalProps> = ({ onClose }) => {
           onChange={onChangeHasEndTime}
         />
         <Text tag='span' theme='muted'>
-          <FormattedMessage id='compose_event.fields.has_end_time' defaultMessage='The event has end date' />
+          <FormattedMessage id='compose_event.fields.has_end_time' defaultMessage='The event has an end date' />
         </Text>
       </HStack>
       {endTime && (

@@ -265,7 +265,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
           <ComposeEditor
             key={modifiedLanguage}
             ref={editorRef}
-            className='mt-2'
+            className='rounded-md border-gray-400 px-3 py-2 ring-2 focus-within:border-primary-500 focus-within:ring-primary-500 dark:border-gray-800 dark:ring-gray-800 dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500'
             composeId={id}
             condensed={condensed}
             eventDiscussion={!!event}
@@ -276,8 +276,9 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
             onPaste={onPaste}
           />
         </Suspense>
-        {composeModifiers}
       </div>
+
+      {composeModifiers}
 
       <QuotedStatusContainer composeId={id} />
 
