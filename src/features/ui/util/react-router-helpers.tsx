@@ -7,21 +7,18 @@ import { useOwnAccount, useSettings } from 'soapbox/hooks';
 
 import ColumnForbidden from '../components/column-forbidden';
 import ColumnLoading from '../components/column-loading';
-import ColumnsArea from '../components/columns-area';
 import ErrorColumn from '../components/error-column';
 
 type PageProps = {
   params?: MatchType['params'];
-  layout?: any;
   children: React.ReactNode;
 };
 
 interface IWrappedRoute extends RouteProps {
   component: React.LazyExoticComponent<any>;
-  page?: React.ComponentType<PageProps>;
+  page: React.ComponentType<PageProps>;
   content?: React.ReactNode;
   componentParams?: Record<string, any>;
-  layout?: any;
   publicRoute?: boolean;
   staffOnly?: boolean;
   adminOnly?: boolean;
@@ -33,7 +30,6 @@ const WrappedRoute: React.FC<IWrappedRoute> = ({
   page: Page,
   content,
   componentParams = {},
-  layout,
   publicRoute = false,
   staffOnly = false,
   adminOnly = false,
@@ -45,33 +41,17 @@ const WrappedRoute: React.FC<IWrappedRoute> = ({
   const { account } = useOwnAccount();
   const { isDeveloper } = useSettings();
 
-  const renderComponent = ({ match }: RouteComponentProps) => {
-    if (Page) {
-      return (
-        <ErrorBoundary FallbackComponent={FallbackError}>
-          <Suspense fallback={<FallbackLoading />}>
-            <Page params={match.params} layout={layout} {...componentParams}>
-              <Component params={match.params} {...componentParams}>
-                {content}
-              </Component>
-            </Page>
-          </Suspense>
-        </ErrorBoundary>
-      );
-    }
-
-    return (
-      <ErrorBoundary FallbackComponent={FallbackError}>
-        <Suspense fallback={<FallbackLoading />}>
-          <ColumnsArea layout={layout}>
-            <Component params={match.params} {...componentParams}>
-              {content}
-            </Component>
-          </ColumnsArea>
-        </Suspense>
-      </ErrorBoundary>
-    );
-  };
+  const renderComponent = ({ match }: RouteComponentProps) => (
+    <ErrorBoundary FallbackComponent={FallbackError}>
+      <Suspense fallback={<FallbackLoading />}>
+        <Page params={match.params} {...componentParams}>
+          <Component params={match.params} {...componentParams}>
+            {content}
+          </Component>
+        </Page>
+      </Suspense>
+    </ErrorBoundary>
+  );
 
   const loginRedirect = () => {
     const actualUrl = encodeURIComponent(`${history.location.pathname}${history.location.search}`);
