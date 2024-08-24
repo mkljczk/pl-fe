@@ -25,9 +25,6 @@ import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 import StatusInfo from './statuses/status-info';
 import { Card, Icon, Stack, Text } from './ui';
 
-// Defined in components/scrollable-list
-type ScrollPosition = { height: number; top: number };
-
 const messages = defineMessages({
   reblogged_by: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
 });
@@ -458,7 +455,6 @@ const Status: React.FC<IStatus> = (props) => {
 };
 
 export {
-  type ScrollPosition,
   type IStatus,
   Status as default,
 };

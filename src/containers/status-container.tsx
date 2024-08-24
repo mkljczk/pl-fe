@@ -9,10 +9,6 @@ interface IStatusContainer extends Omit<IStatus, 'status'> {
   contextType?: string;
   /** @deprecated Unused. */
   otherAccounts?: any;
-  /** @deprecated Unused. */
-  getScrollPosition?: any;
-  /** @deprecated Unused. */
-  updateScrollBottom?: any;
 }
 
 /**

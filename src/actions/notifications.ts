@@ -5,7 +5,7 @@ import { defineMessages } from 'react-intl';
 
 import { getClient } from 'soapbox/api';
 import { getNotificationStatus } from 'soapbox/features/notifications/components/notification';
-import { normalizeNotifications, type Notification } from 'soapbox/normalizers';
+import { normalizeNotification, normalizeNotifications, type Notification } from 'soapbox/normalizers';
 import { getFilters, regexFromFilters } from 'soapbox/selectors';
 import { isLoggedIn } from 'soapbox/utils/auth';
 import { compareId } from 'soapbox/utils/comparators';
@@ -92,7 +92,7 @@ const updateNotifications = (notification: BaseNotification) =>
     if (showInColumn) {
       dispatch({
         type: NOTIFICATIONS_UPDATE,
-        notification,
+        notification: normalizeNotification(notification),
       });
 
       fetchRelatedRelationships(dispatch, [notification]);

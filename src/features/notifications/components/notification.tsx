@@ -18,7 +18,6 @@ import { makeGetNotification } from 'soapbox/selectors';
 import { NotificationType } from 'soapbox/utils/notification';
 
 import type { Notification as BaseNotification } from 'pl-api';
-import type { ScrollPosition } from 'soapbox/components/status';
 import type { Account, Notification as NotificationEntity, Status as StatusEntity } from 'soapbox/normalizers';
 import type { MinifiedNotification } from 'soapbox/reducers/notifications';
 
@@ -174,8 +173,6 @@ interface INotification {
   onMoveUp?: (notificationId: string) => void;
   onMoveDown?: (notificationId: string) => void;
   onReblog?: (status: StatusEntity, e?: KeyboardEvent) => void;
-  getScrollPosition?: () => ScrollPosition | undefined;
-  updateScrollBottom?: (bottom: number) => void;
 }
 
 const getNotificationStatus = (n: NotificationEntity | BaseNotification) => {
