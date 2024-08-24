@@ -9,7 +9,7 @@ const messages = defineMessages({
   placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Subject (optional)' },
 });
 
-interface ISpoilerInput extends Pick<IAutosuggestInput, 'onSuggestionsFetchRequested' | 'onSuggestionsClearRequested' | 'onSuggestionSelected'> {
+interface ISpoilerInput extends Pick<IAutosuggestInput, 'onSuggestionsFetchRequested' | 'onSuggestionsClearRequested' | 'onSuggestionSelected' | 'theme'> {
   composeId: string extends 'default' ? never : string;
 }
 
@@ -19,6 +19,7 @@ const SpoilerInput = React.forwardRef<AutosuggestInput, ISpoilerInput>(({
   onSuggestionsFetchRequested,
   onSuggestionsClearRequested,
   onSuggestionSelected,
+  theme,
 }, ref) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -39,6 +40,7 @@ const SpoilerInput = React.forwardRef<AutosuggestInput, ISpoilerInput>(({
       onSuggestionsFetchRequested={onSuggestionsFetchRequested}
       onSuggestionsClearRequested={onSuggestionsClearRequested}
       onSuggestionSelected={onSuggestionSelected}
+      theme={theme}
       searchTokens={[':']}
       id='cw-spoiler-input'
       className='rounded-md !bg-transparent dark:!bg-transparent'

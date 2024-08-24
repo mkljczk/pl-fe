@@ -74,6 +74,7 @@ const HomeLayout: React.FC<IHomeLayout> = ({ children }) => {
                     autoFocus={false}
                     clickableAreaRef={composeBlock}
                     withAvatar
+                    transparent
                   />
                 </div>
               </HStack>

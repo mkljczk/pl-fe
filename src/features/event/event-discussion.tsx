@@ -160,7 +160,7 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
   return (
     <Stack space={2}>
       {me && <div className='border-b border-solid border-gray-200 p-2 pt-0 dark:border-gray-800'>
-        <ComposeForm id={`reply:${status.id}`} autoFocus={false} event={status.id} />
+        <ComposeForm id={`reply:${status.id}`} autoFocus={false} event={status.id} transparent />
       </div>}
       <div ref={node} className='thread p-0 shadow-none sm:p-2'>
         <ScrollableList

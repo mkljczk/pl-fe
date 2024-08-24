@@ -78,6 +78,7 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
               autoFocus={false}
               group={groupId}
               withAvatar
+              transparent
             />
           </HStack>
         </div>

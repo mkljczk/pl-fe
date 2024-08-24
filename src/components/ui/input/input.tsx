@@ -15,7 +15,7 @@ const messages = defineMessages({
 });
 
 /** Possible theme names for an Input. */
-type InputThemes = 'normal' | 'search'
+type InputThemes = 'normal' | 'search' | 'transparent'
 
 interface IInput extends Pick<React.InputHTMLAttributes<HTMLInputElement>, 'maxLength' | 'onChange' | 'onBlur' | 'type' | 'autoComplete' | 'autoCorrect' | 'autoCapitalize' | 'required' | 'disabled' | 'onClick' | 'readOnly' | 'min' | 'pattern' | 'onKeyDown' | 'onKeyUp' | 'onFocus' | 'style' | 'id'> {
   /** Put the cursor into the input on mount. */
@@ -87,9 +87,9 @@ const Input = React.forwardRef<HTMLInputElement, IInput>(
           {...filteredProps}
           type={revealed ? 'text' : type}
           ref={ref}
-          className={clsx('text-base placeholder:text-gray-600 dark:placeholder:text-gray-600', {
-            'block w-full sm:text-sm ring-1 dark:ring-gray-800 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500':
-              ['normal', 'search'].includes(theme),
+          className={clsx('block w-full text-base placeholder:text-gray-600 focus:border-primary-500 sm:text-sm dark:placeholder:text-gray-600 dark:focus:border-primary-500', {
+            'ring-1 focus:ring-primary-500 dark:ring-gray-800 dark:focus:ring-primary-500': ['search', 'normal'].includes(theme),
+            'px-0 border-none !ring-0': theme === 'transparent',
             'text-gray-900 dark:text-gray-100': !props.disabled,
             'text-gray-600': props.disabled,
             'rounded-md bg-white dark:bg-gray-900 border-gray-400 dark:border-gray-800 black:bg-black': theme === 'normal',
