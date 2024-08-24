@@ -38,7 +38,7 @@ const submitSearch = (value: string, filter?: SearchFilter) =>
 
     // An empty search doesn't return any results
     if (value.length === 0) {
-      return;
+      return dispatch(clearSearchResults());
     }
 
     dispatch(fetchSearchRequest(value));
