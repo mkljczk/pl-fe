@@ -5,7 +5,6 @@ import { decode as decodeBase64 } from 'soapbox/utils/base64';
 
 import { setBrowserSupport, setSubscription, clearSubscription } from './setter';
 
-import type { WebPushSubscription } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { Me } from 'soapbox/types/soapbox';
 
@@ -82,7 +81,7 @@ const register = () =>
     getRegistration()
       .then(getPushSubscription)
       // @ts-ignore
-      .then(({ registration, subscription }) => {
+      .then(async ({ registration, subscription }) => {
         if (subscription !== null) {
           // We have a subscription, check if it is still valid
           const currentServerKey = (new Uint8Array(subscription.options.applicationServerKey!)).toString();
@@ -92,13 +91,15 @@ const register = () =>
           // If the VAPID public key did not change and the endpoint corresponds
           // to the endpoint saved in the backend, the subscription is valid
           if (subscriptionServerKey === currentServerKey && subscription.endpoint === serverEndpoint) {
-            return { subscription };
+            return subscription;
           } else {
             // Something went wrong, try to subscribe again
             return unsubscribe({ registration, subscription }).then((registration) => {
               return subscribe(registration, getState);
-            }).then(
-              (subscription) => dispatch(sendSubscriptionToBackend(subscription, me)));
+            }).then(async (pushSubscription) => {
+              const subscription = await dispatch(sendSubscriptionToBackend(pushSubscription, me));
+              return subscription;
+            });
           }
         }
 
@@ -106,13 +107,13 @@ const register = () =>
         return subscribe(registration, getState)
           .then(async (pushSubscription) => {
             const subscription = await dispatch(sendSubscriptionToBackend(pushSubscription, me));
-            return { subscription };
+            return subscription;
           });
       })
-      .then(({ subscription }: { subscription: WebPushSubscription | PushSubscription | null }) => {
+      .then((subscription) => {
         // If we got a PushSubscription (and not a subscription object from the backend)
         // it means that the backend subscription is valid (and was set during hydration)
-        if (subscription !== null && !(subscription instanceof PushSubscription)) {
+        if (!(subscription instanceof PushSubscription)) {
           dispatch(setSubscription(subscription));
           if (me) {
             pushNotificationsSetting.set(me, { alerts: subscription.alerts });
