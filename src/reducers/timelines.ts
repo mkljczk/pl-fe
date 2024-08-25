@@ -352,12 +352,12 @@ const timelines = (state: State = initialState, action: AnyAction) => {
       }));
     case PIN_SUCCESS:
       return state.updateIn(
-        [`account:${action.accountId}:pinned`, 'items'],
+        [`account:${action.accountId}:with_replies:pinned`, 'items'],
         ids => ImmutableOrderedSet([action.statusId]).union(ids as ImmutableOrderedSet<string>),
       );
     case UNPIN_SUCCESS:
       return state.updateIn(
-        [`account:${action.accountId}:pinned`, 'items'],
+        [`account:${action.accountId}:with_replies:pinned`, 'items'],
         ids => (ids as ImmutableOrderedSet<string>).delete(action.statusId),
       );
     default:

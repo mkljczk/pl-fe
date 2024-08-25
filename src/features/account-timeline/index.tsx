@@ -32,7 +32,7 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
   const path = withReplies ? `${account?.id}:with_replies` : account?.id;
   const showPins = settings.account_timeline.shows.pinned && !withReplies;
   const statusIds = useAppSelector(state => getStatusIds(state, { type: `account:${path}`, prefix: 'account_timeline' }));
-  const featuredStatusIds = useAppSelector(state => getStatusIds(state, { type: `account:${account?.id}:pinned`, prefix: 'account_timeline' }));
+  const featuredStatusIds = useAppSelector(state => getStatusIds(state, { type: `account:${account?.id}:with_replies:pinned`, prefix: 'account_timeline' }));
 
   const isBlocked = useAppSelector(state => state.relationships.getIn([account?.id, 'blocked_by']) === true);
   const unavailable = isBlocked && !features.blockersVisible;
