@@ -24,7 +24,7 @@ const messages = defineMessages({
 });
 
 const formatTime = (secondsNum: number): string => {
-  let hours:   number | string = Math.floor(secondsNum / 3600);
+  let hours: number | string = Math.floor(secondsNum / 3600);
   let minutes: number | string = Math.floor((secondsNum - (hours * 3600)) / 60);
   let seconds: number | string = secondsNum - (hours * 3600) - (minutes * 60);
 

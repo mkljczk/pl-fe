@@ -2,24 +2,11 @@
  * API: HTTP client and utilities.
  * @module soapbox/api
  */
-import LinkHeader from 'http-link-header';
-
 import * as BuildConfig from 'soapbox/build-config';
 import { RootState } from 'soapbox/store';
 import { buildFullPath } from 'soapbox/utils/url';
 
 type PlfeResponse<T = any> = Response & { data: string; json: T };
-
-/**
-  Parse Link headers, mostly for pagination.
-  @param {object} response - Fetch API response object
-  @returns {object} Link object
-  */
-const getLinks = (response: Pick<Response, 'headers'>): LinkHeader =>
-  new LinkHeader(response.headers?.get('link') || undefined);
-
-const getNextLink = (response: Pick<Response, 'headers'>): string | undefined =>
-  getLinks(response).refs.find(link => link.rel === 'next')?.uri;
 
 /**
   * Dumb client for grabbing static files.
@@ -53,8 +40,6 @@ const getClient = (state: RootState | (() => RootState)) => {
 
 export {
   type PlfeResponse,
-  getLinks,
-  getNextLink,
   staticFetch,
   getClient,
 };

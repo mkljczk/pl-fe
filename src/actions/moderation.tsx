@@ -2,7 +2,7 @@ import React from 'react';
 import { defineMessages, IntlShape } from 'react-intl';
 
 import { fetchAccountByUsername } from 'soapbox/actions/accounts';
-import { deactivateUsers, deleteUsers, deleteStatus, toggleStatusSensitivity } from 'soapbox/actions/admin';
+import { deactivateUser, deleteUser, deleteStatus, toggleStatusSensitivity } from 'soapbox/actions/admin';
 import { openModal } from 'soapbox/actions/modals';
 import OutlineBox from 'soapbox/components/outline-box';
 import { Stack, Text } from 'soapbox/components/ui';
@@ -62,7 +62,7 @@ const deactivateUserModal = (intl: IntlShape, accountId: string, afterConfirm = 
       message,
       confirm: intl.formatMessage(messages.deactivateUserConfirm, { name }),
       onConfirm: () => {
-        dispatch(deactivateUsers([accountId])).then(() => {
+        dispatch(deactivateUser(accountId)).then(() => {
           const message = intl.formatMessage(messages.userDeactivated, { acct });
           toast.success(message);
           afterConfirm();
@@ -100,7 +100,7 @@ const deleteUserModal = (intl: IntlShape, accountId: string, afterConfirm = () =
       confirm,
       checkbox,
       onConfirm: () => {
-        dispatch(deleteUsers([accountId])).then(() => {
+        dispatch(deleteUser(accountId)).then(() => {
           const message = intl.formatMessage(messages.userDeleted, { acct });
           dispatch(fetchAccountByUsername(acct));
           toast.success(message);

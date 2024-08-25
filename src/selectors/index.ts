@@ -3,7 +3,6 @@ import {
   List as ImmutableList,
   OrderedSet as ImmutableOrderedSet,
   Record as ImmutableRecord,
-  fromJS,
 } from 'immutable';
 import { createSelector } from 'reselect';
 
@@ -239,24 +238,20 @@ const makeGetReport = () => {
   return createSelector(
     [
       (state: RootState, id: string) => state.admin.reports.get(id),
-      (state: RootState, id: string) => selectAccount(state, state.admin.reports.get(id)?.account || ''),
-      (state: RootState, id: string) => selectAccount(state, state.admin.reports.get(id)?.target_account || ''),
-      (state: RootState, id: string) => ImmutableList(fromJS(state.admin.reports.get(id)?.statuses)).map(
-        statusId => state.statuses.get(normalizeId(statusId)))
-        .filter((s: any) => s)
-        .map((s: any) => getStatus(state, s.toJS())),
+      (state: RootState, id: string) => selectAccount(state, state.admin.reports.get(id)?.account_id || ''),
+      (state: RootState, id: string) => selectAccount(state, state.admin.reports.get(id)?.target_account_id || ''),
+      (state: RootState, id: string) => state.admin.reports.get(id)!.status_ids
+        .map((id) => getStatus(state, { id }))
+        .filter((status): status is SelectedStatus => status !== null),
     ],
-
-    (report, account, targetAccount, statuses) => {
+    (report, account, target_account, statuses) => {
       if (!report) return null;
-      return report.withMutations((report) => {
-        // @ts-ignore
-        report.set('account', account);
-        // @ts-ignore
-        report.set('target_account', targetAccount);
-        // @ts-ignore
-        report.set('statuses', statuses);
-      });
+      return {
+        ...report,
+        account,
+        target_account,
+        statuses,
+      };
     },
   );
 };

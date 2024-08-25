@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { approveUsers, deleteUsers } from 'soapbox/actions/admin';
+import { approveUser, deleteUser } from 'soapbox/actions/admin';
 import { useAccount } from 'soapbox/api/hooks';
 import { AuthorizeRejectButtons } from 'soapbox/components/authorize-reject-buttons';
 import { Stack, HStack, Text } from 'soapbox/components/ui';
@@ -19,8 +19,8 @@ const UnapprovedAccount: React.FC<IUnapprovedAccount> = ({ accountId }) => {
 
   if (!account) return null;
 
-  const handleApprove = () => dispatch(approveUsers([account.id]));
-  const handleReject = () => dispatch(deleteUsers([account.id]));
+  const handleApprove = () => dispatch(approveUser(account.id));
+  const handleReject = () => dispatch(deleteUser(account.id));
 
   return (
     <HStack space={4} justifyContent='between'>

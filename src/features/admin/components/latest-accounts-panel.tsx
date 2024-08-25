@@ -23,14 +23,16 @@ const LatestAccountsPanel: React.FC<ILatestAccountsPanel> = ({ limit = 5 }) => {
   const dispatch = useAppDispatch();
   const accountIds = useAppSelector<ImmutableOrderedSet<string>>((state) => state.admin.get('latestUsers').take(limit));
 
-  const [total, setTotal] = useState(accountIds.size);
+  const [total, setTotal] = useState<number | undefined>(accountIds.size);
 
   useEffect(() => {
-    dispatch(fetchUsers(['local', 'active'], 1, null, limit))
-      .then((value) => {
-        setTotal((value as { count: number }).count);
-      })
-      .catch(() => {});
+    dispatch(fetchUsers({
+      origin: 'local',
+      status: 'active',
+      limit,
+    })).then((value) => {
+      setTotal(value.total);
+    }).catch(() => {});
   }, []);
 
   const handleAction = () => {

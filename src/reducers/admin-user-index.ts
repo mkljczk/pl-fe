@@ -1,4 +1,4 @@
-import { Set as ImmutableSet, OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord } from 'immutable';
+import { OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord } from 'immutable';
 
 import {
   ADMIN_USER_INDEX_EXPAND_FAIL,
@@ -10,6 +10,7 @@ import {
   ADMIN_USER_INDEX_QUERY_SET,
 } from 'soapbox/actions/admin';
 
+import type { AdminAccount, AdminGetAccountsParams, PaginatedResponse } from 'pl-api';
 import type { AnyAction } from 'redux';
 import type { APIEntity } from 'soapbox/types/entities';
 
@@ -17,12 +18,11 @@ const ReducerRecord = ImmutableRecord({
   isLoading: false,
   loaded: false,
   items: ImmutableOrderedSet<string>(),
-  filters: ImmutableSet(['local', 'active']),
   total: Infinity,
-  pageSize: 50,
   page: -1,
   query: '',
-  next: null as string | null,
+  next: null as (() => Promise<PaginatedResponse<AdminAccount>>) | null,
+  params: null as AdminGetAccountsParams | null,
 });
 
 type State = ReturnType<typeof ReducerRecord>;
@@ -36,7 +36,7 @@ const admin_user_index = (state: State = ReducerRecord(), action: AnyAction): St
         .set('isLoading', true)
         .set('loaded', true)
         .set('items', ImmutableOrderedSet())
-        .set('total', action.count)
+        .set('total', action.total)
         .set('page', 0)
         .set('next', null);
     case ADMIN_USER_INDEX_FETCH_SUCCESS:
@@ -44,7 +44,7 @@ const admin_user_index = (state: State = ReducerRecord(), action: AnyAction): St
         .set('isLoading', false)
         .set('loaded', true)
         .set('items', ImmutableOrderedSet(action.users.map((user: APIEntity) => user.id)))
-        .set('total', action.count)
+        .set('total', action.total)
         .set('page', 1)
         .set('next', action.next);
     case ADMIN_USER_INDEX_FETCH_FAIL:
@@ -59,7 +59,7 @@ const admin_user_index = (state: State = ReducerRecord(), action: AnyAction): St
         .set('isLoading', false)
         .set('loaded', true)
         .set('items', state.items.union(action.users.map((user: APIEntity) => user.id)))
-        .set('total', action.count)
+        .set('total', action.total)
         .set('page', 1)
         .set('next', action.next);
     default:

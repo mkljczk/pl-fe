@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { closeReports } from 'soapbox/actions/admin';
+import { closeReport } from 'soapbox/actions/admin';
 import { deactivateUserModal, deleteUserModal } from 'soapbox/actions/moderation';
 import DropdownMenu from 'soapbox/components/dropdown-menu';
 import HoverRefWrapper from 'soapbox/components/hover-ref-wrapper';
@@ -12,10 +12,6 @@ import { makeGetReport } from 'soapbox/selectors';
 import toast from 'soapbox/toast';
 
 import ReportStatus from './report-status';
-
-import type { List as ImmutableList } from 'immutable';
-import type { Account, Status } from 'soapbox/normalizers';
-import type { AdminReport } from 'soapbox/types/entities';
 
 const messages = defineMessages({
   reportClosed: { id: 'admin.reports.report_closed_message', defaultMessage: 'Report on @{name} was closed' },
@@ -33,14 +29,14 @@ const Report: React.FC<IReport> = ({ id }) => {
 
   const getReport = useCallback(makeGetReport(), []);
 
-  const report = useAppSelector((state) => getReport(state, id) as AdminReport | undefined);
+  const report = useAppSelector((state) => getReport(state, id));
 
   const [accordionExpanded, setAccordionExpanded] = useState(false);
 
   if (!report) return null;
 
-  const account = report.account as Account;
-  const targetAccount = report.target_account as Account;
+  const account = report.account;
+  const targetAccount = report.target_account!;
 
   const makeMenu = () => [{
     text: intl.formatMessage(messages.deactivateUser, { name: targetAccount.username }),
@@ -54,7 +50,7 @@ const Report: React.FC<IReport> = ({ id }) => {
   }];
 
   const handleCloseReport = () => {
-    dispatch(closeReports([report.id])).then(() => {
+    dispatch(closeReport(report.id)).then(() => {
       const message = intl.formatMessage(messages.reportClosed, { name: targetAccount.username as string });
       toast.success(message);
     }).catch(() => {});
@@ -62,12 +58,12 @@ const Report: React.FC<IReport> = ({ id }) => {
 
   const handleDeactivateUser = () => {
     const accountId = targetAccount.id;
-    dispatch(deactivateUserModal(intl, accountId, () => handleCloseReport()));
+    dispatch(deactivateUserModal(intl, accountId!, () => handleCloseReport()));
   };
 
   const handleDeleteUser = () => {
     const accountId = targetAccount.id as string;
-    dispatch(deleteUserModal(intl, accountId, () => handleCloseReport()));
+    dispatch(deleteUserModal(intl, accountId!, () => handleCloseReport()));
   };
 
   const handleAccordionToggle = (setting: boolean) => {
@@ -75,10 +71,10 @@ const Report: React.FC<IReport> = ({ id }) => {
   };
 
   const menu = makeMenu();
-  const statuses = report.statuses as ImmutableList<Status>;
-  const statusCount = statuses.count();
-  const acct = targetAccount.acct as string;
-  const reporterAcct = account.acct as string;
+  const statuses = report.statuses;
+  const statusCount = statuses.length;
+  const acct = targetAccount.acct;
+  const reporterAcct = account?.acct;
 
   return (
     <HStack space={3} className='p-3' key={report.id}>
@@ -86,7 +82,7 @@ const Report: React.FC<IReport> = ({ id }) => {
         <Link to={`/@${acct}`} title={acct}>
           <Avatar
             src={targetAccount.avatar}
-            alt={account.avatar_description}
+            alt={targetAccount.avatar_description}
             size={32}
             className='overflow-hidden'
           />
@@ -116,7 +112,6 @@ const Report: React.FC<IReport> = ({ id }) => {
               {statuses.map(status => (
                 <ReportStatus
                   key={status.id}
-                  report={report}
                   status={status}
                 />
               ))}
@@ -125,26 +120,28 @@ const Report: React.FC<IReport> = ({ id }) => {
         )}
 
         <Stack>
-          {(report.comment || '').length > 0 && (
+          {!!report.comment && report.comment.length > 0 && (
             <Text
               tag='blockquote'
               dangerouslySetInnerHTML={{ __html: report.comment }}
             />
           )}
 
-          <HStack space={1}>
-            <Text theme='muted' tag='span'>&mdash;</Text>
+          {!!account && (
+            <HStack space={1}>
+              <Text theme='muted' tag='span'>&mdash;</Text>
 
-            <HoverRefWrapper accountId={account.id} inline>
-              <Link
-                to={`/@${reporterAcct}`}
-                title={reporterAcct}
-                className='text-primary-600 hover:underline dark:text-accent-blue'
-              >
-                @{reporterAcct}
-              </Link>
-            </HoverRefWrapper>
-          </HStack>
+              <HoverRefWrapper accountId={account.id} inline>
+                <Link
+                  to={`/@${reporterAcct}`}
+                  title={reporterAcct}
+                  className='text-primary-600 hover:underline dark:text-accent-blue'
+                >
+                  @{reporterAcct}
+                </Link>
+              </HoverRefWrapper>
+            </HStack>
+          )}
         </Stack>
       </Stack>
 

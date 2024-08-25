@@ -12,7 +12,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import vitePluginRequire from 'vite-plugin-require';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
-const config =  defineConfig(({ command }) => ({
+const config = defineConfig(({ command }) => ({
   build: {
     assetsDir: 'packs',
     assetsInlineLimit: 0,

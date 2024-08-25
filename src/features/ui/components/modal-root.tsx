@@ -52,7 +52,7 @@ const MODAL_COMPONENTS = {
 
 type ModalType = keyof typeof MODAL_COMPONENTS | null;
 
-type BaseModalProps =  {
+type BaseModalProps = {
   /** Action to close the modal. */
   onClose(type?: ModalType): void;
 };

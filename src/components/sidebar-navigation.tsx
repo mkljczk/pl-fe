@@ -212,7 +212,7 @@ const SidebarNavigation = () => {
               text={<FormattedMessage id='tabs_bar.settings' defaultMessage='Settings' />}
             />
 
-            {account.is_admin || account.is_moderator && (
+            {(account.is_admin || account.is_moderator) && (
               <SidebarNavigationLink
                 to='/soapbox/admin'
                 icon={require('@tabler/icons/outline/dashboard.svg')}

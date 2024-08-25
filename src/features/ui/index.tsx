@@ -392,7 +392,10 @@ const UI: React.FC<IUI> = ({ children }) => {
 
     if (account.is_admin || account.is_moderator) {
       dispatch(fetchReports({ resolved: false }));
-      dispatch(fetchUsers(['local', 'need_approval']));
+      dispatch(fetchUsers({
+        origin: 'local',
+        status: 'pending',
+      }));
     }
 
     if (account.is_admin) {

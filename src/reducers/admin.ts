@@ -1,36 +1,34 @@
 import {
   Map as ImmutableMap,
   List as ImmutableList,
-  Set as ImmutableSet,
   Record as ImmutableRecord,
   OrderedSet as ImmutableOrderedSet,
   fromJS,
-  is,
 } from 'immutable';
+import omit from 'lodash/omit';
 
 import {
   ADMIN_CONFIG_FETCH_SUCCESS,
   ADMIN_CONFIG_UPDATE_SUCCESS,
   ADMIN_REPORTS_FETCH_SUCCESS,
-  ADMIN_REPORTS_PATCH_REQUEST,
-  ADMIN_REPORTS_PATCH_SUCCESS,
+  ADMIN_REPORT_PATCH_REQUEST,
+  ADMIN_REPORT_PATCH_SUCCESS,
   ADMIN_USERS_FETCH_SUCCESS,
-  ADMIN_USERS_DELETE_REQUEST,
-  ADMIN_USERS_DELETE_SUCCESS,
-  ADMIN_USERS_APPROVE_REQUEST,
-  ADMIN_USERS_APPROVE_SUCCESS,
+  ADMIN_USER_DELETE_REQUEST,
+  ADMIN_USER_DELETE_SUCCESS,
+  ADMIN_USER_APPROVE_REQUEST,
+  ADMIN_USER_APPROVE_SUCCESS,
 } from 'soapbox/actions/admin';
-import { normalizeAdminReport, normalizeAdminAccount } from 'soapbox/normalizers';
-import { normalizeId } from 'soapbox/utils/normalizers';
+import { normalizeAdminReport, type AdminReport } from 'soapbox/normalizers';
 
+import type { AdminAccount, AdminGetAccountsParams, AdminReport as BaseAdminReport } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { APIEntity } from 'soapbox/types/entities';
 import type { Config } from 'soapbox/utils/config-db';
 
 const ReducerRecord = ImmutableRecord({
-  reports: ImmutableMap<string, ReducerAdminReport>(),
+  reports: ImmutableMap<string, MinifiedReport>(),
   openReports: ImmutableOrderedSet<string>(),
-  users: ImmutableMap<string, ReducerAdminAccount>(),
+  users: ImmutableMap<string, MinifiedUser>(),
   latestUsers: ImmutableOrderedSet<string>(),
   awaitingApproval: ImmutableOrderedSet<string>(),
   configs: ImmutableList<Config>(),
@@ -39,80 +37,50 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-type AdminAccountRecord = ReturnType<typeof normalizeAdminAccount>;
-type AdminReportRecord = ReturnType<typeof normalizeAdminReport>;
-
-interface ReducerAdminAccount extends AdminAccountRecord {
-  account: string | null;
-}
-
-interface ReducerAdminReport extends AdminReportRecord {
-  account: string | null;
-  target_account: string | null;
-  action_taken_by_account: string | null;
-  assigned_account: string | null;
-  statuses: ImmutableList<string | null>;
-}
-
 // Lol https://javascript.plainenglish.io/typescript-essentials-conditionally-filter-types-488705bfbf56
 type FilterConditionally<Source, Condition> = Pick<Source, {[K in keyof Source]: Source[K] extends Condition ? K : never}[keyof Source]>;
 
 type SetKeys = keyof FilterConditionally<State, ImmutableOrderedSet<string>>;
 
-type APIReport = { id: string; state: string; statuses: any[] };
-type APIUser = { id: string; email: string; nickname: string; registration_reason: string };
-
-type Filter = 'local' | 'need_approval' | 'active';
-
-const FILTER_UNAPPROVED: Filter[] = ['local', 'need_approval'];
-const FILTER_LATEST: Filter[]   = ['local', 'active'];
-
-const filtersMatch = (f1: string[], f2: string[]) => is(ImmutableSet(f1), ImmutableSet(f2));
 const toIds = (items: any[]) => items.map(item => item.id);
 
-const mergeSet = (state: State, key: SetKeys, users: APIUser[]): State => {
+const mergeSet = (state: State, key: SetKeys, users: Array<AdminAccount>): State => {
   const newIds = toIds(users);
   return state.update(key, (ids: ImmutableOrderedSet<string>) => ids.union(newIds));
 };
 
-const replaceSet = (state: State, key: SetKeys, users: APIUser[]): State => {
+const replaceSet = (state: State, key: SetKeys, users: Array<AdminAccount>): State => {
   const newIds = toIds(users);
   return state.set(key, ImmutableOrderedSet(newIds));
 };
 
-const maybeImportUnapproved = (state: State, users: APIUser[], filters: Filter[]): State => {
-  if (filtersMatch(FILTER_UNAPPROVED, filters)) {
+const maybeImportUnapproved = (state: State, users: Array<AdminAccount>, params?: AdminGetAccountsParams): State => {
+  if (params?.origin === 'local' && params.status === 'pending') {
     return mergeSet(state, 'awaitingApproval', users);
   } else {
     return state;
   }
 };
 
-const maybeImportLatest = (state: State, users: APIUser[], filters: Filter[], page: number): State => {
-  if (page === 1 && filtersMatch(FILTER_LATEST, filters)) {
+const maybeImportLatest = (state: State, users: Array<AdminAccount>, params?: AdminGetAccountsParams): State => {
+  if (params?.origin === 'local' && params.status === 'active') {
     return replaceSet(state, 'latestUsers', users);
   } else {
     return state;
   }
 };
 
-const minifyUser = (user: AdminAccountRecord): ReducerAdminAccount =>
-  user.mergeWith((o, n) => n || o, {
-    account: normalizeId(user.getIn(['account', 'id'])),
-  }) as ReducerAdminAccount;
+const minifyUser = (user: AdminAccount) => omit(user, ['account']);
 
-const fixUser = (user: APIEntity): ReducerAdminAccount =>
-  normalizeAdminAccount(user).withMutations(user => {
-    minifyUser(user);
-  }) as ReducerAdminAccount;
+type MinifiedUser = ReturnType<typeof minifyUser>;
 
-const importUsers = (state: State, users: APIUser[], filters: Filter[], page: number): State =>
+const importUsers = (state: State, users: Array<AdminAccount>, params: AdminGetAccountsParams): State =>
   state.withMutations(state => {
-    maybeImportUnapproved(state, users, filters);
-    maybeImportLatest(state, users, filters, page);
+    maybeImportUnapproved(state, users, params);
+    maybeImportLatest(state, users, params);
 
     users.forEach(user => {
-      const normalizedUser = fixUser(user);
+      const normalizedUser = minifyUser(user);
       state.setIn(['users', user.id], normalizedUser);
     });
   });
@@ -125,47 +93,40 @@ const deleteUsers = (state: State, accountIds: string[]): State =>
     });
   });
 
-const approveUsers = (state: State, users: APIUser[]): State =>
+const approveUsers = (state: State, users: Array<AdminAccount>): State =>
   state.withMutations(state => {
     users.forEach(user => {
-      const normalizedUser = fixUser(user);
+      const normalizedUser = minifyUser(user);
       state.update('awaitingApproval', orderedSet => orderedSet.delete(user.id));
       state.setIn(['users', user.id], normalizedUser);
     });
   });
 
-const minifyReport = (report: AdminReportRecord): ReducerAdminReport =>
-  report.mergeWith((o, n) => n || o, {
-    account: normalizeId(report.getIn(['account', 'id'])),
-    target_account: normalizeId(report.getIn(['target_account', 'id'])),
-    action_taken_by_account: normalizeId(report.getIn(['action_taken_by_account', 'id'])),
-    assigned_account: normalizeId(report.getIn(['assigned_account', 'id'])),
-    statuses: report.get('statuses').map((status: any) => normalizeId(status.get('id'))),
-  }) as ReducerAdminReport;
+const minifyReport = (report: AdminReport) => omit(
+  report,
+  ['account', 'target_account', 'action_taken_by_account', 'assigned_account', 'statuses'],
+);
 
-const fixReport = (report: APIEntity): ReducerAdminReport =>
-  normalizeAdminReport(report).withMutations(report => {
-    minifyReport(report);
-  }) as ReducerAdminReport;
+type MinifiedReport = ReturnType<typeof minifyReport>;
 
-const importReports = (state: State, reports: APIEntity[]): State =>
+const importReports = (state: State, reports: Array<BaseAdminReport>): State =>
   state.withMutations(state => {
     reports.forEach(report => {
-      const normalizedReport = fixReport(report);
-      if (!normalizedReport.action_taken) {
+      const minifiedReport = minifyReport(normalizeAdminReport(report));
+      if (!minifiedReport.action_taken) {
         state.update('openReports', orderedSet => orderedSet.add(report.id));
       }
-      state.setIn(['reports', report.id], normalizedReport);
+      state.setIn(['reports', report.id], minifiedReport);
     });
   });
 
-const handleReportDiffs = (state: State, reports: APIReport[]) =>
+const handleReportDiffs = (state: State, reports: Array<MinifiedReport>) =>
   // Note: the reports here aren't full report objects
   // hence the need for a new function.
   state.withMutations(state => {
     reports.forEach(report => {
-      switch (report.state) {
-        case 'open':
+      switch (report.action_taken) {
+        case false:
           state.update('openReports', orderedSet => orderedSet.add(report.id));
           break;
         default:
@@ -187,25 +148,21 @@ const admin = (state: State = ReducerRecord(), action: AnyAction): State => {
       return importConfigs(state, action.configs);
     case ADMIN_REPORTS_FETCH_SUCCESS:
       return importReports(state, action.reports);
-    case ADMIN_REPORTS_PATCH_REQUEST:
-    case ADMIN_REPORTS_PATCH_SUCCESS:
+    case ADMIN_REPORT_PATCH_REQUEST:
+    case ADMIN_REPORT_PATCH_SUCCESS:
       return handleReportDiffs(state, action.reports);
     case ADMIN_USERS_FETCH_SUCCESS:
-      return importUsers(state, action.users, action.filters, action.page);
-    case ADMIN_USERS_DELETE_REQUEST:
-    case ADMIN_USERS_DELETE_SUCCESS:
+      return importUsers(state, action.users, action.params);
+    case ADMIN_USER_DELETE_REQUEST:
+    case ADMIN_USER_DELETE_SUCCESS:
       return deleteUsers(state, action.accountIds);
-    case ADMIN_USERS_APPROVE_REQUEST:
+    case ADMIN_USER_APPROVE_REQUEST:
       return state.update('awaitingApproval', set => set.subtract(action.accountIds));
-    case ADMIN_USERS_APPROVE_SUCCESS:
+    case ADMIN_USER_APPROVE_SUCCESS:
       return approveUsers(state, action.users);
     default:
       return state;
   }
 };
 
-export {
-  type ReducerAdminAccount,
-  type ReducerAdminReport,
-  admin as default,
-};
+export { admin as default };

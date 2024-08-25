@@ -1,6 +1,5 @@
 export { normalizeAccount, type Account } from './account';
-export { AdminAccountRecord, normalizeAdminAccount } from './admin-account';
-export { AdminReportRecord, normalizeAdminReport } from './admin-report';
+export { normalizeAdminReport, type AdminReport } from './admin-report';
 export { normalizeAnnouncement, type Announcement } from './announcement';
 export { normalizeChatMessage, type ChatMessage } from './chat-message';
 export { normalizeGroup, type Group } from './group';
