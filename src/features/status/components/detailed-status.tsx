@@ -126,10 +126,13 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
             <TranslateButton status={actualStatus} />
 
             {(withMedia && (quote || actualStatus.card || actualStatus.media_attachments.length > 0)) && (
-              <Stack space={4} className='relative'>
-                <SensitiveContentOverlay status={status} />
-
-                <StatusMedia status={actualStatus} />
+              <Stack space={4}>
+                {actualStatus.media_attachments.length > 0 && (
+                  <div className='relative'>
+                    <SensitiveContentOverlay status={status} />
+                    <StatusMedia status={actualStatus} />
+                  </div>
+                )}
 
                 {quote}
               </Stack>

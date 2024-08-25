@@ -427,13 +427,17 @@ const Status: React.FC<IStatus> = (props) => {
                   <TranslateButton status={actualStatus} />
 
                   {(quote || actualStatus.card || actualStatus.media_attachments.length > 0) && (
-                    <Stack space={4} className='relative'>
-                      <SensitiveContentOverlay status={actualStatus} />
-                      <StatusMedia
-                        status={actualStatus}
-                        muted={muted}
-                        onClick={handleClick}
-                      />
+                    <Stack space={4}>
+                      {actualStatus.media_attachments.length > 0 && (
+                        <div className='relative'>
+                          <SensitiveContentOverlay status={actualStatus} />
+                          <StatusMedia
+                            status={actualStatus}
+                            muted={muted}
+                            onClick={handleClick}
+                          />
+                        </div>
+                      )}
 
                       {quote}
                     </Stack>
