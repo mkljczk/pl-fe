@@ -179,11 +179,13 @@ const handleTimelineExpand = (timelineId: string, fn: Promise<PaginatedResponse<
   };
 
 const fetchHomeTimeline = (expand = false, done = noOp) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
 
     const params: HomeTimelineParams = {};
     if (getSettings(state).get('autoTranslate')) params.language = getLocale(state);
+
+    if (expand && state.timelines.get('home')?.isLoading) return;
 
     const fn = (expand && state.timelines.get('home')?.next?.()) || getClient(state).timelines.homeTimeline(params);
 
@@ -191,12 +193,14 @@ const fetchHomeTimeline = (expand = false, done = noOp) =>
   };
 
 const fetchPublicTimeline = ({ onlyMedia, local, instance }: Record<string, any> = {}, expand = false, done = noOp) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `${instance ? 'remote' : 'public'}${local ? ':local' : ''}${onlyMedia ? ':media' : ''}${instance ? `:${instance}` : ''}`;
 
     const params: PublicTimelineParams = { only_media: onlyMedia, local: instance ? false : local, instance };
     if (getSettings(state).get('autoTranslate')) params.language = getLocale(state);
+
+    if (expand && state.timelines.get(timelineId)?.isLoading) return;
 
     const fn = (expand && state.timelines.get(timelineId)?.next?.()) || getClient(state).timelines.publicTimeline(params);
 
@@ -204,12 +208,14 @@ const fetchPublicTimeline = ({ onlyMedia, local, instance }: Record<string, any>
   };
 
 const fetchBubbleTimeline = ({ onlyMedia }: Record<string, any> = {}, expand = false, done = noOp) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `bubble${onlyMedia ? ':media' : ''}`;
 
     const params: PublicTimelineParams = { only_media: onlyMedia };
     if (getSettings(state).get('autoTranslate')) params.language = getLocale(state);
+
+    if (expand && state.timelines.get(timelineId)?.isLoading) return;
 
     const fn = (expand && state.timelines.get(timelineId)?.next?.()) || getClient(state).timelines.bubbleTimeline(params);
 
@@ -217,7 +223,7 @@ const fetchBubbleTimeline = ({ onlyMedia }: Record<string, any> = {}, expand = f
   };
 
 const fetchAccountTimeline = (accountId: string, { exclude_replies, pinned, only_media, limit }: Record<string, any> = {}, expand = false, done = noOp) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `account:${accountId}${!exclude_replies ? ':with_replies' : ''}${pinned ? ':pinned' : only_media ? ':media' : ''}`;
 
@@ -225,18 +231,22 @@ const fetchAccountTimeline = (accountId: string, { exclude_replies, pinned, only
     if (pinned || only_media) params.with_muted = true;
     if (getSettings(state).get('autoTranslate')) params.language = getLocale(state);
 
+    if (expand && state.timelines.get(timelineId)?.isLoading) return;
+
     const fn = (expand && state.timelines.get(timelineId)?.next?.()) || getClient(state).accounts.getAccountStatuses(accountId, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, false, done));
   };
 
 const fetchListTimeline = (listId: string, expand = false, done = noOp) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `list:${listId}`;
 
     const params: ListTimelineParams = {};
     if (getSettings(state).get('autoTranslate')) params.language = getLocale(state);
+
+    if (expand && state.timelines.get(timelineId)?.isLoading) return;
 
     const fn = (expand && state.timelines.get(timelineId)?.next?.()) || getClient(state).timelines.listTimeline(listId, params);
 
@@ -244,7 +254,7 @@ const fetchListTimeline = (listId: string, expand = false, done = noOp) =>
   };
 
 const fetchGroupTimeline = (groupId: string, { only_media, limit }: Record<string, any> = {}, expand = false, done = noOp) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `group:${groupId}${only_media ? ':media' : ''}`;
 
@@ -252,13 +262,15 @@ const fetchGroupTimeline = (groupId: string, { only_media, limit }: Record<strin
     if (only_media) params.with_muted = true;
     if (getSettings(state).get('autoTranslate')) params.language = getLocale(state);
 
+    if (expand && state.timelines.get(timelineId)?.isLoading) return;
+
     const fn = (expand && state.timelines.get(timelineId)?.next?.()) || getClient(state).timelines.groupTimeline(groupId, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, false, done));
   };
 
 const fetchHashtagTimeline = (hashtag: string, { tags }: Record<string, any> = {}, expand = false, done = noOp) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `hashtag:${hashtag}`;
 
@@ -267,6 +279,8 @@ const fetchHashtagTimeline = (hashtag: string, { tags }: Record<string, any> = {
       all: parseTags(tags, 'all'),
       none: parseTags(tags, 'none'),
     };
+
+    if (expand && state.timelines.get(timelineId)?.isLoading) return;
 
     if (getSettings(state).get('autoTranslate')) params.language = getLocale(state);
 
