@@ -104,6 +104,7 @@ const ListTimeline: React.FC = () => {
     >
       <Timeline
         className='black:p-0 black:sm:p-4'
+        loadMoreClassName='black:sm:mx-4'
         scrollKey='list_timeline'
         timelineId={`list:${id}`}
         onLoadMore={handleLoadMore}

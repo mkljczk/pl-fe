@@ -39,6 +39,7 @@ const BubbleTimeline = () => {
       <PullToRefresh onRefresh={handleRefresh}>
         <Timeline
           className='black:p-0 black:sm:p-4'
+          loadMoreClassName='black:sm:mx-4'
           scrollKey={`${timelineId}_timeline`}
           timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
           prefix='home'

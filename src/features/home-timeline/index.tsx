@@ -63,6 +63,7 @@ const HomeTimeline: React.FC = () => {
       <PullToRefresh onRefresh={handleRefresh}>
         <Timeline
           className='black:p-0 black:sm:p-4'
+          loadMoreClassName='black:sm:mx-4'
           scrollKey='home_timeline'
           onLoadMore={handleLoadMore}
           timelineId='home'

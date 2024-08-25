@@ -75,6 +75,8 @@ interface IScrollableList extends VirtuosoProps<any, any> {
   listClassName?: string;
   /** Class names on each item container. */
   itemClassName?: string;
+  /** Extra class names on the LoadMore element */
+  loadMoreClassName?: string;
   /** `id` attribute on the Virtuoso element. */
   id?: string;
   /** CSS styles on the Virtuoso element. */
@@ -100,6 +102,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
   className,
   listClassName,
   itemClassName,
+  loadMoreClassName,
   id,
   hasMore,
   placeholderComponent: Placeholder,
@@ -195,7 +198,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
     if (autoloadMore || !hasMore || !onLoadMore) {
       return null;
     } else {
-      return <LoadMore visible={!isLoading} onClick={onLoadMore} />;
+      return <LoadMore className={loadMoreClassName} visible={!isLoading} onClick={onLoadMore} />;
     }
   };
 
