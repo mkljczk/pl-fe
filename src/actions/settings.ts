@@ -3,7 +3,10 @@ import { defineMessage } from 'react-intl';
 import { createSelector } from 'reselect';
 
 import { patchMe } from 'soapbox/actions/me';
+import { getClient } from 'soapbox/api';
 import messages from 'soapbox/messages';
+import { makeGetAccount } from 'soapbox/selectors';
+import KVStore from 'soapbox/storage/kv-store';
 import toast from 'soapbox/toast';
 import { isLoggedIn } from 'soapbox/utils/auth';
 
@@ -14,6 +17,8 @@ const SETTING_SAVE = 'SETTING_SAVE' as const;
 const SETTINGS_UPDATE = 'SETTINGS_UPDATE' as const;
 
 const FE_NAME = 'pl_fe';
+
+const getAccount = makeGetAccount();
 
 /** Options when changing/saving settings. */
 type SettingOpts = {
@@ -171,11 +176,7 @@ const saveSettings = (opts?: SettingOpts) =>
 
     const data = state.settings.delete('saved').toJS();
 
-    dispatch(patchMe({
-      pleroma_settings_store: {
-        [FE_NAME]: data,
-      },
-    })).then(() => {
+    dispatch(updateSettingsStore(data)).then(() => {
       dispatch({ type: SETTING_SAVE });
 
       if (opts?.showAlert) {
@@ -184,6 +185,39 @@ const saveSettings = (opts?: SettingOpts) =>
     }).catch(error => {
       toast.showAlertForError(error);
     });
+  };
+
+/** Update settings store for Mastodon, etc. */
+const updateAuthAccount = (url: string, settings: any) => {
+  const key = `authAccount:${url}`;
+  return KVStore.getItem(key).then((oldAccount: any) => {
+    if (!oldAccount) return;
+    if (!oldAccount.__meta) oldAccount.__meta = { pleroma: { settings_store: {} } };
+    else if (!oldAccount.__meta.pleroma) oldAccount.__meta.pleroma = { settings_store: {} };
+    else if (!oldAccount.__meta.pleroma.settings_store) oldAccount.__meta.pleroma.settings_store = {};
+    oldAccount.__meta.pleroma.settings_store[FE_NAME] = settings;
+    // const settingsStore = oldAccount?.__meta || {};
+    // settingsStore[FE_NAME] = settings;
+    KVStore.setItem(key, oldAccount);
+  }).catch(console.error);
+};
+
+const updateSettingsStore = (settings: any) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    const state = getState();
+    const client = getClient(state);
+
+    if (client.features.settingsStore) {
+      return dispatch(patchMe({
+        settings_store: {
+          [FE_NAME]: settings,
+        },
+      }));
+    } else {
+      const accountUrl = getAccount(state, state.me as string)!.url;
+
+      return updateAuthAccount(accountUrl, settings);
+    }
   };
 
 const getLocale = (state: RootState, fallback = 'en') => {
@@ -206,6 +240,7 @@ export {
   changeSettingImmediate,
   changeSetting,
   saveSettings,
+  updateSettingsStore,
   getLocale,
   type SettingsAction,
 };

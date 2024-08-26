@@ -41,6 +41,7 @@ const settings = (
 ): State => {
   switch (action.type) {
     case ME_FETCH_SUCCESS:
+      console.log('importing', action.me);
       return importSettings(state, action.me);
     case NOTIFICATIONS_FILTER_SET:
     case SEARCH_FILTER_SET:

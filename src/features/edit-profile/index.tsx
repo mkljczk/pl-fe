@@ -215,7 +215,7 @@ const EditProfile: React.FC = () => {
     if (header.file !== undefined) params.header = header.file || '';
     if (avatar.file !== undefined) params.avatar = avatar.file || '';
 
-    promises.push(dispatch(patchMe(params)));
+    promises.push(dispatch(patchMe(params as any)));
 
     if (features.muteStrangers) {
       promises.push(

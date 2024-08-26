@@ -8,7 +8,7 @@ import { getClient } from '../api';
 import { loadCredentials } from './auth';
 import { importFetchedAccount } from './importer';
 
-import type { CredentialAccount } from 'pl-api';
+import type { CredentialAccount, UpdateCredentialsParams } from 'pl-api';
 import type { AppDispatch, RootState } from 'soapbox/store';
 
 const ME_FETCH_REQUEST = 'ME_FETCH_REQUEST' as const;
@@ -56,6 +56,17 @@ const fetchMe = () =>
 /** Update the auth account in IndexedDB for Mastodon, etc. */
 const persistAuthAccount = (account: CredentialAccount, params: Record<string, any>) => {
   if (account && account.url) {
+    const key = `authAccount:${account.url}`;
+    KVStore.getItem(key).then((oldAccount: any) => {
+      const settings = oldAccount?.settings_store || {};
+      if (!account.settings_store) {
+        account.settings_store = settings;
+      }
+      KVStore.setItem(key, account);
+    })
+      .catch(console.error);
+  }
+  if (account && account.url) {
     if (!account.settings_store) {
       account.settings_store = params.pleroma_settings_store || {};
     }
@@ -63,7 +74,7 @@ const persistAuthAccount = (account: CredentialAccount, params: Record<string, a
   }
 };
 
-const patchMe = (params: Record<string, any>) =>
+const patchMe = (params: UpdateCredentialsParams) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(patchMeRequest());
 

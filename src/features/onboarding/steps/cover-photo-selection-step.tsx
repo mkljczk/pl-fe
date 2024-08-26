@@ -45,9 +45,7 @@ const CoverPhotoSelectionStep = ({ onNext }: { onNext: () => void }) => {
       setSelectedFile(url);
       setSubmitting(true);
 
-      const formData = new FormData();
-      formData.append('header', file);
-      const credentials = dispatch(patchMe(formData));
+      const credentials = dispatch(patchMe({ header: file }));
 
       Promise.all([credentials]).then(() => {
         setDisabled(false);

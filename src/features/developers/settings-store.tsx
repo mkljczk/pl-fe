@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import { patchMe } from 'soapbox/actions/me';
-import { FE_NAME, SETTINGS_UPDATE, changeSetting } from 'soapbox/actions/settings';
+import { SETTINGS_UPDATE, changeSetting, updateSettingsStore } from 'soapbox/actions/settings';
 import List, { ListItem } from 'soapbox/components/list';
 import {
   CardHeader,
@@ -57,11 +56,7 @@ const SettingsStore: React.FC = () => {
     const settings = JSON.parse(rawJSON);
 
     setLoading(true);
-    dispatch(patchMe({
-      pleroma_settings_store: {
-        [FE_NAME]: settings,
-      },
-    })).then(response => {
+    dispatch(updateSettingsStore(settings)).then(() => {
       dispatch({ type: SETTINGS_UPDATE, settings });
       setLoading(false);
     }).catch(error => {
