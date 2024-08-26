@@ -895,6 +895,8 @@
   "input.copy": "Copy",
   "input.password.hide_password": "Hide password",
   "input.password.show_password": "Show password",
+  "interaction_circle.confirmation_heading": "Do you want to generate an interaction circle for the user @{username}?",
+  "interaction_circle.start": "Generate",
   "interaction_policies.entry.followers": "Followers",
   "interaction_policies.entry.following": "People I follow",
   "interaction_policies.entry.mentioned": "Mentioned",

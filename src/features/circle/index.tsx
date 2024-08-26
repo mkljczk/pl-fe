@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 import { processCircle } from 'soapbox/actions/circle';
 import { resetCompose, uploadComposeSuccess, uploadFile } from 'soapbox/actions/compose';
 import { openModal } from 'soapbox/actions/modals';
-import { Accordion, Avatar, Button, Column, HStack, ProgressBar, Stack, Text } from 'soapbox/components/ui';
+import Account from 'soapbox/components/account';
+import { Accordion, Avatar, Button, Column, Form, FormActions, HStack, ProgressBar, Stack, Text } from 'soapbox/components/ui';
 import { useAppDispatch, useOwnAccount } from 'soapbox/hooks';
 
 const toRad = (x: number) => x * (Math.PI / 180);
@@ -27,9 +28,9 @@ const messages = defineMessages({
 
 const Circle: React.FC = () => {
   const [{ state, progress }, setProgress] = useState<{
-    state: 'pending' | 'fetchingStatuses' | 'fetchingFavourites' | 'fetchingAvatars' | 'drawing' | 'done';
+    state: 'unrequested' | 'pending' | 'fetchingStatuses' | 'fetchingFavourites' | 'fetchingAvatars' | 'drawing' | 'done';
     progress: number;
-  }>({ state: 'pending', progress: 0 });
+  }>({ state: 'unrequested', progress: 0 });
   const [expanded, setExpanded] = useState(false);
   const [users, setUsers] = useState<Array<{ id: string; avatar?: string; avatar_description?: string; acct: string }>>();
 
@@ -40,6 +41,35 @@ const Circle: React.FC = () => {
   const { account } = useOwnAccount();
 
   useEffect(() => {
+  }, []);
+
+  const onSave: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+
+    const fileToDownload = document.createElement('a');
+    fileToDownload.download = 'interactions_circle.png';
+    fileToDownload.href = canvasRef.current!.toDataURL('image/png');
+    fileToDownload.click();
+  };
+
+  const onCompose: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+
+    dispatch(resetCompose('compose-modal'));
+
+    canvasRef.current!.toBlob((blob) => {
+      const file = new File([blob!], 'interactions_circle.png', { type: 'image/png' });
+
+      dispatch(uploadFile(file, intl, (data) => {
+        dispatch(uploadComposeSuccess('compose-modal', data, file));
+        dispatch(openModal('COMPOSE'));
+      }));
+    }, 'image/png');
+  };
+
+  const handleRequest = () => {
+    setProgress({ state: 'pending', progress: 0 });
+
     dispatch(processCircle(setProgress)).then(async (users) => {
       setUsers(users);
 
@@ -98,31 +128,29 @@ const Circle: React.FC = () => {
 
       setProgress({ state: 'done', progress: 100 });
     }).catch(() => {});
-  }, []);
-
-  const onSave: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
-
-    const fileToDownload = document.createElement('a');
-    fileToDownload.download = 'interactions_circle.png';
-    fileToDownload.href = canvasRef.current!.toDataURL('image/png');
-    fileToDownload.click();
   };
 
-  const onCompose: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
+  if (state === 'unrequested') {
+    return (
+      <Column label={intl.formatMessage(messages.heading)}>
+        <Form onSubmit={handleRequest}>
+          <Text size='xl' weight='semibold'>
+            <FormattedMessage id='interaction_circle.confirmation_heading' defaultMessage='Do you want to generate an interaction circle for the user @{username}?' values={{ username: account?.acct }} />
+          </Text>
 
-    dispatch(resetCompose('compose-modal'));
+          <div className='mx-auto max-w-md rounded-lg p-2 black:border black:border-gray-800'>
+            {account && <Account account={account} withRelationship={false} disabled />}
+          </div>
 
-    canvasRef.current!.toBlob((blob) => {
-      const file = new File([blob!], 'interactions_circle.png', { type: 'image/png' });
-
-      dispatch(uploadFile(file, intl, (data) => {
-        dispatch(uploadComposeSuccess('compose-modal', data, file));
-        dispatch(openModal('COMPOSE'));
-      }));
-    }, 'image/png');
-  };
+          <FormActions>
+            <Button theme='primary' type='submit'>
+              <FormattedMessage id='interaction_circle.start' defaultMessage='Generate' />
+            </Button>
+          </FormActions>
+        </Form>
+      </Column>
+    );
+  }
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
