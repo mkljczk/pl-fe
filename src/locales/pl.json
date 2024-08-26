@@ -898,7 +898,7 @@
   "input.password.hide_password": "Ukryj hasło",
   "input.password.show_password": "Pokazuj hasło",
   "interaction_policies.entry.followers": "Obserwujący",
-  "interaction_policies.entry.following": "Obserwowani przeze mnie",
+  "interaction_policies.entry.following": "Obserwowani",
   "interaction_policies.entry.mentioned": "Wspomnieni",
   "interaction_policies.entry.public": "Wszyscy",
   "interaction_policies.fail": "Nie udało się zaktualizować zasad interakcji",

@@ -83,7 +83,7 @@ const Settings = () => {
             <ListItem label={intl.formatMessage(messages.blocks)} to='/blocks' />
             {(features.filters || features.filtersV2) && <ListItem label={intl.formatMessage(messages.filters)} to='/filters' />}
             {features.federating && <ListItem label={intl.formatMessage(messages.domainBlocks)} to='/domain_blocks' />}
-            {features.interactionRequests && <ListItem label={intl.formatMessage(messages.interactionPolicies)} to='/interaction_policies' />}
+            {features.interactionRequests && <ListItem label={intl.formatMessage(messages.interactionPolicies)} to='/settings/interaction_policies' />}
           </List>
         </CardBody>
 

@@ -24,6 +24,8 @@ const messages = defineMessages({
   submit: { id: 'interaction_policies.update', defaultMessage: 'Update' },
   success: { id: 'interaction_policies.success', defaultMessage: 'Updated interaction policies' },
   fail: { id: 'interaction_policies.fail', defaultMessage: 'Failed to update interaction policies' },
+  always: { id: 'interaction_policies.rule.always', defaultMessage: 'Alwyas' },
+  with_approval: { id: 'interaction_policies.rule.with_approval', defaultMessage: 'Require approval' },
 });
 
 const scopeMessages = defineMessages({
@@ -114,7 +116,7 @@ const InteractionPolicies = () => {
             )}
 
             <List>
-              <ListItem label='Always'>
+              <ListItem label={intl.formatMessage(messages.always)}>
                 <InlineMultiselect<Scope>
                   items={items}
                   value={interactionPolicies[visibility][policy].always as Array<Scope>}
@@ -122,7 +124,7 @@ const InteractionPolicies = () => {
                   disabled={isUpdating}
                 />
               </ListItem>
-              <ListItem label='With approval'>
+              <ListItem label={intl.formatMessage(messages.with_approval)}>
                 <InlineMultiselect
                   items={items}
                   value={interactionPolicies[visibility][policy].with_approval as Array<Scope>}
