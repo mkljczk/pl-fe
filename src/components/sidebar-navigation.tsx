@@ -20,6 +20,7 @@ const messages = defineMessages({
   profileDirectory: { id: 'navigation_bar.profile_directory', defaultMessage: 'Profile directory' },
   followedTags: { id: 'navigation_bar.followed_tags', defaultMessage: 'Followed hashtags' },
   developers: { id: 'navigation.developers', defaultMessage: 'Developers' },
+  scheduledStatuses: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
   drafts: { id: 'navigation.drafts', defaultMessage: 'Drafts' },
 });
 
@@ -36,6 +37,7 @@ const SidebarNavigation = () => {
   const notificationCount = useAppSelector((state) => state.notifications.unread);
   const followRequestsCount = useAppSelector((state) => state.user_lists.follow_requests.items.count());
   const dashboardCount = useAppSelector((state) => state.admin.openReports.count() + state.admin.awaitingApproval.count());
+  const scheduledStatusCount = useAppSelector((state) => state.scheduled_statuses.size);
   const draftCount = useAppSelector((state) => state.draft_statuses.size);
 
   const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;
@@ -98,6 +100,15 @@ const SidebarNavigation = () => {
           to: '/developers',
           icon: require('@tabler/icons/outline/code.svg'),
           text: intl.formatMessage(messages.developers),
+        });
+      }
+
+      if (scheduledStatusCount > 0) {
+        menu.push({
+          to: '/scheduled_statuses',
+          icon: require('@tabler/icons/outline/calendar-stats.svg'),
+          text: intl.formatMessage(messages.scheduledStatuses),
+          count: scheduledStatusCount,
         });
       }
 

@@ -29,6 +29,7 @@ const messages = defineMessages({
   events: { id: 'column.events', defaultMessage: 'Events' },
   developers: { id: 'navigation.developers', defaultMessage: 'Developers' },
   dashboard: { id: 'navigation.dashboard', defaultMessage: 'Dashboard' },
+  scheduledStatuses: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
   drafts: { id: 'navigation.drafts', defaultMessage: 'Drafts' },
   addAccount: { id: 'profile_dropdown.add_account', defaultMessage: 'Add an existing account' },
   followRequests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
@@ -83,6 +84,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   const sidebarOpen = useAppSelector((state) => state.sidebar.sidebarOpen);
   const settings = useAppSelector((state) => getSettings(state));
   const followRequestsCount = useAppSelector((state) => state.user_lists.follow_requests.items.count());
+  const scheduledStatusCount = useAppSelector((state) => state.scheduled_statuses.size);
   const draftCount = useAppSelector((state) => state.draft_statuses.size);
   // const dashboardCount = useAppSelector((state) => state.admin.openReports.count() + state.admin.awaitingApproval.count());
   const [sidebarVisible, setSidebarVisible] = useState(sidebarOpen);
@@ -260,6 +262,15 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/directory'
                       icon={require('@tabler/icons/outline/address-book.svg')}
                       text={intl.formatMessage(messages.profileDirectory)}
+                      onClick={onClose}
+                    />
+                  )}
+
+                  {scheduledStatusCount > 0 && (
+                    <SidebarLink
+                      to='/scheduled_statuses'
+                      icon={require('@tabler/icons/outline/calendar-stats.svg')}
+                      text={intl.formatMessage(messages.scheduledStatuses)}
                       onClick={onClose}
                     />
                   )}
