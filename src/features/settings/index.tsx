@@ -26,6 +26,7 @@ const messages = defineMessages({
   exportData: { id: 'column.export_data', defaultMessage: 'Export data' },
   filters: { id: 'navigation_bar.filters', defaultMessage: 'Filters' },
   importData: { id: 'navigation_bar.import_data', defaultMessage: 'Import data' },
+  interactionPolicies: { id: 'column.interaction_policies', defaultMessage: 'Interaction policies' },
   mfaDisabled: { id: 'mfa.disabled', defaultMessage: 'Disabled' },
   mfaEnabled: { id: 'mfa.enabled', defaultMessage: 'Enabled' },
   mutes: { id: 'settings.mutes', defaultMessage: 'Mutes' },
@@ -82,6 +83,7 @@ const Settings = () => {
             <ListItem label={intl.formatMessage(messages.blocks)} to='/blocks' />
             {(features.filters || features.filtersV2) && <ListItem label={intl.formatMessage(messages.filters)} to='/filters' />}
             {features.federating && <ListItem label={intl.formatMessage(messages.domainBlocks)} to='/domain_blocks' />}
+            {features.interactionRequests && <ListItem label={intl.formatMessage(messages.interactionPolicies)} to='/interaction_policies' />}
           </List>
         </CardBody>
 

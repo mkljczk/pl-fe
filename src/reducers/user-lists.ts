@@ -6,10 +6,6 @@ import {
 import { AnyAction } from 'redux';
 
 import {
-  FOLLOWERS_FETCH_SUCCESS,
-  FOLLOWERS_EXPAND_SUCCESS,
-  FOLLOWING_FETCH_SUCCESS,
-  FOLLOWING_EXPAND_SUCCESS,
   FOLLOW_REQUESTS_FETCH_SUCCESS,
   FOLLOW_REQUESTS_EXPAND_SUCCESS,
   FOLLOW_REQUEST_AUTHORIZE_SUCCESS,
@@ -138,14 +134,6 @@ const normalizeFollowRequest = (state: State, notification: Notification) =>
 
 const userLists = (state = ReducerRecord(), action: DirectoryAction | AnyAction) => {
   switch (action.type) {
-    case FOLLOWERS_FETCH_SUCCESS:
-      return normalizeList(state, ['followers', action.accountId], action.accounts, action.next);
-    case FOLLOWERS_EXPAND_SUCCESS:
-      return appendToList(state, ['followers', action.accountId], action.accounts, action.next);
-    case FOLLOWING_FETCH_SUCCESS:
-      return normalizeList(state, ['following', action.accountId], action.accounts, action.next);
-    case FOLLOWING_EXPAND_SUCCESS:
-      return appendToList(state, ['following', action.accountId], action.accounts, action.next);
     case REBLOGS_FETCH_SUCCESS:
       return normalizeList(state, ['reblogged_by', action.statusId], action.accounts, action.next);
     case REBLOGS_EXPAND_SUCCESS:

@@ -62,22 +62,6 @@ const ACCOUNT_LOOKUP_REQUEST = 'ACCOUNT_LOOKUP_REQUEST' as const;
 const ACCOUNT_LOOKUP_SUCCESS = 'ACCOUNT_LOOKUP_SUCCESS' as const;
 const ACCOUNT_LOOKUP_FAIL = 'ACCOUNT_LOOKUP_FAIL' as const;
 
-const FOLLOWERS_FETCH_REQUEST = 'FOLLOWERS_FETCH_REQUEST' as const;
-const FOLLOWERS_FETCH_SUCCESS = 'FOLLOWERS_FETCH_SUCCESS' as const;
-const FOLLOWERS_FETCH_FAIL = 'FOLLOWERS_FETCH_FAIL' as const;
-
-const FOLLOWERS_EXPAND_REQUEST = 'FOLLOWERS_EXPAND_REQUEST' as const;
-const FOLLOWERS_EXPAND_SUCCESS = 'FOLLOWERS_EXPAND_SUCCESS' as const;
-const FOLLOWERS_EXPAND_FAIL = 'FOLLOWERS_EXPAND_FAIL' as const;
-
-const FOLLOWING_FETCH_REQUEST = 'FOLLOWING_FETCH_REQUEST' as const;
-const FOLLOWING_FETCH_SUCCESS = 'FOLLOWING_FETCH_SUCCESS' as const;
-const FOLLOWING_FETCH_FAIL = 'FOLLOWING_FETCH_FAIL' as const;
-
-const FOLLOWING_EXPAND_REQUEST = 'FOLLOWING_EXPAND_REQUEST' as const;
-const FOLLOWING_EXPAND_SUCCESS = 'FOLLOWING_EXPAND_SUCCESS' as const;
-const FOLLOWING_EXPAND_FAIL = 'FOLLOWING_EXPAND_FAIL' as const;
-
 const RELATIONSHIPS_FETCH_REQUEST = 'RELATIONSHIPS_FETCH_REQUEST' as const;
 const RELATIONSHIPS_FETCH_SUCCESS = 'RELATIONSHIPS_FETCH_SUCCESS' as const;
 const RELATIONSHIPS_FETCH_FAIL = 'RELATIONSHIPS_FETCH_FAIL' as const;
@@ -366,147 +350,6 @@ const removeFromFollowersSuccess = (relationship: Relationship) => ({
 
 const removeFromFollowersFail = (accountId: string, error: unknown) => ({
   type: ACCOUNT_REMOVE_FROM_FOLLOWERS_FAIL,
-  accountId,
-  error,
-});
-
-const fetchFollowers = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(fetchFollowersRequest(accountId));
-
-    return getClient(getState()).accounts.getAccountFollowers(accountId)
-      .then(response => {
-        dispatch(importFetchedAccounts(response.items));
-        dispatch(fetchFollowersSuccess(accountId, response.items, response.next));
-        dispatch(fetchRelationships(response.items.map((item) => item.id)));
-      })
-      .catch(error => {
-        dispatch(fetchFollowersFail(accountId, error));
-      });
-  };
-
-const fetchFollowersRequest = (accountId: string) => ({
-  type: FOLLOWERS_FETCH_REQUEST,
-  accountId,
-});
-
-const fetchFollowersSuccess = (accountId: string, accounts: Array<Account>, next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
-  type: FOLLOWERS_FETCH_SUCCESS,
-  accountId,
-  accounts,
-  next,
-});
-
-const fetchFollowersFail = (accountId: string, error: unknown) => ({
-  type: FOLLOWERS_FETCH_FAIL,
-  accountId,
-  error,
-});
-
-const expandFollowers = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return null;
-
-    const next = getState().user_lists.followers.get(accountId)!.next;
-
-    if (next === null) return;
-
-    dispatch(expandFollowersRequest(accountId));
-
-    next().then(response => {
-      dispatch(importFetchedAccounts(response.items));
-      dispatch(expandFollowersSuccess(accountId, response.items, response.next));
-      dispatch(fetchRelationships(response.items.map((item) => item.id)));
-    })
-      .catch(error => {
-        dispatch(expandFollowersFail(accountId, error));
-      });
-  };
-
-const expandFollowersRequest = (accountId: string) => ({
-  type: FOLLOWERS_EXPAND_REQUEST,
-  accountId,
-});
-
-const expandFollowersSuccess = (accountId: string, accounts: Array<Account>, next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
-  type: FOLLOWERS_EXPAND_SUCCESS,
-  accountId,
-  accounts,
-  next,
-});
-
-const expandFollowersFail = (accountId: string, error: unknown) => ({
-  type: FOLLOWERS_EXPAND_FAIL,
-  accountId,
-  error,
-});
-
-const fetchFollowing = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(fetchFollowingRequest(accountId));
-
-    return getClient(getState()).accounts.getAccountFollowing(accountId)
-      .then(response => {
-        dispatch(importFetchedAccounts(response.items));
-        dispatch(fetchFollowingSuccess(accountId, response.items, response.next));
-        dispatch(fetchRelationships(response.items.map((item) => item.id)));
-      })
-      .catch(error => {
-        dispatch(fetchFollowingFail(accountId, error));
-      });
-  };
-
-const fetchFollowingRequest = (accountId: string) => ({
-  type: FOLLOWING_FETCH_REQUEST,
-  accountId,
-});
-
-const fetchFollowingSuccess = (accountId: string, accounts: Array<Account>, next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
-  type: FOLLOWING_FETCH_SUCCESS,
-  accountId,
-  accounts,
-  next,
-});
-
-const fetchFollowingFail = (accountId: string, error: unknown) => ({
-  type: FOLLOWING_FETCH_FAIL,
-  accountId,
-  error,
-});
-
-const expandFollowing = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return null;
-
-    const next = getState().user_lists.following.get(accountId)!.next;
-
-    if (next === null) return;
-
-    dispatch(expandFollowingRequest(accountId));
-
-    next().then(response => {
-      dispatch(importFetchedAccounts(response.items));
-      dispatch(expandFollowingSuccess(accountId, response.items, response.next));
-      dispatch(fetchRelationships(response.items.map((item) => item.id)));
-    }).catch(error => {
-      dispatch(expandFollowingFail(accountId, error));
-    });
-  };
-
-const expandFollowingRequest = (accountId: string) => ({
-  type: FOLLOWING_EXPAND_REQUEST,
-  accountId,
-});
-
-const expandFollowingSuccess = (accountId: string, accounts: Array<Account>, next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
-  type: FOLLOWING_EXPAND_SUCCESS,
-  accountId,
-  accounts,
-  next,
-});
-
-const expandFollowingFail = (accountId: string, error: unknown) => ({
-  type: FOLLOWING_EXPAND_FAIL,
   accountId,
   error,
 });
@@ -874,18 +717,6 @@ export {
   ACCOUNT_LOOKUP_REQUEST,
   ACCOUNT_LOOKUP_SUCCESS,
   ACCOUNT_LOOKUP_FAIL,
-  FOLLOWERS_FETCH_REQUEST,
-  FOLLOWERS_FETCH_SUCCESS,
-  FOLLOWERS_FETCH_FAIL,
-  FOLLOWERS_EXPAND_REQUEST,
-  FOLLOWERS_EXPAND_SUCCESS,
-  FOLLOWERS_EXPAND_FAIL,
-  FOLLOWING_FETCH_REQUEST,
-  FOLLOWING_FETCH_SUCCESS,
-  FOLLOWING_FETCH_FAIL,
-  FOLLOWING_EXPAND_REQUEST,
-  FOLLOWING_EXPAND_SUCCESS,
-  FOLLOWING_EXPAND_FAIL,
   RELATIONSHIPS_FETCH_REQUEST,
   RELATIONSHIPS_FETCH_SUCCESS,
   RELATIONSHIPS_FETCH_FAIL,
@@ -936,22 +767,6 @@ export {
   removeFromFollowersRequest,
   removeFromFollowersSuccess,
   removeFromFollowersFail,
-  fetchFollowers,
-  fetchFollowersRequest,
-  fetchFollowersSuccess,
-  fetchFollowersFail,
-  expandFollowers,
-  expandFollowersRequest,
-  expandFollowersSuccess,
-  expandFollowersFail,
-  fetchFollowing,
-  fetchFollowingRequest,
-  fetchFollowingSuccess,
-  fetchFollowingFail,
-  expandFollowing,
-  expandFollowingRequest,
-  expandFollowingSuccess,
-  expandFollowingFail,
   fetchRelationships,
   fetchRelationshipsRequest,
   fetchRelationshipsSuccess,

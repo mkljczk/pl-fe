@@ -122,4 +122,4 @@ export const Rules = lazy(() => import('soapbox/features/admin/rules'));
 export const DraftStatuses = lazy(() => import('soapbox/features/draft-statuses'));
 export const Circle = lazy(() => import('soapbox/features/circle'));
 export const BubbleTimeline = lazy(() => import('soapbox/features/bubble-timeline'));
-
+export const InteractionPolicies = lazy(() => import('soapbox/features/interaction-policies'));

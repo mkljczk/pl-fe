@@ -27,7 +27,7 @@ const updateFrequentLanguages = (state: State, language: string) =>
 
 const importSettings = (state: State, account: APIEntity) => {
   account = fromJS(account);
-  const prefs = account.getIn(['__meta', 'pleroma', 'settings_store', FE_NAME], ImmutableMap());
+  const prefs = account.getIn(['settings_store', FE_NAME], ImmutableMap());
   return state.merge(prefs) as State;
 };
 
@@ -41,7 +41,6 @@ const settings = (
 ): State => {
   switch (action.type) {
     case ME_FETCH_SUCCESS:
-      console.log('importing', action.me);
       return importSettings(state, action.me);
     case NOTIFICATIONS_FILTER_SET:
     case SEARCH_FILTER_SET:

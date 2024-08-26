@@ -31,6 +31,9 @@ export { useUpdateGroup } from './groups/useUpdateGroup';
 // Instance
 export { useTranslationLanguages } from './instance/useTranslationLanguages';
 
+// Settings
+export { useInteractionPolicies } from './settings/useInteractionPolicies';
+
 // Statuses
 export { useBookmarkFolders } from './statuses/useBookmarkFolders';
 export { useBookmarkFolder } from './statuses/useBookmarkFolder';

@@ -129,6 +129,7 @@ import {
   DraftStatuses,
   Circle,
   BubbleTimeline,
+  InteractionPolicies,
 } from './util/async-components';
 import GlobalHotkeys from './util/global-hotkeys';
 import { WrappedRoute } from './util/react-router-helpers';
@@ -297,6 +298,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
       <WrappedRoute path='/settings/account' layout={DefaultLayout} component={DeleteAccount} content={children} />
       <WrappedRoute path='/settings/mfa' layout={DefaultLayout} component={MfaForm} exact />
       <WrappedRoute path='/settings/tokens' layout={DefaultLayout} component={AuthTokenList} content={children} />
+      {features.interactionRequests && <WrappedRoute path='/settings/interaction_policies' layout={DefaultLayout} component={InteractionPolicies} content={children} />}
       <WrappedRoute path='/settings' layout={DefaultLayout} component={Settings} content={children} />
       <WrappedRoute path='/soapbox/config' adminOnly layout={DefaultLayout} component={SoapboxConfig} content={children} />
 

@@ -404,7 +404,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
       scheduled_at: compose.schedule?.toISOString(),
       language: compose.language || compose.suggested_language || undefined,
       to: to.size ? to.toArray() : undefined,
-      federated: compose.federated,
+      local_only: !compose.federated,
     };
 
     if (compose.poll) {

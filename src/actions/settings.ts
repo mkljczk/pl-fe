@@ -192,12 +192,8 @@ const updateAuthAccount = (url: string, settings: any) => {
   const key = `authAccount:${url}`;
   return KVStore.getItem(key).then((oldAccount: any) => {
     if (!oldAccount) return;
-    if (!oldAccount.__meta) oldAccount.__meta = { pleroma: { settings_store: {} } };
-    else if (!oldAccount.__meta.pleroma) oldAccount.__meta.pleroma = { settings_store: {} };
-    else if (!oldAccount.__meta.pleroma.settings_store) oldAccount.__meta.pleroma.settings_store = {};
-    oldAccount.__meta.pleroma.settings_store[FE_NAME] = settings;
-    // const settingsStore = oldAccount?.__meta || {};
-    // settingsStore[FE_NAME] = settings;
+    if (!oldAccount.settings_store) oldAccount.settings_store = {};
+    oldAccount.settings_store[FE_NAME] = settings;
     KVStore.setItem(key, oldAccount);
   }).catch(console.error);
 };
