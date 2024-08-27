@@ -24,7 +24,7 @@ const messages = defineMessages({
   submit: { id: 'interaction_policies.update', defaultMessage: 'Update' },
   success: { id: 'interaction_policies.success', defaultMessage: 'Updated interaction policies' },
   fail: { id: 'interaction_policies.fail', defaultMessage: 'Failed to update interaction policies' },
-  always: { id: 'interaction_policies.rule.always', defaultMessage: 'Alwyas' },
+  always: { id: 'interaction_policies.rule.always', defaultMessage: 'Always' },
   with_approval: { id: 'interaction_policies.rule.with_approval', defaultMessage: 'Require approval' },
 });
 

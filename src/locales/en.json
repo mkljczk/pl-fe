@@ -903,7 +903,7 @@
   "interaction_policies.entry.public": "Everyone",
   "interaction_policies.fail": "Failed to update interaction policies",
   "interaction_policies.mentioned_warning": "Mentioned users can always reply.",
-  "interaction_policies.rule.always": "Alwyas",
+  "interaction_policies.rule.always": "Always",
   "interaction_policies.rule.with_approval": "Require approval",
   "interaction_policies.success": "Updated interaction policies",
   "interaction_policies.tabs.private": "Followers-only",
