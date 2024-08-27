@@ -13,9 +13,12 @@ import { Stack, Divider, HStack, Icon, Text } from 'soapbox/components/ui';
 import ProfileStats from 'soapbox/features/ui/components/profile-stats';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance } from 'soapbox/hooks';
 import { makeGetOtherAccounts } from 'soapbox/selectors';
+import sourceCode from 'soapbox/utils/code';
+import { isStandalone } from 'soapbox/utils/state';
 
 import type { List as ImmutableList } from 'immutable';
 import type { Account as AccountEntity } from 'soapbox/normalizers';
+
 
 const messages = defineMessages({
   profile: { id: 'account.profile', defaultMessage: 'Profile' },
@@ -36,6 +39,7 @@ const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
   login: { id: 'account.login', defaultMessage: 'Log in' },
   register: { id: 'account.register', defaultMessage: 'Sign up' },
+  sourceCode: { id: 'navigation.source_code', defaultMessage: 'Source code' },
 });
 
 interface ISidebarLink {
@@ -90,6 +94,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   const [sidebarVisible, setSidebarVisible] = useState(sidebarOpen);
   const touchStart = useRef(0);
   const touchEnd = useRef<number | null>(null);
+  const standalone = useAppSelector(isStandalone);
 
   const instance = useInstance();
   const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;
@@ -361,6 +366,15 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
 
                   <Divider />
 
+                  <SidebarLink
+                    href={sourceCode.url}
+                    icon={require('@tabler/icons/outline/code.svg')}
+                    text={intl.formatMessage(messages.sourceCode)}
+                    onClick={onClose}
+                  />
+
+                  <Divider />
+
                   <Stack space={4}>
                     <button type='button' onClick={handleSwitcherClick} className='py-1'>
                       <HStack alignItems='center' justifyContent='between'>
@@ -428,10 +442,21 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                   onClick={onClose}
                 />
 
+                {!standalone && (
+                  <SidebarLink
+                    to='/signup'
+                    icon={require('@tabler/icons/outline/user-plus.svg')}
+                    text={intl.formatMessage(messages.register)}
+                    onClick={onClose}
+                  />
+                )}
+
+                <Divider />
+
                 <SidebarLink
-                  to='/signup'
-                  icon={require('@tabler/icons/outline/user-plus.svg')}
-                  text={intl.formatMessage(messages.register)}
+                  href={sourceCode.url}
+                  icon={require('@tabler/icons/outline/code.svg')}
+                  text={intl.formatMessage(messages.sourceCode)}
                   onClick={onClose}
                 />
               </Stack>

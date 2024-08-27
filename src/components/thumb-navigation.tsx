@@ -9,6 +9,7 @@ import ThumbNavigationLink from 'soapbox/components/thumb-navigation-link';
 import { useStatContext } from 'soapbox/contexts/stat-context';
 import { Entities } from 'soapbox/entity-store/entities';
 import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
+import { isStandalone } from 'soapbox/utils/state';
 
 import { Icon } from './ui';
 
@@ -21,6 +22,7 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
 
   const { unreadChatsCount } = useStatContext();
 
+  const standalone = useAppSelector(isStandalone);
   const notificationCount = useAppSelector((state) => state.notifications.unread);
 
   const handleOpenSidebar = () => dispatch(openSidebar());
@@ -103,12 +105,14 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
 
       {account && !(features.chats || features.conversations) && composeButton}
 
-      <ThumbNavigationLink
-        src={require('@tabler/icons/outline/search.svg')}
-        text={<FormattedMessage id='navigation.search' defaultMessage='Search' />}
-        to='/search'
-        exact
-      />
+      {(!standalone || account) && (
+        <ThumbNavigationLink
+          src={require('@tabler/icons/outline/search.svg')}
+          text={<FormattedMessage id='navigation.search' defaultMessage='Search' />}
+          to='/search'
+          exact
+        />
+      )}
 
       {account && (
         <ThumbNavigationLink
