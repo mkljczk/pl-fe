@@ -194,7 +194,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
           })
         }
       >
-        <div className='relative h-full w-full overflow-auto overflow-y-scroll'>
+        <div className='relative h-full w-full overflow-auto'>
           <div className='p-4'>
             {account ? (
               <Stack space={4}>
