@@ -581,14 +581,14 @@ const clearComposeSuggestions = (composeId: string) => {
 };
 
 const fetchComposeSuggestionsAccounts = throttle((dispatch, getState, composeId, token) => {
-  const signal = cancelFetchComposeSuggestions.signal;
-
   if (cancelFetchComposeSuggestions) {
     cancelFetchComposeSuggestions.abort();
     cancelFetchComposeSuggestions = new AbortController();
   }
 
-  return getClient(getState()).accounts.searchAccounts(token.slice(1), { resolve: false, limit: 10 }, { signal })
+  const signal = cancelFetchComposeSuggestions.signal;
+
+  return getClient(getState).accounts.searchAccounts(token.slice(1), { resolve: false, limit: 10 }, { signal })
     .then(response => {
       dispatch(importFetchedAccounts(response));
       dispatch(readyComposeSuggestionsAccounts(composeId, token, response));

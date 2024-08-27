@@ -1,37 +1,39 @@
 import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 
 import { useClient } from 'soapbox/hooks';
+import { flattenPages } from 'soapbox/utils/queries';
 
-import type { Account } from 'pl-api';
+import type { Account, PaginatedResponse } from 'pl-api';
 
 const useAccountSearch = (q: string) => {
   const client = useClient();
 
-  const getAccountSearch = async(q: string): Promise<Account[]> => {
+  const getAccountSearch = async(q: string, pageParam?: Pick<PaginatedResponse<Account>, 'next'>): Promise<PaginatedResponse<Account>> => {
+    if (pageParam?.next) return pageParam.next();
+
     const response = await client.accounts.searchAccounts(q, {
       limit: 10,
       following: true,
-      offset: data?.length,
+      offset: 0,
     });
 
-    return response;
+    return {
+      previous: null,
+      next: null,
+      items: response,
+      partial: false,
+    };
   };
 
   const queryInfo = useInfiniteQuery({
     queryKey: ['search', 'accounts', q],
-    queryFn: () => getAccountSearch(q),
+    queryFn: ({ pageParam }) => getAccountSearch(q, pageParam),
     placeholderData: keepPreviousData,
-    initialPageParam: {},
-    getNextPageParam: () => {
-      if (queryInfo.data?.pages[queryInfo.data.pages.length - 1].length !== 10) {
-        return {};
-      }
-
-      return undefined;
-    },
+    initialPageParam: { next: null as (() => Promise<PaginatedResponse<Account>>) | null },
+    getNextPageParam: (config) => config.next ? config : undefined,
   });
 
-  const data = queryInfo.data?.pages.flat();
+  const data = flattenPages(queryInfo.data);
 
   return {
     ...queryInfo,
