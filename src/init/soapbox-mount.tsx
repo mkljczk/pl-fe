@@ -80,8 +80,7 @@ const SoapboxMount = () => {
                 <div id='toaster'>
                   <Toaster
                     position='top-right'
-                    containerClassName='top-10'
-                    containerStyle={{ top: 75 }}
+                    containerClassName='top-4'
                   />
                 </div>
               </Route>
