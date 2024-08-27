@@ -16,6 +16,7 @@ const NOTIFICATION_TYPES = [
   'event_reminder',
   'participation_request',
   'participation_accepted',
+  'bite',
 ] as const;
 
 /** Notification types to exclude from the "All" filter by default. */

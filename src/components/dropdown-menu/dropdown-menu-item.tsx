@@ -101,7 +101,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus }: IDropdownMenuItem
       >
         {item.icon && <Icon src={item.icon} className='mr-3 h-5 w-5 flex-none rtl:ml-3 rtl:mr-0' />}
 
-        <span className='truncate font-medium'>{item.text}</span>
+        <span className={clsx('truncate font-medium', { 'ml-2': item.count })}>{item.text}</span>
 
         {item.count ? (
           <span className='ml-auto h-5 w-5 flex-none'>
