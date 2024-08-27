@@ -34,11 +34,8 @@ const normalizeNotifications = (notifications: Array<BaseNotification>) => {
         );
 
       if (existingNotification) {
-        if (existingNotification?.accounts) {
-          existingNotification.accounts.push(normalizeAccount(notification.account));
-        } else {
-          existingNotification.accounts = [existingNotification.account, normalizeAccount(notification.account)];
-        }
+        existingNotification.accounts.push(normalizeAccount(notification.account));
+        existingNotification.account_ids.push(notification.account.id);
         existingNotification.id += '+' + notification.id;
       } else {
         deduplicatedNotifications.push(normalizeNotification(notification));

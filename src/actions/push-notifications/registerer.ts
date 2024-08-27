@@ -94,21 +94,15 @@ const register = () =>
             return subscription;
           } else {
             // Something went wrong, try to subscribe again
-            return unsubscribe({ registration, subscription }).then((registration) => {
-              return subscribe(registration, getState);
-            }).then(async (pushSubscription) => {
-              const subscription = await dispatch(sendSubscriptionToBackend(pushSubscription, me));
-              return subscription;
-            });
+            return unsubscribe({ registration, subscription })
+              .then((registration) => subscribe(registration, getState))
+              .then((pushSubscription) => dispatch(sendSubscriptionToBackend(pushSubscription, me)));
           }
         }
 
         // No subscription, try to subscribe
         return subscribe(registration, getState)
-          .then(async (pushSubscription) => {
-            const subscription = await dispatch(sendSubscriptionToBackend(pushSubscription, me));
-            return subscription;
-          });
+          .then((pushSubscription) => dispatch(sendSubscriptionToBackend(pushSubscription, me)));
       })
       .then((subscription) => {
         // If we got a PushSubscription (and not a subscription object from the backend)
