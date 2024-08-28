@@ -202,13 +202,13 @@ const statuses = (state = initialState, action: AnyAction): State => {
     case EMOJI_REACT_REQUEST:
       return state
         .updateIn(
-          [action.statusId, 'reactions'],
+          [action.statusId, 'emoji_reactions'],
           emojiReacts => simulateEmojiReact(emojiReacts as any, action.emoji, action.custom),
         );
     case UNEMOJI_REACT_REQUEST:
       return state
         .updateIn(
-          [action.statusId, 'reactions'],
+          [action.statusId, 'emoji_reactions'],
           emojiReacts => simulateUnEmojiReact(emojiReacts as any, action.emoji),
         );
     case FAVOURITE_FAIL:

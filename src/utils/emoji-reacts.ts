@@ -41,7 +41,8 @@ const reduceEmoji = (emojiReacts: Array<EmojiReaction> | null, favouritesCount: 
   sortEmoji(
     mergeEmojiFavourites(emojiReacts, favouritesCount, favourited),
     allowedEmoji,
-  ));
+  )
+);
 
 const getReactForStatus = (
   status: Pick<Status, 'emoji_reactions' | 'favourited' | 'favourites_count'>,
@@ -71,12 +72,12 @@ const simulateEmojiReact = (emojiReacts: Array<EmojiReaction>, emoji: string, ur
       url,
     }) : reaction);
   } else {
-    return emojiReacts.push(emojiReactionSchema.parse({
+    return [...emojiReacts, emojiReactionSchema.parse({
       count: 1,
       me: true,
       name: emoji,
       url,
-    }));
+    })];
   }
 };
 
