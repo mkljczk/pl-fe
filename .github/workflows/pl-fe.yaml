@@ -27,19 +27,23 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install deps
+      working-directory: ./packages/pl-fe
       run: yarn install --ignore-scripts
 
     - name: Lint
+      working-directory: ./packages/pl-fe
       run: yarn lint
 
     - name: build
       env:
         NODE_ENV: production
+      working-directory: ./packages/pl-fe
       run: |
           yarn build
           cp dist/index.html dist/404.html
 
     - name: i18n
+      working-directory: ./packages/pl-fe
       run: |
           yarn i18n
           git diff
@@ -49,13 +53,13 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: pl-fe
-        path: dist
+        path: packages/pl-fe/dist
     
     - name: Upload Github Pages artifact
       uses: actions/upload-pages-artifact@v3
       with:
         name: github-pages
-        path: dist
+        path: packages/pl-fe/dist
 
   deploy:
     needs: build
