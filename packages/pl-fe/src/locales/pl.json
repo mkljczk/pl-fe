@@ -107,7 +107,6 @@
   "admin.dashcounters.retention_label": "utrzymywanie użytkowników",
   "admin.dashcounters.status_count_label": "wpisy",
   "admin.dashcounters.user_count_label": "użytkownicy łącznie",
-  "admin.dashwidgets.email_list_header": "Lista adresów e-mail",
   "admin.dashwidgets.software_header": "Oprogramowanie",
   "admin.domains.action": "Utwórz domenę",
   "admin.domains.delete": "Usuń",

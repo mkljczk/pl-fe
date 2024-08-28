@@ -172,6 +172,52 @@ interface AdminGetMeasuresParams {
   };
 }
 
+interface AdminGetAnnouncementsParams {
+  offset?: number;
+  limit?: number;
+}
+
+interface AdminCreateAnnouncementParams {
+  /** announcement content */
+  content: string;
+  /** datetime, optional, default to null, the time when the announcement will become active (displayed to users); if it is null, the announcement will be active immediately */
+  starts_at?: string;
+  /** datetime, optional, default to null, the time when the announcement will become inactive (no longer displayed to users); if it is null, the announcement will be active until an admin deletes it */
+  ends_at?: string;
+  /** boolean, optional, default to false, tells the client whether to only display dates for `starts_at` and `ends_at` */
+  all_day?: boolean;
+}
+
+type AdminUpdateAnnouncementParams = Partial<AdminCreateAnnouncementParams>;
+
+interface AdminCreateDomainParams {
+  /** domain name */
+  domain: string;
+  /** defaults to false, whether it is possible to register an account under the domain by everyone */
+  public?: boolean;
+}
+
+interface AdminGetModerationLogParams extends Pick<PaginationParams, 'limit'> {
+  /** page number */
+  page?: number;
+  /** datetime (ISO 8601) filter logs by creation date, start from start_date. Accepts datetime in ISO 8601 format (YYYY-MM-DDThh:mm:ss), e.g. 2005-08-09T18:31:42 */
+  start_date?: string;
+  /** datetime (ISO 8601) filter logs by creation date, end by from end_date. Accepts datetime in ISO 8601 format (YYYY-MM-DDThh:mm:ss), e.g. 2005-08-09T18:31:42 */
+  end_date?: string;
+  /** filter logs by actor's id */
+  user_id?: string;
+  /** search logs by the log message */
+  search?: string;
+}
+
+interface AdminCreateRuleParams {
+  text: string;
+  hint?: string;
+  priority?: number;
+}
+
+type AdminUpdateRuleParams = Partial<AdminCreateRuleParams>;
+
 interface AdminGetGroupsParams {
 }
 
@@ -196,5 +242,12 @@ export type {
   AdminUpdateIpBlockParams,
   AdminMeasureKey,
   AdminGetMeasuresParams,
+  AdminGetAnnouncementsParams,
+  AdminCreateAnnouncementParams,
+  AdminUpdateAnnouncementParams,
+  AdminCreateDomainParams,
+  AdminGetModerationLogParams,
+  AdminCreateRuleParams,
+  AdminUpdateRuleParams,
   AdminGetGroupsParams,
 };

@@ -5,7 +5,7 @@ import { useModerationLog } from 'pl-fe/api/hooks/admin';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Column, Stack, Text } from 'pl-fe/components/ui';
 
-import type { ModerationLogEntry } from 'pl-fe/schemas';
+import type { AdminModerationLogEntry } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.moderation_log', defaultMessage: 'Moderation log' },
@@ -48,7 +48,7 @@ const ModerationLog = () => {
 };
 
 interface ILogItem {
-  log: ModerationLogEntry;
+  log: AdminModerationLogEntry;
 }
 
 const LogItem: React.FC<ILogItem> = ({ log }) => (

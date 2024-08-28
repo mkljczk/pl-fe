@@ -7,7 +7,7 @@ import { Button, Column, Form, HStack, Input, Stack, Text } from 'pl-fe/componen
 import { useTextField } from 'pl-fe/hooks/forms';
 import toast from 'pl-fe/toast';
 
-import type { Relay as RelayEntity } from 'pl-fe/schemas';
+import type { AdminRelay as RelayEntity } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.relays', defaultMessage: 'Instance relays' },

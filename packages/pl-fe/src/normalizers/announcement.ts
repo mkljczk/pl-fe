@@ -1,9 +1,9 @@
 import emojify from 'pl-fe/features/emoji';
 import { makeCustomEmojiMap } from 'pl-fe/schemas/utils';
 
-import type { Announcement as BaseAnnouncement } from 'pl-api';
+import type { AdminAnnouncement as BaseAdminAnnouncement, Announcement as BaseAnnouncement } from 'pl-api';
 
-const normalizeAnnouncement = (announcement: BaseAnnouncement) => {
+const normalizeAnnouncement = <T extends BaseAnnouncement = BaseAnnouncement>(announcement: T) => {
   const emojiMap = makeCustomEmojiMap(announcement.emojis);
 
   const contentHtml = emojify(announcement.content, emojiMap);
@@ -15,5 +15,6 @@ const normalizeAnnouncement = (announcement: BaseAnnouncement) => {
 };
 
 type Announcement = ReturnType<typeof normalizeAnnouncement>;
+type AdminAnnouncement = ReturnType<typeof normalizeAnnouncement<BaseAdminAnnouncement>>;
 
-export { normalizeAnnouncement, type Announcement };
+export { normalizeAnnouncement, type AdminAnnouncement, type Announcement };

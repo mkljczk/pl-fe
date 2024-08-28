@@ -1,7 +1,7 @@
+import { instanceSchema } from 'pl-api';
 import React from 'react';
 
 import { fireEvent, render, screen } from 'pl-fe/jest/test-helpers';
-import { instanceSchema } from 'pl-fe/schemas';
 
 import LoginForm from './login-form';
 

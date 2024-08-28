@@ -2,7 +2,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { useClient } from 'pl-fe/hooks';
 import { queryClient } from 'pl-fe/queries/client';
-import { domainSchema, type Domain } from 'pl-fe/schemas';
+
+import type { AdminDomain } from 'pl-api';
 
 interface CreateDomainParams {
   domain: string;
@@ -17,14 +18,9 @@ interface UpdateDomainParams {
 const useDomains = () => {
   const client = useClient();
 
-  const getDomains = async () => {
-    const { json: data } = await client.request<Domain[]>('/api/v1/pleroma/admin/domains');
+  const getDomains = () => client.admin.domains.getDomains();
 
-    const normalizedData = data.map((domain) => domainSchema.parse(domain));
-    return normalizedData;
-  };
-
-  const result = useQuery<ReadonlyArray<Domain>>({
+  const result = useQuery<ReadonlyArray<AdminDomain>>({
     queryKey: ['admin', 'domains'],
     queryFn: getDomains,
     placeholderData: [],
@@ -34,13 +30,11 @@ const useDomains = () => {
     mutate: createDomain,
     isPending: isCreating,
   } = useMutation({
-    mutationFn: (params: CreateDomainParams) => client.request('/api/v1/pleroma/admin/domains', {
-      method: 'POST', body: params,
-    }),
+    mutationFn: (params: CreateDomainParams) => client.admin.domains.createDomain(params),
     retry: false,
-    onSuccess: ({ data }) =>
-      queryClient.setQueryData(['admin', 'domains'], (prevResult: ReadonlyArray<Domain>) =>
-        [...prevResult, domainSchema.parse(data)],
+    onSuccess: (data) =>
+      queryClient.setQueryData(['admin', 'domains'], (prevResult: ReadonlyArray<AdminDomain>) =>
+        [...prevResult, data],
       ),
   });
 
@@ -48,13 +42,11 @@ const useDomains = () => {
     mutate: updateDomain,
     isPending: isUpdating,
   } = useMutation({
-    mutationFn: ({ id, ...params }: UpdateDomainParams) => client.request(`/api/v1/pleroma/admin/domains/${id}`, {
-      method: 'PATCH', body: params,
-    }),
+    mutationFn: ({ id, ...params }: UpdateDomainParams) => client.admin.domains.updateDomain(id, params.public),
     retry: false,
-    onSuccess: ({ json: data }) =>
-      queryClient.setQueryData(['admin', 'domains'], (prevResult: ReadonlyArray<Domain>) =>
-        prevResult.map((domain) => domain.id === data.id ? domainSchema.parse(data) : domain),
+    onSuccess: (data) =>
+      queryClient.setQueryData(['admin', 'domains'], (prevResult: ReadonlyArray<AdminDomain>) =>
+        prevResult.map((domain) => domain.id === data.id ? data : domain),
       ),
   });
 
@@ -62,10 +54,10 @@ const useDomains = () => {
     mutate: deleteDomain,
     isPending: isDeleting,
   } = useMutation({
-    mutationFn: (id: string) => client.request(`/api/v1/pleroma/admin/domains/${id}`, { method: 'DELETE' }),
+    mutationFn: (id: string) => client.admin.domains.deleteDomain(id),
     retry: false,
     onSuccess: (_, id) =>
-      queryClient.setQueryData(['admin', 'domains'], (prevResult: ReadonlyArray<Domain>) =>
+      queryClient.setQueryData(['admin', 'domains'], (prevResult: ReadonlyArray<AdminDomain>) =>
         prevResult.filter(({ id: domainId }) => domainId !== id),
       ),
   });

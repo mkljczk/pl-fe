@@ -2,7 +2,6 @@ import {
   Map as ImmutableMap,
   List as ImmutableList,
   Set as ImmutableSet,
-  fromJS,
 } from 'immutable';
 import trimStart from 'lodash/trimStart';
 
@@ -37,18 +36,18 @@ const toSimplePolicy = (configs: ImmutableList<Config>): MRFSimple => {
   }
 };
 
-const fromSimplePolicy = (simplePolicy: Policy): ImmutableList<Config> => {
-  const mapper = ([key, hosts]: [key: string, hosts: ImmutableList<string>]) => fromJS({ tuple: [`:${key}`, hosts] });
+const fromSimplePolicy = (simplePolicy: Policy)=> {
+  const mapper = ([key, hosts]: [key: string, hosts: ImmutableList<string>]) => ({ tuple: [`:${key}`, hosts.toJS()] });
 
   const value = Object.entries(simplePolicy).map(mapper);
 
-  return ImmutableList([
-    ImmutableMap({
+  return [
+    {
       group: ':pleroma',
       key: ':mrf_simple',
-      value: ImmutableList(value),
-    }),
-  ]);
+      value: value,
+    },
+  ];
 };
 
 const ConfigDB = {

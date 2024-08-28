@@ -29,7 +29,7 @@ const updateMrf = (host: string, restrictions: Record<string, any>) =>
         const simplePolicy = ConfigDB.toSimplePolicy(configs);
         const merged = simplePolicyMerge(simplePolicy, host, restrictions);
         const config = ConfigDB.fromSimplePolicy(merged);
-        return dispatch(updateConfig(config.toJS() as Array<Record<string, any>>));
+        return dispatch(updateConfig(config));
       });
 
 export { updateMrf };

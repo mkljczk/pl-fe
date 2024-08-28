@@ -30,6 +30,7 @@ const translationSchema = z.preprocess((translation: any) => {
 
   return translation;
 }, z.object({
+  id: z.string().nullable().catch(null),
   content: z.string().catch(''),
   spoiler_text: z.string().catch(''),
   poll: translationPollSchema.optional().catch(undefined),

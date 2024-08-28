@@ -189,29 +189,6 @@ const getFeatures = (instance?: Instance) => {
     ]),
 
     /**
-     * Ability to manage announcements by admins.
-     * @see GET /api/v1/pleroma/admin/announcements
-     * @see GET /api/v1/pleroma/admin/announcements/:id
-     * @see POST /api/v1/pleroma/admin/announcements
-     * @see PATCH /api/v1/pleroma/admin/announcements/:id
-     * @see DELETE /api/v1/pleroma/admin/announcements/:id
-     * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminannouncements}
-     */
-    adminAnnouncements: v.software === PLEROMA,
-
-    /**
-     * Ability to manage instance rules by admins.
-     * @see GET /api/v1/pleroma/admin/rules
-     * @see POST /api/v1/pleroma/admin/rules
-     * @see PATCH /api/v1/pleroma/admin/rules/:id
-     * @see DELETE /api/v1/pleroma/admin/rules/:id
-     */
-    adminRules: any([
-      v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.5.0'),
-      v.software === PLEROMA && gte(v.version, '2.7.0'),
-    ]),
-
-    /**
      * Ability to address a status to a list of users.
      * @see POST /api/v1/statuses
      */
@@ -830,7 +807,34 @@ const getFeatures = (instance?: Instance) => {
       v.software === GOTOSOCIAL,
     ]),
 
-    pleromaAdminAccoumts: v.software === PLEROMA,
+    pleromaAdminAccounts: v.software === PLEROMA,
+
+    /**
+     * Ability to manage announcements by admins.
+     * @see GET /api/v1/pleroma/admin/announcements
+     * @see GET /api/v1/pleroma/admin/announcements/:id
+     * @see POST /api/v1/pleroma/admin/announcements
+     * @see PATCH /api/v1/pleroma/admin/announcements/:id
+     * @see DELETE /api/v1/pleroma/admin/announcements/:id
+     * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminannouncements}
+     */
+    pleromaAdminAnnouncements: v.software === PLEROMA,
+
+    pleromaAdminModerationLog: v.software === PLEROMA,
+
+    pleromaAdminRelays: v.software === PLEROMA,
+
+    /**
+     * Ability to manage instance rules by admins.
+     * @see GET /api/v1/pleroma/admin/rules
+     * @see POST /api/v1/pleroma/admin/rules
+     * @see PATCH /api/v1/pleroma/admin/rules/:id
+     * @see DELETE /api/v1/pleroma/admin/rules/:id
+     */
+    pleromaAdminRules: any([
+      v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.5.0'),
+      v.software === PLEROMA && gte(v.version, '2.7.0'),
+    ]),
 
     pleromaAdminStatuses: v.software === PLEROMA,
 

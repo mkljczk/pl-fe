@@ -107,7 +107,6 @@
   "admin.dashcounters.retention_label": "user retention",
   "admin.dashcounters.status_count_label": "posts",
   "admin.dashcounters.user_count_label": "total users",
-  "admin.dashwidgets.email_list_header": "Email list",
   "admin.dashwidgets.software_header": "Software",
   "admin.domains.action": "Create domain",
   "admin.domains.delete": "Delete",

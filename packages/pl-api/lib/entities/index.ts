@@ -13,6 +13,7 @@ export * from './admin/ip';
 export * from './admin/ip-block';
 export * from './admin/measure';
 export * from './admin/moderation-log-entry';
+export * from './admin/pleroma-config';
 export * from './admin/relay';
 export * from './admin/report';
 export * from './admin/rule';

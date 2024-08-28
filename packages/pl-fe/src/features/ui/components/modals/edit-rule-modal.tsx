@@ -7,7 +7,7 @@ import { useTextField } from 'pl-fe/hooks/forms';
 import toast from 'pl-fe/toast';
 
 import type { BaseModalProps } from '../modal-root';
-import type { AdminRule } from 'pl-fe/schemas';
+import type { AdminRule } from 'pl-api';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_rule.save', defaultMessage: 'Save' },

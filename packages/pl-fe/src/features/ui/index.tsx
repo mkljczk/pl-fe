@@ -301,9 +301,9 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
       <WrappedRoute path='/pl-fe/admin/users' staffOnly layout={AdminLayout} component={UserIndex} content={children} exact />
       <WrappedRoute path='/pl-fe/admin/theme' staffOnly layout={AdminLayout} component={ThemeEditor} content={children} exact />
       <WrappedRoute path='/pl-fe/admin/relays' staffOnly layout={AdminLayout} component={Relays} content={children} exact />
-      {features.adminAnnouncements && <WrappedRoute path='/pl-fe/admin/announcements' staffOnly layout={AdminLayout} component={Announcements} content={children} exact />}
+      {features.pleromaAdminAnnouncements && <WrappedRoute path='/pl-fe/admin/announcements' staffOnly layout={AdminLayout} component={Announcements} content={children} exact />}
       {features.domains && <WrappedRoute path='/pl-fe/admin/domains' staffOnly layout={AdminLayout} component={Domains} content={children} exact />}
-      {features.adminRules && <WrappedRoute path='/pl-fe/admin/rules' staffOnly layout={AdminLayout} component={Rules} content={children} exact />}
+      {features.pleromaAdminRules && <WrappedRoute path='/pl-fe/admin/rules' staffOnly layout={AdminLayout} component={Rules} content={children} exact />}
       <WrappedRoute path='/info' layout={EmptyLayout} component={ServerInfo} content={children} />
 
       <WrappedRoute path='/developers/apps/create' developerOnly layout={DefaultLayout} component={CreateApp} content={children} />

@@ -12,7 +12,6 @@ import { deleteFromTimelines } from './timelines';
 import type { CreateStatusParams, Status as BaseStatus } from 'pl-api';
 import type { Status } from 'pl-fe/normalizers';
 import type { AppDispatch, RootState } from 'pl-fe/store';
-import type { APIEntity } from 'pl-fe/types/entities';
 import type { IntlShape } from 'react-intl';
 
 const STATUS_CREATE_REQUEST = 'STATUS_CREATE_REQUEST' as const;
@@ -285,7 +284,7 @@ const toggleStatusSpoilerExpanded = (status: Pick<Status, 'id' | 'expanded'>) =>
 let TRANSLATIONS_QUEUE: Set<string> = new Set();
 let TRANSLATIONS_TIMEOUT: NodeJS.Timeout | null = null;
 
-const translateStatus = (statusId: string, targetLanguage?: string, lazy?: boolean) =>
+const translateStatus = (statusId: string, targetLanguage: string, lazy?: boolean) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const client = getClient(getState);
     const features = client.features;
@@ -297,10 +296,8 @@ const translateStatus = (statusId: string, targetLanguage?: string, lazy?: boole
       TRANSLATIONS_QUEUE = new Set();
       if (TRANSLATIONS_TIMEOUT) clearTimeout(TRANSLATIONS_TIMEOUT);
 
-      return client.request('/api/v1/pl/statuses/translate', {
-        method: 'POST', body: { ids: copy, lang: targetLanguage },
-      }).then((response) => {
-        response.json.forEach((translation: APIEntity) => {
+      return client.statuses.translateStatuses(copy, targetLanguage).then((response) => {
+        response.forEach((translation) => {
           dispatch({
             type: STATUS_TRANSLATE_SUCCESS,
             statusId: translation.id,
@@ -308,7 +305,7 @@ const translateStatus = (statusId: string, targetLanguage?: string, lazy?: boole
           });
 
           copy
-            .filter((statusId) => !response.json.some(({ id }: APIEntity) => id === statusId))
+            .filter((statusId) => !response.some(({ id }) => id === statusId))
             .forEach((statusId) => dispatch({
               type: STATUS_TRANSLATE_FAIL,
               statusId,

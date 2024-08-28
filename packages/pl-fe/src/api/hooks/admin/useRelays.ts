@@ -2,19 +2,15 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { useClient } from 'pl-fe/hooks';
 import { queryClient } from 'pl-fe/queries/client';
-import { relaySchema, type Relay } from 'pl-fe/schemas';
+
+import type { AdminRelay } from 'pl-api';
 
 const useRelays = () => {
   const client = useClient();
 
-  const getRelays = async () => {
-    const { json: data } = await client.request<{ relays: Relay[] }>('/api/v1/pleroma/admin/relay');
+  const getRelays = () => client.admin.relays.getRelays();
 
-    const normalizedData = data.relays?.map((relay) => relaySchema.parse(relay));
-    return normalizedData;
-  };
-
-  const result = useQuery<ReadonlyArray<Relay>>({
+  const result = useQuery<ReadonlyArray<AdminRelay>>({
     queryKey: ['admin', 'relays'],
     queryFn: getRelays,
     placeholderData: [],
@@ -24,14 +20,11 @@ const useRelays = () => {
     mutate: followRelay,
     isPending: isPendingFollow,
   } = useMutation({
-    mutationFn: (relayUrl: string) => client.request('/api/v1/pleroma/admin/relays', {
-      method: 'POST',
-      body: JSON.stringify({ relay_url: relayUrl }),
-    }),
+    mutationFn: (relayUrl: string) => client.admin.relays.followRelay(relayUrl),
     retry: false,
-    onSuccess: ({ json: data }) =>
-      queryClient.setQueryData(['admin', 'relays'], (prevResult: ReadonlyArray<Relay>) =>
-        [...prevResult, relaySchema.parse(data)],
+    onSuccess: (data) =>
+      queryClient.setQueryData(['admin', 'relays'], (prevResult: ReadonlyArray<AdminRelay>) =>
+        [...prevResult, data],
       ),
   });
 
@@ -39,13 +32,10 @@ const useRelays = () => {
     mutate: unfollowRelay,
     isPending: isPendingUnfollow,
   } = useMutation({
-    mutationFn: (relayUrl: string) => client.request('/api/v1/pleroma/admin/relays', {
-      method: 'DELETE',
-      body: JSON.stringify({ relay_url: relayUrl }),
-    }),
+    mutationFn: (relayUrl: string) => client.admin.relays.unfollowRelay(relayUrl),
     retry: false,
     onSuccess: (_, relayUrl) =>
-      queryClient.setQueryData(['admin', 'relays'], (prevResult: ReadonlyArray<Relay>) =>
+      queryClient.setQueryData(['admin', 'relays'], (prevResult: ReadonlyArray<AdminRelay>) =>
         prevResult.filter(({ actor }) => actor !== relayUrl),
       ),
   });

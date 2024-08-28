@@ -1,31 +1,25 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  adminAnnouncementSchema,
+  type AdminAnnouncement as BaseAdminAnnouncement,
+  type AdminCreateAnnouncementParams,
+  type AdminUpdateAnnouncementParams,
+} from 'pl-api';
 
 import { useClient } from 'pl-fe/hooks';
+import { normalizeAnnouncement, AdminAnnouncement } from 'pl-fe/normalizers';
 import { queryClient } from 'pl-fe/queries/client';
-import { adminAnnouncementSchema, type AdminAnnouncement } from 'pl-fe/schemas';
 
 import { useAnnouncements as useUserAnnouncements } from '../announcements';
-
-interface CreateAnnouncementParams {
-  content: string;
-  starts_at?: string | null;
-  ends_at?: string | null;
-  all_day?: boolean;
-}
-
-interface UpdateAnnouncementParams extends CreateAnnouncementParams {
-  id: string;
-}
 
 const useAnnouncements = () => {
   const client = useClient();
   const userAnnouncements = useUserAnnouncements();
 
   const getAnnouncements = async () => {
-    const { json: data } = await client.request<AdminAnnouncement[]>('/api/v1/pleroma/admin/announcements');
+    const data = await client.admin.announcements.getAnnouncements();
 
-    const normalizedData = data.map((announcement) => adminAnnouncementSchema.parse(announcement));
-    return normalizedData;
+    return data.items.map(normalizeAnnouncement<BaseAdminAnnouncement>);
   };
 
   const result = useQuery<ReadonlyArray<AdminAnnouncement>>({
@@ -38,11 +32,9 @@ const useAnnouncements = () => {
     mutate: createAnnouncement,
     isPending: isCreating,
   } = useMutation({
-    mutationFn: (params: CreateAnnouncementParams) => client.request('/api/v1/pleroma/admin/announcements', {
-      method: 'POST', body: params,
-    }),
+    mutationFn: (params: AdminCreateAnnouncementParams) => client.admin.announcements.createAnnouncement(params),
     retry: false,
-    onSuccess: ({ json: data }) =>
+    onSuccess: (data) =>
       queryClient.setQueryData(['admin', 'announcements'], (prevResult: ReadonlyArray<AdminAnnouncement>) =>
         [...prevResult, adminAnnouncementSchema.parse(data)],
       ),
@@ -53,11 +45,10 @@ const useAnnouncements = () => {
     mutate: updateAnnouncement,
     isPending: isUpdating,
   } = useMutation({
-    mutationFn: ({ id, ...params }: UpdateAnnouncementParams) => client.request(`/api/v1/pleroma/admin/announcements/${id}`, {
-      method: 'PATCH', body: params,
-    }),
+    mutationFn: ({ id, ...params }: AdminUpdateAnnouncementParams & { id: string }) =>
+      client.admin.announcements.updateAnnouncement(id, params),
     retry: false,
-    onSuccess: ({ json: data }) =>
+    onSuccess: (data) =>
       queryClient.setQueryData(['admin', 'announcements'], (prevResult: ReadonlyArray<AdminAnnouncement>) =>
         prevResult.map((announcement) => announcement.id === data.id ? adminAnnouncementSchema.parse(data) : announcement),
       ),
@@ -68,7 +59,7 @@ const useAnnouncements = () => {
     mutate: deleteAnnouncement,
     isPending: isDeleting,
   } = useMutation({
-    mutationFn: (id: string) => client.request(`/api/v1/pleroma/admin/announcements/${id}`, { method: 'DELETE' }),
+    mutationFn: (id: string) => client.admin.announcements.deleteAnnouncement(id),
     retry: false,
     onSuccess: (_, id) =>
       queryClient.setQueryData(['admin', 'announcements'], (prevResult: ReadonlyArray<AdminAnnouncement>) =>

@@ -1,7 +1,7 @@
 import { List as ImmutableList, fromJS } from 'immutable';
+import { emojiReactionSchema } from 'pl-api';
 
 import { normalizeStatus } from 'pl-fe/normalizers';
-import { emojiReactionSchema } from 'pl-fe/schemas';
 
 import {
   sortEmoji,

@@ -6,8 +6,9 @@ import { useRules } from 'pl-fe/api/hooks/admin';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Button, Column, HStack, Stack, Text } from 'pl-fe/components/ui';
 import { useAppDispatch } from 'pl-fe/hooks';
-import { AdminRule } from 'pl-fe/schemas';
 import toast from 'pl-fe/toast';
+
+import type { AdminRule } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.rules', defaultMessage: 'Instance rules' },

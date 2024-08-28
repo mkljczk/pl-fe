@@ -9,7 +9,7 @@ import { useAppDispatch } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 
 import type { BaseModalProps } from '../modal-root';
-import type { AdminAnnouncement } from 'pl-fe/schemas';
+import type { AdminAnnouncement } from 'pl-api';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_announcement.save', defaultMessage: 'Save' },
@@ -29,7 +29,7 @@ const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProp
   const { createAnnouncement, updateAnnouncement } = useAnnouncements();
   const intl = useIntl();
 
-  const [content, setContent] = useState(announcement?.content || '');
+  const [content, setContent] = useState(announcement?.raw_content || '');
   const [startTime, setStartTime] = useState(announcement?.starts_at ? new Date(announcement.starts_at) : null);
   const [endTime, setEndTime] = useState(announcement?.ends_at ? new Date(announcement.ends_at) : null);
   const [allDay, setAllDay] = useState(announcement?.all_day || false);
@@ -49,8 +49,8 @@ const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProp
   const handleSubmit = () => {
     const form = {
       content,
-      starts_at: startTime?.toISOString() || null,
-      ends_at: endTime?.toISOString() || null,
+      starts_at: startTime?.toISOString() || undefined,
+      ends_at: endTime?.toISOString() || undefined,
       all_day: allDay,
     };
 

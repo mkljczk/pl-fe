@@ -35,8 +35,6 @@ const selectOwnAccount = (state: RootState) => {
   }
 };
 
-const accountIdsToAccts = (state: RootState, accountIds: string[]) => accountIds.map((accountId) => selectAccount(state, accountId)!.acct);
-
 const getAccountBase = (state: RootState, accountId: string) => state.entities[Entities.ACCOUNTS]?.store[accountId] as Account | undefined;
 const getAccountRelationship = (state: RootState, accountId: string) => state.relationships.get(accountId);
 const getAccountMeta = (state: RootState, accountId: string) => state.accounts_meta[accountId];
@@ -354,7 +352,6 @@ export {
   selectAccount,
   selectAccounts,
   selectOwnAccount,
-  accountIdsToAccts,
   makeGetAccount,
   getFilters,
   regexFromFilters,

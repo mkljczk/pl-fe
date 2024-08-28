@@ -1,7 +1,8 @@
+import { instanceSchema } from 'pl-api';
+
 import { __stub } from 'pl-fe/api';
 import { buildGroup } from 'pl-fe/jest/factory';
 import { renderHook, waitFor } from 'pl-fe/jest/test-helpers';
-import { instanceSchema } from 'pl-fe/schemas';
 
 import { useGroups } from './useGroups';
 

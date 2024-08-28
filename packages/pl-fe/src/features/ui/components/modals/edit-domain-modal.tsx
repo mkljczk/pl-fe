@@ -8,7 +8,7 @@ import { useAppDispatch } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 
 import type { BaseModalProps } from '../modal-root';
-import type { Domain } from 'pl-fe/schemas';
+import type { AdminDomain } from 'pl-api';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_domain.save', defaultMessage: 'Save' },
@@ -27,7 +27,7 @@ const EditDomainModal: React.FC<BaseModalProps & EditDomainModalProps> = ({ onCl
 
   const { data: domains, createDomain, isCreating, updateDomain, isUpdating } = useDomains();
 
-  const [domain] = useState<Domain | null>(domainId ? domains!.find(({ id }) => domainId === id)! : null);
+  const [domain] = useState<AdminDomain | null>(domainId ? domains!.find(({ id }) => domainId === id)! : null);
   const [domainName, setDomainName] = useState(domain?.domain || '');
   const [isPublic, setPublic] = useState(domain?.public || false);
 

@@ -19,7 +19,6 @@ import { isStandalone } from 'pl-fe/utils/state';
 import type { List as ImmutableList } from 'immutable';
 import type { Account as AccountEntity } from 'pl-fe/normalizers';
 
-
 const messages = defineMessages({
   profile: { id: 'account.profile', defaultMessage: 'Profile' },
   preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },

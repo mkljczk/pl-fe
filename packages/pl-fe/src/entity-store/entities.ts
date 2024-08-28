@@ -1,6 +1,5 @@
-import type { BookmarkFolder, GroupMember, GroupRelationship, Relationship, TrendsLink } from 'pl-api';
+import type { AdminDomain, AdminRelay, AdminRule, BookmarkFolder, GroupMember, GroupRelationship, Relationship, TrendsLink } from 'pl-api';
 import type { Account, Group, Status } from 'pl-fe/normalizers';
-import type * as Schemas from 'pl-fe/schemas';
 
 enum Entities {
   ACCOUNTS = 'Accounts',
@@ -20,13 +19,13 @@ enum Entities {
 interface EntityTypes {
   [Entities.ACCOUNTS]: Account;
   [Entities.BOOKMARK_FOLDERS]: BookmarkFolder;
-  [Entities.DOMAINS]: Schemas.Domain;
+  [Entities.DOMAINS]: AdminDomain;
   [Entities.GROUPS]: Group;
   [Entities.GROUP_MEMBERSHIPS]: GroupMember;
   [Entities.GROUP_RELATIONSHIPS]: GroupRelationship;
   [Entities.RELATIONSHIPS]: Relationship;
-  [Entities.RELAYS]: Schemas.Relay;
-  [Entities.RULES]: Schemas.AdminRule;
+  [Entities.RELAYS]: AdminRelay;
+  [Entities.RULES]: AdminRule;
   [Entities.STATUSES]: Status;
   [Entities.TRENDS_LINKS]: TrendsLink;
 }

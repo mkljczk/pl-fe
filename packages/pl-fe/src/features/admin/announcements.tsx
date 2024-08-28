@@ -6,7 +6,7 @@ import { useAnnouncements } from 'pl-fe/api/hooks/admin/useAnnouncements';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Button, Column, HStack, Stack, Text } from 'pl-fe/components/ui';
 import { useAppDispatch } from 'pl-fe/hooks';
-import { AdminAnnouncement } from 'pl-fe/schemas';
+import { AdminAnnouncement } from 'pl-fe/normalizers';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({

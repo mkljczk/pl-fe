@@ -11,7 +11,7 @@ import toast from 'pl-fe/toast';
 
 import Indicator from '../developers/components/indicator';
 
-import type { Domain as DomainEntity } from 'pl-fe/schemas';
+import type { AdminDomain as DomainEntity } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.domains', defaultMessage: 'Domains' },

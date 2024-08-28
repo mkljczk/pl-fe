@@ -3,15 +3,20 @@ import z from 'zod';
 import {
   accountSchema,
   adminAccountSchema,
+  adminAnnouncementSchema,
   adminCanonicalEmailBlockSchema,
   adminCohortSchema,
   adminDimensionSchema,
   adminDomainAllowSchema,
   adminDomainBlockSchema,
+  adminDomainSchema,
   adminEmailDomainBlockSchema,
   adminIpBlockSchema,
   adminMeasureSchema,
+  adminModerationLogEntrySchema,
+  adminRelaySchema,
   adminReportSchema,
+  adminRuleSchema,
   adminTagSchema,
   announcementSchema,
   applicationSchema,
@@ -46,6 +51,7 @@ import {
   notificationRequestSchema,
   notificationSchema,
   oauthTokenSchema,
+  pleromaConfigSchema,
   pollSchema,
   relationshipSchema,
   reportSchema,
@@ -71,11 +77,13 @@ import { buildFullPath } from './utils/url';
 import type {
   Account,
   AdminAccount,
+  AdminAnnouncement,
   AdminCanonicalEmailBlock,
   AdminDomainAllow,
   AdminDomainBlock,
   AdminEmailDomainBlock,
   AdminIpBlock,
+  AdminModerationLogEntry,
   AdminReport,
   Chat,
   ChatMessage,
@@ -83,6 +91,7 @@ import type {
   GroupRole,
   Instance,
   Notification,
+  PleromaConfig,
   ScheduledStatus,
   Status,
   StreamingEvent,
@@ -90,10 +99,14 @@ import type {
 } from './entities';
 import type {
   AdminAccountAction,
+  AdminCreateAnnouncementParams,
   AdminCreateDomainBlockParams,
+  AdminCreateDomainParams,
   AdminCreateIpBlockParams,
+  AdminCreateRuleParams,
   AdminDimensionKey,
   AdminGetAccountsParams,
+  AdminGetAnnouncementsParams,
   AdminGetCanonicalEmailBlocks,
   AdminGetDimensionsParams,
   AdminGetDomainAllowsParams,
@@ -102,12 +115,15 @@ import type {
   AdminGetGroupsParams,
   AdminGetIpBlocksParams,
   AdminGetMeasuresParams,
+  AdminGetModerationLogParams,
   AdminGetReportsParams,
   AdminGetStatusesParams,
   AdminMeasureKey,
   AdminPerformAccountActionParams,
+  AdminUpdateAnnouncementParams,
   AdminUpdateDomainBlockParams,
   AdminUpdateReportParams,
+  AdminUpdateRuleParams,
   AdminUpdateStatusParams,
   BubbleTimelineParams,
   CreateAccountParams,
@@ -1776,6 +1792,17 @@ class PlApiClient {
     },
 
     /**
+     * Translate multiple statuses into given language.
+     *
+     * Requires features{@link Features['lazyTranslations']}.
+     */
+    translateStatuses: async (statusIds: Array<string>, lang: string) => {
+      const response = await this.request('/api/v1/pl/statuses/translate', { method: 'POST', body: { ids: statusIds, lang } });
+
+      return filteredArray(translationSchema).parse(response.json);
+    },
+
+    /**
      * See who boosted a status
      * View who boosted a given status.
      * @see {@link https://docs.joinmastodon.org/methods/statuses/#reblogged_by}
@@ -2708,7 +2735,7 @@ class PlApiClient {
     getFrontendConfigurations: async () => {
       const response = await this.request('/api/pleroma/frontend_configurations');
 
-      return z.record(z.record(z.any())).catch({}).parse(response);
+      return z.record(z.record(z.any())).catch({}).parse(response.json);
     },
   };
 
@@ -2965,7 +2992,7 @@ class PlApiClient {
         } else {
           const { account } = await this.admin.accounts.getAccount(accountId)!;
 
-          response = await this.request('/api/v1/pleroma/admin/users/activate', { body: { nicknames: [account!.username] } });
+          response = await this.request('/api/v1/pleroma/admin/users/activate', { body: { nicknames: [account!.acct] } });
           response.json = response.json?.users?.[0];
         }
 
@@ -2991,11 +3018,11 @@ class PlApiClient {
 
         await this.request('/api/v1/pleroma/admin/users/permission_group/moderator', {
           method: 'DELETE',
-          body: { nicknames: [account!.username] },
+          body: { nicknames: [account!.acct] },
         });
         const response = await this.request('/api/v1/pleroma/admin/users/permission_group/admin', {
           method: 'POST',
-          body: { nicknames: [account!.username] },
+          body: { nicknames: [account!.acct] },
         });
 
         return response.json as {};
@@ -3008,9 +3035,9 @@ class PlApiClient {
         const { account } = await this.admin.accounts.getAccount(accountId)!;
 
         await this.request('/api/v1/pleroma/admin/users/permission_group/admin', {
-          method: 'DELETE', body: { nicknames: [account!.username] } });
+          method: 'DELETE', body: { nicknames: [account!.acct] } });
         const response = await this.request('/api/v1/pleroma/admin/users/permission_group/moderator', {
-          method: 'POST', body: { nicknames: [account!.username] } });
+          method: 'POST', body: { nicknames: [account!.acct] } });
 
         return response.json as {};
       },
@@ -3023,11 +3050,79 @@ class PlApiClient {
 
         await this.request('/api/v1/pleroma/admin/users/permission_group/moderator', {
           method: 'DELETE',
-          body: { nicknames: [account!.username] },
+          body: { nicknames: [account!.acct] },
         });
         const response = await this.request('/api/v1/pleroma/admin/users/permission_group/admin', {
           method: 'DELETE',
-          body: { nicknames: [account!.username] },
+          body: { nicknames: [account!.acct] },
+        });
+
+        return response.json as {};
+      },
+
+      /**
+       * Tag a user.
+       *
+       * Requires features{@link Features['pleromaAdminAccounts']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#patch-apiv1pleromaadminuserssuggest}
+       */
+      suggestUser: async (accountId: string) => {
+        const { account } = await this.admin.accounts.getAccount(accountId)!;
+
+        const response = await this.request('/api/v1/pleroma/admin/users/suggest', {
+          method: 'PATCH',
+          body: { nicknames: [account!.acct] },
+        });
+
+        return response.json as {};
+      },
+
+      /**
+       * Untag a user.
+       *
+       * Requires features{@link Features['pleromaAdminAccounts']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#patch-apiv1pleromaadminusersunsuggest}
+       */
+      unsuggestUser: async (accountId: string) => {
+        const { account } = await this.admin.accounts.getAccount(accountId)!;
+
+        const response = await this.request('/api/v1/pleroma/admin/users/unsuggest', {
+          method: 'PATCH',
+          body: { nicknames: [account!.acct] },
+        });
+
+        return response.json as {};
+      },
+
+      /**
+       * Tag a user.
+       *
+       * Requires features{@link Features['pleromaAdminAccounts']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#put-apiv1pleromaadminuserstag}
+       */
+      tagUser: async (accountId: string, tags: Array<string>) => {
+        const { account } = await this.admin.accounts.getAccount(accountId)!;
+
+        const response = await this.request('/api/v1/pleroma/admin/users/tag', {
+          method: 'PUT',
+          body: { nicknames: [account!.acct], tags },
+        });
+
+        return response.json as {};
+      },
+
+      /**
+       * Untag a user.
+       *
+       * Requires features{@link Features['pleromaAdminAccounts']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#delete-apiv1pleromaadminuserstag}
+       */
+      untagUser: async (accountId: string, tags: Array<string>) => {
+        const { account } = await this.admin.accounts.getAccount(accountId)!;
+
+        const response = await this.request('/api/v1/pleroma/admin/users/tag', {
+          method: 'DELETE',
+          body: { nicknames: [account!.acct], tags },
         });
 
         return response.json as {};
@@ -3517,6 +3612,7 @@ class PlApiClient {
     retention: {
       /**
        * Calculate retention data
+       *
        * Generate a retention data report for a given time period and bucket.
        * @see {@link https://docs.joinmastodon.org/methods/admin/retention/#create}
        */
@@ -3524,6 +3620,244 @@ class PlApiClient {
         const response = await this.request('/api/v1/admin/retention', { params: { start_at, end_at, frequency } });
 
         return adminCohortSchema.parse(response.json);
+      },
+    },
+
+    announcements: {
+      /**
+       * List announcements
+       *
+       * Requires features{@link Features['pleromaAdminAnnouncements']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminannouncements}
+       */
+      getAnnouncements: async (params?: AdminGetAnnouncementsParams): Promise<PaginatedResponse<AdminAnnouncement>> => {
+        const response = await this.request('/api/v1/pleroma/admin/announcements', { params });
+
+        const items = filteredArray(adminAnnouncementSchema).parse(response.json);
+
+        return {
+          previous: null,
+          next: items.length ? () => this.admin.announcements.getAnnouncements({ ...params, offset: (params?.offset || 0) + items.length }) : null,
+          items,
+          partial: false,
+        };
+      },
+
+      /**
+       * Display one announcement
+       *
+       * Requires features{@link Features['pleromaAdminAnnouncements']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminannouncementsid}
+       */
+      getAnnouncement: async (announcementId: string) => {
+        const response = await this.request(`/api/v1/pleroma/admin/announcements/${announcementId}`);
+
+        return adminAnnouncementSchema.parse(response.json);
+      },
+
+      /**
+       * Create an announcement
+       *
+       * Requires features{@link Features['pleromaAdminAnnouncements']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#post-apiv1pleromaadminannouncements}
+       */
+      createAnnouncement: async (params: AdminCreateAnnouncementParams) => {
+        const response = await this.request('/api/v1/pleroma/admin/announcements', { method: 'POST', body: params });
+
+        return adminAnnouncementSchema.parse(response.json);
+      },
+
+      /**
+       * Change an announcement
+       *
+       * Requires features{@link Features['pleromaAdminAnnouncements']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#patch-apiv1pleromaadminannouncementsid}
+       */
+      updateAnnouncement: async (announcementId: string, params: AdminUpdateAnnouncementParams) => {
+        const response = await this.request(`/api/v1/pleroma/admin/announcements/${announcementId}`, { method: 'PATCH', body: params });
+
+        return adminAnnouncementSchema.parse(response.json);
+      },
+
+      /**
+       * Delete an announcement
+       *
+       * Requires features{@link Features['pleromaAdminAnnouncements']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#delete-apiv1pleromaadminannouncementsid}
+       */
+      deleteAnnouncement: async (announcementId: string) => {
+        const response = await this.request(`/api/v1/pleroma/admin/announcements/${announcementId}`, { method: 'DELETE' });
+
+        return response.json as {};
+      },
+    },
+
+    domains: {
+      /**
+       * List of domains
+       *
+       * Requires features{@link Features['domains']}.
+       */
+      getDomains: async () => {
+        const response = await this.request('/api/v1/pleroma/admin/domains');
+
+        return filteredArray(adminDomainSchema).parse(response.json);
+      },
+
+      /**
+       * Create a domain
+       *
+       * Requires features{@link Features['domains']}.
+       */
+      createDomain: async (params: AdminCreateDomainParams) => {
+        const response = await this.request('/api/v1/pleroma/admin/domains', { method: 'POST', body: params });
+
+        return adminDomainSchema.parse(response.json);
+      },
+
+      /**
+       * Change domain publicity
+       *
+       * Requires features{@link Features['domains']}.
+       */
+      updateDomain: async (domainId: string, isPublic: boolean) => {
+        const response = await this.request(`/api/v1/pleroma/admin/domains/${domainId}`, { method: 'PATCH', body: { public: isPublic } });
+
+        return adminDomainSchema.parse(response.json);
+      },
+
+      /**
+       * Delete a domain
+       *
+       * Requires features{@link Features['domains']}.
+       */
+      deleteDomain: async (domainId: string) => {
+        const response = await this.request(`/api/v1/pleroma/admin/domains/${domainId}`, { method: 'DELETE' });
+
+        return response.json as {};
+      },
+    },
+
+    moderationLog: {
+      /**
+       * Get moderation log
+       *
+       * Requires features{@link Features['pleromaAdminModerationLog']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminmoderation_log}
+      */
+      getModerationLog: async ({ limit, ...params }: AdminGetModerationLogParams = {}): Promise<PaginatedResponse<AdminModerationLogEntry>> => {
+        const response = await this.request('/api/v1/pleroma/admin/moderation_log', { params: { page_size: limit, ...params } });
+
+        const items = filteredArray(adminModerationLogEntrySchema).parse(response.json.items);
+
+        return {
+          previous: (params.page && params.page > 1) ? () => this.admin.moderationLog.getModerationLog({ ...params, page: params.page! - 1 }) : null,
+          next: response.json.total > (params.page || 1) * (limit || 50) ? () => this.admin.moderationLog.getModerationLog({ ...params, page: (params.page || 1) + 1 }) : null,
+          items,
+          partial: response.status === 206,
+        };
+      },
+    },
+
+    relays: {
+      /**
+       * List Relays
+       *
+       * Requires features{@link Features['pleromaAdminRelays']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminrelay}
+       */
+      getRelays: async () => {
+        const response = await this.request('/api/v1/pleroma/admin/relay');
+
+        return filteredArray(adminRelaySchema).parse(response.json);
+      },
+
+      /**
+       * Follow a Relay
+       *
+       * Requires features{@link Features['pleromaAdminRelays']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#post-apiv1pleromaadminrelay}
+       */
+      followRelay: async (relayUrl: string) => {
+        const response = await this.request('/api/v1/pleroma/admin/relay', { method: 'POST', body: { relay_url: relayUrl } });
+
+        return adminRelaySchema.parse(response.json);
+      },
+
+      /**
+       * Unfollow a Relay
+       *
+       * Requires features{@link Features['pleromaAdminRelays']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#delete-apiv1pleromaadminrelay}
+       */
+      unfollowRelay: async (relayUrl: string, force = false) => {
+        const response = await this.request('/api/v1/pleroma/admin/relay', { method: 'DELETE', body: { relay_url: relayUrl, force } });
+
+        return adminRelaySchema.parse(response.json);
+      },
+    },
+
+    rules: {
+      /**
+       * List rules
+       *
+       * Requires features{@link Features['pleromaAdminRules']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminrules}
+       */
+      getRules: async () => {
+        const response = await this.request('/api/v1/pleroma/admin/rules');
+
+        return filteredArray(adminRuleSchema).parse(response.json);
+      },
+
+      /**
+       * Create a rule
+       *
+       * Requires features{@link Features['pleromaAdminRules']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#post-apiv1pleromaadminrules}
+       */
+      createRule: async (params: AdminCreateRuleParams) => {
+        const response = await this.request('/api/v1/pleroma/admin/rules', { method: 'POST', body: params });
+
+        return adminRuleSchema.parse(response.json);
+      },
+
+      /**
+       * Update a rule
+       *
+       * Requires features{@link Features['pleromaAdminRules']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#patch-apiv1pleromaadminrulesid}
+       */
+      updateRule: async (ruleId: string, params: AdminUpdateRuleParams) => {
+        const response = await this.request(`/api/v1/pleroma/admin/rules/${ruleId}`, { method: 'PATCH', body: params });
+
+        return adminRuleSchema.parse(response.json);
+      },
+
+      /**
+       * Delete a rule
+       *
+       * Requires features{@link Features['pleromaAdminRules']}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#delete-apiv1pleromaadminrulesid}
+       */
+      deleteRule: async (ruleId: string) => {
+        const response = await this.request(`/api/v1/pleroma/admin/rules/${ruleId}`, { method: 'DELETE' });
+
+        return response.json as {};
+      },
+    },
+
+    config: {
+      getPleromaConfig: async () => {
+        const response = await this.request('/api/v1/pleroma/admin/config');
+
+        return pleromaConfigSchema.parse(response.json);
+      },
+
+      updatePleromaConfig: async (params: PleromaConfig['configs']) => {
+        const response = await this.request('/api/v1/pleroma/admin/config', { method: 'POST', body: { configs: params } });
+
+        return pleromaConfigSchema.parse(response.json);
       },
     },
   };

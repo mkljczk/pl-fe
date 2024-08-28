@@ -2,7 +2,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { useClient } from 'pl-fe/hooks';
 import { queryClient } from 'pl-fe/queries/client';
-import { adminRuleSchema, type AdminRule } from 'pl-fe/schemas';
+
+import type { AdminRule } from 'pl-api';
 
 interface CreateRuleParams {
   priority?: number;
@@ -20,12 +21,7 @@ interface UpdateRuleParams {
 const useRules = () => {
   const client = useClient();
 
-  const getRules = async () => {
-    const { json: data } = await client.request<AdminRule[]>('/api/v1/pleroma/admin/rules');
-
-    const normalizedData = data.map((rule) => adminRuleSchema.parse(rule));
-    return normalizedData;
-  };
+  const getRules = () => client.admin.rules.getRules();
 
   const result = useQuery<ReadonlyArray<AdminRule>>({
     queryKey: ['admin', 'rules'],
@@ -37,13 +33,11 @@ const useRules = () => {
     mutate: createRule,
     isPending: isCreating,
   } = useMutation({
-    mutationFn: (params: CreateRuleParams) => client.request('/api/v1/pleroma/admin/rules', {
-      method: 'POST', body: params,
-    }),
+    mutationFn: (params: CreateRuleParams) => client.admin.rules.createRule(params),
     retry: false,
-    onSuccess: ({ json: data }) =>
+    onSuccess: (data) =>
       queryClient.setQueryData(['admin', 'rules'], (prevResult: ReadonlyArray<AdminRule>) =>
-        [...prevResult, adminRuleSchema.parse(data)],
+        [...prevResult, data],
       ),
   });
 
@@ -51,13 +45,11 @@ const useRules = () => {
     mutate: updateRule,
     isPending: isUpdating,
   } = useMutation({
-    mutationFn: ({ id, ...params }: UpdateRuleParams) => client.request(`/api/v1/pleroma/admin/rules/${id}`, {
-      method: 'PATCH', body: params,
-    }),
+    mutationFn: ({ id, ...params }: UpdateRuleParams) => client.admin.rules.updateRule(id, params),
     retry: false,
-    onSuccess: ({ json: data }) =>
+    onSuccess: (data) =>
       queryClient.setQueryData(['admin', 'rules'], (prevResult: ReadonlyArray<AdminRule>) =>
-        prevResult.map((rule) => rule.id === data.id ? adminRuleSchema.parse(data) : rule),
+        prevResult.map((rule) => rule.id === data.id ? data : rule),
       ),
   });
 
@@ -65,7 +57,7 @@ const useRules = () => {
     mutate: deleteRule,
     isPending: isDeleting,
   } = useMutation({
-    mutationFn: (id: string) => client.request(`/api/v1/pleroma/admin/rules/${id}`, { method: 'DELETE' }),
+    mutationFn: (id: string) => client.admin.rules.deleteRule(id),
     retry: false,
     onSuccess: (_, id) =>
       queryClient.setQueryData(['admin', 'rules'], (prevResult: ReadonlyArray<AdminRule>) =>
