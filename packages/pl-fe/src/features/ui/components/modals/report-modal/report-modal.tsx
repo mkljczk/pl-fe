@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { blockAccount } from 'soapbox/actions/accounts';
-import { submitReport, submitReportSuccess, submitReportFail, ReportableEntities } from 'soapbox/actions/reports';
-import { fetchAccountTimeline } from 'soapbox/actions/timelines';
-import { useAccount } from 'soapbox/api/hooks';
-import AttachmentThumbs from 'soapbox/components/attachment-thumbs';
-import StatusContent from 'soapbox/components/status-content';
-import { Modal, ProgressBar, Stack, Text } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
-import { useAppDispatch, useAppSelector, useInstance } from 'soapbox/hooks';
+import { blockAccount } from 'pl-fe/actions/accounts';
+import { submitReport, submitReportSuccess, submitReportFail, ReportableEntities } from 'pl-fe/actions/reports';
+import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
+import { useAccount } from 'pl-fe/api/hooks';
+import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
+import StatusContent from 'pl-fe/components/status-content';
+import { Modal, ProgressBar, Stack, Text } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
+import { useAppDispatch, useAppSelector, useInstance } from 'pl-fe/hooks';
 
 import ConfirmationStep from './steps/confirmation-step';
 import OtherActionsStep from './steps/other-actions-step';

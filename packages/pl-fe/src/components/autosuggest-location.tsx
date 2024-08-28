@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useAppSelector } from 'soapbox/hooks';
+import { useAppSelector } from 'pl-fe/hooks';
 
 import { HStack, Icon, Stack, Text } from './ui';
 

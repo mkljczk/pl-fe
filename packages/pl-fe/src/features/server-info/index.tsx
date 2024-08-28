@@ -1,8 +1,8 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { Column, Divider, Stack, Text } from 'soapbox/components/ui';
-import { useInstance } from 'soapbox/hooks';
+import { Column, Divider, Stack, Text } from 'pl-fe/components/ui';
+import { useInstance } from 'pl-fe/hooks';
 
 import LinkFooter from '../ui/components/link-footer';
 import PromoPanel from '../ui/components/promo-panel';

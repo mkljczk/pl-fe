@@ -1,16 +1,16 @@
 import React from 'react';
 import { defineMessages, IntlShape } from 'react-intl';
 
-import { fetchAccountByUsername } from 'soapbox/actions/accounts';
-import { deactivateUser, deleteUser, deleteStatus, toggleStatusSensitivity } from 'soapbox/actions/admin';
-import { openModal } from 'soapbox/actions/modals';
-import OutlineBox from 'soapbox/components/outline-box';
-import { Stack, Text } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
-import { selectAccount } from 'soapbox/selectors';
-import toast from 'soapbox/toast';
+import { fetchAccountByUsername } from 'pl-fe/actions/accounts';
+import { deactivateUser, deleteUser, deleteStatus, toggleStatusSensitivity } from 'pl-fe/actions/admin';
+import { openModal } from 'pl-fe/actions/modals';
+import OutlineBox from 'pl-fe/components/outline-box';
+import { Stack, Text } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
+import { selectAccount } from 'pl-fe/selectors';
+import toast from 'pl-fe/toast';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const messages = defineMessages({
   deactivateUserHeading: { id: 'confirmations.admin.deactivate_user.heading', defaultMessage: 'Deactivate @{acct}' },

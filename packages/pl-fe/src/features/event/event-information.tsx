@@ -1,18 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import { fetchStatus } from 'soapbox/actions/statuses';
-import MissingIndicator from 'soapbox/components/missing-indicator';
-import StatusContent from 'soapbox/components/status-content';
-import StatusMedia from 'soapbox/components/status-media';
-import TranslateButton from 'soapbox/components/translate-button';
-import { HStack, Icon, Stack, Text } from 'soapbox/components/ui';
-import QuotedStatus from 'soapbox/features/status/containers/quoted-status-container';
-import { useAppDispatch, useAppSelector, useSoapboxConfig } from 'soapbox/hooks';
-import { makeGetStatus } from 'soapbox/selectors';
+import { openModal } from 'pl-fe/actions/modals';
+import { fetchStatus } from 'pl-fe/actions/statuses';
+import MissingIndicator from 'pl-fe/components/missing-indicator';
+import StatusContent from 'pl-fe/components/status-content';
+import StatusMedia from 'pl-fe/components/status-media';
+import TranslateButton from 'pl-fe/components/translate-button';
+import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
+import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
+import { useAppDispatch, useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
+import { makeGetStatus } from 'pl-fe/selectors';
 
-import type { Status as StatusEntity } from 'soapbox/normalizers';
+import type { Status as StatusEntity } from 'pl-fe/normalizers';
 
 type RouteParams = { statusId: string };
 
@@ -27,7 +27,7 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
 
   const status = useAppSelector(state => getStatus(state, { id: params.statusId })) as StatusEntity;
 
-  const { tileServer } = useSoapboxConfig();
+  const { tileServer } = usePlFeConfig();
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 

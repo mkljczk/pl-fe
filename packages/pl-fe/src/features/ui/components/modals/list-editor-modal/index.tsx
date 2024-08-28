@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { setupListEditor, resetListEditor } from 'soapbox/actions/lists';
-import { CardHeader, CardTitle, Modal } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch } from 'soapbox/hooks';
+import { setupListEditor, resetListEditor } from 'pl-fe/actions/lists';
+import { CardHeader, CardTitle, Modal } from 'pl-fe/components/ui';
+import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 import Account from './components/account';
 import EditListForm from './components/edit-list-form';

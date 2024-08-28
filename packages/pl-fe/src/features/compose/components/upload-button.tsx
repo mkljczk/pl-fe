@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
-import { IconButton } from 'soapbox/components/ui';
-import { useInstance } from 'soapbox/hooks';
+import { IconButton } from 'pl-fe/components/ui';
+import { useInstance } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   upload: { id: 'upload_button.label', defaultMessage: 'Add media attachment' },

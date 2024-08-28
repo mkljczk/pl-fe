@@ -1,4 +1,4 @@
-import { isLoggedIn } from 'soapbox/utils/auth';
+import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { getClient } from '../api';
 
@@ -9,7 +9,7 @@ import {
 } from './importer';
 
 import type { Account, Conversation, PaginatedResponse, Status } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const CONVERSATIONS_MOUNT = 'CONVERSATIONS_MOUNT' as const;
 const CONVERSATIONS_UNMOUNT = 'CONVERSATIONS_UNMOUNT' as const;

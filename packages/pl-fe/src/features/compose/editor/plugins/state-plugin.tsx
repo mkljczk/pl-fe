@@ -5,10 +5,10 @@ import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-import { addSuggestedLanguage, addSuggestedQuote, setEditorState } from 'soapbox/actions/compose';
-import { fetchStatus } from 'soapbox/actions/statuses';
-import { useAppDispatch, useFeatures } from 'soapbox/hooks';
-import { getStatusIdsFromLinksInContent } from 'soapbox/utils/status';
+import { addSuggestedLanguage, addSuggestedQuote, setEditorState } from 'pl-fe/actions/compose';
+import { fetchStatus } from 'pl-fe/actions/statuses';
+import { useAppDispatch, useFeatures } from 'pl-fe/hooks';
+import { getStatusIdsFromLinksInContent } from 'pl-fe/utils/status';
 
 import type { LanguageIdentificationModel } from 'fasttext.wasm.js/dist/models/language-identification/common.js';
 

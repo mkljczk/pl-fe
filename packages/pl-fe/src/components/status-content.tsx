@@ -4,11 +4,11 @@ import React, { useState, useRef, useLayoutEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { toggleStatusSpoilerExpanded } from 'soapbox/actions/statuses';
-import Icon from 'soapbox/components/icon';
-import { Button, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useSettings } from 'soapbox/hooks';
-import { onlyEmoji as isOnlyEmoji } from 'soapbox/utils/rich-content';
+import { toggleStatusSpoilerExpanded } from 'pl-fe/actions/statuses';
+import Icon from 'pl-fe/components/icon';
+import { Button, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useSettings } from 'pl-fe/hooks';
+import { onlyEmoji as isOnlyEmoji } from 'pl-fe/utils/rich-content';
 
 import { getTextDirection } from '../utils/rtl';
 
@@ -17,8 +17,8 @@ import HoverRefWrapper from './hover-ref-wrapper';
 import Markup from './markup';
 import Poll from './polls/poll';
 
-import type { Sizes } from 'soapbox/components/ui/text/text';
-import type { MinifiedStatus } from 'soapbox/reducers/statuses';
+import type { Sizes } from 'pl-fe/components/ui/text/text';
+import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 
 const MAX_HEIGHT = 322; // 20px * 16 (+ 2px padding at the top)
 const BIG_EMOJI_LIMIT = 10;

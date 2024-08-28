@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import z from 'zod';
 
-import { useAppDispatch } from 'soapbox/hooks/useAppDispatch';
-import { useAppSelector } from 'soapbox/hooks/useAppSelector';
-import { useLoading } from 'soapbox/hooks/useLoading';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useLoading } from 'pl-fe/hooks/useLoading';
 
 import { importEntities } from '../actions';
 import { selectEntity } from '../selectors';
 
 import type { EntitySchema, EntityPath, EntityFn } from './types';
 import type { Entity } from '../types';
-import type { PlfeResponse } from 'soapbox/api';
+import type { PlfeResponse } from 'pl-fe/api';
 
 /** Additional options for the hook. */
 interface UseEntityOpts<TEntity extends Entity, TTransformedEntity extends Entity> {

@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { Button, Stack, Text } from 'soapbox/components/ui';
+import { Button, Stack, Text } from 'pl-fe/components/ui';
 
 /** To display on the chats main page when no message is selected, but chats are present. */
 const BlankslateWithChats = () => {

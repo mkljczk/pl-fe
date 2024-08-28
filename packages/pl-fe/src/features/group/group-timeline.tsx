@@ -3,13 +3,13 @@ import React, { useEffect, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { groupCompose, uploadCompose } from 'soapbox/actions/compose';
-import { fetchGroupTimeline } from 'soapbox/actions/timelines';
-import { useGroup, useGroupStream } from 'soapbox/api/hooks';
-import { Avatar, HStack, Icon, Stack, Text } from 'soapbox/components/ui';
-import ComposeForm from 'soapbox/features/compose/components/compose-form';
-import { useAppDispatch, useAppSelector, useDraggedFiles, useOwnAccount } from 'soapbox/hooks';
-import { makeGetStatusIds } from 'soapbox/selectors';
+import { groupCompose, uploadCompose } from 'pl-fe/actions/compose';
+import { fetchGroupTimeline } from 'pl-fe/actions/timelines';
+import { useGroup, useGroupStream } from 'pl-fe/api/hooks';
+import { Avatar, HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
+import ComposeForm from 'pl-fe/features/compose/components/compose-form';
+import { useAppDispatch, useAppSelector, useDraggedFiles, useOwnAccount } from 'pl-fe/hooks';
+import { makeGetStatusIds } from 'pl-fe/selectors';
 
 import Timeline from '../ui/components/timeline';
 

@@ -2,40 +2,40 @@ import clsx from 'clsx';
 import React, { Suspense, lazy, useEffect, useRef } from 'react';
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom';
 
-import { fetchFollowRequests } from 'soapbox/actions/accounts';
-import { fetchReports, fetchUsers, fetchConfig } from 'soapbox/actions/admin';
-import { fetchCustomEmojis } from 'soapbox/actions/custom-emojis';
-import { fetchDraftStatuses } from 'soapbox/actions/draft-statuses';
-import { fetchFilters } from 'soapbox/actions/filters';
-import { fetchMarker } from 'soapbox/actions/markers';
-import { expandNotifications } from 'soapbox/actions/notifications';
-import { register as registerPushNotifications } from 'soapbox/actions/push-notifications';
-import { fetchScheduledStatuses } from 'soapbox/actions/scheduled-statuses';
-import { fetchSuggestionsForTimeline } from 'soapbox/actions/suggestions';
-import { fetchHomeTimeline } from 'soapbox/actions/timelines';
-import { useUserStream } from 'soapbox/api/hooks';
-import SidebarNavigation from 'soapbox/components/sidebar-navigation';
-import ThumbNavigation from 'soapbox/components/thumb-navigation';
-import { Layout } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useOwnAccount, useSoapboxConfig, useFeatures, useDraggedFiles, useInstance, useLoggedIn } from 'soapbox/hooks';
-import AdminLayout from 'soapbox/layouts/admin-layout';
-import ChatsLayout from 'soapbox/layouts/chats-layout';
-import DefaultLayout from 'soapbox/layouts/default-layout';
-import EmptyLayout from 'soapbox/layouts/empty-layout';
-import EventLayout from 'soapbox/layouts/event-layout';
-import EventsLayout from 'soapbox/layouts/events-layout';
-import ExternalLoginLayout from 'soapbox/layouts/external-login-layout';
-import GroupLayout from 'soapbox/layouts/group-layout';
-import GroupsLayout from 'soapbox/layouts/groups-layout';
-import HomeLayout from 'soapbox/layouts/home-layout';
-import LandingLayout from 'soapbox/layouts/landing-layout';
-import ManageGroupsLayout from 'soapbox/layouts/manage-groups-layout';
-import ProfileLayout from 'soapbox/layouts/profile-layout';
-import RemoteInstanceLayout from 'soapbox/layouts/remote-instance-layout';
-import SearchLayout from 'soapbox/layouts/search-layout';
-import StatusLayout from 'soapbox/layouts/status-layout';
-import { getVapidKey } from 'soapbox/utils/auth';
-import { isStandalone } from 'soapbox/utils/state';
+import { fetchFollowRequests } from 'pl-fe/actions/accounts';
+import { fetchReports, fetchUsers, fetchConfig } from 'pl-fe/actions/admin';
+import { fetchCustomEmojis } from 'pl-fe/actions/custom-emojis';
+import { fetchDraftStatuses } from 'pl-fe/actions/draft-statuses';
+import { fetchFilters } from 'pl-fe/actions/filters';
+import { fetchMarker } from 'pl-fe/actions/markers';
+import { expandNotifications } from 'pl-fe/actions/notifications';
+import { register as registerPushNotifications } from 'pl-fe/actions/push-notifications';
+import { fetchScheduledStatuses } from 'pl-fe/actions/scheduled-statuses';
+import { fetchSuggestionsForTimeline } from 'pl-fe/actions/suggestions';
+import { fetchHomeTimeline } from 'pl-fe/actions/timelines';
+import { useUserStream } from 'pl-fe/api/hooks';
+import SidebarNavigation from 'pl-fe/components/sidebar-navigation';
+import ThumbNavigation from 'pl-fe/components/thumb-navigation';
+import { Layout } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector, useOwnAccount, usePlFeConfig, useFeatures, useDraggedFiles, useInstance, useLoggedIn } from 'pl-fe/hooks';
+import AdminLayout from 'pl-fe/layouts/admin-layout';
+import ChatsLayout from 'pl-fe/layouts/chats-layout';
+import DefaultLayout from 'pl-fe/layouts/default-layout';
+import EmptyLayout from 'pl-fe/layouts/empty-layout';
+import EventLayout from 'pl-fe/layouts/event-layout';
+import EventsLayout from 'pl-fe/layouts/events-layout';
+import ExternalLoginLayout from 'pl-fe/layouts/external-login-layout';
+import GroupLayout from 'pl-fe/layouts/group-layout';
+import GroupsLayout from 'pl-fe/layouts/groups-layout';
+import HomeLayout from 'pl-fe/layouts/home-layout';
+import LandingLayout from 'pl-fe/layouts/landing-layout';
+import ManageGroupsLayout from 'pl-fe/layouts/manage-groups-layout';
+import ProfileLayout from 'pl-fe/layouts/profile-layout';
+import RemoteInstanceLayout from 'pl-fe/layouts/remote-instance-layout';
+import SearchLayout from 'pl-fe/layouts/search-layout';
+import StatusLayout from 'pl-fe/layouts/status-layout';
+import { getVapidKey } from 'pl-fe/utils/auth';
+import { isStandalone } from 'pl-fe/utils/state';
 
 import BackgroundShapes from './components/background-shapes';
 import {
@@ -69,7 +69,7 @@ import {
   EditEmail,
   EditPassword,
   DeleteAccount,
-  SoapboxConfig,
+  PlFeConfig,
   ExportData,
   ImportData,
   Backups,
@@ -136,7 +136,7 @@ import { WrappedRoute } from './util/react-router-helpers';
 
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
-import 'soapbox/components/status';
+import 'pl-fe/components/status';
 
 interface ISwitchingColumnsArea {
   children: React.ReactNode;
@@ -149,7 +149,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
   const { isLoggedIn } = useLoggedIn();
   const standalone = useAppSelector(isStandalone);
 
-  const { authenticatedProfile, cryptoAddresses } = useSoapboxConfig();
+  const { authenticatedProfile, cryptoAddresses } = usePlFeConfig();
   const hasCrypto = cryptoAddresses.size > 0;
 
   // NOTE: Mastodon and Pleroma route some basenames to the backend.
@@ -203,7 +203,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
       <Redirect from='/registration' to='/' exact />
 
       {/* Mastodon rendered pages */}
-      <Redirect from='/admin' to='/soapbox/admin' />
+      <Redirect from='/admin' to='/pl-fe/admin' />
       <Redirect from='/terms' to='/about' />
       <Redirect from='/settings/preferences' to='/settings' />
       <Redirect from='/settings/two_factor_authentication_methods' to='/settings/mfa' />
@@ -218,14 +218,6 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
 
       {/* Pleroma hard-coded email URLs */}
       <Redirect from='/registration/:token' to='/invite/:token' />
-
-      {/* Soapbox Legacy redirects */}
-      <Redirect from='/canary' to='/about/canary' />
-      <Redirect from='/canary.txt' to='/about/canary' />
-      <Redirect from='/auth/external' to='/login/external' />
-      <Redirect from='/auth/mfa' to='/settings/mfa' />
-      <Redirect from='/auth/password/new' to='/reset-password' />
-      <Redirect from='/auth/password/edit' to={`/edit-password${search}`} />
 
       <WrappedRoute path='/tags/:id' publicRoute layout={DefaultLayout} component={HashtagTimeline} content={children} />
 
@@ -300,18 +292,18 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = ({ children }) => 
       <WrappedRoute path='/settings/tokens' layout={DefaultLayout} component={AuthTokenList} content={children} />
       {features.interactionRequests && <WrappedRoute path='/settings/interaction_policies' layout={DefaultLayout} component={InteractionPolicies} content={children} />}
       <WrappedRoute path='/settings' layout={DefaultLayout} component={Settings} content={children} />
-      <WrappedRoute path='/soapbox/config' adminOnly layout={DefaultLayout} component={SoapboxConfig} content={children} />
+      <WrappedRoute path='/pl-fe/config' adminOnly layout={DefaultLayout} component={PlFeConfig} content={children} />
 
-      <WrappedRoute path='/soapbox/admin' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
-      <WrappedRoute path='/soapbox/admin/approval' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
-      <WrappedRoute path='/soapbox/admin/reports' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
-      <WrappedRoute path='/soapbox/admin/log' staffOnly layout={AdminLayout} component={ModerationLog} content={children} exact />
-      <WrappedRoute path='/soapbox/admin/users' staffOnly layout={AdminLayout} component={UserIndex} content={children} exact />
-      <WrappedRoute path='/soapbox/admin/theme' staffOnly layout={AdminLayout} component={ThemeEditor} content={children} exact />
-      <WrappedRoute path='/soapbox/admin/relays' staffOnly layout={AdminLayout} component={Relays} content={children} exact />
-      {features.adminAnnouncements && <WrappedRoute path='/soapbox/admin/announcements' staffOnly layout={AdminLayout} component={Announcements} content={children} exact />}
-      {features.domains && <WrappedRoute path='/soapbox/admin/domains' staffOnly layout={AdminLayout} component={Domains} content={children} exact />}
-      {features.adminRules && <WrappedRoute path='/soapbox/admin/rules' staffOnly layout={AdminLayout} component={Rules} content={children} exact />}
+      <WrappedRoute path='/pl-fe/admin' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
+      <WrappedRoute path='/pl-fe/admin/approval' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
+      <WrappedRoute path='/pl-fe/admin/reports' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
+      <WrappedRoute path='/pl-fe/admin/log' staffOnly layout={AdminLayout} component={ModerationLog} content={children} exact />
+      <WrappedRoute path='/pl-fe/admin/users' staffOnly layout={AdminLayout} component={UserIndex} content={children} exact />
+      <WrappedRoute path='/pl-fe/admin/theme' staffOnly layout={AdminLayout} component={ThemeEditor} content={children} exact />
+      <WrappedRoute path='/pl-fe/admin/relays' staffOnly layout={AdminLayout} component={Relays} content={children} exact />
+      {features.adminAnnouncements && <WrappedRoute path='/pl-fe/admin/announcements' staffOnly layout={AdminLayout} component={Announcements} content={children} exact />}
+      {features.domains && <WrappedRoute path='/pl-fe/admin/domains' staffOnly layout={AdminLayout} component={Domains} content={children} exact />}
+      {features.adminRules && <WrappedRoute path='/pl-fe/admin/rules' staffOnly layout={AdminLayout} component={Rules} content={children} exact />}
       <WrappedRoute path='/info' layout={EmptyLayout} component={ServerInfo} content={children} />
 
       <WrappedRoute path='/developers/apps/create' developerOnly layout={DefaultLayout} component={CreateApp} content={children} />

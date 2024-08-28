@@ -2,17 +2,17 @@ import clsx from 'clsx';
 import React, { MutableRefObject, useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { uploadMedia } from 'soapbox/actions/media';
-import { Stack } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import { useChatActions } from 'soapbox/queries/chats';
-import toast from 'soapbox/toast';
+import { uploadMedia } from 'pl-fe/actions/media';
+import { Stack } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import { useChatActions } from 'pl-fe/queries/chats';
+import toast from 'pl-fe/toast';
 
 import ChatComposer from './chat-composer';
 import ChatMessageList from './chat-message-list';
 
 import type { Chat as ChatEntity, MediaAttachment } from 'pl-api';
-import type { PlfeResponse } from 'soapbox/api';
+import type { PlfeResponse } from 'pl-fe/api';
 
 const fileKeyGen = (): number => Math.floor((Math.random() * 0x10000));
 

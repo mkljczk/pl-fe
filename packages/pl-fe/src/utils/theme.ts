@@ -1,7 +1,7 @@
 import { hexToRgb } from './colors';
 
-import type { Rgb, Hsl, TailwindColorPalette, TailwindColorObject } from 'soapbox/types/colors';
-import type { SoapboxConfig } from 'soapbox/types/soapbox';
+import type { Rgb, Hsl, TailwindColorPalette, TailwindColorObject } from 'pl-fe/types/colors';
+import type { PlFeConfig } from 'pl-fe/types/pl-fe';
 
 // Taken from chromatism.js
 // https://github.com/graypegg/chromatism/blob/master/src/conversions/rgb.js
@@ -110,8 +110,8 @@ const colorsToCss = (colors: TailwindColorPalette): string => {
   return Object.keys(parsed).reduce((css, variable) => css + `${variable}:${parsed[variable]};`, '');
 };
 
-const generateThemeCss = (soapboxConfig: SoapboxConfig): string =>
-  colorsToCss(soapboxConfig.colors.toJS() as TailwindColorPalette);
+const generateThemeCss = (plFeConfig: PlFeConfig): string =>
+  colorsToCss(plFeConfig.colors.toJS() as TailwindColorPalette);
 
 const hexToHsl = (hex: string): Hsl | null => {
   const rgb = hexToRgb(hex);

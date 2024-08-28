@@ -7,7 +7,7 @@ import {
   FOLLOWED_HASHTAGS_EXPAND_REQUEST,
   FOLLOWED_HASHTAGS_EXPAND_SUCCESS,
   FOLLOWED_HASHTAGS_EXPAND_FAIL,
-} from 'soapbox/actions/tags';
+} from 'pl-fe/actions/tags';
 
 import type { PaginatedResponse, Tag } from 'pl-api';
 import type { AnyAction } from 'redux';

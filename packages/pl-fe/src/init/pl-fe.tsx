@@ -2,17 +2,17 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { StatProvider } from 'soapbox/contexts/stat-context';
-import { createGlobals } from 'soapbox/globals';
-import { queryClient } from 'soapbox/queries/client';
+import { StatProvider } from 'pl-fe/contexts/stat-context';
+import { createGlobals } from 'pl-fe/globals';
+import { queryClient } from 'pl-fe/queries/client';
 
 import { checkOnboardingStatus } from '../actions/onboarding';
 import { preload } from '../actions/preload';
 import { store } from '../store';
 
-import SoapboxHead from './soapbox-head';
-import SoapboxLoad from './soapbox-load';
-import SoapboxMount from './soapbox-mount';
+import PlFeHead from './pl-fe-head';
+import PlFeLoad from './pl-fe-load';
+import PlFeMount from './pl-fe-mount';
 
 // Configure global functions for developers
 createGlobals(store);
@@ -24,18 +24,18 @@ store.dispatch(preload() as any);
 store.dispatch(checkOnboardingStatus() as any);
 
 /** The root React node of the application. */
-const Soapbox: React.FC = () => (
+const PlFe: React.FC = () => (
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
       <StatProvider>
-        <SoapboxHead>
-          <SoapboxLoad>
-            <SoapboxMount />
-          </SoapboxLoad>
-        </SoapboxHead>
+        <PlFeHead>
+          <PlFeLoad>
+            <PlFeMount />
+          </PlFeLoad>
+        </PlFeHead>
       </StatProvider>
     </QueryClientProvider>
   </Provider>
 );
 
-export { Soapbox as default };
+export { PlFe as default };

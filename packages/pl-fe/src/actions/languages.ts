@@ -1,6 +1,6 @@
 import { saveSettings } from './settings';
 
-import type { AppDispatch } from 'soapbox/store';
+import type { AppDispatch } from 'pl-fe/store';
 
 const LANGUAGE_USE = 'LANGUAGE_USE' as const;
 

@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 
-import { logIn, verifyCredentials, switchAccount } from 'soapbox/actions/auth';
-import { fetchInstance } from 'soapbox/actions/instance';
-import { closeModal } from 'soapbox/actions/modals';
-import { BigCard } from 'soapbox/components/big-card';
-import { Button, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { getRedirectUrl } from 'soapbox/utils/redirect';
-import { isStandalone } from 'soapbox/utils/state';
+import { logIn, verifyCredentials, switchAccount } from 'pl-fe/actions/auth';
+import { fetchInstance } from 'pl-fe/actions/instance';
+import { closeModal } from 'pl-fe/actions/modals';
+import { BigCard } from 'pl-fe/components/big-card';
+import { Button, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { getRedirectUrl } from 'pl-fe/utils/redirect';
+import { isStandalone } from 'pl-fe/utils/state';
 
 import ConsumersList from './consumers-list';
 import LoginForm from './login-form';
 import OtpAuthForm from './otp-auth-form';
 
-import type { PlfeResponse } from 'soapbox/api';
+import type { PlfeResponse } from 'pl-fe/api';
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();

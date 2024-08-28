@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 
-import { cancelReplyCompose } from 'soapbox/actions/compose';
-import { useAppDispatch, useAppSelector, useCompose } from 'soapbox/hooks';
-import { makeGetStatus } from 'soapbox/selectors';
+import { cancelReplyCompose } from 'pl-fe/actions/compose';
+import { useAppDispatch, useAppSelector, useCompose } from 'pl-fe/hooks';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 import ReplyIndicator from '../components/reply-indicator';
 

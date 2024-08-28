@@ -1,13 +1,13 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { joinEvent, leaveEvent } from 'soapbox/actions/events';
-import { openModal } from 'soapbox/actions/modals';
-import { Button } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { joinEvent, leaveEvent } from 'pl-fe/actions/events';
+import { openModal } from 'pl-fe/actions/modals';
+import { Button } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
-import type { ButtonThemes } from 'soapbox/components/ui/button/useButtonStyles';
-import type { Status as StatusEntity } from 'soapbox/normalizers';
+import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
+import type { Status as StatusEntity } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   leaveHeading: { id: 'confirmations.leave_event.heading', defaultMessage: 'Leave event' },

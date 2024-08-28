@@ -1,11 +1,11 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { BigCard } from 'soapbox/components/big-card';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Button, Stack, Text } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
-import { useOnboardingSuggestions } from 'soapbox/queries/suggestions';
+import { BigCard } from 'pl-fe/components/big-card';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Button, Stack, Text } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
+import { useOnboardingSuggestions } from 'pl-fe/queries/suggestions';
 
 const SuggestedAccountsStep = ({ onNext }: { onNext: () => void }) => {
   const { data, isFetching } = useOnboardingSuggestions();

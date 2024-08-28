@@ -1,15 +1,15 @@
 import React, { Suspense } from 'react';
 
-import { openModal } from 'soapbox/actions/modals';
-import AttachmentThumbs from 'soapbox/components/attachment-thumbs';
-import PreviewCard from 'soapbox/components/preview-card';
-import PlaceholderCard from 'soapbox/features/placeholder/components/placeholder-card';
-import { MediaGallery, Video, Audio } from 'soapbox/features/ui/util/async-components';
-import { useAppDispatch, useSettings } from 'soapbox/hooks';
-import { defaultMediaVisibility } from 'soapbox/utils/status';
+import { openModal } from 'pl-fe/actions/modals';
+import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
+import PreviewCard from 'pl-fe/components/preview-card';
+import PlaceholderCard from 'pl-fe/features/placeholder/components/placeholder-card';
+import { MediaGallery, Video, Audio } from 'pl-fe/features/ui/util/async-components';
+import { useAppDispatch, useSettings } from 'pl-fe/hooks';
+import { defaultMediaVisibility } from 'pl-fe/utils/status';
 
 import type { MediaAttachment } from 'pl-api';
-import type { Status } from 'soapbox/normalizers';
+import type { Status } from 'pl-fe/normalizers';
 
 interface IStatusMedia {
   /** Status entity to render media for. */

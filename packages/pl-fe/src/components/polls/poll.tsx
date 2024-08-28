@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import { vote } from 'soapbox/actions/polls';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { openModal } from 'pl-fe/actions/modals';
+import { vote } from 'pl-fe/actions/polls';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import { Stack, Text } from '../ui';
 
 import PollFooter from './poll-footer';
 import PollOption from './poll-option';
 
-import type { Status } from 'soapbox/normalizers';
+import type { Status } from 'pl-fe/normalizers';
 
 type Selected = Record<number, boolean>;
 

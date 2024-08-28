@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect } from 'react';
 
-import Blurhash from 'soapbox/components/blurhash';
-import Icon from 'soapbox/components/icon';
-import StillImage from 'soapbox/components/still-image';
-import { MIMETYPE_ICONS } from 'soapbox/components/upload';
-import { useSettings, useSoapboxConfig } from 'soapbox/hooks';
-import { truncateFilename } from 'soapbox/utils/media';
+import Blurhash from 'pl-fe/components/blurhash';
+import Icon from 'pl-fe/components/icon';
+import StillImage from 'pl-fe/components/still-image';
+import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
+import { useSettings, usePlFeConfig } from 'pl-fe/hooks';
+import { truncateFilename } from 'pl-fe/utils/media';
 
 import { isIOS } from '../is-mobile';
 import { isPanoramic, isPortrait, isNonConformingRatio, minimumAspectRatio, maximumAspectRatio } from '../utils/media-aspect-ratio';
@@ -70,7 +70,7 @@ const Item: React.FC<IItem> = ({
   total,
 }) => {
   const { autoPlayGif } = useSettings();
-  const { mediaPreview } = useSoapboxConfig();
+  const { mediaPreview } = usePlFeConfig();
 
   const handleMouseEnter: React.MouseEventHandler<HTMLVideoElement> = ({ currentTarget: video }) => {
     if (hoverToPlay()) {

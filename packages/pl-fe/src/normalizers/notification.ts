@@ -1,4 +1,4 @@
-import { getNotificationStatus } from 'soapbox/features/notifications/components/notification';
+import { getNotificationStatus } from 'pl-fe/features/notifications/components/notification';
 
 import { normalizeAccount } from './account';
 

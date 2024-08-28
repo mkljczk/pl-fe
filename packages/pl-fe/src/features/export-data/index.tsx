@@ -5,8 +5,8 @@ import {
   exportFollows,
   exportBlocks,
   exportMutes,
-} from 'soapbox/actions/export-data';
-import { Column } from 'soapbox/components/ui';
+} from 'pl-fe/actions/export-data';
+import { Column } from 'pl-fe/components/ui';
 
 import CSVExporter from './components/csv-exporter';
 

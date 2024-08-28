@@ -5,38 +5,38 @@ import { CompatRouter } from 'react-router-dom-v5-compat';
 // @ts-ignore: it doesn't have types
 import { ScrollContext } from 'react-router-scroll-4';
 
-import * as BuildConfig from 'soapbox/build-config';
-import LoadingScreen from 'soapbox/components/loading-screen';
-import SiteErrorBoundary from 'soapbox/components/site-error-boundary';
-import { ModalRoot, OnboardingWizard } from 'soapbox/features/ui/util/async-components';
+import * as BuildConfig from 'pl-fe/build-config';
+import LoadingScreen from 'pl-fe/components/loading-screen';
+import SiteErrorBoundary from 'pl-fe/components/site-error-boundary';
+import { ModalRoot, OnboardingWizard } from 'pl-fe/features/ui/util/async-components';
 import {
   useAppSelector,
   useLoggedIn,
   useOwnAccount,
-  useSoapboxConfig,
-} from 'soapbox/hooks';
-import { useCachedLocationHandler } from 'soapbox/utils/redirect';
+  usePlFeConfig,
+} from 'pl-fe/hooks';
+import { useCachedLocationHandler } from 'pl-fe/utils/redirect';
 
-const GdprBanner = React.lazy(() => import('soapbox/components/gdpr-banner'));
-const EmbeddedStatus = React.lazy(() => import('soapbox/features/embedded-status'));
-const UI = React.lazy(() => import('soapbox/features/ui'));
+const GdprBanner = React.lazy(() => import('pl-fe/components/gdpr-banner'));
+const EmbeddedStatus = React.lazy(() => import('pl-fe/features/embedded-status'));
+const UI = React.lazy(() => import('pl-fe/features/ui'));
 
 /** Highest level node with the Redux store. */
-const SoapboxMount = () => {
+const PlFeMount = () => {
   useCachedLocationHandler();
 
   const { isLoggedIn } = useLoggedIn();
   const { account } = useOwnAccount();
-  const soapboxConfig = useSoapboxConfig();
+  const plFeConfig = usePlFeConfig();
 
   const needsOnboarding = useAppSelector(state => state.onboarding.needsOnboarding);
   const showOnboarding = account && needsOnboarding;
-  const { redirectRootNoLogin, gdpr } = soapboxConfig;
+  const { redirectRootNoLogin, gdpr } = plFeConfig;
 
   // @ts-ignore: I don't actually know what these should be, lol
   const shouldUpdateScroll = (prevRouterProps, { location }) =>
-    !(location.state?.soapboxModalKey && location.state?.soapboxModalKey !== prevRouterProps?.location?.state?.soapboxModalKey)
-    && !(location.state?.soapboxDropdownKey && location.state?.soapboxDropdownKey !== prevRouterProps?.location?.state?.soapboxDropdownKey);
+    !(location.state?.plFeModalKey && location.state?.plFeModalKey !== prevRouterProps?.location?.state?.plFeModalKey)
+    && !(location.state?.plFeDropdownKey && location.state?.plFeDropdownKey !== prevRouterProps?.location?.state?.plFeDropdownKey);
 
   return (
     <SiteErrorBoundary>
@@ -92,4 +92,4 @@ const SoapboxMount = () => {
   );
 };
 
-export { SoapboxMount as default };
+export { PlFeMount as default };

@@ -1,7 +1,7 @@
 import { getClient } from '../api';
 
 import type { AnyAction } from 'redux';
-import type { RootState } from 'soapbox/store';
+import type { RootState } from 'pl-fe/store';
 
 const ACCOUNT_NOTE_SUBMIT_REQUEST = 'ACCOUNT_NOTE_SUBMIT_REQUEST' as const;
 const ACCOUNT_NOTE_SUBMIT_SUCCESS = 'ACCOUNT_NOTE_SUBMIT_SUCCESS' as const;

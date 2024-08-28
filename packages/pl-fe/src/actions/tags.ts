@@ -1,7 +1,7 @@
 import { getClient } from '../api';
 
 import type { PaginatedResponse, Tag } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const HASHTAG_FETCH_REQUEST = 'HASHTAG_FETCH_REQUEST' as const;
 const HASHTAG_FETCH_SUCCESS = 'HASHTAG_FETCH_SUCCESS' as const;

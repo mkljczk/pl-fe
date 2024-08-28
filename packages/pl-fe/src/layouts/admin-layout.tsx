@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Layout } from 'soapbox/components/ui';
-import { LatestAccountsPanel } from 'soapbox/features/ui/util/async-components';
+import { Layout } from 'pl-fe/components/ui';
+import { LatestAccountsPanel } from 'pl-fe/features/ui/util/async-components';
 
 import LinkFooter from '../features/ui/components/link-footer';
 

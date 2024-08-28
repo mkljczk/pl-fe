@@ -1,9 +1,9 @@
 import { v4 as uuid } from 'uuid';
 
-import { makeGetAccount } from 'soapbox/selectors';
-import KVStore from 'soapbox/storage/kv-store';
+import { makeGetAccount } from 'pl-fe/selectors';
+import KVStore from 'pl-fe/storage/kv-store';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const DRAFT_STATUSES_FETCH_SUCCESS = 'DRAFT_STATUSES_FETCH_SUCCESS';
 

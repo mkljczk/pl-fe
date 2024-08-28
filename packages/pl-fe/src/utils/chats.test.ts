@@ -1,7 +1,7 @@
-import { buildAccount } from 'soapbox/jest/factory';
-import { normalizeChatMessage } from 'soapbox/normalizers';
-import { ChatKeys, IChat } from 'soapbox/queries/chats';
-import { queryClient } from 'soapbox/queries/client';
+import { buildAccount } from 'pl-fe/jest/factory';
+import { normalizeChatMessage } from 'pl-fe/normalizers';
+import { ChatKeys, IChat } from 'pl-fe/queries/chats';
+import { queryClient } from 'pl-fe/queries/client';
 
 import { updateChatMessage } from './chats';
 

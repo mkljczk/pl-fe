@@ -3,23 +3,23 @@ import { List as ImmutableList, type OrderedSet as ImmutableOrderedSet } from 'i
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { expandSearch, setFilter, setSearchAccount } from 'soapbox/actions/search';
-import { fetchTrendingStatuses } from 'soapbox/actions/trending-statuses';
-import { useAccount, useTrendingLinks } from 'soapbox/api/hooks';
-import Hashtag from 'soapbox/components/hashtag';
-import IconButton from 'soapbox/components/icon-button';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import TrendingLink from 'soapbox/components/trending-link';
-import { HStack, Spinner, Tabs, Text } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
-import StatusContainer from 'soapbox/containers/status-container';
-import PlaceholderAccount from 'soapbox/features/placeholder/components/placeholder-account';
-import PlaceholderHashtag from 'soapbox/features/placeholder/components/placeholder-hashtag';
-import PlaceholderStatus from 'soapbox/features/placeholder/components/placeholder-status';
-import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
+import { expandSearch, setFilter, setSearchAccount } from 'pl-fe/actions/search';
+import { fetchTrendingStatuses } from 'pl-fe/actions/trending-statuses';
+import { useAccount, useTrendingLinks } from 'pl-fe/api/hooks';
+import Hashtag from 'pl-fe/components/hashtag';
+import IconButton from 'pl-fe/components/icon-button';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import TrendingLink from 'pl-fe/components/trending-link';
+import { HStack, Spinner, Tabs, Text } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
+import StatusContainer from 'pl-fe/containers/status-container';
+import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholder-account';
+import PlaceholderHashtag from 'pl-fe/features/placeholder/components/placeholder-hashtag';
+import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
+import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 
 import type { VirtuosoHandle } from 'react-virtuoso';
-import type { SearchFilter } from 'soapbox/reducers/search';
+import type { SearchFilter } from 'pl-fe/reducers/search';
 
 const messages = defineMessages({
   accounts: { id: 'search_results.accounts', defaultMessage: 'People' },

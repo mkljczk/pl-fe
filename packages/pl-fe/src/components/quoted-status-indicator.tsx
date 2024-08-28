@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 
-import { HStack, Icon, Text } from 'soapbox/components/ui';
-import { useAppSelector } from 'soapbox/hooks';
-import { makeGetStatus } from 'soapbox/selectors';
+import { HStack, Icon, Text } from 'pl-fe/components/ui';
+import { useAppSelector } from 'pl-fe/hooks';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 interface IQuotedStatusIndicator {
   /** The quoted status id. */

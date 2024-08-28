@@ -1,7 +1,7 @@
 import { Map as ImmutableMap } from 'immutable';
 
-import { __stub } from 'soapbox/api';
-import { mockStore } from 'soapbox/jest/test-helpers';
+import { __stub } from 'pl-fe/api';
+import { mockStore } from 'pl-fe/jest/test-helpers';
 
 import { VERIFY_CREDENTIALS_REQUEST } from './auth';
 import { ACCOUNTS_IMPORT } from './importer';
@@ -12,7 +12,7 @@ import {
 
 describe('preloadMastodon()', () => {
   it('creates the expected actions', async () => {
-    const data = await import('soapbox/__fixtures__/mastodon_initial_state.json');
+    const data = await import('pl-fe/__fixtures__/mastodon_initial_state.json');
 
     __stub(mock => {
       mock.onGet('/api/v1/accounts/verify_credentials')

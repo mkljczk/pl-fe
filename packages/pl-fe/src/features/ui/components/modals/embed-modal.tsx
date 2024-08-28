@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { closeModal } from 'soapbox/actions/modals';
-import CopyableInput from 'soapbox/components/copyable-input';
-import SafeEmbed from 'soapbox/components/safe-embed';
-import { Modal, Stack, Text, Divider } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import useEmbed from 'soapbox/queries/embed';
+import { closeModal } from 'pl-fe/actions/modals';
+import CopyableInput from 'pl-fe/components/copyable-input';
+import SafeEmbed from 'pl-fe/components/safe-embed';
+import { Modal, Stack, Text, Divider } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import useEmbed from 'pl-fe/queries/embed';
 
 import type { BaseModalProps } from '../modal-root';
 

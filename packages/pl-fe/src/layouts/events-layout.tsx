@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { Layout } from 'soapbox/components/ui';
-import LinkFooter from 'soapbox/features/ui/components/link-footer';
+import { Layout } from 'pl-fe/components/ui';
+import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
   WhoToFollowPanel,
   TrendsPanel,
   NewEventPanel,
-} from 'soapbox/features/ui/util/async-components';
-import { useFeatures } from 'soapbox/hooks';
+} from 'pl-fe/features/ui/util/async-components';
+import { useFeatures } from 'pl-fe/hooks';
 
 interface IEventsLayout {
   children: React.ReactNode;

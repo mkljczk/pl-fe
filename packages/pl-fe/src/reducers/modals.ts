@@ -2,7 +2,7 @@ import { List as ImmutableList, Record as ImmutableRecord } from 'immutable';
 
 import { MODAL_OPEN, MODAL_CLOSE, type ModalsAction } from '../actions/modals';
 
-import type { ModalType } from 'soapbox/features/ui/components/modal-root';
+import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
 
 const ModalRecord = ImmutableRecord({
   modalType: null as ModalType | null,

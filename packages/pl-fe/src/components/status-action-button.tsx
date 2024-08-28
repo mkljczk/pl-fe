@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import { Text, Icon, Emoji } from 'soapbox/components/ui';
-import { useSettings } from 'soapbox/hooks';
+import { Text, Icon, Emoji } from 'pl-fe/components/ui';
+import { useSettings } from 'pl-fe/hooks';
 
 import AnimatedNumber from './animated-number';
 

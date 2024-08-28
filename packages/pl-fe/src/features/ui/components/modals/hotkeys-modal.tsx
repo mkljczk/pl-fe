@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Modal } from 'soapbox/components/ui';
-import { useFeatures } from 'soapbox/hooks';
+import { Modal } from 'pl-fe/components/ui';
+import { useFeatures } from 'pl-fe/hooks';
 
 import type { BaseModalProps } from '../modal-root';
 

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { openModal } from 'soapbox/actions/modals';
-import { useAppDispatch } from 'soapbox/hooks';
+import { openModal } from 'pl-fe/actions/modals';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 const NewStatus = () => {
   const dispatch = useAppDispatch();

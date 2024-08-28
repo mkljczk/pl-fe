@@ -2,16 +2,16 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { patchMe } from 'soapbox/actions/me';
-import { BigCard } from 'soapbox/components/big-card';
-import StillImage from 'soapbox/components/still-image';
-import { Avatar, Button, Icon, Spinner, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useOwnAccount } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
-import { isDefaultHeader } from 'soapbox/utils/accounts';
-import resizeImage from 'soapbox/utils/resize-image';
+import { patchMe } from 'pl-fe/actions/me';
+import { BigCard } from 'pl-fe/components/big-card';
+import StillImage from 'pl-fe/components/still-image';
+import { Avatar, Button, Icon, Spinner, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
+import { isDefaultHeader } from 'pl-fe/utils/accounts';
+import resizeImage from 'pl-fe/utils/resize-image';
 
-import type { PlfeResponse } from 'soapbox/api';
+import type { PlfeResponse } from 'pl-fe/api';
 
 const messages = defineMessages({
   header: { id: 'account.header.alt', defaultMessage: 'Profile header' },

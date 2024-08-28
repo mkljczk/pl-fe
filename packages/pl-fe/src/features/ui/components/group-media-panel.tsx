@@ -2,15 +2,15 @@ import { List as ImmutableList } from 'immutable';
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import { fetchGroupTimeline } from 'soapbox/actions/timelines';
-import { Spinner, Text, Widget } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { type AccountGalleryAttachment, getGroupGallery } from 'soapbox/selectors';
+import { openModal } from 'pl-fe/actions/modals';
+import { fetchGroupTimeline } from 'pl-fe/actions/timelines';
+import { Spinner, Text, Widget } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { type AccountGalleryAttachment, getGroupGallery } from 'pl-fe/selectors';
 
 import MediaItem from '../../account-gallery/components/media-item';
 
-import type { Group } from 'soapbox/normalizers';
+import type { Group } from 'pl-fe/normalizers';
 
 interface IGroupMediaPanel {
   group?: Group;

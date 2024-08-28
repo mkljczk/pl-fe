@@ -1,8 +1,8 @@
 import sumBy from 'lodash/sumBy';
 
-import { normalizeChatMessage } from 'soapbox/normalizers';
-import { ChatKeys } from 'soapbox/queries/chats';
-import { queryClient } from 'soapbox/queries/client';
+import { normalizeChatMessage } from 'pl-fe/normalizers';
+import { ChatKeys } from 'pl-fe/queries/chats';
+import { queryClient } from 'pl-fe/queries/client';
 
 import { compareDate } from './comparators';
 import { appendPageItem, flattenPages, sortQueryData, updatePageItem } from './queries';

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { changeSetting } from 'soapbox/actions/settings';
-import { useAppDispatch, useSettings } from 'soapbox/hooks';
+import { changeSetting } from 'pl-fe/actions/settings';
+import { useAppDispatch, useSettings } from 'pl-fe/hooks';
 
 import ThemeSelector from './theme-selector';
 

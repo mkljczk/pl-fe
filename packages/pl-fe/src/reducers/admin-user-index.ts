@@ -8,11 +8,11 @@ import {
   ADMIN_USER_INDEX_FETCH_REQUEST,
   ADMIN_USER_INDEX_FETCH_SUCCESS,
   ADMIN_USER_INDEX_QUERY_SET,
-} from 'soapbox/actions/admin';
+} from 'pl-fe/actions/admin';
 
 import type { AdminAccount, AdminGetAccountsParams, PaginatedResponse } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { APIEntity } from 'soapbox/types/entities';
+import type { APIEntity } from 'pl-fe/types/entities';
 
 const ReducerRecord = ImmutableRecord({
   isLoading: false,

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { FormattedDate, defineMessages, useIntl } from 'react-intl';
 
-import { fetchBackups, createBackup } from 'soapbox/actions/backups';
-import { Button, Card, Column, FormActions, HStack, Spinner, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { fetchBackups, createBackup } from 'pl-fe/actions/backups';
+import { Button, Card, Column, FormActions, HStack, Spinner, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import type { Backup as BackupEntity } from 'pl-api';
 

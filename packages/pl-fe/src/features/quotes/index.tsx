@@ -4,11 +4,11 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
-import { expandStatusQuotes, fetchStatusQuotes } from 'soapbox/actions/status-quotes';
-import StatusList from 'soapbox/components/status-list';
-import { Column } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useTheme } from 'soapbox/hooks';
-import { useIsMobile } from 'soapbox/hooks/useIsMobile';
+import { expandStatusQuotes, fetchStatusQuotes } from 'pl-fe/actions/status-quotes';
+import StatusList from 'pl-fe/components/status-list';
+import { Column } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector, useTheme } from 'pl-fe/hooks';
+import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 const messages = defineMessages({
   heading: { id: 'column.quotes', defaultMessage: 'Post quotes' },

@@ -2,15 +2,15 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import EventActionButton from 'soapbox/features/event/components/event-action-button';
-import EventDate from 'soapbox/features/event/components/event-date';
-import { useAppSelector } from 'soapbox/hooks';
+import EventActionButton from 'pl-fe/features/event/components/event-action-button';
+import EventDate from 'pl-fe/features/event/components/event-date';
+import { useAppSelector } from 'pl-fe/hooks';
 
 import Icon from './icon';
 import { Button, HStack, Stack, Text } from './ui';
 import VerificationBadge from './verification-badge';
 
-import type { Status as StatusEntity } from 'soapbox/normalizers';
+import type { Status as StatusEntity } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   eventBanner: { id: 'event.banner', defaultMessage: 'Event banner' },

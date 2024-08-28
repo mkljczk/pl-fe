@@ -3,15 +3,15 @@ import { List as ImmutableList } from 'immutable';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { fetchFavourites, fetchReactions } from 'soapbox/actions/interactions';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Emoji, Modal, Spinner, Tabs } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { ReactionRecord } from 'soapbox/reducers/user-lists';
+import { fetchFavourites, fetchReactions } from 'pl-fe/actions/interactions';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Emoji, Modal, Spinner, Tabs } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { ReactionRecord } from 'pl-fe/reducers/user-lists';
 
 import type { BaseModalProps } from '../modal-root';
-import type { Item } from 'soapbox/components/ui/tabs/tabs';
+import type { Item } from 'pl-fe/components/ui/tabs/tabs';
 
 const messages = defineMessages({
   all: { id: 'reactions.all', defaultMessage: 'All' },

@@ -5,14 +5,14 @@ import { FormattedMessage } from 'react-intl';
 import ReactSwipeableViews from 'react-swipeable-views';
 import { createSelector } from 'reselect';
 
-import { useAnnouncements } from 'soapbox/api/hooks/announcements';
-import { Card, HStack, Widget } from 'soapbox/components/ui';
-import { useAppSelector } from 'soapbox/hooks';
+import { useAnnouncements } from 'pl-fe/api/hooks/announcements';
+import { Card, HStack, Widget } from 'pl-fe/components/ui';
+import { useAppSelector } from 'pl-fe/hooks';
 
 import Announcement from './announcement';
 
 import type { CustomEmoji } from 'pl-api';
-import type { RootState } from 'soapbox/store';
+import type { RootState } from 'pl-fe/store';
 
 const customEmojiMap = createSelector([(state: RootState) => state.custom_emojis], items => items.reduce((map, emoji) => map.set(emoji.shortcode, emoji), ImmutableMap<string, CustomEmoji>()));
 

@@ -2,14 +2,14 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { useAccount } from 'soapbox/api/hooks';
-import StillImage from 'soapbox/components/still-image';
-import { Avatar, HStack, Stack, Text } from 'soapbox/components/ui';
-import VerificationBadge from 'soapbox/components/verification-badge';
-import { useAppSelector, useSettings } from 'soapbox/hooks';
-import { getAcct } from 'soapbox/utils/accounts';
-import { shortNumberFormat } from 'soapbox/utils/numbers';
-import { displayFqn } from 'soapbox/utils/state';
+import { useAccount } from 'pl-fe/api/hooks';
+import StillImage from 'pl-fe/components/still-image';
+import { Avatar, HStack, Stack, Text } from 'pl-fe/components/ui';
+import VerificationBadge from 'pl-fe/components/verification-badge';
+import { useAppSelector, useSettings } from 'pl-fe/hooks';
+import { getAcct } from 'pl-fe/utils/accounts';
+import { shortNumberFormat } from 'pl-fe/utils/numbers';
+import { displayFqn } from 'pl-fe/utils/state';
 
 interface IUserPanel {
   accountId: string;

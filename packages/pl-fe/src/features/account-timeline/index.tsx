@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { fetchAccountByUsername } from 'soapbox/actions/accounts';
-import { fetchAccountTimeline } from 'soapbox/actions/timelines';
-import { useAccountLookup } from 'soapbox/api/hooks';
-import MissingIndicator from 'soapbox/components/missing-indicator';
-import StatusList from 'soapbox/components/status-list';
-import { Card, CardBody, Spinner, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useFeatures, useSettings } from 'soapbox/hooks';
-import { makeGetStatusIds } from 'soapbox/selectors';
+import { fetchAccountByUsername } from 'pl-fe/actions/accounts';
+import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
+import { useAccountLookup } from 'pl-fe/api/hooks';
+import MissingIndicator from 'pl-fe/components/missing-indicator';
+import StatusList from 'pl-fe/components/status-list';
+import { Card, CardBody, Spinner, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector, useFeatures, useSettings } from 'pl-fe/hooks';
+import { makeGetStatusIds } from 'pl-fe/selectors';
 
 const getStatusIds = makeGetStatusIds();
 

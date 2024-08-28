@@ -3,10 +3,10 @@ import { GOTOSOCIAL } from 'pl-api';
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { updateNotificationSettings } from 'soapbox/actions/accounts';
-import { patchMe } from 'soapbox/actions/me';
-import BirthdayInput from 'soapbox/components/birthday-input';
-import List, { ListItem } from 'soapbox/components/list';
+import { updateNotificationSettings } from 'pl-fe/actions/accounts';
+import { patchMe } from 'pl-fe/actions/me';
+import BirthdayInput from 'pl-fe/components/birthday-input';
+import List, { ListItem } from 'pl-fe/components/list';
 import {
   Button,
   Column,
@@ -18,17 +18,17 @@ import {
   Streamfield,
   Textarea,
   Toggle,
-} from 'soapbox/components/ui';
-import { useAppDispatch, useOwnAccount, useFeatures, useInstance, useAppSelector } from 'soapbox/hooks';
-import { useImageField } from 'soapbox/hooks/forms';
-import toast from 'soapbox/toast';
-import { isDefaultAvatar, isDefaultHeader } from 'soapbox/utils/accounts';
+} from 'pl-fe/components/ui';
+import { useAppDispatch, useOwnAccount, useFeatures, useInstance, useAppSelector } from 'pl-fe/hooks';
+import { useImageField } from 'pl-fe/hooks/forms';
+import toast from 'pl-fe/toast';
+import { isDefaultAvatar, isDefaultHeader } from 'pl-fe/utils/accounts';
 
 import AvatarPicker from './components/avatar-picker';
 import HeaderPicker from './components/header-picker';
 
-import type { StreamfieldComponent } from 'soapbox/components/ui/streamfield/streamfield';
-import type { Account } from 'soapbox/normalizers';
+import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield/streamfield';
+import type { Account } from 'pl-fe/normalizers';
 
 const nonDefaultAvatar = (url: string | undefined) => url && isDefaultAvatar(url) ? undefined : url;
 const nonDefaultHeader = (url: string | undefined) => url && isDefaultHeader(url) ? undefined : url;
@@ -100,7 +100,7 @@ interface AccountCredentials {
   // Non-Mastodon fields
   /** Pleroma: whether to accept notifications from people you don't follow. */
   stranger_notifications?: boolean;
-  /** Soapbox BE: whether the user opts-in to email communications. */
+  /** Rebased: whether the user opts-in to email communications. */
   accepts_email_list?: boolean;
   /** Pleroma: whether to publicly display followers. */
   hide_followers?: boolean;

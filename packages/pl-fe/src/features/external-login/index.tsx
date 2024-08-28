@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { BigCard } from 'soapbox/components/big-card';
+import { BigCard } from 'pl-fe/components/big-card';
 
 import ExternalLoginForm from './components/external-login-form';
 

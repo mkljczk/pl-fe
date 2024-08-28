@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { useClient } from 'soapbox/hooks';
-import { queryClient } from 'soapbox/queries/client';
-import { adminRuleSchema, type AdminRule } from 'soapbox/schemas';
+import { useClient } from 'pl-fe/hooks';
+import { queryClient } from 'pl-fe/queries/client';
+import { adminRuleSchema, type AdminRule } from 'pl-fe/schemas';
 
 interface CreateRuleParams {
   priority?: number;

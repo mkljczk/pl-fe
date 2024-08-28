@@ -2,21 +2,21 @@ import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { defaultSettings } from 'soapbox/actions/settings';
-import BackgroundShapes from 'soapbox/features/ui/components/background-shapes';
-import { useSystemTheme } from 'soapbox/hooks';
-import { normalizeSoapboxConfig } from 'soapbox/normalizers';
-import { generateThemeCss } from 'soapbox/utils/theme';
+import { defaultSettings } from 'pl-fe/actions/settings';
+import BackgroundShapes from 'pl-fe/features/ui/components/background-shapes';
+import { useSystemTheme } from 'pl-fe/hooks';
+import { normalizePlFeConfig } from 'pl-fe/normalizers';
+import { generateThemeCss } from 'pl-fe/utils/theme';
 
 interface ISitePreview {
-  /** Raw Soapbox configuration. */
-  soapbox: any;
+  /** Raw pl-fe configuration. */
+  plFe: any;
 }
 
 /** Renders a preview of the website's style with the configuration applied. */
-const SitePreview: React.FC<ISitePreview> = ({ soapbox }) => {
-  const soapboxConfig = useMemo(() => normalizeSoapboxConfig(soapbox), [soapbox]);
-  const settings = defaultSettings.mergeDeep(soapboxConfig.defaultSettings);
+const SitePreview: React.FC<ISitePreview> = ({ plFe }) => {
+  const plFeConfig = useMemo(() => normalizePlFeConfig(plFe), [plFe]);
+  const settings = defaultSettings.mergeDeep(plFeConfig.defaultSettings);
 
   const userTheme = settings.get('themeMode');
   const systemTheme = useSystemTheme();
@@ -35,7 +35,7 @@ const SitePreview: React.FC<ISitePreview> = ({ soapbox }) => {
 
   return (
     <div className={bodyClass}>
-      <style>{`.site-preview {${generateThemeCss(soapboxConfig)}}`}</style>
+      <style>{`.site-preview {${generateThemeCss(plFeConfig)}}`}</style>
       <BackgroundShapes position='absolute' />
 
       <div className='absolute z-[2] self-center overflow-hidden rounded-lg bg-accent-500 p-2 text-white'>

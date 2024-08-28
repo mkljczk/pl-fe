@@ -95,7 +95,7 @@ const locales = [
   'zh-TW',
 ] as const;
 
-/** Soapbox locales map */
+/** pl-fe locales map */
 const messages = locales.reduce((acc, locale) => {
   acc[locale] = () => importMessagesWithCustom(locale);
   return acc;

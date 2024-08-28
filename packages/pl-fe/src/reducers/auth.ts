@@ -2,10 +2,10 @@ import { List as ImmutableList, Map as ImmutableMap, Record as ImmutableRecord, 
 import trim from 'lodash/trim';
 import { applicationSchema, PlApiClient, tokenSchema, type Application, type CredentialAccount, type Token } from 'pl-api';
 
-import { MASTODON_PRELOAD_IMPORT } from 'soapbox/actions/preload';
-import * as BuildConfig from 'soapbox/build-config';
-import KVStore from 'soapbox/storage/kv-store';
-import { validId, isURL, parseBaseURL } from 'soapbox/utils/auth';
+import { MASTODON_PRELOAD_IMPORT } from 'pl-fe/actions/preload';
+import * as BuildConfig from 'pl-fe/build-config';
+import KVStore from 'pl-fe/storage/kv-store';
+import { validId, isURL, parseBaseURL } from 'pl-fe/utils/auth';
 
 import {
   AUTH_APP_CREATED,
@@ -19,8 +19,8 @@ import {
 import { ME_FETCH_SKIP } from '../actions/me';
 
 import type { AnyAction } from 'redux';
-import type { PlfeResponse } from 'soapbox/api';
-import type { Account as AccountEntity } from 'soapbox/normalizers';
+import type { PlfeResponse } from 'pl-fe/api';
+import type { Account as AccountEntity } from 'pl-fe/normalizers';
 
 const backendUrl = (isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : '');
 
@@ -44,7 +44,7 @@ type State = ReturnType<typeof ReducerRecord>;
 const buildKey = (parts: string[]) => parts.join(':');
 
 // For subdirectory support
-const NAMESPACE = trim(BuildConfig.FE_SUBDIRECTORY, '/') ? `soapbox@${BuildConfig.FE_SUBDIRECTORY}` : 'pl-fe';
+const NAMESPACE = trim(BuildConfig.FE_SUBDIRECTORY, '/') ? `pl-fe@${BuildConfig.FE_SUBDIRECTORY}` : 'pl-fe';
 
 const STORAGE_KEY = buildKey([NAMESPACE, 'auth']);
 const SESSION_KEY = buildKey([NAMESPACE, 'auth', 'me']);

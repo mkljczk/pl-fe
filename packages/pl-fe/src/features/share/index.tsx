@@ -1,8 +1,8 @@
 import React from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
 
-import { openComposeWithText } from 'soapbox/actions/compose';
-import { useAppDispatch } from 'soapbox/hooks';
+import { openComposeWithText } from 'pl-fe/actions/compose';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 const Share = () => {
   const dispatch = useAppDispatch();

@@ -1,14 +1,14 @@
 import { defineMessages, type IntlShape } from 'react-intl';
 
-import toast from 'soapbox/toast';
-import { isLoggedIn } from 'soapbox/utils/auth';
-import { formatBytes, getVideoDuration } from 'soapbox/utils/media';
-import resizeImage from 'soapbox/utils/resize-image';
+import toast from 'pl-fe/toast';
+import { isLoggedIn } from 'pl-fe/utils/auth';
+import { formatBytes, getVideoDuration } from 'pl-fe/utils/media';
+import resizeImage from 'pl-fe/utils/resize-image';
 
 import { getClient } from '../api';
 
 import type { MediaAttachment, UploadMediaParams } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const messages = defineMessages({
   exceededImageSizeLimit: { id: 'upload_error.image_size_limit', defaultMessage: 'Image exceeds the current file size limit ({limit})' },

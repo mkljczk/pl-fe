@@ -1,6 +1,6 @@
 import { Map as ImmutableMap, type Collection } from 'immutable';
 
-import type { Status } from 'soapbox/normalizers';
+import type { Status } from 'pl-fe/normalizers';
 
 const shouldFilter = (
   status: Pick<Status, 'in_reply_to_id' | 'visibility' | 'reblog_id'>,

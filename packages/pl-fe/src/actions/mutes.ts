@@ -1,7 +1,7 @@
 import { openModal } from './modals';
 
-import type { Account } from 'soapbox/normalizers';
-import type { AppDispatch } from 'soapbox/store';
+import type { Account } from 'pl-fe/normalizers';
+import type { AppDispatch } from 'pl-fe/store';
 
 const MUTES_INIT_MODAL = 'MUTES_INIT_MODAL';
 const MUTES_TOGGLE_HIDE_NOTIFICATIONS = 'MUTES_TOGGLE_HIDE_NOTIFICATIONS';

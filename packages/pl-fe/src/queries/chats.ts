@@ -2,13 +2,13 @@ import { InfiniteData, keepPreviousData, useInfiniteQuery, useMutation, useQuery
 import sumBy from 'lodash/sumBy';
 import { type Chat, type ChatMessage as BaseChatMessage, type PaginatedResponse, chatMessageSchema } from 'pl-api';
 
-import { importFetchedAccount, importFetchedAccounts } from 'soapbox/actions/importer';
-import { ChatWidgetScreens, useChatContext } from 'soapbox/contexts/chat-context';
-import { useStatContext } from 'soapbox/contexts/stat-context';
-import { useAppDispatch, useAppSelector, useClient, useFeatures, useLoggedIn, useOwnAccount } from 'soapbox/hooks';
-import { type ChatMessage, normalizeChatMessage } from 'soapbox/normalizers';
-import { reOrderChatListItems } from 'soapbox/utils/chats';
-import { flattenPages, updatePageItem } from 'soapbox/utils/queries';
+import { importFetchedAccount, importFetchedAccounts } from 'pl-fe/actions/importer';
+import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
+import { useStatContext } from 'pl-fe/contexts/stat-context';
+import { useAppDispatch, useAppSelector, useClient, useFeatures, useLoggedIn, useOwnAccount } from 'pl-fe/hooks';
+import { type ChatMessage, normalizeChatMessage } from 'pl-fe/normalizers';
+import { reOrderChatListItems } from 'pl-fe/utils/chats';
+import { flattenPages, updatePageItem } from 'pl-fe/utils/queries';
 
 import { queryClient } from './client';
 import { useFetchRelationships } from './relationships';

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Modal } from 'soapbox/components/ui';
-import DetailedCryptoAddress from 'soapbox/features/crypto-donate/components/detailed-crypto-address';
+import { Modal } from 'pl-fe/components/ui';
+import DetailedCryptoAddress from 'pl-fe/features/crypto-donate/components/detailed-crypto-address';
 
 import { BaseModalProps } from '../modal-root';
 

@@ -2,31 +2,31 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
-import { blockAccount } from 'soapbox/actions/accounts';
-import { directCompose, mentionCompose, quoteCompose } from 'soapbox/actions/compose';
-import { editEvent, fetchEventIcs } from 'soapbox/actions/events';
-import { toggleBookmark, togglePin, toggleReblog } from 'soapbox/actions/interactions';
-import { openModal } from 'soapbox/actions/modals';
-import { deleteStatusModal, toggleStatusSensitivityModal } from 'soapbox/actions/moderation';
-import { initMuteModal } from 'soapbox/actions/mutes';
-import { initReport, ReportableEntities } from 'soapbox/actions/reports';
-import { deleteStatus } from 'soapbox/actions/statuses';
-import DropdownMenu, { type Menu as MenuType } from 'soapbox/components/dropdown-menu';
-import Icon from 'soapbox/components/icon';
-import StillImage from 'soapbox/components/still-image';
-import { Button, HStack, IconButton, Stack, Text } from 'soapbox/components/ui';
-import VerificationBadge from 'soapbox/components/verification-badge';
-import { useAppDispatch, useFeatures, useOwnAccount, useSettings } from 'soapbox/hooks';
-import { useChats } from 'soapbox/queries/chats';
-import copy from 'soapbox/utils/copy';
-import { download } from 'soapbox/utils/download';
-import { shortNumberFormat } from 'soapbox/utils/numbers';
+import { blockAccount } from 'pl-fe/actions/accounts';
+import { directCompose, mentionCompose, quoteCompose } from 'pl-fe/actions/compose';
+import { editEvent, fetchEventIcs } from 'pl-fe/actions/events';
+import { toggleBookmark, togglePin, toggleReblog } from 'pl-fe/actions/interactions';
+import { openModal } from 'pl-fe/actions/modals';
+import { deleteStatusModal, toggleStatusSensitivityModal } from 'pl-fe/actions/moderation';
+import { initMuteModal } from 'pl-fe/actions/mutes';
+import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
+import { deleteStatus } from 'pl-fe/actions/statuses';
+import DropdownMenu, { type Menu as MenuType } from 'pl-fe/components/dropdown-menu';
+import Icon from 'pl-fe/components/icon';
+import StillImage from 'pl-fe/components/still-image';
+import { Button, HStack, IconButton, Stack, Text } from 'pl-fe/components/ui';
+import VerificationBadge from 'pl-fe/components/verification-badge';
+import { useAppDispatch, useFeatures, useOwnAccount, useSettings } from 'pl-fe/hooks';
+import { useChats } from 'pl-fe/queries/chats';
+import copy from 'pl-fe/utils/copy';
+import { download } from 'pl-fe/utils/download';
+import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
 import PlaceholderEventHeader from '../../placeholder/components/placeholder-event-header';
 import EventActionButton from '../components/event-action-button';
 import EventDate from '../components/event-date';
 
-import type { Status } from 'soapbox/normalizers';
+import type { Status } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   bannerHeader: { id: 'event.banner', defaultMessage: 'Event banner' },

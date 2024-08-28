@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { makeGetAccount } from 'soapbox/selectors';
+import { makeGetAccount } from 'pl-fe/selectors';
 
 import { useAppSelector } from './useAppSelector';
 

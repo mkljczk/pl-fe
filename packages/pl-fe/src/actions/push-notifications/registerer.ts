@@ -1,12 +1,12 @@
-import { createPushSubscription, updatePushSubscription } from 'soapbox/actions/push-subscriptions';
-import { pushNotificationsSetting } from 'soapbox/settings';
-import { getVapidKey } from 'soapbox/utils/auth';
-import { decode as decodeBase64 } from 'soapbox/utils/base64';
+import { createPushSubscription, updatePushSubscription } from 'pl-fe/actions/push-subscriptions';
+import { pushNotificationsSetting } from 'pl-fe/settings';
+import { getVapidKey } from 'pl-fe/utils/auth';
+import { decode as decodeBase64 } from 'pl-fe/utils/base64';
 
 import { setBrowserSupport, setSubscription, clearSubscription } from './setter';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
-import type { Me } from 'soapbox/types/soapbox';
+import type { AppDispatch, RootState } from 'pl-fe/store';
+import type { Me } from 'pl-fe/types/pl-fe';
 
 // Taken from https://www.npmjs.com/package/web-push
 const urlBase64ToUint8Array = (base64String: string) => {

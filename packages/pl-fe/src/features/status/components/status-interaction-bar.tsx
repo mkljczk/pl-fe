@@ -2,13 +2,13 @@ import clsx from 'clsx';import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { openModal } from 'soapbox/actions/modals';
-import AnimatedNumber from 'soapbox/components/animated-number';
-import { HStack, Text, Emoji } from 'soapbox/components/ui';
-import { useAppSelector, useSoapboxConfig, useFeatures, useAppDispatch } from 'soapbox/hooks';
-import { reduceEmoji } from 'soapbox/utils/emoji-reacts';
+import { openModal } from 'pl-fe/actions/modals';
+import AnimatedNumber from 'pl-fe/components/animated-number';
+import { HStack, Text, Emoji } from 'pl-fe/components/ui';
+import { useAppSelector, usePlFeConfig, useFeatures, useAppDispatch } from 'pl-fe/hooks';
+import { reduceEmoji } from 'pl-fe/utils/emoji-reacts';
 
-import type { Status } from 'soapbox/normalizers';
+import type { Status } from 'pl-fe/normalizers';
 
 interface IStatusInteractionBar {
   status: Pick<Status, 'id' | 'account' | 'dislikes_count' | 'emoji_reactions' | 'favourited' | 'favourites_count' | 'reblogs_count' | 'quotes_count'>;
@@ -16,7 +16,7 @@ interface IStatusInteractionBar {
 
 const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.Element | null => {
   const me = useAppSelector(({ me }) => me);
-  const { allowedEmoji } = useSoapboxConfig();
+  const { allowedEmoji } = usePlFeConfig();
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const { account } = status;

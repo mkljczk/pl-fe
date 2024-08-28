@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useIntl, type IntlShape } from 'react-intl';
 import { TransitionMotion, spring } from 'react-motion';
 
-import { useSettings } from 'soapbox/hooks';
-import { isNumber, roundDown } from 'soapbox/utils/numbers';
+import { useSettings } from 'pl-fe/hooks';
+import { isNumber, roundDown } from 'pl-fe/utils/numbers';
 
 const obfuscatedCount = (count: number): string => {
   if (count < 0) {

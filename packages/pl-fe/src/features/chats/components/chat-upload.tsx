@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import { openModal } from 'soapbox/actions/modals';
-import Blurhash from 'soapbox/components/blurhash';
-import { Icon } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import { openModal } from 'pl-fe/actions/modals';
+import Blurhash from 'pl-fe/components/blurhash';
+import { Icon } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 import ChatUploadPreview from './chat-upload-preview';
 

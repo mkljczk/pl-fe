@@ -2,10 +2,10 @@ import debounce from 'lodash/debounce';
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchScheduledStatuses, expandScheduledStatuses } from 'soapbox/actions/scheduled-statuses';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Column } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch } from 'soapbox/hooks';
+import { fetchScheduledStatuses, expandScheduledStatuses } from 'pl-fe/actions/scheduled-statuses';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Column } from 'pl-fe/components/ui';
+import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 import ScheduledStatus from './components/scheduled-status';
 

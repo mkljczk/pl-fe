@@ -1,13 +1,13 @@
 import queryString from 'query-string';
 
-import * as BuildConfig from 'soapbox/build-config';
-import { isURL } from 'soapbox/utils/auth';
-import sourceCode from 'soapbox/utils/code';
-import { getScopes } from 'soapbox/utils/scopes';
+import * as BuildConfig from 'pl-fe/build-config';
+import { isURL } from 'pl-fe/utils/auth';
+import sourceCode from 'pl-fe/utils/code';
+import { getScopes } from 'pl-fe/utils/scopes';
 
 import { createApp } from './apps';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const createProviderApp = () =>
   async(dispatch: AppDispatch, getState: () => RootState) => {

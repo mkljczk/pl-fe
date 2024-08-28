@@ -4,7 +4,7 @@ import {
   OrderedSet as ImmutableOrderedSet,
 } from 'immutable';
 
-import { STATUS_IMPORT, STATUSES_IMPORT } from 'soapbox/actions/importer';
+import { STATUS_IMPORT, STATUSES_IMPORT } from 'pl-fe/actions/importer';
 
 import { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS } from '../actions/accounts';
 import {

@@ -22,8 +22,8 @@ import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { uploadFile } from 'soapbox/actions/compose';
-import { useAppDispatch, useInstance } from 'soapbox/hooks';
+import { uploadFile } from 'pl-fe/actions/compose';
+import { useAppDispatch, useInstance } from 'pl-fe/hooks';
 
 import { $createImageNode } from '../nodes/image-node';
 import { setFloatingElemPosition } from '../utils/set-floating-elem-position';

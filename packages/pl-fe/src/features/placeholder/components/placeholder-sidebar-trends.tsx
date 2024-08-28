@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Stack } from 'soapbox/components/ui';
+import { Stack } from 'pl-fe/components/ui';
 
 import { randomIntFromInterval, generateText } from '../utils';
 

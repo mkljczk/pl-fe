@@ -1,9 +1,9 @@
 import { Record as ImmutableRecord } from 'immutable';
 import { combineReducers } from 'redux-immutable';
 
-import { AUTH_LOGGED_OUT } from 'soapbox/actions/auth';
-import * as BuildConfig from 'soapbox/build-config';
-import entities from 'soapbox/entity-store/reducer';
+import { AUTH_LOGGED_OUT } from 'pl-fe/actions/auth';
+import * as BuildConfig from 'pl-fe/build-config';
+import entities from 'pl-fe/entity-store/reducer';
 
 import accounts_meta from './accounts-meta';
 import admin from './admin';
@@ -44,7 +44,7 @@ import search from './search';
 import security from './security';
 import settings from './settings';
 import sidebar from './sidebar';
-import soapbox from './soapbox';
+import plfe from './pl-fe';
 import status_hover_card from './status-hover-card';
 import status_lists from './status-lists';
 import statuses from './statuses';
@@ -86,6 +86,7 @@ const reducers = {
   notifications,
   onboarding,
   pending_statuses,
+  plfe,
   polls,
   profile_hover_card,
   push_notifications,
@@ -96,7 +97,6 @@ const reducers = {
   security,
   settings,
   sidebar,
-  soapbox,
   status_hover_card,
   status_lists,
   statuses,
@@ -124,7 +124,7 @@ const logOut = (state: any = StateRecord()): ReturnType<typeof appReducer> => {
     location.href = '/login';
   }
 
-  const whitelist: string[] = ['instance', 'soapbox', 'custom_emojis', 'auth'];
+  const whitelist: string[] = ['instance', 'plfe', 'custom_emojis', 'auth'];
 
   return StateRecord(
     whitelist.reduce((acc: Record<string, any>, curr) => {

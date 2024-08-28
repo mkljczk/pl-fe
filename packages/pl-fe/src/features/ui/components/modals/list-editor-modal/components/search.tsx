@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { fetchListSuggestions, clearListSuggestions, changeListSuggestions } from 'soapbox/actions/lists';
-import Icon from 'soapbox/components/icon';
-import { Button, Form, HStack, Input } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch } from 'soapbox/hooks';
+import { fetchListSuggestions, clearListSuggestions, changeListSuggestions } from 'pl-fe/actions/lists';
+import Icon from 'pl-fe/components/icon';
+import { Button, Form, HStack, Input } from 'pl-fe/components/ui';
+import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   search: { id: 'lists.search', defaultMessage: 'Search among people you follow' },

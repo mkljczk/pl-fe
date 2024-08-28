@@ -6,15 +6,15 @@ import {
 } from 'immutable';
 import trimStart from 'lodash/trimStart';
 
-import { normalizeUsername } from 'soapbox/utils/input';
-import { toTailwind } from 'soapbox/utils/tailwind';
-import { generateAccent } from 'soapbox/utils/theme';
+import { normalizeUsername } from 'pl-fe/utils/input';
+import { toTailwind } from 'pl-fe/utils/tailwind';
+import { generateAccent } from 'pl-fe/utils/theme';
 
 import type {
   PromoPanelItem,
   FooterItem,
   CryptoAddress,
-} from 'soapbox/types/soapbox';
+} from 'pl-fe/types/pl-fe';
 
 const DEFAULT_COLORS = ImmutableMap<string, any>({
   success: ImmutableMap({
@@ -66,7 +66,7 @@ const CryptoAddressRecord = ImmutableRecord({
   ticker: '',
 });
 
-const SoapboxConfigRecord = ImmutableRecord({
+const PlFeConfigRecord = ImmutableRecord({
   appleAppId: null,
   authProvider: '',
   logo: '',
@@ -116,42 +116,42 @@ const SoapboxConfigRecord = ImmutableRecord({
    */
   mediaPreview: false,
   sentryDsn: undefined as string | undefined,
-}, 'SoapboxConfig');
+}, 'PlFeConfig');
 
-type SoapboxConfigMap = ImmutableMap<string, any>;
+type PlFeConfigMap = ImmutableMap<string, any>;
 
 const normalizeCryptoAddress = (address: unknown): CryptoAddress =>
   CryptoAddressRecord(ImmutableMap(fromJS(address))).update('ticker', ticker =>
     trimStart(ticker, '$').toLowerCase(),
   );
 
-const normalizeCryptoAddresses = (soapboxConfig: SoapboxConfigMap): SoapboxConfigMap => {
-  const addresses = ImmutableList(soapboxConfig.get('cryptoAddresses'));
-  return soapboxConfig.set('cryptoAddresses', addresses.map(normalizeCryptoAddress));
+const normalizeCryptoAddresses = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
+  const addresses = ImmutableList(plFeConfig.get('cryptoAddresses'));
+  return plFeConfig.set('cryptoAddresses', addresses.map(normalizeCryptoAddress));
 };
 
-const normalizeBrandColor = (soapboxConfig: SoapboxConfigMap): SoapboxConfigMap => {
-  const brandColor = soapboxConfig.get('brandColor') || soapboxConfig.getIn(['colors', 'primary', '500']) || '';
-  return soapboxConfig.set('brandColor', brandColor);
+const normalizeBrandColor = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
+  const brandColor = plFeConfig.get('brandColor') || plFeConfig.getIn(['colors', 'primary', '500']) || '';
+  return plFeConfig.set('brandColor', brandColor);
 };
 
-const normalizeAccentColor = (soapboxConfig: SoapboxConfigMap): SoapboxConfigMap => {
-  const brandColor = soapboxConfig.get('brandColor');
+const normalizeAccentColor = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
+  const brandColor = plFeConfig.get('brandColor');
 
-  const accentColor = soapboxConfig.get('accentColor')
-    || soapboxConfig.getIn(['colors', 'accent', '500'])
+  const accentColor = plFeConfig.get('accentColor')
+    || plFeConfig.getIn(['colors', 'accent', '500'])
     || (brandColor ? generateAccent(brandColor) : '');
 
-  return soapboxConfig.set('accentColor', accentColor);
+  return plFeConfig.set('accentColor', accentColor);
 };
 
-const normalizeColors = (soapboxConfig: SoapboxConfigMap): SoapboxConfigMap => {
-  const colors = DEFAULT_COLORS.mergeDeep(soapboxConfig.get('colors'));
-  return toTailwind(soapboxConfig.set('colors', colors));
+const normalizeColors = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
+  const colors = DEFAULT_COLORS.mergeDeep(plFeConfig.get('colors'));
+  return toTailwind(plFeConfig.set('colors', colors));
 };
 
-const maybeAddMissingColors = (soapboxConfig: SoapboxConfigMap): SoapboxConfigMap => {
-  const colors = soapboxConfig.get('colors');
+const maybeAddMissingColors = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
+  const colors = plFeConfig.get('colors');
 
   const missing = ImmutableMap({
     'gradient-start': colors.getIn(['primary', '500']),
@@ -159,71 +159,71 @@ const maybeAddMissingColors = (soapboxConfig: SoapboxConfigMap): SoapboxConfigMa
     'accent-blue': colors.getIn(['primary', '600']),
   });
 
-  return soapboxConfig.set('colors', missing.mergeDeep(colors));
+  return plFeConfig.set('colors', missing.mergeDeep(colors));
 };
 
-const normalizePromoPanel = (soapboxConfig: SoapboxConfigMap): SoapboxConfigMap => {
-  const promoPanel = PromoPanelRecord(soapboxConfig.get('promoPanel'));
+const normalizePromoPanel = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
+  const promoPanel = PromoPanelRecord(plFeConfig.get('promoPanel'));
   const items = promoPanel.items.map(PromoPanelItemRecord);
-  return soapboxConfig.set('promoPanel', promoPanel.set('items', items));
+  return plFeConfig.set('promoPanel', promoPanel.set('items', items));
 };
 
-const normalizeFooterLinks = (soapboxConfig: SoapboxConfigMap): SoapboxConfigMap => {
+const normalizeFooterLinks = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
   const path = ['navlinks', 'homeFooter'];
-  const items = (soapboxConfig.getIn(path, ImmutableList()) as ImmutableList<any>).map(FooterItemRecord);
-  return soapboxConfig.setIn(path, items);
+  const items = (plFeConfig.getIn(path, ImmutableList()) as ImmutableList<any>).map(FooterItemRecord);
+  return plFeConfig.setIn(path, items);
 };
 
 /** Single user mode is now managed by `redirectRootNoLogin`. */
-const upgradeSingleUserMode = (soapboxConfig: SoapboxConfigMap): SoapboxConfigMap => {
-  const singleUserMode = soapboxConfig.get('singleUserMode') as boolean | undefined;
-  const singleUserModeProfile = soapboxConfig.get('singleUserModeProfile') as string | undefined;
-  const redirectRootNoLogin = soapboxConfig.get('redirectRootNoLogin') as string | undefined;
+const upgradeSingleUserMode = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
+  const singleUserMode = plFeConfig.get('singleUserMode') as boolean | undefined;
+  const singleUserModeProfile = plFeConfig.get('singleUserModeProfile') as string | undefined;
+  const redirectRootNoLogin = plFeConfig.get('redirectRootNoLogin') as string | undefined;
 
   if (!redirectRootNoLogin && singleUserMode && singleUserModeProfile) {
-    return soapboxConfig
+    return plFeConfig
       .set('redirectRootNoLogin', `/@${normalizeUsername(singleUserModeProfile)}`)
       .deleteAll(['singleUserMode', 'singleUserModeProfile']);
   } else {
-    return soapboxConfig
+    return plFeConfig
       .deleteAll(['singleUserMode', 'singleUserModeProfile']);
   }
 };
 
 /** Ensure a valid path is used. */
-const normalizeRedirectRootNoLogin = (soapboxConfig: SoapboxConfigMap): SoapboxConfigMap => {
-  const redirectRootNoLogin = soapboxConfig.get('redirectRootNoLogin');
+const normalizeRedirectRootNoLogin = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
+  const redirectRootNoLogin = plFeConfig.get('redirectRootNoLogin');
 
-  if (!redirectRootNoLogin) return soapboxConfig;
+  if (!redirectRootNoLogin) return plFeConfig;
 
   try {
     // Basically just get the pathname with a leading slash.
     const normalized = new URL(redirectRootNoLogin, 'http://a').pathname;
 
     if (normalized !== '/') {
-      return soapboxConfig.set('redirectRootNoLogin', normalized);
+      return plFeConfig.set('redirectRootNoLogin', normalized);
     } else {
       // Prevent infinite redirect(?)
-      return soapboxConfig.delete('redirectRootNoLogin');
+      return plFeConfig.delete('redirectRootNoLogin');
     }
   } catch (e) {
-    console.error('You have configured an invalid redirect in Soapbox Config.');
+    console.error('You have configured an invalid redirect in pl-fe Config.');
     console.error(e);
-    return soapboxConfig.delete('redirectRootNoLogin');
+    return plFeConfig.delete('redirectRootNoLogin');
   }
 };
 
-const normalizeSoapboxConfig = (soapboxConfig: Record<string, any>) => SoapboxConfigRecord(
-  ImmutableMap(fromJS(soapboxConfig)).withMutations(soapboxConfig => {
-    normalizeBrandColor(soapboxConfig);
-    normalizeAccentColor(soapboxConfig);
-    normalizeColors(soapboxConfig);
-    normalizePromoPanel(soapboxConfig);
-    normalizeFooterLinks(soapboxConfig);
-    maybeAddMissingColors(soapboxConfig);
-    normalizeCryptoAddresses(soapboxConfig);
-    upgradeSingleUserMode(soapboxConfig);
-    normalizeRedirectRootNoLogin(soapboxConfig);
+const normalizePlFeConfig = (plFeConfig: Record<string, any>) => PlFeConfigRecord(
+  ImmutableMap(fromJS(plFeConfig)).withMutations(plFeConfig => {
+    normalizeBrandColor(plFeConfig);
+    normalizeAccentColor(plFeConfig);
+    normalizeColors(plFeConfig);
+    normalizePromoPanel(plFeConfig);
+    normalizeFooterLinks(plFeConfig);
+    maybeAddMissingColors(plFeConfig);
+    normalizeCryptoAddresses(plFeConfig);
+    upgradeSingleUserMode(plFeConfig);
+    normalizeRedirectRootNoLogin(plFeConfig);
   }),
 );
 
@@ -232,6 +232,6 @@ export {
   PromoPanelRecord,
   FooterItemRecord,
   CryptoAddressRecord,
-  SoapboxConfigRecord,
-  normalizeSoapboxConfig,
+  PlFeConfigRecord,
+  normalizePlFeConfig,
 };

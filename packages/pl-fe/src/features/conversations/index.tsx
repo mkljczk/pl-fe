@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { directComposeById } from 'soapbox/actions/compose';
-import { mountConversations, unmountConversations, expandConversations } from 'soapbox/actions/conversations';
-import { useDirectStream } from 'soapbox/api/hooks';
-import AccountSearch from 'soapbox/components/account-search';
-import { Column } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import { directComposeById } from 'pl-fe/actions/compose';
+import { mountConversations, unmountConversations, expandConversations } from 'pl-fe/actions/conversations';
+import { useDirectStream } from 'pl-fe/api/hooks';
+import AccountSearch from 'pl-fe/components/account-search';
+import { Column } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 import ConversationsList from './components/conversations-list';
 

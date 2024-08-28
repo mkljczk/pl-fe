@@ -1,6 +1,6 @@
 import { instanceSchema } from 'pl-api';
 
-import alexJson from 'soapbox/__fixtures__/pleroma-account.json';
+import alexJson from 'pl-fe/__fixtures__/pleroma-account.json';
 
 import { buildAccount } from './factory';
 

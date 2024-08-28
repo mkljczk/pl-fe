@@ -2,8 +2,8 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Switch, Route } from 'react-router-dom';
 
-import { Column } from 'soapbox/components/ui';
-import { useOwnAccount } from 'soapbox/hooks';
+import { Column } from 'pl-fe/components/ui';
+import { useOwnAccount } from 'pl-fe/hooks';
 
 import AdminTabs from './components/admin-tabs';
 import Waitlist from './tabs/awaiting-approval';
@@ -25,9 +25,9 @@ const Admin: React.FC = () => {
       <AdminTabs />
 
       <Switch>
-        <Route path='/soapbox/admin' exact component={Dashboard} />
-        <Route path='/soapbox/admin/reports' exact component={Reports} />
-        <Route path='/soapbox/admin/approval' exact component={Waitlist} />
+        <Route path='/pl-fe/admin' exact component={Dashboard} />
+        <Route path='/pl-fe/admin/reports' exact component={Reports} />
+        <Route path='/pl-fe/admin/approval' exact component={Waitlist} />
       </Switch>
     </Column>
   );

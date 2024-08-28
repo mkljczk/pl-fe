@@ -11,11 +11,11 @@ import {
   fetchComposeSuggestions,
   selectComposeSuggestion,
   uploadCompose,
-} from 'soapbox/actions/compose';
-import { Button, HStack, Stack } from 'soapbox/components/ui';
-import EmojiPickerDropdown from 'soapbox/features/emoji/containers/emoji-picker-dropdown-container';
-import { ComposeEditor } from 'soapbox/features/ui/util/async-components';
-import { useAppDispatch, useAppSelector, useCompose, useDraggedFiles, useFeatures, useInstance } from 'soapbox/hooks';
+} from 'pl-fe/actions/compose';
+import { Button, HStack, Stack } from 'pl-fe/components/ui';
+import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
+import { ComposeEditor } from 'pl-fe/features/ui/util/async-components';
+import { useAppDispatch, useAppSelector, useCompose, useDraggedFiles, useFeatures, useInstance } from 'pl-fe/hooks';
 
 import QuotedStatusContainer from '../containers/quoted-status-container';
 import ReplyIndicatorContainer from '../containers/reply-indicator-container';
@@ -39,8 +39,8 @@ import TextCharacterCounter from './text-character-counter';
 import UploadForm from './upload-form';
 import VisualCharacterCounter from './visual-character-counter';
 
-import type { AutoSuggestion } from 'soapbox/components/autosuggest-input';
-import type { Emoji } from 'soapbox/features/emoji';
+import type { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
+import type { Emoji } from 'pl-fe/features/emoji';
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What\'s on your mind?' },

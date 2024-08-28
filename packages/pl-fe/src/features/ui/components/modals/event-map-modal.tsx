@@ -2,9 +2,9 @@ import L from 'leaflet';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Button, Modal, Stack } from 'soapbox/components/ui';
-import { useAppSelector, useSoapboxConfig } from 'soapbox/hooks';
-import { makeGetStatus } from 'soapbox/selectors';
+import { Button, Modal, Stack } from 'pl-fe/components/ui';
+import { useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 import 'leaflet/dist/leaflet.css';
 
@@ -21,7 +21,7 @@ interface EventMapModalProps {
 }
 
 const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose, statusId }) => {
-  const { tileServer, tileServerAttribution } = useSoapboxConfig();
+  const { tileServer, tileServerAttribution } = usePlFeConfig();
 
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector(state => getStatus(state, { id: statusId }))!;

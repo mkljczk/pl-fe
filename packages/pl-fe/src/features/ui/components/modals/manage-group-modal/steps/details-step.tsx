@@ -1,12 +1,12 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { Form, FormGroup, Input, Textarea } from 'soapbox/components/ui';
-import AvatarPicker from 'soapbox/features/edit-profile/components/avatar-picker';
-import HeaderPicker from 'soapbox/features/edit-profile/components/header-picker';
-import { useAppSelector, useInstance } from 'soapbox/hooks';
-import { usePreview } from 'soapbox/hooks/forms';
-import resizeImage from 'soapbox/utils/resize-image';
+import { Form, FormGroup, Input, Textarea } from 'pl-fe/components/ui';
+import AvatarPicker from 'pl-fe/features/edit-profile/components/avatar-picker';
+import HeaderPicker from 'pl-fe/features/edit-profile/components/header-picker';
+import { useAppSelector, useInstance } from 'pl-fe/hooks';
+import { usePreview } from 'pl-fe/hooks/forms';
+import resizeImage from 'pl-fe/utils/resize-image';
 
 import type { CreateGroupParams } from 'pl-api';
 

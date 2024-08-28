@@ -1,15 +1,15 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { setComposeToStatus } from 'soapbox/actions/compose';
-import { cancelDraftStatus } from 'soapbox/actions/draft-statuses';
-import { openModal } from 'soapbox/actions/modals';
-import { getSettings } from 'soapbox/actions/settings';
-import { Button, HStack } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import { setComposeToStatus } from 'pl-fe/actions/compose';
+import { cancelDraftStatus } from 'pl-fe/actions/draft-statuses';
+import { openModal } from 'pl-fe/actions/modals';
+import { getSettings } from 'pl-fe/actions/settings';
+import { Button, HStack } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
 
-import type { Status as StatusEntity } from 'soapbox/normalizers';
-import type { DraftStatus } from 'soapbox/reducers/draft-statuses';
+import type { Status as StatusEntity } from 'pl-fe/normalizers';
+import type { DraftStatus } from 'pl-fe/reducers/draft-statuses';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.draft_status_delete.confirm', defaultMessage: 'Discard' },

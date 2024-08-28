@@ -3,7 +3,7 @@ import { getClient } from '../api';
 import { importFetchedPoll } from './importer';
 
 import type { Poll } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const POLL_VOTE_REQUEST = 'POLL_VOTE_REQUEST' as const;
 const POLL_VOTE_SUCCESS = 'POLL_VOTE_SUCCESS' as const;

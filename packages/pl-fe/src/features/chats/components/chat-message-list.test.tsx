@@ -2,13 +2,13 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { VirtuosoMockContext } from 'react-virtuoso';
 
-import { __stub } from 'soapbox/api';
-import { ChatContext } from 'soapbox/contexts/chat-context';
-import { buildAccount, buildInstance } from 'soapbox/jest/factory';
-import { queryClient, render, rootState, screen, waitFor } from 'soapbox/jest/test-helpers';
-import { normalizeChatMessage } from 'soapbox/normalizers';
-import { IChat } from 'soapbox/queries/chats';
-import { ChatMessage } from 'soapbox/types/entities';
+import { __stub } from 'pl-fe/api';
+import { ChatContext } from 'pl-fe/contexts/chat-context';
+import { buildAccount, buildInstance } from 'pl-fe/jest/factory';
+import { queryClient, render, rootState, screen, waitFor } from 'pl-fe/jest/test-helpers';
+import { normalizeChatMessage } from 'pl-fe/normalizers';
+import { IChat } from 'pl-fe/queries/chats';
+import { ChatMessage } from 'pl-fe/types/entities';
 
 import ChatMessageList from './chat-message-list';
 

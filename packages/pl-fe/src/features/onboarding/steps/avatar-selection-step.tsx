@@ -2,15 +2,15 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { patchMe } from 'soapbox/actions/me';
-import { BigCard } from 'soapbox/components/big-card';
-import { Avatar, Button, Icon, Spinner, Stack } from 'soapbox/components/ui';
-import { useAppDispatch, useOwnAccount } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
-import { isDefaultAvatar } from 'soapbox/utils/accounts';
-import resizeImage from 'soapbox/utils/resize-image';
+import { patchMe } from 'pl-fe/actions/me';
+import { BigCard } from 'pl-fe/components/big-card';
+import { Avatar, Button, Icon, Spinner, Stack } from 'pl-fe/components/ui';
+import { useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
+import { isDefaultAvatar } from 'pl-fe/utils/accounts';
+import resizeImage from 'pl-fe/utils/resize-image';
 
-import type { PlfeResponse } from 'soapbox/api';
+import type { PlfeResponse } from 'pl-fe/api';
 
 const messages = defineMessages({
   error: { id: 'onboarding.error', defaultMessage: 'An unexpected error occurred. Please try again or skip this step.' },

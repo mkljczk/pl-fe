@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import { externalLogin, loginWithCode } from 'soapbox/actions/external-auth';
-import { Button, Form, FormActions, FormGroup, Input, Spinner } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { externalLogin, loginWithCode } from 'pl-fe/actions/external-auth';
+import { Button, Form, FormActions, FormGroup, Input, Spinner } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   instanceLabel: { id: 'login.fields.instance_label', defaultMessage: 'Instance' },

@@ -1,13 +1,13 @@
 import { accountSchema, GroupRoles } from 'pl-api';
 
-import { Entities } from 'soapbox/entity-store/entities';
-import { useDismissEntity, useEntities } from 'soapbox/entity-store/hooks';
-import { useClient } from 'soapbox/hooks';
-import { normalizeAccount } from 'soapbox/normalizers';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useDismissEntity, useEntities } from 'pl-fe/entity-store/hooks';
+import { useClient } from 'pl-fe/hooks';
+import { normalizeAccount } from 'pl-fe/normalizers';
 
 import { useGroupRelationship } from './useGroupRelationship';
 
-import type { ExpandedEntitiesPath } from 'soapbox/entity-store/hooks/types';
+import type { ExpandedEntitiesPath } from 'pl-fe/entity-store/hooks/types';
 
 const useGroupMembershipRequests = (groupId: string) => {
   const client = useClient();

@@ -1,10 +1,10 @@
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import { prepareRequest } from 'soapbox/actions/consumer-auth';
-import { IconButton, Tooltip } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import { capitalize } from 'soapbox/utils/strings';
+import { prepareRequest } from 'pl-fe/actions/consumer-auth';
+import { IconButton, Tooltip } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import { capitalize } from 'pl-fe/utils/strings';
 
 const messages = defineMessages({
   tooltip: { id: 'oauth_consumer.tooltip', defaultMessage: 'Sign in with {provider}' },

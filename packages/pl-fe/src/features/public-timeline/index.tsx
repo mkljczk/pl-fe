@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { changeSetting } from 'soapbox/actions/settings';
-import { fetchPublicTimeline } from 'soapbox/actions/timelines';
-import { usePublicStream } from 'soapbox/api/hooks';
-import PullToRefresh from 'soapbox/components/pull-to-refresh';
-import { Accordion, Column } from 'soapbox/components/ui';
-import { useAppDispatch, useInstance, useSettings, useTheme } from 'soapbox/hooks';
-import { useIsMobile } from 'soapbox/hooks/useIsMobile';
+import { changeSetting } from 'pl-fe/actions/settings';
+import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
+import { usePublicStream } from 'pl-fe/api/hooks';
+import PullToRefresh from 'pl-fe/components/pull-to-refresh';
+import { Accordion, Column } from 'pl-fe/components/ui';
+import { useAppDispatch, useInstance, useSettings, useTheme } from 'pl-fe/hooks';
+import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 import PinnedHostsPicker from '../remote-timeline/components/pinned-hosts-picker';
 import Timeline from '../ui/components/timeline';

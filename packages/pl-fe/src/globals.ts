@@ -2,14 +2,14 @@
  * globals: do things through the console.
  * This feature is for developers.
  */
-import { changeSettingImmediate } from 'soapbox/actions/settings';
+import { changeSettingImmediate } from 'pl-fe/actions/settings';
 
-import type { Store } from 'soapbox/store';
+import type { Store } from 'pl-fe/store';
 
-/** Add Soapbox globals to the window. */
+/** Add PlFe globals to the window. */
 const createGlobals = (store: Store) => {
-  const Soapbox = {
-    /** Become a developer with `Soapbox.isDeveloper()` */
+  const PlFe = {
+    /** Become a developer with `plFe.isDeveloper()` */
     isDeveloper: (bool = true): boolean => {
       if (![true, false].includes(bool)) {
         throw `Invalid option ${bool}. Must be true or false.`;
@@ -19,7 +19,7 @@ const createGlobals = (store: Store) => {
     },
   };
 
-  (window as any).Soapbox = Soapbox;
+  (window as any).plFe = PlFe;
 };
 
 export { createGlobals };

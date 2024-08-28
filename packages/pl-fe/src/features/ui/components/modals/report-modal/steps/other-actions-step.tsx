@@ -2,13 +2,13 @@ import { OrderedSet } from 'immutable';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeReportBlock, changeReportForward } from 'soapbox/actions/reports';
-import { Button, FormGroup, HStack, Stack, Text, Toggle } from 'soapbox/components/ui';
-import StatusCheckBox from 'soapbox/features/report/components/status-check-box';
-import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
-import { getDomain } from 'soapbox/utils/accounts';
+import { changeReportBlock, changeReportForward } from 'pl-fe/actions/reports';
+import { Button, FormGroup, HStack, Stack, Text, Toggle } from 'pl-fe/components/ui';
+import StatusCheckBox from 'pl-fe/features/report/components/status-check-box';
+import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { getDomain } from 'pl-fe/utils/accounts';
 
-import type { Account } from 'soapbox/normalizers';
+import type { Account } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   addAdditionalStatuses: { id: 'report.other_actions.add_additional', defaultMessage: 'Would you like to add additional statuses to this report?' },

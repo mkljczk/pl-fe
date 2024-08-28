@@ -1,11 +1,11 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Icon from 'soapbox/components/icon';
-import { HStack, Stack, Text } from 'soapbox/components/ui';
-import { useInstance } from 'soapbox/hooks';
+import Icon from 'pl-fe/components/icon';
+import { HStack, Stack, Text } from 'pl-fe/components/ui';
+import { useInstance } from 'pl-fe/hooks';
 
-import type { RemoteInstance } from 'soapbox/selectors';
+import type { RemoteInstance } from 'pl-fe/selectors';
 
 const hasRestrictions = (remoteInstance: RemoteInstance): boolean => {
   const { accept, reject_deletes, report_removal, ...federation } = remoteInstance.federation;

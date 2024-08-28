@@ -1,6 +1,6 @@
 import { List as ImmutableList, Record as ImmutableRecord } from 'immutable';
 
-import { MODAL_OPEN, MODAL_CLOSE } from 'soapbox/actions/modals';
+import { MODAL_OPEN, MODAL_CLOSE } from 'pl-fe/actions/modals';
 
 import reducer from './modals';
 

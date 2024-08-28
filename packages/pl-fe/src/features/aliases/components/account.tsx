@@ -1,12 +1,12 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { addToAliases } from 'soapbox/actions/aliases';
-import { useAccount } from 'soapbox/api/hooks';
-import AccountComponent from 'soapbox/components/account';
-import IconButton from 'soapbox/components/icon-button';
-import { HStack } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
+import { addToAliases } from 'pl-fe/actions/aliases';
+import { useAccount } from 'pl-fe/api/hooks';
+import AccountComponent from 'pl-fe/components/account';
+import IconButton from 'pl-fe/components/icon-button';
+import { HStack } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   add: { id: 'aliases.account.add', defaultMessage: 'Create alias' },

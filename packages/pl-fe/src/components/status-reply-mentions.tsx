@@ -2,12 +2,12 @@ import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { openModal } from 'soapbox/actions/modals';
-import HoverRefWrapper from 'soapbox/components/hover-ref-wrapper';
-import HoverStatusWrapper from 'soapbox/components/hover-status-wrapper';
-import { useAppDispatch } from 'soapbox/hooks';
+import { openModal } from 'pl-fe/actions/modals';
+import HoverRefWrapper from 'pl-fe/components/hover-ref-wrapper';
+import HoverStatusWrapper from 'pl-fe/components/hover-status-wrapper';
+import { useAppDispatch } from 'pl-fe/hooks';
 
-import type { Status } from 'soapbox/normalizers';
+import type { Status } from 'pl-fe/normalizers';
 
 interface IStatusReplyMentions {
   status: Pick<Status, 'in_reply_to_id' | 'id' | 'mentions'>;

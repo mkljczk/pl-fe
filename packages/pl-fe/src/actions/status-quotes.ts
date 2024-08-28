@@ -3,7 +3,7 @@ import { getClient } from '../api';
 import { importFetchedStatuses } from './importer';
 
 import type { Status as BaseStatus, PaginatedResponse } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const STATUS_QUOTES_FETCH_REQUEST = 'STATUS_QUOTES_FETCH_REQUEST' as const;
 const STATUS_QUOTES_FETCH_SUCCESS = 'STATUS_QUOTES_FETCH_SUCCESS' as const;

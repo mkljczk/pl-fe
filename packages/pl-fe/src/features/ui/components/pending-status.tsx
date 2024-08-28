@@ -1,20 +1,20 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Account from 'soapbox/components/account';
-import StatusContent from 'soapbox/components/status-content';
-import StatusReplyMentions from 'soapbox/components/status-reply-mentions';
-import { Card, HStack, Stack } from 'soapbox/components/ui';
-import PlaceholderCard from 'soapbox/features/placeholder/components/placeholder-card';
-import PlaceholderMediaGallery from 'soapbox/features/placeholder/components/placeholder-media-gallery';
-import QuotedStatus from 'soapbox/features/status/containers/quoted-status-container';
-import { useAppSelector } from 'soapbox/hooks';
+import Account from 'pl-fe/components/account';
+import StatusContent from 'pl-fe/components/status-content';
+import StatusReplyMentions from 'pl-fe/components/status-reply-mentions';
+import { Card, HStack, Stack } from 'pl-fe/components/ui';
+import PlaceholderCard from 'pl-fe/features/placeholder/components/placeholder-card';
+import PlaceholderMediaGallery from 'pl-fe/features/placeholder/components/placeholder-media-gallery';
+import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
+import { useAppSelector } from 'pl-fe/hooks';
 
 import { buildStatus } from '../util/pending-status-builder';
 
 import PollPreview from './poll-preview';
 
-import type { Status as StatusEntity } from 'soapbox/normalizers';
+import type { Status as StatusEntity } from 'pl-fe/normalizers';
 
 const shouldHaveCard = (pendingStatus: StatusEntity) => Boolean(pendingStatus.content.match(/https?:\/\/\S*/));
 

@@ -2,12 +2,12 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { Text, Widget } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
-import PlaceholderSidebarSuggestions from 'soapbox/features/placeholder/components/placeholder-sidebar-suggestions';
-import { useDismissSuggestion, useSuggestions } from 'soapbox/queries/suggestions';
+import { Text, Widget } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
+import PlaceholderSidebarSuggestions from 'pl-fe/features/placeholder/components/placeholder-sidebar-suggestions';
+import { useDismissSuggestion, useSuggestions } from 'pl-fe/queries/suggestions';
 
-import type { Account as AccountEntity } from 'soapbox/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   dismissSuggestion: { id: 'suggestions.dismiss', defaultMessage: 'Dismiss suggestion' },

@@ -1,14 +1,14 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeStatusLanguage } from 'soapbox/actions/statuses';
-import { type Language, languages } from 'soapbox/features/preferences';
-import { useAppDispatch } from 'soapbox/hooks';
+import { changeStatusLanguage } from 'pl-fe/actions/statuses';
+import { type Language, languages } from 'pl-fe/features/preferences';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 import DropdownMenu from './dropdown-menu';
 import { HStack, Icon, Text } from './ui';
 
-import type { Status } from 'soapbox/normalizers';
+import type { Status } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   languageVersions: { id: 'status.language_versions', defaultMessage: 'The post has multiple language versions.' },

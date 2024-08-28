@@ -4,16 +4,16 @@ import React, { useEffect, useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { fetchOwnAccounts, logOut, switchAccount } from 'soapbox/actions/auth';
-import Account from 'soapbox/components/account';
-import DropdownMenu from 'soapbox/components/dropdown-menu';
-import { MenuDivider } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
-import { makeGetAccount } from 'soapbox/selectors';
+import { fetchOwnAccounts, logOut, switchAccount } from 'pl-fe/actions/auth';
+import Account from 'pl-fe/components/account';
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import { MenuDivider } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { makeGetAccount } from 'pl-fe/selectors';
 
 import ThemeToggle from './theme-toggle';
 
-import type { Account as AccountEntity } from 'soapbox/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   add: { id: 'profile_dropdown.add_account', defaultMessage: 'Add an existing account' },

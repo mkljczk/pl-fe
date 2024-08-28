@@ -1,13 +1,13 @@
 
-import { fetchRelationships } from 'soapbox/actions/accounts';
-import { importFetchedAccount, importFetchedAccounts, importFetchedStatuses } from 'soapbox/actions/importer';
-import { accountIdsToAccts } from 'soapbox/selectors';
-import { filterBadges, getTagDiff } from 'soapbox/utils/badges';
+import { fetchRelationships } from 'pl-fe/actions/accounts';
+import { importFetchedAccount, importFetchedAccounts, importFetchedStatuses } from 'pl-fe/actions/importer';
+import { accountIdsToAccts } from 'pl-fe/selectors';
+import { filterBadges, getTagDiff } from 'pl-fe/utils/badges';
 
 import { getClient } from '../api';
 
 import type { Account, AdminGetAccountsParams, AdminGetReportsParams } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const ADMIN_CONFIG_FETCH_REQUEST = 'ADMIN_CONFIG_FETCH_REQUEST' as const;
 const ADMIN_CONFIG_FETCH_SUCCESS = 'ADMIN_CONFIG_FETCH_SUCCESS' as const;
@@ -89,7 +89,7 @@ const updateConfig = (configs: Record<string, any>[]) =>
       });
   };
 
-const updateSoapboxConfig = (data: Record<string, any>) =>
+const updatePlFeConfig = (data: Record<string, any>) =>
   (dispatch: AppDispatch) => {
     const params = [{
       group: ':pleroma',
@@ -380,7 +380,7 @@ export {
   ADMIN_USER_INDEX_QUERY_SET,
   fetchConfig,
   updateConfig,
-  updateSoapboxConfig,
+  updatePlFeConfig,
   fetchReports,
   closeReport,
   fetchUsers,

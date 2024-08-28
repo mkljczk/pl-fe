@@ -1,17 +1,17 @@
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import { HStack, Input } from 'soapbox/components/ui';
+import { HStack, Input } from 'pl-fe/components/ui';
 
 import IconPicker from './icon-picker';
 
-import type { StreamfieldComponent } from 'soapbox/components/ui/streamfield/streamfield';
-import type { PromoPanelItem } from 'soapbox/types/soapbox';
+import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield/streamfield';
+import type { PromoPanelItem } from 'pl-fe/types/pl-fe';
 
 const messages = defineMessages({
-  icon: { id: 'soapbox_config.promo_panel.meta_fields.icon_placeholder', defaultMessage: 'Icon' },
-  label: { id: 'soapbox_config.promo_panel.meta_fields.label_placeholder', defaultMessage: 'Label' },
-  url: { id: 'soapbox_config.promo_panel.meta_fields.url_placeholder', defaultMessage: 'URL' },
+  icon: { id: 'plfe_config.promo_panel.meta_fields.icon_placeholder', defaultMessage: 'Icon' },
+  label: { id: 'plfe_config.promo_panel.meta_fields.label_placeholder', defaultMessage: 'Label' },
+  url: { id: 'plfe_config.promo_panel.meta_fields.url_placeholder', defaultMessage: 'URL' },
 });
 
 const PromoPanelInput: StreamfieldComponent<PromoPanelItem> = ({ value, onChange }) => {

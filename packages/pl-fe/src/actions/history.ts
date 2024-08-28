@@ -1,9 +1,9 @@
-import { getClient } from 'soapbox/api';
+import { getClient } from 'pl-fe/api';
 
 import { importFetchedAccounts } from './importer';
 
 import type { StatusEdit } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const HISTORY_FETCH_REQUEST = 'HISTORY_FETCH_REQUEST' as const;
 const HISTORY_FETCH_SUCCESS = 'HISTORY_FETCH_SUCCESS' as const;

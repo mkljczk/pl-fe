@@ -2,17 +2,17 @@ import React, { useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { v4 as uuidv4 } from 'uuid';
 
-import { updateSoapboxConfig } from 'soapbox/actions/admin';
-import { getHost } from 'soapbox/actions/instance';
-import { fetchSoapboxConfig } from 'soapbox/actions/soapbox';
-import DropdownMenu from 'soapbox/components/dropdown-menu';
-import List, { ListItem } from 'soapbox/components/list';
-import { Button, Column, Form, FormActions } from 'soapbox/components/ui';
-import ColorWithPicker from 'soapbox/features/soapbox-config/components/color-with-picker';
-import { useAppDispatch, useAppSelector, useSoapboxConfig } from 'soapbox/hooks';
-import { normalizeSoapboxConfig } from 'soapbox/normalizers';
-import toast from 'soapbox/toast';
-import { download } from 'soapbox/utils/download';
+import { updatePlFeConfig } from 'pl-fe/actions/admin';
+import { getHost } from 'pl-fe/actions/instance';
+import { fetchPlFeConfig } from 'pl-fe/actions/pl-fe';
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import List, { ListItem } from 'pl-fe/components/list';
+import { Button, Column, Form, FormActions } from 'pl-fe/components/ui';
+import ColorWithPicker from 'pl-fe/features/pl-fe-config/components/color-with-picker';
+import { useAppDispatch, useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
+import { normalizePlFeConfig } from 'pl-fe/normalizers';
+import toast from 'pl-fe/toast';
+import { download } from 'pl-fe/utils/download';
 
 import Palette, { ColorGroup } from './components/palette';
 
@@ -45,11 +45,11 @@ const ThemeEditor: React.FC<IThemeEditor> = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const soapbox = useSoapboxConfig();
+  const plFe = usePlFeConfig();
   const host = useAppSelector(state => getHost(state));
-  const rawConfig = useAppSelector(state => state.soapbox);
+  const rawConfig = useAppSelector(state => state.plfe);
 
-  const [colors, setColors] = useState(soapbox.colors.toJS() as any);
+  const [colors, setColors] = useState(plFe.colors.toJS() as any);
   const [submitting, setSubmitting] = useState(false);
   const [resetKey, setResetKey] = useState(uuidv4());
 
@@ -78,16 +78,16 @@ const ThemeEditor: React.FC<IThemeEditor> = () => {
   };
 
   const resetTheme = () => {
-    setTheme(soapbox.colors.toJS() as any);
+    setTheme(plFe.colors.toJS() as any);
   };
 
   const updateTheme = async () => {
     const params = rawConfig.set('colors', colors).toJS();
-    await dispatch(updateSoapboxConfig(params));
+    await dispatch(updatePlFeConfig(params));
   };
 
   const restoreDefaultTheme = () => {
-    const colors = normalizeSoapboxConfig({ brandColor: '#0482d8' }).colors.toJS();
+    const colors = normalizePlFeConfig({ brandColor: '#0482d8' }).colors.toJS();
     setTheme(colors);
   };
 
@@ -106,7 +106,7 @@ const ThemeEditor: React.FC<IThemeEditor> = () => {
     if (file) {
       const text = await file.text();
       const json = JSON.parse(text);
-      const colors = normalizeSoapboxConfig({ colors: json }).colors.toJS();
+      const colors = normalizePlFeConfig({ colors: json }).colors.toJS();
 
       setTheme(colors);
       toast.success(intl.formatMessage(messages.importSuccess));
@@ -117,7 +117,7 @@ const ThemeEditor: React.FC<IThemeEditor> = () => {
     setSubmitting(true);
 
     try {
-      await dispatch(fetchSoapboxConfig(host));
+      await dispatch(fetchPlFeConfig(host));
       await updateTheme();
       toast.success(intl.formatMessage(messages.saved));
       setSubmitting(false);

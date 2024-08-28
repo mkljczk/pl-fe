@@ -3,12 +3,12 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { openModal } from 'soapbox/actions/modals';
-import { useDeleteGroup, useGroup } from 'soapbox/api/hooks';
-import List, { ListItem } from 'soapbox/components/list';
-import { CardBody, CardHeader, CardTitle, Column, Spinner, Text } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { openModal } from 'pl-fe/actions/modals';
+import { useDeleteGroup, useGroup } from 'pl-fe/api/hooks';
+import List, { ListItem } from 'pl-fe/components/list';
+import { CardBody, CardHeader, CardTitle, Column, Spinner, Text } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 import ColumnForbidden from '../ui/components/column-forbidden';
 

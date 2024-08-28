@@ -21,7 +21,7 @@ import { $createParagraphNode, $createTextNode, $getRoot, type EditorState, type
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useAppDispatch, useCompose } from 'soapbox/hooks';
+import { useAppDispatch, useCompose } from 'pl-fe/hooks';
 
 import { importImage } from './handlers/image';
 import { useNodes } from './nodes';

@@ -1,11 +1,11 @@
 import { defineMessages } from 'react-intl';
 
-import { getClient } from 'soapbox/api';
-import { normalizeAccount } from 'soapbox/normalizers';
-import toast from 'soapbox/toast';
+import { getClient } from 'pl-fe/api';
+import { normalizeAccount } from 'pl-fe/normalizers';
+import toast from 'pl-fe/toast';
 
 import type { Account, PaginatedResponse } from 'pl-api';
-import type { RootState } from 'soapbox/store';
+import type { RootState } from 'pl-fe/store';
 
 const EXPORT_FOLLOWS_REQUEST = 'EXPORT_FOLLOWS_REQUEST' as const;
 const EXPORT_FOLLOWS_SUCCESS = 'EXPORT_FOLLOWS_SUCCESS' as const;

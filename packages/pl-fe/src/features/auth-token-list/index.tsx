@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedDate, useIntl } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import { fetchOAuthTokens, revokeOAuthTokenById } from 'soapbox/actions/security';
-import { Button, Card, CardBody, CardHeader, CardTitle, Column, HStack, Spinner, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { openModal } from 'pl-fe/actions/modals';
+import { fetchOAuthTokens, revokeOAuthTokenById } from 'pl-fe/actions/security';
+import { Button, Card, CardBody, CardHeader, CardTitle, Column, HStack, Spinner, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import type { OauthToken } from 'pl-api';
 

@@ -1,7 +1,7 @@
 import React, { HTMLAttributes } from 'react';
 
-import { HStack, IconButton, Text } from 'soapbox/components/ui';
-import { useSettings } from 'soapbox/hooks';
+import { HStack, IconButton, Text } from 'pl-fe/components/ui';
+import { useSettings } from 'pl-fe/hooks';
 
 interface IChatPaneHeader {
   isOpen: boolean;

@@ -1,11 +1,11 @@
 import React from 'react';
 import { VirtuosoMockContext } from 'react-virtuoso';
 
-import { __stub } from 'soapbox/api';
-import { ChatContext } from 'soapbox/contexts/chat-context';
-import { StatProvider } from 'soapbox/contexts/stat-context';
-import chats from 'soapbox/jest/fixtures/chats.json';
-import { render, screen, waitFor } from 'soapbox/jest/test-helpers';
+import { __stub } from 'pl-fe/api';
+import { ChatContext } from 'pl-fe/contexts/chat-context';
+import { StatProvider } from 'pl-fe/contexts/stat-context';
+import chats from 'pl-fe/jest/fixtures/chats.json';
+import { render, screen, waitFor } from 'pl-fe/jest/test-helpers';
 
 import ChatPane from './chat-pane';
 

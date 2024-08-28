@@ -1,17 +1,17 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import { useGroup, useGroupMedia } from 'soapbox/api/hooks';
-import LoadMore from 'soapbox/components/load-more';
-import MissingIndicator from 'soapbox/components/missing-indicator';
-import { Column, Spinner } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import { openModal } from 'pl-fe/actions/modals';
+import { useGroup, useGroupMedia } from 'pl-fe/api/hooks';
+import LoadMore from 'pl-fe/components/load-more';
+import MissingIndicator from 'pl-fe/components/missing-indicator';
+import { Column, Spinner } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 import MediaItem from '../account-gallery/components/media-item';
 
-import type { Status } from 'soapbox/normalizers';
-import type { AccountGalleryAttachment } from 'soapbox/selectors';
+import type { Status } from 'pl-fe/normalizers';
+import type { AccountGalleryAttachment } from 'pl-fe/selectors';
 
 interface IGroupGallery {
   params: { groupId: string };

@@ -2,16 +2,16 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { getSettings } from 'soapbox/actions/settings';
-import { useAccount } from 'soapbox/api/hooks';
-import Account from 'soapbox/components/account';
-import Badge from 'soapbox/components/badge';
-import HoverRefWrapper from 'soapbox/components/hover-ref-wrapper';
-import RelativeTimestamp from 'soapbox/components/relative-timestamp';
-import { Avatar, Stack, Text } from 'soapbox/components/ui';
-import ActionButton from 'soapbox/features/ui/components/action-button';
-import { useAppSelector } from 'soapbox/hooks';
-import { shortNumberFormat } from 'soapbox/utils/numbers';
+import { getSettings } from 'pl-fe/actions/settings';
+import { useAccount } from 'pl-fe/api/hooks';
+import Account from 'pl-fe/components/account';
+import Badge from 'pl-fe/components/badge';
+import HoverRefWrapper from 'pl-fe/components/hover-ref-wrapper';
+import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
+import { Avatar, Stack, Text } from 'pl-fe/components/ui';
+import ActionButton from 'pl-fe/features/ui/components/action-button';
+import { useAppSelector } from 'pl-fe/hooks';
+import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
 interface IAccountCard {
   id: string;

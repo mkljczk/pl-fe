@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl, FormatDateOptions } from 'react-intl';
 
-import Markup from 'soapbox/components/markup';
-import { HStack, Icon } from 'soapbox/components/ui';
-import { CryptoAddress, LightningAddress } from 'soapbox/features/ui/util/async-components';
+import Markup from 'pl-fe/components/markup';
+import { HStack, Icon } from 'pl-fe/components/ui';
+import { CryptoAddress, LightningAddress } from 'pl-fe/features/ui/util/async-components';
 
-import type { Account } from 'soapbox/normalizers';
+import type { Account } from 'pl-fe/normalizers';
 
 const getTicker = (value: string): string => (value.match(/\$([a-zA-Z]*)/i) || [])[1];
 const isTicker = (value: string): boolean => Boolean(getTicker(value));

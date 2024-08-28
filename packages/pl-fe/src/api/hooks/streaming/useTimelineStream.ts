@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
-import { useAppSelector, useClient, useInstance } from 'soapbox/hooks';
-import { getAccessToken } from 'soapbox/utils/auth';
+import { useAppSelector, useClient, useInstance } from 'pl-fe/hooks';
+import { getAccessToken } from 'pl-fe/utils/auth';
 
 import type { StreamingEvent } from 'pl-api';
 

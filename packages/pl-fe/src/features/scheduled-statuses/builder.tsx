@@ -1,9 +1,9 @@
 import { statusSchema, type ScheduledStatus } from 'pl-api';
 
-import { Entities } from 'soapbox/entity-store/entities';
-import { normalizeStatus } from 'soapbox/normalizers/status';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { normalizeStatus } from 'pl-fe/normalizers/status';
 
-import type { RootState } from 'soapbox/store';
+import type { RootState } from 'pl-fe/store';
 
 const buildStatus = (state: RootState, scheduledStatus: ScheduledStatus) => {
   const me = state.me as string;

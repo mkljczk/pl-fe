@@ -2,8 +2,8 @@ import { getClient } from '../api';
 
 import { openModal } from './modals';
 
-import type { Account, Status } from 'soapbox/normalizers';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { Account, Status } from 'pl-fe/normalizers';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const REPORT_INIT = 'REPORT_INIT' as const;
 const REPORT_CANCEL = 'REPORT_CANCEL' as const;

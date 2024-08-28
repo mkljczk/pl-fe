@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Button, Card, CardBody, Icon, Stack, Text } from 'soapbox/components/ui';
+import { Button, Card, CardBody, Icon, Stack, Text } from 'pl-fe/components/ui';
 
 const CompletedStep = ({ onComplete }: { onComplete: () => void }) => (
   <Card variant='rounded' size='xl'>

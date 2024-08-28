@@ -3,16 +3,16 @@ import React, { useEffect } from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { fetchAccountFamiliarFollowers } from 'soapbox/actions/familiar-followers';
-import { openModal } from 'soapbox/actions/modals';
-import AvatarStack from 'soapbox/components/avatar-stack';
-import HoverRefWrapper from 'soapbox/components/hover-ref-wrapper';
-import { HStack, Text } from 'soapbox/components/ui';
-import VerificationBadge from 'soapbox/components/verification-badge';
-import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
-import { makeGetAccount } from 'soapbox/selectors';
+import { fetchAccountFamiliarFollowers } from 'pl-fe/actions/familiar-followers';
+import { openModal } from 'pl-fe/actions/modals';
+import AvatarStack from 'pl-fe/components/avatar-stack';
+import HoverRefWrapper from 'pl-fe/components/hover-ref-wrapper';
+import { HStack, Text } from 'pl-fe/components/ui';
+import VerificationBadge from 'pl-fe/components/verification-badge';
+import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { makeGetAccount } from 'pl-fe/selectors';
 
-import type { Account } from 'soapbox/normalizers';
+import type { Account } from 'pl-fe/normalizers';
 
 const getAccount = makeGetAccount();
 

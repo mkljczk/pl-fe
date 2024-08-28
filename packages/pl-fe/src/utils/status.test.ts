@@ -1,5 +1,5 @@
 
-import { buildStatus } from 'soapbox/jest/factory';
+import { buildStatus } from 'pl-fe/jest/factory';
 
 import {
   hasIntegerMediaIds,
@@ -8,7 +8,7 @@ import {
 
 describe('hasIntegerMediaIds()', () => {
   it('returns true for a Pleroma deleted status', async () => {
-    const status = buildStatus(await import('soapbox/__fixtures__/pleroma-status-deleted.json') as any);
+    const status = buildStatus(await import('pl-fe/__fixtures__/pleroma-status-deleted.json') as any);
     expect(hasIntegerMediaIds(status)).toBe(true);
   });
 });

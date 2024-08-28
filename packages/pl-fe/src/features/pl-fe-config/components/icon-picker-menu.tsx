@@ -3,7 +3,7 @@ import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { Text } from 'soapbox/components/ui';
+import { Text } from 'pl-fe/components/ui';
 
 const messages = defineMessages({
   emoji: { id: 'icon_button.label', defaultMessage: 'Select icon' },

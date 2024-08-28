@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Card, CardBody, Spinner } from 'soapbox/components/ui';
+import { Card, CardBody, Spinner } from 'pl-fe/components/ui';
 
 const ColumnLoading = () => (
   <Card variant='rounded'>

@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 
-import Status, { IStatus } from 'soapbox/components/status';
-import { useAppSelector } from 'soapbox/hooks';
-import { makeGetStatus } from 'soapbox/selectors';
+import Status, { IStatus } from 'pl-fe/components/status';
+import { useAppSelector } from 'pl-fe/hooks';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 interface IStatusContainer extends Omit<IStatus, 'status'> {
   id: string;

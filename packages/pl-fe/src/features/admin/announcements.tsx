@@ -1,13 +1,13 @@
 import React from 'react';
 import { FormattedDate, FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import { useAnnouncements } from 'soapbox/api/hooks/admin/useAnnouncements';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Button, Column, HStack, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import { AdminAnnouncement } from 'soapbox/schemas';
-import toast from 'soapbox/toast';
+import { openModal } from 'pl-fe/actions/modals';
+import { useAnnouncements } from 'pl-fe/api/hooks/admin/useAnnouncements';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Button, Column, HStack, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import { AdminAnnouncement } from 'pl-fe/schemas';
+import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.announcements', defaultMessage: 'Announcements' },

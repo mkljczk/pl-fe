@@ -3,15 +3,15 @@ import React, { useEffect, useState, useLayoutEffect, Suspense } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { createSelector } from 'reselect';
 
-import { chooseEmoji } from 'soapbox/actions/emojis';
-import { changeSetting } from 'soapbox/actions/settings';
-import { useAppDispatch, useAppSelector, useTheme } from 'soapbox/hooks';
-import { RootState } from 'soapbox/store';
+import { chooseEmoji } from 'pl-fe/actions/emojis';
+import { changeSetting } from 'pl-fe/actions/settings';
+import { useAppDispatch, useAppSelector, useTheme } from 'pl-fe/hooks';
+import { RootState } from 'pl-fe/store';
 
 import { buildCustomEmojis } from '../../emoji';
 import { EmojiPicker } from '../../ui/util/async-components';
 
-import type { Emoji, CustomEmoji, NativeEmoji } from 'soapbox/features/emoji';
+import type { Emoji, CustomEmoji, NativeEmoji } from 'pl-fe/features/emoji';
 
 const messages = defineMessages({
   emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },

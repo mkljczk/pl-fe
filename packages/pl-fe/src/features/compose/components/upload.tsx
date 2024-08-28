@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 
-import { undoUploadCompose, changeUploadCompose } from 'soapbox/actions/compose';
-import Upload from 'soapbox/components/upload';
-import { useAppDispatch, useCompose, useInstance } from 'soapbox/hooks';
+import { undoUploadCompose, changeUploadCompose } from 'pl-fe/actions/compose';
+import Upload from 'pl-fe/components/upload';
+import { useAppDispatch, useCompose, useInstance } from 'pl-fe/hooks';
 
 interface IUploadCompose {
   id: string;

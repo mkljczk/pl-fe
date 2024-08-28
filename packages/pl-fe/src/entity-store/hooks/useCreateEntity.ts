@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { useAppDispatch } from 'soapbox/hooks/useAppDispatch';
-import { useLoading } from 'soapbox/hooks/useLoading';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useLoading } from 'pl-fe/hooks/useLoading';
 
 import { importEntities } from '../actions';
 
@@ -9,7 +9,7 @@ import { parseEntitiesPath } from './utils';
 
 import type { EntityCallbacks, EntityFn, EntitySchema, ExpandedEntitiesPath } from './types';
 import type { Entity } from '../types';
-import type { PlfeResponse } from 'soapbox/api';
+import type { PlfeResponse } from 'pl-fe/api';
 
 interface UseCreateEntityOpts<TEntity extends Entity = Entity, TTransformedEntity extends Entity = TEntity> {
   schema?: EntitySchema<TEntity>;

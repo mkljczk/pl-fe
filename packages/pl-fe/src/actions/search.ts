@@ -4,8 +4,8 @@ import { fetchRelationships } from './accounts';
 import { importFetchedAccounts, importFetchedStatuses } from './importer';
 
 import type { Search } from 'pl-api';
-import type { SearchFilter } from 'soapbox/reducers/search';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { SearchFilter } from 'pl-fe/reducers/search';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const SEARCH_CLEAR = 'SEARCH_CLEAR' as const;
 const SEARCH_SHOW = 'SEARCH_SHOW' as const;

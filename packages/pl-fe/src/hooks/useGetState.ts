@@ -1,6 +1,6 @@
 import { useAppDispatch } from './useAppDispatch';
 
-import type { RootState } from 'soapbox/store';
+import type { RootState } from 'pl-fe/store';
 
 /**
  * Provides a `getState()` function to hooks.

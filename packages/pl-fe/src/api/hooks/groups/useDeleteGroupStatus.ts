@@ -1,6 +1,6 @@
-import { Entities } from 'soapbox/entity-store/entities';
-import { useDeleteEntity } from 'soapbox/entity-store/hooks';
-import { useClient } from 'soapbox/hooks';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useDeleteEntity } from 'pl-fe/entity-store/hooks';
+import { useClient } from 'pl-fe/hooks';
 
 import type { Group } from 'pl-api';
 

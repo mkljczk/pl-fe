@@ -1,7 +1,7 @@
 import { getClient } from '../api';
 
 import type { CreatePushNotificationsSubscriptionParams, UpdatePushNotificationsSubscriptionParams } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const createPushSubscription = (params: CreatePushNotificationsSubscriptionParams) =>
   (dispatch: AppDispatch, getState: () => RootState) =>

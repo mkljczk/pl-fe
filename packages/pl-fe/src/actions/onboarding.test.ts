@@ -1,4 +1,4 @@
-import { mockStore, mockWindowProperty, rootState } from 'soapbox/jest/test-helpers';
+import { mockStore, mockWindowProperty, rootState } from 'pl-fe/jest/test-helpers';
 
 import { checkOnboardingStatus, startOnboarding, endOnboarding } from './onboarding';
 

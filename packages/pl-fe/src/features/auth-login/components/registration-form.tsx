@@ -5,13 +5,13 @@ import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import { accountLookup } from 'soapbox/actions/accounts';
-import { register, verifyCredentials } from 'soapbox/actions/auth';
-import { openModal } from 'soapbox/actions/modals';
-import BirthdayInput from 'soapbox/components/birthday-input';
-import { Checkbox, Form, FormGroup, FormActions, Button, Input, Textarea, Select } from 'soapbox/components/ui';
-import CaptchaField from 'soapbox/features/auth-login/components/captcha';
-import { useAppDispatch, useSettings, useFeatures, useInstance } from 'soapbox/hooks';
+import { accountLookup } from 'pl-fe/actions/accounts';
+import { register, verifyCredentials } from 'pl-fe/actions/auth';
+import { openModal } from 'pl-fe/actions/modals';
+import BirthdayInput from 'pl-fe/components/birthday-input';
+import { Checkbox, Form, FormGroup, FormActions, Button, Input, Textarea, Select } from 'pl-fe/components/ui';
+import CaptchaField from 'pl-fe/features/auth-login/components/captcha';
+import { useAppDispatch, useSettings, useFeatures, useInstance } from 'pl-fe/hooks';
 
 import type { CreateAccountParams } from 'pl-api';
 

@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 
-import { resetPassword } from 'soapbox/actions/security';
-import { BigCard } from 'soapbox/components/big-card';
-import { Button, Form, FormActions, FormGroup, Input } from 'soapbox/components/ui';
-import { useAppDispatch, useFeatures } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { resetPassword } from 'pl-fe/actions/security';
+import { BigCard } from 'pl-fe/components/big-card';
+import { Button, Form, FormActions, FormGroup, Input } from 'pl-fe/components/ui';
+import { useAppDispatch, useFeatures } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   nicknameOrEmail: { id: 'password_reset.fields.username_placeholder', defaultMessage: 'Email or username' },

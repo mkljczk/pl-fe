@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
-import { fetchHistory } from 'soapbox/actions/history';
-import AttachmentThumbs from 'soapbox/components/attachment-thumbs';
-import { HStack, Modal, Spinner, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { fetchHistory } from 'pl-fe/actions/history';
+import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
+import { HStack, Modal, Spinner, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import type { BaseModalProps } from '../modal-root';
 

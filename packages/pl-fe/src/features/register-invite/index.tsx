@@ -2,9 +2,9 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
-import { BigCard } from 'soapbox/components/big-card';
-import RegistrationForm from 'soapbox/features/auth-login/components/registration-form';
-import { useInstance } from 'soapbox/hooks';
+import { BigCard } from 'pl-fe/components/big-card';
+import RegistrationForm from 'pl-fe/features/auth-login/components/registration-form';
+import { useInstance } from 'pl-fe/hooks';
 
 interface RegisterInviteParams {
   token: string;

@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import React from 'react';
 import ReactSwipeableViews from 'react-swipeable-views';
 
-import { endOnboarding } from 'soapbox/actions/onboarding';
-import LandingGradient from 'soapbox/components/landing-gradient';
-import { HStack } from 'soapbox/components/ui';
-import { useAppDispatch, useFeatures } from 'soapbox/hooks';
+import { endOnboarding } from 'pl-fe/actions/onboarding';
+import LandingGradient from 'pl-fe/components/landing-gradient';
+import { HStack } from 'pl-fe/components/ui';
+import { useAppDispatch, useFeatures } from 'pl-fe/hooks';
 
 import AvatarSelectionStep from './steps/avatar-selection-step';
 import BioStep from './steps/bio-step';

@@ -1,13 +1,13 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Card, CardTitle, Text, Stack, Button } from 'soapbox/components/ui';
-import { useInstance, useSoapboxConfig } from 'soapbox/hooks';
+import { Card, CardTitle, Text, Stack, Button } from 'pl-fe/components/ui';
+import { useInstance, usePlFeConfig } from 'pl-fe/hooks';
 
 /** Prompts logged-out users to log in when viewing a thread. */
 const ThreadLoginCta: React.FC = () => {
   const instance = useInstance();
-  const { displayCta } = useSoapboxConfig();
+  const { displayCta } = usePlFeConfig();
 
   if (!displayCta) return null;
 

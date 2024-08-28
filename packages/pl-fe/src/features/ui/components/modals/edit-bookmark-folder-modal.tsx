@@ -3,17 +3,17 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { closeModal } from 'soapbox/actions/modals';
-import { useBookmarkFolder, useUpdateBookmarkFolder } from 'soapbox/api/hooks';
-import { Emoji, HStack, Icon, Input, Modal } from 'soapbox/components/ui';
-import EmojiPickerDropdown from 'soapbox/features/emoji/components/emoji-picker-dropdown';
-import { messages as emojiMessages } from 'soapbox/features/emoji/containers/emoji-picker-dropdown-container';
-import { useAppDispatch, useClickOutside } from 'soapbox/hooks';
-import { useTextField } from 'soapbox/hooks/forms';
-import toast from 'soapbox/toast';
+import { closeModal } from 'pl-fe/actions/modals';
+import { useBookmarkFolder, useUpdateBookmarkFolder } from 'pl-fe/api/hooks';
+import { Emoji, HStack, Icon, Input, Modal } from 'pl-fe/components/ui';
+import EmojiPickerDropdown from 'pl-fe/features/emoji/components/emoji-picker-dropdown';
+import { messages as emojiMessages } from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
+import { useAppDispatch, useClickOutside } from 'pl-fe/hooks';
+import { useTextField } from 'pl-fe/hooks/forms';
+import toast from 'pl-fe/toast';
 
 import type { BaseModalProps } from '../modal-root';
-import type { Emoji as EmojiType } from 'soapbox/features/emoji';
+import type { Emoji as EmojiType } from 'pl-fe/features/emoji';
 
 const messages = defineMessages({
   label: { id: 'bookmark_folders.new.title_placeholder', defaultMessage: 'New folder title' },

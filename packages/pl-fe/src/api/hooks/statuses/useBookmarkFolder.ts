@@ -1,6 +1,6 @@
-import { Entities } from 'soapbox/entity-store/entities';
-import { selectEntity } from 'soapbox/entity-store/selectors';
-import { useAppSelector } from 'soapbox/hooks';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { selectEntity } from 'pl-fe/entity-store/selectors';
+import { useAppSelector } from 'pl-fe/hooks';
 
 import { useBookmarkFolders } from './useBookmarkFolders';
 

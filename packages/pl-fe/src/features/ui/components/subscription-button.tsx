@@ -1,12 +1,12 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useFollow } from 'soapbox/api/hooks';
-import { IconButton } from 'soapbox/components/ui';
-import { useFeatures } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { useFollow } from 'pl-fe/api/hooks';
+import { IconButton } from 'pl-fe/components/ui';
+import { useFeatures } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
-import type { Account as AccountEntity } from 'soapbox/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   subscribe: { id: 'account.subscribe', defaultMessage: 'Subscribe to notifications from @{name}' },

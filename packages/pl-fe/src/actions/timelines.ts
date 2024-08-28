@@ -1,14 +1,14 @@
 import { Map as ImmutableMap } from 'immutable';
 
-import { getLocale, getSettings } from 'soapbox/actions/settings';
-import { shouldFilter } from 'soapbox/utils/timelines';
+import { getLocale, getSettings } from 'pl-fe/actions/settings';
+import { shouldFilter } from 'pl-fe/utils/timelines';
 
 import { getClient } from '../api';
 
 import { importFetchedStatus, importFetchedStatuses } from './importer';
 
 import type { PaginatedResponse, Status as BaseStatus, PublicTimelineParams, HomeTimelineParams, ListTimelineParams, HashtagTimelineParams, GetAccountStatusesParams, GroupTimelineParams } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const TIMELINE_UPDATE = 'TIMELINE_UPDATE' as const;
 const TIMELINE_DELETE = 'TIMELINE_DELETE' as const;

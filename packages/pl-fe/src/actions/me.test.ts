@@ -1,9 +1,9 @@
 import { Map as ImmutableMap } from 'immutable';
 
-import { __stub } from 'soapbox/api';
-import { buildAccount } from 'soapbox/jest/factory';
-import { mockStore, rootState } from 'soapbox/jest/test-helpers';
-import { AuthUserRecord, ReducerRecord } from 'soapbox/reducers/auth';
+import { __stub } from 'pl-fe/api';
+import { buildAccount } from 'pl-fe/jest/factory';
+import { mockStore, rootState } from 'pl-fe/jest/test-helpers';
+import { AuthUserRecord, ReducerRecord } from 'pl-fe/reducers/auth';
 
 import { fetchMe, patchMe } from './me';
 

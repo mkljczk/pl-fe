@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeReportComment, changeReportRule } from 'soapbox/actions/reports';
-import { FormGroup, Stack, Text, Textarea } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useInstance } from 'soapbox/hooks';
+import { changeReportComment, changeReportRule } from 'pl-fe/actions/reports';
+import { FormGroup, Stack, Text, Textarea } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector, useInstance } from 'pl-fe/hooks';
 
-import type { Account } from 'soapbox/normalizers';
+import type { Account } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   placeholder: { id: 'report.placeholder', defaultMessage: 'Additional comments' },

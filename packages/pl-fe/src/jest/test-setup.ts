@@ -6,13 +6,13 @@ import '@testing-library/jest-dom/vitest';
 import { __clear as clearApiMocks } from '../api/__mocks__';
 
 // API mocking
-vi.mock('soapbox/api');
+vi.mock('pl-fe/api');
 afterEach(() => {
   clearApiMocks();
 });
 
 // Query mocking
-vi.mock('soapbox/queries/client');
+vi.mock('pl-fe/queries/client');
 
 // Mock IndexedDB
 // https://dev.to/andyhaskell/testing-your-indexeddb-code-with-jest-2o17

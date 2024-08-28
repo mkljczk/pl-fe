@@ -3,13 +3,13 @@ import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchAccount, fetchAccountByUsername } from 'soapbox/actions/accounts';
-import { fetchFavouritedStatuses, expandFavouritedStatuses, fetchAccountFavouritedStatuses, expandAccountFavouritedStatuses } from 'soapbox/actions/favourites';
-import { useAccountLookup } from 'soapbox/api/hooks';
-import MissingIndicator from 'soapbox/components/missing-indicator';
-import StatusList from 'soapbox/components/status-list';
-import { Column } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useOwnAccount } from 'soapbox/hooks';
+import { fetchAccount, fetchAccountByUsername } from 'pl-fe/actions/accounts';
+import { fetchFavouritedStatuses, expandFavouritedStatuses, fetchAccountFavouritedStatuses, expandAccountFavouritedStatuses } from 'pl-fe/actions/favourites';
+import { useAccountLookup } from 'pl-fe/api/hooks';
+import MissingIndicator from 'pl-fe/components/missing-indicator';
+import StatusList from 'pl-fe/components/status-list';
+import { Column } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector, useOwnAccount } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   heading: { id: 'column.favourited_statuses', defaultMessage: 'Liked posts' },

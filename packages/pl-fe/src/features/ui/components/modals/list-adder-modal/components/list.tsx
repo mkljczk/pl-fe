@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { removeFromListAdder, addToListAdder } from 'soapbox/actions/lists';
-import Icon from 'soapbox/components/icon';
-import IconButton from 'soapbox/components/icon-button';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { removeFromListAdder, addToListAdder } from 'pl-fe/actions/lists';
+import Icon from 'pl-fe/components/icon';
+import IconButton from 'pl-fe/components/icon-button';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   remove: { id: 'lists.account.remove', defaultMessage: 'Remove from list' },

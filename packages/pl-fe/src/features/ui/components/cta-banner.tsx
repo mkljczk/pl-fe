@@ -1,13 +1,13 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Banner, Button, HStack, Stack, Text } from 'soapbox/components/ui';
-import { useAppSelector, useInstance, useRegistrationStatus, useSoapboxConfig } from 'soapbox/hooks';
+import { Banner, Button, HStack, Stack, Text } from 'pl-fe/components/ui';
+import { useAppSelector, useInstance, useRegistrationStatus, usePlFeConfig } from 'pl-fe/hooks';
 
 const CtaBanner = () => {
   const instance = useInstance();
   const { isOpen } = useRegistrationStatus();
-  const { displayCta } = useSoapboxConfig();
+  const { displayCta } = usePlFeConfig();
   const me = useAppSelector((state) => state.me);
 
   if (me || !displayCta || !isOpen) return null;

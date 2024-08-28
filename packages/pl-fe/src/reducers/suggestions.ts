@@ -1,13 +1,13 @@
 import { OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord } from 'immutable';
 
-import { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS } from 'soapbox/actions/accounts';
-import { DOMAIN_BLOCK_SUCCESS } from 'soapbox/actions/domain-blocks';
+import { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS } from 'pl-fe/actions/accounts';
+import { DOMAIN_BLOCK_SUCCESS } from 'pl-fe/actions/domain-blocks';
 import {
   SUGGESTIONS_FETCH_REQUEST,
   SUGGESTIONS_FETCH_SUCCESS,
   SUGGESTIONS_FETCH_FAIL,
   SUGGESTIONS_DISMISS,
-} from 'soapbox/actions/suggestions';
+} from 'pl-fe/actions/suggestions';
 
 import type { Suggestion as SuggestionEntity } from 'pl-api';
 import type { AnyAction } from 'redux';

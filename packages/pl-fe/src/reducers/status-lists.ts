@@ -11,8 +11,8 @@ import {
   STATUS_QUOTES_FETCH_FAIL,
   STATUS_QUOTES_FETCH_REQUEST,
   STATUS_QUOTES_FETCH_SUCCESS,
-} from 'soapbox/actions/status-quotes';
-import { STATUS_CREATE_SUCCESS } from 'soapbox/actions/statuses';
+} from 'pl-fe/actions/status-quotes';
+import { STATUS_CREATE_SUCCESS } from 'pl-fe/actions/statuses';
 
 import {
   BOOKMARKED_STATUSES_FETCH_REQUEST,

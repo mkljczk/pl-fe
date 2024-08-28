@@ -1,8 +1,8 @@
-import { entitiesTransaction } from 'soapbox/entity-store/actions';
-import { useAppDispatch } from 'soapbox/hooks/useAppDispatch';
+import { entitiesTransaction } from 'pl-fe/entity-store/actions';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 
-import type { EntityTypes } from 'soapbox/entity-store/entities';
-import type { EntitiesTransaction, Entity } from 'soapbox/entity-store/types';
+import type { EntityTypes } from 'pl-fe/entity-store/entities';
+import type { EntitiesTransaction, Entity } from 'pl-fe/entity-store/types';
 
 type Updater<TEntity extends Entity> = Record<string, (entity: TEntity) => TEntity>
 

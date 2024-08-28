@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { useGroups } from 'soapbox/api/hooks';
-import { Widget } from 'soapbox/components/ui';
-import GroupListItem from 'soapbox/features/groups/components/discover/group-list-item';
-import PlaceholderGroupSearch from 'soapbox/features/placeholder/components/placeholder-group-search';
+import { useGroups } from 'pl-fe/api/hooks';
+import { Widget } from 'pl-fe/components/ui';
+import GroupListItem from 'pl-fe/features/groups/components/discover/group-list-item';
+import PlaceholderGroupSearch from 'pl-fe/features/placeholder/components/placeholder-group-search';
 
 const MyGroupsPanel = () => {
   const { groups, isFetching, isFetched, isError } = useGroups();

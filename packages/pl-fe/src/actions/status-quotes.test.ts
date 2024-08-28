@@ -1,8 +1,8 @@
 import { Map as ImmutableMap } from 'immutable';
 
-import { __stub } from 'soapbox/api';
-import { mockStore, rootState } from 'soapbox/jest/test-helpers';
-import { StatusListRecord } from 'soapbox/reducers/status-lists';
+import { __stub } from 'pl-fe/api';
+import { mockStore, rootState } from 'pl-fe/jest/test-helpers';
+import { StatusListRecord } from 'pl-fe/reducers/status-lists';
 
 import { fetchStatusQuotes, expandStatusQuotes } from './status-quotes';
 
@@ -32,7 +32,7 @@ describe('fetchStatusQuotes()', () => {
 
   describe('with a successful API request', () => {
     beforeEach(async () => {
-      const quotes = await import('soapbox/__fixtures__/status-quotes.json');
+      const quotes = await import('pl-fe/__fixtures__/status-quotes.json');
 
       __stub((mock) => {
         mock.onGet(`/api/v1/pleroma/statuses/${statusId}/quotes`).reply(200, quotes, {
@@ -104,7 +104,7 @@ describe('expandStatusQuotes()', () => {
 
     describe('with a successful API request', () => {
       beforeEach(async () => {
-        const quotes = await import('soapbox/__fixtures__/status-quotes.json');
+        const quotes = await import('pl-fe/__fixtures__/status-quotes.json');
 
         __stub((mock) => {
           mock.onGet('example').reply(200, quotes, {

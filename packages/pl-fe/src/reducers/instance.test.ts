@@ -1,4 +1,4 @@
-import { ADMIN_CONFIG_UPDATE_REQUEST } from 'soapbox/actions/admin';
+import { ADMIN_CONFIG_UPDATE_REQUEST } from 'pl-fe/actions/admin';
 
 import reducer from './instance';
 
@@ -31,7 +31,7 @@ describe('instance reducer', () => {
   });
 
   describe('ADMIN_CONFIG_UPDATE_REQUEST', async () => {
-    const { configs } = await import('soapbox/__fixtures__/pleroma-admin-config.json');
+    const { configs } = await import('pl-fe/__fixtures__/pleroma-admin-config.json');
 
     it('imports the configs', () => {
       const action = {

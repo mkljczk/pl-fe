@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchTrendsSuccess } from 'soapbox/actions/trends';
-import { useAppDispatch, useClient } from 'soapbox/hooks';
+import { fetchTrendsSuccess } from 'pl-fe/actions/trends';
+import { useAppDispatch, useClient } from 'pl-fe/hooks';
 
 import type { Tag } from 'pl-api';
 

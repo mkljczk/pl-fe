@@ -2,9 +2,9 @@ import { Map as ImmutableMap } from 'immutable';
 import React, { useState, useEffect } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
-import { fetchCaptcha } from 'soapbox/actions/auth';
-import { Stack, Text, Input } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import { fetchCaptcha } from 'pl-fe/actions/auth';
+import { Stack, Text, Input } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 const noOp = () => {};
 

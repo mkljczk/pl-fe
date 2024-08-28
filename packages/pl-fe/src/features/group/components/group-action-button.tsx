@@ -2,13 +2,13 @@ import { GroupRoles } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import { useJoinGroup, useLeaveGroup } from 'soapbox/api/hooks';
-import { Button } from 'soapbox/components/ui';
-import { importEntities } from 'soapbox/entity-store/actions';
-import { Entities } from 'soapbox/entity-store/entities';
-import { useAppDispatch } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { openModal } from 'pl-fe/actions/modals';
+import { useJoinGroup, useLeaveGroup } from 'pl-fe/api/hooks';
+import { Button } from 'pl-fe/components/ui';
+import { importEntities } from 'pl-fe/entity-store/actions';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useAppDispatch } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 import type { Group, GroupRelationship } from 'pl-api';
 

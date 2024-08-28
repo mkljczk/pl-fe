@@ -4,8 +4,8 @@ import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 
-import { MODAL_CLOSE, MODAL_OPEN } from 'soapbox/actions/modals';
-import { mockStore, rootState } from 'soapbox/jest/test-helpers';
+import { MODAL_CLOSE, MODAL_OPEN } from 'pl-fe/actions/modals';
+import { mockStore, rootState } from 'pl-fe/jest/test-helpers';
 
 import ComposeButton from './compose-button';
 

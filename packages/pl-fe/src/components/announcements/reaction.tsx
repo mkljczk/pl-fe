@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-import { useAnnouncements } from 'soapbox/api/hooks/announcements';
-import AnimatedNumber from 'soapbox/components/animated-number';
-import unicodeMapping from 'soapbox/features/emoji/mapping';
+import { useAnnouncements } from 'pl-fe/api/hooks/announcements';
+import AnimatedNumber from 'pl-fe/components/animated-number';
+import unicodeMapping from 'pl-fe/features/emoji/mapping';
 
 import Emoji from './emoji';
 

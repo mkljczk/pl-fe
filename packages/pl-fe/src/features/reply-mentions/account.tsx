@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { fetchAccount } from 'soapbox/actions/accounts';
-import { addToMentions, removeFromMentions } from 'soapbox/actions/compose';
-import { useAccount } from 'soapbox/api/hooks';
-import AccountComponent from 'soapbox/components/account';
-import IconButton from 'soapbox/components/icon-button';
-import { useAppDispatch, useCompose } from 'soapbox/hooks';
+import { fetchAccount } from 'pl-fe/actions/accounts';
+import { addToMentions, removeFromMentions } from 'pl-fe/actions/compose';
+import { useAccount } from 'pl-fe/api/hooks';
+import AccountComponent from 'pl-fe/components/account';
+import IconButton from 'pl-fe/components/icon-button';
+import { useAppDispatch, useCompose } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   remove: { id: 'reply_mentions.account.remove', defaultMessage: 'Remove from mentions' },

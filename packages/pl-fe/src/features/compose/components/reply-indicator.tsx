@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import AttachmentThumbs from 'soapbox/components/attachment-thumbs';
-import Markup from 'soapbox/components/markup';
-import { Stack } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
-import { getTextDirection } from 'soapbox/utils/rtl';
+import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
+import Markup from 'pl-fe/components/markup';
+import { Stack } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
+import { getTextDirection } from 'pl-fe/utils/rtl';
 
-import type { Account, Status } from 'soapbox/normalizers';
+import type { Account, Status } from 'pl-fe/normalizers';
 
 interface IReplyIndicator {
   className?: string;

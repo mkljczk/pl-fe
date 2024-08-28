@@ -1,9 +1,9 @@
 import { groupSchema, type Group as BaseGroup } from 'pl-api';
 
-import { Entities } from 'soapbox/entity-store/entities';
-import { useCreateEntity } from 'soapbox/entity-store/hooks';
-import { useClient } from 'soapbox/hooks';
-import { normalizeGroup, type Group } from 'soapbox/normalizers';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useCreateEntity } from 'pl-fe/entity-store/hooks';
+import { useClient } from 'pl-fe/hooks';
+import { normalizeGroup, type Group } from 'pl-fe/normalizers';
 
 interface CreateGroupParams {
   display_name: string;

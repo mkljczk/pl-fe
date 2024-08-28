@@ -6,7 +6,7 @@ const unescapeHTML = (html: string = ''): string => {
   return wrapper.textContent || '';
 };
 
-/** Remove compatibility markup for features Soapbox supports. */
+/** Remove compatibility markup for features pl-fe supports. */
 const stripCompatibilityFeatures = (html: string): string => {
   const node = document.createElement('div');
   node.innerHTML = html;

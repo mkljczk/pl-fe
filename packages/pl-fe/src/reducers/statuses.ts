@@ -1,8 +1,8 @@
 import { Map as ImmutableMap } from 'immutable';
 import omit from 'lodash/omit';
 
-import { normalizeStatus, normalizeTranslation, Status as StatusRecord } from 'soapbox/normalizers';
-import { simulateEmojiReact, simulateUnEmojiReact } from 'soapbox/utils/emoji-reacts';
+import { normalizeStatus, normalizeTranslation, Status as StatusRecord } from 'pl-fe/normalizers';
+import { simulateEmojiReact, simulateUnEmojiReact } from 'pl-fe/utils/emoji-reacts';
 
 import { EMOJI_REACT_REQUEST, UNEMOJI_REACT_REQUEST } from '../actions/emoji-reacts';
 import {

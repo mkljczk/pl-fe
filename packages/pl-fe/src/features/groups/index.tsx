@@ -2,12 +2,12 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { openModal } from 'soapbox/actions/modals';
-import { useGroups } from 'soapbox/api/hooks';
-import GroupCard from 'soapbox/components/group-card';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Button, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import { openModal } from 'pl-fe/actions/modals';
+import { useGroups } from 'pl-fe/api/hooks';
+import GroupCard from 'pl-fe/components/group-card';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Button, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 import PlaceholderGroupCard from '../placeholder/components/placeholder-group-card';
 

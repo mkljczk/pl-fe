@@ -2,11 +2,11 @@ import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 
-import { HStack, Text } from 'soapbox/components/ui';
-import { useSettings } from 'soapbox/hooks';
-import { shortNumberFormat } from 'soapbox/utils/numbers';
+import { HStack, Text } from 'pl-fe/components/ui';
+import { useSettings } from 'pl-fe/hooks';
+import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
-import type { Account } from 'soapbox/normalizers';
+import type { Account } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   followers: { id: 'account.followers', defaultMessage: 'Followers' },

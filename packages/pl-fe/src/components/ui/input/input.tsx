@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useLocale } from 'soapbox/hooks';
-import { getTextDirection } from 'soapbox/utils/rtl';
+import { useLocale } from 'pl-fe/hooks';
+import { getTextDirection } from 'pl-fe/utils/rtl';
 
 import Icon from '../icon/icon';
 import SvgIcon from '../icon/svg-icon';

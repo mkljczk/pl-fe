@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import AltIndicator from 'soapbox/components/alt-indicator';
-import { HStack, Icon, IconButton, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useDraggedFiles } from 'soapbox/hooks';
+import { openModal } from 'pl-fe/actions/modals';
+import AltIndicator from 'pl-fe/components/alt-indicator';
+import { HStack, Icon, IconButton, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useDraggedFiles } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   title: { id: 'group.upload_banner.title', defaultMessage: 'Upload background picture' },

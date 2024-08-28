@@ -2,8 +2,8 @@ import escapeTextContentForBrowser from 'escape-html';
 import DOMPurify from 'isomorphic-dompurify';
 import { Status as BaseStatus, StatusEdit as BaseStatusEdit, CustomEmoji } from 'pl-api';
 
-import emojify from 'soapbox/features/emoji';
-import { makeEmojiMap } from 'soapbox/utils/normalizers';
+import emojify from 'pl-fe/features/emoji';
+import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
 const sanitizeTitle = (text: string, emojiMap: any) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { ALLOWED_TAGS: [] });
 

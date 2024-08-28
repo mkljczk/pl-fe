@@ -2,9 +2,9 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { useAccount } from 'soapbox/api/hooks';
-import VerificationBadge from 'soapbox/components/verification-badge';
-import { useAppSelector } from 'soapbox/hooks';
+import { useAccount } from 'pl-fe/api/hooks';
+import VerificationBadge from 'pl-fe/components/verification-badge';
+import { useAppSelector } from 'pl-fe/hooks';
 
 import { Card, CardBody, CardTitle, HStack, Stack, Text } from '../../components/ui';
 import ActionButton from '../ui/components/action-button';

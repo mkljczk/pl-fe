@@ -2,12 +2,12 @@ import { GroupRoles, type Group } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import { useLeaveGroup } from 'soapbox/api/hooks';
-import DropdownMenu, { Menu } from 'soapbox/components/dropdown-menu';
-import { IconButton } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { openModal } from 'pl-fe/actions/modals';
+import { useLeaveGroup } from 'pl-fe/api/hooks';
+import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
+import { IconButton } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   confirmationConfirm: { id: 'confirmations.leave_group.confirm', defaultMessage: 'Leave' },

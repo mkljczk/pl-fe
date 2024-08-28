@@ -1,11 +1,11 @@
 import React from 'react';
 import { defineMessages, FormattedDate, useIntl } from 'react-intl';
 
-import { useModerationLog } from 'soapbox/api/hooks/admin';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Column, Stack, Text } from 'soapbox/components/ui';
+import { useModerationLog } from 'pl-fe/api/hooks/admin';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Column, Stack, Text } from 'pl-fe/components/ui';
 
-import type { ModerationLogEntry } from 'soapbox/schemas';
+import type { ModerationLogEntry } from 'pl-fe/schemas';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.moderation_log', defaultMessage: 'Moderation log' },

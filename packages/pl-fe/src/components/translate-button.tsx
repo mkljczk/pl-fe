@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { translateStatus, undoStatusTranslation } from 'soapbox/actions/statuses';
-import { useTranslationLanguages } from 'soapbox/api/hooks';
-import { useAppDispatch, useAppSelector, useFeatures, useInstance, useSettings } from 'soapbox/hooks';
+import { translateStatus, undoStatusTranslation } from 'pl-fe/actions/statuses';
+import { useTranslationLanguages } from 'pl-fe/api/hooks';
+import { useAppDispatch, useAppSelector, useFeatures, useInstance, useSettings } from 'pl-fe/hooks';
 
 import { HStack, Icon, Stack, Text } from './ui';
 
-import type { Status } from 'soapbox/normalizers';
+import type { Status } from 'pl-fe/normalizers';
 
 interface ITranslateButton {
   status: Pick<Status, 'id' | 'account' | 'contentHtml' | 'contentMapHtml' | 'language' | 'translating' | 'translation' | 'visibility'>;

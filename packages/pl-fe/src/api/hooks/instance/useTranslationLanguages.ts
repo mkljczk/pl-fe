@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { useClient, useFeatures, useInstance, useLoggedIn } from 'soapbox/hooks';
+import { useClient, useFeatures, useInstance, useLoggedIn } from 'pl-fe/hooks';
 
 const useTranslationLanguages = () => {
   const client = useClient();

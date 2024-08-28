@@ -1,8 +1,8 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { unblockDomain } from 'soapbox/actions/domain-blocks';
-import { useAppDispatch } from 'soapbox/hooks';
+import { unblockDomain } from 'pl-fe/actions/domain-blocks';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 import { HStack, IconButton, Text } from './ui';
 

@@ -1,8 +1,8 @@
 import escapeTextContentForBrowser from 'escape-html';
 
-import emojify from 'soapbox/features/emoji';
-import { unescapeHTML } from 'soapbox/utils/html';
-import { makeEmojiMap } from 'soapbox/utils/normalizers';
+import emojify from 'pl-fe/features/emoji';
+import { unescapeHTML } from 'pl-fe/utils/html';
+import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
 import type { Account as BaseAccount } from 'pl-api';
 
@@ -27,8 +27,8 @@ const guessFqn = (account: Pick<BaseAccount, 'acct' | 'url'>): string => {
 };
 
 const normalizeAccount = (account: BaseAccount) => {
-  const missingAvatar = require('soapbox/assets/images/avatar-missing.png');
-  const missingHeader = require('soapbox/assets/images/header-missing.png');
+  const missingAvatar = require('pl-fe/assets/images/avatar-missing.png');
+  const missingHeader = require('pl-fe/assets/images/header-missing.png');
 
   const fqn = account.fqn || guessFqn(account);
   const domain = fqn.split('@')[1] || '';

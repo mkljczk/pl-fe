@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import { useSoapboxConfig, useSettings, useTheme } from 'soapbox/hooks';
+import { usePlFeConfig, useSettings, useTheme } from 'pl-fe/hooks';
 
 interface ISiteLogo extends React.ComponentProps<'img'> {
   /** Extra class names for the <img> element. */
@@ -12,25 +12,25 @@ interface ISiteLogo extends React.ComponentProps<'img'> {
 
 /** Display the most appropriate site logo based on the theme and configuration. */
 const SiteLogo: React.FC<ISiteLogo> = ({ className, theme, ...rest }) => {
-  const { logo, logoDarkMode } = useSoapboxConfig();
+  const { logo, logoDarkMode } = usePlFeConfig();
   const { demo } = useSettings();
 
   let darkMode = ['dark', 'black'].includes(useTheme());
   if (theme === 'dark') darkMode = true;
 
-  /** Soapbox logo. */
-  const soapboxLogo = darkMode
-    ? require('soapbox/assets/images/soapbox-logo-white.svg')
-    : require('soapbox/assets/images/soapbox-logo.svg');
+  /** pl-fe logo. */
+  const plFeLogo = darkMode
+    ? require('pl-fe/assets/images/soapbox-logo-white.svg')
+    : require('pl-fe/assets/images/soapbox-logo.svg');
 
   // Use the right logo if provided, then use fallbacks.
   const getSrc = () => {
-    // In demo mode, use the Soapbox logo.
-    if (demo) return soapboxLogo;
+    // In demo mode, use the pl-fe logo.
+    if (demo) return plFeLogo;
 
     return (darkMode && logoDarkMode)
       ? logoDarkMode
-      : logo || logoDarkMode || soapboxLogo;
+      : logo || logoDarkMode || plFeLogo;
   };
 
   return (

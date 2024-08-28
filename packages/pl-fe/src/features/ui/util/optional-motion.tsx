@@ -1,7 +1,7 @@
 import React from 'react';
 import { Motion, MotionProps } from 'react-motion';
 
-import { useSettings } from 'soapbox/hooks';
+import { useSettings } from 'pl-fe/hooks';
 
 import ReducedMotion from './reduced-motion';
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { useDimensions } from 'soapbox/hooks';
+import { useDimensions } from 'pl-fe/hooks';
 
 import HStack from '../hstack/hstack';
 import Icon from '../icon/icon';

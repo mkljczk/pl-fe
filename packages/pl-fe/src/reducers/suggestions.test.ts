@@ -1,4 +1,4 @@
-import { SUGGESTIONS_FETCH_SUCCESS, SUGGESTIONS_DISMISS } from 'soapbox/actions/suggestions';
+import { SUGGESTIONS_FETCH_SUCCESS, SUGGESTIONS_DISMISS } from 'pl-fe/actions/suggestions';
 
 import reducer from './suggestions';
 

@@ -2,10 +2,10 @@ import { type Account as BaseAccount, accountSchema } from 'pl-api';
 import { useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Entities } from 'soapbox/entity-store/entities';
-import { useEntity } from 'soapbox/entity-store/hooks';
-import { useAppSelector, useClient, useFeatures, useLoggedIn } from 'soapbox/hooks';
-import { type Account, normalizeAccount } from 'soapbox/normalizers';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useEntity } from 'pl-fe/entity-store/hooks';
+import { useAppSelector, useClient, useFeatures, useLoggedIn } from 'pl-fe/hooks';
+import { type Account, normalizeAccount } from 'pl-fe/normalizers';
 
 import { useRelationship } from './useRelationship';
 

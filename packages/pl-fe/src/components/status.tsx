@@ -3,17 +3,17 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
-import { mentionCompose, replyCompose } from 'soapbox/actions/compose';
-import { toggleFavourite, toggleReblog } from 'soapbox/actions/interactions';
-import { openModal } from 'soapbox/actions/modals';
-import { toggleStatusMediaHidden, unfilterStatus } from 'soapbox/actions/statuses';
-import TranslateButton from 'soapbox/components/translate-button';
-import AccountContainer from 'soapbox/containers/account-container';
-import QuotedStatus from 'soapbox/features/status/containers/quoted-status-container';
-import { HotKeys } from 'soapbox/features/ui/components/hotkeys';
-import { useAppDispatch, useAppSelector, useSettings } from 'soapbox/hooks';
-import { makeGetStatus, type SelectedStatus } from 'soapbox/selectors';
-import { textForScreenReader } from 'soapbox/utils/status';
+import { mentionCompose, replyCompose } from 'pl-fe/actions/compose';
+import { toggleFavourite, toggleReblog } from 'pl-fe/actions/interactions';
+import { openModal } from 'pl-fe/actions/modals';
+import { toggleStatusMediaHidden, unfilterStatus } from 'pl-fe/actions/statuses';
+import TranslateButton from 'pl-fe/components/translate-button';
+import AccountContainer from 'pl-fe/containers/account-container';
+import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
+import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
+import { useAppDispatch, useAppSelector, useSettings } from 'pl-fe/hooks';
+import { makeGetStatus, type SelectedStatus } from 'pl-fe/selectors';
+import { textForScreenReader } from 'pl-fe/utils/status';
 
 import EventPreview from './event-preview';
 import StatusActionBar from './status-action-bar';

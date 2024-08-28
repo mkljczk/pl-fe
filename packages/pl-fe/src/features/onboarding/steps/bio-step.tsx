@@ -1,13 +1,13 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { patchMe } from 'soapbox/actions/me';
-import { BigCard } from 'soapbox/components/big-card';
-import { Button, FormGroup, Stack, Textarea } from 'soapbox/components/ui';
-import { useAppDispatch, useOwnAccount } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { patchMe } from 'pl-fe/actions/me';
+import { BigCard } from 'pl-fe/components/big-card';
+import { Button, FormGroup, Stack, Textarea } from 'pl-fe/components/ui';
+import { useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
-import type { PlfeResponse } from 'soapbox/api';
+import type { PlfeResponse } from 'pl-fe/api';
 
 const messages = defineMessages({
   bioPlaceholder: { id: 'onboarding.bio.placeholder', defaultMessage: 'Tell the world a little about yourself…' },

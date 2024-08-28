@@ -1,12 +1,12 @@
-import { Entities } from 'soapbox/entity-store/entities';
-import { isLoggedIn } from 'soapbox/utils/auth';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { getClient } from '../api';
 
 import type { PaginatedResponse } from 'pl-api';
-import type { EntityStore } from 'soapbox/entity-store/types';
-import type { Account } from 'soapbox/normalizers';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { EntityStore } from 'pl-fe/entity-store/types';
+import type { Account } from 'pl-fe/normalizers';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const DOMAIN_BLOCK_REQUEST = 'DOMAIN_BLOCK_REQUEST' as const;
 const DOMAIN_BLOCK_SUCCESS = 'DOMAIN_BLOCK_SUCCESS' as const;

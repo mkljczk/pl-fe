@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Modal, Stack, Textarea } from 'soapbox/components/ui';
+import { Modal, Stack, Textarea } from 'pl-fe/components/ui';
 
 import type { BaseModalProps } from '../modal-root';
-import type { ButtonThemes } from 'soapbox/components/ui/button/useButtonStyles';
+import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
 
 interface TextFieldModalProps {
   heading: React.ReactNode;

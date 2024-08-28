@@ -1,10 +1,10 @@
 import { Map as ImmutableMap } from 'immutable';
 
-import { __stub } from 'soapbox/api';
-import { buildInstance, buildRelationship } from 'soapbox/jest/factory';
-import { mockStore, rootState } from 'soapbox/jest/test-helpers';
-import { normalizeAccount } from 'soapbox/normalizers';
-import { ListRecord, ReducerRecord } from 'soapbox/reducers/user-lists';
+import { __stub } from 'pl-fe/api';
+import { buildInstance, buildRelationship } from 'pl-fe/jest/factory';
+import { mockStore, rootState } from 'pl-fe/jest/test-helpers';
+import { normalizeAccount } from 'pl-fe/normalizers';
+import { ListRecord, ReducerRecord } from 'pl-fe/reducers/user-lists';
 
 import {
   authorizeFollowRequest,
@@ -95,7 +95,7 @@ describe('fetchAccount()', () => {
   });
 
   describe('with a successful API request', async () => {
-    const account = await import('soapbox/__fixtures__/pleroma-account.json');
+    const account = await import('pl-fe/__fixtures__/pleroma-account.json');
 
     beforeEach(() => {
       const state = rootState;

@@ -2,13 +2,13 @@ import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Link, useHistory, useParams } from 'react-router-dom';
 
-import { blockAccount, unblockAccount } from 'soapbox/actions/accounts';
-import { openModal } from 'soapbox/actions/modals';
-import { Avatar, HStack, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, Text } from 'soapbox/components/ui';
-import VerificationBadge from 'soapbox/components/verification-badge';
-import { useChatContext } from 'soapbox/contexts/chat-context';
-import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
-import { useChat, useChatActions, useChats } from 'soapbox/queries/chats';
+import { blockAccount, unblockAccount } from 'pl-fe/actions/accounts';
+import { openModal } from 'pl-fe/actions/modals';
+import { Avatar, HStack, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, Text } from 'pl-fe/components/ui';
+import VerificationBadge from 'pl-fe/components/verification-badge';
+import { useChatContext } from 'pl-fe/contexts/chat-context';
+import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { useChat, useChatActions, useChats } from 'pl-fe/queries/chats';
 
 import Chat from '../../chat';
 

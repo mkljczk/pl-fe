@@ -2,13 +2,13 @@ import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import Video from 'soapbox/features/video';
-import { useAppSelector } from 'soapbox/hooks';
-import { makeGetStatus } from 'soapbox/selectors';
+import Video from 'pl-fe/features/video';
+import { useAppSelector } from 'pl-fe/hooks';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 import type { BaseModalProps } from '../modal-root';
 import type { MediaAttachment } from 'pl-api';
-import type { Account } from 'soapbox/normalizers';
+import type { Account } from 'pl-fe/normalizers';
 
 type VideoModalProps = {
   media: MediaAttachment;

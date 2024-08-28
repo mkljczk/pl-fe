@@ -1,7 +1,7 @@
-import { isIntegerId } from 'soapbox/utils/numbers';
+import { isIntegerId } from 'pl-fe/utils/numbers';
 
 import type { IntlShape } from 'react-intl';
-import type { Status } from 'soapbox/normalizers';
+import type { Status } from 'pl-fe/normalizers';
 
 /** Get the initial visibility of media attachments from user settings. */
 const defaultMediaVisibility = (

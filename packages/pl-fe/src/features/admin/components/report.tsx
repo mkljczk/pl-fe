@@ -2,14 +2,14 @@ import React, { useCallback, useState } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { closeReport } from 'soapbox/actions/admin';
-import { deactivateUserModal, deleteUserModal } from 'soapbox/actions/moderation';
-import DropdownMenu from 'soapbox/components/dropdown-menu';
-import HoverRefWrapper from 'soapbox/components/hover-ref-wrapper';
-import { Accordion, Avatar, Button, Stack, HStack, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { makeGetReport } from 'soapbox/selectors';
-import toast from 'soapbox/toast';
+import { closeReport } from 'pl-fe/actions/admin';
+import { deactivateUserModal, deleteUserModal } from 'pl-fe/actions/moderation';
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import HoverRefWrapper from 'pl-fe/components/hover-ref-wrapper';
+import { Accordion, Avatar, Button, Stack, HStack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { makeGetReport } from 'pl-fe/selectors';
+import toast from 'pl-fe/toast';
 
 import ReportStatus from './report-status';
 

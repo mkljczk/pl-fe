@@ -1,7 +1,7 @@
 import { List as ImmutableList } from 'immutable';
 import { emojiReactionSchema, type EmojiReaction } from 'pl-api';
 
-import type { Status } from 'soapbox/normalizers';
+import type { Status } from 'pl-fe/normalizers';
 
 // https://emojipedia.org/facebook
 // I've customized them.

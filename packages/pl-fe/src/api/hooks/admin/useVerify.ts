@@ -1,9 +1,9 @@
-import { useTransaction } from 'soapbox/entity-store/hooks';
-import { EntityCallbacks } from 'soapbox/entity-store/hooks/types';
-import { useClient, useGetState } from 'soapbox/hooks';
-import { accountIdsToAccts } from 'soapbox/selectors';
+import { useTransaction } from 'pl-fe/entity-store/hooks';
+import { EntityCallbacks } from 'pl-fe/entity-store/hooks/types';
+import { useClient, useGetState } from 'pl-fe/hooks';
+import { accountIdsToAccts } from 'pl-fe/selectors';
 
-import type { Account } from 'soapbox/normalizers';
+import type { Account } from 'pl-fe/normalizers';
 
 const useVerify = () => {
   const client = useClient();

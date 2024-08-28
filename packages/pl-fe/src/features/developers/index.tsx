@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { getSettings } from 'soapbox/actions/settings';
-import { useAppSelector } from 'soapbox/hooks';
+import { getSettings } from 'pl-fe/actions/settings';
+import { useAppSelector } from 'pl-fe/hooks';
 
 import DevelopersChallenge from './developers-challenge';
 import DevelopersMenu from './developers-menu';

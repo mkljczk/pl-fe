@@ -2,14 +2,14 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useRouteMatch } from 'react-router-dom';
 
-import { groupComposeModal } from 'soapbox/actions/compose';
-import { openModal } from 'soapbox/actions/modals';
-import { openSidebar } from 'soapbox/actions/sidebar';
-import ThumbNavigationLink from 'soapbox/components/thumb-navigation-link';
-import { useStatContext } from 'soapbox/contexts/stat-context';
-import { Entities } from 'soapbox/entity-store/entities';
-import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
-import { isStandalone } from 'soapbox/utils/state';
+import { groupComposeModal } from 'pl-fe/actions/compose';
+import { openModal } from 'pl-fe/actions/modals';
+import { openSidebar } from 'pl-fe/actions/sidebar';
+import ThumbNavigationLink from 'pl-fe/components/thumb-navigation-link';
+import { useStatContext } from 'pl-fe/contexts/stat-context';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'pl-fe/hooks';
+import { isStandalone } from 'pl-fe/utils/state';
 
 import { Icon } from './ui';
 

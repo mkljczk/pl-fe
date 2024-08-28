@@ -1,7 +1,7 @@
 import { Map as ImmutableMap } from 'immutable';
 
-import lain from 'soapbox/__fixtures__/lain.json';
-import { ACCOUNT_IMPORT } from 'soapbox/actions/importer';
+import lain from 'pl-fe/__fixtures__/lain.json';
+import { ACCOUNT_IMPORT } from 'pl-fe/actions/importer';
 
 import reducer from './relationships';
 

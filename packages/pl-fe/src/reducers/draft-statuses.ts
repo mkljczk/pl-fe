@@ -1,13 +1,13 @@
 import { List as ImmutableList, Map as ImmutableMap, OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord, fromJS } from 'immutable';
 
-import { COMPOSE_SUBMIT_SUCCESS, type ComposeAction } from 'soapbox/actions/compose';
-import { DRAFT_STATUSES_FETCH_SUCCESS, PERSIST_DRAFT_STATUS, CANCEL_DRAFT_STATUS } from 'soapbox/actions/draft-statuses';
-import KVStore from 'soapbox/storage/kv-store';
+import { COMPOSE_SUBMIT_SUCCESS, type ComposeAction } from 'pl-fe/actions/compose';
+import { DRAFT_STATUSES_FETCH_SUCCESS, PERSIST_DRAFT_STATUS, CANCEL_DRAFT_STATUS } from 'pl-fe/actions/draft-statuses';
+import KVStore from 'pl-fe/storage/kv-store';
 
 import type { MediaAttachment } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { StatusVisibility } from 'soapbox/normalizers/status';
-import type { APIEntity } from 'soapbox/types/entities';
+import type { StatusVisibility } from 'pl-fe/normalizers/status';
+import type { APIEntity } from 'pl-fe/types/entities';
 
 const DraftStatusRecord = ImmutableRecord({
   content_type: 'text/plain',

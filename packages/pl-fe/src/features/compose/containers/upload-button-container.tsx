@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { uploadCompose } from 'soapbox/actions/compose';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { uploadCompose } from 'pl-fe/actions/compose';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import UploadButton from '../components/upload-button';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Icon } from 'soapbox/components/ui';
-import { MIMETYPE_ICONS } from 'soapbox/components/upload';
+import { Icon } from 'pl-fe/components/ui';
+import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
 
 import type { MediaAttachment } from 'pl-api';
 

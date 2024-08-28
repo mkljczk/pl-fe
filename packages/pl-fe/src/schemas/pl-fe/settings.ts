@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { locales } from 'soapbox/messages';
+import { locales } from 'pl-fe/messages';
 
 import { coerceObject } from '../utils';
 

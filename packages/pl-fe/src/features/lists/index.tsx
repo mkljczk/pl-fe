@@ -2,15 +2,15 @@ import React, { useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { createSelector } from 'reselect';
 
-import { fetchLists } from 'soapbox/actions/lists';
-import List, { ListItem } from 'soapbox/components/list';
-import { Card, Column, HStack, Icon, Spinner, Stack } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { fetchLists } from 'pl-fe/actions/lists';
+import List, { ListItem } from 'pl-fe/components/list';
+import { Card, Column, HStack, Icon, Spinner, Stack } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import NewListForm from './components/new-list-form';
 
 import type { List as ListEntity } from 'pl-api';
-import type { RootState } from 'soapbox/store';
+import type { RootState } from 'pl-fe/store';
 
 const messages = defineMessages({
   heading: { id: 'column.lists', defaultMessage: 'Lists' },

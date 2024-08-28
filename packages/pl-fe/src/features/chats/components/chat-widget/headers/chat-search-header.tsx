@@ -1,8 +1,8 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { HStack, Icon, Text } from 'soapbox/components/ui';
-import { ChatWidgetScreens, useChatContext } from 'soapbox/contexts/chat-context';
+import { HStack, Icon, Text } from 'pl-fe/components/ui';
+import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
 
 import ChatPaneHeader from '../chat-pane-header';
 

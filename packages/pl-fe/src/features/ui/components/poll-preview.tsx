@@ -1,10 +1,10 @@
 import noop from 'lodash/noop';
 import React from 'react';
 
-import PollOption from 'soapbox/components/polls/poll-option';
-import { Stack } from 'soapbox/components/ui';
+import PollOption from 'pl-fe/components/polls/poll-option';
+import { Stack } from 'pl-fe/components/ui';
 
-import type { Poll } from 'soapbox/normalizers/poll';
+import type { Poll } from 'pl-fe/normalizers/poll';
 
 interface IPollPreview {
   poll: Poll;

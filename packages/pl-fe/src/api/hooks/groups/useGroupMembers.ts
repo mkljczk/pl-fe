@@ -1,9 +1,9 @@
 import { groupMemberSchema, type GroupMember as BaseGroupMember, type GroupRoles } from 'pl-api';
 
-import { Entities } from 'soapbox/entity-store/entities';
-import { useEntities } from 'soapbox/entity-store/hooks';
-import { useClient } from 'soapbox/hooks';
-import { normalizeGroupMember, type GroupMember } from 'soapbox/normalizers';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useEntities } from 'pl-fe/entity-store/hooks';
+import { useClient } from 'pl-fe/hooks';
+import { normalizeGroupMember, type GroupMember } from 'pl-fe/normalizers';
 
 const useGroupMembers = (groupId: string, role: GroupRoles) => {
   const client = useClient();

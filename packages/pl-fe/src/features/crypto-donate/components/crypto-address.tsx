@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { openModal } from 'soapbox/actions/modals';
-import CopyableInput from 'soapbox/components/copyable-input';
-import { Text, Icon, Stack, HStack } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import { openModal } from 'pl-fe/actions/modals';
+import CopyableInput from 'pl-fe/components/copyable-input';
+import { Text, Icon, Stack, HStack } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 import { getExplorerUrl } from '../utils/block-explorer';
 import { getTitle } from '../utils/coin-db';

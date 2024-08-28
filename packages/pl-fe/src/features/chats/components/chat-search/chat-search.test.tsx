@@ -2,9 +2,9 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { VirtuosoMockContext } from 'react-virtuoso';
 
-import { __stub } from 'soapbox/api';
-import { ChatProvider } from 'soapbox/contexts/chat-context';
-import { render, screen, waitFor } from 'soapbox/jest/test-helpers';
+import { __stub } from 'pl-fe/api';
+import { ChatProvider } from 'pl-fe/contexts/chat-context';
+import { render, screen, waitFor } from 'pl-fe/jest/test-helpers';
 
 import ChatSearch from './chat-search';
 

@@ -1,14 +1,14 @@
 import React from 'react';
 
-import LinkFooter from 'soapbox/features/ui/components/link-footer';
+import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
   WhoToFollowPanel,
   TrendsPanel,
   SignUpPanel,
   CtaBanner,
-} from 'soapbox/features/ui/util/async-components';
-import { useAppSelector, useFeatures } from 'soapbox/hooks';
-import { isStandalone } from 'soapbox/utils/state';
+} from 'pl-fe/features/ui/util/async-components';
+import { useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { isStandalone } from 'pl-fe/utils/state';
 
 import { Layout } from '../components/ui';
 

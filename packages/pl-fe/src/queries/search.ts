@@ -1,7 +1,7 @@
 import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 
-import { useClient } from 'soapbox/hooks';
-import { flattenPages } from 'soapbox/utils/queries';
+import { useClient } from 'pl-fe/hooks';
+import { flattenPages } from 'pl-fe/utils/queries';
 
 import type { Account, PaginatedResponse } from 'pl-api';
 

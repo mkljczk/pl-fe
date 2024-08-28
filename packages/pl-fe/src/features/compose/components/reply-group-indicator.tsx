@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Link from 'soapbox/components/link';
-import { Text } from 'soapbox/components/ui';
-import { useAppSelector } from 'soapbox/hooks';
-import { makeGetStatus } from 'soapbox/selectors';
+import Link from 'pl-fe/components/link';
+import { Text } from 'pl-fe/components/ui';
+import { useAppSelector } from 'pl-fe/hooks';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 interface IReplyGroupIndicator {
   composeId: string;

@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { fetchHashtag, followHashtag, unfollowHashtag } from 'soapbox/actions/tags';
-import { fetchHashtagTimeline, clearTimeline } from 'soapbox/actions/timelines';
-import { useHashtagStream } from 'soapbox/api/hooks';
-import List, { ListItem } from 'soapbox/components/list';
-import { Column, Toggle } from 'soapbox/components/ui';
-import Timeline from 'soapbox/features/ui/components/timeline';
-import { useAppDispatch, useAppSelector, useFeatures, useLoggedIn, useTheme } from 'soapbox/hooks';
-import { useIsMobile } from 'soapbox/hooks/useIsMobile';
+import { fetchHashtag, followHashtag, unfollowHashtag } from 'pl-fe/actions/tags';
+import { fetchHashtagTimeline, clearTimeline } from 'pl-fe/actions/timelines';
+import { useHashtagStream } from 'pl-fe/api/hooks';
+import List, { ListItem } from 'pl-fe/components/list';
+import { Column, Toggle } from 'pl-fe/components/ui';
+import Timeline from 'pl-fe/features/ui/components/timeline';
+import { useAppDispatch, useAppSelector, useFeatures, useLoggedIn, useTheme } from 'pl-fe/hooks';
+import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 interface IHashtagTimeline {
   params?: {

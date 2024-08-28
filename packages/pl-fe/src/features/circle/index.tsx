@@ -2,16 +2,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { processCircle } from 'soapbox/actions/circle';
-import { resetCompose, uploadComposeSuccess, uploadFile } from 'soapbox/actions/compose';
-import { openModal } from 'soapbox/actions/modals';
-import Account from 'soapbox/components/account';
-import { Accordion, Avatar, Button, Column, Form, FormActions, HStack, ProgressBar, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useOwnAccount } from 'soapbox/hooks';
+import { processCircle } from 'pl-fe/actions/circle';
+import { resetCompose, uploadComposeSuccess, uploadFile } from 'pl-fe/actions/compose';
+import { openModal } from 'pl-fe/actions/modals';
+import Account from 'pl-fe/components/account';
+import { Accordion, Avatar, Button, Column, Form, FormActions, HStack, ProgressBar, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
 
 const toRad = (x: number) => x * (Math.PI / 180);
 
-const avatarMissing = require('soapbox/assets/images/avatar-missing.png');
+const avatarMissing = require('pl-fe/assets/images/avatar-missing.png');
 
 const HEIGHT = 1000;
 const WIDTH = 1000;

@@ -1,6 +1,6 @@
 import { List as ImmutableList, Record as ImmutableRecord } from 'immutable';
 
-import * as actions from 'soapbox/actions/lists';
+import * as actions from 'pl-fe/actions/lists';
 
 import reducer from './list-adder';
 

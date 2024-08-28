@@ -1,6 +1,6 @@
 import { getClient } from '../api';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const MFA_FETCH_REQUEST = 'MFA_FETCH_REQUEST' as const;
 const MFA_FETCH_SUCCESS = 'MFA_FETCH_SUCCESS' as const;

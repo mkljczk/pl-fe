@@ -10,13 +10,13 @@ import {
   setSearchAccount,
   showSearch,
   submitSearch,
-} from 'soapbox/actions/search';
-import AutosuggestAccountInput from 'soapbox/components/autosuggest-account-input';
-import { Input } from 'soapbox/components/ui';
-import SvgIcon from 'soapbox/components/ui/icon/svg-icon';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { selectAccount } from 'soapbox/selectors';
-import { AppDispatch, RootState } from 'soapbox/store';
+} from 'pl-fe/actions/search';
+import AutosuggestAccountInput from 'pl-fe/components/autosuggest-account-input';
+import { Input } from 'pl-fe/components/ui';
+import SvgIcon from 'pl-fe/components/ui/icon/svg-icon';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { selectAccount } from 'pl-fe/selectors';
+import { AppDispatch, RootState } from 'pl-fe/store';
 
 const messages = defineMessages({
   placeholder: { id: 'search.placeholder', defaultMessage: 'Search' },

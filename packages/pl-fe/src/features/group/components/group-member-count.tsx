@@ -2,10 +2,10 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { Text } from 'soapbox/components/ui';
-import { shortNumberFormat } from 'soapbox/utils/numbers';
+import { Text } from 'pl-fe/components/ui';
+import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
-import type { Group } from 'soapbox/normalizers';
+import type { Group } from 'pl-fe/normalizers';
 
 interface IGroupMemberCount {
   group: Pick<Group, 'id' | 'members_count'>;

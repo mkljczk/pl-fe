@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { getTextDirection } from 'soapbox/utils/rtl';
+import { getTextDirection } from 'pl-fe/utils/rtl';
 
 import type { Mention as MentionEntity } from 'pl-api';
-import type { Announcement } from 'soapbox/normalizers';
+import type { Announcement } from 'pl-fe/normalizers';
 
 interface IAnnouncementContent {
   announcement: Announcement;

@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl';
 
-import toast, { type IToastOptions } from 'soapbox/toast';
-import { isLoggedIn } from 'soapbox/utils/auth';
+import toast, { type IToastOptions } from 'pl-fe/toast';
+import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { getClient } from '../api';
 
@@ -10,7 +10,7 @@ import { importFetchedAccounts, importFetchedStatus } from './importer';
 import { openModal } from './modals';
 
 import type { Account, EmojiReaction, PaginatedResponse, Status } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const REBLOG_REQUEST = 'REBLOG_REQUEST' as const;
 const REBLOG_SUCCESS = 'REBLOG_SUCCESS' as const;

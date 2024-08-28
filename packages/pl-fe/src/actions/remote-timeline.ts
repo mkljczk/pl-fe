@@ -1,7 +1,7 @@
-import { getSettings, changeSetting } from 'soapbox/actions/settings';
+import { getSettings, changeSetting } from 'pl-fe/actions/settings';
 
 import type { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const getPinnedHosts = (state: RootState) => {
   const settings = getSettings(state);

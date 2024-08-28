@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Banner, Button, HStack, Stack, Text } from 'soapbox/components/ui';
-import { useInstance, useSoapboxConfig } from 'soapbox/hooks';
+import { Banner, Button, HStack, Stack, Text } from 'pl-fe/components/ui';
+import { useInstance, usePlFeConfig } from 'pl-fe/hooks';
 
 const acceptedGdpr = !!localStorage.getItem('plfe:gdpr');
 
@@ -14,7 +14,7 @@ const GdprBanner: React.FC = () => {
   const [slideout, setSlideout] = useState(false);
 
   const instance = useInstance();
-  const { gdprUrl } = useSoapboxConfig();
+  const { gdprUrl } = usePlFeConfig();
 
   const handleAccept = () => {
     localStorage.setItem('plfe:gdpr', 'true');

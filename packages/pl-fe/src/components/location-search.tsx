@@ -4,10 +4,10 @@ import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { locationSearch } from 'soapbox/actions/events';
-import AutosuggestInput, { AutoSuggestion } from 'soapbox/components/autosuggest-input';
-import Icon from 'soapbox/components/icon';
-import { useAppDispatch } from 'soapbox/hooks';
+import { locationSearch } from 'pl-fe/actions/events';
+import AutosuggestInput, { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
+import Icon from 'pl-fe/components/icon';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 import AutosuggestLocation from './autosuggest-location';
 

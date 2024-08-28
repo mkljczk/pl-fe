@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchAliases, removeFromAliases } from 'soapbox/actions/aliases';
-import Icon from 'soapbox/components/icon';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { CardHeader, CardTitle, Column, HStack, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
+import { fetchAliases, removeFromAliases } from 'pl-fe/actions/aliases';
+import Icon from 'pl-fe/components/icon';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { CardHeader, CardTitle, Column, HStack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'pl-fe/hooks';
 
 import Account from './components/account';
 import Search from './components/search';

@@ -27,9 +27,9 @@ import * as React from 'react';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import { HStack, Icon, IconButton } from 'soapbox/components/ui';
-import { useAppDispatch, useSettings } from 'soapbox/hooks';
+import { openModal } from 'pl-fe/actions/modals';
+import { HStack, Icon, IconButton } from 'pl-fe/components/ui';
+import { useAppDispatch, useSettings } from 'pl-fe/hooks';
 
 import { $isImageNode } from './image-node';
 

@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { useClient } from 'soapbox/hooks';
-import { queryClient } from 'soapbox/queries/client';
-import { adminAnnouncementSchema, type AdminAnnouncement } from 'soapbox/schemas';
+import { useClient } from 'pl-fe/hooks';
+import { queryClient } from 'pl-fe/queries/client';
+import { adminAnnouncementSchema, type AdminAnnouncement } from 'pl-fe/schemas';
 
 import { useAnnouncements as useUserAnnouncements } from '../announcements';
 

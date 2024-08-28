@@ -1,8 +1,8 @@
 import { useMutation, keepPreviousData, useQuery } from '@tanstack/react-query';
 
-import { fetchRelationships } from 'soapbox/actions/accounts';
-import { importFetchedAccounts } from 'soapbox/actions/importer';
-import { useAppDispatch, useClient } from 'soapbox/hooks';
+import { fetchRelationships } from 'pl-fe/actions/accounts';
+import { importFetchedAccounts } from 'pl-fe/actions/importer';
+import { useAppDispatch, useClient } from 'pl-fe/hooks';
 
 import { removePageItem } from '../utils/queries';
 

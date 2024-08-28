@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useMemo, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Virtuoso, Components, VirtuosoProps, VirtuosoHandle, ListRange, IndexLocationWithAlign } from 'react-virtuoso';
 
-import { useSettings } from 'soapbox/hooks';
+import { useSettings } from 'pl-fe/hooks';
 
 import LoadMore from './load-more';
 import { Card, Spinner } from './ui';

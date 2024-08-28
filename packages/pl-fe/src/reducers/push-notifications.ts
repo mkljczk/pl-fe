@@ -2,7 +2,7 @@ import { Map as ImmutableMap, Record as ImmutableRecord } from 'immutable';
 
 import { SET_BROWSER_SUPPORT, SET_SUBSCRIPTION, CLEAR_SUBSCRIPTION, SET_ALERTS } from '../actions/push-notifications';
 
-import type { SetterAction } from 'soapbox/actions/push-notifications/setter';
+import type { SetterAction } from 'pl-fe/actions/push-notifications/setter';
 
 const SubscriptionRecord = ImmutableRecord({
   id: '',

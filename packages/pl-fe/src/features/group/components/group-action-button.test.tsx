@@ -1,9 +1,9 @@
 import { GroupRoles } from 'pl-api';
 import React from 'react';
 
-import { buildGroup, buildGroupRelationship } from 'soapbox/jest/factory';
-import { render, screen } from 'soapbox/jest/test-helpers';
-import { Group } from 'soapbox/normalizers';
+import { buildGroup, buildGroupRelationship } from 'pl-fe/jest/factory';
+import { render, screen } from 'pl-fe/jest/test-helpers';
+import { Group } from 'pl-fe/normalizers';
 
 import GroupActionButton from './group-action-button';
 

@@ -1,8 +1,8 @@
 import { trendsLinkSchema } from 'pl-api';
 
-import { Entities } from 'soapbox/entity-store/entities';
-import { useEntities } from 'soapbox/entity-store/hooks';
-import { useClient, useFeatures } from 'soapbox/hooks';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useEntities } from 'pl-fe/entity-store/hooks';
+import { useClient, useFeatures } from 'pl-fe/hooks';
 
 const useTrendingLinks = () => {
   const client = useClient();

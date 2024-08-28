@@ -4,20 +4,20 @@ import { useIntl, FormattedMessage } from 'react-intl';
 import { usePopper } from 'react-popper';
 import { useHistory } from 'react-router-dom';
 
-import { fetchRelationships } from 'soapbox/actions/accounts';
-import { closeProfileHoverCard, updateProfileHoverCard } from 'soapbox/actions/profile-hover-card';
-import { useAccount } from 'soapbox/api/hooks';
-import Badge from 'soapbox/components/badge';
-import ActionButton from 'soapbox/features/ui/components/action-button';
-import { UserPanel } from 'soapbox/features/ui/util/async-components';
-import { useAppSelector, useAppDispatch } from 'soapbox/hooks';
+import { fetchRelationships } from 'pl-fe/actions/accounts';
+import { closeProfileHoverCard, updateProfileHoverCard } from 'pl-fe/actions/profile-hover-card';
+import { useAccount } from 'pl-fe/api/hooks';
+import Badge from 'pl-fe/components/badge';
+import ActionButton from 'pl-fe/features/ui/components/action-button';
+import { UserPanel } from 'pl-fe/features/ui/util/async-components';
+import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 import { showProfileHoverCard } from './hover-ref-wrapper';
 import { dateFormatOptions } from './relative-timestamp';
 import { Card, CardBody, HStack, Icon, Stack, Text } from './ui';
 
-import type { Account } from 'soapbox/normalizers';
-import type { AppDispatch } from 'soapbox/store';
+import type { Account } from 'pl-fe/normalizers';
+import type { AppDispatch } from 'pl-fe/store';
 
 const getBadges = (
   account?: Pick<Account, 'is_admin' | 'is_moderator'>,

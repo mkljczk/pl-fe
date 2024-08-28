@@ -5,9 +5,9 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { closeDropdownMenu as closeDropdownMenuRedux, openDropdownMenu } from 'soapbox/actions/dropdown-menu';
-import { useAppDispatch } from 'soapbox/hooks';
-import { userTouching } from 'soapbox/is-mobile';
+import { closeDropdownMenu as closeDropdownMenuRedux, openDropdownMenu } from 'pl-fe/actions/dropdown-menu';
+import { useAppDispatch } from 'pl-fe/hooks';
+import { userTouching } from 'pl-fe/is-mobile';
 
 import { IconButton, Portal } from '../ui';
 
@@ -106,9 +106,9 @@ const DropdownMenu = (props: IDropdownMenu) => {
       unlistenHistory.current = undefined;
     }
     const { state } = history.location;
-    if (goBack && state && (state as any).soapboxDropdownKey && (state as any).soapboxDropdownKey === dropdownHistoryKey.current) {
+    if (goBack && state && (state as any).plFeDropdownKey && (state as any).plFeDropdownKey === dropdownHistoryKey.current) {
       history.goBack();
-      (history.location.state as any).soapboxDropdownKey = undefined;
+      (history.location.state as any).plFeDropdownKey = undefined;
     }
 
     closeDropdownMenu();
@@ -239,10 +239,10 @@ const DropdownMenu = (props: IDropdownMenu) => {
 
       dropdownHistoryKey.current = Date.now();
 
-      history.push(pathname, { ...(state as any), soapboxDropdownKey: dropdownHistoryKey.current });
+      history.push(pathname, { ...(state as any), plFeDropdownKey: dropdownHistoryKey.current });
 
       unlistenHistory.current = history.listen(({ state }, action) => {
-        if (!(state as any)?.soapboxDropdownKey) {
+        if (!(state as any)?.plFeDropdownKey) {
           handleClose(false);
         } else if (action === 'POP') {
           handleClose(false);

@@ -3,20 +3,20 @@ import { GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { groupKick } from 'soapbox/actions/groups';
-import { openModal } from 'soapbox/actions/modals';
-import { useAccount, useBlockGroupMember, useDemoteGroupMember, usePromoteGroupMember } from 'soapbox/api/hooks';
-import Account from 'soapbox/components/account';
-import DropdownMenu from 'soapbox/components/dropdown-menu/dropdown-menu';
-import { HStack } from 'soapbox/components/ui';
-import { deleteEntities } from 'soapbox/entity-store/actions';
-import { Entities } from 'soapbox/entity-store/entities';
-import PlaceholderAccount from 'soapbox/features/placeholder/components/placeholder-account';
-import { useAppDispatch } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { groupKick } from 'pl-fe/actions/groups';
+import { openModal } from 'pl-fe/actions/modals';
+import { useAccount, useBlockGroupMember, useDemoteGroupMember, usePromoteGroupMember } from 'pl-fe/api/hooks';
+import Account from 'pl-fe/components/account';
+import DropdownMenu from 'pl-fe/components/dropdown-menu/dropdown-menu';
+import { HStack } from 'pl-fe/components/ui';
+import { deleteEntities } from 'pl-fe/entity-store/actions';
+import { Entities } from 'pl-fe/entity-store/entities';
+import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholder-account';
+import { useAppDispatch } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
-import type { Menu as IMenu } from 'soapbox/components/dropdown-menu';
-import type { Group, GroupMember } from 'soapbox/normalizers';
+import type { Menu as IMenu } from 'pl-fe/components/dropdown-menu';
+import type { Group, GroupMember } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   adminLimitTitle: { id: 'group.member.admin.limit.title', defaultMessage: 'Admin limit reached' },

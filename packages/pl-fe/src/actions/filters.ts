@@ -1,12 +1,12 @@
 import { defineMessages } from 'react-intl';
 
-import toast from 'soapbox/toast';
-import { isLoggedIn } from 'soapbox/utils/auth';
+import toast from 'pl-fe/toast';
+import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { getClient } from '../api';
 
 import type { FilterContext } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const FILTERS_FETCH_REQUEST = 'FILTERS_FETCH_REQUEST' as const;
 const FILTERS_FETCH_SUCCESS = 'FILTERS_FETCH_SUCCESS' as const;

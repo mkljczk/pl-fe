@@ -1,10 +1,10 @@
 import DOMPurify from 'isomorphic-dompurify';
 import React from 'react';
 
-import Markup from 'soapbox/components/markup';
-import { Stack } from 'soapbox/components/ui';
-import { useInstance } from 'soapbox/hooks';
-import { getTextDirection } from 'soapbox/utils/rtl';
+import Markup from 'pl-fe/components/markup';
+import { Stack } from 'pl-fe/components/ui';
+import { useInstance } from 'pl-fe/hooks';
+import { getTextDirection } from 'pl-fe/utils/rtl';
 
 import { LogoText } from './logo-text';
 

@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useLocation } from 'react-router-dom';
 
-import { fetchDirectory, expandDirectory } from 'soapbox/actions/directory';
-import LoadMore from 'soapbox/components/load-more';
-import { RadioGroup, RadioItem } from 'soapbox/components/radio';
-import { CardTitle, Column, Stack } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useFeatures, useInstance } from 'soapbox/hooks';
+import { fetchDirectory, expandDirectory } from 'pl-fe/actions/directory';
+import LoadMore from 'pl-fe/components/load-more';
+import { RadioGroup, RadioItem } from 'pl-fe/components/radio';
+import { CardTitle, Column, Stack } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector, useFeatures, useInstance } from 'pl-fe/hooks';
 
 import AccountCard from './components/account-card';
 

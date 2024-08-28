@@ -1,12 +1,12 @@
 import React from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import DropdownMenu from 'soapbox/components/dropdown-menu';
-import { Widget } from 'soapbox/components/ui';
-import InstanceRestrictions from 'soapbox/features/federation-restrictions/components/instance-restrictions';
-import { useAppSelector, useAppDispatch, useOwnAccount } from 'soapbox/hooks';
-import { makeGetRemoteInstance } from 'soapbox/selectors';
+import { openModal } from 'pl-fe/actions/modals';
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import { Widget } from 'pl-fe/components/ui';
+import InstanceRestrictions from 'pl-fe/features/federation-restrictions/components/instance-restrictions';
+import { useAppSelector, useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
+import { makeGetRemoteInstance } from 'pl-fe/selectors';
 
 const getRemoteInstance = makeGetRemoteInstance();
 

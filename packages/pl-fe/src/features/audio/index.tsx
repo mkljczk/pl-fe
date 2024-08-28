@@ -4,8 +4,8 @@ import throttle from 'lodash/throttle';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Icon from 'soapbox/components/icon';
-import { formatTime, getPointerPosition } from 'soapbox/features/video';
+import Icon from 'pl-fe/components/icon';
+import { formatTime, getPointerPosition } from 'pl-fe/features/video';
 
 import Visualizer from './visualizer';
 

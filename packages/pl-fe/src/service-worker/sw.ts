@@ -19,7 +19,7 @@ const GROUP_TAG = 'tag';
 // https://www.devextent.com/create-service-worker-typescript/
 declare const self: ServiceWorkerGlobalScope;
 
-/** Soapbox notification data from push event. */
+/** pl-fe notification data from push event. */
 interface NotificationData {
   access_token?: string;
   count?: number;

@@ -1,8 +1,8 @@
 import { type GroupRelationship, groupRelationshipSchema } from 'pl-api';
 
-import { Entities } from 'soapbox/entity-store/entities';
-import { useBatchedEntities } from 'soapbox/entity-store/hooks/useBatchedEntities';
-import { useClient, useLoggedIn } from 'soapbox/hooks';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useBatchedEntities } from 'pl-fe/entity-store/hooks/useBatchedEntities';
+import { useClient, useLoggedIn } from 'pl-fe/hooks';
 
 const useGroupRelationships = (listKey: string[], groupIds: string[]) => {
   const client = useClient();

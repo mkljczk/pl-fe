@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import { fetchMfa } from 'soapbox/actions/mfa';
-import { Column, Stack } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch } from 'soapbox/hooks';
+import { fetchMfa } from 'pl-fe/actions/mfa';
+import { Column, Stack } from 'pl-fe/components/ui';
+import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 import DisableOtpForm from './mfa/disable-otp-form';
 import EnableOtpForm from './mfa/enable-otp-form';

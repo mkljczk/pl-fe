@@ -1,8 +1,8 @@
 import React from 'react';
 
-import unicodeMapping from 'soapbox/features/emoji/mapping';
-import { useSettings } from 'soapbox/hooks';
-import { joinPublicPath } from 'soapbox/utils/static';
+import unicodeMapping from 'pl-fe/features/emoji/mapping';
+import { useSettings } from 'pl-fe/hooks';
+import { joinPublicPath } from 'pl-fe/utils/static';
 
 import type { Map as ImmutableMap } from 'immutable';
 import type { CustomEmoji } from 'pl-api';

@@ -1,10 +1,10 @@
 import { groupSchema, type Group as BaseGroup } from 'pl-api';
 
-import { Entities } from 'soapbox/entity-store/entities';
-import { useEntities } from 'soapbox/entity-store/hooks';
-import { useClient } from 'soapbox/hooks';
-import { useFeatures } from 'soapbox/hooks/useFeatures';
-import { normalizeGroup, type Group } from 'soapbox/normalizers';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useEntities } from 'pl-fe/entity-store/hooks';
+import { useClient } from 'pl-fe/hooks';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { normalizeGroup, type Group } from 'pl-fe/normalizers';
 
 import { useGroupRelationships } from './useGroupRelationships';
 

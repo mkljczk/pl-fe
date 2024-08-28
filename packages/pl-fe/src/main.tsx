@@ -3,9 +3,9 @@ import './polyfills';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
-import * as BuildConfig from 'soapbox/build-config';
-import Soapbox from 'soapbox/init/soapbox';
-import { printConsoleWarning } from 'soapbox/utils/console';
+import * as BuildConfig from 'pl-fe/build-config';
+import PlFe from 'pl-fe/init/pl-fe';
+import { printConsoleWarning } from 'pl-fe/utils/console';
 
 import '@fontsource/inter/200.css';
 import '@fontsource/inter/300.css';
@@ -38,5 +38,5 @@ ready(() => {
   const container = document.getElementById('plfe') as HTMLElement;
   const root = createRoot(container);
 
-  root.render(<Soapbox />);
+  root.render(<PlFe />);
 });

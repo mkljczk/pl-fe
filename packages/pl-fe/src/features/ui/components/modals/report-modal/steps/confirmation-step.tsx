@@ -1,9 +1,9 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { getSoapboxConfig } from 'soapbox/actions/soapbox';
-import { Stack, Text } from 'soapbox/components/ui';
-import { useAppSelector } from 'soapbox/hooks';
+import { getPlFeConfig } from 'pl-fe/actions/pl-fe';
+import { Stack, Text } from 'pl-fe/components/ui';
+import { useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   accountEntity: { id: 'report.confirmation.entity.account', defaultMessage: 'account' },
@@ -28,7 +28,7 @@ const renderTermsOfServiceLink = (href: string) => (
 
 const ConfirmationStep: React.FC = () => {
   const intl = useIntl();
-  const links = useAppSelector((state) => getSoapboxConfig(state).get('links') as any);
+  const links = useAppSelector((state) => getPlFeConfig(state).get('links') as any);
 
   const entity = intl.formatMessage(messages.accountEntity);
 

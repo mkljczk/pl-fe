@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Modal } from 'soapbox/components/ui';
+import { Modal } from 'pl-fe/components/ui';
 
 import type { BaseModalProps } from '../modal-root';
 

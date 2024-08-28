@@ -1,4 +1,4 @@
-import { getLocale } from 'soapbox/actions/settings';
+import { getLocale } from 'pl-fe/actions/settings';
 
 import { useAppSelector } from './useAppSelector';
 

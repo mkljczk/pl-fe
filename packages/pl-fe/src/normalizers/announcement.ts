@@ -1,5 +1,5 @@
-import emojify from 'soapbox/features/emoji';
-import { makeCustomEmojiMap } from 'soapbox/schemas/utils';
+import emojify from 'pl-fe/features/emoji';
+import { makeCustomEmojiMap } from 'pl-fe/schemas/utils';
 
 import type { Announcement as BaseAnnouncement } from 'pl-api';
 

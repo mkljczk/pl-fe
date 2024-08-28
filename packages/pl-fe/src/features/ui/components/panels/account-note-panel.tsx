@@ -2,12 +2,12 @@ import debounce from 'lodash/debounce';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { submitAccountNote } from 'soapbox/actions/account-notes';
-import { HStack, Text, Textarea, Widget } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { submitAccountNote } from 'pl-fe/actions/account-notes';
+import { HStack, Text, Textarea, Widget } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
-import type { Account as AccountEntity } from 'soapbox/normalizers';
-import type { AppDispatch } from 'soapbox/store';
+import type { Account as AccountEntity } from 'pl-fe/normalizers';
+import type { AppDispatch } from 'pl-fe/store';
 
 const onSave = debounce(
   (dispatch: AppDispatch, accountId: string, value: string, callback: () => void) =>

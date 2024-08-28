@@ -3,19 +3,19 @@ import debounce from 'lodash/debounce';
 import React, { useRef, useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import LoadGap from 'soapbox/components/load-gap';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import StatusContainer from 'soapbox/containers/status-container';
-import FeedSuggestions from 'soapbox/features/feed-suggestions/feed-suggestions';
-import PlaceholderStatus from 'soapbox/features/placeholder/components/placeholder-status';
-import PendingStatus from 'soapbox/features/ui/components/pending-status';
-import { useSoapboxConfig } from 'soapbox/hooks';
+import LoadGap from 'pl-fe/components/load-gap';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import StatusContainer from 'pl-fe/containers/status-container';
+import FeedSuggestions from 'pl-fe/features/feed-suggestions/feed-suggestions';
+import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
+import PendingStatus from 'pl-fe/features/ui/components/pending-status';
+import { usePlFeConfig } from 'pl-fe/hooks';
 
 import { Stack, Text } from './ui';
 
 import type { OrderedSet as ImmutableOrderedSet } from 'immutable';
 import type { VirtuosoHandle } from 'react-virtuoso';
-import type { IScrollableList } from 'soapbox/components/scrollable-list';
+import type { IScrollableList } from 'pl-fe/components/scrollable-list';
 
 interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
   /** Unique key to preserve the scroll position when navigating back. */
@@ -61,7 +61,7 @@ const StatusList: React.FC<IStatusList> = ({
   className,
   ...other
 }) => {
-  const soapboxConfig = useSoapboxConfig();
+  const plFeConfig = usePlFeConfig();
   const node = useRef<VirtuosoHandle>(null);
 
   const getFeaturedStatusCount = () => featuredStatusIds?.size || 0;
@@ -180,7 +180,7 @@ const StatusList: React.FC<IStatusList> = ({
             acc.push(gap);
           }
         } else if (statusId.startsWith('末suggestions-')) {
-          if (soapboxConfig.feedInjection) {
+          if (plFeConfig.feedInjection) {
             acc.push(renderFeedSuggestions(statusId));
           }
         } else if (statusId.startsWith('末pending-')) {

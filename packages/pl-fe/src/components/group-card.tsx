@@ -1,14 +1,14 @@
 import React from 'react';
 
-import GroupHeaderImage from 'soapbox/features/group/components/group-header-image';
-import GroupMemberCount from 'soapbox/features/group/components/group-member-count';
-import GroupPrivacy from 'soapbox/features/group/components/group-privacy';
-import GroupRelationship from 'soapbox/features/group/components/group-relationship';
+import GroupHeaderImage from 'pl-fe/features/group/components/group-header-image';
+import GroupMemberCount from 'pl-fe/features/group/components/group-member-count';
+import GroupPrivacy from 'pl-fe/features/group/components/group-privacy';
+import GroupRelationship from 'pl-fe/features/group/components/group-relationship';
 
 import GroupAvatar from './groups/group-avatar';
 import { HStack, Stack, Text } from './ui';
 
-import type { Group as GroupEntity } from 'soapbox/normalizers';
+import type { Group as GroupEntity } from 'pl-fe/normalizers';
 
 interface IGroupCard {
   group: GroupEntity;

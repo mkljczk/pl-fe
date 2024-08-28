@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    image: soapbox-dev
+    image: pl-fe-dev
     ports:
       - "3036:3036"
     volumes:

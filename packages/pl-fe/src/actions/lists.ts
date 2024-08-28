@@ -1,13 +1,13 @@
-import { selectAccount } from 'soapbox/selectors';
-import toast from 'soapbox/toast';
-import { isLoggedIn } from 'soapbox/utils/auth';
+import { selectAccount } from 'pl-fe/selectors';
+import toast from 'pl-fe/toast';
+import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { getClient } from '../api';
 
 import { importFetchedAccounts } from './importer';
 
 import type { Account, List, PaginatedResponse } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const LIST_FETCH_REQUEST = 'LIST_FETCH_REQUEST' as const;
 const LIST_FETCH_SUCCESS = 'LIST_FETCH_SUCCESS' as const;

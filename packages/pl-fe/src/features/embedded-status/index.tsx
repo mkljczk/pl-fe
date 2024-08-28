@@ -2,14 +2,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { fetchStatus } from 'soapbox/actions/statuses';
-import MissingIndicator from 'soapbox/components/missing-indicator';
-import SiteLogo from 'soapbox/components/site-logo';
-import Status from 'soapbox/components/status';
-import { Spinner } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { iframeId } from 'soapbox/iframe';
-import { makeGetStatus } from 'soapbox/selectors';
+import { fetchStatus } from 'pl-fe/actions/statuses';
+import MissingIndicator from 'pl-fe/components/missing-indicator';
+import SiteLogo from 'pl-fe/components/site-logo';
+import Status from 'pl-fe/components/status';
+import { Spinner } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { iframeId } from 'pl-fe/iframe';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 interface IEmbeddedStatus {
   params: {

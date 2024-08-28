@@ -1,6 +1,6 @@
 import { fromJS } from 'immutable';
 
-import { buildStatus } from 'soapbox/jest/factory';
+import { buildStatus } from 'pl-fe/jest/factory';
 
 import { shouldFilter } from './timelines';
 

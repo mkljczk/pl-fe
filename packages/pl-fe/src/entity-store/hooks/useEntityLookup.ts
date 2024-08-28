@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
-import { useAppDispatch } from 'soapbox/hooks/useAppDispatch';
-import { useAppSelector } from 'soapbox/hooks/useAppSelector';
-import { useLoading } from 'soapbox/hooks/useLoading';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useLoading } from 'pl-fe/hooks/useLoading';
 
 import { importEntities } from '../actions';
 import { findEntity } from '../selectors';
@@ -11,7 +11,7 @@ import { findEntity } from '../selectors';
 import type { EntityFn } from './types';
 import type { UseEntityOpts } from './useEntity';
 import type { Entity } from '../types';
-import type { PlfeResponse } from 'soapbox/api';
+import type { PlfeResponse } from 'pl-fe/api';
 
 /** Entities will be filtered through this function until it returns true. */
 type LookupFn<TEntity extends Entity> = (entity: TEntity) => boolean

@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import StillImage, { IStillImage } from 'soapbox/components/still-image';
+import StillImage, { IStillImage } from 'pl-fe/components/still-image';
 
 import Icon from '../icon/icon';
 

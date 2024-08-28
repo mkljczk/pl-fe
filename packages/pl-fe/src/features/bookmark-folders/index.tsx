@@ -2,10 +2,10 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 
-import { useBookmarkFolders } from 'soapbox/api/hooks';
-import List, { ListItem } from 'soapbox/components/list';
-import { Column, Emoji, HStack, Icon, Spinner, Stack } from 'soapbox/components/ui';
-import { useFeatures } from 'soapbox/hooks';
+import { useBookmarkFolders } from 'pl-fe/api/hooks';
+import List, { ListItem } from 'pl-fe/components/list';
+import { Column, Emoji, HStack, Icon, Spinner, Stack } from 'pl-fe/components/ui';
+import { useFeatures } from 'pl-fe/hooks';
 
 import NewFolderForm from './components/new-folder-form';
 

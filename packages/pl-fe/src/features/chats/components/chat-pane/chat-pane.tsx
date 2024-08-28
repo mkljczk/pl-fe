@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Stack } from 'soapbox/components/ui';
-import { ChatWidgetScreens, useChatContext } from 'soapbox/contexts/chat-context';
-import { useStatContext } from 'soapbox/contexts/stat-context';
-import { useChats } from 'soapbox/queries/chats';
+import { Stack } from 'pl-fe/components/ui';
+import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
+import { useStatContext } from 'pl-fe/contexts/stat-context';
+import { useChats } from 'pl-fe/queries/chats';
 
 import ChatList from '../chat-list';
 import ChatSearch from '../chat-search/chat-search';

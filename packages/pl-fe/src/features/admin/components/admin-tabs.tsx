@@ -2,8 +2,8 @@ import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 import { useRouteMatch } from 'react-router-dom';
 
-import { Tabs } from 'soapbox/components/ui';
-import { useAppSelector } from 'soapbox/hooks';
+import { Tabs } from 'pl-fe/components/ui';
+import { useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   dashboard: { id: 'admin_nav.dashboard', defaultMessage: 'Dashboard' },
@@ -19,18 +19,18 @@ const AdminTabs: React.FC = () => {
   const reportsCount = useAppSelector(state => state.admin.openReports.count());
 
   const tabs = [{
-    name: '/soapbox/admin',
+    name: '/pl-fe/admin',
     text: intl.formatMessage(messages.dashboard),
-    to: '/soapbox/admin',
+    to: '/pl-fe/admin',
   }, {
-    name: '/soapbox/admin/reports',
+    name: '/pl-fe/admin/reports',
     text: intl.formatMessage(messages.reports),
-    to: '/soapbox/admin/reports',
+    to: '/pl-fe/admin/reports',
     count: reportsCount,
   }, {
-    name: '/soapbox/admin/approval',
+    name: '/pl-fe/admin/approval',
     text: intl.formatMessage(messages.waitlist),
-    to: '/soapbox/admin/approval',
+    to: '/pl-fe/admin/approval',
     count: approvalCount,
   }];
 

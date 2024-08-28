@@ -1,6 +1,6 @@
-import { ONBOARDING_START, ONBOARDING_END } from 'soapbox/actions/onboarding';
+import { ONBOARDING_START, ONBOARDING_END } from 'pl-fe/actions/onboarding';
 
-import type { OnboardingActions } from 'soapbox/actions/onboarding';
+import type { OnboardingActions } from 'pl-fe/actions/onboarding';
 
 type OnboardingState = {
   needsOnboarding: boolean;

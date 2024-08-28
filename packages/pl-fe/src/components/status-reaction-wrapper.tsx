@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import { simpleEmojiReact } from 'soapbox/actions/emoji-reacts';
-import { openModal } from 'soapbox/actions/modals';
-import { EmojiSelector, Portal } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useOwnAccount, useSoapboxConfig } from 'soapbox/hooks';
-import { userTouching } from 'soapbox/is-mobile';
-import { getReactForStatus } from 'soapbox/utils/emoji-reacts';
+import { simpleEmojiReact } from 'pl-fe/actions/emoji-reacts';
+import { openModal } from 'pl-fe/actions/modals';
+import { EmojiSelector, Portal } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector, useOwnAccount, usePlFeConfig } from 'pl-fe/hooks';
+import { userTouching } from 'pl-fe/is-mobile';
+import { getReactForStatus } from 'pl-fe/utils/emoji-reacts';
 
 interface IStatusReactionWrapper {
   statusId: string;
@@ -17,7 +17,7 @@ const StatusReactionWrapper: React.FC<IStatusReactionWrapper> = ({ statusId, chi
   const dispatch = useAppDispatch();
   const { account: ownAccount } = useOwnAccount();
   const status = useAppSelector(state => state.statuses.get(statusId));
-  const soapboxConfig = useSoapboxConfig();
+  const plFeConfig = usePlFeConfig();
 
   const timeout = useRef<NodeJS.Timeout>();
   const [visible, setVisible] = useState(false);
@@ -69,7 +69,7 @@ const StatusReactionWrapper: React.FC<IStatusReactionWrapper> = ({ statusId, chi
   };
 
   const handleClick: React.EventHandler<React.MouseEvent> = e => {
-    const meEmojiReact = getReactForStatus(status, soapboxConfig.allowedEmoji)?.name || '👍';
+    const meEmojiReact = getReactForStatus(status, plFeConfig.allowedEmoji)?.name || '👍';
 
     if (userTouching.matches) {
       if (ownAccount) {

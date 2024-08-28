@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { fetchInstance } from 'soapbox/actions/instance';
-import { fetchMe } from 'soapbox/actions/me';
-import { loadSoapboxConfig } from 'soapbox/actions/soapbox';
-import LoadingScreen from 'soapbox/components/loading-screen';
+import { fetchInstance } from 'pl-fe/actions/instance';
+import { fetchMe } from 'pl-fe/actions/me';
+import { loadPlFeConfig } from 'pl-fe/actions/pl-fe';
+import LoadingScreen from 'pl-fe/components/loading-screen';
 import {
   useAppSelector,
   useAppDispatch,
   useOwnAccount,
   useLocale,
-} from 'soapbox/hooks';
-import MESSAGES from 'soapbox/messages';
+} from 'pl-fe/hooks';
+import MESSAGES from 'pl-fe/messages';
 
 /** Load initial data from the backend */
 const loadInitial = () => {
@@ -22,16 +22,16 @@ const loadInitial = () => {
     // Await for feature detection
     await dispatch(fetchInstance());
     // Await for configuration
-    await dispatch(loadSoapboxConfig());
+    await dispatch(loadPlFeConfig());
   };
 };
 
-interface ISoapboxLoad {
+interface IPlFeLoad {
   children: React.ReactNode;
 }
 
 /** Initial data loader. */
-const SoapboxLoad: React.FC<ISoapboxLoad> = ({ children }) => {
+const PlFeLoad: React.FC<IPlFeLoad> = ({ children }) => {
   const dispatch = useAppDispatch();
 
   const me = useAppSelector(state => state.me);
@@ -82,4 +82,4 @@ const SoapboxLoad: React.FC<ISoapboxLoad> = ({ children }) => {
   );
 };
 
-export { SoapboxLoad as default };
+export { PlFeLoad as default };

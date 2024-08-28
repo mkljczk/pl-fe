@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { fetchReports } from 'soapbox/actions/admin';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { useAppSelector, useAppDispatch } from 'soapbox/hooks';
+import { fetchReports } from 'pl-fe/actions/admin';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 import Report from '../components/report';
 

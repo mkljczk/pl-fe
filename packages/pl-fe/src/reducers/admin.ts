@@ -18,12 +18,12 @@ import {
   ADMIN_USER_DELETE_SUCCESS,
   ADMIN_USER_APPROVE_REQUEST,
   ADMIN_USER_APPROVE_SUCCESS,
-} from 'soapbox/actions/admin';
-import { normalizeAdminReport, type AdminReport } from 'soapbox/normalizers';
+} from 'pl-fe/actions/admin';
+import { normalizeAdminReport, type AdminReport } from 'pl-fe/normalizers';
 
 import type { AdminAccount, AdminGetAccountsParams, AdminReport as BaseAdminReport } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { Config } from 'soapbox/utils/config-db';
+import type { Config } from 'pl-fe/utils/config-db';
 
 const ReducerRecord = ImmutableRecord({
   reports: ImmutableMap<string, MinifiedReport>(),

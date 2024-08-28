@@ -1,15 +1,15 @@
 import { defineMessages } from 'react-intl';
 
-import toast from 'soapbox/toast';
-import { isLoggedIn } from 'soapbox/utils/auth';
+import toast from 'pl-fe/toast';
+import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { getClient } from '../api';
 
 import { importFetchedAccounts } from './importer';
 
 import type { Account as BaseAccount } from 'pl-api';
-import type { Account } from 'soapbox/normalizers';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { Account } from 'pl-fe/normalizers';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const ALIASES_FETCH_REQUEST = 'ALIASES_FETCH_REQUEST' as const;
 const ALIASES_FETCH_SUCCESS = 'ALIASES_FETCH_SUCCESS' as const;

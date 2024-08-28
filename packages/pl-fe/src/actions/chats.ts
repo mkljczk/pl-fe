@@ -1,6 +1,6 @@
-import { getSettings, changeSetting } from 'soapbox/actions/settings';
+import { getSettings, changeSetting } from 'pl-fe/actions/settings';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const toggleMainWindow = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {

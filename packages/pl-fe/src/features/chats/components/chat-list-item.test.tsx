@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { render, screen } from 'soapbox/jest/test-helpers';
-import { IChat } from 'soapbox/queries/chats';
+import { render, screen } from 'pl-fe/jest/test-helpers';
+import { IChat } from 'pl-fe/queries/chats';
 
 import ChatListItem from './chat-list-item';
 

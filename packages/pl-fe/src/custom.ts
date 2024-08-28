@@ -1,7 +1,7 @@
 /**
  * Functions for dealing with custom build configuration.
  */
-import * as BuildConfig from 'soapbox/build-config';
+import * as BuildConfig from 'pl-fe/build-config';
 
 /** Require a custom JSON file if it exists */
 const custom = (filename: string, fallback: any = {}): any => {

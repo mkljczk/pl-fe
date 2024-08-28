@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { MessageDescriptor, useIntl } from 'react-intl';
 
-import { Button, Form, FormActions, Text } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import { AppDispatch, RootState } from 'soapbox/store';
+import { Button, Form, FormActions, Text } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import { AppDispatch, RootState } from 'pl-fe/store';
 
 interface ICSVExporter {
   messages: {

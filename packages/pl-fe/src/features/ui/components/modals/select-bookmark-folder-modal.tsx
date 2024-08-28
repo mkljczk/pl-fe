@@ -1,16 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { bookmark } from 'soapbox/actions/interactions';
-import { useBookmarkFolders } from 'soapbox/api/hooks';
-import { RadioGroup, RadioItem } from 'soapbox/components/radio';
-import { Emoji, HStack, Icon, Modal, Spinner, Stack } from 'soapbox/components/ui';
-import NewFolderForm from 'soapbox/features/bookmark-folders/components/new-folder-form';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { makeGetStatus } from 'soapbox/selectors';
+import { bookmark } from 'pl-fe/actions/interactions';
+import { useBookmarkFolders } from 'pl-fe/api/hooks';
+import { RadioGroup, RadioItem } from 'pl-fe/components/radio';
+import { Emoji, HStack, Icon, Modal, Spinner, Stack } from 'pl-fe/components/ui';
+import NewFolderForm from 'pl-fe/features/bookmark-folders/components/new-folder-form';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 import type { BaseModalProps } from '../modal-root';
-import type { Status as StatusEntity } from 'soapbox/normalizers';
+import type { Status as StatusEntity } from 'pl-fe/normalizers';
 
 interface SelectBookmarkFolderModalProps {
   statusId: string;

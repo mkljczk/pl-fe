@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useAccount } from 'soapbox/api/hooks';
-import Account from 'soapbox/components/account';
+import { useAccount } from 'pl-fe/api/hooks';
+import Account from 'pl-fe/components/account';
 
 interface IAutosuggestAccount {
   id: string;

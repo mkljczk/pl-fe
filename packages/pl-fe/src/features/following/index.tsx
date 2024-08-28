@@ -1,11 +1,11 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccountLookup, useFollowing } from 'soapbox/api/hooks';
-import Account from 'soapbox/components/account';
-import MissingIndicator from 'soapbox/components/missing-indicator';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Column, Spinner } from 'soapbox/components/ui';
+import { useAccountLookup, useFollowing } from 'pl-fe/api/hooks';
+import Account from 'pl-fe/components/account';
+import MissingIndicator from 'pl-fe/components/missing-indicator';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Column, Spinner } from 'pl-fe/components/ui';
 
 const messages = defineMessages({
   heading: { id: 'column.following', defaultMessage: 'Following' },

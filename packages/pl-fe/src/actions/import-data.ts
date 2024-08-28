@@ -1,10 +1,10 @@
 import { defineMessages } from 'react-intl';
 
-import toast from 'soapbox/toast';
+import toast from 'pl-fe/toast';
 
 import { getClient } from '../api';
 
-import type { RootState } from 'soapbox/store';
+import type { RootState } from 'pl-fe/store';
 
 const IMPORT_FOLLOWS_REQUEST = 'IMPORT_FOLLOWS_REQUEST' as const;
 const IMPORT_FOLLOWS_SUCCESS = 'IMPORT_FOLLOWS_SUCCESS' as const;

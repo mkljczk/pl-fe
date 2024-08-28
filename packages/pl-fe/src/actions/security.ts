@@ -1,17 +1,17 @@
 /**
  * Security: Pleroma-specific account management features.
- * @module soapbox/actions/security
- * @see module:soapbox/actions/auth
+ * @module pl-fe/actions/security
+ * @see module:pl-fe/actions/auth
  */
 
-import { getClient } from 'soapbox/api';
-import toast from 'soapbox/toast';
-import { getLoggedInAccount } from 'soapbox/utils/auth';
-import { normalizeUsername } from 'soapbox/utils/input';
+import { getClient } from 'pl-fe/api';
+import toast from 'pl-fe/toast';
+import { getLoggedInAccount } from 'pl-fe/utils/auth';
+import { normalizeUsername } from 'pl-fe/utils/input';
 
 import { AUTH_LOGGED_OUT, messages } from './auth';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const FETCH_TOKENS_REQUEST = 'FETCH_TOKENS_REQUEST' as const;
 const FETCH_TOKENS_SUCCESS = 'FETCH_TOKENS_SUCCESS' as const;

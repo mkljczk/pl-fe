@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Card, CardBody, Stack, Text } from 'soapbox/components/ui';
+import { Card, CardBody, Stack, Text } from 'pl-fe/components/ui';
 
 interface IBigCard {
   title: React.ReactNode;

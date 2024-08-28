@@ -4,20 +4,20 @@ import escape from 'lodash/escape';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import DropdownMenu from 'soapbox/components/dropdown-menu';
-import { HStack, Icon, Stack, Text } from 'soapbox/components/ui';
-import emojify from 'soapbox/features/emoji';
-import { MediaGallery } from 'soapbox/features/ui/util/async-components';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { ChatKeys, useChatActions } from 'soapbox/queries/chats';
-import { queryClient } from 'soapbox/queries/client';
-import { stripHTML } from 'soapbox/utils/html';
-import { onlyEmoji } from 'soapbox/utils/rich-content';
+import { openModal } from 'pl-fe/actions/modals';
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
+import emojify from 'pl-fe/features/emoji';
+import { MediaGallery } from 'pl-fe/features/ui/util/async-components';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { ChatKeys, useChatActions } from 'pl-fe/queries/chats';
+import { queryClient } from 'pl-fe/queries/client';
+import { stripHTML } from 'pl-fe/utils/html';
+import { onlyEmoji } from 'pl-fe/utils/rich-content';
 
 import type { Chat, CustomEmoji } from 'pl-api';
-import type { Menu as IMenu } from 'soapbox/components/dropdown-menu';
-import type { ChatMessage as ChatMessageEntity } from 'soapbox/normalizers';
+import type { Menu as IMenu } from 'pl-fe/components/dropdown-menu';
+import type { ChatMessage as ChatMessageEntity } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   copy: { id: 'chats.actions.copy', defaultMessage: 'Copy' },

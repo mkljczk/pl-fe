@@ -1,11 +1,11 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { Avatar, Divider, HStack, Stack, Text, Button } from 'soapbox/components/ui';
-import toast from 'soapbox/toast';
-import copy from 'soapbox/utils/copy';
+import { Avatar, Divider, HStack, Stack, Text, Button } from 'pl-fe/components/ui';
+import toast from 'pl-fe/toast';
+import copy from 'pl-fe/utils/copy';
 
-import type { Group } from 'soapbox/normalizers';
+import type { Group } from 'pl-fe/normalizers';
 
 interface IConfirmationStep {
   group: Group | null;

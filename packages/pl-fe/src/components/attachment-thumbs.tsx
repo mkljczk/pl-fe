@@ -1,8 +1,8 @@
 import React, { Suspense } from 'react';
 
-import { openModal } from 'soapbox/actions/modals';
-import { MediaGallery } from 'soapbox/features/ui/util/async-components';
-import { useAppDispatch } from 'soapbox/hooks';
+import { openModal } from 'pl-fe/actions/modals';
+import { MediaGallery } from 'pl-fe/features/ui/util/async-components';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 import type { MediaAttachment } from 'pl-api';
 

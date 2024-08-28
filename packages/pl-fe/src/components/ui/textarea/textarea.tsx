@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useLocale } from 'soapbox/hooks';
-import { getTextDirection } from 'soapbox/utils/rtl';
+import { useLocale } from 'pl-fe/hooks';
+import { getTextDirection } from 'pl-fe/utils/rtl';
 
 import Stack from '../stack/stack';
 import Text from '../text/text';

@@ -1,4 +1,4 @@
-import { useLoggedIn } from 'soapbox/hooks';
+import { useLoggedIn } from 'pl-fe/hooks';
 
 import { useTimelineStream } from './useTimelineStream';
 

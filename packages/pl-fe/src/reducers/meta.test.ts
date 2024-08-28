@@ -1,6 +1,6 @@
 import { Record as ImmutableRecord } from 'immutable';
 
-import { SW_UPDATING, setSwUpdating } from 'soapbox/actions/sw';
+import { SW_UPDATING, setSwUpdating } from 'pl-fe/actions/sw';
 
 import reducer from './meta';
 

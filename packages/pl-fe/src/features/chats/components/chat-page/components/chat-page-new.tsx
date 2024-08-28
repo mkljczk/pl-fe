@@ -2,7 +2,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { CardTitle, HStack, IconButton, Stack } from 'soapbox/components/ui';
+import { CardTitle, HStack, IconButton, Stack } from 'pl-fe/components/ui';
 
 import ChatSearch from '../../chat-search/chat-search';
 

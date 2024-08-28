@@ -1,13 +1,13 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import { useRules } from 'soapbox/api/hooks/admin';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Button, Column, HStack, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import { AdminRule } from 'soapbox/schemas';
-import toast from 'soapbox/toast';
+import { openModal } from 'pl-fe/actions/modals';
+import { useRules } from 'pl-fe/api/hooks/admin';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Button, Column, HStack, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import { AdminRule } from 'pl-fe/schemas';
+import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.rules', defaultMessage: 'Instance rules' },

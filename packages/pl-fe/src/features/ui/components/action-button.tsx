@@ -9,14 +9,14 @@ import {
   authorizeFollowRequest,
   rejectFollowRequest,
   biteAccount,
-} from 'soapbox/actions/accounts';
-import { openModal } from 'soapbox/actions/modals';
-import { useFollow } from 'soapbox/api/hooks';
-import { Button, HStack } from 'soapbox/components/ui';
-import { useAppDispatch, useFeatures, useLoggedIn } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+} from 'pl-fe/actions/accounts';
+import { openModal } from 'pl-fe/actions/modals';
+import { useFollow } from 'pl-fe/api/hooks';
+import { Button, HStack } from 'pl-fe/components/ui';
+import { useAppDispatch, useFeatures, useLoggedIn } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
-import type { Account } from 'soapbox/normalizers';
+import type { Account } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },

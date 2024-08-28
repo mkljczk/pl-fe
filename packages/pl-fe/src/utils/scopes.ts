@@ -1,7 +1,7 @@
 
 import { getFeatures, PLEROMA, TOKI, type Instance } from 'pl-api';
 
-import type { RootState } from 'soapbox/store';
+import type { RootState } from 'pl-fe/store';
 
 /**
  * Get the OAuth scopes to use for login & signup.

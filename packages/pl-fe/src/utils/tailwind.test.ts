@@ -3,15 +3,15 @@ import { Map as ImmutableMap } from 'immutable';
 import { toTailwind, fromLegacyColors, expandPalette } from './tailwind';
 
 describe('toTailwind()', () => {
-  it('handles empty Soapbox config', () => {
-    const soapboxConfig = ImmutableMap<string, any>();
-    const result = toTailwind(soapboxConfig);
+  it('handles empty pl-fe config', () => {
+    const plFeConfig = ImmutableMap<string, any>();
+    const result = toTailwind(plFeConfig);
     const expected = ImmutableMap({ colors: ImmutableMap() });
     expect(result).toEqual(expected);
   });
 
   it('converts brandColor into a Tailwind color palette', () => {
-    const soapboxConfig = ImmutableMap({ brandColor: '#0482d8' });
+    const plFeConfig = ImmutableMap({ brandColor: '#0482d8' });
 
     const expected = {
       brandColor: '#0482d8',
@@ -31,12 +31,12 @@ describe('toTailwind()', () => {
       },
     };
 
-    const result = toTailwind(soapboxConfig);
+    const result = toTailwind(plFeConfig);
     expect(result.toJS()).toMatchObject(expected);
   });
 
   it('prefers Tailwind colors object over legacy colors', () => {
-    const soapboxConfig = ImmutableMap({
+    const plFeConfig = ImmutableMap({
       brandColor: '#0482d8',
       colors: ImmutableMap({
         primary: ImmutableMap({
@@ -63,14 +63,14 @@ describe('toTailwind()', () => {
       },
     };
 
-    const result = toTailwind(soapboxConfig);
+    const result = toTailwind(plFeConfig);
     expect(result.toJS()).toMatchObject(expected);
   });
 });
 
 describe('fromLegacyColors()', () => {
   it('converts only brandColor', () => {
-    const soapboxConfig = ImmutableMap({ brandColor: '#0482d8' });
+    const plFeConfig = ImmutableMap({ brandColor: '#0482d8' });
 
     const expected = {
       primary: {
@@ -124,12 +124,12 @@ describe('fromLegacyColors()', () => {
       },
     };
 
-    const result = fromLegacyColors(soapboxConfig);
+    const result = fromLegacyColors(plFeConfig);
     expect(result).toEqual(expected);
   });
 
   it('converts both legacy colors', () => {
-    const soapboxConfig = ImmutableMap({
+    const plFeConfig = ImmutableMap({
       brandColor: '#0482d8',
       accentColor: '#2bd110',
     });
@@ -185,7 +185,7 @@ describe('fromLegacyColors()', () => {
       },
     };
 
-    const result = fromLegacyColors(soapboxConfig);
+    const result = fromLegacyColors(plFeConfig);
     expect(result).toEqual(expected);
   });
 });

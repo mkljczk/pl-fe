@@ -1,13 +1,13 @@
 import React from 'react';
 
-import ForkAwesomeIcon from 'soapbox/components/fork-awesome-icon';
-import List, { ListItem } from 'soapbox/components/list';
-import { Widget, HStack } from 'soapbox/components/ui';
-import { useInstance, useSettings, useSoapboxConfig } from 'soapbox/hooks';
+import ForkAwesomeIcon from 'pl-fe/components/fork-awesome-icon';
+import List, { ListItem } from 'pl-fe/components/list';
+import { Widget, HStack } from 'pl-fe/components/ui';
+import { useInstance, useSettings, usePlFeConfig } from 'pl-fe/hooks';
 
 const PromoPanel: React.FC = () => {
   const instance = useInstance();
-  const { promoPanel } = useSoapboxConfig();
+  const { promoPanel } = usePlFeConfig();
   const { locale } = useSettings();
 
   const promoItems = promoPanel.get('items');

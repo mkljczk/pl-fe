@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { closeModal } from 'soapbox/actions/modals';
-import { useAnnouncements } from 'soapbox/api/hooks/admin/useAnnouncements';
-import { Form, FormGroup, HStack, Modal, Stack, Text, Textarea, Toggle } from 'soapbox/components/ui';
-import { DatePicker } from 'soapbox/features/ui/util/async-components';
-import { useAppDispatch } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { closeModal } from 'pl-fe/actions/modals';
+import { useAnnouncements } from 'pl-fe/api/hooks/admin/useAnnouncements';
+import { Form, FormGroup, HStack, Modal, Stack, Text, Textarea, Toggle } from 'pl-fe/components/ui';
+import { DatePicker } from 'pl-fe/features/ui/util/async-components';
+import { useAppDispatch } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 import type { BaseModalProps } from '../modal-root';
-import type { AdminAnnouncement } from 'soapbox/schemas';
+import type { AdminAnnouncement } from 'pl-fe/schemas';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_announcement.save', defaultMessage: 'Save' },

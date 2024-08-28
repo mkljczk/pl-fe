@@ -2,15 +2,15 @@ import IntlMessageFormat from 'intl-messageformat';
 import 'intl-pluralrules';
 import { defineMessages } from 'react-intl';
 
-import { getClient } from 'soapbox/api';
-import { getNotificationStatus } from 'soapbox/features/notifications/components/notification';
-import { normalizeNotification, normalizeNotifications, type Notification } from 'soapbox/normalizers';
-import { getFilters, regexFromFilters } from 'soapbox/selectors';
-import { isLoggedIn } from 'soapbox/utils/auth';
-import { compareId } from 'soapbox/utils/comparators';
-import { unescapeHTML } from 'soapbox/utils/html';
-import { EXCLUDE_TYPES, NOTIFICATION_TYPES } from 'soapbox/utils/notification';
-import { joinPublicPath } from 'soapbox/utils/static';
+import { getClient } from 'pl-fe/api';
+import { getNotificationStatus } from 'pl-fe/features/notifications/components/notification';
+import { normalizeNotification, normalizeNotifications, type Notification } from 'pl-fe/normalizers';
+import { getFilters, regexFromFilters } from 'pl-fe/selectors';
+import { isLoggedIn } from 'pl-fe/utils/auth';
+import { compareId } from 'pl-fe/utils/comparators';
+import { unescapeHTML } from 'pl-fe/utils/html';
+import { EXCLUDE_TYPES, NOTIFICATION_TYPES } from 'pl-fe/utils/notification';
+import { joinPublicPath } from 'pl-fe/utils/static';
 
 import { fetchRelationships } from './accounts';
 import {
@@ -23,7 +23,7 @@ import { saveMarker } from './markers';
 import { getSettings, saveSettings } from './settings';
 
 import type { Account, Notification as BaseNotification, PaginatedResponse, Status } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const NOTIFICATIONS_UPDATE = 'NOTIFICATIONS_UPDATE' as const;
 const NOTIFICATIONS_UPDATE_NOOP = 'NOTIFICATIONS_UPDATE_NOOP' as const;

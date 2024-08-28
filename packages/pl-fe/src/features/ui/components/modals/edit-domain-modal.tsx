@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { closeModal } from 'soapbox/actions/modals';
-import { useDomains } from 'soapbox/api/hooks/admin';
-import { Form, FormGroup, HStack, Input, Modal, Stack, Text, Toggle } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { closeModal } from 'pl-fe/actions/modals';
+import { useDomains } from 'pl-fe/api/hooks/admin';
+import { Form, FormGroup, HStack, Input, Modal, Stack, Text, Toggle } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 import type { BaseModalProps } from '../modal-root';
-import type { Domain } from 'soapbox/schemas';
+import type { Domain } from 'pl-fe/schemas';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_domain.save', defaultMessage: 'Save' },

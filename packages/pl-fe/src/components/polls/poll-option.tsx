@@ -5,7 +5,7 @@ import { Motion, presets, spring } from 'react-motion';
 
 import { HStack, Icon, Text } from '../ui';
 
-import type { Poll } from 'soapbox/normalizers';
+import type { Poll } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   voted: { id: 'poll.voted', defaultMessage: 'You voted for this answer' },

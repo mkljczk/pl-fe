@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { useClient } from 'soapbox/hooks';
-import { queryClient } from 'soapbox/queries/client';
-import { domainSchema, type Domain } from 'soapbox/schemas';
+import { useClient } from 'pl-fe/hooks';
+import { queryClient } from 'pl-fe/queries/client';
+import { domainSchema, type Domain } from 'pl-fe/schemas';
 
 interface CreateDomainParams {
   domain: string;

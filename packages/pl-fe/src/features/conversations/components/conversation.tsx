@@ -1,10 +1,10 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { markConversationRead } from 'soapbox/actions/conversations';
-import StatusContainer from 'soapbox/containers/status-container';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { selectAccount } from 'soapbox/selectors';
+import { markConversationRead } from 'pl-fe/actions/conversations';
+import StatusContainer from 'pl-fe/containers/status-container';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { selectAccount } from 'pl-fe/selectors';
 
 interface IConversation {
   conversationId: string;

@@ -29,7 +29,7 @@ import { TIMELINE_DELETE } from '../actions/timelines';
 
 import type { AccountWarning, Notification as BaseNotification, Markers, PaginatedResponse, Relationship, RelationshipSeveranceEvent, Report } from 'pl-api';
 import type { AnyAction } from 'redux';
-import type { Notification } from 'soapbox/normalizers';
+import type { Notification } from 'pl-fe/normalizers';
 
 const QueuedNotificationRecord = ImmutableRecord({
   notification: {} as any as BaseNotification,

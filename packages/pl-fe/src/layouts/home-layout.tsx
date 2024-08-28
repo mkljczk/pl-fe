@@ -3,8 +3,8 @@ import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { uploadCompose } from 'soapbox/actions/compose';
-import LinkFooter from 'soapbox/features/ui/components/link-footer';
+import { uploadCompose } from 'pl-fe/actions/compose';
+import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
   WhoToFollowPanel,
   TrendsPanel,
@@ -14,9 +14,9 @@ import {
   BirthdayPanel,
   CtaBanner,
   AnnouncementsPanel,
-} from 'soapbox/features/ui/util/async-components';
-import { useAppSelector, useOwnAccount, useFeatures, useSoapboxConfig, useDraggedFiles, useAppDispatch } from 'soapbox/hooks';
-import { useIsMobile } from 'soapbox/hooks/useIsMobile';
+} from 'pl-fe/features/ui/util/async-components';
+import { useAppSelector, useOwnAccount, useFeatures, usePlFeConfig, useDraggedFiles, useAppDispatch } from 'pl-fe/hooks';
+import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 import { Avatar, Card, CardBody, HStack, Layout } from '../components/ui';
 import ComposeForm from '../features/compose/components/compose-form';
@@ -32,14 +32,14 @@ const HomeLayout: React.FC<IHomeLayout> = ({ children }) => {
   const me = useAppSelector(state => state.me);
   const { account } = useOwnAccount();
   const features = useFeatures();
-  const soapboxConfig = useSoapboxConfig();
+  const plFeConfig = usePlFeConfig();
 
   const composeId = 'home';
   const composeBlock = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
-  const hasCrypto = typeof soapboxConfig.cryptoAddresses.getIn([0, 'ticker']) === 'string';
-  const cryptoLimit = soapboxConfig.cryptoDonatePanel.get('limit', 0);
+  const hasCrypto = typeof plFeConfig.cryptoAddresses.getIn([0, 'ticker']) === 'string';
+  const cryptoLimit = plFeConfig.cryptoDonatePanel.get('limit', 0);
 
   const { isDragging, isDraggedOver } = useDraggedFiles(composeBlock, (files) => {
     dispatch(uploadCompose(composeId, files, intl));

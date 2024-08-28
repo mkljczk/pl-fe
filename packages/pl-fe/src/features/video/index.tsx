@@ -4,9 +4,9 @@ import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Blurhash from 'soapbox/components/blurhash';
-import Icon from 'soapbox/components/icon';
-import { isPanoramic, isPortrait, minimumAspectRatio, maximumAspectRatio } from 'soapbox/utils/media-aspect-ratio';
+import Blurhash from 'pl-fe/components/blurhash';
+import Icon from 'pl-fe/components/icon';
+import { isPanoramic, isPortrait, minimumAspectRatio, maximumAspectRatio } from 'pl-fe/utils/media-aspect-ratio';
 
 import { isFullscreen, requestFullscreen, exitFullscreen } from '../ui/util/fullscreen';
 

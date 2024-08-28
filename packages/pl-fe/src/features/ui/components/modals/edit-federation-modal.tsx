@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { updateMrf } from 'soapbox/actions/mrf';
-import List, { ListItem } from 'soapbox/components/list';
-import { Modal, Toggle } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch } from 'soapbox/hooks';
-import { makeGetRemoteInstance } from 'soapbox/selectors';
-import toast from 'soapbox/toast';
+import { updateMrf } from 'pl-fe/actions/mrf';
+import List, { ListItem } from 'pl-fe/components/list';
+import { Modal, Toggle } from 'pl-fe/components/ui';
+import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import { makeGetRemoteInstance } from 'pl-fe/selectors';
+import toast from 'pl-fe/toast';
 
 import type { BaseModalProps } from '../modal-root';
 

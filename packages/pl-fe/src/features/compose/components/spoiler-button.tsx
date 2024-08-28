@@ -1,8 +1,8 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeComposeSpoilerness } from 'soapbox/actions/compose';
-import { useAppDispatch, useCompose } from 'soapbox/hooks';
+import { changeComposeSpoilerness } from 'pl-fe/actions/compose';
+import { useAppDispatch, useCompose } from 'pl-fe/hooks';
 
 import ComposeFormButton from './compose-form-button';
 

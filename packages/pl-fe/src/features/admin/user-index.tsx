@@ -2,11 +2,11 @@ import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { expandUserIndex, fetchUserIndex, setUserIndexQuery } from 'soapbox/actions/admin';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Column, Input } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { expandUserIndex, fetchUserIndex, setUserIndexQuery } from 'pl-fe/actions/admin';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Column, Input } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.users', defaultMessage: 'Users' },

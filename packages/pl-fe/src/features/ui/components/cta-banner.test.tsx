@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { storeClosed, storeLoggedIn, storeOpen } from 'soapbox/jest/mock-stores';
-import { render, screen } from 'soapbox/jest/test-helpers';
+import { storeClosed, storeLoggedIn, storeOpen } from 'pl-fe/jest/mock-stores';
+import { render, screen } from 'pl-fe/jest/test-helpers';
 
 import CtaBanner from './cta-banner';
 

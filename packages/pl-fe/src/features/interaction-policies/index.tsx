@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useInteractionPolicies } from 'soapbox/api/hooks';
-import List, { ListItem } from 'soapbox/components/list';
-import { Button, CardTitle, Column, Form, FormActions, Tabs } from 'soapbox/components/ui';
-import { InlineMultiselect } from 'soapbox/components/ui/inline-multiselect/inline-multiselect';
-import toast from 'soapbox/toast';
+import { useInteractionPolicies } from 'pl-fe/api/hooks';
+import List, { ListItem } from 'pl-fe/components/list';
+import { Button, CardTitle, Column, Form, FormActions, Tabs } from 'pl-fe/components/ui';
+import { InlineMultiselect } from 'pl-fe/components/ui/inline-multiselect/inline-multiselect';
+import toast from 'pl-fe/toast';
 
 import Warning from '../compose/components/warning';
 

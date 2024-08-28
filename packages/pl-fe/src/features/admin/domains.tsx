@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import { useDomains } from 'soapbox/api/hooks/admin';
-import { dateFormatOptions } from 'soapbox/components/relative-timestamp';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Button, Column, HStack, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { openModal } from 'pl-fe/actions/modals';
+import { useDomains } from 'pl-fe/api/hooks/admin';
+import { dateFormatOptions } from 'pl-fe/components/relative-timestamp';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Button, Column, HStack, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 import Indicator from '../developers/components/indicator';
 
-import type { Domain as DomainEntity } from 'soapbox/schemas';
+import type { Domain as DomainEntity } from 'pl-fe/schemas';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.domains', defaultMessage: 'Domains' },

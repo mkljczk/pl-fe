@@ -1,13 +1,13 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import { cancelScheduledStatus } from 'soapbox/actions/scheduled-statuses';
-import { getSettings } from 'soapbox/actions/settings';
-import { Button, HStack } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import { openModal } from 'pl-fe/actions/modals';
+import { cancelScheduledStatus } from 'pl-fe/actions/scheduled-statuses';
+import { getSettings } from 'pl-fe/actions/settings';
+import { Button, HStack } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
 
-import type { Status as StatusEntity } from 'soapbox/normalizers';
+import type { Status as StatusEntity } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   cancel: { id: 'scheduled_status.cancel', defaultMessage: 'Cancel' },

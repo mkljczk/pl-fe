@@ -1,11 +1,11 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Account from 'soapbox/components/account';
-import Icon from 'soapbox/components/icon';
-import { HStack, Text } from 'soapbox/components/ui';
+import Account from 'pl-fe/components/account';
+import Icon from 'pl-fe/components/icon';
+import { HStack, Text } from 'pl-fe/components/ui';
 
-import type { Account as AccountEntity } from 'soapbox/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers';
 
 interface IMovedNote {
   from: AccountEntity;

@@ -1,13 +1,13 @@
 /**
  * Accounts Meta: private user data only the owner should see.
- * @module soapbox/reducers/accounts_meta
+ * @module pl-fe/reducers/accounts_meta
  */
 
 import { produce } from 'immer';
 import { Account, accountSchema } from 'pl-api';
 
-import { VERIFY_CREDENTIALS_SUCCESS, AUTH_ACCOUNT_REMEMBER_SUCCESS } from 'soapbox/actions/auth';
-import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS } from 'soapbox/actions/me';
+import { VERIFY_CREDENTIALS_SUCCESS, AUTH_ACCOUNT_REMEMBER_SUCCESS } from 'pl-fe/actions/auth';
+import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS } from 'pl-fe/actions/me';
 
 import type { AnyAction } from 'redux';
 

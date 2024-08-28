@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
-import { __stub } from 'soapbox/api';
-import { buildRelationship } from 'soapbox/jest/factory';
-import { createTestStore, queryClient, renderHook, rootState, waitFor } from 'soapbox/jest/test-helpers';
-import { Store } from 'soapbox/store';
+import { __stub } from 'pl-fe/api';
+import { buildRelationship } from 'pl-fe/jest/factory';
+import { createTestStore, queryClient, renderHook, rootState, waitFor } from 'pl-fe/jest/test-helpers';
+import { Store } from 'pl-fe/store';
 
 import { useFetchRelationships } from './relationships';
 

@@ -5,11 +5,11 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { createSelector } from 'reselect';
 
-import { addComposeLanguage, changeComposeLanguage, changeComposeModifiedLanguage, deleteComposeLanguage } from 'soapbox/actions/compose';
-import DropdownMenu from 'soapbox/components/dropdown-menu';
-import { Button, Icon, Input } from 'soapbox/components/ui';
-import { type Language, languages as languagesObject } from 'soapbox/features/preferences';
-import { useAppDispatch, useAppSelector, useCompose, useFeatures } from 'soapbox/hooks';
+import { addComposeLanguage, changeComposeLanguage, changeComposeModifiedLanguage, deleteComposeLanguage } from 'pl-fe/actions/compose';
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import { Button, Icon, Input } from 'pl-fe/components/ui';
+import { type Language, languages as languagesObject } from 'pl-fe/features/preferences';
+import { useAppDispatch, useAppSelector, useCompose, useFeatures } from 'pl-fe/hooks';
 
 const getFrequentlyUsedLanguages = createSelector([
   state => state.settings.get('frequentlyUsedLanguages', ImmutableMap()),

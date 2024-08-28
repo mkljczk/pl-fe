@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchBubbleTimeline } from 'soapbox/actions/timelines';
-import PullToRefresh from 'soapbox/components/pull-to-refresh';
-import { Column } from 'soapbox/components/ui';
-import { useAppDispatch, useSettings, useTheme } from 'soapbox/hooks';
-import { useIsMobile } from 'soapbox/hooks/useIsMobile';
+import { fetchBubbleTimeline } from 'pl-fe/actions/timelines';
+import PullToRefresh from 'pl-fe/components/pull-to-refresh';
+import { Column } from 'pl-fe/components/ui';
+import { useAppDispatch, useSettings, useTheme } from 'pl-fe/hooks';
+import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 import Timeline from '../ui/components/timeline';
 

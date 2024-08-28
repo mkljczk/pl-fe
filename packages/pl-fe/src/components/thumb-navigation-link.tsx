@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-import IconWithCounter from 'soapbox/components/icon-with-counter';
-import { Icon } from 'soapbox/components/ui';
-import { useSettings } from 'soapbox/hooks';
+import IconWithCounter from 'pl-fe/components/icon-with-counter';
+import { Icon } from 'pl-fe/components/ui';
+import { useSettings } from 'pl-fe/hooks';
 
 interface IThumbNavigationLink {
   count?: number;

@@ -19,7 +19,7 @@ import {
   EVENT_SUBMIT_FAIL,
   EVENT_COMPOSE_CANCEL,
   EVENT_FORM_SET,
-} from 'soapbox/actions/events';
+} from 'pl-fe/actions/events';
 
 import type { Location, MediaAttachment } from 'pl-api';
 

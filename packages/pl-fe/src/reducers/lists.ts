@@ -7,7 +7,7 @@ import {
   LIST_CREATE_SUCCESS,
   LIST_UPDATE_SUCCESS,
   LIST_DELETE_SUCCESS,
-} from 'soapbox/actions/lists';
+} from 'pl-fe/actions/lists';
 
 import type { List } from 'pl-api';
 import type { AnyAction } from 'redux';

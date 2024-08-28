@@ -1,6 +1,6 @@
 import { useAppSelector } from './useAppSelector';
 
-import type { ReducerCompose } from 'soapbox/reducers/compose';
+import type { ReducerCompose } from 'pl-fe/reducers/compose';
 
 /** Get compose for given key with fallback to 'default' */
 const useCompose = <ID extends string>(composeId: ID extends 'default' ? never : ID): ReturnType<typeof ReducerCompose> =>

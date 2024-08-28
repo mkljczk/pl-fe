@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Text } from 'soapbox/components/ui';
-import { useSettings, useSoapboxConfig } from 'soapbox/hooks';
+import { Text } from 'pl-fe/components/ui';
+import { useSettings, usePlFeConfig } from 'pl-fe/hooks';
 
 interface INavlinks {
   type: string;
@@ -10,7 +10,7 @@ interface INavlinks {
 
 const Navlinks: React.FC<INavlinks> = ({ type }) => {
   const { locale } = useSettings();
-  const { copyright, navlinks } = useSoapboxConfig();
+  const { copyright, navlinks } = usePlFeConfig();
 
   return (
     <footer className='relative mx-auto mt-auto max-w-7xl py-8'>

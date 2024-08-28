@@ -1,6 +1,6 @@
 import type { Notification } from 'pl-api';
 
-/** Notification types known to Soapbox. */
+/** Notification types known to pl-fe. */
 const NOTIFICATION_TYPES = [
   'follow',
   'follow_request',

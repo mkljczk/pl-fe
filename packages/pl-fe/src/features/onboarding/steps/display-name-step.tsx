@@ -1,13 +1,13 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { patchMe } from 'soapbox/actions/me';
-import { BigCard } from 'soapbox/components/big-card';
-import { Button, FormGroup, Input, Stack } from 'soapbox/components/ui';
-import { useAppDispatch, useOwnAccount } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { patchMe } from 'pl-fe/actions/me';
+import { BigCard } from 'pl-fe/components/big-card';
+import { Button, FormGroup, Input, Stack } from 'pl-fe/components/ui';
+import { useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
-import type { PlfeResponse } from 'soapbox/api';
+import type { PlfeResponse } from 'pl-fe/api';
 
 const messages = defineMessages({
   usernamePlaceholder: { id: 'onboarding.display_name.placeholder', defaultMessage: 'Eg. John Smith' },

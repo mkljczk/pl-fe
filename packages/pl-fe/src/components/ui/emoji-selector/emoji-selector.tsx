@@ -2,13 +2,13 @@ import { shift, useFloating, Placement, offset, OffsetOptions } from '@floating-
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 
-import EmojiComponent from 'soapbox/components/ui/emoji/emoji';
-import HStack from 'soapbox/components/ui/hstack/hstack';
-import IconButton from 'soapbox/components/ui/icon-button/icon-button';
-import EmojiPickerDropdown from 'soapbox/features/emoji/components/emoji-picker-dropdown';
-import { useClickOutside, useFeatures, useSoapboxConfig } from 'soapbox/hooks';
+import EmojiComponent from 'pl-fe/components/ui/emoji/emoji';
+import HStack from 'pl-fe/components/ui/hstack/hstack';
+import IconButton from 'pl-fe/components/ui/icon-button/icon-button';
+import EmojiPickerDropdown from 'pl-fe/features/emoji/components/emoji-picker-dropdown';
+import { useClickOutside, useFeatures, usePlFeConfig } from 'pl-fe/hooks';
 
-import type { Emoji } from 'soapbox/features/emoji';
+import type { Emoji } from 'pl-fe/features/emoji';
 
 interface IEmojiButton {
   /** Unicode emoji character. */
@@ -61,7 +61,7 @@ const EmojiSelector: React.FC<IEmojiSelector> = ({
   offsetOptions,
   all = true,
 }): JSX.Element => {
-  const soapboxConfig = useSoapboxConfig();
+  const plFeConfig = usePlFeConfig();
   const { customEmojiReacts } = useFeatures();
 
   const [expanded, setExpanded] = useState(false);
@@ -122,7 +122,7 @@ const EmojiSelector: React.FC<IEmojiSelector> = ({
         <HStack
           className={clsx('z-[999] flex w-max max-w-[100vw] flex-wrap space-x-3 rounded-full bg-white px-3 py-2.5 shadow-lg focus:outline-none dark:bg-gray-900 dark:ring-2 dark:ring-primary-700')}
         >
-          {Array.from(soapboxConfig.allowedEmoji).map((emoji, i) => (
+          {Array.from(plFeConfig.allowedEmoji).map((emoji, i) => (
             <EmojiButton
               key={i}
               emoji={emoji}

@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchMfa } from 'soapbox/actions/mfa';
-import List, { ListItem } from 'soapbox/components/list';
-import { Card, CardBody, CardHeader, CardTitle, Column, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
+import { fetchMfa } from 'pl-fe/actions/mfa';
+import List, { ListItem } from 'pl-fe/components/list';
+import { Card, CardBody, CardHeader, CardTitle, Column, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'pl-fe/hooks';
 
 import Preferences from '../preferences';
 

@@ -3,14 +3,14 @@ import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
-import { openModal } from 'soapbox/actions/modals';
-import { fetchAccountTimeline } from 'soapbox/actions/timelines';
-import { useAccountLookup } from 'soapbox/api/hooks';
-import LoadMore from 'soapbox/components/load-more';
-import MissingIndicator from 'soapbox/components/missing-indicator';
-import { Column, Spinner } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { type AccountGalleryAttachment, getAccountGallery } from 'soapbox/selectors';
+import { openModal } from 'pl-fe/actions/modals';
+import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
+import { useAccountLookup } from 'pl-fe/api/hooks';
+import LoadMore from 'pl-fe/components/load-more';
+import MissingIndicator from 'pl-fe/components/missing-indicator';
+import { Column, Spinner } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { type AccountGalleryAttachment, getAccountGallery } from 'pl-fe/selectors';
 
 import MediaItem from './components/media-item';
 

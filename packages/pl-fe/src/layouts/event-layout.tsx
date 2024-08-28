@@ -2,18 +2,18 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { Column, Layout, Tabs } from 'soapbox/components/ui';
-import PlaceholderStatus from 'soapbox/features/placeholder/components/placeholder-status';
-import LinkFooter from 'soapbox/features/ui/components/link-footer';
+import { Column, Layout, Tabs } from 'pl-fe/components/ui';
+import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
+import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
   EventHeader,
   CtaBanner,
   SignUpPanel,
   TrendsPanel,
   WhoToFollowPanel,
-} from 'soapbox/features/ui/util/async-components';
-import { useAppSelector, useFeatures } from 'soapbox/hooks';
-import { makeGetStatus } from 'soapbox/selectors';
+} from 'pl-fe/features/ui/util/async-components';
+import { useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 const getStatus = makeGetStatus();
 

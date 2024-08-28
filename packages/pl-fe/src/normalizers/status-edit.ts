@@ -4,9 +4,9 @@
 import escapeTextContentForBrowser from 'escape-html';
 import DOMPurify from 'isomorphic-dompurify';
 
-import emojify from 'soapbox/features/emoji';
-import { stripCompatibilityFeatures } from 'soapbox/utils/html';
-import { makeEmojiMap } from 'soapbox/utils/normalizers';
+import emojify from 'pl-fe/features/emoji';
+import { stripCompatibilityFeatures } from 'pl-fe/utils/html';
+import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
 import { normalizePollEdit } from './poll';
 

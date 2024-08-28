@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeEmail } from 'soapbox/actions/security';
-import { Button, Column, Form, FormActions, FormGroup, Input } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { changeEmail } from 'pl-fe/actions/security';
+import { Button, Column, Form, FormActions, FormGroup, Input } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   header: { id: 'edit_email.header', defaultMessage: 'Change email' },

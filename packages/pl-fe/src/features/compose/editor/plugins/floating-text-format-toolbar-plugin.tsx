@@ -39,8 +39,8 @@ import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { Icon } from 'soapbox/components/ui';
-import { useInstance } from 'soapbox/hooks';
+import { Icon } from 'pl-fe/components/ui';
+import { useInstance } from 'pl-fe/hooks';
 
 import { getDOMRangeRect } from '../utils/get-dom-range-rect';
 import { getSelectedNode } from '../utils/get-selected-node';

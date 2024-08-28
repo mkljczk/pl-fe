@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Modal, Spinner } from 'soapbox/components/ui';
-import Account from 'soapbox/features/birthdays/account';
-import { useAppSelector } from 'soapbox/hooks';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Modal, Spinner } from 'pl-fe/components/ui';
+import Account from 'pl-fe/features/birthdays/account';
+import { useAppSelector } from 'pl-fe/hooks';
 
 import type { BaseModalProps } from '../modal-root';
 

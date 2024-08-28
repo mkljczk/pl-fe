@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import React, { useCallback, useRef } from 'react';
 
-import { changeMediaOrder } from 'soapbox/actions/compose';
-import { HStack } from 'soapbox/components/ui';
-import { useAppDispatch, useCompose } from 'soapbox/hooks';
+import { changeMediaOrder } from 'pl-fe/actions/compose';
+import { HStack } from 'pl-fe/components/ui';
+import { useAppDispatch, useCompose } from 'pl-fe/hooks';
 
 import Upload from './upload';
 import UploadProgress from './upload-progress';

@@ -2,12 +2,12 @@ import { mediaAttachmentSchema } from 'pl-api';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import GroupAvatar from 'soapbox/components/groups/group-avatar';
-import StillImage from 'soapbox/components/still-image';
-import { HStack, Icon, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import { isDefaultHeader } from 'soapbox/utils/accounts';
+import { openModal } from 'pl-fe/actions/modals';
+import GroupAvatar from 'pl-fe/components/groups/group-avatar';
+import StillImage from 'pl-fe/components/still-image';
+import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import { isDefaultHeader } from 'pl-fe/utils/accounts';
 
 import GroupActionButton from './group-action-button';
 import GroupMemberCount from './group-member-count';
@@ -15,7 +15,7 @@ import GroupOptionsButton from './group-options-button';
 import GroupPrivacy from './group-privacy';
 import GroupRelationship from './group-relationship';
 
-import type { Group } from 'soapbox/normalizers';
+import type { Group } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   header: { id: 'group.header.alt', defaultMessage: 'Group header' },

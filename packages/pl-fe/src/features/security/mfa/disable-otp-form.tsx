@@ -2,10 +2,10 @@ import React, { useState, useCallback } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { disableMfa } from 'soapbox/actions/mfa';
-import { Button, Form, FormGroup, Input, FormActions, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { disableMfa } from 'pl-fe/actions/mfa';
+import { Button, Form, FormGroup, Input, FormActions, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   mfa_setup_disable_button: { id: 'column.mfa_disable_button', defaultMessage: 'Disable' },

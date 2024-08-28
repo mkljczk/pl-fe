@@ -1,8 +1,8 @@
 import { QRCodeCanvas as QRCode } from 'qrcode.react';
 import React from 'react';
 
-import CopyableInput from 'soapbox/components/copyable-input';
-import Icon from 'soapbox/components/icon';
+import CopyableInput from 'pl-fe/components/copyable-input';
+import Icon from 'pl-fe/components/icon';
 
 import { getExplorerUrl } from '../utils/block-explorer';
 import { getTitle } from '../utils/coin-db';

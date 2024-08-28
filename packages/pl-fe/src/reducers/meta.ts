@@ -1,7 +1,7 @@
 import { Record as ImmutableRecord } from 'immutable';
 
-import { INSTANCE_FETCH_FAIL, type InstanceAction } from 'soapbox/actions/instance';
-import { SW_UPDATING, type SwAction } from 'soapbox/actions/sw';
+import { INSTANCE_FETCH_FAIL, type InstanceAction } from 'pl-fe/actions/instance';
+import { SW_UPDATING, type SwAction } from 'pl-fe/actions/sw';
 
 const ReducerRecord = ImmutableRecord({
   /** Whether /api/v1/instance 404'd (and we should display the external auth form). */

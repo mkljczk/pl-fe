@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { joinEvent } from 'soapbox/actions/events';
-import { closeModal } from 'soapbox/actions/modals';
-import { FormGroup, Modal, Textarea } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import { joinEvent } from 'pl-fe/actions/events';
+import { closeModal } from 'pl-fe/actions/modals';
+import { FormGroup, Modal, Textarea } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 import { BaseModalProps } from '../modal-root';
 

@@ -1,7 +1,7 @@
 import { saveSettings } from './settings';
 
-import type { Emoji } from 'soapbox/features/emoji';
-import type { AppDispatch } from 'soapbox/store';
+import type { Emoji } from 'pl-fe/features/emoji';
+import type { AppDispatch } from 'pl-fe/store';
 
 const EMOJI_CHOOSE = 'EMOJI_CHOOSE';
 

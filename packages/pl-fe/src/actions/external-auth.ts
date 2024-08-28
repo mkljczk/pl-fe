@@ -1,22 +1,22 @@
 /**
  * External Auth: workflow for logging in to remote servers.
- * @module soapbox/actions/external_auth
- * @see module:soapbox/actions/auth
- * @see module:soapbox/actions/apps
- * @see module:soapbox/actions/oauth
+ * @module pl-fe/actions/external_auth
+ * @see module:pl-fe/actions/auth
+ * @see module:pl-fe/actions/apps
+ * @see module:pl-fe/actions/oauth
  */
 
 import { instanceSchema, PlApiClient, type Instance } from 'pl-api';
 
-import { createApp } from 'soapbox/actions/apps';
-import { authLoggedIn, verifyCredentials, switchAccount } from 'soapbox/actions/auth';
-import { obtainOAuthToken } from 'soapbox/actions/oauth';
-import { parseBaseURL } from 'soapbox/utils/auth';
-import sourceCode from 'soapbox/utils/code';
-import { getQuirks } from 'soapbox/utils/quirks';
-import { getInstanceScopes } from 'soapbox/utils/scopes';
+import { createApp } from 'pl-fe/actions/apps';
+import { authLoggedIn, verifyCredentials, switchAccount } from 'pl-fe/actions/auth';
+import { obtainOAuthToken } from 'pl-fe/actions/oauth';
+import { parseBaseURL } from 'pl-fe/utils/auth';
+import sourceCode from 'pl-fe/utils/code';
+import { getQuirks } from 'pl-fe/utils/quirks';
+import { getInstanceScopes } from 'pl-fe/utils/scopes';
 
-import type { AppDispatch } from 'soapbox/store';
+import type { AppDispatch } from 'pl-fe/store';
 
 const fetchExternalInstance = (baseURL: string) =>
   (new PlApiClient(baseURL)).instance.getInstance()

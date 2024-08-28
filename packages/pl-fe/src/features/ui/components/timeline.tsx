@@ -3,12 +3,12 @@ import debounce from 'lodash/debounce';
 import React, { useCallback } from 'react';
 import { defineMessages } from 'react-intl';
 
-import { dequeueTimeline, scrollTopTimeline } from 'soapbox/actions/timelines';
-import ScrollTopButton from 'soapbox/components/scroll-top-button';
-import StatusList, { IStatusList } from 'soapbox/components/status-list';
-import { Portal } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch } from 'soapbox/hooks';
-import { makeGetStatusIds } from 'soapbox/selectors';
+import { dequeueTimeline, scrollTopTimeline } from 'pl-fe/actions/timelines';
+import ScrollTopButton from 'pl-fe/components/scroll-top-button';
+import StatusList, { IStatusList } from 'pl-fe/components/status-list';
+import { Portal } from 'pl-fe/components/ui';
+import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import { makeGetStatusIds } from 'pl-fe/selectors';
 
 const messages = defineMessages({
   queue: { id: 'status_list.queue_label', defaultMessage: 'Click to see {count} new {count, plural, one {post} other {posts}}' },

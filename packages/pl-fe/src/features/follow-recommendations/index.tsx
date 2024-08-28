@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchSuggestions } from 'soapbox/actions/suggestions';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Column, Stack, Text } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { fetchSuggestions } from 'pl-fe/actions/suggestions';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Column, Stack, Text } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   heading: { id: 'follow_recommendations.heading', defaultMessage: 'Suggested profiles' },

@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { fetchGroupBlocks, groupUnblock } from 'soapbox/actions/groups';
-import { useAccount, useGroup } from 'soapbox/api/hooks';
-import Account from 'soapbox/components/account';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Button, Column, HStack, Spinner } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { fetchGroupBlocks, groupUnblock } from 'pl-fe/actions/groups';
+import { useAccount, useGroup } from 'pl-fe/api/hooks';
+import Account from 'pl-fe/components/account';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Button, Column, HStack, Spinner } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 import ColumnForbidden from '../ui/components/column-forbidden';
 

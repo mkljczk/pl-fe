@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { authorizeFollowRequest, rejectFollowRequest } from 'soapbox/actions/accounts';
-import { useAccount } from 'soapbox/api/hooks';
-import Account from 'soapbox/components/account';
-import { AuthorizeRejectButtons } from 'soapbox/components/authorize-reject-buttons';
-import { useAppDispatch } from 'soapbox/hooks';
+import { authorizeFollowRequest, rejectFollowRequest } from 'pl-fe/actions/accounts';
+import { useAccount } from 'pl-fe/api/hooks';
+import Account from 'pl-fe/components/account';
+import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 interface IAccountAuthorize {
   id: string;

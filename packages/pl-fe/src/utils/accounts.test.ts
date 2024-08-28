@@ -1,10 +1,10 @@
-import { AccountRecord } from 'soapbox/normalizers';
+import { AccountRecord } from 'pl-fe/normalizers';
 
 import {
   getDomain,
 } from './accounts';
 
-import type { ReducerAccount } from 'soapbox/reducers/accounts';
+import type { ReducerAccount } from 'pl-fe/reducers/accounts';
 
 describe('getDomain', () => {
   const account = AccountRecord({

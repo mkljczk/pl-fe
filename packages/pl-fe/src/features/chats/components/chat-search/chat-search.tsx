@@ -3,19 +3,19 @@ import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { Icon, Input, Stack } from 'soapbox/components/ui';
-import { ChatWidgetScreens, useChatContext } from 'soapbox/contexts/chat-context';
-import { useDebounce } from 'soapbox/hooks';
-import { useChats } from 'soapbox/queries/chats';
-import { queryClient } from 'soapbox/queries/client';
-import useAccountSearch from 'soapbox/queries/search';
-import toast from 'soapbox/toast';
+import { Icon, Input, Stack } from 'pl-fe/components/ui';
+import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
+import { useDebounce } from 'pl-fe/hooks';
+import { useChats } from 'pl-fe/queries/chats';
+import { queryClient } from 'pl-fe/queries/client';
+import useAccountSearch from 'pl-fe/queries/search';
+import toast from 'pl-fe/toast';
 
 import Blankslate from './blankslate';
 import EmptyResultsBlankslate from './empty-results-blankslate';
 import Results from './results';
 
-import type { PlfeResponse } from 'soapbox/api';
+import type { PlfeResponse } from 'pl-fe/api';
 
 const messages = defineMessages({
   placeholder: { id: 'chat_search.placeholder', defaultMessage: 'Type a name' },

@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-import Icon from 'soapbox/components/icon';
-import { useAppSelector } from 'soapbox/hooks';
-import { makeGetRemoteInstance } from 'soapbox/selectors';
+import Icon from 'pl-fe/components/icon';
+import { useAppSelector } from 'pl-fe/hooks';
+import { makeGetRemoteInstance } from 'pl-fe/selectors';
 
 import InstanceRestrictions from './instance-restrictions';
 

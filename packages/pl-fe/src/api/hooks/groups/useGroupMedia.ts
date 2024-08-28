@@ -1,9 +1,9 @@
 import { statusSchema } from 'pl-api';
 
-import { Entities } from 'soapbox/entity-store/entities';
-import { useEntities } from 'soapbox/entity-store/hooks';
-import { useClient } from 'soapbox/hooks';
-import { normalizeStatus } from 'soapbox/normalizers';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useEntities } from 'pl-fe/entity-store/hooks';
+import { useClient } from 'pl-fe/hooks';
+import { normalizeStatus } from 'pl-fe/normalizers';
 
 const useGroupMedia = (groupId: string) => {
   const client = useClient();

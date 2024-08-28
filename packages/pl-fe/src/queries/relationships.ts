@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { fetchRelationshipsFail, fetchRelationshipsSuccess } from 'soapbox/actions/accounts';
-import { useAppDispatch, useClient } from 'soapbox/hooks';
+import { fetchRelationshipsFail, fetchRelationshipsSuccess } from 'pl-fe/actions/accounts';
+import { useAppDispatch, useClient } from 'pl-fe/hooks';
 
 const useFetchRelationships = () => {
   const client = useClient();

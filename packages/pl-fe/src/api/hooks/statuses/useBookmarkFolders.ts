@@ -1,9 +1,9 @@
 import { bookmarkFolderSchema, type BookmarkFolder } from 'pl-api';
 
-import { Entities } from 'soapbox/entity-store/entities';
-import { useEntities } from 'soapbox/entity-store/hooks';
-import { useClient } from 'soapbox/hooks';
-import { useFeatures } from 'soapbox/hooks/useFeatures';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useEntities } from 'pl-fe/entity-store/hooks';
+import { useClient } from 'pl-fe/hooks';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 
 const useBookmarkFolders = () => {
   const client = useClient();

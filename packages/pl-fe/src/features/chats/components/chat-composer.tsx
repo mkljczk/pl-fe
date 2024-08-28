@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
-import { unblockAccount } from 'soapbox/actions/accounts';
-import { openModal } from 'soapbox/actions/modals';
-import { Button, Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover, HStack, IconButton, Stack, Text } from 'soapbox/components/ui';
-import { useChatContext } from 'soapbox/contexts/chat-context';
-import UploadButton from 'soapbox/features/compose/components/upload-button';
-import emojiSearch from 'soapbox/features/emoji/search';
-import { useAppDispatch, useAppSelector, useInstance } from 'soapbox/hooks';
-import { textAtCursorMatchesToken } from 'soapbox/utils/suggestions';
+import { unblockAccount } from 'pl-fe/actions/accounts';
+import { openModal } from 'pl-fe/actions/modals';
+import { Button, Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover, HStack, IconButton, Stack, Text } from 'pl-fe/components/ui';
+import { useChatContext } from 'pl-fe/contexts/chat-context';
+import UploadButton from 'pl-fe/features/compose/components/upload-button';
+import emojiSearch from 'pl-fe/features/emoji/search';
+import { useAppDispatch, useAppSelector, useInstance } from 'pl-fe/hooks';
+import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
 
 import ChatTextarea from './chat-textarea';
 
 import type { MediaAttachment } from 'pl-api';
-import type { Emoji, NativeEmoji } from 'soapbox/features/emoji';
+import type { Emoji, NativeEmoji } from 'pl-fe/features/emoji';
 
 const messages = defineMessages({
   placeholder: { id: 'chat.input.placeholder', defaultMessage: 'Type a message' },

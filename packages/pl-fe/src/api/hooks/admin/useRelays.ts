@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { useClient } from 'soapbox/hooks';
-import { queryClient } from 'soapbox/queries/client';
-import { relaySchema, type Relay } from 'soapbox/schemas';
+import { useClient } from 'pl-fe/hooks';
+import { queryClient } from 'pl-fe/queries/client';
+import { relaySchema, type Relay } from 'pl-fe/schemas';
 
 const useRelays = () => {
   const client = useClient();

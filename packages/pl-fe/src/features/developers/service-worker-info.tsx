@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import List, { ListItem } from 'soapbox/components/list';
-import { HStack, Text, Column, FormActions, Button, Stack, Icon } from 'soapbox/components/ui';
-import { unregisterSW } from 'soapbox/utils/sw';
+import List, { ListItem } from 'pl-fe/components/list';
+import { HStack, Text, Column, FormActions, Button, Stack, Icon } from 'pl-fe/components/ui';
+import { unregisterSW } from 'pl-fe/utils/sw';
 
 import Indicator from './components/indicator';
 

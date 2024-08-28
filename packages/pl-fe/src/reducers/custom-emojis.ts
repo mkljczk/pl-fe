@@ -1,6 +1,6 @@
-import { buildCustomEmojis } from 'soapbox/features/emoji';
-import emojiData from 'soapbox/features/emoji/data';
-import { addCustomToPool } from 'soapbox/features/emoji/search';
+import { buildCustomEmojis } from 'pl-fe/features/emoji';
+import emojiData from 'pl-fe/features/emoji/data';
+import { addCustomToPool } from 'pl-fe/features/emoji/search';
 
 import { CUSTOM_EMOJIS_FETCH_SUCCESS, type CustomEmojisAction } from '../actions/custom-emojis';
 

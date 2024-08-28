@@ -5,28 +5,28 @@ import React, { useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { type ComposeReplyAction, mentionCompose, replyCompose } from 'soapbox/actions/compose';
-import { reblog, toggleFavourite, unreblog } from 'soapbox/actions/interactions';
-import { openModal } from 'soapbox/actions/modals';
-import { getSettings } from 'soapbox/actions/settings';
-import { toggleStatusMediaHidden } from 'soapbox/actions/statuses';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import StatusActionBar from 'soapbox/components/status-action-bar';
-import Tombstone from 'soapbox/components/tombstone';
-import { Stack } from 'soapbox/components/ui';
-import PlaceholderStatus from 'soapbox/features/placeholder/components/placeholder-status';
-import { HotKeys } from 'soapbox/features/ui/components/hotkeys';
-import PendingStatus from 'soapbox/features/ui/components/pending-status';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { RootState } from 'soapbox/store';
-import { textForScreenReader } from 'soapbox/utils/status';
+import { type ComposeReplyAction, mentionCompose, replyCompose } from 'pl-fe/actions/compose';
+import { reblog, toggleFavourite, unreblog } from 'pl-fe/actions/interactions';
+import { openModal } from 'pl-fe/actions/modals';
+import { getSettings } from 'pl-fe/actions/settings';
+import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import StatusActionBar from 'pl-fe/components/status-action-bar';
+import Tombstone from 'pl-fe/components/tombstone';
+import { Stack } from 'pl-fe/components/ui';
+import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
+import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
+import PendingStatus from 'pl-fe/features/ui/components/pending-status';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { RootState } from 'pl-fe/store';
+import { textForScreenReader } from 'pl-fe/utils/status';
 
 import DetailedStatus from './detailed-status';
 import ThreadStatus from './thread-status';
 
 import type { VirtuosoHandle } from 'react-virtuoso';
-import type { Account, Status } from 'soapbox/normalizers';
-import type { SelectedStatus } from 'soapbox/selectors';
+import type { Account, Status } from 'pl-fe/normalizers';
+import type { SelectedStatus } from 'pl-fe/selectors';
 
 const getAncestorsIds = createSelector([
   (_: RootState, statusId: string | undefined) => statusId,

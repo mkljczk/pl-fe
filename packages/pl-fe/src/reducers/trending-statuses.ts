@@ -1,6 +1,6 @@
 import { OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord } from 'immutable';
 
-import { TRENDING_STATUSES_FETCH_REQUEST, TRENDING_STATUSES_FETCH_SUCCESS } from 'soapbox/actions/trending-statuses';
+import { TRENDING_STATUSES_FETCH_REQUEST, TRENDING_STATUSES_FETCH_SUCCESS } from 'pl-fe/actions/trending-statuses';
 
 import type { Status } from 'pl-api';
 import type { AnyAction } from 'redux';

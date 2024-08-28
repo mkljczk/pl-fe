@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
-import { fetchAboutPage } from 'soapbox/actions/about';
-import { Navlinks } from 'soapbox/components/navlinks';
-import { Card } from 'soapbox/components/ui';
-import { useSoapboxConfig, useSettings, useAppDispatch } from 'soapbox/hooks';
+import { fetchAboutPage } from 'pl-fe/actions/about';
+import { Navlinks } from 'pl-fe/components/navlinks';
+import { Card } from 'pl-fe/components/ui';
+import { usePlFeConfig, useSettings, useAppDispatch } from 'pl-fe/hooks';
 
 import { languages } from '../preferences';
 
@@ -15,12 +15,12 @@ const AboutPage: React.FC = () => {
   const { slug } = useParams<{ slug?: string }>();
 
   const settings = useSettings();
-  const soapboxConfig = useSoapboxConfig();
+  const plFeConfig = usePlFeConfig();
 
   const [pageHtml, setPageHtml] = useState<string>('');
   const [locale, setLocale] = useState<string>(settings.locale);
 
-  const { aboutPages } = soapboxConfig;
+  const { aboutPages } = plFeConfig;
 
   const page = aboutPages.get(slug || 'about');
   const defaultLocale = page?.get('default') as string | undefined;

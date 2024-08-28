@@ -1,7 +1,7 @@
 import React from 'react';
 import PTRComponent from 'react-simple-pull-to-refresh';
 
-import { Spinner } from 'soapbox/components/ui';
+import { Spinner } from 'pl-fe/components/ui';
 
 interface IPullToRefresh {
   onRefresh?: () => Promise<any>;
@@ -12,7 +12,7 @@ interface IPullToRefresh {
 
 /**
  * PullToRefresh:
- * Wrapper around a third-party PTR component with Soapbox defaults.
+ * Wrapper around a third-party PTR component with pl-fe defaults.
  */
 const PullToRefresh: React.FC<IPullToRefresh> = ({ children, onRefresh, ...rest }): JSX.Element => {
   const handleRefresh = () => {

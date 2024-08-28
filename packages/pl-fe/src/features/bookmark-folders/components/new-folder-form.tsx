@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useCreateBookmarkFolder } from 'soapbox/api/hooks';
-import { Button, Form, HStack, Input } from 'soapbox/components/ui';
-import { useTextField } from 'soapbox/hooks/forms';
-import toast from 'soapbox/toast';
+import { useCreateBookmarkFolder } from 'pl-fe/api/hooks';
+import { Button, Form, HStack, Input } from 'pl-fe/components/ui';
+import { useTextField } from 'pl-fe/hooks/forms';
+import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   label: { id: 'bookmark_folders.new.title_placeholder', defaultMessage: 'New folder title' },

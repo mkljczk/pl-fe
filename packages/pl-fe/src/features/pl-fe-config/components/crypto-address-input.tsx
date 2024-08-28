@@ -1,15 +1,15 @@
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import { HStack, Input } from 'soapbox/components/ui';
+import { HStack, Input } from 'pl-fe/components/ui';
 
-import type { StreamfieldComponent } from 'soapbox/components/ui/streamfield/streamfield';
-import type { CryptoAddress } from 'soapbox/types/soapbox';
+import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield/streamfield';
+import type { CryptoAddress } from 'pl-fe/types/pl-fe';
 
 const messages = defineMessages({
-  ticker: { id: 'soapbox_config.crypto_address.meta_fields.ticker_placeholder', defaultMessage: 'Ticker' },
-  address: { id: 'soapbox_config.crypto_address.meta_fields.address_placeholder', defaultMessage: 'Address' },
-  note: { id: 'soapbox_config.crypto_address.meta_fields.note_placeholder', defaultMessage: 'Note (optional)' },
+  ticker: { id: 'plfe_config.crypto_address.meta_fields.ticker_placeholder', defaultMessage: 'Ticker' },
+  address: { id: 'plfe_config.crypto_address.meta_fields.address_placeholder', defaultMessage: 'Address' },
+  note: { id: 'plfe_config.crypto_address.meta_fields.note_placeholder', defaultMessage: 'Note (optional)' },
 });
 
 const CryptoAddressInput: StreamfieldComponent<CryptoAddress> = ({ value, onChange }) => {

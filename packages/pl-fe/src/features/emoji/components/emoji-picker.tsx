@@ -1,7 +1,7 @@
 import { Picker as EmojiPicker } from 'emoji-mart';
 import React, { useRef, useEffect } from 'react';
 
-import { joinPublicPath } from 'soapbox/utils/static';
+import { joinPublicPath } from 'pl-fe/utils/static';
 
 import data from '../data';
 

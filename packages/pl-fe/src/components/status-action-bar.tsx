@@ -3,36 +3,36 @@ import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
-import { blockAccount } from 'soapbox/actions/accounts';
-import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'soapbox/actions/compose';
-import { editEvent } from 'soapbox/actions/events';
-import { toggleBookmark, toggleDislike, toggleFavourite, togglePin, toggleReblog } from 'soapbox/actions/interactions';
-import { openModal } from 'soapbox/actions/modals';
-import { deleteStatusModal, toggleStatusSensitivityModal } from 'soapbox/actions/moderation';
-import { initMuteModal } from 'soapbox/actions/mutes';
-import { initReport, ReportableEntities } from 'soapbox/actions/reports';
-import { changeSetting } from 'soapbox/actions/settings';
-import { deleteStatus, editStatus, toggleMuteStatus, translateStatus, undoStatusTranslation } from 'soapbox/actions/statuses';
-import { deleteFromTimelines } from 'soapbox/actions/timelines';
-import { useBlockGroupMember, useGroup, useGroupRelationship, useTranslationLanguages } from 'soapbox/api/hooks';
-import { useDeleteGroupStatus } from 'soapbox/api/hooks/groups/useDeleteGroupStatus';
-import DropdownMenu from 'soapbox/components/dropdown-menu';
-import StatusActionButton from 'soapbox/components/status-action-button';
-import StatusReactionWrapper from 'soapbox/components/status-reaction-wrapper';
-import { HStack } from 'soapbox/components/ui';
-import { languages } from 'soapbox/features/preferences';
-import { useAppDispatch, useAppSelector, useFeatures, useInstance, useOwnAccount, useSettings, useSoapboxConfig } from 'soapbox/hooks';
-import { useChats } from 'soapbox/queries/chats';
-import toast from 'soapbox/toast';
-import copy from 'soapbox/utils/copy';
-import { getReactForStatus, reduceEmoji } from 'soapbox/utils/emoji-reacts';
+import { blockAccount } from 'pl-fe/actions/accounts';
+import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'pl-fe/actions/compose';
+import { editEvent } from 'pl-fe/actions/events';
+import { toggleBookmark, toggleDislike, toggleFavourite, togglePin, toggleReblog } from 'pl-fe/actions/interactions';
+import { openModal } from 'pl-fe/actions/modals';
+import { deleteStatusModal, toggleStatusSensitivityModal } from 'pl-fe/actions/moderation';
+import { initMuteModal } from 'pl-fe/actions/mutes';
+import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
+import { changeSetting } from 'pl-fe/actions/settings';
+import { deleteStatus, editStatus, toggleMuteStatus, translateStatus, undoStatusTranslation } from 'pl-fe/actions/statuses';
+import { deleteFromTimelines } from 'pl-fe/actions/timelines';
+import { useBlockGroupMember, useGroup, useGroupRelationship, useTranslationLanguages } from 'pl-fe/api/hooks';
+import { useDeleteGroupStatus } from 'pl-fe/api/hooks/groups/useDeleteGroupStatus';
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import StatusActionButton from 'pl-fe/components/status-action-button';
+import StatusReactionWrapper from 'pl-fe/components/status-reaction-wrapper';
+import { HStack } from 'pl-fe/components/ui';
+import { languages } from 'pl-fe/features/preferences';
+import { useAppDispatch, useAppSelector, useFeatures, useInstance, useOwnAccount, useSettings, usePlFeConfig } from 'pl-fe/hooks';
+import { useChats } from 'pl-fe/queries/chats';
+import toast from 'pl-fe/toast';
+import copy from 'pl-fe/utils/copy';
+import { getReactForStatus, reduceEmoji } from 'pl-fe/utils/emoji-reacts';
 
 import GroupPopover from './groups/popover/group-popover';
 
-import type { Menu } from 'soapbox/components/dropdown-menu';
-import type { UnauthorizedModalAction } from 'soapbox/features/ui/components/modals/unauthorized-modal';
-import type { Account, Group } from 'soapbox/normalizers';
-import type { SelectedStatus } from 'soapbox/selectors';
+import type { Menu } from 'pl-fe/components/dropdown-menu';
+import type { UnauthorizedModalAction } from 'pl-fe/features/ui/components/modals/unauthorized-modal';
+import type { Account, Group } from 'pl-fe/normalizers';
+import type { SelectedStatus } from 'pl-fe/selectors';
 
 const messages = defineMessages({
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
@@ -138,7 +138,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const features = useFeatures();
   const instance = useInstance();
   const { autoTranslate, boostModal, deleteModal, knownLanguages } = useSettings();
-  const soapboxConfig = useSoapboxConfig();
+  const plFeConfig = usePlFeConfig();
 
   const { translationLanguages } = useTranslationLanguages();
 
@@ -154,7 +154,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     return autoTranslate && features.translations && renderTranslate && supportsLanguages;
   }, [me, status, autoTranslate]);
 
-  const { allowedEmoji } = soapboxConfig;
+  const { allowedEmoji } = plFeConfig;
 
   const { account } = useOwnAccount();
   const isStaff = account ? account.is_admin || account.is_moderator : false;

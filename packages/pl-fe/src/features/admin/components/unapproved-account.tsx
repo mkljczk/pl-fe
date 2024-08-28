@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { approveUser, deleteUser } from 'soapbox/actions/admin';
-import { useAccount } from 'soapbox/api/hooks';
-import { AuthorizeRejectButtons } from 'soapbox/components/authorize-reject-buttons';
-import { Stack, HStack, Text } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch } from 'soapbox/hooks';
+import { approveUser, deleteUser } from 'pl-fe/actions/admin';
+import { useAccount } from 'pl-fe/api/hooks';
+import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';
+import { Stack, HStack, Text } from 'pl-fe/components/ui';
+import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 interface IUnapprovedAccount {
   accountId: string;

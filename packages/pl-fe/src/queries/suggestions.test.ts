@@ -1,5 +1,5 @@
-import { __stub } from 'soapbox/api';
-import { renderHook, waitFor } from 'soapbox/jest/test-helpers';
+import { __stub } from 'pl-fe/api';
+import { renderHook, waitFor } from 'pl-fe/jest/test-helpers';
 
 import { useOnboardingSuggestions } from './suggestions';
 

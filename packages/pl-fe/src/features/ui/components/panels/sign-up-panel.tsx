@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 
-import { logIn, switchAccount, verifyCredentials } from 'soapbox/actions/auth';
-import { fetchInstance } from 'soapbox/actions/instance';
-import { Button, Stack, Text } from 'soapbox/components/ui';
-import LoginForm from 'soapbox/features/auth-login/components/login-form';
-import OtpAuthForm from 'soapbox/features/auth-login/components/otp-auth-form';
-import ExternalLoginForm from 'soapbox/features/external-login/components/external-login-form';
-import { useAppDispatch, useAppSelector, useInstance, useRegistrationStatus } from 'soapbox/hooks';
-import { getRedirectUrl } from 'soapbox/utils/redirect';
-import { isStandalone } from 'soapbox/utils/state';
+import { logIn, switchAccount, verifyCredentials } from 'pl-fe/actions/auth';
+import { fetchInstance } from 'pl-fe/actions/instance';
+import { Button, Stack, Text } from 'pl-fe/components/ui';
+import LoginForm from 'pl-fe/features/auth-login/components/login-form';
+import OtpAuthForm from 'pl-fe/features/auth-login/components/otp-auth-form';
+import ExternalLoginForm from 'pl-fe/features/external-login/components/external-login-form';
+import { useAppDispatch, useAppSelector, useInstance, useRegistrationStatus } from 'pl-fe/hooks';
+import { getRedirectUrl } from 'pl-fe/utils/redirect';
+import { isStandalone } from 'pl-fe/utils/state';
 
-import type { PlfeResponse } from 'soapbox/api';
+import type { PlfeResponse } from 'pl-fe/api';
 
 const SignUpPanel = () => {
   const dispatch = useAppDispatch();

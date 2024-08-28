@@ -2,12 +2,12 @@ import { OrderedSet as ImmutableOrderedSet } from 'immutable';
 import React, { useCallback, useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchStatusWithContext } from 'soapbox/actions/statuses';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Modal, Spinner } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
-import { makeGetStatus } from 'soapbox/selectors';
+import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Modal, Spinner } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 import type { BaseModalProps } from '../modal-root';
 

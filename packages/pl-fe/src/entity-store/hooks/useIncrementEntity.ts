@@ -1,5 +1,5 @@
-import { useAppDispatch } from 'soapbox/hooks/useAppDispatch';
-import { useLoading } from 'soapbox/hooks/useLoading';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useLoading } from 'pl-fe/hooks/useLoading';
 
 import { incrementEntities } from '../actions';
 

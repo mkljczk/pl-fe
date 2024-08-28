@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import { SETTINGS_UPDATE, changeSetting, updateSettingsStore } from 'soapbox/actions/settings';
-import List, { ListItem } from 'soapbox/components/list';
+import { SETTINGS_UPDATE, changeSetting, updateSettingsStore } from 'pl-fe/actions/settings';
+import List, { ListItem } from 'pl-fe/components/list';
 import {
   CardHeader,
   CardTitle,
@@ -12,10 +12,10 @@ import {
   FormActions,
   FormGroup,
   Textarea,
-} from 'soapbox/components/ui';
-import SettingToggle from 'soapbox/features/notifications/components/setting-toggle';
-import { useAppSelector, useAppDispatch, useSettings } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+} from 'pl-fe/components/ui';
+import SettingToggle from 'pl-fe/features/notifications/components/setting-toggle';
+import { useAppSelector, useAppDispatch, useSettings } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 const isJSONValid = (text: any): boolean => {
   try {
@@ -88,7 +88,7 @@ const SettingsStore: React.FC = () => {
 
         <FormActions>
           <Button theme='primary' type='submit' disabled={!jsonValid || isLoading}>
-            <FormattedMessage id='soapbox_config.save' defaultMessage='Save' />
+            <FormattedMessage id='plfe_config.save' defaultMessage='Save' />
           </Button>
         </FormActions>
       </Form>
@@ -100,7 +100,7 @@ const SettingsStore: React.FC = () => {
       <List>
         <ListItem
           label={<FormattedMessage id='preferences.fields.demo_label' defaultMessage='Demo mode' />}
-          hint={<FormattedMessage id='preferences.fields.demo_hint' defaultMessage='Use the default Soapbox logo and color scheme. Useful for taking screenshots.' />}
+          hint={<FormattedMessage id='preferences.fields.demo_hint' defaultMessage='Use the default pl-fe logo and color scheme. Useful for taking screenshots.' />}
         >
           <SettingToggle settings={settings} settingPath={['demo']} onChange={onToggleChange} />
         </ListItem>

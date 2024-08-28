@@ -2,13 +2,13 @@ import React, { type ErrorInfo, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { FormattedMessage } from 'react-intl';
 
-import { NODE_ENV } from 'soapbox/build-config';
-import { HStack, Text, Stack, Textarea } from 'soapbox/components/ui';
-import { useSoapboxConfig } from 'soapbox/hooks';
-import { captureSentryException } from 'soapbox/sentry';
-import KVStore from 'soapbox/storage/kv-store';
-import sourceCode from 'soapbox/utils/code';
-import { unregisterSW } from 'soapbox/utils/sw';
+import { NODE_ENV } from 'pl-fe/build-config';
+import { HStack, Text, Stack, Textarea } from 'pl-fe/components/ui';
+import { usePlFeConfig } from 'pl-fe/hooks';
+import { captureSentryException } from 'pl-fe/sentry';
+import KVStore from 'pl-fe/storage/kv-store';
+import sourceCode from 'pl-fe/utils/code';
+import { unregisterSW } from 'pl-fe/utils/sw';
 
 import SentryFeedbackForm from './sentry-feedback-form';
 import SiteLogo from './site-logo';
@@ -19,7 +19,7 @@ interface ISiteErrorBoundary {
 
 /** Application-level error boundary. Fills the whole screen. */
 const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
-  const { links, sentryDsn } = useSoapboxConfig();
+  const { links, sentryDsn } = usePlFeConfig();
   const textarea = useRef<HTMLTextAreaElement>(null);
 
   const [error, setError] = useState<unknown>();

@@ -1,4 +1,4 @@
-import { isLoggedIn } from 'soapbox/utils/auth';
+import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { getClient } from '../api';
 
@@ -6,7 +6,7 @@ import { fetchRelationships } from './accounts';
 import { importFetchedAccounts } from './importer';
 import { insertSuggestionsIntoTimeline } from './timelines';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const SUGGESTIONS_FETCH_REQUEST = 'SUGGESTIONS_FETCH_REQUEST' as const;
 const SUGGESTIONS_FETCH_SUCCESS = 'SUGGESTIONS_FETCH_SUCCESS' as const;

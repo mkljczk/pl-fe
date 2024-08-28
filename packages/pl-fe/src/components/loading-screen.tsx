@@ -1,7 +1,7 @@
 import React from 'react';
 
-import LandingGradient from 'soapbox/components/landing-gradient';
-import { Spinner } from 'soapbox/components/ui';
+import LandingGradient from 'pl-fe/components/landing-gradient';
+import { Spinner } from 'pl-fe/components/ui';
 
 /** Fullscreen loading indicator. */
 const LoadingScreen: React.FC = () => (

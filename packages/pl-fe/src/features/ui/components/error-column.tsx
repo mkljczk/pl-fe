@@ -1,8 +1,8 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { Column, Stack, Text, IconButton } from 'soapbox/components/ui';
-import { isNetworkError } from 'soapbox/utils/errors';
+import { Column, Stack, Text, IconButton } from 'pl-fe/components/ui';
+import { isNetworkError } from 'pl-fe/utils/errors';
 
 const messages = defineMessages({
   title: { id: 'bundle_column_error.title', defaultMessage: 'Network error' },

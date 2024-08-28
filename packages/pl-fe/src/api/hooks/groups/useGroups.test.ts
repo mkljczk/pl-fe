@@ -1,7 +1,7 @@
-import { __stub } from 'soapbox/api';
-import { buildGroup } from 'soapbox/jest/factory';
-import { renderHook, waitFor } from 'soapbox/jest/test-helpers';
-import { instanceSchema } from 'soapbox/schemas';
+import { __stub } from 'pl-fe/api';
+import { buildGroup } from 'pl-fe/jest/factory';
+import { renderHook, waitFor } from 'pl-fe/jest/test-helpers';
+import { instanceSchema } from 'pl-fe/schemas';
 
 import { useGroups } from './useGroups';
 

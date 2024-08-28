@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import React, { useRef } from 'react';
 
-import { fetchAccount } from 'soapbox/actions/accounts';
-import { openProfileHoverCard, closeProfileHoverCard } from 'soapbox/actions/profile-hover-card';
-import { useAppDispatch } from 'soapbox/hooks';
-import { isMobile } from 'soapbox/is-mobile';
+import { fetchAccount } from 'pl-fe/actions/accounts';
+import { openProfileHoverCard, closeProfileHoverCard } from 'pl-fe/actions/profile-hover-card';
+import { useAppDispatch } from 'pl-fe/hooks';
+import { isMobile } from 'pl-fe/is-mobile';
 
 const showProfileHoverCard = debounce((dispatch, ref, accountId) => {
   dispatch(openProfileHoverCard(ref, accountId));

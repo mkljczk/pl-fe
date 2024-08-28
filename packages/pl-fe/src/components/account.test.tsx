@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { buildAccount } from 'soapbox/jest/factory';
-import { render, screen } from 'soapbox/jest/test-helpers';
+import { buildAccount } from 'pl-fe/jest/factory';
+import { render, screen } from 'pl-fe/jest/test-helpers';
 
 import Account from './account';
 

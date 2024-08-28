@@ -4,7 +4,7 @@ import { fetchRelationships } from './accounts';
 import { importFetchedAccounts } from './importer';
 
 import type { Account, ProfileDirectoryParams } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const DIRECTORY_FETCH_REQUEST = 'DIRECTORY_FETCH_REQUEST' as const;
 const DIRECTORY_FETCH_SUCCESS = 'DIRECTORY_FETCH_SUCCESS' as const;

@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import React, { Suspense } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { setSchedule, removeSchedule } from 'soapbox/actions/compose';
-import IconButton from 'soapbox/components/icon-button';
-import { HStack, Input, Stack, Text } from 'soapbox/components/ui';
-import { DatePicker } from 'soapbox/features/ui/util/async-components';
-import { useAppDispatch, useCompose } from 'soapbox/hooks';
+import { setSchedule, removeSchedule } from 'pl-fe/actions/compose';
+import IconButton from 'pl-fe/components/icon-button';
+import { HStack, Input, Stack, Text } from 'pl-fe/components/ui';
+import { DatePicker } from 'pl-fe/features/ui/util/async-components';
+import { useAppDispatch, useCompose } from 'pl-fe/hooks';
 
 const isCurrentOrFutureDate = (date: Date) =>
   date && new Date().setHours(0, 0, 0, 0) <= new Date(date).setHours(0, 0, 0, 0);

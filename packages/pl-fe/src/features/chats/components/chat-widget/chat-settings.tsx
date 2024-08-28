@@ -1,12 +1,12 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { blockAccount, unblockAccount } from 'soapbox/actions/accounts';
-import { openModal } from 'soapbox/actions/modals';
-import { Avatar, HStack, Icon, Stack, Text } from 'soapbox/components/ui';
-import { ChatWidgetScreens, useChatContext } from 'soapbox/contexts/chat-context';
-import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
-import { useChatActions } from 'soapbox/queries/chats';
+import { blockAccount, unblockAccount } from 'pl-fe/actions/accounts';
+import { openModal } from 'pl-fe/actions/modals';
+import { Avatar, HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
+import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
+import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { useChatActions } from 'pl-fe/queries/chats';
 
 import ChatPaneHeader from './chat-pane-header';
 

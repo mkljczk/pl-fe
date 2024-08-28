@@ -2,20 +2,20 @@ import React, { useRef } from 'react';
 import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import Account from 'soapbox/components/account';
-import StatusContent from 'soapbox/components/status-content';
-import StatusLanguagePicker from 'soapbox/components/status-language-picker';
-import StatusMedia from 'soapbox/components/status-media';
-import StatusReplyMentions from 'soapbox/components/status-reply-mentions';
-import SensitiveContentOverlay from 'soapbox/components/statuses/sensitive-content-overlay';
-import StatusInfo from 'soapbox/components/statuses/status-info';
-import TranslateButton from 'soapbox/components/translate-button';
-import { HStack, Icon, Stack, Text } from 'soapbox/components/ui';
-import QuotedStatus from 'soapbox/features/status/containers/quoted-status-container';
+import Account from 'pl-fe/components/account';
+import StatusContent from 'pl-fe/components/status-content';
+import StatusLanguagePicker from 'pl-fe/components/status-language-picker';
+import StatusMedia from 'pl-fe/components/status-media';
+import StatusReplyMentions from 'pl-fe/components/status-reply-mentions';
+import SensitiveContentOverlay from 'pl-fe/components/statuses/sensitive-content-overlay';
+import StatusInfo from 'pl-fe/components/statuses/status-info';
+import TranslateButton from 'pl-fe/components/translate-button';
+import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
+import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
 
 import StatusInteractionBar from './status-interaction-bar';
 
-import type { SelectedStatus } from 'soapbox/selectors';
+import type { SelectedStatus } from 'pl-fe/selectors';
 
 interface IDetailedStatus {
   status: SelectedStatus;

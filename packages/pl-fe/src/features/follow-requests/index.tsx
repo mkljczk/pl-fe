@@ -2,10 +2,10 @@ import debounce from 'lodash/debounce';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { fetchFollowRequests, expandFollowRequests } from 'soapbox/actions/accounts';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Column, Spinner } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { fetchFollowRequests, expandFollowRequests } from 'pl-fe/actions/accounts';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Column, Spinner } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import AccountAuthorize from './components/account-authorize';
 

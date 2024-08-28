@@ -5,10 +5,10 @@ import {
   is,
 } from 'immutable';
 
-import { STATUS_IMPORT } from 'soapbox/actions/importer';
-import { CONTEXT_FETCH_SUCCESS } from 'soapbox/actions/statuses';
-import { TIMELINE_DELETE } from 'soapbox/actions/timelines';
-import { applyActions } from 'soapbox/jest/test-helpers';
+import { STATUS_IMPORT } from 'pl-fe/actions/importer';
+import { CONTEXT_FETCH_SUCCESS } from 'pl-fe/actions/statuses';
+import { TIMELINE_DELETE } from 'pl-fe/actions/timelines';
+import { applyActions } from 'pl-fe/jest/test-helpers';
 
 import reducer, { ReducerRecord } from './contexts';
 

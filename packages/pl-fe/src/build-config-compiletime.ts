@@ -1,6 +1,6 @@
 /**
  * Build config: configuration set at build time.
- * @module soapbox/build-config
+ * @module pl-fe/build-config
  */
 
 // eslint-disable-next-line import/extensions
@@ -34,7 +34,7 @@ const env = {
   SENTRY_DSN,
 };
 
-export type SoapboxEnv = typeof env;
+export type PlFeEnv = typeof env;
 
 export default () => ({
   data: env,

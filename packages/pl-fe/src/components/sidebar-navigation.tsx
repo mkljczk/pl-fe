@@ -1,12 +1,12 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { Icon, Stack } from 'soapbox/components/ui';
-import { useStatContext } from 'soapbox/contexts/stat-context';
-import Search from 'soapbox/features/compose/components/search';
-import ComposeButton from 'soapbox/features/ui/components/compose-button';
-import ProfileDropdown from 'soapbox/features/ui/components/profile-dropdown';
-import { useAppSelector, useFeatures, useOwnAccount, useSettings, useInstance } from 'soapbox/hooks';
+import { Icon, Stack } from 'pl-fe/components/ui';
+import { useStatContext } from 'pl-fe/contexts/stat-context';
+import Search from 'pl-fe/features/compose/components/search';
+import ComposeButton from 'pl-fe/features/ui/components/compose-button';
+import ProfileDropdown from 'pl-fe/features/ui/components/profile-dropdown';
+import { useAppSelector, useFeatures, useOwnAccount, useSettings, useInstance } from 'pl-fe/hooks';
 
 import Account from './account';
 import DropdownMenu, { Menu } from './dropdown-menu';
@@ -225,7 +225,7 @@ const SidebarNavigation = () => {
 
             {(account.is_admin || account.is_moderator) && (
               <SidebarNavigationLink
-                to='/soapbox/admin'
+                to='/pl-fe/admin'
                 icon={require('@tabler/icons/outline/dashboard.svg')}
                 count={dashboardCount}
                 text={<FormattedMessage id='tabs_bar.dashboard' defaultMessage='Dashboard' />}

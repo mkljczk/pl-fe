@@ -12,12 +12,12 @@ import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { spring } from 'react-motion';
 
-import { openModal } from 'soapbox/actions/modals';
-import AltIndicator from 'soapbox/components/alt-indicator';
-import Blurhash from 'soapbox/components/blurhash';
-import { HStack, Icon, IconButton } from 'soapbox/components/ui';
-import Motion from 'soapbox/features/ui/util/optional-motion';
-import { useAppDispatch, useSettings } from 'soapbox/hooks';
+import { openModal } from 'pl-fe/actions/modals';
+import AltIndicator from 'pl-fe/components/alt-indicator';
+import Blurhash from 'pl-fe/components/blurhash';
+import { HStack, Icon, IconButton } from 'pl-fe/components/ui';
+import Motion from 'pl-fe/features/ui/util/optional-motion';
+import { useAppDispatch, useSettings } from 'pl-fe/hooks';
 
 import type { MediaAttachment } from 'pl-api';
 

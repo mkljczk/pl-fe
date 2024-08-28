@@ -1,9 +1,9 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { Column } from 'soapbox/components/ui';
-import Search from 'soapbox/features/compose/components/search';
-import SearchResults from 'soapbox/features/compose/components/search-results';
+import { Column } from 'pl-fe/components/ui';
+import Search from 'pl-fe/features/compose/components/search';
+import SearchResults from 'pl-fe/features/compose/components/search-results';
 
 const messages = defineMessages({
   heading: { id: 'column.search', defaultMessage: 'Search' },

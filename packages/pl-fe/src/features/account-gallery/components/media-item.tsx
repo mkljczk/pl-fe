@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-import Blurhash from 'soapbox/components/blurhash';
-import Icon from 'soapbox/components/icon';
-import StillImage from 'soapbox/components/still-image';
-import { useSettings } from 'soapbox/hooks';
-import { isIOS } from 'soapbox/is-mobile';
+import Blurhash from 'pl-fe/components/blurhash';
+import Icon from 'pl-fe/components/icon';
+import StillImage from 'pl-fe/components/still-image';
+import { useSettings } from 'pl-fe/hooks';
+import { isIOS } from 'pl-fe/is-mobile';
 
-import type { AccountGalleryAttachment } from 'soapbox/selectors';
+import type { AccountGalleryAttachment } from 'pl-fe/selectors';
 
 interface IMediaItem {
   attachment: AccountGalleryAttachment;

@@ -1,12 +1,12 @@
 import { Map as ImmutableMap } from 'immutable';
 
-import { STATUS_IMPORT, STATUSES_IMPORT } from 'soapbox/actions/importer';
+import { STATUS_IMPORT, STATUSES_IMPORT } from 'pl-fe/actions/importer';
 import {
   SCHEDULED_STATUSES_FETCH_SUCCESS,
   SCHEDULED_STATUS_CANCEL_REQUEST,
   SCHEDULED_STATUS_CANCEL_SUCCESS,
-} from 'soapbox/actions/scheduled-statuses';
-import { STATUS_CREATE_SUCCESS } from 'soapbox/actions/statuses';
+} from 'pl-fe/actions/scheduled-statuses';
+import { STATUS_CREATE_SUCCESS } from 'pl-fe/actions/statuses';
 
 import type { Status, ScheduledStatus } from 'pl-api';
 import type { AnyAction } from 'redux';

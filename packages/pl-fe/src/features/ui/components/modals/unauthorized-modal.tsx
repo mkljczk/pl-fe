@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { remoteInteraction } from 'soapbox/actions/interactions';
-import { Button, Form, Input, Modal, Stack, Text } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch, useFeatures, useInstance, useRegistrationStatus } from 'soapbox/hooks';
-import { selectAccount } from 'soapbox/selectors';
-import toast from 'soapbox/toast';
+import { remoteInteraction } from 'pl-fe/actions/interactions';
+import { Button, Form, Input, Modal, Stack, Text } from 'pl-fe/components/ui';
+import { useAppSelector, useAppDispatch, useFeatures, useInstance, useRegistrationStatus } from 'pl-fe/hooks';
+import { selectAccount } from 'pl-fe/selectors';
+import toast from 'pl-fe/toast';
 
 import type { BaseModalProps } from '../modal-root';
 

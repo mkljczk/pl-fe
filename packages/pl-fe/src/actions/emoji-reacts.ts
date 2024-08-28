@@ -1,4 +1,4 @@
-import { isLoggedIn } from 'soapbox/utils/auth';
+import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { getClient } from '../api';
 
@@ -6,7 +6,7 @@ import { importFetchedStatus } from './importer';
 import { favourite, unfavourite } from './interactions';
 
 import type { EmojiReaction, Status } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const EMOJI_REACT_REQUEST = 'EMOJI_REACT_REQUEST' as const;
 const EMOJI_REACT_SUCCESS = 'EMOJI_REACT_SUCCESS' as const;

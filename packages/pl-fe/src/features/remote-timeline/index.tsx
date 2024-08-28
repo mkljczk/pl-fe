@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { fetchPublicTimeline } from 'soapbox/actions/timelines';
-import { useRemoteStream } from 'soapbox/api/hooks';
-import IconButton from 'soapbox/components/icon-button';
-import { Column, HStack, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useSettings, useTheme } from 'soapbox/hooks';
-import { useIsMobile } from 'soapbox/hooks/useIsMobile';
+import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
+import { useRemoteStream } from 'pl-fe/api/hooks';
+import IconButton from 'pl-fe/components/icon-button';
+import { Column, HStack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useSettings, useTheme } from 'pl-fe/hooks';
+import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 import Timeline from '../ui/components/timeline';
 

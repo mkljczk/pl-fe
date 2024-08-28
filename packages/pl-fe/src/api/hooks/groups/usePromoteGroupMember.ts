@@ -1,10 +1,10 @@
 import { groupMemberSchema } from 'pl-api';
 import { z } from 'zod';
 
-import { Entities } from 'soapbox/entity-store/entities';
-import { useCreateEntity } from 'soapbox/entity-store/hooks';
-import { useClient } from 'soapbox/hooks';
-import { normalizeGroupMember } from 'soapbox/normalizers';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useCreateEntity } from 'pl-fe/entity-store/hooks';
+import { useClient } from 'pl-fe/hooks';
+import { normalizeGroupMember } from 'pl-fe/normalizers';
 
 import type { Group, GroupMember, GroupRole } from 'pl-api';
 

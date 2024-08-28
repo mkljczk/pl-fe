@@ -1,7 +1,7 @@
 import IconCode from '@tabler/icons/outline/code.svg';
 import React from 'react';
 
-import { render, screen } from 'soapbox/jest/test-helpers';
+import { render, screen } from 'pl-fe/jest/test-helpers';
 
 import SvgIcon from './svg-icon';
 

@@ -2,12 +2,12 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
-import { changeSettingImmediate } from 'soapbox/actions/settings';
-import { Column, Text } from 'soapbox/components/ui';
-import SvgIcon from 'soapbox/components/ui/icon/svg-icon';
-import { useAppDispatch } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
-import sourceCode from 'soapbox/utils/code';
+import { changeSettingImmediate } from 'pl-fe/actions/settings';
+import { Column, Text } from 'pl-fe/components/ui';
+import SvgIcon from 'pl-fe/components/ui/icon/svg-icon';
+import { useAppDispatch } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
+import sourceCode from 'pl-fe/utils/code';
 
 const messages = defineMessages({
   heading: { id: 'column.developers', defaultMessage: 'Developers' },

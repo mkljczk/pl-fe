@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 
-import type { AppDispatch } from 'soapbox/store';
+import type { AppDispatch } from 'pl-fe/store';
 
 const useAppDispatch = () => useDispatch<AppDispatch>();
 

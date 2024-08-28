@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { resetCompose } from 'soapbox/actions/compose';
-import { openModal } from 'soapbox/actions/modals';
-import { FOCUS_EDITOR_COMMAND } from 'soapbox/features/compose/editor/plugins/focus-plugin';
-import { useAppSelector, useAppDispatch, useOwnAccount } from 'soapbox/hooks';
+import { resetCompose } from 'pl-fe/actions/compose';
+import { openModal } from 'pl-fe/actions/modals';
+import { FOCUS_EDITOR_COMMAND } from 'pl-fe/features/compose/editor/plugins/focus-plugin';
+import { useAppSelector, useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
 
 import { HotKeys } from '../components/hotkeys';
 

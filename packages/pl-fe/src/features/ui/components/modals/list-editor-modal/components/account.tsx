@@ -1,11 +1,11 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { removeFromListEditor, addToListEditor } from 'soapbox/actions/lists';
-import IconButton from 'soapbox/components/icon-button';
-import { HStack } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
-import { useAppSelector, useAppDispatch } from 'soapbox/hooks';
+import { removeFromListEditor, addToListEditor } from 'pl-fe/actions/lists';
+import IconButton from 'pl-fe/components/icon-button';
+import { HStack } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
+import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   remove: { id: 'lists.account.remove', defaultMessage: 'Remove from list' },

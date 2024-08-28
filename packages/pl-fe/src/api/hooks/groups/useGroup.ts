@@ -2,10 +2,10 @@ import { type Group as BaseGroup, groupSchema } from 'pl-api';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Entities } from 'soapbox/entity-store/entities';
-import { useEntity } from 'soapbox/entity-store/hooks';
-import { useClient } from 'soapbox/hooks';
-import { normalizeGroup, type Group } from 'soapbox/normalizers';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useEntity } from 'pl-fe/entity-store/hooks';
+import { useClient } from 'pl-fe/hooks';
+import { normalizeGroup, type Group } from 'pl-fe/normalizers';
 
 import { useGroupRelationship } from './useGroupRelationship';
 

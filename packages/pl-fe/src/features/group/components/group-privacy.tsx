@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { HStack, Icon, Popover, Stack, Text } from 'soapbox/components/ui';
-import { Group } from 'soapbox/normalizers';
+import { HStack, Icon, Popover, Stack, Text } from 'pl-fe/components/ui';
+import { Group } from 'pl-fe/normalizers';
 
 interface IGroupPolicy {
   group: Pick<Group, 'locked'>;

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 
-import List, { ListItem } from 'soapbox/components/list';
-import { Button, FileInput, Form, FormActions, FormGroup, Text, Toggle } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import List, { ListItem } from 'pl-fe/components/list';
+import { Button, FileInput, Form, FormActions, FormGroup, Text, Toggle } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 interface IDataImporter {
   messages: {

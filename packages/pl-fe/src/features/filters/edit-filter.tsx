@@ -2,17 +2,17 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { createFilter, fetchFilter, updateFilter } from 'soapbox/actions/filters';
-import List, { ListItem } from 'soapbox/components/list';
-import MissingIndicator from 'soapbox/components/missing-indicator';
-import { Button, Column, Form, FormActions, FormGroup, HStack, Input, Stack, Streamfield, Text, Toggle } from 'soapbox/components/ui';
-import { useAppDispatch, useFeatures } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { createFilter, fetchFilter, updateFilter } from 'pl-fe/actions/filters';
+import List, { ListItem } from 'pl-fe/components/list';
+import MissingIndicator from 'pl-fe/components/missing-indicator';
+import { Button, Column, Form, FormActions, FormGroup, HStack, Input, Stack, Streamfield, Text, Toggle } from 'pl-fe/components/ui';
+import { useAppDispatch, useFeatures } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 import { SelectDropdown } from '../forms';
 
 import type { FilterContext } from 'pl-api';
-import type { StreamfieldComponent } from 'soapbox/components/ui/streamfield/streamfield';
+import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield/streamfield';
 
 interface IFilterField {
   id?: string;

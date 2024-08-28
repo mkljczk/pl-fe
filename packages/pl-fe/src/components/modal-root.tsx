@@ -4,16 +4,16 @@ import 'wicg-inert';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { cancelReplyCompose } from 'soapbox/actions/compose';
-import { saveDraftStatus } from 'soapbox/actions/draft-statuses';
-import { cancelEventCompose } from 'soapbox/actions/events';
-import { openModal, closeModal } from 'soapbox/actions/modals';
-import { useAppDispatch, useAppSelector, usePrevious } from 'soapbox/hooks';
-import { userTouching } from 'soapbox/is-mobile';
+import { cancelReplyCompose } from 'pl-fe/actions/compose';
+import { saveDraftStatus } from 'pl-fe/actions/draft-statuses';
+import { cancelEventCompose } from 'pl-fe/actions/events';
+import { openModal, closeModal } from 'pl-fe/actions/modals';
+import { useAppDispatch, useAppSelector, usePrevious } from 'pl-fe/hooks';
+import { userTouching } from 'pl-fe/is-mobile';
 
-import type { ModalType } from 'soapbox/features/ui/components/modal-root';
-import type { ReducerCompose } from 'soapbox/reducers/compose';
-import type { ReducerRecord as ReducerComposeEvent } from 'soapbox/reducers/compose-event';
+import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
+import type { ReducerCompose } from 'pl-fe/reducers/compose';
+import type { ReducerRecord as ReducerComposeEvent } from 'pl-fe/reducers/compose-event';
 
 const messages = defineMessages({
   confirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },
@@ -148,9 +148,9 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   const handleModalOpen = () => {
     modalHistoryKey.current = Date.now();
     unlistenHistory.current = history.listen(({ state }, action) => {
-      if ((state as any)?.soapboxDropdownKey) {
+      if ((state as any)?.plFeDropdownKey) {
         return;
-      } else if (!(state as any)?.soapboxModalKey) {
+      } else if (!(state as any)?.plFeModalKey) {
         onClose();
       } else if (action === 'POP') {
         handleOnClose();
@@ -165,15 +165,15 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
       unlistenHistory.current();
     }
     const { state } = history.location;
-    if (state && (state as any).soapboxModalKey === modalHistoryKey.current) {
+    if (state && (state as any).plFeModalKey === modalHistoryKey.current) {
       history.goBack();
     }
   };
 
   const ensureHistoryBuffer = () => {
     const { pathname, state } = history.location;
-    if (!state || (state as any).soapboxModalKey !== modalHistoryKey.current) {
-      history.push(pathname, { ...(state as any), soapboxModalKey: modalHistoryKey.current });
+    if (!state || (state as any).plFeModalKey !== modalHistoryKey.current) {
+      history.push(pathname, { ...(state as any), plFeModalKey: modalHistoryKey.current });
     }
   };
 

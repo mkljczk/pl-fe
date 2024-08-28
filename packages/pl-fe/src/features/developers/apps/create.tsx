@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import { createApp } from 'soapbox/actions/apps';
-import { obtainOAuthToken } from 'soapbox/actions/oauth';
-import { Column, Button, Form, FormActions, FormGroup, Input, Stack, Text, Textarea } from 'soapbox/components/ui';
-import { useAppDispatch, useOwnAccount } from 'soapbox/hooks';
-import { getBaseURL } from 'soapbox/utils/accounts';
+import { createApp } from 'pl-fe/actions/apps';
+import { obtainOAuthToken } from 'pl-fe/actions/oauth';
+import { Column, Button, Form, FormActions, FormGroup, Input, Stack, Text, Textarea } from 'pl-fe/components/ui';
+import { useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
+import { getBaseURL } from 'pl-fe/utils/accounts';
 
 import type { Token } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.app_create', defaultMessage: 'Create app' },
-  namePlaceholder: { id: 'app_create.name_placeholder', defaultMessage: 'e.g. \'Soapbox\'' },
+  namePlaceholder: { id: 'app_create.name_placeholder', defaultMessage: 'e.g. \'pl-fe\'' },
   scopesPlaceholder: { id: 'app_create.scopes_placeholder', defaultMessage: 'e.g. \'read write follow\'' },
 });
 
@@ -159,7 +159,7 @@ const CreateApp: React.FC = () => {
         <FormGroup labelText={<FormattedMessage id='app_create.website_label' defaultMessage='Website' />}>
           <Input
             type='text'
-            placeholder='https://soapbox.pub'
+            placeholder='https://github.com/mkljczk/pl-fe'
             onChange={handleParamChange('website')}
             value={params.website}
           />
@@ -168,7 +168,7 @@ const CreateApp: React.FC = () => {
         <FormGroup labelText={<FormattedMessage id='app_create.redirect_uri_label' defaultMessage='Redirect URIs' />}>
           <Input
             type='text'
-            placeholder='https://example.com'
+            placeholder='https://github.com/mkljczk/pl-fe'
             onChange={handleParamChange('redirect_uris')}
             value={params.redirect_uris}
             required

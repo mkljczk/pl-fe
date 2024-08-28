@@ -2,10 +2,10 @@ import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ReactSwipeableViews from 'react-swipeable-views';
 
-import EventPreview from 'soapbox/components/event-preview';
-import { Card, Icon } from 'soapbox/components/ui';
-import { useAppSelector } from 'soapbox/hooks';
-import { makeGetStatus } from 'soapbox/selectors';
+import EventPreview from 'pl-fe/components/event-preview';
+import { Card, Icon } from 'pl-fe/components/ui';
+import { useAppSelector } from 'pl-fe/hooks';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 import PlaceholderEventPreview from '../../placeholder/components/placeholder-event-preview';
 

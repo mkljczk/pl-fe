@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 
-import QuotedStatus from 'soapbox/components/quoted-status';
-import { useAppSelector } from 'soapbox/hooks';
-import { makeGetStatus } from 'soapbox/selectors';
+import QuotedStatus from 'pl-fe/components/quoted-status';
+import { useAppSelector } from 'pl-fe/hooks';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 interface IQuotedStatusContainer {
   /** Status ID to the quoted status. */

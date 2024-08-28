@@ -1,6 +1,6 @@
 import range from 'lodash/range';
 
-import type { Account } from 'soapbox/normalizers';
+import type { Account } from 'pl-fe/normalizers';
 
 const getDomainFromURL = (account: Pick<Account, 'url'>): string => {
   try {
@@ -33,7 +33,7 @@ const DEFAULT_HEADERS: string[] = [
   '/headers/original/missing.png', // Mastodon
   '/images/banner.png', // Pleroma
   '/assets/default_header.webp', // GoToSocial
-  require('soapbox/assets/images/header-missing.png'), // header not provided by backend
+  require('pl-fe/assets/images/header-missing.png'), // header not provided by backend
 ];
 
 /** Check if the avatar is a default avatar */
@@ -45,7 +45,7 @@ const DEFAULT_AVATARS = [
   '/images/avi.png', // Pleroma
   ...(range(1, 6).map(i => `/assets/default_avatars/GoToSocial_icon${i}.webp`)), // GoToSocial
   '/assets/default_avatars/GoToSocial_icon2.webp', // GoToSocial
-  require('soapbox/assets/images/avatar-missing.png'), // avatar not provided by backend
+  require('pl-fe/assets/images/avatar-missing.png'), // avatar not provided by backend
 ];
 
 /** Check if the avatar is a default avatar */

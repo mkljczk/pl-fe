@@ -1,11 +1,11 @@
 import { Map as ImmutableMap, List as ImmutableList } from 'immutable';
 import { statusSchema } from 'pl-api';
 
-import { normalizeStatus } from 'soapbox/normalizers/status';
-import { makeGetAccount } from 'soapbox/selectors';
+import { normalizeStatus } from 'pl-fe/normalizers/status';
+import { makeGetAccount } from 'pl-fe/selectors';
 
-import type { PendingStatus } from 'soapbox/reducers/pending-statuses';
-import type { RootState } from 'soapbox/store';
+import type { PendingStatus } from 'pl-fe/reducers/pending-statuses';
+import type { RootState } from 'pl-fe/store';
 
 const getAccount = makeGetAccount();
 

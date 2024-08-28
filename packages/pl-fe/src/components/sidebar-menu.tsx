@@ -4,20 +4,20 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link, NavLink } from 'react-router-dom';
 
-import { fetchOwnAccounts, logOut, switchAccount } from 'soapbox/actions/auth';
-import { getSettings } from 'soapbox/actions/settings';
-import { closeSidebar } from 'soapbox/actions/sidebar';
-import { useAccount } from 'soapbox/api/hooks';
-import Account from 'soapbox/components/account';
-import { Stack, Divider, HStack, Icon, Text } from 'soapbox/components/ui';
-import ProfileStats from 'soapbox/features/ui/components/profile-stats';
-import { useAppDispatch, useAppSelector, useFeatures, useInstance } from 'soapbox/hooks';
-import { makeGetOtherAccounts } from 'soapbox/selectors';
-import sourceCode from 'soapbox/utils/code';
-import { isStandalone } from 'soapbox/utils/state';
+import { fetchOwnAccounts, logOut, switchAccount } from 'pl-fe/actions/auth';
+import { getSettings } from 'pl-fe/actions/settings';
+import { closeSidebar } from 'pl-fe/actions/sidebar';
+import { useAccount } from 'pl-fe/api/hooks';
+import Account from 'pl-fe/components/account';
+import { Stack, Divider, HStack, Icon, Text } from 'pl-fe/components/ui';
+import ProfileStats from 'pl-fe/features/ui/components/profile-stats';
+import { useAppDispatch, useAppSelector, useFeatures, useInstance } from 'pl-fe/hooks';
+import { makeGetOtherAccounts } from 'pl-fe/selectors';
+import sourceCode from 'pl-fe/utils/code';
+import { isStandalone } from 'pl-fe/utils/state';
 
 import type { List as ImmutableList } from 'immutable';
-import type { Account as AccountEntity } from 'soapbox/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers';
 
 
 const messages = defineMessages({

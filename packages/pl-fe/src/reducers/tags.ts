@@ -6,7 +6,7 @@ import {
   HASHTAG_FOLLOW_FAIL,
   HASHTAG_UNFOLLOW_REQUEST,
   HASHTAG_UNFOLLOW_FAIL,
-} from 'soapbox/actions/tags';
+} from 'pl-fe/actions/tags';
 
 import type { Tag } from 'pl-api';
 import type { AnyAction } from 'redux';

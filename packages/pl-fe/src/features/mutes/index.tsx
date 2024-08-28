@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { useMutes } from 'soapbox/api/hooks';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Column, Stack } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
+import { useMutes } from 'pl-fe/api/hooks';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Column, Stack } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
 
 const messages = defineMessages({
   heading: { id: 'column.mutes', defaultMessage: 'Mutes' },

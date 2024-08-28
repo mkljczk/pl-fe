@@ -1,8 +1,8 @@
 import escapeTextContentForBrowser from 'escape-html';
 
-import emojify from 'soapbox/features/emoji';
-import { unescapeHTML } from 'soapbox/utils/html';
-import { makeEmojiMap } from 'soapbox/utils/normalizers';
+import emojify from 'pl-fe/features/emoji';
+import { unescapeHTML } from 'pl-fe/utils/html';
+import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
 import type { Group as BaseGroup } from 'pl-api';
 
@@ -16,8 +16,8 @@ const getDomainFromURL = (group: Pick<BaseGroup, 'url'>): string => {
 };
 
 const normalizeGroup = (group: BaseGroup) => {
-  const missingAvatar = require('soapbox/assets/images/avatar-missing.png');
-  const missingHeader = require('soapbox/assets/images/header-missing.png');
+  const missingAvatar = require('pl-fe/assets/images/avatar-missing.png');
+  const missingHeader = require('pl-fe/assets/images/header-missing.png');
 
   const domain = getDomainFromURL(group);
   const note = group.note === '<p></p>' ? '' : group.note;

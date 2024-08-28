@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { HStack, Stack, Slider } from 'soapbox/components/ui';
-import { usePrevious } from 'soapbox/hooks';
-import { compareId } from 'soapbox/utils/comparators';
-import { hueShift } from 'soapbox/utils/theme';
+import { HStack, Stack, Slider } from 'pl-fe/components/ui';
+import { usePrevious } from 'pl-fe/hooks';
+import { compareId } from 'pl-fe/utils/comparators';
+import { hueShift } from 'pl-fe/utils/theme';
 
 import Color from './color';
 

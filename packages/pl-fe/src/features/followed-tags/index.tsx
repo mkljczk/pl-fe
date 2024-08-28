@@ -2,12 +2,12 @@ import debounce from 'lodash/debounce';
 import React, { useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { fetchFollowedHashtags, expandFollowedHashtags } from 'soapbox/actions/tags';
-import Hashtag from 'soapbox/components/hashtag';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Column } from 'soapbox/components/ui';
-import PlaceholderHashtag from 'soapbox/features/placeholder/components/placeholder-hashtag';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { fetchFollowedHashtags, expandFollowedHashtags } from 'pl-fe/actions/tags';
+import Hashtag from 'pl-fe/components/hashtag';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Column } from 'pl-fe/components/ui';
+import PlaceholderHashtag from 'pl-fe/features/placeholder/components/placeholder-hashtag';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   heading: { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },

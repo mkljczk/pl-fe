@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import React, { useCallback, useState } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 
-import { Avatar, HStack, Stack, Text } from 'soapbox/components/ui';
-import VerificationBadge from 'soapbox/components/verification-badge';
-import useAccountSearch from 'soapbox/queries/search';
+import { Avatar, HStack, Stack, Text } from 'pl-fe/components/ui';
+import VerificationBadge from 'pl-fe/components/verification-badge';
+import useAccountSearch from 'pl-fe/queries/search';
 
 import type { Account } from 'pl-api';
 

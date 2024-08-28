@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchDraftStatuses } from 'soapbox/actions/draft-statuses';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Column } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch } from 'soapbox/hooks';
+import { fetchDraftStatuses } from 'pl-fe/actions/draft-statuses';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Column } from 'pl-fe/components/ui';
+import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 import DraftStatus from './components/draft-status';
 

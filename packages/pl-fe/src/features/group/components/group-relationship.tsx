@@ -2,7 +2,7 @@ import { GroupRoles, type Group } from 'pl-api';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { HStack, Icon, Text } from 'soapbox/components/ui';
+import { HStack, Icon, Text } from 'pl-fe/components/ui';
 
 interface IGroupRelationship {
   group: Pick<Group, 'relationship'>;

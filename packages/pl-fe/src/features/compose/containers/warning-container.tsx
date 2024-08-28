@@ -2,8 +2,8 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { useAppSelector, useCompose } from 'soapbox/hooks';
-import { selectOwnAccount } from 'soapbox/selectors';
+import { useAppSelector, useCompose } from 'pl-fe/hooks';
+import { selectOwnAccount } from 'pl-fe/selectors';
 
 import Warning from '../components/warning';
 

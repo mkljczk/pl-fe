@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { getSettings } from 'soapbox/actions/settings';
-import { settingsSchema } from 'soapbox/schemas/soapbox/settings';
+import { getSettings } from 'pl-fe/actions/settings';
+import { settingsSchema } from 'pl-fe/schemas/pl-fe/settings';
 
 import { useAppSelector } from './useAppSelector';
 

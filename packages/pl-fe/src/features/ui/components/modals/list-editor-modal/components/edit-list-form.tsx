@@ -1,9 +1,9 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeListEditorTitle, submitListEditor } from 'soapbox/actions/lists';
-import { Button, Form, HStack, Input } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { changeListEditorTitle, submitListEditor } from 'pl-fe/actions/lists';
+import { Button, Form, HStack, Input } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   title: { id: 'lists.edit.submit', defaultMessage: 'Change title' },

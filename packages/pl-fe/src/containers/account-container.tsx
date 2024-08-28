@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useAccount } from 'soapbox/api/hooks';
-import Account, { IAccount } from 'soapbox/components/account';
+import { useAccount } from 'pl-fe/api/hooks';
+import Account, { IAccount } from 'pl-fe/components/account';
 
 interface IAccountContainer extends Omit<IAccount, 'account'> {
   id: string;

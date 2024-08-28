@@ -3,8 +3,8 @@ import debounce from 'lodash/debounce';
 import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { openStatusHoverCard, closeStatusHoverCard } from 'soapbox/actions/status-hover-card';
-import { isMobile } from 'soapbox/is-mobile';
+import { openStatusHoverCard, closeStatusHoverCard } from 'pl-fe/actions/status-hover-card';
+import { isMobile } from 'pl-fe/is-mobile';
 
 const showStatusHoverCard = debounce((dispatch, ref, statusId) => {
   dispatch(openStatusHoverCard(ref, statusId));

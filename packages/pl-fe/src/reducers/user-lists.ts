@@ -12,7 +12,7 @@ import {
   FOLLOW_REQUEST_REJECT_SUCCESS,
   PINNED_ACCOUNTS_FETCH_SUCCESS,
   BIRTHDAY_REMINDERS_FETCH_SUCCESS,
-} from 'soapbox/actions/accounts';
+} from 'pl-fe/actions/accounts';
 import {
   DIRECTORY_FETCH_REQUEST,
   DIRECTORY_FETCH_SUCCESS,
@@ -21,7 +21,7 @@ import {
   DIRECTORY_EXPAND_SUCCESS,
   DIRECTORY_EXPAND_FAIL,
   DirectoryAction,
-} from 'soapbox/actions/directory';
+} from 'pl-fe/actions/directory';
 import {
   EVENT_PARTICIPATIONS_EXPAND_SUCCESS,
   EVENT_PARTICIPATIONS_FETCH_SUCCESS,
@@ -29,14 +29,14 @@ import {
   EVENT_PARTICIPATION_REQUESTS_FETCH_SUCCESS,
   EVENT_PARTICIPATION_REQUEST_AUTHORIZE_SUCCESS,
   EVENT_PARTICIPATION_REQUEST_REJECT_SUCCESS,
-} from 'soapbox/actions/events';
-import { FAMILIAR_FOLLOWERS_FETCH_SUCCESS } from 'soapbox/actions/familiar-followers';
+} from 'pl-fe/actions/events';
+import { FAMILIAR_FOLLOWERS_FETCH_SUCCESS } from 'pl-fe/actions/familiar-followers';
 import {
   GROUP_BLOCKS_FETCH_REQUEST,
   GROUP_BLOCKS_FETCH_SUCCESS,
   GROUP_BLOCKS_FETCH_FAIL,
   GROUP_UNBLOCK_SUCCESS,
-} from 'soapbox/actions/groups';
+} from 'pl-fe/actions/groups';
 import {
   REBLOGS_FETCH_SUCCESS,
   REBLOGS_EXPAND_SUCCESS,
@@ -44,11 +44,11 @@ import {
   FAVOURITES_EXPAND_SUCCESS,
   DISLIKES_FETCH_SUCCESS,
   REACTIONS_FETCH_SUCCESS,
-} from 'soapbox/actions/interactions';
-import { NOTIFICATIONS_UPDATE } from 'soapbox/actions/notifications';
+} from 'pl-fe/actions/interactions';
+import { NOTIFICATIONS_UPDATE } from 'pl-fe/actions/notifications';
 
 import type { Account, Notification, PaginatedResponse } from 'pl-api';
-import type { APIEntity } from 'soapbox/types/entities';
+import type { APIEntity } from 'pl-fe/types/entities';
 
 const ListRecord = ImmutableRecord({
   next: null as (() => Promise<PaginatedResponse<Account>>) | null,

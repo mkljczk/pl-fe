@@ -1,13 +1,13 @@
 import React from 'react';
 
-import LinkFooter from 'soapbox/features/ui/components/link-footer';
+import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
   PromoPanel,
   InstanceInfoPanel,
   InstanceModerationPanel,
-} from 'soapbox/features/ui/util/async-components';
-import { useAppSelector, useOwnAccount } from 'soapbox/hooks';
-import { federationRestrictionsDisclosed } from 'soapbox/utils/state';
+} from 'pl-fe/features/ui/util/async-components';
+import { useAppSelector, useOwnAccount } from 'pl-fe/hooks';
+import { federationRestrictionsDisclosed } from 'pl-fe/utils/state';
 
 import { Layout } from '../components/ui';
 

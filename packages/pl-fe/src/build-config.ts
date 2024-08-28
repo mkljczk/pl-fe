@@ -1,4 +1,4 @@
-import type { SoapboxEnv } from './build-config-compiletime';
+import type { PlFeEnv } from './build-config-compiletime';
 
 export const {
   NODE_ENV,
@@ -6,4 +6,4 @@ export const {
   FE_SUBDIRECTORY,
   FE_INSTANCE_SOURCE_DIR,
   SENTRY_DSN,
-} = import.meta.compileTime<SoapboxEnv>('./build-config-compiletime.ts');
+} = import.meta.compileTime<PlFeEnv>('./build-config-compiletime.ts');

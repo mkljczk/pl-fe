@@ -2,15 +2,15 @@ import clsx from 'clsx';
 import React from 'react';
 import { TransitionMotion, spring } from 'react-motion';
 
-import { useAnnouncements } from 'soapbox/api/hooks/announcements';
-import EmojiPickerDropdown from 'soapbox/features/emoji/containers/emoji-picker-dropdown-container';
-import { useSettings } from 'soapbox/hooks';
+import { useAnnouncements } from 'pl-fe/api/hooks/announcements';
+import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
+import { useSettings } from 'pl-fe/hooks';
 
 import Reaction from './reaction';
 
 import type { Map as ImmutableMap } from 'immutable';
 import type { AnnouncementReaction, CustomEmoji } from 'pl-api';
-import type { Emoji, NativeEmoji } from 'soapbox/features/emoji';
+import type { Emoji, NativeEmoji } from 'pl-fe/features/emoji';
 
 interface IReactionsBar {
   announcementId: string;

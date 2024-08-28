@@ -93,7 +93,7 @@ const config = defineConfig(({ command }) => ({
     visualizer({
       emitFile: true,
       filename: 'report.html',
-      title: 'Soapbox Bundle',
+      title: 'pl-fe Bundle',
     }),
     {
       name: 'mock-api',
@@ -111,7 +111,7 @@ const config = defineConfig(({ command }) => ({
   ],
   resolve: {
     alias: [
-      { find: 'soapbox', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
+      { find: 'pl-fe', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
     ],
   },
   test: {

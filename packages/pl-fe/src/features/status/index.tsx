@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 
-import { fetchStatusWithContext } from 'soapbox/actions/statuses';
-import MissingIndicator from 'soapbox/components/missing-indicator';
-import PullToRefresh from 'soapbox/components/pull-to-refresh';
-import { Column, Stack } from 'soapbox/components/ui';
-import PlaceholderStatus from 'soapbox/features/placeholder/components/placeholder-status';
-import { useAppDispatch, useAppSelector, useLoggedIn } from 'soapbox/hooks';
-import { makeGetStatus } from 'soapbox/selectors';
+import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
+import MissingIndicator from 'pl-fe/components/missing-indicator';
+import PullToRefresh from 'pl-fe/components/pull-to-refresh';
+import { Column, Stack } from 'pl-fe/components/ui';
+import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
+import { useAppDispatch, useAppSelector, useLoggedIn } from 'pl-fe/hooks';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 import Thread from './components/thread';
 import ThreadLoginCta from './components/thread-login-cta';

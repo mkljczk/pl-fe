@@ -1,14 +1,14 @@
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import { deleteStatusModal } from 'soapbox/actions/moderation';
-import DropdownMenu from 'soapbox/components/dropdown-menu';
-import StatusContent from 'soapbox/components/status-content';
-import StatusMedia from 'soapbox/components/status-media';
-import { HStack, Stack } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import { deleteStatusModal } from 'pl-fe/actions/moderation';
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import StatusContent from 'pl-fe/components/status-content';
+import StatusMedia from 'pl-fe/components/status-media';
+import { HStack, Stack } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
 
-import type { SelectedStatus } from 'soapbox/selectors';
+import type { SelectedStatus } from 'pl-fe/selectors';
 
 const messages = defineMessages({
   viewStatus: { id: 'admin.reports.actions.view_status', defaultMessage: 'View post' },

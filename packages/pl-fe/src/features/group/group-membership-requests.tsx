@@ -2,17 +2,17 @@ import { GroupRoles } from 'pl-api';
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useGroup, useGroupMembers, useGroupMembershipRequests } from 'soapbox/api/hooks';
-import Account from 'soapbox/components/account';
-import { AuthorizeRejectButtons } from 'soapbox/components/authorize-reject-buttons';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Column, HStack, Spinner } from 'soapbox/components/ui';
-import toast from 'soapbox/toast';
+import { useGroup, useGroupMembers, useGroupMembershipRequests } from 'pl-fe/api/hooks';
+import Account from 'pl-fe/components/account';
+import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Column, HStack, Spinner } from 'pl-fe/components/ui';
+import toast from 'pl-fe/toast';
 
 import ColumnForbidden from '../ui/components/column-forbidden';
 
-import type { PlfeResponse } from 'soapbox/api';
-import type { Account as AccountEntity } from 'soapbox/normalizers';
+import type { PlfeResponse } from 'pl-fe/api';
+import type { Account as AccountEntity } from 'pl-fe/normalizers';
 
 type RouteParams = { groupId: string };
 

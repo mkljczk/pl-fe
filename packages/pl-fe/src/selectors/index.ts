@@ -6,20 +6,20 @@ import {
 } from 'immutable';
 import { createSelector } from 'reselect';
 
-import { getLocale, getSettings } from 'soapbox/actions/settings';
-import { Entities } from 'soapbox/entity-store/entities';
-import { getDomain } from 'soapbox/utils/accounts';
-import { validId } from 'soapbox/utils/auth';
-import ConfigDB from 'soapbox/utils/config-db';
-import { shouldFilter } from 'soapbox/utils/timelines';
+import { getLocale, getSettings } from 'pl-fe/actions/settings';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { getDomain } from 'pl-fe/utils/accounts';
+import { validId } from 'pl-fe/utils/auth';
+import ConfigDB from 'pl-fe/utils/config-db';
+import { shouldFilter } from 'pl-fe/utils/timelines';
 
 import type { Account as BaseAccount, Filter, MediaAttachment } from 'pl-api';
-import type { EntityStore } from 'soapbox/entity-store/types';
-import type { Account, Group, Notification } from 'soapbox/normalizers';
-import type { MinifiedNotification } from 'soapbox/reducers/notifications';
-import type { MinifiedStatus } from 'soapbox/reducers/statuses';
-import type { MRFSimple } from 'soapbox/schemas/pleroma';
-import type { RootState } from 'soapbox/store';
+import type { EntityStore } from 'pl-fe/entity-store/types';
+import type { Account, Group, Notification } from 'pl-fe/normalizers';
+import type { MinifiedNotification } from 'pl-fe/reducers/notifications';
+import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
+import type { MRFSimple } from 'pl-fe/schemas/pleroma';
+import type { RootState } from 'pl-fe/store';
 
 const normalizeId = (id: any): string => typeof id === 'string' ? id : typeof id === 'object' ? normalizeId(id.id) : '';
 

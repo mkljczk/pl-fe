@@ -1,12 +1,12 @@
 import { Map as ImmutableMap, fromJS } from 'immutable';
 
-import tintify from 'soapbox/utils/colors';
-import { generateAccent, generateNeutral } from 'soapbox/utils/theme';
+import tintify from 'pl-fe/utils/colors';
+import { generateAccent, generateNeutral } from 'pl-fe/utils/theme';
 
-import type { TailwindColorPalette } from 'soapbox/types/colors';
+import type { TailwindColorPalette } from 'pl-fe/types/colors';
 
-type SoapboxConfig = ImmutableMap<string, any>;
-type SoapboxColors = ImmutableMap<string, any>;
+type PlFeConfig = ImmutableMap<string, any>;
+type PlFeColors = ImmutableMap<string, any>;
 
 /** Check if the value is a valid hex color */
 const isHex = (value: any): boolean => /^#([0-9A-F]{3}){1,2}$/i.test(value);
@@ -33,9 +33,9 @@ const maybeGenerateAccentColor = (brandColor: any): string | null =>
   isHex(brandColor) ? generateAccent(brandColor) : null;
 
 /** Build a color object from legacy colors */
-const fromLegacyColors = (soapboxConfig: SoapboxConfig): TailwindColorPalette => {
-  const brandColor = soapboxConfig.get('brandColor');
-  const accentColor = soapboxConfig.get('accentColor');
+const fromLegacyColors = (plFeConfig: PlFeConfig): TailwindColorPalette => {
+  const brandColor = plFeConfig.get('brandColor');
+  const accentColor = plFeConfig.get('accentColor');
   const accent = isHex(accentColor) ? accentColor : maybeGenerateAccentColor(brandColor);
 
   return expandPalette({
@@ -46,12 +46,12 @@ const fromLegacyColors = (soapboxConfig: SoapboxConfig): TailwindColorPalette =>
   });
 };
 
-/** Convert Soapbox Config into Tailwind colors */
-const toTailwind = (soapboxConfig: SoapboxConfig): SoapboxConfig => {
-  const colors: SoapboxColors = ImmutableMap(soapboxConfig.get('colors'));
-  const legacyColors = ImmutableMap(fromJS(fromLegacyColors(soapboxConfig))) as SoapboxColors;
+/** Convert pl-fe Config into Tailwind colors */
+const toTailwind = (plFeConfig: PlFeConfig): PlFeConfig => {
+  const colors: PlFeColors = ImmutableMap(plFeConfig.get('colors'));
+  const legacyColors = ImmutableMap(fromJS(fromLegacyColors(plFeConfig))) as PlFeColors;
 
-  return soapboxConfig.set('colors', legacyColors.mergeDeep(colors));
+  return plFeConfig.set('colors', legacyColors.mergeDeep(colors));
 };
 
 export {

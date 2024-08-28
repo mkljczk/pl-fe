@@ -1,8 +1,8 @@
 
-import { play, soundCache } from 'soapbox/utils/sounds';
+import { play, soundCache } from 'pl-fe/utils/sounds';
 
 import type { AnyAction, Middleware } from 'redux';
-import type { Sounds } from 'soapbox/utils/sounds';
+import type { Sounds } from 'pl-fe/utils/sounds';
 
 interface Action extends AnyAction {
   meta: {

@@ -1,14 +1,14 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { Entities } from 'soapbox/entity-store/entities';
-import { useClient } from 'soapbox/hooks';
-import { type Account, normalizeAccount } from 'soapbox/normalizers';
-import { flattenPages } from 'soapbox/utils/queries';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useClient } from 'pl-fe/hooks';
+import { type Account, normalizeAccount } from 'pl-fe/normalizers';
+import { flattenPages } from 'pl-fe/utils/queries';
 
 import { useRelationships } from './useRelationships';
 
 import type { PaginatedResponse, Account as BaseAccount } from 'pl-api';
-import type { EntityFn } from 'soapbox/entity-store/hooks/types';
+import type { EntityFn } from 'pl-fe/entity-store/hooks/types';
 
 const useAccountList = (listKey: string[], entityFn: EntityFn<void>) => {
   const getAccounts = async (pageParam?: Pick<PaginatedResponse<BaseAccount>, 'next'>) => {

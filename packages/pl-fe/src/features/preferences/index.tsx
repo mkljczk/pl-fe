@@ -2,12 +2,12 @@ import { Set as ImmutableSet } from 'immutable';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting } from 'soapbox/actions/settings';
-import List, { ListItem } from 'soapbox/components/list';
-import { Form } from 'soapbox/components/ui';
-import { Mutliselect, SelectDropdown } from 'soapbox/features/forms';
-import SettingToggle from 'soapbox/features/notifications/components/setting-toggle';
-import { useAppDispatch, useFeatures, useSettings } from 'soapbox/hooks';
+import { changeSetting } from 'pl-fe/actions/settings';
+import List, { ListItem } from 'pl-fe/components/list';
+import { Form } from 'pl-fe/components/ui';
+import { Mutliselect, SelectDropdown } from 'pl-fe/features/forms';
+import SettingToggle from 'pl-fe/features/notifications/components/setting-toggle';
+import { useAppDispatch, useFeatures, useSettings } from 'pl-fe/hooks';
 
 import ThemeToggle from '../ui/components/theme-toggle';
 

@@ -1,7 +1,7 @@
 import { List as ImmutableList, fromJS } from 'immutable';
 
-import { normalizeStatus } from 'soapbox/normalizers';
-import { emojiReactionSchema } from 'soapbox/schemas';
+import { normalizeStatus } from 'pl-fe/normalizers';
+import { emojiReactionSchema } from 'pl-fe/schemas';
 
 import {
   sortEmoji,

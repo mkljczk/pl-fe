@@ -2,11 +2,11 @@ import { produce } from 'immer';
 import { Map as ImmutableMap, List as ImmutableList, fromJS } from 'immutable';
 import { type Instance, instanceSchema } from 'pl-api';
 
-import { ADMIN_CONFIG_UPDATE_REQUEST, ADMIN_CONFIG_UPDATE_SUCCESS } from 'soapbox/actions/admin';
-import { INSTANCE_FETCH_FAIL, INSTANCE_FETCH_SUCCESS, InstanceAction } from 'soapbox/actions/instance';
-import { PLEROMA_PRELOAD_IMPORT, type PreloadAction } from 'soapbox/actions/preload';
-import KVStore from 'soapbox/storage/kv-store';
-import ConfigDB from 'soapbox/utils/config-db';
+import { ADMIN_CONFIG_UPDATE_REQUEST, ADMIN_CONFIG_UPDATE_SUCCESS } from 'pl-fe/actions/admin';
+import { INSTANCE_FETCH_FAIL, INSTANCE_FETCH_SUCCESS, InstanceAction } from 'pl-fe/actions/instance';
+import { PLEROMA_PRELOAD_IMPORT, type PreloadAction } from 'pl-fe/actions/preload';
+import KVStore from 'pl-fe/storage/kv-store';
+import ConfigDB from 'pl-fe/utils/config-db';
 
 import type { AnyAction } from 'redux';
 

@@ -7,7 +7,7 @@ import {
   setAlerts,
 } from './setter';
 
-import type { AppDispatch } from 'soapbox/store';
+import type { AppDispatch } from 'pl-fe/store';
 
 const changeAlerts = (path: Array<string>, value: any) =>
   (dispatch: AppDispatch) => {

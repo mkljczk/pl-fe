@@ -1,18 +1,18 @@
 import { PLEROMA, type UpdateNotificationSettingsParams, type Account, type CreateAccountParams, type PaginatedResponse, type Relationship } from 'pl-api';
 
-import { importEntities } from 'soapbox/entity-store/actions';
-import { Entities } from 'soapbox/entity-store/entities';
-import { selectAccount } from 'soapbox/selectors';
-import { isLoggedIn } from 'soapbox/utils/auth';
+import { importEntities } from 'pl-fe/entity-store/actions';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { selectAccount } from 'pl-fe/selectors';
+import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { getClient, type PlfeResponse } from '../api';
 
 import { importFetchedAccount, importFetchedAccounts } from './importer';
 
 import type { Map as ImmutableMap } from 'immutable';
-import type { MinifiedStatus } from 'soapbox/reducers/statuses';
-import type { AppDispatch, RootState } from 'soapbox/store';
-import type { History } from 'soapbox/types/history';
+import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
+import type { AppDispatch, RootState } from 'pl-fe/store';
+import type { History } from 'pl-fe/types/history';
 
 const ACCOUNT_CREATE_REQUEST = 'ACCOUNT_CREATE_REQUEST' as const;
 const ACCOUNT_CREATE_SUCCESS = 'ACCOUNT_CREATE_SUCCESS' as const;

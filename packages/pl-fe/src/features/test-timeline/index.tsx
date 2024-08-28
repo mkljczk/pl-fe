@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { importFetchedStatuses } from 'soapbox/actions/importer';
-import { expandTimelineSuccess } from 'soapbox/actions/timelines';
-import { useAppDispatch, useTheme } from 'soapbox/hooks';
-import { useIsMobile } from 'soapbox/hooks/useIsMobile';
+import { importFetchedStatuses } from 'pl-fe/actions/importer';
+import { expandTimelineSuccess } from 'pl-fe/actions/timelines';
+import { useAppDispatch, useTheme } from 'pl-fe/hooks';
+import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 import { Column } from '../../components/ui';
 import Timeline from '../ui/components/timeline';
@@ -18,11 +18,11 @@ const messages = defineMessages({
  * These get embedded into the build, but only in this chunk, so it's okay.
  */
 const MOCK_STATUSES: any[] = [
-  require('soapbox/__fixtures__/pleroma-status.json'),
-  require('soapbox/__fixtures__/pleroma-status-with-poll.json'),
-  require('soapbox/__fixtures__/pleroma-status-vertical-video-without-metadata.json'),
-  require('soapbox/__fixtures__/pleroma-status-with-poll-with-emojis.json'),
-  require('soapbox/__fixtures__/pleroma-quote-of-quote-post.json'),
+  require('pl-fe/__fixtures__/pleroma-status.json'),
+  require('pl-fe/__fixtures__/pleroma-status-with-poll.json'),
+  require('pl-fe/__fixtures__/pleroma-status-vertical-video-without-metadata.json'),
+  require('pl-fe/__fixtures__/pleroma-status-with-poll-with-emojis.json'),
+  require('pl-fe/__fixtures__/pleroma-quote-of-quote-post.json'),
 ];
 
 const timelineId = 'test';

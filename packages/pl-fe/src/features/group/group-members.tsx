@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import { GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
 
-import { useGroup, useGroupMembers, useGroupMembershipRequests } from 'soapbox/api/hooks';
-import { PendingItemsRow } from 'soapbox/components/pending-items-row';
-import ScrollableList from 'soapbox/components/scrollable-list';
+import { useGroup, useGroupMembers, useGroupMembershipRequests } from 'pl-fe/api/hooks';
+import { PendingItemsRow } from 'pl-fe/components/pending-items-row';
+import ScrollableList from 'pl-fe/components/scrollable-list';
 
 import PlaceholderAccount from '../placeholder/components/placeholder-account';
 

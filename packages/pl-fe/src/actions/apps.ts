@@ -2,13 +2,13 @@
  * Apps: manage OAuth applications.
  * Particularly useful for auth.
  * https://docs.joinmastodon.org/methods/apps/
- * @module soapbox/actions/apps
- * @see module:soapbox/actions/auth
+ * @module pl-fe/actions/apps
+ * @see module:pl-fe/actions/auth
  */
 
 import { PlApiClient, type CreateApplicationParams } from 'pl-api';
 
-import * as BuildConfig from 'soapbox/build-config';
+import * as BuildConfig from 'pl-fe/build-config';
 
 import type { AnyAction } from 'redux';
 

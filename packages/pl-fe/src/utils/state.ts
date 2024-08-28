@@ -1,18 +1,18 @@
 /**
  * State: general Redux state utility functions.
- * @module soapbox/utils/state
+ * @module pl-fe/utils/state
  */
 
-import { getSoapboxConfig } from 'soapbox/actions/soapbox';
-import * as BuildConfig from 'soapbox/build-config';
-import { isPrerendered } from 'soapbox/precheck';
-import { selectOwnAccount } from 'soapbox/selectors';
-import { isURL } from 'soapbox/utils/auth';
+import { getPlFeConfig } from 'pl-fe/actions/pl-fe';
+import * as BuildConfig from 'pl-fe/build-config';
+import { isPrerendered } from 'pl-fe/precheck';
+import { selectOwnAccount } from 'pl-fe/selectors';
+import { isURL } from 'pl-fe/utils/auth';
 
-import type { RootState } from 'soapbox/store';
+import type { RootState } from 'pl-fe/store';
 
 /** Whether to display the fqn instead of the acct. */
-const displayFqn = (state: RootState): boolean => getSoapboxConfig(state).displayFqn;
+const displayFqn = (state: RootState): boolean => getPlFeConfig(state).displayFqn;
 
 /** Whether the instance exposes instance blocks through the API. */
 const federationRestrictionsDisclosed = (state: RootState): boolean =>

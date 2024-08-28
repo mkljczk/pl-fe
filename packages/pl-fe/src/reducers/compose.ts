@@ -2,9 +2,9 @@ import { Map as ImmutableMap, List as ImmutableList, OrderedSet as ImmutableOrde
 import { PLEROMA, type CredentialAccount, type MediaAttachment, type Tag } from 'pl-api';
 import { v4 as uuid } from 'uuid';
 
-import { isNativeEmoji } from 'soapbox/features/emoji';
-import { tagHistory } from 'soapbox/settings';
-import { hasIntegerMediaIds } from 'soapbox/utils/status';
+import { isNativeEmoji } from 'pl-fe/features/emoji';
+import { tagHistory } from 'pl-fe/settings';
+import { hasIntegerMediaIds } from 'pl-fe/utils/status';
 
 import {
   COMPOSE_CHANGE,
@@ -67,10 +67,10 @@ import { SETTING_CHANGE, FE_NAME, SettingsAction } from '../actions/settings';
 import { TIMELINE_DELETE, TimelineAction } from '../actions/timelines';
 import { unescapeHTML } from '../utils/html';
 
-import type { Emoji } from 'soapbox/features/emoji';
-import type { Language } from 'soapbox/features/preferences';
-import type { Account, Status } from 'soapbox/normalizers';
-import type { APIEntity } from 'soapbox/types/entities';
+import type { Emoji } from 'pl-fe/features/emoji';
+import type { Language } from 'pl-fe/features/preferences';
+import type { Account, Status } from 'pl-fe/normalizers';
+import type { APIEntity } from 'pl-fe/types/entities';
 
 const getResetFileKey = () => Math.floor((Math.random() * 0x10000));
 

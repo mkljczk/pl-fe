@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { buildAccount } from 'soapbox/jest/factory';
-import { render, screen, rootState } from 'soapbox/jest/test-helpers';
-import { normalizeStatus } from 'soapbox/normalizers';
+import { buildAccount } from 'pl-fe/jest/factory';
+import { render, screen, rootState } from 'pl-fe/jest/test-helpers';
+import { normalizeStatus } from 'pl-fe/normalizers';
 
 import Status from './status';
 
-import type { ReducerStatus } from 'soapbox/reducers/statuses';
+import type { ReducerStatus } from 'pl-fe/reducers/statuses';
 
 const account = buildAccount({
   id: '1',

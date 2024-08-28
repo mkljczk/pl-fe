@@ -1,20 +1,20 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Text } from 'soapbox/components/ui';
-import emojify from 'soapbox/features/emoji';
-import { useSoapboxConfig } from 'soapbox/hooks';
-import sourceCode from 'soapbox/utils/code';
+import { Text } from 'pl-fe/components/ui';
+import emojify from 'pl-fe/features/emoji';
+import { usePlFeConfig } from 'pl-fe/hooks';
+import sourceCode from 'pl-fe/utils/code';
 
 const LinkFooter: React.FC = (): JSX.Element => {
-  const soapboxConfig = useSoapboxConfig();
+  const plFeConfig = usePlFeConfig();
 
   return (
     <Text theme='muted' size='sm'>
-      {soapboxConfig.linkFooterMessage ? (
+      {plFeConfig.linkFooterMessage ? (
         <span
           className='inline-block align-middle'
-          dangerouslySetInnerHTML={{ __html: emojify(soapboxConfig.linkFooterMessage) }}
+          dangerouslySetInnerHTML={{ __html: emojify(plFeConfig.linkFooterMessage) }}
         />
       ) : (
         <FormattedMessage

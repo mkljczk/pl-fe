@@ -9,19 +9,19 @@ import {
   expandNotifications,
   scrollTopNotifications,
   dequeueNotifications,
-} from 'soapbox/actions/notifications';
-import PullToRefresh from 'soapbox/components/pull-to-refresh';
-import ScrollTopButton from 'soapbox/components/scroll-top-button';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Column, Portal } from 'soapbox/components/ui';
-import PlaceholderNotification from 'soapbox/features/placeholder/components/placeholder-notification';
-import { useAppDispatch, useAppSelector, useSettings } from 'soapbox/hooks';
+} from 'pl-fe/actions/notifications';
+import PullToRefresh from 'pl-fe/components/pull-to-refresh';
+import ScrollTopButton from 'pl-fe/components/scroll-top-button';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Column, Portal } from 'pl-fe/components/ui';
+import PlaceholderNotification from 'pl-fe/features/placeholder/components/placeholder-notification';
+import { useAppDispatch, useAppSelector, useSettings } from 'pl-fe/hooks';
 
 import FilterBar from './components/filter-bar';
 import Notification from './components/notification';
 
 import type { VirtuosoHandle } from 'react-virtuoso';
-import type { RootState } from 'soapbox/store';
+import type { RootState } from 'pl-fe/store';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },

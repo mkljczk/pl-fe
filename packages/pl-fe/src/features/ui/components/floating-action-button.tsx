@@ -3,11 +3,11 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useLocation, useRouteMatch } from 'react-router-dom';
 
-import { groupComposeModal } from 'soapbox/actions/compose';
-import { openModal } from 'soapbox/actions/modals';
-import { useGroup } from 'soapbox/api/hooks';
-import { Avatar, HStack, Icon } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import { groupComposeModal } from 'pl-fe/actions/compose';
+import { openModal } from 'pl-fe/actions/modals';
+import { useGroup } from 'pl-fe/api/hooks';
+import { Avatar, HStack, Icon } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   publish: { id: 'compose_form.publish', defaultMessage: 'Post' },

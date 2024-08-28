@@ -7,9 +7,9 @@ import escapeTextContentForBrowser from 'escape-html';
 import DOMPurify from 'isomorphic-dompurify';
 import { type Account as BaseAccount, type Status as BaseStatus, type MediaAttachment, mentionSchema, type Translation } from 'pl-api';
 
-import emojify from 'soapbox/features/emoji';
-import { stripCompatibilityFeatures, unescapeHTML } from 'soapbox/utils/html';
-import { makeEmojiMap } from 'soapbox/utils/normalizers';
+import emojify from 'pl-fe/features/emoji';
+import { stripCompatibilityFeatures, unescapeHTML } from 'pl-fe/utils/html';
+import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
 import { normalizeAccount } from './account';
 import { normalizeGroup } from './group';

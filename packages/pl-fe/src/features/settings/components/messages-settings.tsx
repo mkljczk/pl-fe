@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import List, { ListItem } from 'soapbox/components/list';
-import { Toggle } from 'soapbox/components/ui';
-import { useOwnAccount } from 'soapbox/hooks';
-import { useUpdateCredentials } from 'soapbox/queries/accounts';
+import List, { ListItem } from 'pl-fe/components/list';
+import { Toggle } from 'pl-fe/components/ui';
+import { useOwnAccount } from 'pl-fe/hooks';
+import { useUpdateCredentials } from 'pl-fe/queries/accounts';
 
 const messages = defineMessages({
   label: { id: 'settings.messages.label', defaultMessage: 'Allow users to start a new chat with you' },

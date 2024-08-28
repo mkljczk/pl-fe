@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import AltIndicator from 'soapbox/components/alt-indicator';
-import { Avatar, Icon, HStack } from 'soapbox/components/ui';
-import { useAppDispatch, useDraggedFiles } from 'soapbox/hooks';
+import { openModal } from 'pl-fe/actions/modals';
+import AltIndicator from 'pl-fe/components/alt-indicator';
+import { Avatar, Icon, HStack } from 'pl-fe/components/ui';
+import { useAppDispatch, useDraggedFiles } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   changeDescriptionHeading: { id: 'group.upload_avatar.alt.heading', defaultMessage: 'Change avatar description' },

@@ -3,10 +3,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { setupMfa, confirmMfa } from 'soapbox/actions/mfa';
-import { Button, Form, FormActions, FormGroup, Input, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { setupMfa, confirmMfa } from 'pl-fe/actions/mfa';
+import { Button, Form, FormActions, FormGroup, Input, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   mfaCancelButton: { id: 'column.mfa_cancel', defaultMessage: 'Cancel' },

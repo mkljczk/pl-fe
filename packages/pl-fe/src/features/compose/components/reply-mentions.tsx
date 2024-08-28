@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
-import { openModal } from 'soapbox/actions/modals';
-import { useAppDispatch, useAppSelector, useCompose, useFeatures } from 'soapbox/hooks';
-import { makeGetStatus } from 'soapbox/selectors';
+import { openModal } from 'pl-fe/actions/modals';
+import { useAppDispatch, useAppSelector, useCompose, useFeatures } from 'pl-fe/hooks';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 interface IReplyMentions {
   composeId: string;

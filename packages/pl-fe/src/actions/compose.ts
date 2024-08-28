@@ -1,14 +1,14 @@
 import throttle from 'lodash/throttle';
 import { defineMessages, IntlShape } from 'react-intl';
 
-import { getClient } from 'soapbox/api';
-import { isNativeEmoji } from 'soapbox/features/emoji';
-import emojiSearch from 'soapbox/features/emoji/search';
-import { Language } from 'soapbox/features/preferences';
-import { selectAccount, selectOwnAccount, makeGetAccount } from 'soapbox/selectors';
-import { tagHistory } from 'soapbox/settings';
-import toast from 'soapbox/toast';
-import { isLoggedIn } from 'soapbox/utils/auth';
+import { getClient } from 'pl-fe/api';
+import { isNativeEmoji } from 'pl-fe/features/emoji';
+import emojiSearch from 'pl-fe/features/emoji/search';
+import { Language } from 'pl-fe/features/preferences';
+import { selectAccount, selectOwnAccount, makeGetAccount } from 'pl-fe/selectors';
+import { tagHistory } from 'pl-fe/settings';
+import toast from 'pl-fe/toast';
+import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { chooseEmoji } from './emojis';
 import { importFetchedAccounts } from './importer';
@@ -20,11 +20,11 @@ import { createStatus } from './statuses';
 
 import type { EditorState } from 'lexical';
 import type { Account as BaseAccount, BackendVersion, CreateStatusParams, Group, MediaAttachment, Status as BaseStatus, Tag, Poll, ScheduledStatus } from 'pl-api';
-import type { AutoSuggestion } from 'soapbox/components/autosuggest-input';
-import type { Emoji } from 'soapbox/features/emoji';
-import type { Account, Status } from 'soapbox/normalizers';
-import type { AppDispatch, RootState } from 'soapbox/store';
-import type { History } from 'soapbox/types/history';
+import type { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
+import type { Emoji } from 'pl-fe/features/emoji';
+import type { Account, Status } from 'pl-fe/normalizers';
+import type { AppDispatch, RootState } from 'pl-fe/store';
+import type { History } from 'pl-fe/types/history';
 
 let cancelFetchComposeSuggestions = new AbortController();
 

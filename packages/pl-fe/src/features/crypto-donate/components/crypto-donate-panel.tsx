@@ -2,8 +2,8 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { Text, Widget } from 'soapbox/components/ui';
-import { useInstance, useSoapboxConfig } from 'soapbox/hooks';
+import { Text, Widget } from 'pl-fe/components/ui';
+import { useInstance, usePlFeConfig } from 'pl-fe/hooks';
 
 import SiteWallet from './site-wallet';
 
@@ -20,7 +20,7 @@ const CryptoDonatePanel: React.FC<ICryptoDonatePanel> = ({ limit = 3 }): JSX.Ele
   const history = useHistory();
   const instance = useInstance();
 
-  const addresses = useSoapboxConfig().get('cryptoAddresses');
+  const addresses = usePlFeConfig().get('cryptoAddresses');
 
   if (limit === 0 || addresses.size === 0) {
     return null;

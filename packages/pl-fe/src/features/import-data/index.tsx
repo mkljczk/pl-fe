@@ -5,9 +5,9 @@ import {
   importFollows,
   importBlocks,
   importMutes,
-} from 'soapbox/actions/import-data';
-import { Column } from 'soapbox/components/ui';
-import { useFeatures } from 'soapbox/hooks';
+} from 'pl-fe/actions/import-data';
+import { Column } from 'pl-fe/components/ui';
+import { useFeatures } from 'pl-fe/hooks';
 
 import DataImporter from './components/data-importer';
 

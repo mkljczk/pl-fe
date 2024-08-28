@@ -2,15 +2,15 @@ import { Map as ImmutableMap, List as ImmutableList, OrderedSet as ImmutableOrde
 import { defineMessage } from 'react-intl';
 import { createSelector } from 'reselect';
 
-import { patchMe } from 'soapbox/actions/me';
-import { getClient } from 'soapbox/api';
-import messages from 'soapbox/messages';
-import { makeGetAccount } from 'soapbox/selectors';
-import KVStore from 'soapbox/storage/kv-store';
-import toast from 'soapbox/toast';
-import { isLoggedIn } from 'soapbox/utils/auth';
+import { patchMe } from 'pl-fe/actions/me';
+import { getClient } from 'pl-fe/api';
+import messages from 'pl-fe/messages';
+import { makeGetAccount } from 'pl-fe/selectors';
+import KVStore from 'pl-fe/storage/kv-store';
+import toast from 'pl-fe/toast';
+import { isLoggedIn } from 'pl-fe/utils/auth';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const SETTING_CHANGE = 'SETTING_CHANGE' as const;
 const SETTING_SAVE = 'SETTING_SAVE' as const;
@@ -133,9 +133,9 @@ const defaultSettings = ImmutableMap({
 });
 
 const getSettings = createSelector([
-  (state: RootState) => state.soapbox.get('defaultSettings'),
+  (state: RootState) => state.plfe.get('defaultSettings'),
   (state: RootState) => state.settings,
-], (soapboxSettings, settings) => defaultSettings.mergeDeep(soapboxSettings).mergeDeep(settings));
+], (plFeSettings, settings) => defaultSettings.mergeDeep(plFeSettings).mergeDeep(settings));
 
 interface SettingChangeAction {
   type: typeof SETTING_CHANGE;

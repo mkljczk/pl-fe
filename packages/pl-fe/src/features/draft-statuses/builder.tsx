@@ -1,10 +1,10 @@
 import { statusSchema } from 'pl-api';
 
-import { Entities } from 'soapbox/entity-store/entities';
-import { normalizeStatus } from 'soapbox/normalizers';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { normalizeStatus } from 'pl-fe/normalizers';
 
-import type { DraftStatus } from 'soapbox/reducers/draft-statuses';
-import type { RootState } from 'soapbox/store';
+import type { DraftStatus } from 'pl-fe/reducers/draft-statuses';
+import type { RootState } from 'pl-fe/store';
 
 const buildPoll = (draftStatus: DraftStatus) => {
   if (draftStatus.hasIn(['poll', 'options'])) {

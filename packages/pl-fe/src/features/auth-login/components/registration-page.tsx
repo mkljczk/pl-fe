@@ -1,9 +1,9 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { BigCard } from 'soapbox/components/big-card';
-import { Text } from 'soapbox/components/ui';
-import { useInstance, useRegistrationStatus } from 'soapbox/hooks';
+import { BigCard } from 'pl-fe/components/big-card';
+import { Text } from 'pl-fe/components/ui';
+import { useInstance, useRegistrationStatus } from 'pl-fe/hooks';
 
 import RegistrationForm from './registration-form';
 

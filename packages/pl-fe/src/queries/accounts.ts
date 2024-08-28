@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { patchMeSuccess } from 'soapbox/actions/me';
-import { useAppDispatch, useClient } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { patchMeSuccess } from 'pl-fe/actions/me';
+import { useAppDispatch, useClient } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 type IAccount = {
   acct: string;

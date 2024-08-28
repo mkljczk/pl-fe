@@ -1,4 +1,4 @@
-import { AppDispatch, RootState } from 'soapbox/store';
+import { AppDispatch, RootState } from 'pl-fe/store';
 
 import { getClient } from '../api';
 

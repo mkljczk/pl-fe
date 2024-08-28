@@ -11,8 +11,8 @@ import {
 } from '../actions/me';
 
 import type { AnyAction } from 'redux';
-import type { PlfeResponse } from 'soapbox/api';
-import type { Me } from 'soapbox/types/soapbox';
+import type { PlfeResponse } from 'pl-fe/api';
+import type { Me } from 'pl-fe/types/pl-fe';
 
 const initialState: Me = null;
 

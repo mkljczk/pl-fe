@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import React, { useRef, useState } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 
-import PullToRefresh from 'soapbox/components/pull-to-refresh';
-import { Spinner, Stack } from 'soapbox/components/ui';
-import PlaceholderChat from 'soapbox/features/placeholder/components/placeholder-chat';
-import { useChats } from 'soapbox/queries/chats';
+import PullToRefresh from 'pl-fe/components/pull-to-refresh';
+import { Spinner, Stack } from 'pl-fe/components/ui';
+import PlaceholderChat from 'pl-fe/features/placeholder/components/placeholder-chat';
+import { useChats } from 'pl-fe/queries/chats';
 
 import ChatListItem from './chat-list-item';
 

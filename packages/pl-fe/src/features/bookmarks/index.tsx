@@ -4,16 +4,16 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { fetchBookmarkedStatuses, expandBookmarkedStatuses } from 'soapbox/actions/bookmarks';
-import { openModal } from 'soapbox/actions/modals';
-import { useBookmarkFolder, useDeleteBookmarkFolder } from 'soapbox/api/hooks';
-import DropdownMenu from 'soapbox/components/dropdown-menu';
-import PullToRefresh from 'soapbox/components/pull-to-refresh';
-import StatusList from 'soapbox/components/status-list';
-import { Column } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch, useTheme } from 'soapbox/hooks';
-import { useIsMobile } from 'soapbox/hooks/useIsMobile';
-import toast from 'soapbox/toast';
+import { fetchBookmarkedStatuses, expandBookmarkedStatuses } from 'pl-fe/actions/bookmarks';
+import { openModal } from 'pl-fe/actions/modals';
+import { useBookmarkFolder, useDeleteBookmarkFolder } from 'pl-fe/api/hooks';
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import PullToRefresh from 'pl-fe/components/pull-to-refresh';
+import StatusList from 'pl-fe/components/status-list';
+import { Column } from 'pl-fe/components/ui';
+import { useAppSelector, useAppDispatch, useTheme } from 'pl-fe/hooks';
+import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
+import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },

@@ -1,14 +1,14 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchPoll, vote } from 'soapbox/actions/polls';
-import { useAppDispatch } from 'soapbox/hooks';
+import { fetchPoll, vote } from 'pl-fe/actions/polls';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 import RelativeTimestamp from '../relative-timestamp';
 import { Button, HStack, Stack, Text, Tooltip } from '../ui';
 
 import type { Selected } from './poll';
-import type { Poll } from 'soapbox/normalizers';
+import type { Poll } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   closed: { id: 'poll.closed', defaultMessage: 'Closed' },

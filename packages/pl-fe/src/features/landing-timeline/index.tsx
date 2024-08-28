@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { fetchPublicTimeline } from 'soapbox/actions/timelines';
-import { useCommunityStream } from 'soapbox/api/hooks';
-import PullToRefresh from 'soapbox/components/pull-to-refresh';
-import { Column } from 'soapbox/components/ui';
-import { useAppDispatch, useInstance, useTheme } from 'soapbox/hooks';
-import { useIsMobile } from 'soapbox/hooks/useIsMobile';
+import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
+import { useCommunityStream } from 'pl-fe/api/hooks';
+import PullToRefresh from 'pl-fe/components/pull-to-refresh';
+import { Column } from 'pl-fe/components/ui';
+import { useAppDispatch, useInstance, useTheme } from 'pl-fe/hooks';
+import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 import AboutPage from '../about';
 import Timeline from '../ui/components/timeline';

@@ -2,16 +2,16 @@
  * OAuth: create and revoke tokens.
  * Tokens can be used by users and apps.
  * https://docs.joinmastodon.org/methods/apps/oauth/
- * @module soapbox/actions/oauth
- * @see module:soapbox/actions/auth
+ * @module pl-fe/actions/oauth
+ * @see module:pl-fe/actions/auth
  */
 
 import { PlApiClient, type GetTokenParams, type RevokeTokenParams } from 'pl-api';
 
-import * as BuildConfig from 'soapbox/build-config';
-import { getBaseURL } from 'soapbox/utils/state';
+import * as BuildConfig from 'pl-fe/build-config';
+import { getBaseURL } from 'pl-fe/utils/state';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const OAUTH_TOKEN_CREATE_REQUEST = 'OAUTH_TOKEN_CREATE_REQUEST' as const;
 const OAUTH_TOKEN_CREATE_SUCCESS = 'OAUTH_TOKEN_CREATE_SUCCESS' as const;

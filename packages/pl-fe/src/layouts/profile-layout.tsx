@@ -2,10 +2,10 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Redirect, useHistory } from 'react-router-dom';
 
-import { useAccountLookup } from 'soapbox/api/hooks';
-import { Column, Layout, Tabs } from 'soapbox/components/ui';
-import Header from 'soapbox/features/account/components/header';
-import LinkFooter from 'soapbox/features/ui/components/link-footer';
+import { useAccountLookup } from 'pl-fe/api/hooks';
+import { Column, Layout, Tabs } from 'pl-fe/components/ui';
+import Header from 'pl-fe/features/account/components/header';
+import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
   WhoToFollowPanel,
   ProfileInfoPanel,
@@ -15,9 +15,9 @@ import {
   CtaBanner,
   PinnedAccountsPanel,
   AccountNotePanel,
-} from 'soapbox/features/ui/util/async-components';
-import { useAppSelector, useFeatures, useSoapboxConfig } from 'soapbox/hooks';
-import { getAcct } from 'soapbox/utils/accounts';
+} from 'pl-fe/features/ui/util/async-components';
+import { useAppSelector, useFeatures, usePlFeConfig } from 'pl-fe/hooks';
+import { getAcct } from 'pl-fe/utils/accounts';
 
 interface IProfileLayout {
   params?: {
@@ -35,7 +35,7 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
 
   const me = useAppSelector(state => state.me);
   const features = useFeatures();
-  const { displayFqn } = useSoapboxConfig();
+  const { displayFqn } = usePlFeConfig();
 
   // Fix case of username
   if (account && account.acct !== username) {

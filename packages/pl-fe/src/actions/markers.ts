@@ -1,7 +1,7 @@
 import { getClient } from '../api';
 
 import type { SaveMarkersParams } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const MARKER_FETCH_REQUEST = 'MARKER_FETCH_REQUEST' as const;
 const MARKER_FETCH_SUCCESS = 'MARKER_FETCH_SUCCESS' as const;

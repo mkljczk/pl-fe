@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import AutosuggestAccountInput from 'soapbox/components/autosuggest-account-input';
+import AutosuggestAccountInput from 'pl-fe/components/autosuggest-account-input';
 
 import SvgIcon from './ui/icon/svg-icon';
 

@@ -2,7 +2,7 @@ import { Map as ImmutableMap } from 'immutable';
 import { Location } from 'pl-api';
 import { AnyAction } from 'redux';
 
-import { LOCATION_SEARCH_SUCCESS } from 'soapbox/actions/events';
+import { LOCATION_SEARCH_SUCCESS } from 'pl-fe/actions/events';
 
 type State = ImmutableMap<any, Location>;
 

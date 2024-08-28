@@ -16,6 +16,6 @@ export { useOwnAccount } from './useOwnAccount';
 export { usePrevious } from './usePrevious';
 export { useRegistrationStatus } from './useRegistrationStatus';
 export { useSettings } from './useSettings';
-export { useSoapboxConfig } from './useSoapboxConfig';
+export { usePlFeConfig } from './usePlFeConfig';
 export { useSystemTheme } from './useSystemTheme';
 export { useTheme } from './useTheme';

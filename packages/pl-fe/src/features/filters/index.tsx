@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { fetchFilters, deleteFilter } from 'soapbox/actions/filters';
-import RelativeTimestamp from 'soapbox/components/relative-timestamp';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Button, Column, HStack, Stack, Text } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { fetchFilters, deleteFilter } from 'pl-fe/actions/filters';
+import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Button, Column, HStack, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.filters', defaultMessage: 'Muted words' },

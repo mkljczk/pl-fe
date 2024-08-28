@@ -4,10 +4,10 @@ import {
   STATUS_CREATE_FAIL,
   STATUS_CREATE_REQUEST,
   STATUS_CREATE_SUCCESS,
-} from 'soapbox/actions/statuses';
+} from 'pl-fe/actions/statuses';
 
 import type { AnyAction } from 'redux';
-import type { StatusVisibility } from 'soapbox/normalizers/status';
+import type { StatusVisibility } from 'pl-fe/normalizers/status';
 
 const PendingStatusRecord = ImmutableRecord({
   content_type: '',

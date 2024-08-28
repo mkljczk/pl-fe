@@ -3,15 +3,15 @@ import { List as ImmutableList } from 'immutable';
 import React from 'react';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
-import AutosuggestEmoji from 'soapbox/components/autosuggest-emoji';
-import Icon from 'soapbox/components/icon';
-import { Input, Portal } from 'soapbox/components/ui';
-import AutosuggestAccount from 'soapbox/features/compose/components/autosuggest-account';
-import { textAtCursorMatchesToken } from 'soapbox/utils/suggestions';
+import AutosuggestEmoji from 'pl-fe/components/autosuggest-emoji';
+import Icon from 'pl-fe/components/icon';
+import { Input, Portal } from 'pl-fe/components/ui';
+import AutosuggestAccount from 'pl-fe/features/compose/components/autosuggest-account';
+import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
 
-import type { Menu, MenuItem } from 'soapbox/components/dropdown-menu';
-import type { InputThemes } from 'soapbox/components/ui/input/input';
-import type { Emoji } from 'soapbox/features/emoji';
+import type { Menu, MenuItem } from 'pl-fe/components/dropdown-menu';
+import type { InputThemes } from 'pl-fe/components/ui/input/input';
+import type { Emoji } from 'pl-fe/features/emoji';
 
 type AutoSuggestion = string | Emoji;
 

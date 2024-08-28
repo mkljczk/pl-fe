@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { fetchUsers } from 'soapbox/actions/admin';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { useAppSelector, useAppDispatch } from 'soapbox/hooks';
+import { fetchUsers } from 'pl-fe/actions/admin';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 import UnapprovedAccount from '../components/unapproved-account';
 

@@ -1,6 +1,6 @@
 import type { BookmarkFolder, GroupMember, GroupRelationship, Relationship, TrendsLink } from 'pl-api';
-import type { Account, Group, Status } from 'soapbox/normalizers';
-import type * as Schemas from 'soapbox/schemas';
+import type { Account, Group, Status } from 'pl-fe/normalizers';
+import type * as Schemas from 'pl-fe/schemas';
 
 enum Entities {
   ACCOUNTS = 'Accounts',

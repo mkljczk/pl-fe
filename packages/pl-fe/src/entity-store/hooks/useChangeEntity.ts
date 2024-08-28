@@ -1,9 +1,9 @@
-import { importEntities } from 'soapbox/entity-store/actions';
-import { Entities } from 'soapbox/entity-store/entities';
-import { useAppDispatch } from 'soapbox/hooks/useAppDispatch';
-import { useGetState } from 'soapbox/hooks/useGetState';
+import { importEntities } from 'pl-fe/entity-store/actions';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useGetState } from 'pl-fe/hooks/useGetState';
 
-import type { Entity } from 'soapbox/entity-store/types';
+import type { Entity } from 'pl-fe/entity-store/types';
 
 type ChangeEntityFn<TEntity extends Entity> = (entity: TEntity) => TEntity
 

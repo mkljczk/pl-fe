@@ -1,7 +1,7 @@
-import { selectAccount } from 'soapbox/selectors';
-import { setSentryAccount } from 'soapbox/sentry';
-import KVStore from 'soapbox/storage/kv-store';
-import { getAuthUserId, getAuthUserUrl } from 'soapbox/utils/auth';
+import { selectAccount } from 'pl-fe/selectors';
+import { setSentryAccount } from 'pl-fe/sentry';
+import KVStore from 'pl-fe/storage/kv-store';
+import { getAuthUserId, getAuthUserUrl } from 'pl-fe/utils/auth';
 
 import { getClient } from '../api';
 
@@ -9,7 +9,7 @@ import { loadCredentials } from './auth';
 import { importFetchedAccount } from './importer';
 
 import type { CredentialAccount, UpdateCredentialsParams } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const ME_FETCH_REQUEST = 'ME_FETCH_REQUEST' as const;
 const ME_FETCH_SUCCESS = 'ME_FETCH_SUCCESS' as const;

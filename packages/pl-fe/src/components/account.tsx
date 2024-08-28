@@ -2,19 +2,19 @@ import React, { useRef } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
-import HoverRefWrapper from 'soapbox/components/hover-ref-wrapper';
-import VerificationBadge from 'soapbox/components/verification-badge';
-import ActionButton from 'soapbox/features/ui/components/action-button';
-import { useAppSelector } from 'soapbox/hooks';
-import { getAcct } from 'soapbox/utils/accounts';
-import { displayFqn } from 'soapbox/utils/state';
+import HoverRefWrapper from 'pl-fe/components/hover-ref-wrapper';
+import VerificationBadge from 'pl-fe/components/verification-badge';
+import ActionButton from 'pl-fe/features/ui/components/action-button';
+import { useAppSelector } from 'pl-fe/hooks';
+import { getAcct } from 'pl-fe/utils/accounts';
+import { displayFqn } from 'pl-fe/utils/state';
 
 import Badge from './badge';
 import RelativeTimestamp from './relative-timestamp';
 import { Avatar, Emoji, HStack, Icon, IconButton, Stack, Text } from './ui';
 
-import type { Account as AccountSchema } from 'soapbox/normalizers';
-import type { StatusApprovalStatus } from 'soapbox/normalizers/status';
+import type { Account as AccountSchema } from 'pl-fe/normalizers';
+import type { StatusApprovalStatus } from 'pl-fe/normalizers/status';
 
 interface IInstanceFavicon {
   account: Pick<AccountSchema, 'domain' | 'favicon'>;

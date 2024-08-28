@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchReblogs, expandReblogs } from 'soapbox/actions/interactions';
-import { fetchStatus } from 'soapbox/actions/statuses';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Modal, Spinner } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { fetchReblogs, expandReblogs } from 'pl-fe/actions/interactions';
+import { fetchStatus } from 'pl-fe/actions/statuses';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Modal, Spinner } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import type { BaseModalProps } from '../modal-root';
 

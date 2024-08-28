@@ -1,5 +1,5 @@
-import { __stub } from 'soapbox/api';
-import { mockStore, rootState } from 'soapbox/jest/test-helpers';
+import { __stub } from 'pl-fe/api';
+import { mockStore, rootState } from 'pl-fe/jest/test-helpers';
 
 import { submitAccountNote } from './account-notes';
 

@@ -1,6 +1,6 @@
 /**
  * Icon: abstract component to render SVG icons.
- * @module soapbox/components/icon
+ * @module pl-fe/components/icon
  */
 
 import clsx from 'clsx';

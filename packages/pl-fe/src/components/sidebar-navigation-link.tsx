@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { useSettings } from 'soapbox/hooks';
+import { useSettings } from 'pl-fe/hooks';
 
 import { Icon, Text } from './ui';
 

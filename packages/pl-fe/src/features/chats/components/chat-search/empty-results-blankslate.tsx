@@ -1,7 +1,7 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { Stack, Text } from 'soapbox/components/ui';
+import { Stack, Text } from 'pl-fe/components/ui';
 
 const messages = defineMessages({
   title: { id: 'chat_search.empty_results_blankslate.title', defaultMessage: 'No matches found' },

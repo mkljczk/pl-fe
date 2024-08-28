@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { changeSettingImmediate } from 'soapbox/actions/settings';
-import { Column, Button, Form, FormActions, FormGroup, Input, Text } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
-import toast from 'soapbox/toast';
+import { changeSettingImmediate } from 'pl-fe/actions/settings';
+import { Column, Button, Form, FormActions, FormGroup, Input, Text } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
+import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.developers', defaultMessage: 'Developers' },
@@ -33,7 +33,7 @@ const DevelopersChallenge = () => {
     }
   };
 
-  const challenge = `function soapbox() {
+  const challenge = `function plFe() {
   return 'soap|box'.split('|').reverse().join('');
 }`;
 
@@ -44,7 +44,7 @@ const DevelopersChallenge = () => {
           <FormattedMessage
             id='developers.challenge.message'
             defaultMessage='What is the result of calling {function}?'
-            values={{ function: <span className='font-mono'>soapbox()</span> }}
+            values={{ function: <span className='font-mono'>plFe()</span> }}
           />
         </Text>
 

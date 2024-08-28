@@ -4,8 +4,8 @@ import React, { KeyboardEvent, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { IconButton } from 'soapbox/components/ui';
-import { useClickOutside } from 'soapbox/hooks';
+import { IconButton } from 'pl-fe/components/ui';
+import { useClickOutside } from 'pl-fe/hooks';
 
 import EmojiPickerDropdown, { IEmojiPickerDropdown } from '../components/emoji-picker-dropdown';
 

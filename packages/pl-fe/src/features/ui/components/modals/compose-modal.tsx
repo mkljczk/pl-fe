@@ -2,12 +2,12 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { cancelReplyCompose, uploadCompose } from 'soapbox/actions/compose';
-import { saveDraftStatus } from 'soapbox/actions/draft-statuses';
-import { openModal, closeModal } from 'soapbox/actions/modals';
-import { checkComposeContent } from 'soapbox/components/modal-root';
-import { Modal } from 'soapbox/components/ui';
-import { useAppDispatch, useCompose, useDraggedFiles } from 'soapbox/hooks';
+import { cancelReplyCompose, uploadCompose } from 'pl-fe/actions/compose';
+import { saveDraftStatus } from 'pl-fe/actions/draft-statuses';
+import { openModal, closeModal } from 'pl-fe/actions/modals';
+import { checkComposeContent } from 'pl-fe/components/modal-root';
+import { Modal } from 'pl-fe/components/ui';
+import { useAppDispatch, useCompose, useDraggedFiles } from 'pl-fe/hooks';
 
 import ComposeForm from '../../../compose/components/compose-form';
 

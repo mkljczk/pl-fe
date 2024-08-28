@@ -1,12 +1,12 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { getSubscribersCsv, getUnsubscribersCsv, getCombinedCsv } from 'soapbox/actions/admin';
-import List, { ListItem } from 'soapbox/components/list';
-import { CardTitle, Icon, IconButton, Stack } from 'soapbox/components/ui';
-import { useAppDispatch, useOwnAccount, useFeatures, useInstance } from 'soapbox/hooks';
-import sourceCode from 'soapbox/utils/code';
-import { download } from 'soapbox/utils/download';
+import { getSubscribersCsv, getUnsubscribersCsv, getCombinedCsv } from 'pl-fe/actions/admin';
+import List, { ListItem } from 'pl-fe/components/list';
+import { CardTitle, Icon, IconButton, Stack } from 'pl-fe/components/ui';
+import { useAppDispatch, useOwnAccount, useFeatures, useInstance } from 'pl-fe/hooks';
+import sourceCode from 'pl-fe/utils/code';
+import { download } from 'pl-fe/utils/download';
 
 import { DashCounter, DashCounters } from '../components/dashcounter';
 import RegistrationModePicker from '../components/registration-mode-picker';
@@ -59,7 +59,7 @@ const Dashboard: React.FC = () => {
           label={<FormattedMessage id='admin.dashcounters.mau_label' defaultMessage='monthly active users' />}
         />
         <DashCounter
-          to='/soapbox/admin/users'
+          to='/pl-fe/admin/users'
           count={userCount}
           label={<FormattedMessage id='admin.dashcounters.user_count_label' defaultMessage='total users' />}
         />
@@ -82,33 +82,33 @@ const Dashboard: React.FC = () => {
       <List>
         {account.is_admin && (
           <ListItem
-            to='/soapbox/config'
-            label={<FormattedMessage id='navigation_bar.soapbox_config' defaultMessage='Soapbox config' />}
+            to='/pl-fe/config'
+            label={<FormattedMessage id='navigation_bar.plfe_config' defaultMessage='pl-fe config' />}
           />
         )}
 
         <ListItem
-          to='/soapbox/admin/log'
+          to='/pl-fe/admin/log'
           label={<FormattedMessage id='column.admin.moderation_log' defaultMessage='Moderation log' />}
         />
 
         {features.adminAnnouncements && (
           <ListItem
-            to='/soapbox/admin/announcements'
+            to='/pl-fe/admin/announcements'
             label={<FormattedMessage id='column.admin.announcements' defaultMessage='Announcements' />}
           />
         )}
 
         {features.adminRules && (
           <ListItem
-            to='/soapbox/admin/rules'
+            to='/pl-fe/admin/rules'
             label={<FormattedMessage id='column.admin.rules' defaultMessage='Instance rules' />}
           />
         )}
 
         {features.domains && (
           <ListItem
-            to='/soapbox/admin/domains'
+            to='/pl-fe/admin/domains'
             label={<FormattedMessage id='column.admin.domains' defaultMessage='Domains' />}
           />
         )}

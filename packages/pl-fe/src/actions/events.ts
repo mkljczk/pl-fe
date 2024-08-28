@@ -1,7 +1,7 @@
 import { defineMessages, IntlShape } from 'react-intl';
 
-import { getClient } from 'soapbox/api';
-import toast from 'soapbox/toast';
+import { getClient } from 'pl-fe/api';
+import toast from 'pl-fe/toast';
 
 import { importFetchedAccounts, importFetchedStatus, importFetchedStatuses } from './importer';
 import { uploadFile } from './media';
@@ -13,8 +13,8 @@ import {
 } from './statuses';
 
 import type { Account, CreateEventParams, MediaAttachment, PaginatedResponse, Status } from 'pl-api';
-import type { MinifiedStatus } from 'soapbox/reducers/statuses';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const LOCATION_SEARCH_REQUEST = 'LOCATION_SEARCH_REQUEST' as const;
 const LOCATION_SEARCH_SUCCESS = 'LOCATION_SEARCH_SUCCESS' as const;

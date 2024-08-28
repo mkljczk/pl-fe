@@ -1,7 +1,7 @@
-import { importEntities } from 'soapbox/entity-store/actions';
-import { Entities } from 'soapbox/entity-store/entities';
-import { useTransaction } from 'soapbox/entity-store/hooks';
-import { useAppDispatch, useClient, useLoggedIn } from 'soapbox/hooks';
+import { importEntities } from 'pl-fe/entity-store/actions';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { useTransaction } from 'pl-fe/entity-store/hooks';
+import { useAppDispatch, useClient, useLoggedIn } from 'pl-fe/hooks';
 
 interface FollowOpts {
   reblogs?: boolean;

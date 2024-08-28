@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchJoinedEvents, fetchRecentEvents } from 'soapbox/actions/events';
-import { openModal } from 'soapbox/actions/modals';
-import { Button, CardBody, CardHeader, CardTitle, Column, HStack } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { fetchJoinedEvents, fetchRecentEvents } from 'pl-fe/actions/events';
+import { openModal } from 'pl-fe/actions/modals';
+import { Button, CardBody, CardHeader, CardTitle, Column, HStack } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import EventCarousel from './components/event-carousel';
 

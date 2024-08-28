@@ -2,20 +2,20 @@ import {
   PromoPanelItemRecord,
   FooterItemRecord,
   CryptoAddressRecord,
-  SoapboxConfigRecord,
-} from 'soapbox/normalizers/soapbox/soapbox-config';
+  PlFeConfigRecord,
+} from 'pl-fe/normalizers/pl-fe/pl-fe-config';
 
 type Me = string | null | false | undefined;
 
 type PromoPanelItem = ReturnType<typeof PromoPanelItemRecord>;
 type FooterItem = ReturnType<typeof FooterItemRecord>;
 type CryptoAddress = ReturnType<typeof CryptoAddressRecord>;
-type SoapboxConfig = ReturnType<typeof SoapboxConfigRecord>;
+type PlFeConfig = ReturnType<typeof PlFeConfigRecord>;
 
 export {
   Me,
   PromoPanelItem,
   FooterItem,
   CryptoAddress,
-  SoapboxConfig,
+  PlFeConfig,
 };

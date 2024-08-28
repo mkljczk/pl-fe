@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
-import { changeComposeFederated, changeComposeVisibility } from 'soapbox/actions/compose';
-import DropdownMenu from 'soapbox/components/dropdown-menu';
-import Icon from 'soapbox/components/icon';
-import { Button, Toggle } from 'soapbox/components/ui';
-import { useAppDispatch, useCompose, useFeatures } from 'soapbox/hooks';
+import { changeComposeFederated, changeComposeVisibility } from 'pl-fe/actions/compose';
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import Icon from 'pl-fe/components/icon';
+import { Button, Toggle } from 'pl-fe/components/ui';
+import { useAppDispatch, useCompose, useFeatures } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   public_short: { id: 'privacy.public.short', defaultMessage: 'Public' },

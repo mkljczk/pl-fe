@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { render, screen } from 'soapbox/jest/test-helpers';
-import { instanceSchema } from 'soapbox/schemas';
+import { render, screen } from 'pl-fe/jest/test-helpers';
+import { instanceSchema } from 'pl-fe/schemas';
 
 import LoginPage from './login-page';
 

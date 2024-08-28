@@ -2,12 +2,12 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import GroupAvatar from 'soapbox/components/groups/group-avatar';
-import { HStack, Icon, Stack, Text } from 'soapbox/components/ui';
-import GroupActionButton from 'soapbox/features/group/components/group-action-button';
-import { shortNumberFormat } from 'soapbox/utils/numbers';
+import GroupAvatar from 'pl-fe/components/groups/group-avatar';
+import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
+import GroupActionButton from 'pl-fe/features/group/components/group-action-button';
+import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
-import type { Group } from 'soapbox/normalizers';
+import type { Group } from 'pl-fe/normalizers';
 
 interface IGroupListItem {
   group: Pick<Group, 'id' | 'avatar' | 'avatar_description' | 'display_name_html' | 'locked' | 'members_count' | 'relationship'>;

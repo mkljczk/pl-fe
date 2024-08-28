@@ -2,27 +2,27 @@
 import { announcementSchema, type Announcement, type AnnouncementReaction, type FollowRelationshipUpdate, type Relationship, type StreamingEvent } from 'pl-api';
 import { useCallback } from 'react';
 
-import { updateConversations } from 'soapbox/actions/conversations';
-import { fetchFilters } from 'soapbox/actions/filters';
-import { updateNotificationsQueue } from 'soapbox/actions/notifications';
-import { getLocale, getSettings } from 'soapbox/actions/settings';
-import { updateStatus } from 'soapbox/actions/statuses';
-import { deleteFromTimelines, processTimelineUpdate } from 'soapbox/actions/timelines';
-import { useStatContext } from 'soapbox/contexts/stat-context';
-import { importEntities } from 'soapbox/entity-store/actions';
-import { Entities } from 'soapbox/entity-store/entities';
-import { selectEntity } from 'soapbox/entity-store/selectors';
-import { useAppDispatch, useLoggedIn } from 'soapbox/hooks';
-import messages from 'soapbox/messages';
-import { queryClient } from 'soapbox/queries/client';
-import { getUnreadChatsCount, updateChatListItem } from 'soapbox/utils/chats';
-import { play, soundCache } from 'soapbox/utils/sounds';
+import { updateConversations } from 'pl-fe/actions/conversations';
+import { fetchFilters } from 'pl-fe/actions/filters';
+import { updateNotificationsQueue } from 'pl-fe/actions/notifications';
+import { getLocale, getSettings } from 'pl-fe/actions/settings';
+import { updateStatus } from 'pl-fe/actions/statuses';
+import { deleteFromTimelines, processTimelineUpdate } from 'pl-fe/actions/timelines';
+import { useStatContext } from 'pl-fe/contexts/stat-context';
+import { importEntities } from 'pl-fe/entity-store/actions';
+import { Entities } from 'pl-fe/entity-store/entities';
+import { selectEntity } from 'pl-fe/entity-store/selectors';
+import { useAppDispatch, useLoggedIn } from 'pl-fe/hooks';
+import messages from 'pl-fe/messages';
+import { queryClient } from 'pl-fe/queries/client';
+import { getUnreadChatsCount, updateChatListItem } from 'pl-fe/utils/chats';
+import { play, soundCache } from 'pl-fe/utils/sounds';
 
 import { updateReactions } from '../announcements/useAnnouncements';
 
 import { useTimelineStream } from './useTimelineStream';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const updateAnnouncementReactions = ({ announcement_id: id, name }: AnnouncementReaction) => {
   queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>

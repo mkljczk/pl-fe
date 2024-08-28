@@ -3,7 +3,7 @@ import { Record as ImmutableRecord } from 'immutable';
 import {
   MUTES_INIT_MODAL,
   MUTES_TOGGLE_HIDE_NOTIFICATIONS,
-} from 'soapbox/actions/mutes';
+} from 'pl-fe/actions/mutes';
 
 import reducer from './mutes';
 

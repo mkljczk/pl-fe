@@ -2,24 +2,24 @@ import React, { useCallback } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage, IntlShape, MessageDescriptor } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
-import { mentionCompose } from 'soapbox/actions/compose';
-import { reblog, favourite, unreblog, unfavourite } from 'soapbox/actions/interactions';
-import { openModal } from 'soapbox/actions/modals';
-import { getSettings } from 'soapbox/actions/settings';
-import { toggleStatusMediaHidden } from 'soapbox/actions/statuses';
-import Icon from 'soapbox/components/icon';
-import RelativeTimestamp from 'soapbox/components/relative-timestamp';
-import { HStack, Text, Emoji } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
-import StatusContainer from 'soapbox/containers/status-container';
-import { HotKeys } from 'soapbox/features/ui/components/hotkeys';
-import { useAppDispatch, useAppSelector, useInstance } from 'soapbox/hooks';
-import { makeGetNotification } from 'soapbox/selectors';
-import { NotificationType } from 'soapbox/utils/notification';
+import { mentionCompose } from 'pl-fe/actions/compose';
+import { reblog, favourite, unreblog, unfavourite } from 'pl-fe/actions/interactions';
+import { openModal } from 'pl-fe/actions/modals';
+import { getSettings } from 'pl-fe/actions/settings';
+import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
+import Icon from 'pl-fe/components/icon';
+import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
+import { HStack, Text, Emoji } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
+import StatusContainer from 'pl-fe/containers/status-container';
+import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
+import { useAppDispatch, useAppSelector, useInstance } from 'pl-fe/hooks';
+import { makeGetNotification } from 'pl-fe/selectors';
+import { NotificationType } from 'pl-fe/utils/notification';
 
 import type { Notification as BaseNotification } from 'pl-api';
-import type { Account, Notification as NotificationEntity, Status as StatusEntity } from 'soapbox/normalizers';
-import type { MinifiedNotification } from 'soapbox/reducers/notifications';
+import type { Account, Notification as NotificationEntity, Status as StatusEntity } from 'pl-fe/normalizers';
+import type { MinifiedNotification } from 'pl-fe/reducers/notifications';
 
 const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: string) => {
   const output = [message];

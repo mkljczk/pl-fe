@@ -1,15 +1,15 @@
 import { List as ImmutableList, Map as ImmutableMap, fromJS } from 'immutable';
 
-import { PLEROMA_PRELOAD_IMPORT } from 'soapbox/actions/preload';
-import KVStore from 'soapbox/storage/kv-store';
-import ConfigDB from 'soapbox/utils/config-db';
+import { PLEROMA_PRELOAD_IMPORT } from 'pl-fe/actions/preload';
+import KVStore from 'pl-fe/storage/kv-store';
+import ConfigDB from 'pl-fe/utils/config-db';
 
 import { ADMIN_CONFIG_UPDATE_SUCCESS } from '../actions/admin';
 import {
-  SOAPBOX_CONFIG_REMEMBER_SUCCESS,
-  SOAPBOX_CONFIG_REQUEST_SUCCESS,
-  SOAPBOX_CONFIG_REQUEST_FAIL,
-} from '../actions/soapbox';
+  PLFE_CONFIG_REMEMBER_SUCCESS,
+  PLFE_CONFIG_REQUEST_SUCCESS,
+  PLFE_CONFIG_REQUEST_FAIL,
+} from '../actions/pl-fe';
 
 const initialState = ImmutableMap<string, any>();
 
@@ -33,33 +33,33 @@ const preloadImport = (state: ImmutableMap<string, any>, action: Record<string, 
   const feData = action.data[path];
 
   if (feData) {
-    const soapbox = feData.pl_fe;
-    return soapbox ? fallbackState.mergeDeep(fromJS(soapbox)) : fallbackState;
+    const plfe = feData.pl_fe;
+    return plfe ? fallbackState.mergeDeep(fromJS(plfe)) : fallbackState;
   } else {
     return state;
   }
 };
 
-const persistSoapboxConfig = (soapboxConfig: ImmutableMap<string, any>, host: string) => {
+const persistPlFeConfig = (plFeConfig: ImmutableMap<string, any>, host: string) => {
   if (host) {
-    KVStore.setItem(`soapbox_config:${host}`, soapboxConfig.toJS()).catch(console.error);
+    KVStore.setItem(`plfe_config:${host}`, plFeConfig.toJS()).catch(console.error);
   }
 };
 
-const importSoapboxConfig = (state: ImmutableMap<string, any>, soapboxConfig: ImmutableMap<string, any>, host: string) => {
-  persistSoapboxConfig(soapboxConfig, host);
-  return soapboxConfig;
+const importPlFeConfig = (state: ImmutableMap<string, any>, plFeConfig: ImmutableMap<string, any>, host: string) => {
+  persistPlFeConfig(plFeConfig, host);
+  return plFeConfig;
 };
 
-const soapbox = (state = initialState, action: Record<string, any>) => {
+const plfe = (state = initialState, action: Record<string, any>) => {
   switch (action.type) {
     case PLEROMA_PRELOAD_IMPORT:
       return preloadImport(state, action);
-    case SOAPBOX_CONFIG_REMEMBER_SUCCESS:
-      return fromJS(action.soapboxConfig);
-    case SOAPBOX_CONFIG_REQUEST_SUCCESS:
-      return importSoapboxConfig(state, fromJS(action.soapboxConfig) as ImmutableMap<string, any>, action.host);
-    case SOAPBOX_CONFIG_REQUEST_FAIL:
+    case PLFE_CONFIG_REMEMBER_SUCCESS:
+      return fromJS(action.plFeConfig);
+    case PLFE_CONFIG_REQUEST_SUCCESS:
+      return importPlFeConfig(state, fromJS(action.plFeConfig) as ImmutableMap<string, any>, action.host);
+    case PLFE_CONFIG_REQUEST_FAIL:
       return fallbackState.mergeDeep(state);
     case ADMIN_CONFIG_UPDATE_SUCCESS:
       return updateFromAdmin(state, fromJS(action.configs) as ImmutableList<ImmutableMap<string, any>>);
@@ -68,4 +68,4 @@ const soapbox = (state = initialState, action: Record<string, any>) => {
   }
 };
 
-export { soapbox as default };
+export { plfe as default };

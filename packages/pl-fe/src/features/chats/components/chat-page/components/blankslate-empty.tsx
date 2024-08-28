@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { Button, Stack, Text } from 'soapbox/components/ui';
+import { Button, Stack, Text } from 'pl-fe/components/ui';
 
 interface IBlankslate {
 }

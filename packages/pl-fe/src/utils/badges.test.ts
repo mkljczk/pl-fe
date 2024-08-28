@@ -1,4 +1,4 @@
-import { buildAccount } from 'soapbox/jest/factory';
+import { buildAccount } from 'pl-fe/jest/factory';
 
 import {
   tagToBadge,

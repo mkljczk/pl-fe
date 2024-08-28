@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { fetchUsers } from 'soapbox/actions/admin';
-import { Widget } from 'soapbox/components/ui';
-import AccountContainer from 'soapbox/containers/account-container';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { fetchUsers } from 'pl-fe/actions/admin';
+import { Widget } from 'pl-fe/components/ui';
+import AccountContainer from 'pl-fe/containers/account-container';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   title: { id: 'admin.latest_accounts_panel.title', defaultMessage: 'Latest Accounts' },
@@ -36,7 +36,7 @@ const LatestAccountsPanel: React.FC<ILatestAccountsPanel> = ({ limit = 5 }) => {
   }, []);
 
   const handleAction = () => {
-    history.push('/soapbox/admin/users');
+    history.push('/pl-fe/admin/users');
   };
 
   return (

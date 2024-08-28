@@ -10,4 +10,4 @@ export { normalizeStatus, type Status } from './status';
 export { normalizeStatusEdit, type StatusEdit } from './status-edit';
 export { normalizeTranslation, type Translation } from './translation';
 
-export { SoapboxConfigRecord, normalizeSoapboxConfig } from './soapbox/soapbox-config';
+export { PlFeConfigRecord, normalizePlFeConfig } from './pl-fe/pl-fe-config';

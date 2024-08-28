@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
 import React from 'react';
 
-import { Avatar, HStack } from 'soapbox/components/ui';
-import { useAppSelector } from 'soapbox/hooks';
-import { makeGetAccount } from 'soapbox/selectors';
+import { Avatar, HStack } from 'pl-fe/components/ui';
+import { useAppSelector } from 'pl-fe/hooks';
+import { makeGetAccount } from 'pl-fe/selectors';
 
-import type { Account } from 'soapbox/normalizers';
+import type { Account } from 'pl-fe/normalizers';
 
 const getAccount = makeGetAccount();
 

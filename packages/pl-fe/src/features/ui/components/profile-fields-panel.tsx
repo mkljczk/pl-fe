@@ -1,11 +1,11 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Widget, Stack } from 'soapbox/components/ui';
+import { Widget, Stack } from 'pl-fe/components/ui';
 
 import ProfileField from './profile-field';
 
-import type { Account } from 'soapbox/normalizers';
+import type { Account } from 'pl-fe/normalizers';
 
 interface IProfileFieldsPanel {
   account: Pick<Account, 'fields'>;

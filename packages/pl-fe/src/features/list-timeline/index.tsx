@@ -2,15 +2,15 @@ import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
-import { deleteList, fetchList } from 'soapbox/actions/lists';
-import { openModal } from 'soapbox/actions/modals';
-import { fetchListTimeline } from 'soapbox/actions/timelines';
-import { useListStream } from 'soapbox/api/hooks';
-import DropdownMenu from 'soapbox/components/dropdown-menu';
-import MissingIndicator from 'soapbox/components/missing-indicator';
-import { Column, Button, Spinner } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector, useTheme } from 'soapbox/hooks';
-import { useIsMobile } from 'soapbox/hooks/useIsMobile';
+import { deleteList, fetchList } from 'pl-fe/actions/lists';
+import { openModal } from 'pl-fe/actions/modals';
+import { fetchListTimeline } from 'pl-fe/actions/timelines';
+import { useListStream } from 'pl-fe/api/hooks';
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import MissingIndicator from 'pl-fe/components/missing-indicator';
+import { Column, Button, Spinner } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector, useTheme } from 'pl-fe/hooks';
+import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 import Timeline from '../ui/components/timeline';
 

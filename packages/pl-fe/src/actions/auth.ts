@@ -1,37 +1,37 @@
 /**
  * Auth: login & registration workflow.
  * This file contains abstractions over auth concepts.
- * @module soapbox/actions/auth
- * @see module:soapbox/actions/apps
- * @see module:soapbox/actions/oauth
- * @see module:soapbox/actions/security
+ * @module pl-fe/actions/auth
+ * @see module:pl-fe/actions/apps
+ * @see module:pl-fe/actions/oauth
+ * @see module:pl-fe/actions/security
 */
 import { credentialAccountSchema, PlApiClient, type CreateAccountParams, type Token } from 'pl-api';
 import { defineMessages } from 'react-intl';
 
-import { createAccount } from 'soapbox/actions/accounts';
-import { createApp } from 'soapbox/actions/apps';
-import { fetchMeSuccess, fetchMeFail } from 'soapbox/actions/me';
-import { obtainOAuthToken, revokeOAuthToken } from 'soapbox/actions/oauth';
-import { startOnboarding } from 'soapbox/actions/onboarding';
-import * as BuildConfig from 'soapbox/build-config';
-import { custom } from 'soapbox/custom';
-import { queryClient } from 'soapbox/queries/client';
-import { selectAccount } from 'soapbox/selectors';
-import { unsetSentryAccount } from 'soapbox/sentry';
-import KVStore from 'soapbox/storage/kv-store';
-import toast from 'soapbox/toast';
-import { getLoggedInAccount, parseBaseURL } from 'soapbox/utils/auth';
-import sourceCode from 'soapbox/utils/code';
-import { normalizeUsername } from 'soapbox/utils/input';
-import { getScopes } from 'soapbox/utils/scopes';
-import { isStandalone } from 'soapbox/utils/state';
+import { createAccount } from 'pl-fe/actions/accounts';
+import { createApp } from 'pl-fe/actions/apps';
+import { fetchMeSuccess, fetchMeFail } from 'pl-fe/actions/me';
+import { obtainOAuthToken, revokeOAuthToken } from 'pl-fe/actions/oauth';
+import { startOnboarding } from 'pl-fe/actions/onboarding';
+import * as BuildConfig from 'pl-fe/build-config';
+import { custom } from 'pl-fe/custom';
+import { queryClient } from 'pl-fe/queries/client';
+import { selectAccount } from 'pl-fe/selectors';
+import { unsetSentryAccount } from 'pl-fe/sentry';
+import KVStore from 'pl-fe/storage/kv-store';
+import toast from 'pl-fe/toast';
+import { getLoggedInAccount, parseBaseURL } from 'pl-fe/utils/auth';
+import sourceCode from 'pl-fe/utils/code';
+import { normalizeUsername } from 'pl-fe/utils/input';
+import { getScopes } from 'pl-fe/utils/scopes';
+import { isStandalone } from 'pl-fe/utils/state';
 
 import { type PlfeResponse, getClient } from '../api';
 
 import { importFetchedAccount } from './importer';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const SWITCH_ACCOUNT = 'SWITCH_ACCOUNT' as const;
 

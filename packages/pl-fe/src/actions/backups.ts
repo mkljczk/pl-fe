@@ -1,6 +1,6 @@
 import { getClient } from '../api';
 
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const BACKUPS_FETCH_REQUEST = 'BACKUPS_FETCH_REQUEST' as const;
 const BACKUPS_FETCH_SUCCESS = 'BACKUPS_FETCH_SUCCESS' as const;

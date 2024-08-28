@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Account from 'soapbox/components/account';
-import AttachmentThumbs from 'soapbox/components/attachment-thumbs';
-import StatusContent from 'soapbox/components/status-content';
-import StatusReplyMentions from 'soapbox/components/status-reply-mentions';
-import { HStack, Stack } from 'soapbox/components/ui';
-import PollPreview from 'soapbox/features/ui/components/poll-preview';
-import { useAppSelector } from 'soapbox/hooks';
+import Account from 'pl-fe/components/account';
+import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
+import StatusContent from 'pl-fe/components/status-content';
+import StatusReplyMentions from 'pl-fe/components/status-reply-mentions';
+import { HStack, Stack } from 'pl-fe/components/ui';
+import PollPreview from 'pl-fe/features/ui/components/poll-preview';
+import { useAppSelector } from 'pl-fe/hooks';
 
 import { buildStatus } from '../builder';
 

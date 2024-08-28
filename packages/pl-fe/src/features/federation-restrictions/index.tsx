@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { Column, Accordion } from 'soapbox/components/ui';
-import { useAppSelector, useInstance } from 'soapbox/hooks';
-import { makeGetHosts } from 'soapbox/selectors';
-import { federationRestrictionsDisclosed } from 'soapbox/utils/state';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Column, Accordion } from 'pl-fe/components/ui';
+import { useAppSelector, useInstance } from 'pl-fe/hooks';
+import { makeGetHosts } from 'pl-fe/selectors';
+import { federationRestrictionsDisclosed } from 'pl-fe/utils/state';
 
 import RestrictedInstance from './components/restricted-instance';
 

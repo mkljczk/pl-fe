@@ -1,9 +1,9 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeComposeSpoilerText } from 'soapbox/actions/compose';
-import AutosuggestInput, { IAutosuggestInput } from 'soapbox/components/autosuggest-input';
-import { useAppDispatch, useCompose } from 'soapbox/hooks';
+import { changeComposeSpoilerText } from 'pl-fe/actions/compose';
+import AutosuggestInput, { IAutosuggestInput } from 'pl-fe/components/autosuggest-input';
+import { useAppDispatch, useCompose } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Subject (optional)' },

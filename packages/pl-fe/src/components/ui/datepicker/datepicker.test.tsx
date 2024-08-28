@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import { queryAllByRole, render, screen } from 'soapbox/jest/test-helpers';
+import { queryAllByRole, render, screen } from 'pl-fe/jest/test-helpers';
 
 import Datepicker from './datepicker';
 

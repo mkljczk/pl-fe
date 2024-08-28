@@ -3,7 +3,7 @@ import { defineMessages, useIntl } from 'react-intl';
 // @ts-ignore
 import Overlay from 'react-overlays/lib/Overlay';
 
-import ForkAwesomeIcon from 'soapbox/components/fork-awesome-icon';
+import ForkAwesomeIcon from 'pl-fe/components/fork-awesome-icon';
 
 import IconPickerMenu from './icon-picker-menu';
 

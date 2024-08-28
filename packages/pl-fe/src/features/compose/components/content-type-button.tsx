@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeComposeContentType } from 'soapbox/actions/compose';
-import DropdownMenu from 'soapbox/components/dropdown-menu';
-import { Button } from 'soapbox/components/ui';
-import { useAppDispatch, useCompose, useInstance } from 'soapbox/hooks';
+import { changeComposeContentType } from 'pl-fe/actions/compose';
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import { Button } from 'pl-fe/components/ui';
+import { useAppDispatch, useCompose, useInstance } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   content_type_plaintext: { id: 'preferences.options.content_type_plaintext', defaultMessage: 'Plain text' },

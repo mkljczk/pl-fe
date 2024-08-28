@@ -1,4 +1,4 @@
-import { getClient } from 'soapbox/api';
+import { getClient } from 'pl-fe/api';
 
 import { useAppSelector } from './useAppSelector';
 

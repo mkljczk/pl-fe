@@ -2,17 +2,17 @@ import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { openModal } from 'soapbox/actions/modals';
-import DropdownMenu from 'soapbox/components/dropdown-menu';
-import RelativeTimestamp from 'soapbox/components/relative-timestamp';
-import { Avatar, HStack, IconButton, Stack, Text } from 'soapbox/components/ui';
-import VerificationBadge from 'soapbox/components/verification-badge';
-import { useChatContext } from 'soapbox/contexts/chat-context';
-import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
-import { useChatActions } from 'soapbox/queries/chats';
+import { openModal } from 'pl-fe/actions/modals';
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
+import { Avatar, HStack, IconButton, Stack, Text } from 'pl-fe/components/ui';
+import VerificationBadge from 'pl-fe/components/verification-badge';
+import { useChatContext } from 'pl-fe/contexts/chat-context';
+import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { useChatActions } from 'pl-fe/queries/chats';
 
 import type { Chat } from 'pl-api';
-import type { Menu } from 'soapbox/components/dropdown-menu';
+import type { Menu } from 'pl-fe/components/dropdown-menu';
 
 const messages = defineMessages({
   blockedYou: { id: 'chat_list_item.blocked_you', defaultMessage: 'This user has blocked you' },

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useGroup, useUpdateGroup } from 'soapbox/api/hooks';
-import { Button, Column, Form, FormActions, FormGroup, Icon, Input, Spinner, Textarea } from 'soapbox/components/ui';
-import { useAppSelector, useInstance } from 'soapbox/hooks';
-import { useImageField, useTextField } from 'soapbox/hooks/forms';
-import toast from 'soapbox/toast';
-import { isDefaultAvatar, isDefaultHeader } from 'soapbox/utils/accounts';
+import { useGroup, useUpdateGroup } from 'pl-fe/api/hooks';
+import { Button, Column, Form, FormActions, FormGroup, Icon, Input, Spinner, Textarea } from 'pl-fe/components/ui';
+import { useAppSelector, useInstance } from 'pl-fe/hooks';
+import { useImageField, useTextField } from 'pl-fe/hooks/forms';
+import toast from 'pl-fe/toast';
+import { isDefaultAvatar, isDefaultHeader } from 'pl-fe/utils/accounts';
 
 import AvatarPicker from '../edit-profile/components/avatar-picker';
 import HeaderPicker from '../edit-profile/components/header-picker';

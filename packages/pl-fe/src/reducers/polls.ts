@@ -1,7 +1,7 @@
 import { Map as ImmutableMap } from 'immutable';
 
-import { POLLS_IMPORT } from 'soapbox/actions/importer';
-import { normalizePoll } from 'soapbox/normalizers';
+import { POLLS_IMPORT } from 'pl-fe/actions/importer';
+import { normalizePoll } from 'pl-fe/normalizers';
 
 import type { Status } from 'pl-api';
 import type { AnyAction } from 'redux';

@@ -3,7 +3,7 @@ import split from 'graphemesplit';
 import unicodeMapping from './mapping';
 
 import type { CustomEmoji as BaseCustomEmoji } from 'pl-api';
-import type { Emoji as EmojiMart, CustomEmoji as EmojiMartCustom } from 'soapbox/features/emoji/data';
+import type { Emoji as EmojiMart, CustomEmoji as EmojiMartCustom } from 'pl-fe/features/emoji/data';
 
 /*
  * TODO: Consolate emoji object types

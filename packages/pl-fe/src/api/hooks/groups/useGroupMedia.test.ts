@@ -1,6 +1,6 @@
-import { __stub } from 'soapbox/api';
-import { buildStatus } from 'soapbox/jest/factory';
-import { renderHook, waitFor } from 'soapbox/jest/test-helpers';
+import { __stub } from 'pl-fe/api';
+import { buildStatus } from 'pl-fe/jest/factory';
+import { renderHook, waitFor } from 'pl-fe/jest/test-helpers';
 
 import { useGroupMedia } from './useGroupMedia';
 

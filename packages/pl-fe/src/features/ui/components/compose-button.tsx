@@ -2,11 +2,11 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useLocation, useRouteMatch } from 'react-router-dom';
 
-import { groupComposeModal } from 'soapbox/actions/compose';
-import { openModal } from 'soapbox/actions/modals';
-import { useGroup } from 'soapbox/api/hooks';
-import { Avatar, Button, HStack } from 'soapbox/components/ui';
-import { useAppDispatch } from 'soapbox/hooks';
+import { groupComposeModal } from 'pl-fe/actions/compose';
+import { openModal } from 'pl-fe/actions/modals';
+import { useGroup } from 'pl-fe/api/hooks';
+import { Avatar, Button, HStack } from 'pl-fe/components/ui';
+import { useAppDispatch } from 'pl-fe/hooks';
 
 const ComposeButton = () => {
   const location = useLocation();

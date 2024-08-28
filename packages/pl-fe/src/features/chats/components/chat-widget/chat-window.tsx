@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Avatar, HStack, Icon, Stack, Text } from 'soapbox/components/ui';
-import VerificationBadge from 'soapbox/components/verification-badge';
-import { ChatWidgetScreens, useChatContext } from 'soapbox/contexts/chat-context';
+import { Avatar, HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
+import VerificationBadge from 'pl-fe/components/verification-badge';
+import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
 
 import Chat from '../chat';
 

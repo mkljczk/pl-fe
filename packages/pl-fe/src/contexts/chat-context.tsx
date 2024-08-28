@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { toggleMainWindow } from 'soapbox/actions/chats';
-import { useAppDispatch, useSettings } from 'soapbox/hooks';
-import { useChat } from 'soapbox/queries/chats';
+import { toggleMainWindow } from 'pl-fe/actions/chats';
+import { useAppDispatch, useSettings } from 'pl-fe/hooks';
+import { useChat } from 'pl-fe/queries/chats';
 
 import type { Chat } from 'pl-api';
 

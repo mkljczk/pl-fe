@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Stack } from 'soapbox/components/ui';
-import { useSoapboxConfig } from 'soapbox/hooks';
+import { Stack } from 'pl-fe/components/ui';
+import { usePlFeConfig } from 'pl-fe/hooks';
 
 import CryptoAddress from './crypto-address';
 
@@ -10,7 +10,7 @@ interface ISiteWallet {
 }
 
 const SiteWallet: React.FC<ISiteWallet> = ({ limit }): JSX.Element => {
-  const { cryptoAddresses } = useSoapboxConfig();
+  const { cryptoAddresses } = usePlFeConfig();
   const addresses = typeof limit === 'number' ? cryptoAddresses.take(limit) : cryptoAddresses;
 
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { HStack, Textarea } from 'soapbox/components/ui';
+import { HStack, Textarea } from 'pl-fe/components/ui';
 
 import ChatPendingUpload from './chat-pending-upload';
 import ChatUpload from './chat-upload';

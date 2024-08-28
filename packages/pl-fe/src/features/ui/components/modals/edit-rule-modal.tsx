@@ -1,13 +1,13 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useRules } from 'soapbox/api/hooks/admin';
-import { Form, FormGroup, Input, Modal } from 'soapbox/components/ui';
-import { useTextField } from 'soapbox/hooks/forms';
-import toast from 'soapbox/toast';
+import { useRules } from 'pl-fe/api/hooks/admin';
+import { Form, FormGroup, Input, Modal } from 'pl-fe/components/ui';
+import { useTextField } from 'pl-fe/hooks/forms';
+import toast from 'pl-fe/toast';
 
 import type { BaseModalProps } from '../modal-root';
-import type { AdminRule } from 'soapbox/schemas';
+import type { AdminRule } from 'pl-fe/schemas';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_rule.save', defaultMessage: 'Save' },

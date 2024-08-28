@@ -1,10 +1,10 @@
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import { pinHost, unpinHost } from 'soapbox/actions/remote-timeline';
-import { Widget } from 'soapbox/components/ui';
-import { useAppSelector, useAppDispatch, useSettings } from 'soapbox/hooks';
-import { makeGetRemoteInstance } from 'soapbox/selectors';
+import { pinHost, unpinHost } from 'pl-fe/actions/remote-timeline';
+import { Widget } from 'pl-fe/components/ui';
+import { useAppSelector, useAppDispatch, useSettings } from 'pl-fe/hooks';
+import { makeGetRemoteInstance } from 'pl-fe/selectors';
 
 const getRemoteInstance = makeGetRemoteInstance();
 

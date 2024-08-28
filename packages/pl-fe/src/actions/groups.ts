@@ -3,7 +3,7 @@ import { getClient } from '../api';
 import { importFetchedAccounts } from './importer';
 
 import type { Account, PaginatedResponse } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const GROUP_BLOCKS_FETCH_REQUEST = 'GROUP_BLOCKS_FETCH_REQUEST' as const;
 const GROUP_BLOCKS_FETCH_SUCCESS = 'GROUP_BLOCKS_FETCH_SUCCESS' as const;

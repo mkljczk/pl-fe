@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { HStack, IconButton, Text } from 'soapbox/components/ui';
+import { HStack, IconButton, Text } from 'pl-fe/components/ui';
 
 interface IAuthorizeRejectButtons {
   onAuthorize(): Promise<unknown> | unknown;

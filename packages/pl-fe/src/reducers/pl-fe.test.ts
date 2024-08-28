@@ -1,32 +1,32 @@
 import { Map as ImmutableMap } from 'immutable';
 
-import soapboxConfig from 'soapbox/__fixtures__/admin_api_frontend_config.json';
-import soapbox from 'soapbox/__fixtures__/soapbox.json';
-import { ADMIN_CONFIG_UPDATE_SUCCESS } from 'soapbox/actions/admin';
-import * as actions from 'soapbox/actions/soapbox';
+import plFeConfig from 'pl-fe/__fixtures__/admin_api_frontend_config.json';
+import plfe from 'pl-fe/__fixtures__/pl-fe.json';
+import { ADMIN_CONFIG_UPDATE_SUCCESS } from 'pl-fe/actions/admin';
+import * as actions from 'pl-fe/actions/pl-fe';
 
-import reducer from './soapbox';
+import reducer from './pl-fe';
 
-describe('soapbox reducer', () => {
+describe('pl-fe reducer', () => {
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual(ImmutableMap());
   });
 
-  it('should handle SOAPBOX_CONFIG_REQUEST_SUCCESS', () => {
+  it('should handle PLFE_CONFIG_REQUEST_SUCCESS', () => {
     const state = ImmutableMap({ brandColor: '#354e91' });
     const action = {
-      type: actions.SOAPBOX_CONFIG_REQUEST_SUCCESS,
-      soapboxConfig: soapbox,
+      type: actions.PLFE_CONFIG_REQUEST_SUCCESS,
+      plFeConfig: plfe,
     };
     expect(reducer(state, action).toJS()).toMatchObject({
       brandColor: '#254f92',
     });
   });
 
-  // it('should handle SOAPBOX_CONFIG_REQUEST_FAIL', () => {
+  // it('should handle PLFE_CONFIG_REQUEST_FAIL', () => {
   //   const state = ImmutableMap({ skipAlert: false, brandColor: '#354e91' });
   //   const action = {
-  //     type: actions.SOAPBOX_CONFIG_REQUEST_FAIL,
+  //     type: actions.PLFE_CONFIG_REQUEST_FAIL,
   //     skipAlert: true,
   //   };
   //   expect(reducer(state, action).toJS()).toMatchObject({
@@ -39,7 +39,7 @@ describe('soapbox reducer', () => {
     const state = ImmutableMap({ brandColor: '#354e91' });
     const action = {
       type: ADMIN_CONFIG_UPDATE_SUCCESS,
-      configs: soapboxConfig.configs,
+      configs: plFeConfig.configs,
     };
     expect(reducer(state, action).toJS()).toMatchObject({
       brandColor: '#254f92',

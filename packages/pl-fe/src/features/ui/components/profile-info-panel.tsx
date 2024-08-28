@@ -1,18 +1,18 @@
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import Badge from 'soapbox/components/badge';
-import Markup from 'soapbox/components/markup';
-import { dateFormatOptions } from 'soapbox/components/relative-timestamp';
-import { Icon, HStack, Stack, Text } from 'soapbox/components/ui';
-import { useAppSelector, useSoapboxConfig } from 'soapbox/hooks';
-import { capitalize } from 'soapbox/utils/strings';
+import Badge from 'pl-fe/components/badge';
+import Markup from 'pl-fe/components/markup';
+import { dateFormatOptions } from 'pl-fe/components/relative-timestamp';
+import { Icon, HStack, Stack, Text } from 'pl-fe/components/ui';
+import { useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
+import { capitalize } from 'pl-fe/utils/strings';
 
 import ProfileFamiliarFollowers from './profile-familiar-followers';
 import ProfileField from './profile-field';
 import ProfileStats from './profile-stats';
 
-import type { Account } from 'soapbox/normalizers';
+import type { Account } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   linkVerifiedOn: { id: 'account.link_verified_on', defaultMessage: 'Ownership of this link was checked on {date}' },
@@ -30,7 +30,7 @@ interface IProfileInfoPanel {
 /** User profile metadata, such as location, birthday, etc. */
 const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) => {
   const intl = useIntl();
-  const { displayFqn } = useSoapboxConfig();
+  const { displayFqn } = usePlFeConfig();
   const me = useAppSelector(state => state.me);
   const ownAccount = account?.id === me;
 

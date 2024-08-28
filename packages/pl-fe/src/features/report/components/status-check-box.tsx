@@ -1,10 +1,10 @@
 import noop from 'lodash/noop';
 import React, { Suspense } from 'react';
 
-import { toggleStatusReport } from 'soapbox/actions/reports';
-import StatusContent from 'soapbox/components/status-content';
-import { Stack, Toggle } from 'soapbox/components/ui';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { toggleStatusReport } from 'pl-fe/actions/reports';
+import StatusContent from 'pl-fe/components/status-content';
+import { Stack, Toggle } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import { MediaGallery, Video, Audio } from '../../ui/util/async-components';
 

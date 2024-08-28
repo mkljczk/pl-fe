@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { buildGroup } from 'soapbox/jest/factory';
-import { render, screen } from 'soapbox/jest/test-helpers';
+import { buildGroup } from 'pl-fe/jest/factory';
+import { render, screen } from 'pl-fe/jest/test-helpers';
 
 import GroupListItem from './group-list-item';
 

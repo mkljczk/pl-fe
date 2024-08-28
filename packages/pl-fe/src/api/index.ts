@@ -1,10 +1,10 @@
 /**
  * API: HTTP client and utilities.
- * @module soapbox/api
+ * @module pl-fe/api
  */
-import * as BuildConfig from 'soapbox/build-config';
-import { RootState } from 'soapbox/store';
-import { buildFullPath } from 'soapbox/utils/url';
+import * as BuildConfig from 'pl-fe/build-config';
+import { RootState } from 'pl-fe/store';
+import { buildFullPath } from 'pl-fe/utils/url';
 
 type PlfeResponse<T = any> = Response & { data: string; json: T };
 

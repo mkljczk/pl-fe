@@ -1,9 +1,9 @@
 // Loosely adapted from twitter-interaction-circles, licensed under MIT License
 // https://github.com/duiker101/twitter-interaction-circles
-import { getClient } from 'soapbox/api';
+import { getClient } from 'pl-fe/api';
 
 import type { PaginatedResponse, Status } from 'pl-api';
-import type { AppDispatch, RootState } from 'soapbox/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 interface Interaction {
   acct: string;

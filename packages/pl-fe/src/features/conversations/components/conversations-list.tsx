@@ -2,9 +2,9 @@ import debounce from 'lodash/debounce';
 import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { expandConversations } from 'soapbox/actions/conversations';
-import ScrollableList from 'soapbox/components/scrollable-list';
-import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
+import { expandConversations } from 'pl-fe/actions/conversations';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import Conversation from './conversation';
 

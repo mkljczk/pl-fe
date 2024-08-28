@@ -1,8 +1,8 @@
 import { GroupRoles } from 'pl-api';
 
-import { __stub } from 'soapbox/api';
-import { buildGroupMember } from 'soapbox/jest/factory';
-import { renderHook, waitFor } from 'soapbox/jest/test-helpers';
+import { __stub } from 'pl-fe/api';
+import { buildGroupMember } from 'pl-fe/jest/factory';
+import { renderHook, waitFor } from 'pl-fe/jest/test-helpers';
 
 import { useGroupMembers } from './useGroupMembers';
 

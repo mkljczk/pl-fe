@@ -3,8 +3,8 @@ import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import Helmet from 'soapbox/components/helmet';
-import { useSoapboxConfig } from 'soapbox/hooks';
+import Helmet from 'pl-fe/components/helmet';
+import { usePlFeConfig } from 'pl-fe/hooks';
 
 import { Card, CardBody, CardHeader, CardTitle, type CardSizes } from '../card/card';
 
@@ -66,7 +66,7 @@ interface IColumn {
 /** A backdrop for the main section of the UI. */
 const Column: React.FC<IColumn> = React.forwardRef((props, ref: React.ForwardedRef<HTMLDivElement>): JSX.Element => {
   const { backHref, children, label, transparent = false, withHeader = true, className, bodyClassName, action, size } = props;
-  const soapboxConfig = useSoapboxConfig();
+  const plFeConfig = usePlFeConfig();
   const [isScrolled, setIsScrolled] = useState(false);
 
   const handleScroll = useCallback(throttle(() => {
@@ -86,11 +86,11 @@ const Column: React.FC<IColumn> = React.forwardRef((props, ref: React.ForwardedR
       <Helmet>
         <title>{label}</title>
 
-        {soapboxConfig.appleAppId && (
+        {plFeConfig.appleAppId && (
           <meta
             data-react-helmet='true'
             name='apple-itunes-app'
-            content={`app-id=${soapboxConfig.appleAppId}, app-argument=${location.href}`}
+            content={`app-id=${plFeConfig.appleAppId}, app-argument=${location.href}`}
           />
         )}
       </Helmet>

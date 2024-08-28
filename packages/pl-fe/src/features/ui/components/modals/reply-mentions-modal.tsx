@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Modal } from 'soapbox/components/ui';
-import Account from 'soapbox/features/reply-mentions/account';
-import { useAppSelector, useCompose, useOwnAccount } from 'soapbox/hooks';
-import { statusToMentionsAccountIdsArray } from 'soapbox/reducers/compose';
-import { makeGetStatus } from 'soapbox/selectors';
+import { Modal } from 'pl-fe/components/ui';
+import Account from 'pl-fe/features/reply-mentions/account';
+import { useAppSelector, useCompose, useOwnAccount } from 'pl-fe/hooks';
+import { statusToMentionsAccountIdsArray } from 'pl-fe/reducers/compose';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 import type { BaseModalProps } from '../modal-root';
 

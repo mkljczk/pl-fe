@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { userTouching } from 'soapbox/is-mobile';
+import { userTouching } from 'pl-fe/is-mobile';
 
 import { Counter, Icon } from '../ui';
 

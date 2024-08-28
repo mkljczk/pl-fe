@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useRef } from 'react';
 
-import { useSettings } from 'soapbox/hooks';
+import { useSettings } from 'pl-fe/hooks';
 
 interface IStillImage {
   /** Image alt text. */

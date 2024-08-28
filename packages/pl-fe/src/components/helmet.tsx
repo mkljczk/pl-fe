@@ -1,10 +1,10 @@
 import React from 'react';
 import { Helmet as ReactHelmet } from 'react-helmet';
 
-import { useStatContext } from 'soapbox/contexts/stat-context';
-import { useAppSelector, useInstance, useSettings } from 'soapbox/hooks';
-import { RootState } from 'soapbox/store';
-import FaviconService from 'soapbox/utils/favicon-service';
+import { useStatContext } from 'pl-fe/contexts/stat-context';
+import { useAppSelector, useInstance, useSettings } from 'pl-fe/hooks';
+import { RootState } from 'pl-fe/store';
+import FaviconService from 'pl-fe/utils/favicon-service';
 
 FaviconService.initFaviconService();
 

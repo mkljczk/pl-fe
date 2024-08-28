@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Card, HStack, Text } from 'soapbox/components/ui';
-import { useInstance } from 'soapbox/hooks';
+import { Card, HStack, Text } from 'pl-fe/components/ui';
+import { useInstance } from 'pl-fe/hooks';
 
 import ConsumerButton from './consumer-button';
 

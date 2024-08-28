@@ -2,12 +2,12 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { toggleStatusMediaHidden } from 'soapbox/actions/statuses';
-import { useAppDispatch, useSettings } from 'soapbox/hooks';
+import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
+import { useAppDispatch, useSettings } from 'pl-fe/hooks';
 
 import { Button, HStack, Text } from '../ui';
 
-import type { Status } from 'soapbox/normalizers';
+import type { Status } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   delete: { id: 'status.delete', defaultMessage: 'Delete' },
