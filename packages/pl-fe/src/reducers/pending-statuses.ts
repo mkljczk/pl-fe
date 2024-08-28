@@ -6,8 +6,8 @@ import {
   STATUS_CREATE_SUCCESS,
 } from 'pl-fe/actions/statuses';
 
-import type { AnyAction } from 'redux';
 import type { StatusVisibility } from 'pl-fe/normalizers/status';
+import type { AnyAction } from 'redux';
 
 const PendingStatusRecord = ImmutableRecord({
   content_type: '',

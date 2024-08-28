@@ -14,8 +14,8 @@ import { usePlFeConfig } from 'pl-fe/hooks';
 import { Stack, Text } from './ui';
 
 import type { OrderedSet as ImmutableOrderedSet } from 'immutable';
-import type { VirtuosoHandle } from 'react-virtuoso';
 import type { IScrollableList } from 'pl-fe/components/scrollable-list';
+import type { VirtuosoHandle } from 'react-virtuoso';
 
 interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
   /** Unique key to preserve the scroll position when navigating back. */

@@ -20,8 +20,8 @@ import { useAppDispatch, useAppSelector, useSettings } from 'pl-fe/hooks';
 import FilterBar from './components/filter-bar';
 import Notification from './components/notification';
 
-import type { VirtuosoHandle } from 'react-virtuoso';
 import type { RootState } from 'pl-fe/store';
+import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },

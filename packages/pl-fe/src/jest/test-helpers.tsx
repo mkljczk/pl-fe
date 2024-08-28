@@ -17,8 +17,8 @@ import { queryClient } from 'pl-fe/queries/client';
 
 import { default as rootReducer } from '../reducers';
 
-import type { AnyAction } from 'redux';
 import type { AppDispatch } from 'pl-fe/store';
+import type { AnyAction } from 'redux';
 
 // Mock Redux
 // https://redux.js.org/recipes/writing-tests/

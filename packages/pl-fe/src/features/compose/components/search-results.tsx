@@ -18,8 +18,8 @@ import PlaceholderHashtag from 'pl-fe/features/placeholder/components/placeholde
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 
-import type { VirtuosoHandle } from 'react-virtuoso';
 import type { SearchFilter } from 'pl-fe/reducers/search';
+import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
   accounts: { id: 'search_results.accounts', defaultMessage: 'People' },
@@ -216,7 +216,7 @@ const SearchResults = () => {
       searchResults = ImmutableList(trendingLinks.map(trendingLink => <TrendingLink trendingLink={trendingLink} />));
     }
   }
-  
+
   return (
     <>
       {filterByAccount ? (

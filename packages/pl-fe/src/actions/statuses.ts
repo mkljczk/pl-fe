@@ -10,10 +10,10 @@ import { getSettings } from './settings';
 import { deleteFromTimelines } from './timelines';
 
 import type { CreateStatusParams, Status as BaseStatus } from 'pl-api';
-import type { IntlShape } from 'react-intl';
 import type { Status } from 'pl-fe/normalizers';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 import type { APIEntity } from 'pl-fe/types/entities';
+import type { IntlShape } from 'react-intl';
 
 const STATUS_CREATE_REQUEST = 'STATUS_CREATE_REQUEST' as const;
 const STATUS_CREATE_SUCCESS = 'STATUS_CREATE_SUCCESS' as const;

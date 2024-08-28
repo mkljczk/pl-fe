@@ -11,8 +11,8 @@ import {
 } from 'pl-fe/actions/admin';
 
 import type { AdminAccount, AdminGetAccountsParams, PaginatedResponse } from 'pl-api';
-import type { AnyAction } from 'redux';
 import type { APIEntity } from 'pl-fe/types/entities';
+import type { AnyAction } from 'redux';
 
 const ReducerRecord = ImmutableRecord({
   isLoading: false,

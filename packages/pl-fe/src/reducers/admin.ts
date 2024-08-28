@@ -22,8 +22,8 @@ import {
 import { normalizeAdminReport, type AdminReport } from 'pl-fe/normalizers';
 
 import type { AdminAccount, AdminGetAccountsParams, AdminReport as BaseAdminReport } from 'pl-api';
-import type { AnyAction } from 'redux';
 import type { Config } from 'pl-fe/utils/config-db';
+import type { AnyAction } from 'redux';
 
 const ReducerRecord = ImmutableRecord({
   reports: ImmutableMap<string, MinifiedReport>(),

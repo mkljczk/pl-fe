@@ -197,7 +197,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
             theme='muted'
             size='xs'
             onClick={toggleExpanded}
-            icon={expanded ? require('@tabler/icons/outline/chevron-up.svg') : require('@tabler/icons/outline/chevron-down.svg')} 
+            icon={expanded ? require('@tabler/icons/outline/chevron-up.svg') : require('@tabler/icons/outline/chevron-down.svg')}
           >
             {intl.formatMessage(expanded ? messages.collapse : messages.expand)}
           </Button>

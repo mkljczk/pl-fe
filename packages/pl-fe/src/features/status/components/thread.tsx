@@ -24,9 +24,9 @@ import { textForScreenReader } from 'pl-fe/utils/status';
 import DetailedStatus from './detailed-status';
 import ThreadStatus from './thread-status';
 
-import type { VirtuosoHandle } from 'react-virtuoso';
 import type { Account, Status } from 'pl-fe/normalizers';
 import type { SelectedStatus } from 'pl-fe/selectors';
+import type { VirtuosoHandle } from 'react-virtuoso';
 
 const getAncestorsIds = createSelector([
   (_: RootState, statusId: string | undefined) => statusId,

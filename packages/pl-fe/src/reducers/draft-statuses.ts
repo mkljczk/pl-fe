@@ -5,9 +5,9 @@ import { DRAFT_STATUSES_FETCH_SUCCESS, PERSIST_DRAFT_STATUS, CANCEL_DRAFT_STATUS
 import KVStore from 'pl-fe/storage/kv-store';
 
 import type { MediaAttachment } from 'pl-api';
-import type { AnyAction } from 'redux';
 import type { StatusVisibility } from 'pl-fe/normalizers/status';
 import type { APIEntity } from 'pl-fe/types/entities';
+import type { AnyAction } from 'redux';
 
 const DraftStatusRecord = ImmutableRecord({
   content_type: 'text/plain',

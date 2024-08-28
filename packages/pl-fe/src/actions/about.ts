@@ -1,7 +1,7 @@
 import { staticFetch } from '../api';
 
-import type { AnyAction } from 'redux';
 import type { RootState } from 'pl-fe/store';
+import type { AnyAction } from 'redux';
 
 const FETCH_ABOUT_PAGE_REQUEST = 'FETCH_ABOUT_PAGE_REQUEST' as const;
 const FETCH_ABOUT_PAGE_SUCCESS = 'FETCH_ABOUT_PAGE_SUCCESS' as const;

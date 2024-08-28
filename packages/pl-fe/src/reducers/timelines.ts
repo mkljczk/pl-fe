@@ -25,8 +25,8 @@ import {
 
 import type { Status } from '../normalizers';
 import type { PaginatedResponse, Status as BaseStatus, Relationship } from 'pl-api';
-import type { AnyAction } from 'redux';
 import type { ImportPosition } from 'pl-fe/entity-store/types';
+import type { AnyAction } from 'redux';
 
 const TRUNCATE_LIMIT = 40;
 const TRUNCATE_SIZE = 20;

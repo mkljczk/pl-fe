@@ -10,9 +10,9 @@ import {
   ME_PATCH_SUCCESS,
 } from '../actions/me';
 
-import type { AnyAction } from 'redux';
 import type { PlfeResponse } from 'pl-fe/api';
 import type { Me } from 'pl-fe/types/pl-fe';
+import type { AnyAction } from 'redux';
 
 const initialState: Me = null;
 

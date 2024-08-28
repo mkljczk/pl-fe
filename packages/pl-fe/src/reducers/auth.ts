@@ -18,9 +18,9 @@ import {
 } from '../actions/auth';
 import { ME_FETCH_SKIP } from '../actions/me';
 
-import type { AnyAction } from 'redux';
 import type { PlfeResponse } from 'pl-fe/api';
 import type { Account as AccountEntity } from 'pl-fe/normalizers';
+import type { AnyAction } from 'redux';
 
 const backendUrl = (isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : '');
 

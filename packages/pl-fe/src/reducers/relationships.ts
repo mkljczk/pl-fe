@@ -16,8 +16,8 @@ import {
 import { DOMAIN_BLOCK_SUCCESS, DOMAIN_UNBLOCK_SUCCESS } from '../actions/domain-blocks';
 import { ACCOUNT_IMPORT, ACCOUNTS_IMPORT } from '../actions/importer';
 
-import type { AnyAction } from 'redux';
 import type { APIEntity } from 'pl-fe/types/entities';
+import type { AnyAction } from 'redux';
 
 type State = ImmutableMap<string, Relationship>;
 type APIEntities = Array<APIEntity>;
