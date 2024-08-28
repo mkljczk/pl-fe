@@ -2,13 +2,13 @@
   "name": "pl-api",
   "version": "0.0.22",
   "type": "module",
-  "homepage": "https://github.com/mkljczk/pl-api",
+  "homepage": "https://github.com/mkljczk/pl-fe/tree/fork/packages/pl-api",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mkljczk/pl-api"
+    "url": "https://github.com/mkljczk/pl-fe"
   },
   "bugs": {
-    "url": "https://github.com/mkljczk/pl-api/issues"
+    "url": "https://github.com/mkljczk/pl-fe/issues"
   },
   "scripts": {
     "dev": "vite",
