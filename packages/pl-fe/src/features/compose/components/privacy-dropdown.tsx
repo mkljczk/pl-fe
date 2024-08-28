@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
 import { changeComposeFederated, changeComposeVisibility } from 'pl-fe/actions/compose';
@@ -102,6 +102,12 @@ const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({
       onChange(value);
     }
   };
+
+  useEffect(() => {
+    if (node.current) {
+      (node.current?.querySelector('li[aria-selected=true]') as HTMLDivElement)?.focus();
+    }
+  }, [node.current]);
 
   return (
     <ul ref={node}>

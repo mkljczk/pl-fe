@@ -146,8 +146,9 @@ const useChatActions = (chatId: string) => {
       .catch(() => null);
 
   const createChatMessage = useMutation({
-    mutationFn: ({ chatId, content, mediaId }: { chatId: string; content: string; mediaId?: string }) =>
-      client.chats.createChatMessage(chatId, { content, media_id: mediaId }),
+    mutationFn: ({ chatId, content, mediaId }: { chatId: string; content: string; mediaId?: string }) => {
+      return client.chats.createChatMessage(chatId, { content, media_id: mediaId });
+    },
     retry: false,
     onMutate: async (variables) => {
       // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
@@ -167,7 +168,7 @@ const useChatActions = (chatId: string) => {
           if (idx === 0) {
             return {
               ...page,
-              result: [
+              items: [
                 normalizeChatMessage({
                   ...chatMessageSchema.parse({
                     content: variables.content,
@@ -178,7 +179,7 @@ const useChatActions = (chatId: string) => {
                   }),
                   pending: true,
                 }),
-                ...page.result,
+                ...page.items,
               ],
             };
           }

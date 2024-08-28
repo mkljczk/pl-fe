@@ -88,11 +88,15 @@ const unknownAttachmentSchema = baseAttachmentSchema.extend({
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/MediaAttachment} */
-const mediaAttachmentSchema = z.preprocess((data: any) => ({
-  mime_type: data.pleroma?.mime_type,
-  preview_url: data.url,
-  ...data,
-}), z.discriminatedUnion('type', [
+const mediaAttachmentSchema = z.preprocess((data: any) => {
+  if (!data) return null;
+
+  return {
+    mime_type: data.pleroma?.mime_type,
+    preview_url: data.url,
+    ...data,
+  };
+}, z.discriminatedUnion('type', [
   imageAttachmentSchema,
   videoAttachmentSchema,
   gifvAttachmentSchema,

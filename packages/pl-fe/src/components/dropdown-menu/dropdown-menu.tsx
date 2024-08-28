@@ -140,14 +140,14 @@ const DropdownMenu = (props: IDropdownMenu) => {
     }
   };
 
-  const handleDocumentClick = (event: Event) => {
+  const handleDocumentClick = useMemo(() => (event: Event) => {
     if (refs.floating.current && !refs.floating.current.contains(event.target as Node)) {
       handleClose();
       event.stopPropagation();
     }
-  };
+  }, [refs.floating.current]);
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = useMemo(() => (e: KeyboardEvent) => {
     if (!refs.floating.current) return;
 
     const items = Array.from(refs.floating.current.querySelectorAll('a, button'));
@@ -185,7 +185,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
       e.preventDefault();
       e.stopPropagation();
     }
-  };
+  }, [refs.floating.current]);
 
   const arrowProps: React.CSSProperties = useMemo(() => {
     if (middlewareData.arrow) {
@@ -325,27 +325,29 @@ const DropdownMenu = (props: IDropdownMenu) => {
             }}
           >
             {Component && <Component handleClose={handleClose} />}
-            <ul>
-              {items?.map((item, idx) => (
-                <DropdownMenuItem
-                  key={idx}
-                  item={item}
-                  index={idx}
-                  onClick={handleClose}
-                  autoFocus={autoFocus}
-                />
-              ))}
-              {touching && (
-                <li className='p-2 px-3'>
-                  <button
-                    className='flex w-full appearance-none place-content-center items-center justify-center rounded-full border border-gray-700 bg-transparent p-2 text-sm font-medium text-gray-700 transition-all hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:border-gray-500 dark:text-gray-500'
+            {(items?.length || touching) && (
+              <ul>
+                {items?.map((item, idx) => (
+                  <DropdownMenuItem
+                    key={idx}
+                    item={item}
+                    index={idx}
                     onClick={handleClose}
-                  >
-                    <FormattedMessage id='lightbox.close' defaultMessage='Close' />
-                  </button>
-                </li>
-              )}
-            </ul>
+                    autoFocus={autoFocus}
+                  />
+                ))}
+                {touching && (
+                  <li className='p-2 px-3'>
+                    <button
+                      className='flex w-full appearance-none place-content-center items-center justify-center rounded-full border border-gray-700 bg-transparent p-2 text-sm font-medium text-gray-700 transition-all hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:border-gray-500 dark:text-gray-500'
+                      onClick={handleClose}
+                    >
+                      <FormattedMessage id='lightbox.close' defaultMessage='Close' />
+                    </button>
+                  </li>
+                )}
+              </ul>
+            )}
 
             {/* Arrow */}
             {!touching && (
