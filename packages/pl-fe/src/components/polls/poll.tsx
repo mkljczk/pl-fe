@@ -69,12 +69,12 @@ const Poll: React.FC<IPoll> = ({ id, status }): JSX.Element | null => {
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div onClick={e => e.stopPropagation()}>
       {!showResults && poll.multiple && (
-        <Text theme='muted' size='sm'>
+        <Text className='mb-4' theme='muted' size='sm'>
           {intl.formatMessage(messages.multiple)}
         </Text>
       )}
 
-      <Stack space={4} className='mt-4'>
+      <Stack space={4}>
         <Stack space={2}>
           {poll.options.map((option, i) => (
             <PollOption

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import { toggleStatusSpoilerExpanded } from 'pl-fe/actions/statuses';
 import Icon from 'pl-fe/components/icon';
-import { Button, Text } from 'pl-fe/components/ui';
+import { Button, Stack, Text } from 'pl-fe/components/ui';
 import { useAppDispatch, useSettings } from 'pl-fe/hooks';
 import { onlyEmoji as isOnlyEmoji } from 'pl-fe/utils/rich-content';
 
@@ -234,7 +234,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
       output.push(<Poll id={status.poll_id} key='poll' status={status} />);
     }
 
-    return <div className={clsx({ 'bg-gray-100 dark:bg-primary-800 rounded-md p-4': hasPoll })}>{output}</div>;
+    return <Stack space={4} className={clsx({ 'bg-gray-100 dark:bg-primary-800 rounded-md p-4': hasPoll })}>{output}</Stack>;
   } else {
     output.push(
       <Markup
