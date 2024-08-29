@@ -22,6 +22,7 @@ const messages = defineMessages({
   developers: { id: 'navigation.developers', defaultMessage: 'Developers' },
   scheduledStatuses: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
   drafts: { id: 'navigation.drafts', defaultMessage: 'Drafts' },
+  conversations: { id: 'navigation.direct_messages', defaultMessage: 'Direct messages' },
 });
 
 /** Desktop sidebar with links to different views in the app. */
@@ -46,6 +47,14 @@ const SidebarNavigation = () => {
     const menu: Menu = [];
 
     if (account) {
+      if (features.chats && features.conversations) {
+        menu.push({
+          to: '/conversations',
+          text: intl.formatMessage(messages.conversations),
+          icon: require('@tabler/icons/outline/mail.svg'),
+        });
+      }
+
       if (account.locked || followRequestsCount > 0) {
         menu.push({
           to: '/follow_requests',
@@ -127,33 +136,6 @@ const SidebarNavigation = () => {
 
   const menu = makeMenu();
 
-  /** Conditionally render the supported messages link */
-  const renderMessagesLink = (): React.ReactNode => {
-    if (features.chats) {
-      return (
-        <SidebarNavigationLink
-          to='/chats'
-          icon={require('@tabler/icons/outline/messages.svg')}
-          count={unreadChatsCount}
-          countMax={9}
-          text={<FormattedMessage id='navigation.chats' defaultMessage='Chats' />}
-        />
-      );
-    }
-
-    if (features.conversations) {
-      return (
-        <SidebarNavigationLink
-          to='/conversations'
-          icon={require('@tabler/icons/outline/mail.svg')}
-          text={<FormattedMessage id='navigation.direct_messages' defaultMessage='Messages' />}
-        />
-      );
-    }
-
-    return null;
-  };
-
   return (
     <Stack space={4}>
 
@@ -198,7 +180,23 @@ const SidebarNavigation = () => {
               text={<FormattedMessage id='tabs_bar.notifications' defaultMessage='Notifications' />}
             />
 
-            {renderMessagesLink()}
+            {features.chats && (
+              <SidebarNavigationLink
+                to='/chats'
+                icon={require('@tabler/icons/outline/messages.svg')}
+                count={unreadChatsCount}
+                countMax={9}
+                text={<FormattedMessage id='navigation.chats' defaultMessage='Chats' />}
+              />
+            )}
+
+            {!features.chats && features.conversations && (
+              <SidebarNavigationLink
+                to='/conversations'
+                icon={require('@tabler/icons/outline/mail.svg')}
+                text={<FormattedMessage id='navigation.direct_messages' defaultMessage='Direct messages' />}
+              />
+            )}
 
             {features.groups && (
               <SidebarNavigationLink

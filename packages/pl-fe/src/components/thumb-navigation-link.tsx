@@ -11,7 +11,7 @@ interface IThumbNavigationLink {
   countMax?: number;
   src: string;
   activeSrc?: string;
-  text: string | React.ReactElement;
+  text: string;
   to: string;
   exact?: boolean;
   paths?: Array<string>;
@@ -34,7 +34,7 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({ count, countMax, 
   const icon = (active && activeSrc) || src;
 
   return (
-    <NavLink to={to} exact={exact} className='flex flex-1 flex-col items-center space-y-1 px-2 py-4 text-lg text-gray-600'>
+    <NavLink to={to} exact={exact} className='flex flex-1 flex-col items-center space-y-1 px-2 py-4 text-lg text-gray-600' title={text}>
       {!demetricator && count !== undefined ? (
         <IconWithCounter
           src={icon}

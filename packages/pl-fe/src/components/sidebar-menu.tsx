@@ -39,6 +39,7 @@ const messages = defineMessages({
   login: { id: 'account.login', defaultMessage: 'Log in' },
   register: { id: 'account.register', defaultMessage: 'Sign up' },
   sourceCode: { id: 'navigation.source_code', defaultMessage: 'Source code' },
+  conversations: { id: 'navigation.direct_messages', defaultMessage: 'Direct messages' },
 });
 
 interface ISidebarLink {
@@ -221,6 +222,15 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/follow_requests'
                       icon={require('@tabler/icons/outline/user-plus.svg')}
                       text={intl.formatMessage(messages.followRequests)}
+                      onClick={onClose}
+                    />
+                  )}
+
+                  {features.conversations && (
+                    <SidebarLink
+                      to='/conversations'
+                      icon={require('@tabler/icons/outline/mail.svg')}
+                      text={intl.formatMessage(messages.conversations)}
                       onClick={onClose}
                     />
                   )}
