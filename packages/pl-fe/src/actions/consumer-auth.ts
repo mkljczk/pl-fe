@@ -14,9 +14,9 @@ const createProviderApp = () =>
     const scopes = getScopes(getState());
 
     const params = {
-      client_name:   sourceCode.displayName,
+      client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
       redirect_uris: `${window.location.origin}/login/external`,
-      website:       sourceCode.homepage,
+      website: sourceCode.homepage,
       scopes,
     };
 

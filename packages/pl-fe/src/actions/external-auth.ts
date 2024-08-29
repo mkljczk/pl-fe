@@ -37,7 +37,7 @@ const createExternalApp = (instance: Instance, baseURL?: string) =>
     if (getQuirks(instance).noApps) return new Promise(f => f({}));
 
     const params = {
-      client_name: sourceCode.displayName,
+      client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
       redirect_uris: `${window.location.origin}/login/external`,
       website: sourceCode.homepage,
       scopes: getInstanceScopes(instance),

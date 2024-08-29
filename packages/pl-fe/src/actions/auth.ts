@@ -77,7 +77,7 @@ const getAuthApp = () =>
 const createAuthApp = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const params = {
-      client_name: sourceCode.displayName,
+      client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
       redirect_uris: 'urn:ietf:wg:oauth:2.0:oob',
       scopes: getScopes(getState()),
       website: sourceCode.homepage,
