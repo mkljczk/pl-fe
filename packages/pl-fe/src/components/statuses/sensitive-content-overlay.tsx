@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
+import { hideStatusMedia, revealStatusMedia, toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
 import { useAppDispatch, useSettings } from 'pl-fe/hooks';
 
 import { Button, HStack, Text } from '../ui';
@@ -17,7 +17,7 @@ const messages = defineMessages({
   hide: { id: 'moderation_overlay.hide', defaultMessage: 'Hide content' },
   sensitiveTitle: { id: 'status.sensitive_warning', defaultMessage: 'Sensitive content' },
   sensitiveSubtitle: { id: 'status.sensitive_warning.subtitle', defaultMessage: 'This content may not be suitable for all audiences.' },
-  show: { id: 'moderation_overlay.show', defaultMessage: 'Show Content' },
+  show: { id: 'moderation_overlay.show', defaultMessage: 'Show content' },
 });
 
 interface ISensitiveContentOverlay {
@@ -42,7 +42,8 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
   const toggleVisibility = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
 
-    dispatch(toggleStatusMediaHidden(status));
+    if (visible) dispatch(hideStatusMedia(status.id));
+    else dispatch(revealStatusMedia(status.id));
   };
 
   if (visible && !showHideButton) return null;
