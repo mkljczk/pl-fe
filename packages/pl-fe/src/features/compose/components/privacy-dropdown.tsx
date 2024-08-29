@@ -1,12 +1,14 @@
 import clsx from 'clsx';
-import React, { useEffect, useRef } from 'react';
-import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { useIntl, defineMessages, FormattedMessage, IntlShape } from 'react-intl';
 
 import { changeComposeFederated, changeComposeVisibility } from 'pl-fe/actions/compose';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import Icon from 'pl-fe/components/icon';
 import { Button, Toggle } from 'pl-fe/components/ui';
 import { useAppDispatch, useCompose, useFeatures } from 'pl-fe/hooks';
+
+import type { Features } from 'pl-api';
 
 const messages = defineMessages({
   public_short: { id: 'privacy.public.short', defaultMessage: 'Public' },
@@ -34,19 +36,33 @@ interface Option {
 }
 
 interface IPrivacyDropdownMenu {
-  items: any[];
-  value: string;
-  onClose: () => void;
-  onChange: (value: string | null) => void;
-  unavailable?: boolean;
-  showFederated?: boolean;
-  federated?: boolean;
-  onChangeFederated: () => void;
+  handleClose: () => any;
 }
 
-const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({
-  items, value, onClose, onChange, showFederated, federated, onChangeFederated,
-}) => {
+const getItems = (features: Features, intl: IntlShape) => [
+  { icon: require('@tabler/icons/outline/world.svg'), value: 'public', text: intl.formatMessage(messages.public_short), meta: intl.formatMessage(messages.public_long) },
+  { icon: require('@tabler/icons/outline/lock-open.svg'), value: 'unlisted', text: intl.formatMessage(messages.unlisted_short), meta: intl.formatMessage(messages.unlisted_long) },
+  { icon: require('@tabler/icons/outline/lock.svg'), value: 'private', text: intl.formatMessage(messages.private_short), meta: intl.formatMessage(messages.private_long) },
+  features.visibilityMutualsOnly ? { icon: require('@tabler/icons/outline/users-group.svg'), value: 'mutuals_only', text: intl.formatMessage(messages.mutuals_only_short), meta: intl.formatMessage(messages.mutuals_only_long) } : undefined,
+  { icon: require('@tabler/icons/outline/mail.svg'), value: 'direct', text: intl.formatMessage(messages.direct_short), meta: intl.formatMessage(messages.direct_long) },
+  features.visibilityLocalOnly ? { icon: require('@tabler/icons/outline/affiliate.svg'), value: 'local', text: intl.formatMessage(messages.local_short), meta: intl.formatMessage(messages.local_long) } : undefined,
+].filter((option): option is Option => !!option);
+
+const getPrivacyDropdown = (composeId: string): React.FC<IPrivacyDropdownMenu> => ({ handleClose: handleMenuClose }) => {
+  const dispatch = useAppDispatch();
+  const intl = useIntl();
+  const features = useFeatures();
+
+  const compose = useCompose(composeId);
+
+  const value = compose.privacy;
+
+  const items = getItems(features, intl);
+
+  const onChange = (value: string | null) => value && dispatch(changeComposeVisibility(composeId, value));
+
+  const onChangeFederated = () => dispatch(changeComposeFederated(composeId));
+
   const node = useRef<HTMLUListElement>(null);
   const focusedItem = useRef<HTMLLIElement>(null);
 
@@ -56,7 +72,7 @@ const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({
 
     switch (e.key) {
       case 'Escape':
-        onClose();
+        handleMenuClose();
         break;
       case 'Enter':
         handleClick(e);
@@ -98,7 +114,7 @@ const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({
 
     if (value === 'local_switch') onChangeFederated();
     else {
-      onClose();
+      handleMenuClose();
       onChange(value);
     }
   };
@@ -143,7 +159,7 @@ const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({
           </li>
         );
       })}
-      {showFederated && (
+      {features.localOnlyStatuses && (
         <li
           role='option'
           tabIndex={0}
@@ -165,7 +181,7 @@ const PrivacyDropdownMenu: React.FC<IPrivacyDropdownMenu> = ({
             <FormattedMessage id='privacy.local.long' defaultMessage='Only visible on your instance' />
           </div>
 
-          <Toggle checked={!federated} onChange={onChangeFederated} />
+          <Toggle checked={!compose.federated} onChange={onChangeFederated} />
         </li>
       )}
 
@@ -180,7 +196,6 @@ interface IPrivacyDropdown {
 const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   composeId,
 }) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
   const features = useFeatures();
 
@@ -189,38 +204,20 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   const value = compose.privacy;
   const unavailable = compose.id;
 
-  const options = [
-    { icon: require('@tabler/icons/outline/world.svg'), value: 'public', text: intl.formatMessage(messages.public_short), meta: intl.formatMessage(messages.public_long) },
-    { icon: require('@tabler/icons/outline/lock-open.svg'), value: 'unlisted', text: intl.formatMessage(messages.unlisted_short), meta: intl.formatMessage(messages.unlisted_long) },
-    { icon: require('@tabler/icons/outline/lock.svg'), value: 'private', text: intl.formatMessage(messages.private_short), meta: intl.formatMessage(messages.private_long) },
-    features.visibilityMutualsOnly ? { icon: require('@tabler/icons/outline/users-group.svg'), value: 'mutuals_only', text: intl.formatMessage(messages.mutuals_only_short), meta: intl.formatMessage(messages.mutuals_only_long) } : undefined,
-    { icon: require('@tabler/icons/outline/mail.svg'), value: 'direct', text: intl.formatMessage(messages.direct_short), meta: intl.formatMessage(messages.direct_long) },
-    features.visibilityLocalOnly ? { icon: require('@tabler/icons/outline/affiliate.svg'), value: 'local', text: intl.formatMessage(messages.local_short), meta: intl.formatMessage(messages.local_long) } : undefined,
-  ].filter((option): option is Option => !!option);
+  const items = getItems(features, intl);
 
-  const onChange = (value: string | null) => value && dispatch(changeComposeVisibility(composeId, value));
-
-  const onChangeFederated = () => dispatch(changeComposeFederated(composeId));
+  const PrivacyDropdownMenu = useMemo(() => getPrivacyDropdown(composeId), [composeId]);
 
   if (unavailable) {
     return null;
   }
 
-  const valueOption = options.find(item => item.value === value);
+  const valueOption = items.find(item => item.value === value);
+
 
   return (
     <DropdownMenu
-      component={({ handleClose }) => (
-        <PrivacyDropdownMenu
-          items={options}
-          value={value}
-          onClose={handleClose}
-          onChange={onChange}
-          showFederated={features.localOnlyStatuses}
-          federated={compose.federated}
-          onChangeFederated={onChangeFederated}
-        />
-      )}
+      component={PrivacyDropdownMenu}
     >
       <Button
         theme='muted'
