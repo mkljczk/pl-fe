@@ -74,6 +74,7 @@ const baseStatusSchema = z.object({
   group: groupSchema.nullable().catch(null),
   scheduled_at: z.null().catch(null),
 
+  quote_id: z.string().nullable().catch(null),
   local: z.boolean().optional().catch(undefined),
   conversation_id: z.string().optional().catch(undefined),
   direct_conversation_id: z.string().optional().catch(undefined),
@@ -104,8 +105,10 @@ const baseStatusSchema = z.object({
 const preprocess = (status: any) => {
   if (!status) return null;
   status = {
+    // @ts-ignore
     ...(pick(status.pleroma || {}, [
       'quote',
+      'quote_id',
       'local',
       'conversation_id',
       'direct_conversation_id',
@@ -131,11 +134,11 @@ const preprocess = (status: any) => {
   return status;
 };
 
-const statusSchema: z.ZodType<Status> = baseStatusSchema.extend({
+const statusSchema: z.ZodType<Status> = z.preprocess(preprocess, baseStatusSchema.extend({
   reblog: z.lazy(() => statusSchema).nullable().catch(null),
 
   quote: z.lazy(() => statusSchema).nullable().catch(null),
-}) as any;
+})) as any;
 
 const statusWithoutAccountSchema = z.preprocess(preprocess, baseStatusSchema.omit({ account: true }).extend({
   account: accountSchema.nullable().catch(null),
