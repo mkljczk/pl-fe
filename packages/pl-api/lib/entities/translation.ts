@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import { Resolve } from '../utils/types';
-
 import { filteredArray } from './utils';
 
 const translationPollSchema = z.object({
@@ -39,6 +37,6 @@ const translationSchema = z.preprocess((translation: any) => {
   provider: z.string(),
 }));
 
-type Translation = Resolve<z.infer<typeof translationSchema>>;
+type Translation = z.infer<typeof translationSchema>;
 
 export { translationSchema, type Translation };

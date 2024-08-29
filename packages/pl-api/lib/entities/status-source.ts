@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import { Resolve } from '../utils/types';
-
 import { locationSchema } from './location';
 
 /** @see {@link https://docs.joinmastodon.org/entities/StatusSource/} */
@@ -17,6 +15,6 @@ const statusSourceSchema = z.object({
   spoiler_text_map: z.record(z.string()).nullable().catch(null),
 });
 
-type StatusSource = Resolve<z.infer<typeof statusSourceSchema>>;
+type StatusSource = z.infer<typeof statusSourceSchema>;
 
 export { statusSourceSchema, type StatusSource };

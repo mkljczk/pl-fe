@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import type { Resolve } from '../utils/types';
-
 /** @see {@link https://docs.joinmastodon.org/entities/Application/} */
 const applicationSchema = z.object({
   name: z.string().catch(''),
@@ -16,6 +14,6 @@ const applicationSchema = z.object({
   vapid_key: z.string().optional().catch(undefined),
 });
 
-type Application = Resolve<z.infer<typeof applicationSchema>>;
+type Application = z.infer<typeof applicationSchema>;
 
 export { applicationSchema, type Application };

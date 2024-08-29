@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import { Resolve } from '../utils/types';
-
 import { filterSchema } from './filter';
 
 /** @see {@link https://docs.joinmastodon.org/entities/FilterResult/} */
@@ -11,6 +9,6 @@ const filterResultSchema = z.object({
   status_matches: z.array(z.string()).nullable().catch(null),
 });
 
-type FilterResult = Resolve<z.infer<typeof filterResultSchema>>;
+type FilterResult = z.infer<typeof filterResultSchema>;
 
 export { filterResultSchema, type FilterResult };

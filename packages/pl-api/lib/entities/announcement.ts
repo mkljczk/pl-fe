@@ -6,8 +6,6 @@ import { mentionSchema } from './mention';
 import { tagSchema } from './tag';
 import { dateSchema, filteredArray } from './utils';
 
-import type { Resolve } from '../utils/types';
-
 /** @see {@link https://docs.joinmastodon.org/entities/announcement/} */
 const announcementSchema = z.object({
   id: z.string(),
@@ -30,6 +28,6 @@ const announcementSchema = z.object({
   updated_at: dateSchema,
 });
 
-type Announcement = Resolve<z.infer<typeof announcementSchema>>;
+type Announcement = z.infer<typeof announcementSchema>;
 
 export { announcementSchema, type Announcement };

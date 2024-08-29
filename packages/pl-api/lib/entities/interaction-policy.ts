@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import { Resolve } from '../utils/types';
-
 import { coerceObject } from './utils';
 
 const interactionPolicyEntrySchema = z.enum(['public', 'followers', 'following', 'mutuals', 'mentioned', 'author', 'me']);
@@ -18,7 +16,7 @@ const interactionPolicySchema = coerceObject({
   can_reply: interactionPolicyRuleSchema,
 });
 
-type InteractionPolicy = Resolve<z.infer<typeof interactionPolicySchema>>;
+type InteractionPolicy = z.infer<typeof interactionPolicySchema>;
 
 const interactionPoliciesSchema = coerceObject({
   public: interactionPolicySchema,
@@ -27,7 +25,7 @@ const interactionPoliciesSchema = coerceObject({
   direct: interactionPolicySchema,
 });
 
-type InteractionPolicies = Resolve<z.infer<typeof interactionPoliciesSchema>>;
+type InteractionPolicies = z.infer<typeof interactionPoliciesSchema>;
 
 export { interactionPolicySchema, interactionPoliciesSchema, type InteractionPolicy, type InteractionPolicies };
 

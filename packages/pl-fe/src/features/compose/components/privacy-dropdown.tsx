@@ -214,7 +214,6 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
 
   const valueOption = items.find(item => item.value === value);
 
-
   return (
     <DropdownMenu
       component={PrivacyDropdownMenu}

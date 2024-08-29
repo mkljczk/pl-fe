@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import { Resolve } from '../utils/types';
-
 import { dateSchema } from './utils';
 
 /** @see {@link https://docs.joinmastodon.org/entities/RelationshipSeveranceEvent/} */
@@ -13,6 +11,6 @@ const relationshipSeveranceEventSchema = z.object({
   created_at: dateSchema,
 });
 
-type RelationshipSeveranceEvent = Resolve<z.infer<typeof relationshipSeveranceEventSchema>>;
+type RelationshipSeveranceEvent = z.infer<typeof relationshipSeveranceEventSchema>;
 
 export { relationshipSeveranceEventSchema, type RelationshipSeveranceEvent };

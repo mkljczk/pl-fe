@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import type { Resolve } from '../utils/types';
-
 /** @see {@link https://docs.joinmastodon.org/entities/announcement/} */
 const announcementReactionSchema = z.object({
   name: z.string().catch(''),
@@ -12,6 +10,6 @@ const announcementReactionSchema = z.object({
   announcement_id: z.string().catch(''),
 });
 
-type AnnouncementReaction = Resolve<z.infer<typeof announcementReactionSchema>>;
+type AnnouncementReaction = z.infer<typeof announcementReactionSchema>;
 
 export { announcementReactionSchema, type AnnouncementReaction };

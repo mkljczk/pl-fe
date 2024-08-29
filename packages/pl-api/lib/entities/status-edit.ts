@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import { Resolve } from '../utils/types';
-
 import { accountSchema } from './account';
 import { customEmojiSchema } from './custom-emoji';
 import { mediaAttachmentSchema } from './media-attachment';
@@ -23,6 +21,6 @@ const statusEditSchema = z.object({
   emojis: filteredArray(customEmojiSchema),
 });
 
-type StatusEdit = Resolve<z.infer<typeof statusEditSchema>>;
+type StatusEdit = z.infer<typeof statusEditSchema>;
 
 export { statusEditSchema, type StatusEdit };

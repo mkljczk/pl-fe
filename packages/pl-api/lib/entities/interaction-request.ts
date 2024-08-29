@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import { Resolve } from '../utils/types';
-
 import { accountSchema } from './account';
 import { statusSchema } from './status';
 
@@ -18,6 +16,6 @@ const interactionRequestSchema = z.object({
   uri: z.string().nullable().catch(null),
 });
 
-type InteractionRequest = Resolve<z.infer<typeof interactionRequestSchema>>;
+type InteractionRequest = z.infer<typeof interactionRequestSchema>;
 
 export { interactionRequestSchema, type InteractionRequest };

@@ -15,8 +15,6 @@ import { tagSchema } from './tag';
 import { translationSchema } from './translation';
 import { dateSchema, filteredArray } from './utils';
 
-import type { Resolve } from '../utils/types';
-
 const statusEventSchema = z.object({
   name: z.string().catch(''),
   start_time: z.string().datetime().nullable().catch(null),
@@ -133,19 +131,22 @@ const preprocess = (status: any) => {
   return status;
 };
 
-const statusSchema = z.preprocess(preprocess, baseStatusSchema.extend({
-  reblog: z.lazy(() => baseStatusSchema).nullable().catch(null),
+const statusSchema: z.ZodType<Status> = baseStatusSchema.extend({
+  reblog: z.lazy(() => statusSchema).nullable().catch(null),
 
-  quote: z.lazy(() => baseStatusSchema).nullable().catch(null),
-}));
+  quote: z.lazy(() => statusSchema).nullable().catch(null),
+}) as any;
 
 const statusWithoutAccountSchema = z.preprocess(preprocess, baseStatusSchema.omit({ account: true }).extend({
   account: accountSchema.nullable().catch(null),
-  reblog: z.lazy(() => baseStatusSchema).nullable().catch(null),
+  reblog: z.lazy(() => statusSchema).nullable().catch(null),
 
-  quote: z.lazy(() => baseStatusSchema).nullable().catch(null),
+  quote: z.lazy(() => statusSchema).nullable().catch(null),
 }));
 
-type Status = Resolve<z.infer<typeof statusSchema>>;
+type Status = z.infer<typeof baseStatusSchema> & {
+  reblog: Status | null;
+  quote: Status | null;
+}
 
 export { statusSchema, statusWithoutAccountSchema, type Status };

@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import { Resolve } from '../utils/types';
-
 import { filteredArray } from './utils';
 
 /** @see {@link https://docs.joinmastodon.org/entities/FilterKeyword/} */
@@ -42,6 +40,6 @@ const filterSchema = z.preprocess((filter: any) => {
   statuses: filteredArray(filterStatusSchema),
 }));
 
-type Filter = Resolve<z.infer<typeof filterSchema>>;
+type Filter = z.infer<typeof filterSchema>;
 
 export { filterKeywordSchema, filterStatusSchema, filterSchema, type Filter };

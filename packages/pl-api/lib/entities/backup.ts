@@ -2,8 +2,6 @@ import { z } from 'zod';
 
 import { dateSchema, mimeSchema } from './utils';
 
-import type { Resolve } from '../utils/types';
-
 /** @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#post-apiv1pleromabackups} */
 const backupSchema = z.object({
   id: z.coerce.string(),
@@ -14,6 +12,6 @@ const backupSchema = z.object({
   url: z.string().catch(''),
 });
 
-type Backup = Resolve<z.infer<typeof backupSchema>>;
+type Backup = z.infer<typeof backupSchema>;
 
 export { backupSchema, type Backup };

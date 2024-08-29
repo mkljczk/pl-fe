@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import { Resolve } from '../utils/types';
-
 import { accountSchema } from './account';
 import { dateSchema } from './utils';
 
@@ -22,6 +20,6 @@ const accountWarningSchema = z.object({
   created_at: dateSchema,
 });
 
-type AccountWarning = Resolve<z.infer<typeof accountWarningSchema>>;
+type AccountWarning = z.infer<typeof accountWarningSchema>;
 
 export { accountWarningSchema, type AccountWarning };

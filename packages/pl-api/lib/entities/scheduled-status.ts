@@ -3,8 +3,6 @@ import { z } from 'zod';
 import { mediaAttachmentSchema } from './media-attachment';
 import { filteredArray } from './utils';
 
-import type { Resolve } from '../utils/types';
-
 /** @see {@link https://docs.joinmastodon.org/entities/ScheduledStatus/} */
 const scheduledStatusSchema = z.object({
   id: z.string(),
@@ -33,6 +31,6 @@ const scheduledStatusSchema = z.object({
   media_attachments: filteredArray(mediaAttachmentSchema),
 });
 
-type ScheduledStatus = Resolve<z.infer<typeof scheduledStatusSchema>>;
+type ScheduledStatus = z.infer<typeof scheduledStatusSchema>;
 
 export { scheduledStatusSchema, type ScheduledStatus };
