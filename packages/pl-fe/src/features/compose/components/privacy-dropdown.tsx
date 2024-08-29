@@ -4,8 +4,7 @@ import { useIntl, defineMessages, FormattedMessage, IntlShape } from 'react-intl
 
 import { changeComposeFederated, changeComposeVisibility } from 'pl-fe/actions/compose';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import Icon from 'pl-fe/components/icon';
-import { Button, Toggle } from 'pl-fe/components/ui';
+import { Button, Icon, Toggle } from 'pl-fe/components/ui';
 import { useAppDispatch, useCompose, useFeatures } from 'pl-fe/hooks';
 
 import type { Features } from 'pl-api';
@@ -144,9 +143,7 @@ const getPrivacyDropdown = (composeId: string): React.FC<IPrivacyDropdownMenu> =
             aria-selected={active}
             ref={active ? focusedItem : null}
           >
-            <div className='mr-2.5 flex items-center justify-center rtl:ml-2.5 rtl:mr-0'>
-              <Icon src={item.icon} />
-            </div>
+            <Icon src={item.icon} className='mr-2.5 h-5 w-5 flex-none rtl:ml-2.5 rtl:mr-0' />
 
             <div
               className={clsx('flex-auto text-xs text-primary-600 dark:text-primary-400', {
