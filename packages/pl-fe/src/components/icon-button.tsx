@@ -33,7 +33,6 @@ const IconButton: React.FC<IIconButton> = ({
   text,
   title,
 }) => {
-
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
 
