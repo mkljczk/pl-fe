@@ -258,23 +258,24 @@ const DropdownMenu = (props: IDropdownMenu) => {
   const autoFocus = items && !items.some((item) => item?.active);
 
   const getClassName = () => {
-    const className = clsx('z-[1001] bg-white py-1 shadow-lg ease-in-out focus:outline-none black:bg-black no-reduce-motion:transition-all dark:bg-gray-900 dark:ring-2 dark:ring-primary-700', touching ? clsx({
-      'overflow-auto fixed left-0 right-0 mx-auto w-[calc(100vw-2rem)] max-w-lg max-h-[calc(100dvh-1rem)] rounded-t-xl duration-200': true,
-      'bottom-0 opacity-100': isDisplayed && isOpen,
-      '-bottom-32 opacity-0': !(isDisplayed && isOpen),
-    }) : clsx({
-      'rounded-md min-w-56 max-w-sm duration-100': true,
-      'scale-0': !(isDisplayed && isOpen),
-      'scale-100': isDisplayed && isOpen,
-      'origin-bottom': placement === 'top',
-      'origin-left': placement === 'right',
-      'origin-top': placement === 'bottom',
-      'origin-right': placement === 'left',
-      'origin-bottom-left': placement === 'top-start',
-      'origin-bottom-right': placement === 'top-end',
-      'origin-top-left': placement === 'bottom-start',
-      'origin-top-right': placement === 'bottom-end',
-    }));
+    const className = clsx('z-[1001] bg-white py-1 shadow-lg ease-in-out focus:outline-none black:bg-black no-reduce-motion:transition-all dark:bg-gray-900 dark:ring-2 dark:ring-primary-700',
+      touching ? clsx({
+        'overflow-auto fixed left-0 right-0 mx-auto w-[calc(100vw-2rem)] max-w-lg max-h-[calc(100dvh-1rem)] rounded-t-xl duration-200': true,
+        'bottom-0 opacity-100': isDisplayed && isOpen,
+        '-bottom-32 opacity-0': !(isDisplayed && isOpen),
+      }) : clsx({
+        'rounded-md min-w-56 max-w-sm duration-100': true,
+        'scale-0': !(isDisplayed && isOpen),
+        'scale-100': isDisplayed && isOpen,
+        'origin-bottom': placement === 'top',
+        'origin-left': placement === 'right',
+        'origin-top': placement === 'bottom',
+        'origin-right': placement === 'left',
+        'origin-bottom-left': placement === 'top-start',
+        'origin-bottom-right': placement === 'top-end',
+        'origin-top-left': placement === 'bottom-start',
+        'origin-top-right': placement === 'bottom-end',
+      }));
 
     return className;
   };
