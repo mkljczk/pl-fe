@@ -165,9 +165,7 @@ const getPrivacyDropdown = (composeId: string): React.FC<IPrivacyDropdownMenu> =
           onClick={onChangeFederated}
           className='flex cursor-pointer items-center p-2.5 text-xs text-gray-700 hover:bg-gray-100 focus:bg-gray-100 black:hover:bg-gray-900 black:focus:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:focus:bg-gray-800'
         >
-          <div className='mr-2.5 flex items-center justify-center rtl:ml-2.5 rtl:mr-0'>
-            <Icon src={require('@tabler/icons/outline/affiliate.svg')} />
-          </div>
+          <Icon src={require('@tabler/icons/outline/affiliate.svg')} className='mr-2.5 h-5 w-5 flex-none rtl:ml-2.5 rtl:mr-0' />
 
           <div
             className='flex-auto text-xs text-primary-600 dark:text-primary-400'
