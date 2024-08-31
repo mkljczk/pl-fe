@@ -1,10 +1,9 @@
-import { useFloating, shift } from '@floating-ui/react';
+import { useFloating, shift, flip } from '@floating-ui/react';
 import clsx from 'clsx';
 import React, { KeyboardEvent, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { IconButton } from 'pl-fe/components/ui';
+import { IconButton, Portal } from 'pl-fe/components/ui';
 import { useClickOutside } from 'pl-fe/hooks';
 
 import EmojiPickerDropdown, { IEmojiPickerDropdown } from '../components/emoji-picker-dropdown';
@@ -21,7 +20,7 @@ const EmojiPickerDropdownContainer = (
   const [visible, setVisible] = useState(false);
 
   const { x, y, strategy, refs, update } = useFloating<HTMLButtonElement>({
-    middleware: [shift()],
+    middleware: [flip(), shift()],
   });
 
   useClickOutside(refs, () => {
@@ -50,7 +49,7 @@ const EmojiPickerDropdownContainer = (
         tabIndex={0}
       />
 
-      {createPortal(
+      <Portal>
         <div
           className='z-[101]'
           ref={refs.setFloating}
@@ -67,9 +66,8 @@ const EmojiPickerDropdownContainer = (
             update={update}
             {...props}
           />
-        </div>,
-        document.body,
-      )}
+        </div>
+      </Portal>
     </div>
   );
 };
