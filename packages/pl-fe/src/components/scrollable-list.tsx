@@ -216,8 +216,9 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
     if (initialTopMostItemIndex) {
       if (typeof initialTopMostItemIndex === 'number') {
         return {
-          align: 'center',
+          align: 'start',
           index: initialTopMostItemIndex,
+          offset: 60,
         };
       }
       return initialTopMostItemIndex;
