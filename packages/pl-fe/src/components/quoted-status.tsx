@@ -100,6 +100,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
               <StatusContent
                 status={status}
                 collapsable
+                quote
               />
 
               {status.quote_id && <QuotedStatusIndicator statusId={status.quote_id} />}

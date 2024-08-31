@@ -30,12 +30,17 @@ const messages = defineMessages({
 
 interface IReadMoreButton {
   onClick: React.MouseEventHandler;
+  quote?: boolean;
 }
 
 /** Button to expand a truncated status (due to too much content) */
-const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick }) => (
+const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, quote }) => (
   <div className='relative'>
-    <div className='absolute -top-16 h-16 w-full bg-gradient-to-b from-transparent to-white black:to-black dark:to-primary-900' />
+    <div
+      className={clsx('absolute -top-16 h-16 w-full bg-gradient-to-b from-transparent to-white black:to-black dark:to-primary-900', {
+        'hover:to-gray-100 black:hover-to-gray-800 dark:hover:to-gray-800': quote,
+      })}
+    />
     <button className='flex items-center border-0 bg-transparent p-0 pt-2 text-gray-900 hover:underline active:underline dark:text-gray-300' onClick={onClick}>
       <FormattedMessage id='status.read_more' defaultMessage='Read more' />
       <Icon className='inline-block h-5 w-5' src={require('@tabler/icons/outline/chevron-right.svg')} />
@@ -49,6 +54,7 @@ interface IStatusContent {
   collapsable?: boolean;
   translatable?: boolean;
   textSize?: Sizes;
+  quote?: boolean;
 }
 
 /** Renders the text content of a status */
@@ -58,6 +64,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   collapsable = false,
   translatable,
   textSize = 'md',
+  quote = false,
 }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -113,8 +120,6 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   }
 
   const withSpoiler = status.spoiler_text.length > 0;
-
-  const baseClassName = 'text-gray-900 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none';
 
   const options: HTMLReactParserOptions = {
     replace(domNode) {
@@ -174,9 +179,8 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   const content = parse(parsedHtml, options);
 
   const direction = getTextDirection(status.search_index);
-  const className = clsx(baseClassName, {
+  const className = clsx('relative overflow-hidden text-ellipsis break-words text-gray-900 focus:outline-none dark:text-gray-100', {
     'cursor-pointer': onClick,
-    'whitespace-normal': withSpoiler,
     'max-h-[200px]': collapsed,
     'leading-normal big-emoji': onlyEmoji,
   });
@@ -224,7 +228,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     );
 
     if (collapsed) {
-      output.push(<ReadMoreButton onClick={onClick} key='read-more' />);
+      output.push(<ReadMoreButton onClick={onClick} key='read-more' quote={quote} />);
     }
 
     let hasPoll = false;
@@ -241,9 +245,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
         ref={node}
         tabIndex={0}
         key='content'
-        className={clsx(baseClassName, {
-          'leading-normal big-emoji': onlyEmoji,
-        })}
+        className={className}
         direction={direction}
         lang={status.language || undefined}
         size={textSize}
@@ -251,6 +253,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
         {content}
       </Markup>,
     );
+
+    if (collapsed) {
+      output.push(<ReadMoreButton onClick={() => {}} key='read-more' quote={quote} />);
+    }
 
     if (status.poll_id) {
       output.push(<Poll id={status.poll_id} key='poll' status={status} />);
