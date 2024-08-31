@@ -54,7 +54,11 @@ jobs:
       with:
         name: pl-fe
         path: packages/pl-fe/dist
-    
+
+    - name: Include archive
+      working-directory: ./packages/pl-fe/dist
+      run: zip -r pl-fe.zip .
+
     - name: Upload Github Pages artifact
       uses: actions/upload-pages-artifact@v3
       with:
