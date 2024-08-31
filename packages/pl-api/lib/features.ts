@@ -517,6 +517,7 @@ const getFeatures = (instance?: Instance) => {
       v.software === GOTOSOCIAL && gte(v.version, '0.16.1'),
       v.software === MASTODON && gte(v.compatVersion, '4.0.0'),
       v.software === PLEROMA && v.build === AKKOMA,
+      v.software === PLEROMA && v.build === PL,
       v.software === TAKAHE && gte(v.version, '0.9.0'),
     ]),
 
