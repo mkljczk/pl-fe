@@ -15,6 +15,14 @@ There is more to mention. `pl-fe` includes various minor improvements and visual
 
 Want to test `pl-fe` with **any existing MastoAPI-compatible server?** Try [pl.mkljczk.pl](https://pl.mkljczk.pl) — enter your server's domain name to use `pl-fe` on any server!
 
+If you want to use `pl-fe` as the default frontend on your server, download the latest build from [pl.mkljczk.pl/pl-fe.zip](http://pl.mkljczk.pl/pl-fe.zip) and install it following the instructions for your backend. For example, on a standard Pleroma installation you can use:
+
+```sh
+curl -O http://pl.mkljczk.pl/pl-fe.zip
+unzip pl-fe.zip -d /opt/pleroma/instance/static/
+rm pl-fe.zip
+```
+
 ## License
 
 `pl-fe` is a fork of Soapbox, which was forked from [Gab Social](https://github.com/GabOpenSource/gab-social), which is a fork of [Mastodon](https://github.com/mastodon/mastodon/).
