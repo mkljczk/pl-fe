@@ -181,7 +181,7 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
             <FormattedMessage id='event.description' defaultMessage='Description' />
           </Text>
 
-          <StatusContent status={status} collapsable={false} translatable />
+          <StatusContent status={status} translatable />
 
           <TranslateButton status={status} />
         </Stack>

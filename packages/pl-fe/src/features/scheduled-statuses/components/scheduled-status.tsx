@@ -48,7 +48,7 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ statusId, ...other }) => 
         <Stack space={4}>
           <StatusContent
             status={status}
-            collapsable
+            collapsable={false}
           />
 
           {status.media_attachments.length > 0 && (

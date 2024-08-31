@@ -71,7 +71,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   const maybeSetCollapsed = (): void => {
     if (!node.current) return;
 
-    if (collapsable && onClick && !collapsed) {
+    if (collapsable && !collapsed) {
       if (node.current.clientHeight > MAX_HEIGHT) {
         setCollapsed(true);
       }
