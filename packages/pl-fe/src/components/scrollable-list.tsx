@@ -212,6 +212,12 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
   /** Figure out the initial index to scroll to. */
   const initialIndex = useMemo<number | IndexLocationWithAlign>(() => {
     if (showLoading) return 0;
+    if (typeof initialTopMostItemIndex === 'number') {
+      return {
+        align: 'center',
+        index: initialTopMostItemIndex,
+      };
+    }
     if (initialTopMostItemIndex) return initialTopMostItemIndex;
 
     if (scrollData && history.action === 'POP') {
@@ -231,6 +237,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
       id={id}
       useWindowScroll={useWindowScroll}
       data={data}
+      totalCount={data.length}
       startReached={onScrollToTop}
       endReached={handleEndReached}
       isScrolling={isScrolling => isScrolling && onScroll && onScroll()}
