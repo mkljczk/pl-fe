@@ -7,16 +7,17 @@ const unescapeHTML = (html: string = ''): string => {
 };
 
 /** Remove compatibility markup for features pl-fe supports. */
-const stripCompatibilityFeatures = (html: string): string => {
+const stripCompatibilityFeatures = (html: string, hasQuote = true): string => {
   const node = document.createElement('div');
   node.innerHTML = html;
 
   const selectors = [
-    // Quote posting
-    '.quote-inline',
     // Explicit mentions
     '.recipients-inline',
   ];
+
+  // Quote posting
+  if (hasQuote) selectors.push('.quote-inline');
 
   // Remove all instances of all selectors
   selectors.forEach(selector => {
