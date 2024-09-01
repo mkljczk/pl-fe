@@ -537,7 +537,13 @@ const getFeatures = (instance?: Instance) => {
      * Ability to list followed hashtags.
      * @see GET /api/v1/followed_tags
      */
-    followedHashtagsList: v.software === MASTODON && gte(v.compatVersion, '4.1.0'),
+    followedHashtagsList: any([
+      v.software === GOTOSOCIAL && gte(v.version, '0.16.1'),
+      v.software === MASTODON && gte(v.compatVersion, '4.1.0'),
+      v.software === PLEROMA && v.build === AKKOMA,
+      v.software === PLEROMA && v.build === PL,
+      v.software === TAKAHE && gte(v.version, '0.9.0'),
+    ]),
 
     /**
      * Whether client settings can be retrieved from the API.
