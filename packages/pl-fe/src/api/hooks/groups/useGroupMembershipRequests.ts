@@ -1,4 +1,4 @@
-import { accountSchema, GroupRoles } from 'pl-api';
+import { GroupRoles } from 'pl-api';
 
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useDismissEntity, useEntities } from 'pl-fe/entity-store/hooks';
@@ -19,7 +19,6 @@ const useGroupMembershipRequests = (groupId: string) => {
     path,
     () => client.experimental.groups.getGroupMembershipRequests(groupId),
     {
-      schema: accountSchema,
       transform: normalizeAccount,
       enabled: relationship?.role === GroupRoles.OWNER || relationship?.role === GroupRoles.ADMIN,
     },

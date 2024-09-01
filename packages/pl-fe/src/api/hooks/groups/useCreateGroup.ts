@@ -1,9 +1,9 @@
-import { groupSchema, type Group as BaseGroup } from 'pl-api';
-
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useCreateEntity } from 'pl-fe/entity-store/hooks';
 import { useClient } from 'pl-fe/hooks';
 import { normalizeGroup, type Group } from 'pl-fe/normalizers';
+
+import type { Group as BaseGroup } from 'pl-api';
 
 interface CreateGroupParams {
   display_name: string;
@@ -21,7 +21,7 @@ const useCreateGroup = () => {
   const { createEntity, ...rest } = useCreateEntity<BaseGroup, Group, CreateGroupParams>(
     [Entities.GROUPS, 'search', ''],
     (params: CreateGroupParams) => client.experimental.groups.createGroup(params),
-    { schema: groupSchema, transform: normalizeGroup },
+    { transform: normalizeGroup },
   );
 
   return {

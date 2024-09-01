@@ -1,9 +1,10 @@
-import { type GroupRelationship, groupRelationshipSchema } from 'pl-api';
 import { z } from 'zod';
 
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useEntity } from 'pl-fe/entity-store/hooks';
 import { useClient } from 'pl-fe/hooks';
+
+import type { GroupRelationship } from 'pl-api';
 
 const useGroupRelationship = (groupId: string | undefined) => {
   const client = useClient();
@@ -13,7 +14,7 @@ const useGroupRelationship = (groupId: string | undefined) => {
     () => client.experimental.groups.getGroupRelationships([groupId!]),
     {
       enabled: !!groupId,
-      schema: z.array(groupRelationshipSchema).nonempty().transform(arr => arr[0]),
+      schema: z.any().transform(arr => arr[0]),
     },
   );
 

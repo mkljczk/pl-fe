@@ -1,4 +1,3 @@
-import { type Account as BaseAccount } from 'pl-api';
 import { useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -9,6 +8,8 @@ import { type Account, normalizeAccount } from 'pl-fe/normalizers';
 
 import { useAccountScrobble } from './useAccountScrobble';
 import { useRelationship } from './useRelationship';
+
+import type { Account as BaseAccount } from 'pl-api';
 
 interface UseAccountOpts {
   withRelationship?: boolean;

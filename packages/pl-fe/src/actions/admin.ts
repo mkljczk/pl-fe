@@ -1,4 +1,3 @@
-
 import { fetchRelationships } from 'pl-fe/actions/accounts';
 import { importFetchedAccount, importFetchedAccounts, importFetchedStatuses } from 'pl-fe/actions/importer';
 import { filterBadges, getTagDiff } from 'pl-fe/utils/badges';

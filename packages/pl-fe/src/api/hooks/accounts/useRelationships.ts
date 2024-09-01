@@ -1,8 +1,8 @@
-import { type Relationship, relationshipSchema } from 'pl-api';
-
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useBatchedEntities } from 'pl-fe/entity-store/hooks/useBatchedEntities';
 import { useClient, useLoggedIn } from 'pl-fe/hooks';
+
+import type { Relationship } from 'pl-api';
 
 const useRelationships = (listKey: string[], accountIds: string[]) => {
   const client = useClient();
@@ -14,7 +14,7 @@ const useRelationships = (listKey: string[], accountIds: string[]) => {
     [Entities.RELATIONSHIPS, ...listKey],
     accountIds,
     fetchRelationships,
-    { schema: relationshipSchema, enabled: isLoggedIn },
+    { enabled: isLoggedIn },
   );
 
   return { relationships, ...result };

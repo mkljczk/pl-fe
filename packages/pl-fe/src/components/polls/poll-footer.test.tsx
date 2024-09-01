@@ -1,5 +1,4 @@
 import userEvent from '@testing-library/user-event';
-import { type Poll } from 'pl-api';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
@@ -8,6 +7,8 @@ import { __stub } from 'pl-fe/api';
 import { mockStore, render, screen, rootState } from 'pl-fe/jest/test-helpers';
 
 import PollFooter from './poll-footer';
+
+import type { Poll } from 'pl-api';
 
 let poll: Poll = {
   id: '1',

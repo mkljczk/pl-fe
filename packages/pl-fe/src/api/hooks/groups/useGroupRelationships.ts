@@ -1,8 +1,8 @@
-import { type GroupRelationship, groupRelationshipSchema } from 'pl-api';
-
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useBatchedEntities } from 'pl-fe/entity-store/hooks/useBatchedEntities';
 import { useClient, useLoggedIn } from 'pl-fe/hooks';
+
+import type { GroupRelationship } from 'pl-api';
 
 const useGroupRelationships = (listKey: string[], groupIds: string[]) => {
   const client = useClient();
@@ -15,7 +15,7 @@ const useGroupRelationships = (listKey: string[], groupIds: string[]) => {
     [Entities.RELATIONSHIPS, ...listKey],
     groupIds,
     fetchGroupRelationships,
-    { schema: groupRelationshipSchema, enabled: isLoggedIn },
+    { enabled: isLoggedIn },
   );
 
   return { relationships, ...result };

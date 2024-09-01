@@ -1,5 +1,3 @@
-import { bookmarkFolderSchema } from 'pl-api';
-
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useCreateEntity } from 'pl-fe/entity-store/hooks';
 import { useClient } from 'pl-fe/hooks';
@@ -16,7 +14,6 @@ const useUpdateBookmarkFolder = (folderId: string) => {
     [Entities.BOOKMARK_FOLDERS],
     (params: UpdateBookmarkFolderParams) =>
       client.myAccount.updateBookmarkFolder(folderId, params),
-    { schema: bookmarkFolderSchema },
   );
 
   return {

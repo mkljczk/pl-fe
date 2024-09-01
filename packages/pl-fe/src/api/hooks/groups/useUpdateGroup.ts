@@ -1,5 +1,3 @@
-import { groupSchema } from 'pl-api';
-
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useCreateEntity } from 'pl-fe/entity-store/hooks';
 import { useClient } from 'pl-fe/hooks';
@@ -20,7 +18,7 @@ const useUpdateGroup = (groupId: string) => {
   const { createEntity, ...rest } = useCreateEntity(
     [Entities.GROUPS],
     (params: UpdateGroupParams) => client.experimental.groups.updateGroup(groupId, params),
-    { schema: groupSchema, transform: normalizeGroup },
+    { transform: normalizeGroup },
   );
 
   return {

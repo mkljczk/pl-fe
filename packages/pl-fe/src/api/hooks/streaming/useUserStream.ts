@@ -1,5 +1,3 @@
-
-import { announcementSchema, type Announcement, type AnnouncementReaction, type FollowRelationshipUpdate, type Relationship, type StreamingEvent } from 'pl-api';
 import { useCallback } from 'react';
 
 import { updateConversations } from 'pl-fe/actions/conversations';
@@ -22,6 +20,7 @@ import { updateReactions } from '../announcements/useAnnouncements';
 
 import { useTimelineStream } from './useTimelineStream';
 
+import type { Announcement, AnnouncementReaction, FollowRelationshipUpdate, Relationship, StreamingEvent } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const updateAnnouncementReactions = ({ announcement_id: id, name }: AnnouncementReaction) => {
@@ -42,10 +41,10 @@ const updateAnnouncement = (announcement: Announcement) =>
     let updated = false;
 
     const result = prevResult.map(value => value.id === announcement.id
-      ? (updated = true, announcementSchema.parse(announcement))
+      ? (updated = true, announcement)
       : value);
 
-    if (!updated) return [announcementSchema.parse(announcement), ...result];
+    if (!updated) return [announcement, ...result];
   });
 
 const deleteAnnouncement = (announcementId: string) =>

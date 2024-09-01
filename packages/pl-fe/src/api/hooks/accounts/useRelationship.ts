@@ -1,9 +1,10 @@
-import { type Relationship, relationshipSchema } from 'pl-api';
 import { z } from 'zod';
 
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useEntity } from 'pl-fe/entity-store/hooks';
 import { useClient } from 'pl-fe/hooks';
+
+import type { Relationship } from 'pl-api';
 
 interface UseRelationshipOpts {
   enabled?: boolean;
@@ -18,7 +19,7 @@ const useRelationship = (accountId: string | undefined, opts: UseRelationshipOpt
     () => client.accounts.getRelationships([accountId!]),
     {
       enabled: enabled && !!accountId,
-      schema: z.array(relationshipSchema).nonempty().transform(arr => arr[0]),
+      schema: z.any().transform(arr => arr[0]),
     },
   );
 

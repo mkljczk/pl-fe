@@ -1,4 +1,3 @@
-import { type Group as BaseGroup, groupSchema } from 'pl-api';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -9,6 +8,8 @@ import { normalizeGroup, type Group } from 'pl-fe/normalizers';
 
 import { useGroupRelationship } from './useGroupRelationship';
 
+import type { Group as BaseGroup } from 'pl-api';
+
 const useGroup = (groupId: string, refetch = true) => {
   const client = useClient();
   const history = useHistory();
@@ -17,7 +18,6 @@ const useGroup = (groupId: string, refetch = true) => {
     [Entities.GROUPS, groupId],
     () => client.experimental.groups.getGroup(groupId),
     {
-      schema: groupSchema,
       transform: normalizeGroup,
       refetch,
       enabled: !!groupId,

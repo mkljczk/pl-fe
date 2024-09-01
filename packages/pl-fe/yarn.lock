@@ -8378,10 +8378,10 @@ pkg-types@^1.0.3:
     mlly "^1.2.0"
     pathe "^1.1.0"
 
-pl-api@^0.0.25:
-  version "0.0.25"
-  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.0.25.tgz#d950d902c4bfe268d9de66611372dbd589939ca4"
-  integrity sha512-gBS/5aN47w0ZcE7I0gBQMkngMwB9DSHvH40dM5XsZGPzUw7f3VECHM+tZyTlZI13rdVC9xJlVQTPX1h9KmGUOg==
+pl-api@^0.0.26:
+  version "0.0.26"
+  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.0.26.tgz#82b20fa0500a22efaae643782ac917c725eef4ff"
+  integrity sha512-vbH11YmElHNpQZWM5G6nvgyQDp4q+G6IoMKqa7ek156UbuDBuZx/de2LYjlCJQ9nGtTzwNoOYRdtbLcshDKyiw==
   dependencies:
     blurhash "^2.0.5"
     http-link-header "^1.1.3"

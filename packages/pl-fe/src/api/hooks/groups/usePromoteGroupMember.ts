@@ -1,4 +1,3 @@
-import { groupMemberSchema } from 'pl-api';
 import { z } from 'zod';
 
 import { Entities } from 'pl-fe/entity-store/entities';
@@ -14,7 +13,7 @@ const usePromoteGroupMember = (group: Pick<Group, 'id'>, groupMember: Pick<Group
   const { createEntity } = useCreateEntity(
     [Entities.GROUP_MEMBERSHIPS, groupMember.id],
     ({ account_ids, role }: { account_ids: string[]; role: GroupRole }) => client.experimental.groups.promoteGroupUsers(group.id, account_ids, role),
-    { schema: z.array(groupMemberSchema).transform((arr) => arr[0]), transform: normalizeGroupMember },
+    { schema: z.any().transform((arr) => arr[0]), transform: normalizeGroupMember },
   );
 
   return createEntity;

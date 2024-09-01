@@ -1,5 +1,3 @@
-import { statusSchema } from 'pl-api';
-
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useEntities } from 'pl-fe/entity-store/hooks';
 import { useClient } from 'pl-fe/hooks';
@@ -11,7 +9,7 @@ const useGroupMedia = (groupId: string) => {
   return useEntities(
     [Entities.STATUSES, 'groupMedia', groupId],
     () => client.timelines.groupTimeline(groupId, { only_media: true }),
-    { schema: statusSchema, transform: normalizeStatus })
+    { transform: normalizeStatus })
   ;
 };
 

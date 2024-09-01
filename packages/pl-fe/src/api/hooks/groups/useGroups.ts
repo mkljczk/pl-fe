@@ -1,5 +1,3 @@
-import { groupSchema, type Group as BaseGroup } from 'pl-api';
-
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useEntities } from 'pl-fe/entity-store/hooks';
 import { useClient } from 'pl-fe/hooks';
@@ -8,6 +6,8 @@ import { normalizeGroup, type Group } from 'pl-fe/normalizers';
 
 import { useGroupRelationships } from './useGroupRelationships';
 
+import type { Group as BaseGroup } from 'pl-api';
+
 const useGroups = () => {
   const client = useClient();
   const features = useFeatures();
@@ -15,7 +15,7 @@ const useGroups = () => {
   const { entities, ...result } = useEntities<BaseGroup, Group>(
     [Entities.GROUPS, 'search', ''],
     () => client.experimental.groups.getGroups(),
-    { enabled: features.groups, schema: groupSchema, transform: normalizeGroup },
+    { enabled: features.groups, transform: normalizeGroup },
   );
   const { relationships } = useGroupRelationships(
     ['search', ''],

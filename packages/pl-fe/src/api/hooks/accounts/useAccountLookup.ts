@@ -1,4 +1,3 @@
-import { accountSchema, type Account as BaseAccount } from 'pl-api';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -9,6 +8,8 @@ import { type Account, normalizeAccount } from 'pl-fe/normalizers';
 
 import { useAccountScrobble } from './useAccountScrobble';
 import { useRelationship } from './useRelationship';
+
+import type { Account as BaseAccount } from 'pl-api';
 
 interface UseAccountLookupOpts {
   withRelationship?: boolean;
@@ -26,7 +27,7 @@ const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts =
     Entities.ACCOUNTS,
     (account) => account.acct.toLowerCase() === acct?.toLowerCase(),
     () => client.accounts.lookupAccount(acct!),
-    { schema: accountSchema, enabled: !!acct, transform: normalizeAccount },
+    { enabled: !!acct, transform: normalizeAccount },
   );
 
   const {
