@@ -61,6 +61,7 @@ export * from './report';
 export * from './role';
 export * from './rule';
 export * from './scheduled-status';
+export * from './scrobble';
 export * from './search';
 export * from './status';
 export * from './status-edit';

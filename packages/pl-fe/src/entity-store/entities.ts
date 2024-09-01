@@ -1,4 +1,4 @@
-import type { AdminDomain, AdminRelay, AdminRule, BookmarkFolder, GroupMember, GroupRelationship, Relationship, TrendsLink } from 'pl-api';
+import type { AdminDomain, AdminRelay, AdminRule, BookmarkFolder, GroupMember, GroupRelationship, Relationship, Scrobble, TrendsLink } from 'pl-api';
 import type { Account, Group, Status } from 'pl-fe/normalizers';
 
 enum Entities {
@@ -12,6 +12,7 @@ enum Entities {
   RELATIONSHIPS = 'Relationships',
   RELAYS = 'Relays',
   RULES = 'Rules',
+  SCROBBLES = 'Scrobbles',
   STATUSES = 'Statuses',
   TRENDS_LINKS = 'TrendsLinks',
 }
@@ -26,6 +27,7 @@ interface EntityTypes {
   [Entities.RELATIONSHIPS]: Relationship;
   [Entities.RELAYS]: AdminRelay;
   [Entities.RULES]: AdminRule;
+  [Entities.SCROBBLES]: Scrobble;
   [Entities.STATUSES]: Status;
   [Entities.TRENDS_LINKS]: TrendsLink;
 }

@@ -2,6 +2,7 @@
 // Accounts
 export { useAccount } from './accounts/useAccount';
 export { useAccountLookup } from './accounts/useAccountLookup';
+export { useAccountScrobble } from './accounts/useAccountScrobble';
 export {
   useBlocks,
   useMutes,

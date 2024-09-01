@@ -4,6 +4,7 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import Badge from 'pl-fe/components/badge';
 import Markup from 'pl-fe/components/markup';
 import { dateFormatOptions } from 'pl-fe/components/relative-timestamp';
+import Scrobble from 'pl-fe/components/scrobble';
 import { Icon, HStack, Stack, Text } from 'pl-fe/components/ui';
 import { useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
 import { capitalize } from 'pl-fe/utils/strings';
@@ -12,6 +13,7 @@ import ProfileFamiliarFollowers from './profile-familiar-followers';
 import ProfileField from './profile-field';
 import ProfileStats from './profile-stats';
 
+import type { Scrobble as ScrobbleEntity } from 'pl-api';
 import type { Account } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
@@ -22,7 +24,7 @@ const messages = defineMessages({
 });
 
 interface IProfileInfoPanel {
-  account?: Account;
+  account?: Account & { scrobble?: ScrobbleEntity };
   /** Username from URL params, in case the account isn't found. */
   username: string;
 }
@@ -190,6 +192,8 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
           {renderBirthday()}
         </div>
+
+        {account.scrobble && <Scrobble scrobble={account.scrobble} />}
 
         {ownAccount ? null : <ProfileFamiliarFollowers account={account} />}
       </Stack>

@@ -1,4 +1,4 @@
-import { type Account as BaseAccount, accountSchema } from 'pl-api';
+import { type Account as BaseAccount } from 'pl-api';
 import { useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -7,10 +7,12 @@ import { useEntity } from 'pl-fe/entity-store/hooks';
 import { useAppSelector, useClient, useFeatures, useLoggedIn } from 'pl-fe/hooks';
 import { type Account, normalizeAccount } from 'pl-fe/normalizers';
 
+import { useAccountScrobble } from './useAccountScrobble';
 import { useRelationship } from './useRelationship';
 
 interface UseAccountOpts {
   withRelationship?: boolean;
+  withScrobble?: boolean;
 }
 
 const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
@@ -18,12 +20,12 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
   const history = useHistory();
   const features = useFeatures();
   const { me } = useLoggedIn();
-  const { withRelationship } = opts;
+  const { withRelationship, withScrobble } = opts;
 
   const { entity, isUnauthorized, ...result } = useEntity<BaseAccount, Account>(
     [Entities.ACCOUNTS, accountId!],
     () => client.accounts.getAccount(accountId!),
-    { schema: accountSchema, enabled: !!accountId, transform: normalizeAccount },
+    { enabled: !!accountId, transform: normalizeAccount },
   );
 
   const meta = useAppSelector((state) => accountId && state.accounts_meta[accountId] || {});
@@ -33,12 +35,17 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
     isLoading: isRelationshipLoading,
   } = useRelationship(accountId, { enabled: withRelationship });
 
+  const {
+    scrobble,
+    isLoading: isScrobbleLoading,
+  } = useAccountScrobble(accountId, { enabled: withScrobble });
+
   const isBlocked = entity?.relationship?.blocked_by === true;
   const isUnavailable = (me === entity?.id) ? false : (isBlocked && !features.blockersVisible);
 
   const account = useMemo(
-    () => entity ? { ...entity, relationship, __meta: { meta, ...entity.__meta } } : undefined,
-    [entity, relationship],
+    () => entity ? { ...entity, relationship, scrobble, __meta: { meta, ...entity.__meta } } : undefined,
+    [entity, relationship, scrobble],
   );
 
   useEffect(() => {
@@ -51,6 +58,7 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
     ...result,
     isLoading: result.isLoading,
     isRelationshipLoading,
+    isScrobbleLoading,
     isUnauthorized,
     isUnavailable,
     account,

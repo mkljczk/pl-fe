@@ -135,7 +135,7 @@ const Circle: React.FC = () => {
       <Column label={intl.formatMessage(messages.heading)}>
         <Form onSubmit={handleRequest}>
           <Text size='xl' weight='semibold'>
-            <FormattedMessage id='interaction_circle.confirmation_heading' defaultMessage='Do you want to generate an interaction circle for the user @{username}?' values={{ username: account?.acct }} />
+            <FormattedMessage id='interactions_circle.confirmation_heading' defaultMessage='Do you want to generate an interaction circle for the user @{username}?' values={{ username: account?.acct }} />
           </Text>
 
           <div className='mx-auto max-w-md rounded-lg p-2 black:border black:border-gray-800'>
@@ -144,7 +144,7 @@ const Circle: React.FC = () => {
 
           <FormActions>
             <Button theme='primary' type='submit'>
-              <FormattedMessage id='interaction_circle.start' defaultMessage='Generate' />
+              <FormattedMessage id='interactions_circle.start' defaultMessage='Generate' />
             </Button>
           </FormActions>
         </Form>

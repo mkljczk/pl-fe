@@ -92,6 +92,6 @@ const useAnnouncements = () => {
 };
 
 const compareAnnouncements = (a: Announcement, b: Announcement): number =>
-  new Date(a.starts_at || a.published_at).getDate() - new Date(b.starts_at || b.published_at).getDate();
+  new Date(a.starts_at || a.published_at).getTime() - new Date(b.starts_at || b.published_at).getTime();
 
 export { updateReactions, useAnnouncements };

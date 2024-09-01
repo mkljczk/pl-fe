@@ -988,6 +988,13 @@ const getFeatures = (instance?: Instance) => {
     ]),
 
     /**
+     * Can create Listen activities
+     * @see GET /api/v1/pleroma/accounts/:id/scrobbles
+     * @see POST /api/v1/pleroma/scrobble
+     */
+    scrobbles: v.software === PLEROMA && v.build !== AKKOMA,
+
+    /**
      * Ability to search statuses from the given account.
      * @see {@link https://docs.joinmastodon.org/methods/search/}
      * @see POST /api/v2/search

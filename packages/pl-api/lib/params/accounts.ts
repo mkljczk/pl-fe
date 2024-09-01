@@ -53,6 +53,21 @@ interface ReportAccountParams {
 type GetAccountEndorsementsParams = WithRelationshipsParam;
 type GetAccountFavouritesParams = PaginationParams;
 
+type GetScrobblesParams = PaginationParams;
+
+interface CreateScrobbleParams {
+  /** the title of the media playing */
+  title: string;
+  /** the album of the media playing */
+  album?: string;
+  /** the artist of the media playing */
+  artist?: string;
+  /** the length of the media playing */
+  length?: string;
+  /** A URL referencing the media playing */
+  external_link?: string;
+}
+
 export type {
   GetAccountParams,
   GetAccountStatusesParams,
@@ -64,4 +79,6 @@ export type {
   ReportAccountParams,
   GetAccountEndorsementsParams,
   GetAccountFavouritesParams,
+  GetScrobblesParams,
+  CreateScrobbleParams,
 };

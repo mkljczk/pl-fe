@@ -14,6 +14,7 @@ import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 import { showProfileHoverCard } from './hover-ref-wrapper';
 import { dateFormatOptions } from './relative-timestamp';
+import Scrobble from './scrobble';
 import { Card, CardBody, HStack, Icon, Stack, Text } from './ui';
 
 import type { Account } from 'pl-fe/normalizers';
@@ -55,7 +56,7 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
 
   const me = useAppSelector(state => state.me);
   const accountId: string | undefined = useAppSelector(state => state.profile_hover_card.accountId || undefined);
-  const { account } = useAccount(accountId, { withRelationship: true });
+  const { account } = useAccount(accountId, { withRelationship: true, withScrobble: true });
   const targetRef = useAppSelector(state => state.profile_hover_card.ref?.current);
   const badges = getBadges(account);
 
@@ -119,6 +120,10 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
                 </Text>
               </HStack>
             ) : null}
+
+            {!!account.scrobble && (
+              <Scrobble scrobble={account.scrobble} />
+            )}
 
             {account.note.length > 0 && (
               <Text

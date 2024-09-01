@@ -57,6 +57,7 @@ import {
   reportSchema,
   ruleSchema,
   scheduledStatusSchema,
+  scrobbleSchema,
   searchSchema,
   statusEditSchema,
   statusSchema,
@@ -93,6 +94,7 @@ import type {
   Notification,
   PleromaConfig,
   ScheduledStatus,
+  Scrobble,
   Status,
   StreamingEvent,
   Tag,
@@ -135,6 +137,7 @@ import type {
   CreateGroupParams,
   CreateListParams,
   CreatePushNotificationsSubscriptionParams,
+  CreateScrobbleParams,
   CreateStatusParams,
   EditEventParams,
   EditStatusParams,
@@ -170,6 +173,7 @@ import type {
   GetRebloggedByParams,
   GetRelationshipsParams,
   GetScheduledStatusesParams,
+  GetScrobblesParams,
   GetStatusContextParams,
   GetStatusesParams,
   GetStatusParams,
@@ -662,10 +666,33 @@ class PlApiClient {
      * Requires features{@link Features['bites']}.
      * @see {@link https://github.com/purifetchi/Toki/blob/master/Toki/Controllers/MastodonApi/Bite/BiteController.cs}
      */
-    biteAccount: async (id: string) => {
-      const response = await this.request('/api/v1/bite', { method: 'POST', params: { id } });
+    biteAccount: async (accountId: string) => {
+      const response = await this.request('/api/v1/bite', { method: 'POST', params: { id: accountId } });
 
       return response.json as {};
+    },
+
+    /**
+     * Requests a list of current and recent Listen activities for an account
+     *
+     * Requires features{@link Features['scrobbles']}
+     * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#get-apiv1pleromaaccountsidscrobbles}
+     */
+    getScrobbles: async (accountId: string, params?: GetScrobblesParams) =>
+      this.#paginatedGet<Scrobble>(`/api/v1/pleroma/accounts/${accountId}/scrobbles`, { params }, scrobbleSchema),
+
+    /**
+     * Creates a new Listen activity for an account
+     *
+     * Requires features{@link Features['scrobbles']}
+     * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#post-apiv1pleromascrobble}
+     */
+    createScrobble: async (params: CreateScrobbleParams) => {
+      if (params.external_link) (params as any).externalLink = params.external_link;
+
+      const response = await this.request('/api/v1/pleroma/scrobble', { body: params });
+
+      return scrobbleSchema.parse(response.json);
     },
   };
 
