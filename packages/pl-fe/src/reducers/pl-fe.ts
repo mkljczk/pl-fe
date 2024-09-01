@@ -14,7 +14,7 @@ import {
 const initialState = ImmutableMap<string, any>();
 
 const fallbackState = ImmutableMap<string, any>({
-  brandColor: '#0482d8', // Azure
+  brandColor: '#d80482',
 });
 
 const updateFromAdmin = (state: ImmutableMap<string, any>, configs: ImmutableList<ImmutableMap<string, any>>) => {

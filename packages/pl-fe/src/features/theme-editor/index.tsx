@@ -87,7 +87,7 @@ const ThemeEditor: React.FC<IThemeEditor> = () => {
   };
 
   const restoreDefaultTheme = () => {
-    const colors = normalizePlFeConfig({ brandColor: '#0482d8' }).colors.toJS();
+    const colors = normalizePlFeConfig({ brandColor: '#d80482' }).colors.toJS();
     setTheme(colors);
   };
 

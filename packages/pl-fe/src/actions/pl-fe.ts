@@ -75,7 +75,7 @@ const fetchPlFeJson = (host: string | null) =>
 
 const importPlFeConfig = (plFeConfig: APIEntity, host: string | null) => {
   if (!plFeConfig.brandColor) {
-    plFeConfig.brandColor = '#0482d8';
+    plFeConfig.brandColor = '#d80482';
   }
   return {
     type: PLFE_CONFIG_REQUEST_SUCCESS,

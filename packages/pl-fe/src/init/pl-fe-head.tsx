@@ -28,7 +28,7 @@ const PlFeHead: React.FC<IPlFeHead> = ({ children }) => {
 
   const withModals = useAppSelector((state) => !state.modals.isEmpty() || (state.dropdown_menu.isOpen && userTouching.matches));
 
-  const themeCss = generateThemeCss(demo ? normalizePlFeConfig({ brandColor: '#0482d8' }) : plFeConfig);
+  const themeCss = generateThemeCss(demo ? normalizePlFeConfig({ brandColor: '#d80482' }) : plFeConfig);
   const dsn = plFeConfig.sentryDsn;
 
   const bodyClass = clsx('h-full bg-white text-base antialiased black:bg-black dark:bg-gray-800', {
