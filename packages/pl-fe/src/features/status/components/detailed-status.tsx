@@ -172,7 +172,6 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
             <StatusLanguagePicker status={status} showLabel />
           </HStack>
-
         </HStack>
       </div>
     </div>

@@ -35,7 +35,7 @@ interface IReadMoreButton {
 
 /** Button to expand a truncated status (due to too much content) */
 const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, quote }) => (
-  <div className='relative'>
+  <div className='relative -mt-4'>
     <div
       className={clsx('absolute -top-16 h-16 w-full bg-gradient-to-b from-transparent to-white black:to-black dark:to-primary-900', {
         'hover:to-gray-100 black:hover-to-gray-800 dark:hover:to-gray-800': quote,

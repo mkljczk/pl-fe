@@ -55,10 +55,7 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
         hideActions
       />
 
-      <StatusContent
-        status={status}
-        collapsable
-      />
+      <StatusContent status={status} />
 
       {status.media_attachments.length > 0 && (
         <AttachmentThumbs

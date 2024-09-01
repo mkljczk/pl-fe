@@ -87,7 +87,6 @@ const LoginPage = () => {
         <Button className='w-full' theme='secondary' to='/login/external'>
           <FormattedMessage id='login_form.external' defaultMessage='Sign in from remote instance' />
         </Button>
-
       </Stack>
     </BigCard>
   );

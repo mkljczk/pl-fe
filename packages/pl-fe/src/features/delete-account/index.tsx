@@ -70,7 +70,6 @@ const DeleteAccount = () => {
               <Button type='submit' theme='danger' disabled={isLoading}>
                 {intl.formatMessage(messages.deleteSubmit)}
               </Button>
-
             </FormActions>
           </Form>
         </Stack>

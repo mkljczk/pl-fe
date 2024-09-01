@@ -73,7 +73,6 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled }) => {
       <Stack className='status-check-box__status py-2' space={1}>
         <StatusContent status={status} />
         <Suspense>{media}</Suspense>
-
       </Stack>
 
       <div className='flex items-center justify-center p-2.5'>
