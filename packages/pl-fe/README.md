@@ -39,3 +39,7 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+---
+
+Follow [my Pleroma account](https://pl.fediverse.pl/@mkljczk) to stay up to date on `pl-fe` development. You can also join the [project community on Discord](https://discord.gg/NCZZsqqgUH).

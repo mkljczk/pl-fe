@@ -5,4 +5,4 @@ This repo hosts a few of my projects related to the Fediverse client `pl-fe`. Th
 
 More projects to be announced.
 
-Follow [my Pleroma account](https://pl.fediverse.pl/@mkljczk) to stay up to date on `pl-fe` development.
+Follow [my Pleroma account](https://pl.fediverse.pl/@mkljczk) to stay up to date on `pl-fe` development. You can also join the [project community on Discord](https://discord.gg/NCZZsqqgUH).
