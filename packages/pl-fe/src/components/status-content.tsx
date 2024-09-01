@@ -187,7 +187,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   if (spoilerText) {
     output.push(
       <Text key='spoiler' size='2xl' weight='medium'>
-        <span className='line-clamp-3' dangerouslySetInnerHTML={{ __html: spoilerText }} />
+        <span
+          className={clsx({ 'line-clamp-3': !expanded })}
+          dangerouslySetInnerHTML={{ __html: spoilerText }}
+        />
         {expandable && (
           <Button
             className='ml-2 align-middle'
