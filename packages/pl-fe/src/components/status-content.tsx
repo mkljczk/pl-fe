@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import parse, { Element, type HTMLReactParserOptions, domToReact, type DOMNode } from 'html-react-parser';
 import React, { useState, useRef, useLayoutEffect, useMemo } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import {  FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { toggleStatusSpoilerExpanded } from 'pl-fe/actions/statuses';
@@ -22,11 +22,6 @@ import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 
 const MAX_HEIGHT = 322; // 20px * 16 (+ 2px padding at the top)
 const BIG_EMOJI_LIMIT = 10;
-
-const messages = defineMessages({
-  collapse: { id: 'status.spoiler.collapse', defaultMessage: 'Collapse' },
-  expand: { id: 'status.spoiler.expand', defaultMessage: 'Expand' },
-});
 
 interface IReadMoreButton {
   onClick: React.MouseEventHandler;
@@ -66,7 +61,6 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   textSize = 'md',
   quote = false,
 }) => {
-  const intl = useIntl();
   const dispatch = useAppDispatch();
   const { displaySpoilers } = useSettings();
 
@@ -193,7 +187,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   if (spoilerText) {
     output.push(
       <Text key='spoiler' size='2xl' weight='medium'>
-        <span dangerouslySetInnerHTML={{ __html: spoilerText }} />
+        <span className='line-clamp-3' dangerouslySetInnerHTML={{ __html: spoilerText }} />
         {expandable && (
           <Button
             className='ml-2 align-middle'
@@ -203,7 +197,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
             onClick={toggleExpanded}
             icon={expanded ? require('@tabler/icons/outline/chevron-up.svg') : require('@tabler/icons/outline/chevron-down.svg')}
           >
-            {intl.formatMessage(expanded ? messages.collapse : messages.expand)}
+            {expanded
+              ? <FormattedMessage id='status.spoiler.collapse' defaultMessage='Collapse' />
+              : <FormattedMessage id='status.spoiler.expand' defaultMessage='Expand' />}
           </Button>
         )}
       </Text>,
