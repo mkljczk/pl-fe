@@ -625,6 +625,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
 
   const replyCount = status.replies_count;
   const reblogCount = status.reblogs_count;
+  const quoteCount = status.quotes_count;
   const favouriteCount = status.favourites_count;
 
   const emojiReactCount = status.emoji_reactions ? reduceEmoji(
@@ -683,7 +684,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       title={!publicStatus ? intl.formatMessage(messages.cannot_reblog) : intl.formatMessage(messages.reblog)}
       active={status.reblogged}
       onClick={handleReblogClick}
-      count={reblogCount}
+      count={reblogCount + quoteCount}
       text={withLabels ? intl.formatMessage(messages.reblog) : undefined}
       theme={statusActionButtonTheme}
     />

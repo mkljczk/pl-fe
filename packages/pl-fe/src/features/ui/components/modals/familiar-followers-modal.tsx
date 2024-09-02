@@ -36,7 +36,7 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
         scrollKey='familiar_followers'
         emptyMessage={emptyMessage}
         itemClassName='pb-3'
-        style={{ height: '80vh' }}
+        style={{ height: 'calc(80vh - 88px)' }}
         useWindowScroll={false}
       >
         {familiarFollowerIds.map(id =>
