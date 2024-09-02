@@ -877,6 +877,12 @@ const getFeatures = (instance?: Instance) => {
     ]),
 
     /**
+     * @see GET /api/v1/akkoma/preferred_frontend/available
+     * @see PUT /api/v1/akkoma/preferred_frontend
+     */
+    preferredFrontends: v.software === PLEROMA && v.build === AKKOMA,
+
+    /**
      * Can set privacy scopes on statuses.
      * @see POST /api/v1/statuses
      */

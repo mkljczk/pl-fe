@@ -1406,6 +1406,30 @@ class PlApiClient {
 
       return interactionPoliciesSchema.parse(response.json);
     },
+
+    /**
+     * List frontend setting profiles
+     *
+     * Requires features{@link Features['preferredFrontends']}.
+     */
+    getAvailableFrontends: async () => {
+      const response = await this.request('/api/v1/akkoma/preferred_frontend/available');
+
+      return z.array(z.string()).parse(response.json);
+    },
+
+    /**
+     * Update preferred frontend setting
+     *
+     * Store preferred frontend in cookies
+     *
+     * Requires features{@link Features['preferredFrontends']}.
+     */
+    setPreferredFrontend: async (frontendName: string) => {
+      const response = await this.request('/api/v1/akkoma/preferred_frontend', { method: 'PUT', body: { frontend_name: frontendName } });
+
+      return z.object({ frontend_name: z.string() }).parse(response.json);
+    },
   };
 
   public readonly filtering = {
