@@ -1,10 +1,13 @@
-import React from 'react';
+import parse, { Element, type HTMLReactParserOptions, domToReact, type DOMNode } from 'html-react-parser';
+import React, { useMemo } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import Badge from 'pl-fe/components/badge';
+import HashtagLink from 'pl-fe/components/hashtag-link';
 import Markup from 'pl-fe/components/markup';
 import { dateFormatOptions } from 'pl-fe/components/relative-timestamp';
 import Scrobble from 'pl-fe/components/scrobble';
+import StatusMention from 'pl-fe/components/status-mention';
 import { Icon, HStack, Stack, Text } from 'pl-fe/components/ui';
 import { useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
 import { capitalize } from 'pl-fe/utils/strings';
@@ -101,6 +104,54 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
     );
   };
 
+  const note = useMemo(() => {
+    if (!account) return false;
+
+    const options: HTMLReactParserOptions = {
+      replace(domNode) {
+        if (domNode instanceof Element && ['script', 'iframe'].includes(domNode.name)) {
+          return null;
+        }
+
+        if (domNode instanceof Element && domNode.name === 'a') {
+          const classes = domNode.attribs.class?.split(' ');
+          const id = domNode.attribs['data-user'];
+
+          const fallback = (
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+            <a
+              {...domNode.attribs}
+              onClick={(e) => e.stopPropagation()}
+              rel='nofollow noopener'
+              target='_blank'
+              title={domNode.attribs.href}
+            >
+              {domToReact(domNode.children as DOMNode[], options)}
+            </a>
+          );
+
+          if (classes?.includes('mention') && id) {
+            return (
+              <StatusMention accountId={id} fallback={fallback} />
+            );
+          }
+
+          if (classes?.includes('hashtag')) {
+            const child = domToReact(domNode.children as DOMNode[]);
+            const hashtag = typeof child === 'string' ? child.replace(/^#/, '') : undefined;
+            if (hashtag) {
+              return <HashtagLink hashtag={hashtag} />;
+            }
+          }
+
+          return fallback;
+        }
+      },
+    };
+
+    return !!account.note.length && parse(account.note_emojified, options);
+  }, [account?.note_emojified]);
+
   if (!account) {
     return (
       <div className='mt-6 min-w-0 flex-1 sm:px-2'>
@@ -155,8 +206,8 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
         <ProfileStats account={account} />
 
-        {account.note.length > 0 && (
-          <Markup size='sm' dangerouslySetInnerHTML={{ __html: account.note_emojified }} />
+        {note && (
+          <Markup size='sm'>{note}</Markup>
         )}
 
         <div className='flex flex-col items-start gap-2 md:flex-row md:flex-wrap md:items-center'>

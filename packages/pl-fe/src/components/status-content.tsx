@@ -109,68 +109,70 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     [status.contentHtml, status.translation, status.currentLanguage],
   );
 
-  if (status.content.length === 0) {
-    return null;
-  }
+  const content = useMemo(() => {
+    if (status.content.length === 0) {
+      return null;
+    }
+
+    const options: HTMLReactParserOptions = {
+      replace(domNode) {
+        if (domNode instanceof Element && ['script', 'iframe'].includes(domNode.name)) {
+          return null;
+        }
+
+        if (domNode instanceof Element && domNode.name === 'a') {
+          const classes = domNode.attribs.class?.split(' ');
+
+          if (classes?.includes('mention')) {
+            const mention = status.mentions.find(({ url }) => domNode.attribs.href === url);
+            if (mention) {
+              return (
+                <HoverRefWrapper accountId={mention.id} inline>
+                  <Link
+                    to={`/@${mention.acct}`}
+                    className='text-primary-600 hover:underline dark:text-accent-blue'
+                    dir='ltr'
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    @{mention.username}
+                  </Link>
+                </HoverRefWrapper>
+              );
+            }
+          }
+
+          if (classes?.includes('hashtag')) {
+            const child = domToReact(domNode.children as DOMNode[]);
+            const hashtag = typeof child === 'string' ? child.replace(/^#/, '') : undefined;
+            if (hashtag) {
+              return <HashtagLink hashtag={hashtag} />;
+            }
+          }
+
+          return (
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+            <a
+              {...domNode.attribs}
+              onClick={(e) => e.stopPropagation()}
+              rel='nofollow noopener'
+              target='_blank'
+              title={domNode.attribs.href}
+            >
+              {domToReact(domNode.children as DOMNode[], options)}
+            </a>
+          );
+        }
+      },
+    };
+
+    return parse(parsedHtml, options);
+  }, [parsedHtml]);
 
   const withSpoiler = status.spoiler_text.length > 0;
-
-  const options: HTMLReactParserOptions = {
-    replace(domNode) {
-      if (domNode instanceof Element && ['script', 'iframe'].includes(domNode.name)) {
-        return null;
-      }
-
-      if (domNode instanceof Element && domNode.name === 'a') {
-        const classes = domNode.attribs.class?.split(' ');
-
-        if (classes?.includes('mention')) {
-          const mention = status.mentions.find(({ url }) => domNode.attribs.href === url);
-          if (mention) {
-            return (
-              <HoverRefWrapper accountId={mention.id} inline>
-                <Link
-                  to={`/@${mention.acct}`}
-                  className='text-primary-600 hover:underline dark:text-accent-blue'
-                  dir='ltr'
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  @{mention.username}
-                </Link>
-              </HoverRefWrapper>
-            );
-          }
-        }
-
-        if (classes?.includes('hashtag')) {
-          const child = domToReact(domNode.children as DOMNode[]);
-          const hashtag = typeof child === 'string' ? child.replace(/^#/, '') : undefined;
-          if (hashtag) {
-            return <HashtagLink hashtag={hashtag} />;
-          }
-        }
-
-        return (
-          // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-          <a
-            {...domNode.attribs}
-            onClick={(e) => e.stopPropagation()}
-            rel='nofollow noopener'
-            target='_blank'
-            title={domNode.attribs.href}
-          >
-            {domToReact(domNode.children as DOMNode[], options)}
-          </a>
-        );
-      }
-    },
-  };
 
   const spoilerText = status.spoilerMapHtml && status.currentLanguage
     ? status.spoilerMapHtml[status.currentLanguage] || status.spoilerHtml
     : status.spoilerHtml;
-
-  const content = parse(parsedHtml, options);
 
   const direction = getTextDirection(status.search_index);
   const className = clsx('relative overflow-hidden text-ellipsis break-words text-gray-900 focus:outline-none dark:text-gray-100', {
