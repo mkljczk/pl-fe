@@ -29,12 +29,12 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
   const [value, setValue] = useState(text);
 
   const handleClick = () => {
-    onClose('CONFIRM');
+    onClose('TEXT_FIELD');
     onConfirm(value);
   };
 
   const handleCancel = () => {
-    onClose('CONFIRM');
+    onClose('TEXT_FIELD');
     if (onCancel) onCancel();
   };
 
