@@ -2,9 +2,9 @@ name: pl-fe CI
 
 on:
   push:
-    branches: [ "fork" ]
+    branches: [ "develop" ]
   pull_request:
-    branches: [ "fork" ]
+    branches: [ "develop" ]
 
 jobs:
   build:
@@ -67,7 +67,7 @@ jobs:
 
   deploy:
     needs: build
-    if: github.ref == 'refs/heads/fork'
+    if: github.ref == 'refs/heads/develop'
 
     permissions:
       pages: write
