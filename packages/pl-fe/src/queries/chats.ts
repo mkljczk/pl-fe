@@ -171,6 +171,7 @@ const useChatActions = (chatId: string) => {
               items: [
                 normalizeChatMessage({
                   ...chatMessageSchema.parse({
+                    chat_id: variables.chatId,
                     content: variables.content,
                     id: pendingId,
                     created_at: new Date(),
