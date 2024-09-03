@@ -38,7 +38,7 @@ const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ list
   }, []);
 
   const onClickClose = () => {
-    onClose('LIST_ADDER');
+    onClose('LIST_EDITOR');
   };
 
   return (
