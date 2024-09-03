@@ -106,7 +106,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
         </Suspense>
       );
     }
-  } else if (status.spoiler_text.length === 0 && !status.quote_id && status.card) {
+  } else if (!status.quote_id && status.card) {
     media = (
       <PreviewCard
         onOpenMedia={openMedia}
