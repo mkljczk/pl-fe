@@ -136,7 +136,7 @@ const deduplicateStatuses = (statuses: any[]) => {
   const deduplicatedStatuses: any[] = [];
 
   for (const status of statuses) {
-    const reblogged = status.reblog && deduplicatedStatuses.find((deduplicatedStatuses) => deduplicatedStatuses.reblog?.id === status.reblog.id);
+    const reblogged = status.reblog && deduplicatedStatuses.find((deduplicatedStatus) => deduplicatedStatus.reblog?.id === status.reblog.id);
 
     if (reblogged) {
       if (reblogged.accounts) {
@@ -145,7 +145,7 @@ const deduplicateStatuses = (statuses: any[]) => {
         reblogged.accounts = [reblogged.account, status.account];
       }
       reblogged.id += ':' + status.id;
-    } else {
+    } else if (!deduplicatedStatuses.find((deduplicatedStatus) => deduplicatedStatus.reblog?.id === status.id)) {
       deduplicatedStatuses.push(status);
     }
   }
