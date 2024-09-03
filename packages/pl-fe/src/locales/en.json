@@ -1239,7 +1239,7 @@
   "preferences.fields.boost_modal_label": "Show confirmation dialog before reposting",
   "preferences.fields.content_type_label": "Default post format",
   "preferences.fields.delete_modal_label": "Show confirmation dialog before deleting a post",
-  "preferences.fields.demetricator_label": "Use Demetricator",
+  "preferences.fields.demetricator_label": "Hide social media counters",
   "preferences.fields.demo_hint": "Use the default pl-fe logo and color scheme. Useful for taking screenshots.",
   "preferences.fields.demo_label": "Demo mode",
   "preferences.fields.display_media.default": "Hide posts marked as sensitive",

@@ -199,7 +199,7 @@ const Preferences = () => {
         </ListItem>
 
         <ListItem
-          label={<FormattedMessage id='preferences.fields.demetricator_label' defaultMessage='Use Demetricator' />}
+          label={<FormattedMessage id='preferences.fields.demetricator_label' defaultMessage='Hide social media counters' />}
           hint={<FormattedMessage id='preferences.hints.demetricator' defaultMessage='Decrease social media anxiety by hiding all numbers from the site.' />}
         >
           <SettingToggle settings={settings} settingPath={['demetricator']} onChange={onToggleChange} />
