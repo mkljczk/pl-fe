@@ -8,7 +8,6 @@ interface IIconButton extends Pick<React.ButtonHTMLAttributes<HTMLButtonElement>
   expanded?: boolean;
   iconClassName?: string;
   pressed?: boolean;
-  size?: number;
   src: string;
   text?: React.ReactNode;
 }
@@ -27,7 +26,6 @@ const IconButton: React.FC<IIconButton> = ({
   onMouseEnter,
   onMouseLeave,
   pressed,
-  size = 18,
   src,
   tabIndex = 0,
   text,

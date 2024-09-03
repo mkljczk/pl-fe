@@ -4,12 +4,13 @@ import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
+import ReactSwipeableViews from 'react-swipeable-views';
 
 import { closeDropdownMenu as closeDropdownMenuRedux, openDropdownMenu } from 'pl-fe/actions/dropdown-menu';
 import { useAppDispatch } from 'pl-fe/hooks';
 import { userTouching } from 'pl-fe/is-mobile';
 
-import { IconButton, Portal } from '../ui';
+import { HStack, IconButton, Portal } from '../ui';
 
 import DropdownMenuItem, { MenuItem } from './dropdown-menu-item';
 
@@ -49,6 +50,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isDisplayed, setIsDisplayed] = useState<boolean>(false);
+  const [tab, setTab] = useState<number>();
 
   const touching = userTouching.matches;
 
@@ -92,6 +94,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
   const handleOpen = () => {
     dispatch(openDropdownMenu());
     setIsOpen(true);
+    setTab(undefined);
 
     if (onOpen) {
       onOpen();
@@ -147,6 +150,11 @@ const DropdownMenu = (props: IDropdownMenu) => {
     }
   }, [refs.floating.current]);
 
+  const handleExitSubmenu: React.EventHandler<any> = (event) => {
+    event.stopPropagation();
+    setTab(undefined);
+  };
+
   const handleKeyDown = useMemo(() => (e: KeyboardEvent) => {
     if (!refs.floating.current) return;
 
@@ -156,6 +164,9 @@ const DropdownMenu = (props: IDropdownMenu) => {
     let element = null;
 
     switch (e.key) {
+      case 'ArrowLeft':
+        if (tab !== undefined) setTab(undefined);
+        break;
       case 'ArrowDown':
         element = items[index + 1] || items[0];
         break;
@@ -280,6 +291,21 @@ const DropdownMenu = (props: IDropdownMenu) => {
     return className;
   };
 
+  const renderItems = (items: Menu | undefined) => (
+    <ul>
+      {items?.map((item, idx) => (
+        <DropdownMenuItem
+          key={idx}
+          item={item}
+          index={idx}
+          onClick={handleClose}
+          autoFocus={autoFocus}
+          onSetTab={setTab}
+        />
+      ))}
+    </ul>
+  );
+
   return (
     <>
       {children ? (
@@ -325,29 +351,45 @@ const DropdownMenu = (props: IDropdownMenu) => {
               left: x ?? 0,
             }}
           >
-            {Component && <Component handleClose={handleClose} />}
-            {(items?.length || touching) && (
-              <ul>
-                {items?.map((item, idx) => (
-                  <DropdownMenuItem
-                    key={idx}
-                    item={item}
-                    index={idx}
-                    onClick={handleClose}
-                    autoFocus={autoFocus}
-                  />
-                ))}
-                {touching && (
-                  <li className='p-2 px-3'>
-                    <button
-                      className='flex w-full appearance-none place-content-center items-center justify-center rounded-full border border-gray-700 bg-transparent p-2 text-sm font-medium text-gray-700 transition-all hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:border-gray-500 dark:text-gray-500'
-                      onClick={handleClose}
-                    >
-                      <FormattedMessage id='lightbox.close' defaultMessage='Close' />
-                    </button>
-                  </li>
-                )}
-              </ul>
+            {items?.some(item => item?.items?.length) ? (
+              <ReactSwipeableViews animateHeight index={tab === undefined ? 0 : 1}>
+                <div className={clsx({ 'w-full': touching })}>
+                  {Component && <Component handleClose={handleClose} />}
+                  {(items?.length || touching) && renderItems(items)}
+                </div>
+                <div className={clsx({ 'w-full': touching, 'fit-content': !touching })}>
+                  {tab !== undefined && (
+                    <>
+                      <HStack className='mx-2 my-1 text-gray-700 dark:text-gray-300' space={3} alignItems='center'>
+                        <IconButton
+                          theme='transparent'
+                          src={require('@tabler/icons/outline/arrow-left.svg')}
+                          iconClassName='h-5 w-5'
+                          onClick={handleExitSubmenu}
+                        />
+                        {items![tab]?.text}
+                      </HStack>
+                      {renderItems(items![tab]?.items)}
+                    </>
+                  )}
+                </div>
+              </ReactSwipeableViews>
+            ) : (
+              <>
+                {Component && <Component handleClose={handleClose} />}
+                {(items?.length || touching) && renderItems(items)}
+              </>
+            )}
+
+            {touching && (
+              <div className='p-2 px-3'>
+                <button
+                  className='flex w-full appearance-none place-content-center items-center justify-center rounded-full border border-gray-700 bg-transparent p-2 text-sm font-medium text-gray-700 transition-all hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:border-gray-500 dark:text-gray-500'
+                  onClick={handleClose}
+                >
+                  <FormattedMessage id='lightbox.close' defaultMessage='Close' />
+                </button>
+              </div>
             )}
 
             {/* Arrow */}

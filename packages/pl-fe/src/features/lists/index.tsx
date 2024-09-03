@@ -75,4 +75,4 @@ const Lists: React.FC = () => {
   );
 };
 
-export { Lists as default };
+export { Lists as default, getOrderedLists };

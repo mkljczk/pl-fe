@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 
 import Counter from '../counter/counter';
@@ -7,6 +8,8 @@ import SvgIcon from './svg-icon';
 interface IIcon extends Pick<React.SVGAttributes<SVGAElement>, 'strokeWidth'> {
   /** Class name for the <svg> element. */
   className?: string;
+  /** Class name for the <div> element. */
+  containerClassName?: string;
   /** Number to display a counter over the icon. */
   count?: number;
   /** Optional max to cap count (ie: N+) */
@@ -22,9 +25,9 @@ interface IIcon extends Pick<React.SVGAttributes<SVGAElement>, 'strokeWidth'> {
 }
 
 /** Renders and SVG icon with optional counter. */
-const Icon: React.FC<IIcon> = ({ src, alt, count, size, countMax, ...filteredProps }): JSX.Element => (
+const Icon: React.FC<IIcon> = ({ src, alt, count, size, countMax, containerClassName, ...filteredProps }): JSX.Element => (
   <div
-    className='relative flex shrink-0 flex-col'
+    className={clsx('relative flex shrink-0 flex-col', containerClassName)}
     data-testid={filteredProps['data-testid'] || 'icon'}
   >
     {count ? (

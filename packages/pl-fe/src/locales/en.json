@@ -1269,6 +1269,8 @@
   "privacy.change": "Adjust post privacy",
   "privacy.direct.long": "Post to mentioned users only",
   "privacy.direct.short": "Direct",
+  "privacy.list.long": "Visible to members of a list",
+  "privacy.list.short": "List only",
   "privacy.local": "{privacy} (local-only)",
   "privacy.local.long": "Only visible on your instance",
   "privacy.local.short": "Local-only",

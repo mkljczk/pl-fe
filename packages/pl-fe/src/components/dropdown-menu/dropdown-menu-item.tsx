@@ -21,6 +21,7 @@ interface MenuItem {
   text: string;
   to?: string;
   type?: 'toggle';
+  items?: Array<Omit<MenuItem, 'items'>>;
 }
 
 interface IDropdownMenuItem {
@@ -28,9 +29,10 @@ interface IDropdownMenuItem {
   item: MenuItem | null;
   onClick?(goBack?: boolean): void;
   autoFocus?: boolean;
+  onSetTab: (tab?: number) => void;
 }
 
-const DropdownMenuItem = ({ index, item, onClick, autoFocus }: IDropdownMenuItem) => {
+const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdownMenuItem) => {
   const history = useHistory();
 
   const itemRef = useRef<HTMLAnchorElement>(null);
@@ -39,6 +41,12 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus }: IDropdownMenuItem
     event.stopPropagation();
 
     if (!item) return;
+
+    if (item.items?.length) {
+      event.preventDefault();
+      onSetTab(index);
+      return;
+    }
 
     if (onClick) onClick(!(item.to && userTouching.matches));
 
@@ -112,7 +120,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus }: IDropdownMenuItem
       >
         {item.icon && <Icon src={item.icon} className='mr-3 h-5 w-5 flex-none rtl:ml-3 rtl:mr-0' />}
 
-        <div className={clsx('text-xs', { 'mr-2': item.count || item.type === 'toggle' })}>
+        <div className={clsx('text-xs', { 'mr-2': item.count || item.type === 'toggle' || item.items?.length })}>
           <div className='truncate text-base'>{item.text}</div>
           <div className='mt-0.5'>{item.meta}</div>
         </div>
@@ -127,6 +135,10 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus }: IDropdownMenuItem
           <div className='ml-auto'>
             <Toggle checked={item.checked} onChange={handleChange} />
           </div>
+        )}
+
+        {!!item.items?.length && (
+          <Icon src={require('@tabler/icons/outline/chevron-right.svg')} containerClassName='ml-auto' className='h-5 w-5 flex-none' />
         )}
       </a>
     </li>
