@@ -14,11 +14,8 @@ const ALLOWED_EMOJI = ImmutableList([
   '😩',
 ]);
 
-const sortEmoji = (emojiReacts: Array<EmojiReaction>, allowedEmoji: ImmutableList<string>): Array<EmojiReaction> => (
-  emojiReacts
-    .toSorted(emojiReact =>
-      -((emojiReact.count || 0) + Number(allowedEmoji.includes(emojiReact.name))))
-);
+const sortEmoji = (emojiReacts: Array<EmojiReaction>): Array<EmojiReaction> =>
+  emojiReacts.toSorted(emojiReact => -(emojiReact.count || 0));
 
 const mergeEmojiFavourites = (emojiReacts: Array<EmojiReaction> | null, favouritesCount: number, favourited: boolean) => {
   if (!emojiReacts) return [emojiReactionSchema.parse({ count: favouritesCount, me: favourited, name: '👍' })];
@@ -37,16 +34,11 @@ const mergeEmojiFavourites = (emojiReacts: Array<EmojiReaction> | null, favourit
   }
 };
 
-const reduceEmoji = (emojiReacts: Array<EmojiReaction> | null, favouritesCount: number, favourited: boolean, allowedEmoji = ALLOWED_EMOJI): Array<EmojiReaction> => (
-  sortEmoji(
-    mergeEmojiFavourites(emojiReacts, favouritesCount, favourited),
-    allowedEmoji,
-  )
-);
+const reduceEmoji = (emojiReacts: Array<EmojiReaction> | null, favouritesCount: number, favourited: boolean): Array<EmojiReaction> => (
+  sortEmoji(mergeEmojiFavourites(emojiReacts, favouritesCount, favourited)));
 
 const getReactForStatus = (
   status: Pick<Status, 'emoji_reactions' | 'favourited' | 'favourites_count'>,
-  allowedEmoji = ALLOWED_EMOJI,
 ): EmojiReaction | undefined => {
   if (!status.emoji_reactions) return;
 
@@ -54,7 +46,6 @@ const getReactForStatus = (
     status.emoji_reactions,
     status.favourites_count || 0,
     status.favourited,
-    allowedEmoji,
   ).filter(e => e.me === true)[0];
 
   return typeof result?.name === 'string' ? result : undefined;

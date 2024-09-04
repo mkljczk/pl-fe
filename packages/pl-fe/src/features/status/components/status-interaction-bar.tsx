@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { openModal } from 'pl-fe/actions/modals';
 import AnimatedNumber from 'pl-fe/components/animated-number';
 import { HStack, Text, Emoji } from 'pl-fe/components/ui';
-import { useAppSelector, usePlFeConfig, useFeatures, useAppDispatch } from 'pl-fe/hooks';
+import { useAppSelector, useFeatures, useAppDispatch } from 'pl-fe/hooks';
 import { reduceEmoji } from 'pl-fe/utils/emoji-reacts';
 
 import type { Status } from 'pl-fe/normalizers';
@@ -16,7 +16,6 @@ interface IStatusInteractionBar {
 
 const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.Element | null => {
   const me = useAppSelector(({ me }) => me);
-  const { allowedEmoji } = usePlFeConfig();
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const { account } = status;
@@ -47,7 +46,6 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
     status.emoji_reactions,
     status.favourites_count,
     status.favourited,
-    allowedEmoji,
   );
 
   const handleOpenReblogsModal: React.EventHandler<React.MouseEvent> = (e) => {

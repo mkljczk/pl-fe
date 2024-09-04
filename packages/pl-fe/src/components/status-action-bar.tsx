@@ -21,7 +21,7 @@ import StatusActionButton from 'pl-fe/components/status-action-button';
 import StatusReactionWrapper from 'pl-fe/components/status-reaction-wrapper';
 import { HStack } from 'pl-fe/components/ui';
 import { languages } from 'pl-fe/features/preferences';
-import { useAppDispatch, useAppSelector, useFeatures, useInstance, useOwnAccount, useSettings, usePlFeConfig } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector, useFeatures, useInstance, useOwnAccount, useSettings } from 'pl-fe/hooks';
 import { useChats } from 'pl-fe/queries/chats';
 import toast from 'pl-fe/toast';
 import copy from 'pl-fe/utils/copy';
@@ -138,7 +138,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const features = useFeatures();
   const instance = useInstance();
   const { autoTranslate, boostModal, deleteModal, knownLanguages } = useSettings();
-  const plFeConfig = usePlFeConfig();
 
   const { translationLanguages } = useTranslationLanguages();
 
@@ -153,8 +152,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
 
     return autoTranslate && features.translations && renderTranslate && supportsLanguages;
   }, [me, status, autoTranslate]);
-
-  const { allowedEmoji } = plFeConfig;
 
   const { account } = useOwnAccount();
   const isStaff = account ? account.is_admin || account.is_moderator : false;
@@ -632,10 +629,9 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     status.emoji_reactions,
     favouriteCount,
     status.favourited,
-    allowedEmoji,
   ).reduce((acc, cur) => acc + (cur.count || 0), 0) : undefined;
 
-  const meEmojiReact = getReactForStatus(status, allowedEmoji);
+  const meEmojiReact = getReactForStatus(status);
   const meEmojiName = meEmojiReact?.name as keyof typeof reactMessages | undefined;
 
   const reactMessages = {

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { simpleEmojiReact } from 'pl-fe/actions/emoji-reacts';
 import { openModal } from 'pl-fe/actions/modals';
 import { EmojiSelector, Portal } from 'pl-fe/components/ui';
-import { useAppDispatch, useAppSelector, useOwnAccount, usePlFeConfig } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector, useOwnAccount } from 'pl-fe/hooks';
 import { userTouching } from 'pl-fe/is-mobile';
 import { getReactForStatus } from 'pl-fe/utils/emoji-reacts';
 
@@ -17,7 +17,6 @@ const StatusReactionWrapper: React.FC<IStatusReactionWrapper> = ({ statusId, chi
   const dispatch = useAppDispatch();
   const { account: ownAccount } = useOwnAccount();
   const status = useAppSelector(state => state.statuses.get(statusId));
-  const plFeConfig = usePlFeConfig();
 
   const timeout = useRef<NodeJS.Timeout>();
   const [visible, setVisible] = useState(false);
@@ -69,7 +68,7 @@ const StatusReactionWrapper: React.FC<IStatusReactionWrapper> = ({ statusId, chi
   };
 
   const handleClick: React.EventHandler<React.MouseEvent> = e => {
-    const meEmojiReact = getReactForStatus(status, plFeConfig.allowedEmoji)?.name || '👍';
+    const meEmojiReact = getReactForStatus(status)?.name || '👍';
 
     if (userTouching.matches) {
       if (ownAccount) {
