@@ -28,8 +28,7 @@ const keyMap = {
   goToHome: 'g h',
   goToNotifications: 'g n',
   goToFavourites: 'g f',
-  goToPinned: 'g p',
-  goToProfile: 'g u',
+  goToProfile: ['g p', 'g u'],
   goToBlocked: 'g b',
   goToMuted: 'g m',
   goToRequests: 'g r',
@@ -115,11 +114,6 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
     history.push(`/@${account.username}/favorites`);
   };
 
-  const handleHotkeyGoToPinned = () => {
-    if (!account) return;
-    history.push(`/@${account.username}/pins`);
-  };
-
   const handleHotkeyGoToProfile = () => {
     if (!account) return;
     history.push(`/@${account.username}`);
@@ -148,7 +142,6 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
     goToHome: handleHotkeyGoToHome,
     goToNotifications: handleHotkeyGoToNotifications,
     goToFavourites: handleHotkeyGoToFavourites,
-    goToPinned: handleHotkeyGoToPinned,
     goToProfile: handleHotkeyGoToProfile,
     goToBlocked: handleHotkeyGoToBlocked,
     goToMuted: handleHotkeyGoToMuted,

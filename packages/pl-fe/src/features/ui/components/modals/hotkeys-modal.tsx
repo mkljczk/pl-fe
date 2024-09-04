@@ -141,10 +141,6 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
             </tr>
             <tr>
               <TableCell><Hotkey>g</Hotkey> + <Hotkey>p</Hotkey></TableCell>
-              <TableCell><FormattedMessage id='keyboard_shortcuts.pinned' defaultMessage='to open pinned posts list' /></TableCell>
-            </tr>
-            <tr>
-              <TableCell><Hotkey>g</Hotkey> + <Hotkey>u</Hotkey></TableCell>
               <TableCell><FormattedMessage id='keyboard_shortcuts.my_profile' defaultMessage='to open your profile' /></TableCell>
             </tr>
             <tr>
