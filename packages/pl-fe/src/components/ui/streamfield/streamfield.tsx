@@ -14,6 +14,7 @@ const messages = defineMessages({
 
 /** Type of the inner Streamfield input component. */
 type StreamfieldComponent<T> = React.ComponentType<{
+  index: number;
   value: T;
   onChange: (value: T) => void;
   autoFocus: boolean;
@@ -70,9 +71,10 @@ const Streamfield: React.FC<IStreamfield> = ({
       {(values.length > 0) && (
         <Stack space={1}>
           {values.map((value, i) => value?._destroy ? null : (
-            <HStack space={2} alignItems='center'>
+            <HStack key={i} space={2} alignItems='center'>
               <Component
                 key={i}
+                index={i}
                 onChange={handleChange(i)}
                 value={value}
                 autoFocus={i > 0}

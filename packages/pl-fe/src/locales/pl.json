@@ -655,6 +655,7 @@
   "edit_profile.fields.locked_label": "Zablokuj konto",
   "edit_profile.fields.meta_fields.content_placeholder": "Treść",
   "edit_profile.fields.meta_fields.label_placeholder": "Podpis",
+  "edit_profile.fields.meta_fields.label_placeholder.first": "Podpis (np. zaimki)",
   "edit_profile.fields.meta_fields_label": "Pola profilu",
   "edit_profile.fields.rss_label": "Włącz kanał RSS dla publicznych wpisów",
   "edit_profile.fields.stranger_notifications_label": "Blokuj powiadomienia od nieznajomych",

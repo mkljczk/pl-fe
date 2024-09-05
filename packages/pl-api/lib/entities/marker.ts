@@ -2,10 +2,10 @@ import { z } from 'zod';
 
 import { dateSchema } from './utils';
 
-const markerSchema = z.preprocess((marker: any) => ({
+const markerSchema = z.preprocess((marker: any) => marker ? ({
   unread_count: marker.pleroma?.unread_count,
   ...marker,
-}), z.object({
+}) : null, z.object({
   last_read_id: z.string(),
   version: z.number().int(),
   updated_at: dateSchema,

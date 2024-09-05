@@ -46,6 +46,7 @@ const messages = defineMessages({
   header: { id: 'edit_profile.header', defaultMessage: 'Edit profile' },
   metaFieldLabel: { id: 'edit_profile.fields.meta_fields.label_placeholder', defaultMessage: 'Label' },
   metaFieldContent: { id: 'edit_profile.fields.meta_fields.content_placeholder', defaultMessage: 'Content' },
+  firstMetaFieldLabel: { id: 'edit_profile.fields.meta_fields.label_placeholder.first', defaultMessage: 'Label (e.g. pronouns)' },
   success: { id: 'edit_profile.success', defaultMessage: 'Your profile has been successfully saved!' },
   error: { id: 'edit_profile.error', defaultMessage: 'Profile update failed' },
   bioPlaceholder: { id: 'edit_profile.fields.bio_placeholder', defaultMessage: 'Tell us about yourself.' },
@@ -142,7 +143,7 @@ const accountToCredentials = (account: Account): AccountCredentials => {
   };
 };
 
-const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({ value, onChange }) => {
+const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({ index, value, onChange }) => {
   const intl = useIntl();
 
   const handleChange = (key: string): React.ChangeEventHandler<HTMLInputElement> => e => {
@@ -156,7 +157,7 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({ value, on
         outerClassName='w-2/5 grow'
         value={value.name}
         onChange={handleChange('name')}
-        placeholder={intl.formatMessage(messages.metaFieldLabel)}
+        placeholder={index === 0 ? intl.formatMessage(messages.firstMetaFieldLabel) : intl.formatMessage(messages.metaFieldLabel)}
       />
       <Input
         type='text'

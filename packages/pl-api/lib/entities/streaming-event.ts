@@ -4,7 +4,7 @@ import { announcementSchema } from './announcement';
 import { announcementReactionSchema } from './announcement-reaction';
 import { chatSchema } from './chat';
 import { conversationSchema } from './conversation';
-import { markerSchema } from './marker';
+import { markersSchema } from './marker';
 import { notificationSchema } from './notification';
 import { statusSchema } from './status';
 
@@ -82,7 +82,7 @@ const respondStreamingEventSchema = baseStreamingEventSchema.extend({
 
 const markerStreamingEventSchema = baseStreamingEventSchema.extend({
   event: z.literal('marker'),
-  payload: z.preprocess((payload: any) => JSON.parse(payload), markerSchema),
+  payload: z.preprocess((payload: any) => JSON.parse(payload), markersSchema),
 });
 
 /** @see {@link https://docs.joinmastodon.org/methods/streaming/#events} */
