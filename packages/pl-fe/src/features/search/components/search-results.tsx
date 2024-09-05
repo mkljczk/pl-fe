@@ -10,7 +10,7 @@ import Hashtag from 'pl-fe/components/hashtag';
 import IconButton from 'pl-fe/components/icon-button';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import TrendingLink from 'pl-fe/components/trending-link';
-import { HStack, Spinner, Tabs, Text } from 'pl-fe/components/ui';
+import { HStack, Tabs, Text } from 'pl-fe/components/ui';
 import AccountContainer from 'pl-fe/containers/account-container';
 import StatusContainer from 'pl-fe/containers/status-container';
 import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholder-account';
@@ -179,8 +179,6 @@ const SearchResults = () => {
           />
         </div>
       );
-    } else {
-      noResultsMessage = <Spinner />;
     }
   }
 
@@ -239,7 +237,7 @@ const SearchResults = () => {
           key={selectedFilter}
           scrollKey={`${selectedFilter}:${value}`}
           isLoading={submitted && !loaded}
-          showLoading={submitted && !loaded && searchResults?.isEmpty()}
+          showLoading={submitted && !loaded && (!searchResults || searchResults?.isEmpty())}
           hasMore={hasMore}
           onLoadMore={handleLoadMore}
           placeholderComponent={placeholderComponent}
