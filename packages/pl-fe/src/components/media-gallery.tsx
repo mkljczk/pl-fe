@@ -58,6 +58,7 @@ interface IItem {
   dimensions: Dimensions;
   last?: boolean;
   total: number;
+  visible?: boolean;
 }
 
 const Item: React.FC<IItem> = ({
@@ -68,6 +69,7 @@ const Item: React.FC<IItem> = ({
   dimensions,
   last,
   total,
+  visible,
 }) => {
   const { autoPlayGif } = useSettings();
   const { mediaPreview } = usePlFeConfig();
@@ -264,7 +266,7 @@ const Item: React.FC<IItem> = ({
         hash={attachment.blurhash}
         className='media-gallery__preview'
       />
-      {thumbnail}
+      {(visible || !attachment.blurhash) && thumbnail}
     </div>
   );
 };
@@ -278,6 +280,7 @@ interface IMediaGallery {
   displayMedia?: string;
   compact?: boolean;
   className?: string;
+  visible?: boolean;
 }
 
 const MediaGallery: React.FC<IMediaGallery> = (props) => {
@@ -289,6 +292,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
     cacheWidth,
     compact,
     height,
+    visible,
   } = props;
   const [width, setWidth] = useState<number>(defaultWidth);
 
@@ -537,6 +541,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
       dimensions={sizeData.itemsDimensions[i]}
       last={i === ATTACHMENT_LIMIT - 1}
       total={media.length}
+      visible={visible}
     />
   ));
 

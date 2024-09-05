@@ -9,6 +9,24 @@ import { Button, HStack, Text } from '../ui';
 
 import type { Status } from 'pl-fe/normalizers';
 
+const isMediaVisible = (status: Pick<Status, 'hidden' | 'media_attachments' | 'sensitive'>, displayMedia: 'default' | 'show_all' | 'hide_all') => {
+  let visible = !status.sensitive;
+
+  if (status.hidden !== null) visible = !status.hidden;
+  else if (displayMedia === 'show_all') visible = true;
+  else if (displayMedia === 'hide_all' && status.media_attachments.length) visible = false;
+
+  return visible;
+};
+
+const showOverlay = (status: Pick<Status, 'hidden' | 'media_attachments' | 'sensitive'>, displayMedia: 'default' | 'show_all' | 'hide_all') => {
+  const visible = isMediaVisible(status, displayMedia);
+
+  const showHideButton = status.sensitive || (status.media_attachments.length && displayMedia === 'hide_all');
+
+  return !visible || showHideButton;
+};
+
 const messages = defineMessages({
   delete: { id: 'status.delete', defaultMessage: 'Delete' },
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
@@ -31,13 +49,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
   const intl = useIntl();
   const { displayMedia } = useSettings();
 
-  let visible = !status.sensitive;
-
-  if (status.hidden !== null) visible = !status.hidden;
-  else if (displayMedia === 'show_all') visible = true;
-  else if (displayMedia === 'hide_all' && status.media_attachments.length) visible = false;
-
-  const showHideButton = status.sensitive || (status.media_attachments.length && displayMedia === 'hide_all');
+  const visible = isMediaVisible(status, displayMedia);
 
   const toggleVisibility = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -46,7 +58,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
     else dispatch(revealStatusMedia(status.id));
   };
 
-  if (visible && !showHideButton) return null;
+  if (!showOverlay(status, displayMedia)) return null;
 
   return (
     <div
@@ -96,4 +108,4 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
   );
 });
 
-export { SensitiveContentOverlay as default };
+export { SensitiveContentOverlay as default, isMediaVisible, showOverlay };

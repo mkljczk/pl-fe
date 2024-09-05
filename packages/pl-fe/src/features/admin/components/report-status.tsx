@@ -48,7 +48,7 @@ const ReportStatus: React.FC<IReportStatus> = ({ status }) => {
     <HStack space={2} alignItems='start'>
       <Stack space={2} className='overflow-hidden' grow>
         <StatusContent status={status} />
-        <StatusMedia status={status} showMedia />
+        <StatusMedia status={status} />
       </Stack>
 
       <div className='flex-none'>

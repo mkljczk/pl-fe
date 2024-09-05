@@ -6,7 +6,8 @@ import PreviewCard from 'pl-fe/components/preview-card';
 import PlaceholderCard from 'pl-fe/features/placeholder/components/placeholder-card';
 import { MediaGallery, Video, Audio } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch, useSettings } from 'pl-fe/hooks';
-import { defaultMediaVisibility } from 'pl-fe/utils/status';
+
+import { isMediaVisible } from './statuses/sensitive-content-overlay';
 
 import type { MediaAttachment } from 'pl-api';
 import type { Status } from 'pl-fe/normalizers';
@@ -18,8 +19,6 @@ interface IStatusMedia {
   muted?: boolean;
   /** Callback when compact media is clicked. */
   onClick?: () => void;
-  /** Whether or not the media is concealed behind a NSFW banner. */
-  showMedia?: boolean;
 }
 
 /** Render media attachments for a status. */
@@ -27,12 +26,11 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   status,
   muted = false,
   onClick,
-  showMedia,
 }) => {
   const dispatch = useAppDispatch();
   const { displayMedia } = useSettings();
 
-  const visible = showMedia || (status.hidden === null ? defaultMediaVisibility(status, displayMedia) : !status.hidden);
+  const visible = isMediaVisible(status, displayMedia);
 
   const size = status.media_attachments.length;
   const firstAttachment = status.media_attachments[0];
@@ -102,6 +100,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
             media={status.media_attachments}
             height={285}
             onOpenMedia={openMedia}
+            visible={visible}
           />
         </Suspense>
       );
