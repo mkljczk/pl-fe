@@ -11,10 +11,8 @@ import {
   ADMIN_CONFIG_FETCH_SUCCESS,
   ADMIN_CONFIG_UPDATE_SUCCESS,
   ADMIN_REPORTS_FETCH_SUCCESS,
-  ADMIN_REPORT_PATCH_REQUEST,
   ADMIN_REPORT_PATCH_SUCCESS,
   ADMIN_USERS_FETCH_SUCCESS,
-  ADMIN_USER_DELETE_REQUEST,
   ADMIN_USER_DELETE_SUCCESS,
   ADMIN_USER_APPROVE_REQUEST,
   ADMIN_USER_APPROVE_SUCCESS,
@@ -85,21 +83,16 @@ const importUsers = (state: State, users: Array<AdminAccount>, params: AdminGetA
     });
   });
 
-const deleteUsers = (state: State, accountIds: string[]): State =>
-  state.withMutations(state => {
-    accountIds.forEach(id => {
-      state.update('awaitingApproval', orderedSet => orderedSet.delete(id));
-      state.deleteIn(['users', id]);
-    });
-  });
+const deleteUser = (state: State, accountId: string): State =>
+  state
+    .update('awaitingApproval', orderedSet => orderedSet.delete(accountId))
+    .deleteIn(['users', accountId]);
 
-const approveUsers = (state: State, users: Array<AdminAccount>): State =>
+const approveUser = (state: State, user: AdminAccount): State =>
   state.withMutations(state => {
-    users.forEach(user => {
-      const normalizedUser = minifyUser(user);
-      state.update('awaitingApproval', orderedSet => orderedSet.delete(user.id));
-      state.setIn(['users', user.id], normalizedUser);
-    });
+    const normalizedUser = minifyUser(user);
+    state.update('awaitingApproval', orderedSet => orderedSet.delete(user.id));
+    state.setIn(['users', user.id], normalizedUser);
   });
 
 const minifyReport = (report: AdminReport) => omit(
@@ -120,19 +113,17 @@ const importReports = (state: State, reports: Array<BaseAdminReport>): State =>
     });
   });
 
-const handleReportDiffs = (state: State, reports: Array<MinifiedReport>) =>
+const handleReportDiffs = (state: State, report: MinifiedReport) =>
   // Note: the reports here aren't full report objects
   // hence the need for a new function.
   state.withMutations(state => {
-    reports.forEach(report => {
-      switch (report.action_taken) {
-        case false:
-          state.update('openReports', orderedSet => orderedSet.add(report.id));
-          break;
-        default:
-          state.update('openReports', orderedSet => orderedSet.delete(report.id));
-      }
-    });
+    switch (report.action_taken) {
+      case false:
+        state.update('openReports', orderedSet => orderedSet.add(report.id));
+        break;
+      default:
+        state.update('openReports', orderedSet => orderedSet.delete(report.id));
+    }
   });
 
 const normalizeConfig = (config: any): Config => ImmutableMap(fromJS(config));
@@ -148,18 +139,16 @@ const admin = (state: State = ReducerRecord(), action: AnyAction): State => {
       return importConfigs(state, action.configs);
     case ADMIN_REPORTS_FETCH_SUCCESS:
       return importReports(state, action.reports);
-    case ADMIN_REPORT_PATCH_REQUEST:
     case ADMIN_REPORT_PATCH_SUCCESS:
-      return handleReportDiffs(state, action.reports);
+      return handleReportDiffs(state, action.report);
     case ADMIN_USERS_FETCH_SUCCESS:
       return importUsers(state, action.users, action.params);
-    case ADMIN_USER_DELETE_REQUEST:
     case ADMIN_USER_DELETE_SUCCESS:
-      return deleteUsers(state, action.accountIds);
+      return deleteUser(state, action.accountId);
     case ADMIN_USER_APPROVE_REQUEST:
-      return state.update('awaitingApproval', set => set.subtract(action.accountIds));
+      return state.update('awaitingApproval', set => set.subtract(action.accountId));
     case ADMIN_USER_APPROVE_SUCCESS:
-      return approveUsers(state, action.users);
+      return approveUser(state, action.user);
     default:
       return state;
   }

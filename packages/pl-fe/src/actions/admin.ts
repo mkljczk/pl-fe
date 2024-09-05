@@ -125,8 +125,8 @@ const closeReport = (reportId: string) =>
 
     dispatch({ type: ADMIN_REPORT_PATCH_REQUEST, reportId });
 
-    return getClient(state).admin.reports.resolveReport(reportId).then(() => {
-      dispatch({ type: ADMIN_REPORT_PATCH_SUCCESS, reportId });
+    return getClient(state).admin.reports.resolveReport(reportId).then((report) => {
+      dispatch({ type: ADMIN_REPORT_PATCH_SUCCESS, report, reportId });
     }).catch(error => {
       dispatch({ type: ADMIN_REPORT_PATCH_FAIL, error, reportId });
     });
