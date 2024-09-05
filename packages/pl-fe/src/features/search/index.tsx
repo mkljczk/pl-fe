@@ -2,8 +2,8 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { Column } from 'pl-fe/components/ui';
-import Search from 'pl-fe/features/compose/components/search';
-import SearchResults from 'pl-fe/features/compose/components/search-results';
+import Search from 'pl-fe/features/search/components/search';
+import SearchResults from 'pl-fe/features/search/components/search-results';
 
 const messages = defineMessages({
   heading: { id: 'column.search', defaultMessage: 'Search' },

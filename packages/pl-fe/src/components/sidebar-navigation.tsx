@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { Icon, Stack } from 'pl-fe/components/ui';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
-import Search from 'pl-fe/features/compose/components/search';
+import Search from 'pl-fe/features/search/components/search';
 import ComposeButton from 'pl-fe/features/ui/components/compose-button';
 import ProfileDropdown from 'pl-fe/features/ui/components/profile-dropdown';
 import { useAppSelector, useFeatures, useOwnAccount, useSettings, useInstance } from 'pl-fe/hooks';
