@@ -1,7 +1,7 @@
 {
   "name": "pl-fe",
   "displayName": "pl-fe",
-  "version": "3.2.0",
+  "version": "0.0.1",
   "type": "module",
   "description": "Web-based federated social media client, a fork of Soapbox",
   "homepage": "https://github.com/mkljczk/pl-fe",
