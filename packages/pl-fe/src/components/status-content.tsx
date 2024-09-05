@@ -4,7 +4,7 @@ import React, { useState, useRef, useLayoutEffect, useMemo } from 'react';
 import {  FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { toggleStatusSpoilerExpanded } from 'pl-fe/actions/statuses';
+import { collapseStatusSpoiler, expandStatusSpoiler } from 'pl-fe/actions/statuses';
 import Icon from 'pl-fe/components/icon';
 import { Button, Stack, Text } from 'pl-fe/components/ui';
 import { useAppDispatch, useSettings } from 'pl-fe/hooks';
@@ -92,7 +92,8 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     e.preventDefault();
     e.stopPropagation();
 
-    dispatch(toggleStatusSpoilerExpanded(status));
+    if (expanded) dispatch(collapseStatusSpoiler(status.id));
+    else dispatch(expandStatusSpoiler(status.id));
   };
 
   useLayoutEffect(() => {
