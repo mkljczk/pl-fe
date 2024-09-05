@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import parse, { Element, type HTMLReactParserOptions, domToReact, type DOMNode } from 'html-react-parser';
-import React, { useState, useRef, useLayoutEffect, useMemo } from 'react';
+import React, { useState, useRef, useLayoutEffect, useMemo, useEffect } from 'react';
 import {  FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
@@ -66,8 +66,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
 
   const [collapsed, setCollapsed] = useState(false);
   const [onlyEmoji, setOnlyEmoji] = useState(false);
+  const [lineClamp, setLineClamp] = useState(true);
 
   const node = useRef<HTMLDivElement>(null);
+  const spoilerNode = useRef<HTMLSpanElement>(null);
 
   const maybeSetCollapsed = (): void => {
     if (!node.current) return;
@@ -169,6 +171,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     return parse(parsedHtml, options);
   }, [parsedHtml]);
 
+  useEffect(() => {
+    setLineClamp(!spoilerNode.current || spoilerNode.current.clientHeight >= 96);
+  }, [spoilerNode.current]);
+
   const withSpoiler = status.spoiler_text.length > 0;
 
   const spoilerText = status.spoilerMapHtml && status.currentLanguage
@@ -191,8 +197,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     output.push(
       <Text key='spoiler' size='2xl' weight='medium'>
         <span
-          className={clsx({ 'line-clamp-3': !expanded })}
+          className={clsx({ 'line-clamp-3': !expanded && lineClamp })}
           dangerouslySetInnerHTML={{ __html: spoilerText }}
+          ref={spoilerNode}
         />
         {expandable && (
           <Button
