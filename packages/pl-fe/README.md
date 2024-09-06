@@ -25,7 +25,7 @@ rm pl-fe.zip
 
 ## Contribute
 
-Code contributions are welcome. Weblate is used for project translation.
+Code contributions are welcome. [Weblate](https://hosted.weblate.org/projects/pl-fe/) is used for project translation.
 
 <a href="https://hosted.weblate.org/engage/pl-fe/">
 <img src="https://hosted.weblate.org/widget/pl-fe/287x66-grey.png" alt="Translation status" />
