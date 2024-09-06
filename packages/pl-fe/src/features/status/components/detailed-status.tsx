@@ -14,6 +14,7 @@ import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
 
 import StatusInteractionBar from './status-interaction-bar';
+import StatusTypeIcon from './status-type-icon';
 
 import type { SelectedStatus } from 'pl-fe/selectors';
 
@@ -76,8 +77,6 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
   const { account } = actualStatus;
   if (!account || typeof account !== 'object') return null;
 
-  let statusTypeIcon = null;
-
   let quote;
 
   if (actualStatus.quote_id) {
@@ -90,12 +89,6 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
     } else {
       quote = <QuotedStatus statusId={actualStatus.quote_id} />;
     }
-  }
-
-  if (actualStatus.visibility === 'direct') {
-    statusTypeIcon = <Icon className='h-4 w-4 text-gray-700 dark:text-gray-600' src={require('@tabler/icons/outline/mail.svg')} />;
-  } else if (actualStatus.visibility === 'private' || actualStatus.visibility === 'mutuals_only') {
-    statusTypeIcon = <Icon className='h-4 w-4 text-gray-700 dark:text-gray-600' src={require('@tabler/icons/outline/lock.svg')} />;
   }
 
   return (
@@ -144,8 +137,6 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
           <StatusInteractionBar status={actualStatus} />
 
           <HStack space={1} alignItems='center'>
-            {statusTypeIcon}
-
             <span>
               <a href={actualStatus.url} target='_blank' rel='noopener' className='hover:underline'>
                 <Text tag='span' theme='muted' size='sm'>
@@ -169,6 +160,8 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                 </>
               )}
             </span>
+
+            <StatusTypeIcon status={actualStatus} />
 
             <StatusLanguagePicker status={status} showLabel />
           </HStack>

@@ -9,6 +9,7 @@ import { openModal } from 'pl-fe/actions/modals';
 import { toggleStatusMediaHidden, unfilterStatus } from 'pl-fe/actions/statuses';
 import TranslateButton from 'pl-fe/components/translate-button';
 import AccountContainer from 'pl-fe/containers/account-container';
+import StatusTypeIcon from 'pl-fe/features/status/components/status-type-icon';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch, useAppSelector, useSettings } from 'pl-fe/hooks';
@@ -408,7 +409,12 @@ const Status: React.FC<IStatus> = (props) => {
             withLinkToProfile={hoverable}
             approvalStatus={actualStatus.approval_status}
             avatarSize={avatarSize}
-            items={<StatusLanguagePicker status={status} />}
+            items={(
+              <>
+                <StatusTypeIcon status={status} />
+                <StatusLanguagePicker status={status} />
+              </>
+            )}
           />
 
           <div className='status__content-wrapper'>
