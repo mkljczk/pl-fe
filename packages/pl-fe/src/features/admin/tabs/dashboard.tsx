@@ -59,7 +59,7 @@ const Dashboard: React.FC = () => {
         {account.is_admin && (
           <ListItem
             to='/pl-fe/config'
-            label={<FormattedMessage id='navigation_bar.plfe_config' defaultMessage='pl-fe config' />}
+            label={<FormattedMessage id='navigation_bar.plfe_config' defaultMessage='Front-end configuration' />}
           />
         )}
 

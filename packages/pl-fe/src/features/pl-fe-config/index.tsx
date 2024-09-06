@@ -31,7 +31,7 @@ import PromoPanelInput from './components/promo-panel-input';
 import SitePreview from './components/site-preview';
 
 const messages = defineMessages({
-  heading: { id: 'column.plfe_config', defaultMessage: 'pl-fe config' },
+  heading: { id: 'column.plfe_config', defaultMessage: 'Front-end configuration' },
   saved: { id: 'plfe_config.saved', defaultMessage: 'pl-fe config saved!' },
   copyrightFooterLabel: { id: 'plfe_config.copyright_footer.meta_fields.label_placeholder', defaultMessage: 'Copyright footer' },
   cryptoDonatePanelLimitLabel: { id: 'plfe_config.crypto_donate_panel_limit.meta_fields.limit_placeholder', defaultMessage: 'Number of items to display in the crypto homepage widget' },
