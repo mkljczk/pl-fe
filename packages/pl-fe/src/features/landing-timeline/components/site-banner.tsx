@@ -13,16 +13,18 @@ const SiteBanner: React.FC = () => {
   const description = DOMPurify.sanitize(instance.description);
 
   return (
-    <Stack space={3}>
+    <Stack space={6}>
       <LogoText dir={getTextDirection(instance.title)}>
         {instance.title}
       </LogoText>
 
-      <Markup
-        size='lg'
-        dangerouslySetInnerHTML={{ __html: description }}
-        direction={getTextDirection(description)}
-      />
+      {instance.description.trim().length > 0 && (
+        <Markup
+          size='lg'
+          dangerouslySetInnerHTML={{ __html: description }}
+          direction={getTextDirection(description)}
+        />
+      )}
     </Stack>
   );
 };
