@@ -33,7 +33,7 @@ import ReplyGroupIndicator from './reply-group-indicator';
 import ReplyMentions from './reply-mentions';
 import ScheduleButton from './schedule-button';
 import ScheduleForm from './schedule-form';
-import SpoilerButton from './spoiler-button';
+import SensitiveMediaButton from './sensitive-media-button';
 import SpoilerInput from './spoiler-input';
 import TextCharacterCounter from './text-character-counter';
 import UploadForm from './upload-form';
@@ -179,7 +179,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       <EmojiPickerDropdown onPickEmoji={handleEmojiPick} condensed={shouldCondense} />
       {features.polls && <PollButton composeId={id} />}
       {features.scheduledStatuses && <ScheduleButton composeId={id} />}
-      {features.spoilers && <SpoilerButton composeId={id} />}
+      {anyMedia && features.spoilers && <SensitiveMediaButton composeId={id} />}
     </HStack>
   ), [features, id]);
 
