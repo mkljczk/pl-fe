@@ -38,7 +38,7 @@ const StatusTypeIcon: React.FC<IStatusTypeIcon> = ({ status }) => {
     <>
       <Text tag='span' theme='muted' size='sm'>&middot;</Text>
 
-      <Icon title={message ? intl.formatMessage(message) : undefined} className='h-5 w-5 text-gray-700 dark:text-gray-600' src={icon} />
+      <Icon title={message ? intl.formatMessage(message) : undefined} className='h-4 w-4 text-gray-700 dark:text-gray-600' src={icon} />
     </>
   );
 };
