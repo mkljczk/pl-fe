@@ -114,7 +114,10 @@ const getFeatures = (instance?: Instance) => {
      * Ability to set description of profile avatar and header.
      * @see PATCH /api/v1/accounts/update_credentials
      */
-    accountAvatarDescription: v.software === GOTOSOCIAL && gte(v.version, '0.16.1'),
+    accountAvatarDescription: any([
+      v.software === GOTOSOCIAL && gte(v.version, '0.16.1'),
+      v.software === PLEROMA && v.build === PL,
+    ]),
 
     /**
      * Pleroma backups.
