@@ -42,8 +42,8 @@ const FollowRecommendations: React.FC = () => {
         >
           {suggestions.map((suggestion) => (
             <AccountContainer
-              key={suggestion.account}
-              id={suggestion.account}
+              key={suggestion.account_id}
+              id={suggestion.account_id}
               withAccountNote
             />
           ))}

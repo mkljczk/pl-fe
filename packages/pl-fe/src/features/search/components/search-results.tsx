@@ -129,7 +129,7 @@ const SearchResults = () => {
     if (results.accounts && results.accounts.size > 0) {
       searchResults = results.accounts.map(accountId => <AccountContainer key={accountId} id={accountId} />);
     } else if (!submitted && suggestions && !suggestions.isEmpty()) {
-      searchResults = suggestions.map(suggestion => <AccountContainer key={suggestion.account} id={suggestion.account} />);
+      searchResults = suggestions.map(suggestion => <AccountContainer key={suggestion.account_id} id={suggestion.account_id} />);
     } else if (loaded) {
       noResultsMessage = (
         <div className='empty-column-indicator'>

@@ -12,30 +12,31 @@ import {
 import type { Suggestion as SuggestionEntity } from 'pl-api';
 import type { AnyAction } from 'redux';
 
-const SuggestionRecord = ImmutableRecord({
-  source: '',
-  account: '',
-});
-
 const ReducerRecord = ImmutableRecord({
-  items: ImmutableOrderedSet<Suggestion>(),
+  items: ImmutableOrderedSet<MinifiedSuggestion>(),
   isLoading: false,
 });
 
 type State = ReturnType<typeof ReducerRecord>;
-type Suggestion = ReturnType<typeof SuggestionRecord>;
+
+const minifySuggestion = ({ account, ...suggestion }: SuggestionEntity) => ({
+  ...suggestion,
+  account_id: account.id,
+});
+
+type MinifiedSuggestion = ReturnType<typeof minifySuggestion>;
 
 const importSuggestions = (state: State, suggestions: SuggestionEntity[]) =>
   state.withMutations(state => {
-    state.update('items', items => items.concat(suggestions.map(x => ({ ...x, account: x.account.id })).map(suggestion => SuggestionRecord(suggestion))));
+    state.update('items', items => items.concat(suggestions.map(minifySuggestion)));
     state.set('isLoading', false);
   });
 
 const dismissAccount = (state: State, accountId: string) =>
-  state.update('items', items => items.filterNot(item => item.account === accountId));
+  state.update('items', items => items.filterNot(item => item.account_id === accountId));
 
 const dismissAccounts = (state: State, accountIds: string[]) =>
-  state.update('items', items => items.filterNot(item => accountIds.includes(item.account)));
+  state.update('items', items => items.filterNot(item => accountIds.includes(item.account_id)));
 
 const suggestionsReducer = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {

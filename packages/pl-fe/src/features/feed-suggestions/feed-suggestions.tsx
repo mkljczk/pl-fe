@@ -109,7 +109,7 @@ const FeedSuggestions: React.FC<IFeedSuggesetions> = ({ statusId, onMoveUp, onMo
         <CardBody>
           <HStack space={4} alignItems='center' className='overflow-x-auto md:space-x-0 lg:overflow-x-hidden'>
             {suggestedProfiles.slice(0, 4).map((suggestedProfile) => (
-              <SuggestionItem key={suggestedProfile.account} accountId={suggestedProfile.account} />
+              <SuggestionItem key={suggestedProfile.account_id} accountId={suggestedProfile.account_id} />
             ))}
           </HStack>
         </CardBody>
