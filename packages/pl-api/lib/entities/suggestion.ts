@@ -8,15 +8,30 @@ const suggestionSchema = z.preprocess((suggestion: any) => {
    * Support `/api/v1/suggestions`
    * @see {@link https://docs.joinmastodon.org/methods/suggestions/#v1}
   */
+  if (!suggestion) return null;
+
   if (suggestion?.acct) return {
     source: 'staff',
-    sources: 'featured',
+    sources: ['featured'],
     account: suggestion,
   };
+
+  if (!suggestion.sources) {
+    suggestion.sources = [];
+    switch (suggestion.source) {
+      case 'staff':
+        suggestion.sources.push('staff');
+        break;
+      case 'global':
+        suggestion.sources.push('most_interactions');
+        break;
+    }
+  }
+
   return suggestion;
 }, z.object({
-  source: z.string(),
-  sources: z.array(z.string()),
+  source: z.string().nullable().catch(null),
+  sources: z.array(z.string()).catch([]),
   account: accountSchema,
 }));
 
