@@ -181,7 +181,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       {features.scheduledStatuses && <ScheduleButton composeId={id} />}
       {anyMedia && features.spoilers && <SensitiveMediaButton composeId={id} />}
     </HStack>
-  ), [features, id]);
+  ), [features, id, anyMedia]);
 
   const composeModifiers = !condensed && (
     <Stack space={4} className='font-[inherit] text-sm text-gray-900'>
