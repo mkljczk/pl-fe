@@ -308,20 +308,20 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       onClick={onClose}
                     />
 
-                    {features.federating && (
-                      <SidebarLink
-                        to='/timeline/fediverse'
-                        icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
-                        text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-                        onClick={onClose}
-                      />
-                    )}
-
                     {features.bubbleTimeline && (
                       <SidebarLink
                         to='/timeline/bubble'
                         icon={require('@tabler/icons/outline/chart-bubble.svg')}
                         text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                        onClick={onClose}
+                      />
+                    )}
+
+                    {features.federating && (
+                      <SidebarLink
+                        to='/timeline/fediverse'
+                        icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
+                        text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
                         onClick={onClose}
                       />
                     )}
@@ -423,20 +423,20 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                     onClick={onClose}
                   />
 
-                  {features.federating && !restrictUnauth.timelines.federated && (
-                    <SidebarLink
-                      to='/timeline/fediverse'
-                      icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
-                      text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-                      onClick={onClose}
-                    />
-                  )}
-
                   {features.bubbleTimeline && !restrictUnauth.timelines.bubble && (
                     <SidebarLink
                       to='/timeline/bubble'
                       icon={require('@tabler/icons/outline/chart-bubble.svg')}
                       text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                      onClick={onClose}
+                    />
+                  )}
+
+                  {features.federating && !restrictUnauth.timelines.federated && (
+                    <SidebarLink
+                      to='/timeline/fediverse'
+                      icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
+                      text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
                       onClick={onClose}
                     />
                   )}

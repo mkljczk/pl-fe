@@ -243,19 +243,19 @@ const SidebarNavigation = () => {
               />
             )}
 
-            {(features.federating && (account || !restrictUnauth.timelines.federated)) && (
-              <SidebarNavigationLink
-                to='/timeline/fediverse'
-                icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
-                text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-              />
-            )}
-
             {(features.bubbleTimeline && (account || !restrictUnauth.timelines.bubble)) && (
               <SidebarNavigationLink
                 to='/timeline/bubble'
                 icon={require('@tabler/icons/outline/chart-bubble.svg')}
                 text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+              />
+            )}
+
+            {(features.federating && (account || !restrictUnauth.timelines.federated)) && (
+              <SidebarNavigationLink
+                to='/timeline/fediverse'
+                icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
+                text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
               />
             )}
           </>
