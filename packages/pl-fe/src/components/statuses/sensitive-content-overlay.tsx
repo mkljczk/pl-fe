@@ -9,8 +9,8 @@ import { Button, HStack, Text } from '../ui';
 
 import type { Status } from 'pl-fe/normalizers';
 
-const isMediaVisible = (status: Pick<Status, 'hidden' | 'media_attachments' | 'sensitive'>, displayMedia: 'default' | 'show_all' | 'hide_all') => {
-  let visible = !status.sensitive;
+const isMediaVisible = (status: Pick<Status, 'hidden' | 'media_attachments' | 'sensitive' | 'spoiler_text'>, displayMedia: 'default' | 'show_all' | 'hide_all') => {
+  let visible = !(status.sensitive || status.spoiler_text);
 
   if (status.hidden !== null) visible = !status.hidden;
   else if (displayMedia === 'show_all') visible = true;
@@ -19,7 +19,7 @@ const isMediaVisible = (status: Pick<Status, 'hidden' | 'media_attachments' | 's
   return visible;
 };
 
-const showOverlay = (status: Pick<Status, 'hidden' | 'media_attachments' | 'sensitive'>, displayMedia: 'default' | 'show_all' | 'hide_all') => {
+const showOverlay = (status: Pick<Status, 'hidden' | 'media_attachments' | 'sensitive' | 'spoiler_text'>, displayMedia: 'default' | 'show_all' | 'hide_all') => {
   const visible = isMediaVisible(status, displayMedia);
 
   const showHideButton = status.sensitive || (status.media_attachments.length && displayMedia === 'hide_all');
@@ -39,7 +39,7 @@ const messages = defineMessages({
 });
 
 interface ISensitiveContentOverlay {
-  status: Pick<Status, 'id' | 'sensitive' | 'hidden' | 'media_attachments' | 'currentLanguage'>;
+  status: Pick<Status, 'id' | 'sensitive' | 'spoiler_text' | 'hidden' | 'media_attachments' | 'currentLanguage'>;
 }
 
 const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveContentOverlay>((props, ref) => {
