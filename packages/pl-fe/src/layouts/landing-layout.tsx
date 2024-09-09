@@ -4,7 +4,6 @@ import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
   TrendsPanel,
   SignUpPanel,
-  CtaBanner,
 } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector, useFeatures } from 'pl-fe/hooks';
 
@@ -22,10 +21,6 @@ const LandingLayout: React.FC<ILandingLayout> = ({ children }) => {
     <>
       <Layout.Main className='space-y-3 pt-3 sm:pt-0 dark:divide-gray-800'>
         {children}
-
-        {!me && (
-          <CtaBanner />
-        )}
       </Layout.Main>
 
       <Layout.Aside>

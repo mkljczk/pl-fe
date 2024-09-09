@@ -12,7 +12,6 @@ import {
   ProfileMediaPanel,
   ProfileFieldsPanel,
   SignUpPanel,
-  CtaBanner,
   PinnedAccountsPanel,
   AccountNotePanel,
 } from 'pl-fe/features/ui/util/async-components';
@@ -100,10 +99,6 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
             {children}
           </div>
         </Column>
-
-        {!me && (
-          <CtaBanner />
-        )}
       </Layout.Main>
 
       <Layout.Aside>

@@ -7,7 +7,6 @@ import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
   EventHeader,
-  CtaBanner,
   SignUpPanel,
   TrendsPanel,
   WhoToFollowPanel,
@@ -74,10 +73,6 @@ const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
             {children}
           </div>
         </Column>
-
-        {!me && (
-          <CtaBanner />
-        )}
       </Layout.Main>
 
       <Layout.Aside>

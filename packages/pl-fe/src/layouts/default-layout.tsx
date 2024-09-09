@@ -5,7 +5,6 @@ import {
   WhoToFollowPanel,
   TrendsPanel,
   SignUpPanel,
-  CtaBanner,
 } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector, useFeatures } from 'pl-fe/hooks';
 
@@ -23,10 +22,6 @@ const DefaultLayout: React.FC<IDefaultLayout> = ({ children }) => {
     <>
       <Layout.Main>
         {children}
-
-        {!me && (
-          <CtaBanner />
-        )}
       </Layout.Main>
 
       <Layout.Aside>

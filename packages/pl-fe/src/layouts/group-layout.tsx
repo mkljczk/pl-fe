@@ -7,7 +7,6 @@ import { Column, Icon, Layout, Stack, Text, Tabs } from 'pl-fe/components/ui';
 import GroupHeader from 'pl-fe/features/group/components/group-header';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
-  CtaBanner,
   GroupMediaPanel,
   SignUpPanel,
 } from 'pl-fe/features/ui/util/async-components';
@@ -105,10 +104,6 @@ const GroupLayout: React.FC<IGroupLayout> = ({ params, children }) => {
 
           {renderChildren()}
         </Column>
-
-        {!me && (
-          <CtaBanner />
-        )}
       </Layout.Main>
 
       <Layout.Aside>

@@ -12,7 +12,6 @@ import {
   PromoPanel,
   CryptoDonatePanel,
   BirthdayPanel,
-  CtaBanner,
   AnnouncementsPanel,
 } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector, useOwnAccount, useFeatures, usePlFeConfig, useDraggedFiles, useAppDispatch } from 'pl-fe/hooks';
@@ -83,10 +82,6 @@ const HomeLayout: React.FC<IHomeLayout> = ({ children }) => {
         )}
 
         {children}
-
-        {!me && (
-          <CtaBanner />
-        )}
       </Layout.Main>
 
       <Layout.Aside>

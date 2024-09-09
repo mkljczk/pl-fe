@@ -56,7 +56,6 @@ export const ThemeEditor = lazy(() => import('pl-fe/features/theme-editor'));
 export const UserPanel = lazy(() => import('pl-fe/features/ui/components/user-panel'));
 export const PromoPanel = lazy(() => import('pl-fe/features/ui/components/promo-panel'));
 export const SignUpPanel = lazy(() => import('pl-fe/features/ui/components/panels/sign-up-panel'));
-export const CtaBanner = lazy(() => import('pl-fe/features/ui/components/cta-banner'));
 export const TrendsPanel = lazy(() => import('pl-fe/features/ui/components/trends-panel'));
 export const ProfileInfoPanel = lazy(() => import('pl-fe/features/ui/components/profile-info-panel'));
 export const ProfileMediaPanel = lazy(() => import('pl-fe/features/ui/components/profile-media-panel'));
