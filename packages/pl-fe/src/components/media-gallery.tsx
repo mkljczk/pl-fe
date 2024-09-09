@@ -329,9 +329,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
     const style: React.CSSProperties = {};
     let itemsDimensions: Dimensions[] = [];
 
-    const ratios = Array(size).fill(null).map((_, i) =>
-      getAspectRatio(media[i]) as number,
-    );
+    const ratios = Array(size).fill(null).map((_, i) => getAspectRatio(media[i]));
 
     const [ar1, ar2, ar3, ar4] = ratios;
 
