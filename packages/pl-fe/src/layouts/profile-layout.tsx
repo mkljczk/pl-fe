@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { Redirect, useHistory } from 'react-router-dom';
 
@@ -86,6 +87,11 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
 
   return (
     <>
+      {account?.local === false && (
+        <Helmet>
+          <meta content='noindex, noarchive' name='robots' />
+        </Helmet>
+      )}
       <Layout.Main>
         <Column size='lg' label={account ? `@${getAcct(account, displayFqn)}` : ''} withHeader={false}>
           <div className='space-y-4'>

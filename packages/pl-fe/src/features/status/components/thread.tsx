@@ -2,6 +2,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import clsx from 'clsx';
 import { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
 import React, { useEffect, useRef } from 'react';
+import { Helmet } from 'react-helmet';
 import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
@@ -381,6 +382,12 @@ const Thread: React.FC<IThread> = ({
         })
       }
     >
+      {status.account.local === false && (
+        <Helmet>
+          <meta content='noindex, noarchive' name='robots' />
+        </Helmet>
+      )}
+
       <div
         ref={node}
         className={

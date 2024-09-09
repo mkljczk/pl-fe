@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
@@ -61,6 +62,11 @@ const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
 
   return (
     <>
+      {status?.account.local === false && (
+        <Helmet>
+          <meta content='noindex, noarchive' name='robots' />
+        </Helmet>
+      )}
       <Layout.Main>
         <Column label={event?.name} withHeader={false}>
           <div className='space-y-4'>
