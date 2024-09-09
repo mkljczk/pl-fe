@@ -30,7 +30,7 @@ const messages = defineMessages({
 
 const getNotifications = createSelector([
   (state: RootState) => state.notifications.items.toList(),
-], (notifications) => notifications.filter(item => item !== null));
+], (notifications) => notifications.filter(item => item !== null && !item.duplicate));
 
 const Notifications = () => {
   const dispatch = useAppDispatch();

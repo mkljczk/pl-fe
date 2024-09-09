@@ -64,6 +64,7 @@ const comparator = (a: Pick<Notification, 'id'>, b: Pick<Notification, 'id'>) =>
 const minifyNotification = (notification: Notification) => {
   // @ts-ignore
   const minifiedNotification: {
+    duplicate: boolean;
     account_id: string;
     account_ids: string[];
     created_at: string;
@@ -127,7 +128,7 @@ type MinifiedNotification = ReturnType<typeof minifyNotification>;
 // Count how many notifications appear after the given ID (for unread count)
 const countFuture = (notifications: ImmutableOrderedMap<string, MinifiedNotification>, lastId: string | number) =>
   notifications.reduce((acc, notification) => {
-    if (parseId(notification.id.split('+')[0]) > parseId(lastId)) {
+    if (parseId(notification.id) > parseId(lastId)) {
       return acc + 1;
     } else {
       return acc;

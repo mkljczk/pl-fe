@@ -208,12 +208,6 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
       }
     }
 
-    if (maxId?.includes('+')) {
-      const ids = maxId.split('+');
-
-      maxId = ids[ids.length - 1];
-    }
-
     const params: Record<string, any> = {
       max_id: maxId,
     };
@@ -263,7 +257,7 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
       dispatch(importFetchedAccounts(Object.values(entries.accounts)));
       dispatch(importFetchedStatuses(Object.values(entries.statuses)));
 
-      const deduplicatedNotifications = normalizeNotifications(response.items);
+      const deduplicatedNotifications = normalizeNotifications(response.items, state.notifications.items);
 
       dispatch(expandNotificationsSuccess(deduplicatedNotifications, response.next));
       fetchRelatedRelationships(dispatch, response.items);
@@ -314,12 +308,8 @@ const markReadNotifications = () =>
     if (!isLoggedIn(getState)) return;
 
     const state = getState();
-    let topNotificationId = state.notifications.items.first()?.id;
+    const topNotificationId = state.notifications.items.first()?.id;
     const lastReadId = state.notifications.lastRead;
-
-    if (typeof topNotificationId === 'string' && topNotificationId?.includes('+')) {
-      topNotificationId = topNotificationId.split('+')[0];
-    }
 
     if (topNotificationId && (lastReadId === -1 || compareId(topNotificationId, lastReadId) > 0)) {
       const marker = {
