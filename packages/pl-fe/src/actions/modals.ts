@@ -2,7 +2,7 @@ import { AppDispatch } from 'pl-fe/store';
 
 import type { ICryptoAddress } from 'pl-fe/features/crypto-donate/components/crypto-address';
 import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
-import type { AccountModerationModalProps } from 'pl-fe/features/ui/components/modals/account-moderation-modal/account-moderation-modal';
+import type { AccountModerationModalProps } from 'pl-fe/features/ui/components/modals/account-moderation-modal';
 import type { BoostModalProps } from 'pl-fe/features/ui/components/modals/boost-modal';
 import type { CompareHistoryModalProps } from 'pl-fe/features/ui/components/modals/compare-history-modal';
 import type { ComponentModalProps } from 'pl-fe/features/ui/components/modals/component-modal';
