@@ -194,6 +194,7 @@ const SidebarNavigation = () => {
               <SidebarNavigationLink
                 to='/conversations'
                 icon={require('@tabler/icons/outline/mail.svg')}
+                activeIcon={require('@tabler/icons/filled/mail.svg')}
                 text={<FormattedMessage id='navigation.direct_messages' defaultMessage='Direct messages' />}
               />
             )}
@@ -247,6 +248,7 @@ const SidebarNavigation = () => {
               <SidebarNavigationLink
                 to='/timeline/bubble'
                 icon={require('@tabler/icons/outline/chart-bubble.svg')}
+                activeIcon={require('@tabler/icons/filled/chart-bubble.svg')}
                 text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
               />
             )}
