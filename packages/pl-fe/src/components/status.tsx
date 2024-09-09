@@ -434,7 +434,7 @@ const Status: React.FC<IStatus> = (props) => {
 
                   {(quote || actualStatus.card || actualStatus.media_attachments.length > 0) && (
                     <Stack space={4}>
-                      {(actualStatus.media_attachments.length > 0 || actualStatus.card) && (
+                      {(actualStatus.media_attachments.length > 0 || (actualStatus.card && !quote)) && (
                         <div className='relative'>
                           <SensitiveContentOverlay status={actualStatus} />
                           <StatusMedia
