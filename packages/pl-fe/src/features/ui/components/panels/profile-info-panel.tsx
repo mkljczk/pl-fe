@@ -12,9 +12,9 @@ import { Icon, HStack, Stack, Text } from 'pl-fe/components/ui';
 import { useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
 import { capitalize } from 'pl-fe/utils/strings';
 
-import ProfileFamiliarFollowers from './profile-familiar-followers';
-import ProfileField from './profile-field';
-import ProfileStats from './profile-stats';
+import ProfileFamiliarFollowers from '../profile-familiar-followers';
+import ProfileField from '../profile-field';
+import ProfileStats from '../profile-stats';
 
 import type { Scrobble as ScrobbleEntity } from 'pl-api';
 import type { Account } from 'pl-fe/normalizers';

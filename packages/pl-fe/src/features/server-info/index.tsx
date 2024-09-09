@@ -5,7 +5,7 @@ import { Column, Divider, Stack, Text } from 'pl-fe/components/ui';
 import { useInstance } from 'pl-fe/hooks';
 
 import LinkFooter from '../ui/components/link-footer';
-import PromoPanel from '../ui/components/promo-panel';
+import PromoPanel from '../ui/components/panels/promo-panel';
 
 const messages = defineMessages({
   heading: { id: 'column.info', defaultMessage: 'Server information' },

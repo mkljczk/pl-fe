@@ -8,7 +8,7 @@ import { Spinner, Text, Widget } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { type AccountGalleryAttachment, getAccountGallery } from 'pl-fe/selectors';
 
-import MediaItem from '../../account-gallery/components/media-item';
+import MediaItem from '../../../account-gallery/components/media-item';
 
 import type { Account } from 'pl-fe/normalizers';
 

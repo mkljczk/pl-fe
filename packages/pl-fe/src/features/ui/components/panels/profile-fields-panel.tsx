@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { Widget, Stack } from 'pl-fe/components/ui';
 
-import ProfileField from './profile-field';
+import ProfileField from '../profile-field';
 
 import type { Account } from 'pl-fe/normalizers';
 
