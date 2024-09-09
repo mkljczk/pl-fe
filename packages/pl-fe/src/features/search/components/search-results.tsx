@@ -158,7 +158,7 @@ const SearchResults = () => {
         />
       ));
       resultsIds = results.statuses;
-    } else if (!submitted && trendingStatuses && !trendingStatuses.isEmpty()) {
+    } else if (!submitted && !filterByAccount && trendingStatuses && !trendingStatuses.isEmpty()) {
       searchResults = trendingStatuses.map((statusId: string) => (
         // @ts-ignore
         <StatusContainer
