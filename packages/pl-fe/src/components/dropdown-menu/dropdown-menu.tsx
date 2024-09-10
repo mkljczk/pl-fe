@@ -46,33 +46,45 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
   const handleKeyDown = useMemo(() => (e: KeyboardEvent) => {
     if (!ref.current) return;
 
-    const items = Array.from(ref.current.querySelectorAll('a, button'));
-    const index = items.indexOf(document.activeElement as any);
+    const elements = Array.from(ref.current.querySelectorAll('a, button'));
+    const index = elements.indexOf(document.activeElement as any);
 
     let element = null;
 
     switch (e.key) {
       case 'ArrowLeft':
-        if (tab !== undefined) setTab(undefined);
+        setTab(tab => {
+          if (tab !== undefined) {
+            (elements[tab] as HTMLElement)?.focus();
+            return undefined;
+          }
+          return tab;
+        });
+        break;
+      case 'ArrowRight':
+        // eslint-disable-next-line no-case-declarations
+        const itemIndex = +(elements[index]?.getAttribute('data-index') || '');
+
+        if (items?.[itemIndex]?.items) setTab(itemIndex);
         break;
       case 'ArrowDown':
-        element = items[index + 1] || items[0];
+        element = elements[index + 1] || elements[0];
         break;
       case 'ArrowUp':
-        element = items[index - 1] || items[items.length - 1];
+        element = elements[index - 1] || elements[elements.length - 1];
         break;
       case 'Tab':
         if (e.shiftKey) {
-          element = items[index - 1] || items[items.length - 1];
+          element = elements[index - 1] || elements[elements.length - 1];
         } else {
-          element = items[index + 1] || items[0];
+          element = elements[index + 1] || elements[0];
         }
         break;
       case 'Home':
-        element = items[0];
+        element = elements[0];
         break;
       case 'End':
-        element = items[items.length - 1];
+        element = elements[elements.length - 1];
         break;
       case 'Escape':
         handleClose();
@@ -144,6 +156,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
                     src={require('@tabler/icons/outline/arrow-left.svg')}
                     iconClassName='h-5 w-5'
                     onClick={handleExitSubmenu}
+                    autoFocus
                   />
                   {items![tab]?.text}
                 </HStack>
