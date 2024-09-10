@@ -36,7 +36,7 @@ const toSimplePolicy = (configs: ImmutableList<Config>): MRFSimple => {
   }
 };
 
-const fromSimplePolicy = (simplePolicy: Policy)=> {
+const fromSimplePolicy = (simplePolicy: Policy) => {
   const mapper = ([key, hosts]: [key: string, hosts: ImmutableList<string>]) => ({ tuple: [`:${key}`, hosts] });
 
   const value = Object.entries(simplePolicy).map(mapper);

@@ -58,8 +58,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
     } else if (typeof item.action === 'function') {
       const action = item.action;
       event.preventDefault();
-      // TODO
-      setTimeout(() => action(event), userTouching.matches ? 10 : 0);
+      action(event);
     }
   };
 

@@ -1,5 +1,3 @@
-import { AppDispatch } from 'pl-fe/store';
-
 import type { ICryptoAddress } from 'pl-fe/features/crypto-donate/components/crypto-address';
 import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
 import type { AccountModerationModalProps } from 'pl-fe/features/ui/components/modals/account-moderation-modal';
@@ -9,6 +7,7 @@ import type { ComponentModalProps } from 'pl-fe/features/ui/components/modals/co
 import type { ComposeModalProps } from 'pl-fe/features/ui/components/modals/compose-modal';
 import type { ConfirmationModalProps } from 'pl-fe/features/ui/components/modals/confirmation-modal';
 import type { DislikesModalProps } from 'pl-fe/features/ui/components/modals/dislikes-modal';
+import type { DropdownMenuModalProps } from 'pl-fe/features/ui/components/modals/dropdown-menu-modal';
 import type { EditAnnouncementModalProps } from 'pl-fe/features/ui/components/modals/edit-announcement-modal';
 import type { EditBookmarkFolderModalProps } from 'pl-fe/features/ui/components/modals/edit-bookmark-folder-modal';
 import type { EditDomainModalProps } from 'pl-fe/features/ui/components/modals/edit-domain-modal';
@@ -46,6 +45,7 @@ type OpenModalProps =
   | [type: 'CONFIRM', props: ConfirmationModalProps]
   | [type: 'CRYPTO_DONATE', props: ICryptoAddress]
   | [type: 'DISLIKES', props: DislikesModalProps]
+  | [type: 'DROPDOWN_MENU', props: DropdownMenuModalProps]
   | [type: 'EDIT_ANNOUNCEMENT', props?: EditAnnouncementModalProps]
   | [type: 'EDIT_BOOKMARK_FOLDER', props: EditBookmarkFolderModalProps]
   | [type: 'EDIT_DOMAIN', props?: EditDomainModalProps]
@@ -72,15 +72,7 @@ type OpenModalProps =
   | [type: 'VIDEO', props: VideoModalProps];
 
 /** Open a modal of the given type */
-const openModal = (...[type, props]: OpenModalProps) => {
-  // const [type, props] = args;
-  return (dispatch: AppDispatch) => {
-    dispatch(closeModal(type));
-    dispatch(openModalSuccess(type, props));
-  };
-};
-
-const openModalSuccess = (type: ModalType, props?: any) => ({
+const openModal = (...[type, props]: OpenModalProps) => ({
   type: MODAL_OPEN,
   modalType: type,
   modalProps: props,
@@ -93,7 +85,7 @@ const closeModal = (type?: ModalType) => ({
 });
 
 type ModalsAction =
-  ReturnType<typeof openModalSuccess>
+  ReturnType<typeof openModal>
   | ReturnType<typeof closeModal>;
 
 export {

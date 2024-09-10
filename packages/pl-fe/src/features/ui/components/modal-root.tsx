@@ -22,6 +22,7 @@ const MODAL_COMPONENTS = {
   CREATE_GROUP: lazy(() => import('pl-fe/features/ui/components/modals/manage-group-modal')),
   CRYPTO_DONATE: lazy(() => import('pl-fe/features/ui/components/modals/crypto-donate-modal')),
   DISLIKES: lazy(() => import('pl-fe/features/ui/components/modals/dislikes-modal')),
+  DROPDOWN_MENU: lazy(() => import('pl-fe/features/ui/components/modals/dropdown-menu-modal')),
   EDIT_ANNOUNCEMENT: lazy(() => import('pl-fe/features/ui/components/modals/edit-announcement-modal')),
   EDIT_BOOKMARK_FOLDER: lazy(() => import('pl-fe/features/ui/components/modals/edit-bookmark-folder-modal')),
   EDIT_DOMAIN: lazy(() => import('pl-fe/features/ui/components/modals/edit-domain-modal')),

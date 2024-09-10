@@ -8,8 +8,7 @@ import { cancelReplyCompose } from 'pl-fe/actions/compose';
 import { saveDraftStatus } from 'pl-fe/actions/draft-statuses';
 import { cancelEventCompose } from 'pl-fe/actions/events';
 import { openModal, closeModal } from 'pl-fe/actions/modals';
-import { useAppDispatch, useAppSelector, usePrevious } from 'pl-fe/hooks';
-import { userTouching } from 'pl-fe/is-mobile';
+import { useAppDispatch, usePrevious } from 'pl-fe/hooks';
 
 import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
 import type { ReducerCompose } from 'pl-fe/reducers/compose';
@@ -50,8 +49,6 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   const dispatch = useAppDispatch();
 
   const [revealed, setRevealed] = useState(!!children);
-  const isDropdownOpen = useAppSelector(state => state.dropdown_menu.isOpen);
-  const wasDropdownOpen = usePrevious(isDropdownOpen);
 
   const ref = useRef<HTMLDivElement>(null);
   const activeElement = useRef<HTMLDivElement | null>(revealed ? document.activeElement as HTMLDivElement | null : null);
@@ -148,9 +145,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   const handleModalOpen = () => {
     modalHistoryKey.current = Date.now();
     unlistenHistory.current = history.listen(({ state }, action) => {
-      if ((state as any)?.plFeDropdownKey) {
-        return;
-      } else if (!(state as any)?.plFeModalKey) {
+      if (!(state as any)?.plFeModalKey) {
         onClose();
       } else if (action === 'POP') {
         handleOnClose();
@@ -220,17 +215,6 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
     }
   }, [children]);
 
-  useEffect(() => {
-    if (!userTouching.matches) return;
-
-    if (isDropdownOpen && unlistenHistory.current) {
-      unlistenHistory.current();
-    } else if (!isDropdownOpen && wasDropdownOpen) {
-      // TODO find a better solution
-      setTimeout(() => handleModalOpen(), 50);
-    }
-  }, [isDropdownOpen]);
-
   if (!visible) {
     return (
       <div className='z-50 transition-all' ref={ref} style={{ opacity: 0 }} />
@@ -248,7 +232,9 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
       <div
         role='presentation'
         id='modal-overlay'
-        className='fixed inset-0 bg-gray-500/90 backdrop-blur black:bg-gray-900/90 dark:bg-gray-700/90'
+        className={clsx('fixed inset-0 bg-gray-500/90 black:bg-gray-900/90 dark:bg-gray-700/90', {
+          'opacity-60': type === 'DROPDOWN_MENU',
+        })}
         onClick={handleOnClose}
       />
 
@@ -257,7 +243,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
         className={clsx({
           'my-2 mx-auto relative pointer-events-none flex items-center min-h-[calc(100%-3.5rem)]': true,
           'p-4 md:p-0': type !== 'MEDIA',
-          '!my-0': type === 'MEDIA',
+          '!my-0': type === 'MEDIA' || type === 'DROPDOWN_MENU',
         })}
       >
         {children}
