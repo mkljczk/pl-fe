@@ -128,7 +128,7 @@ type MinifiedNotification = ReturnType<typeof minifyNotification>;
 // Count how many notifications appear after the given ID (for unread count)
 const countFuture = (notifications: ImmutableOrderedMap<string, MinifiedNotification>, lastId: string | number) =>
   notifications.reduce((acc, notification) => {
-    if (parseId(notification.id) > parseId(lastId)) {
+    if (!notification.duplicate && parseId(notification.id) > parseId(lastId)) {
       return acc + 1;
     } else {
       return acc;
@@ -138,7 +138,7 @@ const countFuture = (notifications: ImmutableOrderedMap<string, MinifiedNotifica
 const importNotification = (state: State, notification: Notification) => {
   const top = state.top;
 
-  if (!top) state = state.update('unread', unread => unread + 1);
+  if (!top && !notification.duplicate) state = state.update('unread', unread => unread + 1);
 
   return state.update('items', map => {
     if (top && map.size > 40) {
