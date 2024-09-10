@@ -6,7 +6,7 @@ import EmojiComponent from 'pl-fe/components/ui/emoji/emoji';
 import HStack from 'pl-fe/components/ui/hstack/hstack';
 import IconButton from 'pl-fe/components/ui/icon-button/icon-button';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/components/emoji-picker-dropdown';
-import { useClickOutside, useFeatures, usePlFeConfig } from 'pl-fe/hooks';
+import { useAppSelector, useClickOutside, useFeatures, usePlFeConfig } from 'pl-fe/hooks';
 
 import type { Emoji } from 'pl-fe/features/emoji';
 
@@ -14,7 +14,7 @@ interface IEmojiButton {
   /** Unicode emoji character. */
   emoji: string;
   /** Event handler when the emoji is clicked. */
-  onClick(emoji: string): void;
+  onClick(emoji: string, custom?: string): void;
   /** Extra class name on the <button> element. */
   className?: string;
   /** Tab order of the button. */
@@ -23,16 +23,21 @@ interface IEmojiButton {
 
 /** Clickable emoji button that scales when hovered. */
 const EmojiButton: React.FC<IEmojiButton> = ({ emoji, className, onClick, tabIndex }): JSX.Element => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const customEmoji = emoji.startsWith(':') ? useAppSelector((state) => {
+    return state.custom_emojis.find(({ shortcode }) => `:${shortcode}:` === emoji);
+  }) : undefined;
+
   const handleClick: React.EventHandler<React.MouseEvent> = (event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    onClick(emoji);
+    onClick(customEmoji ? emoji.replace(/:(\w+):/, '$1') : emoji, customEmoji?.url);
   };
 
   return (
     <button className={clsx(className)} onClick={handleClick} tabIndex={tabIndex}>
-      <EmojiComponent className='h-6 w-6 duration-100 hover:scale-110' emoji={emoji} />
+      <EmojiComponent className='h-6 w-6 duration-100 hover:scale-110' emoji={emoji} src={customEmoji?.url} />
     </button>
   );
 };
@@ -122,9 +127,9 @@ const EmojiSelector: React.FC<IEmojiSelector> = ({
         <HStack
           className={clsx('z-[999] flex w-max max-w-[100vw] flex-wrap space-x-3 rounded-full bg-white px-3 py-2.5 shadow-lg focus:outline-none dark:bg-gray-900 dark:ring-2 dark:ring-primary-700')}
         >
-          {Array.from(plFeConfig.allowedEmoji).map((emoji, i) => (
+          {Array.from(plFeConfig.allowedEmoji).map((emoji) => (
             <EmojiButton
-              key={i}
+              key={emoji}
               emoji={emoji.replace(/^\\/, '')}
               onClick={onReact}
               tabIndex={visible ? 0 : -1}
