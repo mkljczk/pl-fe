@@ -1896,8 +1896,8 @@ class PlApiClient {
      * Reshare a status on your own profile.
      * @see {@link https://docs.joinmastodon.org/methods/statuses/#reblog}
      */
-    reblogStatus: async (statusId: string) => {
-      const response = await this.request(`/api/v1/statuses/${statusId}/reblog`, { method: 'POST' });
+    reblogStatus: async (statusId: string, visibility?: string) => {
+      const response = await this.request(`/api/v1/statuses/${statusId}/reblog`, { method: 'POST', body: { visibility } });
 
       return statusSchema.parse(response.json);
     },

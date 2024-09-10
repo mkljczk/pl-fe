@@ -86,17 +86,16 @@ const AKKOMA = 'akkoma';
 const GLITCH = 'glitch';
 
 /**
- * Rebased, the recommended backend for Soapbox.
- * @see {@link https://gitlab.com/soapbox-pub/rebased}
- */
-// NOTE: Rebased is named 'soapbox' for legacy reasons.
-const REBASED = 'soapbox';
-
-/**
  * Pl, fork of Pleroma developed by pl-api author.
  * @see {@link https://github.com/mkljczk/pl}
  */
 const PL = 'pl';
+
+/**
+ * Rebased, fork of Pleroma developed by Soapbox author.
+ * @see {@link https://gitlab.com/soapbox-pub/rebased}
+ */
+const REBASED = 'soapbox';
 
 /** Backend name reserved only for tests. */
 const UNRELEASED = 'unreleased';
@@ -946,6 +945,15 @@ const getFeatures = (instance?: Instance) => {
       v.software === PLEROMA && [REBASED, AKKOMA].includes(v.build!) && gte(v.version, '2.5.0'),
       features.includes('quote_posting'),
       instance?.feature_quote === true,
+    ]),
+
+    /**
+     * Ability to boost a status to a selected scope.
+     * @see POST /api/v1/statuses/:id/reblog
+     */
+    reblogVisibility: any([
+      v.software === MASTODON,
+      v.software === PLEROMA,
     ]),
 
     /**
