@@ -125,7 +125,7 @@ const EmojiSelector: React.FC<IEmojiSelector> = ({
           {Array.from(plFeConfig.allowedEmoji).map((emoji, i) => (
             <EmojiButton
               key={i}
-              emoji={emoji}
+              emoji={emoji.replace(/^\\/, '')}
               onClick={onReact}
               tabIndex={visible ? 0 : -1}
             />
