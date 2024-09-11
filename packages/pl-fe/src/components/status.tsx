@@ -21,6 +21,7 @@ import StatusActionBar from './status-action-bar';
 import StatusContent from './status-content';
 import StatusLanguagePicker from './status-language-picker';
 import StatusMedia from './status-media';
+import StatusReactionsBar from './status-reactions-bar';
 import StatusReplyMentions from './status-reply-mentions';
 import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 import StatusInfo from './statuses/status-info';
@@ -174,15 +175,10 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   const handleHotkeyReact = (): void => {
-    _expandEmojiSelector();
+    (node.current?.querySelector('.emoji-picker-dropdown') as HTMLButtonElement)?.click();
   };
 
   const handleUnfilter = () => dispatch(unfilterStatus(status.filtered.length ? status.id : actualStatus.id));
-
-  const _expandEmojiSelector = (): void => {
-    const firstEmoji: HTMLDivElement | null | undefined = node.current?.querySelector('.emoji-react-selector .emoji-react-selector__emoji');
-    firstEmoji?.focus();
-  };
 
   const renderStatusInfo = () => {
     if (isReblog && showGroup && group) {
@@ -452,8 +448,15 @@ const Status: React.FC<IStatus> = (props) => {
               )}
             </Stack>
 
+            <StatusReactionsBar status={actualStatus} collapsed />
+
             {!hideActionBar && (
-              <div className='pt-4'>
+              <div
+                className={clsx({
+                  'pt-2': actualStatus.emoji_reactions.length,
+                  'pt-4': !actualStatus.emoji_reactions.length,
+                })}
+              >
                 <StatusActionBar status={actualStatus} rebloggedBy={isReblog ? status.account : undefined} fromBookmarks={fromBookmarks} />
               </div>
             )}

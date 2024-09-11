@@ -86,14 +86,6 @@ const PlFeConfigRecord = ImmutableRecord({
   navlinks: ImmutableMap({
     homeFooter: ImmutableList<FooterItem>(),
   }),
-  allowedEmoji: ImmutableList<string>([
-    '👍',
-    '❤️',
-    '😆',
-    '😮',
-    '😢',
-    '😩',
-  ]),
   verifiedIcon: '',
   displayFqn: true,
   cryptoAddresses: ImmutableList<CryptoAddress>(),

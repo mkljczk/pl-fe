@@ -5,6 +5,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import { blockAccount } from 'pl-fe/actions/accounts';
 import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'pl-fe/actions/compose';
+import { emojiReact } from 'pl-fe/actions/emoji-reacts';
 import { editEvent } from 'pl-fe/actions/events';
 import { toggleBookmark, toggleDislike, toggleFavourite, togglePin, toggleReblog } from 'pl-fe/actions/interactions';
 import { openModal } from 'pl-fe/actions/modals';
@@ -18,18 +19,18 @@ import { useBlockGroupMember, useGroup, useGroupRelationship, useTranslationLang
 import { useDeleteGroupStatus } from 'pl-fe/api/hooks/groups/useDeleteGroupStatus';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import StatusActionButton from 'pl-fe/components/status-action-button';
-import StatusReactionWrapper from 'pl-fe/components/status-reaction-wrapper';
 import { HStack } from 'pl-fe/components/ui';
+import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import { languages } from 'pl-fe/features/preferences';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance, useOwnAccount, useSettings } from 'pl-fe/hooks';
 import { useChats } from 'pl-fe/queries/chats';
 import toast from 'pl-fe/toast';
 import copy from 'pl-fe/utils/copy';
-import { getReactForStatus, reduceEmoji } from 'pl-fe/utils/emoji-reacts';
 
 import GroupPopover from './groups/popover/group-popover';
 
 import type { Menu } from 'pl-fe/components/dropdown-menu';
+import type { Emoji as EmojiType } from 'pl-fe/features/emoji';
 import type { UnauthorizedModalAction } from 'pl-fe/features/ui/components/modals/unauthorized-modal';
 import type { Account, Group } from 'pl-fe/normalizers';
 import type { SelectedStatus } from 'pl-fe/selectors';
@@ -77,12 +78,6 @@ const messages = defineMessages({
   open: { id: 'status.open', defaultMessage: 'Show post details' },
   pin: { id: 'status.pin', defaultMessage: 'Pin on profile' },
   quotePost: { id: 'status.quote', defaultMessage: 'Quote post' },
-  reactionCry: { id: 'status.reactions.cry', defaultMessage: 'Sad' },
-  reactionHeart: { id: 'status.reactions.heart', defaultMessage: 'Love' },
-  reactionLaughing: { id: 'status.reactions.laughing', defaultMessage: 'Haha' },
-  reactionLike: { id: 'status.reactions.like', defaultMessage: 'Like' },
-  reactionOpenMouth: { id: 'status.reactions.open_mouth', defaultMessage: 'Wow' },
-  reactionWeary: { id: 'status.reactions.weary', defaultMessage: 'Weary' },
   reblog: { id: 'status.reblog', defaultMessage: 'Repost' },
   reblog_private: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
   redraft: { id: 'status.redraft', defaultMessage: 'Delete & re-draft' },
@@ -99,6 +94,7 @@ const messages = defineMessages({
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
   unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
+  viewReactions: { id: 'status.view_reactions', defaultMessage: 'View reactions' },
   addKnownLanguage: { id: 'status.add_known_language', defaultMessage: 'Do not auto-translate posts in {language}.' },
   translate: { id: 'status.translate', defaultMessage: 'Translate' },
   hideTranslation: { id: 'status.hide_translation', defaultMessage: 'Hide translation' },
@@ -199,6 +195,10 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     } else {
       onOpenUnauthorizedModal('DISLIKE');
     }
+  };
+
+  const handlePickEmoji = (emoji: EmojiType) => {
+    dispatch(emojiReact(status, emoji.custom ? emoji.id : emoji.native, emoji.custom ? emoji.imageUrl : undefined));
   };
 
   const handleBookmarkClick: React.EventHandler<React.MouseEvent> = (e) => {
@@ -307,6 +307,10 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     }));
   };
 
+  const handleOpenReactionsModal = (): void => {
+    dispatch(openModal('REACTIONS', { statusId: status.id }));
+  };
+
   const handleReport: React.EventHandler<React.MouseEvent> = (e) => {
     dispatch(initReport(ReportableEntities.STATUS, status.account, { status }));
   };
@@ -408,6 +412,14 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
           icon: require('@tabler/icons/outline/share.svg'),
         });
       }
+    }
+
+    if (status.emoji_reactions.length && features.exposableReactions) {
+      menu.push({
+        text: intl.formatMessage(messages.viewReactions),
+        action: handleOpenReactionsModal,
+        icon: require('@tabler/icons/outline/mood-happy.svg'),
+      });
     }
 
     if (!me) {
@@ -625,27 +637,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const quoteCount = status.quotes_count;
   const favouriteCount = status.favourites_count;
 
-  const emojiReactCount = status.emoji_reactions ? reduceEmoji(
-    status.emoji_reactions,
-    favouriteCount,
-    status.favourited,
-  ).reduce((acc, cur) => acc + (cur.count || 0), 0) : undefined;
-
-  const meEmojiReact = getReactForStatus(status);
-  const meEmojiName = meEmojiReact?.name as keyof typeof reactMessages | undefined;
-
-  const reactMessages = {
-    '👍': messages.reactionLike,
-    '❤️': messages.reactionHeart,
-    '😆': messages.reactionLaughing,
-    '😮': messages.reactionOpenMouth,
-    '😢': messages.reactionCry,
-    '😩': messages.reactionWeary,
-    '': messages.favourite,
-  };
-
-  const meEmojiTitle = intl.formatMessage(reactMessages[meEmojiName || ''] || messages.favourite);
-
   const menu = _makeMenu(publicStatus);
   let reblogIcon = require('@tabler/icons/outline/repeat.svg');
   let replyTitle;
@@ -738,33 +729,17 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
           reblogButton
         )}
 
-        {features.emojiReacts ? (
-          <StatusReactionWrapper statusId={status.id}>
-            <StatusActionButton
-              title={meEmojiTitle}
-              icon={require('@tabler/icons/outline/heart.svg')}
-              filled
-              color='accent'
-              active={Boolean(meEmojiName)}
-              count={emojiReactCount}
-              emoji={meEmojiReact}
-              text={withLabels ? meEmojiTitle : undefined}
-              theme={statusActionButtonTheme}
-            />
-          </StatusReactionWrapper>
-        ) : (
-          <StatusActionButton
-            title={intl.formatMessage(messages.favourite)}
-            icon={features.statusDislikes ? require('@tabler/icons/outline/thumb-up.svg') : require('@tabler/icons/outline/heart.svg')}
-            color='accent'
-            filled
-            onClick={handleFavouriteClick}
-            active={status.favourited}
-            count={favouriteCount}
-            text={withLabels ? intl.formatMessage(status.favourited ? messages.reactionLike : messages.favourite) : undefined}
-            theme={statusActionButtonTheme}
-          />
-        )}
+        <StatusActionButton
+          title={intl.formatMessage(messages.favourite)}
+          icon={features.statusDislikes ? require('@tabler/icons/outline/thumb-up.svg') : require('@tabler/icons/outline/heart.svg')}
+          color='accent'
+          filled
+          onClick={handleFavouriteClick}
+          active={status.favourited}
+          count={favouriteCount}
+          text={withLabels ? intl.formatMessage(messages.favourite) : undefined}
+          theme={statusActionButtonTheme}
+        />
 
         {features.statusDislikes && (
           <StatusActionButton
@@ -778,6 +753,10 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
             text={withLabels ? intl.formatMessage(messages.disfavourite) : undefined}
             theme={statusActionButtonTheme}
           />
+        )}
+
+        {expandable && (features.emojiReacts || features.emojiReactsMastodon) && (
+          <EmojiPickerDropdown onPickEmoji={handlePickEmoji} />
         )}
 
         {canShare && (

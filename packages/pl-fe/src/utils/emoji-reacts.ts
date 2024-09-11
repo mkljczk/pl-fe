@@ -1,55 +1,7 @@
-import { List as ImmutableList } from 'immutable';
 import { emojiReactionSchema, type EmojiReaction } from 'pl-api';
-
-import type { Status } from 'pl-fe/normalizers';
-
-// https://emojipedia.org/facebook
-// I've customized them.
-const ALLOWED_EMOJI = ImmutableList([
-  '👍',
-  '❤️',
-  '😆',
-  '😮',
-  '😢',
-  '😩',
-]);
 
 const sortEmoji = (emojiReacts: Array<EmojiReaction>): Array<EmojiReaction> =>
   emojiReacts.toSorted(emojiReact => -(emojiReact.count || 0));
-
-const mergeEmojiFavourites = (emojiReacts: Array<EmojiReaction> | null, favouritesCount: number, favourited: boolean) => {
-  if (!emojiReacts) return [emojiReactionSchema.parse({ count: favouritesCount, me: favourited, name: '👍' })];
-  if (!favouritesCount) return emojiReacts;
-  const likeIndex = emojiReacts.findIndex(emojiReact => emojiReact.name === '👍');
-  if (likeIndex > -1) {
-    const likeCount = Number(emojiReacts[likeIndex].count);
-    favourited = favourited || Boolean(emojiReacts[likeIndex].me || false);
-    return emojiReacts.map((reaction, index) => index === likeIndex ? {
-      ...reaction,
-      count: likeCount + favouritesCount,
-      me: favourited,
-    } : reaction);
-  } else {
-    return [...emojiReacts, emojiReactionSchema.parse({ count: favouritesCount, me: favourited, name: '👍' })];
-  }
-};
-
-const reduceEmoji = (emojiReacts: Array<EmojiReaction> | null, favouritesCount: number, favourited: boolean): Array<EmojiReaction> => (
-  sortEmoji(mergeEmojiFavourites(emojiReacts, favouritesCount, favourited)));
-
-const getReactForStatus = (
-  status: Pick<Status, 'emoji_reactions' | 'favourited' | 'favourites_count'>,
-): EmojiReaction | undefined => {
-  if (!status.emoji_reactions) return;
-
-  const result = reduceEmoji(
-    status.emoji_reactions,
-    status.favourites_count || 0,
-    status.favourited,
-  ).filter(e => e.me === true)[0];
-
-  return typeof result?.name === 'string' ? result : undefined;
-};
 
 const simulateEmojiReact = (emojiReacts: Array<EmojiReaction>, emoji: string, url?: string) => {
   const idx = emojiReacts.findIndex(e => e.name === emoji);
@@ -92,11 +44,7 @@ const simulateUnEmojiReact = (emojiReacts: Array<EmojiReaction>, emoji: string) 
 };
 
 export {
-  ALLOWED_EMOJI,
   sortEmoji,
-  mergeEmojiFavourites,
-  reduceEmoji,
-  getReactForStatus,
   simulateEmojiReact,
   simulateUnEmojiReact,
 };

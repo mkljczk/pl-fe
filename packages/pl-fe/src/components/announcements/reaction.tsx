@@ -39,7 +39,7 @@ const Reaction: React.FC<IReaction> = ({ announcementId, reaction, emojiMap, sty
   // @ts-ignore
   if (unicodeMapping[shortCode]) {
     // @ts-ignore
-    shortCode = unicodeMapping[shortCode].shortCode;
+    shortCode = unicodeMapping[shortCode].shortcode;
   }
 
   return (

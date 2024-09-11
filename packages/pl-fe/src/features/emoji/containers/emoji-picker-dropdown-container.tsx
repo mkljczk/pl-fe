@@ -1,5 +1,4 @@
 import { useFloating, shift, flip } from '@floating-ui/react';
-import clsx from 'clsx';
 import React, { KeyboardEvent, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -13,7 +12,7 @@ const messages = defineMessages({
 });
 
 const EmojiPickerDropdownContainer = (
-  props: Pick<IEmojiPickerDropdown, 'onPickEmoji' | 'condensed' | 'withCustom'>,
+  { children, ...props }: Pick<IEmojiPickerDropdown, 'onPickEmoji' | 'condensed' | 'withCustom'> & { children?: JSX.Element },
 ) => {
   const intl = useIntl();
   const title = intl.formatMessage(messages.emoji);
@@ -27,27 +26,41 @@ const EmojiPickerDropdownContainer = (
     setVisible(false);
   });
 
-  const handleToggle = (e: MouseEvent | KeyboardEvent) => {
+  const handleClick = (e: MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     setVisible(!visible);
+  };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (['Enter', ' '].includes(e.key)) {
+      e.stopPropagation();
+      e.preventDefault();
+      setVisible(!visible);
+    }
   };
 
   return (
     <div className='relative'>
-      <IconButton
-        className={clsx({
-          'text-gray-600 hover:text-gray-700 dark:hover:text-gray-500': true,
-        })}
-        ref={refs.setReference}
-        src={require('@tabler/icons/outline/mood-happy.svg')}
-        title={title}
-        aria-label={title}
-        aria-expanded={visible}
-        role='button'
-        onClick={handleToggle as any}
-        onKeyDown={handleToggle as React.KeyboardEventHandler<HTMLButtonElement>}
-        tabIndex={0}
-      />
+      {children ? (
+        React.cloneElement(children, {
+          onClick: handleClick,
+          onKeyDown: handleKeyDown,
+          ref: refs.setReference,
+        })
+      ) : (
+        <IconButton
+          className='emoji-picker-dropdown text-gray-600 hover:text-gray-700 dark:hover:text-gray-500'
+          ref={refs.setReference}
+          src={require('@tabler/icons/outline/mood-happy.svg')}
+          title={title}
+          aria-label={title}
+          aria-expanded={visible}
+          role='button'
+          onClick={handleClick as any}
+          onKeyDown={handleKeyDown as React.KeyboardEventHandler<HTMLButtonElement>}
+          tabIndex={0}
+        />)}
 
       <Portal>
         <div

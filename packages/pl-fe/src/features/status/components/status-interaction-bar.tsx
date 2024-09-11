@@ -4,14 +4,13 @@ import { Link } from 'react-router-dom';
 
 import { openModal } from 'pl-fe/actions/modals';
 import AnimatedNumber from 'pl-fe/components/animated-number';
-import { HStack, Text, Emoji } from 'pl-fe/components/ui';
+import { HStack, Text } from 'pl-fe/components/ui';
 import { useAppSelector, useFeatures, useAppDispatch } from 'pl-fe/hooks';
-import { reduceEmoji } from 'pl-fe/utils/emoji-reacts';
 
 import type { Status } from 'pl-fe/normalizers';
 
 interface IStatusInteractionBar {
-  status: Pick<Status, 'id' | 'account' | 'dislikes_count' | 'emoji_reactions' | 'favourited' | 'favourites_count' | 'reblogs_count' | 'quotes_count'>;
+  status: Pick<Status, 'id' | 'account' | 'dislikes_count' | 'favourited' | 'favourites_count' | 'reblogs_count' | 'quotes_count'>;
 }
 
 const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.Element | null => {
@@ -37,16 +36,6 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
   const onOpenDislikesModal = (username: string, statusId: string): void => {
     dispatch(openModal('DISLIKES', { statusId }));
   };
-
-  const onOpenReactionsModal = (username: string, statusId: string): void => {
-    dispatch(openModal('REACTIONS', { statusId }));
-  };
-
-  const getNormalizedReacts = () => reduceEmoji(
-    status.emoji_reactions,
-    status.favourites_count,
-    status.favourited,
-  );
 
   const handleOpenReblogsModal: React.EventHandler<React.MouseEvent> = (e) => {
     e.preventDefault();
@@ -135,49 +124,11 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
     return null;
   };
 
-  const handleOpenReactionsModal = () => {
-    if (!me) {
-      return onOpenUnauthorizedModal();
-    }
-
-    onOpenReactionsModal(account.acct, status.id);
-  };
-
-  const getEmojiReacts = () => {
-    const emojiReacts = getNormalizedReacts();
-    const count = emojiReacts.reduce((acc, cur) => (
-      acc + (cur.count || 0)
-    ), 0);
-
-    const handleClick = features.emojiReacts ? handleOpenReactionsModal : handleOpenFavouritesModal;
-
-    if (count) {
-      return (
-        <InteractionCounter count={count} onClick={features.exposableReactions ? handleClick : undefined}>
-          <HStack space={0.5} alignItems='center'>
-            {emojiReacts.slice(0, 3).map((e, i) => {
-              return (
-                <Emoji
-                  key={i}
-                  className='h-4.5 w-4.5 flex-none'
-                  emoji={e.name}
-                  src={e.url}
-                />
-              );
-            })}
-          </HStack>
-        </InteractionCounter>
-      );
-    }
-
-    return null;
-  };
-
   return (
     <HStack space={3}>
       {getReposts()}
       {getQuotes()}
-      {(features.emojiReacts || features.emojiReactsMastodon) ? getEmojiReacts() : getFavourites()}
+      {getFavourites()}
       {getDislikes()}
     </HStack>
   );
@@ -203,7 +154,6 @@ const InteractionCounter: React.FC<IInteractionCounter> = ({ count, children, on
     <HStack space={1} alignItems='center'>
       <Text weight='bold'>
         <AnimatedNumber value={count} short />
-        {/* {shortNumberFormat(count)} */}
       </Text>
 
       <Text tag='div' theme='muted'>

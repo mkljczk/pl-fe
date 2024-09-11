@@ -18,7 +18,6 @@ export { default as Counter } from './counter/counter';
 export { default as Datepicker } from './datepicker/datepicker';
 export { default as Divider } from './divider/divider';
 export { default as Emoji } from './emoji/emoji';
-export { default as EmojiSelector } from './emoji-selector/emoji-selector';
 export { default as FileInput } from './file-input/file-input';
 export { default as Form } from './form/form';
 export { default as FormActions } from './form-actions/form-actions';

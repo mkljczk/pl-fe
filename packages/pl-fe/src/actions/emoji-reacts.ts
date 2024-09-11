@@ -3,9 +3,8 @@ import { isLoggedIn } from 'pl-fe/utils/auth';
 import { getClient } from '../api';
 
 import { importFetchedStatus } from './importer';
-import { favourite, unfavourite } from './interactions';
 
-import type { EmojiReaction, Status } from 'pl-api';
+import type { Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const EMOJI_REACT_REQUEST = 'EMOJI_REACT_REQUEST' as const;
@@ -17,31 +16,6 @@ const UNEMOJI_REACT_SUCCESS = 'UNEMOJI_REACT_SUCCESS' as const;
 const UNEMOJI_REACT_FAIL = 'UNEMOJI_REACT_FAIL' as const;
 
 const noOp = () => () => new Promise(f => f(undefined));
-
-const simpleEmojiReact = (status: Pick<Status, 'id' | 'emoji_reactions' | 'favourited'>, emoji: string, custom?: string) =>
-  (dispatch: AppDispatch) => {
-    const emojiReacts: Array<EmojiReaction> = status.emoji_reactions || [];
-
-    if (emoji === '👍' && status.favourited) return dispatch(unfavourite(status));
-
-    const undo = emojiReacts.filter(e => e.me === true && e.name === emoji).length > 0;
-    if (undo) return dispatch(unEmojiReact(status, emoji));
-
-    return Promise.all([
-      ...emojiReacts
-        .filter((emojiReact) => emojiReact.me === true)
-        .map(emojiReact => dispatch(unEmojiReact(status, emojiReact.name))),
-      status.favourited && dispatch(unfavourite(status)),
-    ]).then(() => {
-      if (emoji === '👍') {
-        dispatch(favourite(status));
-      } else {
-        dispatch(emojiReact(status, emoji, custom));
-      }
-    }).catch(err => {
-      console.error(err);
-    });
-  };
 
 const emojiReact = (status: Pick<Status, 'id'>, emoji: string, custom?: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -119,7 +93,6 @@ export {
   UNEMOJI_REACT_REQUEST,
   UNEMOJI_REACT_SUCCESS,
   UNEMOJI_REACT_FAIL,
-  simpleEmojiReact,
   emojiReact,
   unEmojiReact,
   emojiReactRequest,

@@ -120,8 +120,7 @@ const Thread: React.FC<IThread> = ({
 
   const handleHotkeyReact = () => {
     if (statusRef.current) {
-      const firstEmoji: HTMLButtonElement | null = statusRef.current.querySelector('.emoji-react-selector .emoji-react-selector__emoji');
-      firstEmoji?.focus();
+      (node.current?.querySelector('.emoji-picker-dropdown') as HTMLButtonElement)?.click();
     }
   };
 

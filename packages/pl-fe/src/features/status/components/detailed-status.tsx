@@ -6,6 +6,7 @@ import Account from 'pl-fe/components/account';
 import StatusContent from 'pl-fe/components/status-content';
 import StatusLanguagePicker from 'pl-fe/components/status-language-picker';
 import StatusMedia from 'pl-fe/components/status-media';
+import StatusReactionsBar from 'pl-fe/components/status-reactions-bar';
 import StatusReplyMentions from 'pl-fe/components/status-reply-mentions';
 import SensitiveContentOverlay from 'pl-fe/components/statuses/sensitive-content-overlay';
 import StatusInfo from 'pl-fe/components/statuses/status-info';
@@ -132,6 +133,8 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
             )}
           </Stack>
         </Stack>
+
+        <StatusReactionsBar status={actualStatus} />
 
         <HStack justifyContent='between' alignItems='center' className='py-3' wrap>
           <StatusInteractionBar status={actualStatus} />

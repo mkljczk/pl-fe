@@ -3,12 +3,11 @@ import { List as ImmutableList } from 'immutable';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { fetchFavourites, fetchReactions } from 'pl-fe/actions/interactions';
+import { fetchReactions } from 'pl-fe/actions/interactions';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Emoji, Modal, Spinner, Tabs } from 'pl-fe/components/ui';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
-import { ReactionRecord } from 'pl-fe/reducers/user-lists';
 
 import type { BaseModalProps } from '../modal-root';
 import type { Item } from 'pl-fe/components/ui/tabs/tabs';
@@ -32,16 +31,7 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const [reaction, setReaction] = useState(initialReaction);
-  const reactions = useAppSelector<ImmutableList<ReturnType<typeof ReactionRecord>> | undefined>((state) => {
-    const favourites = state.user_lists.favourited_by.get(statusId)?.items;
-    const reactions = state.user_lists.reactions.get(statusId)?.items;
-    return favourites && reactions && ImmutableList(favourites?.size ? [ReactionRecord({ accounts: favourites, count: favourites.size, name: '👍' })] : []).concat(reactions || []);
-  });
-
-  const fetchData = () => {
-    dispatch(fetchFavourites(statusId));
-    dispatch(fetchReactions(statusId));
-  };
+  const reactions = useAppSelector((state) => state.user_lists.reactions.get(statusId)?.items);
 
   const onClickClose = () => {
     onClose('REACTIONS');
@@ -83,7 +73,7 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
   }, [reactions, reaction]);
 
   useEffect(() => {
-    fetchData();
+    dispatch(fetchReactions(statusId));
   }, []);
 
   let body;
