@@ -11,6 +11,7 @@ import { createHtmlPlugin } from 'vite-plugin-html';
 import { VitePWA } from 'vite-plugin-pwa';
 import vitePluginRequire from 'vite-plugin-require';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import { manualChunksPlugin } from 'vite-plugin-webpackchunkname';
 
 const config = defineConfig(({ command }) => ({
   build: {
@@ -30,6 +31,7 @@ const config = defineConfig(({ command }) => ({
     port: Number(process.env.PORT ?? 3036),
   },
   plugins: [
+    manualChunksPlugin(),
     checker({ typescript: true }),
     // @ts-ignore
     vitePluginRequire.default(),
