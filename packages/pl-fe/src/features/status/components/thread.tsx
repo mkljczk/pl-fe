@@ -299,7 +299,15 @@ const Thread: React.FC<IThread> = ({
       offset: -146,
     });
 
-    setTimeout(() => statusRef.current?.querySelector<HTMLDivElement>('.detailed-actualStatus')?.focus(), 0);
+    // TODO: Actually fix this
+    setTimeout(() => {
+      scroller.current?.scrollToIndex({
+        index: ancestorsIds.size,
+        offset: -146,
+      });
+
+      setTimeout(() => statusRef.current?.querySelector<HTMLDivElement>('.detailed-actualStatus')?.focus(), 0);
+    }, 0);
   }, [status.id, ancestorsIds.size]);
 
   const handleOpenCompareHistoryModal = (status: Pick<Status, 'id'>) => {
