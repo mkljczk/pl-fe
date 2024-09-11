@@ -52,7 +52,7 @@ const EmojiPickerDropdownContainer = (
         <IconButton
           className='emoji-picker-dropdown text-gray-600 hover:text-gray-700 dark:hover:text-gray-500'
           ref={refs.setReference}
-          src={require('@tabler/icons/outline/mood-happy.svg')}
+          src={require('@tabler/icons/outline/mood-smile.svg')}
           title={title}
           aria-label={title}
           aria-expanded={visible}
