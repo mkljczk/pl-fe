@@ -1,8 +1,5 @@
 import { emojiReactionSchema, type EmojiReaction } from 'pl-api';
 
-const sortEmoji = (emojiReacts: Array<EmojiReaction>): Array<EmojiReaction> =>
-  emojiReacts.toSorted(emojiReact => -(emojiReact.count || 0));
-
 const simulateEmojiReact = (emojiReacts: Array<EmojiReaction>, emoji: string, url?: string) => {
   const idx = emojiReacts.findIndex(e => e.name === emoji);
   const emojiReact = emojiReacts[idx];
@@ -44,7 +41,6 @@ const simulateUnEmojiReact = (emojiReacts: Array<EmojiReaction>, emoji: string) 
 };
 
 export {
-  sortEmoji,
   simulateEmojiReact,
   simulateUnEmojiReact,
 };

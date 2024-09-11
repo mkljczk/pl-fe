@@ -7,7 +7,6 @@ import { emojiReact, unEmojiReact } from 'pl-fe/actions/emoji-reacts';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import unicodeMapping from 'pl-fe/features/emoji/mapping';
 import { useAppDispatch, useSettings } from 'pl-fe/hooks';
-import { sortEmoji } from 'pl-fe/utils/emoji-reacts';
 
 import AnimatedNumber from './animated-number';
 import { Emoji, HStack, Icon, Text } from './ui';
@@ -43,7 +42,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
     if (reaction.me) {
       dispatch(unEmojiReact(status, reaction.name));
     } else {
-      dispatch(emojiReact(status, reaction.name));
+      dispatch(emojiReact(status, reaction.name, reaction.url));
     }
   };
 
@@ -88,7 +87,7 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
 
   if ((demetricator || status.emoji_reactions.length === 0) && collapsed) return null;
 
-  const sortedReactions = sortEmoji(status.emoji_reactions);
+  const sortedReactions = status.emoji_reactions.toSorted((a, b) => (b.count || 0) - (a.count || 0));
 
   return (
     <HStack className='pt-2' space={2} wrap>
