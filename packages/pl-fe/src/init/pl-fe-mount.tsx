@@ -17,9 +17,9 @@ import {
 } from 'pl-fe/hooks';
 import { useCachedLocationHandler } from 'pl-fe/utils/redirect';
 
-const GdprBanner = React.lazy(() => import(/* webpackChunkName: "ui" */ 'pl-fe/components/gdpr-banner'));
-const EmbeddedStatus = React.lazy(() => import(/* webpackChunkName: "statuses" */ 'pl-fe/features/embedded-status'));
-const UI = React.lazy(() => import(/* webpackChunkName: "ui" */ 'pl-fe/features/ui'));
+const GdprBanner = React.lazy(() => import('pl-fe/components/gdpr-banner'));
+const EmbeddedStatus = React.lazy(() => import('pl-fe/features/embedded-status'));
+const UI = React.lazy(() => import('pl-fe/features/ui'));
 
 /** Highest level node with the Redux store. */
 const PlFeMount = () => {
