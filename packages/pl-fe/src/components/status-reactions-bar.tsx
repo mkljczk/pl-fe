@@ -57,8 +57,8 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
   return (
     <button
       className={clsx('flex cursor-pointer items-center gap-2 rounded-md border border-gray-400 p-1.5 transition-colors', {
-        'bg-primary-100 dark:border-primary-400 dark:bg-primary-400 hover:bg-primary-200 hover:dark:border-primary-300 hover:dark:bg-primary-300': reaction.me,
-        'bg-transparent dark:border-primary-700 dark:bg-primary-700 hover:bg-primary-100 hover:dark:border-primary-600 hover:dark:bg-primary-600': !reaction.me,
+        'bg-primary-100 dark:border-primary-400 dark:bg-primary-400 black:border-primary-600 black:bg-primary-600 hover:bg-primary-200 hover:dark:border-primary-300 hover:dark:bg-primary-300 hover:black:bg-primary-500': reaction.me,
+        'bg-transparent dark:border-primary-700 dark:bg-primary-700 black:border-primary-800 black:bg-primary-800 hover:bg-primary-100 hover:dark:border-primary-600 hover:dark:bg-primary-600 hover:black:bg-primary-700': !reaction.me,
       })}
       key={reaction.name}
       onClick={handleClick}
@@ -96,7 +96,7 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
       ) : null)}
       <EmojiPickerDropdown onPickEmoji={handlePickEmoji}>
         <button
-          className='emoji-picker-dropdown cursor-pointer rounded-md border border-gray-400 bg-transparent p-1.5 transition-colors hover:bg-gray-50 dark:border-primary-700 dark:bg-primary-700 hover:dark:border-primary-600 hover:dark:bg-primary-600'
+          className='emoji-picker-dropdown cursor-pointer rounded-md border border-gray-400 bg-transparent p-1.5 transition-colors hover:bg-gray-50 black:border-primary-800 black:bg-primary-800 hover:black:bg-primary-700 dark:border-primary-700 dark:bg-primary-700 hover:dark:border-primary-600 hover:dark:bg-primary-600'
           title={intl.formatMessage(messages.addEmoji)}
         >
           <Icon
