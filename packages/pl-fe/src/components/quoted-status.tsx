@@ -76,7 +76,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
     <OutlineBox
       data-testid='quoted-status'
       className={clsx('cursor-pointer', {
-        'hover:bg-gray-100 dark:hover:bg-gray-800': !compose,
+        'group hover:bg-gray-100 dark:hover:bg-gray-800': !compose,
       })}
     >
       <Stack

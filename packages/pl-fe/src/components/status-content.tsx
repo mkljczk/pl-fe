@@ -26,14 +26,16 @@ const BIG_EMOJI_LIMIT = 10;
 interface IReadMoreButton {
   onClick: React.MouseEventHandler;
   quote?: boolean;
+  poll?: boolean;
 }
 
 /** Button to expand a truncated status (due to too much content) */
-const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, quote }) => (
+const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, quote, poll }) => (
   <div className='relative -mt-4'>
     <div
       className={clsx('absolute -top-16 h-16 w-full bg-gradient-to-b from-transparent to-white black:to-black dark:to-primary-900', {
-        'hover:to-gray-100 black:hover-to-gray-800 dark:hover:to-gray-800': quote,
+        'group-hover:to-gray-100 black:group-hover:to-gray-800 dark:group-hover:to-gray-800': quote,
+        'to-gray-100 dark:to-primary-800': poll,
       })}
     />
     <button className='flex items-center border-0 bg-transparent p-0 pt-2 text-gray-900 hover:underline active:underline dark:text-gray-300' onClick={onClick}>
@@ -236,14 +238,13 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
       </Markup>,
     );
 
+    const hasPoll = !!status.poll_id;
+
     if (collapsed) {
-      output.push(<ReadMoreButton onClick={onClick} key='read-more' quote={quote} />);
+      output.push(<ReadMoreButton onClick={onClick} key='read-more' quote={quote} poll={hasPoll} />);
     }
 
-    let hasPoll = false;
-
     if (status.poll_id) {
-      hasPoll = true;
       output.push(<Poll id={status.poll_id} key='poll' status={status} />);
     }
 
