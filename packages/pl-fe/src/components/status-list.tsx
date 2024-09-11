@@ -92,12 +92,16 @@ const StatusList: React.FC<IStatusList> = ({
   }, 300, { leading: true }), [onLoadMore, lastStatusId, statusIds.last()]);
 
   const selectChild = (index: number) => {
+    const selector = `#status-list [data-index="${index}"] .focusable`;
+    const element = document.querySelector<HTMLDivElement>(selector);
+
+    if (element) element.focus();
+
     node.current?.scrollIntoView({
       index,
       behavior: 'smooth',
       done: () => {
-        const element = document.querySelector<HTMLDivElement>(`#status-list [data-index="${index}"] .focusable`);
-        element?.focus();
+        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
       },
     });
   };

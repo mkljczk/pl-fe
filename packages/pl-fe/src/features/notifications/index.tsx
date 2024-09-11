@@ -77,16 +77,16 @@ const Notifications = () => {
   };
 
   const _selectChild = (index: number) => {
+    const selector = `[data-index="${index}"] .focusable`;
+    const element = document.querySelector<HTMLDivElement>(selector);
+
+    if (element) element.focus();
+
     node.current?.scrollIntoView({
       index,
       behavior: 'smooth',
       done: () => {
-        const container = column.current;
-        const element = container?.querySelector(`[data-index="${index}"] .focusable`);
-
-        if (element) {
-          (element as HTMLDivElement).focus();
-        }
+        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
       },
     });
   };

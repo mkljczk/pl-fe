@@ -233,11 +233,17 @@ const Thread: React.FC<IThread> = ({
 
   const _selectChild = (index: number) => {
     if (!useWindowScroll) index = index + 1;
+
+    const selector = `[data-index="${index}"] .focusable`;
+    const element = node.current?.querySelector<HTMLDivElement>(selector);
+
+    if (element) element.focus();
+
     scroller.current?.scrollIntoView({
       index,
       behavior: 'smooth',
       done: () => {
-        node.current?.querySelector<HTMLDivElement>(`[data-index="${index}"] .focusable`)?.focus();
+        if (!element) node.current?.querySelector<HTMLDivElement>(selector)?.focus();
       },
     });
   };

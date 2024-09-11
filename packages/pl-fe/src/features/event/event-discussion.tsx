@@ -83,15 +83,16 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
   };
 
   const _selectChild = (index: number) => {
+    const selector = `#thread [data-index="${index}"] .focusable`;
+    const element = document.querySelector<HTMLDivElement>(selector);
+
+    if (element) element.focus();
+
     scroller.current?.scrollIntoView({
       index,
       behavior: 'smooth',
       done: () => {
-        const element = document.querySelector<HTMLDivElement>(`#thread [data-index="${index}"] .focusable`);
-
-        if (element) {
-          element.focus();
-        }
+        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
       },
     });
   };

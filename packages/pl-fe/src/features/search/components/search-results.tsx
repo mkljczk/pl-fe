@@ -100,12 +100,16 @@ const SearchResults = () => {
   };
 
   const selectChild = (index: number) => {
+    const selector = `#search-results [data-index="${index}"] .focusable`;
+    const element = document.querySelector<HTMLDivElement>(selector);
+
+    if (element) element.focus();
+
     node.current?.scrollIntoView({
       index,
       behavior: 'smooth',
       done: () => {
-        const element = document.querySelector<HTMLDivElement>(`#search-results [data-index="${index}"] .focusable`);
-        element?.focus();
+        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
       },
     });
   };

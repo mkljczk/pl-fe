@@ -31,15 +31,16 @@ const ConversationsList: React.FC = () => {
   };
 
   const selectChild = (index: number) => {
+    const selector = `#direct-list [data-index="${index}"] .focusable`;
+    const element = document.querySelector<HTMLDivElement>(selector);
+
+    if (element) element.focus();
+
     ref.current?.scrollIntoView({
       index,
       behavior: 'smooth',
       done: () => {
-        const element = document.querySelector<HTMLDivElement>(`#direct-list [data-index="${index}"] .focusable`);
-
-        if (element) {
-          element.focus();
-        }
+        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
       },
     });
   };
