@@ -1,16 +1,18 @@
 import React from 'react';
 
+import StillImage from 'pl-fe/components/still-image';
 import { removeVS16s, toCodePoints } from 'pl-fe/utils/emoji';
 import { joinPublicPath } from 'pl-fe/utils/static';
 
-interface IEmoji extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface IEmoji extends Pick<React.ImgHTMLAttributes<HTMLImageElement>, 'alt' | 'className' | 'src' | 'title'> {
   /** Unicode emoji character. */
   emoji?: string;
+  noGroup?: boolean;
 }
 
 /** A single emoji image. */
 const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
-  const { emoji, alt, src, ...rest } = props;
+  const { emoji, alt, src, noGroup, ...rest } = props;
 
   let filename;
 
@@ -20,6 +22,18 @@ const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
   }
 
   if (!filename && !src) return null;
+
+  if (src) {
+    return (
+      <StillImage
+        alt={alt || emoji}
+        src={src}
+        isGif
+        noGroup={noGroup}
+        {...rest}
+      />
+    );
+  }
 
   return (
     <img

@@ -59,7 +59,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
 
   return (
     <button
-      className={clsx('flex cursor-pointer items-center gap-2 rounded-md border border-gray-400 p-1.5 transition-colors', {
+      className={clsx('group flex cursor-pointer items-center gap-2 rounded-md border border-gray-400 p-1.5 transition-colors', {
         'bg-primary-100 dark:border-primary-400 dark:bg-primary-400 black:border-primary-600 black:bg-primary-600': reaction.me,
         'bg-transparent dark:border-primary-700 dark:bg-primary-700 black:border-primary-800 black:bg-primary-800': !reaction.me,
         'cursor-pointer': !disabled,

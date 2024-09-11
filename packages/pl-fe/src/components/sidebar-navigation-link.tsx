@@ -45,7 +45,7 @@ const SidebarNavigationLink = React.forwardRef((props: ISidebarNavigationLink, r
       ref={ref}
       onClick={handleClick}
       className={clsx({
-        'flex items-center py-2 text-sm font-semibold space-x-4 rtl:space-x-reverse transition-colors duration-200': true,
+        'group flex items-center py-2 text-sm font-semibold space-x-4 rtl:space-x-reverse transition-colors duration-200': true,
         'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200': !isActive,
         'text-gray-900 dark:text-white': isActive,
       })}
@@ -53,7 +53,7 @@ const SidebarNavigationLink = React.forwardRef((props: ISidebarNavigationLink, r
       <span
         className={clsx({
           'relative rounded-lg inline-flex p-2.5 transition-colors duration-200': true,
-          'bg-primary-50 hover:bg-primary-100 dark:bg-slate-700 dark:hover:bg-slate-600 black:bg-gray-900 black:hover:bg-gray-800': !isActive,
+          'bg-primary-50 group-hover:bg-primary-100 dark:bg-slate-700 dark:group-hover:bg-slate-600 black:bg-gray-900 black:group-hover:bg-gray-800': !isActive,
           'bg-primary-600': isActive,
         })}
       >
