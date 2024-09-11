@@ -6,7 +6,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { emojiReact, unEmojiReact } from 'pl-fe/actions/emoji-reacts';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import unicodeMapping from 'pl-fe/features/emoji/mapping';
-import { useAppDispatch, useSettings } from 'pl-fe/hooks';
+import { useAppDispatch, useLoggedIn, useSettings } from 'pl-fe/hooks';
 
 import AnimatedNumber from './animated-number';
 import { Emoji, HStack, Icon, Text } from './ui';
@@ -28,9 +28,10 @@ interface IStatusReaction {
   status: Pick<SelectedStatus, 'id'>;
   reaction: EmojiReaction;
   obfuscate?: boolean;
+  disabled?: boolean;
 }
 
-const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate }) => {
+const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate, disabled }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -38,6 +39,8 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
 
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
+
+    if (disabled) return;
 
     if (reaction.me) {
       dispatch(unEmojiReact(status, reaction.name));
@@ -57,8 +60,11 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
   return (
     <button
       className={clsx('flex cursor-pointer items-center gap-2 rounded-md border border-gray-400 p-1.5 transition-colors', {
-        'bg-primary-100 dark:border-primary-400 dark:bg-primary-400 black:border-primary-600 black:bg-primary-600 hover:bg-primary-200 hover:dark:border-primary-300 hover:dark:bg-primary-300 hover:black:bg-primary-500': reaction.me,
-        'bg-transparent dark:border-primary-700 dark:bg-primary-700 black:border-primary-800 black:bg-primary-800 hover:bg-primary-100 hover:dark:border-primary-600 hover:dark:bg-primary-600 hover:black:bg-primary-700': !reaction.me,
+        'bg-primary-100 dark:border-primary-400 dark:bg-primary-400 black:border-primary-600 black:bg-primary-600': reaction.me,
+        'bg-transparent dark:border-primary-700 dark:bg-primary-700 black:border-primary-800 black:bg-primary-800': !reaction.me,
+        'cursor-pointer': !disabled,
+        'hover:bg-primary-200 hover:dark:border-primary-300 hover:dark:bg-primary-300 hover:black:bg-primary-500': reaction.me && !disabled,
+        'hover:bg-primary-100 hover:dark:border-primary-600 hover:dark:bg-primary-600 hover:black:bg-primary-700': !reaction.me && !disabled,
       })}
       key={reaction.name}
       onClick={handleClick}
@@ -66,6 +72,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
         emoji: `:${shortCode}:`,
         count: reaction.count,
       })}
+      disabled={disabled}
     >
       <Emoji className='h-4 w-4' emoji={reaction.name} src={reaction.url || undefined} />
 
@@ -79,6 +86,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
 const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
+  const { me } = useLoggedIn();
   const { demetricator } = useSettings();
 
   const handlePickEmoji = (emoji: EmojiType) => {
@@ -94,17 +102,19 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
       {sortedReactions.map((reaction) => reaction.count ? (
         <StatusReaction key={reaction.name} status={status} reaction={reaction} obfuscate={demetricator} />
       ) : null)}
-      <EmojiPickerDropdown onPickEmoji={handlePickEmoji}>
-        <button
-          className='emoji-picker-dropdown cursor-pointer rounded-md border border-gray-400 bg-transparent p-1.5 transition-colors hover:bg-gray-50 black:border-primary-800 black:bg-primary-800 hover:black:bg-primary-700 dark:border-primary-700 dark:bg-primary-700 hover:dark:border-primary-600 hover:dark:bg-primary-600'
-          title={intl.formatMessage(messages.addEmoji)}
-        >
-          <Icon
-            className='h-4 w-4'
-            src={require('@tabler/icons/outline/mood-plus.svg')}
-          />
-        </button>
-      </EmojiPickerDropdown>
+      {me && (
+        <EmojiPickerDropdown onPickEmoji={handlePickEmoji}>
+          <button
+            className='emoji-picker-dropdown cursor-pointer rounded-md border border-gray-400 bg-transparent p-1.5 transition-colors hover:bg-gray-50 black:border-primary-800 black:bg-primary-800 hover:black:bg-primary-700 dark:border-primary-700 dark:bg-primary-700 hover:dark:border-primary-600 hover:dark:bg-primary-600'
+            title={intl.formatMessage(messages.addEmoji)}
+          >
+            <Icon
+              className='h-4 w-4'
+              src={require('@tabler/icons/outline/mood-plus.svg')}
+            />
+          </button>
+        </EmojiPickerDropdown>
+      )}
     </HStack>
   );
 };
