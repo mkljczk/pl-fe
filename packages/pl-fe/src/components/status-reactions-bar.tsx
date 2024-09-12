@@ -1,3 +1,4 @@
+import { useLongPress } from '@uidotdev/usehooks';
 import clsx from 'clsx';
 import { EmojiReaction } from 'pl-api';
 import React from 'react';
@@ -35,6 +36,13 @@ interface IStatusReaction {
 const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate, unauthenticated }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
+
+  const bind = useLongPress((e) => {
+    if (e.type !== 'touchstart') return;
+
+    e.stopPropagation();
+    dispatch(openModal('REACTIONS', { statusId: status.id, reaction: reaction.name }));
+  });
 
   if (!reaction.count) return null;
 
@@ -74,6 +82,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
         count: reaction.count,
       })}
       disabled={unauthenticated}
+      {...bind}
     >
       <Emoji className='h-4 w-4' emoji={reaction.name} src={reaction.url || undefined} />
 
