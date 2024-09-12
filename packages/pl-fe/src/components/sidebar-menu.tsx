@@ -11,10 +11,9 @@ import { useAccount } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
 import { Stack, Divider, HStack, Icon, Text } from 'pl-fe/components/ui';
 import ProfileStats from 'pl-fe/features/ui/components/profile-stats';
-import { useAppDispatch, useAppSelector, useFeatures, useInstance } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector, useFeatures, useInstance, useRegistrationStatus } from 'pl-fe/hooks';
 import { makeGetOtherAccounts } from 'pl-fe/selectors';
 import sourceCode from 'pl-fe/utils/code';
-import { isStandalone } from 'pl-fe/utils/state';
 
 import type { List as ImmutableList } from 'immutable';
 import type { Account as AccountEntity } from 'pl-fe/normalizers';
@@ -94,7 +93,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   const [sidebarVisible, setSidebarVisible] = useState(sidebarOpen);
   const touchStart = useRef(0);
   const touchEnd = useRef<number | null>(null);
-  const standalone = useAppSelector(isStandalone);
+  const { isOpen } = useRegistrationStatus();
 
   const instance = useInstance();
   const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;
@@ -451,7 +450,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                   onClick={onClose}
                 />
 
-                {!standalone && (
+                {isOpen && (
                   <SidebarLink
                     to='/signup'
                     icon={require('@tabler/icons/outline/user-plus.svg')}

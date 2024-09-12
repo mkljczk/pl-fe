@@ -6,7 +6,7 @@ import { useStatContext } from 'pl-fe/contexts/stat-context';
 import Search from 'pl-fe/features/search/components/search';
 import ComposeButton from 'pl-fe/features/ui/components/compose-button';
 import ProfileDropdown from 'pl-fe/features/ui/components/profile-dropdown';
-import { useAppSelector, useFeatures, useOwnAccount, useSettings, useInstance } from 'pl-fe/hooks';
+import { useAppSelector, useFeatures, useOwnAccount, useSettings, useInstance, useRegistrationStatus } from 'pl-fe/hooks';
 
 import Account from './account';
 import DropdownMenu, { Menu } from './dropdown-menu';
@@ -34,6 +34,7 @@ const SidebarNavigation = () => {
   const features = useFeatures();
   const { isDeveloper } = useSettings();
   const { account } = useOwnAccount();
+  const { isOpen } = useRegistrationStatus();
 
   const notificationCount = useAppSelector((state) => state.notifications.unread);
   const followRequestsCount = useAppSelector((state) => state.user_lists.follow_requests.items.count());
@@ -280,11 +281,11 @@ const SidebarNavigation = () => {
               text={<FormattedMessage id='account.login' defaultMessage='Log in' />}
             />
 
-            <SidebarNavigationLink
+            {isOpen && <SidebarNavigationLink
               to='/signup'
               icon={require('@tabler/icons/outline/user-plus.svg')}
               text={<FormattedMessage id='account.register' defaultMessage='Sign up' />}
-            />
+            />}
           </Stack>
         )}
       </Stack>
