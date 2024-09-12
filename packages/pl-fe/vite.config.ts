@@ -68,6 +68,54 @@ const config = defineConfig(({ command }) => ({
         name: 'pl-fe',
         short_name: 'pl-fe',
         description: 'Web-based federated social media client, a fork of Soapbox',
+        display: 'standalone',
+        display_override: [
+          'window-controls-overlay',
+        ],
+        theme_color: '#d80482',
+        categories: ['social'],
+        share_target: {
+          params: {
+            title: 'title',
+            text: 'text',
+            url: 'url',
+          },
+          action: 'share',
+          method: 'GET',
+        },
+        shortcuts: [
+          {
+            name: 'Search',
+            url: '/search',
+            icons: [
+              {
+                src: '/instance/images/shortcuts/search.png',
+                sizes: '192x192',
+              },
+            ],
+          },
+          {
+            name: 'Notifications',
+            url: '/notifications',
+            icons: [
+              {
+                src: '/instance/images/shortcuts/notifications.png',
+                sizes: '192x192',
+              },
+            ],
+          },
+          {
+            name: 'Chats',
+            url: '/chats',
+            icons: [
+              {
+                src: '/instance/images/shortcuts/chats.png',
+                sizes: '192x192',
+              },
+            ],
+          },
+        ],
+        start_url: '/',
       },
       srcDir: 'src/service-worker',
       filename: 'sw.ts',
