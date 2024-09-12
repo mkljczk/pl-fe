@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { NODE_ENV } from 'pl-fe/build-config';
 import { HStack, Text, Stack, Textarea } from 'pl-fe/components/ui';
-import { usePlFeConfig } from 'pl-fe/hooks';
+import { useLogo, usePlFeConfig } from 'pl-fe/hooks';
 import { captureSentryException } from 'pl-fe/sentry';
 import KVStore from 'pl-fe/storage/kv-store';
 import sourceCode from 'pl-fe/utils/code';
@@ -20,6 +20,7 @@ interface ISiteErrorBoundary {
 /** Application-level error boundary. Fills the whole screen. */
 const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
   const { links, sentryDsn } = usePlFeConfig();
+  const logoSrc = useLogo();
   const textarea = useRef<HTMLTextAreaElement>(null);
 
   const [error, setError] = useState<unknown>();
@@ -76,11 +77,13 @@ const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
   const fallback = (
     <div className='flex h-screen flex-col bg-white pb-12 pt-16 black:bg-black dark:bg-primary-900'>
       <main className='mx-auto flex w-full max-w-7xl grow flex-col justify-center px-4 sm:px-6 lg:px-8'>
-        <div className='flex shrink-0 justify-center'>
-          <a href='/' className='inline-flex'>
-            <SiteLogo alt='Logo' className='h-12 w-auto cursor-pointer' />
-          </a>
-        </div>
+        {logoSrc && (
+          <div className='flex shrink-0 justify-center'>
+            <a href='/' className='inline-flex'>
+              <SiteLogo alt='Logo' className='h-12 w-auto cursor-pointer' />
+            </a>
+          </div>
+        )}
 
         <div className='py-8'>
           <div className='mx-auto max-w-xl space-y-2 text-center'>

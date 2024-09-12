@@ -12,6 +12,7 @@ export { useInstance } from './useInstance';
 export { useLoading } from './useLoading';
 export { useLocale } from './useLocale';
 export { useLoggedIn } from './useLoggedIn';
+export { useLogo } from './useLogo';
 export { useOwnAccount } from './useOwnAccount';
 export { usePrevious } from './usePrevious';
 export { useRegistrationStatus } from './useRegistrationStatus';
