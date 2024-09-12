@@ -756,7 +756,10 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
         )}
 
         {me && expandable && (features.emojiReacts || features.emojiReactsMastodon) && (
-          <EmojiPickerDropdown onPickEmoji={handlePickEmoji} />
+          <EmojiPickerDropdown
+            onPickEmoji={handlePickEmoji}
+            theme={statusActionButtonTheme}
+          />
         )}
 
         {canShare && (

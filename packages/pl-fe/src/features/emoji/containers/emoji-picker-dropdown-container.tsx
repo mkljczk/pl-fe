@@ -1,4 +1,5 @@
 import { useFloating, shift, flip } from '@floating-ui/react';
+import clsx from 'clsx';
 import React, { KeyboardEvent, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -11,9 +12,12 @@ const messages = defineMessages({
   emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
 });
 
-const EmojiPickerDropdownContainer = (
-  { children, ...props }: Pick<IEmojiPickerDropdown, 'onPickEmoji' | 'condensed' | 'withCustom'> & { children?: JSX.Element },
-) => {
+interface IEmojiPickerDropdownContainer extends Pick<IEmojiPickerDropdown, 'onPickEmoji' | 'condensed' | 'withCustom'> {
+  children?: JSX.Element;
+  theme?: 'default' | 'inverse';
+}
+
+const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({ theme = 'default', children, ...props }) => {
   const intl = useIntl();
   const title = intl.formatMessage(messages.emoji);
   const [visible, setVisible] = useState(false);
@@ -50,7 +54,10 @@ const EmojiPickerDropdownContainer = (
         })
       ) : (
         <IconButton
-          className='emoji-picker-dropdown text-gray-600 hover:text-gray-700 dark:hover:text-gray-500'
+          className={clsx('emoji-picker-dropdown', {
+            'text-gray-600 hover:text-gray-700 dark:hover:text-gray-500': theme === 'default',
+            'text-white/80 hover:text-white bg-transparent dark:bg-transparent': theme === 'inverse',
+          })}
           ref={refs.setReference}
           src={require('@tabler/icons/outline/mood-smile.svg')}
           title={title}
