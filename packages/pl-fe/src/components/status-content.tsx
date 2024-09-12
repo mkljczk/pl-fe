@@ -33,9 +33,10 @@ interface IReadMoreButton {
 const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, quote, poll }) => (
   <div className='relative -mt-4'>
     <div
-      className={clsx('absolute -top-16 h-16 w-full bg-gradient-to-b from-transparent to-white black:to-black dark:to-primary-900', {
-        'group-hover:to-gray-100 black:group-hover:to-gray-800 dark:group-hover:to-gray-800': quote,
+      className={clsx('absolute -top-16 h-16 w-full bg-gradient-to-b from-transparent', {
+        'to-white black:to-black dark:to-primary-900': !poll,
         'to-gray-100 dark:to-primary-800': poll,
+        'group-hover:to-gray-100 black:group-hover:to-gray-800 dark:group-hover:to-gray-800': quote,
       })}
     />
     <button className='flex items-center border-0 bg-transparent p-0 pt-2 text-gray-900 hover:underline active:underline dark:text-gray-300' onClick={onClick}>
