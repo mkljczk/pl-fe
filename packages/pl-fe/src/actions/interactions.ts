@@ -388,8 +388,6 @@ const unbookmarkFail = (statusId: string, error: unknown) => ({
 
 const fetchReblogs = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
-
     dispatch(fetchReblogsRequest(statusId));
 
     return getClient(getState()).statuses.getRebloggedBy(statusId).then(response => {
@@ -445,8 +443,6 @@ const expandReblogsFail = (statusId: string, error: unknown) => ({
 
 const fetchFavourites = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
-
     dispatch(fetchFavouritesRequest(statusId));
 
     return getClient(getState()).statuses.getFavouritedBy(statusId).then(response => {
@@ -502,8 +498,6 @@ const expandFavouritesFail = (statusId: string, error: unknown) => ({
 
 const fetchDislikes = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
-
     dispatch(fetchDislikesRequest(statusId));
 
     return getClient(getState).statuses.getDislikedBy(statusId).then(response => {
