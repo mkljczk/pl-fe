@@ -199,7 +199,7 @@ const Account = ({
             <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} />
             {emoji && (
               <Emoji
-                className='absolute -right-1.5 bottom-0 h-5 w-5'
+                className='!absolute -right-1.5 bottom-0 h-5 w-5'
                 emoji={emoji}
                 src={emojiUrl}
               />
@@ -254,7 +254,7 @@ const Account = ({
                 <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} />
                 {emoji && (
                   <Emoji
-                    className='absolute -right-1.5 bottom-0 h-5 w-5'
+                    className='!absolute -right-1.5 bottom-0 h-5 w-5'
                     emoji={emoji}
                     src={emojiUrl}
                   />
