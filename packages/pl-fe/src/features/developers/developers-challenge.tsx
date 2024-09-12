@@ -25,7 +25,7 @@ const DevelopersChallenge = () => {
   };
 
   const handleSubmit = () => {
-    if (answer === 'boxsoap') {
+    if (answer === 'fe-pl') {
       dispatch(changeSettingImmediate(['isDeveloper'], true));
       toast.success(intl.formatMessage(messages.success));
     } else {
@@ -34,7 +34,7 @@ const DevelopersChallenge = () => {
   };
 
   const challenge = `function plFe() {
-  return 'soap|box'.split('|').reverse().join('');
+  return 'pl-fe'.split('-').reverse().join('-');
 }`;
 
   return (

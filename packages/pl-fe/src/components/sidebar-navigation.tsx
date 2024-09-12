@@ -6,11 +6,12 @@ import { useStatContext } from 'pl-fe/contexts/stat-context';
 import Search from 'pl-fe/features/search/components/search';
 import ComposeButton from 'pl-fe/features/ui/components/compose-button';
 import ProfileDropdown from 'pl-fe/features/ui/components/profile-dropdown';
-import { useAppSelector, useFeatures, useOwnAccount, useSettings, useInstance, useRegistrationStatus } from 'pl-fe/hooks';
+import { useAppSelector, useFeatures, useOwnAccount, useSettings, useInstance, useRegistrationStatus, useLogo } from 'pl-fe/hooks';
 
 import Account from './account';
 import DropdownMenu, { Menu } from './dropdown-menu';
 import SidebarNavigationLink from './sidebar-navigation-link';
+import SiteLogo from './site-logo';
 
 const messages = defineMessages({
   followRequests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
@@ -35,6 +36,7 @@ const SidebarNavigation = () => {
   const { isDeveloper } = useSettings();
   const { account } = useOwnAccount();
   const { isOpen } = useRegistrationStatus();
+  const logoSrc = useLogo();
 
   const notificationCount = useAppSelector((state) => state.notifications.unread);
   const followRequestsCount = useAppSelector((state) => state.user_lists.follow_requests.items.count());
@@ -139,6 +141,9 @@ const SidebarNavigation = () => {
 
   return (
     <Stack space={4}>
+      {logoSrc && (
+        <SiteLogo className='h-12 w-auto cursor-pointer' />
+      )}
 
       {account && (
         <Stack space={4}>

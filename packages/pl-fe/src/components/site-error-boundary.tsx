@@ -80,7 +80,7 @@ const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
         {logoSrc && (
           <div className='flex shrink-0 justify-center'>
             <a href='/' className='inline-flex'>
-              <SiteLogo alt='Logo' className='h-12 w-auto cursor-pointer' />
+              <SiteLogo className='h-12 w-auto cursor-pointer' />
             </a>
           </div>
         )}
