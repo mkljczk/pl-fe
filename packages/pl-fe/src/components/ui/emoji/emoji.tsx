@@ -30,6 +30,7 @@ const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
         src={src}
         isGif
         noGroup={noGroup}
+        letterboxed
         {...rest}
       />
     );
