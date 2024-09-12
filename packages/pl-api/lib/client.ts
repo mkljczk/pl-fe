@@ -861,7 +861,7 @@ class PlApiClient {
      * Remove a suggestion
      * Remove an account from follow suggestions.
      *
-     * Requires features{@link Features['suggestions']}.
+     * Requires features{@link Features['suggestionsDismiss']}.
      * @see {@link https://docs.joinmastodon.org/methods/suggestions/#remove}
      */
     dismissSuggestions: async (accountId: string) => {

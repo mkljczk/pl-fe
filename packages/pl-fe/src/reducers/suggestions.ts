@@ -6,7 +6,6 @@ import {
   SUGGESTIONS_FETCH_REQUEST,
   SUGGESTIONS_FETCH_SUCCESS,
   SUGGESTIONS_FETCH_FAIL,
-  SUGGESTIONS_DISMISS,
 } from 'pl-fe/actions/suggestions';
 
 import type { Suggestion as SuggestionEntity } from 'pl-api';
@@ -46,8 +45,6 @@ const suggestionsReducer = (state: State = ReducerRecord(), action: AnyAction) =
       return importSuggestions(state, action.suggestions);
     case SUGGESTIONS_FETCH_FAIL:
       return state.set('isLoading', false);
-    case SUGGESTIONS_DISMISS:
-      return dismissAccount(state, action.accountId);
     case ACCOUNT_BLOCK_SUCCESS:
     case ACCOUNT_MUTE_SUCCESS:
       return dismissAccount(state, action.relationship.id);

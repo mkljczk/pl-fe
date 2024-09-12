@@ -22,7 +22,7 @@ const useSuggestions = () => {
     dispatch(importFetchedAccounts(accounts));
     dispatch(fetchRelationships(accountIds));
 
-    return response.map(x => ({ ...x, account: x.account.id }));
+    return response.map(({ account, ...x }) => ({ ...x, account_id: account.id }));
   };
 
   const result = useQuery({

@@ -1,5 +1,3 @@
-import { isLoggedIn } from 'pl-fe/utils/auth';
-
 import { getClient } from '../api';
 
 import { fetchRelationships } from './accounts';
@@ -11,8 +9,6 @@ import type { AppDispatch, RootState } from 'pl-fe/store';
 const SUGGESTIONS_FETCH_REQUEST = 'SUGGESTIONS_FETCH_REQUEST' as const;
 const SUGGESTIONS_FETCH_SUCCESS = 'SUGGESTIONS_FETCH_SUCCESS' as const;
 const SUGGESTIONS_FETCH_FAIL = 'SUGGESTIONS_FETCH_FAIL' as const;
-
-const SUGGESTIONS_DISMISS = 'SUGGESTIONS_DISMISS' as const;
 
 const fetchSuggestions = (limit = 50) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -47,24 +43,10 @@ const fetchSuggestionsForTimeline = () => (dispatch: AppDispatch) => {
   dispatch(fetchSuggestions(20))?.then(() => dispatch(insertSuggestionsIntoTimeline()));
 };
 
-const dismissSuggestion = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
-
-    dispatch({
-      type: SUGGESTIONS_DISMISS,
-      accountId,
-    });
-
-    return getClient(getState).myAccount.dismissSuggestions(accountId);
-  };
-
 export {
   SUGGESTIONS_FETCH_REQUEST,
   SUGGESTIONS_FETCH_SUCCESS,
   SUGGESTIONS_FETCH_FAIL,
-  SUGGESTIONS_DISMISS,
   fetchSuggestions,
   fetchSuggestionsForTimeline,
-  dismissSuggestion,
 };

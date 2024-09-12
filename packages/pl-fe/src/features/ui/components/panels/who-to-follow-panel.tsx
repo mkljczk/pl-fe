@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Text, Widget } from 'pl-fe/components/ui';
 import AccountContainer from 'pl-fe/containers/account-container';
 import PlaceholderSidebarSuggestions from 'pl-fe/features/placeholder/components/placeholder-sidebar-suggestions';
+import { useFeatures } from 'pl-fe/hooks';
 import { useDismissSuggestion, useSuggestions } from 'pl-fe/queries/suggestions';
 
 import type { Account as AccountEntity } from 'pl-fe/normalizers';
@@ -18,6 +19,7 @@ interface IWhoToFollowPanel {
 }
 
 const WhoToFollowPanel = ({ limit }: IWhoToFollowPanel) => {
+  const features = useFeatures();
   const intl = useIntl();
 
   const { data: suggestions, isFetching } = useSuggestions();
@@ -54,7 +56,7 @@ const WhoToFollowPanel = ({ limit }: IWhoToFollowPanel) => {
             id={suggestion.account}
             actionIcon={require('@tabler/icons/outline/x.svg')}
             actionTitle={intl.formatMessage(messages.dismissSuggestion)}
-            onActionClick={handleDismiss}
+            onActionClick={features.suggestionsDismiss ? handleDismiss : undefined}
           />
         ))
       )}

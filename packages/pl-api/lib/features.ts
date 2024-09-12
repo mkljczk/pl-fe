@@ -1086,6 +1086,14 @@ const getFeatures = (instance?: Instance) => {
     ]),
 
     /**
+     * Remove an account from follow suggestions
+     * @see DELETE /api/v1/suggestions/:account_id
+     */
+    suggestionsDismiss: any([
+      v.software === MASTODON,
+    ]),
+
+    /**
      * Supports V2 suggested accounts.
      * @see GET /api/v2/suggestions
      */
