@@ -41,6 +41,8 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
     if (e.type !== 'touchstart') return;
 
     e.stopPropagation();
+
+    if ('vibrate' in navigator) navigator.vibrate(100);
     dispatch(openModal('REACTIONS', { statusId: status.id, reaction: reaction.name }));
   });
 
