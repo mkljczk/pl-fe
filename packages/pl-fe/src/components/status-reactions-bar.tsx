@@ -42,7 +42,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
 
     e.stopPropagation();
 
-    if ('vibrate' in navigator) navigator.vibrate(100);
+    if ('vibrate' in navigator) navigator.vibrate(1);
     dispatch(openModal('REACTIONS', { statusId: status.id, reaction: reaction.name }));
   });
 
