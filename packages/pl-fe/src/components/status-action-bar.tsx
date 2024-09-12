@@ -414,16 +414,16 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       }
     }
 
+    if (!me) {
+      return menu;
+    }
+
     if (status.emoji_reactions.length && features.exposableReactions) {
       menu.push({
         text: intl.formatMessage(messages.viewReactions),
         action: handleOpenReactionsModal,
         icon: require('@tabler/icons/outline/mood-happy.svg'),
       });
-    }
-
-    if (!me) {
-      return menu;
     }
 
     const isGroupStatus = typeof status.group === 'object';

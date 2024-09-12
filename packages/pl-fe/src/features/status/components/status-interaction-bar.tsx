@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { openModal } from 'pl-fe/actions/modals';
 import AnimatedNumber from 'pl-fe/components/animated-number';
 import { HStack, Text } from 'pl-fe/components/ui';
-import { useAppSelector, useFeatures, useAppDispatch } from 'pl-fe/hooks';
+import { useFeatures, useAppDispatch } from 'pl-fe/hooks';
 
 import type { Status } from 'pl-fe/normalizers';
 
@@ -14,16 +14,11 @@ interface IStatusInteractionBar {
 }
 
 const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.Element | null => {
-  const me = useAppSelector(({ me }) => me);
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const { account } = status;
 
   if (!account || typeof account !== 'object') return null;
-
-  const onOpenUnauthorizedModal = () => {
-    dispatch(openModal('UNAUTHORIZED'));
-  };
 
   const onOpenReblogsModal = (username: string, statusId: string): void => {
     dispatch(openModal('REBLOGS', { statusId }));
@@ -40,8 +35,8 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
   const handleOpenReblogsModal: React.EventHandler<React.MouseEvent> = (e) => {
     e.preventDefault();
 
-    if (!me) onOpenUnauthorizedModal();
-    else onOpenReblogsModal(account.acct, status.id);
+    // if (!me) onOpenUnauthorizedModal();
+    onOpenReblogsModal(account.acct, status.id);
   };
 
   const getReposts = () => {
@@ -79,15 +74,15 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
   const handleOpenFavouritesModal: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     e.preventDefault();
 
-    if (!me) onOpenUnauthorizedModal();
-    else onOpenFavouritesModal(account.acct, status.id);
+    // if (!me) onOpenUnauthorizedModal();
+    onOpenFavouritesModal(account.acct, status.id);
   };
 
   const handleOpenDislikesModal: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     e.preventDefault();
 
-    if (!me) onOpenUnauthorizedModal();
-    else onOpenDislikesModal(account.acct, status.id);
+    // if (!me) onOpenUnauthorizedModal();
+    onOpenDislikesModal(account.acct, status.id);
   };
 
   const getFavourites = () => {
