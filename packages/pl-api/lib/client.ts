@@ -217,7 +217,7 @@ class PlApiClient {
   #accessToken?: string;
   #instance: Instance = instanceSchema.parse({});
   public request = request.bind(this) as typeof request;
-  public features: Features = getFeatures();
+  public features: Features = getFeatures(this.#instance);
   #socket?: {
     listen: (listener: any, stream?: string) => number;
     unlisten: (listener: any) => void;
@@ -2015,14 +2015,34 @@ class PlApiClient {
     /**
      * Get an object of emoji to account mappings with accounts that reacted to the post
      *
-     * Requires features{@link Features['emojiReacts']}.
+     * Requires features{@link Features['emojiReactsList']}.
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#get-apiv1pleromastatusesidreactions}
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#get-apiv1pleromastatusesidreactionsemoji}
      */
     getStatusReactions: async (statusId: string, emoji?: string) => {
-      const response = await this.request(`/api/v1/pleroma/statuses/${statusId}/reactions${emoji ? `/${emoji}` : ''}`);
+      const apiVersions = this.#instance.api_versions;
 
-      return filteredArray(emojiReactionSchema).parse(response.json);
+      let response;
+      if (apiVersions['pleroma_emoji_reactions.pleroma.pl-api'] >= 1) {
+        response = await this.request(`/api/v1/pleroma/statuses/${statusId}/reactions${emoji ? `/${emoji}` : ''}`);
+      } else if (apiVersions['emoji_reaction.fedibird.pl-api'] >= 1) {
+        response = await this.request(`/api/v1/statuses/${statusId}/emoji_reactioned_by`);
+        response.json = response.json?.reduce((acc: Array<any>, cur: any) => {
+          if (emoji && cur.name !== emoji) return acc;
+
+          const existing = acc.find(reaction => reaction.name === cur.name);
+
+          if (existing) {
+            existing.accounts.push(cur.account);
+            existing.account_ids.push(cur.account.id);
+            existing.count += 1;
+          } else acc.push({ count: 1, accounts: [cur.account], account_ids: [cur.account.id], ...cur });
+
+          return acc;
+        }, []);
+      }
+
+      return filteredArray(emojiReactionSchema).parse(response?.json || []);
     },
 
     /**
@@ -2033,7 +2053,14 @@ class PlApiClient {
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#put-apiv1pleromastatusesidreactionsemoji}
      */
     createStatusReaction: async (statusId: string, emoji: string) => {
-      const response = await this.request(`/api/v1/pleroma/statuses/${statusId}/reactions/${emoji}`, { method: 'PUT' });
+      const apiVersions = this.#instance.api_versions;
+
+      let response;
+      if (apiVersions['pleroma_emoji_reactions.pleroma.pl-api'] >= 1) {
+        response = await this.request(`/api/v1/pleroma/statuses/${statusId}/reactions/${encodeURIComponent(emoji)}`, { method: 'PUT' });
+      } else {
+        response = await this.request(`/api/v1/statuses/${statusId}/react/${encodeURIComponent(emoji)}`, { method: 'POST' });
+      }
 
       return statusSchema.parse(response.json);
     },
@@ -2045,7 +2072,14 @@ class PlApiClient {
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#delete-apiv1pleromastatusesidreactionsemoji}
      */
     deleteStatusReaction: async (statusId: string, emoji: string) => {
-      const response = await this.request(`/api/v1/pleroma/statuses/${statusId}/reactions/${emoji}`, { method: 'DELETE' });
+      const apiVersions = this.#instance.api_versions;
+
+      let response;
+      if (apiVersions['pleroma_emoji_reactions.pleroma.pl-api'] >= 1) {
+        response = await this.request(`/api/v1/pleroma/statuses/${statusId}/reactions/${emoji}`, { method: 'DELETE' });
+      } else {
+        response = await this.request(`/api/v1/statuses/${statusId}/unreact/${encodeURIComponent(emoji)}`, { method: 'POST' });
+      }
 
       return statusSchema.parse(response.json);
     },

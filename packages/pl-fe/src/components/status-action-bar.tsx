@@ -418,7 +418,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       return menu;
     }
 
-    if (status.emoji_reactions.length && features.exposableReactions) {
+    if (status.emoji_reactions.length && features.exposableReactions && features.emojiReactsList) {
       menu.push({
         text: intl.formatMessage(messages.viewReactions),
         action: handleOpenReactionsModal,
@@ -755,7 +755,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
           />
         )}
 
-        {me && expandable && (features.emojiReacts || features.emojiReactsMastodon) && (
+        {me && expandable && (features.emojiReacts) && (
           <EmojiPickerDropdown
             onPickEmoji={handlePickEmoji}
             theme={statusActionButtonTheme}

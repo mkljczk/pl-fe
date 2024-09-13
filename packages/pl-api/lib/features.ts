@@ -101,10 +101,9 @@ const REBASED = 'soapbox';
 const UNRELEASED = 'unreleased';
 
 /** Parse features for the given instance */
-const getFeatures = (instance?: Instance) => {
-  const v = parseVersion(instance?.version || '');
-  const features = instance?.pleroma.metadata.features || [];
-  const federation = !!instance?.pleroma.metadata.federation.enabled;
+const getFeatures = (instance: Instance) => {
+  const v = parseVersion(instance.version || '');
+  const federation = !!instance.pleroma.metadata.federation.enabled;
 
   return {
     version: v,
@@ -231,11 +230,11 @@ const getFeatures = (instance?: Instance) => {
      */
     bites: any([
       v.software === TOKI,
-      features.includes('pleroma:bites'),
+      instance.api_versions['bites.pleroma.pl-api'] >= 1,
     ]),
 
     /** Whether people who blocked you are visible through the API. */
-    blockersVisible: features.includes('blockers_visible'),
+    blockersVisible: instance.api_versions['blockers_visible.pleroma.pl-api'] >= 1,
 
     /**
      * Can group bookmarks in folders.
@@ -244,7 +243,7 @@ const getFeatures = (instance?: Instance) => {
      * @see PATCH /api/v1/pleroma/bookmark_folders/:id
      * @see DELETE /api/v1/pleroma/bookmark_folders/:id
      */
-    bookmarkFolders: features.includes('pleroma:bookmark_folders'),
+    bookmarkFolders: instance.api_versions['bookmark_folders.pleroma.pl-api'] >= 1,
 
     /**
      * Can bookmark statuses.
@@ -278,13 +277,13 @@ const getFeatures = (instance?: Instance) => {
      * Can display a timeline of statuses from instances selected by instance admin.
      * @see GET /api/v1/timelines/bubble
      */
-    bubbleTimeline: features.includes('bubble_timeline'),
+    bubbleTimeline: instance.api_versions['bubble_timeline.pleroma.pl-api'] >= 1,
 
     /**
      * Pleroma chats API.
      * @see {@link https://docs.pleroma.social/backend/development/API/chats/}
      */
-    chats: features.includes('pleroma_chat_messages'),
+    chats: instance.api_versions['chat_messages.pleroma.pl-api'] >= 1,
 
     /**
      * Ability to delete a chat.
@@ -353,8 +352,8 @@ const getFeatures = (instance?: Instance) => {
      * Ability to add non-standard reactions to a status.
      */
     customEmojiReacts: any([
-      features.includes('pleroma_custom_emoji_reactions'),
-      features.includes('custom_emoji_reactions'),
+      instance.api_versions['custom_emoji_reactions.pleroma.pl-api'] >= 1,
+      instance.api_versions['custom_emoji_reactions.pleroma.pl-api'] >= 1,
       v.software === PLEROMA && gte(v.version, '2.6.0'),
     ]),
 
@@ -403,7 +402,7 @@ const getFeatures = (instance?: Instance) => {
       v.software === MASTODON,
       v.software === MITRA,
       v.software === TAKAHE && gte(v.version, '0.8.0'),
-      features.includes('editing'),
+      instance.api_versions['editing.pleroma.pl-api'] >= 1,
     ]),
 
     /**
@@ -414,7 +413,7 @@ const getFeatures = (instance?: Instance) => {
      * @see GET /api/v1/pleroma/admin/email_list/unsubscribers.csv
      * @see GET /api/v1/pleroma/admin/email_list/combined.csv
      */
-    emailList: features.includes('email_list'),
+    emailList: instance.api_versions['email_list.pleroma.pl-api'] >= 1,
 
     /**
      * Ability to embed posts on external sites.
@@ -425,17 +424,25 @@ const getFeatures = (instance?: Instance) => {
     /**
      * Ability to add emoji reactions to a status.
      * @see PUT /api/v1/pleroma/statuses/:id/reactions/:emoji
-     * @see GET /api/v1/pleroma/statuses/:id/reactions/:emoji?
      * @see DELETE /api/v1/pleroma/statuses/:id/reactions/:emoji
-     */
-    emojiReacts: v.software === PLEROMA,
-
-    /**
-     * Ability to add emoji reactions to a status available in Mastodon forks.
+     * 
      * @see POST /v1/statuses/:id/react/:emoji
      * @see POST /v1/statuses/:id/unreact/:emoji
      */
-    emojiReactsMastodon: instance ? instance.configuration.reactions.max_reactions > 0 : false,
+    emojiReacts: any([
+      v.software === PLEROMA,
+      instance ? instance.configuration.reactions.max_reactions > 0 : false,
+    ]),
+
+    /**
+     * @see GET /api/v1/pleroma/statuses/:id/reactions/:emoji?
+     *
+     * @see GET /api/v1/statuses/:id/emoji_reactioned_by
+     */
+    emojiReactsList: any([
+      v.software === PLEROMA,
+      instance.api_versions['emoji_reaction.fedibird.pl-api'] >= 1,
+    ]),
 
     /**
      * Ability to create and perform actions on events.
@@ -451,7 +458,7 @@ const getFeatures = (instance?: Instance) => {
      * @see GET /api/v1/pleroma/events/:id/ics
      * @see GET /api/v1/pleroma/search/location
      */
-    events: features.includes('events'),
+    events: instance.api_versions['events.pleroma.pl-api'] >= 1,
 
     /** Whether to allow exporting follows/blocks/mutes to CSV by paginating the API. */
     exportData: true,
@@ -465,7 +472,7 @@ const getFeatures = (instance?: Instance) => {
       v.software === MASTODON,
       v.software === TAKAHE && gte(v.version, '0.6.1'),
       v.software === TOKI,
-      features.includes('exposable_reactions'),
+      instance.api_versions['exposable_reactions.pleroma.pl-api'] >= 1,
     ]),
 
     /**
@@ -582,7 +589,7 @@ const getFeatures = (instance?: Instance) => {
      * @see POST /api/v1/admin/groups/:group_id/unsuspend
      * @see DELETE /api/v1/admin/groups/:group_id
      */
-    groups: features.includes('pleroma:groups'),
+    groups: instance.api_versions['pleroma:groups.pleroma.pl-api'] >= 1,
 
     /**
      * Can hide follows/followers lists and counts.
@@ -649,13 +656,13 @@ const getFeatures = (instance?: Instance) => {
     /**
      * Server-side status language detection.
      */
-    languageDetection: features.includes('pleroma:language_detection'),
+    languageDetection: instance.api_versions['language_detection.pleroma.pl-api'] >= 1,
 
     /**
      * Can translate multiple statuses in a single request.
      * @see POST /api/v1/pl/statuses/translate
      */
-    lazyTranslations: features.includes('pl:translations'),
+    lazyTranslations: instance.api_versions['translations.pl.pl-api'] >= 1,
 
     /**
      * Can create, view, and manage lists.
@@ -744,7 +751,7 @@ const getFeatures = (instance?: Instance) => {
      * Ability to include multiple language variants for a post.
      * @see POST /api/v1/statuses
      */
-    multiLanguage: features.includes('pleroma:multi_language'),
+    multiLanguage: instance.api_versions['multi_language.pleroma.pl-api'] >= 1,
 
     /**
      * Ability to hide notifications from people you don't follow.
@@ -898,7 +905,7 @@ const getFeatures = (instance?: Instance) => {
       v.software === FRIENDICA,
       v.software === MASTODON,
       v.software === MITRA,
-      features.includes('profile_directory'),
+      instance.api_versions['profile_directory.pleroma.pl-api'] >= 1,
     ]),
 
     /**
@@ -943,7 +950,7 @@ const getFeatures = (instance?: Instance) => {
     quotePosts: any([
       v.software === FRIENDICA && gte(v.version, '2023.3.0'),
       v.software === PLEROMA && [REBASED, AKKOMA].includes(v.build!) && gte(v.version, '2.5.0'),
-      features.includes('quote_posting'),
+      instance.api_versions['quote_posting.pleroma.pl-api'] >= 1,
       instance?.feature_quote === true,
     ]),
 
@@ -1082,7 +1089,7 @@ const getFeatures = (instance?: Instance) => {
       v.software === FRIENDICA,
       v.software === ICESHRIMP,
       v.software === MASTODON,
-      features.includes('v2_suggestions'),
+      instance.api_versions['v2_suggestions.pleroma.pl-api'] >= 1,
     ]),
 
     /**
@@ -1101,7 +1108,7 @@ const getFeatures = (instance?: Instance) => {
       v.software === FRIENDICA,
       v.software === ICESHRIMP,
       v.software === MASTODON,
-      features.includes('v2_suggestions'),
+      instance.api_versions['v2_suggestions.pleroma.pl-api'] >= 1,
     ]),
 
     /**
@@ -1109,8 +1116,8 @@ const getFeatures = (instance?: Instance) => {
      * @see POST /api/v1/statuses/:id/translate
      */
     translations: any([
-      features.includes('translation'),
-      features.includes('akkoma:machine_translation'),
+      instance.api_versions['translation.pleroma.pl-api'] >= 1,
+      instance.api_versions['machine_translation.akkoma.pl-api'] >= 1,
       instance?.configuration.translation.enabled,
     ]),
 

@@ -13,6 +13,7 @@ const baseNotificationSchema = z.object({
   account: accountSchema,
   created_at: dateSchema,
   id: z.string(),
+  group_key: z.string(),
   type: z.string(),
 
   is_muted: z.boolean().optional().catch(undefined),
@@ -68,6 +69,7 @@ const eventParticipationRequestNotificationSchema = baseNotificationSchema.exten
 
 /** @see {@link https://docs.joinmastodon.org/entities/Notification/} */
 const notificationSchema: z.ZodType<Notification> = z.preprocess((notification: any) => ({
+  group_key: `ungrouped-${notification.id}`,
   ...pick(notification.pleroma || {}, ['is_muted', 'is_seen']),
   ...notification,
   type: notification.type === 'pleroma:report'

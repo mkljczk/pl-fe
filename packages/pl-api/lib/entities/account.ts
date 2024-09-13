@@ -12,17 +12,12 @@ const filterBadges = (tags?: string[]) =>
 const preprocessAccount = (account: any) => {
   if (!account?.acct) return null;
 
+  const username = account.username || account.acct.split('@')[0];
+
   return {
-    username: account.username || account.acct.split('@')[0],
-    display_name: account.display_name.trim() || account.username,
-    roles: account.roles?.length ? account.roles : filterBadges(account.pleroma?.tags),
+    username,
     avatar_static: account.avatar_static || account.avatar,
     header_static: account.header_static || account.header,
-    source: account.source
-      ? { ...(pick(account.pleroma?.source || {}, [
-        'show_role', 'no_rich_text', 'discoverable', 'actor_type', 'show_birthday',
-      ])), ...account.source }
-      : undefined,
     local: typeof account.pleroma?.is_local === 'boolean' ? account.pleroma.is_local : account.acct.split('@')[1] === undefined,
     discoverable: account.discoverable || account.pleroma?.source?.discoverable,
     verified: account.verified || account.pleroma?.tags?.includes('verified'),
@@ -54,6 +49,13 @@ const preprocessAccount = (account: any) => {
     ...(pick(account.other_settings || {}), ['birthday', 'location']),
     __meta: pick(account, ['pleroma', 'source']),
     ...account,
+    display_name: account.display_name.trim() || username,
+    roles: account.roles?.length ? account.roles : filterBadges(account.pleroma?.tags),
+    source: account.source
+      ? { ...(pick(account.pleroma?.source || {}, [
+        'show_role', 'no_rich_text', 'discoverable', 'actor_type', 'show_birthday',
+      ])), ...account.source }
+      : undefined,
   };
 };
 

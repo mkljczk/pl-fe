@@ -60,7 +60,7 @@ const getAuthUserUrl = (state: RootState) => {
 
 /** Get the VAPID public key. */
 const getVapidKey = (state: RootState) =>
-  state.auth.app?.vapid_key || state.instance.pleroma.vapid_public_key;
+  state.auth.app?.vapid_key || state.instance.configuration.vapid.public_key;
 
 const getMeUrl = (state: RootState) => selectOwnAccount(state)?.url;
 

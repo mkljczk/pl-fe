@@ -4,7 +4,12 @@ import omit from 'lodash/omit';
 import { normalizeStatus, normalizeTranslation, Status as StatusRecord } from 'pl-fe/normalizers';
 import { simulateEmojiReact, simulateUnEmojiReact } from 'pl-fe/utils/emoji-reacts';
 
-import { EMOJI_REACT_REQUEST, UNEMOJI_REACT_REQUEST } from '../actions/emoji-reacts';
+import {
+  EMOJI_REACT_FAIL,
+  EMOJI_REACT_REQUEST,
+  UNEMOJI_REACT_REQUEST,
+  type EmojiReactsAction,
+} from '../actions/emoji-reacts';
 import {
   EVENT_JOIN_REQUEST,
   EVENT_JOIN_FAIL,
@@ -181,7 +186,7 @@ const deleteTranslation = (state: State, statusId: string) => state.deleteIn([st
 
 const initialState: State = ImmutableMap();
 
-const statuses = (state = initialState, action: AnyAction): State => {
+const statuses = (state = initialState, action: EmojiReactsAction | AnyAction): State => {
   switch (action.type) {
     case STATUS_IMPORT:
       return importStatus(state, action.status);
@@ -206,6 +211,7 @@ const statuses = (state = initialState, action: AnyAction): State => {
           emojiReacts => simulateEmojiReact(emojiReacts as any, action.emoji, action.custom),
         );
     case UNEMOJI_REACT_REQUEST:
+    case EMOJI_REACT_FAIL:
       return state
         .updateIn(
           [action.statusId, 'emoji_reactions'],

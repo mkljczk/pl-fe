@@ -8240,10 +8240,10 @@ pkg-types@^1.0.3:
     mlly "^1.2.0"
     pathe "^1.1.0"
 
-pl-api@^0.0.29:
-  version "0.0.29"
-  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.0.29.tgz#59005a6051932c8b0defb552b1ecda15e1241462"
-  integrity sha512-NDtii+PkJ/pCJHbVx0guAPtfxcXwMYPc7Bm6517I0fJtqhuY3c+QXcaL6DXuQV+OP7+WVcdVIYqIYhhgzCMkXQ==
+pl-api@^0.0.30:
+  version "0.0.30"
+  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.0.30.tgz#4b093d9336604e3f1d38d790d9d2908fc36bfa99"
+  integrity sha512-ZTrdcrLPhXQIJSK9smBoN96VngEIrFugmQvwKJPZLJfMXme+kXsV2X4GbNahSByYaoDRFZy6I4vgKicMQlSxig==
   dependencies:
     blurhash "^2.0.5"
     http-link-header "^1.1.3"

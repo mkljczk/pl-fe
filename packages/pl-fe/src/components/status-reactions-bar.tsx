@@ -8,7 +8,7 @@ import { emojiReact, unEmojiReact } from 'pl-fe/actions/emoji-reacts';
 import { openModal } from 'pl-fe/actions/modals';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import unicodeMapping from 'pl-fe/features/emoji/mapping';
-import { useAppDispatch, useLoggedIn, useSettings } from 'pl-fe/hooks';
+import { useAppDispatch, useFeatures, useLoggedIn, useSettings } from 'pl-fe/hooks';
 
 import AnimatedNumber from './animated-number';
 import { Emoji, HStack, Icon, Text } from './ui';
@@ -36,9 +36,10 @@ interface IStatusReaction {
 const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate, unauthenticated }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
+  const features = useFeatures();
 
   const bind = useLongPress((e) => {
-    if (e.type !== 'touchstart') return;
+    if (!features.emojiReactsList || e.type !== 'touchstart') return;
 
     e.stopPropagation();
 
@@ -52,6 +53,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
     e.stopPropagation();
 
     if (unauthenticated) {
+      if (!features.emojiReactsList) return;
       dispatch(openModal('REACTIONS', { statusId: status.id, reaction: reaction.name }));
     } else if (reaction.me) {
       dispatch(unEmojiReact(status, reaction.name));

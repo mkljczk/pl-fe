@@ -5,6 +5,83 @@ import { accountSchema } from './account';
 import { ruleSchema } from './rule';
 import { coerceObject, filteredArray, mimeSchema } from './utils';
 
+const getApiVersions = (instance: any) => ({
+  ...Object.fromEntries(instance.pleroma?.metadata?.features?.map((feature: string) => {
+    let string = `${feature}.pleroma.pl-api`;
+    if (string.startsWith('pleroma:') || string.startsWith('pleroma_')) string = string.slice(8);
+    if (string.startsWith('akkoma:')) string = string.slice(7);
+    if (string.startsWith('pl:')) string = string.slice(3);
+    return [string, 1];
+  }) || []),
+  ...Object.fromEntries(instance.fedibird_capabilities?.map((feature: string) => [`${feature}.fedibird.pl-api`, 1]) || []),
+  ...instance.api_versions,
+});
+
+const instanceV1ToV2 = (data: any) => {
+  const {
+    approval_required,
+    configuration,
+    contact_account,
+    description,
+    description_limit,
+    email,
+    max_media_attachments,
+    max_toot_chars,
+    poll_limits,
+    pleroma,
+    registrations,
+    short_description,
+    thumbnail,
+    uri,
+    urls,
+    ...instance
+  } = instanceV1Schema.parse(data);
+
+  return {
+    ...instance,
+    account_domain: instance.account_domain	|| uri,
+    configuration: {
+      ...configuration,
+      polls: {
+        ...configuration.polls,
+        max_characters_per_option: configuration.polls.max_characters_per_option ?? poll_limits.max_option_chars ?? 25,
+        max_expiration: configuration.polls.max_expiration ?? poll_limits.max_expiration ?? 2629746,
+        max_options: configuration.polls.max_options ?? poll_limits.max_options ?? 4,
+        min_expiration: configuration.polls.min_expiration ?? poll_limits.min_expiration ?? 300,
+      },
+      statuses: {
+        ...configuration.statuses,
+        max_characters: configuration.statuses.max_characters ?? max_toot_chars ?? 500,
+        max_media_attachments: configuration.statuses.max_media_attachments ?? max_media_attachments,
+      },
+      urls: {
+        streaming: urls.streaming_api,
+      },
+      vapid: {
+        public_key: pleroma.vapid_public_key,
+      },
+    },
+    contact: {
+      account: contact_account,
+      email: email,
+    },
+    description: short_description || description,
+    domain: uri,
+    pleroma: {
+      ...pleroma,
+      metadata: {
+        ...pleroma.metadata,
+        description_limit,
+      },
+    },
+    registrations: {
+      approval_required: approval_required,
+      enabled: registrations,
+    },
+    thumbnail: { url: thumbnail },
+  };
+};
+
 const fixVersion = (version: string) => {
   // Handle Mastodon release candidates
   if (new RegExp(/[0-9.]+rc[0-9]+/g).test(version)) {
@@ -47,18 +124,18 @@ const configurationSchema = coerceObject({
     video_size_limit: z.number().optional().catch(undefined),
   }),
   polls: coerceObject({
-    max_characters_per_option: z.number().optional().catch(undefined),
-    max_expiration: z.number().optional().catch(undefined),
-    max_options: z.number().optional().catch(undefined),
-    min_expiration: z.number().optional().catch(undefined),
+    max_characters_per_option: z.number().catch(25),
+    max_expiration: z.number().catch(2629746),
+    max_options: z.number().catch(4),
+    min_expiration: z.number().catch(300),
   }),
   reactions: coerceObject({
     max_reactions: z.number().catch(0),
   }),
   statuses: coerceObject({
     characters_reserved_per_url: z.number().optional().catch(undefined),
-    max_characters: z.number().optional().catch(undefined),
-    max_media_attachments: z.number().optional().catch(undefined),
+    max_characters: z.number().catch(500),
+    max_media_attachments: z.number().catch(4),
 
   }),
   translation: coerceObject({
@@ -66,6 +143,9 @@ const configurationSchema = coerceObject({
   }),
   urls: coerceObject({
     streaming: z.string().url().optional().catch(undefined),
+  }),
+  vapid: coerceObject({
+    public_key: z.string().catch(''),
   }),
 });
 
@@ -214,69 +294,14 @@ const instanceSchema = z.preprocess((data: any) => {
     data.version = `0.0.0 (compatible; GoToSocial ${data.version})`;
   }
 
-  if (data.domain) return { account_domain: data.domain, ...data };
+  const apiVersions = getApiVersions(data);
 
-  const {
-    approval_required,
-    configuration,
-    contact_account,
-    description,
-    description_limit,
-    email,
-    max_media_attachments,
-    max_toot_chars,
-    poll_limits,
-    pleroma,
-    registrations,
-    short_description,
-    thumbnail,
-    uri,
-    urls,
-    ...instance
-  } = instanceV1Schema.parse(data);
+  if (data.domain) return { account_domain: data.domain, ...data, api_versions: apiVersions };
 
-  return {
-    ...instance,
-    account_domain: instance.account_domain	|| uri,
-    configuration: {
-      ...configuration,
-      polls: {
-        ...configuration.polls,
-        max_characters_per_option: configuration.polls.max_characters_per_option ?? poll_limits.max_option_chars ?? 25,
-        max_expiration: configuration.polls.max_expiration ?? poll_limits.max_expiration ?? 2629746,
-        max_options: configuration.polls.max_options ?? poll_limits.max_options ?? 4,
-        min_expiration: configuration.polls.min_expiration ?? poll_limits.min_expiration ?? 300,
-      },
-      statuses: {
-        ...configuration.statuses,
-        max_characters: configuration.statuses.max_characters ?? max_toot_chars ?? 500,
-        max_media_attachments: configuration.statuses.max_media_attachments ?? max_media_attachments,
-      },
-      urls: {
-        streaming: urls.streaming_api,
-      },
-    },
-    contact: {
-      account: contact_account,
-      email: email,
-    },
-    description: short_description || description,
-    domain: uri,
-    pleroma: {
-      ...pleroma,
-      metadata: {
-        ...pleroma.metadata,
-        description_limit,
-      },
-    },
-    registrations: {
-      approval_required: approval_required,
-      enabled: registrations,
-    },
-    thumbnail: { url: thumbnail },
-  };
+  return instanceV1ToV2({ api_versions: apiVersions, ...data });
 }, coerceObject({
   account_domain: z.string().catch(''),
+  api_versions: z.record(z.number()).catch({}),
   configuration: configurationSchema,
   contact: contactSchema,
   description: z.string().catch(''),
@@ -292,30 +317,11 @@ const instanceSchema = z.preprocess((data: any) => {
   title: z.string().catch(''),
   usage: usageSchema,
   version: z.string().catch('0.0.0'),
-}).transform(({ configuration, ...instance }) => {
+}).transform((instance) => {
   const version = fixVersion(instance.version);
-
-  const polls = {
-    ...configuration.polls,
-    max_characters_per_option: configuration.polls.max_characters_per_option ?? 25,
-    max_expiration: configuration.polls.max_expiration ?? 2629746,
-    max_options: configuration.polls.max_options ?? 4,
-    min_expiration: configuration.polls.min_expiration ?? 300,
-  };
-
-  const statuses = {
-    ...configuration.statuses,
-    max_characters: configuration.statuses.max_characters ?? 500,
-    max_media_attachments: configuration.statuses.max_media_attachments ?? 4,
-  };
 
   return {
     ...instance,
-    configuration: {
-      ...configuration,
-      polls,
-      statuses,
-    },
     version,
   };
 }));

@@ -86,6 +86,14 @@ const unEmojiReactFail = (statusId: string, emoji: string, error: unknown) => ({
   error,
 });
 
+type EmojiReactsAction =
+  | ReturnType<typeof emojiReactRequest>
+  | ReturnType<typeof emojiReactSuccess>
+  | ReturnType<typeof emojiReactFail>
+  | ReturnType<typeof unEmojiReactRequest>
+  | ReturnType<typeof unEmojiReactSuccess>
+  | ReturnType<typeof unEmojiReactFail>
+
 export {
   EMOJI_REACT_REQUEST,
   EMOJI_REACT_SUCCESS,
@@ -101,4 +109,5 @@ export {
   unEmojiReactRequest,
   unEmojiReactSuccess,
   unEmojiReactFail,
+  type EmojiReactsAction,
 };
