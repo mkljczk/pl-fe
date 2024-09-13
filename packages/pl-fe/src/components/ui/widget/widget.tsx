@@ -47,7 +47,7 @@ const Widget: React.FC<IWidget> = ({
   action,
 }): JSX.Element => (
   <Stack space={4}>
-    <HStack alignItems='center' justifyContent='between'>
+    <HStack space={2} alignItems='center' justifyContent='between'>
       <WidgetTitle title={title} />
       {action || (onActionClick && (
         <IconButton
