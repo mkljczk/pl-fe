@@ -31,7 +31,7 @@ const WhoToFollowPanel = ({ limit }: IWhoToFollowPanel) => {
     dismissSuggestion.mutate(account.id);
   };
 
-  if (!isFetching && !suggestions.length) {
+  if (!isFetching && !suggestionsToRender.length) {
     return null;
   }
 
@@ -51,9 +51,8 @@ const WhoToFollowPanel = ({ limit }: IWhoToFollowPanel) => {
       ) : (
         suggestionsToRender.map((suggestion: any) => (
           <AccountContainer
-            key={suggestion.account}
-            // @ts-ignore: TS thinks `id` is passed to <Account>, but it isn't
-            id={suggestion.account}
+            key={suggestion.account_id}
+            id={suggestion.account_id}
             actionIcon={require('@tabler/icons/outline/x.svg')}
             actionTitle={intl.formatMessage(messages.dismissSuggestion)}
             onActionClick={features.suggestionsDismiss ? handleDismiss : undefined}
