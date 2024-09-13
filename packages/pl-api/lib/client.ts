@@ -2023,7 +2023,7 @@ class PlApiClient {
       const apiVersions = this.#instance.api_versions;
 
       let response;
-      if (apiVersions['pleroma_emoji_reactions.pleroma.pl-api'] >= 1) {
+      if (apiVersions['emoji_reactions.pleroma.pl-api'] >= 1) {
         response = await this.request(`/api/v1/pleroma/statuses/${statusId}/reactions${emoji ? `/${emoji}` : ''}`);
       } else if (apiVersions['emoji_reaction.fedibird.pl-api'] >= 1) {
         response = await this.request(`/api/v1/statuses/${statusId}/emoji_reactioned_by`);
@@ -2056,7 +2056,7 @@ class PlApiClient {
       const apiVersions = this.#instance.api_versions;
 
       let response;
-      if (apiVersions['pleroma_emoji_reactions.pleroma.pl-api'] >= 1) {
+      if (apiVersions['emoji_reactions.pleroma.pl-api'] >= 1) {
         response = await this.request(`/api/v1/pleroma/statuses/${statusId}/reactions/${encodeURIComponent(emoji)}`, { method: 'PUT' });
       } else {
         response = await this.request(`/api/v1/statuses/${statusId}/react/${encodeURIComponent(emoji)}`, { method: 'POST' });
@@ -2075,7 +2075,7 @@ class PlApiClient {
       const apiVersions = this.#instance.api_versions;
 
       let response;
-      if (apiVersions['pleroma_emoji_reactions.pleroma.pl-api'] >= 1) {
+      if (apiVersions['emoji_reactions.pleroma.pl-api'] >= 1) {
         response = await this.request(`/api/v1/pleroma/statuses/${statusId}/reactions/${emoji}`, { method: 'DELETE' });
       } else {
         response = await this.request(`/api/v1/statuses/${statusId}/unreact/${encodeURIComponent(emoji)}`, { method: 'POST' });

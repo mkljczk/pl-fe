@@ -325,7 +325,7 @@ const getFeatures = (instance: Instance) => {
      */
     createStatusExplicitAddressing: any([
       v.software === DITTO,
-      v.software === PLEROMA,
+      instance.api_versions['explicit_addressing.pleroma.pl-api'] >= 1,
     ]),
 
     /**
@@ -353,7 +353,6 @@ const getFeatures = (instance: Instance) => {
      */
     customEmojiReacts: any([
       instance.api_versions['custom_emoji_reactions.pleroma.pl-api'] >= 1,
-      instance.api_versions['custom_emoji_reactions.pleroma.pl-api'] >= 1,
       v.software === PLEROMA && gte(v.version, '2.6.0'),
     ]),
 
@@ -373,7 +372,7 @@ const getFeatures = (instance: Instance) => {
      * @see PATCH /api/v1/pleroma/admin/domains/:id
      * @see DELETE /api/v1/pleroma/admin/domains/:id
      */
-    domains: any([instance?.pleroma.metadata.multitenancy.enabled]),
+    domains: any([instance.pleroma.metadata.multitenancy.enabled]),
 
     /**
      * Ability to edit profile information.
@@ -868,9 +867,9 @@ const getFeatures = (instance: Instance) => {
       v.software === FIREFISH,
       v.software === ICESHRIMP,
       v.software === MASTODON,
-      v.software === PLEROMA,
       v.software === TAKAHE && gte(v.version, '0.8.0'),
       v.software === GOTOSOCIAL,
+      instance.api_versions['polls.pleroma.pl-api'] >= 1,
     ]),
 
     /**
@@ -951,7 +950,7 @@ const getFeatures = (instance: Instance) => {
       v.software === FRIENDICA && gte(v.version, '2023.3.0'),
       v.software === PLEROMA && [REBASED, AKKOMA].includes(v.build!) && gte(v.version, '2.5.0'),
       instance.api_versions['quote_posting.pleroma.pl-api'] >= 1,
-      instance?.feature_quote === true,
+      instance.feature_quote === true,
     ]),
 
     /**
@@ -1118,7 +1117,7 @@ const getFeatures = (instance: Instance) => {
     translations: any([
       instance.api_versions['translation.pleroma.pl-api'] >= 1,
       instance.api_versions['machine_translation.akkoma.pl-api'] >= 1,
-      instance?.configuration.translation.enabled,
+      instance.configuration.translation.enabled,
     ]),
 
     /**
