@@ -34,7 +34,7 @@ const StillImage: React.FC<IStillImage> = ({
   const img = useRef<HTMLImageElement>(null);
 
   const hoverToPlay = (
-    src && !autoPlayGif && (isGif || src.endsWith('.gif') || src.startsWith('blob:'))
+    src && !autoPlayGif && ((isGif && !src.endsWith('.png')) || src.endsWith('.gif') || src.startsWith('blob:'))
   );
 
   const handleImageLoad = () => {
