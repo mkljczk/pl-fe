@@ -4,6 +4,8 @@ import { filterBadges, getTagDiff } from 'pl-fe/utils/badges';
 
 import { getClient } from '../api';
 
+import { deleteFromTimelines } from './timelines';
+
 import type { Account, AdminGetAccountsParams, AdminGetReportsParams, PleromaConfig } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
@@ -189,9 +191,10 @@ const deleteStatus = (statusId: string) =>
     dispatch({ type: ADMIN_STATUS_DELETE_REQUEST, statusId });
     return getClient(getState).admin.statuses.deleteStatus(statusId)
       .then(() => {
-        dispatch({ type: ADMIN_STATUS_DELETE_SUCCESS, statusId });
+        dispatch(deleteFromTimelines(statusId));
+        return dispatch({ type: ADMIN_STATUS_DELETE_SUCCESS, statusId });
       }).catch(error => {
-        dispatch({ type: ADMIN_STATUS_DELETE_FAIL, error, statusId });
+        return dispatch({ type: ADMIN_STATUS_DELETE_FAIL, error, statusId });
       });
   };
 
