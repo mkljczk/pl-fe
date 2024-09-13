@@ -28,7 +28,7 @@ const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
       <StillImage
         alt={alt || emoji}
         src={src}
-        isGif
+        isGif={!src.endsWith('.png')}
         noGroup={noGroup}
         letterboxed
         {...rest}
