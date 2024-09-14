@@ -1124,6 +1124,7 @@
   "notification.pleroma:participation_request": "{name} wants to join your event",
   "notification.poll": "A poll you have voted in has ended",
   "notification.reblog": "{name} reposted your post",
+  "notification.reply": "{name} replied to your post",
   "notification.severed_relationships": "Lost connections with {name}",
   "notification.status": "{name} just posted",
   "notification.update": "{name} edited a post you interacted with",

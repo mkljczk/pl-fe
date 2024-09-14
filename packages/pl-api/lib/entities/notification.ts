@@ -24,8 +24,14 @@ const accountNotificationSchema = baseNotificationSchema.extend({
   type: z.enum(['follow', 'follow_request', 'admin.sign_up', 'bite']),
 });
 
+const mentionNotificationSchema = baseNotificationSchema.extend({
+  type: z.literal('mention'),
+  subtype: z.enum(['reply']).nullable().catch(null),
+  status: statusSchema,
+});
+
 const statusNotificationSchema = baseNotificationSchema.extend({
-  type: z.enum(['mention', 'status', 'reblog', 'favourite', 'poll', 'update', 'event_reminder']),
+  type: z.enum(['status', 'reblog', 'favourite', 'poll', 'update', 'event_reminder']),
   status: statusSchema,
 });
 
@@ -77,6 +83,7 @@ const notificationSchema: z.ZodType<Notification> = z.preprocess((notification: 
     : notification.type?.replace(/^pleroma:/, ''),
 }), z.discriminatedUnion('type', [
   accountNotificationSchema,
+  mentionNotificationSchema,
   statusNotificationSchema,
   reportNotificationSchema,
   severedRelationshipNotificationSchema,
@@ -89,6 +96,7 @@ const notificationSchema: z.ZodType<Notification> = z.preprocess((notification: 
 
 type Notification = z.infer<
 | typeof accountNotificationSchema
+| typeof mentionNotificationSchema
 | typeof statusNotificationSchema
 | typeof reportNotificationSchema
 | typeof severedRelationshipNotificationSchema

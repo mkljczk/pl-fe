@@ -40,7 +40,7 @@ const buildLink = (account: Pick<Account, 'acct' | 'display_name_html'>): JSX.El
   </bdi>
 );
 
-const icons: Partial<Record<NotificationType, string>> = {
+const icons: Partial<Record<NotificationType | 'reply', string>> = {
   follow: require('@tabler/icons/outline/user-plus.svg'),
   follow_request: require('@tabler/icons/outline/user-plus.svg'),
   mention: require('@tabler/icons/outline/at.svg'),
@@ -56,9 +56,10 @@ const icons: Partial<Record<NotificationType, string>> = {
   participation_request: require('@tabler/icons/outline/calendar-event.svg'),
   participation_accepted: require('@tabler/icons/outline/calendar-event.svg'),
   bite: require('@tabler/icons/outline/pacman.svg'),
+  reply: require('@tabler/icons/outline/corner-up-left.svg'),
 };
 
-const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
+const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMessages({
   follow: {
     id: 'notification.follow',
     defaultMessage: '{name} followed you',
@@ -135,11 +136,15 @@ const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
     id: 'notification.bite',
     defaultMessage: '{name} has bit you',
   },
+  reply: {
+    id: 'notification.reply',
+    defaultMessage: '{name} replied to your post',
+  },
 });
 
 const buildMessage = (
   intl: IntlShape,
-  type: NotificationType,
+  type: NotificationType | 'reply',
   accounts: Array<Pick<Account, 'acct' | 'display_name_html'>>,
   targetName: string,
   instanceTitle: string,
@@ -292,7 +297,7 @@ const Notification: React.FC<INotification> = (props) => {
     } else if (icons[type]) {
       return (
         <Icon
-          src={icons[type]!}
+          src={icons[type === 'mention' ? notification.subtype || type : type]!}
           className='flex-none text-primary-600 dark:text-primary-400'
         />
       );
@@ -362,7 +367,7 @@ const Notification: React.FC<INotification> = (props) => {
   const targetName = notification.type === 'move' ? notification.target.acct : '';
 
   const message: React.ReactNode = account && typeof account === 'object'
-    ? buildMessage(intl, type, accounts, targetName, instance.title)
+    ? buildMessage(intl, type === 'mention' ? notification.subtype || type : type, accounts, targetName, instance.title)
     : null;
 
   const ariaLabel = (
