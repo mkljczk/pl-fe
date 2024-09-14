@@ -364,7 +364,6 @@ const DropdownMenu = (props: IDropdownMenu) => {
         <Portal>
           <div
             data-testid='dropdown-menu'
-            className={getClassName()}
             ref={refs.setFloating}
             style={{
               position: strategy,
@@ -372,14 +371,16 @@ const DropdownMenu = (props: IDropdownMenu) => {
               left: x ?? 0,
             }}
           >
-            <DropdownMenuContent handleClose={handleClose} items={items} component={component} />
+            <div className={getClassName()}>
+              <DropdownMenuContent handleClose={handleClose} items={items} component={component} />
 
-            {/* Arrow */}
-            <div
-              ref={arrowRef}
-              style={arrowProps}
-              className='pointer-events-none absolute z-[-1] h-3 w-3 bg-white black:bg-black dark:bg-gray-900'
-            />
+              {/* Arrow */}
+              <div
+                ref={arrowRef}
+                style={arrowProps}
+                className='pointer-events-none absolute z-[-1] h-3 w-3 bg-white black:bg-black dark:bg-gray-900'
+              />
+            </div>
           </div>
         </Portal>
       ) : null}
