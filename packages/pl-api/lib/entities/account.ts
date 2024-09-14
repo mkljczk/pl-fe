@@ -36,6 +36,8 @@ const preprocessAccount = (account: any) => {
       'favicon',
       'birthday',
       'deactivated',
+      'avatar_description',
+      'header_description',
 
       'settings_store',
       'chat_token',
