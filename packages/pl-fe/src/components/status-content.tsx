@@ -204,7 +204,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
           dangerouslySetInnerHTML={{ __html: spoilerText }}
           ref={spoilerNode}
         />
-        {expandable && (
+        {content && expandable && (
           <Button
             className='ml-2 align-middle'
             type='button'
@@ -225,19 +225,21 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   if (expandable && !expanded) return <>{output}</>;
 
   if (onClick) {
-    output.push(
-      <Markup
-        ref={node}
-        tabIndex={0}
-        key='content'
-        className={className}
-        direction={direction}
-        lang={status.language || undefined}
-        size={textSize}
-      >
-        {content}
-      </Markup>,
-    );
+    if (content) {
+      output.push(
+        <Markup
+          ref={node}
+          tabIndex={0}
+          key='content'
+          className={className}
+          direction={direction}
+          lang={status.language || undefined}
+          size={textSize}
+        >
+          {content}
+        </Markup>,
+      );
+    }
 
     const hasPoll = !!status.poll_id;
 
@@ -251,19 +253,21 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
 
     return <Stack space={4} className={clsx({ 'bg-gray-100 dark:bg-primary-800 rounded-md p-4': hasPoll })}>{output}</Stack>;
   } else {
-    output.push(
-      <Markup
-        ref={node}
-        tabIndex={0}
-        key='content'
-        className={className}
-        direction={direction}
-        lang={status.language || undefined}
-        size={textSize}
-      >
-        {content}
-      </Markup>,
-    );
+    if (content) {
+      output.push(
+        <Markup
+          ref={node}
+          tabIndex={0}
+          key='content'
+          className={className}
+          direction={direction}
+          lang={status.language || undefined}
+          size={textSize}
+        >
+          {content}
+        </Markup>,
+      );
+    }
 
     if (collapsed) {
       output.push(<ReadMoreButton onClick={() => {}} key='read-more' quote={quote} />);
