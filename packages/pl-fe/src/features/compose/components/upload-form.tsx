@@ -16,7 +16,9 @@ interface IUploadForm {
 const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
   const dispatch = useAppDispatch();
 
-  const mediaIds = useCompose(composeId).media_attachments.map((item) => item.id);
+  const { is_uploading: isUploading, media_attachments: mediaAttachments } = useCompose(composeId);
+
+  const mediaIds = mediaAttachments.map((item) => item.id);
 
   const dragItem = useRef<string | null>();
   const dragOverItem = useRef<string | null>();
@@ -35,11 +37,13 @@ const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
     dragOverItem.current = null;
   }, [dragItem, dragOverItem]);
 
+  if (!isUploading && mediaIds.isEmpty()) return null;
+
   return (
     <div className='overflow-hidden'>
       <UploadProgress composeId={composeId} />
 
-      <HStack wrap className={clsx('overflow-hidden', mediaIds.size !== 0 && 'p-1')}>
+      <HStack wrap className={clsx('overflow-hidden', mediaIds.size !== 0 && 'm-[-5px]')}>
         {mediaIds.map((id: string) => (
           <Upload
             id={id}

@@ -183,11 +183,12 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     </HStack>
   ), [features, id, anyMedia]);
 
-  const composeModifiers = !condensed && (
+  const showModifiers = !condensed && (compose.media_attachments.size || compose.is_uploading || compose.poll?.options.size || compose.schedule);
+
+  const composeModifiers = showModifiers && (
     <Stack space={4} className='font-[inherit] text-sm text-gray-900'>
       <UploadForm composeId={id} onSubmit={handleSubmit} />
       <PollForm composeId={id} />
-
       <ScheduleForm composeId={id} />
     </Stack>
   );
@@ -228,7 +229,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       {!shouldCondense && !event && !group && <ReplyMentions composeId={id} />}
 
       {!!selectButtons && (
-        <HStack space={2} wrap className='-mb-2'>
+        <HStack space={2} wrap className={clsx(transparent && '-mb-2')}>
           {selectButtons}
         </HStack>
       )}
