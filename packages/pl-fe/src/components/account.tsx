@@ -160,7 +160,7 @@ const Account = ({
 
     if (!withRelationship) return null;
 
-    if (account.id !== me) {
+    if (me && account.id !== me) {
       return <ActionButton account={account} actionType={actionType} />;
     }
 
