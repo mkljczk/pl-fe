@@ -198,7 +198,11 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
     if (autoloadMore || !hasMore || !onLoadMore) {
       return null;
     } else {
-      return <LoadMore className={loadMoreClassName} visible={!isLoading} onClick={onLoadMore} />;
+      const button = <LoadMore visible={!isLoading} onClick={onLoadMore} />;
+
+      if (loadMoreClassName) return <div className={loadMoreClassName}>{button}</div>;
+
+      return button;
     }
   };
 
