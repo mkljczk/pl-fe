@@ -23,6 +23,9 @@ import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 const MAX_HEIGHT = 322; // 20px * 16 (+ 2px padding at the top)
 const BIG_EMOJI_LIMIT = 10;
 
+const nodesToText = (nodes: Array<DOMNode>): string =>
+  nodes.map(node => node.type === 'text' ? node.data : node.type === 'tag' ? nodesToText(node.children as Array<DOMNode>) : '').join('');
+
 interface IReadMoreButton {
   onClick: React.MouseEventHandler;
   quote?: boolean;
@@ -148,10 +151,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
           }
 
           if (classes?.includes('hashtag')) {
-            const child = domToReact(domNode.children as DOMNode[]);
-            const hashtag = typeof child === 'string' ? child.replace(/^#/, '') : undefined;
+            const hashtag = nodesToText(domNode.children as Array<DOMNode>);
             if (hashtag) {
-              return <HashtagLink hashtag={hashtag} />;
+              return <HashtagLink hashtag={hashtag.replace(/^#/, '')} />;
             }
           }
 
