@@ -257,6 +257,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === FRIENDICA,
       v.software === MASTODON,
+      v.software === MITRA && gte(v.version, '3.3.0'),
       v.software === PIXELFED,
       v.software === PLEROMA,
       v.software === TAKAHE && gte(v.version, '0.9.0'),
@@ -353,7 +354,7 @@ const getFeatures = (instance: Instance) => {
      */
     customEmojiReacts: any([
       instance.api_versions['custom_emoji_reactions.pleroma.pl-api'] >= 1,
-      v.software === PLEROMA && gte(v.version, '2.6.0'),
+      v.software === MITRA && gte(v.version, '3.4.0'),
     ]),
 
     /**
@@ -429,6 +430,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /v1/statuses/:id/unreact/:emoji
      */
     emojiReacts: any([
+      v.software === MITRA && gte(v.version, '2.21.0'),
       v.software === PLEROMA,
       instance ? instance.configuration.reactions.max_reactions > 0 : false,
     ]),
