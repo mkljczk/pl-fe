@@ -113,19 +113,19 @@ const Preferences = () => {
     default: intl.formatMessage(messages.displayPostsDefault),
     hide_all: intl.formatMessage(messages.displayPostsHideAll),
     show_all: intl.formatMessage(messages.displayPostsShowAll),
-  }), []);
+  }), [settings.locale]);
 
   const defaultPrivacyOptions = React.useMemo(() => ({
     public: intl.formatMessage(messages.privacy_public),
     unlisted: intl.formatMessage(messages.privacy_unlisted),
     private: intl.formatMessage(messages.privacy_followers_only),
-  }), []);
+  }), [settings.locale]);
 
   const defaultContentTypeOptions = React.useMemo(() => ({
     'text/plain': intl.formatMessage(messages.content_type_plaintext),
     'text/markdown': intl.formatMessage(messages.content_type_markdown),
     'text/html': intl.formatMessage(messages.content_type_html),
-  }), []);
+  }), [settings.locale]);
 
   return (
     <Form>
