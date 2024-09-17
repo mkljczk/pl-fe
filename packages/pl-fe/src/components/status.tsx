@@ -132,8 +132,9 @@ const Status: React.FC<IStatus> = (props) => {
     dispatch(replyCompose(actualStatus, status.reblog_id ? status.account : undefined));
   };
 
-  const handleHotkeyFavourite = (): void => {
-    toggleFavourite(actualStatus);
+  const handleHotkeyFavourite = (e?: KeyboardEvent): void => {
+    e?.preventDefault();
+    dispatch(toggleFavourite(actualStatus));
   };
 
   const handleHotkeyBoost = (e?: KeyboardEvent): void => {
