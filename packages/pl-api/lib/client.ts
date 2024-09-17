@@ -3418,7 +3418,7 @@ class PlApiClient {
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#put-apiv1pleromaadminstatusesid}
        */
       updateStatus: async (statusId: string, params: AdminUpdateStatusParams) => {
-        const response = await this.request(`/api/v1/pleroma/admin/statuses/${statusId}`, { method: 'PUT', params });
+        const response = await this.request(`/api/v1/pleroma/admin/statuses/${statusId}`, { method: 'PUT', body: params });
 
         return statusSchema.parse(response.json);
       },
