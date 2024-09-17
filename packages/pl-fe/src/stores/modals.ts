@@ -30,6 +30,7 @@ import type { MissingDescriptionModalProps } from 'pl-fe/features/ui/components/
 import type { ReactionsModalProps } from 'pl-fe/features/ui/components/modals/reactions-modal';
 import type { ReblogsModalProps } from 'pl-fe/features/ui/components/modals/reblogs-modal';
 import type { ReplyMentionsModalProps } from 'pl-fe/features/ui/components/modals/reply-mentions-modal';
+import type { ReportModalProps } from 'pl-fe/features/ui/components/modals/report-modal';
 import type { SelectBookmarkFolderModalProps } from 'pl-fe/features/ui/components/modals/select-bookmark-folder-modal';
 import type { TextFieldModalProps } from 'pl-fe/features/ui/components/modals/text-field-modal';
 import type { UnauthorizedModalProps } from 'pl-fe/features/ui/components/modals/unauthorized-modal';
@@ -37,7 +38,7 @@ import type { VideoModalProps } from 'pl-fe/features/ui/components/modals/video-
 
 type OpenModalProps =
   | [type: 'ACCOUNT_MODERATION', props: AccountModerationModalProps]
-  | [type: 'BIRTHDAYS' | 'COMPOSE_EVENT' | 'CREATE_GROUP' | 'HOTKEYS' | 'REPORT']
+  | [type: 'BIRTHDAYS' | 'COMPOSE_EVENT' | 'CREATE_GROUP' | 'HOTKEYS']
   | [type: 'BOOST', props: BoostModalProps]
   | [type: 'COMPARE_HISTORY', props: CompareHistoryModalProps]
   | [type: 'COMPONENT', props: ComponentModalProps]
@@ -66,6 +67,7 @@ type OpenModalProps =
   | [type: 'REACTIONS', props: ReactionsModalProps]
   | [type: 'REBLOGS', props: ReblogsModalProps]
   | [type: 'REPLY_MENTIONS', props: ReplyMentionsModalProps]
+  | [type: 'REPORT', props: ReportModalProps]
   | [type: 'SELECT_BOOKMARK_FOLDER', props: SelectBookmarkFolderModalProps]
   | [type: 'TEXT_FIELD', props: TextFieldModalProps]
   | [type: 'UNAUTHORIZED', props?: UnauthorizedModalProps]

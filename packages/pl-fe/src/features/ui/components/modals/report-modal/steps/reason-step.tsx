@@ -2,9 +2,8 @@ import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeReportComment, changeReportRule } from 'pl-fe/actions/reports';
 import { FormGroup, Stack, Text, Textarea } from 'pl-fe/components/ui';
-import { useAppDispatch, useAppSelector, useInstance } from 'pl-fe/hooks';
+import { useInstance } from 'pl-fe/hooks';
 
 import type { Account } from 'pl-fe/normalizers';
 
@@ -15,12 +14,15 @@ const messages = defineMessages({
 
 interface IReasonStep {
   account?: Account;
+  comment: string;
+  setComment: (value: string) => void;
+  ruleIds: Array<string>;
+  setRuleIds: (value: Array<string>) => void;
 }
 
 const RULES_HEIGHT = 385;
 
-const ReasonStep: React.FC<IReasonStep> = () => {
-  const dispatch = useAppDispatch();
+const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRuleIds }) => {
   const intl = useIntl();
 
   const rulesListRef = useRef(null);
@@ -28,13 +30,18 @@ const ReasonStep: React.FC<IReasonStep> = () => {
   const [isNearBottom, setNearBottom] = useState<boolean>(false);
   const [isNearTop, setNearTop] = useState<boolean>(true);
 
-  const comment = useAppSelector((state) => state.reports.new.comment);
   const { rules } = useInstance();
-  const ruleIds = useAppSelector((state) => state.reports.new.rule_ids);
   const shouldRequireRule = rules.length > 0;
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    dispatch(changeReportComment(event.target.value));
+    setComment(event.target.value);
+  };
+
+  const handleRuleChange = (ruleId: string) => {
+    let newRuleIds;
+    if (ruleIds.includes(ruleId)) newRuleIds = ruleIds.filter(id => id !== ruleId);
+    else newRuleIds = [...ruleIds, ruleId];
+    setRuleIds(newRuleIds);
   };
 
   const handleRulesScrolling = () => {
@@ -81,13 +88,13 @@ const ReasonStep: React.FC<IReasonStep> = () => {
               ref={rulesListRef}
             >
               {rules.map((rule, idx) => {
-                const isSelected = ruleIds.includes(String(rule.id));
+                const isSelected = ruleIds.includes(rule.id);
 
                 return (
                   <button
                     key={idx}
                     data-testid={`rule-${rule.id}`}
-                    onClick={() => dispatch(changeReportRule(rule.id))}
+                    onClick={() => handleRuleChange(rule.id)}
                     className={clsx({
                       'relative border border-solid border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-primary-800/30 text-start w-full p-4 flex justify-between items-center cursor-pointer': true,
                       'rounded-tl-lg rounded-tr-lg': idx === 0,

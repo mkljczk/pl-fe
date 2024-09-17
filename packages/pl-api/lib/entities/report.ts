@@ -14,7 +14,7 @@ const reportSchema = z.object({
   created_at: dateSchema.optional().catch(undefined),
   status_ids: z.array(z.string()).nullable().catch(null),
   rule_ids: z.array(z.string()).nullable().catch(null),
-  target_account: accountSchema,
+  target_account: accountSchema.nullable().catch(null),
 });
 
 type Report = z.infer<typeof reportSchema>;

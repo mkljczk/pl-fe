@@ -64,19 +64,25 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
   );
 };
 
-const ReportModal = ({ onClose }: BaseModalProps) => {
+interface ReportModalProps {
+  accountId: string;
+  entityType: ReportableEntities;
+  statusIds: Array<string>;
+}
+
+const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({ onClose, accountId, entityType, statusIds }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const accountId = useAppSelector((state) => state.reports.new.account_id);
   const { account } = useAccount(accountId || undefined);
 
-  const entityType = useAppSelector((state) => state.reports.new.entityType);
-  const isBlocked = useAppSelector((state) => state.reports.new.block);
-  const isSubmitting = useAppSelector((state) => state.reports.new.isSubmitting);
+  const [block, setBlock] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { rules } = useInstance();
-  const ruleIds = useAppSelector((state) => state.reports.new.rule_ids);
-  const selectedStatusIds = useAppSelector((state) => state.reports.new.status_ids);
+  const [ruleIds, setRuleIds] = useState<Array<string>>([]);
+  const [selectedStatusIds, setSelectedStatusIds] = useState(statusIds);
+  const [comment, setComment] = useState('');
+  const [forward, setForward] = useState(false);
 
   const shouldRequireRule = rules.length > 0;
 
@@ -86,17 +92,25 @@ const ReportModal = ({ onClose }: BaseModalProps) => {
   const [currentStep, setCurrentStep] = useState<Steps>(Steps.ONE);
 
   const handleSubmit = () => {
-    dispatch(submitReport())
-      .then(() => setCurrentStep(Steps.THREE))
-      .catch((error) => dispatch(submitReportFail(error)));
+    setIsSubmitting(true);
 
-    if (isBlocked && account) {
+    dispatch(submitReport(accountId, selectedStatusIds, [...ruleIds], comment, forward))
+      .then(() => {
+        setIsSubmitting(false);
+        setCurrentStep(Steps.THREE);
+      })
+      .catch((error) => {
+        setIsSubmitting(false);
+        dispatch(submitReportFail(error));
+      });
+
+    if (block && account) {
       dispatch(blockAccount(account.id));
     }
   };
 
   const renderSelectedStatuses = useCallback(() => {
-    switch (selectedStatusIds.size) {
+    switch (selectedStatusIds.length) {
       case 0:
         return (
           <div className='flex w-full items-center justify-center rounded-lg bg-gray-100 p-4 dark:bg-gray-800'>
@@ -104,9 +118,9 @@ const ReportModal = ({ onClose }: BaseModalProps) => {
           </div>
         );
       default:
-        return <SelectedStatus statusId={selectedStatusIds.first()} />;
+        return <SelectedStatus statusId={selectedStatusIds[0]} />;
     }
-  }, [selectedStatusIds.size]);
+  }, [selectedStatusIds.length]);
 
   const cancelText = useMemo(() => {
     switch (currentStep) {
@@ -174,8 +188,8 @@ const ReportModal = ({ onClose }: BaseModalProps) => {
       return false;
     }
 
-    return isSubmitting || (shouldRequireRule && ruleIds.isEmpty()) || (isReportingStatus && selectedStatusIds.size === 0);
-  }, [currentStep, isSubmitting, shouldRequireRule, ruleIds, selectedStatusIds.size, isReportingStatus]);
+    return isSubmitting || (shouldRequireRule && ruleIds.length === 0) || (isReportingStatus && selectedStatusIds.length === 0);
+  }, [currentStep, isSubmitting, shouldRequireRule, ruleIds.length, selectedStatusIds.length, isReportingStatus]);
 
   const calculateProgress = useCallback(() => {
     switch (currentStep) {
@@ -219,11 +233,24 @@ const ReportModal = ({ onClose }: BaseModalProps) => {
         {(currentStep !== Steps.THREE && !isReportingAccount) && renderSelectedEntity()}
 
         {StepToRender && (
-          <StepToRender account={account} />
+          <StepToRender
+            account={account}
+            selectedStatusIds={selectedStatusIds}
+            setSelectedStatusIds={setSelectedStatusIds}
+            block={block}
+            setBlock={setBlock}
+            forward={forward}
+            setForward={setForward}
+            comment={comment}
+            setComment={setComment}
+            ruleIds={ruleIds}
+            setRuleIds={setRuleIds}
+            isSubmitting={isSubmitting}
+          />
         )}
       </Stack>
     </Modal>
   );
 };
 
-export { ReportModal as default };
+export { ReportModal as default, type ReportModalProps };

@@ -2,10 +2,9 @@ import { OrderedSet } from 'immutable';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeReportBlock, changeReportForward } from 'pl-fe/actions/reports';
 import { Button, FormGroup, HStack, Stack, Text, Toggle } from 'pl-fe/components/ui';
 import StatusCheckBox from 'pl-fe/features/ui/components/modals/report-modal/components/status-check-box';
-import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { getDomain } from 'pl-fe/utils/accounts';
 
 import type { Account } from 'pl-fe/normalizers';
@@ -20,27 +19,49 @@ const messages = defineMessages({
 
 interface IOtherActionsStep {
   account: Pick<Account, 'id' | 'acct' | 'local' | 'url'>;
+  selectedStatusIds: string[];
+  setSelectedStatusIds: (value: string[]) => void;
+  block: boolean;
+  setBlock: (value: boolean) => void;
+  forward: boolean;
+  setForward: (value: boolean) => void;
+  isSubmitting: boolean;
 }
 
-const OtherActionsStep = ({ account }: IOtherActionsStep) => {
-  const dispatch = useAppDispatch();
+const OtherActionsStep = ({
+  account,
+  selectedStatusIds,
+  setSelectedStatusIds,
+  block,
+  setBlock,
+  forward,
+  setForward,
+  isSubmitting,
+}: IOtherActionsStep) => {
   const features = useFeatures();
   const intl = useIntl();
 
-  const statusIds = useAppSelector((state) => OrderedSet(state.timelines.get(`account:${account.id}:with_replies`)!.items).union(state.reports.new.status_ids) as OrderedSet<string>);
-  const isBlocked = useAppSelector((state) => state.reports.new.block);
-  const isForward = useAppSelector((state) => state.reports.new.forward);
+  const statusIds = useAppSelector((state) => OrderedSet(state.timelines.get(`account:${account.id}:with_replies`)!.items).union(selectedStatusIds) as OrderedSet<string>);
+  const isBlocked = block;
+  const isForward = forward;
   const canForward = !account.local && features.federating;
-  const isSubmitting = useAppSelector((state) => state.reports.new.isSubmitting);
 
   const [showAdditionalStatuses, setShowAdditionalStatuses] = useState<boolean>(false);
 
   const handleBlockChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeReportBlock(event.target.checked));
+    setBlock(event.target.checked);
   };
 
   const handleForwardChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeReportForward(event.target.checked));
+    setForward(event.target.checked);
+  };
+
+  const toggleStatusReport = (statusId: string) => (value: boolean) => {
+    let newStatusIds = selectedStatusIds;
+    if (value && !selectedStatusIds.includes(statusId)) newStatusIds = [...selectedStatusIds, statusId];
+    if (!value) newStatusIds = selectedStatusIds.filter(id => id !== statusId);
+
+    setSelectedStatusIds(newStatusIds);
   };
 
   return (
@@ -54,7 +75,14 @@ const OtherActionsStep = ({ account }: IOtherActionsStep) => {
           {showAdditionalStatuses ? (
             <Stack space={2}>
               <div className='divide-y divide-solid divide-gray-200 dark:divide-gray-800'>
-                {statusIds.map((statusId) => <StatusCheckBox id={statusId} key={statusId} />)}
+                {statusIds.map((statusId) => (
+                  <StatusCheckBox
+                    id={statusId}
+                    key={statusId}
+                    checked={selectedStatusIds.includes(statusId)}
+                    toggleStatusReport={toggleStatusReport(statusId)}
+                  />
+                ))}
               </div>
 
               <div>

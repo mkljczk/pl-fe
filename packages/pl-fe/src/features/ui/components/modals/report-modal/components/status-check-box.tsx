@@ -1,23 +1,22 @@
 import noop from 'lodash/noop';
 import React, { Suspense } from 'react';
 
-import { toggleStatusReport } from 'pl-fe/actions/reports';
 import StatusContent from 'pl-fe/components/status-content';
 import { Stack, Toggle } from 'pl-fe/components/ui';
 import { MediaGallery, Video, Audio } from 'pl-fe/features/ui/util/async-components';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks';
 
 interface IStatusCheckBox {
   id: string;
   disabled?: boolean;
+  toggleStatusReport: (value: boolean) => void;
+  checked: boolean;
 }
 
-const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled }) => {
-  const dispatch = useAppDispatch();
+const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled, checked, toggleStatusReport }) => {
   const status = useAppSelector((state) => state.statuses.get(id));
-  const checked = useAppSelector((state) => state.reports.new.status_ids.includes(id));
 
-  const onToggle: React.ChangeEventHandler<HTMLInputElement> = (e) => dispatch(toggleStatusReport(id, e.target.checked));
+  const onToggle: React.ChangeEventHandler<HTMLInputElement> = (e) => toggleStatusReport(e.target.checked);
 
   if (!status || status.reblog_id) {
     return null;
