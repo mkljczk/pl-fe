@@ -8,7 +8,6 @@ import {
   useLocale,
   useAppSelector,
 } from 'pl-fe/hooks';
-import { userTouching } from 'pl-fe/is-mobile';
 import { normalizePlFeConfig } from 'pl-fe/normalizers';
 import { startSentry } from 'pl-fe/sentry';
 import { generateThemeCss } from 'pl-fe/utils/theme';
@@ -26,7 +25,7 @@ const PlFeHead: React.FC<IPlFeHead> = ({ children }) => {
   const plFeConfig = usePlFeConfig();
   const theme = useTheme();
 
-  const withModals = useAppSelector((state) => !state.modals.isEmpty() || (state.dropdown_menu.isOpen && userTouching.matches));
+  const withModals = useAppSelector((state) => !state.modals.isEmpty());
 
   const themeCss = generateThemeCss(demo ? normalizePlFeConfig({ brandColor: '#d80482' }) : plFeConfig);
   const dsn = plFeConfig.sentryDsn;
