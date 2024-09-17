@@ -4,7 +4,6 @@ import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { groupKick } from 'pl-fe/actions/groups';
-import { openModal } from 'pl-fe/actions/modals';
 import { useAccount, useBlockGroupMember, useDemoteGroupMember, usePromoteGroupMember } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
 import DropdownMenu from 'pl-fe/components/dropdown-menu/dropdown-menu';
@@ -13,6 +12,7 @@ import { deleteEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
 import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholder-account';
 import { useAppDispatch } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 
 import type { Menu as IMenu } from 'pl-fe/components/dropdown-menu';
@@ -44,11 +44,10 @@ interface IGroupMemberListItem {
   group: Pick<Group, 'id' | 'relationship'>;
 }
 
-const GroupMemberListItem = (props: IGroupMemberListItem) => {
-  const { member, group } = props;
-
+const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
+  const { openModal } = useModalsStore();
 
   const blockGroupMember = useBlockGroupMember(group, member.account);
   const promoteGroupMember = usePromoteGroupMember(group, member);
@@ -66,18 +65,18 @@ const GroupMemberListItem = (props: IGroupMemberListItem) => {
   const isMemberUser = member.role === GroupRoles.USER;
 
   const handleKickFromGroup = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.kickFromGroupHeading, { name: account?.username }),
       message: intl.formatMessage(messages.kickFromGroupMessage, { name: account?.username }),
       confirm: intl.formatMessage(messages.kickConfirm),
       onConfirm: () => dispatch(groupKick(group.id, account?.id as string)).then(() =>
         toast.success(intl.formatMessage(messages.kicked, { name: account?.acct })),
       ),
-    }));
+    });
   };
 
   const handleBlockFromGroup = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.blockFromGroupHeading),
       message: intl.formatMessage(messages.blockFromGroupMessage, { name: account?.username }),
       confirm: intl.formatMessage(messages.blockConfirm),
@@ -89,11 +88,11 @@ const GroupMemberListItem = (props: IGroupMemberListItem) => {
           },
         });
       },
-    }));
+    });
   };
 
   const handleAdminAssignment = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.promoteConfirm),
       message: intl.formatMessage(messages.promoteConfirmMessage, { name: account?.username }),
       confirm: intl.formatMessage(messages.promoteConfirm),
@@ -107,7 +106,7 @@ const GroupMemberListItem = (props: IGroupMemberListItem) => {
           },
         });
       },
-    }));
+    });
   };
 
   const handleUserAssignment = () => {

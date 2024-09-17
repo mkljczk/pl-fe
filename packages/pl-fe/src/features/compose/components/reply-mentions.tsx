@@ -1,16 +1,16 @@
 import React, { useCallback } from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
-import { useAppDispatch, useAppSelector, useCompose, useFeatures } from 'pl-fe/hooks';
+import { useAppSelector, useCompose, useFeatures } from 'pl-fe/hooks';
 import { makeGetStatus } from 'pl-fe/selectors';
+import { useModalsStore } from 'pl-fe/stores';
 
 interface IReplyMentions {
   composeId: string;
 }
 
 const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
   const features = useFeatures();
   const compose = useCompose(composeId);
 
@@ -25,9 +25,9 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
 
-    dispatch(openModal('REPLY_MENTIONS', {
+    openModal('REPLY_MENTIONS', {
       composeId,
-    }));
+    });
   };
 
   if (!compose.parent_reblogged_by && to.length === 0) {

@@ -4,14 +4,14 @@ import escape from 'lodash/escape';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
 import emojify from 'pl-fe/features/emoji';
 import { MediaGallery } from 'pl-fe/features/ui/util/async-components';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks';
 import { ChatKeys, useChatActions } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
+import { useModalsStore } from 'pl-fe/stores';
 import { stripHTML } from 'pl-fe/utils/html';
 import { onlyEmoji } from 'pl-fe/utils/rich-content';
 
@@ -51,7 +51,7 @@ interface IChatMessage {
 const ChatMessage = (props: IChatMessage) => {
   const { chat, chatMessage } = props;
 
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
   const intl = useIntl();
 
   const me = useAppSelector((state) => state.me);
@@ -78,7 +78,7 @@ const ChatMessage = (props: IChatMessage) => {
   }, []);
 
   const onOpenMedia = (media: any, index: number) => {
-    dispatch(openModal('MEDIA', { media, index }));
+    openModal('MEDIA', { media, index });
   };
 
   const maybeRenderMedia = (chatMessage: ChatMessageEntity) => {

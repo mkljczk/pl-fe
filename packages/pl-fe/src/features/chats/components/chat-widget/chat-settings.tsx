@@ -2,11 +2,11 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { blockAccount, unblockAccount } from 'pl-fe/actions/accounts';
-import { openModal } from 'pl-fe/actions/modals';
 import { Avatar, HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
 import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { useChatActions } from 'pl-fe/queries/chats';
+import { useModalsStore } from 'pl-fe/stores';
 
 import ChatPaneHeader from './chat-pane-header';
 
@@ -31,6 +31,7 @@ const ChatSettings = () => {
   const intl = useIntl();
   const features = useFeatures();
 
+  const { openModal } = useModalsStore();
   const { chat, changeScreen, toggleChatPane } = useChatContext();
   const { deleteChat } = useChatActions(chat?.id as string);
 
@@ -46,33 +47,33 @@ const ChatSettings = () => {
   };
 
   const handleBlockUser = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.blockHeading, { acct: chat?.account.acct }),
       message: intl.formatMessage(messages.blockMessage),
       confirm: intl.formatMessage(messages.blockConfirm),
       confirmationTheme: 'primary',
       onConfirm: () => dispatch(blockAccount(chat?.account.id as string)),
-    }));
+    });
   };
 
   const handleUnblockUser = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.unblockHeading, { acct: chat?.account.acct }),
       message: intl.formatMessage(messages.unblockMessage),
       confirm: intl.formatMessage(messages.unblockConfirm),
       confirmationTheme: 'primary',
       onConfirm: () => dispatch(unblockAccount(chat?.account.id as string)),
-    }));
+    });
   };
 
   const handleLeaveChat = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.leaveHeading),
       message: intl.formatMessage(messages.leaveMessage),
       confirm: intl.formatMessage(messages.leaveConfirm),
       confirmationTheme: 'primary',
       onConfirm: () => deleteChat.mutate(),
-    }));
+    });
   };
 
   if (!chat) {

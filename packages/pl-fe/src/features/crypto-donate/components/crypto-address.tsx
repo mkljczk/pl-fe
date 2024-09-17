@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { openModal } from 'pl-fe/actions/modals';
 import CopyableInput from 'pl-fe/components/copyable-input';
 import { Text, Icon, Stack, HStack } from 'pl-fe/components/ui';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import { getExplorerUrl } from '../utils/block-explorer';
 import { getTitle } from '../utils/coin-db';
@@ -19,10 +18,10 @@ interface ICryptoAddress {
 const CryptoAddress: React.FC<ICryptoAddress> = (props): JSX.Element => {
   const { address, ticker, note } = props;
 
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
 
   const handleModalClick = (e: React.MouseEvent<HTMLElement>): void => {
-    dispatch(openModal('CRYPTO_DONATE', props));
+    openModal('CRYPTO_DONATE', props);
     e.preventDefault();
   };
 

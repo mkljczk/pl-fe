@@ -1,12 +1,11 @@
 import React from 'react';
 import { FormattedDate, FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
 import { useAnnouncements } from 'pl-fe/api/hooks/admin/useAnnouncements';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Button, Column, HStack, Stack, Text } from 'pl-fe/components/ui';
-import { useAppDispatch } from 'pl-fe/hooks';
 import { AdminAnnouncement } from 'pl-fe/normalizers';
+import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
@@ -23,22 +22,22 @@ interface IAnnouncement {
 
 const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const { deleteAnnouncement } = useAnnouncements();
+  const { openModal } = useModalsStore();
 
   const handleEditAnnouncement = () => {
-    dispatch(openModal('EDIT_ANNOUNCEMENT', { announcement }));
+    openModal('EDIT_ANNOUNCEMENT', { announcement });
   };
 
   const handleDeleteAnnouncement = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.deleteHeading),
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
       onConfirm: () => deleteAnnouncement(announcement.id, {
         onSuccess: () => toast.success(messages.deleteSuccess),
       }),
-    }));
+    });
   };
 
   return (
@@ -87,12 +86,12 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
 
 const Announcements: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
 
   const { data: announcements, isLoading } = useAnnouncements();
 
   const handleCreateAnnouncement = () => {
-    dispatch(openModal('EDIT_ANNOUNCEMENT'));
+    openModal('EDIT_ANNOUNCEMENT');
   };
 
   const emptyMessage = <FormattedMessage id='empty_column.admin.announcements' defaultMessage='There are no announcements yet.' />;

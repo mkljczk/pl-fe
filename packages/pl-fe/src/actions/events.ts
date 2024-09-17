@@ -1,11 +1,11 @@
 import { defineMessages, IntlShape } from 'react-intl';
 
 import { getClient } from 'pl-fe/api';
+import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 
 import { importFetchedAccounts, importFetchedStatus, importFetchedStatuses } from './importer';
 import { uploadFile } from './media';
-import { closeModal, openModal } from './modals';
 import {
   STATUS_FETCH_SOURCE_FAIL,
   STATUS_FETCH_SOURCE_REQUEST,
@@ -228,7 +228,7 @@ const submitEvent = () =>
         ? getClient(state).events.createEvent(params)
         : getClient(state).events.editEvent(statusId, params)
     ).then((data) => {
-      dispatch(closeModal('COMPOSE_EVENT'));
+      useModalsStore.getState().closeModal('COMPOSE_EVENT');
       dispatch(importFetchedStatus(data));
       dispatch(submitEventSuccess(data));
       toast.success(
@@ -557,7 +557,7 @@ const editEvent = (statusId: string) => (dispatch: AppDispatch, getState: () => 
       text: response.text,
       location: response.location,
     });
-    dispatch(openModal('COMPOSE_EVENT'));
+    useModalsStore.getState().openModal('COMPOSE_EVENT');
   }).catch(error => {
     dispatch({ type: STATUS_FETCH_SOURCE_FAIL, statusId, error });
   });

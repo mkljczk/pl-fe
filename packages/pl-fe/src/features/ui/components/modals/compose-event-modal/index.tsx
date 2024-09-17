@@ -17,7 +17,6 @@ import {
   authorizeEventParticipationRequest,
   cancelEventCompose,
 } from 'pl-fe/actions/events';
-import { closeModal, openModal } from 'pl-fe/actions/modals';
 import { ADDRESS_ICONS } from 'pl-fe/components/autosuggest-location';
 import LocationSearch from 'pl-fe/components/location-search';
 import { checkEventComposeContent } from 'pl-fe/components/modal-root';
@@ -26,6 +25,7 @@ import AccountContainer from 'pl-fe/containers/account-container';
 import { isCurrentOrFutureDate } from 'pl-fe/features/compose/components/schedule-form';
 import { ComposeEditor, DatePicker } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import UploadButton from './upload-button';
 
@@ -90,6 +90,7 @@ const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
 const ComposeEventModal: React.FC<BaseModalProps> = ({ onClose }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
 
   const [tab, setTab] = useState<'edit' | 'pending'>('edit');
   const [text, setText] = useState('');
@@ -134,7 +135,7 @@ const ComposeEventModal: React.FC<BaseModalProps> = ({ onClose }) => {
   const onClickClose = () => {
     dispatch((dispatch, getState) => {
       if (checkEventComposeContent(getState().compose_event)) {
-        dispatch(openModal('CONFIRM', {
+        openModal('CONFIRM', {
           heading: statusId
             ? <FormattedMessage id='confirmations.cancel_event_editing.heading' defaultMessage='Cancel event editing' />
             : <FormattedMessage id='confirmations.delete_event.heading' defaultMessage='Delete event' />,
@@ -143,10 +144,10 @@ const ComposeEventModal: React.FC<BaseModalProps> = ({ onClose }) => {
             : <FormattedMessage id='confirmations.delete_event.message' defaultMessage='Are you sure you want to delete this event?' />,
           confirm: intl.formatMessage(messages.confirm),
           onConfirm: () => {
-            dispatch(closeModal('COMPOSE_EVENT'));
+            onClose('COMPOSE_EVENT');
             dispatch(cancelEventCompose());
           },
-        }));
+        });
       } else {
         onClose('COMPOSE_EVENT');
       }

@@ -27,9 +27,9 @@ import * as React from 'react';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
 import { HStack, Icon, IconButton } from 'pl-fe/components/ui';
-import { useAppDispatch, useSettings } from 'pl-fe/hooks';
+import { useSettings } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import { $isImageNode } from './image-node';
 
@@ -92,7 +92,7 @@ const ImageComponent = ({
   src: string;
 }): JSX.Element => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
   const { missingDescriptionModal } = useSettings();
 
   const imageRef = useRef<null | HTMLImageElement>(null);
@@ -129,7 +129,7 @@ const ImageComponent = ({
       altText,
     });
 
-    dispatch(openModal('MEDIA', { media: [image], index: 0 }));
+    openModal('MEDIA', { media: [image], index: 0 });
   };
 
   const onDelete = useCallback(

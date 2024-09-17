@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
 import { unblockAccount } from 'pl-fe/actions/accounts';
-import { openModal } from 'pl-fe/actions/modals';
 import { Button, Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover, HStack, IconButton, Stack, Text } from 'pl-fe/components/ui';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
 import UploadButton from 'pl-fe/features/compose/components/upload-button';
 import emojiSearch from 'pl-fe/features/emoji/search';
 import { useAppDispatch, useAppSelector, useInstance } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
 
 import ChatTextarea from './chat-textarea';
@@ -71,6 +71,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
+  const { openModal } = useModalsStore();
   const { chat } = useChatContext();
 
   const isBlocked = useAppSelector((state) => state.getIn(['relationships', chat?.account?.id, 'blocked_by']));
@@ -131,13 +132,13 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
   };
 
   const handleUnblockUser = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.unblockHeading, { acct: chat?.account.acct }),
       message: intl.formatMessage(messages.unblockMessage),
       confirm: intl.formatMessage(messages.unblockConfirm),
       confirmationTheme: 'primary',
       onConfirm: () => dispatch(unblockAccount(chat?.account.id as string)),
-    }));
+    });
   };
 
   if (isBlocking) {

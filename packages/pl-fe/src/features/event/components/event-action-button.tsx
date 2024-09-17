@@ -2,9 +2,9 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { joinEvent, leaveEvent } from 'pl-fe/actions/events';
-import { openModal } from 'pl-fe/actions/modals';
 import { Button } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
 import type { Status as StatusEntity } from 'pl-fe/normalizers';
@@ -24,6 +24,7 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
+  const { openModal } = useModalsStore();
   const me = useAppSelector((state) => state.me);
 
   const event = status.event!;
@@ -34,9 +35,9 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
     if (event.join_mode === 'free') {
       dispatch(joinEvent(status.id));
     } else {
-      dispatch(openModal('JOIN_EVENT', {
+      openModal('JOIN_EVENT', {
         statusId: status.id,
-      }));
+      });
     }
   };
 
@@ -44,12 +45,12 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
     e.preventDefault();
 
     if (event.join_mode === 'restricted') {
-      dispatch(openModal('CONFIRM', {
+      openModal('CONFIRM', {
         heading: intl.formatMessage(messages.leaveHeading),
         message: intl.formatMessage(messages.leaveMessage),
         confirm: intl.formatMessage(messages.leaveConfirm),
         onConfirm: () => dispatch(leaveEvent(status.id)),
-      }));
+      });
     } else {
       dispatch(leaveEvent(status.id));
     }
@@ -58,10 +59,10 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
   const handleOpenUnauthorizedModal: React.EventHandler<React.MouseEvent> = (e) => {
     e.preventDefault();
 
-    dispatch(openModal('UNAUTHORIZED', {
+    openModal('UNAUTHORIZED', {
       action: 'JOIN',
       ap_id: status.url,
-    }));
+    });
   };
 
   let buttonLabel;

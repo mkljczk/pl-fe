@@ -8,7 +8,6 @@ import { useHistory } from 'react-router-dom';
 
 import { type ComposeReplyAction, mentionCompose, replyCompose } from 'pl-fe/actions/compose';
 import { reblog, toggleFavourite, unreblog } from 'pl-fe/actions/interactions';
-import { openModal } from 'pl-fe/actions/modals';
 import { getSettings } from 'pl-fe/actions/settings';
 import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
 import ScrollableList from 'pl-fe/components/scrollable-list';
@@ -20,6 +19,7 @@ import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import PendingStatus from 'pl-fe/features/ui/components/pending-status';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { RootState } from 'pl-fe/store';
+import { useModalsStore } from 'pl-fe/stores';
 import { textForScreenReader } from 'pl-fe/utils/status';
 
 import DetailedStatus from './detailed-status';
@@ -92,6 +92,8 @@ const Thread: React.FC<IThread> = ({
   const history = useHistory();
   const intl = useIntl();
 
+  const { openModal } = useModalsStore();
+
   const { ancestorsIds, descendantsIds } = useAppSelector((state) => {
     let ancestorsIds = ImmutableOrderedSet<string>();
     let descendantsIds = ImmutableOrderedSet<string>();
@@ -141,7 +143,7 @@ const Thread: React.FC<IThread> = ({
         if ((e && e.shiftKey) || !boostModal) {
           handleModalReblog(status);
         } else {
-          dispatch(openModal('BOOST', { statusId: status.id, onReblog: handleModalReblog }));
+          openModal('BOOST', { statusId: status.id, onReblog: handleModalReblog });
         }
       }
     });
@@ -158,9 +160,9 @@ const Thread: React.FC<IThread> = ({
       const firstAttachment = media[0];
 
       if (media.length === 1 && firstAttachment.type === 'video') {
-        dispatch(openModal('VIDEO', { media: firstAttachment, statusId: status.id }));
+        openModal('VIDEO', { media: firstAttachment, statusId: status.id });
       } else {
-        dispatch(openModal('MEDIA', { media, index: 0, statusId: status.id }));
+        openModal('MEDIA', { media, index: 0, statusId: status.id });
       }
     }
   };
@@ -311,9 +313,9 @@ const Thread: React.FC<IThread> = ({
   }, [status.id, ancestorsIds.size]);
 
   const handleOpenCompareHistoryModal = (status: Pick<Status, 'id'>) => {
-    dispatch(openModal('COMPARE_HISTORY', {
+    openModal('COMPARE_HISTORY', {
       statusId: status.id,
-    }));
+    });
   };
 
   const hasAncestors = ancestorsIds.size > 0;

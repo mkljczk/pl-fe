@@ -5,10 +5,10 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { emojiReact, unEmojiReact } from 'pl-fe/actions/emoji-reacts';
-import { openModal } from 'pl-fe/actions/modals';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import unicodeMapping from 'pl-fe/features/emoji/mapping';
 import { useAppDispatch, useFeatures, useLoggedIn, useSettings } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import AnimatedNumber from './animated-number';
 import { Emoji, HStack, Icon, Text } from './ui';
@@ -37,6 +37,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const features = useFeatures();
+  const { openModal } = useModalsStore();
 
   const bind = useLongPress((e) => {
     if (!features.emojiReactsList || e.type !== 'touchstart') return;
@@ -44,7 +45,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
     e.stopPropagation();
 
     if ('vibrate' in navigator) navigator.vibrate(1);
-    dispatch(openModal('REACTIONS', { statusId: status.id, reaction: reaction.name }));
+    openModal('REACTIONS', { statusId: status.id, reaction: reaction.name });
   });
 
   if (!reaction.count) return null;
@@ -54,7 +55,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
 
     if (unauthenticated) {
       if (!features.emojiReactsList) return;
-      dispatch(openModal('REACTIONS', { statusId: status.id, reaction: reaction.name }));
+      openModal('REACTIONS', { statusId: status.id, reaction: reaction.name });
     } else if (reaction.me) {
       dispatch(unEmojiReact(status, reaction.name));
     } else {

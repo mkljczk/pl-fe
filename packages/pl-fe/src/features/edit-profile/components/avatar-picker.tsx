@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
 import AltIndicator from 'pl-fe/components/alt-indicator';
 import { Avatar, Icon, HStack } from 'pl-fe/components/ui';
-import { useAppDispatch, useDraggedFiles } from 'pl-fe/hooks';
+import { useDraggedFiles } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 const messages = defineMessages({
   changeDescriptionHeading: { id: 'group.upload_avatar.alt.heading', defaultMessage: 'Change avatar description' },
@@ -26,7 +26,7 @@ interface IMediaInput {
 const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
   className, src, onChange, accept, disabled, description, onChangeDescription,
 }, ref) => {
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
   const intl = useIntl();
 
   const picker = useRef<HTMLLabelElement>(null);
@@ -38,7 +38,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
   const handleChangeDescriptionClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
 
-    dispatch(openModal('TEXT_FIELD', {
+    openModal('TEXT_FIELD', {
       heading: intl.formatMessage(messages.changeDescriptionHeading),
       placeholder: intl.formatMessage(messages.changeDescriptionPlaceholder),
       confirm: intl.formatMessage(messages.changeDescriptionConfirm),
@@ -46,7 +46,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
         onChangeDescription?.(description || '');
       },
       text: description,
-    }));
+    });
   };
 
   return (

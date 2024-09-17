@@ -1,5 +1,6 @@
 import { defineMessages } from 'react-intl';
 
+import { useModalsStore } from 'pl-fe/stores';
 import toast, { type IToastOptions } from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 
@@ -7,7 +8,6 @@ import { getClient } from '../api';
 
 import { fetchRelationships } from './accounts';
 import { importFetchedAccounts, importFetchedStatus } from './importer';
-import { openModal } from './modals';
 
 import type { Account, EmojiReaction, PaginatedResponse, Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
@@ -318,9 +318,9 @@ const bookmark = (status: Pick<Status, 'id'>, folderId?: string) =>
       if (features.bookmarkFolders && typeof folderId !== 'string') {
         opts = {
           actionLabel: messages.selectFolder,
-          action: () => dispatch(openModal('SELECT_BOOKMARK_FOLDER', {
+          action: () => useModalsStore.getState().openModal('SELECT_BOOKMARK_FOLDER', {
             statusId: status.id,
-          })),
+          }),
         };
       }
 

@@ -2,11 +2,11 @@ import { List as ImmutableList } from 'immutable';
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
 import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
 import { Spinner, Text, Widget } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { type AccountGalleryAttachment, getAccountGallery } from 'pl-fe/selectors';
+import { useModalsStore } from 'pl-fe/stores';
 
 import MediaItem from '../../../account-gallery/components/media-item';
 
@@ -18,6 +18,7 @@ interface IProfileMediaPanel {
 
 const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
   const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
 
   const [loading, setLoading] = useState(true);
 
@@ -25,12 +26,12 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
 
   const handleOpenMedia = (attachment: AccountGalleryAttachment): void => {
     if (attachment.type === 'video') {
-      dispatch(openModal('VIDEO', { media: attachment, statusId: attachment.status.id }));
+      openModal('VIDEO', { media: attachment, statusId: attachment.status.id });
     } else {
       const media = attachment.status.media_attachments;
       const index = media.findIndex(x => x.id === attachment.id);
 
-      dispatch(openModal('MEDIA', { media, index, statusId: attachment.status.id }));
+      openModal('MEDIA', { media, index, statusId: attachment.status.id });
     }
   };
 

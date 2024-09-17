@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedDate, useIntl } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
 import { fetchOAuthTokens, revokeOAuthTokenById } from 'pl-fe/actions/security';
 import { Button, Card, CardBody, CardHeader, CardTitle, Column, HStack, Spinner, Stack, Text } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import type { OauthToken } from 'pl-api';
 
@@ -25,16 +25,18 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
+  const { openModal } = useModalsStore();
+
   const handleRevoke = () => {
     if (isCurrent)
-      dispatch(openModal('CONFIRM', {
+      openModal('CONFIRM', {
         heading: intl.formatMessage(messages.revokeSessionHeading),
         message: intl.formatMessage(messages.revokeSessionMessage),
         confirm: intl.formatMessage(messages.revokeSessionConfirm),
         onConfirm: () => {
           dispatch(revokeOAuthTokenById(token.id));
         },
-      }));
+      });
     else {
       dispatch(revokeOAuthTokenById(token.id));
     }

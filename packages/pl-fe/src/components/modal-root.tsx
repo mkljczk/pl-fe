@@ -1,14 +1,14 @@
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import 'wicg-inert';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
+import 'wicg-inert';
 
 import { cancelReplyCompose } from 'pl-fe/actions/compose';
 import { saveDraftStatus } from 'pl-fe/actions/draft-statuses';
 import { cancelEventCompose } from 'pl-fe/actions/events';
-import { openModal, closeModal } from 'pl-fe/actions/modals';
 import { useAppDispatch, usePrevious } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
 import type { ReducerCompose } from 'pl-fe/reducers/compose';
@@ -48,6 +48,8 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   const history = useHistory();
   const dispatch = useAppDispatch();
 
+  const { openModal } = useModalsStore();
+
   const [revealed, setRevealed] = useState(!!children);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -73,7 +75,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
 
       if (hasComposeContent && type === 'COMPOSE') {
         const isEditing = compose!.id !== null;
-        dispatch(openModal('CONFIRM', {
+        openModal('CONFIRM', {
           heading: isEditing
             ? <FormattedMessage id='confirmations.cancel_editing.heading' defaultMessage='Cancel post editing' />
             : <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />,
@@ -82,22 +84,22 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
             : <FormattedMessage id='confirmations.cancel.message' defaultMessage='Are you sure you want to cancel creating this post?' />,
           confirm: intl.formatMessage(messages.confirm),
           onConfirm: () => {
-            dispatch(closeModal('COMPOSE'));
+            onClose('COMPOSE');
             dispatch(cancelReplyCompose());
           },
           onCancel: () => {
-            dispatch(closeModal('CONFIRM'));
+            onClose('CONFIRM');
           },
           secondary: intl.formatMessage(messages.saveDraft),
           onSecondary: isEditing ? undefined : () => {
             dispatch(saveDraftStatus('compose-modal'));
-            dispatch(closeModal('COMPOSE'));
+            onClose('COMPOSE');
             dispatch(cancelReplyCompose());
           },
-        }));
+        });
       } else if (hasEventComposeContent && type === 'COMPOSE_EVENT') {
         const isEditing = getState().compose_event.id !== null;
-        dispatch(openModal('CONFIRM', {
+        openModal('CONFIRM', {
           heading: isEditing
             ? <FormattedMessage id='confirmations.cancel_event_editing.heading' defaultMessage='Cancel event editing' />
             : <FormattedMessage id='confirmations.delete_event.heading' defaultMessage='Delete event' />,
@@ -106,15 +108,15 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
             : <FormattedMessage id='confirmations.delete_event.message' defaultMessage='Are you sure you want to delete this event?' />,
           confirm: intl.formatMessage(isEditing ? messages.cancelEditing : messages.confirm),
           onConfirm: () => {
-            dispatch(closeModal('COMPOSE_EVENT'));
+            onClose('COMPOSE_EVENT');
             dispatch(cancelEventCompose());
           },
           onCancel: () => {
-            dispatch(closeModal('CONFIRM'));
+            onClose('CONFIRM');
           },
-        }));
+        });
       } else if ((hasComposeContent || hasEventComposeContent) && type === 'CONFIRM') {
-        dispatch(closeModal('CONFIRM'));
+        onClose('CONFIRM');
       } else {
         onClose();
       }

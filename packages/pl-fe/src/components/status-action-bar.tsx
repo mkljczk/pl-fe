@@ -8,7 +8,6 @@ import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'pl-fe
 import { emojiReact } from 'pl-fe/actions/emoji-reacts';
 import { editEvent } from 'pl-fe/actions/events';
 import { toggleBookmark, toggleDislike, toggleFavourite, togglePin, toggleReblog } from 'pl-fe/actions/interactions';
-import { openModal } from 'pl-fe/actions/modals';
 import { deleteStatusModal, toggleStatusSensitivityModal } from 'pl-fe/actions/moderation';
 import { initMuteModal } from 'pl-fe/actions/mutes';
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
@@ -24,6 +23,7 @@ import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dr
 import { languages } from 'pl-fe/features/preferences';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance, useOwnAccount, useSettings } from 'pl-fe/hooks';
 import { useChats } from 'pl-fe/queries/chats';
+import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 import copy from 'pl-fe/utils/copy';
 
@@ -124,6 +124,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const dispatch = useAppDispatch();
   const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
 
+  const { openModal } = useModalsStore();
   const { group } = useGroup((status.group as Group)?.id as string);
   const deleteGroupStatus = useDeleteGroupStatus(group as Group, status.id);
   const blockGroupMember = useBlockGroupMember(group as Group, status.account);
@@ -158,10 +159,10 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   }
 
   const onOpenUnauthorizedModal = (action?: UnauthorizedModalAction) => {
-    dispatch(openModal('UNAUTHORIZED', {
+    openModal('UNAUTHORIZED', {
       action,
       ap_id: status.url,
-    }));
+    });
   };
 
   const handleReplyClick: React.MouseEventHandler = (e) => {
@@ -206,9 +207,9 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   };
 
   const handleBookmarkFolderClick = () => {
-    dispatch(openModal('SELECT_BOOKMARK_FOLDER', {
+    openModal('SELECT_BOOKMARK_FOLDER', {
       statusId: status.id,
-    }));
+    });
   };
 
   const handleReblogClick: React.EventHandler<React.MouseEvent> = e => {
@@ -217,7 +218,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       if ((e && e.shiftKey) || !boostModal) {
         modalReblog();
       } else {
-        dispatch(openModal('BOOST', { statusId: status.id, onReblog: modalReblog }));
+        openModal('BOOST', { statusId: status.id, onReblog: modalReblog });
       }
     } else {
       onOpenUnauthorizedModal('REBLOG');
@@ -237,12 +238,12 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       if (!deleteModal) {
         dispatch(deleteStatus(status.id, withRedraft));
       } else {
-        dispatch(openModal('CONFIRM', {
+        openModal('CONFIRM', {
           heading: intl.formatMessage(withRedraft ? messages.redraftHeading : messages.deleteHeading),
           message: intl.formatMessage(withRedraft ? messages.redraftMessage : messages.deleteMessage),
           confirm: intl.formatMessage(withRedraft ? messages.redraftConfirm : messages.deleteConfirm),
           onConfirm: () => dispatch(deleteStatus(status.id, withRedraft)),
-        }));
+        });
       }
     });
   };
@@ -287,7 +288,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const handleBlockClick: React.EventHandler<React.MouseEvent> = (e) => {
     const account = status.account;
 
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: <FormattedMessage id='confirmations.block.heading' defaultMessage='Block @{name}' values={{ name: account.acct }} />,
       message: <FormattedMessage id='confirmations.block.message' defaultMessage='Are you sure you want to block {name}?' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
       confirm: intl.formatMessage(messages.blockConfirm),
@@ -297,18 +298,18 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
         dispatch(blockAccount(account.id));
         dispatch(initReport(ReportableEntities.STATUS, account, { status }));
       },
-    }));
+    });
   };
 
   const handleEmbed = () => {
-    dispatch(openModal('EMBED', {
+    openModal('EMBED', {
       url: status.url,
       onError: (error: any) => toast.showAlertForError(error),
-    }));
+    });
   };
 
   const handleOpenReactionsModal = (): void => {
-    dispatch(openModal('REACTIONS', { statusId: status.id }));
+    openModal('REACTIONS', { statusId: status.id });
   };
 
   const handleReport: React.EventHandler<React.MouseEvent> = (e) => {
@@ -327,7 +328,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
 
   const onModerate: React.MouseEventHandler = (e) => {
     const account = status.account;
-    dispatch(openModal('ACCOUNT_MODERATION', { accountId: account.id }));
+    openModal('ACCOUNT_MODERATION', { accountId: account.id });
   };
 
   const handleDeleteStatus: React.EventHandler<React.MouseEvent> = (e) => {
@@ -341,7 +342,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const handleDeleteFromGroup: React.EventHandler<React.MouseEvent> = () => {
     const account = status.account;
 
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.deleteHeading),
       message: intl.formatMessage(messages.deleteFromGroupMessage, { name: <strong className='break-words'>{account.username}</strong> }),
       confirm: intl.formatMessage(messages.deleteConfirm),
@@ -352,11 +353,11 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
           },
         });
       },
-    }));
+    });
   };
 
   const handleBlockFromGroup = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.groupBlockFromGroupHeading),
       message: intl.formatMessage(messages.groupBlockFromGroupMessage, { name: status.account.username }),
       confirm: intl.formatMessage(messages.groupBlockConfirm),
@@ -367,7 +368,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
           },
         });
       },
-    }));
+    });
   };
 
   const handleIgnoreLanguage = () => {

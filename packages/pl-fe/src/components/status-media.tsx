@@ -1,11 +1,11 @@
 import React, { Suspense } from 'react';
 
-import { openModal } from 'pl-fe/actions/modals';
 import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
 import PreviewCard from 'pl-fe/components/preview-card';
 import PlaceholderCard from 'pl-fe/features/placeholder/components/placeholder-card';
 import { MediaGallery, Video, Audio } from 'pl-fe/features/ui/util/async-components';
-import { useAppDispatch, useSettings } from 'pl-fe/hooks';
+import { useSettings } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import { isMediaVisible } from './statuses/sensitive-content-overlay';
 
@@ -27,7 +27,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   muted = false,
   onClick,
 }) => {
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
   const { displayMedia } = useSettings();
 
   const visible = isMediaVisible(status, displayMedia);
@@ -48,7 +48,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   );
 
   const openMedia = (media: Array<MediaAttachment>, index: number) => {
-    dispatch(openModal('MEDIA', { media, statusId: status.id, index }));
+    openModal('MEDIA', { media, statusId: status.id, index });
   };
 
   if (size > 0 && firstAttachment) {

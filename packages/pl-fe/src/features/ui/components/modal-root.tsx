@@ -2,10 +2,10 @@ import React, { Suspense, lazy } from 'react';
 
 import { cancelReplyCompose } from 'pl-fe/actions/compose';
 import { cancelEventCompose } from 'pl-fe/actions/events';
-import { closeModal } from 'pl-fe/actions/modals';
 import { cancelReport } from 'pl-fe/actions/reports';
 import Base from 'pl-fe/components/modal-root';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import ModalLoading from './modal-loading';
 
@@ -62,10 +62,8 @@ const ModalRoot: React.FC = () => {
   const renderLoading = (modalId: string) => !['MEDIA', 'VIDEO', 'BOOST', 'CONFIRM'].includes(modalId) ? <ModalLoading /> : null;
 
   const dispatch = useAppDispatch();
-  const { modalType: type, modalProps: props } = useAppSelector((state) => state.modals.last({
-    modalProps: {},
-    modalType: null,
-  }));
+  const { modals, closeModal } = useModalsStore();
+  const { modalType: type, modalProps: props } = modals.at(-1) || { modalProps: {}, modalType: null };
 
   const onClickClose = (type?: ModalType) => {
     switch (type) {
@@ -82,7 +80,7 @@ const ModalRoot: React.FC = () => {
         break;
     }
 
-    dispatch(closeModal(type));
+    closeModal(type);
   };
 
   const Component = type !== null ? (MODAL_COMPONENTS as Record<keyof typeof MODAL_COMPONENTS, React.LazyExoticComponent<any>>)[type] : null;

@@ -7,11 +7,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { accountLookup } from 'pl-fe/actions/accounts';
 import { register, verifyCredentials } from 'pl-fe/actions/auth';
-import { openModal } from 'pl-fe/actions/modals';
 import BirthdayInput from 'pl-fe/components/birthday-input';
 import { Checkbox, Form, FormGroup, FormActions, Button, Input, Textarea, Select } from 'pl-fe/components/ui';
 import CaptchaField from 'pl-fe/features/auth-login/components/captcha';
 import { useAppDispatch, useSettings, useFeatures, useInstance } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import type { CreateAccountParams } from 'pl-api';
 
@@ -45,6 +45,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const { locale } = useSettings();
   const features = useFeatures();
   const instance = useInstance();
+  const { openModal } = useModalsStore();
 
   const needsConfirmation = instance.pleroma.metadata.account_activation_required;
   const needsApproval = instance.registrations.approval_required;
@@ -142,7 +143,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
         /></p>}
     </>);
 
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: needsConfirmation
         ? intl.formatMessage(messages.needsConfirmationHeader)
         : needsApproval
@@ -151,7 +152,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
       message,
       confirm: intl.formatMessage(messages.close),
       onConfirm: () => {},
-    }));
+    });
   };
 
   const postRegisterAction = ({ access_token }: any) => {

@@ -3,11 +3,10 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { openModal } from 'pl-fe/actions/modals';
 import { useDeleteGroup, useGroup } from 'pl-fe/api/hooks';
 import List, { ListItem } from 'pl-fe/components/list';
 import { CardBody, CardHeader, CardTitle, Column, Spinner, Text } from 'pl-fe/components/ui';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 
 import ColumnForbidden from '../ui/components/column-forbidden';
@@ -35,7 +34,7 @@ interface IManageGroup {
 const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
   const { groupId: id } = params;
 
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
   const history = useHistory();
   const intl = useIntl();
 
@@ -58,7 +57,7 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
   }
 
   const onDeleteGroup = () =>
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.deleteHeading),
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
@@ -70,7 +69,7 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
           },
         });
       },
-    }));
+    });
 
   return (
     <Column label={intl.formatMessage(messages.heading)} backHref={`/groups/${group.id}`}>

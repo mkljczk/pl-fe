@@ -2,10 +2,10 @@ import clsx from 'clsx';import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { openModal } from 'pl-fe/actions/modals';
 import AnimatedNumber from 'pl-fe/components/animated-number';
 import { HStack, Text } from 'pl-fe/components/ui';
-import { useFeatures, useAppDispatch } from 'pl-fe/hooks';
+import { useFeatures } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import type { Status } from 'pl-fe/normalizers';
 
@@ -14,22 +14,22 @@ interface IStatusInteractionBar {
 }
 
 const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.Element | null => {
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
   const features = useFeatures();
   const { account } = status;
 
   if (!account || typeof account !== 'object') return null;
 
   const onOpenReblogsModal = (username: string, statusId: string): void => {
-    dispatch(openModal('REBLOGS', { statusId }));
+    openModal('REBLOGS', { statusId });
   };
 
   const onOpenFavouritesModal = (username: string, statusId: string): void => {
-    dispatch(openModal('FAVOURITES', { statusId }));
+    openModal('FAVOURITES', { statusId });
   };
 
   const onOpenDislikesModal = (username: string, statusId: string): void => {
-    dispatch(openModal('DISLIKES', { statusId }));
+    openModal('DISLIKES', { statusId });
   };
 
   const handleOpenReblogsModal: React.EventHandler<React.MouseEvent> = (e) => {

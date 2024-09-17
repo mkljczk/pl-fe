@@ -2,14 +2,14 @@ import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { openModal } from 'pl-fe/actions/modals';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
 import { Avatar, HStack, IconButton, Stack, Text } from 'pl-fe/components/ui';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
-import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { useChatActions } from 'pl-fe/queries/chats';
+import { useModalsStore } from 'pl-fe/stores';
 
 import type { Chat } from 'pl-api';
 import type { Menu } from 'pl-fe/components/dropdown-menu';
@@ -29,7 +29,7 @@ interface IChatListItemInterface {
 }
 
 const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
   const intl = useIntl();
   const features = useFeatures();
   const history = useHistory();
@@ -44,7 +44,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
     action: (event) => {
       event.stopPropagation();
 
-      dispatch(openModal('CONFIRM', {
+      openModal('CONFIRM', {
         heading: intl.formatMessage(messages.leaveHeading),
         message: intl.formatMessage(messages.leaveMessage),
         confirm: intl.formatMessage(messages.leaveConfirm),
@@ -58,7 +58,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
             },
           });
         },
-      }));
+      });
     },
     icon: require('@tabler/icons/outline/logout.svg'),
   }], []);

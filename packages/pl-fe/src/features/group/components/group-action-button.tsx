@@ -2,12 +2,12 @@ import { GroupRoles } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
 import { useJoinGroup, useLeaveGroup } from 'pl-fe/api/hooks';
 import { Button } from 'pl-fe/components/ui';
 import { importEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useAppDispatch } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 
 import type { Group, GroupRelationship } from 'pl-api';
@@ -29,6 +29,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
+  const { openModal } = useModalsStore();
   const joinGroup = useJoinGroup(group);
   const leaveGroup = useLeaveGroup(group);
 
@@ -56,7 +57,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
   });
 
   const onLeaveGroup = () =>
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.confirmationHeading),
       message: intl.formatMessage(messages.confirmationMessage),
       confirm: intl.formatMessage(messages.confirmationConfirm),
@@ -66,7 +67,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
           toast.success(intl.formatMessage(messages.leaveSuccess));
         },
       }),
-    }));
+    });
 
   const onCancelRequest = () => leaveGroup.mutate(group.relationship?.id as string, {
     onSuccess() {

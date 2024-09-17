@@ -1,10 +1,9 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import { openModal } from 'pl-fe/actions/modals';
 import Blurhash from 'pl-fe/components/blurhash';
 import { Icon } from 'pl-fe/components/ui';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import ChatUploadPreview from './chat-upload-preview';
 
@@ -17,11 +16,11 @@ interface IChatUpload {
 
 /** An attachment uploaded to the chat composer, before sending. */
 const ChatUpload: React.FC<IChatUpload> = ({ attachment, onDelete }) => {
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
   const clickable = attachment.type !== 'unknown';
 
   const handleOpenModal = () => {
-    dispatch(openModal('MEDIA', { media: [attachment], index: 0 }));
+    openModal('MEDIA', { media: [attachment], index: 0 });
   };
 
   return (

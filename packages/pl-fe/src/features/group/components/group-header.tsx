@@ -2,11 +2,10 @@ import { mediaAttachmentSchema } from 'pl-api';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
 import GroupAvatar from 'pl-fe/components/groups/group-avatar';
 import StillImage from 'pl-fe/components/still-image';
 import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 import { isDefaultHeader } from 'pl-fe/utils/accounts';
 
 import GroupActionButton from './group-action-button';
@@ -27,7 +26,7 @@ interface IGroupHeader {
 
 const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
 
   const [isHeaderMissing, setIsHeaderMissing] = useState<boolean>(false);
 
@@ -57,7 +56,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
       type: 'image',
       url: group.avatar,
     });
-    dispatch(openModal('MEDIA', { media: [avatar], index: 0 }));
+    openModal('MEDIA', { media: [avatar], index: 0 });
   };
 
   const handleAvatarClick: React.MouseEventHandler = (e) => {
@@ -73,7 +72,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
       type: 'image',
       url: group.header,
     });
-    dispatch(openModal('MEDIA', { media: [header], index: 0 }));
+    openModal('MEDIA', { media: [header], index: 0 });
   };
 
   const handleHeaderClick: React.MouseEventHandler = (e) => {

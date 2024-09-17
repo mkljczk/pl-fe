@@ -4,7 +4,6 @@ import { Link, useHistory } from 'react-router-dom';
 
 import { mentionCompose } from 'pl-fe/actions/compose';
 import { reblog, favourite, unreblog, unfavourite } from 'pl-fe/actions/interactions';
-import { openModal } from 'pl-fe/actions/modals';
 import { getSettings } from 'pl-fe/actions/settings';
 import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
 import Icon from 'pl-fe/components/icon';
@@ -15,6 +14,7 @@ import StatusContainer from 'pl-fe/containers/status-container';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch, useAppSelector, useInstance } from 'pl-fe/hooks';
 import { makeGetNotification } from 'pl-fe/selectors';
+import { useModalsStore } from 'pl-fe/stores';
 import { NotificationType } from 'pl-fe/utils/notification';
 
 import type { Notification as BaseNotification } from 'pl-api';
@@ -194,6 +194,7 @@ const Notification: React.FC<INotification> = (props) => {
 
   const getNotification = useCallback(makeGetNotification(), []);
 
+  const { openModal } = useModalsStore();
   const notification = useAppSelector((state) => getNotification(state, props.notification));
 
   const history = useHistory();
@@ -258,9 +259,12 @@ const Notification: React.FC<INotification> = (props) => {
           if (e?.shiftKey || !boostModal) {
             dispatch(reblog(status));
           } else {
-            dispatch(openModal('BOOST', { statusId: status.id, onReblog: (status) => {
-              dispatch(reblog(status));
-            } }));
+            openModal('BOOST', {
+              statusId: status.id,
+              onReblog: (status) => {
+                dispatch(reblog(status));
+              },
+            });
           }
         }
       });

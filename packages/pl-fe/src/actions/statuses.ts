@@ -1,3 +1,4 @@
+import { useModalsStore } from 'pl-fe/stores';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 import { shouldHaveCard } from 'pl-fe/utils/status';
 
@@ -5,7 +6,6 @@ import { getClient } from '../api';
 
 import { setComposeToStatus } from './compose';
 import { importFetchedStatus, importFetchedStatuses } from './importer';
-import { openModal } from './modals';
 import { getSettings } from './settings';
 import { deleteFromTimelines } from './timelines';
 
@@ -104,7 +104,7 @@ const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () =>
   return getClient(state).statuses.getStatusSource(statusId).then(response => {
     dispatch({ type: STATUS_FETCH_SOURCE_SUCCESS });
     dispatch(setComposeToStatus(status, poll, response.text, response.spoiler_text, response.content_type, false));
-    dispatch(openModal('COMPOSE'));
+    useModalsStore.getState().openModal('COMPOSE');
   }).catch(error => {
     dispatch({ type: STATUS_FETCH_SOURCE_FAIL, error });
   });
@@ -144,7 +144,7 @@ const deleteStatus = (statusId: string, withRedraft = false) =>
 
       if (withRedraft) {
         dispatch(setComposeToStatus(status, poll, response.text || '', response.spoiler_text, response.content_type, withRedraft));
-        dispatch(openModal('COMPOSE'));
+        useModalsStore.getState().openModal('COMPOSE');
       }
     })
       .catch(error => {

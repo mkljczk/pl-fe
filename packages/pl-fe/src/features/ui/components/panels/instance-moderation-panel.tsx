@@ -1,12 +1,12 @@
 import React from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import { Widget } from 'pl-fe/components/ui';
 import InstanceRestrictions from 'pl-fe/features/federation-restrictions/components/instance-restrictions';
-import { useAppSelector, useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
+import { useAppSelector, useOwnAccount } from 'pl-fe/hooks';
 import { makeGetRemoteInstance } from 'pl-fe/selectors';
+import { useModalsStore } from 'pl-fe/stores';
 
 const getRemoteInstance = makeGetRemoteInstance();
 
@@ -22,13 +22,13 @@ interface IInstanceModerationPanel {
 /** Widget for moderators to manage a remote instance. */
 const InstanceModerationPanel: React.FC<IInstanceModerationPanel> = ({ host }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
 
   const { account } = useOwnAccount();
   const remoteInstance = useAppSelector(state => getRemoteInstance(state, host));
 
   const handleEditFederation = () => {
-    dispatch(openModal('EDIT_FEDERATION', { host }));
+    openModal('EDIT_FEDERATION', { host });
   };
 
   const makeMenu = () => [{

@@ -5,9 +5,9 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import ReactSwipeableViews from 'react-swipeable-views';
 
 import { closeDropdownMenu as closeDropdownMenuRedux, openDropdownMenu } from 'pl-fe/actions/dropdown-menu';
-import { closeModal, openModal } from 'pl-fe/actions/modals';
 import { useAppDispatch } from 'pl-fe/hooks';
 import { userTouching } from 'pl-fe/is-mobile';
+import { useModalsStore } from 'pl-fe/stores';
 
 import { HStack, IconButton, Portal } from '../ui';
 
@@ -190,6 +190,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
   } = props;
 
   const dispatch = useAppDispatch();
+  const { openModal, closeModal } = useModalsStore();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isDisplayed, setIsDisplayed] = useState<boolean>(false);
@@ -232,11 +233,11 @@ const DropdownMenu = (props: IDropdownMenu) => {
   const handleOpen = () => {
     if (userTouching.matches) {
       const handleClose = () => {
-        dispatch(closeModal('DROPDOWN_MENU'));
+        closeModal('DROPDOWN_MENU');
       };
-      dispatch(openModal('DROPDOWN_MENU', {
+      openModal('DROPDOWN_MENU', {
         content: <DropdownMenuContent handleClose={handleClose} items={items} component={component} touchscreen />,
-      }));
+      });
     } else {
       dispatch(openDropdownMenu());
       setIsOpen(true);

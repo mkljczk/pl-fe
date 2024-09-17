@@ -5,7 +5,6 @@ import { Link, useHistory } from 'react-router-dom';
 
 import { mentionCompose, replyCompose } from 'pl-fe/actions/compose';
 import { toggleFavourite, toggleReblog } from 'pl-fe/actions/interactions';
-import { openModal } from 'pl-fe/actions/modals';
 import { toggleStatusMediaHidden, unfilterStatus } from 'pl-fe/actions/statuses';
 import TranslateButton from 'pl-fe/components/translate-button';
 import AccountContainer from 'pl-fe/containers/account-container';
@@ -14,6 +13,7 @@ import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-contain
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch, useAppSelector, useSettings } from 'pl-fe/hooks';
 import { makeGetStatus, type SelectedStatus } from 'pl-fe/selectors';
+import { useModalsStore } from 'pl-fe/stores';
 import { textForScreenReader } from 'pl-fe/utils/status';
 
 import EventPreview from './event-preview';
@@ -75,6 +75,7 @@ const Status: React.FC<IStatus> = (props) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
 
+  const { openModal } = useModalsStore();
   const { boostModal } = useSettings();
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
@@ -120,9 +121,9 @@ const Status: React.FC<IStatus> = (props) => {
 
     if (firstAttachment) {
       if (firstAttachment.type === 'video') {
-        dispatch(openModal('VIDEO', { statusId: status.id, media: firstAttachment, time: 0 }));
+        openModal('VIDEO', { statusId: status.id, media: firstAttachment, time: 0 });
       } else {
-        dispatch(openModal('MEDIA', { statusId: status.id, media: status.media_attachments, index: 0 }));
+        openModal('MEDIA', { statusId: status.id, media: status.media_attachments, index: 0 });
       }
     }
   };
@@ -141,7 +142,7 @@ const Status: React.FC<IStatus> = (props) => {
     if ((e && e.shiftKey) || !boostModal) {
       modalReblog();
     } else {
-      dispatch(openModal('BOOST', { statusId: actualStatus.id, onReblog: modalReblog }));
+      openModal('BOOST', { statusId: actualStatus.id, onReblog: modalReblog });
     }
   };
 

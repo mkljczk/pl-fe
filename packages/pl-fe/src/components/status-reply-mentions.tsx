@@ -2,10 +2,9 @@ import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { openModal } from 'pl-fe/actions/modals';
 import HoverRefWrapper from 'pl-fe/components/hover-ref-wrapper';
 import HoverStatusWrapper from 'pl-fe/components/hover-status-wrapper';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import type { Status } from 'pl-fe/normalizers';
 
@@ -15,12 +14,12 @@ interface IStatusReplyMentions {
 }
 
 const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable = true }) => {
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
 
   const handleOpenMentionsModal: React.MouseEventHandler<HTMLSpanElement> = (e) => {
     e.stopPropagation();
 
-    dispatch(openModal('MENTIONS', { statusId: status.id }));
+    openModal('MENTIONS', { statusId: status.id });
   };
 
   if (!status.in_reply_to_id) {

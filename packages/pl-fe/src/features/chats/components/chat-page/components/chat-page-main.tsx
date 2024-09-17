@@ -3,12 +3,12 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Link, useHistory, useParams } from 'react-router-dom';
 
 import { blockAccount, unblockAccount } from 'pl-fe/actions/accounts';
-import { openModal } from 'pl-fe/actions/modals';
 import { Avatar, HStack, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, Text } from 'pl-fe/components/ui';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
 import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { useChat, useChatActions, useChats } from 'pl-fe/queries/chats';
+import { useModalsStore } from 'pl-fe/stores';
 
 import Chat from '../../chat';
 
@@ -38,6 +38,7 @@ const ChatPageMain = () => {
 
   const { chatId } = useParams<{ chatId: string }>();
 
+  const { openModal } = useModalsStore();
   const { data: chat } = useChat(chatId);
   const { currentChatId } = useChatContext();
   const { chatsQuery: { data: chats, isLoading } } = useChats();
@@ -49,27 +50,27 @@ const ChatPageMain = () => {
   const isBlocking = useAppSelector((state) => state.getIn(['relationships', chat?.account?.id, 'blocking']));
 
   const handleBlockUser = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.blockHeading, { acct: chat?.account.acct }),
       message: intl.formatMessage(messages.blockMessage),
       confirm: intl.formatMessage(messages.blockConfirm),
       confirmationTheme: 'primary',
       onConfirm: () => dispatch(blockAccount(chat?.account.id as string)),
-    }));
+    });
   };
 
   const handleUnblockUser = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.unblockHeading, { acct: chat?.account.acct }),
       message: intl.formatMessage(messages.unblockMessage),
       confirm: intl.formatMessage(messages.unblockConfirm),
       confirmationTheme: 'primary',
       onConfirm: () => dispatch(unblockAccount(chat?.account.id as string)),
-    }));
+    });
   };
 
   const handleLeaveChat = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.leaveHeading),
       message: intl.formatMessage(messages.leaveMessage),
       confirm: intl.formatMessage(messages.leaveConfirm),
@@ -81,7 +82,7 @@ const ChatPageMain = () => {
           },
         });
       },
-    }));
+    });
   };
 
   if (isLoading) {

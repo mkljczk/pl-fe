@@ -7,7 +7,6 @@ import { useHistory } from 'react-router-dom';
 import { biteAccount, blockAccount, pinAccount, removeFromFollowers, unblockAccount, unmuteAccount, unpinAccount } from 'pl-fe/actions/accounts';
 import { mentionCompose, directCompose } from 'pl-fe/actions/compose';
 import { blockDomain, unblockDomain } from 'pl-fe/actions/domain-blocks';
-import { openModal } from 'pl-fe/actions/modals';
 import { initMuteModal } from 'pl-fe/actions/mutes';
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { setSearchAccount } from 'pl-fe/actions/search';
@@ -24,6 +23,7 @@ import SubscriptionButton from 'pl-fe/features/ui/components/subscription-button
 import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'pl-fe/hooks';
 import { useChats } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
+import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 import { isDefaultHeader } from 'pl-fe/utils/accounts';
 import copy from 'pl-fe/utils/copy';
@@ -89,6 +89,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const features = useFeatures();
   const { account: ownAccount } = useOwnAccount();
   const { follow } = useFollow();
+  const { openModal } = useModalsStore();
 
   const { software } = useAppSelector((state) => state.auth.client.features.version);
 
@@ -132,7 +133,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
     if (account.relationship?.blocking) {
       dispatch(unblockAccount(account.id));
     } else {
-      dispatch(openModal('CONFIRM', {
+      openModal('CONFIRM', {
         heading: <FormattedMessage id='confirmations.block.heading' defaultMessage='Block @{name}' values={{ name: account.acct }} />,
         message: <FormattedMessage id='confirmations.block.message' defaultMessage='Are you sure you want to block {name}?' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
         confirm: intl.formatMessage(messages.blockConfirm),
@@ -142,7 +143,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
           dispatch(blockAccount(account.id));
           dispatch(initReport(ReportableEntities.ACCOUNT, account));
         },
-      }));
+      });
     }
   };
 
@@ -193,12 +194,12 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const onBlockDomain = (domain: string) => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: <FormattedMessage id='confirmations.domain_block.heading' defaultMessage='Block {domain}' values={{ domain }} />,
       message: <FormattedMessage id='confirmations.domain_block.message' defaultMessage='Are you really, really sure you want to block the entire {domain}? In most cases a few targeted blocks or mutes are sufficient and preferable. You will not see content from that domain in any public timelines or your notifications.' values={{ domain: <strong>{domain}</strong> }} />,
       confirm: intl.formatMessage(messages.blockDomainConfirm),
       onConfirm: () => dispatch(blockDomain(domain)),
-    }));
+    });
   };
 
   const onUnblockDomain = (domain: string) => {
@@ -210,25 +211,25 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const onAddToList = () => {
-    dispatch(openModal('LIST_ADDER', {
+    openModal('LIST_ADDER', {
       accountId: account.id,
-    }));
+    });
   };
 
   const onModerate = () => {
-    dispatch(openModal('ACCOUNT_MODERATION', { accountId: account.id }));
+    openModal('ACCOUNT_MODERATION', { accountId: account.id });
   };
 
   const onRemoveFromFollowers = () => {
     dispatch((_, getState) => {
       const unfollowModal = getSettings(getState()).get('unfollowModal');
       if (unfollowModal) {
-        dispatch(openModal('CONFIRM', {
+        openModal('CONFIRM', {
           heading: <FormattedMessage id='confirmations.remove_from_followers.heading' defaultMessage='Remove {name} from followers' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
           message: <FormattedMessage id='confirmations.remove_from_followers.message' defaultMessage='Are you sure you want to remove {name} from your followers?' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
           confirm: intl.formatMessage(messages.removeFromFollowersConfirm),
           onConfirm: () => dispatch(removeFromFollowers(account.id)),
-        }));
+        });
       } else {
         dispatch(removeFromFollowers(account.id));
       }
@@ -246,7 +247,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       type: 'image',
       url: account.avatar,
     });
-    dispatch(openModal('MEDIA', { media: [avatar], index: 0 }));
+    openModal('MEDIA', { media: [avatar], index: 0 });
   };
 
   const handleAvatarClick: React.MouseEventHandler = (e) => {
@@ -261,7 +262,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       type: 'image',
       url: account.header,
     });
-    dispatch(openModal('MEDIA', { media: [header], index: 0 }));
+    openModal('MEDIA', { media: [header], index: 0 });
   };
 
   const handleHeaderClick: React.MouseEventHandler = (e) => {

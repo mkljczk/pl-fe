@@ -5,7 +5,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { fetchBookmarkedStatuses, expandBookmarkedStatuses } from 'pl-fe/actions/bookmarks';
-import { openModal } from 'pl-fe/actions/modals';
 import { useBookmarkFolder, useDeleteBookmarkFolder } from 'pl-fe/api/hooks';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
@@ -13,6 +12,7 @@ import StatusList from 'pl-fe/components/status-list';
 import { Column } from 'pl-fe/components/ui';
 import { useAppSelector, useAppDispatch, useTheme } from 'pl-fe/hooks';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
+import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
@@ -45,6 +45,7 @@ const Bookmarks: React.FC<IBookmarks> = ({ params }) => {
 
   const folderId = params?.id;
 
+  const { openModal } = useModalsStore();
   const { bookmarkFolder: folder } = useBookmarkFolder(folderId);
   const { deleteBookmarkFolder } = useDeleteBookmarkFolder();
 
@@ -62,11 +63,11 @@ const Bookmarks: React.FC<IBookmarks> = ({ params }) => {
 
   const handleEditFolder = () => {
     if (!folderId) return;
-    dispatch(openModal('EDIT_BOOKMARK_FOLDER', { folderId }));
+    openModal('EDIT_BOOKMARK_FOLDER', { folderId });
   };
 
   const handleDeleteFolder = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.deleteFolderHeading, { name: folder?.name }),
       message: intl.formatMessage(messages.deleteFolderMessage),
       confirm: intl.formatMessage(messages.deleteFolderConfirm),
@@ -81,7 +82,7 @@ const Bookmarks: React.FC<IBookmarks> = ({ params }) => {
           },
         });
       },
-    }));
+    });
   };
 
   const emptyMessage = folderId

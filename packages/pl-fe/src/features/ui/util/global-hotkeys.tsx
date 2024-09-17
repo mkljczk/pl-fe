@@ -2,9 +2,9 @@ import React, { useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { resetCompose } from 'pl-fe/actions/compose';
-import { openModal } from 'pl-fe/actions/modals';
 import { FOCUS_EDITOR_COMMAND } from 'pl-fe/features/compose/editor/plugins/focus-plugin';
 import { useAppSelector, useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import { HotKeys } from '../components/hotkeys';
 
@@ -48,6 +48,7 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
   const dispatch = useAppDispatch();
   const me = useAppSelector(state => state.me);
   const { account } = useOwnAccount();
+  const { openModal } = useModalsStore();
 
   const handleHotkeyNew = (e?: KeyboardEvent) => {
     e?.preventDefault();
@@ -57,7 +58,7 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
     if (element) {
       ((element as any).__lexicalEditor as LexicalEditor).dispatchCommand(FOCUS_EDITOR_COMMAND, undefined);
     } else {
-      dispatch(openModal('COMPOSE'));
+      openModal('COMPOSE');
     }
   };
 
@@ -98,7 +99,7 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
   };
 
   const handleHotkeyToggleHelp = () => {
-    dispatch(openModal('HOTKEYS'));
+    openModal('HOTKEYS');
   };
 
   const handleHotkeyGoToHome = () => {

@@ -29,7 +29,6 @@ import lists from './lists';
 import locations from './locations';
 import me from './me';
 import meta from './meta';
-import modals from './modals';
 import mutes from './mutes';
 import notifications from './notifications';
 import onboarding from './onboarding';
@@ -81,7 +80,6 @@ const reducers = {
   locations,
   me,
   meta,
-  modals,
   mutes,
   notifications,
   onboarding,

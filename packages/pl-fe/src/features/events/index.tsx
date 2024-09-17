@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchJoinedEvents, fetchRecentEvents } from 'pl-fe/actions/events';
-import { openModal } from 'pl-fe/actions/modals';
 import { Button, CardBody, CardHeader, CardTitle, Column, HStack } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import EventCarousel from './components/event-carousel';
 
@@ -15,6 +15,7 @@ const messages = defineMessages({
 const Events = () => {
   const intl = useIntl();
 
+  const { openModal } = useModalsStore();
   const dispatch = useAppDispatch();
 
   const recentEvents = useAppSelector((state) => state.status_lists.get('recent_events')!.items);
@@ -23,7 +24,7 @@ const Events = () => {
   const joinedEventsLoading = useAppSelector((state) => state.status_lists.get('joined_events')!.isLoading);
 
   const onComposeEvent = () => {
-    dispatch(openModal('COMPOSE_EVENT'));
+    openModal('COMPOSE_EVENT');
   };
 
   useEffect(() => {

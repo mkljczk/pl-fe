@@ -4,10 +4,10 @@ import { Redirect } from 'react-router-dom';
 
 import { logIn, verifyCredentials, switchAccount } from 'pl-fe/actions/auth';
 import { fetchInstance } from 'pl-fe/actions/instance';
-import { closeModal } from 'pl-fe/actions/modals';
 import { BigCard } from 'pl-fe/components/big-card';
 import { Button, Stack, Text } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 import { getRedirectUrl } from 'pl-fe/utils/redirect';
 import { isStandalone } from 'pl-fe/utils/state';
 
@@ -19,6 +19,7 @@ import type { PlfeResponse } from 'pl-fe/api';
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();
+  const { closeModal } = useModalsStore();
 
   const me = useAppSelector((state) => state.me);
   const standalone = useAppSelector((state) => isStandalone(state));
@@ -45,7 +46,7 @@ const LoginPage = () => {
         return account;
       })
       .then((account: { id: string }) => {
-        dispatch(closeModal());
+        closeModal();
         if (typeof me === 'string') {
           dispatch(switchAccount(account.id));
         } else {

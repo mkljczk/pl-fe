@@ -7,6 +7,7 @@ import emojiSearch from 'pl-fe/features/emoji/search';
 import { Language } from 'pl-fe/features/preferences';
 import { selectAccount, selectOwnAccount, makeGetAccount } from 'pl-fe/selectors';
 import { tagHistory } from 'pl-fe/settings';
+import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 
@@ -14,7 +15,6 @@ import { chooseEmoji } from './emojis';
 import { importFetchedAccounts } from './importer';
 import { rememberLanguageUse } from './languages';
 import { uploadFile, updateMedia } from './media';
-import { openModal, closeModal } from './modals';
 import { getSettings } from './settings';
 import { createStatus } from './statuses';
 
@@ -194,7 +194,7 @@ const replyCompose = (
     };
 
     dispatch(action);
-    dispatch(openModal('COMPOSE'));
+    useModalsStore.getState().openModal('COMPOSE');
   };
 
 const cancelReplyCompose = () => ({
@@ -224,7 +224,7 @@ const quoteCompose = (status: ComposeQuoteAction['status']) =>
     };
 
     dispatch(action);
-    dispatch(openModal('COMPOSE'));
+    useModalsStore.getState().openModal('COMPOSE');
   };
 
 const cancelQuoteCompose = (composeId: string) => ({
@@ -237,7 +237,7 @@ const groupComposeModal = (group: Pick<Group, 'id'>) =>
     const composeId = `group:${group.id}`;
 
     dispatch(groupCompose(composeId, group.id));
-    dispatch(openModal('COMPOSE', { composeId }));
+    useModalsStore.getState().openModal('COMPOSE', { composeId });
   };
 
 const resetCompose = (composeId = 'compose-modal') => ({
@@ -260,7 +260,7 @@ const mentionCompose = (account: ComposeMentionAction['account']) =>
     };
 
     dispatch(action);
-    dispatch(openModal('COMPOSE'));
+    useModalsStore.getState().openModal('COMPOSE');
   };
 
 interface ComposeDirectAction {
@@ -278,7 +278,7 @@ const directCompose = (account: ComposeDirectAction['account']) =>
     };
 
     dispatch(action);
-    dispatch(openModal('COMPOSE'));
+    useModalsStore.getState().openModal('COMPOSE');
   };
 
 const directComposeById = (accountId: string) =>
@@ -293,7 +293,7 @@ const directComposeById = (accountId: string) =>
     };
 
     dispatch(action);
-    dispatch(openModal('COMPOSE'));
+    useModalsStore.getState().openModal('COMPOSE');
   };
 
 const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, composeId: string, data: BaseStatus | ScheduledStatus, status: string, edit?: boolean) => {
@@ -366,12 +366,12 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
     }
 
     if (!force && needsDescriptions(state, composeId)) {
-      dispatch(openModal('MISSING_DESCRIPTION', {
+      useModalsStore.getState().openModal('MISSING_DESCRIPTION', {
         onContinue: () => {
-          dispatch(closeModal('MISSING_DESCRIPTION'));
+          useModalsStore.getState().closeModal('MISSING_DESCRIPTION');
           dispatch(submitCompose(composeId, { history, force: true }));
         },
-      }));
+      });
       return;
     }
 
@@ -383,7 +383,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
     }
 
     dispatch(submitComposeRequest(composeId));
-    dispatch(closeModal());
+    useModalsStore.getState().closeModal('COMPOSE');
 
     if (compose.language && !statusId) {
       dispatch(rememberLanguageUse(compose.language));
@@ -849,7 +849,7 @@ const changePollSettings = (composeId: string, expiresIn?: number, isMultiple?: 
 const openComposeWithText = (composeId: string, text = '') =>
   (dispatch: AppDispatch) => {
     dispatch(resetCompose(composeId));
-    dispatch(openModal('COMPOSE'));
+    useModalsStore.getState().openModal('COMPOSE');
     dispatch(changeCompose(composeId, text));
   };
 

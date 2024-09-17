@@ -3,7 +3,6 @@ import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
-import { openModal } from 'pl-fe/actions/modals';
 import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
 import { useAccountLookup } from 'pl-fe/api/hooks';
 import LoadMore from 'pl-fe/components/load-more';
@@ -11,6 +10,7 @@ import MissingIndicator from 'pl-fe/components/missing-indicator';
 import { Column, Spinner } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { type AccountGalleryAttachment, getAccountGallery } from 'pl-fe/selectors';
+import { useModalsStore } from 'pl-fe/stores';
 
 import MediaItem from './components/media-item';
 
@@ -32,6 +32,7 @@ const LoadMoreMedia: React.FC<ILoadMoreMedia> = ({ maxId, onLoadMore }) => {
 const AccountGallery = () => {
   const dispatch = useAppDispatch();
   const { username } = useParams<{ username: string }>();
+  const { openModal } = useModalsStore();
 
   const {
     account,
@@ -64,12 +65,12 @@ const AccountGallery = () => {
 
   const handleOpenMedia = (attachment: AccountGalleryAttachment) => {
     if (attachment.type === 'video') {
-      dispatch(openModal('VIDEO', { media: attachment, statusId: attachment.status.id, account: attachment.account }));
+      openModal('VIDEO', { media: attachment, statusId: attachment.status.id, account: attachment.account });
     } else {
       const media = attachment.status.media_attachments;
       const index = media.findIndex((x) => x.id === attachment.id);
 
-      dispatch(openModal('MEDIA', { media, index, statusId: attachment.status.id }));
+      openModal('MEDIA', { media, index, statusId: attachment.status.id });
     }
   };
 

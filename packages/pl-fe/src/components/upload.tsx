@@ -12,12 +12,12 @@ import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { spring } from 'react-motion';
 
-import { openModal } from 'pl-fe/actions/modals';
 import AltIndicator from 'pl-fe/components/alt-indicator';
 import Blurhash from 'pl-fe/components/blurhash';
 import { HStack, Icon, IconButton } from 'pl-fe/components/ui';
 import Motion from 'pl-fe/features/ui/util/optional-motion';
-import { useAppDispatch, useSettings } from 'pl-fe/hooks';
+import { useSettings } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import type { MediaAttachment } from 'pl-api';
 
@@ -83,7 +83,7 @@ const Upload: React.FC<IUpload> = ({
   withPreview = true,
 }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
 
   const { missingDescriptionModal } = useSettings();
 
@@ -135,7 +135,7 @@ const Upload: React.FC<IUpload> = ({
   };
 
   const handleOpenModal = () => {
-    dispatch(openModal('MEDIA', { media: [media], index: 0 }));
+    openModal('MEDIA', { media: [media], index: 0 });
   };
 
   const active = hovered || focused;

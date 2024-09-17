@@ -6,7 +6,6 @@ import { blockAccount } from 'pl-fe/actions/accounts';
 import { directCompose, mentionCompose, quoteCompose } from 'pl-fe/actions/compose';
 import { editEvent, fetchEventIcs } from 'pl-fe/actions/events';
 import { toggleBookmark, togglePin, toggleReblog } from 'pl-fe/actions/interactions';
-import { openModal } from 'pl-fe/actions/modals';
 import { deleteStatusModal, toggleStatusSensitivityModal } from 'pl-fe/actions/moderation';
 import { initMuteModal } from 'pl-fe/actions/mutes';
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
@@ -18,6 +17,7 @@ import { Button, HStack, IconButton, Stack, Text } from 'pl-fe/components/ui';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useAppDispatch, useFeatures, useOwnAccount, useSettings } from 'pl-fe/hooks';
 import { useChats } from 'pl-fe/queries/chats';
+import { useModalsStore } from 'pl-fe/stores';
 import copy from 'pl-fe/utils/copy';
 import { download } from 'pl-fe/utils/download';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
@@ -68,6 +68,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
+  const { openModal } = useModalsStore();
   const { getOrCreateChatByAccountId } = useChats();
 
   const features = useFeatures();
@@ -98,7 +99,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     e.preventDefault();
     e.stopPropagation();
 
-    dispatch(openModal('MEDIA', { media: [event.banner!], index: 0 }));
+    openModal('MEDIA', { media: [event.banner!], index: 0 });
   };
 
   const handleExportClick = () => {
@@ -122,7 +123,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     if (!boostModal) {
       modalReblog();
     } else {
-      dispatch(openModal('BOOST', { statusId: status.id, onReblog: modalReblog }));
+      openModal('BOOST', { statusId: status.id, onReblog: modalReblog });
     }
   };
 
@@ -135,12 +136,12 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleDeleteClick = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.deleteHeading),
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
       onConfirm: () => dispatch(deleteStatus(status.id)),
-    }));
+    });
   };
 
   const handleMentionClick = () => {
@@ -162,7 +163,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleBlockClick = () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: <FormattedMessage id='confirmations.block.heading' defaultMessage='Block @{name}' values={{ name: account.acct }} />,
       message: <FormattedMessage id='confirmations.block.message' defaultMessage='Are you sure you want to block {name}?' values={{ name: <strong>@{account.acct}</strong> }} />,
       confirm: intl.formatMessage(messages.blockConfirm),
@@ -172,7 +173,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         dispatch(blockAccount(account.id));
         dispatch(initReport(ReportableEntities.STATUS, account, { status }));
       },
-    }));
+    });
   };
 
   const handleReport = () => {
@@ -180,7 +181,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleModerate = () => {
-    dispatch(openModal('ACCOUNT_MODERATION', { accountId: account.id }));
+    openModal('ACCOUNT_MODERATION', { accountId: account.id });
   };
 
   const handleModerateStatus = () => {
@@ -349,11 +350,9 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     e.stopPropagation();
 
     if (!ownAccount) {
-      dispatch(openModal('UNAUTHORIZED'));
+      openModal('UNAUTHORIZED');
     } else {
-      dispatch(openModal('EVENT_PARTICIPANTS', {
-        statusId: status.id,
-      }));
+      openModal('EVENT_PARTICIPANTS', { statusId: status.id });
     }
   };
 

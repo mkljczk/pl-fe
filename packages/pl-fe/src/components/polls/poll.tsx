@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
 import { vote } from 'pl-fe/actions/polls';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import { Stack, Text } from '../ui';
 
@@ -24,6 +24,7 @@ const messages = defineMessages({
 });
 
 const Poll: React.FC<IPoll> = ({ id, status }): JSX.Element | null => {
+  const { openModal } = useModalsStore();
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -33,10 +34,10 @@ const Poll: React.FC<IPoll> = ({ id, status }): JSX.Element | null => {
   const [selected, setSelected] = useState({} as Selected);
 
   const openUnauthorizedModal = () =>
-    dispatch(openModal('UNAUTHORIZED', {
+    openModal('UNAUTHORIZED', {
       action: 'POLL_VOTE',
       ap_id: status?.url,
-    }));
+    });
 
   const handleVote = (selectedId: number) => dispatch(vote(id, [selectedId]));
 

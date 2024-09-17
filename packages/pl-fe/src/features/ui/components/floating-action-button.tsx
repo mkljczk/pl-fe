@@ -4,10 +4,10 @@ import { defineMessages, useIntl } from 'react-intl';
 import { useLocation, useRouteMatch } from 'react-router-dom';
 
 import { groupComposeModal } from 'pl-fe/actions/compose';
-import { openModal } from 'pl-fe/actions/modals';
 import { useGroup } from 'pl-fe/api/hooks';
 import { Avatar, HStack, Icon } from 'pl-fe/components/ui';
 import { useAppDispatch } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 const messages = defineMessages({
   publish: { id: 'compose_form.publish', defaultMessage: 'Post' },
@@ -26,10 +26,10 @@ const FloatingActionButton: React.FC = () => {
 
 const HomeFAB: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
 
   const handleOpenComposeModal = () => {
-    dispatch(openModal('COMPOSE'));
+    openModal('COMPOSE');
   };
 
   return (

@@ -3,12 +3,11 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { closeModal } from 'pl-fe/actions/modals';
 import { useBookmarkFolder, useUpdateBookmarkFolder } from 'pl-fe/api/hooks';
 import { Emoji, HStack, Icon, Input, Modal } from 'pl-fe/components/ui';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/components/emoji-picker-dropdown';
 import { messages as emojiMessages } from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
-import { useAppDispatch, useClickOutside } from 'pl-fe/hooks';
+import { useClickOutside } from 'pl-fe/hooks';
 import { useTextField } from 'pl-fe/hooks/forms';
 import toast from 'pl-fe/toast';
 
@@ -92,7 +91,6 @@ interface EditBookmarkFolderModalProps {
 
 const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModalProps> = ({ folderId, onClose }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const { bookmarkFolder } = useBookmarkFolder(folderId);
   const { updateBookmarkFolder, isSubmitting } = useUpdateBookmarkFolder(folderId);
@@ -121,7 +119,7 @@ const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModal
     }, {
       onSuccess() {
         toast.success(intl.formatMessage(messages.editSuccess));
-        dispatch(closeModal('EDIT_BOOKMARK_FOLDER'));
+        onClose('EDIT_BOOKMARK_FOLDER');
       },
       onError() {
         toast.success(intl.formatMessage(messages.editFail));

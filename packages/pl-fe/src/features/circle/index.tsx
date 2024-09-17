@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 
 import { processCircle } from 'pl-fe/actions/circle';
 import { resetCompose, uploadComposeSuccess, uploadFile } from 'pl-fe/actions/compose';
-import { openModal } from 'pl-fe/actions/modals';
 import Account from 'pl-fe/components/account';
 import { Accordion, Avatar, Button, Column, Form, FormActions, HStack, ProgressBar, Stack, Text } from 'pl-fe/components/ui';
 import { useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 const toRad = (x: number) => x * (Math.PI / 180);
 
@@ -38,6 +38,7 @@ const Circle: React.FC = () => {
   const dispatch = useAppDispatch();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const { openModal } = useModalsStore();
   const { account } = useOwnAccount();
 
   useEffect(() => {
@@ -62,7 +63,7 @@ const Circle: React.FC = () => {
 
       dispatch(uploadFile(file, intl, (data) => {
         dispatch(uploadComposeSuccess('compose-modal', data, file));
-        dispatch(openModal('COMPOSE'));
+        openModal('COMPOSE');
       }));
     }, 'image/png');
   };

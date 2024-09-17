@@ -1,11 +1,11 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
 import { cancelScheduledStatus } from 'pl-fe/actions/scheduled-statuses';
 import { getSettings } from 'pl-fe/actions/settings';
 import { Button, HStack } from 'pl-fe/components/ui';
 import { useAppDispatch } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import type { Status as StatusEntity } from 'pl-fe/normalizers';
 
@@ -24,6 +24,7 @@ const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({ status 
   const intl = useIntl();
 
   const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
 
   const handleCancelClick = () => {
     dispatch((_, getState) => {
@@ -32,12 +33,12 @@ const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({ status 
       if (!deleteModal) {
         dispatch(cancelScheduledStatus(status.id));
       } else {
-        dispatch(openModal('CONFIRM', {
+        openModal('CONFIRM', {
           heading: intl.formatMessage(messages.deleteHeading),
           message: intl.formatMessage(messages.deleteMessage),
           confirm: intl.formatMessage(messages.deleteConfirm),
           onConfirm: () => dispatch(cancelScheduledStatus(status.id)),
-        }));
+        });
       }
     });
   };

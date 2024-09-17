@@ -3,7 +3,6 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
 import { deleteList, fetchList } from 'pl-fe/actions/lists';
-import { openModal } from 'pl-fe/actions/modals';
 import { fetchListTimeline } from 'pl-fe/actions/timelines';
 import { useListStream } from 'pl-fe/api/hooks';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
@@ -11,6 +10,7 @@ import MissingIndicator from 'pl-fe/components/missing-indicator';
 import { Column, Button, Spinner } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector, useTheme } from 'pl-fe/hooks';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
+import { useModalsStore } from 'pl-fe/stores';
 
 import Timeline from '../ui/components/timeline';
 
@@ -28,6 +28,7 @@ const ListTimeline: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const theme = useTheme();
   const isMobile = useIsMobile();
+  const { openModal } = useModalsStore();
 
   const list = useAppSelector((state) => state.lists.get(id));
 
@@ -43,20 +44,20 @@ const ListTimeline: React.FC = () => {
   };
 
   const handleEditClick = () => {
-    dispatch(openModal('LIST_EDITOR', { listId: id }));
+    openModal('LIST_EDITOR', { listId: id });
   };
 
   const handleDeleteClick = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.preventDefault();
 
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.deleteHeading),
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
       onConfirm: () => {
         dispatch(deleteList(id));
       },
-    }));
+    });
   };
 
   const title = list ? list.title : id;

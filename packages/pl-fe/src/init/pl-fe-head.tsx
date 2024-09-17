@@ -6,10 +6,10 @@ import {
   usePlFeConfig,
   useTheme,
   useLocale,
-  useAppSelector,
 } from 'pl-fe/hooks';
 import { normalizePlFeConfig } from 'pl-fe/normalizers';
 import { startSentry } from 'pl-fe/sentry';
+import { useModalsStore } from 'pl-fe/stores';
 import { generateThemeCss } from 'pl-fe/utils/theme';
 
 const Helmet = React.lazy(() => import('pl-fe/components/helmet'));
@@ -25,7 +25,7 @@ const PlFeHead: React.FC<IPlFeHead> = ({ children }) => {
   const plFeConfig = usePlFeConfig();
   const theme = useTheme();
 
-  const withModals = useAppSelector((state) => !state.modals.isEmpty());
+  const withModals = useModalsStore().modals.length > 0;
 
   const themeCss = generateThemeCss(demo ? normalizePlFeConfig({ brandColor: '#d80482' }) : plFeConfig);
   const dsn = plFeConfig.sentryDsn;

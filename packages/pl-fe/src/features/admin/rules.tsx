@@ -1,11 +1,10 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
 import { useRules } from 'pl-fe/api/hooks/admin';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Button, Column, HStack, Stack, Text } from 'pl-fe/components/ui';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 
 import type { AdminRule } from 'pl-api';
@@ -24,22 +23,22 @@ interface IRule {
 
 const Rule: React.FC<IRule> = ({ rule }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
   const { deleteRule } = useRules();
 
   const handleEditRule = (rule: AdminRule) => () => {
-    dispatch(openModal('EDIT_RULE', { rule }));
+    openModal('EDIT_RULE', { rule });
   };
 
   const handleDeleteRule = (id: string) => () => {
-    dispatch(openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.deleteHeading),
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
       onConfirm: () => deleteRule(id, {
         onSuccess: () => toast.success(messages.ruleDeleteSuccess),
       }),
-    }));
+    });
   };
 
   return (
@@ -71,12 +70,12 @@ const Rule: React.FC<IRule> = ({ rule }) => {
 
 const Rules: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
+  const { openModal } = useModalsStore();
   const { data, isLoading } = useRules();
 
   const handleCreateRule = () => {
-    dispatch(openModal('EDIT_RULE'));
+    openModal('EDIT_RULE');
   };
 
   const emptyMessage = <FormattedMessage id='empty_column.admin.rules' defaultMessage='There are no instance rules yet.' />;

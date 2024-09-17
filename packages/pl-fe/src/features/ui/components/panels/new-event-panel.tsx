@@ -1,15 +1,14 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
 import { Button, Stack, Text } from 'pl-fe/components/ui';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 const NewEventPanel = () => {
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
 
   const createEvent = () => {
-    dispatch(openModal('COMPOSE_EVENT'));
+    openModal('COMPOSE_EVENT');
   };
 
   return (

@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { closeModal } from 'pl-fe/actions/modals';
 import { useAnnouncements } from 'pl-fe/api/hooks/admin/useAnnouncements';
 import { Form, FormGroup, HStack, Modal, Stack, Text, Textarea, Toggle } from 'pl-fe/components/ui';
 import { DatePicker } from 'pl-fe/features/ui/util/async-components';
-import { useAppDispatch } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 
 import type { BaseModalProps } from '../modal-root';
@@ -25,7 +23,6 @@ interface EditAnnouncementModalProps {
 }
 
 const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProps> = ({ onClose, announcement }) => {
-  const dispatch = useAppDispatch();
   const { createAnnouncement, updateAnnouncement } = useAnnouncements();
   const intl = useIntl();
 
@@ -57,14 +54,14 @@ const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProp
     if (announcement) {
       updateAnnouncement({ ...form, id: announcement.id }, {
         onSuccess: () => {
-          dispatch(closeModal('EDIT_ANNOUNCEMENT'));
+          onClose('EDIT_ANNOUNCEMENT');
           toast.success(messages.announcementUpdateSuccess);
         },
       });
     } else {
       createAnnouncement(form, {
         onSuccess: () => {
-          dispatch(closeModal('EDIT_ANNOUNCEMENT'));
+          onClose('EDIT_ANNOUNCEMENT');
           toast.success(messages.announcementCreateSuccess);
         },
       });

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { closeModal } from 'pl-fe/actions/modals';
 import { useDomains } from 'pl-fe/api/hooks/admin';
 import { Form, FormGroup, HStack, Input, Modal, Stack, Text, Toggle } from 'pl-fe/components/ui';
-import { useAppDispatch } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 
 import type { BaseModalProps } from '../modal-root';
@@ -22,7 +20,6 @@ interface EditDomainModalProps {
 }
 
 const EditDomainModal: React.FC<BaseModalProps & EditDomainModalProps> = ({ onClose, domainId }) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const { data: domains, createDomain, isCreating, updateDomain, isUpdating } = useDomains();
@@ -43,7 +40,7 @@ const EditDomainModal: React.FC<BaseModalProps & EditDomainModalProps> = ({ onCl
       }, {
         onSuccess: () => {
           toast.success(messages.domainUpdateSuccess);
-          dispatch(closeModal('EDIT_DOMAIN'));
+          onClose('EDIT_DOMAIN');
         },
       });
     } else {
@@ -53,7 +50,7 @@ const EditDomainModal: React.FC<BaseModalProps & EditDomainModalProps> = ({ onCl
       }, {
         onSuccess: () => {
           toast.success(messages.domainCreateSuccess);
-          dispatch(closeModal('EDIT_DOMAIN'));
+          onClose('EDIT_DOMAIN');
         },
       });
     }

@@ -1,4 +1,4 @@
-import { openModal } from './modals';
+import { useModalsStore } from 'pl-fe/stores';
 
 import type { Account } from 'pl-fe/normalizers';
 import type { AppDispatch } from 'pl-fe/store';
@@ -14,7 +14,7 @@ const initMuteModal = (account: Account) =>
       account,
     });
 
-    dispatch(openModal('MUTE'));
+    useModalsStore.getState().openModal('MUTE');
   };
 
 const toggleHideNotifications = () =>

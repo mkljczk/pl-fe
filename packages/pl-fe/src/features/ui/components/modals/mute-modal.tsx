@@ -2,14 +2,15 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { muteAccount } from 'pl-fe/actions/accounts';
-import { closeModal } from 'pl-fe/actions/modals';
 import { toggleHideNotifications, changeMuteDuration } from 'pl-fe/actions/mutes';
 import { useAccount } from 'pl-fe/api/hooks';
 import { Modal, HStack, Stack, Text, Toggle } from 'pl-fe/components/ui';
 import DurationSelector from 'pl-fe/features/compose/components/polls/duration-selector';
 import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 
-const MuteModal = () => {
+import type { BaseModalProps } from '../modal-root';
+
+const MuteModal: React.FC<BaseModalProps> = ({ onClose }) => {
   const dispatch = useAppDispatch();
 
   const accountId = useAppSelector((state) => state.mutes.new.accountId);
@@ -21,12 +22,12 @@ const MuteModal = () => {
   if (!account) return null;
 
   const handleClick = () => {
-    dispatch(closeModal());
+    onClose('MUTE');
     dispatch(muteAccount(account.id, notifications, duration));
   };
 
   const handleCancel = () => {
-    dispatch(closeModal());
+    onClose('MUTE');
   };
 
   const toggleNotifications = () => {

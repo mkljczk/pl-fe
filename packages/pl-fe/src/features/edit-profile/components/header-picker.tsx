@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { openModal } from 'pl-fe/actions/modals';
 import AltIndicator from 'pl-fe/components/alt-indicator';
 import { HStack, Icon, IconButton, Text } from 'pl-fe/components/ui';
-import { useAppDispatch, useDraggedFiles } from 'pl-fe/hooks';
+import { useDraggedFiles } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 const messages = defineMessages({
   title: { id: 'group.upload_banner.title', defaultMessage: 'Upload background picture' },
@@ -27,7 +27,7 @@ interface IMediaInput {
 const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
   src, onChange, onClear, accept, disabled, description, onChangeDescription,
 }, ref) => {
-  const dispatch = useAppDispatch();
+  const { openModal } = useModalsStore();
   const intl = useIntl();
 
   const picker = useRef<HTMLLabelElement>(null);
@@ -45,7 +45,7 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
   const handleChangeDescriptionClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
 
-    dispatch(openModal('TEXT_FIELD', {
+    openModal('TEXT_FIELD', {
       heading: intl.formatMessage(messages.changeHeaderDescriptionHeading),
       placeholder: intl.formatMessage(messages.changeHeaderDescriptionPlaceholder),
       confirm: intl.formatMessage(messages.changeHeaderDescriptionConfirm),
@@ -53,7 +53,7 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
         onChangeDescription?.(description || '');
       },
       text: description,
-    }));
+    });
   };
 
   return (

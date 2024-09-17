@@ -10,10 +10,10 @@ import {
   rejectFollowRequest,
   biteAccount,
 } from 'pl-fe/actions/accounts';
-import { openModal } from 'pl-fe/actions/modals';
 import { useFollow } from 'pl-fe/api/hooks';
 import { Button, HStack } from 'pl-fe/components/ui';
 import { useAppDispatch, useFeatures, useLoggedIn } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 
 import type { Account } from 'pl-fe/normalizers';
@@ -56,6 +56,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
   const features = useFeatures();
   const intl = useIntl();
 
+  const { openModal } = useModalsStore();
   const { isLoggedIn, me } = useLoggedIn();
   const { follow, unfollow } = useFollow();
 
@@ -98,11 +99,11 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
   };
 
   const handleRemoteFollow = () => {
-    dispatch(openModal('UNAUTHORIZED', {
+    openModal('UNAUTHORIZED', {
       action: 'FOLLOW',
       account: account.id,
       ap_id: account.url,
-    }));
+    });
   };
 
   /** Handles actionType='muting' */

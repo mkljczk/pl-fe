@@ -4,13 +4,13 @@ import { FormattedList, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { fetchAccountFamiliarFollowers } from 'pl-fe/actions/familiar-followers';
-import { openModal } from 'pl-fe/actions/modals';
 import AvatarStack from 'pl-fe/components/avatar-stack';
 import HoverRefWrapper from 'pl-fe/components/hover-ref-wrapper';
 import { HStack, Text } from 'pl-fe/components/ui';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { makeGetAccount } from 'pl-fe/selectors';
+import { useModalsStore } from 'pl-fe/stores';
 
 import type { Account } from 'pl-fe/normalizers';
 
@@ -21,6 +21,7 @@ interface IProfileFamiliarFollowers {
 }
 
 const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account }) => {
+  const { openModal } = useModalsStore();
   const dispatch = useAppDispatch();
   const me = useAppSelector((state) => state.me);
   const features = useFeatures();
@@ -34,9 +35,9 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
   }, [account.id]);
 
   const openFamiliarFollowersModal = () => {
-    dispatch(openModal('FAMILIAR_FOLLOWERS', {
+    openModal('FAMILIAR_FOLLOWERS', {
       accountId: account.id,
-    }));
+    });
   };
 
   if (familiarFollowerIds.size === 0) {

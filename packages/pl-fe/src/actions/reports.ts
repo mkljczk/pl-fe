@@ -1,6 +1,6 @@
-import { getClient } from '../api';
+import { useModalsStore } from 'pl-fe/stores';
 
-import { openModal } from './modals';
+import { getClient } from '../api';
 
 import type { Account, Status } from 'pl-fe/normalizers';
 import type { AppDispatch, RootState } from 'pl-fe/store';
@@ -38,7 +38,7 @@ const initReport = (entityType: ReportableEntities, account: Pick<Account, 'id'>
     status,
   });
 
-  return dispatch(openModal('REPORT'));
+  return useModalsStore.getState().openModal('REPORT');
 };
 
 const cancelReport = () => ({
