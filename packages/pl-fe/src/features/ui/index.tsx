@@ -34,6 +34,7 @@ import ProfileLayout from 'pl-fe/layouts/profile-layout';
 import RemoteInstanceLayout from 'pl-fe/layouts/remote-instance-layout';
 import SearchLayout from 'pl-fe/layouts/search-layout';
 import StatusLayout from 'pl-fe/layouts/status-layout';
+import { useDropdownMenuStore } from 'pl-fe/stores';
 import { getVapidKey } from 'pl-fe/utils/auth';
 import { isStandalone } from 'pl-fe/utils/state';
 
@@ -137,7 +138,6 @@ import { WrappedRoute } from './util/react-router-helpers';
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import 'pl-fe/components/status';
-import { useDropdownMenuStore } from 'pl-fe/stores';
 
 interface ISwitchingColumnsArea {
   children: React.ReactNode;
