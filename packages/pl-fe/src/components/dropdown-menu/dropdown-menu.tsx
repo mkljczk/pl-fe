@@ -4,10 +4,8 @@ import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import ReactSwipeableViews from 'react-swipeable-views';
 
-import { closeDropdownMenu as closeDropdownMenuRedux, openDropdownMenu } from 'pl-fe/actions/dropdown-menu';
-import { useAppDispatch } from 'pl-fe/hooks';
 import { userTouching } from 'pl-fe/is-mobile';
-import { useModalsStore } from 'pl-fe/stores';
+import { useDropdownMenuStore, useModalsStore } from 'pl-fe/stores';
 
 import { HStack, IconButton, Portal } from '../ui';
 
@@ -189,7 +187,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
     title = 'Menu',
   } = props;
 
-  const dispatch = useAppDispatch();
+  const { openDropdownMenu, closeDropdownMenu } = useDropdownMenuStore();
   const { openModal, closeModal } = useModalsStore();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -239,7 +237,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
         content: <DropdownMenuContent handleClose={handleClose} items={items} component={component} touchscreen />,
       });
     } else {
-      dispatch(openDropdownMenu());
+      openDropdownMenu();
       setIsOpen(true);
     }
 
@@ -257,16 +255,6 @@ const DropdownMenu = (props: IDropdownMenu) => {
     if (onClose) {
       onClose();
     }
-  };
-
-  const closeDropdownMenu = () => {
-    dispatch((dispatch, getState) => {
-      const isOpenRedux = getState().dropdown_menu.isOpen;
-
-      if (isOpenRedux) {
-        dispatch(closeDropdownMenuRedux());
-      }
-    });
   };
 
   const handleKeyPress: React.EventHandler<React.KeyboardEvent<HTMLButtonElement>> = (event) => {

@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeReportBlock, changeReportForward } from 'pl-fe/actions/reports';
 import { Button, FormGroup, HStack, Stack, Text, Toggle } from 'pl-fe/components/ui';
-import StatusCheckBox from 'pl-fe/features/report/components/status-check-box';
+import StatusCheckBox from 'pl-fe/features/ui/components/modals/report-modal/components/status-check-box';
 import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { getDomain } from 'pl-fe/utils/accounts';
 

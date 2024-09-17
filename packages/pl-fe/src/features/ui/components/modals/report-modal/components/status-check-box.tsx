@@ -4,9 +4,8 @@ import React, { Suspense } from 'react';
 import { toggleStatusReport } from 'pl-fe/actions/reports';
 import StatusContent from 'pl-fe/components/status-content';
 import { Stack, Toggle } from 'pl-fe/components/ui';
+import { MediaGallery, Video, Audio } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
-
-import { MediaGallery, Video, Audio } from '../../ui/util/async-components';
 
 interface IStatusCheckBox {
   id: string;

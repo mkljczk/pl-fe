@@ -17,14 +17,17 @@ import {
 import type { AnyAction } from 'redux';
 
 const NewReportRecord = ImmutableRecord({
-  isSubmitting: false,
   entityType: '' as ReportableEntities,
   account_id: null as string | null,
+
   status_ids: ImmutableSet<string>(),
   comment: '',
   forward: false,
-  block: false,
   rule_ids: ImmutableSet<string>(),
+
+  block: false,
+
+  isSubmitting: false,
 });
 
 const ReducerRecord = ImmutableRecord({

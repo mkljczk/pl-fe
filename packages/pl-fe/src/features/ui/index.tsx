@@ -137,6 +137,7 @@ import { WrappedRoute } from './util/react-router-helpers';
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import 'pl-fe/components/status';
+import { useDropdownMenuStore } from 'pl-fe/stores';
 
 interface ISwitchingColumnsArea {
   children: React.ReactNode;
@@ -351,7 +352,7 @@ const UI: React.FC<IUI> = ({ children }) => {
   const features = useFeatures();
   const vapidKey = useAppSelector(state => getVapidKey(state));
 
-  const dropdownMenuIsOpen = useAppSelector(state => state.dropdown_menu.isOpen);
+  const { isOpen: dropdownMenuIsOpen } = useDropdownMenuStore();
   const standalone = useAppSelector(isStandalone);
 
   const { isDragging } = useDraggedFiles(node);
