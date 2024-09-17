@@ -55,7 +55,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
     if (muted) {
       media = (
         <AttachmentThumbs
-          media={status.media_attachments}
+          status={status}
           onClick={onClick}
         />
       );

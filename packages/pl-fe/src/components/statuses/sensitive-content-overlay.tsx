@@ -9,7 +9,7 @@ import { Button, HStack, Text } from '../ui';
 
 import type { Status } from 'pl-fe/normalizers';
 
-const isMediaVisible = (status: Pick<Status, 'hidden' | 'media_attachments' | 'sensitive' | 'spoiler_text'>, displayMedia: 'default' | 'show_all' | 'hide_all') => {
+const isMediaVisible = (status: Pick<Status, 'media_attachments' | 'sensitive' | 'spoiler_text'> & { hidden?: boolean | null }, displayMedia: 'default' | 'show_all' | 'hide_all') => {
   let visible = !(status.sensitive || status.spoiler_text);
 
   if (status.hidden !== null) visible = !status.hidden;

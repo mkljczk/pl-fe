@@ -71,8 +71,7 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
 
           {status.media_attachments.length > 0 && (
             <AttachmentThumbs
-              media={status.media_attachments}
-              sensitive={status.sensitive}
+              status={status}
             />
           )}
 

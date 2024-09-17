@@ -58,10 +58,7 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
       <StatusContent status={status} />
 
       {status.media_attachments.length > 0 && (
-        <AttachmentThumbs
-          media={status.media_attachments}
-          sensitive={status.sensitive}
-        />
+        <AttachmentThumbs status={status} />
       )}
     </Stack>
   );

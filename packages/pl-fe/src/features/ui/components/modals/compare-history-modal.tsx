@@ -69,7 +69,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
               )}
 
               {version.media_attachments.length > 0 && (
-                <AttachmentThumbs media={version.media_attachments} />
+                <AttachmentThumbs status={version} />
               )}
 
               <Text align='right' tag='span' theme='muted' size='sm'>

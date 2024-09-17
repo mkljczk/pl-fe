@@ -11,7 +11,7 @@ import type { Account, Status } from 'pl-fe/normalizers';
 
 interface IReplyIndicator {
   className?: string;
-  status?: Pick<Status, | 'contentHtml' | 'created_at' | 'media_attachments' | 'search_index' | 'sensitive'> & { account: Pick<Account, 'id'> };
+  status?: Pick<Status, | 'contentHtml' | 'created_at' | 'hidden' | 'media_attachments' | 'search_index' | 'sensitive' | 'spoiler_text'> & { account: Pick<Account, 'id'> };
   onCancel?: () => void;
   hideActions: boolean;
 }
@@ -55,8 +55,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({ className, status, hideActi
 
       {status.media_attachments.length > 0 && (
         <AttachmentThumbs
-          media={status.media_attachments}
-          sensitive={status.sensitive}
+          status={status}
         />
       )}
     </Stack>
