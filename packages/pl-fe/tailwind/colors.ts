@@ -1,10 +1,14 @@
-import type{ RecursiveKeyValuePair } from 'tailwindcss/types/config';
+import type { RecursiveKeyValuePair } from 'tailwindcss/types/config';
 
 /** https://tailwindcss.com/docs/customizing-colors#using-css-variables */
-const withOpacityValue = (variable: string): string => `rgb(var(${variable}) / <alpha-value>)`;
+const withOpacityValue = (variable: string): string =>
+  `rgb(var(${variable}) / <alpha-value>)`;
 
 /** Parse a single color as a CSS variable. */
-const toColorVariable = (colorName: string, tint: number | null = null): string => {
+const toColorVariable = (
+  colorName: string,
+  tint: number | null = null,
+): string => {
   const suffix = tint ? `-${tint}` : '';
   const variable = `--color-${colorName}${suffix}`;
 
@@ -12,7 +16,10 @@ const toColorVariable = (colorName: string, tint: number | null = null): string 
 };
 
 /** Parse list of tints into Tailwind function with CSS variables. */
-const parseTints = (colorName: string, tints: number[]): RecursiveKeyValuePair =>
+const parseTints = (
+  colorName: string,
+  tints: number[],
+): RecursiveKeyValuePair =>
   tints.reduce<Record<string, string>>((colorObj, tint) => {
     colorObj[tint] = toColorVariable(colorName, tint);
     return colorObj;
@@ -24,17 +31,20 @@ interface ColorMatrix {
 
 /** Parse color matrix into Tailwind color palette. */
 const parseColorMatrix = (colorMatrix: ColorMatrix): RecursiveKeyValuePair =>
-  Object.entries(colorMatrix).reduce<RecursiveKeyValuePair>((palette, colorData) => {
-    const [colorName, tints] = colorData;
+  Object.entries(colorMatrix).reduce<RecursiveKeyValuePair>(
+    (palette, colorData) => {
+      const [colorName, tints] = colorData;
 
-    // Conditionally parse array or single-tint colors
-    if (Array.isArray(tints)) {
-      palette[colorName] = parseTints(colorName, tints);
-    } else if (tints === true) {
-      palette[colorName] = toColorVariable(colorName);
-    }
+      // Conditionally parse array or single-tint colors
+      if (Array.isArray(tints)) {
+        palette[colorName] = parseTints(colorName, tints);
+      } else if (tints === true) {
+        palette[colorName] = toColorVariable(colorName);
+      }
 
-    return palette;
-  }, {});
+      return palette;
+    },
+    {},
+  );
 
 export { withOpacityValue, parseColorMatrix };

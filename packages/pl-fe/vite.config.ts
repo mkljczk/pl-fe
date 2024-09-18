@@ -1,6 +1,6 @@
 /// <reference types="vitest" />
 import fs from 'node:fs';
-import { fileURLToPath, URL } from 'node:url';
+import { URL, fileURLToPath } from 'node:url';
 
 import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -12,7 +12,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import vitePluginRequire from 'vite-plugin-require';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
-const config = defineConfig(({ command }) => ({
+const config = defineConfig(() => ({
   build: {
     assetsDir: 'packs',
     assetsInlineLimit: 0,
@@ -67,11 +67,10 @@ const config = defineConfig(({ command }) => ({
       manifest: {
         name: 'pl-fe',
         short_name: 'pl-fe',
-        description: 'Web-based federated social media client, a fork of Soapbox',
+        description:
+          'Web-based federated social media client, a fork of Soapbox',
         display: 'standalone',
-        display_override: [
-          'window-controls-overlay',
-        ],
+        display_override: ['window-controls-overlay'],
         theme_color: '#d80482',
         categories: ['social'],
         share_target: {
@@ -121,22 +120,28 @@ const config = defineConfig(({ command }) => ({
       filename: 'sw.ts',
     }),
     viteStaticCopy({
-      targets: [{
-        src: './node_modules/twemoji/assets/svg/*',
-        dest: 'packs/emoji/',
-      }, {
-        src: './src/instance',
-        dest: '.',
-      }, {
-        src: './custom/instance',
-        dest: '.',
-      }, {
-        src: './node_modules/fasttext.wasm.js/dist/models/language-identification/assets/lid.176.ftz',
-        dest: 'fastText/models/',
-      }, {
-        src: './node_modules/fasttext.wasm.js/dist/core/fastText.common.wasm',
-        dest: 'fastText/',
-      }],
+      targets: [
+        {
+          src: './node_modules/twemoji/assets/svg/*',
+          dest: 'packs/emoji/',
+        },
+        {
+          src: './src/instance',
+          dest: '.',
+        },
+        {
+          src: './custom/instance',
+          dest: '.',
+        },
+        {
+          src: './node_modules/fasttext.wasm.js/dist/models/language-identification/assets/lid.176.ftz',
+          dest: 'fastText/models/',
+        },
+        {
+          src: './node_modules/fasttext.wasm.js/dist/core/fastText.common.wasm',
+          dest: 'fastText/',
+        },
+      ],
     }),
     visualizer({
       emitFile: true,
@@ -159,7 +164,10 @@ const config = defineConfig(({ command }) => ({
   ],
   resolve: {
     alias: [
-      { find: 'pl-fe', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
+      {
+        find: 'pl-fe',
+        replacement: fileURLToPath(new URL('./src', import.meta.url)),
+      },
     ],
   },
   test: {

@@ -1,7 +1,4 @@
-import {
-  withOpacityValue,
-  parseColorMatrix,
-} from './colors';
+import { parseColorMatrix, withOpacityValue } from './colors';
 
 describe('withOpacityValue()', () => {
   it('returns a Tailwind color function with alpha support', () => {
@@ -29,7 +26,9 @@ describe('parseColorMatrix()', () => {
 
     // Colors are mapped to functions which return CSS values
     // @ts-ignore
-    expect(result.accent['300']).toEqual('rgb(var(--color-accent-300) / <alpha-value>)');
+    expect(result.accent['300']).toEqual(
+      'rgb(var(--color-accent-300) / <alpha-value>)',
+    );
   });
 
   it('parses single-tint values', () => {
@@ -45,6 +44,8 @@ describe('parseColorMatrix()', () => {
 
     const result = parseColorMatrix(colorMatrix);
 
-    expect(result['gradient-start']).toEqual('rgb(var(--color-gradient-start) / <alpha-value>)');
+    expect(result['gradient-start']).toEqual(
+      'rgb(var(--color-gradient-start) / <alpha-value>)',
+    );
   });
 });
