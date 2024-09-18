@@ -30,7 +30,9 @@ describe('<ChatListItem />', () => {
     render(<ChatListItem chat={chat as IChat} onClick={vi.fn()} />);
 
     expect(screen.getByTestId('chat-list-item')).toBeInTheDocument();
-    expect(screen.getByTestId('chat-list-item')).toHaveTextContent(chat.account.display_name);
+    expect(screen.getByTestId('chat-list-item')).toHaveTextContent(
+      chat.account.display_name,
+    );
   });
 
   describe('last message content', () => {
@@ -55,10 +57,15 @@ describe('<ChatListItem />', () => {
       });
 
       it('does not render the unread dot', () => {
-        const changedChat = { ...chat, last_message: { ...chat.last_message, unread: false } };
+        const changedChat = {
+          ...chat,
+          last_message: { ...chat.last_message, unread: false },
+        };
         render(<ChatListItem chat={changedChat as IChat} onClick={vi.fn()} />);
 
-        expect(screen.queryAllByTestId('chat-unread-indicator')).toHaveLength(0);
+        expect(screen.queryAllByTestId('chat-unread-indicator')).toHaveLength(
+          0,
+        );
       });
     });
   });

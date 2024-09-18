@@ -8,7 +8,10 @@ import { Icon, Select } from '../../components/ui';
 
 const messages = defineMessages({
   selectPlaceholder: { id: 'select.placeholder', defaultMessage: 'Select' },
-  selectNoOptions: { id: 'select.no_options', defaultMessage: 'No options available' },
+  selectNoOptions: {
+    id: 'select.no_options',
+    defaultMessage: 'No options available',
+  },
 });
 
 interface IInputContainer {
@@ -22,12 +25,16 @@ interface IInputContainer {
 }
 
 const InputContainer: React.FC<IInputContainer> = (props) => {
-  const containerClass = clsx('input', {
-    'with_label': props.label,
-    'required': props.required,
-    'boolean': props.type === 'checkbox',
-    'field_with_errors': props.error,
-  }, props.extraClass);
+  const containerClass = clsx(
+    'input',
+    {
+      with_label: props.label,
+      required: props.required,
+      boolean: props.type === 'checkbox',
+      field_with_errors: props.error,
+    },
+    props.extraClass,
+  );
 
   return (
     <div className={containerClass}>
@@ -43,19 +50,21 @@ interface ILabelInputContainer {
   children: React.ReactNode;
 }
 
-const LabelInputContainer: React.FC<ILabelInputContainer> = ({ label, hint, children }) => {
+const LabelInputContainer: React.FC<ILabelInputContainer> = ({
+  label,
+  hint,
+  children,
+}) => {
   const [id] = useState(uuidv4());
-  const childrenWithProps = React.Children.map(children, child => (
+  const childrenWithProps = React.Children.map(children, (child) =>
     // @ts-ignore: not sure how to get the right type here
-    React.cloneElement(child, { id, key: id })
-  ));
+    React.cloneElement(child, { id, key: id }),
+  );
 
   return (
     <div className='label_input'>
       <label htmlFor={id}>{label}</label>
-      <div className='label_input__wrapper'>
-        {childrenWithProps}
-      </div>
+      <div className='label_input__wrapper'>{childrenWithProps}</div>
       {hint && <span className='hint'>{hint}</span>}
     </div>
   );
@@ -136,16 +145,22 @@ interface ISelectDropdown {
 const SelectDropdown: React.FC<ISelectDropdown> = (props) => {
   const { label, hint, items, ...rest } = props;
 
-  const optionElems = Object.keys(items).map(item => (
-    <option key={item} value={item}>{items[item]}</option>
+  const optionElems = Object.keys(items).map((item) => (
+    <option key={item} value={item}>
+      {items[item]}
+    </option>
   ));
 
   // @ts-ignore
   const selectElem = <Select {...rest}>{optionElems}</Select>;
 
   return label ? (
-    <LabelInputContainer label={label} hint={hint}>{selectElem}</LabelInputContainer>
-  ) : selectElem;
+    <LabelInputContainer label={label} hint={hint}>
+      {selectElem}
+    </LabelInputContainer>
+  ) : (
+    selectElem
+  );
 };
 
 interface IMultiselect {
@@ -154,7 +169,7 @@ interface IMultiselect {
   hint?: React.ReactNode;
   items: Record<string, string>;
   value?: string[];
-  onChange?: ((values: string[]) => void);
+  onChange?: (values: string[]) => void;
   disabled?: boolean;
 }
 
@@ -162,8 +177,13 @@ const Mutliselect: React.FC<IMultiselect> = (props) => {
   const intl = useIntl();
   const { label, hint, items, value, onChange, disabled } = props;
 
-  const options = useMemo(() => Object.entries(items).map(([key, value]) => ({ key, value })), [items]);
-  const selectedValues = value?.map(key => options.find(option => option.key === key)).filter(value => value);
+  const options = useMemo(
+    () => Object.entries(items).map(([key, value]) => ({ key, value })),
+    [items],
+  );
+  const selectedValues = value
+    ?.map((key) => options.find((option) => option.key === key))
+    .filter((value) => value);
 
   const handleChange = (values: Record<'key' | 'value', string>[]) => {
     onChange?.(values.map(({ key }) => key));
@@ -178,15 +198,24 @@ const Mutliselect: React.FC<IMultiselect> = (props) => {
       onRemove={handleChange}
       displayValue='value'
       disable={disabled}
-      customCloseIcon={<Icon className='ml-1 h-4 w-4 hover:cursor-pointer' src={require('@tabler/icons/outline/circle-x.svg')} />}
+      customCloseIcon={
+        <Icon
+          className='ml-1 h-4 w-4 hover:cursor-pointer'
+          src={require('@tabler/icons/outline/circle-x.svg')}
+        />
+      }
       placeholder={intl.formatMessage(messages.selectPlaceholder)}
       emptyRecordMsg={intl.formatMessage(messages.selectNoOptions)}
     />
   );
 
   return label ? (
-    <LabelInputContainer label={label} hint={hint}>{selectElem}</LabelInputContainer>
-  ) : selectElem;
+    <LabelInputContainer label={label} hint={hint}>
+      {selectElem}
+    </LabelInputContainer>
+  ) : (
+    selectElem
+  );
 };
 
 interface ITextInput {
@@ -204,13 +233,11 @@ interface ITextInput {
   required?: boolean;
 }
 
-const TextInput: React.FC<ITextInput> = props => (
+const TextInput: React.FC<ITextInput> = (props) => (
   <SimpleInput type='text' {...props} />
 );
 
-const FileChooser : React.FC = (props) => (
-  <SimpleInput type='file' {...props} />
-);
+const FileChooser: React.FC = (props) => <SimpleInput type='file' {...props} />;
 
 FileChooser.defaultProps = {
   accept: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
@@ -224,7 +251,7 @@ interface IFileChooserLogo {
   onChange: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-const FileChooserLogo: React.FC<IFileChooserLogo> = props => (
+const FileChooserLogo: React.FC<IFileChooserLogo> = (props) => (
   <SimpleInput type='file' {...props} />
 );
 

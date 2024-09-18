@@ -6,9 +6,9 @@ import Video from 'pl-fe/features/video';
 import { useAppSelector } from 'pl-fe/hooks';
 import { makeGetStatus } from 'pl-fe/selectors';
 
-import type { BaseModalProps } from '../modal-root';
 import type { MediaAttachment } from 'pl-api';
 import type { Account } from 'pl-fe/normalizers';
+import type { BaseModalProps } from '../modal-root';
 
 type VideoModalProps = {
   media: MediaAttachment;
@@ -17,13 +17,18 @@ type VideoModalProps = {
   time?: number;
 };
 
-const VideoModal: React.FC<VideoModalProps & BaseModalProps> = ({ statusId, account, media, time }) => {
+const VideoModal: React.FC<VideoModalProps & BaseModalProps> = ({
+  statusId,
+  account,
+  media,
+  time,
+}) => {
   const getStatus = useCallback(makeGetStatus(), []);
 
-  const status = useAppSelector(state => getStatus(state, { id: statusId }))!;
+  const status = useAppSelector((state) => getStatus(state, { id: statusId }))!;
   const history = useHistory();
 
-  const handleStatusClick: React.MouseEventHandler = e => {
+  const handleStatusClick: React.MouseEventHandler = (e) => {
     if (!account) return;
 
     if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
@@ -34,7 +39,10 @@ const VideoModal: React.FC<VideoModalProps & BaseModalProps> = ({ statusId, acco
 
   const link = status && account && (
     <a href={status.url} onClick={handleStatusClick}>
-      <FormattedMessage id='lightbox.view_context' defaultMessage='View context' />
+      <FormattedMessage
+        id='lightbox.view_context'
+        defaultMessage='View context'
+      />
     </a>
   );
 

@@ -12,9 +12,7 @@ describe('<Card />', () => {
           <CardTitle title='Card Title' />
         </CardHeader>
 
-        <CardBody>
-          Card Body
-        </CardBody>
+        <CardBody>Card Body</CardBody>
       </Card>,
     );
 

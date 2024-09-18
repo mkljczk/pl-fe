@@ -8,7 +8,9 @@ import { randomIntFromInterval } from '../utils';
 import PlaceholderAvatar from './placeholder-avatar';
 
 /** Fake chat to display while data is loading. */
-const PlaceholderChatMessage = ({ isMyMessage = false }: { isMyMessage?: boolean }) => {
+const PlaceholderChatMessage = ({
+  isMyMessage = false,
+}: { isMyMessage?: boolean }) => {
   const messageLength = randomIntFromInterval(160, 220);
 
   return (
@@ -25,15 +27,16 @@ const PlaceholderChatMessage = ({ isMyMessage = false }: { isMyMessage?: boolean
         justifyContent={isMyMessage ? 'end' : 'start'}
       >
         <div
-          className={
-            clsx({
-              'text-ellipsis break-words relative rounded-md p-2': true,
-              'mr-2': isMyMessage,
-              'order-2 ml-2': !isMyMessage,
-            })
-          }
+          className={clsx({
+            'text-ellipsis break-words relative rounded-md p-2': true,
+            'mr-2': isMyMessage,
+            'order-2 ml-2': !isMyMessage,
+          })}
         >
-          <div style={{ width: messageLength, height: 20 }} className='rounded-full bg-primary-50 dark:bg-primary-800' />
+          <div
+            style={{ width: messageLength, height: 20 }}
+            className='rounded-full bg-primary-50 dark:bg-primary-800'
+          />
         </div>
 
         <div className={clsx({ 'order-1': !isMyMessage })}>
@@ -56,7 +59,10 @@ const PlaceholderChatMessage = ({ isMyMessage = false }: { isMyMessage?: boolean
             'order-2': !isMyMessage,
           })}
         >
-          <span style={{ width: 50, height: 12 }} className='block rounded-full bg-primary-50 dark:bg-primary-800' />
+          <span
+            style={{ width: 50, height: 12 }}
+            className='block rounded-full bg-primary-50 dark:bg-primary-800'
+          />
         </Text>
 
         <div className={clsx({ 'order-1': !isMyMessage })}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { patchMe } from 'pl-fe/actions/me';
 import { BigCard } from 'pl-fe/components/big-card';
@@ -10,8 +10,15 @@ import toast from 'pl-fe/toast';
 import type { PlfeResponse } from 'pl-fe/api';
 
 const messages = defineMessages({
-  usernamePlaceholder: { id: 'onboarding.display_name.placeholder', defaultMessage: 'Eg. John Smith' },
-  error: { id: 'onboarding.error', defaultMessage: 'An unexpected error occurred. Please try again or skip this step.' },
+  usernamePlaceholder: {
+    id: 'onboarding.display_name.placeholder',
+    defaultMessage: 'Eg. John Smith',
+  },
+  error: {
+    id: 'onboarding.error',
+    defaultMessage:
+      'An unexpected error occurred. Please try again or skip this step.',
+  },
 });
 
 const DisplayNameStep = ({ onNext }: { onNext: () => void }) => {
@@ -29,7 +36,8 @@ const DisplayNameStep = ({ onNext }: { onNext: () => void }) => {
 
   const hintText = React.useMemo(() => {
     const charsLeft = 30 - value.length;
-    const suffix = charsLeft === 1 ? 'character remaining' : 'characters remaining';
+    const suffix =
+      charsLeft === 1 ? 'character remaining' : 'characters remaining';
 
     return `${charsLeft} ${suffix}`;
   }, [value]);
@@ -43,11 +51,17 @@ const DisplayNameStep = ({ onNext }: { onNext: () => void }) => {
       .then(() => {
         setSubmitting(false);
         onNext();
-      }).catch((error: { response: PlfeResponse }) => {
+      })
+      .catch((error: { response: PlfeResponse }) => {
         setSubmitting(false);
 
         if (error.response?.status === 422) {
-          setErrors([(error.response.json as any).error.replace('Validation failed: ', '')]);
+          setErrors([
+            (error.response.json as any).error.replace(
+              'Validation failed: ',
+              '',
+            ),
+          ]);
         } else {
           toast.error(messages.error);
         }
@@ -56,13 +70,28 @@ const DisplayNameStep = ({ onNext }: { onNext: () => void }) => {
 
   return (
     <BigCard
-      title={<FormattedMessage id='onboarding.display_name.title' defaultMessage='Choose a display name' />}
-      subtitle={<FormattedMessage id='onboarding.display_name.subtitle' defaultMessage='You can always edit this later.' />}
+      title={
+        <FormattedMessage
+          id='onboarding.display_name.title'
+          defaultMessage='Choose a display name'
+        />
+      }
+      subtitle={
+        <FormattedMessage
+          id='onboarding.display_name.subtitle'
+          defaultMessage='You can always edit this later.'
+        />
+      }
     >
       <Stack space={5}>
         <FormGroup
           hintText={hintText}
-          labelText={<FormattedMessage id='onboarding.display_name.label' defaultMessage='Display name' />}
+          labelText={
+            <FormattedMessage
+              id='onboarding.display_name.label'
+              defaultMessage='Display name'
+            />
+          }
           errors={errors}
         >
           <Input
@@ -83,14 +112,20 @@ const DisplayNameStep = ({ onNext }: { onNext: () => void }) => {
             onClick={handleSubmit}
           >
             {isSubmitting ? (
-              <FormattedMessage id='onboarding.saving' defaultMessage='Saving…' />
+              <FormattedMessage
+                id='onboarding.saving'
+                defaultMessage='Saving…'
+              />
             ) : (
               <FormattedMessage id='onboarding.next' defaultMessage='Next' />
             )}
           </Button>
 
           <Button block theme='tertiary' type='button' onClick={onNext}>
-            <FormattedMessage id='onboarding.skip' defaultMessage='Skip for now' />
+            <FormattedMessage
+              id='onboarding.skip'
+              defaultMessage='Skip for now'
+            />
           </Button>
         </Stack>
       </Stack>

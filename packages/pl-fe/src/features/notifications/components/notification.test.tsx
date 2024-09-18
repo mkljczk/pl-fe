@@ -1,7 +1,12 @@
 import React from 'react';
 
 import { updateNotifications } from 'pl-fe/actions/notifications';
-import { render, screen, rootState, createTestStore } from 'pl-fe/jest/test-helpers';
+import {
+  createTestStore,
+  render,
+  rootState,
+  screen,
+} from 'pl-fe/jest/test-helpers';
 
 import Notification from './notification';
 
@@ -20,19 +25,23 @@ const normalize = (notification: any) => {
 
 describe('<Notification />', () => {
   it('renders a follow notification', async () => {
-    const { notification, state } = normalize(await import('pl-fe/__fixtures__/notification-follow.json'));
+    const { notification, state } = normalize(
+      await import('pl-fe/__fixtures__/notification-follow.json'),
+    );
 
     render(<Notification notification={notification} />, undefined, state);
 
     expect(screen.getByTestId('notification')).toBeInTheDocument();
     expect(screen.getByTestId('account')).toContainHTML('neko@rdrama.cc');
-    expect(screen.getByTestId('message')).toHaveTextContent('Nekobit followed you');
+    expect(screen.getByTestId('message')).toHaveTextContent(
+      'Nekobit followed you',
+    );
   });
 
   describe('grouped notifications', () => {
     it('renders a grouped follow notification for more than 2', async () => {
       const { notification, state } = normalize({
-        ...await import('pl-fe/__fixtures__/notification-follow.json'),
+        ...(await import('pl-fe/__fixtures__/notification-follow.json')),
         total_count: 5,
       });
 
@@ -40,12 +49,14 @@ describe('<Notification />', () => {
 
       expect(screen.getByTestId('notification')).toBeInTheDocument();
       expect(screen.getByTestId('account')).toContainHTML('neko@rdrama.cc');
-      expect(screen.getByTestId('message')).toHaveTextContent('Nekobit + 4 others followed you');
+      expect(screen.getByTestId('message')).toHaveTextContent(
+        'Nekobit + 4 others followed you',
+      );
     });
 
     it('renders a grouped follow notification for 1', async () => {
       const { notification, state } = normalize({
-        ...await import('pl-fe/__fixtures__/notification-follow.json'),
+        ...(await import('pl-fe/__fixtures__/notification-follow.json')),
         total_count: 2,
       });
 
@@ -53,17 +64,25 @@ describe('<Notification />', () => {
 
       expect(screen.getByTestId('notification')).toBeInTheDocument();
       expect(screen.getByTestId('account')).toContainHTML('neko@rdrama.cc');
-      expect(screen.getByTestId('message')).toHaveTextContent('Nekobit + 1 other followed you');
+      expect(screen.getByTestId('message')).toHaveTextContent(
+        'Nekobit + 1 other followed you',
+      );
     });
   });
 
   it('renders a favourite notification', async () => {
-    const { notification, state } = normalize(await import('pl-fe/__fixtures__/notification-favourite.json'));
+    const { notification, state } = normalize(
+      await import('pl-fe/__fixtures__/notification-favourite.json'),
+    );
 
     render(<Notification notification={notification} />, undefined, state);
 
-    expect(screen.getByTestId('notification')).toContainHTML('Hollahollara@spinster.xyz');
-    expect(screen.getByTestId('status')).toContainHTML('https://media.gleasonator.com');
+    expect(screen.getByTestId('notification')).toContainHTML(
+      'Hollahollara@spinster.xyz',
+    );
+    expect(screen.getByTestId('status')).toContainHTML(
+      'https://media.gleasonator.com',
+    );
   });
 
   // it('renders a follow_request notification', async () => {
@@ -76,25 +95,37 @@ describe('<Notification />', () => {
   // });
 
   it('renders a mention notification', async () => {
-    const { notification, state } = normalize(await import('pl-fe/__fixtures__/notification-mention.json'));
+    const { notification, state } = normalize(
+      await import('pl-fe/__fixtures__/notification-mention.json'),
+    );
 
     render(<Notification notification={notification} />, undefined, state);
 
-    expect(screen.getByTestId('notification')).toContainHTML('silverpill@mitra.social');
+    expect(screen.getByTestId('notification')).toContainHTML(
+      'silverpill@mitra.social',
+    );
     expect(screen.getByTestId('status')).toContainHTML('ActivityPub spec');
   });
 
   it('renders a move notification', async () => {
-    const { notification, state } = normalize(await import('pl-fe/__fixtures__/notification-move.json'));
+    const { notification, state } = normalize(
+      await import('pl-fe/__fixtures__/notification-move.json'),
+    );
 
     render(<Notification notification={notification} />, undefined, state);
 
-    expect(screen.getByTestId('notification')).toContainHTML('alex@fedibird.com');
+    expect(screen.getByTestId('notification')).toContainHTML(
+      'alex@fedibird.com',
+    );
     expect(screen.getByTestId('account')).toContainHTML('benis911');
   });
 
   it('renders a pleroma:emoji_reaction notification', async () => {
-    const { notification, state } = normalize(await import('pl-fe/__fixtures__/notification-pleroma-emoji_reaction.json'));
+    const { notification, state } = normalize(
+      await import(
+        'pl-fe/__fixtures__/notification-pleroma-emoji_reaction.json'
+      ),
+    );
 
     render(<Notification notification={notification} />, undefined, state);
 
@@ -103,7 +134,9 @@ describe('<Notification />', () => {
   });
 
   it('renders a pleroma:chat_mention notification', async () => {
-    const { notification, state } = normalize(await import('pl-fe/__fixtures__/notification-pleroma-chat_mention.json'));
+    const { notification, state } = normalize(
+      await import('pl-fe/__fixtures__/notification-pleroma-chat_mention.json'),
+    );
 
     render(<Notification notification={notification} />, undefined, state);
 
@@ -111,20 +144,30 @@ describe('<Notification />', () => {
   });
 
   it('renders a poll notification', async () => {
-    const { notification, state } = normalize(await import('pl-fe/__fixtures__/notification-poll.json'));
+    const { notification, state } = normalize(
+      await import('pl-fe/__fixtures__/notification-poll.json'),
+    );
 
     render(<Notification notification={notification} />, undefined, state);
 
     expect(screen.getByTestId('notification')).toBeInTheDocument();
-    expect(screen.getByTestId('status')).toContainHTML('what do you guys think?');
+    expect(screen.getByTestId('status')).toContainHTML(
+      'what do you guys think?',
+    );
   });
 
   it('renders a reblog notification', async () => {
-    const { notification, state } = normalize(await import('pl-fe/__fixtures__/notification-reblog.json'));
+    const { notification, state } = normalize(
+      await import('pl-fe/__fixtures__/notification-reblog.json'),
+    );
 
     render(<Notification notification={notification} />, undefined, state);
 
-    expect(screen.getByTestId('notification')).toContainHTML('rob@nicecrew.digital');
-    expect(screen.getByTestId('status')).toContainHTML('never downloaded TikTok');
+    expect(screen.getByTestId('notification')).toContainHTML(
+      'rob@nicecrew.digital',
+    );
+    expect(screen.getByTestId('status')).toContainHTML(
+      'never downloaded TikTok',
+    );
   });
 });

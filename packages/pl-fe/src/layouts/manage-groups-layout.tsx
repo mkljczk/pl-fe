@@ -2,7 +2,10 @@ import React from 'react';
 
 import { Layout } from 'pl-fe/components/ui';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
-import { MyGroupsPanel, NewGroupPanel } from 'pl-fe/features/ui/util/async-components';
+import {
+  MyGroupsPanel,
+  NewGroupPanel,
+} from 'pl-fe/features/ui/util/async-components';
 
 interface IGroupsLayout {
   children: React.ReactNode;
@@ -11,9 +14,7 @@ interface IGroupsLayout {
 /** Layout to display groups. */
 const ManageGroupsLayout: React.FC<IGroupsLayout> = ({ children }) => (
   <>
-    <Layout.Main>
-      {children}
-    </Layout.Main>
+    <Layout.Main>{children}</Layout.Main>
 
     <Layout.Aside>
       <NewGroupPanel />

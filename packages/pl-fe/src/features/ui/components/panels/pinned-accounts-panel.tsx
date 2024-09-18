@@ -15,37 +15,49 @@ interface IPinnedAccountsPanel {
   limit: number;
 }
 
-const PinnedAccountsPanel: React.FC<IPinnedAccountsPanel> = ({ account, limit }) => {
+const PinnedAccountsPanel: React.FC<IPinnedAccountsPanel> = ({
+  account,
+  limit,
+}) => {
   const dispatch = useAppDispatch();
-  const pinned = useAppSelector((state) => state.user_lists.pinned.get(account.id)?.items || ImmutableOrderedSet<string>()).slice(0, limit);
+  const pinned = useAppSelector(
+    (state) =>
+      state.user_lists.pinned.get(account.id)?.items ||
+      ImmutableOrderedSet<string>(),
+  ).slice(0, limit);
 
   useEffect(() => {
     dispatch(fetchPinnedAccounts(account.id));
   }, []);
 
   if (pinned.isEmpty()) {
-    return (
-      <WhoToFollowPanel limit={limit} />
-    );
+    return <WhoToFollowPanel limit={limit} />;
   }
 
   return (
     <Widget
-      title={<FormattedMessage
-        id='pinned_accounts.title'
-        defaultMessage='{name}’s choices'
-        values={{
-          name: <span dangerouslySetInnerHTML={{ __html: account.display_name_html }} />,
-        }}
-      />}
-    >
-      {pinned && pinned.map((suggestion) => (
-        <AccountContainer
-          key={suggestion}
-          id={suggestion}
-          withRelationship={false}
+      title={
+        <FormattedMessage
+          id='pinned_accounts.title'
+          defaultMessage='{name}’s choices'
+          values={{
+            name: (
+              <span
+                dangerouslySetInnerHTML={{ __html: account.display_name_html }}
+              />
+            ),
+          }}
         />
-      ))}
+      }
+    >
+      {pinned &&
+        pinned.map((suggestion) => (
+          <AccountContainer
+            key={suggestion}
+            id={suggestion}
+            withRelationship={false}
+          />
+        ))}
     </Widget>
   );
 };

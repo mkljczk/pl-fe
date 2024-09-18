@@ -1,10 +1,17 @@
 import React, { useEffect } from 'react';
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { createSelector } from 'reselect';
 
 import { fetchLists } from 'pl-fe/actions/lists';
 import List, { ListItem } from 'pl-fe/components/list';
-import { Card, Column, HStack, Icon, Spinner, Stack } from 'pl-fe/components/ui';
+import {
+  Card,
+  Column,
+  HStack,
+  Icon,
+  Spinner,
+  Stack,
+} from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import NewListForm from './components/new-list-form';
@@ -17,13 +24,19 @@ const messages = defineMessages({
   subheading: { id: 'lists.subheading', defaultMessage: 'Your lists' },
 });
 
-const getOrderedLists = createSelector([(state: RootState) => state.lists], lists => {
-  if (!lists) {
-    return lists;
-  }
+const getOrderedLists = createSelector(
+  [(state: RootState) => state.lists],
+  (lists) => {
+    if (!lists) {
+      return lists;
+    }
 
-  return lists.toList().filter((item): item is ListEntity => !!item).sort((a, b) => a.title.localeCompare(b.title));
-});
+    return lists
+      .toList()
+      .filter((item): item is ListEntity => !!item)
+      .sort((a, b) => a.title.localeCompare(b.title));
+  },
+);
 
 const Lists: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -43,7 +56,12 @@ const Lists: React.FC = () => {
     );
   }
 
-  const emptyMessage = <FormattedMessage id='empty_column.lists' defaultMessage="You don't have any lists yet. When you create one, it will show up here." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.lists'
+      defaultMessage="You don't have any lists yet. When you create one, it will show up here."
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -62,7 +80,10 @@ const Lists: React.FC = () => {
                 to={`/list/${list.id}`}
                 label={
                   <HStack alignItems='center' space={2}>
-                    <Icon src={require('@tabler/icons/outline/list.svg')} size={20} />
+                    <Icon
+                      src={require('@tabler/icons/outline/list.svg')}
+                      size={20}
+                    />
                     <span>{list.title}</span>
                   </HStack>
                 }

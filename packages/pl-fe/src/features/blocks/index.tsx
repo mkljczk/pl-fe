@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { useBlocks } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
@@ -13,12 +13,7 @@ const messages = defineMessages({
 const Blocks: React.FC = () => {
   const intl = useIntl();
 
-  const {
-    accounts,
-    hasNextPage,
-    fetchNextPage,
-    isLoading,
-  } = useBlocks();
+  const { accounts, hasNextPage, fetchNextPage, isLoading } = useBlocks();
 
   if (isLoading) {
     return (
@@ -28,7 +23,12 @@ const Blocks: React.FC = () => {
     );
   }
 
-  const emptyMessage = <FormattedMessage id='empty_column.blocks' defaultMessage="You haven't blocked any users yet." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.blocks'
+      defaultMessage="You haven't blocked any users yet."
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>

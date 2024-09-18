@@ -3,7 +3,11 @@ import React, { Suspense } from 'react';
 import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
 import PreviewCard from 'pl-fe/components/preview-card';
 import PlaceholderCard from 'pl-fe/features/placeholder/components/placeholder-card';
-import { MediaGallery, Video, Audio } from 'pl-fe/features/ui/util/async-components';
+import {
+  Audio,
+  MediaGallery,
+  Video,
+} from 'pl-fe/features/ui/util/async-components';
 import { useSettings } from 'pl-fe/hooks';
 import { useModalsStore } from 'pl-fe/stores';
 
@@ -14,7 +18,19 @@ import type { Status } from 'pl-fe/normalizers';
 
 interface IStatusMedia {
   /** Status entity to render media for. */
-  status: Pick<Status, 'id' | 'account' | 'card' | 'expectsCard' | 'hidden' | 'media_attachments' | 'quote_id' | 'sensitive' | 'spoiler_text' | 'visibility'>;
+  status: Pick<
+    Status,
+    | 'id'
+    | 'account'
+    | 'card'
+    | 'expectsCard'
+    | 'hidden'
+    | 'media_attachments'
+    | 'quote_id'
+    | 'sensitive'
+    | 'spoiler_text'
+    | 'visibility'
+  >;
   /** Whether to display compact media. */
   muted?: boolean;
   /** Callback when compact media is clicked. */
@@ -37,14 +53,22 @@ const StatusMedia: React.FC<IStatusMedia> = ({
 
   let media: JSX.Element | null = null;
 
-  const renderLoadingMediaGallery = (): JSX.Element => <div className='media_gallery' style={{ height: '285px' }} />;
+  const renderLoadingMediaGallery = (): JSX.Element => (
+    <div className='media_gallery' style={{ height: '285px' }} />
+  );
 
   const renderLoadingVideoPlayer = (): JSX.Element => (
-    <div className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat' style={{ height: '285px' }} />
+    <div
+      className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat'
+      style={{ height: '285px' }}
+    />
   );
 
   const renderLoadingAudioPlayer = (): JSX.Element => (
-    <div className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat' style={{ height: '285px' }} />
+    <div
+      className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat'
+      style={{ height: '285px' }}
+    />
   );
 
   const openMedia = (media: Array<MediaAttachment>, index: number) => {
@@ -53,12 +77,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
 
   if (size > 0 && firstAttachment) {
     if (muted) {
-      media = (
-        <AttachmentThumbs
-          status={status}
-          onClick={onClick}
-        />
-      );
+      media = <AttachmentThumbs status={status} onClick={onClick} />;
     } else if (size === 1 && firstAttachment.type === 'video') {
       const video = firstAttachment;
 
@@ -84,7 +103,11 @@ const StatusMedia: React.FC<IStatusMedia> = ({
           <Audio
             src={attachment.url}
             alt={attachment.description}
-            poster={attachment.preview_url !== attachment.url ? attachment.preview_url : status.account.avatar_static}
+            poster={
+              attachment.preview_url !== attachment.url
+                ? attachment.preview_url
+                : status.account.avatar_static
+            }
             backgroundColor={attachment.meta.colors?.background}
             foregroundColor={attachment.meta.colors?.foreground}
             accentColor={attachment.meta.colors?.accent}
@@ -106,25 +129,15 @@ const StatusMedia: React.FC<IStatusMedia> = ({
       );
     }
   } else if (!status.quote_id && status.card) {
-    media = (
-      <PreviewCard
-        onOpenMedia={openMedia}
-        card={status.card}
-        compact
-      />
-    );
+    media = <PreviewCard onOpenMedia={openMedia} card={status.card} compact />;
   } else if (status.expectsCard) {
-    media = (
-      <PlaceholderCard />
-    );
+    media = <PlaceholderCard />;
   }
 
   if (media) {
     return (
       // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-      <div onClick={e => e.stopPropagation()}>
-        {media}
-      </div>
+      <div onClick={(e) => e.stopPropagation()}>{media}</div>
     );
   } else {
     return null;

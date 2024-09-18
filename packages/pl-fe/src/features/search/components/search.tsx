@@ -23,7 +23,8 @@ const messages = defineMessages({
   action: { id: 'search.action', defaultMessage: 'Search for “{query}”' },
 });
 
-const redirectToAccount = (accountId: string, routerHistory: any) =>
+const redirectToAccount =
+  (accountId: string, routerHistory: any) =>
   (_dispatch: AppDispatch, getState: () => RootState) => {
     const acct = selectAccount(getState(), accountId)!.acct;
 
@@ -55,9 +56,12 @@ const Search = (props: ISearch) => {
 
   const submitted = useAppSelector((state) => state.search.submitted);
 
-  const debouncedSubmit = useCallback(debounce((value: string) => {
-    dispatch(submitSearch(value));
-  }, 900), []);
+  const debouncedSubmit = useCallback(
+    debounce((value: string) => {
+      dispatch(submitSearch(value));
+    }, 900),
+    [],
+  );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -142,10 +146,13 @@ const Search = (props: ISearch) => {
   return (
     <div
       className={clsx('w-full', {
-        'sticky top-[76px] z-10 bg-white/90 backdrop-blur black:bg-black/80 dark:bg-primary-900/90': !openInRoute,
+        'sticky top-[76px] z-10 bg-white/90 backdrop-blur black:bg-black/80 dark:bg-primary-900/90':
+          !openInRoute,
       })}
     >
-      <label htmlFor='search' className='sr-only'>{intl.formatMessage(messages.placeholder)}</label>
+      <label htmlFor='search' className='sr-only'>
+        {intl.formatMessage(messages.placeholder)}
+      </label>
 
       <div className='relative'>
         {autosuggest ? (

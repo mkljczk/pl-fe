@@ -26,16 +26,25 @@ interface IStillImage {
 
 /** Renders images on a canvas, only playing GIFs if autoPlayGif is enabled. */
 const StillImage: React.FC<IStillImage> = ({
-  alt, className, src, style, letterboxed = false, showExt = false, onError, isGif, noGroup,
+  alt,
+  className,
+  src,
+  style,
+  letterboxed = false,
+  showExt = false,
+  onError,
+  isGif,
+  noGroup,
 }) => {
   const { autoPlayGif } = useSettings();
 
   const canvas = useRef<HTMLCanvasElement>(null);
   const img = useRef<HTMLImageElement>(null);
 
-  const hoverToPlay = (
-    src && !autoPlayGif && ((isGif) || src.endsWith('.gif') || src.startsWith('blob:'))
-  );
+  const hoverToPlay =
+    src &&
+    !autoPlayGif &&
+    (isGif || src.endsWith('.gif') || src.startsWith('blob:'));
 
   const handleImageLoad = () => {
     if (hoverToPlay && canvas.current && img.current) {
@@ -54,7 +63,9 @@ const StillImage: React.FC<IStillImage> = ({
   return (
     <div
       data-testid='still-image-container'
-      className={clsx(className, 'relative isolate overflow-hidden', { 'group': !noGroup })}
+      className={clsx(className, 'relative isolate overflow-hidden', {
+        group: !noGroup,
+      })}
       style={style}
     >
       <img
@@ -77,7 +88,7 @@ const StillImage: React.FC<IStillImage> = ({
         />
       )}
 
-      {(hoverToPlay && showExt) && (
+      {hoverToPlay && showExt && (
         <div className='pointer-events-none absolute bottom-2 left-2 opacity-90 group-hover:hidden'>
           <ExtensionBadge ext='GIF' />
         </div>
@@ -98,7 +109,4 @@ const ExtensionBadge: React.FC<IExtensionBadge> = ({ ext }) => (
   </div>
 );
 
-export {
-  type IStillImage,
-  StillImage as default,
-};
+export { type IStillImage, StillImage as default };

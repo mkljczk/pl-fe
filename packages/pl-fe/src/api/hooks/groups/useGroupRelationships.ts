@@ -11,12 +11,13 @@ const useGroupRelationships = (listKey: string[], groupIds: string[]) => {
   const fetchGroupRelationships = (groupIds: string[]) =>
     client.experimental.groups.getGroupRelationships(groupIds);
 
-  const { entityMap: relationships, ...result } = useBatchedEntities<GroupRelationship>(
-    [Entities.RELATIONSHIPS, ...listKey],
-    groupIds,
-    fetchGroupRelationships,
-    { enabled: isLoggedIn },
-  );
+  const { entityMap: relationships, ...result } =
+    useBatchedEntities<GroupRelationship>(
+      [Entities.RELATIONSHIPS, ...listKey],
+      groupIds,
+      fetchGroupRelationships,
+      { enabled: isLoggedIn },
+    );
 
   return { relationships, ...result };
 };

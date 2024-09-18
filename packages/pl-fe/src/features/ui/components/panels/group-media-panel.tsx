@@ -5,7 +5,10 @@ import { FormattedMessage } from 'react-intl';
 import { fetchGroupTimeline } from 'pl-fe/actions/timelines';
 import { Spinner, Text, Widget } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
-import { type AccountGalleryAttachment, getGroupGallery } from 'pl-fe/selectors';
+import {
+  type AccountGalleryAttachment,
+  getGroupGallery,
+} from 'pl-fe/selectors';
 import { useModalsStore } from 'pl-fe/stores';
 
 import MediaItem from '../../../account-gallery/components/media-item';
@@ -25,14 +28,16 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
   const isMember = !!group?.relationship?.member;
   const isPrivate = group?.locked;
 
-  const attachments: ImmutableList<AccountGalleryAttachment> = useAppSelector((state) => group ? getGroupGallery(state, group?.id) : ImmutableList());
+  const attachments: ImmutableList<AccountGalleryAttachment> = useAppSelector(
+    (state) => (group ? getGroupGallery(state, group?.id) : ImmutableList()),
+  );
 
   const handleOpenMedia = (attachment: AccountGalleryAttachment): void => {
     if (attachment.type === 'video') {
       openModal('VIDEO', { media: attachment, statusId: attachment.status.id });
     } else {
       const media = attachment.status.media_attachments;
-      const index = media.findIndex(x => x.id === attachment.id);
+      const index = media.findIndex((x) => x.id === attachment.id);
 
       openModal('MEDIA', { media, index, statusId: attachment.status.id });
     }
@@ -43,7 +48,7 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
 
     if (group && (isMember || !isPrivate)) {
       dispatch(fetchGroupTimeline(group.id, { only_media: true, limit: 40 }))
-      // @ts-ignore
+        // @ts-ignore
         .then(() => setLoading(false))
         .catch(() => {});
     }
@@ -67,7 +72,10 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
     } else {
       return (
         <Text size='sm' theme='muted'>
-          <FormattedMessage id='media_panel.empty_message' defaultMessage='No media found.' />
+          <FormattedMessage
+            id='media_panel.empty_message'
+            defaultMessage='No media found.'
+          />
         </Text>
       );
     }
@@ -78,14 +86,12 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
   }
 
   return (
-    <Widget title={<FormattedMessage id='media_panel.title' defaultMessage='Media' />}>
+    <Widget
+      title={<FormattedMessage id='media_panel.title' defaultMessage='Media' />}
+    >
       {group && (
         <div className='w-full'>
-          {loading ? (
-            <Spinner />
-          ) : (
-            renderAttachments()
-          )}
+          {loading ? <Spinner /> : renderAttachments()}
         </div>
       )}
     </Widget>

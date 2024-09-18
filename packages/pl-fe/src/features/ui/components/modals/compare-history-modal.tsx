@@ -12,11 +12,17 @@ interface CompareHistoryModalProps {
   statusId: string;
 }
 
-const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> = ({ onClose, statusId }) => {
+const CompareHistoryModal: React.FC<
+  BaseModalProps & CompareHistoryModalProps
+> = ({ onClose, statusId }) => {
   const dispatch = useAppDispatch();
 
-  const loading = useAppSelector(state => state.history.getIn([statusId, 'loading']));
-  const versions = useAppSelector(state => state.history.get(statusId)?.items);
+  const loading = useAppSelector((state) =>
+    state.history.getIn([statusId, 'loading']),
+  );
+  const versions = useAppSelector(
+    (state) => state.history.get(statusId)?.items,
+  );
 
   const onClickClose = () => {
     onClose('COMPARE_HISTORY');
@@ -48,20 +54,30 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
                 </>
               )}
 
-              <div className='status__content' dangerouslySetInnerHTML={content} />
+              <div
+                className='status__content'
+                dangerouslySetInnerHTML={content}
+              />
 
               {poll && (
                 <div className='poll'>
                   <Stack>
                     {poll.options.map((option: any) => (
-                      <HStack alignItems='center' className='p-1 text-gray-900 dark:text-gray-300'>
+                      <HStack
+                        alignItems='center'
+                        className='p-1 text-gray-900 dark:text-gray-300'
+                      >
                         <span
                           className='mr-2.5 inline-block h-4 w-4 flex-none rounded-full border border-solid border-primary-600'
                           tabIndex={0}
                           role='radio'
                         />
 
-                        <span dangerouslySetInnerHTML={{ __html: option.title_emojified }} />
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: option.title_emojified,
+                          }}
+                        />
                       </HStack>
                     ))}
                   </Stack>
@@ -73,7 +89,15 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
               )}
 
               <Text align='right' tag='span' theme='muted' size='sm'>
-                <FormattedDate value={new Date(version.created_at)} hour12 year='numeric' month='short' day='2-digit' hour='numeric' minute='2-digit' />
+                <FormattedDate
+                  value={new Date(version.created_at)}
+                  hour12
+                  year='numeric'
+                  month='short'
+                  day='2-digit'
+                  hour='numeric'
+                  minute='2-digit'
+                />
               </Text>
             </div>
           );
@@ -84,7 +108,12 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
 
   return (
     <Modal
-      title={<FormattedMessage id='compare_history_modal.header' defaultMessage='Edit history' />}
+      title={
+        <FormattedMessage
+          id='compare_history_modal.header'
+          defaultMessage='Edit history'
+        />
+      }
       onClose={onClickClose}
     >
       {body}

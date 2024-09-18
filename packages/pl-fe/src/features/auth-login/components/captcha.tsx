@@ -1,16 +1,19 @@
 import { Map as ImmutableMap } from 'immutable';
 import React, { useState, useEffect } from 'react';
-import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchCaptcha } from 'pl-fe/actions/auth';
-import { Stack, Text, Input } from 'pl-fe/components/ui';
+import { Input, Stack, Text } from 'pl-fe/components/ui';
 import { useAppDispatch } from 'pl-fe/hooks';
 
 const noOp = () => {};
 
 const messages = defineMessages({
   captcha: { id: 'registration.captcha', defaultMessage: 'Captcha' },
-  placeholder: { id: 'registration.captcha.placeholder', defaultMessage: 'Enter the pictured text' },
+  placeholder: {
+    id: 'registration.captcha.placeholder',
+    defaultMessage: 'Enter the pictured text',
+  },
 });
 
 interface ICaptchaField {
@@ -40,13 +43,15 @@ const CaptchaField: React.FC<ICaptchaField> = ({
   const [refresh, setRefresh] = useState<NodeJS.Timeout | undefined>(undefined);
 
   const getCaptcha = () => {
-    dispatch(fetchCaptcha()).then((response) => {
-      const captcha = ImmutableMap(response);
-      setCaptcha(captcha);
-      onFetch(captcha);
-    }).catch((error: Error) => {
-      onFetchFail(error);
-    });
+    dispatch(fetchCaptcha())
+      .then((response) => {
+        const captcha = ImmutableMap(response);
+        setCaptcha(captcha);
+        onFetch(captcha);
+      })
+      .catch((error: Error) => {
+        onFetchFail(error);
+      });
   };
 
   const startRefresh = () => {
@@ -77,7 +82,10 @@ const CaptchaField: React.FC<ICaptchaField> = ({
       return (
         <div>
           <Text>
-            <FormattedMessage id='registration.captcha.hint' defaultMessage='Click the image to get a new captcha' />
+            <FormattedMessage
+              id='registration.captcha.hint'
+              defaultMessage='Click the image to get a new captcha'
+            />
           </Text>
 
           <NativeCaptchaField
@@ -103,13 +111,23 @@ interface INativeCaptchaField {
   value: string;
 }
 
-const NativeCaptchaField: React.FC<INativeCaptchaField> = ({ captcha, onChange, onClick, name, value }) => {
+const NativeCaptchaField: React.FC<INativeCaptchaField> = ({
+  captcha,
+  onChange,
+  onClick,
+  name,
+  value,
+}) => {
   const intl = useIntl();
 
   return (
     <Stack space={2}>
       <div className='flex w-full items-center justify-center rounded-md border border-solid border-gray-300 bg-white dark:border-gray-600'>
-        <img alt={intl.formatMessage(messages.captcha)} src={captcha.get('url')} onClick={onClick} />
+        <img
+          alt={intl.formatMessage(messages.captcha)}
+          src={captcha.get('url')}
+          onClick={onClick}
+        />
       </div>
 
       <Input
@@ -127,7 +145,4 @@ const NativeCaptchaField: React.FC<INativeCaptchaField> = ({ captcha, onChange, 
   );
 };
 
-export {
-  CaptchaField as default,
-  NativeCaptchaField,
-};
+export { CaptchaField as default, NativeCaptchaField };

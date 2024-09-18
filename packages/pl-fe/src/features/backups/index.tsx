@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { FormattedDate, defineMessages, useIntl } from 'react-intl';
 
-import { fetchBackups, createBackup } from 'pl-fe/actions/backups';
-import { Button, Card, Column, FormActions, HStack, Spinner, Stack, Text } from 'pl-fe/components/ui';
+import { createBackup, fetchBackups } from 'pl-fe/actions/backups';
+import {
+  Button,
+  Card,
+  Column,
+  FormActions,
+  HStack,
+  Spinner,
+  Stack,
+  Text,
+} from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import type { Backup as BackupEntity } from 'pl-api';
@@ -10,8 +19,14 @@ import type { Backup as BackupEntity } from 'pl-api';
 const messages = defineMessages({
   heading: { id: 'column.backups', defaultMessage: 'Backups' },
   create: { id: 'backups.actions.create', defaultMessage: 'Create backup' },
-  emptyMessage: { id: 'backups.empty_message', defaultMessage: 'No backups found. {action}' },
-  emptyMessageAction: { id: 'backups.empty_message.action', defaultMessage: 'Create one now?' },
+  emptyMessage: {
+    id: 'backups.empty_message',
+    defaultMessage: 'No backups found. {action}',
+  },
+  emptyMessageAction: {
+    id: 'backups.empty_message.action',
+    defaultMessage: 'Create one now?',
+  },
   download: { id: 'backups.download', defaultMessage: 'Download' },
   pending: { id: 'backups.pending', defaultMessage: 'Pending' },
 });
@@ -25,12 +40,17 @@ const Backup: React.FC<IBackup> = ({ backup }) => {
 
   const button = (
     <Button theme='primary' disabled={!backup.processed}>
-      {intl.formatMessage(backup.processed ? messages.download : messages.pending)}
+      {intl.formatMessage(
+        backup.processed ? messages.download : messages.pending,
+      )}
     </Button>
   );
 
   return (
-    <div key={backup.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
+    <div
+      key={backup.id}
+      className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'
+    >
       <Stack space={2}>
         <Stack>
           <Text size='md'>
@@ -46,7 +66,13 @@ const Backup: React.FC<IBackup> = ({ backup }) => {
           </Text>
         </Stack>
         <HStack justifyContent='end'>
-          {backup.processed ? <a href={backup.url} target='_blank'>{button}</a> : button}
+          {backup.processed ? (
+            <a href={backup.url} target='_blank'>
+              {button}
+            </a>
+          ) : (
+            button
+          )}
         </HStack>
       </Stack>
     </div>
@@ -57,19 +83,23 @@ const Backups = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const backups = useAppSelector((state) => state.backups.toList().sortBy((backup) => backup.inserted_at));
+  const backups = useAppSelector((state) =>
+    state.backups.toList().sortBy((backup) => backup.inserted_at),
+  );
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleCreateBackup: React.MouseEventHandler = e => {
+  const handleCreateBackup: React.MouseEventHandler = (e) => {
     dispatch(createBackup());
     e.preventDefault();
   };
 
   useEffect(() => {
-    dispatch(fetchBackups()).then(() => {
-      setIsLoading(false);
-    }).catch(() => {});
+    dispatch(fetchBackups())
+      .then(() => {
+        setIsLoading(false);
+      })
+      .catch(() => {});
   }, []);
 
   const showLoading = isLoading && backups.count() === 0;
@@ -79,7 +109,12 @@ const Backups = () => {
       {intl.formatMessage(messages.emptyMessage, {
         action: (
           <a href='#' onClick={handleCreateBackup}>
-            <Text tag='span' theme='primary' size='sm' className='hover:underline'>
+            <Text
+              tag='span'
+              theme='primary'
+              size='sm'
+              className='hover:underline'
+            >
               {intl.formatMessage(messages.emptyMessageAction)}
             </Text>
           </a>
@@ -88,9 +123,15 @@ const Backups = () => {
     </Card>
   );
 
-  const body = showLoading ? <Spinner /> : backups.isEmpty() ? emptyMessage : (
+  const body = showLoading ? (
+    <Spinner />
+  ) : backups.isEmpty() ? (
+    emptyMessage
+  ) : (
     <div className='mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2'>
-      {backups.map((backup) => <Backup key={backup.id} backup={backup} />)}
+      {backups.map((backup) => (
+        <Backup key={backup.id} backup={backup} />
+      ))}
     </div>
   );
 
@@ -99,7 +140,11 @@ const Backups = () => {
       {body}
 
       <FormActions>
-        <Button theme='primary' disabled={isLoading} onClick={handleCreateBackup}>
+        <Button
+          theme='primary'
+          disabled={isLoading}
+          onClick={handleCreateBackup}
+        >
           {intl.formatMessage(messages.create)}
         </Button>
       </FormActions>

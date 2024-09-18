@@ -4,7 +4,7 @@ type State = {
   isOpen: boolean;
   openDropdownMenu: () => void;
   closeDropdownMenu: () => void;
-}
+};
 
 const useDropdownMenuStore = create<State>((set) => ({
   isOpen: false,
@@ -13,4 +13,3 @@ const useDropdownMenuStore = create<State>((set) => ({
 }));
 
 export { useDropdownMenuStore };
-

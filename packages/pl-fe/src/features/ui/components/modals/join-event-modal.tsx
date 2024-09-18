@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { joinEvent } from 'pl-fe/actions/events';
 import { FormGroup, Modal, Textarea } from 'pl-fe/components/ui';
@@ -8,8 +8,15 @@ import { useAppDispatch } from 'pl-fe/hooks';
 import { BaseModalProps } from '../modal-root';
 
 const messages = defineMessages({
-  hint: { id: 'join_event.hint', defaultMessage: 'You can tell the organizer why do you want to participate in this event:' },
-  placeholder: { id: 'join_event.placeholder', defaultMessage: 'Message to organizer' },
+  hint: {
+    id: 'join_event.hint',
+    defaultMessage:
+      'You can tell the organizer why do you want to participate in this event:',
+  },
+  placeholder: {
+    id: 'join_event.placeholder',
+    defaultMessage: 'Message to organizer',
+  },
   join: { id: 'join_event.join', defaultMessage: 'Request join' },
 });
 
@@ -17,7 +24,10 @@ interface JoinEventModalProps {
   statusId: string;
 }
 
-const JoinEventModal: React.FC<BaseModalProps & JoinEventModalProps> = ({ onClose, statusId }) => {
+const JoinEventModal: React.FC<BaseModalProps & JoinEventModalProps> = ({
+  onClose,
+  statusId,
+}) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -28,18 +38,22 @@ const JoinEventModal: React.FC<BaseModalProps & JoinEventModalProps> = ({ onClos
     onClose('JOIN_EVENT');
   };
 
-  const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
+  const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setParticipationMessage(e.target.value);
   };
 
   const handleSubmit = () => {
     setIsSubmitting(true);
-    dispatch(joinEvent(statusId, participationMessage)).then(() => {
-      handleClose();
-    }).catch(() => {});
+    dispatch(joinEvent(statusId, participationMessage))
+      .then(() => {
+        handleClose();
+      })
+      .catch(() => {});
   };
 
-  const handleKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = e => {
+  const handleKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (
+    e,
+  ) => {
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
       handleSubmit();
     }
@@ -47,7 +61,9 @@ const JoinEventModal: React.FC<BaseModalProps & JoinEventModalProps> = ({ onClos
 
   return (
     <Modal
-      title={<FormattedMessage id='join_event.title' defaultMessage='Join event' />}
+      title={
+        <FormattedMessage id='join_event.title' defaultMessage='Join event' />
+      }
       onClose={handleClose}
       confirmationAction={handleSubmit}
       confirmationText={intl.formatMessage(messages.join)}

@@ -6,14 +6,23 @@ import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useGetState } from 'pl-fe/hooks/useGetState';
 import { filteredArray } from 'pl-fe/schemas/utils';
 
-import { entitiesFetchFail, entitiesFetchRequest, entitiesFetchSuccess } from '../actions';
+import {
+  entitiesFetchFail,
+  entitiesFetchRequest,
+  entitiesFetchSuccess,
+} from '../actions';
 import { selectCache, selectListState, useListState } from '../selectors';
 
 import { parseEntitiesPath } from './utils';
 
-import type { EntitiesPath, EntityFn, EntitySchema, ExpandedEntitiesPath } from './types';
-import type { Entity } from '../types';
 import type { RootState } from 'pl-fe/store';
+import type { Entity } from '../types';
+import type {
+  EntitiesPath,
+  EntityFn,
+  EntitySchema,
+  ExpandedEntitiesPath,
+} from './types';
 
 interface UseBatchedEntitiesOpts<TEntity extends Entity> {
   schema?: EntitySchema<TEntity>;
@@ -45,7 +54,9 @@ const useBatchedEntities = <TEntity extends Entity>(
     return ids.filter((id) => !cache.store[id]);
   });
 
-  const entityMap = useAppSelector((state) => selectEntityMap<TEntity>(state, path, ids));
+  const entityMap = useAppSelector((state) =>
+    selectEntityMap<TEntity>(state, path, ids),
+  );
 
   const fetchEntities = async () => {
     const isFetching = selectListState(getState(), path, 'fetching');
@@ -55,16 +66,18 @@ const useBatchedEntities = <TEntity extends Entity>(
     try {
       const response = await entityFn(filteredIds);
       const entities = filteredArray(schema).parse(response);
-      dispatch(entitiesFetchSuccess(entities, entityType, listKey, 'end', {
-        next: null,
-        prev: null,
-        totalCount: undefined,
-        fetching: false,
-        fetched: true,
-        error: null,
-        lastFetchedAt: new Date(),
-        invalid: false,
-      }));
+      dispatch(
+        entitiesFetchSuccess(entities, entityType, listKey, 'end', {
+          next: null,
+          prev: null,
+          totalCount: undefined,
+          fetching: false,
+          fetched: true,
+          error: null,
+          lastFetchedAt: new Date(),
+          invalid: false,
+        }),
+      );
     } catch (e) {
       dispatch(entitiesFetchFail(entityType, listKey, e));
     }
@@ -86,7 +99,11 @@ const useBatchedEntities = <TEntity extends Entity>(
   };
 };
 
-const selectEntityMap = <TEntity extends Entity>(state: RootState, path: EntitiesPath, entityIds: string[]): Record<string, TEntity> => {
+const selectEntityMap = <TEntity extends Entity>(
+  state: RootState,
+  path: EntitiesPath,
+  entityIds: string[],
+): Record<string, TEntity> => {
   const cache = selectCache(state, path);
 
   return entityIds.reduce<Record<string, TEntity>>((result, id) => {

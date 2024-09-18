@@ -1,6 +1,6 @@
 import {
-  STATUS_HOVER_CARD_OPEN,
   STATUS_HOVER_CARD_CLOSE,
+  STATUS_HOVER_CARD_OPEN,
   STATUS_HOVER_CARD_UPDATE,
 } from 'pl-fe/actions/status-hover-card';
 

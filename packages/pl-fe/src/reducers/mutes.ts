@@ -1,9 +1,9 @@
 import { Record as ImmutableRecord } from 'immutable';
 
 import {
+  MUTES_CHANGE_DURATION,
   MUTES_INIT_MODAL,
   MUTES_TOGGLE_HIDE_NOTIFICATIONS,
-  MUTES_CHANGE_DURATION,
 } from '../actions/mutes';
 
 import type { AnyAction } from 'redux';

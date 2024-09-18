@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useIntl, type IntlShape } from 'react-intl';
+import { type IntlShape, useIntl } from 'react-intl';
 import { TransitionMotion, spring } from 'react-motion';
 
 import { useSettings } from 'pl-fe/hooks';
@@ -32,13 +32,15 @@ const shortNumberFormat = (number: any, intl: IntlShape, max?: number) => {
     return `${max}+`;
   }
 
-  return intl.formatNumber(value, {
-    maximumFractionDigits: 0,
-    minimumFractionDigits: 0,
-    maximumSignificantDigits: 3,
-    numberingSystem: 'latn',
-    style: 'decimal',
-  }) + factor;
+  return (
+    intl.formatNumber(value, {
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+      maximumSignificantDigits: 3,
+      numberingSystem: 'latn',
+      style: 'decimal',
+    }) + factor
+  );
 };
 
 interface IAnimatedNumber {
@@ -48,13 +50,20 @@ interface IAnimatedNumber {
   max?: number;
 }
 
-const AnimatedNumber: React.FC<IAnimatedNumber> = ({ value, obfuscate, short, max }) => {
+const AnimatedNumber: React.FC<IAnimatedNumber> = ({
+  value,
+  obfuscate,
+  short,
+  max,
+}) => {
   const intl = useIntl();
   const { reduceMotion } = useSettings();
 
   const [direction, setDirection] = useState(1);
   const [displayedValue, setDisplayedValue] = useState<number>(value);
-  const [formattedValue, setFormattedValue] = useState<string>(intl.formatNumber(value, { numberingSystem: 'latn' }));
+  const [formattedValue, setFormattedValue] = useState<string>(
+    intl.formatNumber(value, { numberingSystem: 'latn' }),
+  );
 
   useEffect(() => {
     if (displayedValue !== undefined) {
@@ -63,35 +72,48 @@ const AnimatedNumber: React.FC<IAnimatedNumber> = ({ value, obfuscate, short, ma
     }
 
     setDisplayedValue(value);
-    setFormattedValue(obfuscate
-      ? obfuscatedCount(value)
-      : short
-        ? shortNumberFormat(value, intl, max)
-        : intl.formatNumber(value, { numberingSystem: 'latn' }));
+    setFormattedValue(
+      obfuscate
+        ? obfuscatedCount(value)
+        : short
+          ? shortNumberFormat(value, intl, max)
+          : intl.formatNumber(value, { numberingSystem: 'latn' }),
+    );
   }, [value]);
 
   const willEnter = () => ({ y: -1 * direction });
 
-  const willLeave = () => ({ y: spring(1 * direction, { damping: 35, stiffness: 400 }) });
+  const willLeave = () => ({
+    y: spring(1 * direction, { damping: 35, stiffness: 400 }),
+  });
 
   if (reduceMotion) {
     return <>{formattedValue}</>;
   }
 
-  const styles = [{
-    key: `${formattedValue}`,
-    data: formattedValue,
-    style: { y: spring(0, { damping: 35, stiffness: 400 }) },
-  }];
+  const styles = [
+    {
+      key: `${formattedValue}`,
+      data: formattedValue,
+      style: { y: spring(0, { damping: 35, stiffness: 400 }) },
+    },
+  ];
 
   return (
-    <TransitionMotion styles={styles} willEnter={willEnter} willLeave={willLeave}>
-      {items => (
+    <TransitionMotion
+      styles={styles}
+      willEnter={willEnter}
+      willLeave={willLeave}
+    >
+      {(items) => (
         <span className='relative inline-flex flex-col items-stretch overflow-hidden'>
           {items.map(({ key, data, style }) => (
             <span
               key={key}
-              style={{ position: (direction * style.y) > 0 ? 'absolute' : 'static', transform: `translateY(${style.y * 100}%)` }}
+              style={{
+                position: direction * style.y > 0 ? 'absolute' : 'static',
+                transform: `translateY(${style.y * 100}%)`,
+              }}
             >
               {data}
             </span>

@@ -1,8 +1,8 @@
 import { useRect } from '@reach/rect';
 import {
-  Tabs as ReachTabs,
-  TabList as ReachTabList,
   Tab as ReachTab,
+  TabList as ReachTabList,
+  Tabs as ReachTabs,
   useTabsContext,
 } from '@reach/tabs';
 import clsx from 'clsx';
@@ -35,7 +35,8 @@ const AnimatedTabs: React.FC<IAnimatedInterface> = ({ children, ...rest }) => {
   // @ts-ignore
   const width: number = activeRect && activeRect.width - HORIZONTAL_PADDING * 2;
   // @ts-ignore
-  const left: number = (activeRect && activeRect.left) - (rect && rect.left) + HORIZONTAL_PADDING;
+  const left: number =
+    (activeRect && activeRect.left) - (rect && rect.left) + HORIZONTAL_PADDING;
 
   return (
     // @ts-ignore
@@ -50,9 +51,12 @@ const AnimatedTabs: React.FC<IAnimatedInterface> = ({ children, ...rest }) => {
           style={{ top }}
         />
         <div
-          className={clsx('absolute h-[3px] bg-primary-500 transition-all duration-200', {
-            'hidden': top <= 0,
-          })}
+          className={clsx(
+            'absolute h-[3px] bg-primary-500 transition-all duration-200',
+            {
+              hidden: top <= 0,
+            },
+          )}
           style={{ left, top, width }}
         />
         {children}
@@ -117,7 +121,7 @@ type Item = {
   count?: number;
   /** Unique name for this tab. */
   name: string;
-}
+};
 
 interface ITabs {
   /** Array of structured tab items. */
@@ -169,14 +173,9 @@ const Tabs = ({ items, activeItem }: ITabs) => {
 
   return (
     <AnimatedTabs onChange={onChange} defaultIndex={defaultIndex}>
-      <ReachTabList>
-        {items.map((item, i) => renderItem(item, i))}
-      </ReachTabList>
+      <ReachTabList>{items.map((item, i) => renderItem(item, i))}</ReachTabList>
     </AnimatedTabs>
   );
 };
 
-export {
-  type Item,
-  Tabs as default,
-};
+export { type Item, Tabs as default };

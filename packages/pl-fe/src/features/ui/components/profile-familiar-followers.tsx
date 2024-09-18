@@ -20,13 +20,24 @@ interface IProfileFamiliarFollowers {
   account: Account;
 }
 
-const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account }) => {
+const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({
+  account,
+}) => {
   const { openModal } = useModalsStore();
   const dispatch = useAppDispatch();
   const me = useAppSelector((state) => state.me);
   const features = useFeatures();
-  const familiarFollowerIds = useAppSelector(state => state.user_lists.familiar_followers.get(account.id)?.items || ImmutableOrderedSet<string>());
-  const familiarFollowers: ImmutableOrderedSet<Account | null> = useAppSelector(state => familiarFollowerIds.slice(0, 2).map(accountId => getAccount(state, accountId)));
+  const familiarFollowerIds = useAppSelector(
+    (state) =>
+      state.user_lists.familiar_followers.get(account.id)?.items ||
+      ImmutableOrderedSet<string>(),
+  );
+  const familiarFollowers: ImmutableOrderedSet<Account | null> = useAppSelector(
+    (state) =>
+      familiarFollowerIds
+        .slice(0, 2)
+        .map((accountId) => getAccount(state, accountId)),
+  );
 
   useEffect(() => {
     if (me && features.familiarFollowers) {
@@ -44,26 +55,39 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
     return null;
   }
 
-  const accounts: Array<React.ReactNode> = familiarFollowers.map(account => !!account && (
-    <HoverRefWrapper accountId={account.id} key={account.id} inline>
-      <Link className='mention inline-block' to={`/@${account.acct}`}>
-        <HStack space={1} alignItems='center' grow>
-          <Text
-            size='sm'
-            theme='primary'
-            truncate
-            dangerouslySetInnerHTML={{ __html: account.display_name_html }}
-          />
+  const accounts: Array<React.ReactNode> = familiarFollowers
+    .map(
+      (account) =>
+        !!account && (
+          <HoverRefWrapper accountId={account.id} key={account.id} inline>
+            <Link className='mention inline-block' to={`/@${account.acct}`}>
+              <HStack space={1} alignItems='center' grow>
+                <Text
+                  size='sm'
+                  theme='primary'
+                  truncate
+                  dangerouslySetInnerHTML={{
+                    __html: account.display_name_html,
+                  }}
+                />
 
-          {account.verified && <VerificationBadge />}
-        </HStack>
-      </Link>
-    </HoverRefWrapper>
-  )).toArray().filter(Boolean);
+                {account.verified && <VerificationBadge />}
+              </HStack>
+            </Link>
+          </HoverRefWrapper>
+        ),
+    )
+    .toArray()
+    .filter(Boolean);
 
   if (familiarFollowerIds.size > 2) {
     accounts.push(
-      <span key='_' className='cursor-pointer hover:underline' role='presentation' onClick={openFamiliarFollowersModal}>
+      <span
+        key='_'
+        className='cursor-pointer hover:underline'
+        role='presentation'
+        onClick={openFamiliarFollowersModal}
+      >
         <FormattedMessage
           id='account.familiar_followers.more'
           defaultMessage='{count, plural, one {# other} other {# others}} you follow'

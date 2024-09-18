@@ -1,8 +1,15 @@
 import { OrderedSet } from 'immutable';
 import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { Button, FormGroup, HStack, Stack, Text, Toggle } from 'pl-fe/components/ui';
+import {
+  Button,
+  FormGroup,
+  HStack,
+  Stack,
+  Text,
+  Toggle,
+} from 'pl-fe/components/ui';
 import StatusCheckBox from 'pl-fe/features/ui/components/modals/report-modal/components/status-check-box';
 import { useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { getDomain } from 'pl-fe/utils/accounts';
@@ -10,11 +17,23 @@ import { getDomain } from 'pl-fe/utils/accounts';
 import type { Account } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
-  addAdditionalStatuses: { id: 'report.other_actions.add_additional', defaultMessage: 'Would you like to add additional statuses to this report?' },
+  addAdditionalStatuses: {
+    id: 'report.other_actions.add_additional',
+    defaultMessage: 'Would you like to add additional statuses to this report?',
+  },
   addMore: { id: 'report.other_actions.add_more', defaultMessage: 'Add more' },
-  furtherActions: { id: 'report.other_actions.further_actions', defaultMessage: 'Further actions:' },
-  hideAdditionalStatuses: { id: 'report.other_actions.hide_additional', defaultMessage: 'Hide additional statuses' },
-  otherStatuses: { id: 'report.other_actions.other_statuses', defaultMessage: 'Include other statuses?' },
+  furtherActions: {
+    id: 'report.other_actions.further_actions',
+    defaultMessage: 'Further actions:',
+  },
+  hideAdditionalStatuses: {
+    id: 'report.other_actions.hide_additional',
+    defaultMessage: 'Hide additional statuses',
+  },
+  otherStatuses: {
+    id: 'report.other_actions.other_statuses',
+    defaultMessage: 'Include other statuses?',
+  },
 });
 
 interface IOtherActionsStep {
@@ -41,12 +60,18 @@ const OtherActionsStep = ({
   const features = useFeatures();
   const intl = useIntl();
 
-  const statusIds = useAppSelector((state) => OrderedSet(state.timelines.get(`account:${account.id}:with_replies`)!.items).union(selectedStatusIds) as OrderedSet<string>);
+  const statusIds = useAppSelector(
+    (state) =>
+      OrderedSet(
+        state.timelines.get(`account:${account.id}:with_replies`)!.items,
+      ).union(selectedStatusIds) as OrderedSet<string>,
+  );
   const isBlocked = block;
   const isForward = forward;
   const canForward = !account.local && features.federating;
 
-  const [showAdditionalStatuses, setShowAdditionalStatuses] = useState<boolean>(false);
+  const [showAdditionalStatuses, setShowAdditionalStatuses] =
+    useState<boolean>(false);
 
   const handleBlockChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setBlock(event.target.checked);
@@ -58,8 +83,10 @@ const OtherActionsStep = ({
 
   const toggleStatusReport = (statusId: string) => (value: boolean) => {
     let newStatusIds = selectedStatusIds;
-    if (value && !selectedStatusIds.includes(statusId)) newStatusIds = [...selectedStatusIds, statusId];
-    if (!value) newStatusIds = selectedStatusIds.filter(id => id !== statusId);
+    if (value && !selectedStatusIds.includes(statusId))
+      newStatusIds = [...selectedStatusIds, statusId];
+    if (!value)
+      newStatusIds = selectedStatusIds.filter((id) => id !== statusId);
 
     setSelectedStatusIds(newStatusIds);
   };
@@ -71,7 +98,9 @@ const OtherActionsStep = ({
           {intl.formatMessage(messages.otherStatuses)}
         </Text>
 
-        <FormGroup labelText={intl.formatMessage(messages.addAdditionalStatuses)}>
+        <FormGroup
+          labelText={intl.formatMessage(messages.addAdditionalStatuses)}
+        >
           {showAdditionalStatuses ? (
             <Stack space={2}>
               <div className='divide-y divide-solid divide-gray-200 dark:divide-gray-800'>
@@ -115,7 +144,12 @@ const OtherActionsStep = ({
         </Text>
 
         <FormGroup
-          labelText={<FormattedMessage id='report.block_hint' defaultMessage='Do you also want to block this account?' />}
+          labelText={
+            <FormattedMessage
+              id='report.block_hint'
+              defaultMessage='Do you also want to block this account?'
+            />
+          }
         >
           <HStack space={2} alignItems='center'>
             <Toggle
@@ -125,14 +159,23 @@ const OtherActionsStep = ({
             />
 
             <Text theme='muted' tag='label' size='sm' htmlFor='report-block'>
-              <FormattedMessage id='report.block' defaultMessage='Block {target}' values={{ target: `@${account.acct}` }} />
+              <FormattedMessage
+                id='report.block'
+                defaultMessage='Block {target}'
+                values={{ target: `@${account.acct}` }}
+              />
             </Text>
           </HStack>
         </FormGroup>
 
         {canForward && (
           <FormGroup
-            labelText={<FormattedMessage id='report.forward_hint' defaultMessage='The account is from another server. Send a copy of the report there as well?' />}
+            labelText={
+              <FormattedMessage
+                id='report.forward_hint'
+                defaultMessage='The account is from another server. Send a copy of the report there as well?'
+              />
+            }
           >
             <HStack space={2} alignItems='center'>
               <Toggle
@@ -142,8 +185,17 @@ const OtherActionsStep = ({
                 disabled={isSubmitting}
               />
 
-              <Text theme='muted' tag='label' size='sm' htmlFor='report-forward'>
-                <FormattedMessage id='report.forward' defaultMessage='Forward to {target}' values={{ target: getDomain(account) }} />
+              <Text
+                theme='muted'
+                tag='label'
+                size='sm'
+                htmlFor='report-forward'
+              >
+                <FormattedMessage
+                  id='report.forward'
+                  defaultMessage='Forward to {target}'
+                  values={{ target: getDomain(account) }}
+                />
               </Text>
             </HStack>
           </FormGroup>

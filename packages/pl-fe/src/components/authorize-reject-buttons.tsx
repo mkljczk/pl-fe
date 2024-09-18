@@ -11,8 +11,14 @@ interface IAuthorizeRejectButtons {
 }
 
 /** Buttons to approve or reject a pending item, usually an account. */
-const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({ onAuthorize, onReject, countdown }) => {
-  const [state, setState] = useState<'authorizing' | 'rejecting' | 'authorized' | 'rejected' | 'pending'>('pending');
+const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({
+  onAuthorize,
+  onReject,
+  countdown,
+}) => {
+  const [state, setState] = useState<
+    'authorizing' | 'rejecting' | 'authorized' | 'rejected' | 'pending'
+  >('pending');
   const timeout = useRef<NodeJS.Timeout>();
   const interval = useRef<ReturnType<typeof setInterval>>();
 
@@ -20,16 +26,19 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({ onAuthorize
 
   const startProgressInterval = () => {
     let startValue = 1;
-    interval.current = setInterval(() => {
-      startValue++;
-      const newValue = startValue * 3.6; // get to 360 (deg)
-      setProgress(newValue);
+    interval.current = setInterval(
+      () => {
+        startValue++;
+        const newValue = startValue * 3.6; // get to 360 (deg)
+        setProgress(newValue);
 
-      if (newValue >= 360) {
-        clearInterval(interval.current as NodeJS.Timeout);
-        setProgress(0);
-      }
-    }, (countdown as number) / 100);
+        if (newValue >= 360) {
+          clearInterval(interval.current as NodeJS.Timeout);
+          setProgress(0);
+        }
+      },
+      (countdown as number) / 100,
+    );
   };
 
   const handleAction = (
@@ -64,8 +73,10 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({ onAuthorize
     }
   };
 
-  const handleAuthorize = async () => handleAction('authorizing', 'authorized', onAuthorize);
-  const handleReject = async () => handleAction('rejecting', 'rejected', onReject);
+  const handleAuthorize = async () =>
+    handleAction('authorizing', 'authorized', onAuthorize);
+  const handleReject = async () =>
+    handleAction('rejecting', 'rejected', onReject);
 
   const renderStyle = (selectedState: typeof state) => {
     if (state === 'authorizing' && selectedState === 'authorizing') {
@@ -81,23 +92,37 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({ onAuthorize
     return {};
   };
 
-  useEffect(() => () => {
-    if (timeout.current) {
-      clearTimeout(timeout.current);
-    }
-    if (interval.current) {
-      clearInterval(interval.current);
-    }
-  }, []);
+  useEffect(
+    () => () => {
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+      }
+      if (interval.current) {
+        clearInterval(interval.current);
+      }
+    },
+    [],
+  );
 
   switch (state) {
     case 'authorized':
       return (
-        <ActionEmblem text={<FormattedMessage id='authorize.success' defaultMessage='Approved' />} />
+        <ActionEmblem
+          text={
+            <FormattedMessage
+              id='authorize.success'
+              defaultMessage='Approved'
+            />
+          }
+        />
       );
     case 'rejected':
       return (
-        <ActionEmblem text={<FormattedMessage id='reject.success' defaultMessage='Rejected' />} />
+        <ActionEmblem
+          text={
+            <FormattedMessage id='reject.success' defaultMessage='Rejected' />
+          }
+        />
       );
     default:
       return (
@@ -144,17 +169,22 @@ interface IAuthorizeRejectButton {
   style: React.CSSProperties;
 }
 
-const AuthorizeRejectButton: React.FC<IAuthorizeRejectButton> = ({ theme, icon, action, isLoading, style, disabled }) => (
+const AuthorizeRejectButton: React.FC<IAuthorizeRejectButton> = ({
+  theme,
+  icon,
+  action,
+  isLoading,
+  style,
+  disabled,
+}) => (
   <div className='relative'>
     <div
       style={style}
-      className={
-        clsx({
-          'flex h-11 w-11 items-center justify-center rounded-full': true,
-          'bg-danger-600/10': theme === 'danger',
-          'bg-primary-500/10': theme === 'primary',
-        })
-      }
+      className={clsx({
+        'flex h-11 w-11 items-center justify-center rounded-full': true,
+        'bg-danger-600/10': theme === 'danger',
+        'bg-primary-500/10': theme === 'primary',
+      })}
     >
       <IconButton
         src={isLoading ? require('@tabler/icons/filled/player-stop.svg') : icon}

@@ -2,10 +2,10 @@ import { Map as ImmutableMap } from 'immutable';
 
 import {
   HASHTAG_FETCH_SUCCESS,
-  HASHTAG_FOLLOW_REQUEST,
   HASHTAG_FOLLOW_FAIL,
-  HASHTAG_UNFOLLOW_REQUEST,
+  HASHTAG_FOLLOW_REQUEST,
   HASHTAG_UNFOLLOW_FAIL,
+  HASHTAG_UNFOLLOW_REQUEST,
 } from 'pl-fe/actions/tags';
 
 import type { Tag } from 'pl-api';

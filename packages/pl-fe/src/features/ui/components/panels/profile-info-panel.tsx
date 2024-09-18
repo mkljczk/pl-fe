@@ -1,6 +1,11 @@
-import parse, { Element, type HTMLReactParserOptions, domToReact, type DOMNode } from 'html-react-parser';
+import parse, {
+  Element,
+  type HTMLReactParserOptions,
+  domToReact,
+  type DOMNode,
+} from 'html-react-parser';
 import React, { useMemo } from 'react';
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import Badge from 'pl-fe/components/badge';
 import HashtagLink from 'pl-fe/components/hashtag-link';
@@ -8,7 +13,7 @@ import Markup from 'pl-fe/components/markup';
 import { dateFormatOptions } from 'pl-fe/components/relative-timestamp';
 import Scrobble from 'pl-fe/components/scrobble';
 import StatusMention from 'pl-fe/components/status-mention';
-import { Icon, HStack, Stack, Text } from 'pl-fe/components/ui';
+import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
 import { useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
 import { capitalize } from 'pl-fe/utils/strings';
 
@@ -20,8 +25,15 @@ import type { Scrobble as ScrobbleEntity } from 'pl-api';
 import type { Account } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
-  linkVerifiedOn: { id: 'account.link_verified_on', defaultMessage: 'Ownership of this link was checked on {date}' },
-  account_locked: { id: 'account.locked_info', defaultMessage: 'This account privacy status is set to locked. The owner manually reviews who can follow them.' },
+  linkVerifiedOn: {
+    id: 'account.link_verified_on',
+    defaultMessage: 'Ownership of this link was checked on {date}',
+  },
+  account_locked: {
+    id: 'account.locked_info',
+    defaultMessage:
+      'This account privacy status is set to locked. The owner manually reviews who can follow them.',
+  },
   deactivated: { id: 'account.deactivated', defaultMessage: 'Deactivated' },
   bot: { id: 'account.badges.bot', defaultMessage: 'Bot' },
 });
@@ -33,17 +45,42 @@ interface IProfileInfoPanel {
 }
 
 /** User profile metadata, such as location, birthday, etc. */
-const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) => {
+const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({
+  account,
+  username,
+}) => {
   const intl = useIntl();
   const { displayFqn } = usePlFeConfig();
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
   const ownAccount = account?.id === me;
 
   const getStaffBadge = (): React.ReactNode => {
     if (account?.is_admin) {
-      return <Badge slug='admin' title={<FormattedMessage id='account_moderation_modal.roles.admin' defaultMessage='Admin' />} key='staff' />;
+      return (
+        <Badge
+          slug='admin'
+          title={
+            <FormattedMessage
+              id='account_moderation_modal.roles.admin'
+              defaultMessage='Admin'
+            />
+          }
+          key='staff'
+        />
+      );
     } else if (account?.is_moderator) {
-      return <Badge slug='moderator' title={<FormattedMessage id='account_moderation_modal.roles.moderator' defaultMessage='Moderator' />} key='staff' />;
+      return (
+        <Badge
+          slug='moderator'
+          title={
+            <FormattedMessage
+              id='account_moderation_modal.roles.moderator'
+              defaultMessage='Moderator'
+            />
+          }
+          key='staff'
+        />
+      );
     } else {
       return null;
     }
@@ -52,14 +89,16 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   const getCustomBadges = (): React.ReactNode[] => {
     const badges = account?.roles || [];
 
-    return badges.filter(badge => badge.highlighted).map(badge => (
-      <Badge
-        key={badge.id || badge.name}
-        slug={badge.name}
-        title={capitalize(badge.name)}
-        color={badge.color}
-      />
-    ));
+    return badges
+      .filter((badge) => badge.highlighted)
+      .map((badge) => (
+        <Badge
+          key={badge.id || badge.name}
+          slug={badge.name}
+          title={capitalize(badge.name)}
+          color={badge.color}
+        />
+      ));
   };
 
   const getBadges = (): React.ReactNode[] => {
@@ -79,12 +118,19 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
     const birthday = account?.birthday;
     if (!birthday) return null;
 
-    const formattedBirthday = intl.formatDate(birthday, { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' });
+    const formattedBirthday = intl.formatDate(birthday, {
+      timeZone: 'UTC',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
 
     const date = new Date(birthday);
     const today = new Date();
 
-    const hasBirthday = date.getDate() === today.getDate() && date.getMonth() === today.getMonth();
+    const hasBirthday =
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth();
 
     return (
       <HStack alignItems='center' space={0.5}>
@@ -95,9 +141,16 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
         <Text size='sm'>
           {hasBirthday ? (
-            <FormattedMessage id='account.birthday_today' defaultMessage='Birthday is today!' />
+            <FormattedMessage
+              id='account.birthday_today'
+              defaultMessage='Birthday is today!'
+            />
           ) : (
-            <FormattedMessage id='account.birthday' defaultMessage='Born {date}' values={{ date: formattedBirthday }} />
+            <FormattedMessage
+              id='account.birthday'
+              defaultMessage='Born {date}'
+              values={{ date: formattedBirthday }}
+            />
           )}
         </Text>
       </HStack>
@@ -109,7 +162,10 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
     const options: HTMLReactParserOptions = {
       replace(domNode) {
-        if (domNode instanceof Element && ['script', 'iframe'].includes(domNode.name)) {
+        if (
+          domNode instanceof Element &&
+          ['script', 'iframe'].includes(domNode.name)
+        ) {
           return null;
         }
 
@@ -131,14 +187,13 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
           );
 
           if (classes?.includes('mention') && id) {
-            return (
-              <StatusMention accountId={id} fallback={fallback} />
-            );
+            return <StatusMention accountId={id} fallback={fallback} />;
           }
 
           if (classes?.includes('hashtag')) {
             const child = domToReact(domNode.children as DOMNode[]);
-            const hashtag = typeof child === 'string' ? child.replace(/^#/, '') : undefined;
+            const hashtag =
+              typeof child === 'string' ? child.replace(/^#/, '') : undefined;
             if (hashtag) {
               return <HashtagLink hashtag={hashtag} />;
             }
@@ -169,8 +224,13 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   }
 
   const deactivated = account.deactivated ?? false;
-  const displayNameHtml = deactivated ? { __html: intl.formatMessage(messages.deactivated) } : { __html: account.display_name_html };
-  const memberSinceDate = intl.formatDate(account.created_at, { month: 'long', year: 'numeric' });
+  const displayNameHtml = deactivated
+    ? { __html: intl.formatMessage(messages.deactivated) }
+    : { __html: account.display_name_html };
+  const memberSinceDate = intl.formatDate(account.created_at, {
+    month: 'long',
+    year: 'numeric',
+  });
   const badges = getBadges();
 
   return (
@@ -178,9 +238,16 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
       <Stack space={2}>
         <Stack>
           <HStack space={1} alignItems='center'>
-            <Text size='lg' weight='bold' dangerouslySetInnerHTML={displayNameHtml} truncate />
+            <Text
+              size='lg'
+              weight='bold'
+              dangerouslySetInnerHTML={displayNameHtml}
+              truncate
+            />
 
-            {account.bot && <Badge slug='bot' title={intl.formatMessage(messages.bot)} />}
+            {account.bot && (
+              <Badge slug='bot' title={intl.formatMessage(messages.bot)} />
+            )}
 
             {badges.length > 0 && (
               <HStack space={1} alignItems='center'>
@@ -206,9 +273,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
         <ProfileStats account={account} />
 
-        {note && (
-          <Markup size='sm'>{note}</Markup>
-        )}
+        {note && <Markup size='sm'>{note}</Markup>}
 
         <div className='flex flex-col items-start gap-2 md:flex-row md:flex-wrap md:items-center'>
           {account.local ? (
@@ -218,9 +283,14 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
                 className='h-4 w-4 text-gray-800 dark:text-gray-200'
               />
 
-              <Text size='sm' title={intl.formatDate(account.created_at, dateFormatOptions)}>
+              <Text
+                size='sm'
+                title={intl.formatDate(account.created_at, dateFormatOptions)}
+              >
                 <FormattedMessage
-                  id='account.member_since' defaultMessage='Joined {date}' values={{
+                  id='account.member_since'
+                  defaultMessage='Joined {date}'
+                  values={{
                     date: memberSinceDate,
                   }}
                 />
@@ -235,9 +305,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
                 className='h-4 w-4 text-gray-800 dark:text-gray-200'
               />
 
-              <Text size='sm'>
-                {account.location}
-              </Text>
+              <Text size='sm'>{account.location}</Text>
             </HStack>
           ) : null}
 

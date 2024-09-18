@@ -9,7 +9,14 @@ import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 const timeToMidnight = () => {
   const now = new Date();
-  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+  const midnight = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() + 1,
+    0,
+    0,
+    0,
+  );
 
   return midnight.getTime() - now.getTime();
 };
@@ -21,7 +28,11 @@ interface IBirthdayPanel {
 const BirthdayPanel = ({ limit }: IBirthdayPanel) => {
   const dispatch = useAppDispatch();
 
-  const birthdays: ImmutableOrderedSet<string> = useAppSelector(state => state.user_lists.birthday_reminders.get(state.me as string)?.items || ImmutableOrderedSet());
+  const birthdays: ImmutableOrderedSet<string> = useAppSelector(
+    (state) =>
+      state.user_lists.birthday_reminders.get(state.me as string)?.items ||
+      ImmutableOrderedSet(),
+  );
   const birthdaysToRender = birthdays.slice(0, limit);
 
   const timeout = useRef<NodeJS.Timeout>();
@@ -33,7 +44,10 @@ const BirthdayPanel = ({ limit }: IBirthdayPanel) => {
     const month = date.getMonth() + 1;
 
     dispatch(fetchBirthdayReminders(month, day))?.then(() => {
-      timeout.current = setTimeout(() => handleFetchBirthdayReminders(), timeToMidnight());
+      timeout.current = setTimeout(
+        () => handleFetchBirthdayReminders(),
+        timeToMidnight(),
+      );
     });
   };
 
@@ -52,8 +66,15 @@ const BirthdayPanel = ({ limit }: IBirthdayPanel) => {
   }
 
   return (
-    <Widget title={<FormattedMessage id='birthday_panel.title' defaultMessage='Birthdays' />}>
-      {birthdaysToRender.map(accountId => (
+    <Widget
+      title={
+        <FormattedMessage
+          id='birthday_panel.title'
+          defaultMessage='Birthdays'
+        />
+      }
+    >
+      {birthdaysToRender.map((accountId) => (
         <AccountContainer
           key={accountId}
           // @ts-ignore: TS thinks `id` is passed to <Account>, but it isn't

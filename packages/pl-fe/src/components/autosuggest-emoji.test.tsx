@@ -14,7 +14,9 @@ describe('<AutosuggestEmoji />', () => {
     render(<AutosuggestEmoji emoji={emoji as any} />);
 
     expect(screen.getByTestId('emoji')).toHaveTextContent('foobar');
-    expect(screen.getByRole('img').getAttribute('src')).not.toBe('http://example.com/emoji.png');
+    expect(screen.getByRole('img').getAttribute('src')).not.toBe(
+      'http://example.com/emoji.png',
+    );
   });
 
   it('renders emoji with custom url', () => {
@@ -28,6 +30,8 @@ describe('<AutosuggestEmoji />', () => {
     render(<AutosuggestEmoji emoji={emoji as any} />);
 
     expect(screen.getByTestId('emoji')).toHaveTextContent('foobar');
-    expect(screen.getByRole('img').getAttribute('src')).toBe('http://example.com/emoji.png');
+    expect(screen.getByRole('img').getAttribute('src')).toBe(
+      'http://example.com/emoji.png',
+    );
   });
 });

@@ -1,7 +1,7 @@
 import { useAppSelector } from './useAppSelector';
 
 const useLoggedIn = () => {
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
 
   return {
     isLoggedIn: typeof me === 'string',

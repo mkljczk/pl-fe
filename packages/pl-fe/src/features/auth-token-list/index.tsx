@@ -1,8 +1,19 @@
 import React, { useEffect } from 'react';
-import { defineMessages, FormattedDate, useIntl } from 'react-intl';
+import { FormattedDate, defineMessages, useIntl } from 'react-intl';
 
 import { fetchOAuthTokens, revokeOAuthTokenById } from 'pl-fe/actions/security';
-import { Button, Card, CardBody, CardHeader, CardTitle, Column, HStack, Spinner, Stack, Text } from 'pl-fe/components/ui';
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Column,
+  HStack,
+  Spinner,
+  Stack,
+  Text,
+} from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { useModalsStore } from 'pl-fe/stores';
 
@@ -11,9 +22,19 @@ import type { OauthToken } from 'pl-api';
 const messages = defineMessages({
   header: { id: 'security.headers.tokens', defaultMessage: 'Sessions' },
   revoke: { id: 'security.tokens.revoke', defaultMessage: 'Revoke' },
-  revokeSessionHeading: { id: 'confirmations.revoke_session.heading', defaultMessage: 'Revoke current session' },
-  revokeSessionMessage: { id: 'confirmations.revoke_session.message', defaultMessage: 'You are about to revoke your current session. You will be signed out.' },
-  revokeSessionConfirm: { id: 'confirmations.revoke_session.confirm', defaultMessage: 'Revoke' },
+  revokeSessionHeading: {
+    id: 'confirmations.revoke_session.heading',
+    defaultMessage: 'Revoke current session',
+  },
+  revokeSessionMessage: {
+    id: 'confirmations.revoke_session.message',
+    defaultMessage:
+      'You are about to revoke your current session. You will be signed out.',
+  },
+  revokeSessionConfirm: {
+    id: 'confirmations.revoke_session.confirm',
+    defaultMessage: 'Revoke',
+  },
 });
 
 interface IAuthToken {
@@ -46,7 +67,9 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
     <div className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
       <Stack space={2}>
         <Stack>
-          <Text size='md' weight='medium'>{token.app_name}</Text>
+          <Text size='md' weight='medium'>
+            {token.app_name}
+          </Text>
           {token.valid_until && (
             <Text size='sm' theme='muted'>
               <FormattedDate
@@ -62,7 +85,10 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
           )}
         </Stack>
         <HStack justifyContent='end'>
-          <Button theme={isCurrent ? 'danger' : 'primary'} onClick={handleRevoke}>
+          <Button
+            theme={isCurrent ? 'danger' : 'primary'}
+            onClick={handleRevoke}
+          >
             {intl.formatMessage(messages.revoke)}
           </Button>
         </HStack>
@@ -74,9 +100,13 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
 const AuthTokenList: React.FC = () => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
-  const tokens = useAppSelector(state => state.security.get('tokens').toReversed());
-  const currentTokenId = useAppSelector(state => {
-    const currentToken = state.auth.tokens.valueSeq().find((token) => token.me === state.auth.me);
+  const tokens = useAppSelector((state) =>
+    state.security.get('tokens').toReversed(),
+  );
+  const currentTokenId = useAppSelector((state) => {
+    const currentToken = state.auth.tokens
+      .valueSeq()
+      .find((token) => token.me === state.auth.me);
 
     return currentToken?.id;
   });
@@ -88,21 +118,29 @@ const AuthTokenList: React.FC = () => {
   const body = tokens ? (
     <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
       {tokens.map((token) => (
-        <AuthToken key={token.id} token={token} isCurrent={token.id === currentTokenId} />
+        <AuthToken
+          key={token.id}
+          token={token}
+          isCurrent={token.id === currentTokenId}
+        />
       ))}
     </div>
-  ) : <Spinner />;
+  ) : (
+    <Spinner />
+  );
 
   return (
-    <Column label={intl.formatMessage(messages.header)} transparent withHeader={false}>
+    <Column
+      label={intl.formatMessage(messages.header)}
+      transparent
+      withHeader={false}
+    >
       <Card variant='rounded'>
         <CardHeader backHref='/settings'>
           <CardTitle title={intl.formatMessage(messages.header)} />
         </CardHeader>
 
-        <CardBody>
-          {body}
-        </CardBody>
+        <CardBody>{body}</CardBody>
       </Card>
     </Column>
   );

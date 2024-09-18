@@ -2,13 +2,13 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import {
-  blockAccount,
-  unblockAccount,
-  muteAccount,
-  unmuteAccount,
   authorizeFollowRequest,
-  rejectFollowRequest,
   biteAccount,
+  blockAccount,
+  muteAccount,
+  rejectFollowRequest,
+  unblockAccount,
+  unmuteAccount,
 } from 'pl-fe/actions/accounts';
 import { useFollow } from 'pl-fe/api/hooks';
 import { Button, HStack } from 'pl-fe/components/ui';
@@ -24,17 +24,32 @@ const messages = defineMessages({
   edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
   follow: { id: 'account.follow', defaultMessage: 'Follow' },
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
-  remote_follow: { id: 'account.remote_follow', defaultMessage: 'Remote follow' },
-  requested: { id: 'account.requested', defaultMessage: 'Awaiting approval. Click to cancel follow request' },
-  requested_small: { id: 'account.requested_small', defaultMessage: 'Awaiting approval' },
+  remote_follow: {
+    id: 'account.remote_follow',
+    defaultMessage: 'Remote follow',
+  },
+  requested: {
+    id: 'account.requested',
+    defaultMessage: 'Awaiting approval. Click to cancel follow request',
+  },
+  requested_small: {
+    id: 'account.requested_small',
+    defaultMessage: 'Awaiting approval',
+  },
   unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
   unfollow: { id: 'account.unfollow', defaultMessage: 'Unfollow' },
   unmute: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' },
   authorize: { id: 'follow_request.authorize', defaultMessage: 'Authorize' },
   reject: { id: 'follow_request.reject', defaultMessage: 'Reject' },
   bite: { id: 'account.bite', defaultMessage: 'Bite @{name}' },
-  userBit: { id: 'account.bite.success', defaultMessage: 'You have bit @{acct}' },
-  userBiteFail: { id: 'account.bite.fail', defaultMessage: 'Failed to bite @{acct}' },
+  userBit: {
+    id: 'account.bite.success',
+    defaultMessage: 'You have bit @{acct}',
+  },
+  userBiteFail: {
+    id: 'account.bite.fail',
+    defaultMessage: 'Failed to bite @{acct}',
+  },
 });
 
 interface IActionButton {
@@ -51,7 +66,11 @@ interface IActionButton {
  * May say "Unblock" or something else, depending on the relationship and
  * `actionType` prop.
  */
-const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) => {
+const ActionButton: React.FC<IActionButton> = ({
+  account,
+  actionType,
+  small,
+}) => {
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const intl = useIntl();
@@ -94,8 +113,16 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
 
   const handleBite = () => {
     dispatch(biteAccount(account.id))
-      .then(() => toast.success(intl.formatMessage(messages.userBit, { acct: account.acct })))
-      .catch(() => toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct })));
+      .then(() =>
+        toast.success(
+          intl.formatMessage(messages.userBit, { acct: account.acct }),
+        ),
+      )
+      .catch(() =>
+        toast.error(
+          intl.formatMessage(messages.userBiteFail, { acct: account.acct }),
+        ),
+      );
   };
 
   const handleRemoteFollow = () => {
@@ -242,25 +269,36 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
         <Button
           size='sm'
           theme='tertiary'
-          text={small ? intl.formatMessage(messages.requested_small) : intl.formatMessage(messages.requested)}
+          text={
+            small
+              ? intl.formatMessage(messages.requested_small)
+              : intl.formatMessage(messages.requested)
+          }
           onClick={handleFollow}
         />
       );
-    } else if (!account.relationship?.blocking && !account.relationship?.muting) {
+    } else if (
+      !account.relationship?.blocking &&
+      !account.relationship?.muting
+    ) {
       // Follow & Unfollow
       return (
         <Button
           size='sm'
           disabled={blockedBy}
           theme={isFollowing ? 'secondary' : 'primary'}
-          icon={blockedBy ? require('@tabler/icons/outline/ban.svg') : (!isFollowing && require('@tabler/icons/outline/plus.svg'))}
+          icon={
+            blockedBy
+              ? require('@tabler/icons/outline/ban.svg')
+              : !isFollowing && require('@tabler/icons/outline/plus.svg')
+          }
           onClick={handleFollow}
         >
-          {isFollowing ? (
-            intl.formatMessage(messages.unfollow)
-          ) : (
-            intl.formatMessage(blockedBy ? messages.blocked : messages.follow)
-          )}
+          {isFollowing
+            ? intl.formatMessage(messages.unfollow)
+            : intl.formatMessage(
+                blockedBy ? messages.blocked : messages.follow,
+              )}
         </Button>
       );
     } else if (account.relationship?.blocking) {
@@ -269,7 +307,9 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
         <Button
           theme='danger'
           size='sm'
-          text={intl.formatMessage(messages.unblock, { name: account.username })}
+          text={intl.formatMessage(messages.unblock, {
+            name: account.username,
+          })}
           onClick={handleBlock}
         />
       );

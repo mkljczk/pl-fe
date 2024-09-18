@@ -10,7 +10,10 @@ interface UseRelationshipOpts {
   enabled?: boolean;
 }
 
-const useRelationship = (accountId: string | undefined, opts: UseRelationshipOpts = {}) => {
+const useRelationship = (
+  accountId: string | undefined,
+  opts: UseRelationshipOpts = {},
+) => {
   const client = useClient();
   const { enabled = false } = opts;
 
@@ -19,7 +22,7 @@ const useRelationship = (accountId: string | undefined, opts: UseRelationshipOpt
     () => client.accounts.getRelationships([accountId!]),
     {
       enabled: enabled && !!accountId,
-      schema: z.any().transform(arr => arr[0]),
+      schema: z.any().transform((arr) => arr[0]),
     },
   );
 

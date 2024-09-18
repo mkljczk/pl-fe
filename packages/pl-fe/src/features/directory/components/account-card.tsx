@@ -20,7 +20,9 @@ interface IAccountCard {
 const AccountCard: React.FC<IAccountCard> = ({ id }) => {
   const me = useAppSelector((state) => state.me);
   const { account } = useAccount(id);
-  const autoPlayGif = useAppSelector((state) => getSettings(state).get('autoPlayGif'));
+  const autoPlayGif = useAppSelector((state) =>
+    getSettings(state).get('autoPlayGif'),
+  );
 
   if (!account) return null;
 
@@ -33,7 +35,12 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           <div className='absolute left-2.5 top-2.5'>
             <Badge
               slug='opaque'
-              title={<FormattedMessage id='account.follows_you' defaultMessage='Follows you' />}
+              title={
+                <FormattedMessage
+                  id='account.follows_you'
+                  defaultMessage='Follows you'
+                />
+              }
             />
           </div>
         )}
@@ -71,7 +78,9 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           truncate
           align='left'
           className='line-clamp-2 [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
-          dangerouslySetInnerHTML={{ __html: account.note_emojified || '&nbsp;' }}
+          dangerouslySetInnerHTML={{
+            __html: account.note_emojified || '&nbsp;',
+          }}
         />
       </Stack>
 
@@ -92,21 +101,33 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           </Text>
 
           <Text theme='muted' size='sm'>
-            <FormattedMessage id='account.followers' defaultMessage='Followers' />
+            <FormattedMessage
+              id='account.followers'
+              defaultMessage='Followers'
+            />
           </Text>
         </Stack>
 
         <Stack>
           <Text theme='primary' size='md' weight='medium'>
             {account.last_status_at ? (
-              <RelativeTimestamp theme='inherit' timestamp={account.last_status_at} />
+              <RelativeTimestamp
+                theme='inherit'
+                timestamp={account.last_status_at}
+              />
             ) : (
-              <FormattedMessage id='account.never_active' defaultMessage='Never' />
+              <FormattedMessage
+                id='account.never_active'
+                defaultMessage='Never'
+              />
             )}
           </Text>
 
           <Text theme='muted' size='sm'>
-            <FormattedMessage id='account.last_status' defaultMessage='Last active' />
+            <FormattedMessage
+              id='account.last_status'
+              defaultMessage='Last active'
+            />
           </Text>
         </Stack>
       </div>

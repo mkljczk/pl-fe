@@ -12,15 +12,23 @@ interface IConversation {
   onMoveDown: (id: string) => void;
 }
 
-const Conversation: React.FC<IConversation> = ({ conversationId, onMoveUp, onMoveDown }) => {
+const Conversation: React.FC<IConversation> = ({
+  conversationId,
+  onMoveUp,
+  onMoveDown,
+}) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
   const { accounts, unread, lastStatusId } = useAppSelector((state) => {
-    const conversation = state.conversations.items.find(x => x.id === conversationId)!;
+    const conversation = state.conversations.items.find(
+      (x) => x.id === conversationId,
+    )!;
 
     return {
-      accounts: conversation.accounts.map((accountId: string) => selectAccount(state, accountId)!),
+      accounts: conversation.accounts.map(
+        (accountId: string) => selectAccount(state, accountId)!,
+      ),
       unread: conversation.unread,
       lastStatusId: conversation.last_status,
     };

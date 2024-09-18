@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Text } from 'pl-fe/components/ui';
-import { useSettings, usePlFeConfig } from 'pl-fe/hooks';
+import { usePlFeConfig, useSettings } from 'pl-fe/hooks';
 
 interface INavlinks {
   type: string;
@@ -19,13 +19,21 @@ const Navlinks: React.FC<INavlinks> = ({ type }) => {
           const url = link.url;
           const isExternal = url.startsWith('http');
           const Comp = (isExternal ? 'a' : Link) as 'a';
-          const compProps = isExternal ? { href: url, target: '_blank' } : { to: url };
+          const compProps = isExternal
+            ? { href: url, target: '_blank' }
+            : { to: url };
 
           return (
             <div key={idx} className='px-5 py-2'>
-              <Comp {...compProps} className='text-primary-600 hover:underline dark:text-primary-400'>
+              <Comp
+                {...compProps}
+                className='text-primary-600 hover:underline dark:text-primary-400'
+              >
                 <Text tag='span' theme='inherit' size='sm'>
-                  {(link.getIn(['titleLocales', locale]) || link.get('title')) as string}
+                  {
+                    (link.getIn(['titleLocales', locale]) ||
+                      link.get('title')) as string
+                  }
                 </Text>
               </Comp>
             </div>
@@ -34,7 +42,9 @@ const Navlinks: React.FC<INavlinks> = ({ type }) => {
       </div>
 
       <div className='mt-6'>
-        <Text theme='muted' align='center' size='sm'>{copyright}</Text>
+        <Text theme='muted' align='center' size='sm'>
+          {copyright}
+        </Text>
       </div>
     </footer>
   );

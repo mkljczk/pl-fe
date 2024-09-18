@@ -27,11 +27,18 @@ const GdprBanner: React.FC = () => {
   }
 
   return (
-    <Banner theme='opaque' className={clsx('transition-transform', { 'translate-y-full': slideout })}>
+    <Banner
+      theme='opaque'
+      className={clsx('transition-transform', { 'translate-y-full': slideout })}
+    >
       <div className='flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-x-4 lg:space-y-0 rtl:space-x-reverse'>
         <Stack space={2}>
           <Text size='xl' weight='bold'>
-            <FormattedMessage id='gdpr.title' defaultMessage='{siteTitle} uses cookies' values={{ siteTitle: instance.title }} />
+            <FormattedMessage
+              id='gdpr.title'
+              defaultMessage='{siteTitle} uses cookies'
+              values={{ siteTitle: instance.title }}
+            />
           </Text>
 
           <Text weight='medium' className='opacity-60'>
@@ -47,7 +54,10 @@ const GdprBanner: React.FC = () => {
           {gdprUrl && (
             <a href={gdprUrl} tabIndex={-1} className='inline-flex'>
               <Button theme='secondary'>
-                <FormattedMessage id='gdpr.learn_more' defaultMessage='Learn more' />
+                <FormattedMessage
+                  id='gdpr.learn_more'
+                  defaultMessage='Learn more'
+                />
               </Button>
             </a>
           )}

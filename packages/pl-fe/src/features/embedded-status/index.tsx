@@ -25,7 +25,9 @@ const EmbeddedStatus: React.FC<IEmbeddedStatus> = ({ params }) => {
   const intl = useIntl();
   const logoSrc = useLogo();
 
-  const status = useAppSelector(state => getStatus(state, { id: params.statusId }));
+  const status = useAppSelector((state) =>
+    getStatus(state, { id: params.statusId }),
+  );
 
   const [loading, setLoading] = useState(true);
 
@@ -40,11 +42,14 @@ const EmbeddedStatus: React.FC<IEmbeddedStatus> = ({ params }) => {
   }, []);
 
   useEffect(() => {
-    window.parent.postMessage({
-      type: 'setHeight',
-      id: iframeId,
-      height: document.getElementsByTagName('html')[0].scrollHeight,
-    }, '*');
+    window.parent.postMessage(
+      {
+        type: 'setHeight',
+        id: iframeId,
+        height: document.getElementsByTagName('html')[0].scrollHeight,
+      },
+      '*',
+    );
   }, [status, loading]);
 
   const logo = logoSrc && (
@@ -57,7 +62,13 @@ const EmbeddedStatus: React.FC<IEmbeddedStatus> = ({ params }) => {
     if (loading) {
       return <Spinner />;
     } else if (status) {
-      return <Status status={status} accountAction={logo || undefined} variant='default' />;
+      return (
+        <Status
+          status={status}
+          accountAction={logo || undefined}
+          variant='default'
+        />
+      );
     } else {
       return <MissingIndicator nested />;
     }
@@ -67,12 +78,10 @@ const EmbeddedStatus: React.FC<IEmbeddedStatus> = ({ params }) => {
     <a
       className='block bg-white dark:bg-primary-900'
       href={status?.url || '#'}
-      onClick={e => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
       target='_blank'
     >
-      <div className='pointer-events-none p-4 sm:p-6'>
-        {renderInner()}
-      </div>
+      <div className='pointer-events-none p-4 sm:p-6'>{renderInner()}</div>
     </a>
   );
 };

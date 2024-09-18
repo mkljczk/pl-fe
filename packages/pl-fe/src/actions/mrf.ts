@@ -5,7 +5,11 @@ import { fetchConfig, updateConfig } from './admin';
 import type { MRFSimple } from 'pl-fe/schemas/pleroma';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
-const simplePolicyMerge = (simplePolicy: MRFSimple, host: string, restrictions: Record<string, any>) => {
+const simplePolicyMerge = (
+  simplePolicy: MRFSimple,
+  host: string,
+  restrictions: Record<string, any>,
+) => {
   const entries = Object.entries(simplePolicy).map(([key, hosts]) => {
     const isRestricted = restrictions[key];
 
@@ -23,7 +27,8 @@ const simplePolicyMerge = (simplePolicy: MRFSimple, host: string, restrictions: 
   return Object.fromEntries(entries);
 };
 
-const updateMrf = (host: string, restrictions: Record<string, any>) =>
+const updateMrf =
+  (host: string, restrictions: Record<string, any>) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
     dispatch(fetchConfig()).then(() => {
       const configs = getState().admin.get('configs');

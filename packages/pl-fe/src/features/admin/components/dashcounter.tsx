@@ -13,8 +13,12 @@ interface IDashCounter {
 }
 
 /** Displays a (potentially clickable) dashboard statistic. */
-const DashCounter: React.FC<IDashCounter> = ({ count, label, to = '#', percent = false }) => {
-
+const DashCounter: React.FC<IDashCounter> = ({
+  count,
+  label,
+  to = '#',
+  percent = false,
+}) => {
   if (!isNumber(count)) {
     return null;
   }
@@ -32,9 +36,7 @@ const DashCounter: React.FC<IDashCounter> = ({ count, label, to = '#', percent =
           numberingSystem='latn'
         />
       </Text>
-      <Text align='center'>
-        {label}
-      </Text>
+      <Text align='center'>{label}</Text>
     </Link>
   );
 };
@@ -50,7 +52,4 @@ const DashCounters: React.FC<IDashCounters> = ({ children }) => (
   </div>
 );
 
-export {
-  DashCounter,
-  DashCounters,
-};
+export { DashCounter, DashCounters };

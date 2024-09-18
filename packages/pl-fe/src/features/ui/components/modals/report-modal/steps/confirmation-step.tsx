@@ -1,20 +1,29 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { getPlFeConfig } from 'pl-fe/actions/pl-fe';
 import { Stack, Text } from 'pl-fe/components/ui';
 import { useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({
-  accountEntity: { id: 'report.confirmation.entity.account', defaultMessage: 'account' },
-  title: { id: 'report.confirmation.title', defaultMessage: 'Thanks for submitting your report.' },
-  content: { id: 'report.confirmation.content', defaultMessage: 'If we find that this {entity} is violating the {link} we will take further action on the matter.' },
+  accountEntity: {
+    id: 'report.confirmation.entity.account',
+    defaultMessage: 'account',
+  },
+  title: {
+    id: 'report.confirmation.title',
+    defaultMessage: 'Thanks for submitting your report.',
+  },
+  content: {
+    id: 'report.confirmation.content',
+    defaultMessage:
+      'If we find that this {entity} is violating the {link} we will take further action on the matter.',
+  },
 });
 
-const termsOfServiceText = (<FormattedMessage
-  id='shared.tos'
-  defaultMessage='Terms of Service'
-/>);
+const termsOfServiceText = (
+  <FormattedMessage id='shared.tos' defaultMessage='Terms of Service' />
+);
 
 const renderTermsOfServiceLink = (href: string) => (
   <a
@@ -28,7 +37,9 @@ const renderTermsOfServiceLink = (href: string) => (
 
 const ConfirmationStep: React.FC = () => {
   const intl = useIntl();
-  const links = useAppSelector((state) => getPlFeConfig(state).get('links') as any);
+  const links = useAppSelector(
+    (state) => getPlFeConfig(state).get('links') as any,
+  );
 
   const entity = intl.formatMessage(messages.accountEntity);
 
@@ -41,9 +52,9 @@ const ConfirmationStep: React.FC = () => {
       <Text>
         {intl.formatMessage(messages.content, {
           entity,
-          link: links.get('termsOfService') ?
-            renderTermsOfServiceLink(links.get('termsOfService')) :
-            termsOfServiceText,
+          link: links.get('termsOfService')
+            ? renderTermsOfServiceLink(links.get('termsOfService'))
+            : termsOfServiceText,
         })}
       </Text>
     </Stack>

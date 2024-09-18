@@ -34,7 +34,12 @@ const ChatPaneHeader = (props: IChatPaneHeader) => {
   }
 
   return (
-    <HStack {...rest} alignItems='center' justifyContent='between' className='h-16 rounded-t-xl px-4 py-3'>
+    <HStack
+      {...rest}
+      alignItems='center'
+      justifyContent='between'
+      className='h-16 rounded-t-xl px-4 py-3'
+    >
       <ButtonComp
         className='flex h-16 grow flex-row items-center space-x-1'
         data-testid='title'
@@ -44,15 +49,17 @@ const ChatPaneHeader = (props: IChatPaneHeader) => {
           {title}
         </Text>
 
-        {(!demetricator && typeof unreadCount !== 'undefined' && unreadCount > 0) && (
-          <HStack alignItems='center' space={2}>
-            <Text weight='semibold' data-testid='unread-count'>
-              ({unreadCount})
-            </Text>
+        {!demetricator &&
+          typeof unreadCount !== 'undefined' &&
+          unreadCount > 0 && (
+            <HStack alignItems='center' space={2}>
+              <Text weight='semibold' data-testid='unread-count'>
+                ({unreadCount})
+              </Text>
 
-            <div className='h-2.5 w-2.5 rounded-full bg-accent-300' />
-          </HStack>
-        )}
+              <div className='h-2.5 w-2.5 rounded-full bg-accent-300' />
+            </HStack>
+          )}
       </ButtonComp>
 
       <HStack space={2} alignItems='center'>
@@ -66,7 +73,11 @@ const ChatPaneHeader = (props: IChatPaneHeader) => {
 
         <IconButton
           onClick={onToggle}
-          src={isOpen ? require('@tabler/icons/outline/chevron-down.svg') : require('@tabler/icons/outline/chevron-up.svg')}
+          src={
+            isOpen
+              ? require('@tabler/icons/outline/chevron-down.svg')
+              : require('@tabler/icons/outline/chevron-up.svg')
+          }
           iconClassName='h-5 w-5 text-gray-600'
         />
       </HStack>

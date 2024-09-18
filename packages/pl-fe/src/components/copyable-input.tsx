@@ -13,7 +13,11 @@ interface ICopyableInput {
 }
 
 /** An input with copy abilities. */
-const CopyableInput: React.FC<ICopyableInput> = ({ value, type = 'text', onCopy }) => {
+const CopyableInput: React.FC<ICopyableInput> = ({
+  value,
+  type = 'text',
+  onCopy,
+}) => {
   const input = useRef<HTMLInputElement>(null);
 
   const selectInput = () => {

@@ -8,13 +8,13 @@ import { Column, Layout, Tabs } from 'pl-fe/components/ui';
 import Header from 'pl-fe/features/account/components/header';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
-  WhoToFollowPanel,
+  AccountNotePanel,
+  PinnedAccountsPanel,
+  ProfileFieldsPanel,
   ProfileInfoPanel,
   ProfileMediaPanel,
-  ProfileFieldsPanel,
   SignUpPanel,
-  PinnedAccountsPanel,
-  AccountNotePanel,
+  WhoToFollowPanel,
 } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector, useFeatures, usePlFeConfig } from 'pl-fe/hooks';
 import { getAcct } from 'pl-fe/utils/accounts';
@@ -31,9 +31,12 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
   const history = useHistory();
   const username = params?.username || '';
 
-  const { account } = useAccountLookup(username, { withRelationship: true, withScrobble: true });
+  const { account } = useAccountLookup(username, {
+    withRelationship: true,
+    withScrobble: true,
+  });
 
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
   const features = useFeatures();
   const { displayFqn } = usePlFeConfig();
 
@@ -49,7 +52,12 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
       name: 'profile',
     },
     {
-      text: <FormattedMessage id='account.posts_with_replies' defaultMessage='Posts & replies' />,
+      text: (
+        <FormattedMessage
+          id='account.posts_with_replies'
+          defaultMessage='Posts & replies'
+        />
+      ),
       to: `/@${username}/with_replies`,
       name: 'replies',
     },
@@ -64,7 +72,12 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
     const ownAccount = account.id === me;
     if (ownAccount || account.hide_favorites === false) {
       tabItems.push({
-        text: <FormattedMessage id='navigation_bar.favourites' defaultMessage='Likes' />,
+        text: (
+          <FormattedMessage
+            id='navigation_bar.favourites'
+            defaultMessage='Likes'
+          />
+        ),
         to: `/@${account.acct}/favorites`,
         name: 'likes',
       });
@@ -83,7 +96,9 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
     activeItem = 'profile';
   }
 
-  const showTabs = !['/following', '/followers', '/pins'].some(path => pathname.endsWith(path));
+  const showTabs = !['/following', '/followers', '/pins'].some((path) =>
+    pathname.endsWith(path),
+  );
 
   return (
     <>
@@ -93,13 +108,21 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
         </Helmet>
       )}
       <Layout.Main>
-        <Column size='lg' label={account ? `@${getAcct(account, displayFqn)}` : ''} withHeader={false}>
+        <Column
+          size='lg'
+          label={account ? `@${getAcct(account, displayFqn)}` : ''}
+          withHeader={false}
+        >
           <div className='space-y-4'>
             <Header account={account} />
             <ProfileInfoPanel username={username} account={account} />
 
             {account && showTabs && (
-              <Tabs key={`profile-tabs-${account.id}`} items={tabItems} activeItem={activeItem} />
+              <Tabs
+                key={`profile-tabs-${account.id}`}
+                items={tabItems}
+                activeItem={activeItem}
+              />
             )}
 
             {children}
@@ -108,21 +131,19 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
       </Layout.Main>
 
       <Layout.Aside>
-        {!me && (
-          <SignUpPanel />
-        )}
+        {!me && <SignUpPanel />}
 
         {features.notes && account && account?.id !== me && (
           <AccountNotePanel account={account} />
         )}
         <ProfileMediaPanel account={account} />
-        {(account && account.fields.length > 0) && (
+        {account && account.fields.length > 0 && (
           <ProfileFieldsPanel account={account} />
         )}
-        {(features.accountEndorsements && account && account.local) ? (
+        {features.accountEndorsements && account && account.local ? (
           <PinnedAccountsPanel account={account} limit={5} />
-        ) : me && features.suggestions && (
-          <WhoToFollowPanel limit={3} />
+        ) : (
+          me && features.suggestions && <WhoToFollowPanel limit={3} />
         )}
         <LinkFooter key='link-footer' />
       </Layout.Aside>

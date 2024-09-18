@@ -20,7 +20,10 @@ interface IPoll {
 }
 
 const messages = defineMessages({
-  multiple: { id: 'poll.choose_multiple', defaultMessage: 'Choose as many as you\'d like.' },
+  multiple: {
+    id: 'poll.choose_multiple',
+    defaultMessage: "Choose as many as you'd like.",
+  },
 });
 
 const Poll: React.FC<IPoll> = ({ id, status }): JSX.Element | null => {
@@ -68,7 +71,7 @@ const Poll: React.FC<IPoll> = ({ id, status }): JSX.Element | null => {
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div onClick={e => e.stopPropagation()}>
+    <div onClick={(e) => e.stopPropagation()}>
       {!showResults && poll.multiple && (
         <Text className='mb-4' theme='muted' size='sm'>
           {intl.formatMessage(messages.multiple)}
@@ -91,11 +94,7 @@ const Poll: React.FC<IPoll> = ({ id, status }): JSX.Element | null => {
           ))}
         </Stack>
 
-        <PollFooter
-          poll={poll}
-          showResults={showResults}
-          selected={selected}
-        />
+        <PollFooter poll={poll} showResults={showResults} selected={selected} />
       </Stack>
     </div>
   );

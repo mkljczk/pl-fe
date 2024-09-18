@@ -1,4 +1,9 @@
-import { List as ImmutableList, Map as ImmutableMap, Record as ImmutableRecord, fromJS } from 'immutable';
+import {
+  List as ImmutableList,
+  Map as ImmutableMap,
+  Record as ImmutableRecord,
+  fromJS,
+} from 'immutable';
 
 import {
   STATUS_CREATE_FAIL,
@@ -27,15 +32,25 @@ type State = ImmutableMap<string, PendingStatus>;
 
 const initialState: State = ImmutableMap();
 
-const importStatus = (state: State, params: ImmutableMap<string, any>, idempotencyKey: string) =>
-  state.set(idempotencyKey, PendingStatusRecord(params));
+const importStatus = (
+  state: State,
+  params: ImmutableMap<string, any>,
+  idempotencyKey: string,
+) => state.set(idempotencyKey, PendingStatusRecord(params));
 
-const deleteStatus = (state: State, idempotencyKey: string) => state.delete(idempotencyKey);
+const deleteStatus = (state: State, idempotencyKey: string) =>
+  state.delete(idempotencyKey);
 
 const pending_statuses = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case STATUS_CREATE_REQUEST:
-      return action.editing ? state : importStatus(state, ImmutableMap(fromJS(action.params)), action.idempotencyKey);
+      return action.editing
+        ? state
+        : importStatus(
+            state,
+            ImmutableMap(fromJS(action.params)),
+            action.idempotencyKey,
+          );
     case STATUS_CREATE_FAIL:
     case STATUS_CREATE_SUCCESS:
       return deleteStatus(state, action.idempotencyKey);
@@ -44,7 +59,4 @@ const pending_statuses = (state = initialState, action: AnyAction) => {
   }
 };
 
-export {
-  type PendingStatus,
-  pending_statuses as default,
-};
+export { type PendingStatus, pending_statuses as default };

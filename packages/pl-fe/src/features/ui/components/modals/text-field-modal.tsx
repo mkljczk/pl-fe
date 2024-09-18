@@ -3,8 +3,8 @@ import { FormattedMessage } from 'react-intl';
 
 import { Modal, Stack, Textarea } from 'pl-fe/components/ui';
 
-import type { BaseModalProps } from '../modal-root';
 import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
+import type { BaseModalProps } from '../modal-root';
 
 interface TextFieldModalProps {
   heading: React.ReactNode;
@@ -44,7 +44,12 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
       confirmationAction={handleClick}
       confirmationText={confirm}
       confirmationTheme={confirmationTheme}
-      cancelText={<FormattedMessage id='confirmation_modal.cancel' defaultMessage='Cancel' />}
+      cancelText={
+        <FormattedMessage
+          id='confirmation_modal.cancel'
+          defaultMessage='Cancel'
+        />
+      }
       cancelAction={handleCancel}
     >
       <Stack space={4}>

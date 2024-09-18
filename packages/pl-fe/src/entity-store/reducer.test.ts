@@ -48,9 +48,7 @@ test('import entities into a list', () => {
   expect(cache.lists.thingies!.state.totalCount).toBe(3);
 
   // Now try adding an additional item.
-  const entities2: TestEntity[] = [
-    { id: '4', msg: 'hehe' },
-  ];
+  const entities2: TestEntity[] = [{ id: '4', msg: 'hehe' }];
 
   const action2 = importEntities(entities2, 'TestEntity', 'thingies');
   const result2 = reducer(result, action2);
@@ -61,9 +59,7 @@ test('import entities into a list', () => {
   expect(cache2.lists.thingies!.state.totalCount).toBe(4);
 
   // Finally, update an item.
-  const entities3: TestEntity[] = [
-    { id: '2', msg: 'yolofam' },
-  ];
+  const entities3: TestEntity[] = [{ id: '2', msg: 'yolofam' }];
 
   const action3 = importEntities(entities3, 'TestEntity', 'thingies');
   const result3 = reducer(result2, action3);
@@ -110,16 +106,23 @@ test('import entities with override', () => {
 
   const now = new Date();
 
-  const action = entitiesFetchSuccess(entities, 'TestEntity', 'thingies', 'end', {
-    next: undefined,
-    prev: undefined,
-    totalCount: 2,
-    error: null,
-    fetched: true,
-    fetching: false,
-    lastFetchedAt: now,
-    invalid: false,
-  }, true);
+  const action = entitiesFetchSuccess(
+    entities,
+    'TestEntity',
+    'thingies',
+    'end',
+    {
+      next: undefined,
+      prev: undefined,
+      totalCount: 2,
+      error: null,
+      fetched: true,
+      fetching: false,
+      lastFetchedAt: now,
+      invalid: false,
+    },
+    true,
+  );
 
   const result = reducer(state, action);
   const cache = result.TestEntity as EntityCache<TestEntity>;

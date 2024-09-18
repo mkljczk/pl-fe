@@ -45,7 +45,7 @@ const OnboardingWizard = () => {
     <SuggestedAccountsStep onNext={handleNextStep} />,
   ];
 
-  if (features.federating){
+  if (features.federating) {
     steps.push(<FediverseStep onNext={handleNextStep} />);
   }
 
@@ -80,9 +80,16 @@ const OnboardingWizard = () => {
 
       <main className='flex h-screen flex-col overflow-x-hidden'>
         <div className='flex h-full flex-col items-center justify-center'>
-          <ReactSwipeableViews animateHeight index={currentStep} onChangeIndex={handleSwipe}>
+          <ReactSwipeableViews
+            animateHeight
+            index={currentStep}
+            onChangeIndex={handleSwipe}
+          >
             {steps.map((step, i) => (
-              <div key={i} className='w-full max-w-[100vw] py-6 sm:mx-auto sm:max-w-lg md:max-w-2xl'>
+              <div
+                key={i}
+                className='w-full max-w-[100vw] py-6 sm:mx-auto sm:max-w-lg md:max-w-2xl'
+              >
                 <div
                   className={clsx({
                     'transition-opacity ease-linear': true,
@@ -96,7 +103,12 @@ const OnboardingWizard = () => {
             ))}
           </ReactSwipeableViews>
 
-          <HStack space={3} alignItems='center' justifyContent='center' className='relative'>
+          <HStack
+            space={3}
+            alignItems='center'
+            justifyContent='center'
+            className='relative'
+          >
             {steps.map((_, i) => (
               <button
                 key={i}
@@ -104,7 +116,8 @@ const OnboardingWizard = () => {
                 onClick={() => handleDotClick(i)}
                 className={clsx({
                   'w-5 h-5 rounded-full focus:ring-primary-600 focus:ring-2 focus:ring-offset-2': true,
-                  'bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-700/75 hover:bg-gray-400': i !== currentStep,
+                  'bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-700/75 hover:bg-gray-400':
+                    i !== currentStep,
                   'bg-primary-600': i === currentStep,
                 })}
               />

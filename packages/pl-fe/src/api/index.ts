@@ -9,11 +9,14 @@ import { buildFullPath } from 'pl-fe/utils/url';
 type PlfeResponse<T = any> = Response & { data: string; json: T };
 
 /**
-  * Dumb client for grabbing static files.
-  * It uses FE_SUBDIRECTORY and parses JSON if possible.
-  * No authorization is needed.
-  */
-const staticFetch = (input: URL | RequestInfo, init?: RequestInit | undefined) => {
+ * Dumb client for grabbing static files.
+ * It uses FE_SUBDIRECTORY and parses JSON if possible.
+ * No authorization is needed.
+ */
+const staticFetch = (
+  input: URL | RequestInfo,
+  init?: RequestInit | undefined,
+) => {
   const fullPath = buildFullPath(input.toString(), BuildConfig.FE_SUBDIRECTORY);
 
   return fetch(fullPath, init).then(async (response) => {
@@ -28,7 +31,17 @@ const staticFetch = (input: URL | RequestInfo, init?: RequestInit | undefined) =
 
     const { headers, ok, redirected, status, statusText, type, url } = response;
 
-    return { headers, ok, redirected, status, statusText, type, url, data, json } as any as PlfeResponse;
+    return {
+      headers,
+      ok,
+      redirected,
+      status,
+      statusText,
+      type,
+      url,
+      data,
+      json,
+    } as any as PlfeResponse;
   });
 };
 
@@ -38,8 +51,4 @@ const getClient = (state: RootState | (() => RootState)) => {
   return state.auth.client;
 };
 
-export {
-  type PlfeResponse,
-  staticFetch,
-  getClient,
-};
+export { type PlfeResponse, staticFetch, getClient };

@@ -75,9 +75,7 @@
     "is_suggested": true,
     "relationship": {},
     "skip_thread_containment": false,
-    "tags": [
-      "verified"
-    ]
+    "tags": ["verified"]
   },
   "source": {
     "fields": [

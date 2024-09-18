@@ -9,17 +9,20 @@ import { render, screen, waitFor } from 'pl-fe/jest/test-helpers';
 
 import ChatPane from './chat-pane';
 
-const renderComponentWithChatContext = (store = {}) => render(
-  <VirtuosoMockContext.Provider value={{ viewportHeight: 300, itemHeight: 100 }}>
-    <StatProvider>
-      <ChatContext.Provider value={{ isOpen: true }}>
-        <ChatPane />
-      </ChatContext.Provider>
-    </StatProvider>
-  </VirtuosoMockContext.Provider>,
-  undefined,
-  store,
-);
+const renderComponentWithChatContext = (store = {}) =>
+  render(
+    <VirtuosoMockContext.Provider
+      value={{ viewportHeight: 300, itemHeight: 100 }}
+    >
+      <StatProvider>
+        <ChatContext.Provider value={{ isOpen: true }}>
+          <ChatPane />
+        </ChatContext.Provider>
+      </StatProvider>
+    </VirtuosoMockContext.Provider>,
+    undefined,
+    store,
+  );
 
 describe('<ChatPane />', () => {
   // describe('when there are no chats', () => {
@@ -48,7 +51,7 @@ describe('<ChatPane />', () => {
   beforeEach(() => {
     __stub((mock) => {
       mock.onGet('/api/v1/pleroma/chats').reply(200, chats, {
-        link: '<https://example.com/api/v1/pleroma/chats?since_id=2>; rel=\'prev\'',
+        link: "<https://example.com/api/v1/pleroma/chats?since_id=2>; rel='prev'",
       });
     });
   });

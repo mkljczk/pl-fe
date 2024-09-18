@@ -13,7 +13,14 @@ const RegistrationPage: React.FC = () => {
 
   if (!isOpen) {
     return (
-      <BigCard title={<FormattedMessage id='registration.closed_title' defaultMessage='Registrations closed' />}>
+      <BigCard
+        title={
+          <FormattedMessage
+            id='registration.closed_title'
+            defaultMessage='Registrations closed'
+          />
+        }
+      >
         <Text theme='muted' align='center'>
           <FormattedMessage
             id='registration.closed_message'
@@ -26,7 +33,11 @@ const RegistrationPage: React.FC = () => {
   }
 
   return (
-    <BigCard title={<FormattedMessage id='column.registration' defaultMessage='Sign up' />}>
+    <BigCard
+      title={
+        <FormattedMessage id='column.registration' defaultMessage='Sign up' />
+      }
+    >
       <RegistrationForm />
     </BigCard>
   );

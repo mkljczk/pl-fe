@@ -1,6 +1,6 @@
 import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useEffect, useRef } from 'react';
-import { SketchPicker, ColorChangeHandler } from 'react-color';
+import { ColorChangeHandler, SketchPicker } from 'react-color';
 
 import { isMobile } from 'pl-fe/is-mobile';
 
@@ -13,7 +13,12 @@ interface IColorPicker {
   onClose: () => void;
 }
 
-const ColorPicker: React.FC<IColorPicker> = ({ style, value, onClose, onChange }) => {
+const ColorPicker: React.FC<IColorPicker> = ({
+  style,
+  value,
+  onClose,
+  onChange,
+}) => {
   const node = useRef<HTMLDivElement>(null);
 
   const handleDocumentClick = (e: MouseEvent | TouchEvent) => {

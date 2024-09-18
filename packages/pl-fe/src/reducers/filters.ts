@@ -7,7 +7,8 @@ import type { AnyAction } from 'redux';
 
 type State = ImmutableList<Filter>;
 
-const importFilters = (_state: State, filters: Array<Filter>): State => ImmutableList(filters);
+const importFilters = (_state: State, filters: Array<Filter>): State =>
+  ImmutableList(filters);
 
 const filters = (state: State = ImmutableList(), action: AnyAction): State => {
   switch (action.type) {

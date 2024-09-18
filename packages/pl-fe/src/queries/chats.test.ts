@@ -4,12 +4,26 @@ import { useEffect } from 'react';
 
 import { __stub } from 'pl-fe/api';
 import { buildAccount, buildRelationship } from 'pl-fe/jest/factory';
-import { createTestStore, mockStore, queryClient, renderHook, rootState, waitFor } from 'pl-fe/jest/test-helpers';
+import {
+  createTestStore,
+  mockStore,
+  queryClient,
+  renderHook,
+  rootState,
+  waitFor,
+} from 'pl-fe/jest/test-helpers';
 import { normalizeChatMessage } from 'pl-fe/normalizers';
 import { Store } from 'pl-fe/store';
 import { flattenPages } from 'pl-fe/utils/queries';
 
-import { ChatKeys, IChat, useChat, useChatActions, useChatMessages, useChats } from './chats';
+import {
+  ChatKeys,
+  IChat,
+  useChat,
+  useChatActions,
+  useChatMessages,
+  useChats,
+} from './chats';
 
 const chat: IChat = {
   account: buildAccount({
@@ -27,15 +41,16 @@ const chat: IChat = {
   unread: 0,
 };
 
-const buildChatMessage = (id: string) => normalizeChatMessage({
-  id,
-  chat_id: '1',
-  account_id: '1',
-  content: `chat message #${id}`,
-  created_at: '2020-06-10T02:05:06.000Z',
-  expiration: 1209600,
-  unread: true,
-});
+const buildChatMessage = (id: string) =>
+  normalizeChatMessage({
+    id,
+    chat_id: '1',
+    account_id: '1',
+    content: `chat message #${id}`,
+    created_at: '2020-06-10T02:05:06.000Z',
+    expiration: 1209600,
+    unread: true,
+  });
 
 describe('ChatKeys', () => {
   it('has a "chat" key', () => {
@@ -60,16 +75,19 @@ describe('useChatMessages', () => {
 
   describe('when the user is blocked', () => {
     beforeEach(() => {
-      const state = rootState
-        .set(
-          'relationships',
-          ImmutableMap({ '1': buildRelationship({ blocked_by: true }) }),
-        );
+      const state = rootState.set(
+        'relationships',
+        ImmutableMap({ '1': buildRelationship({ blocked_by: true }) }),
+      );
       store = mockStore(state);
     });
 
     it('is does not fetch the endpoint', async () => {
-      const { result } = renderHook(() => useChatMessages(chat), undefined, store);
+      const { result } = renderHook(
+        () => useChatMessages(chat),
+        undefined,
+        store,
+      );
 
       await waitFor(() => expect(result.current.isFetching).toBe(false));
 
@@ -81,10 +99,9 @@ describe('useChatMessages', () => {
     describe('with a successful request', () => {
       beforeEach(() => {
         __stub((mock) => {
-          mock.onGet(`/api/v1/pleroma/chats/${chat.id}/messages`)
-            .reply(200, [
-              buildChatMessage('2'),
-            ], {
+          mock
+            .onGet(`/api/v1/pleroma/chats/${chat.id}/messages`)
+            .reply(200, [buildChatMessage('2')], {
               link: `<https://example.com/api/v1/pleroma/chats/${chat.id}/messages?since_id=2>; rel="prev"`,
             });
         });
@@ -102,11 +119,13 @@ describe('useChatMessages', () => {
     describe('with an unsuccessful query', () => {
       beforeEach(() => {
         __stub((mock) => {
-          mock.onGet(`/api/v1/pleroma/chats/${chat.id}/messages`).networkError();
+          mock
+            .onGet(`/api/v1/pleroma/chats/${chat.id}/messages`)
+            .networkError();
         });
       });
 
-      it('is has error state', async() => {
+      it('is has error state', async () => {
         const { result } = renderHook(() => useChatMessages(chat));
 
         await waitFor(() => expect(result.current.isFetching).toBe(false));
@@ -155,7 +174,7 @@ describe('useChats', () => {
       });
     });
 
-    it('is has error state', async() => {
+    it('is has error state', async () => {
       const { result } = renderHook(() => useChats().chatsQuery);
 
       await waitFor(() => expect(result.current.isFetching).toBe(false));
@@ -182,19 +201,27 @@ describe('useChat()', () => {
         mock.onGet(`/api/v1/pleroma/chats/${chat.id}`).reply(200, chat);
         mock
           .onGet(`/api/v1/accounts/relationships?id[]=${chat.account.id}`)
-          .reply(200, [buildRelationship({ id: relationshipId, blocked_by: true })]);
+          .reply(200, [
+            buildRelationship({ id: relationshipId, blocked_by: true }),
+          ]);
       });
     });
 
     it('is successful', async () => {
-      expect(store.getState().relationships.getIn([relationshipId, 'blocked_by'])).toBeUndefined();
+      expect(
+        store.getState().relationships.getIn([relationshipId, 'blocked_by']),
+      ).toBeUndefined();
 
       const { result } = renderHook(() => useChat(chat.id), undefined, store);
 
       await waitFor(() => expect(result.current.isFetching).toBe(false));
 
-      expect(store.getState().relationships.getIn([relationshipId, 'id'])).toBe(relationshipId);
-      expect(store.getState().relationships.getIn([relationshipId, 'blocked_by'])).toBe(true);
+      expect(store.getState().relationships.getIn([relationshipId, 'id'])).toBe(
+        relationshipId,
+      );
+      expect(
+        store.getState().relationships.getIn([relationshipId, 'blocked_by']),
+      ).toBe(true);
       expect(result.current.data.id).toBe(chat.id);
     });
   });
@@ -206,7 +233,7 @@ describe('useChat()', () => {
       });
     });
 
-    it('is has error state', async() => {
+    it('is has error state', async () => {
       const { result } = renderHook(() => useChat(chat.id));
 
       await waitFor(() => expect(result.current.isFetching).toBe(false));
@@ -227,16 +254,16 @@ describe('useChatActions', () => {
     beforeEach(() => {
       __stub((mock) => {
         mock
-          .onPost(`/api/v1/pleroma/chats/${chat.id}/read`, { last_read_id: '2' })
+          .onPost(`/api/v1/pleroma/chats/${chat.id}/read`, {
+            last_read_id: '2',
+          })
           .reply(200, { ...chat, unread: nextUnreadCount });
       });
     });
 
-    it('updates the queryCache', async() => {
+    it('updates the queryCache', async () => {
       const initialQueryData = {
-        pages: [
-          { result: [chat], hasMore: false, link: undefined },
-        ],
+        pages: [{ result: [chat], hasMore: false, link: undefined }],
         pageParams: [undefined],
       };
       const initialFlattenedData = flattenPages(initialQueryData);
@@ -244,7 +271,9 @@ describe('useChatActions', () => {
 
       queryClient.setQueryData(['chats', 'search'], initialQueryData);
 
-      const { result } = renderHook(() => useChatActions(chat.id).markChatAsRead('2'));
+      const { result } = renderHook(() =>
+        useChatActions(chat.id).markChatAsRead('2'),
+      );
 
       await waitFor(() => {
         expect(result.current).resolves.toBeDefined();
@@ -252,7 +281,9 @@ describe('useChatActions', () => {
 
       const nextQueryData = queryClient.getQueryData(['chats', 'search']);
       const nextFlattenedData = flattenPages(nextQueryData as any);
-      expect(sumBy(nextFlattenedData as any, (chat: IChat) => chat.unread)).toBe(nextUnreadCount);
+      expect(
+        sumBy(nextFlattenedData as any, (chat: IChat) => chat.unread),
+      ).toBe(nextUnreadCount);
     });
   });
 
@@ -265,7 +296,10 @@ describe('useChatActions', () => {
         pageParams: [undefined],
       };
 
-      queryClient.setQueryData(ChatKeys.chatMessages(chat.id), initialQueryData);
+      queryClient.setQueryData(
+        ChatKeys.chatMessages(chat.id),
+        initialQueryData,
+      );
 
       __stub((mock) => {
         mock
@@ -274,7 +308,7 @@ describe('useChatActions', () => {
       });
     });
 
-    it('creates a chat message', async() => {
+    it('creates a chat message', async () => {
       const { result } = renderHook(() => {
         const { createChatMessage } = useChatActions(chat.id);
 

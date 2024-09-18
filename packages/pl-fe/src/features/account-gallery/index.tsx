@@ -9,7 +9,10 @@ import LoadMore from 'pl-fe/components/load-more';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import { Column, Spinner } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
-import { type AccountGalleryAttachment, getAccountGallery } from 'pl-fe/selectors';
+import {
+  type AccountGalleryAttachment,
+  getAccountGallery,
+} from 'pl-fe/selectors';
 import { useModalsStore } from 'pl-fe/stores';
 
 import MediaItem from './components/media-item';
@@ -24,9 +27,7 @@ const LoadMoreMedia: React.FC<ILoadMoreMedia> = ({ maxId, onLoadMore }) => {
     onLoadMore(maxId);
   };
 
-  return (
-    <LoadMore onClick={handleLoadMore} />
-  );
+  return <LoadMore onClick={handleLoadMore} />;
 };
 
 const AccountGallery = () => {
@@ -40,9 +41,19 @@ const AccountGallery = () => {
     isUnavailable,
   } = useAccountLookup(username, { withRelationship: true });
 
-  const attachments: ImmutableList<AccountGalleryAttachment> = useAppSelector((state) => account ? getAccountGallery(state, account.id) : ImmutableList());
-  const isLoading = useAppSelector((state) => state.timelines.get(`account:${account?.id}:with_replies:media`)?.isLoading);
-  const hasMore = useAppSelector((state) => state.timelines.get(`account:${account?.id}:with_replies:media`)?.hasMore);
+  const attachments: ImmutableList<AccountGalleryAttachment> = useAppSelector(
+    (state) =>
+      account ? getAccountGallery(state, account.id) : ImmutableList(),
+  );
+  const isLoading = useAppSelector(
+    (state) =>
+      state.timelines.get(`account:${account?.id}:with_replies:media`)
+        ?.isLoading,
+  );
+  const hasMore = useAppSelector(
+    (state) =>
+      state.timelines.get(`account:${account?.id}:with_replies:media`)?.hasMore,
+  );
 
   const node = useRef<HTMLDivElement>(null);
 
@@ -58,14 +69,18 @@ const AccountGallery = () => {
     }
   };
 
-  const handleLoadOlder: React.MouseEventHandler = e => {
+  const handleLoadOlder: React.MouseEventHandler = (e) => {
     e.preventDefault();
     handleScrollToBottom();
   };
 
   const handleOpenMedia = (attachment: AccountGalleryAttachment) => {
     if (attachment.type === 'video') {
-      openModal('VIDEO', { media: attachment, statusId: attachment.status.id, account: attachment.account });
+      openModal('VIDEO', {
+        media: attachment,
+        statusId: attachment.status.id,
+        account: attachment.account,
+      });
     } else {
       const media = attachment.status.media_attachments;
       const index = media.findIndex((x) => x.id === attachment.id);
@@ -76,7 +91,9 @@ const AccountGallery = () => {
 
   useEffect(() => {
     if (account) {
-      dispatch(fetchAccountTimeline(account.id, { only_media: true, limit: 40 }));
+      dispatch(
+        fetchAccountTimeline(account.id, { only_media: true, limit: 40 }),
+      );
     }
   }, [account?.id]);
 
@@ -89,22 +106,29 @@ const AccountGallery = () => {
   }
 
   if (!account) {
-    return (
-      <MissingIndicator />
-    );
+    return <MissingIndicator />;
   }
 
   let loadOlder = null;
 
   if (hasMore && !(isLoading && attachments.size === 0)) {
-    loadOlder = <LoadMore className='my-auto' visible={!isLoading} onClick={handleLoadOlder} />;
+    loadOlder = (
+      <LoadMore
+        className='my-auto'
+        visible={!isLoading}
+        onClick={handleLoadOlder}
+      />
+    );
   }
 
   if (isUnavailable) {
     return (
       <Column>
         <div className='empty-column-indicator'>
-          <FormattedMessage id='empty_column.account_unavailable' defaultMessage='Profile unavailable' />
+          <FormattedMessage
+            id='empty_column.account_unavailable'
+            defaultMessage='Profile unavailable'
+          />
         </div>
       </Column>
     );
@@ -112,20 +136,33 @@ const AccountGallery = () => {
 
   return (
     <Column label={`@${account.acct}`} transparent withHeader={false}>
-      <div role='feed' className='grid grid-cols-2 gap-2 sm:grid-cols-3' ref={node}>
-        {attachments.map((attachment, index) => attachment === null ? (
-          <LoadMoreMedia key={'more:' + attachments.get(index + 1)?.id} maxId={index > 0 ? (attachments.get(index - 1)?.id || null) : null} onLoadMore={handleLoadMore} />
-        ) : (
-          <MediaItem
-            key={`${attachment.status.id}+${attachment.id}`}
-            attachment={attachment}
-            onOpenMedia={handleOpenMedia}
-          />
-        ))}
+      <div
+        role='feed'
+        className='grid grid-cols-2 gap-2 sm:grid-cols-3'
+        ref={node}
+      >
+        {attachments.map((attachment, index) =>
+          attachment === null ? (
+            <LoadMoreMedia
+              key={'more:' + attachments.get(index + 1)?.id}
+              maxId={index > 0 ? attachments.get(index - 1)?.id || null : null}
+              onLoadMore={handleLoadMore}
+            />
+          ) : (
+            <MediaItem
+              key={`${attachment.status.id}+${attachment.id}`}
+              attachment={attachment}
+              onOpenMedia={handleOpenMedia}
+            />
+          ),
+        )}
 
         {!isLoading && attachments.size === 0 && (
           <div className='empty-column-indicator col-span-2 sm:col-span-3'>
-            <FormattedMessage id='account_gallery.none' defaultMessage='No media to show.' />
+            <FormattedMessage
+              id='account_gallery.none'
+              defaultMessage='No media to show.'
+            />
           </div>
         )}
 

@@ -1,4 +1,4 @@
-import { useFloating, shift, flip } from '@floating-ui/react';
+import { flip, shift, useFloating } from '@floating-ui/react';
 import clsx from 'clsx';
 import React, { KeyboardEvent, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -6,18 +6,28 @@ import { defineMessages, useIntl } from 'react-intl';
 import { IconButton, Portal } from 'pl-fe/components/ui';
 import { useClickOutside } from 'pl-fe/hooks';
 
-import EmojiPickerDropdown, { IEmojiPickerDropdown } from '../components/emoji-picker-dropdown';
+import EmojiPickerDropdown, {
+  IEmojiPickerDropdown,
+} from '../components/emoji-picker-dropdown';
 
 const messages = defineMessages({
   emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
 });
 
-interface IEmojiPickerDropdownContainer extends Pick<IEmojiPickerDropdown, 'onPickEmoji' | 'condensed' | 'withCustom'> {
+interface IEmojiPickerDropdownContainer
+  extends Pick<
+    IEmojiPickerDropdown,
+    'onPickEmoji' | 'condensed' | 'withCustom'
+  > {
   children?: JSX.Element;
   theme?: 'default' | 'inverse';
 }
 
-const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({ theme = 'default', children, ...props }) => {
+const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
+  theme = 'default',
+  children,
+  ...props
+}) => {
   const intl = useIntl();
   const title = intl.formatMessage(messages.emoji);
   const [visible, setVisible] = useState(false);
@@ -55,8 +65,10 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
       ) : (
         <IconButton
           className={clsx('emoji-picker-dropdown', {
-            'text-gray-600 hover:text-gray-700 dark:hover:text-gray-500': theme === 'default',
-            'text-white/80 hover:text-white bg-transparent dark:bg-transparent': theme === 'inverse',
+            'text-gray-600 hover:text-gray-700 dark:hover:text-gray-500':
+              theme === 'default',
+            'text-white/80 hover:text-white bg-transparent dark:bg-transparent':
+              theme === 'inverse',
           })}
           ref={refs.setReference}
           src={require('@tabler/icons/outline/mood-smile.svg')}
@@ -65,9 +77,12 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
           aria-expanded={visible}
           role='button'
           onClick={handleClick as any}
-          onKeyDown={handleKeyDown as React.KeyboardEventHandler<HTMLButtonElement>}
+          onKeyDown={
+            handleKeyDown as React.KeyboardEventHandler<HTMLButtonElement>
+          }
           tabIndex={0}
-        />)}
+        />
+      )}
 
       <Portal>
         <div
@@ -92,7 +107,4 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
   );
 };
 
-export {
-  messages,
-  EmojiPickerDropdownContainer as default,
-};
+export { messages, EmojiPickerDropdownContainer as default };

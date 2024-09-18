@@ -13,24 +13,31 @@ const POLL_FETCH_REQUEST = 'POLL_FETCH_REQUEST' as const;
 const POLL_FETCH_SUCCESS = 'POLL_FETCH_SUCCESS' as const;
 const POLL_FETCH_FAIL = 'POLL_FETCH_FAIL' as const;
 
-const vote = (pollId: string, choices: number[]) =>
+const vote =
+  (pollId: string, choices: number[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(voteRequest());
 
-    return getClient(getState()).polls.vote(pollId, choices).then((data) => {
-      dispatch(importFetchedPoll(data));
-      dispatch(voteSuccess(data));
-    }).catch(err => dispatch(voteFail(err)));
+    return getClient(getState())
+      .polls.vote(pollId, choices)
+      .then((data) => {
+        dispatch(importFetchedPoll(data));
+        dispatch(voteSuccess(data));
+      })
+      .catch((err) => dispatch(voteFail(err)));
   };
 
-const fetchPoll = (pollId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const fetchPoll =
+  (pollId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchPollRequest());
 
-    return getClient(getState()).polls.getPoll(pollId).then((data) => {
-      dispatch(importFetchedPoll(data));
-      dispatch(fetchPollSuccess(data));
-    }).catch(err => dispatch(fetchPollFail(err)));
+    return getClient(getState())
+      .polls.getPoll(pollId)
+      .then((data) => {
+        dispatch(importFetchedPoll(data));
+        dispatch(fetchPollSuccess(data));
+      })
+      .catch((err) => dispatch(fetchPollFail(err)));
   };
 
 const voteRequest = () => ({

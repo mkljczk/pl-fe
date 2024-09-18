@@ -1,22 +1,37 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { updateMrf } from 'pl-fe/actions/mrf';
 import List, { ListItem } from 'pl-fe/components/list';
 import { Modal, Toggle } from 'pl-fe/components/ui';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { makeGetRemoteInstance } from 'pl-fe/selectors';
 import toast from 'pl-fe/toast';
 
 import type { BaseModalProps } from '../modal-root';
 
 const messages = defineMessages({
-  mediaRemoval: { id: 'edit_federation.media_removal', defaultMessage: 'Strip media' },
-  forceNsfw: { id: 'edit_federation.force_nsfw', defaultMessage: 'Force attachments to be marked sensitive' },
-  unlisted: { id: 'edit_federation.unlisted', defaultMessage: 'Force posts unlisted' },
-  followersOnly: { id: 'edit_federation.followers_only', defaultMessage: 'Hide posts except to followers' },
+  mediaRemoval: {
+    id: 'edit_federation.media_removal',
+    defaultMessage: 'Strip media',
+  },
+  forceNsfw: {
+    id: 'edit_federation.force_nsfw',
+    defaultMessage: 'Force attachments to be marked sensitive',
+  },
+  unlisted: {
+    id: 'edit_federation.unlisted',
+    defaultMessage: 'Force posts unlisted',
+  },
+  followersOnly: {
+    id: 'edit_federation.followers_only',
+    defaultMessage: 'Hide posts except to followers',
+  },
   save: { id: 'edit_federation.save', defaultMessage: 'Save' },
-  success: { id: 'edit_federation.success', defaultMessage: '{host} federation was updated' },
+  success: {
+    id: 'edit_federation.success',
+    defaultMessage: '{host} federation was updated',
+  },
 });
 
 interface EditFederationModalProps {
@@ -24,12 +39,16 @@ interface EditFederationModalProps {
 }
 
 /** Modal for moderators to edit federation with a remote instance. */
-const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> = ({ host, onClose }) => {
+const EditFederationModal: React.FC<
+  BaseModalProps & EditFederationModalProps
+> = ({ host, onClose }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
   const getRemoteInstance = useCallback(makeGetRemoteInstance(), []);
-  const remoteInstance = useAppSelector(state => getRemoteInstance(state, host));
+  const remoteInstance = useAppSelector((state) =>
+    getRemoteInstance(state, host),
+  );
 
   const [data, setData] = useState<Record<string, any>>({});
 
@@ -37,11 +56,15 @@ const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> =
     setData(remoteInstance.federation);
   }, [remoteInstance]);
 
-  const handleDataChange = (key: string): React.ChangeEventHandler<HTMLInputElement> => ({ target }) => {
-    setData({ ...data, [key]: target.checked });
-  };
+  const handleDataChange =
+    (key: string): React.ChangeEventHandler<HTMLInputElement> =>
+    ({ target }) => {
+      setData({ ...data, [key]: target.checked });
+    };
 
-  const handleMediaRemoval: React.ChangeEventHandler<HTMLInputElement> = ({ target: { checked } }) => {
+  const handleMediaRemoval: React.ChangeEventHandler<HTMLInputElement> = ({
+    target: { checked },
+  }) => {
     const newData = {
       ...data,
       avatar_removal: checked,
@@ -80,7 +103,14 @@ const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> =
       confirmationText={intl.formatMessage(messages.save)}
     >
       <List>
-        <ListItem label={<FormattedMessage id='edit_federation.reject' defaultMessage='Reject all activities' />}>
+        <ListItem
+          label={
+            <FormattedMessage
+              id='edit_federation.reject'
+              defaultMessage='Reject all activities'
+            />
+          }
+        >
           <Toggle
             checked={reject}
             onChange={handleDataChange('reject')}
@@ -88,7 +118,14 @@ const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> =
           />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='edit_federation.media_removal' defaultMessage='Strip media' />}>
+        <ListItem
+          label={
+            <FormattedMessage
+              id='edit_federation.media_removal'
+              defaultMessage='Strip media'
+            />
+          }
+        >
           <Toggle
             checked={fullMediaRemoval}
             onChange={handleMediaRemoval}
@@ -97,7 +134,14 @@ const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> =
           />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='edit_federation.force_nsfw' defaultMessage='Force attachments to be marked sensitive' />}>
+        <ListItem
+          label={
+            <FormattedMessage
+              id='edit_federation.force_nsfw'
+              defaultMessage='Force attachments to be marked sensitive'
+            />
+          }
+        >
           <Toggle
             checked={media_nsfw}
             onChange={handleDataChange('media_nsfw')}
@@ -106,7 +150,14 @@ const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> =
           />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='edit_federation.followers_only' defaultMessage='Hide posts except to followers' />}>
+        <ListItem
+          label={
+            <FormattedMessage
+              id='edit_federation.followers_only'
+              defaultMessage='Hide posts except to followers'
+            />
+          }
+        >
           <Toggle
             checked={followers_only}
             onChange={handleDataChange('followers_only')}
@@ -115,7 +166,14 @@ const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> =
           />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='edit_federation.unlisted' defaultMessage='Force posts unlisted' />}>
+        <ListItem
+          label={
+            <FormattedMessage
+              id='edit_federation.unlisted'
+              defaultMessage='Force posts unlisted'
+            />
+          }
+        >
           <Toggle
             checked={federated_timeline_removal}
             onChange={handleDataChange('federated_timeline_removal')}

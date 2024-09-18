@@ -10,13 +10,24 @@ interface ILoadMore {
   className?: string;
 }
 
-const LoadMore: React.FC<ILoadMore> = ({ onClick, disabled, visible = true, className }) => {
+const LoadMore: React.FC<ILoadMore> = ({
+  onClick,
+  disabled,
+  visible = true,
+  className,
+}) => {
   if (!visible) {
     return null;
   }
 
   return (
-    <Button className={className} theme='primary' block disabled={disabled || !visible} onClick={onClick}>
+    <Button
+      className={className}
+      theme='primary'
+      block
+      disabled={disabled || !visible}
+      onClick={onClick}
+    >
       <FormattedMessage id='status.load_more' defaultMessage='Load more' />
     </Button>
   );

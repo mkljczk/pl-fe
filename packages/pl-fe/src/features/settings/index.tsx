@@ -1,10 +1,22 @@
 import React, { useEffect } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchMfa } from 'pl-fe/actions/mfa';
 import List, { ListItem } from 'pl-fe/components/list';
-import { Card, CardBody, CardHeader, CardTitle, Column, Text } from 'pl-fe/components/ui';
-import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'pl-fe/hooks';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Column,
+  Text,
+} from 'pl-fe/components/ui';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useFeatures,
+  useOwnAccount,
+} from 'pl-fe/hooks';
 
 import Preferences from '../preferences';
 
@@ -13,24 +25,51 @@ import MessagesSettings from './components/messages-settings';
 const any = (arr: Array<any>): boolean => arr.some(Boolean);
 
 const messages = defineMessages({
-  accountAliases: { id: 'navigation_bar.account_aliases', defaultMessage: 'Account aliases' },
-  accountMigration: { id: 'settings.account_migration', defaultMessage: 'Move Account' },
+  accountAliases: {
+    id: 'navigation_bar.account_aliases',
+    defaultMessage: 'Account aliases',
+  },
+  accountMigration: {
+    id: 'settings.account_migration',
+    defaultMessage: 'Move Account',
+  },
   backups: { id: 'column.backups', defaultMessage: 'Backups' },
   blocks: { id: 'settings.blocks', defaultMessage: 'Blocks' },
   changeEmail: { id: 'settings.change_email', defaultMessage: 'Change email' },
-  changePassword: { id: 'settings.change_password', defaultMessage: 'Change password' },
-  configureMfa: { id: 'settings.configure_mfa', defaultMessage: 'Configure MFA' },
-  deleteAccount: { id: 'settings.delete_account', defaultMessage: 'Delete account' },
-  domainBlocks: { id: 'navigation_bar.domain_blocks', defaultMessage: 'Domain blocks' },
+  changePassword: {
+    id: 'settings.change_password',
+    defaultMessage: 'Change password',
+  },
+  configureMfa: {
+    id: 'settings.configure_mfa',
+    defaultMessage: 'Configure MFA',
+  },
+  deleteAccount: {
+    id: 'settings.delete_account',
+    defaultMessage: 'Delete account',
+  },
+  domainBlocks: {
+    id: 'navigation_bar.domain_blocks',
+    defaultMessage: 'Domain blocks',
+  },
   editProfile: { id: 'settings.edit_profile', defaultMessage: 'Edit profile' },
   exportData: { id: 'column.export_data', defaultMessage: 'Export data' },
   filters: { id: 'navigation_bar.filters', defaultMessage: 'Filters' },
-  importData: { id: 'navigation_bar.import_data', defaultMessage: 'Import data' },
-  interactionPolicies: { id: 'column.interaction_policies', defaultMessage: 'Interaction policies' },
+  importData: {
+    id: 'navigation_bar.import_data',
+    defaultMessage: 'Import data',
+  },
+  interactionPolicies: {
+    id: 'column.interaction_policies',
+    defaultMessage: 'Interaction policies',
+  },
   mfaDisabled: { id: 'mfa.disabled', defaultMessage: 'Disabled' },
   mfaEnabled: { id: 'mfa.enabled', defaultMessage: 'Enabled' },
   mutes: { id: 'settings.mutes', defaultMessage: 'Mutes' },
-  mutesAndBlocks: { id: 'settings.mutes_blocks', defaultMessage: 'Mutes and blocks' },
+  mutesAndBlocks: {
+    id: 'settings.mutes_blocks',
+    defaultMessage: 'Mutes and blocks',
+  },
   other: { id: 'settings.other', defaultMessage: 'Other options' },
   preferences: { id: 'settings.preferences', defaultMessage: 'Preferences' },
   profile: { id: 'settings.profile', defaultMessage: 'Profile' },
@@ -59,7 +98,11 @@ const Settings = () => {
   const displayName = account.display_name || account.username;
 
   return (
-    <Column label={intl.formatMessage(messages.settings)} transparent withHeader={false}>
+    <Column
+      label={intl.formatMessage(messages.settings)}
+      transparent
+      withHeader={false}
+    >
       <Card className='space-y-4' variant='rounded'>
         <CardHeader>
           <CardTitle title={intl.formatMessage(messages.profile)} />
@@ -67,7 +110,10 @@ const Settings = () => {
 
         <CardBody>
           <List>
-            <ListItem label={intl.formatMessage(messages.editProfile)} to='/settings/profile'>
+            <ListItem
+              label={intl.formatMessage(messages.editProfile)}
+              to='/settings/profile'
+            >
               <span className='max-w-full truncate'>{displayName}</span>
             </ListItem>
           </List>
@@ -80,10 +126,28 @@ const Settings = () => {
         <CardBody>
           <List>
             <ListItem label={intl.formatMessage(messages.mutes)} to='/mutes' />
-            <ListItem label={intl.formatMessage(messages.blocks)} to='/blocks' />
-            {(features.filters || features.filtersV2) && <ListItem label={intl.formatMessage(messages.filters)} to='/filters' />}
-            {features.federating && <ListItem label={intl.formatMessage(messages.domainBlocks)} to='/domain_blocks' />}
-            {features.interactionRequests && <ListItem label={intl.formatMessage(messages.interactionPolicies)} to='/settings/interaction_policies' />}
+            <ListItem
+              label={intl.formatMessage(messages.blocks)}
+              to='/blocks'
+            />
+            {(features.filters || features.filtersV2) && (
+              <ListItem
+                label={intl.formatMessage(messages.filters)}
+                to='/filters'
+              />
+            )}
+            {features.federating && (
+              <ListItem
+                label={intl.formatMessage(messages.domainBlocks)}
+                to='/domain_blocks'
+              />
+            )}
+            {features.interactionRequests && (
+              <ListItem
+                label={intl.formatMessage(messages.interactionPolicies)}
+                to='/settings/interaction_policies'
+              />
+            )}
           </List>
         </CardBody>
 
@@ -100,21 +164,37 @@ const Settings = () => {
 
             <CardBody>
               <List>
-                {features.changeEmail && <ListItem label={intl.formatMessage(messages.changeEmail)} to='/settings/email' />}
-                {features.changePassword && <ListItem label={intl.formatMessage(messages.changePassword)} to='/settings/password' />}
+                {features.changeEmail && (
+                  <ListItem
+                    label={intl.formatMessage(messages.changeEmail)}
+                    to='/settings/email'
+                  />
+                )}
+                {features.changePassword && (
+                  <ListItem
+                    label={intl.formatMessage(messages.changePassword)}
+                    to='/settings/password'
+                  />
+                )}
                 {features.manageMfa && (
                   <>
-                    <ListItem label={intl.formatMessage(messages.configureMfa)} to='/settings/mfa'>
+                    <ListItem
+                      label={intl.formatMessage(messages.configureMfa)}
+                      to='/settings/mfa'
+                    >
                       <span>
-                        {isMfaEnabled ?
-                          intl.formatMessage(messages.mfaEnabled) :
-                          intl.formatMessage(messages.mfaDisabled)}
+                        {isMfaEnabled
+                          ? intl.formatMessage(messages.mfaEnabled)
+                          : intl.formatMessage(messages.mfaDisabled)}
                       </span>
                     </ListItem>
                   </>
                 )}
                 {features.sessions && (
-                  <ListItem label={intl.formatMessage(messages.sessions)} to='/settings/tokens' />
+                  <ListItem
+                    label={intl.formatMessage(messages.sessions)}
+                    to='/settings/tokens'
+                  />
                 )}
               </List>
             </CardBody>
@@ -124,7 +204,11 @@ const Settings = () => {
         {features.chats ? (
           <>
             <CardHeader>
-              <CardTitle title={<FormattedMessage id='column.chats' defaultMessage='Chats' />} />
+              <CardTitle
+                title={
+                  <FormattedMessage id='column.chats' defaultMessage='Chats' />
+                }
+              />
             </CardHeader>
 
             <CardBody>
@@ -158,26 +242,53 @@ const Settings = () => {
 
             <CardBody>
               <List>
-                {(features.importBlocks || features.importFollows || features.importMutes) && (
-                  <ListItem label={intl.formatMessage(messages.importData)} to='/settings/import' />
+                {(features.importBlocks ||
+                  features.importFollows ||
+                  features.importMutes) && (
+                  <ListItem
+                    label={intl.formatMessage(messages.importData)}
+                    to='/settings/import'
+                  />
                 )}
 
                 {features.exportData && (
-                  <ListItem label={intl.formatMessage(messages.exportData)} to='/settings/export' />
+                  <ListItem
+                    label={intl.formatMessage(messages.exportData)}
+                    to='/settings/export'
+                  />
                 )}
 
                 {features.accountBackups && (
-                  <ListItem label={intl.formatMessage(messages.backups)} to='/settings/backups' />
+                  <ListItem
+                    label={intl.formatMessage(messages.backups)}
+                    to='/settings/backups'
+                  />
                 )}
 
-                {features.federating && (features.accountMoving ? (
-                  <ListItem label={intl.formatMessage(messages.accountMigration)} to='/settings/migration' />
-                ) : features.manageAccountAliases && (
-                  <ListItem label={intl.formatMessage(messages.accountAliases)} to='/settings/aliases' />
-                ))}
+                {features.federating &&
+                  (features.accountMoving ? (
+                    <ListItem
+                      label={intl.formatMessage(messages.accountMigration)}
+                      to='/settings/migration'
+                    />
+                  ) : (
+                    features.manageAccountAliases && (
+                      <ListItem
+                        label={intl.formatMessage(messages.accountAliases)}
+                        to='/settings/aliases'
+                      />
+                    )
+                  ))}
 
                 {features.deleteAccount && (
-                  <ListItem label={<Text theme='danger'>{intl.formatMessage(messages.deleteAccount)}</Text>} to='/settings/account' />
+                  <ListItem
+                    label={
+                      <Text theme='danger'>
+                        {intl.formatMessage(messages.deleteAccount)}
+                      </Text>
+                    }
+                    to='/settings/account'
+                  />
                 )}
               </List>
             </CardBody>

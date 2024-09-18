@@ -16,7 +16,6 @@ const AutosuggestAccount: React.FC<IAutosuggestAccount> = ({ id }) => {
       <Account account={account} hideActions showProfileHoverCard={false} />
     </div>
   );
-
 };
 
 export { AutosuggestAccount as default };

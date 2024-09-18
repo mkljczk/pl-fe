@@ -16,32 +16,40 @@ interface UseAccountLookupOpts {
   withScrobble?: boolean;
 }
 
-const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts = {}) => {
+const useAccountLookup = (
+  acct: string | undefined,
+  opts: UseAccountLookupOpts = {},
+) => {
   const client = useClient();
   const features = useFeatures();
   const history = useHistory();
   const { me } = useLoggedIn();
   const { withRelationship, withScrobble } = opts;
 
-  const { entity: account, isUnauthorized, ...result } = useEntityLookup<BaseAccount, Account>(
+  const {
+    entity: account,
+    isUnauthorized,
+    ...result
+  } = useEntityLookup<BaseAccount, Account>(
     Entities.ACCOUNTS,
     (account) => account.acct.toLowerCase() === acct?.toLowerCase(),
     () => client.accounts.lookupAccount(acct!),
     { enabled: !!acct, transform: normalizeAccount },
   );
 
-  const {
-    relationship,
-    isLoading: isRelationshipLoading,
-  } = useRelationship(account?.id, { enabled: withRelationship });
+  const { relationship, isLoading: isRelationshipLoading } = useRelationship(
+    account?.id,
+    { enabled: withRelationship },
+  );
 
-  const {
-    scrobble,
-    isLoading: isScrobbleLoading,
-  } = useAccountScrobble(account?.id, { enabled: withScrobble });
+  const { scrobble, isLoading: isScrobbleLoading } = useAccountScrobble(
+    account?.id,
+    { enabled: withScrobble },
+  );
 
   const isBlocked = account?.relationship?.blocked_by === true;
-  const isUnavailable = (me === account?.id) ? false : (isBlocked && !features.blockersVisible);
+  const isUnavailable =
+    me === account?.id ? false : isBlocked && !features.blockersVisible;
 
   useEffect(() => {
     if (isUnauthorized) {

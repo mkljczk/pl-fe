@@ -14,17 +14,24 @@ import type { ReducerCompose } from 'pl-fe/reducers/compose';
 
 const messages = defineMessages({
   confirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },
-  cancelEditing: { id: 'confirmations.cancel_editing.confirm', defaultMessage: 'Cancel editing' },
-  saveDraft: { id: 'confirmations.cancel_editing.save_draft', defaultMessage: 'Save draft' },
+  cancelEditing: {
+    id: 'confirmations.cancel_editing.confirm',
+    defaultMessage: 'Cancel editing',
+  },
+  saveDraft: {
+    id: 'confirmations.cancel_editing.save_draft',
+    defaultMessage: 'Save draft',
+  },
 });
 
 const checkComposeContent = (compose?: ReturnType<typeof ReducerCompose>) =>
-  !!compose && [
+  !!compose &&
+  [
     compose.editorState && compose.editorState.length > 0,
     compose.spoiler_text.length > 0,
     compose.media_attachments.size > 0,
     compose.poll !== null,
-  ].some(check => check === true);
+  ].some((check) => check === true);
 
 // const checkEventComposeContent = (compose?: ReturnType<typeof ReducerComposeEvent>) =>
 //   !!compose && [
@@ -41,7 +48,12 @@ interface IModalRoot {
   children: React.ReactNode;
 }
 
-const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) => {
+const ModalRoot: React.FC<IModalRoot> = ({
+  children,
+  onCancel,
+  onClose,
+  type,
+}) => {
   const intl = useIntl();
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -51,7 +63,9 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   const [revealed, setRevealed] = useState(!!children);
 
   const ref = useRef<HTMLDivElement>(null);
-  const activeElement = useRef<HTMLDivElement | null>(revealed ? document.activeElement as HTMLDivElement | null : null);
+  const activeElement = useRef<HTMLDivElement | null>(
+    revealed ? (document.activeElement as HTMLDivElement | null) : null,
+  );
   const modalHistoryKey = useRef<number>();
   const unlistenHistory = useRef<ReturnType<typeof history.listen>>();
 
@@ -74,12 +88,28 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
       if (hasComposeContent && type === 'COMPOSE') {
         const isEditing = compose!.id !== null;
         openModal('CONFIRM', {
-          heading: isEditing
-            ? <FormattedMessage id='confirmations.cancel_editing.heading' defaultMessage='Cancel post editing' />
-            : <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />,
-          message: isEditing
-            ? <FormattedMessage id='confirmations.cancel_editing.message' defaultMessage='Are you sure you want to cancel editing this post? All changes will be lost.' />
-            : <FormattedMessage id='confirmations.cancel.message' defaultMessage='Are you sure you want to cancel creating this post?' />,
+          heading: isEditing ? (
+            <FormattedMessage
+              id='confirmations.cancel_editing.heading'
+              defaultMessage='Cancel post editing'
+            />
+          ) : (
+            <FormattedMessage
+              id='confirmations.cancel.heading'
+              defaultMessage='Discard post'
+            />
+          ),
+          message: isEditing ? (
+            <FormattedMessage
+              id='confirmations.cancel_editing.message'
+              defaultMessage='Are you sure you want to cancel editing this post? All changes will be lost.'
+            />
+          ) : (
+            <FormattedMessage
+              id='confirmations.cancel.message'
+              defaultMessage='Are you sure you want to cancel creating this post?'
+            />
+          ),
           confirm: intl.formatMessage(messages.confirm),
           onConfirm: () => {
             onClose('COMPOSE');
@@ -89,32 +119,37 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
             onClose('CONFIRM');
           },
           secondary: intl.formatMessage(messages.saveDraft),
-          onSecondary: isEditing ? undefined : () => {
-            dispatch(saveDraftStatus('compose-modal'));
-            onClose('COMPOSE');
-            dispatch(cancelReplyCompose());
-          },
+          onSecondary: isEditing
+            ? undefined
+            : () => {
+                dispatch(saveDraftStatus('compose-modal'));
+                onClose('COMPOSE');
+                dispatch(cancelReplyCompose());
+              },
         });
-      // TODO: restore this functionality
-      // } else if (hasEventComposeContent && type === 'COMPOSE_EVENT') {
-      //   const isEditing = getState().compose_event.id !== null;
-      //   openModal('CONFIRM', {
-      //     heading: isEditing
-      //       ? <FormattedMessage id='confirmations.cancel_event_editing.heading' defaultMessage='Cancel event editing' />
-      //       : <FormattedMessage id='confirmations.delete_event.heading' defaultMessage='Delete event' />,
-      //     message: isEditing
-      //       ? <FormattedMessage id='confirmations.cancel_event_editing.message' defaultMessage='Are you sure you want to cancel editing this event? All changes will be lost.' />
-      //       : <FormattedMessage id='confirmations.delete_event.message' defaultMessage='Are you sure you want to delete this event?' />,
-      //     confirm: intl.formatMessage(isEditing ? messages.cancelEditing : messages.confirm),
-      //     onConfirm: () => {
-      //       onClose('COMPOSE_EVENT');
-      //       dispatch(cancelEventCompose());
-      //     },
-      //     onCancel: () => {
-      //       onClose('CONFIRM');
-      //     },
-      //   });
-      } else if ((hasComposeContent/* || hasEventComposeContent */) && type === 'CONFIRM') {
+        // TODO: restore this functionality
+        // } else if (hasEventComposeContent && type === 'COMPOSE_EVENT') {
+        //   const isEditing = getState().compose_event.id !== null;
+        //   openModal('CONFIRM', {
+        //     heading: isEditing
+        //       ? <FormattedMessage id='confirmations.cancel_event_editing.heading' defaultMessage='Cancel event editing' />
+        //       : <FormattedMessage id='confirmations.delete_event.heading' defaultMessage='Delete event' />,
+        //     message: isEditing
+        //       ? <FormattedMessage id='confirmations.cancel_event_editing.message' defaultMessage='Are you sure you want to cancel editing this event? All changes will be lost.' />
+        //       : <FormattedMessage id='confirmations.delete_event.message' defaultMessage='Are you sure you want to delete this event?' />,
+        //     confirm: intl.formatMessage(isEditing ? messages.cancelEditing : messages.confirm),
+        //     onConfirm: () => {
+        //       onClose('COMPOSE_EVENT');
+        //       dispatch(cancelEventCompose());
+        //     },
+        //     onCancel: () => {
+        //       onClose('CONFIRM');
+        //     },
+        //   });
+      } else if (
+        hasComposeContent /* || hasEventComposeContent */ &&
+        type === 'CONFIRM'
+      ) {
         onClose('CONFIRM');
       } else {
         onClose();
@@ -124,7 +159,11 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Tab') {
-      const focusable = Array.from(ref.current!.querySelectorAll('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')).filter((x) => window.getComputedStyle(x).display !== 'none');
+      const focusable = Array.from(
+        ref.current!.querySelectorAll(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((x) => window.getComputedStyle(x).display !== 'none');
       const index = focusable.indexOf(e.target as Element);
 
       let element;
@@ -169,13 +208,17 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   const ensureHistoryBuffer = () => {
     const { pathname, state } = history.location;
     if (!state || (state as any).plFeModalKey !== modalHistoryKey.current) {
-      history.push(pathname, { ...(state as any), plFeModalKey: modalHistoryKey.current });
+      history.push(pathname, {
+        ...(state as any),
+        plFeModalKey: modalHistoryKey.current,
+      });
     }
   };
 
-  const getSiblings = () => Array(...(ref.current!.parentElement!.childNodes as any as ChildNode[]))
-    .filter(node => (node as HTMLDivElement).id !== 'toaster')
-    .filter(node => node !== ref.current);
+  const getSiblings = () =>
+    Array(...(ref.current!.parentElement!.childNodes as any as ChildNode[]))
+      .filter((node) => (node as HTMLDivElement).id !== 'toaster')
+      .filter((node) => node !== ref.current);
 
   useEffect(() => {
     if (!visible) return;
@@ -192,7 +235,9 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   useEffect(() => {
     if (!!children && !prevChildren) {
       activeElement.current = document.activeElement as HTMLDivElement;
-      getSiblings().forEach(sibling => (sibling as HTMLDivElement).setAttribute('inert', 'true'));
+      getSiblings().forEach((sibling) =>
+        (sibling as HTMLDivElement).setAttribute('inert', 'true'),
+      );
 
       handleModalOpen();
     } else if (!prevChildren) {
@@ -202,7 +247,9 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
     if (!children && !!prevChildren) {
       activeElement.current?.focus();
       activeElement.current = null;
-      getSiblings().forEach(sibling => (sibling as HTMLDivElement).removeAttribute('inert'));
+      getSiblings().forEach((sibling) =>
+        (sibling as HTMLDivElement).removeAttribute('inert'),
+      );
 
       handleModalClose();
     }
@@ -225,17 +272,23 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   return (
     <div
       ref={ref}
-      className={clsx('fixed left-0 top-0 z-[100] h-full w-full overflow-y-auto overflow-x-hidden transition-opacity ease-in-out', {
-        'pointer-events-none': !visible,
-      })}
+      className={clsx(
+        'fixed left-0 top-0 z-[100] h-full w-full overflow-y-auto overflow-x-hidden transition-opacity ease-in-out',
+        {
+          'pointer-events-none': !visible,
+        },
+      )}
       style={{ opacity: revealed ? 1 : 0 }}
     >
       <div
         role='presentation'
         id='modal-overlay'
-        className={clsx('fixed inset-0 bg-gray-500/90 black:bg-gray-900/90 dark:bg-gray-700/90', {
-          'opacity-60': type === 'DROPDOWN_MENU',
-        })}
+        className={clsx(
+          'fixed inset-0 bg-gray-500/90 black:bg-gray-900/90 dark:bg-gray-700/90',
+          {
+            'opacity-60': type === 'DROPDOWN_MENU',
+          },
+        )}
         onClick={handleOnClose}
       />
 
@@ -253,7 +306,4 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   );
 };
 
-export {
-  checkComposeContent,
-  ModalRoot as default,
-};
+export { checkComposeContent, ModalRoot as default };

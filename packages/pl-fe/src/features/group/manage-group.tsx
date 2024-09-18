@@ -5,7 +5,14 @@ import { useHistory } from 'react-router-dom';
 
 import { useDeleteGroup, useGroup } from 'pl-fe/api/hooks';
 import List, { ListItem } from 'pl-fe/components/list';
-import { CardBody, CardHeader, CardTitle, Column, Spinner, Text } from 'pl-fe/components/ui';
+import {
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Column,
+  Spinner,
+  Text,
+} from 'pl-fe/components/ui';
 import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 
@@ -16,15 +23,37 @@ type RouteParams = { groupId: string };
 const messages = defineMessages({
   heading: { id: 'column.manage_group', defaultMessage: 'Manage group' },
   editGroup: { id: 'manage_group.edit_group', defaultMessage: 'Edit group' },
-  pendingRequests: { id: 'manage_group.pending_requests', defaultMessage: 'Pending requests' },
-  blockedMembers: { id: 'manage_group.blocked_members', defaultMessage: 'Banned members' },
-  deleteGroup: { id: 'manage_group.delete_group', defaultMessage: 'Delete group' },
-  deleteConfirm: { id: 'confirmations.delete_group.confirm', defaultMessage: 'Delete' },
-  deleteHeading: { id: 'confirmations.delete_group.heading', defaultMessage: 'Delete group' },
-  deleteMessage: { id: 'confirmations.delete_group.message', defaultMessage: 'Are you sure you want to delete this group? This is a permanent action that cannot be undone.' },
+  pendingRequests: {
+    id: 'manage_group.pending_requests',
+    defaultMessage: 'Pending requests',
+  },
+  blockedMembers: {
+    id: 'manage_group.blocked_members',
+    defaultMessage: 'Banned members',
+  },
+  deleteGroup: {
+    id: 'manage_group.delete_group',
+    defaultMessage: 'Delete group',
+  },
+  deleteConfirm: {
+    id: 'confirmations.delete_group.confirm',
+    defaultMessage: 'Delete',
+  },
+  deleteHeading: {
+    id: 'confirmations.delete_group.heading',
+    defaultMessage: 'Delete group',
+  },
+  deleteMessage: {
+    id: 'confirmations.delete_group.message',
+    defaultMessage:
+      'Are you sure you want to delete this group? This is a permanent action that cannot be undone.',
+  },
   members: { id: 'group.tabs.members', defaultMessage: 'Members' },
   other: { id: 'settings.other', defaultMessage: 'Other options' },
-  deleteSuccess: { id: 'group.delete.success', defaultMessage: 'Group successfully deleted' },
+  deleteSuccess: {
+    id: 'group.delete.success',
+    defaultMessage: 'Group successfully deleted',
+  },
 });
 
 interface IManageGroup {
@@ -52,8 +81,11 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
     );
   }
 
-  if (!group.relationship.role || !['owner', 'admin', 'moderator'].includes(group.relationship.role)) {
-    return (<ColumnForbidden />);
+  if (
+    !group.relationship.role ||
+    !['owner', 'admin', 'moderator'].includes(group.relationship.role)
+  ) {
+    return <ColumnForbidden />;
   }
 
   const onDeleteGroup = () =>
@@ -72,7 +104,10 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
     });
 
   return (
-    <Column label={intl.formatMessage(messages.heading)} backHref={`/groups/${group.id}`}>
+    <Column
+      label={intl.formatMessage(messages.heading)}
+      backHref={`/groups/${group.id}`}
+    >
       <CardBody className='space-y-4'>
         {isOwner && (
           <>
@@ -81,8 +116,13 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
             </CardHeader>
 
             <List>
-              <ListItem label={intl.formatMessage(messages.editGroup)} to={`/groups/${group.id}/manage/edit`}>
-                <span dangerouslySetInnerHTML={{ __html: group.display_name_html }} />
+              <ListItem
+                label={intl.formatMessage(messages.editGroup)}
+                to={`/groups/${group.id}/manage/edit`}
+              >
+                <span
+                  dangerouslySetInnerHTML={{ __html: group.display_name_html }}
+                />
               </ListItem>
             </List>
           </>
@@ -93,9 +133,15 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
         </CardHeader>
 
         <List>
-          <ListItem label={intl.formatMessage(messages.pendingRequests)} to={`/groups/${group.id}/manage/requests`} />
+          <ListItem
+            label={intl.formatMessage(messages.pendingRequests)}
+            to={`/groups/${group.id}/manage/requests`}
+          />
 
-          <ListItem label={intl.formatMessage(messages.blockedMembers)} to={`/groups/${group.id}/manage/blocks`} />
+          <ListItem
+            label={intl.formatMessage(messages.blockedMembers)}
+            to={`/groups/${group.id}/manage/blocks`}
+          />
         </List>
 
         {isOwner && (
@@ -105,7 +151,14 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
             </CardHeader>
 
             <List>
-              <ListItem label={<Text theme='danger'>{intl.formatMessage(messages.deleteGroup)}</Text>} onClick={onDeleteGroup} />
+              <ListItem
+                label={
+                  <Text theme='danger'>
+                    {intl.formatMessage(messages.deleteGroup)}
+                  </Text>
+                }
+                onClick={onDeleteGroup}
+              />
             </List>
           </>
         )}

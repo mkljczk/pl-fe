@@ -8,7 +8,12 @@ import { fetchGroupTimeline } from 'pl-fe/actions/timelines';
 import { useGroup, useGroupStream } from 'pl-fe/api/hooks';
 import { Avatar, HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
 import ComposeForm from 'pl-fe/features/compose/components/compose-form';
-import { useAppDispatch, useAppSelector, useDraggedFiles, useOwnAccount } from 'pl-fe/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useDraggedFiles,
+  useOwnAccount,
+} from 'pl-fe/hooks';
 import { makeGetStatusIds } from 'pl-fe/selectors';
 
 import Timeline from '../ui/components/timeline';
@@ -33,7 +38,9 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
 
   const composeId = `group:${groupId}`;
   const canComposeGroupStatus = !!account && group?.relationship?.member;
-  const featuredStatusIds = useAppSelector((state) => getStatusIds(state, { type: `group:${group?.id}:pinned` }));
+  const featuredStatusIds = useAppSelector((state) =>
+    getStatusIds(state, { type: `group:${group?.id}:pinned` }),
+  );
 
   const { isDragging, isDraggedOver } = useDraggedFiles(composer, (files) => {
     dispatch(uploadCompose(composeId, files, intl));
@@ -64,12 +71,17 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
             alignItems='start'
             space={2}
             className={clsx('relative rounded-xl transition', {
-              'border-2 border-primary-600 border-dashed z-[99] p-4': isDragging,
+              'border-2 border-primary-600 border-dashed z-[99] p-4':
+                isDragging,
               'ring-2 ring-offset-2 ring-primary-600': isDraggedOver,
             })}
           >
             <Link to={`/@${account.acct}`}>
-              <Avatar src={account.avatar} alt={account.avatar_description} size={42} />
+              <Avatar
+                src={account.avatar}
+                alt={account.avatar_description}
+                size={42}
+              />
             </Link>
 
             <ComposeForm
@@ -89,7 +101,12 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
         timelineId={composeId}
         onLoadMore={handleLoadMore}
         emptyMessage={
-          <Stack space={4} className='py-6' justifyContent='center' alignItems='center'>
+          <Stack
+            space={4}
+            className='py-6'
+            justifyContent='center'
+            alignItems='center'
+          >
             <div className='rounded-full bg-gray-200 p-4 dark:bg-gray-800'>
               <Icon
                 src={require('@tabler/icons/outline/message-2.svg')}
@@ -98,7 +115,10 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
             </div>
 
             <Text theme='muted'>
-              <FormattedMessage id='empty_column.group' defaultMessage='There are no posts in this group yet.' />
+              <FormattedMessage
+                id='empty_column.group'
+                defaultMessage='There are no posts in this group yet.'
+              />
             </Text>
           </Stack>
         }

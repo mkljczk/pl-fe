@@ -15,7 +15,9 @@ const ReplyGroupIndicator = (props: IReplyGroupIndicator) => {
 
   const getStatus = useCallback(makeGetStatus(), []);
 
-  const status = useAppSelector((state) => getStatus(state, { id: state.compose.get(composeId)?.in_reply_to! }));
+  const status = useAppSelector((state) =>
+    getStatus(state, { id: state.compose.get(composeId)?.in_reply_to! }),
+  );
   const group = status?.group;
 
   if (!group) {
@@ -28,10 +30,12 @@ const ReplyGroupIndicator = (props: IReplyGroupIndicator) => {
         id='compose.reply_group_indicator.message'
         defaultMessage='Posting to {groupLink}'
         values={{
-          groupLink: <Link
-            to={`/groups/${group.id}`}
-            dangerouslySetInnerHTML={{ __html: group.display_name_html }}
-          />,
+          groupLink: (
+            <Link
+              to={`/groups/${group.id}`}
+              dangerouslySetInnerHTML={{ __html: group.display_name_html }}
+            />
+          ),
         }}
       />
     </Text>

@@ -12,9 +12,7 @@
     "domain_count": 0
   },
   "thumbnail": "https://ica.mkljczk.plimages/friendica-32.png",
-  "languages": [
-    "pl"
-  ],
+  "languages": ["pl"],
   "max_toot_chars": 200000,
   "registrations": true,
   "approval_required": false,

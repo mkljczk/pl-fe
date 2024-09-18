@@ -4,8 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import { Button, Stack, Text } from 'pl-fe/components/ui';
 
-interface IBlankslate {
-}
+interface IBlankslate {}
 
 /** To display on the chats main page when no message is selected. */
 const BlankslateEmpty: React.FC<IBlankslate> = () => {
@@ -16,7 +15,12 @@ const BlankslateEmpty: React.FC<IBlankslate> = () => {
   };
 
   return (
-    <Stack space={6} alignItems='center' justifyContent='center' className='h-full p-6'>
+    <Stack
+      space={6}
+      alignItems='center'
+      justifyContent='center'
+      className='h-full p-6'
+    >
       <Stack space={2} className='max-w-sm'>
         <Text size='2xl' weight='bold' tag='h2' align='center'>
           <FormattedMessage

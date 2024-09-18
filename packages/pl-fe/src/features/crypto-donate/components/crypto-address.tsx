@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CopyableInput from 'pl-fe/components/copyable-input';
-import { Text, Icon, Stack, HStack } from 'pl-fe/components/ui';
+import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
 import { useModalsStore } from 'pl-fe/stores';
 
 import { getExplorerUrl } from '../utils/block-explorer';
@@ -40,28 +40,34 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props): JSX.Element => {
         <Text weight='bold'>{title || ticker.toUpperCase()}</Text>
 
         <HStack alignItems='center' className='ml-auto'>
-          <a className='ml-1 text-gray-500 rtl:ml-0 rtl:mr-1' href='#' onClick={handleModalClick}>
+          <a
+            className='ml-1 text-gray-500 rtl:ml-0 rtl:mr-1'
+            href='#'
+            onClick={handleModalClick}
+          >
             <Icon src={require('@tabler/icons/outline/qrcode.svg')} size={20} />
           </a>
 
           {explorerUrl && (
-            <a className='ml-1 text-gray-500 rtl:ml-0 rtl:mr-1' href={explorerUrl} target='_blank'>
-              <Icon src={require('@tabler/icons/outline/external-link.svg')} size={20} />
+            <a
+              className='ml-1 text-gray-500 rtl:ml-0 rtl:mr-1'
+              href={explorerUrl}
+              target='_blank'
+            >
+              <Icon
+                src={require('@tabler/icons/outline/external-link.svg')}
+                size={20}
+              />
             </a>
           )}
         </HStack>
       </HStack>
 
-      {note && (
-        <Text>{note}</Text>
-      )}
+      {note && <Text>{note}</Text>}
 
       <CopyableInput value={address} />
     </Stack>
   );
 };
 
-export {
-  type ICryptoAddress,
-  CryptoAddress as default,
-};
+export { type ICryptoAddress, CryptoAddress as default };

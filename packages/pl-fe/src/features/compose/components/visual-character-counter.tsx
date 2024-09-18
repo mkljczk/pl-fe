@@ -5,7 +5,11 @@ import { length } from 'stringz';
 import ProgressCircle from 'pl-fe/components/progress-circle';
 
 const messages = defineMessages({
-  title: { id: 'compose.character_counter.title', defaultMessage: 'Used {chars} out of {maxChars} {maxChars, plural, one {character} other {characters}}' },
+  title: {
+    id: 'compose.character_counter.title',
+    defaultMessage:
+      'Used {chars} out of {maxChars} {maxChars, plural, one {character} other {characters}}',
+  },
 });
 
 interface IVisualCharacterCounter {
@@ -16,7 +20,10 @@ interface IVisualCharacterCounter {
 }
 
 /** Renders a character counter */
-const VisualCharacterCounter: React.FC<IVisualCharacterCounter> = ({ text, max }) => {
+const VisualCharacterCounter: React.FC<IVisualCharacterCounter> = ({
+  text,
+  max,
+}) => {
   const intl = useIntl();
 
   const textLength = length(text);
@@ -24,7 +31,10 @@ const VisualCharacterCounter: React.FC<IVisualCharacterCounter> = ({ text, max }
 
   return (
     <ProgressCircle
-      title={intl.formatMessage(messages.title, { chars: textLength, maxChars: max })}
+      title={intl.formatMessage(messages.title, {
+        chars: textLength,
+        maxChars: max,
+      })}
       progress={progress}
       radius={10}
       stroke={3}

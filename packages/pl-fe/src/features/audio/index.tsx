@@ -91,7 +91,9 @@ const Audio: React.FC<IAudio> = (props) => {
   const _setDimensions = () => {
     if (player.current) {
       const width = player.current.offsetWidth;
-      const height = fullscreen ? player.current.offsetHeight : (width / (16 / 9));
+      const height = fullscreen
+        ? player.current.offsetHeight
+        : width / (16 / 9);
 
       if (cacheWidth) {
         cacheWidth(width);
@@ -116,13 +118,17 @@ const Audio: React.FC<IAudio> = (props) => {
     setPaused(!paused);
   };
 
-  const handleResize = debounce(() => {
-    if (player.current) {
-      _setDimensions();
-    }
-  }, 250, {
-    trailing: true,
-  });
+  const handleResize = debounce(
+    () => {
+      if (player.current) {
+        _setDimensions();
+      }
+    },
+    250,
+    {
+      trailing: true,
+    },
+  );
 
   const handlePlay = () => {
     setPaused(false);
@@ -144,7 +150,13 @@ const Audio: React.FC<IAudio> = (props) => {
       const lastTimeRange = audio.current.buffered.length - 1;
 
       if (lastTimeRange > -1) {
-        setBuffer(Math.ceil(audio.current.buffered.end(lastTimeRange) / audio.current.duration * 100));
+        setBuffer(
+          Math.ceil(
+            (audio.current.buffered.end(lastTimeRange) /
+              audio.current.duration) *
+              100,
+          ),
+        );
       }
     }
   };
@@ -159,7 +171,7 @@ const Audio: React.FC<IAudio> = (props) => {
     }
   };
 
-  const handleVolumeMouseDown: React.MouseEventHandler = e => {
+  const handleVolumeMouseDown: React.MouseEventHandler = (e) => {
     document.addEventListener('mousemove', handleMouseVolSlide, true);
     document.addEventListener('mouseup', handleVolumeMouseUp, true);
     document.addEventListener('touchmove', handleMouseVolSlide, true);
@@ -178,7 +190,7 @@ const Audio: React.FC<IAudio> = (props) => {
     document.removeEventListener('touchend', handleVolumeMouseUp, true);
   };
 
-  const handleMouseDown: React.MouseEventHandler = e => {
+  const handleMouseDown: React.MouseEventHandler = (e) => {
     document.addEventListener('mousemove', handleMouseMove, true);
     document.addEventListener('mouseup', handleMouseUp, true);
     document.addEventListener('touchmove', handleMouseMove, true);
@@ -221,7 +233,7 @@ const Audio: React.FC<IAudio> = (props) => {
     }
   };
 
-  const handleMouseVolSlide = throttle(e => {
+  const handleMouseVolSlide = throttle((e) => {
     if (audio.current && slider.current) {
       const { x } = getPointerPosition(slider.current, e);
 
@@ -232,24 +244,30 @@ const Audio: React.FC<IAudio> = (props) => {
     }
   }, 15);
 
-  const handleScroll = throttle(() => {
-    if (!canvas.current || !audio.current) {
-      return;
-    }
-
-    const { top, height } = canvas.current.getBoundingClientRect();
-    const inView = (top <= (window.innerHeight || document.documentElement.clientHeight)) && (top + height >= 0);
-
-    if (!paused && !inView) {
-      audio.current.pause();
-
-      if (deployPictureInPicture) {
-        deployPictureInPicture('audio', _pack());
+  const handleScroll = throttle(
+    () => {
+      if (!canvas.current || !audio.current) {
+        return;
       }
 
-      setPaused(true);
-    }
-  }, 150, { trailing: true });
+      const { top, height } = canvas.current.getBoundingClientRect();
+      const inView =
+        top <= (window.innerHeight || document.documentElement.clientHeight) &&
+        top + height >= 0;
+
+      if (!paused && !inView) {
+        audio.current.pause();
+
+        if (deployPictureInPicture) {
+          deployPictureInPicture('audio', _pack());
+        }
+
+        setPaused(true);
+      }
+    },
+    150,
+    { trailing: true },
+  );
 
   const handleMouseEnter = () => {
     setHovered(true);
@@ -316,16 +334,25 @@ const Audio: React.FC<IAudio> = (props) => {
   };
 
   const _draw = () => {
-    visualizer.current?.draw(_getCX(), _getCY(), _getAccentColor(), _getRadius(), _getScaleCoefficient());
+    visualizer.current?.draw(
+      _getCX(),
+      _getCY(),
+      _getAccentColor(),
+      _getRadius(),
+      _getScaleCoefficient(),
+    );
   };
 
-  const _getRadius = (): number => ((height || props.height || 0) - (PADDING * _getScaleCoefficient()) * 2) / 2;
+  const _getRadius = (): number =>
+    ((height || props.height || 0) - PADDING * _getScaleCoefficient() * 2) / 2;
 
-  const _getScaleCoefficient = (): number => (height || props.height || 0) / 982;
+  const _getScaleCoefficient = (): number =>
+    (height || props.height || 0) / 982;
 
   const _getCX = (): number => Math.floor((width || 0) / 2);
 
-  const _getCY = (): number => Math.floor(_getRadius() + (PADDING * _getScaleCoefficient()));
+  const _getCY = (): number =>
+    Math.floor(_getRadius() + PADDING * _getScaleCoefficient());
 
   const _getAccentColor = (): string => accentColor || '#ffffff';
 
@@ -344,7 +371,7 @@ const Audio: React.FC<IAudio> = (props) => {
     }
   };
 
-  const handleAudioKeyDown: React.KeyboardEventHandler = e => {
+  const handleAudioKeyDown: React.KeyboardEventHandler = (e) => {
     // On the audio element or the seek bar, we can safely use the space bar
     // for playback control because there are no buttons to press
 
@@ -355,7 +382,7 @@ const Audio: React.FC<IAudio> = (props) => {
     }
   };
 
-  const handleKeyDown: React.KeyboardEventHandler = e => {
+  const handleKeyDown: React.KeyboardEventHandler = (e) => {
     switch (e.key) {
       case 'k':
         e.preventDefault();
@@ -424,19 +451,22 @@ const Audio: React.FC<IAudio> = (props) => {
 
   return (
     <div
-      className={clsx('relative box-border overflow-hidden rounded-[10px] bg-black pb-11 [direction:ltr]', { 'rounded-none h-full': editable })}
+      className={clsx(
+        'relative box-border overflow-hidden rounded-[10px] bg-black pb-11 [direction:ltr]',
+        { 'rounded-none h-full': editable },
+      )}
       ref={player}
       style={{
         backgroundColor: _getBackgroundColor(),
         color: _getForegroundColor(),
         width: '100%',
-        height: fullscreen ? '100%' : (height || props.height),
+        height: fullscreen ? '100%' : height || props.height,
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       tabIndex={0}
       onKeyDown={handleKeyDown}
-      onClick={e => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
     >
       <audio
         src={src}
@@ -476,9 +506,15 @@ const Audio: React.FC<IAudio> = (props) => {
         />
       )}
 
-      <div className='video-player__seek before:top-0 before:bg-white/10' onMouseDown={handleMouseDown} ref={seek}>
-
-        <div className='absolute top-0 block h-1 rounded bg-white/20' style={{ width: `${buffer}%` }} />
+      <div
+        className='video-player__seek before:top-0 before:bg-white/10'
+        onMouseDown={handleMouseDown}
+        ref={seek}
+      >
+        <div
+          className='absolute top-0 block h-1 rounded bg-white/20'
+          style={{ width: `${buffer}%` }}
+        />
 
         <div
           className='absolute top-0 block h-1 rounded bg-accent-500'
@@ -486,7 +522,9 @@ const Audio: React.FC<IAudio> = (props) => {
         />
 
         <span
-          className={clsx('video-player__seek__handle -top-1', { 'opacity-100': dragging })}
+          className={clsx('video-player__seek__handle -top-1', {
+            'opacity-100': dragging,
+          })}
           tabIndex={0}
           style={{ left: `${progress}%`, backgroundColor: accentColor }}
           onKeyDown={handleAudioKeyDown}
@@ -496,29 +534,50 @@ const Audio: React.FC<IAudio> = (props) => {
       <div className='video-player__controls absolute bottom-0 left-0 z-[2] box-border bg-transparent px-4 py-0 pt-2.5 opacity-100 ring-0 transition-opacity duration-100 ease-in-out'>
         <div className='-mx-[5px] my-0 flex justify-between pb-2'>
           <div className='video-player__buttons left'>
-
             <button
               type='button'
-              title={intl.formatMessage(paused ? messages.play : messages.pause)}
-              aria-label={intl.formatMessage(paused ? messages.play : messages.pause)}
+              title={intl.formatMessage(
+                paused ? messages.play : messages.pause,
+              )}
+              aria-label={intl.formatMessage(
+                paused ? messages.play : messages.pause,
+              )}
               className='player-button text-current opacity-[75] hover:text-current hover:opacity-100 focus:text-current focus:opacity-100 active:text-current active:opacity-100'
               onClick={togglePlay}
             >
-              <Icon src={paused ? require('@tabler/icons/outline/player-play.svg') : require('@tabler/icons/outline/player-pause.svg')} />
+              <Icon
+                src={
+                  paused
+                    ? require('@tabler/icons/outline/player-play.svg')
+                    : require('@tabler/icons/outline/player-pause.svg')
+                }
+              />
             </button>
 
             <button
               type='button'
-              title={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-              aria-label={intl.formatMessage(muted ? messages.unmute : messages.mute)}
+              title={intl.formatMessage(
+                muted ? messages.unmute : messages.mute,
+              )}
+              aria-label={intl.formatMessage(
+                muted ? messages.unmute : messages.mute,
+              )}
               className='player-button text-current opacity-[75] hover:text-current hover:opacity-100 focus:text-current focus:opacity-100 active:text-current active:opacity-100'
               onClick={toggleMute}
             >
-              <Icon src={muted ? require('@tabler/icons/outline/volume-3.svg') : require('@tabler/icons/outline/volume.svg')} />
+              <Icon
+                src={
+                  muted
+                    ? require('@tabler/icons/outline/volume-3.svg')
+                    : require('@tabler/icons/outline/volume.svg')
+                }
+              />
             </button>
 
             <div
-              className={clsx('video-player__volume before:bg-white/10', { 'overflow-visible w-12 mr-4': hovered })}
+              className={clsx('video-player__volume before:bg-white/10', {
+                'overflow-visible w-12 mr-4': hovered,
+              })}
               ref={slider}
               onMouseDown={handleVolumeMouseDown}
             >
@@ -531,18 +590,31 @@ const Audio: React.FC<IAudio> = (props) => {
               />
 
               <span
-                className={clsx('video-player__volume__handle', { 'opacity-100': dragging || hovered })}
+                className={clsx('video-player__volume__handle', {
+                  'opacity-100': dragging || hovered,
+                })}
                 tabIndex={0}
-                style={{ left: `${volume * 100}%`, backgroundColor: _getAccentColor() }}
+                style={{
+                  left: `${volume * 100}%`,
+                  backgroundColor: _getAccentColor(),
+                }}
               />
             </div>
 
             <span className='mx-[5px] my-0 inline flex-initial overflow-hidden text-ellipsis'>
-              <span className='text-sm font-medium text-current'>{formatTime(Math.floor(currentTime))}</span>
-              {getDuration() && (<>
-                <span className='mx-1.5 my-0 inline-block text-sm font-medium text-current'>/</span>
-                <span className='text-sm font-medium text-current'>{formatTime(Math.floor(getDuration()))}</span>
-              </>)}
+              <span className='text-sm font-medium text-current'>
+                {formatTime(Math.floor(currentTime))}
+              </span>
+              {getDuration() && (
+                <>
+                  <span className='mx-1.5 my-0 inline-block text-sm font-medium text-current'>
+                    /
+                  </span>
+                  <span className='text-sm font-medium text-current'>
+                    {formatTime(Math.floor(getDuration()))}
+                  </span>
+                </>
+              )}
             </span>
           </div>
 

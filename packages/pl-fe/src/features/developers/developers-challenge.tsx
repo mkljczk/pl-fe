@@ -2,15 +2,32 @@ import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { changeSettingImmediate } from 'pl-fe/actions/settings';
-import { Column, Button, Form, FormActions, FormGroup, Input, Text } from 'pl-fe/components/ui';
+import {
+  Button,
+  Column,
+  Form,
+  FormActions,
+  FormGroup,
+  Input,
+  Text,
+} from 'pl-fe/components/ui';
 import { useAppDispatch } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.developers', defaultMessage: 'Developers' },
-  answerLabel: { id: 'developers.challenge.answer_label', defaultMessage: 'Answer' },
-  answerPlaceholder: { id: 'developers.challenge.answer_placeholder', defaultMessage: 'Your answer' },
-  success: { id: 'developers.challenge.success', defaultMessage: 'You are now a developer' },
+  answerLabel: {
+    id: 'developers.challenge.answer_label',
+    defaultMessage: 'Answer',
+  },
+  answerPlaceholder: {
+    id: 'developers.challenge.answer_placeholder',
+    defaultMessage: 'Your answer',
+  },
+  success: {
+    id: 'developers.challenge.success',
+    defaultMessage: 'You are now a developer',
+  },
   fail: { id: 'developers.challenge.fail', defaultMessage: 'Wrong answer' },
 });
 
@@ -52,9 +69,7 @@ const DevelopersChallenge = () => {
           {challenge}
         </Text>
 
-        <FormGroup
-          labelText={intl.formatMessage(messages.answerLabel)}
-        >
+        <FormGroup labelText={intl.formatMessage(messages.answerLabel)}>
           <Input
             name='answer'
             placeholder={intl.formatMessage(messages.answerPlaceholder)}
@@ -66,7 +81,10 @@ const DevelopersChallenge = () => {
 
         <FormActions>
           <Button theme='primary' type='submit'>
-            <FormattedMessage id='developers.challenge.submit' defaultMessage='Become a developer' />
+            <FormattedMessage
+              id='developers.challenge.submit'
+              defaultMessage='Become a developer'
+            />
           </Button>
         </FormActions>
       </Form>

@@ -1,8 +1,21 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 import { Components, Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 
-import { Avatar, Button, Divider, Spinner, Stack, Text } from 'pl-fe/components/ui';
+import {
+  Avatar,
+  Button,
+  Divider,
+  Spinner,
+  Stack,
+  Text,
+} from 'pl-fe/components/ui';
 import PlaceholderChatMessage from 'pl-fe/features/placeholder/components/placeholder-chat-message';
 import { useAppSelector } from 'pl-fe/hooks';
 import { useChatActions, useChatMessages } from 'pl-fe/queries/chats';
@@ -14,15 +27,30 @@ import type { ChatMessage as ChatMessageEntity } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   today: { id: 'chats.dividers.today', defaultMessage: 'Today' },
-  blockedBy: { id: 'chat_message_list.blocked_by', defaultMessage: 'You are blocked by' },
-  networkFailureTitle: { id: 'chat_message_list.network_failure.title', defaultMessage: 'Whoops!' },
-  networkFailureSubtitle: { id: 'chat_message_list.network_failure.subtitle', defaultMessage: 'We encountered a network failure.' },
-  networkFailureAction: { id: 'chat_message_list.network_failure.action', defaultMessage: 'Try again' },
+  blockedBy: {
+    id: 'chat_message_list.blocked_by',
+    defaultMessage: 'You are blocked by',
+  },
+  networkFailureTitle: {
+    id: 'chat_message_list.network_failure.title',
+    defaultMessage: 'Whoops!',
+  },
+  networkFailureSubtitle: {
+    id: 'chat_message_list.network_failure.subtitle',
+    defaultMessage: 'We encountered a network failure.',
+  },
+  networkFailureAction: {
+    id: 'chat_message_list.network_failure.action',
+    defaultMessage: 'Try again',
+  },
 });
 
 type TimeFormat = 'today' | 'date';
 
-const timeChange = (prev: Pick<ChatMessageEntity, 'created_at'>, curr: Pick<ChatMessageEntity, 'created_at'>): TimeFormat | null => {
+const timeChange = (
+  prev: Pick<ChatMessageEntity, 'created_at'>,
+  curr: Pick<ChatMessageEntity, 'created_at'>,
+): TimeFormat | null => {
   const prevDate = new Date(prev.created_at).getDate();
   const currDate = new Date(curr.created_at).getDate();
   const nowDate = new Date().getDate();
@@ -82,9 +110,13 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
 
   const formattedChatMessages = chatMessages || [];
 
-  const isBlocked = useAppSelector((state) => state.getIn(['relationships', chat.account.id, 'blocked_by']));
+  const isBlocked = useAppSelector((state) =>
+    state.getIn(['relationships', chat.account.id, 'blocked_by']),
+  );
 
-  const lastChatMessage = chatMessages ? chatMessages[chatMessages.length - 1] : null;
+  const lastChatMessage = chatMessages
+    ? chatMessages[chatMessages.length - 1]
+    : null;
 
   useEffect(() => {
     if (!chatMessages) {
@@ -95,7 +127,9 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
     setFirstItemIndex(nextFirstItemIndex);
   }, [lastChatMessage]);
 
-  const buildCachedMessages = (): Array<ChatMessageEntity | { type: 'divider'; text: string }> => {
+  const buildCachedMessages = (): Array<
+    ChatMessageEntity | { type: 'divider'; text: string }
+  > => {
     if (!chatMessages) {
       return [];
     }
@@ -124,7 +158,10 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
                 minute: '2-digit',
                 month: 'short',
                 day: 'numeric',
-                year: messageDate.getFullYear() !== currentYear ? '2-digit' : undefined,
+                year:
+                  messageDate.getFullYear() !== currentYear
+                    ? '2-digit'
+                    : undefined,
               }),
             });
             break;
@@ -155,7 +192,9 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
     return false;
   }, [firstItemIndex, hasNextPage, isFetching]);
 
-  const renderDivider = (key: React.Key, text: string) => <Divider key={key} text={text} textSize='xs' />;
+  const renderDivider = (key: React.Key, text: string) => (
+    <Divider key={key} text={text} textSize='xs' />
+  );
 
   useEffect(() => {
     const lastMessage = formattedChatMessages[formattedChatMessages.length - 1];
@@ -170,7 +209,7 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
      * Only "mark the message as read" if..
      * 1) it is not pending and
      * 2) it has not already been read
-    */
+     */
     if (!isMessagePending) {
       markChatAsRead(lastMessageId);
     }
@@ -178,14 +217,23 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
 
   if (isBlocked) {
     return (
-      <Stack alignItems='center' justifyContent='center' className='h-full grow'>
+      <Stack
+        alignItems='center'
+        justifyContent='center'
+        className='h-full grow'
+      >
         <Stack alignItems='center' space={2}>
-          <Avatar src={chat.account.avatar} alt={chat.account.avatar_description} size={75} />
+          <Avatar
+            src={chat.account.avatar}
+            alt={chat.account.avatar_description}
+            size={75}
+          />
           <Text align='center'>
             <>
-              <Text tag='span'>{intl.formatMessage(messages.blockedBy)}</Text>
-              {' '}
-              <Text tag='span' theme='primary'>@{chat.account.acct}</Text>
+              <Text tag='span'>{intl.formatMessage(messages.blockedBy)}</Text>{' '}
+              <Text tag='span' theme='primary'>
+                @{chat.account.acct}
+              </Text>
             </>
           </Text>
         </Stack>
@@ -195,7 +243,11 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
 
   if (isError) {
     return (
-      <Stack alignItems='center' justifyContent='center' className='h-full grow'>
+      <Stack
+        alignItems='center'
+        justifyContent='center'
+        className='h-full grow'
+      >
         <Stack space={4}>
           <Stack space={1}>
             <Text size='lg' weight='bold' align='center'>

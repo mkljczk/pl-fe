@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { defineMessages, IntlShape, useIntl } from 'react-intl';
+import { IntlShape, defineMessages, useIntl } from 'react-intl';
 
 import { IconButton } from 'pl-fe/components/ui';
 import { useInstance } from 'pl-fe/hooks';
@@ -51,11 +51,11 @@ const UploadButton: React.FC<IUploadButton> = ({
     return null;
   }
 
-  const src = icon || (
-    onlyImages(attachmentTypes)
+  const src =
+    icon ||
+    (onlyImages(attachmentTypes)
       ? require('@tabler/icons/outline/photo.svg')
-      : require('@tabler/icons/outline/paperclip.svg')
-  );
+      : require('@tabler/icons/outline/paperclip.svg'));
 
   return (
     <div>
@@ -85,8 +85,4 @@ const UploadButton: React.FC<IUploadButton> = ({
   );
 };
 
-export {
-  onlyImages,
-  type IUploadButton,
-  UploadButton as default,
-};
+export { onlyImages, type IUploadButton, UploadButton as default };

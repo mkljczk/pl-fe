@@ -7,7 +7,10 @@ import { useOwnAccount } from 'pl-fe/hooks';
 import { useUpdateCredentials } from 'pl-fe/queries/accounts';
 
 const messages = defineMessages({
-  label: { id: 'settings.messages.label', defaultMessage: 'Allow users to start a new chat with you' },
+  label: {
+    id: 'settings.messages.label',
+    defaultMessage: 'Allow users to start a new chat with you',
+  },
 });
 
 const MessagesSettings = () => {
@@ -25,9 +28,7 @@ const MessagesSettings = () => {
 
   return (
     <List>
-      <ListItem
-        label={intl.formatMessage(messages.label)}
-      >
+      <ListItem label={intl.formatMessage(messages.label)}>
         <Toggle
           checked={account.accepts_chat_messages || false}
           onChange={handleChange}

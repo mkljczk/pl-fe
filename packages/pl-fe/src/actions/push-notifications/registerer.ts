@@ -1,19 +1,24 @@
-import { createPushSubscription, updatePushSubscription } from 'pl-fe/actions/push-subscriptions';
+import {
+  createPushSubscription,
+  updatePushSubscription,
+} from 'pl-fe/actions/push-subscriptions';
 import { pushNotificationsSetting } from 'pl-fe/settings';
 import { getVapidKey } from 'pl-fe/utils/auth';
 import { decode as decodeBase64 } from 'pl-fe/utils/base64';
 
-import { setBrowserSupport, setSubscription, clearSubscription } from './setter';
+import {
+  clearSubscription,
+  setBrowserSupport,
+  setSubscription,
+} from './setter';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
 import type { Me } from 'pl-fe/types/pl-fe';
 
 // Taken from https://www.npmjs.com/package/web-push
 const urlBase64ToUint8Array = (base64String: string) => {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/-/g, '+')
-    .replace(/_/g, '/');
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
 
   return decodeBase64(base64);
 };
@@ -27,24 +32,37 @@ const getRegistration = () => {
 };
 
 const getPushSubscription = (registration: ServiceWorkerRegistration) =>
-  registration.pushManager.getSubscription()
-    .then(subscription => ({ registration, subscription }));
+  registration.pushManager
+    .getSubscription()
+    .then((subscription) => ({ registration, subscription }));
 
-const subscribe = (registration: ServiceWorkerRegistration, getState: () => RootState) =>
+const subscribe = (
+  registration: ServiceWorkerRegistration,
+  getState: () => RootState,
+) =>
   registration.pushManager.subscribe({
     userVisibleOnly: true,
     applicationServerKey: urlBase64ToUint8Array(getVapidKey(getState())),
   });
 
-const unsubscribe = ({ registration, subscription }: {
+const unsubscribe = ({
+  registration,
+  subscription,
+}: {
   registration: ServiceWorkerRegistration;
   subscription: PushSubscription | null;
 }) =>
-  subscription ? subscription.unsubscribe().then(() => registration) : new Promise<ServiceWorkerRegistration>(r => r(registration));
+  subscription
+    ? subscription.unsubscribe().then(() => registration)
+    : new Promise<ServiceWorkerRegistration>((r) => r(registration));
 
-const sendSubscriptionToBackend = (subscription: PushSubscription, me: Me) =>
+const sendSubscriptionToBackend =
+  (subscription: PushSubscription, me: Me) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const alerts = getState().push_notifications.alerts.toJS() as Record<string, boolean>;
+    const alerts = getState().push_notifications.alerts.toJS() as Record<
+      string,
+      boolean
+    >;
     const params = { subscription, data: { alerts } };
 
     if (me) {
@@ -59,97 +77,110 @@ const sendSubscriptionToBackend = (subscription: PushSubscription, me: Me) =>
 
 // Last one checks for payload support: https://web-push-book.gauntface.com/chapter-06/01-non-standards-browsers/#no-payload
 // eslint-disable-next-line compat/compat
-const supportsPushNotifications = ('serviceWorker' in navigator && 'PushManager' in window && 'getKey' in PushSubscription.prototype);
+const supportsPushNotifications =
+  'serviceWorker' in navigator &&
+  'PushManager' in window &&
+  'getKey' in PushSubscription.prototype;
 
-const register = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const me = getState().me;
-    const vapidKey = getVapidKey(getState());
+const register = () => (dispatch: AppDispatch, getState: () => RootState) => {
+  const me = getState().me;
+  const vapidKey = getVapidKey(getState());
 
-    dispatch(setBrowserSupport(supportsPushNotifications));
+  dispatch(setBrowserSupport(supportsPushNotifications));
 
-    if (!supportsPushNotifications) {
-      console.warn('Your browser does not support Web Push Notifications.');
-      return;
-    }
+  if (!supportsPushNotifications) {
+    console.warn('Your browser does not support Web Push Notifications.');
+    return;
+  }
 
-    if (!vapidKey) {
-      console.error('The VAPID public key is not set. You will not be able to receive Web Push Notifications.');
-      return;
-    }
+  if (!vapidKey) {
+    console.error(
+      'The VAPID public key is not set. You will not be able to receive Web Push Notifications.',
+    );
+    return;
+  }
 
-    getRegistration()
-      .then(getPushSubscription)
-      // @ts-ignore
-      .then(async ({ registration, subscription }) => {
-        if (subscription !== null) {
-          // We have a subscription, check if it is still valid
-          const currentServerKey = (new Uint8Array(subscription.options.applicationServerKey!)).toString();
-          const subscriptionServerKey = urlBase64ToUint8Array(vapidKey).toString();
-          const serverEndpoint = getState().push_notifications.subscription?.endpoint;
+  getRegistration()
+    .then(getPushSubscription)
+    // @ts-ignore
+    .then(async ({ registration, subscription }) => {
+      if (subscription !== null) {
+        // We have a subscription, check if it is still valid
+        const currentServerKey = new Uint8Array(
+          subscription.options.applicationServerKey!,
+        ).toString();
+        const subscriptionServerKey =
+          urlBase64ToUint8Array(vapidKey).toString();
+        const serverEndpoint =
+          getState().push_notifications.subscription?.endpoint;
 
-          // If the VAPID public key did not change and the endpoint corresponds
-          // to the endpoint saved in the backend, the subscription is valid
-          if (subscriptionServerKey === currentServerKey && subscription.endpoint === serverEndpoint) {
-            return subscription;
-          } else {
-            // Something went wrong, try to subscribe again
-            return unsubscribe({ registration, subscription })
-              .then((registration) => subscribe(registration, getState))
-              .then((pushSubscription) => dispatch(sendSubscriptionToBackend(pushSubscription, me)));
-          }
+        // If the VAPID public key did not change and the endpoint corresponds
+        // to the endpoint saved in the backend, the subscription is valid
+        if (
+          subscriptionServerKey === currentServerKey &&
+          subscription.endpoint === serverEndpoint
+        ) {
+          return subscription;
+        } else {
+          // Something went wrong, try to subscribe again
+          return unsubscribe({ registration, subscription })
+            .then((registration) => subscribe(registration, getState))
+            .then((pushSubscription) =>
+              dispatch(sendSubscriptionToBackend(pushSubscription, me)),
+            );
         }
+      }
 
-        // No subscription, try to subscribe
-        return subscribe(registration, getState)
-          .then((pushSubscription) => dispatch(sendSubscriptionToBackend(pushSubscription, me)));
-      })
-      .then((subscription) => {
-        // If we got a PushSubscription (and not a subscription object from the backend)
-        // it means that the backend subscription is valid (and was set during hydration)
-        if (!(subscription instanceof PushSubscription)) {
-          dispatch(setSubscription(subscription));
-          if (me) {
-            pushNotificationsSetting.set(me, { alerts: subscription.alerts });
-          }
-        }
-      })
-      .catch(error => {
-        if (error.code === 20 && error.name === 'AbortError') {
-          console.warn('Your browser supports Web Push Notifications, but does not seem to implement the VAPID protocol.');
-        } else if (error.code === 5 && error.name === 'InvalidCharacterError') {
-          console.error('The VAPID public key seems to be invalid:', vapidKey);
-        }
-
-        // Clear alerts and hide UI settings
-        dispatch(clearSubscription());
-
+      // No subscription, try to subscribe
+      return subscribe(registration, getState).then((pushSubscription) =>
+        dispatch(sendSubscriptionToBackend(pushSubscription, me)),
+      );
+    })
+    .then((subscription) => {
+      // If we got a PushSubscription (and not a subscription object from the backend)
+      // it means that the backend subscription is valid (and was set during hydration)
+      if (!(subscription instanceof PushSubscription)) {
+        dispatch(setSubscription(subscription));
         if (me) {
-          pushNotificationsSetting.remove(me);
+          pushNotificationsSetting.set(me, { alerts: subscription.alerts });
         }
+      }
+    })
+    .catch((error) => {
+      if (error.code === 20 && error.name === 'AbortError') {
+        console.warn(
+          'Your browser supports Web Push Notifications, but does not seem to implement the VAPID protocol.',
+        );
+      } else if (error.code === 5 && error.name === 'InvalidCharacterError') {
+        console.error('The VAPID public key seems to be invalid:', vapidKey);
+      }
 
-        return getRegistration()
-          .then(getPushSubscription)
-          .then(unsubscribe);
-      })
-      .catch(console.warn);
-  };
+      // Clear alerts and hide UI settings
+      dispatch(clearSubscription());
 
-const saveSettings = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+      if (me) {
+        pushNotificationsSetting.remove(me);
+      }
+
+      return getRegistration().then(getPushSubscription).then(unsubscribe);
+    })
+    .catch(console.warn);
+};
+
+const saveSettings =
+  () => (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState().push_notifications;
     const alerts = state.alerts.toJS();
     const data = { alerts };
     const me = getState().me;
 
-    return dispatch(updatePushSubscription({ data })).then(() => {
-      if (me) {
-        pushNotificationsSetting.set(me, data);
-      }
-    }).catch(console.warn);
+    return dispatch(updatePushSubscription({ data }))
+      .then(() => {
+        if (me) {
+          pushNotificationsSetting.set(me, data);
+        }
+      })
+      .catch(console.warn);
   };
 
-export {
-  register,
-  saveSettings,
-};
+export { register, saveSettings };

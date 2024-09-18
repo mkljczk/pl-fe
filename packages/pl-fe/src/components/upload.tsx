@@ -42,27 +42,40 @@ const MIMETYPE_ICONS: Record<string, string> = {
   'application/epub+zip': bookIcon,
   'application/vnd.oasis.opendocument.spreadsheet': fileSpreadsheetIcon,
   'application/vnd.ms-excel': fileSpreadsheetIcon,
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': fileSpreadsheetIcon,
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+    fileSpreadsheetIcon,
   'application/pdf': fileTextIcon,
   'application/vnd.oasis.opendocument.presentation': presentationIcon,
   'application/vnd.ms-powerpoint': presentationIcon,
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation': presentationIcon,
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+    presentationIcon,
   'text/plain': fileTextIcon,
   'application/rtf': fileTextIcon,
   'application/msword': fileTextIcon,
   'application/x-abiword': fileTextIcon,
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': fileTextIcon,
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+    fileTextIcon,
   'application/vnd.oasis.opendocument.text': fileTextIcon,
 };
 
 const messages = defineMessages({
-  description: { id: 'upload_form.description', defaultMessage: 'Describe for the visually impaired' },
+  description: {
+    id: 'upload_form.description',
+    defaultMessage: 'Describe for the visually impaired',
+  },
   delete: { id: 'upload_form.undo', defaultMessage: 'Delete' },
   preview: { id: 'upload_form.preview', defaultMessage: 'Preview' },
-  descriptionMissingTitle: { id: 'upload_form.description_missing.title', defaultMessage: 'This attachment doesn\'t have a description' },
+  descriptionMissingTitle: {
+    id: 'upload_form.description_missing.title',
+    defaultMessage: "This attachment doesn't have a description",
+  },
 });
 
-interface IUpload extends Pick<React.HTMLAttributes<HTMLDivElement>, 'onDragStart' | 'onDragEnter' | 'onDragEnd'> {
+interface IUpload
+  extends Pick<
+    React.HTMLAttributes<HTMLDivElement>,
+    'onDragStart' | 'onDragEnter' | 'onDragEnd'
+  > {
   media: MediaAttachment;
   onSubmit?(): void;
   onDelete?(): void;
@@ -98,14 +111,16 @@ const Upload: React.FC<IUpload> = ({
     }
   };
 
-  const handleUndoClick: React.MouseEventHandler = e => {
+  const handleUndoClick: React.MouseEventHandler = (e) => {
     if (onDelete) {
       e.stopPropagation();
       onDelete();
     }
   };
 
-  const handleInputChange: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
+  const handleInputChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
+    e,
+  ) => {
     setDirtyDescription(e.target.value);
   };
 
@@ -139,11 +154,12 @@ const Upload: React.FC<IUpload> = ({
   };
 
   const active = hovered || focused;
-  const description = dirtyDescription || (dirtyDescription !== '' && media.description) || '';
-  const focusX = media.type === 'image' && media.meta?.focus?.x || undefined;
-  const focusY = media.type === 'image' && media.meta?.focus?.y || undefined;
-  const x = focusX ? ((focusX / 2) + .5) * 100 : undefined;
-  const y = focusY ? ((focusY / -2) + .5) * 100 : undefined;
+  const description =
+    dirtyDescription || (dirtyDescription !== '' && media.description) || '';
+  const focusX = (media.type === 'image' && media.meta?.focus?.x) || undefined;
+  const focusY = (media.type === 'image' && media.meta?.focus?.y) || undefined;
+  const x = focusX ? (focusX / 2 + 0.5) * 100 : undefined;
+  const y = focusY ? (focusY / -2 + 0.5) * 100 : undefined;
   const mediaType = media.type;
   const mimeType = media.mime_type as string | undefined;
 
@@ -168,18 +184,28 @@ const Upload: React.FC<IUpload> = ({
       onDragEnd={onDragEnd}
     >
       <Blurhash hash={media.blurhash} className='media-gallery__preview' />
-      <Motion defaultStyle={{ scale: 0.8 }} style={{ scale: spring(1, { stiffness: 180, damping: 12 }) }}>
+      <Motion
+        defaultStyle={{ scale: 0.8 }}
+        style={{ scale: spring(1, { stiffness: 180, damping: 12 }) }}
+      >
         {({ scale }) => (
           <div
-            className={clsx('compose-form__upload-thumbnail relative h-40 w-full overflow-hidden bg-contain bg-center bg-no-repeat', mediaType)}
+            className={clsx(
+              'compose-form__upload-thumbnail relative h-40 w-full overflow-hidden bg-contain bg-center bg-no-repeat',
+              mediaType,
+            )}
             style={{
               transform: `scale(${scale})`,
-              backgroundImage: mediaType === 'image' ? `url(${media.preview_url})` : undefined,
-              backgroundPosition: typeof x === 'number' && typeof y === 'number' ? `${x}% ${y}%` : undefined,
+              backgroundImage:
+                mediaType === 'image' ? `url(${media.preview_url})` : undefined,
+              backgroundPosition:
+                typeof x === 'number' && typeof y === 'number'
+                  ? `${x}% ${y}%`
+                  : undefined,
             }}
           >
             <HStack className='absolute right-2 top-2 z-10' space={2}>
-              {(withPreview && mediaType !== 'unknown' && Boolean(media.url)) && (
+              {withPreview && mediaType !== 'unknown' && Boolean(media.url) && (
                 <IconButton
                   onClick={handleOpenModal}
                   src={zoomInIcon}
@@ -203,12 +229,17 @@ const Upload: React.FC<IUpload> = ({
 
             {onDescriptionChange && (
               <div
-                className={clsx('absolute inset-x-0 bottom-0 z-[2px] bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900/80 p-2.5 opacity-0 transition-opacity duration-100 ease-linear', {
-                  'opacity-100': active,
-                })}
+                className={clsx(
+                  'absolute inset-x-0 bottom-0 z-[2px] bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900/80 p-2.5 opacity-0 transition-opacity duration-100 ease-linear',
+                  {
+                    'opacity-100': active,
+                  },
+                )}
               >
                 <label>
-                  <span style={{ display: 'none' }}>{intl.formatMessage(messages.description)}</span>
+                  <span style={{ display: 'none' }}>
+                    {intl.formatMessage(messages.description)}
+                  </span>
 
                   <textarea
                     className='m-0 w-full rounded-md border border-solid border-white/25 bg-transparent p-2.5 text-sm text-white placeholder:text-white/60'
@@ -228,16 +259,25 @@ const Upload: React.FC<IUpload> = ({
               <AltIndicator
                 warning
                 title={intl.formatMessage(messages.descriptionMissingTitle)}
-                className={clsx('absolute bottom-2 left-2 z-10 transition-opacity duration-100 ease-linear', {
-                  'opacity-0 pointer-events-none': active,
-                  'opacity-100': !active,
-                })}
+                className={clsx(
+                  'absolute bottom-2 left-2 z-10 transition-opacity duration-100 ease-linear',
+                  {
+                    'opacity-0 pointer-events-none': active,
+                    'opacity-100': !active,
+                  },
+                )}
               />
             )}
 
             <div className='absolute inset-0 -z-[1] h-full w-full'>
               {mediaType === 'video' && (
-                <video className='h-full w-full object-cover' autoPlay playsInline muted loop>
+                <video
+                  className='h-full w-full object-cover'
+                  autoPlay
+                  playsInline
+                  muted
+                  loop
+                >
                   <source src={media.preview_url} />
                 </video>
               )}
@@ -250,7 +290,4 @@ const Upload: React.FC<IUpload> = ({
   );
 };
 
-export {
-  MIMETYPE_ICONS,
-  Upload as default,
-};
+export { MIMETYPE_ICONS, Upload as default };

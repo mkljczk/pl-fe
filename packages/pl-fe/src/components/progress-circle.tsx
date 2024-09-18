@@ -8,7 +8,12 @@ interface IProgressCircle {
   title?: string;
 }
 
-const ProgressCircle: React.FC<IProgressCircle> = ({ progress, radius = 12, stroke = 4, title }) => {
+const ProgressCircle: React.FC<IProgressCircle> = ({
+  progress,
+  radius = 12,
+  stroke = 4,
+  title,
+}) => {
   const progressStroke = stroke + 0.5;
   const actualRadius = radius + progressStroke;
   const circumference = 2 * Math.PI * radius;

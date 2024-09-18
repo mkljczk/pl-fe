@@ -2,42 +2,76 @@ import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { useAnnouncements } from 'pl-fe/api/hooks/admin/useAnnouncements';
-import { Form, FormGroup, HStack, Modal, Stack, Text, Textarea, Toggle } from 'pl-fe/components/ui';
+import {
+  Form,
+  FormGroup,
+  HStack,
+  Modal,
+  Stack,
+  Text,
+  Textarea,
+  Toggle,
+} from 'pl-fe/components/ui';
 import { DatePicker } from 'pl-fe/features/ui/util/async-components';
 import toast from 'pl-fe/toast';
 
-import type { BaseModalProps } from '../modal-root';
 import type { AdminAnnouncement } from 'pl-api';
+import type { BaseModalProps } from '../modal-root';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_announcement.save', defaultMessage: 'Save' },
-  announcementContentPlaceholder: { id: 'admin.edit_announcement.fields.content_placeholder', defaultMessage: 'Announcement content' },
-  announcementStartTimePlaceholder: { id: 'admin.edit_announcement.fields.start_time_placeholder', defaultMessage: 'Announcement starts on:' },
-  announcementEndTimePlaceholder: { id: 'admin.edit_announcement.fields.end_time_placeholder', defaultMessage: 'Announcement ends on:' },
-  announcementCreateSuccess: { id: 'admin.edit_announcement.created', defaultMessage: 'Announcement created' },
-  announcementUpdateSuccess: { id: 'admin.edit_announcement.updated', defaultMessage: 'Announcement edited' },
+  announcementContentPlaceholder: {
+    id: 'admin.edit_announcement.fields.content_placeholder',
+    defaultMessage: 'Announcement content',
+  },
+  announcementStartTimePlaceholder: {
+    id: 'admin.edit_announcement.fields.start_time_placeholder',
+    defaultMessage: 'Announcement starts on:',
+  },
+  announcementEndTimePlaceholder: {
+    id: 'admin.edit_announcement.fields.end_time_placeholder',
+    defaultMessage: 'Announcement ends on:',
+  },
+  announcementCreateSuccess: {
+    id: 'admin.edit_announcement.created',
+    defaultMessage: 'Announcement created',
+  },
+  announcementUpdateSuccess: {
+    id: 'admin.edit_announcement.updated',
+    defaultMessage: 'Announcement edited',
+  },
 });
 
 interface EditAnnouncementModalProps {
   announcement?: AdminAnnouncement;
 }
 
-const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProps> = ({ onClose, announcement }) => {
+const EditAnnouncementModal: React.FC<
+  BaseModalProps & EditAnnouncementModalProps
+> = ({ onClose, announcement }) => {
   const { createAnnouncement, updateAnnouncement } = useAnnouncements();
   const intl = useIntl();
 
   const [content, setContent] = useState(announcement?.raw_content || '');
-  const [startTime, setStartTime] = useState(announcement?.starts_at ? new Date(announcement.starts_at) : null);
-  const [endTime, setEndTime] = useState(announcement?.ends_at ? new Date(announcement.ends_at) : null);
+  const [startTime, setStartTime] = useState(
+    announcement?.starts_at ? new Date(announcement.starts_at) : null,
+  );
+  const [endTime, setEndTime] = useState(
+    announcement?.ends_at ? new Date(announcement.ends_at) : null,
+  );
   const [allDay, setAllDay] = useState(announcement?.all_day || false);
 
-  const onChangeContent: React.ChangeEventHandler<HTMLTextAreaElement> = ({ target }) => setContent(target.value);
+  const onChangeContent: React.ChangeEventHandler<HTMLTextAreaElement> = ({
+    target,
+  }) => setContent(target.value);
 
   const onChangeStartTime = (date: Date | null) => setStartTime(date);
 
   const onChangeEndTime = (date: Date | null) => setEndTime(date);
 
-  const onChangeAllDay: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => setAllDay(target.checked);
+  const onChangeAllDay: React.ChangeEventHandler<HTMLInputElement> = ({
+    target,
+  }) => setAllDay(target.checked);
 
   const onClickClose = () => {
     onClose('EDIT_ANNOUNCEMENT');
@@ -52,12 +86,15 @@ const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProp
     };
 
     if (announcement) {
-      updateAnnouncement({ ...form, id: announcement.id }, {
-        onSuccess: () => {
-          onClose('EDIT_ANNOUNCEMENT');
-          toast.success(messages.announcementUpdateSuccess);
+      updateAnnouncement(
+        { ...form, id: announcement.id },
+        {
+          onSuccess: () => {
+            onClose('EDIT_ANNOUNCEMENT');
+            toast.success(messages.announcementUpdateSuccess);
+          },
         },
-      });
+      );
     } else {
       createAnnouncement(form, {
         onSuccess: () => {
@@ -71,62 +108,96 @@ const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProp
   return (
     <Modal
       onClose={onClickClose}
-      title={announcement
-        ? <FormattedMessage id='column.admin.edit_announcement' defaultMessage='Edit announcement' />
-        : <FormattedMessage id='column.admin.create_announcement' defaultMessage='Create announcement' />}
+      title={
+        announcement ? (
+          <FormattedMessage
+            id='column.admin.edit_announcement'
+            defaultMessage='Edit announcement'
+          />
+        ) : (
+          <FormattedMessage
+            id='column.admin.create_announcement'
+            defaultMessage='Create announcement'
+          />
+        )
+      }
       confirmationAction={handleSubmit}
       confirmationText={intl.formatMessage(messages.save)}
     >
       <Form>
         <FormGroup
-          labelText={<FormattedMessage id='admin.edit_announcement.fields.content_label' defaultMessage='Content' />}
+          labelText={
+            <FormattedMessage
+              id='admin.edit_announcement.fields.content_label'
+              defaultMessage='Content'
+            />
+          }
         >
           <Textarea
             autoComplete='off'
-            placeholder={intl.formatMessage(messages.announcementContentPlaceholder)}
+            placeholder={intl.formatMessage(
+              messages.announcementContentPlaceholder,
+            )}
             value={content}
             onChange={onChangeContent}
           />
         </FormGroup>
         <FormGroup
-          labelText={<FormattedMessage id='admin.edit_announcement.fields.start_time_label' defaultMessage='Start date' />}
+          labelText={
+            <FormattedMessage
+              id='admin.edit_announcement.fields.start_time_label'
+              defaultMessage='Start date'
+            />
+          }
         >
           <DatePicker
             showTimeSelect
             dateFormat='MMMM d, yyyy h:mm aa'
             timeIntervals={15}
             wrapperClassName='react-datepicker-wrapper'
-            placeholderText={intl.formatMessage(messages.announcementStartTimePlaceholder)}
+            placeholderText={intl.formatMessage(
+              messages.announcementStartTimePlaceholder,
+            )}
             selected={startTime}
             onChange={onChangeStartTime}
             isClearable
           />
         </FormGroup>
         <FormGroup
-          labelText={<FormattedMessage id='admin.edit_announcement.fields.end_time_label' defaultMessage='End date' />}
+          labelText={
+            <FormattedMessage
+              id='admin.edit_announcement.fields.end_time_label'
+              defaultMessage='End date'
+            />
+          }
         >
           <DatePicker
             showTimeSelect
             dateFormat='MMMM d, yyyy h:mm aa'
             timeIntervals={15}
             wrapperClassName='react-datepicker-wrapper'
-            placeholderText={intl.formatMessage(messages.announcementEndTimePlaceholder)}
+            placeholderText={intl.formatMessage(
+              messages.announcementEndTimePlaceholder,
+            )}
             selected={endTime}
             onChange={onChangeEndTime}
             isClearable
           />
         </FormGroup>
         <HStack alignItems='center' space={2}>
-          <Toggle
-            checked={allDay}
-            onChange={onChangeAllDay}
-          />
+          <Toggle checked={allDay} onChange={onChangeAllDay} />
           <Stack>
             <Text tag='span' theme='muted'>
-              <FormattedMessage id='admin.edit_announcement.fields.all_day_label' defaultMessage='All-day event' />
+              <FormattedMessage
+                id='admin.edit_announcement.fields.all_day_label'
+                defaultMessage='All-day event'
+              />
             </Text>
             <Text size='xs' tag='span' theme='muted'>
-              <FormattedMessage id='admin.edit_announcement.fields.all_day_hint' defaultMessage='When checked, only the dates of the time range will be displayed' />
+              <FormattedMessage
+                id='admin.edit_announcement.fields.all_day_hint'
+                defaultMessage='When checked, only the dates of the time range will be displayed'
+              />
             </Text>
           </Stack>
         </HStack>

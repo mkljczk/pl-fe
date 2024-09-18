@@ -1,6 +1,6 @@
 import { Map as ImmutableMap } from 'immutable';
 
-import { toTailwind, fromLegacyColors, expandPalette } from './tailwind';
+import { expandPalette, fromLegacyColors, toTailwind } from './tailwind';
 
 describe('toTailwind()', () => {
   it('handles empty pl-fe config', () => {

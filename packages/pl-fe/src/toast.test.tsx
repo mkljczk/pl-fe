@@ -30,7 +30,7 @@ afterAll(() => {
 });
 
 describe('toasts', () => {
-  it('renders successfully', async() => {
+  it('renders successfully', async () => {
     const { toast } = renderApp();
 
     act(() => {
@@ -42,7 +42,7 @@ describe('toasts', () => {
   });
 
   describe('actionable button', () => {
-    it('renders the button', async() => {
+    it('renders the button', async () => {
       const { toast } = renderApp();
 
       act(() => {
@@ -52,7 +52,7 @@ describe('toasts', () => {
       expect(screen.getByTestId('toast-action')).toHaveTextContent('click me');
     });
 
-    it('does not render the button', async() => {
+    it('does not render the button', async () => {
       const { toast } = renderApp();
 
       act(() => {

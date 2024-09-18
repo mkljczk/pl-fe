@@ -20,11 +20,17 @@ const normalizeStatusEdit = (statusEdit: BaseStatusEdit) => {
   return {
     ...statusEdit,
     poll,
-    contentHtml: DOMPurify.sanitize(stripCompatibilityFeatures(emojify(statusEdit.content, emojiMap)), { ADD_ATTR: ['target'] }),
-    spoilerHtml: DOMPurify.sanitize(emojify(escapeTextContentForBrowser(statusEdit.spoiler_text), emojiMap), { ADD_ATTR: ['target'] }),
+    contentHtml: DOMPurify.sanitize(
+      stripCompatibilityFeatures(emojify(statusEdit.content, emojiMap)),
+      { ADD_ATTR: ['target'] },
+    ),
+    spoilerHtml: DOMPurify.sanitize(
+      emojify(escapeTextContentForBrowser(statusEdit.spoiler_text), emojiMap),
+      { ADD_ATTR: ['target'] },
+    ),
   };
 };
 
-type StatusEdit = ReturnType<typeof normalizeStatusEdit>
+type StatusEdit = ReturnType<typeof normalizeStatusEdit>;
 
 export { type StatusEdit, normalizeStatusEdit };

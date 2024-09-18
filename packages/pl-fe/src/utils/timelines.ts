@@ -1,4 +1,4 @@
-import { Map as ImmutableMap, type Collection } from 'immutable';
+import { type Collection, Map as ImmutableMap } from 'immutable';
 
 import type { Status } from 'pl-fe/normalizers';
 
@@ -12,7 +12,9 @@ const shouldFilter = (
     direct: status.visibility === 'direct',
   });
 
-  return shows.some((value, key) => columnSettings.getIn(['shows', key]) === false && value);
+  return shows.some(
+    (value, key) => columnSettings.getIn(['shows', key]) === false && value,
+  );
 };
 
 export { shouldFilter };

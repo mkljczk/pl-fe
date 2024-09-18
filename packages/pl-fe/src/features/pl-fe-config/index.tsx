@@ -1,6 +1,6 @@
-import { Map as ImmutableMap, List as ImmutableList, fromJS } from 'immutable';
+import { List as ImmutableList, Map as ImmutableMap, fromJS } from 'immutable';
 import React, { useState, useEffect, useMemo } from 'react';
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { updatePlFeConfig } from 'pl-fe/actions/admin';
 import { uploadMedia } from 'pl-fe/actions/media';
@@ -8,9 +8,9 @@ import List, { ListItem } from 'pl-fe/components/list';
 import {
   Accordion,
   Button,
-  Column,
   CardHeader,
   CardTitle,
+  Column,
   FileInput,
   Form,
   FormActions,
@@ -21,7 +21,7 @@ import {
   Toggle,
 } from 'pl-fe/components/ui';
 import ThemeSelector from 'pl-fe/features/ui/components/theme-selector';
-import { useAppSelector, useAppDispatch, useFeatures } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { normalizePlFeConfig } from 'pl-fe/normalizers';
 import toast from 'pl-fe/toast';
 
@@ -31,30 +31,105 @@ import PromoPanelInput from './components/promo-panel-input';
 import SitePreview from './components/site-preview';
 
 const messages = defineMessages({
-  heading: { id: 'column.plfe_config', defaultMessage: 'Front-end configuration' },
+  heading: {
+    id: 'column.plfe_config',
+    defaultMessage: 'Front-end configuration',
+  },
   saved: { id: 'plfe_config.saved', defaultMessage: 'pl-fe config saved!' },
-  copyrightFooterLabel: { id: 'plfe_config.copyright_footer.meta_fields.label_placeholder', defaultMessage: 'Copyright footer' },
-  cryptoDonatePanelLimitLabel: { id: 'plfe_config.crypto_donate_panel_limit.meta_fields.limit_placeholder', defaultMessage: 'Number of items to display in the crypto homepage widget' },
-  customCssLabel: { id: 'plfe_config.custom_css.meta_fields.url_placeholder', defaultMessage: 'URL' },
-  rawJSONLabel: { id: 'plfe_config.raw_json_label', defaultMessage: 'Advanced: Edit raw JSON data' },
-  rawJSONHint: { id: 'plfe_config.raw_json_hint', defaultMessage: 'Edit the settings data directly. Changes made directly to the JSON file will override the form fields above. Click "Save" to apply your changes.' },
-  rawJSONInvalid: { id: 'plfe_config.raw_json_invalid', defaultMessage: 'is invalid' },
-  displayFqnLabel: { id: 'plfe_config.display_fqn_label', defaultMessage: 'Display domain (eg @user@domain) for local accounts.' },
-  greentextLabel: { id: 'plfe_config.greentext_label', defaultMessage: 'Enable greentext support' },
-  promoPanelIconsLink: { id: 'plfe_config.hints.promo_panel_icons.link', defaultMessage: 'pl-fe Icons List' },
-  authenticatedProfileLabel: { id: 'plfe_config.authenticated_profile_label', defaultMessage: 'Profiles require authentication' },
-  authenticatedProfileHint: { id: 'plfe_config.authenticated_profile_hint', defaultMessage: 'Users must be logged-in to view replies and media on user profiles.' },
-  displayCtaLabel: { id: 'plfe_config.cta_label', defaultMessage: 'Display call to action panels if not authenticated' },
-  mediaPreviewLabel: { id: 'plfe_config.media_preview_label', defaultMessage: 'Prefer preview media for thumbnails' },
-  mediaPreviewHint: { id: 'plfe_config.media_preview_hint', defaultMessage: 'Some backends provide an optimized version of media for display in timelines. However, these preview images may be too small without additional configuration.' },
-  feedInjectionLabel: { id: 'plfe_config.feed_injection_label', defaultMessage: 'Feed injection' },
-  feedInjectionHint: { id: 'plfe_config.feed_injection_hint', defaultMessage: 'Inject the feed with additional content, such as suggested profiles.' },
-  tileServerLabel: { id: 'plfe_config.tile_server_label', defaultMessage: 'Map tile server' },
-  tileServerAttributionLabel: { id: 'plfe_config.tile_server_attribution_label', defaultMessage: 'Map tiles attribution' },
-  redirectRootNoLoginLabel: { id: 'plfe_config.redirect_root_no_login_label', defaultMessage: 'Redirect homepage' },
-  redirectRootNoLoginHint: { id: 'plfe_config.redirect_root_no_login_hint', defaultMessage: 'Path to redirect the homepage when a user is not logged in.' },
-  sentryDsnLabel: { id: 'plfe_config.sentry_dsn_label', defaultMessage: 'Sentry DSN' },
-  sentryDsnHint: { id: 'plfe_config.sentry_dsn_hint', defaultMessage: 'DSN URL for error reporting. Works with Sentry and GlitchTip.' },
+  copyrightFooterLabel: {
+    id: 'plfe_config.copyright_footer.meta_fields.label_placeholder',
+    defaultMessage: 'Copyright footer',
+  },
+  cryptoDonatePanelLimitLabel: {
+    id: 'plfe_config.crypto_donate_panel_limit.meta_fields.limit_placeholder',
+    defaultMessage: 'Number of items to display in the crypto homepage widget',
+  },
+  customCssLabel: {
+    id: 'plfe_config.custom_css.meta_fields.url_placeholder',
+    defaultMessage: 'URL',
+  },
+  rawJSONLabel: {
+    id: 'plfe_config.raw_json_label',
+    defaultMessage: 'Advanced: Edit raw JSON data',
+  },
+  rawJSONHint: {
+    id: 'plfe_config.raw_json_hint',
+    defaultMessage:
+      'Edit the settings data directly. Changes made directly to the JSON file will override the form fields above. Click "Save" to apply your changes.',
+  },
+  rawJSONInvalid: {
+    id: 'plfe_config.raw_json_invalid',
+    defaultMessage: 'is invalid',
+  },
+  displayFqnLabel: {
+    id: 'plfe_config.display_fqn_label',
+    defaultMessage: 'Display domain (eg @user@domain) for local accounts.',
+  },
+  greentextLabel: {
+    id: 'plfe_config.greentext_label',
+    defaultMessage: 'Enable greentext support',
+  },
+  promoPanelIconsLink: {
+    id: 'plfe_config.hints.promo_panel_icons.link',
+    defaultMessage: 'pl-fe Icons List',
+  },
+  authenticatedProfileLabel: {
+    id: 'plfe_config.authenticated_profile_label',
+    defaultMessage: 'Profiles require authentication',
+  },
+  authenticatedProfileHint: {
+    id: 'plfe_config.authenticated_profile_hint',
+    defaultMessage:
+      'Users must be logged-in to view replies and media on user profiles.',
+  },
+  displayCtaLabel: {
+    id: 'plfe_config.cta_label',
+    defaultMessage: 'Display call to action panels if not authenticated',
+  },
+  mediaPreviewLabel: {
+    id: 'plfe_config.media_preview_label',
+    defaultMessage: 'Prefer preview media for thumbnails',
+  },
+  mediaPreviewHint: {
+    id: 'plfe_config.media_preview_hint',
+    defaultMessage:
+      'Some backends provide an optimized version of media for display in timelines. However, these preview images may be too small without additional configuration.',
+  },
+  feedInjectionLabel: {
+    id: 'plfe_config.feed_injection_label',
+    defaultMessage: 'Feed injection',
+  },
+  feedInjectionHint: {
+    id: 'plfe_config.feed_injection_hint',
+    defaultMessage:
+      'Inject the feed with additional content, such as suggested profiles.',
+  },
+  tileServerLabel: {
+    id: 'plfe_config.tile_server_label',
+    defaultMessage: 'Map tile server',
+  },
+  tileServerAttributionLabel: {
+    id: 'plfe_config.tile_server_attribution_label',
+    defaultMessage: 'Map tiles attribution',
+  },
+  redirectRootNoLoginLabel: {
+    id: 'plfe_config.redirect_root_no_login_label',
+    defaultMessage: 'Redirect homepage',
+  },
+  redirectRootNoLoginHint: {
+    id: 'plfe_config.redirect_root_no_login_hint',
+    defaultMessage:
+      'Path to redirect the homepage when a user is not logged in.',
+  },
+  sentryDsnLabel: {
+    id: 'plfe_config.sentry_dsn_label',
+    defaultMessage: 'Sentry DSN',
+  },
+  sentryDsnHint: {
+    id: 'plfe_config.sentry_dsn_hint',
+    defaultMessage:
+      'DSN URL for error reporting. Works with Sentry and GlitchTip.',
+  },
 });
 
 type ValueGetter<T = Element> = (e: React.ChangeEvent<T>) => any;
@@ -74,12 +149,14 @@ const PlFeConfig: React.FC = () => {
 
   const features = useFeatures();
 
-  const initialData = useAppSelector(state => state.plfe);
+  const initialData = useAppSelector((state) => state.plfe);
 
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState(initialData);
   const [jsonEditorExpanded, setJsonEditorExpanded] = useState(false);
-  const [rawJSON, setRawJSON] = useState<string>(JSON.stringify(initialData, null, 2));
+  const [rawJSON, setRawJSON] = useState<string>(
+    JSON.stringify(initialData, null, 2),
+  );
   const [jsonValid, setJsonValid] = useState(true);
 
   const plFe = useMemo(() => normalizePlFeConfig(data), [data]);
@@ -96,33 +173,43 @@ const PlFeConfig: React.FC = () => {
   };
 
   const handleSubmit: React.FormEventHandler = (e) => {
-    dispatch(updatePlFeConfig(data.toJS())).then(() => {
-      setLoading(false);
-      toast.success(intl.formatMessage(messages.saved));
-    }).catch(() => {
-      setLoading(false);
-    });
+    dispatch(updatePlFeConfig(data.toJS()))
+      .then(() => {
+        setLoading(false);
+        toast.success(intl.formatMessage(messages.saved));
+      })
+      .catch(() => {
+        setLoading(false);
+      });
     setLoading(true);
     e.preventDefault();
   };
 
-  const handleChange = (path: ConfigPath, getValue: ValueGetter<any>): React.ChangeEventHandler => e => {
-    setConfig(path, getValue(e));
-  };
+  const handleChange =
+    (path: ConfigPath, getValue: ValueGetter<any>): React.ChangeEventHandler =>
+    (e) => {
+      setConfig(path, getValue(e));
+    };
 
-  const handleThemeChange = (path: ConfigPath): ThemeChangeHandler => theme => {
-    setConfig(path, theme);
-  };
+  const handleThemeChange =
+    (path: ConfigPath): ThemeChangeHandler =>
+    (theme) => {
+      setConfig(path, theme);
+    };
 
-  const handleFileChange = (path: ConfigPath): React.ChangeEventHandler<HTMLInputElement> => e => {
-    const file = e.target.files?.item(0);
+  const handleFileChange =
+    (path: ConfigPath): React.ChangeEventHandler<HTMLInputElement> =>
+    (e) => {
+      const file = e.target.files?.item(0);
 
-    if (file) {
-      dispatch(uploadMedia({ file })).then((data: any) => {
-        handleChange(path, () => data.url)(e);
-      }).catch(console.error);
-    }
-  };
+      if (file) {
+        dispatch(uploadMedia({ file }))
+          .then((data: any) => {
+            handleChange(path, () => data.url)(e);
+          })
+          .catch(console.error);
+      }
+    };
 
   const handleStreamItemChange = (path: ConfigPath) => (values: any[]) => {
     setConfig(path, ImmutableList(values));
@@ -138,11 +225,12 @@ const PlFeConfig: React.FC = () => {
     setData(newData);
   };
 
-  const handleEditJSON: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
+  const handleEditJSON: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setRawJSON(e.target.value);
   };
 
-  const toggleJSONEditor = (expanded: boolean) => setJsonEditorExpanded(expanded);
+  const toggleJSONEditor = (expanded: boolean) =>
+    setJsonEditorExpanded(expanded);
 
   useEffect(() => {
     putConfig(initialData);
@@ -168,8 +256,18 @@ const PlFeConfig: React.FC = () => {
           <SitePreview plFe={plFe} />
 
           <FormGroup
-            labelText={<FormattedMessage id='plfe_config.fields.logo_label' defaultMessage='Logo' />}
-            hintText={<FormattedMessage id='plfe_config.hints.logo' defaultMessage='SVG. At most 2 MB. Will be displayed to 50px height, maintaining aspect ratio' />}
+            labelText={
+              <FormattedMessage
+                id='plfe_config.fields.logo_label'
+                defaultMessage='Logo'
+              />
+            }
+            hintText={
+              <FormattedMessage
+                id='plfe_config.hints.logo'
+                defaultMessage='SVG. At most 2 MB. Will be displayed to 50px height, maintaining aspect ratio'
+              />
+            }
           >
             <FileInput
               onChange={handleFileChange(['logo'])}
@@ -178,11 +276,25 @@ const PlFeConfig: React.FC = () => {
           </FormGroup>
 
           <CardHeader>
-            <CardTitle title={<FormattedMessage id='plfe_config.headings.theme' defaultMessage='Theme' />} />
+            <CardTitle
+              title={
+                <FormattedMessage
+                  id='plfe_config.headings.theme'
+                  defaultMessage='Theme'
+                />
+              }
+            />
           </CardHeader>
 
           <List>
-            <ListItem label={<FormattedMessage id='plfe_config.fields.theme_label' defaultMessage='Default theme' />}>
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='plfe_config.fields.theme_label'
+                  defaultMessage='Default theme'
+                />
+              }
+            >
               <ThemeSelector
                 value={plFe.defaultSettings.get('themeMode')}
                 onChange={handleThemeChange(['defaultSettings', 'themeMode'])}
@@ -190,13 +302,25 @@ const PlFeConfig: React.FC = () => {
             </ListItem>
 
             <ListItem
-              label={<FormattedMessage id='plfe_config.fields.edit_theme_label' defaultMessage='Edit theme' />}
+              label={
+                <FormattedMessage
+                  id='plfe_config.fields.edit_theme_label'
+                  defaultMessage='Edit theme'
+                />
+              }
               to='/pl-fe/admin/theme'
             />
           </List>
 
           <CardHeader>
-            <CardTitle title={<FormattedMessage id='plfe_config.headings.options' defaultMessage='Options' />} />
+            <CardTitle
+              title={
+                <FormattedMessage
+                  id='plfe_config.headings.options'
+                  defaultMessage='Options'
+                />
+              }
+            />
           </CardHeader>
 
           <List>
@@ -220,7 +344,10 @@ const PlFeConfig: React.FC = () => {
             >
               <Toggle
                 checked={plFe.feedInjection === true}
-                onChange={handleChange(['feedInjection'], (e) => e.target.checked)}
+                onChange={handleChange(
+                  ['feedInjection'],
+                  (e) => e.target.checked,
+                )}
               />
             </ListItem>
 
@@ -230,7 +357,10 @@ const PlFeConfig: React.FC = () => {
             >
               <Toggle
                 checked={plFe.mediaPreview === true}
-                onChange={handleChange(['mediaPreview'], (e) => e.target.checked)}
+                onChange={handleChange(
+                  ['mediaPreview'],
+                  (e) => e.target.checked,
+                )}
               />
             </ListItem>
 
@@ -247,7 +377,10 @@ const PlFeConfig: React.FC = () => {
             >
               <Toggle
                 checked={plFe.authenticatedProfile === true}
-                onChange={handleChange(['authenticatedProfile'], (e) => e.target.checked)}
+                onChange={handleChange(
+                  ['authenticatedProfile'],
+                  (e) => e.target.checked,
+                )}
               />
             </ListItem>
 
@@ -259,7 +392,10 @@ const PlFeConfig: React.FC = () => {
                 type='text'
                 placeholder='/timeline/local'
                 value={String(data.get('redirectRootNoLogin', ''))}
-                onChange={handleChange(['redirectRootNoLogin'], (e) => e.target.value)}
+                onChange={handleChange(
+                  ['redirectRootNoLogin'],
+                  (e) => e.target.value,
+                )}
               />
             </ListItem>
 
@@ -277,30 +413,65 @@ const PlFeConfig: React.FC = () => {
           </List>
 
           <CardHeader>
-            <CardTitle title={<FormattedMessage id='plfe_config.headings.navigation' defaultMessage='Navigation' />} />
+            <CardTitle
+              title={
+                <FormattedMessage
+                  id='plfe_config.headings.navigation'
+                  defaultMessage='Navigation'
+                />
+              }
+            />
           </CardHeader>
 
           <Streamfield
-            label={<FormattedMessage id='plfe_config.fields.promo_panel_fields_label' defaultMessage='Promo panel items' />}
-            hint={<FormattedMessage id='plfe_config.hints.promo_panel_fields' defaultMessage='You can have custom defined links displayed on the right panel of the timelines page.' />}
+            label={
+              <FormattedMessage
+                id='plfe_config.fields.promo_panel_fields_label'
+                defaultMessage='Promo panel items'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='plfe_config.hints.promo_panel_fields'
+                defaultMessage='You can have custom defined links displayed on the right panel of the timelines page.'
+              />
+            }
             component={PromoPanelInput}
             values={plFe.promoPanel.items.toArray()}
             onChange={handleStreamItemChange(['promoPanel', 'items'])}
-            onAddItem={addStreamItem(['promoPanel', 'items'], templates.promoPanel)}
+            onAddItem={addStreamItem(
+              ['promoPanel', 'items'],
+              templates.promoPanel,
+            )}
             onRemoveItem={deleteStreamItem(['promoPanel', 'items'])}
           />
 
           <Streamfield
-            label={<FormattedMessage id='plfe_config.fields.home_footer_fields_label' defaultMessage='Home footer items' />}
-            hint={<FormattedMessage id='plfe_config.hints.home_footer_fields' defaultMessage='You can have custom defined links displayed on the footer of your static pages' />}
+            label={
+              <FormattedMessage
+                id='plfe_config.fields.home_footer_fields_label'
+                defaultMessage='Home footer items'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='plfe_config.hints.home_footer_fields'
+                defaultMessage='You can have custom defined links displayed on the footer of your static pages'
+              />
+            }
             component={FooterLinkInput}
             values={plFe.navlinks.get('homeFooter')?.toArray() || []}
             onChange={handleStreamItemChange(['navlinks', 'homeFooter'])}
-            onAddItem={addStreamItem(['navlinks', 'homeFooter'], templates.footerItem)}
+            onAddItem={addStreamItem(
+              ['navlinks', 'homeFooter'],
+              templates.footerItem,
+            )}
             onRemoveItem={deleteStreamItem(['navlinks', 'homeFooter'])}
           />
 
-          <FormGroup labelText={intl.formatMessage(messages.copyrightFooterLabel)}>
+          <FormGroup
+            labelText={intl.formatMessage(messages.copyrightFooterLabel)}
+          >
             <Input
               type='text'
               placeholder={intl.formatMessage(messages.copyrightFooterLabel)}
@@ -312,10 +483,19 @@ const PlFeConfig: React.FC = () => {
           {features.events && (
             <>
               <CardHeader>
-                <CardTitle title={<FormattedMessage id='plfe_config.headings.events' defaultMessage='Events' />} />
+                <CardTitle
+                  title={
+                    <FormattedMessage
+                      id='plfe_config.headings.events'
+                      defaultMessage='Events'
+                    />
+                  }
+                />
               </CardHeader>
 
-              <FormGroup labelText={intl.formatMessage(messages.tileServerLabel)}>
+              <FormGroup
+                labelText={intl.formatMessage(messages.tileServerLabel)}
+              >
                 <Input
                   type='text'
                   placeholder={intl.formatMessage(messages.tileServerLabel)}
@@ -324,44 +504,86 @@ const PlFeConfig: React.FC = () => {
                 />
               </FormGroup>
 
-              <FormGroup labelText={intl.formatMessage(messages.tileServerAttributionLabel)}>
+              <FormGroup
+                labelText={intl.formatMessage(
+                  messages.tileServerAttributionLabel,
+                )}
+              >
                 <Input
                   type='text'
-                  placeholder={intl.formatMessage(messages.tileServerAttributionLabel)}
+                  placeholder={intl.formatMessage(
+                    messages.tileServerAttributionLabel,
+                  )}
                   value={plFe.tileServerAttribution}
-                  onChange={handleChange(['tileServerAttribution'], (e) => e.target.value)}
+                  onChange={handleChange(
+                    ['tileServerAttribution'],
+                    (e) => e.target.value,
+                  )}
                 />
               </FormGroup>
             </>
           )}
 
           <CardHeader>
-            <CardTitle title={<FormattedMessage id='plfe_config.headings.cryptocurrency' defaultMessage='Cryptocurrency' />} />
+            <CardTitle
+              title={
+                <FormattedMessage
+                  id='plfe_config.headings.cryptocurrency'
+                  defaultMessage='Cryptocurrency'
+                />
+              }
+            />
           </CardHeader>
 
           <Streamfield
-            label={<FormattedMessage id='plfe_config.fields.crypto_addresses_label' defaultMessage='Cryptocurrency addresses' />}
-            hint={<FormattedMessage id='plfe_config.hints.crypto_addresses' defaultMessage='Add cryptocurrency addresses so users of your site can donate to you. Order matters, and you must use lowercase ticker values.' />}
+            label={
+              <FormattedMessage
+                id='plfe_config.fields.crypto_addresses_label'
+                defaultMessage='Cryptocurrency addresses'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='plfe_config.hints.crypto_addresses'
+                defaultMessage='Add cryptocurrency addresses so users of your site can donate to you. Order matters, and you must use lowercase ticker values.'
+              />
+            }
             component={CryptoAddressInput}
             values={plFe.cryptoAddresses.toArray()}
             onChange={handleStreamItemChange(['cryptoAddresses'])}
-            onAddItem={addStreamItem(['cryptoAddresses'], templates.cryptoAddress)}
+            onAddItem={addStreamItem(
+              ['cryptoAddresses'],
+              templates.cryptoAddress,
+            )}
             onRemoveItem={deleteStreamItem(['cryptoAddresses'])}
           />
 
-          <FormGroup labelText={intl.formatMessage(messages.cryptoDonatePanelLimitLabel)}>
+          <FormGroup
+            labelText={intl.formatMessage(messages.cryptoDonatePanelLimitLabel)}
+          >
             <Input
               type='number'
               min={0}
               pattern='[0-9]+'
-              placeholder={intl.formatMessage(messages.cryptoDonatePanelLimitLabel)}
+              placeholder={intl.formatMessage(
+                messages.cryptoDonatePanelLimitLabel,
+              )}
               value={plFe.cryptoDonatePanel.get('limit')}
-              onChange={handleChange(['cryptoDonatePanel', 'limit'], (e) => Number(e.target.value))}
+              onChange={handleChange(['cryptoDonatePanel', 'limit'], (e) =>
+                Number(e.target.value),
+              )}
             />
           </FormGroup>
 
           <CardHeader>
-            <CardTitle title={<FormattedMessage id='plfe_config.headings.advanced' defaultMessage='Advanced' />} />
+            <CardTitle
+              title={
+                <FormattedMessage
+                  id='plfe_config.headings.advanced'
+                  defaultMessage='Advanced'
+                />
+              }
+            />
           </CardHeader>
 
           <Accordion
@@ -371,7 +593,11 @@ const PlFeConfig: React.FC = () => {
           >
             <FormGroup
               hintText={intl.formatMessage(messages.rawJSONHint)}
-              errors={jsonValid ? undefined : [intl.formatMessage(messages.rawJSONInvalid)]}
+              errors={
+                jsonValid
+                  ? undefined
+                  : [intl.formatMessage(messages.rawJSONInvalid)]
+              }
             >
               <Textarea
                 value={rawJSON}

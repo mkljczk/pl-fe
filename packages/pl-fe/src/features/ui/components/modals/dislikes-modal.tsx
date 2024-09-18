@@ -13,10 +13,15 @@ interface DislikesModalProps {
   statusId: string;
 }
 
-const DislikesModal: React.FC<BaseModalProps & DislikesModalProps> = ({ onClose, statusId }) => {
+const DislikesModal: React.FC<BaseModalProps & DislikesModalProps> = ({
+  onClose,
+  statusId,
+}) => {
   const dispatch = useAppDispatch();
 
-  const accountIds = useAppSelector((state) => state.user_lists.disliked_by.get(statusId)?.items);
+  const accountIds = useAppSelector(
+    (state) => state.user_lists.disliked_by.get(statusId)?.items,
+  );
 
   const fetchData = () => {
     dispatch(fetchDislikes(statusId));
@@ -35,7 +40,12 @@ const DislikesModal: React.FC<BaseModalProps & DislikesModalProps> = ({ onClose,
   if (!accountIds) {
     body = <Spinner />;
   } else {
-    const emptyMessage = <FormattedMessage id='empty_column.dislikes' defaultMessage='No one has disliked this post yet. When someone does, they will show up here.' />;
+    const emptyMessage = (
+      <FormattedMessage
+        id='empty_column.dislikes'
+        defaultMessage='No one has disliked this post yet. When someone does, they will show up here.'
+      />
+    );
 
     body = (
       <ScrollableList
@@ -44,16 +54,18 @@ const DislikesModal: React.FC<BaseModalProps & DislikesModalProps> = ({ onClose,
         listClassName='max-w-full'
         itemClassName='pb-3'
       >
-        {accountIds.map(id =>
-          <AccountContainer key={id} id={id} />,
-        )}
+        {accountIds.map((id) => (
+          <AccountContainer key={id} id={id} />
+        ))}
       </ScrollableList>
     );
   }
 
   return (
     <Modal
-      title={<FormattedMessage id='column.dislikes' defaultMessage='Dislikes' />}
+      title={
+        <FormattedMessage id='column.dislikes' defaultMessage='Dislikes' />
+      }
       onClose={onClickClose}
     >
       {body}

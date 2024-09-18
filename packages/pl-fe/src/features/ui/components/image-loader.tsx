@@ -15,7 +15,6 @@ interface IImageLoader {
 }
 
 class ImageLoader extends React.PureComponent<IImageLoader> {
-
   static defaultProps = {
     alt: '',
     width: null,
@@ -57,10 +56,12 @@ class ImageLoader extends React.PureComponent<IImageLoader> {
   loadImage(props: IImageLoader) {
     this.removeEventListeners();
     this.setState({ loading: true, error: false });
-    Promise.all([
-      props.previewSrc && this.loadPreviewCanvas(props),
-      this.hasSize() && this.loadOriginalImage(props),
-    ].filter(Boolean))
+    Promise.all(
+      [
+        props.previewSrc && this.loadPreviewCanvas(props),
+        this.hasSize() && this.loadOriginalImage(props),
+      ].filter(Boolean),
+    )
       .then(() => {
         this.setState({ loading: false, error: false });
         this.clearPreviewCanvas();
@@ -68,26 +69,27 @@ class ImageLoader extends React.PureComponent<IImageLoader> {
       .catch(() => this.setState({ loading: false, error: true }));
   }
 
-  loadPreviewCanvas = ({ previewSrc, width, height }: IImageLoader) => new Promise<void>((resolve, reject) => {
-    const image = new Image();
-    const removeEventListeners = () => {
-      image.removeEventListener('error', handleError);
-      image.removeEventListener('load', handleLoad);
-    };
-    const handleError = () => {
-      removeEventListeners();
-      reject();
-    };
-    const handleLoad = () => {
-      removeEventListeners();
-      this.canvasContext?.drawImage(image, 0, 0, width || 0, height || 0);
-      resolve();
-    };
-    image.addEventListener('error', handleError);
-    image.addEventListener('load', handleLoad);
-    image.src = previewSrc || '';
-    this.removers.push(removeEventListeners);
-  });
+  loadPreviewCanvas = ({ previewSrc, width, height }: IImageLoader) =>
+    new Promise<void>((resolve, reject) => {
+      const image = new Image();
+      const removeEventListeners = () => {
+        image.removeEventListener('error', handleError);
+        image.removeEventListener('load', handleLoad);
+      };
+      const handleError = () => {
+        removeEventListeners();
+        reject();
+      };
+      const handleLoad = () => {
+        removeEventListeners();
+        this.canvasContext?.drawImage(image, 0, 0, width || 0, height || 0);
+        resolve();
+      };
+      image.addEventListener('error', handleError);
+      image.addEventListener('load', handleLoad);
+      image.src = previewSrc || '';
+      this.removers.push(removeEventListeners);
+    });
 
   clearPreviewCanvas() {
     if (this.canvas && this.canvasContext) {
@@ -96,28 +98,29 @@ class ImageLoader extends React.PureComponent<IImageLoader> {
     }
   }
 
-  loadOriginalImage = ({ src }: IImageLoader) => new Promise<void>((resolve, reject) => {
-    const image = new Image();
-    const removeEventListeners = () => {
-      image.removeEventListener('error', handleError);
-      image.removeEventListener('load', handleLoad);
-    };
-    const handleError = () => {
-      removeEventListeners();
-      reject();
-    };
-    const handleLoad = () => {
-      removeEventListeners();
-      resolve();
-    };
-    image.addEventListener('error', handleError);
-    image.addEventListener('load', handleLoad);
-    image.src = src;
-    this.removers.push(removeEventListeners);
-  });
+  loadOriginalImage = ({ src }: IImageLoader) =>
+    new Promise<void>((resolve, reject) => {
+      const image = new Image();
+      const removeEventListeners = () => {
+        image.removeEventListener('error', handleError);
+        image.removeEventListener('load', handleLoad);
+      };
+      const handleError = () => {
+        removeEventListeners();
+        reject();
+      };
+      const handleLoad = () => {
+        removeEventListeners();
+        resolve();
+      };
+      image.addEventListener('error', handleError);
+      image.addEventListener('load', handleLoad);
+      image.src = src;
+      this.removers.push(removeEventListeners);
+    });
 
   removeEventListeners() {
-    this.removers.forEach(listeners => listeners());
+    this.removers.forEach((listeners) => listeners());
     this.removers = [];
   }
 
@@ -139,22 +142,17 @@ class ImageLoader extends React.PureComponent<IImageLoader> {
       <div className='relative flex h-full w-full flex-col items-center justify-center'>
         {loading ? (
           <canvas
-            className={clsx({ 'hidden': !this.hasSize() })}
+            className={clsx({ hidden: !this.hasSize() })}
             ref={this.setCanvasRef}
             width={width}
             height={height}
           />
         ) : (
-          <ZoomableImage
-            alt={alt}
-            src={src}
-            onClick={onClick}
-          />
+          <ZoomableImage alt={alt} src={src} onClick={onClick} />
         )}
       </div>
     );
   }
-
 }
 
 export { ImageLoader as default };

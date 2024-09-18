@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 
 import List, { ListItem } from 'pl-fe/components/list';
-import { Button, FileInput, Form, FormActions, FormGroup, Text, Toggle } from 'pl-fe/components/ui';
+import {
+  Button,
+  FileInput,
+  Form,
+  FormActions,
+  FormGroup,
+  Text,
+  Toggle,
+} from 'pl-fe/components/ui';
 import { useAppDispatch } from 'pl-fe/hooks';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
@@ -13,12 +21,20 @@ interface IDataImporter {
     input_hint: MessageDescriptor;
     submit: MessageDescriptor;
   };
-  action: (list: File, overwrite?: boolean) => (dispatch: AppDispatch, getState: () => RootState) => Promise<void>;
+  action: (
+    list: File,
+    overwrite?: boolean,
+  ) => (dispatch: AppDispatch, getState: () => RootState) => Promise<void>;
   accept?: string;
   allowOverwrite?: boolean;
 }
 
-const DataImporter: React.FC<IDataImporter> = ({ messages, action, accept = '.csv,text/csv', allowOverwrite }) => {
+const DataImporter: React.FC<IDataImporter> = ({
+  messages,
+  action,
+  accept = '.csv,text/csv',
+  allowOverwrite,
+}) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -28,37 +44,44 @@ const DataImporter: React.FC<IDataImporter> = ({ messages, action, accept = '.cs
 
   const handleSubmit: React.FormEventHandler = (event) => {
     setIsLoading(true);
-    dispatch(action(file!, overwrite)).then(() => {
-      setIsLoading(false);
-    }).catch(() => {
-      setIsLoading(false);
-    });
+    dispatch(action(file!, overwrite))
+      .then(() => {
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
 
     event.preventDefault();
   };
 
-  const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const file = e.target.files?.item(0);
     setFile(file);
   };
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Text size='xl' weight='bold' tag='label'>{intl.formatMessage(messages.input_label)}</Text>
+      <Text size='xl' weight='bold' tag='label'>
+        {intl.formatMessage(messages.input_label)}
+      </Text>
       <FormGroup
-        hintText={<Text theme='muted'>{intl.formatMessage(messages.input_hint)}</Text>}
+        hintText={
+          <Text theme='muted'>{intl.formatMessage(messages.input_hint)}</Text>
+        }
       >
-        <FileInput
-          accept={accept}
-          onChange={handleFileChange}
-          required
-        />
+        <FileInput accept={accept} onChange={handleFileChange} required />
       </FormGroup>
 
       {allowOverwrite && (
         <List>
           <ListItem
-            label={<FormattedMessage id='import_data.overwrite' defaultMessage='Overwrite instead of appending' />}
+            label={
+              <FormattedMessage
+                id='import_data.overwrite'
+                defaultMessage='Overwrite instead of appending'
+              />
+            }
           >
             <Toggle
               checked={overwrite}

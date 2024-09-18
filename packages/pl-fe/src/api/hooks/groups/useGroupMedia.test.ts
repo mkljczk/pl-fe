@@ -11,7 +11,9 @@ describe('useGroupMedia hook', () => {
   describe('with a successful request', () => {
     beforeEach(() => {
       __stub((mock) => {
-        mock.onGet(`/api/v1/timelines/group/${groupId}?only_media=true`).reply(200, [status]);
+        mock
+          .onGet(`/api/v1/timelines/group/${groupId}?only_media=true`)
+          .reply(200, [status]);
       });
     });
 
@@ -28,11 +30,13 @@ describe('useGroupMedia hook', () => {
   describe('with an unsuccessful query', () => {
     beforeEach(() => {
       __stub((mock) => {
-        mock.onGet(`/api/v1/timelines/group/${groupId}?only_media=true`).networkError();
+        mock
+          .onGet(`/api/v1/timelines/group/${groupId}?only_media=true`)
+          .networkError();
       });
     });
 
-    it('is has error state', async() => {
+    it('is has error state', async () => {
       const { result } = renderHook(() => useGroupMedia(groupId));
 
       await waitFor(() => expect(result.current.isFetching).toBe(false));

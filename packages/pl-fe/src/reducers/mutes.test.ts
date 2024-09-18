@@ -63,5 +63,4 @@ describe('mutes reducer', () => {
       },
     });
   });
-
 });

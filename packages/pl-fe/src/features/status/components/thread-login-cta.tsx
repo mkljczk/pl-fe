@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Card, CardTitle, Text, Stack, Button } from 'pl-fe/components/ui';
+import { Button, Card, CardTitle, Stack, Text } from 'pl-fe/components/ui';
 import { useInstance, usePlFeConfig } from 'pl-fe/hooks';
 
 /** Prompts logged-out users to log in when viewing a thread. */
@@ -14,7 +14,14 @@ const ThreadLoginCta: React.FC = () => {
   return (
     <Card className='space-y-6 px-6 py-12 text-center' variant='rounded'>
       <Stack>
-        <CardTitle title={<FormattedMessage id='thread_login.title' defaultMessage='Continue the conversation' />} />
+        <CardTitle
+          title={
+            <FormattedMessage
+              id='thread_login.title'
+              defaultMessage='Continue the conversation'
+            />
+          }
+        />
         <Text>
           <FormattedMessage
             id='thread_login.message'

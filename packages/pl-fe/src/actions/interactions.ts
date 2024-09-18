@@ -82,43 +82,61 @@ type AccountListLink = () => Promise<PaginatedResponse<Account>>;
 
 const messages = defineMessages({
   bookmarkAdded: { id: 'status.bookmarked', defaultMessage: 'Bookmark added.' },
-  bookmarkRemoved: { id: 'status.unbookmarked', defaultMessage: 'Bookmark removed.' },
-  folderChanged: { id: 'status.bookmark_folder_changed', defaultMessage: 'Changed folder' },
+  bookmarkRemoved: {
+    id: 'status.unbookmarked',
+    defaultMessage: 'Bookmark removed.',
+  },
+  folderChanged: {
+    id: 'status.bookmark_folder_changed',
+    defaultMessage: 'Changed folder',
+  },
   view: { id: 'toast.view', defaultMessage: 'View' },
-  selectFolder: { id: 'status.bookmark.select_folder', defaultMessage: 'Select folder' },
+  selectFolder: {
+    id: 'status.bookmark.select_folder',
+    defaultMessage: 'Select folder',
+  },
 });
 
-const reblog = (status: Pick<Status, 'id'>) =>
+const reblog =
+  (status: Pick<Status, 'id'>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
     dispatch(reblogRequest(status.id));
 
-    return getClient(getState()).statuses.reblogStatus(status.id).then((response) => {
-      // The reblog API method returns a new status wrapped around the original. In this case we are only
-      // interested in how the original is modified, hence passing it skipping the wrapper
-      if (response.reblog) dispatch(importFetchedStatus(response.reblog as Status));
-      dispatch(reblogSuccess(response));
-    }).catch(error => {
-      dispatch(reblogFail(status.id, error));
-    });
+    return getClient(getState())
+      .statuses.reblogStatus(status.id)
+      .then((response) => {
+        // The reblog API method returns a new status wrapped around the original. In this case we are only
+        // interested in how the original is modified, hence passing it skipping the wrapper
+        if (response.reblog)
+          dispatch(importFetchedStatus(response.reblog as Status));
+        dispatch(reblogSuccess(response));
+      })
+      .catch((error) => {
+        dispatch(reblogFail(status.id, error));
+      });
   };
 
-const unreblog = (status: Pick<Status, 'id'>) =>
+const unreblog =
+  (status: Pick<Status, 'id'>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
     dispatch(unreblogRequest(status.id));
 
-    return getClient(getState()).statuses.unreblogStatus(status.id).then((status) => {
-      dispatch(unreblogSuccess(status));
-    }).catch(error => {
-      dispatch(unreblogFail(status.id, error));
-    });
+    return getClient(getState())
+      .statuses.unreblogStatus(status.id)
+      .then((status) => {
+        dispatch(unreblogSuccess(status));
+      })
+      .catch((error) => {
+        dispatch(unreblogFail(status.id, error));
+      });
   };
 
-const toggleReblog = (status: Pick<Status, 'id' | 'reblogged'>) =>
-  (dispatch: AppDispatch) => {
+const toggleReblog =
+  (status: Pick<Status, 'id' | 'reblogged'>) => (dispatch: AppDispatch) => {
     if (status.reblogged) {
       dispatch(unreblog(status));
     } else {
@@ -160,34 +178,42 @@ const unreblogFail = (statusId: string, error: unknown) => ({
   error,
 });
 
-const favourite = (status: Pick<Status, 'id'>) =>
+const favourite =
+  (status: Pick<Status, 'id'>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
     dispatch(favouriteRequest(status.id));
 
-    return getClient(getState()).statuses.favouriteStatus(status.id).then((response) => {
-      dispatch(favouriteSuccess(response));
-    }).catch((error) => {
-      dispatch(favouriteFail(status.id, error));
-    });
+    return getClient(getState())
+      .statuses.favouriteStatus(status.id)
+      .then((response) => {
+        dispatch(favouriteSuccess(response));
+      })
+      .catch((error) => {
+        dispatch(favouriteFail(status.id, error));
+      });
   };
 
-const unfavourite = (status: Pick<Status, 'id'>) =>
+const unfavourite =
+  (status: Pick<Status, 'id'>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
     dispatch(unfavouriteRequest(status.id));
 
-    return getClient(getState()).statuses.unfavouriteStatus(status.id).then((response) => {
-      dispatch(unfavouriteSuccess(response));
-    }).catch(error => {
-      dispatch(unfavouriteFail(status.id, error));
-    });
+    return getClient(getState())
+      .statuses.unfavouriteStatus(status.id)
+      .then((response) => {
+        dispatch(unfavouriteSuccess(response));
+      })
+      .catch((error) => {
+        dispatch(unfavouriteFail(status.id, error));
+      });
   };
 
-const toggleFavourite = (status: Pick<Status, 'id' | 'favourited'>) =>
-  (dispatch: AppDispatch) => {
+const toggleFavourite =
+  (status: Pick<Status, 'id' | 'favourited'>) => (dispatch: AppDispatch) => {
     if (status.favourited) {
       dispatch(unfavourite(status));
     } else {
@@ -229,34 +255,42 @@ const unfavouriteFail = (statusId: string, error: unknown) => ({
   error,
 });
 
-const dislike = (status: Pick<Status, 'id'>) =>
+const dislike =
+  (status: Pick<Status, 'id'>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
     dispatch(dislikeRequest(status.id));
 
-    return getClient(getState).statuses.dislikeStatus(status.id).then((response) => {
-      dispatch(dislikeSuccess(response));
-    }).catch((error) => {
-      dispatch(dislikeFail(status.id, error));
-    });
+    return getClient(getState)
+      .statuses.dislikeStatus(status.id)
+      .then((response) => {
+        dispatch(dislikeSuccess(response));
+      })
+      .catch((error) => {
+        dispatch(dislikeFail(status.id, error));
+      });
   };
 
-const undislike = (status: Pick<Status, 'id'>) =>
+const undislike =
+  (status: Pick<Status, 'id'>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
     dispatch(undislikeRequest(status.id));
 
-    return getClient(getState).statuses.undislikeStatus(status.id).then((response) => {
-      dispatch(undislikeSuccess(response));
-    }).catch(error => {
-      dispatch(undislikeFail(status.id, error));
-    });
+    return getClient(getState)
+      .statuses.undislikeStatus(status.id)
+      .then((response) => {
+        dispatch(undislikeSuccess(response));
+      })
+      .catch((error) => {
+        dispatch(undislikeFail(status.id, error));
+      });
   };
 
-const toggleDislike = (status: Pick<Status, 'id' | 'disliked'>) =>
-  (dispatch: AppDispatch) => {
+const toggleDislike =
+  (status: Pick<Status, 'id' | 'disliked'>) => (dispatch: AppDispatch) => {
     if (status.disliked) {
       dispatch(undislike(status));
     } else {
@@ -298,7 +332,8 @@ const undislikeFail = (statusId: string, error: unknown) => ({
   error,
 });
 
-const bookmark = (status: Pick<Status, 'id'>, folderId?: string) =>
+const bookmark =
+  (status: Pick<Status, 'id'>, folderId?: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
 
@@ -306,45 +341,58 @@ const bookmark = (status: Pick<Status, 'id'>, folderId?: string) =>
 
     dispatch(bookmarkRequest(status.id));
 
-    return getClient(getState()).statuses.bookmarkStatus(status.id, folderId).then((response) => {
-      dispatch(importFetchedStatus(response));
-      dispatch(bookmarkSuccess(response));
+    return getClient(getState())
+      .statuses.bookmarkStatus(status.id, folderId)
+      .then((response) => {
+        dispatch(importFetchedStatus(response));
+        dispatch(bookmarkSuccess(response));
 
-      let opts: IToastOptions = {
-        actionLabel: messages.view,
-        actionLink: folderId ? `/bookmarks/${folderId}` : '/bookmarks/all',
-      };
-
-      if (features.bookmarkFolders && typeof folderId !== 'string') {
-        opts = {
-          actionLabel: messages.selectFolder,
-          action: () => useModalsStore.getState().openModal('SELECT_BOOKMARK_FOLDER', {
-            statusId: status.id,
-          }),
+        let opts: IToastOptions = {
+          actionLabel: messages.view,
+          actionLink: folderId ? `/bookmarks/${folderId}` : '/bookmarks/all',
         };
-      }
 
-      toast.success(typeof folderId === 'string' ? messages.folderChanged : messages.bookmarkAdded, opts);
-    }).catch((error) => {
-      dispatch(bookmarkFail(status.id, error));
-    });
+        if (features.bookmarkFolders && typeof folderId !== 'string') {
+          opts = {
+            actionLabel: messages.selectFolder,
+            action: () =>
+              useModalsStore.getState().openModal('SELECT_BOOKMARK_FOLDER', {
+                statusId: status.id,
+              }),
+          };
+        }
+
+        toast.success(
+          typeof folderId === 'string'
+            ? messages.folderChanged
+            : messages.bookmarkAdded,
+          opts,
+        );
+      })
+      .catch((error) => {
+        dispatch(bookmarkFail(status.id, error));
+      });
   };
 
-const unbookmark = (status: Pick<Status, 'id'>) =>
+const unbookmark =
+  (status: Pick<Status, 'id'>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(unbookmarkRequest(status.id));
 
-    return getClient(getState()).statuses.unbookmarkStatus(status.id).then(response => {
-      dispatch(importFetchedStatus(response));
-      dispatch(unbookmarkSuccess(response));
-      toast.success(messages.bookmarkRemoved);
-    }).catch(error => {
-      dispatch(unbookmarkFail(status.id, error));
-    });
+    return getClient(getState())
+      .statuses.unbookmarkStatus(status.id)
+      .then((response) => {
+        dispatch(importFetchedStatus(response));
+        dispatch(unbookmarkSuccess(response));
+        toast.success(messages.bookmarkRemoved);
+      })
+      .catch((error) => {
+        dispatch(unbookmarkFail(status.id, error));
+      });
   };
 
-const toggleBookmark = (status: Pick<Status, 'id' | 'bookmarked'>) =>
-  (dispatch: AppDispatch) => {
+const toggleBookmark =
+  (status: Pick<Status, 'id' | 'bookmarked'>) => (dispatch: AppDispatch) => {
     if (status.bookmarked) {
       dispatch(unbookmark(status));
     } else {
@@ -386,17 +434,20 @@ const unbookmarkFail = (statusId: string, error: unknown) => ({
   error,
 });
 
-const fetchReblogs = (statusId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const fetchReblogs =
+  (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchReblogsRequest(statusId));
 
-    return getClient(getState()).statuses.getRebloggedBy(statusId).then(response => {
-      dispatch(importFetchedAccounts(response.items));
-      dispatch(fetchRelationships(response.items.map((item) => item.id)));
-      dispatch(fetchReblogsSuccess(statusId, response.items, response.next));
-    }).catch(error => {
-      dispatch(fetchReblogsFail(statusId, error));
-    });
+    return getClient(getState())
+      .statuses.getRebloggedBy(statusId)
+      .then((response) => {
+        dispatch(importFetchedAccounts(response.items));
+        dispatch(fetchRelationships(response.items.map((item) => item.id)));
+        dispatch(fetchReblogsSuccess(statusId, response.items, response.next));
+      })
+      .catch((error) => {
+        dispatch(fetchReblogsFail(statusId, error));
+      });
   };
 
 const fetchReblogsRequest = (statusId: string) => ({
@@ -404,7 +455,11 @@ const fetchReblogsRequest = (statusId: string) => ({
   statusId,
 });
 
-const fetchReblogsSuccess = (statusId: string, accounts: Array<Account>, next: AccountListLink | null) => ({
+const fetchReblogsSuccess = (
+  statusId: string,
+  accounts: Array<Account>,
+  next: AccountListLink | null,
+) => ({
   type: REBLOGS_FETCH_SUCCESS,
   statusId,
   accounts,
@@ -417,18 +472,25 @@ const fetchReblogsFail = (statusId: string, error: unknown) => ({
   error,
 });
 
-const expandReblogs = (statusId: string, next: AccountListLink) =>
+const expandReblogs =
+  (statusId: string, next: AccountListLink) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    next().then(response => {
-      dispatch(importFetchedAccounts(response.items));
-      dispatch(fetchRelationships(response.items.map((item) => item.id)));
-      dispatch(expandReblogsSuccess(statusId, response.items, response.next));
-    }).catch(error => {
-      dispatch(expandReblogsFail(statusId, error));
-    });
+    next()
+      .then((response) => {
+        dispatch(importFetchedAccounts(response.items));
+        dispatch(fetchRelationships(response.items.map((item) => item.id)));
+        dispatch(expandReblogsSuccess(statusId, response.items, response.next));
+      })
+      .catch((error) => {
+        dispatch(expandReblogsFail(statusId, error));
+      });
   };
 
-const expandReblogsSuccess = (statusId: string, accounts: Array<Account>, next: AccountListLink | null) => ({
+const expandReblogsSuccess = (
+  statusId: string,
+  accounts: Array<Account>,
+  next: AccountListLink | null,
+) => ({
   type: REBLOGS_EXPAND_SUCCESS,
   statusId,
   accounts,
@@ -441,17 +503,22 @@ const expandReblogsFail = (statusId: string, error: unknown) => ({
   error,
 });
 
-const fetchFavourites = (statusId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const fetchFavourites =
+  (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchFavouritesRequest(statusId));
 
-    return getClient(getState()).statuses.getFavouritedBy(statusId).then(response => {
-      dispatch(importFetchedAccounts(response.items));
-      dispatch(fetchRelationships(response.items.map((item) => item.id)));
-      dispatch(fetchFavouritesSuccess(statusId, response.items, response.next));
-    }).catch(error => {
-      dispatch(fetchFavouritesFail(statusId, error));
-    });
+    return getClient(getState())
+      .statuses.getFavouritedBy(statusId)
+      .then((response) => {
+        dispatch(importFetchedAccounts(response.items));
+        dispatch(fetchRelationships(response.items.map((item) => item.id)));
+        dispatch(
+          fetchFavouritesSuccess(statusId, response.items, response.next),
+        );
+      })
+      .catch((error) => {
+        dispatch(fetchFavouritesFail(statusId, error));
+      });
   };
 
 const fetchFavouritesRequest = (statusId: string) => ({
@@ -459,7 +526,11 @@ const fetchFavouritesRequest = (statusId: string) => ({
   statusId,
 });
 
-const fetchFavouritesSuccess = (statusId: string, accounts: Array<Account>, next: AccountListLink | null) => ({
+const fetchFavouritesSuccess = (
+  statusId: string,
+  accounts: Array<Account>,
+  next: AccountListLink | null,
+) => ({
   type: FAVOURITES_FETCH_SUCCESS,
   statusId,
   accounts,
@@ -472,18 +543,26 @@ const fetchFavouritesFail = (statusId: string, error: unknown) => ({
   error,
 });
 
-const expandFavourites = (statusId: string, next: AccountListLink) =>
-  (dispatch: AppDispatch) => {
-    next().then(response => {
-      dispatch(importFetchedAccounts(response.items));
-      dispatch(fetchRelationships(response.items.map((item) => item.id)));
-      dispatch(expandFavouritesSuccess(statusId, response.items, response.next));
-    }).catch(error => {
-      dispatch(expandFavouritesFail(statusId, error));
-    });
+const expandFavourites =
+  (statusId: string, next: AccountListLink) => (dispatch: AppDispatch) => {
+    next()
+      .then((response) => {
+        dispatch(importFetchedAccounts(response.items));
+        dispatch(fetchRelationships(response.items.map((item) => item.id)));
+        dispatch(
+          expandFavouritesSuccess(statusId, response.items, response.next),
+        );
+      })
+      .catch((error) => {
+        dispatch(expandFavouritesFail(statusId, error));
+      });
   };
 
-const expandFavouritesSuccess = (statusId: string, accounts: Array<Account>, next: AccountListLink | null) => ({
+const expandFavouritesSuccess = (
+  statusId: string,
+  accounts: Array<Account>,
+  next: AccountListLink | null,
+) => ({
   type: FAVOURITES_EXPAND_SUCCESS,
   statusId,
   accounts,
@@ -496,17 +575,20 @@ const expandFavouritesFail = (statusId: string, error: unknown) => ({
   error,
 });
 
-const fetchDislikes = (statusId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const fetchDislikes =
+  (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchDislikesRequest(statusId));
 
-    return getClient(getState).statuses.getDislikedBy(statusId).then(response => {
-      dispatch(importFetchedAccounts(response));
-      dispatch(fetchRelationships(response.map((item) => item.id)));
-      dispatch(fetchDislikesSuccess(statusId, response));
-    }).catch(error => {
-      dispatch(fetchDislikesFail(statusId, error));
-    });
+    return getClient(getState)
+      .statuses.getDislikedBy(statusId)
+      .then((response) => {
+        dispatch(importFetchedAccounts(response));
+        dispatch(fetchRelationships(response.map((item) => item.id)));
+        dispatch(fetchDislikesSuccess(statusId, response));
+      })
+      .catch((error) => {
+        dispatch(fetchDislikesFail(statusId, error));
+      });
   };
 
 const fetchDislikesRequest = (statusId: string) => ({
@@ -526,16 +608,23 @@ const fetchDislikesFail = (statusId: string, error: unknown) => ({
   error,
 });
 
-const fetchReactions = (statusId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const fetchReactions =
+  (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(fetchReactionsRequest(statusId));
 
-    return getClient(getState).statuses.getStatusReactions(statusId).then(response => {
-      dispatch(importFetchedAccounts((response).map(({ accounts }) => accounts).flat()));
-      dispatch(fetchReactionsSuccess(statusId, response));
-    }).catch(error => {
-      dispatch(fetchReactionsFail(statusId, error));
-    });
+    return getClient(getState)
+      .statuses.getStatusReactions(statusId)
+      .then((response) => {
+        dispatch(
+          importFetchedAccounts(
+            response.map(({ accounts }) => accounts).flat(),
+          ),
+        );
+        dispatch(fetchReactionsSuccess(statusId, response));
+      })
+      .catch((error) => {
+        dispatch(fetchReactionsFail(statusId, error));
+      });
   };
 
 const fetchReactionsRequest = (statusId: string) => ({
@@ -543,7 +632,10 @@ const fetchReactionsRequest = (statusId: string) => ({
   statusId,
 });
 
-const fetchReactionsSuccess = (statusId: string, reactions: EmojiReaction[]) => ({
+const fetchReactionsSuccess = (
+  statusId: string,
+  reactions: EmojiReaction[],
+) => ({
   type: REACTIONS_FETCH_SUCCESS,
   statusId,
   reactions,
@@ -555,18 +647,22 @@ const fetchReactionsFail = (statusId: string, error: unknown) => ({
   error,
 });
 
-const pin = (status: Pick<Status, 'id'>, accountId: string) =>
+const pin =
+  (status: Pick<Status, 'id'>, accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
     dispatch(pinRequest(status.id, accountId));
 
-    return getClient(getState()).statuses.pinStatus(status.id).then(response => {
-      dispatch(importFetchedStatus(response));
-      dispatch(pinSuccess(response, accountId));
-    }).catch(error => {
-      dispatch(pinFail(status.id, error, accountId));
-    });
+    return getClient(getState())
+      .statuses.pinStatus(status.id)
+      .then((response) => {
+        dispatch(importFetchedStatus(response));
+        dispatch(pinSuccess(response, accountId));
+      })
+      .catch((error) => {
+        dispatch(pinFail(status.id, error, accountId));
+      });
   };
 
 const pinRequest = (statusId: string, accountId: string) => ({
@@ -589,21 +685,26 @@ const pinFail = (statusId: string, error: unknown, accountId: string) => ({
   accountId,
 });
 
-const unpin = (status: Pick<Status, 'id'>, accountId: string) =>
+const unpin =
+  (status: Pick<Status, 'id'>, accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
     dispatch(unpinRequest(status.id, accountId));
 
-    return getClient(getState()).statuses.unpinStatus(status.id).then(response => {
-      dispatch(importFetchedStatus(response));
-      dispatch(unpinSuccess(response, accountId));
-    }).catch(error => {
-      dispatch(unpinFail(status.id, error, accountId));
-    });
+    return getClient(getState())
+      .statuses.unpinStatus(status.id)
+      .then((response) => {
+        dispatch(importFetchedStatus(response));
+        dispatch(unpinSuccess(response, accountId));
+      })
+      .catch((error) => {
+        dispatch(unpinFail(status.id, error, accountId));
+      });
   };
 
-const togglePin = (status: Pick<Status, 'id' | 'pinned'>) =>
+const togglePin =
+  (status: Pick<Status, 'id' | 'pinned'>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const accountId = getState().me;
 
@@ -636,18 +737,22 @@ const unpinFail = (statusId: string, error: unknown, accountId: string) => ({
   accountId,
 });
 
-const remoteInteraction = (ap_id: string, profile: string) =>
+const remoteInteraction =
+  (ap_id: string, profile: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(remoteInteractionRequest(ap_id, profile));
 
-    return getClient(getState).accounts.remoteInteraction(ap_id, profile).then((data) => {
-      dispatch(remoteInteractionSuccess(ap_id, profile, data.url));
+    return getClient(getState)
+      .accounts.remoteInteraction(ap_id, profile)
+      .then((data) => {
+        dispatch(remoteInteractionSuccess(ap_id, profile, data.url));
 
-      return data.url;
-    }).catch(error => {
-      dispatch(remoteInteractionFail(ap_id, profile, error));
-      throw error;
-    });
+        return data.url;
+      })
+      .catch((error) => {
+        dispatch(remoteInteractionFail(ap_id, profile, error));
+        throw error;
+      });
   };
 
 const remoteInteractionRequest = (ap_id: string, profile: string) => ({
@@ -656,14 +761,22 @@ const remoteInteractionRequest = (ap_id: string, profile: string) => ({
   profile,
 });
 
-const remoteInteractionSuccess = (ap_id: string, profile: string, url: string) => ({
+const remoteInteractionSuccess = (
+  ap_id: string,
+  profile: string,
+  url: string,
+) => ({
   type: REMOTE_INTERACTION_SUCCESS,
   ap_id,
   profile,
   url,
 });
 
-const remoteInteractionFail = (ap_id: string, profile: string, error: unknown) => ({
+const remoteInteractionFail = (
+  ap_id: string,
+  profile: string,
+  error: unknown,
+) => ({
   type: REMOTE_INTERACTION_FAIL,
   ap_id,
   profile,
@@ -671,7 +784,7 @@ const remoteInteractionFail = (ap_id: string, profile: string, error: unknown) =
 });
 
 type InteractionsAction =
-  ReturnType<typeof reblogRequest>
+  | ReturnType<typeof reblogRequest>
   | ReturnType<typeof reblogSuccess>
   | ReturnType<typeof reblogFail>
   | ReturnType<typeof unreblogRequest>

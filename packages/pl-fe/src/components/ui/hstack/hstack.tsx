@@ -31,7 +31,11 @@ const spaces = {
   8: 'gap-8',
 };
 
-interface IHStack extends Pick<React.HTMLAttributes<HTMLDivElement>, 'children' | 'className' | 'onClick' | 'style' | 'title'> {
+interface IHStack
+  extends Pick<
+    React.HTMLAttributes<HTMLDivElement>,
+    'children' | 'className' | 'onClick' | 'style' | 'title'
+  > {
   /** Vertical alignment of children. */
   alignItems?: keyof typeof alignItemsOptions;
   /** Horizontal alignment of children. */
@@ -48,7 +52,16 @@ interface IHStack extends Pick<React.HTMLAttributes<HTMLDivElement>, 'children' 
 
 /** Horizontal row of child elements. */
 const HStack = forwardRef<HTMLDivElement, IHStack>((props, ref) => {
-  const { space, alignItems, justifyContent, className, grow, element = 'div', wrap, ...filteredProps } = props;
+  const {
+    space,
+    alignItems,
+    justifyContent,
+    className,
+    grow,
+    element = 'div',
+    wrap,
+    ...filteredProps
+  } = props;
 
   const Elem = element as 'div';
 
@@ -56,16 +69,21 @@ const HStack = forwardRef<HTMLDivElement, IHStack>((props, ref) => {
     <Elem
       {...filteredProps}
       ref={ref}
-      className={clsx('flex', {
-        // @ts-ignore
-        [alignItemsOptions[alignItems]]: typeof alignItems !== 'undefined',
-        // @ts-ignore
-        [justifyContentOptions[justifyContent]]: typeof justifyContent !== 'undefined',
-        // @ts-ignore
-        [spaces[space]]: typeof space !== 'undefined',
-        'grow': grow,
-        'flex-wrap': wrap,
-      }, className)}
+      className={clsx(
+        'flex',
+        {
+          // @ts-ignore
+          [alignItemsOptions[alignItems]]: typeof alignItems !== 'undefined',
+          // @ts-ignore
+          [justifyContentOptions[justifyContent]]:
+            typeof justifyContent !== 'undefined',
+          // @ts-ignore
+          [spaces[space]]: typeof space !== 'undefined',
+          grow: grow,
+          'flex-wrap': wrap,
+        },
+        className,
+      )}
     />
   );
 });

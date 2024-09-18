@@ -4,21 +4,39 @@ import { useHistory } from 'react-router-dom';
 
 import { changeSetting } from 'pl-fe/actions/settings';
 import List, { ListItem } from 'pl-fe/components/list';
-import { Button, CardBody, CardTitle, Form, HStack, IconButton, Stack, Toggle } from 'pl-fe/components/ui';
+import {
+  Button,
+  CardBody,
+  CardTitle,
+  Form,
+  HStack,
+  IconButton,
+  Stack,
+  Toggle,
+} from 'pl-fe/components/ui';
 import SettingToggle from 'pl-fe/features/notifications/components/setting-toggle';
 import { useAppDispatch, useOwnAccount, useSettings } from 'pl-fe/hooks';
 import { useUpdateCredentials } from 'pl-fe/queries/accounts';
 
 type FormData = {
   accepts_chat_messages?: boolean;
-}
+};
 
 const messages = defineMessages({
   title: { id: 'chat.page_settings.title', defaultMessage: 'Message Settings' },
-  preferences: { id: 'chat.page_settings.preferences', defaultMessage: 'Preferences' },
+  preferences: {
+    id: 'chat.page_settings.preferences',
+    defaultMessage: 'Preferences',
+  },
   privacy: { id: 'chat.page_settings.privacy', defaultMessage: 'Privacy' },
-  acceptingMessageLabel: { id: 'chat.page_settings.accepting_messages.label', defaultMessage: 'Allow users to start a new chat with you' },
-  playSoundsLabel: { id: 'chat.page_settings.play_sounds.label', defaultMessage: 'Play a sound when you receive a message' },
+  acceptingMessageLabel: {
+    id: 'chat.page_settings.accepting_messages.label',
+    defaultMessage: 'Allow users to start a new chat with you',
+  },
+  playSoundsLabel: {
+    id: 'chat.page_settings.play_sounds.label',
+    defaultMessage: 'Play a sound when you receive a message',
+  },
   submit: { id: 'chat.page_settings.submit', defaultMessage: 'Save' },
 });
 
@@ -60,10 +78,12 @@ const ChatPageSettings = () => {
         <CardTitle title={intl.formatMessage(messages.preferences)} />
 
         <List>
-          <ListItem
-            label={intl.formatMessage(messages.playSoundsLabel)}
-          >
-            <SettingToggle settings={settings} settingPath={['chats', 'sound']} onChange={onToggleChange} />
+          <ListItem label={intl.formatMessage(messages.playSoundsLabel)}>
+            <SettingToggle
+              settings={settings}
+              settingPath={['chats', 'sound']}
+              onChange={onToggleChange}
+            />
           </ListItem>
         </List>
 
@@ -76,13 +96,22 @@ const ChatPageSettings = () => {
             >
               <Toggle
                 checked={data.accepts_chat_messages}
-                onChange={(event) => setData((prevData) => ({ ...prevData, accepts_chat_messages: event.target.checked }))}
+                onChange={(event) =>
+                  setData((prevData) => ({
+                    ...prevData,
+                    accepts_chat_messages: event.target.checked,
+                  }))
+                }
               />
             </ListItem>
           </List>
         </CardBody>
 
-        <Button type='submit' theme='primary' disabled={updateCredentials.isPending}>
+        <Button
+          type='submit'
+          theme='primary'
+          disabled={updateCredentials.isPending}
+        >
           {intl.formatMessage(messages.submit)}
         </Button>
       </Form>

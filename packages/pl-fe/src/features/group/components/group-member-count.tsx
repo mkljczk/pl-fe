@@ -13,9 +13,14 @@ interface IGroupMemberCount {
 
 const GroupMemberCount = ({ group }: IGroupMemberCount) => (
   <Link to={`/groups/${group.id}/members`} className='hover:underline'>
-    <Text theme='inherit' tag='span' size='sm' weight='medium' data-testid='group-member-count'>
-      {shortNumberFormat(group.members_count)}
-      {' '}
+    <Text
+      theme='inherit'
+      tag='span'
+      size='sm'
+      weight='medium'
+      data-testid='group-member-count'
+    >
+      {shortNumberFormat(group.members_count)}{' '}
       <FormattedMessage
         id='groups.discover.search.results.member_count'
         defaultMessage='{members, plural, one {member} other {members}}'

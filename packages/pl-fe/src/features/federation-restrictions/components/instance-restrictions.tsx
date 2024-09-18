@@ -8,8 +8,12 @@ import { useInstance } from 'pl-fe/hooks';
 import type { RemoteInstance } from 'pl-fe/selectors';
 
 const hasRestrictions = (remoteInstance: RemoteInstance): boolean => {
-  const { accept, reject_deletes, report_removal, ...federation } = remoteInstance.federation;
-  return !!Object.values(federation).reduce((acc, value) => Boolean(acc || value), false);
+  const { accept, reject_deletes, report_removal, ...federation } =
+    remoteInstance.federation;
+  return !!Object.values(federation).reduce(
+    (acc, value) => Boolean(acc || value),
+    false,
+  );
 };
 
 interface IRestriction {
@@ -21,9 +25,7 @@ const Restriction: React.FC<IRestriction> = ({ icon, children }) => (
   <HStack space={3}>
     <Icon className='h-5 w-5 flex-none' src={icon} />
 
-    <Text theme='muted'>
-      {children}
-    </Text>
+    <Text theme='muted'>{children}</Text>
   </HStack>
 );
 
@@ -31,7 +33,9 @@ interface IInstanceRestrictions {
   remoteInstance: RemoteInstance;
 }
 
-const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance }) => {
+const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({
+  remoteInstance,
+}) => {
   const instance = useInstance();
 
   const renderRestrictions = () => {
@@ -47,57 +51,73 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
     } = remoteInstance.federation;
 
     const fullMediaRemoval = media_removal && avatar_removal && banner_removal;
-    const partialMediaRemoval = media_removal || avatar_removal || banner_removal;
+    const partialMediaRemoval =
+      media_removal || avatar_removal || banner_removal;
 
     if (followers_only) {
-      items.push((
-        <Restriction key='followersOnly' icon={require('@tabler/icons/outline/lock.svg')}>
+      items.push(
+        <Restriction
+          key='followersOnly'
+          icon={require('@tabler/icons/outline/lock.svg')}
+        >
           <FormattedMessage
             id='federation_restriction.followers_only'
             defaultMessage='Hidden except to followers'
           />
-        </Restriction>
-      ));
+        </Restriction>,
+      );
     } else if (federated_timeline_removal) {
-      items.push((
-        <Restriction key='federatedTimelineRemoval' icon={require('@tabler/icons/outline/lock-open.svg')}>
+      items.push(
+        <Restriction
+          key='federatedTimelineRemoval'
+          icon={require('@tabler/icons/outline/lock-open.svg')}
+        >
           <FormattedMessage
             id='federation_restriction.federated_timeline_removal'
             defaultMessage='Fediverse timeline removal'
           />
-        </Restriction>
-      ));
+        </Restriction>,
+      );
     }
 
     if (fullMediaRemoval) {
-      items.push((
-        <Restriction key='fullMediaRemoval' icon={require('@tabler/icons/outline/photo-off.svg')}>
+      items.push(
+        <Restriction
+          key='fullMediaRemoval'
+          icon={require('@tabler/icons/outline/photo-off.svg')}
+        >
           <FormattedMessage
             id='federation_restriction.full_media_removal'
             defaultMessage='Full media removal'
           />
-        </Restriction>
-      ));
+        </Restriction>,
+      );
     } else if (partialMediaRemoval) {
-      items.push((
-        <Restriction key='partialMediaRemoval' icon={require('@tabler/icons/outline/photo-off.svg')}>
+      items.push(
+        <Restriction
+          key='partialMediaRemoval'
+          icon={require('@tabler/icons/outline/photo-off.svg')}
+        >
           <FormattedMessage
             id='federation_restriction.partial_media_removal'
             defaultMessage='Partial media removal'
           />
-        </Restriction>
-      ));
+        </Restriction>,
+      );
     }
 
     if (!fullMediaRemoval && media_nsfw) {
-      items.push((
-        <Restriction key='mediaNsfw' icon={require('@tabler/icons/outline/eye-off.svg')}>
+      items.push(
+        <Restriction
+          key='mediaNsfw'
+          icon={require('@tabler/icons/outline/eye-off.svg')}
+        >
           <FormattedMessage
             id='federation_restriction.media_nsfw'
             defaultMessage='Attachments marked NSFW'
           />
-        </Restriction>
-      ));
+        </Restriction>,
+      );
     }
 
     return items;
@@ -146,11 +166,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
     }
   };
 
-  return (
-    <Stack space={3}>
-      {renderContent()}
-    </Stack>
-  );
+  return <Stack space={3}>{renderContent()}</Stack>;
 };
 
 export { InstanceRestrictions as default };

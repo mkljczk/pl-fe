@@ -6,12 +6,22 @@ import { useAccount } from 'pl-fe/api/hooks';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useAppSelector } from 'pl-fe/hooks';
 
-import { Card, CardBody, CardTitle, HStack, Stack, Text } from '../../components/ui';
+import {
+  Card,
+  CardBody,
+  CardTitle,
+  HStack,
+  Stack,
+  Text,
+} from '../../components/ui';
 import ActionButton from '../ui/components/action-button';
 import { HotKeys } from '../ui/components/hotkeys';
 
 const messages = defineMessages({
-  heading: { id: 'feed_suggestions.heading', defaultMessage: 'Suggested profiles' },
+  heading: {
+    id: 'feed_suggestions.heading',
+    defaultMessage: 'Suggested profiles',
+  },
   viewAll: { id: 'feed_suggestions.view_all', defaultMessage: 'View all' },
 });
 
@@ -24,11 +34,11 @@ const SuggestionItem: React.FC<ISuggestionItem> = ({ accountId }) => {
   if (!account) return null;
 
   return (
-    <Stack space={3} className='w-52 shrink-0 rounded-md border border-solid border-gray-300 p-4 md:w-full md:shrink md:border-transparent md:p-0 dark:border-gray-800 dark:md:border-transparent'>
-      <Link
-        to={`/@${account.acct}`}
-        title={account.acct}
-      >
+    <Stack
+      space={3}
+      className='w-52 shrink-0 rounded-md border border-solid border-gray-300 p-4 md:w-full md:shrink md:border-transparent md:p-0 dark:border-gray-800 dark:md:border-transparent'
+    >
+      <Link to={`/@${account.acct}`} title={account.acct}>
         <Stack space={3} className='mx-auto w-40 md:w-24'>
           <img
             src={account.avatar}
@@ -50,7 +60,9 @@ const SuggestionItem: React.FC<ISuggestionItem> = ({ accountId }) => {
               {account.verified && <VerificationBadge />}
             </HStack>
 
-            <Text theme='muted' align='center' size='sm' truncate>@{account.acct}</Text>
+            <Text theme='muted' align='center' size='sm' truncate>
+              @{account.acct}
+            </Text>
           </Stack>
         </Stack>
       </Link>
@@ -68,7 +80,11 @@ interface IFeedSuggesetions {
   onMoveDown?: (statusId: string, featured?: boolean) => void;
 }
 
-const FeedSuggestions: React.FC<IFeedSuggesetions> = ({ statusId, onMoveUp, onMoveDown }) => {
+const FeedSuggestions: React.FC<IFeedSuggesetions> = ({
+  statusId,
+  onMoveUp,
+  onMoveDown,
+}) => {
   const intl = useIntl();
   const suggestedProfiles = useAppSelector((state) => state.suggestions.items);
   const isLoading = useAppSelector((state) => state.suggestions.isLoading);
@@ -94,7 +110,12 @@ const FeedSuggestions: React.FC<IFeedSuggesetions> = ({ statusId, onMoveUp, onMo
 
   return (
     <HotKeys handlers={handlers}>
-      <Card size='lg' variant='rounded' className='focusable space-y-6' tabIndex={0}>
+      <Card
+        size='lg'
+        variant='rounded'
+        className='focusable space-y-6'
+        tabIndex={0}
+      >
         <HStack justifyContent='between' alignItems='center'>
           <CardTitle title={intl.formatMessage(messages.heading)} />
 
@@ -107,9 +128,16 @@ const FeedSuggestions: React.FC<IFeedSuggesetions> = ({ statusId, onMoveUp, onMo
         </HStack>
 
         <CardBody>
-          <HStack space={4} alignItems='center' className='overflow-x-auto md:space-x-0 lg:overflow-x-hidden'>
+          <HStack
+            space={4}
+            alignItems='center'
+            className='overflow-x-auto md:space-x-0 lg:overflow-x-hidden'
+          >
             {suggestedProfiles.slice(0, 4).map((suggestedProfile) => (
-              <SuggestionItem key={suggestedProfile.account_id} accountId={suggestedProfile.account_id} />
+              <SuggestionItem
+                key={suggestedProfile.account_id}
+                accountId={suggestedProfile.account_id}
+              />
             ))}
           </HStack>
         </CardBody>

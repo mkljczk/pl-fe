@@ -46,12 +46,18 @@ const normalizeAccount = (account: BaseAccount) => {
     fqn,
     domain,
     note,
-    display_name_html: emojify(escapeTextContentForBrowser(account.display_name), emojiMap),
+    display_name_html: emojify(
+      escapeTextContentForBrowser(account.display_name),
+      emojiMap,
+    ),
     note_emojified: emojify(account.note, emojiMap),
     note_plain: unescapeHTML(account.note),
-    fields: account.fields.map(field => ({
+    fields: account.fields.map((field) => ({
       ...field,
-      name_emojified: emojify(escapeTextContentForBrowser(field.name), emojiMap),
+      name_emojified: emojify(
+        escapeTextContentForBrowser(field.name),
+        emojiMap,
+      ),
       value_emojified: emojify(field.value, emojiMap),
       value_plain: unescapeHTML(field.value),
     })),

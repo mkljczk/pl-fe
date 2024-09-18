@@ -9,9 +9,4 @@ const closeSidebar = () => ({
   type: SIDEBAR_CLOSE,
 });
 
-export {
-  SIDEBAR_OPEN,
-  SIDEBAR_CLOSE,
-  openSidebar,
-  closeSidebar,
-};
+export { SIDEBAR_OPEN, SIDEBAR_CLOSE, openSidebar, closeSidebar };

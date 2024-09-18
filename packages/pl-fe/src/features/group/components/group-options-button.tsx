@@ -1,4 +1,4 @@
-import { GroupRoles, type Group } from 'pl-api';
+import { type Group, GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -9,9 +9,19 @@ import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
-  confirmationConfirm: { id: 'confirmations.leave_group.confirm', defaultMessage: 'Leave' },
-  confirmationHeading: { id: 'confirmations.leave_group.heading', defaultMessage: 'Leave group' },
-  confirmationMessage: { id: 'confirmations.leave_group.message', defaultMessage: 'You are about to leave the group. Do you want to continue?' },
+  confirmationConfirm: {
+    id: 'confirmations.leave_group.confirm',
+    defaultMessage: 'Leave',
+  },
+  confirmationHeading: {
+    id: 'confirmations.leave_group.heading',
+    defaultMessage: 'Leave group',
+  },
+  confirmationMessage: {
+    id: 'confirmations.leave_group.message',
+    defaultMessage:
+      'You are about to leave the group. Do you want to continue?',
+  },
   leave: { id: 'group.leave.label', defaultMessage: 'Leave' },
   leaveSuccess: { id: 'group.leave.success', defaultMessage: 'Left the group' },
   share: { id: 'group.share.label', defaultMessage: 'Share' },
@@ -32,12 +42,14 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
   const isInGroup = !!group.relationship?.member;
 
   const handleShare = () => {
-    navigator.share({
-      text: group.display_name,
-      url: group.url,
-    }).catch((e) => {
-      if (e.name !== 'AbortError') console.error(e);
-    });
+    navigator
+      .share({
+        text: group.display_name,
+        url: group.url,
+      })
+      .catch((e) => {
+        if (e.name !== 'AbortError') console.error(e);
+      });
   };
 
   const handleLeave = () =>
@@ -45,12 +57,13 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
       heading: intl.formatMessage(messages.confirmationHeading),
       message: intl.formatMessage(messages.confirmationMessage),
       confirm: intl.formatMessage(messages.confirmationConfirm),
-      onConfirm: () => leaveGroup.mutate(group.relationship?.id as string, {
-        onSuccess() {
-          leaveGroup.invalidate();
-          toast.success(intl.formatMessage(messages.leaveSuccess));
-        },
-      }),
+      onConfirm: () =>
+        leaveGroup.mutate(group.relationship?.id as string, {
+          onSuccess() {
+            leaveGroup.invalidate();
+            toast.success(intl.formatMessage(messages.leaveSuccess));
+          },
+        }),
     });
 
   const menu: Menu = useMemo(() => {

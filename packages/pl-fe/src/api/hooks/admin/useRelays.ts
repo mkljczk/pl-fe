@@ -16,27 +16,25 @@ const useRelays = () => {
     placeholderData: [],
   });
 
-  const {
-    mutate: followRelay,
-    isPending: isPendingFollow,
-  } = useMutation({
+  const { mutate: followRelay, isPending: isPendingFollow } = useMutation({
     mutationFn: (relayUrl: string) => client.admin.relays.followRelay(relayUrl),
     retry: false,
     onSuccess: (data) =>
-      queryClient.setQueryData(['admin', 'relays'], (prevResult: ReadonlyArray<AdminRelay>) =>
-        [...prevResult, data],
+      queryClient.setQueryData(
+        ['admin', 'relays'],
+        (prevResult: ReadonlyArray<AdminRelay>) => [...prevResult, data],
       ),
   });
 
-  const {
-    mutate: unfollowRelay,
-    isPending: isPendingUnfollow,
-  } = useMutation({
-    mutationFn: (relayUrl: string) => client.admin.relays.unfollowRelay(relayUrl),
+  const { mutate: unfollowRelay, isPending: isPendingUnfollow } = useMutation({
+    mutationFn: (relayUrl: string) =>
+      client.admin.relays.unfollowRelay(relayUrl),
     retry: false,
     onSuccess: (_, relayUrl) =>
-      queryClient.setQueryData(['admin', 'relays'], (prevResult: ReadonlyArray<AdminRelay>) =>
-        prevResult.filter(({ actor }) => actor !== relayUrl),
+      queryClient.setQueryData(
+        ['admin', 'relays'],
+        (prevResult: ReadonlyArray<AdminRelay>) =>
+          prevResult.filter(({ actor }) => actor !== relayUrl),
       ),
   });
 

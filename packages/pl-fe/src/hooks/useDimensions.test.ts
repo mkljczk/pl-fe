@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { act, renderHook } from '@testing-library/react-hooks';
 
 import { listener, mockDisconnect } from './__mocks__/resize-observer';
 import { useDimensions } from './useDimensions';

@@ -2,13 +2,13 @@ import clsx from 'clsx';
 import { List as ImmutableList } from 'immutable';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { createSelector } from 'reselect';
 
 import {
+  dequeueNotifications,
   expandNotifications,
   scrollTopNotifications,
-  dequeueNotifications,
 } from 'pl-fe/actions/notifications';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import ScrollTopButton from 'pl-fe/components/scroll-top-button';
@@ -25,12 +25,18 @@ import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },
-  queue: { id: 'notifications.queue_label', defaultMessage: 'Click to see {count} new {count, plural, one {notification} other {notifications}}' },
+  queue: {
+    id: 'notifications.queue_label',
+    defaultMessage:
+      'Click to see {count} new {count, plural, one {notification} other {notifications}}',
+  },
 });
 
-const getNotifications = createSelector([
-  (state: RootState) => state.notifications.items.toList(),
-], (notifications) => notifications.filter(item => item !== null && !item.duplicate));
+const getNotifications = createSelector(
+  [(state: RootState) => state.notifications.items.toList()],
+  (notifications) =>
+    notifications.filter((item) => item !== null && !item.duplicate),
+);
 
 const Notifications = () => {
   const dispatch = useAppDispatch();
@@ -39,11 +45,13 @@ const Notifications = () => {
 
   const showFilterBar = settings.notifications.quickFilter.show;
   const activeFilter = settings.notifications.quickFilter.active;
-  const notifications = useAppSelector(state => getNotifications(state));
-  const isLoading = useAppSelector(state => state.notifications.isLoading);
+  const notifications = useAppSelector((state) => getNotifications(state));
+  const isLoading = useAppSelector((state) => state.notifications.isLoading);
   // const isUnread = useAppSelector(state => state.notifications.unread > 0);
-  const hasMore = useAppSelector(state => state.notifications.hasMore);
-  const totalQueuedNotificationsCount = useAppSelector(state => state.notifications.totalQueuedNotificationsCount || 0);
+  const hasMore = useAppSelector((state) => state.notifications.hasMore);
+  const totalQueuedNotificationsCount = useAppSelector(
+    (state) => state.notifications.totalQueuedNotificationsCount || 0,
+  );
 
   const node = useRef<VirtuosoHandle>(null);
   const column = useRef<HTMLDivElement>(null);
@@ -53,26 +61,41 @@ const Notifications = () => {
   //   dispatch(expandNotifications({ maxId }));
   // };
 
-  const handleLoadOlder = useCallback(debounce(() => {
-    const last = notifications.last();
-    dispatch(expandNotifications({ maxId: last && last.id }));
-  }, 300, { leading: true }), [notifications]);
+  const handleLoadOlder = useCallback(
+    debounce(
+      () => {
+        const last = notifications.last();
+        dispatch(expandNotifications({ maxId: last && last.id }));
+      },
+      300,
+      { leading: true },
+    ),
+    [notifications],
+  );
 
-  const handleScrollToTop = useCallback(debounce(() => {
-    dispatch(scrollTopNotifications(true));
-  }, 100), []);
+  const handleScrollToTop = useCallback(
+    debounce(() => {
+      dispatch(scrollTopNotifications(true));
+    }, 100),
+    [],
+  );
 
-  const handleScroll = useCallback(debounce(() => {
-    dispatch(scrollTopNotifications(false));
-  }, 100), []);
+  const handleScroll = useCallback(
+    debounce(() => {
+      dispatch(scrollTopNotifications(false));
+    }, 100),
+    [],
+  );
 
   const handleMoveUp = (id: string) => {
-    const elementIndex = notifications.findIndex(item => item !== null && item.id === id) - 1;
+    const elementIndex =
+      notifications.findIndex((item) => item !== null && item.id === id) - 1;
     _selectChild(elementIndex);
   };
 
   const handleMoveDown = (id: string) => {
-    const elementIndex = notifications.findIndex(item => item !== null && item.id === id) + 1;
+    const elementIndex =
+      notifications.findIndex((item) => item !== null && item.id === id) + 1;
     _selectChild(elementIndex);
   };
 
@@ -109,15 +132,22 @@ const Notifications = () => {
     };
   }, []);
 
-  const emptyMessage = activeFilter === 'all'
-    ? <FormattedMessage id='empty_column.notifications' defaultMessage="You don't have any notifications yet. Interact with others to start the conversation." />
-    : <FormattedMessage id='empty_column.notifications_filtered' defaultMessage="You don't have any notifications of this type yet." />;
+  const emptyMessage =
+    activeFilter === 'all' ? (
+      <FormattedMessage
+        id='empty_column.notifications'
+        defaultMessage="You don't have any notifications yet. Interact with others to start the conversation."
+      />
+    ) : (
+      <FormattedMessage
+        id='empty_column.notifications_filtered'
+        defaultMessage="You don't have any notifications of this type yet."
+      />
+    );
 
   let scrollableContent: ImmutableList<JSX.Element> | null = null;
 
-  const filterBarContainer = showFilterBar
-    ? (<FilterBar />)
-    : null;
+  const filterBarContainer = showFilterBar ? <FilterBar /> : null;
 
   if (isLoading && scrollableContentRef.current) {
     scrollableContent = scrollableContentRef.current;
@@ -149,16 +179,23 @@ const Notifications = () => {
       onLoadMore={handleLoadOlder}
       onScrollToTop={handleScrollToTop}
       onScroll={handleScroll}
-      listClassName={clsx('divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800', {
-        'animate-pulse': notifications.size === 0,
-      })}
+      listClassName={clsx(
+        'divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800',
+        {
+          'animate-pulse': notifications.size === 0,
+        },
+      )}
     >
       {scrollableContent as ImmutableList<JSX.Element>}
     </ScrollableList>
   );
 
   return (
-    <Column ref={column} label={intl.formatMessage(messages.title)} withHeader={false}>
+    <Column
+      ref={column}
+      label={intl.formatMessage(messages.title)}
+      withHeader={false}
+    >
       {filterBarContainer}
 
       <Portal>
@@ -169,9 +206,7 @@ const Notifications = () => {
         />
       </Portal>
 
-      <PullToRefresh onRefresh={handleRefresh}>
-        {scrollContainer}
-      </PullToRefresh>
+      <PullToRefresh onRefresh={handleRefresh}>{scrollContainer}</PullToRefresh>
     </Column>
   );
 };

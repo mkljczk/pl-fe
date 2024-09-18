@@ -14,10 +14,12 @@ import reducer, { ReducerRecord } from './contexts';
 
 describe('contexts reducer', () => {
   it('should return the initial state', () => {
-    expect(reducer(undefined, {} as any)).toEqual(ReducerRecord({
-      inReplyTos: ImmutableMap(),
-      replies: ImmutableMap(),
-    }));
+    expect(reducer(undefined, {} as any)).toEqual(
+      ReducerRecord({
+        inReplyTos: ImmutableMap(),
+        replies: ImmutableMap(),
+      }),
+    );
   });
 
   describe(CONTEXT_FETCH_SUCCESS, () => {
@@ -27,9 +29,7 @@ describe('contexts reducer', () => {
       const context = {
         id: 'A',
         ancestors: [],
-        descendants: [
-          { id: 'C', in_reply_to_id: 'B' },
-        ],
+        descendants: [{ id: 'C', in_reply_to_id: 'B' }],
       };
 
       const actions = [
@@ -48,9 +48,7 @@ describe('contexts reducer', () => {
       const context = {
         id: 'A',
         ancestors: [],
-        descendants: [
-          { id: 'C', in_reply_to_id: null },
-        ],
+        descendants: [{ id: 'C', in_reply_to_id: null }],
       };
 
       const actions = [
@@ -63,7 +61,7 @@ describe('contexts reducer', () => {
       expect(result.replies.get('A').toArray()).toEqual(['C-tombstone']);
     });
 
-    it('doesn\'t explode when it encounters a loop', () => {
+    it("doesn't explode when it encounters a loop", () => {
       const status = { id: 'A', in_reply_to_id: null };
 
       const context = {
@@ -86,7 +84,10 @@ describe('contexts reducer', () => {
 
       // These checks are superficial. We just don't want a stack overflow!
       expect(result.inReplyTos.get('C')).toBe('C-tombstone');
-      expect(result.replies.get('A').toArray()).toEqual(['C-tombstone', 'F-tombstone']);
+      expect(result.replies.get('A').toArray()).toEqual([
+        'C-tombstone',
+        'F-tombstone',
+      ]);
     });
   });
 

@@ -19,7 +19,8 @@ const AttachmentThumbs = ({ status, onClick }: IAttachmentThumbs) => {
   const { openModal } = useModalsStore();
 
   const fallback = <div className='media-gallery--compact' />;
-  const onOpenMedia = (media: Array<MediaAttachment>, index: number) => openModal('MEDIA', { media, index });
+  const onOpenMedia = (media: Array<MediaAttachment>, index: number) =>
+    openModal('MEDIA', { media, index });
 
   const visible = isMediaVisible(status, displayMedia);
 
@@ -36,7 +37,10 @@ const AttachmentThumbs = ({ status, onClick }: IAttachmentThumbs) => {
       </Suspense>
 
       {onClick && (
-        <div className='absolute inset-0 h-full w-full cursor-pointer' onClick={onClick} />
+        <div
+          className='absolute inset-0 h-full w-full cursor-pointer'
+          onClick={onClick}
+        />
       )}
     </div>
   );

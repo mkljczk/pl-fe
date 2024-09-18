@@ -3,13 +3,22 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import IconButton from 'pl-fe/components/icon-button';
 import { DatePicker } from 'pl-fe/features/ui/util/async-components';
-import { useInstance, useFeatures } from 'pl-fe/hooks';
+import { useFeatures, useInstance } from 'pl-fe/hooks';
 
 const messages = defineMessages({
-  birthdayPlaceholder: { id: 'edit_profile.fields.birthday_placeholder', defaultMessage: 'Your birthday' },
-  previousMonth: { id: 'datepicker.previous_month', defaultMessage: 'Previous month' },
+  birthdayPlaceholder: {
+    id: 'edit_profile.fields.birthday_placeholder',
+    defaultMessage: 'Your birthday',
+  },
+  previousMonth: {
+    id: 'datepicker.previous_month',
+    defaultMessage: 'Previous month',
+  },
   nextMonth: { id: 'datepicker.next_month', defaultMessage: 'Next month' },
-  previousYear: { id: 'datepicker.previous_year', defaultMessage: 'Previous year' },
+  previousYear: {
+    id: 'datepicker.previous_year',
+    defaultMessage: 'Previous year',
+  },
   nextYear: { id: 'datepicker.next_year', defaultMessage: 'Next year' },
 });
 
@@ -19,7 +28,11 @@ interface IBirthdayInput {
   required?: boolean;
 }
 
-const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) => {
+const BirthdayInput: React.FC<IBirthdayInput> = ({
+  value,
+  onChange,
+  required,
+}) => {
   const intl = useIntl();
   const features = useFeatures();
   const instance = useInstance();
@@ -31,7 +44,11 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
     if (!supportsBirthdays) return null;
 
     let maxDate = new Date();
-    maxDate = new Date(maxDate.getTime() - minAge * 1000 * 60 * 60 * 24 + maxDate.getTimezoneOffset() * 1000 * 60);
+    maxDate = new Date(
+      maxDate.getTime() -
+        minAge * 1000 * 60 * 60 * 24 +
+        maxDate.getTimezoneOffset() * 1000 * 60,
+    );
     return maxDate;
   }, [minAge]);
 
@@ -39,7 +56,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
     if (!supportsBirthdays || !value) return null;
 
     const date = new Date(value);
-    return new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+    return new Date(date.getTime() + date.getTimezoneOffset() * 60000);
   }, [value]);
 
   if (!supportsBirthdays) return null;
@@ -107,7 +124,14 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
     </div>
   );
 
-  const handleChange = (date: Date) => onChange(date ? new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 10) : '');
+  const handleChange = (date: Date) =>
+    onChange(
+      date
+        ? new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+            .toISOString()
+            .slice(0, 10)
+        : '',
+    );
 
   return (
     <div className='relative mt-1 rounded-md shadow-sm'>

@@ -2,7 +2,12 @@ import { importEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { normalizeAccount, normalizeGroup } from 'pl-fe/normalizers';
 
-import type { Account as BaseAccount, Group, Poll, Status as BaseStatus } from 'pl-api';
+import type {
+  Account as BaseAccount,
+  Status as BaseStatus,
+  Group,
+  Poll,
+} from 'pl-api';
 import type { AppDispatch } from 'pl-fe/store';
 
 const ACCOUNT_IMPORT = 'ACCOUNT_IMPORT';
@@ -13,15 +18,16 @@ const POLLS_IMPORT = 'POLLS_IMPORT';
 
 const importAccount = (data: BaseAccount) => importAccounts([data]);
 
-const importAccounts = (data: Array<BaseAccount>) => (dispatch: AppDispatch) => {
-  dispatch({ type: ACCOUNTS_IMPORT, accounts: data });
-  try {
-    const accounts = data.map(normalizeAccount);
-    dispatch(importEntities(accounts, Entities.ACCOUNTS));
-  } catch (e) {
-    //
-  }
-};
+const importAccounts =
+  (data: Array<BaseAccount>) => (dispatch: AppDispatch) => {
+    dispatch({ type: ACCOUNTS_IMPORT, accounts: data });
+    try {
+      const accounts = data.map(normalizeAccount);
+      dispatch(importEntities(accounts, Entities.ACCOUNTS));
+    } catch (e) {
+      //
+    }
+  };
 
 const importGroup = (data: Group) => importGroups([data]);
 
@@ -34,9 +40,15 @@ const importGroups = (data: Array<Group>) => (dispatch: AppDispatch) => {
   }
 };
 
-const importStatus = (status: BaseStatus & { expectsCard?: boolean }, idempotencyKey?: string) => ({ type: STATUS_IMPORT, status, idempotencyKey });
+const importStatus = (
+  status: BaseStatus & { expectsCard?: boolean },
+  idempotencyKey?: string,
+) => ({ type: STATUS_IMPORT, status, idempotencyKey });
 
-const importStatuses = (statuses: Array<BaseStatus>) => ({ type: STATUSES_IMPORT, statuses });
+const importStatuses = (statuses: Array<BaseStatus>) => ({
+  type: STATUSES_IMPORT,
+  statuses,
+});
 
 const importPolls = (polls: Array<Poll>) => ({ type: POLLS_IMPORT, polls });
 
@@ -61,7 +73,8 @@ const importFetchedAccounts = (accounts: Array<BaseAccount>) => {
   return importAccounts(normalAccounts);
 };
 
-const importFetchedStatus = (status: BaseStatus & { expectsCard?: boolean }, idempotencyKey?: string) =>
+const importFetchedStatus =
+  (status: BaseStatus & { expectsCard?: boolean }, idempotencyKey?: string) =>
   (dispatch: AppDispatch) => {
     // Skip broken statuses
     if (isBroken(status)) return;
@@ -110,48 +123,53 @@ const isBroken = (status: BaseStatus) => {
   }
 };
 
-const importFetchedStatuses = (statuses: Array<Omit<BaseStatus, 'account'> & { account: BaseAccount | null }>) => (dispatch: AppDispatch) => {
-  const accounts: Array<BaseAccount> = [];
-  const normalStatuses: Array<BaseStatus> = [];
-  const polls: Array<Poll> = [];
-
-  const processStatus = (status: BaseStatus) => {
-    if (status.account === null) return;
-    // Skip broken statuses
-    if (isBroken(status)) return;
-
-    normalStatuses.push(status);
-
-    if (status.account !== null) accounts.push(status.account);
-    // if (status.accounts) {
-    //   accounts.push(...status.accounts);
-    // }
-
-    if (status.reblog?.id) {
-      processStatus(status.reblog as BaseStatus);
-    }
-
-    // Fedibird quotes
-    if (status.quote?.id) {
-      processStatus(status.quote as BaseStatus);
-    }
-
-    if (status.poll?.id) {
-      polls.push(status.poll);
-    }
-  };
-
-  (statuses as Array<BaseStatus>).forEach(processStatus);
-
-  dispatch(importPolls(polls));
-  dispatch(importFetchedAccounts(accounts));
-  dispatch(importStatuses(normalStatuses));
-};
-
-const importFetchedPoll = (poll: Poll) =>
+const importFetchedStatuses =
+  (
+    statuses: Array<
+      Omit<BaseStatus, 'account'> & { account: BaseAccount | null }
+    >,
+  ) =>
   (dispatch: AppDispatch) => {
-    dispatch(importPolls([poll]));
+    const accounts: Array<BaseAccount> = [];
+    const normalStatuses: Array<BaseStatus> = [];
+    const polls: Array<Poll> = [];
+
+    const processStatus = (status: BaseStatus) => {
+      if (status.account === null) return;
+      // Skip broken statuses
+      if (isBroken(status)) return;
+
+      normalStatuses.push(status);
+
+      if (status.account !== null) accounts.push(status.account);
+      // if (status.accounts) {
+      //   accounts.push(...status.accounts);
+      // }
+
+      if (status.reblog?.id) {
+        processStatus(status.reblog as BaseStatus);
+      }
+
+      // Fedibird quotes
+      if (status.quote?.id) {
+        processStatus(status.quote as BaseStatus);
+      }
+
+      if (status.poll?.id) {
+        polls.push(status.poll);
+      }
+    };
+
+    (statuses as Array<BaseStatus>).forEach(processStatus);
+
+    dispatch(importPolls(polls));
+    dispatch(importFetchedAccounts(accounts));
+    dispatch(importStatuses(normalStatuses));
   };
+
+const importFetchedPoll = (poll: Poll) => (dispatch: AppDispatch) => {
+  dispatch(importPolls([poll]));
+};
 
 export {
   ACCOUNT_IMPORT,

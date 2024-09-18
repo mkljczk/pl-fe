@@ -7,7 +7,10 @@ interface IIndicator {
 }
 
 /** Indicator dot component. */
-const Indicator: React.FC<IIndicator> = ({ state = 'inactive', size = 'sm' }) => (
+const Indicator: React.FC<IIndicator> = ({
+  state = 'inactive',
+  size = 'sm',
+}) => (
   <div
     className={clsx('rounded-full outline-double', {
       'w-1.5 h-1.5 shadow-sm': size === 'sm',

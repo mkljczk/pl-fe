@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useRef } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { cancelReplyCompose, uploadCompose } from 'pl-fe/actions/compose';
 import { saveDraftStatus } from 'pl-fe/actions/draft-statuses';
@@ -15,22 +15,37 @@ import type { BaseModalProps } from '../modal-root';
 
 const messages = defineMessages({
   confirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },
-  cancelEditing: { id: 'confirmations.cancel_editing.confirm', defaultMessage: 'Cancel editing' },
-  saveDraft: { id: 'confirmations.cancel_editing.save_draft', defaultMessage: 'Save draft' },
+  cancelEditing: {
+    id: 'confirmations.cancel_editing.confirm',
+    defaultMessage: 'Cancel editing',
+  },
+  saveDraft: {
+    id: 'confirmations.cancel_editing.save_draft',
+    defaultMessage: 'Save draft',
+  },
 });
 
 interface ComposeModalProps {
   composeId?: string;
 }
 
-const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, composeId = 'compose-modal' }) => {
+const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
+  onClose,
+  composeId = 'compose-modal',
+}) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const node = useRef<HTMLDivElement>(null);
   const compose = useCompose(composeId);
   const { openModal } = useModalsStore();
 
-  const { id: statusId, privacy, in_reply_to: inReplyTo, quote, group_id: groupId } = compose!;
+  const {
+    id: statusId,
+    privacy,
+    in_reply_to: inReplyTo,
+    quote,
+    group_id: groupId,
+  } = compose!;
 
   const { isDragging, isDraggedOver } = useDraggedFiles(node, (files) => {
     dispatch(uploadCompose(composeId, files, intl));
@@ -39,23 +54,43 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, c
   const onClickClose = () => {
     if (checkComposeContent(compose)) {
       openModal('CONFIRM', {
-        heading: statusId
-          ? <FormattedMessage id='confirmations.cancel_editing.heading' defaultMessage='Cancel post editing' />
-          : <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />,
-        message: statusId
-          ? <FormattedMessage id='confirmations.cancel_editing.message' defaultMessage='Are you sure you want to cancel editing this post? All changes will be lost.' />
-          : <FormattedMessage id='confirmations.cancel.message' defaultMessage='Are you sure you want to cancel creating this post?' />,
-        confirm: intl.formatMessage(statusId ? messages.cancelEditing : messages.confirm),
+        heading: statusId ? (
+          <FormattedMessage
+            id='confirmations.cancel_editing.heading'
+            defaultMessage='Cancel post editing'
+          />
+        ) : (
+          <FormattedMessage
+            id='confirmations.cancel.heading'
+            defaultMessage='Discard post'
+          />
+        ),
+        message: statusId ? (
+          <FormattedMessage
+            id='confirmations.cancel_editing.message'
+            defaultMessage='Are you sure you want to cancel editing this post? All changes will be lost.'
+          />
+        ) : (
+          <FormattedMessage
+            id='confirmations.cancel.message'
+            defaultMessage='Are you sure you want to cancel creating this post?'
+          />
+        ),
+        confirm: intl.formatMessage(
+          statusId ? messages.cancelEditing : messages.confirm,
+        ),
         onConfirm: () => {
           onClose('COMPOSE');
           dispatch(cancelReplyCompose());
         },
         secondary: intl.formatMessage(messages.saveDraft),
-        onSecondary: statusId ? undefined : () => {
-          dispatch(saveDraftStatus(composeId));
-          onClose('COMPOSE');
-          dispatch(cancelReplyCompose());
-        },
+        onSecondary: statusId
+          ? undefined
+          : () => {
+              dispatch(saveDraftStatus(composeId));
+              onClose('COMPOSE');
+              dispatch(cancelReplyCompose());
+            },
       });
     } else {
       onClose('COMPOSE');
@@ -64,19 +99,54 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, c
 
   const renderTitle = () => {
     if (statusId) {
-      return <FormattedMessage id='navigation_bar.compose_edit' defaultMessage='Edit post' />;
+      return (
+        <FormattedMessage
+          id='navigation_bar.compose_edit'
+          defaultMessage='Edit post'
+        />
+      );
     } else if (privacy === 'direct') {
-      return <FormattedMessage id='navigation_bar.compose_direct' defaultMessage='Direct message' />;
+      return (
+        <FormattedMessage
+          id='navigation_bar.compose_direct'
+          defaultMessage='Direct message'
+        />
+      );
     } else if (inReplyTo && groupId) {
-      return <FormattedMessage id='navigation_bar.compose_group_reply' defaultMessage='Reply to group post' />;
+      return (
+        <FormattedMessage
+          id='navigation_bar.compose_group_reply'
+          defaultMessage='Reply to group post'
+        />
+      );
     } else if (groupId) {
-      return <FormattedMessage id='navigation_bar.compose_group' defaultMessage='Compose to group' />;
+      return (
+        <FormattedMessage
+          id='navigation_bar.compose_group'
+          defaultMessage='Compose to group'
+        />
+      );
     } else if (inReplyTo) {
-      return <FormattedMessage id='navigation_bar.compose_reply' defaultMessage='Reply to post' />;
+      return (
+        <FormattedMessage
+          id='navigation_bar.compose_reply'
+          defaultMessage='Reply to post'
+        />
+      );
     } else if (quote) {
-      return <FormattedMessage id='navigation_bar.compose_quote' defaultMessage='Quote post' />;
+      return (
+        <FormattedMessage
+          id='navigation_bar.compose_quote'
+          defaultMessage='Quote post'
+        />
+      );
     } else {
-      return <FormattedMessage id='navigation_bar.compose' defaultMessage='Compose a post' />;
+      return (
+        <FormattedMessage
+          id='navigation_bar.compose'
+          defaultMessage='Compose a post'
+        />
+      );
     }
   };
 

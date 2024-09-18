@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { joinEvent, leaveEvent } from 'pl-fe/actions/events';
 import { Button } from 'pl-fe/components/ui';
@@ -10,9 +10,19 @@ import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
 import type { Status as StatusEntity } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
-  leaveHeading: { id: 'confirmations.leave_event.heading', defaultMessage: 'Leave event' },
-  leaveMessage: { id: 'confirmations.leave_event.message', defaultMessage: 'If you want to rejoin the event, the request will be manually reviewed again. Are you sure you want to proceed?' },
-  leaveConfirm: { id: 'confirmations.leave_event.confirm', defaultMessage: 'Leave event' },
+  leaveHeading: {
+    id: 'confirmations.leave_event.heading',
+    defaultMessage: 'Leave event',
+  },
+  leaveMessage: {
+    id: 'confirmations.leave_event.message',
+    defaultMessage:
+      'If you want to rejoin the event, the request will be manually reviewed again. Are you sure you want to proceed?',
+  },
+  leaveConfirm: {
+    id: 'confirmations.leave_event.confirm',
+    defaultMessage: 'Leave event',
+  },
 });
 
 interface IEventAction {
@@ -20,7 +30,10 @@ interface IEventAction {
   theme?: ButtonThemes;
 }
 
-const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary' }) => {
+const EventActionButton: React.FC<IEventAction> = ({
+  status,
+  theme = 'secondary',
+}) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -56,7 +69,9 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
     }
   };
 
-  const handleOpenUnauthorizedModal: React.EventHandler<React.MouseEvent> = (e) => {
+  const handleOpenUnauthorizedModal: React.EventHandler<React.MouseEvent> = (
+    e,
+  ) => {
     e.preventDefault();
 
     openModal('UNAUTHORIZED', {
@@ -72,19 +87,36 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
 
   switch (event.join_state) {
     case 'accept':
-      buttonLabel = <FormattedMessage id='event.join_state.accept' defaultMessage='Going' />;
+      buttonLabel = (
+        <FormattedMessage id='event.join_state.accept' defaultMessage='Going' />
+      );
       buttonIcon = require('@tabler/icons/outline/check.svg');
       break;
     case 'pending':
-      buttonLabel = <FormattedMessage id='event.join_state.pending' defaultMessage='Pending' />;
+      buttonLabel = (
+        <FormattedMessage
+          id='event.join_state.pending'
+          defaultMessage='Pending'
+        />
+      );
       break;
     case 'reject':
-      buttonLabel = <FormattedMessage id='event.join_state.rejected' defaultMessage='Going' />;
+      buttonLabel = (
+        <FormattedMessage
+          id='event.join_state.rejected'
+          defaultMessage='Going'
+        />
+      );
       buttonIcon = require('@tabler/icons/outline/ban.svg');
       buttonDisabled = true;
       break;
     default:
-      buttonLabel = <FormattedMessage id='event.join_state.empty' defaultMessage='Participate' />;
+      buttonLabel = (
+        <FormattedMessage
+          id='event.join_state.empty'
+          defaultMessage='Participate'
+        />
+      );
       buttonAction = me ? handleJoin : handleOpenUnauthorizedModal;
   }
 

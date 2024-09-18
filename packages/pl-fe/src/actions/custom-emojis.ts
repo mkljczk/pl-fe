@@ -7,18 +7,21 @@ const CUSTOM_EMOJIS_FETCH_REQUEST = 'CUSTOM_EMOJIS_FETCH_REQUEST' as const;
 const CUSTOM_EMOJIS_FETCH_SUCCESS = 'CUSTOM_EMOJIS_FETCH_SUCCESS' as const;
 const CUSTOM_EMOJIS_FETCH_FAIL = 'CUSTOM_EMOJIS_FETCH_FAIL' as const;
 
-const fetchCustomEmojis = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const fetchCustomEmojis =
+  () => (dispatch: AppDispatch, getState: () => RootState) => {
     const me = getState().me;
     if (!me) return;
 
     dispatch(fetchCustomEmojisRequest());
 
-    return getClient(getState()).instance.getCustomEmojis().then(response => {
-      dispatch(fetchCustomEmojisSuccess(response));
-    }).catch(error => {
-      dispatch(fetchCustomEmojisFail(error));
-    });
+    return getClient(getState())
+      .instance.getCustomEmojis()
+      .then((response) => {
+        dispatch(fetchCustomEmojisSuccess(response));
+      })
+      .catch((error) => {
+        dispatch(fetchCustomEmojisFail(error));
+      });
   };
 
 const fetchCustomEmojisRequest = () => ({
@@ -36,7 +39,7 @@ const fetchCustomEmojisFail = (error: unknown) => ({
 });
 
 type CustomEmojisAction =
-  ReturnType<typeof fetchCustomEmojisRequest>
+  | ReturnType<typeof fetchCustomEmojisRequest>
   | ReturnType<typeof fetchCustomEmojisSuccess>
   | ReturnType<typeof fetchCustomEmojisFail>;
 

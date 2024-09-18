@@ -1,8 +1,11 @@
 import debounce from 'lodash/debounce';
 import React, { useEffect } from 'react';
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { fetchFollowedHashtags, expandFollowedHashtags } from 'pl-fe/actions/tags';
+import {
+  expandFollowedHashtags,
+  fetchFollowedHashtags,
+} from 'pl-fe/actions/tags';
 import Hashtag from 'pl-fe/components/hashtag';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Column } from 'pl-fe/components/ui';
@@ -13,9 +16,13 @@ const messages = defineMessages({
   heading: { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },
 });
 
-const handleLoadMore = debounce((dispatch) => {
-  dispatch(expandFollowedHashtags());
-}, 300, { leading: true });
+const handleLoadMore = debounce(
+  (dispatch) => {
+    dispatch(expandFollowedHashtags());
+  },
+  300,
+  { leading: true },
+);
 
 const FollowedTags = () => {
   const intl = useIntl();
@@ -25,11 +32,16 @@ const FollowedTags = () => {
     dispatch(fetchFollowedHashtags());
   }, []);
 
-  const tags = useAppSelector((state => state.followed_tags.items));
-  const isLoading = useAppSelector((state => state.followed_tags.isLoading));
-  const hasMore = useAppSelector((state => !!state.followed_tags.next));
+  const tags = useAppSelector((state) => state.followed_tags.items);
+  const isLoading = useAppSelector((state) => state.followed_tags.isLoading);
+  const hasMore = useAppSelector((state) => !!state.followed_tags.next);
 
-  const emptyMessage = <FormattedMessage id='empty_column.followed_tags' defaultMessage="You haven't followed any hashtag yet." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.followed_tags'
+      defaultMessage="You haven't followed any hashtag yet."
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -43,7 +55,9 @@ const FollowedTags = () => {
         placeholderCount={5}
         itemClassName='pb-3'
       >
-        {tags.map(tag => <Hashtag key={tag.name} hashtag={tag} />)}
+        {tags.map((tag) => (
+          <Hashtag key={tag.name} hashtag={tag} />
+        ))}
       </ScrollableList>
     </Column>
   );

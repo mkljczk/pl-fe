@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 
 import { cancelQuoteCompose } from 'pl-fe/actions/compose';
 import QuotedStatus from 'pl-fe/components/quoted-status';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { makeGetStatus } from 'pl-fe/selectors';
 
 interface IQuotedStatusContainer {
@@ -10,11 +10,15 @@ interface IQuotedStatusContainer {
 }
 
 /** QuotedStatus shown in post composer. */
-const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ composeId }) => {
+const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({
+  composeId,
+}) => {
   const dispatch = useAppDispatch();
   const getStatus = useCallback(makeGetStatus(), []);
 
-  const status = useAppSelector(state => getStatus(state, { id: state.compose.get(composeId)?.quote! }));
+  const status = useAppSelector((state) =>
+    getStatus(state, { id: state.compose.get(composeId)?.quote! }),
+  );
 
   const onCancel = () => {
     dispatch(cancelQuoteCompose(composeId));
@@ -26,11 +30,7 @@ const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ composeId }) 
 
   return (
     <div className='mb-2'>
-      <QuotedStatus
-        status={status}
-        onCancel={onCancel}
-        compose
-      />
+      <QuotedStatus status={status} onCancel={onCancel} compose />
     </div>
   );
 };

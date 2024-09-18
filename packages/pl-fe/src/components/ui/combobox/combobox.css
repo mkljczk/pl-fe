@@ -1,5 +1,5 @@
 :root {
-	--reach-combobox: 1;
+  --reach-combobox: 1;
 }
 
 [data-reach-combobox-popover] {

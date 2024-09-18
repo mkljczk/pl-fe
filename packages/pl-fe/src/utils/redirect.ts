@@ -13,7 +13,8 @@ const getRedirectUrl = () => {
 };
 
 const useCachedLocationHandler = () => {
-  const removeCachedRedirectUri = () => localStorage.removeItem(LOCAL_STORAGE_REDIRECT_KEY);
+  const removeCachedRedirectUri = () =>
+    localStorage.removeItem(LOCAL_STORAGE_REDIRECT_KEY);
 
   useEffect(() => {
     window.addEventListener('beforeunload', removeCachedRedirectUri);

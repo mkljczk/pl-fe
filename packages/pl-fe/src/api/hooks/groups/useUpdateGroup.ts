@@ -17,7 +17,8 @@ const useUpdateGroup = (groupId: string) => {
 
   const { createEntity, ...rest } = useCreateEntity(
     [Entities.GROUPS],
-    (params: UpdateGroupParams) => client.experimental.groups.updateGroup(groupId, params),
+    (params: UpdateGroupParams) =>
+      client.experimental.groups.updateGroup(groupId, params),
     { transform: normalizeGroup },
   );
 

@@ -1,20 +1,32 @@
-import { List as ImmutableList, Map as ImmutableMap, Record as ImmutableRecord, fromJS } from 'immutable';
+import {
+  List as ImmutableList,
+  Map as ImmutableMap,
+  Record as ImmutableRecord,
+  fromJS,
+} from 'immutable';
 import trim from 'lodash/trim';
-import { applicationSchema, PlApiClient, tokenSchema, type Application, type CredentialAccount, type Token } from 'pl-api';
+import {
+  type Application,
+  type CredentialAccount,
+  PlApiClient,
+  type Token,
+  applicationSchema,
+  tokenSchema,
+} from 'pl-api';
 
 import { MASTODON_PRELOAD_IMPORT } from 'pl-fe/actions/preload';
 import * as BuildConfig from 'pl-fe/build-config';
 import KVStore from 'pl-fe/storage/kv-store';
-import { validId, isURL, parseBaseURL } from 'pl-fe/utils/auth';
+import { isURL, parseBaseURL, validId } from 'pl-fe/utils/auth';
 
 import {
+  AUTH_APP_AUTHORIZED,
   AUTH_APP_CREATED,
   AUTH_LOGGED_IN,
-  AUTH_APP_AUTHORIZED,
   AUTH_LOGGED_OUT,
   SWITCH_ACCOUNT,
-  VERIFY_CREDENTIALS_SUCCESS,
   VERIFY_CREDENTIALS_FAIL,
+  VERIFY_CREDENTIALS_SUCCESS,
 } from '../actions/auth';
 import { ME_FETCH_SKIP } from '../actions/me';
 
@@ -22,7 +34,9 @@ import type { PlfeResponse } from 'pl-fe/api';
 import type { Account as AccountEntity } from 'pl-fe/normalizers';
 import type { AnyAction } from 'redux';
 
-const backendUrl = (isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : '');
+const backendUrl = isURL(BuildConfig.BACKEND_URL)
+  ? BuildConfig.BACKEND_URL
+  : '';
 
 const AuthUserRecord = ImmutableRecord({
   access_token: '',
@@ -44,7 +58,9 @@ type State = ReturnType<typeof ReducerRecord>;
 const buildKey = (parts: string[]) => parts.join(':');
 
 // For subdirectory support
-const NAMESPACE = trim(BuildConfig.FE_SUBDIRECTORY, '/') ? `pl-fe@${BuildConfig.FE_SUBDIRECTORY}` : 'pl-fe';
+const NAMESPACE = trim(BuildConfig.FE_SUBDIRECTORY, '/')
+  ? `pl-fe@${BuildConfig.FE_SUBDIRECTORY}`
+  : 'pl-fe';
 
 const STORAGE_KEY = buildKey([NAMESPACE, 'auth']);
 const SESSION_KEY = buildKey([NAMESPACE, 'auth', 'me']);
@@ -61,10 +77,23 @@ const getLocalState = () => {
 
   return ReducerRecord({
     app: state.app && applicationSchema.parse(state.app),
-    tokens: ImmutableMap(Object.entries(state.tokens).map(([key, value]) => [key, tokenSchema.parse(value)])),
-    users: ImmutableMap(Object.entries(state.users).map(([key, value]) => [key, AuthUserRecord(value as any)])),
+    tokens: ImmutableMap(
+      Object.entries(state.tokens).map(([key, value]) => [
+        key,
+        tokenSchema.parse(value),
+      ]),
+    ),
+    users: ImmutableMap(
+      Object.entries(state.users).map(([key, value]) => [
+        key,
+        AuthUserRecord(value as any),
+      ]),
+    ),
     me: state.me,
-    client: new PlApiClient(parseBaseURL(state.me) || backendUrl, state.users[state.me]?.access_token),
+    client: new PlApiClient(
+      parseBaseURL(state.me) || backendUrl,
+      state.users[state.me]?.access_token,
+    ),
   });
 };
 
@@ -107,14 +136,15 @@ const maybeShiftMe = (state: State) => {
 };
 
 // Set the user from the session or localStorage, whichever is valid first
-const setSessionUser = (state: State) => state.update('me', me => {
-  const user = ImmutableList<AuthUser>([
-    state.users.get(sessionUser!)!,
-    state.users.get(me!)!,
-  ]).find(validUser);
+const setSessionUser = (state: State) =>
+  state.update('me', (me) => {
+    const user = ImmutableList<AuthUser>([
+      state.users.get(sessionUser!)!,
+      state.users.get(me!)!,
+    ]).find(validUser);
 
-  return getUrlOrId(user);
-});
+    return getUrlOrId(user);
+  });
 
 const isUpgradingUrlId = (state: State) => {
   const me = state.me;
@@ -127,23 +157,20 @@ const sanitizeState = (state: State) => {
   // Skip sanitation during ID to URL upgrade
   if (isUpgradingUrlId(state)) return state;
 
-  return state.withMutations(state => {
+  return state.withMutations((state) => {
     // Remove invalid users, ensure ID match
-    state.update('users', users => (
-      users.filter((user, url) => (
-        validUser(user) && user.get('url') === url
-      ))
-    ));
+    state.update('users', (users) =>
+      users.filter((user, url) => validUser(user) && user.get('url') === url),
+    );
     // Remove mismatched tokens
-    state.update('tokens', tokens => (
-      tokens.filter((token, id) => (
-        validId(id) && token.access_token === id
-      ))
-    ));
+    state.update('tokens', (tokens) =>
+      tokens.filter((token, id) => validId(id) && token.access_token === id),
+    );
   });
 };
 
-const persistAuth = (state: State) => localStorage.setItem(STORAGE_KEY, JSON.stringify(state.toJS()));
+const persistAuth = (state: State) =>
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.toJS()));
 
 const persistSession = (state: State) => {
   const me = state.me;
@@ -158,7 +185,7 @@ const persistState = (state: State) => {
 };
 
 const initialize = (state: State) =>
-  state.withMutations(state => {
+  state.withMutations((state) => {
     maybeShiftMe(state);
     setSessionUser(state);
     sanitizeState(state);
@@ -176,14 +203,15 @@ const upgradeNonUrlId = (state: State, account: CredentialAccount) => {
   const me = state.me;
   if (isURL(me)) return state;
 
-  return state.withMutations(state => {
-    state.update('me', me => me === account.id ? account.url : me);
+  return state.withMutations((state) => {
+    state.update('me', (me) => (me === account.id ? account.url : me));
     state.deleteIn(['users', account.id]);
   });
 };
 
 // Returns a predicate function for filtering a mismatched user/token
-const userMismatch = (token: string, account: CredentialAccount) =>
+const userMismatch =
+  (token: string, account: CredentialAccount) =>
   (user: AuthUser, url: string) => {
     const sameToken = user.get('access_token') === token;
     const differentUrl = url !== account.url || user.get('url') !== account.url;
@@ -192,64 +220,83 @@ const userMismatch = (token: string, account: CredentialAccount) =>
     return sameToken && (differentUrl || differentId);
   };
 
-const importCredentials = (state: State, token: string, account: CredentialAccount) =>
-  state.withMutations(state => {
-    state.setIn(['users', account.url], AuthUserRecord({
-      id: account.id,
-      access_token: token,
-      url: account.url,
-    }));
+const importCredentials = (
+  state: State,
+  token: string,
+  account: CredentialAccount,
+) =>
+  state.withMutations((state) => {
+    state.setIn(
+      ['users', account.url],
+      AuthUserRecord({
+        id: account.id,
+        access_token: token,
+        url: account.url,
+      }),
+    );
     state.setIn(['tokens', token, 'account'], account.id);
     state.setIn(['tokens', token, 'me'], account.url);
-    state.update('users', users => users.filterNot(userMismatch(token, account)));
-    state.update('client', client =>
+    state.update('users', (users) =>
+      users.filterNot(userMismatch(token, account)),
+    );
+    state.update('client', (client) =>
       state.me
         ? client
         : client.baseURL === parseBaseURL(account.url)
-          ? (client.accessToken = token, client)
+          ? ((client.accessToken = token), client)
           : new PlApiClient(parseBaseURL(account.url) || backendUrl, token),
     );
-    state.update('me', me => me || account.url);
+    state.update('me', (me) => me || account.url);
     upgradeNonUrlId(state, account);
   });
 
 const deleteToken = (state: State, token: string) =>
-  state.withMutations(state => {
-    state.update('tokens', tokens => tokens.delete(token));
-    state.update('users', users => users.filterNot(user => user.get('access_token') === token));
+  state.withMutations((state) => {
+    state.update('tokens', (tokens) => tokens.delete(token));
+    state.update('users', (users) =>
+      users.filterNot((user) => user.get('access_token') === token),
+    );
     maybeShiftMe(state);
   });
 
 const deleteUser = (state: State, account: Pick<AccountEntity, 'url'>) => {
   const accountUrl = account.url;
 
-  return state.withMutations(state => {
-    state.update('users', users => users.delete(accountUrl));
-    state.update('tokens', tokens => tokens.filterNot(token => token.me === accountUrl));
+  return state.withMutations((state) => {
+    state.update('users', (users) => users.delete(accountUrl));
+    state.update('tokens', (tokens) =>
+      tokens.filterNot((token) => token.me === accountUrl),
+    );
     maybeShiftMe(state);
   });
 };
 
 const importMastodonPreload = (state: State, data: ImmutableMap<string, any>) =>
-  state.withMutations(state => {
+  state.withMutations((state) => {
     const accountId = data.getIn(['meta', 'me']) as string;
     const accountUrl = data.getIn(['accounts', accountId, 'url']) as string;
     const accessToken = data.getIn(['meta', 'access_token']) as string;
 
     if (validId(accessToken) && validId(accountId) && isURL(accountUrl)) {
-      state.setIn(['tokens', accessToken], tokenSchema.parse({
-        access_token: accessToken,
-        account: accountId,
-        me: accountUrl,
-        scope: 'read write follow push',
-        token_type: 'Bearer',
-      }));
+      state.setIn(
+        ['tokens', accessToken],
+        tokenSchema.parse({
+          access_token: accessToken,
+          account: accountId,
+          me: accountUrl,
+          scope: 'read write follow push',
+          token_type: 'Bearer',
+        }),
+      );
 
-      state.setIn(['users', accountUrl], AuthUserRecord({
-        id: accountId,
-        access_token: accessToken,
-        url: accountUrl,
-      }));
+      state.setIn(
+        ['users', accountUrl],
+        AuthUserRecord({
+          id: accountId,
+          access_token: accessToken,
+          url: accountUrl,
+        }),
+      );
     }
 
     maybeShiftMe(state);
@@ -258,18 +305,23 @@ const importMastodonPreload = (state: State, data: ImmutableMap<string, any>) =>
 const persistAuthAccount = (account: CredentialAccount) => {
   if (account && account.url) {
     const key = `authAccount:${account.url}`;
-    KVStore.getItem(key).then((oldAccount: any) => {
-      const settings = oldAccount?.settings_store || {};
-      if (!account.settings_store) {
-        account.settings_store = settings;
-      }
-      KVStore.setItem(key, account);
-    })
+    KVStore.getItem(key)
+      .then((oldAccount: any) => {
+        const settings = oldAccount?.settings_store || {};
+        if (!account.settings_store) {
+          account.settings_store = settings;
+        }
+        KVStore.setItem(key, account);
+      })
       .catch(console.error);
   }
 };
 
-const deleteForbiddenToken = (state: State, error: { response: PlfeResponse }, token: string) => {
+const deleteForbiddenToken = (
+  state: State,
+  error: { response: PlfeResponse },
+  token: string,
+) => {
   if ([401, 403].includes(error.response?.status!)) {
     return deleteToken(state, token);
   } else {
@@ -282,7 +334,7 @@ const reducer = (state: State, action: AnyAction) => {
     case AUTH_APP_CREATED:
       return state.set('app', action.app);
     case AUTH_APP_AUTHORIZED:
-      return state.update('app', app => ({ ...app, ...action.token }));
+      return state.update('app', (app) => ({ ...app, ...action.token }));
     case AUTH_LOGGED_IN:
       return importToken(state, action.token);
     case AUTH_LOGGED_OUT:
@@ -295,15 +347,21 @@ const reducer = (state: State, action: AnyAction) => {
     case SWITCH_ACCOUNT:
       return state
         .set('me', action.account.url)
-        .update('client', client =>
+        .update('client', (client) =>
           client.baseURL === parseBaseURL(action.account.url)
-            ? (client.accessToken = action.account.access_token, client)
-            : new PlApiClient(parseBaseURL(action.account.url) || backendUrl, action.account.access_token),
+            ? ((client.accessToken = action.account.access_token), client)
+            : new PlApiClient(
+                parseBaseURL(action.account.url) || backendUrl,
+                action.account.access_token,
+              ),
         );
     case ME_FETCH_SKIP:
       return state.set('me', null);
     case MASTODON_PRELOAD_IMPORT:
-      return importMastodonPreload(state, fromJS(action.data) as ImmutableMap<string, any>);
+      return importMastodonPreload(
+        state,
+        fromJS(action.data) as ImmutableMap<string, any>,
+      );
     default:
       return state;
   }
@@ -330,7 +388,8 @@ const userSwitched = (oldState: State, state: State) => {
 };
 
 const maybeReload = (oldState: State, state: State, action: AnyAction) => {
-  const loggedOutStandalone = action.type === AUTH_LOGGED_OUT && action.standalone;
+  const loggedOutStandalone =
+    action.type === AUTH_LOGGED_OUT && action.standalone;
   const switched = userSwitched(oldState, state);
 
   if (switched || loggedOutStandalone) {
@@ -361,9 +420,4 @@ const auth = (oldState: State = initialState, action: AnyAction) => {
   return state;
 };
 
-export {
-  AuthUserRecord,
-  ReducerRecord,
-  localState,
-  auth as default,
-};
+export { AuthUserRecord, ReducerRecord, localState, auth as default };

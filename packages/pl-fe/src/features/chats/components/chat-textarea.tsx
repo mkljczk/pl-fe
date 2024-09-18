@@ -15,14 +15,13 @@ interface IChatTextarea extends React.ComponentProps<typeof Textarea> {
 }
 
 /** Custom textarea for chats. */
-const ChatTextarea: React.FC<IChatTextarea> = React.forwardRef(({
-  attachment,
-  onDeleteAttachment,
-  uploading,
-  uploadProgress = 0,
-  ...rest
-}, ref) => (
-  <div className={`
+const ChatTextarea: React.FC<IChatTextarea> = React.forwardRef(
+  (
+    { attachment, onDeleteAttachment, uploading, uploadProgress = 0, ...rest },
+    ref,
+  ) => (
+    <div
+      className={`
       block
       w-full
       rounded-md border border-gray-400
@@ -33,29 +32,30 @@ const ChatTextarea: React.FC<IChatTextarea> = React.forwardRef(({
       dark:bg-gray-800 dark:text-gray-100 dark:ring-1 dark:ring-gray-800 dark:placeholder:text-gray-600
       dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500
     `}
-  >
-    {(attachment || uploading) && (
-      <HStack className='-ml-2 -mt-2 p-3 pb-0' wrap>
-        {attachment && (
-          <div className='ml-2 mt-2 flex'>
-            <ChatUpload
-              key={attachment.id}
-              attachment={attachment}
-              onDelete={onDeleteAttachment}
-            />
-          </div>
-        )}
+    >
+      {(attachment || uploading) && (
+        <HStack className='-ml-2 -mt-2 p-3 pb-0' wrap>
+          {attachment && (
+            <div className='ml-2 mt-2 flex'>
+              <ChatUpload
+                key={attachment.id}
+                attachment={attachment}
+                onDelete={onDeleteAttachment}
+              />
+            </div>
+          )}
 
-        {uploading && (
-          <div className='ml-2 mt-2 flex'>
-            <ChatPendingUpload progress={uploadProgress} />
-          </div>
-        )}
-      </HStack>
-    )}
+          {uploading && (
+            <div className='ml-2 mt-2 flex'>
+              <ChatPendingUpload progress={uploadProgress} />
+            </div>
+          )}
+        </HStack>
+      )}
 
-    <Textarea ref={ref} theme='transparent' {...rest} />
-  </div>
-));
+      <Textarea ref={ref} theme='transparent' {...rest} />
+    </div>
+  ),
+);
 
 export { ChatTextarea as default };

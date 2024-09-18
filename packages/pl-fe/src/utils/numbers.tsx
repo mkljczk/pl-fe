@@ -3,10 +3,11 @@ import { FormattedNumber } from 'react-intl';
 import { z } from 'zod';
 
 /** Check if a value is REALLY a number. */
-const isNumber = (value: unknown): value is number => typeof value === 'number' && !isNaN(value);
+const isNumber = (value: unknown): value is number =>
+  typeof value === 'number' && !isNaN(value);
 
 /** The input is a number and is not NaN. */
-const realNumberSchema = z.coerce.number().refine(n => !isNaN(n));
+const realNumberSchema = z.coerce.number().refine((n) => !isNaN(n));
 
 const roundDown = (num: number) => {
   if (num >= 100 && num < 1000) {
@@ -14,7 +15,7 @@ const roundDown = (num: number) => {
   }
 
   const n = Number(num.toFixed(2));
-  return (n > num) ? n - (1 / (Math.pow(10, 2))) : n;
+  return n > num ? n - 1 / Math.pow(10, 2) : n;
 };
 
 /** Display a number nicely for the UI, eg 1000 becomes 1K. */

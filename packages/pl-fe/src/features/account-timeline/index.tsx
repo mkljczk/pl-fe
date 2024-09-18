@@ -8,7 +8,12 @@ import { useAccountLookup } from 'pl-fe/api/hooks';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StatusList from 'pl-fe/components/status-list';
 import { Card, CardBody, Spinner, Text } from 'pl-fe/components/ui';
-import { useAppDispatch, useAppSelector, useFeatures, useSettings } from 'pl-fe/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useFeatures,
+  useSettings,
+} from 'pl-fe/hooks';
 import { makeGetStatusIds } from 'pl-fe/selectors';
 
 const getStatusIds = makeGetStatusIds();
@@ -20,24 +25,45 @@ interface IAccountTimeline {
   withReplies?: boolean;
 }
 
-const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = false }) => {
+const AccountTimeline: React.FC<IAccountTimeline> = ({
+  params,
+  withReplies = false,
+}) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const settings = useSettings();
 
-  const { account } = useAccountLookup(params.username, { withRelationship: true });
+  const { account } = useAccountLookup(params.username, {
+    withRelationship: true,
+  });
   const [accountLoading, setAccountLoading] = useState<boolean>(!account);
 
   const path = withReplies ? `${account?.id}:with_replies` : account?.id;
   const showPins = settings.account_timeline.shows.pinned && !withReplies;
-  const statusIds = useAppSelector(state => getStatusIds(state, { type: `account:${path}`, prefix: 'account_timeline' }));
-  const featuredStatusIds = useAppSelector(state => getStatusIds(state, { type: `account:${account?.id}:with_replies:pinned`, prefix: 'account_timeline' }));
+  const statusIds = useAppSelector((state) =>
+    getStatusIds(state, {
+      type: `account:${path}`,
+      prefix: 'account_timeline',
+    }),
+  );
+  const featuredStatusIds = useAppSelector((state) =>
+    getStatusIds(state, {
+      type: `account:${account?.id}:with_replies:pinned`,
+      prefix: 'account_timeline',
+    }),
+  );
 
-  const isBlocked = useAppSelector(state => state.relationships.getIn([account?.id, 'blocked_by']) === true);
+  const isBlocked = useAppSelector(
+    (state) => state.relationships.getIn([account?.id, 'blocked_by']) === true,
+  );
   const unavailable = isBlocked && !features.blockersVisible;
-  const isLoading = useAppSelector(state => state.timelines.get(`account:${path}`)?.isLoading === true);
-  const hasMore = useAppSelector(state => state.timelines.get(`account:${path}`)?.hasMore === true);
+  const isLoading = useAppSelector(
+    (state) => state.timelines.get(`account:${path}`)?.isLoading === true,
+  );
+  const hasMore = useAppSelector(
+    (state) => state.timelines.get(`account:${path}`)?.hasMore === true,
+  );
 
   const accountUsername = account?.username || params.username;
 
@@ -55,13 +81,21 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
 
   useEffect(() => {
     if (account) {
-      dispatch(fetchAccountTimeline(account.id, { exclude_replies: !withReplies }));
+      dispatch(
+        fetchAccountTimeline(account.id, { exclude_replies: !withReplies }),
+      );
     }
   }, [account?.id, withReplies]);
 
   const handleLoadMore = () => {
     if (account) {
-      dispatch(fetchAccountTimeline(account.id, { exclude_replies: !withReplies }, true));
+      dispatch(
+        fetchAccountTimeline(
+          account.id,
+          { exclude_replies: !withReplies },
+          true,
+        ),
+      );
     }
   };
 
@@ -77,9 +111,16 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
         <CardBody>
           <Text align='center'>
             {isBlocked ? (
-              <FormattedMessage id='empty_column.account_blocked' defaultMessage='You are blocked by @{accountUsername}.' values={{ accountUsername }} />
+              <FormattedMessage
+                id='empty_column.account_blocked'
+                defaultMessage='You are blocked by @{accountUsername}.'
+                values={{ accountUsername }}
+              />
             ) : (
-              <FormattedMessage id='empty_column.account_unavailable' defaultMessage='Profile unavailable' />
+              <FormattedMessage
+                id='empty_column.account_unavailable'
+                defaultMessage='Profile unavailable'
+              />
             )}
           </Text>
         </CardBody>
@@ -95,7 +136,12 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
       isLoading={isLoading}
       hasMore={hasMore}
       onLoadMore={handleLoadMore}
-      emptyMessage={<FormattedMessage id='empty_column.account_timeline' defaultMessage='No posts here!' />}
+      emptyMessage={
+        <FormattedMessage
+          id='empty_column.account_timeline'
+          defaultMessage='No posts here!'
+        />
+      }
     />
   );
 };

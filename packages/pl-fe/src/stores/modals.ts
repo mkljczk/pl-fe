@@ -90,19 +90,32 @@ type State = {
 
 const useModalsStore = create<State>((set) => ({
   modals: [],
-  openModal: (...[modalType, modalProps]) => set(produce((state: State) => {
-    state.modals.push({ modalType, modalProps });
-  })),
-  closeModal: (modalType) => set(produce((state: State) => {
-    if (state.modals.length === 0) {
-      return;
-    }
-    if (modalType === undefined) {
-      state.modals = state.modals.slice(0, -1);
-    } else if (state.modals.some((modal) => modalType === modal.modalType)) {
-      state.modals = state.modals.slice(0, state.modals.findLastIndex((modal) => modalType === modal.modalType));
-    }
-  })),
+  openModal: (...[modalType, modalProps]) =>
+    set(
+      produce((state: State) => {
+        state.modals.push({ modalType, modalProps });
+      }),
+    ),
+  closeModal: (modalType) =>
+    set(
+      produce((state: State) => {
+        if (state.modals.length === 0) {
+          return;
+        }
+        if (modalType === undefined) {
+          state.modals = state.modals.slice(0, -1);
+        } else if (
+          state.modals.some((modal) => modalType === modal.modalType)
+        ) {
+          state.modals = state.modals.slice(
+            0,
+            state.modals.findLastIndex(
+              (modal) => modalType === modal.modalType,
+            ),
+          );
+        }
+      }),
+    ),
 }));
 
 export { useModalsStore, type OpenModalProps };

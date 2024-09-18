@@ -7,11 +7,26 @@ import { Button } from 'pl-fe/components/ui';
 import { useAppDispatch, useCompose, useInstance } from 'pl-fe/hooks';
 
 const messages = defineMessages({
-  content_type_plaintext: { id: 'preferences.options.content_type_plaintext', defaultMessage: 'Plain text' },
-  content_type_markdown: { id: 'preferences.options.content_type_markdown', defaultMessage: 'Markdown' },
-  content_type_html: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
-  content_type_wysiwyg: { id: 'preferences.options.content_type_wysiwyg', defaultMessage: 'WYSIWYG' },
-  change_content_type: { id: 'compose_form.content_type.change', defaultMessage: 'Change content type' },
+  content_type_plaintext: {
+    id: 'preferences.options.content_type_plaintext',
+    defaultMessage: 'Plain text',
+  },
+  content_type_markdown: {
+    id: 'preferences.options.content_type_markdown',
+    defaultMessage: 'Markdown',
+  },
+  content_type_html: {
+    id: 'preferences.options.content_type_html',
+    defaultMessage: 'HTML',
+  },
+  content_type_wysiwyg: {
+    id: 'preferences.options.content_type_wysiwyg',
+    defaultMessage: 'WYSIWYG',
+  },
+  change_content_type: {
+    id: 'compose_form.content_type.change',
+    defaultMessage: 'Change content type',
+  },
 });
 
 interface IContentTypeButton {
@@ -25,7 +40,8 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId }) => {
 
   const contentType = useCompose(composeId).content_type;
 
-  const handleChange = (contentType: string) => () => dispatch(changeComposeContentType(composeId, contentType));
+  const handleChange = (contentType: string) => () =>
+    dispatch(changeComposeContentType(composeId, contentType));
 
   const options = [
     {
@@ -33,7 +49,8 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId }) => {
       text: intl.formatMessage(messages.content_type_plaintext),
       value: 'text/plain',
     },
-    { icon: require('@tabler/icons/outline/markdown.svg'),
+    {
+      icon: require('@tabler/icons/outline/markdown.svg'),
       text: intl.formatMessage(messages.content_type_markdown),
       value: 'text/markdown',
     },
@@ -74,7 +91,6 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId }) => {
       />
     </DropdownMenu>
   );
-
 };
 
 export { ContentTypeButton as default };

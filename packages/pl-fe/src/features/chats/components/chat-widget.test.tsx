@@ -14,33 +14,34 @@ const account = buildAccount({
   avatar: 'test.jpg',
 });
 
-const store = rootState
-  .set('me', id)
-  .set('entities', {
-    'ACCOUNTS': {
-      store: {
-        [id]: account,
-      },
-      lists: {},
+const store = rootState.set('me', id).set('entities', {
+  ACCOUNTS: {
+    store: {
+      [id]: account,
     },
-  });
+    lists: {},
+  },
+});
 
 describe('<ChatWidget />', () => {
   describe('when on the /chats endpoint', () => {
     it('hides the widget', async () => {
       const App = () => (
         <Switch>
-          <Route path='/chats' exact><span>Chats page <ChatWidget /></span></Route>
-          <Route path='/' exact><span data-testid='home'>Homepage <ChatWidget /></span></Route>
+          <Route path='/chats' exact>
+            <span>
+              Chats page <ChatWidget />
+            </span>
+          </Route>
+          <Route path='/' exact>
+            <span data-testid='home'>
+              Homepage <ChatWidget />
+            </span>
+          </Route>
         </Switch>
       );
 
-      const screen = render(
-        <App />,
-        {},
-        store,
-        { initialEntries: ['/chats'] },
-      );
+      const screen = render(<App />, {}, store, { initialEntries: ['/chats'] });
 
       expect(screen.queryAllByTestId('pane')).toHaveLength(0);
     });
@@ -80,17 +81,20 @@ describe('<ChatWidget />', () => {
     it('shows the widget', async () => {
       const App = () => (
         <Switch>
-          <Route path='/chats' exact><span>Chats page <ChatWidget /></span></Route>
-          <Route path='/' exact><span data-testid='home'>Homepage <ChatWidget /></span></Route>
+          <Route path='/chats' exact>
+            <span>
+              Chats page <ChatWidget />
+            </span>
+          </Route>
+          <Route path='/' exact>
+            <span data-testid='home'>
+              Homepage <ChatWidget />
+            </span>
+          </Route>
         </Switch>
       );
 
-      const screen = render(
-        <App />,
-        {},
-        store,
-        { initialEntries: ['/'] },
-      );
+      const screen = render(<App />, {}, store, { initialEntries: ['/'] });
 
       expect(screen.queryAllByTestId('pane')).toHaveLength(1);
     });

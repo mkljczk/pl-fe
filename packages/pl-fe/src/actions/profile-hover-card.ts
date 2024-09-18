@@ -2,7 +2,10 @@ const PROFILE_HOVER_CARD_OPEN = 'PROFILE_HOVER_CARD_OPEN';
 const PROFILE_HOVER_CARD_UPDATE = 'PROFILE_HOVER_CARD_UPDATE';
 const PROFILE_HOVER_CARD_CLOSE = 'PROFILE_HOVER_CARD_CLOSE';
 
-const openProfileHoverCard = (ref: React.MutableRefObject<HTMLDivElement>, accountId: string) => ({
+const openProfileHoverCard = (
+  ref: React.MutableRefObject<HTMLDivElement>,
+  accountId: string,
+) => ({
   type: PROFILE_HOVER_CARD_OPEN,
   ref,
   accountId,

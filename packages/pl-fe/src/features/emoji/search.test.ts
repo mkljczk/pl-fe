@@ -3,7 +3,8 @@ import pick from 'lodash/pick';
 
 import search, { addCustomToPool } from './search';
 
-const trimEmojis = (emoji: any) => pick(emoji, ['id', 'unified', 'native', 'custom']);
+const trimEmojis = (emoji: any) =>
+  pick(emoji, ['id', 'unified', 'native', 'custom']);
 
 describe('emoji_index', () => {
   it('should give same result for emoji_index_light and emoji-mart', () => {
@@ -50,7 +51,9 @@ describe('emoji_index', () => {
     ];
 
     addCustomToPool(custom);
-    expect(search('masto', {}, custom_emojis).map(trimEmojis)).toEqual(lightExpected);
+    expect(search('masto', {}, custom_emojis).map(trimEmojis)).toEqual(
+      lightExpected,
+    );
   });
 
   it('updates custom emoji if another is passed', () => {
@@ -81,25 +84,27 @@ describe('emoji_index', () => {
     ]);
 
     const expected: any = [];
-    expect(search('masto', {}, custom_emojis).map(trimEmojis)).toEqual(expected);
+    expect(search('masto', {}, custom_emojis).map(trimEmojis)).toEqual(
+      expected,
+    );
   });
 
   it('does an emoji whose unified name is irregular', () => {
     const expected = [
       {
-        'id': 'water_polo',
-        'unified': '1f93d',
-        'native': '🤽',
+        id: 'water_polo',
+        unified: '1f93d',
+        native: '🤽',
       },
       {
-        'id': 'man-playing-water-polo',
-        'unified': '1f93d-200d-2642-fe0f',
-        'native': '🤽‍♂️',
+        id: 'man-playing-water-polo',
+        unified: '1f93d-200d-2642-fe0f',
+        native: '🤽‍♂️',
       },
       {
-        'id': 'woman-playing-water-polo',
-        'unified': '1f93d-200d-2640-fe0f',
-        'native': '🤽‍♀️',
+        id: 'woman-playing-water-polo',
+        unified: '1f93d-200d-2640-fe0f',
+        native: '🤽‍♀️',
       },
     ];
     expect(search('polo').map(trimEmojis)).toEqual(expected);

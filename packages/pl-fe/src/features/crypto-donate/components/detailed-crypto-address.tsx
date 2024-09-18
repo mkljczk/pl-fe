@@ -15,7 +15,11 @@ interface IDetailedCryptoAddress {
   note?: string;
 }
 
-const DetailedCryptoAddress: React.FC<IDetailedCryptoAddress> = ({ address, ticker, note }): JSX.Element => {
+const DetailedCryptoAddress: React.FC<IDetailedCryptoAddress> = ({
+  address,
+  ticker,
+  note,
+}): JSX.Element => {
   const title = getTitle(ticker);
   const explorerUrl = getExplorerUrl(ticker, address);
 
@@ -30,9 +34,18 @@ const DetailedCryptoAddress: React.FC<IDetailedCryptoAddress> = ({ address, tick
         />
         <div className='font-bold'>{title || ticker.toUpperCase()}</div>
         <div className='ml-auto flex'>
-          {explorerUrl && <a className='ml-2 text-gray-400' href={explorerUrl} target='_blank'>
-            <Icon className='h-4.5 w-4.5' src={require('@tabler/icons/outline/external-link.svg')} />
-          </a>}
+          {explorerUrl && (
+            <a
+              className='ml-2 text-gray-400'
+              href={explorerUrl}
+              target='_blank'
+            >
+              <Icon
+                className='h-4.5 w-4.5'
+                src={require('@tabler/icons/outline/external-link.svg')}
+              />
+            </a>
+          )}
         </div>
       </div>
       {note && <div className='mb-2.5'>{note}</div>}

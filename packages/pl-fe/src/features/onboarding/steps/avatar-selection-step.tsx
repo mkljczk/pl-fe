@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 import { patchMe } from 'pl-fe/actions/me';
 import { BigCard } from 'pl-fe/components/big-card';
@@ -13,7 +13,11 @@ import resizeImage from 'pl-fe/utils/resize-image';
 import type { PlfeResponse } from 'pl-fe/api';
 
 const messages = defineMessages({
-  error: { id: 'onboarding.error', defaultMessage: 'An unexpected error occurred. Please try again or skip this step.' },
+  error: {
+    id: 'onboarding.error',
+    defaultMessage:
+      'An unexpected error occurred. Please try again or skip this step.',
+  },
 });
 
 const AvatarSelectionStep = ({ onNext }: { onNext: () => void }) => {
@@ -36,41 +40,66 @@ const AvatarSelectionStep = ({ onNext }: { onNext: () => void }) => {
 
     if (!rawFile) return;
 
-    resizeImage(rawFile, maxPixels).then((file) => {
-      const url = file ? URL.createObjectURL(file) : account?.avatar as string;
+    resizeImage(rawFile, maxPixels)
+      .then((file) => {
+        const url = file
+          ? URL.createObjectURL(file)
+          : (account?.avatar as string);
 
-      setSelectedFile(url);
-      setSubmitting(true);
+        setSelectedFile(url);
+        setSubmitting(true);
 
-      const credentials = dispatch(patchMe({ avatar: rawFile }));
+        const credentials = dispatch(patchMe({ avatar: rawFile }));
 
-      return Promise.all([credentials]).then(() => {
-        setDisabled(false);
-        setSubmitting(false);
-        onNext();
-      }).catch((error: { response: PlfeResponse }) => {
-        setSubmitting(false);
-        setDisabled(false);
-        setSelectedFile(null);
+        return Promise.all([credentials])
+          .then(() => {
+            setDisabled(false);
+            setSubmitting(false);
+            onNext();
+          })
+          .catch((error: { response: PlfeResponse }) => {
+            setSubmitting(false);
+            setDisabled(false);
+            setSelectedFile(null);
 
-        if (error.response?.status === 422) {
-          toast.error((error.response.json as any).error.replace('Validation failed: ', ''));
-        } else {
-          toast.error(messages.error);
-        }
-      });
-    }).catch(console.error);
+            if (error.response?.status === 422) {
+              toast.error(
+                (error.response.json as any).error.replace(
+                  'Validation failed: ',
+                  '',
+                ),
+              );
+            } else {
+              toast.error(messages.error);
+            }
+          });
+      })
+      .catch(console.error);
   };
 
   return (
     <BigCard
-      title={<FormattedMessage id='onboarding.avatar.title' defaultMessage='Choose a profile picture' />}
-      subtitle={<FormattedMessage id='onboarding.avatar.subtitle' defaultMessage='Just have fun with it.' />}
+      title={
+        <FormattedMessage
+          id='onboarding.avatar.title'
+          defaultMessage='Choose a profile picture'
+        />
+      }
+      subtitle={
+        <FormattedMessage
+          id='onboarding.avatar.subtitle'
+          defaultMessage='Just have fun with it.'
+        />
+      }
     >
       <Stack space={10}>
         <div className='relative mx-auto rounded-full bg-gray-200'>
           {account && (
-            <Avatar src={selectedFile || account.avatar} alt={account.avatar_description} size={175} />
+            <Avatar
+              src={selectedFile || account.avatar}
+              alt={account.avatar_description}
+              size={175}
+            />
           )}
 
           {isSubmitting && (
@@ -88,16 +117,33 @@ const AvatarSelectionStep = ({ onNext }: { onNext: () => void }) => {
             })}
             disabled={isSubmitting}
           >
-            <Icon src={require('@tabler/icons/outline/plus.svg')} className='h-5 w-5 text-white' />
+            <Icon
+              src={require('@tabler/icons/outline/plus.svg')}
+              className='h-5 w-5 text-white'
+            />
           </button>
 
-          <input type='file' className='hidden' ref={fileInput} onChange={handleFileChange} />
+          <input
+            type='file'
+            className='hidden'
+            ref={fileInput}
+            onChange={handleFileChange}
+          />
         </div>
 
         <Stack justifyContent='center' space={2}>
-          <Button block theme='primary' type='button' onClick={onNext} disabled={isDefault && isDisabled || isSubmitting}>
+          <Button
+            block
+            theme='primary'
+            type='button'
+            onClick={onNext}
+            disabled={(isDefault && isDisabled) || isSubmitting}
+          >
             {isSubmitting ? (
-              <FormattedMessage id='onboarding.saving' defaultMessage='Saving…' />
+              <FormattedMessage
+                id='onboarding.saving'
+                defaultMessage='Saving…'
+              />
             ) : (
               <FormattedMessage id='onboarding.next' defaultMessage='Next' />
             )}
@@ -105,7 +151,10 @@ const AvatarSelectionStep = ({ onNext }: { onNext: () => void }) => {
 
           {isDisabled && (
             <Button block theme='tertiary' type='button' onClick={onNext}>
-              <FormattedMessage id='onboarding.skip' defaultMessage='Skip for now' />
+              <FormattedMessage
+                id='onboarding.skip'
+                defaultMessage='Skip for now'
+              />
             </Button>
           )}
         </Stack>

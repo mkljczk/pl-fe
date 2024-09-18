@@ -1,7 +1,7 @@
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { render, RenderOptions } from '@testing-library/react';
-import { renderHook, RenderHookOptions } from '@testing-library/react-hooks';
+import { RenderOptions, render } from '@testing-library/react';
+import { RenderHookOptions, renderHook } from '@testing-library/react-hooks';
 import { merge } from 'immutable';
 import React, { FC, ReactElement } from 'react';
 import { Toaster } from 'react-hot-toast';
@@ -23,20 +23,25 @@ import type { AnyAction } from 'redux';
 // Mock Redux
 // https://redux.js.org/recipes/writing-tests/
 const rootState = rootReducer(undefined, {} as Action);
-const mockStore = configureMockStore<typeof rootState, AnyAction, AppDispatch>([thunk]);
+const mockStore = configureMockStore<typeof rootState, AnyAction, AppDispatch>([
+  thunk,
+]);
 
 /** Apply actions to the state, one at a time. */
 const applyActions = (state: any, actions: any, reducer: any) =>
   actions.reduce((state: any, action: any) => reducer(state, action), state);
 
-const createTestStore = (initialState: any) => createStore(rootReducer, initialState, applyMiddleware(thunk));
+const createTestStore = (initialState: any) =>
+  createStore(rootReducer, initialState, applyMiddleware(thunk));
 const TestApp: FC<any> = ({ children, storeProps, routerProps = {} }) => {
   let store: ReturnType<typeof createTestStore>;
   let appState = rootState;
 
-  if (storeProps && typeof storeProps.getState !== 'undefined') { // storeProps is a store
+  if (storeProps && typeof storeProps.getState !== 'undefined') {
+    // storeProps is a store
     store = storeProps;
-  } else if (storeProps) { // storeProps is state
+  } else if (storeProps) {
+    // storeProps is state
     appState = merge(rootState, storeProps);
     store = createTestStore(appState);
   } else {
@@ -74,18 +79,24 @@ const customRender = (
   options?: Omit<RenderOptions, 'wrapper'>,
   store?: any,
   routerProps?: any,
-) => render(ui, {
-  wrapper: () => <TestApp children={ui} storeProps={store} routerProps={routerProps} />,
-  ...options,
-});
+) =>
+  render(ui, {
+    wrapper: () => (
+      <TestApp children={ui} storeProps={store} routerProps={routerProps} />
+    ),
+    ...options,
+  });
 
 /** Like renderHook, but with access to the Redux store. */
 const customRenderHook = <T extends { children?: React.ReactNode }>(
   callback: (props?: any) => any,
   options?: Omit<RenderHookOptions<T>, 'wrapper'>,
   store?: any,
-) => renderHook(callback, {
-    wrapper: ({ children }) => <TestApp children={children} storeProps={store} />,
+) =>
+  renderHook(callback, {
+    wrapper: ({ children }) => (
+      <TestApp children={children} storeProps={store} />
+    ),
     ...options,
   });
 

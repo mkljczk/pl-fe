@@ -7,16 +7,28 @@ import { importEntities } from '../actions';
 
 import { parseEntitiesPath } from './utils';
 
-import type { EntityCallbacks, EntityFn, EntitySchema, ExpandedEntitiesPath } from './types';
-import type { Entity } from '../types';
 import type { PlfeResponse } from 'pl-fe/api';
+import type { Entity } from '../types';
+import type {
+  EntityCallbacks,
+  EntityFn,
+  EntitySchema,
+  ExpandedEntitiesPath,
+} from './types';
 
-interface UseCreateEntityOpts<TEntity extends Entity = Entity, TTransformedEntity extends Entity = TEntity> {
+interface UseCreateEntityOpts<
+  TEntity extends Entity = Entity,
+  TTransformedEntity extends Entity = TEntity,
+> {
   schema?: EntitySchema<TEntity>;
   transform?: (schema: TEntity) => TTransformedEntity;
 }
 
-const useCreateEntity = <TEntity extends Entity = Entity, TTransformedEntity extends Entity = TEntity, Data = unknown>(
+const useCreateEntity = <
+  TEntity extends Entity = Entity,
+  TTransformedEntity extends Entity = TEntity,
+  Data = unknown,
+>(
   expandedPath: ExpandedEntitiesPath,
   entityFn: EntityFn<Data>,
   opts: UseCreateEntityOpts<TEntity, TTransformedEntity> = {},
@@ -28,7 +40,10 @@ const useCreateEntity = <TEntity extends Entity = Entity, TTransformedEntity ext
 
   const createEntity = async (
     data: Data,
-    callbacks: EntityCallbacks<TTransformedEntity, { response?: PlfeResponse }> = {},
+    callbacks: EntityCallbacks<
+      TTransformedEntity,
+      { response?: PlfeResponse }
+    > = {},
   ): Promise<void> => {
     const result = await setPromise(entityFn(data));
     const schema = opts.schema || z.custom<TEntity>();

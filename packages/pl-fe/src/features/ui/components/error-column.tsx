@@ -1,12 +1,15 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { Column, Stack, Text, IconButton } from 'pl-fe/components/ui';
+import { Column, IconButton, Stack, Text } from 'pl-fe/components/ui';
 import { isNetworkError } from 'pl-fe/utils/errors';
 
 const messages = defineMessages({
   title: { id: 'bundle_column_error.title', defaultMessage: 'Network error' },
-  body: { id: 'bundle_column_error.body', defaultMessage: 'Something went wrong while loading this page.' },
+  body: {
+    id: 'bundle_column_error.body',
+    defaultMessage: 'Something went wrong while loading this page.',
+  },
   retry: { id: 'bundle_column_error.retry', defaultMessage: 'Try again' },
 });
 
@@ -15,7 +18,10 @@ interface IErrorColumn {
   onRetry?: () => void;
 }
 
-const ErrorColumn: React.FC<IErrorColumn> = ({ error, onRetry = () => location.reload() }) => {
+const ErrorColumn: React.FC<IErrorColumn> = ({
+  error,
+  onRetry = () => location.reload(),
+}) => {
   const intl = useIntl();
 
   const handleRetry = () => {
@@ -28,7 +34,12 @@ const ErrorColumn: React.FC<IErrorColumn> = ({ error, onRetry = () => location.r
 
   return (
     <Column label={intl.formatMessage(messages.title)}>
-      <Stack space={4} alignItems='center' justifyContent='center' className='min-h-[160px] rounded-lg p-10'>
+      <Stack
+        space={4}
+        alignItems='center'
+        justifyContent='center'
+        className='min-h-[160px] rounded-lg p-10'
+      >
         <IconButton
           iconClassName='h-10 w-10'
           title={intl.formatMessage(messages.retry)}
@@ -36,7 +47,9 @@ const ErrorColumn: React.FC<IErrorColumn> = ({ error, onRetry = () => location.r
           onClick={handleRetry}
         />
 
-        <Text align='center' theme='muted'>{intl.formatMessage(messages.body)}</Text>
+        <Text align='center' theme='muted'>
+          {intl.formatMessage(messages.body)}
+        </Text>
       </Stack>
     </Column>
   );

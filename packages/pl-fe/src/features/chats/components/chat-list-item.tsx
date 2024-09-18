@@ -15,12 +15,31 @@ import type { Chat } from 'pl-api';
 import type { Menu } from 'pl-fe/components/dropdown-menu';
 
 const messages = defineMessages({
-  blockedYou: { id: 'chat_list_item.blocked_you', defaultMessage: 'This user has blocked you' },
-  blocking: { id: 'chat_list_item.blocking', defaultMessage: 'You have blocked this user' },
-  leaveMessage: { id: 'chat_settings.leave.message', defaultMessage: 'Are you sure you want to leave this chat? Messages will be deleted for you and this chat will be removed from your inbox.' },
-  leaveHeading: { id: 'chat_settings.leave.heading', defaultMessage: 'Leave chat' },
-  leaveConfirm: { id: 'chat_settings.leave.confirm', defaultMessage: 'Leave chat' },
-  leaveChat: { id: 'chat_settings.options.leave_chat', defaultMessage: 'Leave chat' },
+  blockedYou: {
+    id: 'chat_list_item.blocked_you',
+    defaultMessage: 'This user has blocked you',
+  },
+  blocking: {
+    id: 'chat_list_item.blocking',
+    defaultMessage: 'You have blocked this user',
+  },
+  leaveMessage: {
+    id: 'chat_settings.leave.message',
+    defaultMessage:
+      'Are you sure you want to leave this chat? Messages will be deleted for you and this chat will be removed from your inbox.',
+  },
+  leaveHeading: {
+    id: 'chat_settings.leave.heading',
+    defaultMessage: 'Leave chat',
+  },
+  leaveConfirm: {
+    id: 'chat_settings.leave.confirm',
+    defaultMessage: 'Leave chat',
+  },
+  leaveChat: {
+    id: 'chat_settings.options.leave_chat',
+    defaultMessage: 'Leave chat',
+  },
 });
 
 interface IChatListItemInterface {
@@ -36,32 +55,41 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
 
   const { isUsingMainChatPage } = useChatContext();
   const { deleteChat } = useChatActions(chat?.id as string);
-  const isBlocked = useAppSelector((state) => state.getIn(['relationships', chat.account.id, 'blocked_by']));
-  const isBlocking = useAppSelector((state) => state.getIn(['relationships', chat?.account?.id, 'blocking']));
+  const isBlocked = useAppSelector((state) =>
+    state.getIn(['relationships', chat.account.id, 'blocked_by']),
+  );
+  const isBlocking = useAppSelector((state) =>
+    state.getIn(['relationships', chat?.account?.id, 'blocking']),
+  );
 
-  const menu = useMemo((): Menu => [{
-    text: intl.formatMessage(messages.leaveChat),
-    action: (event) => {
-      event.stopPropagation();
+  const menu = useMemo(
+    (): Menu => [
+      {
+        text: intl.formatMessage(messages.leaveChat),
+        action: (event) => {
+          event.stopPropagation();
 
-      openModal('CONFIRM', {
-        heading: intl.formatMessage(messages.leaveHeading),
-        message: intl.formatMessage(messages.leaveMessage),
-        confirm: intl.formatMessage(messages.leaveConfirm),
-        confirmationTheme: 'primary',
-        onConfirm: () => {
-          deleteChat.mutate(undefined, {
-            onSuccess() {
-              if (isUsingMainChatPage) {
-                history.push('/chats');
-              }
+          openModal('CONFIRM', {
+            heading: intl.formatMessage(messages.leaveHeading),
+            message: intl.formatMessage(messages.leaveMessage),
+            confirm: intl.formatMessage(messages.leaveConfirm),
+            confirmationTheme: 'primary',
+            onConfirm: () => {
+              deleteChat.mutate(undefined, {
+                onSuccess() {
+                  if (isUsingMainChatPage) {
+                    history.push('/chats');
+                  }
+                },
+              });
             },
           });
         },
-      });
-    },
-    icon: require('@tabler/icons/outline/logout.svg'),
-  }], []);
+        icon: require('@tabler/icons/outline/logout.svg'),
+      },
+    ],
+    [],
+  );
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -79,7 +107,12 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
       data-testid='chat-list-item'
       tabIndex={0}
     >
-      <HStack alignItems='center' justifyContent='between' space={2} className='w-full'>
+      <HStack
+        alignItems='center'
+        justifyContent='between'
+        space={2}
+        className='w-full'
+      >
         <HStack alignItems='center' space={2} className='overflow-hidden'>
           <Avatar
             src={chat.account.avatar}
@@ -90,11 +123,13 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
 
           <Stack alignItems='start' className='overflow-hidden'>
             <div className='flex w-full grow items-center space-x-1'>
-              <Text weight='bold' size='sm' align='left' truncate>{chat.account?.display_name || `@${chat.account.username}`}</Text>
+              <Text weight='bold' size='sm' align='left' truncate>
+                {chat.account?.display_name || `@${chat.account.username}`}
+              </Text>
               {chat.account?.verified && <VerificationBadge />}
             </div>
 
-            {(isBlocked || isBlocking) ? (
+            {isBlocked || isBlocking ? (
               <Text
                 align='left'
                 size='sm'
@@ -104,7 +139,9 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
                 className='pointer-events-none h-5 w-full italic'
                 data-testid='chat-last-message'
               >
-                {intl.formatMessage(isBlocked ? messages.blockedYou : messages.blocking)}
+                {intl.formatMessage(
+                  isBlocked ? messages.blockedYou : messages.blocking,
+                )}
               </Text>
             ) : (
               <>
@@ -117,7 +154,9 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
                     truncate
                     className='truncate-child pointer-events-none h-5 w-full'
                     data-testid='chat-last-message'
-                    dangerouslySetInnerHTML={{ __html: chat.last_message?.content }}
+                    dangerouslySetInnerHTML={{
+                      __html: chat.last_message?.content,
+                    }}
                   />
                 )}
               </>

@@ -21,7 +21,11 @@ import {
   HeadingTagType,
 } from '@lexical/rich-text';
 import { $setBlocksType } from '@lexical/selection';
-import { $findMatchingParent, $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
+import {
+  $findMatchingParent,
+  $getNearestNodeOfType,
+  mergeRegister,
+} from '@lexical/utils';
 import clsx from 'clsx';
 import {
   $createParagraphNode,
@@ -47,12 +51,30 @@ import { getSelectedNode } from '../utils/get-selected-node';
 import { setFloatingElemPosition } from '../utils/set-floating-elem-position';
 
 const messages = defineMessages({
-  formatBold: { id: 'compose_form.lexical.format_bold', defaultMessage: 'Format bold' },
-  formatItalic: { id: 'compose_form.lexical.format_italic', defaultMessage: 'Format italic' },
-  formatUnderline: { id: 'compose_form.lexical.format_underline', defaultMessage: 'Format underline' },
-  formatStrikethrough: { id: 'compose_form.lexical.format_strikethrough', defaultMessage: 'Format strikethrough' },
-  insertCodeBlock: { id: 'compose_form.lexical.insert_code_block', defaultMessage: 'Insert code block' },
-  insertLink: { id: 'compose_form.lexical.insert_link', defaultMessage: 'Insert link' },
+  formatBold: {
+    id: 'compose_form.lexical.format_bold',
+    defaultMessage: 'Format bold',
+  },
+  formatItalic: {
+    id: 'compose_form.lexical.format_italic',
+    defaultMessage: 'Format italic',
+  },
+  formatUnderline: {
+    id: 'compose_form.lexical.format_underline',
+    defaultMessage: 'Format underline',
+  },
+  formatStrikethrough: {
+    id: 'compose_form.lexical.format_strikethrough',
+    defaultMessage: 'Format strikethrough',
+  },
+  insertCodeBlock: {
+    id: 'compose_form.lexical.insert_code_block',
+    defaultMessage: 'Insert code block',
+  },
+  insertLink: {
+    id: 'compose_form.lexical.insert_link',
+    defaultMessage: 'Insert link',
+  },
 });
 
 const blockTypeToIcon = {
@@ -90,7 +112,11 @@ interface IToolbarButton extends React.HTMLAttributes<HTMLButtonElement> {
   icon: string;
 }
 
-export const ToolbarButton: React.FC<IToolbarButton> = ({ active, icon, ...props }) => (
+export const ToolbarButton: React.FC<IToolbarButton> = ({
+  active,
+  icon,
+  ...props
+}) => (
   <button
     className={clsx(
       'flex cursor-pointer rounded-lg border-0 bg-none p-1 align-middle hover:bg-gray-100 disabled:cursor-not-allowed disabled:hover:bg-none dark:hover:bg-primary-700',
@@ -103,7 +129,12 @@ export const ToolbarButton: React.FC<IToolbarButton> = ({ active, icon, ...props
   </button>
 );
 
-const BlockTypeDropdown = ({ editor, anchorElem, blockType, icon }: {
+const BlockTypeDropdown = ({
+  editor,
+  anchorElem,
+  blockType,
+  icon,
+}: {
   editor: LexicalEditor;
   anchorElem: HTMLElement;
   blockType: keyof typeof blockTypeToBlockName;
@@ -190,11 +221,12 @@ const BlockTypeDropdown = ({ editor, anchorElem, blockType, icon }: {
         type='button'
       >
         <Icon src={icon} />
-        <Icon src={require('@tabler/icons/outline/chevron-down.svg')} className='-bottom-2 h-4 w-4' />
+        <Icon
+          src={require('@tabler/icons/outline/chevron-down.svg')}
+          className='-bottom-2 h-4 w-4'
+        />
         {showDropDown && (
-          <div
-            className='absolute left-0 top-9 z-10 flex h-[38px] gap-0.5 rounded-lg bg-white p-1 shadow-lg transition-[opacity] dark:bg-gray-900'
-          >
+          <div className='absolute left-0 top-9 z-10 flex h-[38px] gap-0.5 rounded-lg bg-white p-1 shadow-lg transition-[opacity] dark:bg-gray-900'>
             <ToolbarButton
               onClick={formatParagraph}
               active={blockType === 'paragraph'}
@@ -257,16 +289,16 @@ const TextFormatFloatingToolbar = ({
   isCode,
   isStrikethrough,
 }: {
-   editor: LexicalEditor;
-   anchorElem: HTMLElement;
-   blockType: keyof typeof blockTypeToBlockName;
-   isBold: boolean;
-   isCode: boolean;
-   isItalic: boolean;
-   isLink: boolean;
-   isStrikethrough: boolean;
-   isUnderline: boolean;
- }): JSX.Element => {
+  editor: LexicalEditor;
+  anchorElem: HTMLElement;
+  blockType: keyof typeof blockTypeToBlockName;
+  isBold: boolean;
+  isCode: boolean;
+  isItalic: boolean;
+  isLink: boolean;
+  isStrikethrough: boolean;
+  isUnderline: boolean;
+}): JSX.Element => {
   const intl = useIntl();
   const popupCharStylesEditorRef = useRef<HTMLDivElement | null>(null);
 
@@ -455,9 +487,9 @@ const useFloatingTextFormatToolbar = (
         anchorNode.getKey() === 'root'
           ? anchorNode
           : $findMatchingParent(anchorNode, (e) => {
-            const parent = e.getParent();
-            return parent !== null && $isRootOrShadowRoot(parent);
-          });
+              const parent = e.getParent();
+              return parent !== null && $isRootOrShadowRoot(parent);
+            });
 
       if (element === null) {
         element = anchorNode.getTopLevelElementOrThrow();
@@ -503,7 +535,10 @@ const useFloatingTextFormatToolbar = (
         setIsLink(false);
       }
 
-      if (!$isCodeHighlightNode(selection.anchor.getNode()) && selection.getTextContent() !== '') {
+      if (
+        !$isCodeHighlightNode(selection.anchor.getNode()) &&
+        selection.getTextContent() !== ''
+      ) {
         setIsText($isTextNode(node));
       } else {
         setIsText(false);
@@ -554,8 +589,8 @@ const useFloatingTextFormatToolbar = (
 const FloatingTextFormatToolbarPlugin = ({
   anchorElem = document.body,
 }: {
-   anchorElem?: HTMLElement;
- }): JSX.Element | null => {
+  anchorElem?: HTMLElement;
+}): JSX.Element | null => {
   const [editor] = useLexicalComposerContext();
   return useFloatingTextFormatToolbar(editor, anchorElem);
 };

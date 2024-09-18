@@ -7,9 +7,7 @@
   "description": "FEDIsroot - Federated social network powered by Pleroma (open beta)",
   "description_limit": 5000,
   "email": "admin@example.lan",
-  "languages": [
-    "en"
-  ],
+  "languages": ["en"],
   "max_toot_chars": 5000,
   "pleroma": {
     "metadata": {
@@ -40,15 +38,10 @@
         "mrf_hashtag": {
           "federated_timeline_removal": [],
           "reject": [],
-          "sensitive": [
-            "nsfw"
-          ]
+          "sensitive": ["nsfw"]
         },
         "mrf_object_age": {
-          "actions": [
-            "delist",
-            "strip_followers"
-          ],
+          "actions": ["delist", "strip_followers"],
           "threshold": 604800
         },
         "mrf_policies": [

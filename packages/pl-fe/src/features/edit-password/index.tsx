@@ -2,23 +2,52 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { changePassword } from 'pl-fe/actions/security';
-import { Button, Column, Form, FormActions, FormGroup, Input } from 'pl-fe/components/ui';
+import {
+  Button,
+  Column,
+  Form,
+  FormActions,
+  FormGroup,
+  Input,
+} from 'pl-fe/components/ui';
 import { useAppDispatch } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
-  updatePasswordSuccess: { id: 'security.update_password.success', defaultMessage: 'Password successfully updated.' },
-  updatePasswordFail: { id: 'security.update_password.fail', defaultMessage: 'Update password failed.' },
-  passwordsNoMatch: { id: 'security.update_password.password_confirmation_no_match', defaultMessage: 'Passwords do not match.' },
-  oldPasswordFieldLabel: { id: 'security.fields.old_password.label', defaultMessage: 'Current password' },
-  newPasswordFieldLabel: { id: 'security.fields.new_password.label', defaultMessage: 'New password' },
-  confirmationFieldLabel: { id: 'security.fields.password_confirmation.label', defaultMessage: 'New password (again)' },
+  updatePasswordSuccess: {
+    id: 'security.update_password.success',
+    defaultMessage: 'Password successfully updated.',
+  },
+  updatePasswordFail: {
+    id: 'security.update_password.fail',
+    defaultMessage: 'Update password failed.',
+  },
+  passwordsNoMatch: {
+    id: 'security.update_password.password_confirmation_no_match',
+    defaultMessage: 'Passwords do not match.',
+  },
+  oldPasswordFieldLabel: {
+    id: 'security.fields.old_password.label',
+    defaultMessage: 'Current password',
+  },
+  newPasswordFieldLabel: {
+    id: 'security.fields.new_password.label',
+    defaultMessage: 'New password',
+  },
+  confirmationFieldLabel: {
+    id: 'security.fields.password_confirmation.label',
+    defaultMessage: 'New password (again)',
+  },
   header: { id: 'edit_password.header', defaultMessage: 'Change password' },
   submit: { id: 'security.submit', defaultMessage: 'Save changes' },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
 });
 
-const initialState = { currentPassword: '', newPassword: '', newPasswordConfirmation: '' };
+const initialState = {
+  currentPassword: '',
+  newPassword: '',
+  newPasswordConfirmation: '',
+};
 
 const EditPassword = () => {
   const intl = useIntl();
@@ -31,32 +60,41 @@ const EditPassword = () => {
 
   const resetState = () => setState(initialState);
 
-  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = React.useCallback((event) => {
-    event.persist();
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> =
+    React.useCallback((event) => {
+      event.persist();
 
-    setState((prevState) => ({ ...prevState, [event.target.name]: event.target.value }));
-  }, []);
+      setState((prevState) => ({
+        ...prevState,
+        [event.target.name]: event.target.value,
+      }));
+    }, []);
 
   const handleSubmit = React.useCallback(() => {
-    if (newPassword !== newPasswordConfirmation) return toast.error(intl.formatMessage(messages.passwordsNoMatch));
+    if (newPassword !== newPasswordConfirmation)
+      return toast.error(intl.formatMessage(messages.passwordsNoMatch));
 
     setLoading(true);
-    dispatch(changePassword(currentPassword, newPassword)).then(() => {
-      resetState();
-      toast.success(intl.formatMessage(messages.updatePasswordSuccess));
-
-    }).finally(() => {
-      setLoading(false);
-    }).catch(() => {
-      resetState();
-      toast.error(intl.formatMessage(messages.updatePasswordFail));
-    });
+    dispatch(changePassword(currentPassword, newPassword))
+      .then(() => {
+        resetState();
+        toast.success(intl.formatMessage(messages.updatePasswordSuccess));
+      })
+      .finally(() => {
+        setLoading(false);
+      })
+      .catch(() => {
+        resetState();
+        toast.error(intl.formatMessage(messages.updatePasswordFail));
+      });
   }, [currentPassword, newPassword, newPasswordConfirmation, dispatch, intl]);
 
   return (
     <Column label={intl.formatMessage(messages.header)} backHref='/settings'>
       <Form onSubmit={handleSubmit}>
-        <FormGroup labelText={intl.formatMessage(messages.oldPasswordFieldLabel)}>
+        <FormGroup
+          labelText={intl.formatMessage(messages.oldPasswordFieldLabel)}
+        >
           <Input
             type='password'
             name='currentPassword'
@@ -65,7 +103,9 @@ const EditPassword = () => {
           />
         </FormGroup>
 
-        <FormGroup labelText={intl.formatMessage(messages.newPasswordFieldLabel)}>
+        <FormGroup
+          labelText={intl.formatMessage(messages.newPasswordFieldLabel)}
+        >
           <Input
             type='password'
             name='newPassword'
@@ -74,7 +114,9 @@ const EditPassword = () => {
           />
         </FormGroup>
 
-        <FormGroup labelText={intl.formatMessage(messages.confirmationFieldLabel)}>
+        <FormGroup
+          labelText={intl.formatMessage(messages.confirmationFieldLabel)}
+        >
           <Input
             type='password'
             name='newPasswordConfirmation'
@@ -88,7 +130,11 @@ const EditPassword = () => {
             {intl.formatMessage(messages.cancel)}
           </Button>
 
-          <Button type='submit' theme='primary' disabled={isLoading || newPassword !== newPasswordConfirmation}>
+          <Button
+            type='submit'
+            theme='primary'
+            disabled={isLoading || newPassword !== newPasswordConfirmation}
+          >
             {intl.formatMessage(messages.submit)}
           </Button>
         </FormActions>

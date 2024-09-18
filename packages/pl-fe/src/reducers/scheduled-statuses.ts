@@ -1,6 +1,6 @@
 import { Map as ImmutableMap } from 'immutable';
 
-import { STATUS_IMPORT, STATUSES_IMPORT } from 'pl-fe/actions/importer';
+import { STATUSES_IMPORT, STATUS_IMPORT } from 'pl-fe/actions/importer';
 import {
   SCHEDULED_STATUSES_FETCH_SUCCESS,
   SCHEDULED_STATUS_CANCEL_REQUEST,
@@ -8,7 +8,7 @@ import {
 } from 'pl-fe/actions/scheduled-statuses';
 import { STATUS_CREATE_SUCCESS } from 'pl-fe/actions/statuses';
 
-import type { Status, ScheduledStatus } from 'pl-api';
+import type { ScheduledStatus, Status } from 'pl-api';
 import type { AnyAction } from 'redux';
 
 type State = ImmutableMap<string, ScheduledStatus>;
@@ -20,8 +20,13 @@ const importStatus = (state: State, status: Status | ScheduledStatus) => {
   return state.set(status.id, status);
 };
 
-const importStatuses = (state: State, statuses: Array<Status | ScheduledStatus>) =>
-  state.withMutations(mutable => statuses.forEach(status => importStatus(mutable, status)));
+const importStatuses = (
+  state: State,
+  statuses: Array<Status | ScheduledStatus>,
+) =>
+  state.withMutations((mutable) =>
+    statuses.forEach((status) => importStatus(mutable, status)),
+  );
 
 const deleteStatus = (state: State, statusId: string) => state.delete(statusId);
 

@@ -1,13 +1,14 @@
 // APIs for normalizing fullscreen operations. Note that Edge uses
 // the WebKit-prefixed APIs currently (as of Edge 16).
 
-const isFullscreen = (): boolean => Boolean(
-  document.fullscreenElement ||
-    // @ts-ignore
-    document.webkitFullscreenElement ||
-    // @ts-ignore
-    document.mozFullScreenElement,
-);
+const isFullscreen = (): boolean =>
+  Boolean(
+    document.fullscreenElement ||
+      // @ts-ignore
+      document.webkitFullscreenElement ||
+      // @ts-ignore
+      document.mozFullScreenElement,
+  );
 
 const exitFullscreen = (): void => {
   if (document.exitFullscreen) {

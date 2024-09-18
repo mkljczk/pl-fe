@@ -32,7 +32,10 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
 
   if (!group) {
     return (
-      <div className='-mx-4 -mt-4 sm:-mx-6 sm:-mt-6' data-testid='group-header-missing'>
+      <div
+        className='-mx-4 -mt-4 sm:-mx-6 sm:-mt-6'
+        data-testid='group-header-missing'
+      >
         <div>
           <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none md:rounded-t-xl lg:h-48 dark:bg-gray-900/50' />
         </div>
@@ -40,9 +43,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
         <div className='px-4 sm:px-6'>
           <HStack alignItems='bottom' space={5} className='-mt-12'>
             <div className='relative flex'>
-              <div
-                className='h-24 w-24 rounded-full bg-gray-400 ring-4 ring-white dark:ring-gray-800'
-              />
+              <div className='h-24 w-24 rounded-full bg-gray-400 ring-4 ring-white dark:ring-gray-800' />
             </div>
           </HStack>
         </div>
@@ -97,7 +98,12 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
 
       if (!isDefaultHeader(group.header)) {
         header = (
-          <a href={group.header} onClick={handleHeaderClick} target='_blank' className='relative w-full'>
+          <a
+            href={group.header}
+            onClick={handleHeaderClick}
+            target='_blank'
+            className='relative w-full'
+          >
             {header}
           </a>
         );
@@ -110,8 +116,13 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
         className='flex h-32 w-full items-center justify-center bg-gray-200 md:rounded-t-xl lg:h-52 dark:bg-gray-800/30'
       >
         {isHeaderMissing ? (
-          <Icon src={require('@tabler/icons/outline/photo-off.svg')} className='h-6 w-6 text-gray-500 dark:text-gray-700' />
-        ) : header}
+          <Icon
+            src={require('@tabler/icons/outline/photo-off.svg')}
+            className='h-6 w-6 text-gray-500 dark:text-gray-700'
+          />
+        ) : (
+          header
+        )}
       </div>
     );
   };
@@ -121,13 +132,12 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
       <div className='relative'>
         {renderHeader()}
 
-        <div className='absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2' data-testid='group-avatar'>
+        <div
+          className='absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2'
+          data-testid='group-avatar'
+        >
           <a href={group.avatar} onClick={handleAvatarClick} target='_blank'>
-            <GroupAvatar
-              group={group}
-              size={80}
-              withRing
-            />
+            <GroupAvatar group={group} size={80} withRing />
           </a>
         </div>
       </div>

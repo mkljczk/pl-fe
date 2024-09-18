@@ -17,7 +17,9 @@ const AutosuggestEmoji: React.FC<IAutosuggestEmoji> = ({ emoji }) => {
     url = emoji.imageUrl;
     alt = emoji.colons;
   } else {
-    const mapping = unicodeMapping[emoji.native] || unicodeMapping[emoji.native.replace(/\uFE0F$/, '')];
+    const mapping =
+      unicodeMapping[emoji.native] ||
+      unicodeMapping[emoji.native.replace(/\uFE0F$/, '')];
 
     if (!mapping) {
       return null;
@@ -28,12 +30,11 @@ const AutosuggestEmoji: React.FC<IAutosuggestEmoji> = ({ emoji }) => {
   }
 
   return (
-    <div className='flex flex-row items-center justify-start text-sm leading-[18px]' data-testid='emoji'>
-      <img
-        className='emojione mr-2 block h-4 w-4'
-        src={url}
-        alt={alt}
-      />
+    <div
+      className='flex flex-row items-center justify-start text-sm leading-[18px]'
+      data-testid='emoji'
+    >
+      <img className='emojione mr-2 block h-4 w-4' src={url} alt={alt} />
 
       {emoji.colons}
     </div>

@@ -31,14 +31,27 @@ const GroupGallery: React.FC<IGroupGallery> = (props) => {
     hasNextPage,
   } = useGroupMedia(groupId);
 
-  const attachments = statuses.reduce<AccountGalleryAttachment[]>((result, status) => {
-    result.push(...status.media_attachments.map((a) => ({ ...a, status: status as any, account: status.account })));
-    return result;
-  }, []);
+  const attachments = statuses.reduce<AccountGalleryAttachment[]>(
+    (result, status) => {
+      result.push(
+        ...status.media_attachments.map((a) => ({
+          ...a,
+          status: status as any,
+          account: status.account,
+        })),
+      );
+      return result;
+    },
+    [],
+  );
 
   const handleOpenMedia = (attachment: AccountGalleryAttachment) => {
     if (attachment.type === 'video') {
-      openModal('VIDEO', { media: attachment, statusId: attachment.status.id, account: attachment.account });
+      openModal('VIDEO', {
+        media: attachment,
+        statusId: attachment.status.id,
+        account: attachment.account,
+      });
     } else {
       const media = (attachment.status as Status).media_attachments;
       const index = media.findIndex((x) => x.id === attachment.id);
@@ -76,15 +89,22 @@ const GroupGallery: React.FC<IGroupGallery> = (props) => {
           />
         ))}
 
-        {(!isLoading && attachments.length === 0) && (
+        {!isLoading && attachments.length === 0 && (
           <div className='empty-column-indicator col-span-2 sm:col-span-3'>
-            <FormattedMessage id='account_gallery.none' defaultMessage='No media to show.' />
+            <FormattedMessage
+              id='account_gallery.none'
+              defaultMessage='No media to show.'
+            />
           </div>
         )}
       </div>
 
       {hasNextPage && (
-        <LoadMore className='mt-4' disabled={isFetching} onClick={fetchNextPage} />
+        <LoadMore
+          className='mt-4'
+          disabled={isFetching}
+          onClick={fetchNextPage}
+        />
       )}
     </Column>
   );

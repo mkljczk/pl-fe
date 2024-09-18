@@ -1,12 +1,12 @@
 import { Map as ImmutableMap } from 'immutable';
 
 import {
-  LIST_FETCH_SUCCESS,
-  LIST_FETCH_FAIL,
   LISTS_FETCH_SUCCESS,
   LIST_CREATE_SUCCESS,
-  LIST_UPDATE_SUCCESS,
   LIST_DELETE_SUCCESS,
+  LIST_FETCH_FAIL,
+  LIST_FETCH_SUCCESS,
+  LIST_UPDATE_SUCCESS,
 } from 'pl-fe/actions/lists';
 
 import type { List } from 'pl-api';
@@ -19,7 +19,7 @@ const initialState: State = ImmutableMap();
 const importList = (state: State, list: List) => state.set(list.id, list);
 
 const importLists = (state: State, lists: Array<List>) => {
-  lists.forEach(list => {
+  lists.forEach((list) => {
     state = importList(state, list);
   });
 

@@ -12,9 +12,18 @@ import type { Status as StatusEntity } from 'pl-fe/normalizers';
 import type { DraftStatus } from 'pl-fe/reducers/draft-statuses';
 
 const messages = defineMessages({
-  deleteConfirm: { id: 'confirmations.draft_status_delete.confirm', defaultMessage: 'Discard' },
-  deleteHeading: { id: 'confirmations.draft_status_delete.heading', defaultMessage: 'Cancel draft post' },
-  deleteMessage: { id: 'confirmations.draft_status_delete.message', defaultMessage: 'Are you sure you want to discard this draft post?' },
+  deleteConfirm: {
+    id: 'confirmations.draft_status_delete.confirm',
+    defaultMessage: 'Discard',
+  },
+  deleteHeading: {
+    id: 'confirmations.draft_status_delete.heading',
+    defaultMessage: 'Cancel draft post',
+  },
+  deleteMessage: {
+    id: 'confirmations.draft_status_delete.message',
+    defaultMessage: 'Are you sure you want to discard this draft post?',
+  },
 });
 
 interface IDraftStatusActionBar {
@@ -22,7 +31,10 @@ interface IDraftStatusActionBar {
   status: StatusEntity;
 }
 
-const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status }) => {
+const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({
+  source,
+  status,
+}) => {
   const intl = useIntl();
 
   const { openModal } = useModalsStore();
@@ -30,7 +42,6 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
 
   const handleCancelClick = () => {
     dispatch((_, getState) => {
-
       const deleteModal = getSettings(getState()).get('deleteModal');
       if (!deleteModal) {
         dispatch(cancelDraftStatus(source.draft_id));
@@ -46,7 +57,18 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
   };
 
   const handleEditClick = () => {
-    dispatch(setComposeToStatus(status, status.poll, source.text, source.spoiler_text, source.content_type, false, source.draft_id, source.editorState));
+    dispatch(
+      setComposeToStatus(
+        status,
+        status.poll,
+        source.text,
+        source.spoiler_text,
+        source.content_type,
+        false,
+        source.draft_id,
+        source.editorState,
+      ),
+    );
     openModal('COMPOSE');
   };
 

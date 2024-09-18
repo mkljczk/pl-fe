@@ -1,7 +1,7 @@
 import {
+  FloatingArrow,
   arrow,
   autoPlacement,
-  FloatingArrow,
   offset,
   useClick,
   useDismiss,
@@ -34,7 +34,13 @@ interface IPopover {
  * of information.
  */
 const Popover: React.FC<IPopover> = (props) => {
-  const { children, content, referenceElementClassName, interaction = 'hover', isFlush = false } = props;
+  const {
+    children,
+    content,
+    referenceElementClassName,
+    interaction = 'hover',
+    isFlush = false,
+  } = props;
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -84,7 +90,7 @@ const Popover: React.FC<IPopover> = (props) => {
         className: clsx(children.props.className, referenceElementClassName),
       })}
 
-      {(isMounted) && (
+      {isMounted && (
         <Portal>
           <div
             ref={refs.setFloating}
@@ -94,12 +100,10 @@ const Popover: React.FC<IPopover> = (props) => {
               left: x ?? 0,
               ...styles,
             }}
-            className={
-              clsx({
-                'z-40 rounded-lg bg-white shadow-2xl dark:bg-gray-900 dark:ring-2 dark:ring-primary-700': true,
-                'p-6': !isFlush,
-              })
-            }
+            className={clsx({
+              'z-40 rounded-lg bg-white shadow-2xl dark:bg-gray-900 dark:ring-2 dark:ring-primary-700': true,
+              'p-6': !isFlush,
+            })}
             {...getFloatingProps()}
           >
             {content}

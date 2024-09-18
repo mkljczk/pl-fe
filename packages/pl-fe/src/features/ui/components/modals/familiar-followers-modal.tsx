@@ -16,9 +16,15 @@ interface FamiliarFollowersModalProps {
   accountId: string;
 }
 
-const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalProps> = ({ accountId, onClose }) => {
-  const account = useAppSelector(state => getAccount(state, accountId));
-  const familiarFollowerIds: ImmutableOrderedSet<string> = useAppSelector(state => state.user_lists.familiar_followers.get(accountId)?.items || ImmutableOrderedSet());
+const FamiliarFollowersModal: React.FC<
+  BaseModalProps & FamiliarFollowersModalProps
+> = ({ accountId, onClose }) => {
+  const account = useAppSelector((state) => getAccount(state, accountId));
+  const familiarFollowerIds: ImmutableOrderedSet<string> = useAppSelector(
+    (state) =>
+      state.user_lists.familiar_followers.get(accountId)?.items ||
+      ImmutableOrderedSet(),
+  );
 
   const onClickClose = () => {
     onClose('FAMILIAR_FOLLOWERS');
@@ -29,7 +35,19 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
   if (!account || !familiarFollowerIds) {
     body = <Spinner />;
   } else {
-    const emptyMessage = <FormattedMessage id='account.familiar_followers.empty' defaultMessage='No one you know follows {name}.' values={{ name: <span dangerouslySetInnerHTML={{ __html: account.display_name_html }} /> }} />;
+    const emptyMessage = (
+      <FormattedMessage
+        id='account.familiar_followers.empty'
+        defaultMessage='No one you know follows {name}.'
+        values={{
+          name: (
+            <span
+              dangerouslySetInnerHTML={{ __html: account.display_name_html }}
+            />
+          ),
+        }}
+      />
+    );
 
     body = (
       <ScrollableList
@@ -39,9 +57,9 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
         style={{ height: 'calc(80vh - 88px)' }}
         useWindowScroll={false}
       >
-        {familiarFollowerIds.map(id =>
-          <AccountContainer key={id} id={id} />,
-        )}
+        {familiarFollowerIds.map((id) => (
+          <AccountContainer key={id} id={id} />
+        ))}
       </ScrollableList>
     );
   }
@@ -52,7 +70,15 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
         <FormattedMessage
           id='column.familiar_followers'
           defaultMessage='People you know following {name}'
-          values={{ name: <span dangerouslySetInnerHTML={{ __html: account?.display_name_html || '' }} /> }}
+          values={{
+            name: (
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: account?.display_name_html || '',
+                }}
+              />
+            ),
+          }}
         />
       }
       onClose={onClickClose}

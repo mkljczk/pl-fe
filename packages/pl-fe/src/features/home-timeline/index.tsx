@@ -1,12 +1,18 @@
 import React, { useEffect, useRef } from 'react';
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { fetchHomeTimeline } from 'pl-fe/actions/timelines';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import { Column, Stack, Text } from 'pl-fe/components/ui';
 import Timeline from 'pl-fe/features/ui/components/timeline';
-import { useAppSelector, useAppDispatch, useFeatures, useInstance, useTheme } from 'pl-fe/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useFeatures,
+  useInstance,
+  useTheme,
+} from 'pl-fe/hooks';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 const messages = defineMessages({
@@ -23,7 +29,9 @@ const HomeTimeline: React.FC = () => {
   const polling = useRef<NodeJS.Timeout | null>(null);
   const isMobile = useIsMobile();
 
-  const isPartial = useAppSelector(state => state.timelines.get('home')?.isPartial === true);
+  const isPartial = useAppSelector(
+    (state) => state.timelines.get('home')?.isPartial === true,
+  );
 
   const handleLoadMore = (maxId: string) => {
     dispatch(fetchHomeTimeline(true));
@@ -59,7 +67,12 @@ const HomeTimeline: React.FC = () => {
   }, [isPartial]);
 
   return (
-    <Column className='py-0' label={intl.formatMessage(messages.title)} transparent={!isMobile} withHeader={false}>
+    <Column
+      className='py-0'
+      label={intl.formatMessage(messages.title)}
+      transparent={!isMobile}
+      withHeader={false}
+    >
       <PullToRefresh onRefresh={handleRefresh}>
         <Timeline
           className='black:p-0 black:sm:p-4'
@@ -67,7 +80,7 @@ const HomeTimeline: React.FC = () => {
           scrollKey='home_timeline'
           onLoadMore={handleLoadMore}
           timelineId='home'
-          divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
+          divideType={theme === 'black' || isMobile ? 'border' : 'space'}
           showAds
           emptyMessage={
             <Stack space={1}>
@@ -93,8 +106,15 @@ const HomeTimeline: React.FC = () => {
                     defaultMessage='Or you can visit {public} to get started and meet other users.'
                     values={{
                       public: (
-                        <Link to='/timeline/local' className='text-primary-600 hover:underline dark:text-primary-400'>
-                          <FormattedMessage id='empty_column.home.local_tab' defaultMessage='the {site_title} tab' values={{ site_title: instance.title }} />
+                        <Link
+                          to='/timeline/local'
+                          className='text-primary-600 hover:underline dark:text-primary-400'
+                        >
+                          <FormattedMessage
+                            id='empty_column.home.local_tab'
+                            defaultMessage='the {site_title} tab'
+                            values={{ site_title: instance.title }}
+                          />
                         </Link>
                       ),
                     }}

@@ -6,7 +6,7 @@
  * @see module:pl-fe/actions/auth
  */
 
-import { PlApiClient, type CreateApplicationParams } from 'pl-api';
+import { type CreateApplicationParams, PlApiClient } from 'pl-api';
 
 import * as BuildConfig from 'pl-fe/build-config';
 
@@ -16,24 +16,23 @@ const APP_CREATE_REQUEST = 'APP_CREATE_REQUEST' as const;
 const APP_CREATE_SUCCESS = 'APP_CREATE_SUCCESS' as const;
 const APP_CREATE_FAIL = 'APP_CREATE_FAIL' as const;
 
-const createApp = (params: CreateApplicationParams, baseURL?: string) =>
+const createApp =
+  (params: CreateApplicationParams, baseURL?: string) =>
   (dispatch: AppDispatch) => {
     dispatch({ type: APP_CREATE_REQUEST, params });
 
     const client = new PlApiClient(baseURL || BuildConfig.BACKEND_URL || '');
 
-    return client.apps.createApplication(params).then((app) => {
-      dispatch({ type: APP_CREATE_SUCCESS, params, app });
-      return app as Record<string, string>;
-    }).catch(error => {
-      dispatch({ type: APP_CREATE_FAIL, params, error });
-      throw error;
-    });
+    return client.apps
+      .createApplication(params)
+      .then((app) => {
+        dispatch({ type: APP_CREATE_SUCCESS, params, app });
+        return app as Record<string, string>;
+      })
+      .catch((error) => {
+        dispatch({ type: APP_CREATE_FAIL, params, error });
+        throw error;
+      });
   };
 
-export {
-  APP_CREATE_REQUEST,
-  APP_CREATE_SUCCESS,
-  APP_CREATE_FAIL,
-  createApp,
-};
+export { APP_CREATE_REQUEST, APP_CREATE_SUCCESS, APP_CREATE_FAIL, createApp };

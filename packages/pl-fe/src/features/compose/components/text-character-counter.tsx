@@ -7,7 +7,10 @@ interface ITextCharacterCounter {
   text: string;
 }
 
-const TextCharacterCounter: React.FC<ITextCharacterCounter> = ({ text, max }) => {
+const TextCharacterCounter: React.FC<ITextCharacterCounter> = ({
+  text,
+  max,
+}) => {
   const checkRemainingText = (diff: number) => (
     <span
       className={clsx('text-sm font-medium', {

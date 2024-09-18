@@ -16,6 +16,8 @@ describe('<Avatar />', () => {
   it('handles size props', () => {
     render(<Avatar src={src} size={50} />);
 
-    expect(screen.getByTestId('still-image-container').getAttribute('style')).toMatch(/50px/i);
+    expect(
+      screen.getByTestId('still-image-container').getAttribute('style'),
+    ).toMatch(/50px/i);
   });
 });

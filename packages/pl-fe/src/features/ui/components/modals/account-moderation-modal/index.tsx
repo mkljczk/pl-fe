@@ -1,6 +1,6 @@
 import { PLEROMA } from 'pl-api';
 import React, { ChangeEventHandler, useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { setBadges as saveBadges } from 'pl-fe/actions/admin';
 import { deactivateUserModal, deleteUserModal } from 'pl-fe/actions/moderation';
@@ -10,7 +10,14 @@ import Account from 'pl-fe/components/account';
 import List, { ListItem } from 'pl-fe/components/list';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import OutlineBox from 'pl-fe/components/outline-box';
-import { Button, Text, HStack, Modal, Stack, Toggle } from 'pl-fe/components/ui';
+import {
+  Button,
+  HStack,
+  Modal,
+  Stack,
+  Text,
+  Toggle,
+} from 'pl-fe/components/ui';
 import { useAppDispatch, useFeatures, useOwnAccount } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 import { getBadges } from 'pl-fe/utils/badges';
@@ -21,11 +28,26 @@ import StaffRolePicker from './staff-role-picker';
 import type { BaseModalProps } from '../../modal-root';
 
 const messages = defineMessages({
-  userVerified: { id: 'admin.users.user_verified_message', defaultMessage: '@{acct} was verified' },
-  userUnverified: { id: 'admin.users.user_unverified_message', defaultMessage: '@{acct} was unverified' },
-  userSuggested: { id: 'admin.users.user_suggested_message', defaultMessage: '@{acct} was suggested' },
-  userUnsuggested: { id: 'admin.users.user_unsuggested_message', defaultMessage: '@{acct} was unsuggested' },
-  badgesSaved: { id: 'admin.users.badges_saved_message', defaultMessage: 'Custom badges updated.' },
+  userVerified: {
+    id: 'admin.users.user_verified_message',
+    defaultMessage: '@{acct} was verified',
+  },
+  userUnverified: {
+    id: 'admin.users.user_unverified_message',
+    defaultMessage: '@{acct} was unverified',
+  },
+  userSuggested: {
+    id: 'admin.users.user_suggested_message',
+    defaultMessage: '@{acct} was suggested',
+  },
+  userUnsuggested: {
+    id: 'admin.users.user_unsuggested_message',
+    defaultMessage: '@{acct} was unsuggested',
+  },
+  badgesSaved: {
+    id: 'admin.users.badges_saved_message',
+    defaultMessage: 'Custom badges updated.',
+  },
 });
 
 interface AccountModerationModalProps {
@@ -34,7 +56,9 @@ interface AccountModerationModalProps {
 }
 
 /** Moderator actions against accounts. */
-const AccountModerationModal: React.FC<AccountModerationModalProps & BaseModalProps> = ({ onClose, accountId }) => {
+const AccountModerationModal: React.FC<
+  AccountModerationModalProps & BaseModalProps
+> = ({ onClose, accountId }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -68,7 +92,8 @@ const AccountModerationModal: React.FC<AccountModerationModalProps & BaseModalPr
     const action = checked ? verify : unverify;
 
     action(account.id, {
-      onSuccess: () => toast.success(intl.formatMessage(message, { acct: account.acct })),
+      onSuccess: () =>
+        toast.success(intl.formatMessage(message, { acct: account.acct })),
     });
   };
 
@@ -79,7 +104,8 @@ const AccountModerationModal: React.FC<AccountModerationModalProps & BaseModalPr
     const action = checked ? suggest : unsuggest;
 
     action(account.id, {
-      onSuccess: () => toast.success(intl.formatMessage(message, { acct: account.acct })),
+      onSuccess: () =>
+        toast.success(intl.formatMessage(message, { acct: account.acct })),
     });
   };
 
@@ -99,7 +125,13 @@ const AccountModerationModal: React.FC<AccountModerationModalProps & BaseModalPr
 
   return (
     <Modal
-      title={<FormattedMessage id='account_moderation_modal.title' defaultMessage='Moderate @{acct}' values={{ acct: account.acct }} />}
+      title={
+        <FormattedMessage
+          id='account_moderation_modal.title'
+          defaultMessage='Moderate @{acct}'
+          values={{ acct: account.acct }}
+        />
+      }
       onClose={handleClose}
     >
       <Stack space={4}>
@@ -113,15 +145,29 @@ const AccountModerationModal: React.FC<AccountModerationModalProps & BaseModalPr
         </OutlineBox>
 
         <List>
-          {(ownAccount.is_admin && account.local) && (
-            <ListItem label={<FormattedMessage id='account_moderation_modal.fields.account_role' defaultMessage='Staff level' />}>
+          {ownAccount.is_admin && account.local && (
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='account_moderation_modal.fields.account_role'
+                  defaultMessage='Staff level'
+                />
+              }
+            >
               <div className='w-auto'>
                 <StaffRolePicker account={account} />
               </div>
             </ListItem>
           )}
 
-          <ListItem label={<FormattedMessage id='account_moderation_modal.fields.verified' defaultMessage='Verified account' />}>
+          <ListItem
+            label={
+              <FormattedMessage
+                id='account_moderation_modal.fields.verified'
+                defaultMessage='Verified account'
+              />
+            }
+          >
             <Toggle
               checked={account.verified}
               onChange={handleVerifiedChange}
@@ -129,7 +175,14 @@ const AccountModerationModal: React.FC<AccountModerationModalProps & BaseModalPr
           </ListItem>
 
           {features.suggestionsV2 && (
-            <ListItem label={<FormattedMessage id='account_moderation_modal.fields.suggested' defaultMessage='Suggested in people to follow' />}>
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='account_moderation_modal.fields.suggested'
+                  defaultMessage='Suggested in people to follow'
+                />
+              }
+            >
               <Toggle
                 checked={account.is_suggested === true}
                 onChange={handleSuggestedChange}
@@ -137,7 +190,14 @@ const AccountModerationModal: React.FC<AccountModerationModalProps & BaseModalPr
             </ListItem>
           )}
 
-          <ListItem label={<FormattedMessage id='account_moderation_modal.fields.badges' defaultMessage='Custom badges' />}>
+          <ListItem
+            label={
+              <FormattedMessage
+                id='account_moderation_modal.fields.badges'
+                defaultMessage='Custom badges'
+              />
+            }
+          >
             <div className='grow'>
               <HStack className='w-full' alignItems='center' space={2}>
                 <BadgeInput badges={badges} onChange={setBadges} />
@@ -151,12 +211,22 @@ const AccountModerationModal: React.FC<AccountModerationModalProps & BaseModalPr
 
         <List>
           <ListItem
-            label={<FormattedMessage id='account_moderation_modal.fields.deactivate' defaultMessage='Deactivate account' />}
+            label={
+              <FormattedMessage
+                id='account_moderation_modal.fields.deactivate'
+                defaultMessage='Deactivate account'
+              />
+            }
             onClick={handleDeactivate}
           />
 
           <ListItem
-            label={<FormattedMessage id='account_moderation_modal.fields.delete' defaultMessage='Delete account' />}
+            label={
+              <FormattedMessage
+                id='account_moderation_modal.fields.delete'
+                defaultMessage='Delete account'
+              />
+            }
             onClick={handleDelete}
           />
         </List>
@@ -171,8 +241,16 @@ const AccountModerationModal: React.FC<AccountModerationModalProps & BaseModalPr
 
         {features.version.software === PLEROMA && (
           <HStack justifyContent='center'>
-            <Button icon={require('@tabler/icons/outline/external-link.svg')} size='sm' theme='secondary' onClick={handleAdminFE}>
-              <FormattedMessage id='account_moderation_modal.admin_fe' defaultMessage='Open in AdminFE' />
+            <Button
+              icon={require('@tabler/icons/outline/external-link.svg')}
+              size='sm'
+              theme='secondary'
+              onClick={handleAdminFE}
+            >
+              <FormattedMessage
+                id='account_moderation_modal.admin_fe'
+                defaultMessage='Open in AdminFE'
+              />
             </Button>
           </HStack>
         )}

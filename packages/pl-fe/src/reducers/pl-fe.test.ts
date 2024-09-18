@@ -45,5 +45,4 @@ describe('pl-fe reducer', () => {
       brandColor: '#254f92',
     });
   });
-
 });

@@ -11,24 +11,37 @@ const REPORT_SUBMIT_FAIL = 'REPORT_SUBMIT_FAIL' as const;
 
 enum ReportableEntities {
   ACCOUNT = 'ACCOUNT',
-  STATUS = 'STATUS'
+  STATUS = 'STATUS',
 }
 
 type ReportedEntity = {
   status?: Pick<Status, 'id' | 'reblog_id'>;
-}
-
-const initReport = (entityType: ReportableEntities, account: Pick<Account, 'id'>, entities?: ReportedEntity) => (dispatch: AppDispatch) => {
-  const { status } = entities || {};
-
-  return useModalsStore.getState().openModal('REPORT', {
-    accountId: account.id,
-    entityType,
-    statusIds: status ? [status.id] : [],
-  });
 };
 
-const submitReport = (accountId: string, statusIds: string[], ruleIds?: string[], comment?: string, forward?: boolean) =>
+const initReport =
+  (
+    entityType: ReportableEntities,
+    account: Pick<Account, 'id'>,
+    entities?: ReportedEntity,
+  ) =>
+  (dispatch: AppDispatch) => {
+    const { status } = entities || {};
+
+    return useModalsStore.getState().openModal('REPORT', {
+      accountId: account.id,
+      entityType,
+      statusIds: status ? [status.id] : [],
+    });
+  };
+
+const submitReport =
+  (
+    accountId: string,
+    statusIds: string[],
+    ruleIds?: string[],
+    comment?: string,
+    forward?: boolean,
+  ) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(submitReportRequest());
 

@@ -2,7 +2,7 @@ import { $applyNodeReplacement, DecoratorNode } from 'lexical';
 import React from 'react';
 
 import { Emoji as Component } from 'pl-fe/components/ui';
-import { isNativeEmoji, type Emoji } from 'pl-fe/features/emoji';
+import { type Emoji, isNativeEmoji } from 'pl-fe/features/emoji';
 
 import type {
   EditorConfig,
@@ -12,14 +12,16 @@ import type {
   Spread,
 } from 'lexical';
 
-type SerializedEmojiNode = Spread<{
-  data: Emoji;
-  type: 'emoji';
-  version: 1;
-}, SerializedLexicalNode>;
+type SerializedEmojiNode = Spread<
+  {
+    data: Emoji;
+    type: 'emoji';
+    version: 1;
+  },
+  SerializedLexicalNode
+>;
 
 class EmojiNode extends DecoratorNode<JSX.Element> {
-
   __emoji: Emoji;
 
   static getType(): 'emoji' {
@@ -81,12 +83,24 @@ class EmojiNode extends DecoratorNode<JSX.Element> {
   decorate(): JSX.Element {
     const emoji = this.__emoji;
     if (isNativeEmoji(emoji)) {
-      return <Component emoji={emoji.native} alt={emoji.colons} title={emoji.colons} className='emojione h-4 w-4' />;
+      return (
+        <Component
+          emoji={emoji.native}
+          alt={emoji.colons}
+          title={emoji.colons}
+          className='emojione h-4 w-4'
+        />
+      );
     } else {
-      return <Component src={emoji.imageUrl} alt={emoji.colons} className='emojione h-4 w-4' />;
+      return (
+        <Component
+          src={emoji.imageUrl}
+          alt={emoji.colons}
+          className='emojione h-4 w-4'
+        />
+      );
     }
   }
-
 }
 
 function $createEmojiNode(emoji: Emoji): EmojiNode {

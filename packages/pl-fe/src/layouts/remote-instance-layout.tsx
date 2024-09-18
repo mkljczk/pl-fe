@@ -2,9 +2,9 @@ import React from 'react';
 
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
-  PromoPanel,
   InstanceInfoPanel,
   InstanceModerationPanel,
+  PromoPanel,
 } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector, useOwnAccount } from 'pl-fe/hooks';
 import { federationRestrictionsDisclosed } from 'pl-fe/utils/state';
@@ -19,7 +19,10 @@ interface IRemoteInstanceLayout {
 }
 
 /** Layout for viewing a remote instance timeline. */
-const RemoteInstanceLayout: React.FC<IRemoteInstanceLayout> = ({ children, params }) => {
+const RemoteInstanceLayout: React.FC<IRemoteInstanceLayout> = ({
+  children,
+  params,
+}) => {
   const host = params!.instance!;
 
   const { account } = useOwnAccount();
@@ -27,9 +30,7 @@ const RemoteInstanceLayout: React.FC<IRemoteInstanceLayout> = ({ children, param
 
   return (
     <>
-      <Layout.Main>
-        {children}
-      </Layout.Main>
+      <Layout.Main>{children}</Layout.Main>
 
       <Layout.Aside>
         <PromoPanel />

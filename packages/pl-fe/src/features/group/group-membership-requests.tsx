@@ -2,7 +2,11 @@ import { GroupRoles } from 'pl-api';
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useGroup, useGroupMembers, useGroupMembershipRequests } from 'pl-fe/api/hooks';
+import {
+  useGroup,
+  useGroupMembers,
+  useGroupMembershipRequests,
+} from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
 import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';
 import ScrollableList from 'pl-fe/components/scrollable-list';
@@ -17,9 +21,18 @@ import type { Account as AccountEntity } from 'pl-fe/normalizers';
 type RouteParams = { groupId: string };
 
 const messages = defineMessages({
-  heading: { id: 'column.group_pending_requests', defaultMessage: 'Pending requests' },
-  authorizeFail: { id: 'group.group_mod_authorize.fail', defaultMessage: 'Failed to approve @{name}' },
-  rejectFail: { id: 'group.group_mod_reject.fail', defaultMessage: 'Failed to reject @{name}' },
+  heading: {
+    id: 'column.group_pending_requests',
+    defaultMessage: 'Pending requests',
+  },
+  authorizeFail: {
+    id: 'group.group_mod_authorize.fail',
+    defaultMessage: 'Failed to approve @{name}',
+  },
+  rejectFail: {
+    id: 'group.group_mod_reject.fail',
+    defaultMessage: 'Failed to reject @{name}',
+  },
 });
 
 interface IMembershipRequest {
@@ -28,14 +41,23 @@ interface IMembershipRequest {
   onReject(account: AccountEntity): Promise<void>;
 }
 
-const MembershipRequest: React.FC<IMembershipRequest> = ({ account, onAuthorize, onReject }) => {
+const MembershipRequest: React.FC<IMembershipRequest> = ({
+  account,
+  onAuthorize,
+  onReject,
+}) => {
   if (!account) return null;
 
   const handleAuthorize = () => onAuthorize(account);
   const handleReject = () => onReject(account);
 
   return (
-    <HStack space={1} alignItems='center' justifyContent='between' className='p-2.5'>
+    <HStack
+      space={1}
+      alignItems='center'
+      justifyContent='between'
+      className='p-2.5'
+    >
       <div className='w-full'>
         <Account account={account} withRelationship={false} />
       </div>
@@ -53,18 +75,24 @@ interface IGroupMembershipRequests {
   params: RouteParams;
 }
 
-const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params }) => {
+const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({
+  params,
+}) => {
   const groupId = params?.groupId;
   const intl = useIntl();
 
   const { group } = useGroup(groupId);
 
-  const { accounts, authorize, reject, refetch, isLoading } = useGroupMembershipRequests(groupId);
+  const { accounts, authorize, reject, refetch, isLoading } =
+    useGroupMembershipRequests(groupId);
   const { invalidate } = useGroupMembers(groupId, GroupRoles.USER);
 
-  useEffect(() => () => {
-    invalidate();
-  }, []);
+  useEffect(
+    () => () => {
+      invalidate();
+    },
+    [],
+  );
 
   if (!group || !group.relationship || isLoading) {
     return (
@@ -74,7 +102,10 @@ const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params })
     );
   }
 
-  if (!group.relationship.role || !['owner', 'admin', 'moderator'].includes(group.relationship.role)) {
+  if (
+    !group.relationship.role ||
+    !['owner', 'admin', 'moderator'].includes(group.relationship.role)
+  ) {
     return <ColumnForbidden />;
   }
 
@@ -84,7 +115,9 @@ const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params })
       .catch((error: { response: PlfeResponse }) => {
         refetch();
 
-        let message = intl.formatMessage(messages.authorizeFail, { name: account.username });
+        let message = intl.formatMessage(messages.authorizeFail, {
+          name: account.username,
+        });
         if (error.response?.status === 409) {
           message = (error.response?.json as any).error;
         }
@@ -99,7 +132,9 @@ const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params })
       .catch((error: { response: PlfeResponse }) => {
         refetch();
 
-        let message = intl.formatMessage(messages.rejectFail, { name: account.username });
+        let message = intl.formatMessage(messages.rejectFail, {
+          name: account.username,
+        });
         if (error.response?.status === 409) {
           message = (error.response?.json as any).error;
         }
@@ -112,7 +147,12 @@ const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params })
     <Column label={intl.formatMessage(messages.heading)}>
       <ScrollableList
         scrollKey='group_membership_requests'
-        emptyMessage={<FormattedMessage id='empty_column.group_membership_requests' defaultMessage='There are no pending membership requests for this group.' />}
+        emptyMessage={
+          <FormattedMessage
+            id='empty_column.group_membership_requests'
+            defaultMessage='There are no pending membership requests for this group.'
+          />
+        }
       >
         {accounts.map((account) => (
           <MembershipRequest

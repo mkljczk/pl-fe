@@ -10,7 +10,8 @@ const initialState: State = ImmutableMap();
 
 const normalizeLocations = (state: State, locations: Array<Location>) =>
   locations.reduce(
-    (state: State, location: Location) => state.set(location.origin_id, location),
+    (state: State, location: Location) =>
+      state.set(location.origin_id, location),
     state,
   );
 

@@ -1,14 +1,22 @@
 import { useMutation } from '@tanstack/react-query';
 import { GOTOSOCIAL, MASTODON, mediaAttachmentSchema } from 'pl-api';
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { biteAccount, blockAccount, pinAccount, removeFromFollowers, unblockAccount, unmuteAccount, unpinAccount } from 'pl-fe/actions/accounts';
-import { mentionCompose, directCompose } from 'pl-fe/actions/compose';
+import {
+  biteAccount,
+  blockAccount,
+  pinAccount,
+  removeFromFollowers,
+  unblockAccount,
+  unmuteAccount,
+  unpinAccount,
+} from 'pl-fe/actions/accounts';
+import { directCompose, mentionCompose } from 'pl-fe/actions/compose';
 import { blockDomain, unblockDomain } from 'pl-fe/actions/domain-blocks';
 import { initMuteModal } from 'pl-fe/actions/mutes';
-import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
+import { ReportableEntities, initReport } from 'pl-fe/actions/reports';
 import { setSearchAccount } from 'pl-fe/actions/search';
 import { getSettings } from 'pl-fe/actions/settings';
 import { useFollow } from 'pl-fe/api/hooks';
@@ -20,7 +28,12 @@ import VerificationBadge from 'pl-fe/components/verification-badge';
 import MovedNote from 'pl-fe/features/account-timeline/components/moved-note';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
 import SubscriptionButton from 'pl-fe/features/ui/components/subscription-button';
-import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'pl-fe/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useFeatures,
+  useOwnAccount,
+} from 'pl-fe/hooks';
 import { useChats } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
 import { useModalsStore } from 'pl-fe/stores';
@@ -33,8 +46,15 @@ import type { Account } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
-  linkVerifiedOn: { id: 'account.link_verified_on', defaultMessage: 'Ownership of this link was checked on {date}' },
-  account_locked: { id: 'account.locked_info', defaultMessage: 'This account privacy status is set to locked. The owner manually reviews who can follow them.' },
+  linkVerifiedOn: {
+    id: 'account.link_verified_on',
+    defaultMessage: 'Ownership of this link was checked on {date}',
+  },
+  account_locked: {
+    id: 'account.locked_info',
+    defaultMessage:
+      'This account privacy status is set to locked. The owner manually reviews who can follow them.',
+  },
   mention: { id: 'account.mention', defaultMessage: 'Mention' },
   chat: { id: 'account.chat', defaultMessage: 'Chat with @{name}' },
   direct: { id: 'account.direct', defaultMessage: 'Direct message @{name}' },
@@ -44,37 +64,103 @@ const messages = defineMessages({
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
   report: { id: 'account.report', defaultMessage: 'Report @{name}' },
   copy: { id: 'account.copy', defaultMessage: 'Copy link to profile' },
-  share: { id: 'account.share', defaultMessage: 'Share @{name}\'s profile' },
+  share: { id: 'account.share', defaultMessage: "Share @{name}'s profile" },
   media: { id: 'account.media', defaultMessage: 'Media' },
-  blockDomain: { id: 'account.block_domain', defaultMessage: 'Hide everything from {domain}' },
-  unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
-  hideReblogs: { id: 'account.hide_reblogs', defaultMessage: 'Hide reposts from @{name}' },
-  showReblogs: { id: 'account.show_reblogs', defaultMessage: 'Show reposts from @{name}' },
-  preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },
-  follow_requests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
+  blockDomain: {
+    id: 'account.block_domain',
+    defaultMessage: 'Hide everything from {domain}',
+  },
+  unblockDomain: {
+    id: 'account.unblock_domain',
+    defaultMessage: 'Unhide {domain}',
+  },
+  hideReblogs: {
+    id: 'account.hide_reblogs',
+    defaultMessage: 'Hide reposts from @{name}',
+  },
+  showReblogs: {
+    id: 'account.show_reblogs',
+    defaultMessage: 'Show reposts from @{name}',
+  },
+  preferences: {
+    id: 'navigation_bar.preferences',
+    defaultMessage: 'Preferences',
+  },
+  follow_requests: {
+    id: 'navigation_bar.follow_requests',
+    defaultMessage: 'Follow requests',
+  },
   blocks: { id: 'navigation_bar.blocks', defaultMessage: 'Blocks' },
-  domain_blocks: { id: 'navigation_bar.domain_blocks', defaultMessage: 'Domain blocks' },
+  domain_blocks: {
+    id: 'navigation_bar.domain_blocks',
+    defaultMessage: 'Domain blocks',
+  },
   mutes: { id: 'navigation_bar.mutes', defaultMessage: 'Mutes' },
   endorse: { id: 'account.endorse', defaultMessage: 'Feature on profile' },
-  unendorse: { id: 'account.unendorse', defaultMessage: 'Don\'t feature on profile' },
+  unendorse: {
+    id: 'account.unendorse',
+    defaultMessage: "Don't feature on profile",
+  },
   bite: { id: 'account.bite', defaultMessage: 'Bite @{name}' },
-  removeFromFollowers: { id: 'account.remove_from_followers', defaultMessage: 'Remove this follower' },
-  adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
-  add_or_remove_from_list: { id: 'account.add_or_remove_from_list', defaultMessage: 'Add or Remove from lists' },
+  removeFromFollowers: {
+    id: 'account.remove_from_followers',
+    defaultMessage: 'Remove this follower',
+  },
+  adminAccount: {
+    id: 'status.admin_account',
+    defaultMessage: 'Moderate @{name}',
+  },
+  add_or_remove_from_list: {
+    id: 'account.add_or_remove_from_list',
+    defaultMessage: 'Add or Remove from lists',
+  },
   search: { id: 'account.search', defaultMessage: 'Search from @{name}' },
-  searchSelf: { id: 'account.search_self', defaultMessage: 'Search your posts' },
-  unfollowConfirm: { id: 'confirmations.unfollow.confirm', defaultMessage: 'Unfollow' },
+  searchSelf: {
+    id: 'account.search_self',
+    defaultMessage: 'Search your posts',
+  },
+  unfollowConfirm: {
+    id: 'confirmations.unfollow.confirm',
+    defaultMessage: 'Unfollow',
+  },
   blockConfirm: { id: 'confirmations.block.confirm', defaultMessage: 'Block' },
-  blockDomainConfirm: { id: 'confirmations.domain_block.confirm', defaultMessage: 'Hide entire domain' },
-  blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block and report' },
-  removeFromFollowersConfirm: { id: 'confirmations.remove_from_followers.confirm', defaultMessage: 'Remove' },
-  userEndorsed: { id: 'account.endorse.success', defaultMessage: 'You are now featuring @{acct} on your profile' },
-  userUnendorsed: { id: 'account.unendorse.success', defaultMessage: 'You are no longer featuring @{acct}' },
-  userBit: { id: 'account.bite.success', defaultMessage: 'You have bit @{acct}' },
-  userBiteFail: { id: 'account.bite.fail', defaultMessage: 'Failed to bite @{acct}' },
-  profileExternal: { id: 'account.profile_external', defaultMessage: 'View profile on {domain}' },
+  blockDomainConfirm: {
+    id: 'confirmations.domain_block.confirm',
+    defaultMessage: 'Hide entire domain',
+  },
+  blockAndReport: {
+    id: 'confirmations.block.block_and_report',
+    defaultMessage: 'Block and report',
+  },
+  removeFromFollowersConfirm: {
+    id: 'confirmations.remove_from_followers.confirm',
+    defaultMessage: 'Remove',
+  },
+  userEndorsed: {
+    id: 'account.endorse.success',
+    defaultMessage: 'You are now featuring @{acct} on your profile',
+  },
+  userUnendorsed: {
+    id: 'account.unendorse.success',
+    defaultMessage: 'You are no longer featuring @{acct}',
+  },
+  userBit: {
+    id: 'account.bite.success',
+    defaultMessage: 'You have bit @{acct}',
+  },
+  userBiteFail: {
+    id: 'account.bite.fail',
+    defaultMessage: 'Failed to bite @{acct}',
+  },
+  profileExternal: {
+    id: 'account.profile_external',
+    defaultMessage: 'View profile on {domain}',
+  },
   header: { id: 'account.header.alt', defaultMessage: 'Profile header' },
-  subscribeFeed: { id: 'account.rss_feed', defaultMessage: 'Subscribe to RSS feed' },
+  subscribeFeed: {
+    id: 'account.rss_feed',
+    defaultMessage: 'Subscribe to RSS feed',
+  },
 });
 
 interface IHeader {
@@ -91,7 +177,9 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const { follow } = useFollow();
   const { openModal } = useModalsStore();
 
-  const { software } = useAppSelector((state) => state.auth.client.features.version);
+  const { software } = useAppSelector(
+    (state) => state.auth.client.features.version,
+  );
 
   const { getOrCreateChatByAccountId } = useChats();
 
@@ -119,9 +207,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
         <div className='px-4 sm:px-6'>
           <HStack alignItems='bottom' space={5} className='-mt-12'>
             <div className='relative flex'>
-              <div
-                className='h-24 w-24 rounded-full bg-gray-400 ring-4 ring-white dark:ring-gray-800'
-              />
+              <div className='h-24 w-24 rounded-full bg-gray-400 ring-4 ring-white dark:ring-gray-800' />
             </div>
           </HStack>
         </div>
@@ -134,8 +220,22 @@ const Header: React.FC<IHeader> = ({ account }) => {
       dispatch(unblockAccount(account.id));
     } else {
       openModal('CONFIRM', {
-        heading: <FormattedMessage id='confirmations.block.heading' defaultMessage='Block @{name}' values={{ name: account.acct }} />,
-        message: <FormattedMessage id='confirmations.block.message' defaultMessage='Are you sure you want to block {name}?' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
+        heading: (
+          <FormattedMessage
+            id='confirmations.block.heading'
+            defaultMessage='Block @{name}'
+            values={{ name: account.acct }}
+          />
+        ),
+        message: (
+          <FormattedMessage
+            id='confirmations.block.message'
+            defaultMessage='Are you sure you want to block {name}?'
+            values={{
+              name: <strong className='break-words'>@{account.acct}</strong>,
+            }}
+          />
+        ),
         confirm: intl.formatMessage(messages.blockConfirm),
         onConfirm: () => dispatch(blockAccount(account.id)),
         secondary: intl.formatMessage(messages.blockAndReport),
@@ -166,19 +266,35 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const onEndorseToggle = () => {
     if (account.relationship?.endorsed) {
       dispatch(unpinAccount(account.id))
-        .then(() => toast.success(intl.formatMessage(messages.userUnendorsed, { acct: account.acct })))
-        .catch(() => { });
+        .then(() =>
+          toast.success(
+            intl.formatMessage(messages.userUnendorsed, { acct: account.acct }),
+          ),
+        )
+        .catch(() => {});
     } else {
       dispatch(pinAccount(account.id))
-        .then(() => toast.success(intl.formatMessage(messages.userEndorsed, { acct: account.acct })))
-        .catch(() => { });
+        .then(() =>
+          toast.success(
+            intl.formatMessage(messages.userEndorsed, { acct: account.acct }),
+          ),
+        )
+        .catch(() => {});
     }
   };
 
   const onBite = () => {
     dispatch(biteAccount(account.id))
-      .then(() => toast.success(intl.formatMessage(messages.userBit, { acct: account.acct })))
-      .catch(() => toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct })));
+      .then(() =>
+        toast.success(
+          intl.formatMessage(messages.userBit, { acct: account.acct }),
+        ),
+      )
+      .catch(() =>
+        toast.error(
+          intl.formatMessage(messages.userBiteFail, { acct: account.acct }),
+        ),
+      );
   };
 
   const onReport = () => {
@@ -195,8 +311,20 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
   const onBlockDomain = (domain: string) => {
     openModal('CONFIRM', {
-      heading: <FormattedMessage id='confirmations.domain_block.heading' defaultMessage='Block {domain}' values={{ domain }} />,
-      message: <FormattedMessage id='confirmations.domain_block.message' defaultMessage='Are you really, really sure you want to block the entire {domain}? In most cases a few targeted blocks or mutes are sufficient and preferable. You will not see content from that domain in any public timelines or your notifications.' values={{ domain: <strong>{domain}</strong> }} />,
+      heading: (
+        <FormattedMessage
+          id='confirmations.domain_block.heading'
+          defaultMessage='Block {domain}'
+          values={{ domain }}
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='confirmations.domain_block.message'
+          defaultMessage='Are you really, really sure you want to block the entire {domain}? In most cases a few targeted blocks or mutes are sufficient and preferable. You will not see content from that domain in any public timelines or your notifications.'
+          values={{ domain: <strong>{domain}</strong> }}
+        />
+      ),
       confirm: intl.formatMessage(messages.blockDomainConfirm),
       onConfirm: () => dispatch(blockDomain(domain)),
     });
@@ -225,8 +353,24 @@ const Header: React.FC<IHeader> = ({ account }) => {
       const unfollowModal = getSettings(getState()).get('unfollowModal');
       if (unfollowModal) {
         openModal('CONFIRM', {
-          heading: <FormattedMessage id='confirmations.remove_from_followers.heading' defaultMessage='Remove {name} from followers' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
-          message: <FormattedMessage id='confirmations.remove_from_followers.message' defaultMessage='Are you sure you want to remove {name} from your followers?' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
+          heading: (
+            <FormattedMessage
+              id='confirmations.remove_from_followers.heading'
+              defaultMessage='Remove {name} from followers'
+              values={{
+                name: <strong className='break-words'>@{account.acct}</strong>,
+              }}
+            />
+          ),
+          message: (
+            <FormattedMessage
+              id='confirmations.remove_from_followers.message'
+              defaultMessage='Are you sure you want to remove {name} from your followers?'
+              values={{
+                name: <strong className='break-words'>@{account.acct}</strong>,
+              }}
+            />
+          ),
           confirm: intl.formatMessage(messages.removeFromFollowersConfirm),
           onConfirm: () => dispatch(removeFromFollowers(account.id)),
         });
@@ -273,12 +417,14 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const handleShare = () => {
-    navigator.share({
-      text: `@${account.acct}`,
-      url: account.url,
-    }).catch((e) => {
-      if (e.name !== 'AbortError') console.error(e);
-    });
+    navigator
+      .share({
+        text: `@${account.acct}`,
+        url: account.url,
+      })
+      .catch((e) => {
+        if (e.name !== 'AbortError') console.error(e);
+      });
   };
 
   const handleCopy: React.EventHandler<React.MouseEvent> = (e) => {
@@ -292,11 +438,18 @@ const Header: React.FC<IHeader> = ({ account }) => {
       return [];
     }
 
-    if (features.rssFeeds && account.local && (software !== GOTOSOCIAL || account.enable_rss)) {
+    if (
+      features.rssFeeds &&
+      account.local &&
+      (software !== GOTOSOCIAL || account.enable_rss)
+    ) {
       menu.push({
         text: intl.formatMessage(messages.subscribeFeed),
         icon: require('@tabler/icons/outline/rss.svg'),
-        href: software === MASTODON ? `${account.url}.rss` : `${account.url}/feed.rss`,
+        href:
+          software === MASTODON
+            ? `${account.url}.rss`
+            : `${account.url}/feed.rss`,
         target: '_blank',
       });
     }
@@ -329,7 +482,10 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
     if (features.searchFromAccount) {
       menu.push({
-        text: intl.formatMessage(account.id === ownAccount.id ? messages.searchSelf : messages.search, { name: account.username }),
+        text: intl.formatMessage(
+          account.id === ownAccount.id ? messages.searchSelf : messages.search,
+          { name: account.username },
+        ),
         action: onSearch,
         icon: require('@tabler/icons/outline/search.svg'),
       });
@@ -379,13 +535,17 @@ const Header: React.FC<IHeader> = ({ account }) => {
       if (account.relationship?.following) {
         if (account.relationship?.showing_reblogs) {
           menu.push({
-            text: intl.formatMessage(messages.hideReblogs, { name: account.username }),
+            text: intl.formatMessage(messages.hideReblogs, {
+              name: account.username,
+            }),
             action: onReblogToggle,
             icon: require('@tabler/icons/outline/repeat.svg'),
           });
         } else {
           menu.push({
-            text: intl.formatMessage(messages.showReblogs, { name: account.username }),
+            text: intl.formatMessage(messages.showReblogs, {
+              name: account.username,
+            }),
             action: onReblogToggle,
             icon: require('@tabler/icons/outline/repeat.svg'),
           });
@@ -401,7 +561,11 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
         if (features.accountEndorsements) {
           menu.push({
-            text: intl.formatMessage(account.relationship?.endorsed ? messages.unendorse : messages.endorse),
+            text: intl.formatMessage(
+              account.relationship?.endorsed
+                ? messages.unendorse
+                : messages.endorse,
+            ),
             action: onEndorseToggle,
             icon: require('@tabler/icons/outline/user-check.svg'),
           });
@@ -448,7 +612,9 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
       if (account.relationship?.blocking) {
         menu.push({
-          text: intl.formatMessage(messages.unblock, { name: account.username }),
+          text: intl.formatMessage(messages.unblock, {
+            name: account.username,
+          }),
           action: onBlock,
           icon: require('@tabler/icons/outline/ban.svg'),
         });
@@ -491,7 +657,9 @@ const Header: React.FC<IHeader> = ({ account }) => {
       menu.push(null);
 
       menu.push({
-        text: intl.formatMessage(messages.adminAccount, { name: account.username }),
+        text: intl.formatMessage(messages.adminAccount, {
+          name: account.username,
+        }),
         action: onModerate,
         icon: require('@tabler/icons/outline/gavel.svg'),
       });
@@ -510,7 +678,12 @@ const Header: React.FC<IHeader> = ({ account }) => {
         <Badge
           key='followed_by'
           slug='opaque'
-          title={<FormattedMessage id='account.follows_you' defaultMessage='Follows you' />}
+          title={
+            <FormattedMessage
+              id='account.follows_you'
+              defaultMessage='Follows you'
+            />
+          }
         />,
       );
     } else if (ownAccount.id !== account.id && account.relationship?.blocking) {
@@ -518,7 +691,9 @@ const Header: React.FC<IHeader> = ({ account }) => {
         <Badge
           key='blocked'
           slug='opaque'
-          title={<FormattedMessage id='account.blocked' defaultMessage='Blocked' />}
+          title={
+            <FormattedMessage id='account.blocked' defaultMessage='Blocked' />
+          }
         />,
       );
     }
@@ -531,12 +706,20 @@ const Header: React.FC<IHeader> = ({ account }) => {
           title={<FormattedMessage id='account.muted' defaultMessage='Muted' />}
         />,
       );
-    } else if (ownAccount.id !== account.id && account.relationship?.domain_blocking) {
+    } else if (
+      ownAccount.id !== account.id &&
+      account.relationship?.domain_blocking
+    ) {
       info.push(
         <Badge
           key='domain_blocked'
           slug='opaque'
-          title={<FormattedMessage id='account.domain_blocked' defaultMessage='Domain hidden' />}
+          title={
+            <FormattedMessage
+              id='account.domain_blocked'
+              defaultMessage='Domain hidden'
+            />
+          }
         />,
       );
     }
@@ -551,7 +734,9 @@ const Header: React.FC<IHeader> = ({ account }) => {
       header = (
         <StillImage
           src={account.header}
-          alt={account.header_description || intl.formatMessage(messages.header)}
+          alt={
+            account.header_description || intl.formatMessage(messages.header)
+          }
         />
       );
 
@@ -591,7 +776,9 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const renderShareButton = () => {
     const canShare = 'share' in navigator;
 
-    if (!(account && ownAccount?.id && account.id === ownAccount?.id && canShare)) {
+    if (
+      !(account && ownAccount?.id && account.id === ownAccount?.id && canShare)
+    ) {
       return null;
     }
 
@@ -608,11 +795,17 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const renderRssButton = () => {
-    if (ownAccount || !features.rssFeeds || !account.local || (software === GOTOSOCIAL && !account.enable_rss)) {
+    if (
+      ownAccount ||
+      !features.rssFeeds ||
+      !account.local ||
+      (software === GOTOSOCIAL && !account.enable_rss)
+    ) {
       return null;
     }
 
-    const href = software === MASTODON ? `${account.url}.rss` : `${account.url}/feed.rss`;
+    const href =
+      software === MASTODON ? `${account.url}.rss` : `${account.url}/feed.rss`;
 
     return (
       <IconButton
@@ -631,7 +824,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
   return (
     <div className='-mx-4 -mt-4 sm:-mx-6 sm:-mt-6'>
-      {(account.moved && typeof account.moved === 'object') && (
+      {account.moved && typeof account.moved === 'object' && (
         <MovedNote from={account} to={account.moved as Account} />
       )}
 
@@ -650,7 +843,11 @@ const Header: React.FC<IHeader> = ({ account }) => {
       <div className='px-4 sm:px-6'>
         <HStack className='-mt-12' alignItems='bottom' space={5}>
           <div className='relative flex'>
-            <a href={account.avatar} onClick={handleAvatarClick} target='_blank'>
+            <a
+              href={account.avatar}
+              onClick={handleAvatarClick}
+              target='_blank'
+            >
               <Avatar
                 src={account.avatar}
                 alt={account.avatar_description}

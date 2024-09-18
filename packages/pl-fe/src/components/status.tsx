@@ -1,18 +1,26 @@
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
+import {
+  FormattedList,
+  FormattedMessage,
+  defineMessages,
+  useIntl,
+} from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
 import { mentionCompose, replyCompose } from 'pl-fe/actions/compose';
 import { toggleFavourite, toggleReblog } from 'pl-fe/actions/interactions';
-import { toggleStatusMediaHidden, unfilterStatus } from 'pl-fe/actions/statuses';
+import {
+  toggleStatusMediaHidden,
+  unfilterStatus,
+} from 'pl-fe/actions/statuses';
 import TranslateButton from 'pl-fe/components/translate-button';
 import AccountContainer from 'pl-fe/containers/account-container';
 import StatusTypeIcon from 'pl-fe/features/status/components/status-type-icon';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch, useAppSelector, useSettings } from 'pl-fe/hooks';
-import { makeGetStatus, type SelectedStatus } from 'pl-fe/selectors';
+import { type SelectedStatus, makeGetStatus } from 'pl-fe/selectors';
 import { useModalsStore } from 'pl-fe/stores';
 import { textForScreenReader } from 'pl-fe/utils/status';
 
@@ -28,7 +36,10 @@ import StatusInfo from './statuses/status-info';
 import { Card, Icon, Stack, Text } from './ui';
 
 const messages = defineMessages({
-  reblogged_by: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
+  reblogged_by: {
+    id: 'status.reblogged_by',
+    defaultMessage: '{name} reposted',
+  },
 });
 
 interface IStatus {
@@ -81,13 +92,18 @@ const Status: React.FC<IStatus> = (props) => {
   const node = useRef<HTMLDivElement>(null);
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const actualStatus = useAppSelector(state => status.reblog_id && getStatus(state, { id: status.reblog_id }) || status)!;
+  const actualStatus = useAppSelector(
+    (state) =>
+      (status.reblog_id && getStatus(state, { id: status.reblog_id })) ||
+      status,
+  )!;
 
   const isReblog = status.reblog_id;
   const statusUrl = `/@${actualStatus.account.acct}/posts/${actualStatus.id}`;
   const group = actualStatus.group;
 
-  const filtered = (status.filtered?.length || actualStatus.filtered?.length) > 0;
+  const filtered =
+    (status.filtered?.length || actualStatus.filtered?.length) > 0;
 
   // Track height changes we know about to compensate scrolling.
   useEffect(() => {
@@ -121,16 +137,26 @@ const Status: React.FC<IStatus> = (props) => {
 
     if (firstAttachment) {
       if (firstAttachment.type === 'video') {
-        openModal('VIDEO', { statusId: status.id, media: firstAttachment, time: 0 });
+        openModal('VIDEO', {
+          statusId: status.id,
+          media: firstAttachment,
+          time: 0,
+        });
       } else {
-        openModal('MEDIA', { statusId: status.id, media: status.media_attachments, index: 0 });
+        openModal('MEDIA', {
+          statusId: status.id,
+          media: status.media_attachments,
+          index: 0,
+        });
       }
     }
   };
 
   const handleHotkeyReply = (e?: KeyboardEvent): void => {
     e?.preventDefault();
-    dispatch(replyCompose(actualStatus, status.reblog_id ? status.account : undefined));
+    dispatch(
+      replyCompose(actualStatus, status.reblog_id ? status.account : undefined),
+    );
   };
 
   const handleHotkeyFavourite = (e?: KeyboardEvent): void => {
@@ -177,17 +203,27 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   const handleHotkeyReact = (): void => {
-    (node.current?.querySelector('.emoji-picker-dropdown') as HTMLButtonElement)?.click();
+    (
+      node.current?.querySelector('.emoji-picker-dropdown') as HTMLButtonElement
+    )?.click();
   };
 
-  const handleUnfilter = () => dispatch(unfilterStatus(status.filtered.length ? status.id : actualStatus.id));
+  const handleUnfilter = () =>
+    dispatch(
+      unfilterStatus(status.filtered.length ? status.id : actualStatus.id),
+    );
 
   const renderStatusInfo = () => {
     if (isReblog && showGroup && group) {
       return (
         <StatusInfo
           avatarSize={avatarSize}
-          icon={<Icon src={require('@tabler/icons/outline/repeat.svg')} className='h-4 w-4 text-green-600' />}
+          icon={
+            <Icon
+              src={require('@tabler/icons/outline/repeat.svg')}
+              className='h-4 w-4 text-green-600'
+            />
+          }
           text={
             <FormattedMessage
               id='status.reblogged_by_with_group'
@@ -226,18 +262,25 @@ const Status: React.FC<IStatus> = (props) => {
     } else if (isReblog) {
       const accounts = status.accounts || [status.account];
 
-      const renderedAccounts = accounts.slice(0, 2).map(account => !!account && (
-        <Link key={account.acct} to={`/@${account.acct}`} className='hover:underline'>
-          <bdi className='truncate'>
-            <strong
-              className='text-gray-800 dark:text-gray-200'
-              dangerouslySetInnerHTML={{
-                __html: account.display_name_html,
-              }}
-            />
-          </bdi>
-        </Link>
-      ));
+      const renderedAccounts = accounts.slice(0, 2).map(
+        (account) =>
+          !!account && (
+            <Link
+              key={account.acct}
+              to={`/@${account.acct}`}
+              className='hover:underline'
+            >
+              <bdi className='truncate'>
+                <strong
+                  className='text-gray-800 dark:text-gray-200'
+                  dangerouslySetInnerHTML={{
+                    __html: account.display_name_html,
+                  }}
+                />
+              </bdi>
+            </Link>
+          ),
+      );
 
       if (accounts.length > 2) {
         renderedAccounts.push(
@@ -252,13 +295,20 @@ const Status: React.FC<IStatus> = (props) => {
       return (
         <StatusInfo
           avatarSize={avatarSize}
-          icon={<Icon src={require('@tabler/icons/outline/repeat.svg')} className='h-4 w-4 text-green-600' />}
+          icon={
+            <Icon
+              src={require('@tabler/icons/outline/repeat.svg')}
+              className='h-4 w-4 text-green-600'
+            />
+          }
           text={
             <FormattedMessage
               id='status.reblogged_by'
               defaultMessage='{name} reposted'
               values={{
-                name: <FormattedList type='conjunction' value={renderedAccounts} />,
+                name: (
+                  <FormattedList type='conjunction' value={renderedAccounts} />
+                ),
                 count: accounts.length,
               }}
             />
@@ -269,7 +319,12 @@ const Status: React.FC<IStatus> = (props) => {
       return (
         <StatusInfo
           avatarSize={avatarSize}
-          icon={<Icon src={require('@tabler/icons/outline/pinned.svg')} className='h-4 w-4 text-gray-600 dark:text-gray-400' />}
+          icon={
+            <Icon
+              src={require('@tabler/icons/outline/pinned.svg')}
+              className='h-4 w-4 text-gray-600 dark:text-gray-400'
+            />
+          }
           text={
             <FormattedMessage id='status.pinned' defaultMessage='Pinned post' />
           }
@@ -279,7 +334,12 @@ const Status: React.FC<IStatus> = (props) => {
       return (
         <StatusInfo
           avatarSize={avatarSize}
-          icon={<Icon src={require('@tabler/icons/outline/circles.svg')} className='h-4 w-4 text-primary-600 dark:text-accent-blue' />}
+          icon={
+            <Icon
+              src={require('@tabler/icons/outline/circles.svg')}
+              className='h-4 w-4 text-primary-600 dark:text-accent-blue'
+            />
+          }
           text={
             <FormattedMessage
               id='status.group'
@@ -289,7 +349,11 @@ const Status: React.FC<IStatus> = (props) => {
                   <Link to={`/groups/${group.id}`} className='hover:underline'>
                     <bdi className='truncate'>
                       <strong className='text-gray-800 dark:text-gray-200'>
-                        <span dangerouslySetInnerHTML={{ __html: group.display_name_html }} />
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: group.display_name_html,
+                          }}
+                        />
                       </strong>
                     </bdi>
                   </Link>
@@ -316,19 +380,31 @@ const Status: React.FC<IStatus> = (props) => {
   }
 
   if (filtered && status.showFiltered !== false) {
-    const minHandlers = muted ? undefined : {
-      moveUp: handleHotkeyMoveUp,
-      moveDown: handleHotkeyMoveDown,
-    };
+    const minHandlers = muted
+      ? undefined
+      : {
+          moveUp: handleHotkeyMoveUp,
+          moveDown: handleHotkeyMoveDown,
+        };
 
     return (
       <HotKeys handlers={minHandlers}>
-        <div className={clsx('status__wrapper text-center', { focusable })} tabIndex={focusable ? 0 : undefined} ref={node}>
+        <div
+          className={clsx('status__wrapper text-center', { focusable })}
+          tabIndex={focusable ? 0 : undefined}
+          ref={node}
+        >
           <Text theme='muted'>
-            <FormattedMessage id='status.filtered' defaultMessage='Filtered' />: {status.filtered.join(', ')}.
-            {' '}
-            <button className='text-primary-600 hover:underline dark:text-accent-blue' onClick={handleUnfilter}>
-              <FormattedMessage id='status.show_filter_reason' defaultMessage='Show anyway' />
+            <FormattedMessage id='status.filtered' defaultMessage='Filtered' />:{' '}
+            {status.filtered.join(', ')}.{' '}
+            <button
+              className='text-primary-600 hover:underline dark:text-accent-blue'
+              onClick={handleUnfilter}
+            >
+              <FormattedMessage
+                id='status.show_filter_reason'
+                defaultMessage='Show anyway'
+              />
             </button>
           </Text>
         </div>
@@ -338,10 +414,9 @@ const Status: React.FC<IStatus> = (props) => {
 
   let rebloggedByText;
   if (status.reblog_id === 'object') {
-    rebloggedByText = intl.formatMessage(
-      messages.reblogged_by,
-      { name: status.account.acct },
-    );
+    rebloggedByText = intl.formatMessage(messages.reblogged_by, {
+      name: status.account.acct,
+    });
   }
 
   let quote;
@@ -350,7 +425,12 @@ const Status: React.FC<IStatus> = (props) => {
     if ((actualStatus.quote_visible ?? true) === false) {
       quote = (
         <div className='quoted-status-tombstone'>
-          <p><FormattedMessage id='statuses.quote_tombstone' defaultMessage='Post is unavailable.' /></p>
+          <p>
+            <FormattedMessage
+              id='statuses.quote_tombstone'
+              defaultMessage='Post is unavailable.'
+            />
+          </p>
         </div>
       );
     } else {
@@ -358,19 +438,21 @@ const Status: React.FC<IStatus> = (props) => {
     }
   }
 
-  const handlers = muted ? undefined : {
-    reply: handleHotkeyReply,
-    favourite: handleHotkeyFavourite,
-    boost: handleHotkeyBoost,
-    mention: handleHotkeyMention,
-    open: handleHotkeyOpen,
-    openProfile: handleHotkeyOpenProfile,
-    moveUp: handleHotkeyMoveUp,
-    moveDown: handleHotkeyMoveDown,
-    toggleSensitive: handleHotkeyToggleSensitive,
-    openMedia: handleHotkeyOpenMedia,
-    react: handleHotkeyReact,
-  };
+  const handlers = muted
+    ? undefined
+    : {
+        reply: handleHotkeyReply,
+        favourite: handleHotkeyFavourite,
+        boost: handleHotkeyBoost,
+        mention: handleHotkeyMention,
+        open: handleHotkeyOpen,
+        openProfile: handleHotkeyOpenProfile,
+        moveUp: handleHotkeyMoveUp,
+        moveDown: handleHotkeyMoveDown,
+        toggleSensitive: handleHotkeyToggleSensitive,
+        openMedia: handleHotkeyOpenMedia,
+        react: handleHotkeyReact,
+      };
 
   return (
     <HotKeys handlers={handlers} data-testid='status'>
@@ -385,12 +467,16 @@ const Status: React.FC<IStatus> = (props) => {
       >
         <Card
           variant={variant}
-          className={clsx('status__wrapper space-y-4', `status-${actualStatus.visibility}`, {
-            'py-6 sm:p-5': variant === 'rounded',
-            'status-reply': !!status.in_reply_to_id,
-            muted,
-            read: unread === false,
-          })}
+          className={clsx(
+            'status__wrapper space-y-4',
+            `status-${actualStatus.visibility}`,
+            {
+              'py-6 sm:p-5': variant === 'rounded',
+              'status-reply': !!status.in_reply_to_id,
+              muted,
+              read: unread === false,
+            },
+          )}
           data-id={status.id}
         >
           {renderStatusInfo()}
@@ -407,19 +493,21 @@ const Status: React.FC<IStatus> = (props) => {
             withLinkToProfile={hoverable}
             approvalStatus={actualStatus.approval_status}
             avatarSize={avatarSize}
-            items={(
+            items={
               <>
                 <StatusTypeIcon status={status} />
                 <StatusLanguagePicker status={status} />
               </>
-            )}
+            }
           />
 
           <div className='status__content-wrapper'>
             <StatusReplyMentions status={actualStatus} hoverable={hoverable} />
 
             <Stack className='relative z-0'>
-              {actualStatus.event ? <EventPreview className='shadow-xl' status={actualStatus} /> : (
+              {actualStatus.event ? (
+                <EventPreview className='shadow-xl' status={actualStatus} />
+              ) : (
                 <Stack space={4}>
                   <StatusContent
                     status={actualStatus}
@@ -430,9 +518,12 @@ const Status: React.FC<IStatus> = (props) => {
 
                   <TranslateButton status={actualStatus} />
 
-                  {(quote || actualStatus.card || actualStatus.media_attachments.length > 0) && (
+                  {(quote ||
+                    actualStatus.card ||
+                    actualStatus.media_attachments.length > 0) && (
                     <Stack space={4}>
-                      {(actualStatus.media_attachments.length > 0 || (actualStatus.card && !quote)) && (
+                      {(actualStatus.media_attachments.length > 0 ||
+                        (actualStatus.card && !quote)) && (
                         <div className='relative'>
                           <SensitiveContentOverlay status={actualStatus} />
                           <StatusMedia
@@ -459,17 +550,18 @@ const Status: React.FC<IStatus> = (props) => {
                   'pt-4': !actualStatus.emoji_reactions.length,
                 })}
               >
-                <StatusActionBar status={actualStatus} rebloggedBy={isReblog ? status.account : undefined} fromBookmarks={fromBookmarks} />
+                <StatusActionBar
+                  status={actualStatus}
+                  rebloggedBy={isReblog ? status.account : undefined}
+                  fromBookmarks={fromBookmarks}
+                />
               </div>
             )}
           </div>
         </Card>
-      </div >
-    </HotKeys >
+      </div>
+    </HotKeys>
   );
 };
 
-export {
-  type IStatus,
-  Status as default,
-};
+export { type IStatus, Status as default };

@@ -2,7 +2,14 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Link, matchPath, useHistory } from 'react-router-dom';
 
-import { Button, Divider, HStack, Popover, Stack, Text } from 'pl-fe/components/ui';
+import {
+  Button,
+  Divider,
+  HStack,
+  Popover,
+  Stack,
+  Text,
+} from 'pl-fe/components/ui';
 import GroupMemberCount from 'pl-fe/features/group/components/group-member-count';
 import GroupPrivacy from 'pl-fe/features/group/components/group-privacy';
 
@@ -18,7 +25,11 @@ interface IGroupPopoverContainer {
 
 const messages = defineMessages({
   title: { id: 'group.popover.title', defaultMessage: 'Membership required' },
-  summary: { id: 'group.popover.summary', defaultMessage: 'You must be a member of the group in order to reply to this status.' },
+  summary: {
+    id: 'group.popover.summary',
+    defaultMessage:
+      'You must be a member of the group in order to reply to this status.',
+  },
   action: { id: 'group.popover.action', defaultMessage: 'View group' },
 });
 
@@ -49,7 +60,10 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
             data-testid='group-card'
           >
             {/* Group Cover Image */}
-            <Stack grow className='relative basis-1/2 rounded-t-lg bg-primary-100 dark:bg-gray-800'>
+            <Stack
+              grow
+              className='relative basis-1/2 rounded-t-lg bg-primary-100 dark:bg-gray-800'
+            >
               {group.header && (
                 <img
                   className='absolute inset-0 h-full w-full rounded-t-lg object-cover'
@@ -65,10 +79,24 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
             </div>
 
             {/* Group Info */}
-            <Stack alignItems='center' justifyContent='end' grow className='basis-1/2 py-4' space={0.5}>
-              <Text size='lg' weight='bold' dangerouslySetInnerHTML={{ __html: group.display_name_html }} />
+            <Stack
+              alignItems='center'
+              justifyContent='end'
+              grow
+              className='basis-1/2 py-4'
+              space={0.5}
+            >
+              <Text
+                size='lg'
+                weight='bold'
+                dangerouslySetInnerHTML={{ __html: group.display_name_html }}
+              />
 
-              <HStack className='text-gray-700 dark:text-gray-600' space={2} wrap>
+              <HStack
+                className='text-gray-700 dark:text-gray-600'
+                space={2}
+                wrap
+              >
                 <GroupPrivacy group={group} />
                 <GroupMemberCount group={group} />
               </HStack>
@@ -78,12 +106,8 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
           <Divider />
 
           <Stack space={0.5} className='px-4'>
-            <Text weight='semibold'>
-              {intl.formatMessage(messages.title)}
-            </Text>
-            <Text theme='muted'>
-              {intl.formatMessage(messages.summary)}
-            </Text>
+            <Text weight='semibold'>{intl.formatMessage(messages.title)}</Text>
+            <Text theme='muted'>{intl.formatMessage(messages.summary)}</Text>
           </Stack>
 
           {!shouldHideAction && (
@@ -98,9 +122,7 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
         </Stack>
       }
       isFlush
-      children={
-        <div className='inline-block'>{children}</div>
-      }
+      children={<div className='inline-block'>{children}</div>}
     />
   );
 };

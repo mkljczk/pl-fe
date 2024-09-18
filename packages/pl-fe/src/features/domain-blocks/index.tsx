@@ -1,8 +1,11 @@
 import debounce from 'lodash/debounce';
 import React from 'react';
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { fetchDomainBlocks, expandDomainBlocks } from 'pl-fe/actions/domain-blocks';
+import {
+  expandDomainBlocks,
+  fetchDomainBlocks,
+} from 'pl-fe/actions/domain-blocks';
 import Domain from 'pl-fe/components/domain';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Column, Spinner } from 'pl-fe/components/ui';
@@ -10,12 +13,19 @@ import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({
   heading: { id: 'column.domain_blocks', defaultMessage: 'Hidden domains' },
-  unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
+  unblockDomain: {
+    id: 'account.unblock_domain',
+    defaultMessage: 'Unhide {domain}',
+  },
 });
 
-const handleLoadMore = debounce((dispatch) => {
-  dispatch(expandDomainBlocks());
-}, 300, { leading: true });
+const handleLoadMore = debounce(
+  (dispatch) => {
+    dispatch(expandDomainBlocks());
+  },
+  300,
+  { leading: true },
+);
 
 const DomainBlocks: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -36,7 +46,12 @@ const DomainBlocks: React.FC = () => {
     );
   }
 
-  const emptyMessage = <FormattedMessage id='empty_column.domain_blocks' defaultMessage='There are no hidden domains yet.' />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.domain_blocks'
+      defaultMessage='There are no hidden domains yet.'
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -47,9 +62,9 @@ const DomainBlocks: React.FC = () => {
         emptyMessage={emptyMessage}
         listClassName='divide-y divide-gray-200 dark:divide-gray-800'
       >
-        {domains.map((domain) =>
-          <Domain key={domain} domain={domain} />,
-        )}
+        {domains.map((domain) => (
+          <Domain key={domain} domain={domain} />
+        ))}
       </ScrollableList>
     </Column>
   );

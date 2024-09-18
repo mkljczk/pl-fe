@@ -9,12 +9,30 @@ import toast from 'pl-fe/toast';
 import type { Account as AccountEntity } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
-  subscribe: { id: 'account.subscribe', defaultMessage: 'Subscribe to notifications from @{name}' },
-  unsubscribe: { id: 'account.unsubscribe', defaultMessage: 'Unsubscribe to notifications from @{name}' },
-  subscribeSuccess: { id: 'account.subscribe.success', defaultMessage: 'You have subscribed to this account.' },
-  unsubscribeSuccess: { id: 'account.unsubscribe.success', defaultMessage: 'You have unsubscribed from this account.' },
-  subscribeFailure: { id: 'account.subscribe.failure', defaultMessage: 'An error occurred trying to subscribe to this account.' },
-  unsubscribeFailure: { id: 'account.unsubscribe.failure', defaultMessage: 'An error occurred trying to unsubscribe to this account.' },
+  subscribe: {
+    id: 'account.subscribe',
+    defaultMessage: 'Subscribe to notifications from @{name}',
+  },
+  unsubscribe: {
+    id: 'account.unsubscribe',
+    defaultMessage: 'Unsubscribe to notifications from @{name}',
+  },
+  subscribeSuccess: {
+    id: 'account.subscribe.success',
+    defaultMessage: 'You have subscribed to this account.',
+  },
+  unsubscribeSuccess: {
+    id: 'account.unsubscribe.success',
+    defaultMessage: 'You have unsubscribed from this account.',
+  },
+  subscribeFailure: {
+    id: 'account.subscribe.failure',
+    defaultMessage: 'An error occurred trying to subscribe to this account.',
+  },
+  unsubscribeFailure: {
+    id: 'account.unsubscribe.failure',
+    defaultMessage: 'An error occurred trying to unsubscribe to this account.',
+  },
 });
 
 interface ISubscriptionButton {
@@ -36,12 +54,20 @@ const SubscriptionButton = ({ account }: ISubscriptionButton) => {
   const onNotifyToggle = () => {
     if (account.relationship?.notifying) {
       follow(account.id, { notify: false })
-        ?.then(() => toast.success(intl.formatMessage(messages.unsubscribeSuccess)))
-        .catch(() => toast.error(intl.formatMessage(messages.unsubscribeFailure)));
+        ?.then(() =>
+          toast.success(intl.formatMessage(messages.unsubscribeSuccess)),
+        )
+        .catch(() =>
+          toast.error(intl.formatMessage(messages.unsubscribeFailure)),
+        );
     } else {
       follow(account.id, { notify: true })
-        ?.then(() => toast.success(intl.formatMessage(messages.subscribeSuccess)))
-        .catch(() => toast.error(intl.formatMessage(messages.subscribeFailure)));
+        ?.then(() =>
+          toast.success(intl.formatMessage(messages.subscribeSuccess)),
+        )
+        .catch(() =>
+          toast.error(intl.formatMessage(messages.subscribeFailure)),
+        );
     }
   };
 
@@ -56,7 +82,11 @@ const SubscriptionButton = ({ account }: ISubscriptionButton) => {
   if (isRequested || isFollowing) {
     return (
       <IconButton
-        src={isSubscribed ? require('@tabler/icons/outline/bell-ringing.svg') : require('@tabler/icons/outline/bell.svg')}
+        src={
+          isSubscribed
+            ? require('@tabler/icons/outline/bell-ringing.svg')
+            : require('@tabler/icons/outline/bell.svg')
+        }
         onClick={handleToggle}
         title={title}
         theme='outlined'

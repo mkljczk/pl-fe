@@ -1,8 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { blockAccount } from 'pl-fe/actions/accounts';
-import { submitReport, submitReportSuccess, submitReportFail, ReportableEntities } from 'pl-fe/actions/reports';
+import {
+  ReportableEntities,
+  submitReport,
+  submitReportFail,
+  submitReportSuccess,
+} from 'pl-fe/actions/reports';
 import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
 import { useAccount } from 'pl-fe/api/hooks';
 import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
@@ -18,7 +23,10 @@ import ReasonStep from './steps/reason-step';
 import type { BaseModalProps } from '../../modal-root';
 
 const messages = defineMessages({
-  blankslate: { id: 'report.reason.blankslate', defaultMessage: 'You have removed all statuses from being selected.' },
+  blankslate: {
+    id: 'report.reason.blankslate',
+    defaultMessage: 'You have removed all statuses from being selected.',
+  },
   done: { id: 'report.done', defaultMessage: 'Done' },
   next: { id: 'report.next', defaultMessage: 'Next' },
   submit: { id: 'report.submit', defaultMessage: 'Submit' },
@@ -70,7 +78,12 @@ interface ReportModalProps {
   statusIds: Array<string>;
 }
 
-const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({ onClose, accountId, entityType, statusIds }) => {
+const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
+  onClose,
+  accountId,
+  entityType,
+  statusIds,
+}) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -94,7 +107,15 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({ onClose, acc
   const handleSubmit = () => {
     setIsSubmitting(true);
 
-    dispatch(submitReport(accountId, selectedStatusIds, [...ruleIds], comment, forward))
+    dispatch(
+      submitReport(
+        accountId,
+        selectedStatusIds,
+        [...ruleIds],
+        comment,
+        forward,
+      ),
+    )
       .then(() => {
         setIsSubmitting(false);
         setCurrentStep(Steps.THREE);
@@ -175,12 +196,17 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({ onClose, acc
   };
 
   const renderSelectedEntity = () => {
-    if (entityType === ReportableEntities.STATUS) return renderSelectedStatuses();
+    if (entityType === ReportableEntities.STATUS)
+      return renderSelectedStatuses();
     return null;
   };
 
   const renderTitle = () => (
-    <FormattedMessage id='report.target' defaultMessage='Reporting {target}' values={{ target: <strong>@{account?.acct}</strong> }} />
+    <FormattedMessage
+      id='report.target'
+      defaultMessage='Reporting {target}'
+      values={{ target: <strong>@{account?.acct}</strong> }}
+    />
   );
 
   const isConfirmationButtonDisabled = useMemo(() => {
@@ -188,8 +214,19 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({ onClose, acc
       return false;
     }
 
-    return isSubmitting || (shouldRequireRule && ruleIds.length === 0) || (isReportingStatus && selectedStatusIds.length === 0);
-  }, [currentStep, isSubmitting, shouldRequireRule, ruleIds.length, selectedStatusIds.length, isReportingStatus]);
+    return (
+      isSubmitting ||
+      (shouldRequireRule && ruleIds.length === 0) ||
+      (isReportingStatus && selectedStatusIds.length === 0)
+    );
+  }, [
+    currentStep,
+    isSubmitting,
+    shouldRequireRule,
+    ruleIds.length,
+    selectedStatusIds.length,
+    isReportingStatus,
+  ]);
 
   const calculateProgress = useCallback(() => {
     switch (currentStep) {
@@ -230,7 +267,9 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({ onClose, acc
       <Stack space={4}>
         <ProgressBar progress={calculateProgress()} />
 
-        {(currentStep !== Steps.THREE && !isReportingAccount) && renderSelectedEntity()}
+        {currentStep !== Steps.THREE &&
+          !isReportingAccount &&
+          renderSelectedEntity()}
 
         {StepToRender && (
           <StepToRender

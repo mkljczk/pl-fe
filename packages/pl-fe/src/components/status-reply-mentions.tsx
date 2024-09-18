@@ -13,10 +13,15 @@ interface IStatusReplyMentions {
   hoverable?: boolean;
 }
 
-const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable = true }) => {
+const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({
+  status,
+  hoverable = true,
+}) => {
   const { openModal } = useModalsStore();
 
-  const handleOpenMentionsModal: React.MouseEventHandler<HTMLSpanElement> = (e) => {
+  const handleOpenMentionsModal: React.MouseEventHandler<HTMLSpanElement> = (
+    e,
+  ) => {
     e.stopPropagation();
 
     openModal('MENTIONS', { statusId: status.id });
@@ -42,7 +47,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
   }
 
   // The typical case with a reply-to and a list of mentions.
-  const accounts = to.slice(0, 2).map(account => {
+  const accounts = to.slice(0, 2).map((account) => {
     const link = (
       <Link
         key={account.id}
@@ -67,8 +72,18 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
 
   if (to.length > 2) {
     accounts.push(
-      <span key='more' className='cursor-pointer hover:underline' role='button' onClick={handleOpenMentionsModal} tabIndex={0}>
-        <FormattedMessage id='reply_mentions.more' defaultMessage='{count} more' values={{ count: to.length - 2 }} />
+      <span
+        key='more'
+        className='cursor-pointer hover:underline'
+        role='button'
+        onClick={handleOpenMentionsModal}
+        tabIndex={0}
+      >
+        <FormattedMessage
+          id='reply_mentions.more'
+          defaultMessage='{count} more'
+          values={{ count: to.length - 2 }}
+        />
       </span>,
     );
   }

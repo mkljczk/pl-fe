@@ -12,7 +12,11 @@ describe('<Modal />', () => {
   });
 
   it('renders children', () => {
-    render(<Modal title='Modal title'><div data-testid='child' /></Modal>);
+    render(
+      <Modal title='Modal title'>
+        <div data-testid='child' />
+      </Modal>,
+    );
     expect(screen.getByTestId('child')).toBeInTheDocument();
   });
 
@@ -29,7 +33,7 @@ describe('<Modal />', () => {
   });
 
   describe('onClose prop', () => {
-    it('renders the Icon to close the modal', async() => {
+    it('renders the Icon to close the modal', async () => {
       const mockFn = vi.fn();
       const user = userEvent.setup();
 
@@ -48,7 +52,7 @@ describe('<Modal />', () => {
   });
 
   describe('confirmationAction prop', () => {
-    it('renders the confirmation button', async() => {
+    it('renders the confirmation button', async () => {
       const mockFn = vi.fn();
       const user = userEvent.setup();
 
@@ -71,7 +75,7 @@ describe('<Modal />', () => {
     });
 
     describe('with secondaryAction', () => {
-      it('renders the secondary button', async() => {
+      it('renders the secondary button', async () => {
         const confirmationAction = vi.fn();
         const secondaryAction = vi.fn();
         const user = userEvent.setup();
@@ -104,7 +108,7 @@ describe('<Modal />', () => {
     });
 
     describe('with cancelAction', () => {
-      it('renders the cancel button', async() => {
+      it('renders the cancel button', async () => {
         const confirmationAction = vi.fn();
         const cancelAction = vi.fn();
         const user = userEvent.setup();

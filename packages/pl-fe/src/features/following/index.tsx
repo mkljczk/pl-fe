@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { useAccountLookup, useFollowing } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
@@ -23,29 +23,25 @@ const Following: React.FC<IFollowing> = ({ params }) => {
 
   const { account, isUnavailable } = useAccountLookup(params?.username);
 
-  const {
-    accounts,
-    hasNextPage,
-    fetchNextPage,
-    isLoading,
-  } = useFollowing(account?.id);
+  const { accounts, hasNextPage, fetchNextPage, isLoading } = useFollowing(
+    account?.id,
+  );
 
   if (isLoading) {
-    return (
-      <Spinner />
-    );
+    return <Spinner />;
   }
 
   if (!account) {
-    return (
-      <MissingIndicator />
-    );
+    return <MissingIndicator />;
   }
 
   if (isUnavailable) {
     return (
       <div className='empty-column-indicator'>
-        <FormattedMessage id='empty_column.account_unavailable' defaultMessage='Profile unavailable' />
+        <FormattedMessage
+          id='empty_column.account_unavailable'
+          defaultMessage='Profile unavailable'
+        />
       </div>
     );
   }
@@ -56,7 +52,12 @@ const Following: React.FC<IFollowing> = ({ params }) => {
         scrollKey='following'
         hasMore={hasNextPage}
         onLoadMore={fetchNextPage}
-        emptyMessage={<FormattedMessage id='account.follows.empty' defaultMessage="This user doesn't follow anyone yet." />}
+        emptyMessage={
+          <FormattedMessage
+            id='account.follows.empty'
+            defaultMessage="This user doesn't follow anyone yet."
+          />
+        }
         itemClassName='pb-4'
       >
         {accounts.map((account) => (

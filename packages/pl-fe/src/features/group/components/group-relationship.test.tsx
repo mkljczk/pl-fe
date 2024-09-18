@@ -24,7 +24,9 @@ describe('<GroupRelationship />', () => {
     it('should render the relationship', () => {
       render(<GroupRelationship group={group} />);
 
-      expect(screen.getByTestId('group-relationship')).toHaveTextContent('Admin');
+      expect(screen.getByTestId('group-relationship')).toHaveTextContent(
+        'Admin',
+      );
     });
   });
 
@@ -42,7 +44,9 @@ describe('<GroupRelationship />', () => {
     it('should render the relationship', () => {
       render(<GroupRelationship group={group} />);
 
-      expect(screen.getByTestId('group-relationship')).toHaveTextContent('Owner');
+      expect(screen.getByTestId('group-relationship')).toHaveTextContent(
+        'Owner',
+      );
     });
   });
 

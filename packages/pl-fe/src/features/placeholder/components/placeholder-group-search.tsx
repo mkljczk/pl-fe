@@ -4,7 +4,9 @@ import { HStack, Stack, Text } from 'pl-fe/components/ui';
 
 import { generateText, randomIntFromInterval } from '../utils';
 
-const PlaceholderGroupSearch = ({ withJoinAction = true }: { withJoinAction?: boolean }) => {
+const PlaceholderGroupSearch = ({
+  withJoinAction = true,
+}: { withJoinAction?: boolean }) => {
   const groupNameLength = randomIntFromInterval(12, 20);
 
   return (

@@ -4,13 +4,18 @@ import type { CustomEmoji } from 'pl-api';
 
 /** Validates individual items in an array, dropping any that aren't valid. */
 const filteredArray = <T extends z.ZodTypeAny>(schema: T) =>
-  z.any().array().catch([])
-    .transform((arr) => (
-      arr.map((item) => {
-        const parsed = schema.safeParse(item);
-        return parsed.success ? parsed.data : undefined;
-      }).filter((item): item is z.infer<T> => Boolean(item))
-    ));
+  z
+    .any()
+    .array()
+    .catch([])
+    .transform((arr) =>
+      arr
+        .map((item) => {
+          const parsed = schema.safeParse(item);
+          return parsed.success ? parsed.data : undefined;
+        })
+        .filter((item): item is z.infer<T> => Boolean(item)),
+    );
 
 /** Map a list of CustomEmoji to their shortcodes. */
 const makeCustomEmojiMap = (customEmojis: CustomEmoji[]) =>

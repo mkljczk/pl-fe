@@ -1,9 +1,13 @@
 import clsx from 'clsx';
-import { type MediaAttachment, type PreviewCard as CardEntity, mediaAttachmentSchema } from 'pl-api';
+import {
+  type PreviewCard as CardEntity,
+  type MediaAttachment,
+  mediaAttachmentSchema,
+} from 'pl-api';
 import React, { useState, useEffect } from 'react';
 
 import Blurhash from 'pl-fe/components/blurhash';
-import { HStack, Stack, Text, Icon } from 'pl-fe/components/ui';
+import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
 import { addAutoPlay } from 'pl-fe/utils/media';
 import { getTextDirection } from 'pl-fe/utils/rtl';
 
@@ -69,7 +73,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
     }
   };
 
-  const setRef: React.RefCallback<HTMLElement> = c => {
+  const setRef: React.RefCallback<HTMLElement> = (c) => {
     if (c) {
       if (cacheWidth) {
         cacheWidth(c.offsetWidth);
@@ -95,7 +99,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   };
 
   const getRatio = (card: CardEntity): number => {
-    const ratio = (card.width / card.height) || 16 / 9;
+    const ratio = card.width / card.height || 16 / 9;
 
     // Constrain to a sane limit
     // https://en.wikipedia.org/wiki/Aspect_ratio_(image)
@@ -103,10 +107,15 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   };
 
   const interactive = card.type !== 'link';
-  horizontal = typeof horizontal === 'boolean' ? horizontal : interactive || embedded;
-  const className = clsx('status-card', { horizontal, compact, interactive }, `status-card--${card.type}`);
+  horizontal =
+    typeof horizontal === 'boolean' ? horizontal : interactive || embedded;
+  const className = clsx(
+    'status-card',
+    { horizontal, compact, interactive },
+    `status-card--${card.type}`,
+  );
   const ratio = getRatio(card);
-  const height = (compact && !embedded) ? (width / (16 / 9)) : (width / ratio);
+  const height = compact && !embedded ? width / (16 / 9) : width / ratio;
 
   const title = interactive ? (
     <a
@@ -120,13 +129,17 @@ const PreviewCard: React.FC<IPreviewCard> = ({
       <span dir={direction}>{trimmedTitle}</span>
     </a>
   ) : (
-    <span title={trimmedTitle} dir={direction}>{trimmedTitle}</span>
+    <span title={trimmedTitle} dir={direction}>
+      {trimmedTitle}
+    </span>
   );
 
   const description = (
     <Stack space={2} className='flex-1 overflow-hidden p-4'>
       {trimmedTitle && (
-        <Text weight='bold' direction={direction}>{title}</Text>
+        <Text weight='bold' direction={direction}>
+          {title}
+        </Text>
       )}
       {trimmedDescription && (
         <Text direction={direction}>{trimmedDescription}</Text>
@@ -181,11 +194,11 @@ const PreviewCard: React.FC<IPreviewCard> = ({
           <div className='absolute inset-0 flex items-center justify-center'>
             <div className='flex items-center justify-center rounded-full bg-gray-500/90 px-4 py-3 shadow-md dark:bg-gray-700/90'>
               <HStack space={3} alignItems='center'>
-                <button onClick={handleEmbedClick} className='appearance-none text-gray-700 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-100'>
-                  <Icon
-                    src={iconVariant}
-                    className='h-6 w-6 text-inherit'
-                  />
+                <button
+                  onClick={handleEmbedClick}
+                  className='appearance-none text-gray-700 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-100'
+                >
+                  <Icon src={iconVariant} className='h-6 w-6 text-inherit' />
                 </button>
 
                 {horizontal && (
@@ -217,14 +230,15 @@ const PreviewCard: React.FC<IPreviewCard> = ({
     );
   } else if (card.image) {
     embed = (
-      <div className={clsx(
-        'status-card__image',
-        'w-full flex-none rounded-l md:h-auto md:w-auto md:flex-auto',
-        {
-          'h-auto': horizontal,
-          'h-[200px]': !horizontal,
-        },
-      )}
+      <div
+        className={clsx(
+          'status-card__image',
+          'w-full flex-none rounded-l md:h-auto md:w-auto md:flex-auto',
+          {
+            'h-auto': horizontal,
+            'h-[200px]': !horizontal,
+          },
+        )}
       >
         {canvas}
         {thumbnail}
@@ -239,7 +253,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
       target='_blank'
       rel='noopener'
       ref={setRef}
-      onClick={e => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
     >
       {embed}
       {description}

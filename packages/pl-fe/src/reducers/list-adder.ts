@@ -1,11 +1,11 @@
 import { List as ImmutableList, Record as ImmutableRecord } from 'immutable';
 
 import {
-  LIST_ADDER_RESET,
-  LIST_ADDER_SETUP,
+  LIST_ADDER_LISTS_FETCH_FAIL,
   LIST_ADDER_LISTS_FETCH_REQUEST,
   LIST_ADDER_LISTS_FETCH_SUCCESS,
-  LIST_ADDER_LISTS_FETCH_FAIL,
+  LIST_ADDER_RESET,
+  LIST_ADDER_SETUP,
   LIST_EDITOR_ADD_SUCCESS,
   LIST_EDITOR_REMOVE_SUCCESS,
 } from '../actions/lists';
@@ -26,12 +26,15 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-const listAdderReducer = (state: State = ReducerRecord(), action: AnyAction) => {
+const listAdderReducer = (
+  state: State = ReducerRecord(),
+  action: AnyAction,
+) => {
   switch (action.type) {
     case LIST_ADDER_RESET:
       return ReducerRecord();
     case LIST_ADDER_SETUP:
-      return state.withMutations(map => {
+      return state.withMutations((map) => {
         map.set('accountId', action.account.id);
       });
     case LIST_ADDER_LISTS_FETCH_REQUEST:
@@ -39,15 +42,26 @@ const listAdderReducer = (state: State = ReducerRecord(), action: AnyAction) => 
     case LIST_ADDER_LISTS_FETCH_FAIL:
       return state.setIn(['lists', 'isLoading'], false);
     case LIST_ADDER_LISTS_FETCH_SUCCESS:
-      return state.update('lists', lists => lists.withMutations(map => {
-        map.set('isLoading', false);
-        map.set('loaded', true);
-        map.set('items', ImmutableList(action.lists.map((item: { id: string }) => item.id)));
-      }));
+      return state.update('lists', (lists) =>
+        lists.withMutations((map) => {
+          map.set('isLoading', false);
+          map.set('loaded', true);
+          map.set(
+            'items',
+            ImmutableList(action.lists.map((item: { id: string }) => item.id)),
+          );
+        }),
+      );
     case LIST_EDITOR_ADD_SUCCESS:
-      return state.updateIn(['lists', 'items'], list => (list as ImmutableList<string>).unshift(action.listId));
+      return state.updateIn(['lists', 'items'], (list) =>
+        (list as ImmutableList<string>).unshift(action.listId),
+      );
     case LIST_EDITOR_REMOVE_SUCCESS:
-      return state.updateIn(['lists', 'items'], list => (list as ImmutableList<string>).filterNot(item => item === action.listId));
+      return state.updateIn(['lists', 'items'], (list) =>
+        (list as ImmutableList<string>).filterNot(
+          (item) => item === action.listId,
+        ),
+      );
     default:
       return state;
   }

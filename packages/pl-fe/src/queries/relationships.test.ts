@@ -2,7 +2,13 @@ import { useEffect } from 'react';
 
 import { __stub } from 'pl-fe/api';
 import { buildRelationship } from 'pl-fe/jest/factory';
-import { createTestStore, queryClient, renderHook, rootState, waitFor } from 'pl-fe/jest/test-helpers';
+import {
+  createTestStore,
+  queryClient,
+  renderHook,
+  rootState,
+  waitFor,
+} from 'pl-fe/jest/test-helpers';
 import { Store } from 'pl-fe/store';
 
 import { useFetchRelationships } from './relationships';
@@ -29,21 +35,27 @@ describe('useFetchRelationships()', () => {
         });
       });
 
-      it('is successful', async() => {
-        renderHook(() => {
-          const fetchRelationships = useFetchRelationships();
+      it('is successful', async () => {
+        renderHook(
+          () => {
+            const fetchRelationships = useFetchRelationships();
 
-          useEffect(() => {
-            fetchRelationships.mutate({ accountIds: [id] });
-          }, []);
+            useEffect(() => {
+              fetchRelationships.mutate({ accountIds: [id] });
+            }, []);
 
-          return fetchRelationships;
-        }, undefined, store);
+            return fetchRelationships;
+          },
+          undefined,
+          store,
+        );
 
         await waitFor(() => {
           expect(store.getState().relationships.size).toBe(1);
           expect(store.getState().relationships.getIn([id, 'id'])).toBe(id);
-          expect(store.getState().relationships.getIn([id, 'blocked_by'])).toBe(true);
+          expect(store.getState().relationships.getIn([id, 'blocked_by'])).toBe(
+            true,
+          );
         });
       });
     });
@@ -54,26 +66,39 @@ describe('useFetchRelationships()', () => {
       beforeEach(() => {
         __stub((mock) => {
           mock
-            .onGet(`/api/v1/accounts/relationships?id[]=${ids[0]}&id[]=${ids[1]}`)
-            .reply(200, ids.map((id) => buildRelationship({ id, blocked_by: true })));
+            .onGet(
+              `/api/v1/accounts/relationships?id[]=${ids[0]}&id[]=${ids[1]}`,
+            )
+            .reply(
+              200,
+              ids.map((id) => buildRelationship({ id, blocked_by: true })),
+            );
         });
       });
 
-      it('is successful', async() => {
-        renderHook(() => {
-          const fetchRelationships = useFetchRelationships();
+      it('is successful', async () => {
+        renderHook(
+          () => {
+            const fetchRelationships = useFetchRelationships();
 
-          useEffect(() => {
-            fetchRelationships.mutate({ accountIds: ids });
-          }, []);
+            useEffect(() => {
+              fetchRelationships.mutate({ accountIds: ids });
+            }, []);
 
-          return fetchRelationships;
-        }, undefined, store);
+            return fetchRelationships;
+          },
+          undefined,
+          store,
+        );
 
         await waitFor(() => {
           expect(store.getState().relationships.size).toBe(2);
-          expect(store.getState().relationships.getIn([ids[0], 'id'])).toBe(ids[0]);
-          expect(store.getState().relationships.getIn([ids[1], 'id'])).toBe(ids[1]);
+          expect(store.getState().relationships.getIn([ids[0], 'id'])).toBe(
+            ids[0],
+          );
+          expect(store.getState().relationships.getIn([ids[1], 'id'])).toBe(
+            ids[1],
+          );
         });
       });
     });
@@ -88,16 +113,20 @@ describe('useFetchRelationships()', () => {
       });
     });
 
-    it('is successful', async() => {
-      const { result } = renderHook(() => {
-        const fetchRelationships = useFetchRelationships();
+    it('is successful', async () => {
+      const { result } = renderHook(
+        () => {
+          const fetchRelationships = useFetchRelationships();
 
-        useEffect(() => {
-          fetchRelationships.mutate({ accountIds: [id] });
-        }, []);
+          useEffect(() => {
+            fetchRelationships.mutate({ accountIds: [id] });
+          }, []);
 
-        return fetchRelationships;
-      }, undefined, store);
+          return fetchRelationships;
+        },
+        undefined,
+        store,
+      );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
 

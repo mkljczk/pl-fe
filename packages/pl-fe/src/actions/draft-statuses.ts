@@ -12,21 +12,23 @@ const CANCEL_DRAFT_STATUS = 'DELETE_DRAFT_STATUS';
 
 const getAccount = makeGetAccount();
 
-const fetchDraftStatuses = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const fetchDraftStatuses =
+  () => (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const accountUrl = getAccount(state, state.me as string)!.url;
 
-    return KVStore.getItem(`drafts:${accountUrl}`).then((statuses) => {
-      dispatch({
-        type: DRAFT_STATUSES_FETCH_SUCCESS,
-        statuses,
-      });
-    }).catch(() => {});
+    return KVStore.getItem(`drafts:${accountUrl}`)
+      .then((statuses) => {
+        dispatch({
+          type: DRAFT_STATUSES_FETCH_SUCCESS,
+          statuses,
+        });
+      })
+      .catch(() => {});
   };
 
-const saveDraftStatus = (composeId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const saveDraftStatus =
+  (composeId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const accountUrl = getAccount(state, state.me as string)!.url;
 
@@ -44,8 +46,8 @@ const saveDraftStatus = (composeId: string) =>
     });
   };
 
-const cancelDraftStatus = (statusId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const cancelDraftStatus =
+  (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const accountUrl = getAccount(state, state.me as string)!.url;
 

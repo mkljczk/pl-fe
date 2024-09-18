@@ -1,16 +1,19 @@
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
-import { useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { usePopper } from 'react-popper';
 import { useHistory } from 'react-router-dom';
 
 import { fetchRelationships } from 'pl-fe/actions/accounts';
-import { closeProfileHoverCard, updateProfileHoverCard } from 'pl-fe/actions/profile-hover-card';
+import {
+  closeProfileHoverCard,
+  updateProfileHoverCard,
+} from 'pl-fe/actions/profile-hover-card';
 import { useAccount } from 'pl-fe/api/hooks';
 import Badge from 'pl-fe/components/badge';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
 import { UserPanel } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import { showProfileHoverCard } from './hover-ref-wrapper';
 import { dateFormatOptions } from './relative-timestamp';
@@ -26,21 +29,47 @@ const getBadges = (
   const badges = [];
 
   if (account?.is_admin) {
-    badges.push(<Badge key='admin' slug='admin' title={<FormattedMessage id='account_moderation_modal.roles.admin' defaultMessage='Admin' />} />);
+    badges.push(
+      <Badge
+        key='admin'
+        slug='admin'
+        title={
+          <FormattedMessage
+            id='account_moderation_modal.roles.admin'
+            defaultMessage='Admin'
+          />
+        }
+      />,
+    );
   } else if (account?.is_moderator) {
-    badges.push(<Badge key='moderator' slug='moderator' title={<FormattedMessage id='account_moderation_modal.roles.moderator' defaultMessage='Moderator' />} />);
+    badges.push(
+      <Badge
+        key='moderator'
+        slug='moderator'
+        title={
+          <FormattedMessage
+            id='account_moderation_modal.roles.moderator'
+            defaultMessage='Moderator'
+          />
+        }
+      />,
+    );
   }
 
   return badges;
 };
 
-const handleMouseEnter = (dispatch: AppDispatch): React.MouseEventHandler => () => {
-  dispatch(updateProfileHoverCard());
-};
+const handleMouseEnter =
+  (dispatch: AppDispatch): React.MouseEventHandler =>
+  () => {
+    dispatch(updateProfileHoverCard());
+  };
 
-const handleMouseLeave = (dispatch: AppDispatch): React.MouseEventHandler => () => {
-  dispatch(closeProfileHoverCard(true));
-};
+const handleMouseLeave =
+  (dispatch: AppDispatch): React.MouseEventHandler =>
+  () => {
+    dispatch(closeProfileHoverCard(true));
+  };
 
 interface IProfileHoverCard {
   visible?: boolean;
@@ -54,10 +83,17 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
 
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
 
-  const me = useAppSelector(state => state.me);
-  const accountId: string | undefined = useAppSelector(state => state.profile_hover_card.accountId || undefined);
-  const { account } = useAccount(accountId, { withRelationship: true, withScrobble: true });
-  const targetRef = useAppSelector(state => state.profile_hover_card.ref?.current);
+  const me = useAppSelector((state) => state.me);
+  const accountId: string | undefined = useAppSelector(
+    (state) => state.profile_hover_card.accountId || undefined,
+  );
+  const { account } = useAccount(accountId, {
+    withRelationship: true,
+    withScrobble: true,
+  });
+  const targetRef = useAppSelector(
+    (state) => state.profile_hover_card.ref?.current,
+  );
   const badges = getBadges(account);
 
   useEffect(() => {
@@ -79,8 +115,12 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
 
   if (!account) return null;
   const accountBio = { __html: account.note_emojified };
-  const memberSinceDate = intl.formatDate(account.created_at, { month: 'long', year: 'numeric' });
-  const followedBy = me !== account.id && account.relationship?.followed_by === true;
+  const memberSinceDate = intl.formatDate(account.created_at, {
+    month: 'long',
+    year: 'numeric',
+  });
+  const followedBy =
+    me !== account.id && account.relationship?.followed_by === true;
 
   return (
     <div
@@ -95,7 +135,10 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
       onMouseEnter={handleMouseEnter(dispatch)}
       onMouseLeave={handleMouseLeave(dispatch)}
     >
-      <Card variant='rounded' className='relative isolate overflow-hidden black:rounded-xl black:border black:border-gray-800'>
+      <Card
+        variant='rounded'
+        className='relative isolate overflow-hidden black:rounded-xl black:border black:border-gray-800'
+      >
         <CardBody>
           <Stack space={2}>
             <UserPanel
@@ -111,9 +154,14 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
                   className='h-4 w-4 text-gray-800 dark:text-gray-200'
                 />
 
-                <Text size='sm' title={intl.formatDate(account.created_at, dateFormatOptions)}>
+                <Text
+                  size='sm'
+                  title={intl.formatDate(account.created_at, dateFormatOptions)}
+                >
                   <FormattedMessage
-                    id='account.member_since' defaultMessage='Joined {date}' values={{
+                    id='account.member_since'
+                    defaultMessage='Joined {date}'
+                    values={{
                       date: memberSinceDate,
                     }}
                   />
@@ -121,9 +169,7 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
               </HStack>
             ) : null}
 
-            {!!account.scrobble && (
-              <Scrobble scrobble={account.scrobble} />
-            )}
+            {!!account.scrobble && <Scrobble scrobble={account.scrobble} />}
 
             {account.note.length > 0 && (
               <Text
@@ -139,7 +185,12 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
             <div className='absolute left-2 top-2'>
               <Badge
                 slug='opaque'
-                title={<FormattedMessage id='account.follows_you' defaultMessage='Follows you' />}
+                title={
+                  <FormattedMessage
+                    id='account.follows_you'
+                    defaultMessage='Follows you'
+                  />
+                }
               />
             </div>
           )}

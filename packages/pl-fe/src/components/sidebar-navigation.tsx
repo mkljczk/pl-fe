@@ -1,12 +1,20 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { Icon, Stack } from 'pl-fe/components/ui';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
 import Search from 'pl-fe/features/search/components/search';
 import ComposeButton from 'pl-fe/features/ui/components/compose-button';
 import ProfileDropdown from 'pl-fe/features/ui/components/profile-dropdown';
-import { useAppSelector, useFeatures, useOwnAccount, useSettings, useInstance, useRegistrationStatus, useLogo } from 'pl-fe/hooks';
+import {
+  useAppSelector,
+  useFeatures,
+  useInstance,
+  useLogo,
+  useOwnAccount,
+  useRegistrationStatus,
+  useSettings,
+} from 'pl-fe/hooks';
 
 import Account from './account';
 import DropdownMenu, { Menu } from './dropdown-menu';
@@ -14,16 +22,31 @@ import SidebarNavigationLink from './sidebar-navigation-link';
 import SiteLogo from './site-logo';
 
 const messages = defineMessages({
-  followRequests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
+  followRequests: {
+    id: 'navigation_bar.follow_requests',
+    defaultMessage: 'Follow requests',
+  },
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
   lists: { id: 'column.lists', defaultMessage: 'Lists' },
   events: { id: 'column.events', defaultMessage: 'Events' },
-  profileDirectory: { id: 'navigation_bar.profile_directory', defaultMessage: 'Profile directory' },
-  followedTags: { id: 'navigation_bar.followed_tags', defaultMessage: 'Followed hashtags' },
+  profileDirectory: {
+    id: 'navigation_bar.profile_directory',
+    defaultMessage: 'Profile directory',
+  },
+  followedTags: {
+    id: 'navigation_bar.followed_tags',
+    defaultMessage: 'Followed hashtags',
+  },
   developers: { id: 'navigation.developers', defaultMessage: 'Developers' },
-  scheduledStatuses: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
+  scheduledStatuses: {
+    id: 'column.scheduled_statuses',
+    defaultMessage: 'Scheduled posts',
+  },
   drafts: { id: 'navigation.drafts', defaultMessage: 'Drafts' },
-  conversations: { id: 'navigation.direct_messages', defaultMessage: 'Direct messages' },
+  conversations: {
+    id: 'navigation.direct_messages',
+    defaultMessage: 'Direct messages',
+  },
 });
 
 /** Desktop sidebar with links to different views in the app. */
@@ -38,10 +61,19 @@ const SidebarNavigation = () => {
   const { isOpen } = useRegistrationStatus();
   const logoSrc = useLogo();
 
-  const notificationCount = useAppSelector((state) => state.notifications.unread);
-  const followRequestsCount = useAppSelector((state) => state.user_lists.follow_requests.items.count());
-  const dashboardCount = useAppSelector((state) => state.admin.openReports.count() + state.admin.awaitingApproval.count());
-  const scheduledStatusCount = useAppSelector((state) => state.scheduled_statuses.size);
+  const notificationCount = useAppSelector(
+    (state) => state.notifications.unread,
+  );
+  const followRequestsCount = useAppSelector((state) =>
+    state.user_lists.follow_requests.items.count(),
+  );
+  const dashboardCount = useAppSelector(
+    (state) =>
+      state.admin.openReports.count() + state.admin.awaitingApproval.count(),
+  );
+  const scheduledStatusCount = useAppSelector(
+    (state) => state.scheduled_statuses.size,
+  );
   const draftCount = useAppSelector((state) => state.draft_statuses.size);
 
   const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;
@@ -141,9 +173,7 @@ const SidebarNavigation = () => {
 
   return (
     <Stack space={4}>
-      {logoSrc && (
-        <SiteLogo className='h-12 w-auto cursor-pointer' />
-      )}
+      {logoSrc && <SiteLogo className='h-12 w-auto cursor-pointer' />}
 
       {account && (
         <Stack space={4}>
@@ -151,7 +181,12 @@ const SidebarNavigation = () => {
             <ProfileDropdown account={account}>
               <Account
                 account={account}
-                action={<Icon src={require('@tabler/icons/outline/chevron-down.svg')} className='text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500' />}
+                action={
+                  <Icon
+                    src={require('@tabler/icons/outline/chevron-down.svg')}
+                    className='text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500'
+                  />
+                }
                 disabled
               />
             </ProfileDropdown>
@@ -173,7 +208,9 @@ const SidebarNavigation = () => {
         <SidebarNavigationLink
           to='/search'
           icon={require('@tabler/icons/outline/search.svg')}
-          text={<FormattedMessage id='tabs_bar.search' defaultMessage='Search' />}
+          text={
+            <FormattedMessage id='tabs_bar.search' defaultMessage='Search' />
+          }
         />
 
         {account && (
@@ -183,7 +220,12 @@ const SidebarNavigation = () => {
               icon={require('@tabler/icons/outline/bell.svg')}
               activeIcon={require('@tabler/icons/filled/bell.svg')}
               count={notificationCount}
-              text={<FormattedMessage id='tabs_bar.notifications' defaultMessage='Notifications' />}
+              text={
+                <FormattedMessage
+                  id='tabs_bar.notifications'
+                  defaultMessage='Notifications'
+                />
+              }
             />
 
             {features.chats && (
@@ -192,7 +234,12 @@ const SidebarNavigation = () => {
                 icon={require('@tabler/icons/outline/messages.svg')}
                 count={unreadChatsCount}
                 countMax={9}
-                text={<FormattedMessage id='navigation.chats' defaultMessage='Chats' />}
+                text={
+                  <FormattedMessage
+                    id='navigation.chats'
+                    defaultMessage='Chats'
+                  />
+                }
               />
             )}
 
@@ -201,7 +248,12 @@ const SidebarNavigation = () => {
                 to='/conversations'
                 icon={require('@tabler/icons/outline/mail.svg')}
                 activeIcon={require('@tabler/icons/filled/mail.svg')}
-                text={<FormattedMessage id='navigation.direct_messages' defaultMessage='Direct messages' />}
+                text={
+                  <FormattedMessage
+                    id='navigation.direct_messages'
+                    defaultMessage='Direct messages'
+                  />
+                }
               />
             )}
 
@@ -210,7 +262,12 @@ const SidebarNavigation = () => {
                 to='/groups'
                 icon={require('@tabler/icons/outline/circles.svg')}
                 activeIcon={require('@tabler/icons/filled/circles.svg')}
-                text={<FormattedMessage id='tabs_bar.groups' defaultMessage='Groups' />}
+                text={
+                  <FormattedMessage
+                    id='tabs_bar.groups'
+                    defaultMessage='Groups'
+                  />
+                }
               />
             )}
 
@@ -218,14 +275,24 @@ const SidebarNavigation = () => {
               to={`/@${account.acct}`}
               icon={require('@tabler/icons/outline/user.svg')}
               activeIcon={require('@tabler/icons/filled/user.svg')}
-              text={<FormattedMessage id='tabs_bar.profile' defaultMessage='Profile' />}
+              text={
+                <FormattedMessage
+                  id='tabs_bar.profile'
+                  defaultMessage='Profile'
+                />
+              }
             />
 
             <SidebarNavigationLink
               to='/settings'
               icon={require('@tabler/icons/outline/settings.svg')}
               activeIcon={require('@tabler/icons/filled/settings.svg')}
-              text={<FormattedMessage id='tabs_bar.settings' defaultMessage='Settings' />}
+              text={
+                <FormattedMessage
+                  id='tabs_bar.settings'
+                  defaultMessage='Settings'
+                />
+              }
             />
 
             {(account.is_admin || account.is_moderator) && (
@@ -233,39 +300,73 @@ const SidebarNavigation = () => {
                 to='/pl-fe/admin'
                 icon={require('@tabler/icons/outline/dashboard.svg')}
                 count={dashboardCount}
-                text={<FormattedMessage id='tabs_bar.dashboard' defaultMessage='Dashboard' />}
+                text={
+                  <FormattedMessage
+                    id='tabs_bar.dashboard'
+                    defaultMessage='Dashboard'
+                  />
+                }
               />
             )}
           </>
         )}
 
-        {(features.publicTimeline) && (
+        {features.publicTimeline && (
           <>
             {(account || !restrictUnauth.timelines.local) && (
               <SidebarNavigationLink
                 to='/timeline/local'
-                icon={features.federating ? require('@tabler/icons/outline/affiliate.svg') : require('@tabler/icons/outline/world.svg')}
-                activeIcon={features.federating ? require('@tabler/icons/filled/affiliate.svg') : undefined}
-                text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
+                icon={
+                  features.federating
+                    ? require('@tabler/icons/outline/affiliate.svg')
+                    : require('@tabler/icons/outline/world.svg')
+                }
+                activeIcon={
+                  features.federating
+                    ? require('@tabler/icons/filled/affiliate.svg')
+                    : undefined
+                }
+                text={
+                  features.federating ? (
+                    <FormattedMessage
+                      id='tabs_bar.local'
+                      defaultMessage='Local'
+                    />
+                  ) : (
+                    <FormattedMessage id='tabs_bar.all' defaultMessage='All' />
+                  )
+                }
               />
             )}
 
-            {(features.bubbleTimeline && (account || !restrictUnauth.timelines.bubble)) && (
-              <SidebarNavigationLink
-                to='/timeline/bubble'
-                icon={require('@tabler/icons/outline/chart-bubble.svg')}
-                activeIcon={require('@tabler/icons/filled/chart-bubble.svg')}
-                text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
-              />
-            )}
+            {features.bubbleTimeline &&
+              (account || !restrictUnauth.timelines.bubble) && (
+                <SidebarNavigationLink
+                  to='/timeline/bubble'
+                  icon={require('@tabler/icons/outline/chart-bubble.svg')}
+                  activeIcon={require('@tabler/icons/filled/chart-bubble.svg')}
+                  text={
+                    <FormattedMessage
+                      id='tabs_bar.bubble'
+                      defaultMessage='Bubble'
+                    />
+                  }
+                />
+              )}
 
-            {(features.federating && (account || !restrictUnauth.timelines.federated)) && (
-              <SidebarNavigationLink
-                to='/timeline/fediverse'
-                icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
-                text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-              />
-            )}
+            {features.federating &&
+              (account || !restrictUnauth.timelines.federated) && (
+                <SidebarNavigationLink
+                  to='/timeline/fediverse'
+                  icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
+                  text={
+                    <FormattedMessage
+                      id='tabs_bar.fediverse'
+                      defaultMessage='Fediverse'
+                    />
+                  }
+                />
+              )}
           </>
         )}
 
@@ -273,7 +374,9 @@ const SidebarNavigation = () => {
           <DropdownMenu items={menu} placement='top'>
             <SidebarNavigationLink
               icon={require('@tabler/icons/outline/dots-circle-horizontal.svg')}
-              text={<FormattedMessage id='tabs_bar.more' defaultMessage='More' />}
+              text={
+                <FormattedMessage id='tabs_bar.more' defaultMessage='More' />
+              }
             />
           </DropdownMenu>
         )}
@@ -283,21 +386,28 @@ const SidebarNavigation = () => {
             <SidebarNavigationLink
               to='/login'
               icon={require('@tabler/icons/outline/login.svg')}
-              text={<FormattedMessage id='account.login' defaultMessage='Log in' />}
+              text={
+                <FormattedMessage id='account.login' defaultMessage='Log in' />
+              }
             />
 
-            {isOpen && <SidebarNavigationLink
-              to='/signup'
-              icon={require('@tabler/icons/outline/user-plus.svg')}
-              text={<FormattedMessage id='account.register' defaultMessage='Sign up' />}
-            />}
+            {isOpen && (
+              <SidebarNavigationLink
+                to='/signup'
+                icon={require('@tabler/icons/outline/user-plus.svg')}
+                text={
+                  <FormattedMessage
+                    id='account.register'
+                    defaultMessage='Sign up'
+                  />
+                }
+              />
+            )}
           </Stack>
         )}
       </Stack>
 
-      {account && (
-        <ComposeButton />
-      )}
+      {account && <ComposeButton />}
     </Stack>
   );
 };

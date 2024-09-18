@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { GroupRoles, type Group } from 'pl-api';
+import { type Group, GroupRoles } from 'pl-api';
 import React from 'react';
 
 import { Avatar } from '../ui';
@@ -17,14 +17,15 @@ const GroupAvatar = (props: IGroupAvatar) => {
 
   return (
     <Avatar
-      className={
-        clsx('relative rounded-full', {
-          'shadow-[0_0_0_2px_theme(colors.primary.600),0_0_0_4px_theme(colors.white)]': isOwner && withRing,
-          'dark:shadow-[0_0_0_2px_theme(colors.primary.600),0_0_0_4px_theme(colors.gray.800)]': isOwner && withRing,
-          'shadow-[0_0_0_2px_theme(colors.primary.600)]': isOwner && !withRing,
-          'shadow-[0_0_0_2px_theme(colors.white)] dark:shadow-[0_0_0_2px_theme(colors.gray.800)]': !isOwner && withRing,
-        })
-      }
+      className={clsx('relative rounded-full', {
+        'shadow-[0_0_0_2px_theme(colors.primary.600),0_0_0_4px_theme(colors.white)]':
+          isOwner && withRing,
+        'dark:shadow-[0_0_0_2px_theme(colors.primary.600),0_0_0_4px_theme(colors.gray.800)]':
+          isOwner && withRing,
+        'shadow-[0_0_0_2px_theme(colors.primary.600)]': isOwner && !withRing,
+        'shadow-[0_0_0_2px_theme(colors.white)] dark:shadow-[0_0_0_2px_theme(colors.gray.800)]':
+          !isOwner && withRing,
+      })}
       src={group.avatar}
       alt={group.avatar_description}
       size={size}

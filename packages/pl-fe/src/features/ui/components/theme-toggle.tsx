@@ -14,12 +14,7 @@ const ThemeToggle: React.FC = () => {
     dispatch(changeSetting(['themeMode'], themeMode));
   };
 
-  return (
-    <ThemeSelector
-      value={themeMode}
-      onChange={handleChange}
-    />
-  );
+  return <ThemeSelector value={themeMode} onChange={handleChange} />;
 };
 
 export { ThemeToggle as default };

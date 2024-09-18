@@ -6,17 +6,17 @@ import { fetchMe } from 'pl-fe/actions/me';
 import { loadPlFeConfig } from 'pl-fe/actions/pl-fe';
 import LoadingScreen from 'pl-fe/components/loading-screen';
 import {
-  useAppSelector,
   useAppDispatch,
-  useOwnAccount,
+  useAppSelector,
   useLocale,
+  useOwnAccount,
 } from 'pl-fe/hooks';
 import MESSAGES from 'pl-fe/messages';
 
 /** Load initial data from the backend */
 const loadInitial = () => {
   // @ts-ignore
-  return async(dispatch, getState) => {
+  return async (dispatch, getState) => {
     // Await for authenticated fetch
     await dispatch(fetchMe());
     // Await for feature detection
@@ -34,9 +34,9 @@ interface IPlFeLoad {
 const PlFeLoad: React.FC<IPlFeLoad> = ({ children }) => {
   const dispatch = useAppDispatch();
 
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
   const { account } = useOwnAccount();
-  const swUpdating = useAppSelector(state => state.meta.swUpdating);
+  const swUpdating = useAppSelector((state) => state.meta.swUpdating);
   const { locale } = useLocale();
 
   const [messages, setMessages] = useState<Record<string, string>>({});
@@ -54,19 +54,23 @@ const PlFeLoad: React.FC<IPlFeLoad> = ({ children }) => {
 
   // Load the user's locale
   useEffect(() => {
-    MESSAGES[locale]().then(messages => {
-      setMessages(messages);
-      setLocaleLoading(false);
-    }).catch(() => { });
+    MESSAGES[locale]()
+      .then((messages) => {
+        setMessages(messages);
+        setLocaleLoading(false);
+      })
+      .catch(() => {});
   }, [locale]);
 
   // Load initial data from the API
   useEffect(() => {
-    dispatch(loadInitial()).then(() => {
-      setIsLoaded(true);
-    }).catch(() => {
-      setIsLoaded(true);
-    });
+    dispatch(loadInitial())
+      .then(() => {
+        setIsLoaded(true);
+      })
+      .catch(() => {
+        setIsLoaded(true);
+      });
   }, []);
 
   // intl is part of loading.

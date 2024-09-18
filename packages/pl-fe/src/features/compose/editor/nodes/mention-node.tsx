@@ -18,14 +18,16 @@ import type {
 } from 'lexical';
 import type { Mention as MentionEntity } from 'pl-api';
 
-type SerializedMentionNode = Spread<{
-  mention: MentionEntity;
-  type: 'mention';
-  version: 1;
-}, SerializedLexicalNode>;
+type SerializedMentionNode = Spread<
+  {
+    mention: MentionEntity;
+    type: 'mention';
+    version: 1;
+  },
+  SerializedLexicalNode
+>;
 
 class MentionNode extends DecoratorNode<JSX.Element> {
-
   __mention: MentionEntity;
 
   static getType(): string {
@@ -75,11 +77,8 @@ class MentionNode extends DecoratorNode<JSX.Element> {
   }
 
   decorate(): JSX.Element {
-    return (
-      <Mention mention={this.__mention} disabled />
-    );
+    return <Mention mention={this.__mention} disabled />;
   }
-
 }
 
 function $createMentionNode(mention: MentionEntity): MentionNode {

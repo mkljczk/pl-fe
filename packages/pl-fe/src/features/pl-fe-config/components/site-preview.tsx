@@ -21,7 +21,9 @@ const SitePreview: React.FC<ISitePreview> = ({ plFe }) => {
   const userTheme = settings.get('themeMode');
   const systemTheme = useSystemTheme();
 
-  const dark = ['dark', 'black'].includes(userTheme as string) || (userTheme === 'system' && systemTheme === 'black');
+  const dark =
+    ['dark', 'black'].includes(userTheme as string) ||
+    (userTheme === 'system' && systemTheme === 'black');
 
   const bodyClass = clsx(
     'site-preview',
@@ -31,7 +33,8 @@ const SitePreview: React.FC<ISitePreview> = ({ plFe }) => {
     {
       'bg-white': !dark,
       'bg-gray-900': dark,
-    });
+    },
+  );
 
   return (
     <div className={bodyClass}>
@@ -50,7 +53,6 @@ const SitePreview: React.FC<ISitePreview> = ({ plFe }) => {
       />
     </div>
   );
-
 };
 
 export { SitePreview as default };

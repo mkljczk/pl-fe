@@ -1,17 +1,32 @@
 import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 
 import { resetPassword } from 'pl-fe/actions/security';
 import { BigCard } from 'pl-fe/components/big-card';
-import { Button, Form, FormActions, FormGroup, Input } from 'pl-fe/components/ui';
+import {
+  Button,
+  Form,
+  FormActions,
+  FormGroup,
+  Input,
+} from 'pl-fe/components/ui';
 import { useAppDispatch, useFeatures } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
-  nicknameOrEmail: { id: 'password_reset.fields.username_placeholder', defaultMessage: 'Email or username' },
-  email: { id: 'password_reset.fields.email_placeholder', defaultMessage: 'E-mail address' },
-  confirmation: { id: 'password_reset.confirmation', defaultMessage: 'Check your email for confirmation.' },
+  nicknameOrEmail: {
+    id: 'password_reset.fields.username_placeholder',
+    defaultMessage: 'Email or username',
+  },
+  email: {
+    id: 'password_reset.fields.email_placeholder',
+    defaultMessage: 'E-mail address',
+  },
+  confirmation: {
+    id: 'password_reset.confirmation',
+    defaultMessage: 'Check your email for confirmation.',
+  },
 });
 
 const PasswordReset = () => {
@@ -25,21 +40,36 @@ const PasswordReset = () => {
   const handleSubmit = (e: React.FormEvent<Element>) => {
     const nicknameOrEmail = (e.target as any).nickname_or_email.value;
     setIsLoading(true);
-    dispatch(resetPassword(nicknameOrEmail)).then(() => {
-      setIsLoading(false);
-      setSuccess(true);
-      toast.info(intl.formatMessage(messages.confirmation));
-    }).catch(() => {
-      setIsLoading(false);
-    });
+    dispatch(resetPassword(nicknameOrEmail))
+      .then(() => {
+        setIsLoading(false);
+        setSuccess(true);
+        toast.info(intl.formatMessage(messages.confirmation));
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
 
   if (success) return <Redirect to='/' />;
 
   return (
-    <BigCard title={<FormattedMessage id='password_reset.header' defaultMessage='Reset password' />}>
+    <BigCard
+      title={
+        <FormattedMessage
+          id='password_reset.header'
+          defaultMessage='Reset password'
+        />
+      }
+    >
       <Form onSubmit={handleSubmit}>
-        <FormGroup labelText={intl.formatMessage(features.logInWithUsername ? messages.nicknameOrEmail : messages.email)}>
+        <FormGroup
+          labelText={intl.formatMessage(
+            features.logInWithUsername
+              ? messages.nicknameOrEmail
+              : messages.email,
+          )}
+        >
           <Input
             type='text'
             name='nickname_or_email'
@@ -50,7 +80,10 @@ const PasswordReset = () => {
 
         <FormActions>
           <Button type='submit' theme='primary' disabled={isLoading}>
-            <FormattedMessage id='password_reset.reset' defaultMessage='Reset password' />
+            <FormattedMessage
+              id='password_reset.reset'
+              defaultMessage='Reset password'
+            />
           </Button>
         </FormActions>
       </Form>

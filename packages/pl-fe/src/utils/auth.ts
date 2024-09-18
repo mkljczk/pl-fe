@@ -4,7 +4,8 @@ import { selectAccount, selectOwnAccount } from 'pl-fe/selectors';
 
 import type { RootState } from 'pl-fe/store';
 
-const validId = (id: any) => typeof id === 'string' && id !== 'null' && id !== 'undefined';
+const validId = (id: any) =>
+  typeof id === 'string' && id !== 'null' && id !== 'undefined';
 
 const isURL = (url?: string | null) => {
   if (typeof url !== 'string') return false;
@@ -43,19 +44,17 @@ const getAccessToken = (state: RootState) => {
 const getAuthUserId = (state: RootState) => {
   const me = state.auth.me;
 
-  return ImmutableList([
-    state.auth.users.get(me!)?.id,
-    me,
-  ].filter(id => id)).find(validId);
+  return ImmutableList(
+    [state.auth.users.get(me!)?.id, me].filter((id) => id),
+  ).find(validId);
 };
 
 const getAuthUserUrl = (state: RootState) => {
   const me = state.auth.me;
 
-  return ImmutableList([
-    state.auth.users.get(me!)?.url,
-    me,
-  ].filter(url => url)).find(isURL);
+  return ImmutableList(
+    [state.auth.users.get(me!)?.url, me].filter((url) => url),
+  ).find(isURL);
 };
 
 /** Get the VAPID public key. */

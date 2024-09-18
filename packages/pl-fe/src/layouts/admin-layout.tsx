@@ -11,9 +11,7 @@ interface IAdminLayout {
 
 const AdminLayout: React.FC<IAdminLayout> = ({ children }) => (
   <>
-    <Layout.Main>
-      {children}
-    </Layout.Main>
+    <Layout.Main>{children}</Layout.Main>
 
     <Layout.Aside>
       <LatestAccountsPanel limit={5} />

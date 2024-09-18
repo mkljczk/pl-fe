@@ -26,11 +26,11 @@ type IAccount = {
   url: string;
   username: string;
   verified: boolean;
-}
+};
 
 type UpdateCredentialsData = {
   accepts_chat_messages?: boolean;
-}
+};
 
 const useUpdateCredentials = () => {
   // const { account } = useOwnAccount();
@@ -38,7 +38,8 @@ const useUpdateCredentials = () => {
   const dispatch = useAppDispatch();
 
   return useMutation({
-    mutationFn: (data: UpdateCredentialsData) => client.settings.updateCredentials(data),
+    mutationFn: (data: UpdateCredentialsData) =>
+      client.settings.updateCredentials(data),
     // TODO: What is it intended to do?
     // onMutate(variables) {
     //   const cachedAccount = account;

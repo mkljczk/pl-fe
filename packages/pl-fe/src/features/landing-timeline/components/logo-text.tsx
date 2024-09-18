@@ -1,6 +1,7 @@
 import React from 'react';
 
-interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'dir'> {
+interface ILogoText
+  extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'dir'> {
   children: React.ReactNode;
 }
 

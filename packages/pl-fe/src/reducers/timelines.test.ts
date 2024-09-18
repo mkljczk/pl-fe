@@ -1,8 +1,13 @@
-import { Map as ImmutableMap, OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord, fromJS } from 'immutable';
+import {
+  Map as ImmutableMap,
+  OrderedSet as ImmutableOrderedSet,
+  Record as ImmutableRecord,
+  fromJS,
+} from 'immutable';
 
 import {
-  TIMELINE_EXPAND_REQUEST,
   TIMELINE_EXPAND_FAIL,
+  TIMELINE_EXPAND_REQUEST,
   TIMELINE_EXPAND_SUCCESS,
 } from 'pl-fe/actions/timelines';
 
@@ -43,9 +48,11 @@ describe('timelines reducer', () => {
 
   describe('TIMELINE_EXPAND_SUCCESS', () => {
     it('sets loading to false', () => {
-      const state = ImmutableMap(fromJS({
-        home: ImmutableRecord({ isLoading: true })(),
-      }));
+      const state = ImmutableMap(
+        fromJS({
+          home: ImmutableRecord({ isLoading: true })(),
+        }),
+      );
 
       const action = {
         type: TIMELINE_EXPAND_SUCCESS,
@@ -70,9 +77,13 @@ describe('timelines reducer', () => {
     });
 
     it('merges new status IDs', () => {
-      const state = ImmutableMap(fromJS({
-        home: ImmutableRecord({ items: ImmutableOrderedSet(['5', '2', '1']) })(),
-      }));
+      const state = ImmutableMap(
+        fromJS({
+          home: ImmutableRecord({
+            items: ImmutableOrderedSet(['5', '2', '1']),
+          })(),
+        }),
+      );
 
       const expected = ImmutableOrderedSet(['6', '5', '4', '2', '1']);
 
@@ -87,9 +98,13 @@ describe('timelines reducer', () => {
     });
 
     it('merges old status IDs', () => {
-      const state = ImmutableMap(fromJS({
-        home: ImmutableRecord({ items: ImmutableOrderedSet(['6', '4', '3']) })(),
-      }));
+      const state = ImmutableMap(
+        fromJS({
+          home: ImmutableRecord({
+            items: ImmutableOrderedSet(['6', '4', '3']),
+          })(),
+        }),
+      );
 
       const expected = ImmutableOrderedSet(['6', '4', '3', '5', '2', '1']);
 
@@ -104,9 +119,13 @@ describe('timelines reducer', () => {
     });
 
     it('overrides pinned post IDs', () => {
-      const state = ImmutableMap(fromJS({
-        'account:1:pinned': ImmutableRecord({ items: ImmutableOrderedSet(['5', '2', '1']) })(),
-      }));
+      const state = ImmutableMap(
+        fromJS({
+          'account:1:pinned': ImmutableRecord({
+            items: ImmutableOrderedSet(['5', '2', '1']),
+          })(),
+        }),
+      );
 
       const expected = ImmutableOrderedSet(['9', '8', '7']);
 

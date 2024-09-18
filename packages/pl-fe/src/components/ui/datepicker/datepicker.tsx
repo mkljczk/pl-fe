@@ -5,7 +5,8 @@ import Select from '../select/select';
 import Stack from '../stack/stack';
 import Text from '../text/text';
 
-const getDaysInMonth = (month: number, year: number) => new Date(year, month + 1, 0).getDate();
+const getDaysInMonth = (month: number, year: number) =>
+  new Date(year, month + 1, 0).getDate();
 const currentYear = new Date().getFullYear();
 
 interface IDatepicker {
@@ -22,7 +23,10 @@ const Datepicker = ({ onChange }: IDatepicker) => {
   const [day, setDay] = useState<number>(new Date().getDate());
   const [year, setYear] = useState<number>(new Date().getFullYear());
 
-  const numberOfDays = useMemo(() => getDaysInMonth(month, year), [month, year]);
+  const numberOfDays = useMemo(
+    () => getDaysInMonth(month, year),
+    [month, year],
+  );
 
   useEffect(() => {
     onChange(new Date(year, month, day));
@@ -62,7 +66,9 @@ const Datepicker = ({ onChange }: IDatepicker) => {
             data-testid='datepicker-day'
           >
             {[...Array(numberOfDays)].map((_, idx) => (
-              <option key={idx} value={idx + 1}>{idx + 1}</option>
+              <option key={idx} value={idx + 1}>
+                {idx + 1}
+              </option>
             ))}
           </Select>
         </Stack>
@@ -80,7 +86,9 @@ const Datepicker = ({ onChange }: IDatepicker) => {
             data-testid='datepicker-year'
           >
             {[...Array(121)].map((_, idx) => (
-              <option key={idx} value={currentYear - idx}>{currentYear - idx}</option>
+              <option key={idx} value={currentYear - idx}>
+                {currentYear - idx}
+              </option>
             ))}
           </Select>
         </Stack>

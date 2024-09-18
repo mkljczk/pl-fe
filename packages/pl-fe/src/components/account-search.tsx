@@ -7,7 +7,10 @@ import AutosuggestAccountInput from 'pl-fe/components/autosuggest-account-input'
 import SvgIcon from './ui/icon/svg-icon';
 
 const messages = defineMessages({
-  placeholder: { id: 'account_search.placeholder', defaultMessage: 'Search for an account' },
+  placeholder: {
+    id: 'account_search.placeholder',
+    defaultMessage: 'Search for an account',
+  },
 });
 
 interface IAccountSearch {
@@ -29,7 +32,9 @@ const AccountSearch: React.FC<IAccountSearch> = ({ onSelected, ...rest }) => {
     setValue('');
   };
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = ({
+    target,
+  }) => {
     setValue(target.value);
   };
 
@@ -38,7 +43,7 @@ const AccountSearch: React.FC<IAccountSearch> = ({ onSelected, ...rest }) => {
     onSelected(accountId);
   };
 
-  const handleClear: React.MouseEventHandler = e => {
+  const handleClear: React.MouseEventHandler = (e) => {
     e.preventDefault();
 
     if (!isEmpty()) {
@@ -46,7 +51,7 @@ const AccountSearch: React.FC<IAccountSearch> = ({ onSelected, ...rest }) => {
     }
   };
 
-  const handleKeyDown: React.KeyboardEventHandler = e => {
+  const handleKeyDown: React.KeyboardEventHandler = (e) => {
     if (e.key === 'Escape') {
       document.querySelector('.ui')?.parentElement?.focus();
     }
@@ -54,7 +59,9 @@ const AccountSearch: React.FC<IAccountSearch> = ({ onSelected, ...rest }) => {
 
   return (
     <div className='w-full'>
-      <label className='sr-only'>{intl.formatMessage(messages.placeholder)}</label>
+      <label className='sr-only'>
+        {intl.formatMessage(messages.placeholder)}
+      </label>
 
       <div className='relative'>
         <AutosuggestAccountInput

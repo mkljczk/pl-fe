@@ -13,7 +13,11 @@ const FediverseStep = ({ onNext }: { onNext: () => void }) => {
     <Card variant='rounded' size='xl'>
       <CardBody>
         <Stack space={2}>
-          <Icon strokeWidth={1} src={require('@tabler/icons/outline/affiliate.svg')} className='mx-auto h-16 w-16 text-primary-600 dark:text-primary-400' />
+          <Icon
+            strokeWidth={1}
+            src={require('@tabler/icons/outline/affiliate.svg')}
+            className='mx-auto h-16 w-16 text-primary-600 dark:text-primary-400'
+          />
 
           <Text size='2xl' weight='bold'>
             <FormattedMessage
@@ -71,12 +75,11 @@ const FediverseStep = ({ onNext }: { onNext: () => void }) => {
 
         <div className='mx-auto pt-10 sm:w-2/3 md:w-1/2'>
           <Stack justifyContent='center' space={2}>
-            <Button
-              block
-              theme='primary'
-              onClick={onNext}
-            >
-              <FormattedMessage id='onboarding.fediverse.next' defaultMessage='Next' />
+            <Button block theme='primary' onClick={onNext}>
+              <FormattedMessage
+                id='onboarding.fediverse.next'
+                defaultMessage='Next'
+              />
             </Button>
           </Stack>
         </div>

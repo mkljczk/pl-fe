@@ -1,6 +1,9 @@
 import React from 'react';
 
-import { authorizeFollowRequest, rejectFollowRequest } from 'pl-fe/actions/accounts';
+import {
+  authorizeFollowRequest,
+  rejectFollowRequest,
+} from 'pl-fe/actions/accounts';
 import { useAccount } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
 import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';

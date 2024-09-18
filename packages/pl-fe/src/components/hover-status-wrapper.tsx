@@ -3,7 +3,10 @@ import debounce from 'lodash/debounce';
 import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { openStatusHoverCard, closeStatusHoverCard } from 'pl-fe/actions/status-hover-card';
+import {
+  closeStatusHoverCard,
+  openStatusHoverCard,
+} from 'pl-fe/actions/status-hover-card';
 import { isMobile } from 'pl-fe/is-mobile';
 
 const showStatusHoverCard = debounce((dispatch, ref, statusId) => {
@@ -18,7 +21,12 @@ interface IHoverStatusWrapper {
 }
 
 /** Makes a status hover card appear when the wrapped element is hovered. */
-const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({ statusId, children, inline = false, className }) => {
+const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({
+  statusId,
+  children,
+  inline = false,
+  className,
+}) => {
   const dispatch = useDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const Elem: keyof JSX.IntrinsicElements = inline ? 'span' : 'div';

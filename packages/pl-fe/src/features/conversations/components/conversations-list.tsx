@@ -18,7 +18,8 @@ const ConversationsList: React.FC = () => {
   const isLoading = useAppSelector((state) => state.conversations.isLoading);
   const hasMore = useAppSelector((state) => !!state.conversations.next);
 
-  const getCurrentIndex = (id: string) => conversations.findIndex(x => x.id === id);
+  const getCurrentIndex = (id: string) =>
+    conversations.findIndex((x) => x.id === id);
 
   const handleMoveUp = (id: string) => {
     const elementIndex = getCurrentIndex(id) - 1;
@@ -45,9 +46,13 @@ const ConversationsList: React.FC = () => {
     });
   };
 
-  const handleLoadOlder = debounce(() => {
-    if (hasMore) dispatch(expandConversations());
-  }, 300, { leading: true });
+  const handleLoadOlder = debounce(
+    () => {
+      if (hasMore) dispatch(expandConversations());
+    },
+    300,
+    { leading: true },
+  );
 
   return (
     <ScrollableList
@@ -58,7 +63,12 @@ const ConversationsList: React.FC = () => {
       ref={ref}
       isLoading={isLoading}
       showLoading={isLoading && conversations.size === 0}
-      emptyMessage={<FormattedMessage id='empty_column.direct' defaultMessage="You don't have any direct messages yet. When you send or receive one, it will show up here." />}
+      emptyMessage={
+        <FormattedMessage
+          id='empty_column.direct'
+          defaultMessage="You don't have any direct messages yet. When you send or receive one, it will show up here."
+        />
+      }
     >
       {conversations.map((item: any) => (
         <Conversation

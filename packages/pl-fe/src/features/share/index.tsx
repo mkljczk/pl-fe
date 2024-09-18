@@ -10,21 +10,15 @@ const Share = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
 
-  const text = [
-    params.get('title'),
-    params.get('text'),
-    params.get('url'),
-  ]
-    .filter(v => v)
+  const text = [params.get('title'), params.get('text'), params.get('url')]
+    .filter((v) => v)
     .join('\n\n');
 
   if (text) {
     dispatch(openComposeWithText('compose-modal', text));
   }
 
-  return (
-    <Redirect to='/' />
-  );
+  return <Redirect to='/' />;
 };
 
 export { Share as default };

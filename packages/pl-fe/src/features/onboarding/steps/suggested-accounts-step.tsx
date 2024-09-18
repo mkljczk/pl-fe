@@ -40,7 +40,10 @@ const SuggestedAccountsStep = ({ onNext }: { onNext: () => void }) => {
   const renderEmpty = () => (
     <div className='my-2 rounded-lg bg-primary-50 p-8 text-center dark:bg-gray-800'>
       <Text>
-        <FormattedMessage id='empty_column.follow_recommendations' defaultMessage='Looks like no suggestions could be generated for you. You can try using search to look for people you might know or explore trending hashtags.' />
+        <FormattedMessage
+          id='empty_column.follow_recommendations'
+          defaultMessage='Looks like no suggestions could be generated for you. You can try using search to look for people you might know or explore trending hashtags.'
+        />
       </Text>
     </div>
   );
@@ -55,23 +58,32 @@ const SuggestedAccountsStep = ({ onNext }: { onNext: () => void }) => {
 
   return (
     <BigCard
-      title={<FormattedMessage id='onboarding.suggestions.title' defaultMessage='Suggested accounts' />}
-      subtitle={<FormattedMessage id='onboarding.suggestions.subtitle' defaultMessage='Here are a few of the most popular accounts you might like.' />}
+      title={
+        <FormattedMessage
+          id='onboarding.suggestions.title'
+          defaultMessage='Suggested accounts'
+        />
+      }
+      subtitle={
+        <FormattedMessage
+          id='onboarding.suggestions.subtitle'
+          defaultMessage='Here are a few of the most popular accounts you might like.'
+        />
+      }
     >
       {renderBody()}
 
       <Stack>
         <Stack justifyContent='center' space={2}>
-          <Button
-            block
-            theme='primary'
-            onClick={onNext}
-          >
+          <Button block theme='primary' onClick={onNext}>
             <FormattedMessage id='onboarding.done' defaultMessage='Done' />
           </Button>
 
           <Button block theme='tertiary' type='button' onClick={onNext}>
-            <FormattedMessage id='onboarding.skip' defaultMessage='Skip for now' />
+            <FormattedMessage
+              id='onboarding.skip'
+              defaultMessage='Skip for now'
+            />
           </Button>
         </Stack>
       </Stack>

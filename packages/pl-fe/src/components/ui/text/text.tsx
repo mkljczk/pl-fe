@@ -50,11 +50,29 @@ const families = {
   mono: 'font-mono',
 };
 
-type Sizes = keyof typeof sizes
-type Tags = 'abbr' | 'p' | 'span' | 'pre' | 'time' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'label' | 'div' | 'blockquote'
-type Directions = 'ltr' | 'rtl'
+type Sizes = keyof typeof sizes;
+type Tags =
+  | 'abbr'
+  | 'p'
+  | 'span'
+  | 'pre'
+  | 'time'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6'
+  | 'label'
+  | 'div'
+  | 'blockquote';
+type Directions = 'ltr' | 'rtl';
 
-interface IText extends Pick<React.HTMLAttributes<HTMLParagraphElement>, 'dangerouslySetInnerHTML' | 'tabIndex' | 'lang'> {
+interface IText
+  extends Pick<
+    React.HTMLAttributes<HTMLParagraphElement>,
+    'dangerouslySetInnerHTML' | 'tabIndex' | 'lang'
+  > {
   /** Text content. */
   children?: React.ReactNode;
   /** How to align the text. */
@@ -88,36 +106,36 @@ interface IText extends Pick<React.HTMLAttributes<HTMLParagraphElement>, 'danger
 }
 
 /** UI-friendly text container with dark mode support. */
-const Text = React.forwardRef<any, IText>(
-  (props, ref) => {
-    const {
-      align,
-      className,
-      direction,
-      family = 'sans',
-      size = 'md',
-      tag = 'p',
-      theme = 'default',
-      tracking = 'normal',
-      transform = 'normal',
-      truncate = false,
-      weight = 'normal',
-      ...filteredProps
-    } = props;
+const Text = React.forwardRef<any, IText>((props, ref) => {
+  const {
+    align,
+    className,
+    direction,
+    family = 'sans',
+    size = 'md',
+    tag = 'p',
+    theme = 'default',
+    tracking = 'normal',
+    transform = 'normal',
+    truncate = false,
+    weight = 'normal',
+    ...filteredProps
+  } = props;
 
-    const Comp: React.ElementType = tag;
+  const Comp: React.ElementType = tag;
 
-    const alignmentClass = typeof align === 'string' ? alignments[align] : '';
+  const alignmentClass = typeof align === 'string' ? alignments[align] : '';
 
-    return (
-      <Comp
-        {...filteredProps}
-        ref={ref}
-        style={{
-          textDecoration: tag === 'abbr' ? 'underline dotted' : undefined,
-          direction,
-        }}
-        className={clsx({
+  return (
+    <Comp
+      {...filteredProps}
+      ref={ref}
+      style={{
+        textDecoration: tag === 'abbr' ? 'underline dotted' : undefined,
+        direction,
+      }}
+      className={clsx(
+        {
           'cursor-default': tag === 'abbr',
           truncate: truncate,
           [sizes[size]]: true,
@@ -127,14 +145,11 @@ const Text = React.forwardRef<any, IText>(
           [families[family]]: true,
           [alignmentClass]: typeof align !== 'undefined',
           [transformProperties[transform]]: typeof transform !== 'undefined',
-        }, className)}
-      />
-    );
-  },
-);
+        },
+        className,
+      )}
+    />
+  );
+});
 
-export {
-  type Sizes,
-  type IText,
-  Text as default,
-};
+export { type Sizes, type IText, Text as default };

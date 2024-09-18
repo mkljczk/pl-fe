@@ -1,11 +1,17 @@
-import { OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord } from 'immutable';
+import {
+  OrderedSet as ImmutableOrderedSet,
+  Record as ImmutableRecord,
+} from 'immutable';
 
-import { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS } from 'pl-fe/actions/accounts';
+import {
+  ACCOUNT_BLOCK_SUCCESS,
+  ACCOUNT_MUTE_SUCCESS,
+} from 'pl-fe/actions/accounts';
 import { DOMAIN_BLOCK_SUCCESS } from 'pl-fe/actions/domain-blocks';
 import {
+  SUGGESTIONS_FETCH_FAIL,
   SUGGESTIONS_FETCH_REQUEST,
   SUGGESTIONS_FETCH_SUCCESS,
-  SUGGESTIONS_FETCH_FAIL,
 } from 'pl-fe/actions/suggestions';
 
 import type { Suggestion as SuggestionEntity } from 'pl-api';
@@ -26,18 +32,27 @@ const minifySuggestion = ({ account, ...suggestion }: SuggestionEntity) => ({
 type MinifiedSuggestion = ReturnType<typeof minifySuggestion>;
 
 const importSuggestions = (state: State, suggestions: SuggestionEntity[]) =>
-  state.withMutations(state => {
-    state.update('items', items => items.concat(suggestions.map(minifySuggestion)));
+  state.withMutations((state) => {
+    state.update('items', (items) =>
+      items.concat(suggestions.map(minifySuggestion)),
+    );
     state.set('isLoading', false);
   });
 
 const dismissAccount = (state: State, accountId: string) =>
-  state.update('items', items => items.filterNot(item => item.account_id === accountId));
+  state.update('items', (items) =>
+    items.filterNot((item) => item.account_id === accountId),
+  );
 
 const dismissAccounts = (state: State, accountIds: string[]) =>
-  state.update('items', items => items.filterNot(item => accountIds.includes(item.account_id)));
+  state.update('items', (items) =>
+    items.filterNot((item) => accountIds.includes(item.account_id)),
+  );
 
-const suggestionsReducer = (state: State = ReducerRecord(), action: AnyAction) => {
+const suggestionsReducer = (
+  state: State = ReducerRecord(),
+  action: AnyAction,
+) => {
   switch (action.type) {
     case SUGGESTIONS_FETCH_REQUEST:
       return state.set('isLoading', true);

@@ -24,14 +24,15 @@ const Carousel: React.FC<ICarousel> = (props): JSX.Element => {
   const { children, controlsHeight, isDisabled, itemCount, itemWidth } = props;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [ref, setContainerRef, { width: finalContainerWidth }] = useDimensions();
+  const [ref, setContainerRef, { width: finalContainerWidth }] =
+    useDimensions();
   const containerWidth = finalContainerWidth || ref?.clientWidth;
 
   const [pageSize, setPageSize] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const numberOfPages = Math.ceil(itemCount / pageSize);
-  const width = containerWidth / (Math.floor(containerWidth / itemWidth));
+  const width = containerWidth / Math.floor(containerWidth / itemWidth);
 
   const hasNextPage = currentPage < numberOfPages && numberOfPages > 1;
   const hasPrevPage = currentPage > 1 && numberOfPages > 1;

@@ -32,7 +32,10 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 
-import { clearComposeSuggestions, fetchComposeSuggestions } from 'pl-fe/actions/compose';
+import {
+  clearComposeSuggestions,
+  fetchComposeSuggestions,
+} from 'pl-fe/actions/compose';
 import { chooseEmoji } from 'pl-fe/actions/emojis';
 import AutosuggestEmoji from 'pl-fe/components/autosuggest-emoji';
 import { useAppDispatch, useCompose } from 'pl-fe/hooks';
@@ -122,12 +125,17 @@ const getScrollParent = (
   if (style.position === 'fixed') {
     return document.body;
   }
-  for (let parent: HTMLElement | null = element; (parent = parent.parentElement);) {
+  for (
+    let parent: HTMLElement | null = element;
+    (parent = parent.parentElement);
+  ) {
     style = getComputedStyle(parent);
     if (excludeStaticParent && style.position === 'static') {
       continue;
     }
-    if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX)) {
+    if (
+      overflowRegex.test(style.overflow + style.overflowY + style.overflowX)
+    ) {
       return parent;
     }
   }
@@ -154,10 +162,9 @@ const useDynamicPositioning = (
   useEffect(() => {
     if (targetElement && resolution) {
       const rootElement = editor.getRootElement();
-      const rootScrollParent =
-        rootElement
-          ? getScrollParent(rootElement, false)
-          : document.body;
+      const rootScrollParent = rootElement
+        ? getScrollParent(rootElement, false)
+        : document.body;
       let ticking = false;
       let previousIsInView = isTriggerVisibleInNearestScrollContainer(
         targetElement,
@@ -198,7 +205,10 @@ const useDynamicPositioning = (
   }, [targetElement, editor, onVisibilityChange, onReposition, resolution]);
 };
 
-const LexicalPopoverMenu = ({ anchorElementRef, menuRenderFn }: {
+const LexicalPopoverMenu = ({
+  anchorElementRef,
+  menuRenderFn,
+}: {
   anchorElementRef: MutableRefObject<HTMLElement>;
   menuRenderFn: MenuRenderFn;
 }): JSX.Element | null => menuRenderFn(anchorElementRef);
@@ -288,12 +298,11 @@ const AutosuggestPlugin = ({
   const [editor] = useLexicalComposerContext();
   const [resolution, setResolution] = useState<Resolution | null>(null);
   const [selectedSuggestion, setSelectedSuggestion] = useState(0);
-  const anchorElementRef = useMenuAnchorRef(
-    resolution,
-    setResolution,
-  );
+  const anchorElementRef = useMenuAnchorRef(resolution, setResolution);
 
-  const handleSelectSuggestion: React.MouseEventHandler<HTMLDivElement> = (e) => {
+  const handleSelectSuggestion: React.MouseEventHandler<HTMLDivElement> = (
+    e,
+  ) => {
     e.preventDefault();
     const index = Number(e.currentTarget.getAttribute('data-index'));
     return onSelectSuggestion(index);
@@ -312,7 +321,10 @@ const AutosuggestPlugin = ({
 
         /** Replace the matched text with the given node. */
         const replaceMatch = (replaceWith: LexicalNode) => {
-          const result = (node as TextNode).splitText(offset, offset + matchingString.length);
+          const result = (node as TextNode).splitText(
+            offset,
+            offset + matchingString.length,
+          );
           const textNode = result[1] ?? result[0];
           const replacedNode = textNode.replace(replaceWith);
           replacedNode.insertAfter(new TextNode(' '));
@@ -379,7 +391,8 @@ const AutosuggestPlugin = ({
         data-index={i}
         className={clsx({
           'snap-start snap-always px-4 py-2.5 text-sm text-gray-700 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 focus:bg-gray-100 dark:focus:bg-primary-800 group black:hover:bg-gray-900 black:focus:bg-gray-900': true,
-          'snap-start snap-always bg-gray-100 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 black:bg-gray-900 black:hover:bg-gray-900': i === selectedSuggestion,
+          'snap-start snap-always bg-gray-100 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 black:bg-gray-900 black:hover:bg-gray-900':
+            i === selectedSuggestion,
         })}
         onMouseDown={handleSelectSuggestion}
       >
@@ -406,12 +419,17 @@ const AutosuggestPlugin = ({
         const match = getQueryTextForSearch(editor);
         const nativeSelection = window.getSelection();
 
-        if (!match || nativeSelection?.anchorOffset !== nativeSelection?.focusOffset) {
+        if (
+          !match ||
+          nativeSelection?.anchorOffset !== nativeSelection?.focusOffset
+        ) {
           closeTypeahead();
           return;
         }
 
-        dispatch(fetchComposeSuggestions(composeId, match.matchingString.trim()));
+        dispatch(
+          fetchComposeSuggestions(composeId, match.matchingString.trim()),
+        );
 
         if (!isSelectionOnEntityBoundary(editor, match.leadOffset)) {
           const isRangePositioned = tryToPositionRange(match.leadOffset, range);
@@ -434,12 +452,7 @@ const AutosuggestPlugin = ({
     return () => {
       removeUpdateListener();
     };
-  }, [
-    editor,
-    resolution,
-    closeTypeahead,
-    openTypeahead,
-  ]);
+  }, [editor, resolution, closeTypeahead, openTypeahead]);
 
   useEffect(() => {
     if (suggestions && suggestions.size > 0) setSuggestionsHidden(false);
@@ -450,7 +463,10 @@ const AutosuggestPlugin = ({
       const handleClick = (event: MouseEvent) => {
         const target = event.target as HTMLElement;
 
-        if (!editor._rootElement?.contains(target) && !anchorElementRef.current.contains(target)) {
+        if (
+          !editor._rootElement?.contains(target) &&
+          !anchorElementRef.current.contains(target)
+        ) {
           setResolution(null);
         }
       };
@@ -468,8 +484,15 @@ const AutosuggestPlugin = ({
         KEY_ARROW_UP_COMMAND,
         (payload) => {
           const event = payload;
-          if (suggestions !== null && suggestions.size && selectedSuggestion !== null) {
-            const newSelectedSuggestion = selectedSuggestion !== 0 ? selectedSuggestion - 1 : suggestions.size - 1;
+          if (
+            suggestions !== null &&
+            suggestions.size &&
+            selectedSuggestion !== null
+          ) {
+            const newSelectedSuggestion =
+              selectedSuggestion !== 0
+                ? selectedSuggestion - 1
+                : suggestions.size - 1;
             setSelectedSuggestion(newSelectedSuggestion);
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -482,8 +505,15 @@ const AutosuggestPlugin = ({
         KEY_ARROW_DOWN_COMMAND,
         (payload) => {
           const event = payload;
-          if (suggestions !== null && suggestions.size && selectedSuggestion !== null) {
-            const newSelectedSuggestion = selectedSuggestion !== suggestions.size - 1 ? selectedSuggestion + 1 : 0;
+          if (
+            suggestions !== null &&
+            suggestions.size &&
+            selectedSuggestion !== null
+          ) {
+            const newSelectedSuggestion =
+              selectedSuggestion !== suggestions.size - 1
+                ? selectedSuggestion + 1
+                : 0;
             setSelectedSuggestion(newSelectedSuggestion);
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -536,17 +566,17 @@ const AutosuggestPlugin = ({
       menuRenderFn={(anchorElementRef) =>
         anchorElementRef.current
           ? ReactDOM.createPortal(
-            <div
-              className={clsx({
-                'scroll-smooth snap-y snap-always will-change-scroll mt-6 overflow-y-auto max-h-56 relative w-max z-[1000] shadow bg-white dark:bg-gray-900 rounded-lg py-1 space-y-0 dark:ring-2 dark:ring-primary-700 focus:outline-none': true,
-                hidden: suggestionsHidden || suggestions.isEmpty(),
-                block: !suggestionsHidden && !suggestions.isEmpty(),
-              })}
-            >
-              {suggestions.map(renderSuggestion)}
-            </div>,
-            anchorElementRef.current,
-          )
+              <div
+                className={clsx({
+                  'scroll-smooth snap-y snap-always will-change-scroll mt-6 overflow-y-auto max-h-56 relative w-max z-[1000] shadow bg-white dark:bg-gray-900 rounded-lg py-1 space-y-0 dark:ring-2 dark:ring-primary-700 focus:outline-none': true,
+                  hidden: suggestionsHidden || suggestions.isEmpty(),
+                  block: !suggestionsHidden && !suggestions.isEmpty(),
+                })}
+              >
+                {suggestions.map(renderSuggestion)}
+              </div>,
+              anchorElementRef.current,
+            )
           : null
       }
     />

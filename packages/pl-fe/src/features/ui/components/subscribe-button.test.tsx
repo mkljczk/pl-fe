@@ -17,7 +17,10 @@ describe('<SubscribeButton />', () => {
 
   describe('with "accountNotifies" disabled', () => {
     it('renders nothing', () => {
-      const account = buildAccount({ ...justin, relationship: buildRelationship({ following: true }) });
+      const account = buildAccount({
+        ...justin,
+        relationship: buildRelationship({ following: true }),
+      });
 
       render(<SubscribeButton account={account} />, undefined, store);
       expect(screen.queryAllByTestId('icon-button')).toHaveLength(0);

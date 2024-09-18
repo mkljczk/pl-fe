@@ -5,7 +5,13 @@ import { VirtuosoMockContext } from 'react-virtuoso';
 import { __stub } from 'pl-fe/api';
 import { ChatContext } from 'pl-fe/contexts/chat-context';
 import { buildAccount, buildInstance } from 'pl-fe/jest/factory';
-import { queryClient, render, rootState, screen, waitFor } from 'pl-fe/jest/test-helpers';
+import {
+  queryClient,
+  render,
+  rootState,
+  screen,
+  waitFor,
+} from 'pl-fe/jest/test-helpers';
 import { normalizeChatMessage } from 'pl-fe/normalizers';
 import { IChat } from 'pl-fe/queries/chats';
 import { ChatMessage } from 'pl-fe/types/entities';
@@ -50,26 +56,34 @@ const chatMessages: ChatMessage[] = [
 ];
 
 // Mock scrollIntoView function.
-window.HTMLElement.prototype.scrollIntoView = () => { };
+window.HTMLElement.prototype.scrollIntoView = () => {};
 Object.assign(navigator, {
   clipboard: {
-    writeText: () => { },
+    writeText: () => {},
   },
 });
 
 const store = rootState
   .set('me', '1')
-  .set('instance', buildInstance({ version: '3.4.1 (compatible; TruthSocial 1.0.0+unreleased)' }));
+  .set(
+    'instance',
+    buildInstance({
+      version: '3.4.1 (compatible; TruthSocial 1.0.0+unreleased)',
+    }),
+  );
 
-const renderComponentWithChatContext = () => render(
-  <VirtuosoMockContext.Provider value={{ viewportHeight: 300, itemHeight: 100 }}>
-    <ChatContext.Provider value={{ chat }}>
-      <ChatMessageList chat={chat} />
-    </ChatContext.Provider>
-  </VirtuosoMockContext.Provider>,
-  undefined,
-  store,
-);
+const renderComponentWithChatContext = () =>
+  render(
+    <VirtuosoMockContext.Provider
+      value={{ viewportHeight: 300, itemHeight: 100 }}
+    >
+      <ChatContext.Provider value={{ chat }}>
+        <ChatMessageList chat={chat} />
+      </ChatContext.Provider>
+    </VirtuosoMockContext.Provider>,
+    undefined,
+    store,
+  );
 
 beforeEach(() => {
   queryClient.clear();
@@ -79,20 +93,28 @@ describe('<ChatMessageList />', () => {
   describe('when the query is loading', () => {
     beforeEach(() => {
       __stub((mock) => {
-        mock.onGet(`/api/v1/pleroma/chats/${chat.id}/messages`).reply(200, chatMessages, {
-          link: null,
-        });
+        mock
+          .onGet(`/api/v1/pleroma/chats/${chat.id}/messages`)
+          .reply(200, chatMessages, {
+            link: null,
+          });
       });
     });
 
     it('displays the skeleton loader', async () => {
       renderComponentWithChatContext();
 
-      expect(screen.queryAllByTestId('placeholder-chat-message')).toHaveLength(5);
+      expect(screen.queryAllByTestId('placeholder-chat-message')).toHaveLength(
+        5,
+      );
 
       await waitFor(() => {
-        expect(screen.getByTestId('chat-message-list-intro')).toBeInTheDocument();
-        expect(screen.queryAllByTestId('placeholder-chat-message')).toHaveLength(0);
+        expect(
+          screen.getByTestId('chat-message-list-intro'),
+        ).toBeInTheDocument();
+        expect(
+          screen.queryAllByTestId('placeholder-chat-message'),
+        ).toHaveLength(0);
       });
     });
   });
@@ -100,19 +122,25 @@ describe('<ChatMessageList />', () => {
   describe('when the query is finished loading', () => {
     beforeEach(() => {
       __stub((mock) => {
-        mock.onGet(`/api/v1/pleroma/chats/${chat.id}/messages`).reply(200, chatMessages, {
-          link: null,
-        });
+        mock
+          .onGet(`/api/v1/pleroma/chats/${chat.id}/messages`)
+          .reply(200, chatMessages, {
+            link: null,
+          });
       });
     });
 
     it('displays the intro', async () => {
       renderComponentWithChatContext();
 
-      expect(screen.queryAllByTestId('chat-message-list-intro')).toHaveLength(0);
+      expect(screen.queryAllByTestId('chat-message-list-intro')).toHaveLength(
+        0,
+      );
 
       await waitFor(() => {
-        expect(screen.getByTestId('chat-message-list-intro')).toBeInTheDocument();
+        expect(
+          screen.getByTestId('chat-message-list-intro'),
+        ).toBeInTheDocument();
       });
     });
 
@@ -122,7 +150,9 @@ describe('<ChatMessageList />', () => {
       expect(screen.queryAllByTestId('chat-message')).toHaveLength(0);
 
       await waitFor(() => {
-        expect(screen.queryAllByTestId('chat-message')).toHaveLength(chatMessages.length);
+        expect(screen.queryAllByTestId('chat-message')).toHaveLength(
+          chatMessages.length,
+        );
       });
     });
 
@@ -134,10 +164,18 @@ describe('<ChatMessageList />', () => {
       });
 
       // my message
-      await userEvent.click(screen.queryAllByTestId('chat-message-menu')[0].querySelector('button') as any);
+      await userEvent.click(
+        screen
+          .queryAllByTestId('chat-message-menu')[0]
+          .querySelector('button') as any,
+      );
 
       // other user message
-      await userEvent.click(screen.queryAllByTestId('chat-message-menu')[1].querySelector('button') as any);
+      await userEvent.click(
+        screen
+          .queryAllByTestId('chat-message-menu')[1]
+          .querySelector('button') as any,
+      );
     });
   });
 });

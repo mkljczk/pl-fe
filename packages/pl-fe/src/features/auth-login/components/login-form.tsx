@@ -2,7 +2,13 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { Button, Form, FormActions, FormGroup, Input } from 'pl-fe/components/ui';
+import {
+  Button,
+  Form,
+  FormActions,
+  FormGroup,
+  Input,
+} from 'pl-fe/components/ui';
 import { useFeatures } from 'pl-fe/hooks';
 
 const messages = defineMessages({
@@ -29,7 +35,9 @@ const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {
   const intl = useIntl();
   const features = useFeatures();
 
-  const usernameLabel = intl.formatMessage(features.logInWithUsername ? messages.username : messages.email);
+  const usernameLabel = intl.formatMessage(
+    features.logInWithUsername ? messages.username : messages.email,
+  );
   const passwordLabel = intl.formatMessage(messages.password);
 
   return (
@@ -70,11 +78,7 @@ const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {
       </FormGroup>
 
       <FormActions>
-        <Button
-          theme='primary'
-          type='submit'
-          disabled={isLoading}
-        >
+        <Button theme='primary' type='submit' disabled={isLoading}>
           <FormattedMessage id='login.sign_in' defaultMessage='Sign in' />
         </Button>
       </FormActions>

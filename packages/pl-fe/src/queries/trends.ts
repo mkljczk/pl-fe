@@ -9,7 +9,7 @@ const useTrends = () => {
   const dispatch = useAppDispatch();
   const client = useClient();
 
-  const getTrends = async() => {
+  const getTrends = async () => {
     const data = await client.trends.getTrendingTags();
 
     dispatch(fetchTrendsSuccess(data));

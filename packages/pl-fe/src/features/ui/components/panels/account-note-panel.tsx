@@ -10,13 +10,20 @@ import type { Account as AccountEntity } from 'pl-fe/normalizers';
 import type { AppDispatch } from 'pl-fe/store';
 
 const onSave = debounce(
-  (dispatch: AppDispatch, accountId: string, value: string, callback: () => void) =>
-    dispatch(submitAccountNote(accountId, value)).then(() => callback()),
+  (
+    dispatch: AppDispatch,
+    accountId: string,
+    value: string,
+    callback: () => void,
+  ) => dispatch(submitAccountNote(accountId, value)).then(() => callback()),
   900,
 );
 
 const messages = defineMessages({
-  placeholder: { id: 'account_note.placeholder', defaultMessage: 'Click to add a note' },
+  placeholder: {
+    id: 'account_note.placeholder',
+    defaultMessage: 'Click to add a note',
+  },
   saved: { id: 'generic.saved', defaultMessage: 'Saved' },
 });
 
@@ -31,10 +38,12 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
 
   const textarea = useRef<HTMLTextAreaElement>(null);
 
-  const [value, setValue] = useState<string | undefined>(account.relationship?.note);
+  const [value, setValue] = useState<string | undefined>(
+    account.relationship?.note,
+  );
   const [saved, setSaved] = useState(false);
 
-  const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
+  const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setValue(e.target.value);
 
     onSave(dispatch, account.id, e.target.value, () => {
@@ -53,16 +62,18 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
 
   return (
     <Widget
-      title={<HStack space={2} alignItems='center'>
-        <label htmlFor={`account-note-${account.id}`}>
-          <FormattedMessage id='account_note.header' defaultMessage='Note' />
-        </label>
-        {saved && (
-          <Text theme='success' tag='span' className='leading-none'>
-            <FormattedMessage id='generic.saved' defaultMessage='Saved' />
-          </Text>
-        )}
-      </HStack>}
+      title={
+        <HStack space={2} alignItems='center'>
+          <label htmlFor={`account-note-${account.id}`}>
+            <FormattedMessage id='account_note.header' defaultMessage='Note' />
+          </label>
+          {saved && (
+            <Text theme='success' tag='span' className='leading-none'>
+              <FormattedMessage id='generic.saved' defaultMessage='Saved' />
+            </Text>
+          )}
+        </HStack>
+      }
     >
       <div className='-mx-2'>
         <Textarea

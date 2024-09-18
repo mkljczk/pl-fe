@@ -1,10 +1,20 @@
 import { produce } from 'immer';
-import { Map as ImmutableMap, List as ImmutableList, fromJS } from 'immutable';
+import { List as ImmutableList, Map as ImmutableMap, fromJS } from 'immutable';
 import { type Instance, instanceSchema } from 'pl-api';
 
-import { ADMIN_CONFIG_UPDATE_REQUEST, ADMIN_CONFIG_UPDATE_SUCCESS } from 'pl-fe/actions/admin';
-import { INSTANCE_FETCH_FAIL, INSTANCE_FETCH_SUCCESS, InstanceAction } from 'pl-fe/actions/instance';
-import { PLEROMA_PRELOAD_IMPORT, type PreloadAction } from 'pl-fe/actions/preload';
+import {
+  ADMIN_CONFIG_UPDATE_REQUEST,
+  ADMIN_CONFIG_UPDATE_SUCCESS,
+} from 'pl-fe/actions/admin';
+import {
+  INSTANCE_FETCH_FAIL,
+  INSTANCE_FETCH_SUCCESS,
+  InstanceAction,
+} from 'pl-fe/actions/instance';
+import {
+  PLEROMA_PRELOAD_IMPORT,
+  type PreloadAction,
+} from 'pl-fe/actions/preload';
 import KVStore from 'pl-fe/storage/kv-store';
 import ConfigDB from 'pl-fe/utils/config-db';
 
@@ -12,14 +22,20 @@ import type { AnyAction } from 'redux';
 
 const initialState: Instance = instanceSchema.parse({});
 
-const preloadImport = (state: Instance, action: Record<string, any>, path: string) => {
+const preloadImport = (
+  state: Instance,
+  action: Record<string, any>,
+  path: string,
+) => {
   const instance = action.data[path];
   return instance ? instanceSchema.parse(instance) : state;
 };
 
-const getConfigValue = (instanceConfig: ImmutableMap<string, any>, key: string) => {
-  const v = instanceConfig
-    .find(value => value.getIn(['tuple', 0]) === key);
+const getConfigValue = (
+  instanceConfig: ImmutableMap<string, any>,
+  key: string,
+) => {
+  const v = instanceConfig.find((value) => value.getIn(['tuple', 0]) === key);
 
   return v ? v.getIn(['tuple', 1]) : undefined;
 };
@@ -34,12 +50,18 @@ const importConfigs = (state: Instance, configs: ImmutableList<any>) => {
   return produce(state, (draft) => {
     if (config) {
       const value = config.get('value', ImmutableList());
-      const registrationsOpen = getConfigValue(value, ':registrations_open') as boolean | undefined;
-      const approvalRequired = getConfigValue(value, ':account_approval_required') as boolean | undefined;
+      const registrationsOpen = getConfigValue(value, ':registrations_open') as
+        | boolean
+        | undefined;
+      const approvalRequired = getConfigValue(
+        value,
+        ':account_approval_required',
+      ) as boolean | undefined;
 
       draft.registrations = {
         enabled: registrationsOpen ?? draft.registrations.enabled,
-        approval_required: approvalRequired ?? draft.registrations.approval_required,
+        approval_required:
+          approvalRequired ?? draft.registrations.approval_required,
       };
     }
 
@@ -71,13 +93,19 @@ const getHost = (instance: { domain: string }) => {
   }
 };
 
-const persistInstance = (instance: { domain: string }, host: string | null = getHost(instance)) => {
+const persistInstance = (
+  instance: { domain: string },
+  host: string | null = getHost(instance),
+) => {
   if (host) {
     KVStore.setItem(`instance:${host}`, instance).catch(console.error);
   }
 };
 
-const handleInstanceFetchFail = (state: Instance, error: Record<string, any>) => {
+const handleInstanceFetchFail = (
+  state: Instance,
+  error: Record<string, any>,
+) => {
   if (error.response?.status === 401) {
     return handleAuthFetch(state);
   } else {
@@ -85,7 +113,10 @@ const handleInstanceFetchFail = (state: Instance, error: Record<string, any>) =>
   }
 };
 
-const instance = (state = initialState, action: AnyAction | InstanceAction | PreloadAction): Instance => {
+const instance = (
+  state = initialState,
+  action: AnyAction | InstanceAction | PreloadAction,
+): Instance => {
   switch (action.type) {
     case PLEROMA_PRELOAD_IMPORT:
       return preloadImport(state, action, '/api/v1/instance');

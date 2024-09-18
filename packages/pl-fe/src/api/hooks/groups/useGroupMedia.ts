@@ -9,8 +9,8 @@ const useGroupMedia = (groupId: string) => {
   return useEntities(
     [Entities.STATUSES, 'groupMedia', groupId],
     () => client.timelines.groupTimeline(groupId, { only_media: true }),
-    { transform: normalizeStatus })
-  ;
+    { transform: normalizeStatus },
+  );
 };
 
 export { useGroupMedia };

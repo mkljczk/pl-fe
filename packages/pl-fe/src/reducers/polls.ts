@@ -8,9 +8,12 @@ import type { AnyAction } from 'redux';
 
 type State = ImmutableMap<string, ReturnType<typeof normalizePoll>>;
 
-const importPolls = (state: State, polls: Array<Exclude<Status['poll'], null>>) =>
-  state.withMutations(map =>
-    polls.forEach(poll => map.set(poll.id, normalizePoll(poll))),
+const importPolls = (
+  state: State,
+  polls: Array<Exclude<Status['poll'], null>>,
+) =>
+  state.withMutations((map) =>
+    polls.forEach((poll) => map.set(poll.id, normalizePoll(poll))),
   );
 
 const initialState: State = ImmutableMap();

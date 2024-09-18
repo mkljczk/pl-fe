@@ -4,7 +4,11 @@ import StillImage from 'pl-fe/components/still-image';
 import { removeVS16s, toCodePoints } from 'pl-fe/utils/emoji';
 import { joinPublicPath } from 'pl-fe/utils/static';
 
-interface IEmoji extends Pick<React.ImgHTMLAttributes<HTMLImageElement>, 'alt' | 'className' | 'src' | 'title'> {
+interface IEmoji
+  extends Pick<
+    React.ImgHTMLAttributes<HTMLImageElement>,
+    'alt' | 'className' | 'src' | 'title'
+  > {
   /** Unicode emoji character. */
   emoji?: string;
   noGroup?: boolean;

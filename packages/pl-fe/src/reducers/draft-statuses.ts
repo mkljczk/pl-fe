@@ -1,7 +1,20 @@
-import { List as ImmutableList, Map as ImmutableMap, OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord, fromJS } from 'immutable';
+import {
+  List as ImmutableList,
+  Map as ImmutableMap,
+  OrderedSet as ImmutableOrderedSet,
+  Record as ImmutableRecord,
+  fromJS,
+} from 'immutable';
 
-import { COMPOSE_SUBMIT_SUCCESS, type ComposeAction } from 'pl-fe/actions/compose';
-import { DRAFT_STATUSES_FETCH_SUCCESS, PERSIST_DRAFT_STATUS, CANCEL_DRAFT_STATUS } from 'pl-fe/actions/draft-statuses';
+import {
+  COMPOSE_SUBMIT_SUCCESS,
+  type ComposeAction,
+} from 'pl-fe/actions/compose';
+import {
+  CANCEL_DRAFT_STATUS,
+  DRAFT_STATUSES_FETCH_SUCCESS,
+  PERSIST_DRAFT_STATUS,
+} from 'pl-fe/actions/draft-statuses';
 import KVStore from 'pl-fe/storage/kv-store';
 
 import type { MediaAttachment } from 'pl-api';
@@ -36,7 +49,11 @@ const importStatus = (state: State, status: APIEntity) =>
   state.set(status.draft_id, DraftStatusRecord(ImmutableMap(fromJS(status))));
 
 const importStatuses = (state: State, statuses: APIEntity[]) =>
-  state.withMutations(mutable => Object.values(statuses || {}).forEach(status => importStatus(mutable, status)));
+  state.withMutations((mutable) =>
+    Object.values(statuses || {}).forEach((status) =>
+      importStatus(mutable, status),
+    ),
+  );
 
 const deleteStatus = (state: State, statusId: string) => {
   if (statusId) return state.delete(statusId);
@@ -48,22 +65,31 @@ const persistState = (state: State, accountUrl: string) => {
   return state;
 };
 
-const scheduled_statuses = (state: State = initialState, action: AnyAction | ComposeAction) => {
+const scheduled_statuses = (
+  state: State = initialState,
+  action: AnyAction | ComposeAction,
+) => {
   switch (action.type) {
     case DRAFT_STATUSES_FETCH_SUCCESS:
       return importStatuses(state, action.statuses);
     case PERSIST_DRAFT_STATUS:
-      return persistState(importStatus(state, action.status), action.accountUrl);
+      return persistState(
+        importStatus(state, action.status),
+        action.accountUrl,
+      );
     case CANCEL_DRAFT_STATUS:
-      return persistState(deleteStatus(state, action.statusId), action.accountUrl);
+      return persistState(
+        deleteStatus(state, action.statusId),
+        action.accountUrl,
+      );
     case COMPOSE_SUBMIT_SUCCESS:
-      return persistState(deleteStatus(state, action.draftId), action.accountUrl);
+      return persistState(
+        deleteStatus(state, action.draftId),
+        action.accountUrl,
+      );
     default:
       return state;
   }
 };
 
-export {
-  type DraftStatus,
-  scheduled_statuses as default,
-};
+export { type DraftStatus, scheduled_statuses as default };

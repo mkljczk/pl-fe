@@ -22,12 +22,18 @@ interface IHelmet {
 const Helmet: React.FC<IHelmet> = ({ children }) => {
   const instance = useInstance();
   const { unreadChatsCount } = useStatContext();
-  const unreadCount = useAppSelector((state) => getNotifTotals(state) + unreadChatsCount);
+  const unreadCount = useAppSelector(
+    (state) => getNotifTotals(state) + unreadChatsCount,
+  );
   const { demetricator } = useSettings();
 
-  const hasUnreadNotifications = React.useMemo(() => !(unreadCount < 1 || demetricator), [unreadCount, demetricator]);
+  const hasUnreadNotifications = React.useMemo(
+    () => !(unreadCount < 1 || demetricator),
+    [unreadCount, demetricator],
+  );
 
-  const addCounter = (string: string) => hasUnreadNotifications ? `(${unreadCount}) ${string}` : string;
+  const addCounter = (string: string) =>
+    hasUnreadNotifications ? `(${unreadCount}) ${string}` : string;
 
   const updateFaviconBadge = () => {
     if (hasUnreadNotifications) {

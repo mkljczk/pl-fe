@@ -14,7 +14,12 @@ interface IForkAwesomeIcon extends React.HTMLAttributes<HTMLLIElement> {
   fixedWidth?: boolean;
 }
 
-const ForkAwesomeIcon: React.FC<IForkAwesomeIcon> = ({ id, className, fixedWidth, ...rest }) => {
+const ForkAwesomeIcon: React.FC<IForkAwesomeIcon> = ({
+  id,
+  className,
+  fixedWidth,
+  ...rest
+}) => {
   // Use the Fork Awesome retweet icon, but change its alt
   // tag. There is a common adblocker rule which hides elements with
   // alt='retweet' unless the domain is twitter.com. This should

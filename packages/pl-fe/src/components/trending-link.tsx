@@ -14,7 +14,9 @@ interface ITrendingLink {
 const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
   const count = Number(trendingLink.history?.[0]?.accounts);
 
-  const direction = getTextDirection(trendingLink.title + trendingLink.description);
+  const direction = getTextDirection(
+    trendingLink.title + trendingLink.description,
+  );
 
   let media;
 
@@ -27,7 +29,11 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
             hash={trendingLink.blurhash}
           />
         )}
-        <img className='relative h-full w-full object-cover' src={trendingLink.image} alt={trendingLink.image_description || undefined} />
+        <img
+          className='relative h-full w-full object-cover'
+          src={trendingLink.image}
+          alt={trendingLink.image_description || undefined}
+        />
       </div>
     );
   }
@@ -41,9 +47,19 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
     >
       {media}
       <Stack space={2} className='flex-1 overflow-hidden'>
-        <Text className='line-clamp-2' weight='bold' direction={direction}>{trendingLink.title}</Text>
-        {trendingLink.description && <Text truncate direction={direction}>{trendingLink.description}</Text>}
-        <HStack alignItems='center' wrap className='divide-x-dot text-gray-700 dark:text-gray-600'>
+        <Text className='line-clamp-2' weight='bold' direction={direction}>
+          {trendingLink.title}
+        </Text>
+        {trendingLink.description && (
+          <Text truncate direction={direction}>
+            {trendingLink.description}
+          </Text>
+        )}
+        <HStack
+          alignItems='center'
+          wrap
+          className='divide-x-dot text-gray-700 dark:text-gray-600'
+        >
           <HStack space={1} alignItems='center'>
             <Text tag='span' theme='muted'>
               <Icon src={require('@tabler/icons/outline/link.svg')} />

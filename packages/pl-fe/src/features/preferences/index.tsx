@@ -1,6 +1,6 @@
 import { Set as ImmutableSet } from 'immutable';
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { changeSetting } from 'pl-fe/actions/settings';
 import List, { ListItem } from 'pl-fe/components/list';
@@ -80,15 +80,42 @@ type Language = keyof typeof languages;
 
 const messages = defineMessages({
   heading: { id: 'column.preferences', defaultMessage: 'Preferences' },
-  displayPostsDefault: { id: 'preferences.fields.display_media.default', defaultMessage: 'Hide posts marked as sensitive' },
-  displayPostsHideAll: { id: 'preferences.fields.display_media.hide_all', defaultMessage: 'Always hide media posts' },
-  displayPostsShowAll: { id: 'preferences.fields.display_media.show_all', defaultMessage: 'Always show posts' },
-  privacy_public: { id: 'preferences.options.privacy_public', defaultMessage: 'Public' },
-  privacy_unlisted: { id: 'preferences.options.privacy_unlisted', defaultMessage: 'Unlisted' },
-  privacy_followers_only: { id: 'preferences.options.privacy_followers_only', defaultMessage: 'Followers-only' },
-  content_type_plaintext: { id: 'preferences.options.content_type_plaintext', defaultMessage: 'Plain text' },
-  content_type_markdown: { id: 'preferences.options.content_type_markdown', defaultMessage: 'Markdown' },
-  content_type_html: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
+  displayPostsDefault: {
+    id: 'preferences.fields.display_media.default',
+    defaultMessage: 'Hide posts marked as sensitive',
+  },
+  displayPostsHideAll: {
+    id: 'preferences.fields.display_media.hide_all',
+    defaultMessage: 'Always hide media posts',
+  },
+  displayPostsShowAll: {
+    id: 'preferences.fields.display_media.show_all',
+    defaultMessage: 'Always show posts',
+  },
+  privacy_public: {
+    id: 'preferences.options.privacy_public',
+    defaultMessage: 'Public',
+  },
+  privacy_unlisted: {
+    id: 'preferences.options.privacy_unlisted',
+    defaultMessage: 'Unlisted',
+  },
+  privacy_followers_only: {
+    id: 'preferences.options.privacy_followers_only',
+    defaultMessage: 'Followers-only',
+  },
+  content_type_plaintext: {
+    id: 'preferences.options.content_type_plaintext',
+    defaultMessage: 'Plain text',
+  },
+  content_type_markdown: {
+    id: 'preferences.options.content_type_markdown',
+    defaultMessage: 'Markdown',
+  },
+  content_type_html: {
+    id: 'preferences.options.content_type_html',
+    defaultMessage: 'HTML',
+  },
 });
 
 const Preferences = () => {
@@ -97,171 +124,432 @@ const Preferences = () => {
   const features = useFeatures();
   const settings = useSettings();
 
-  const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, path: string[]) => {
+  const onSelectChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+    path: string[],
+  ) => {
     dispatch(changeSetting(path, event.target.value, { showAlert: true }));
   };
 
   const onSelectMultiple = (selectedList: string[], path: string[]) => {
-    dispatch(changeSetting(path, ImmutableSet(selectedList.sort((a, b) => a.localeCompare(b))), { showAlert: true }));
+    dispatch(
+      changeSetting(
+        path,
+        ImmutableSet(selectedList.sort((a, b) => a.localeCompare(b))),
+        { showAlert: true },
+      ),
+    );
   };
 
   const onToggleChange = (key: string[], checked: boolean) => {
     dispatch(changeSetting(key, checked, { showAlert: true }));
   };
 
-  const displayMediaOptions = React.useMemo(() => ({
-    default: intl.formatMessage(messages.displayPostsDefault),
-    hide_all: intl.formatMessage(messages.displayPostsHideAll),
-    show_all: intl.formatMessage(messages.displayPostsShowAll),
-  }), [settings.locale]);
+  const displayMediaOptions = React.useMemo(
+    () => ({
+      default: intl.formatMessage(messages.displayPostsDefault),
+      hide_all: intl.formatMessage(messages.displayPostsHideAll),
+      show_all: intl.formatMessage(messages.displayPostsShowAll),
+    }),
+    [settings.locale],
+  );
 
-  const defaultPrivacyOptions = React.useMemo(() => ({
-    public: intl.formatMessage(messages.privacy_public),
-    unlisted: intl.formatMessage(messages.privacy_unlisted),
-    private: intl.formatMessage(messages.privacy_followers_only),
-  }), [settings.locale]);
+  const defaultPrivacyOptions = React.useMemo(
+    () => ({
+      public: intl.formatMessage(messages.privacy_public),
+      unlisted: intl.formatMessage(messages.privacy_unlisted),
+      private: intl.formatMessage(messages.privacy_followers_only),
+    }),
+    [settings.locale],
+  );
 
-  const defaultContentTypeOptions = React.useMemo(() => ({
-    'text/plain': intl.formatMessage(messages.content_type_plaintext),
-    'text/markdown': intl.formatMessage(messages.content_type_markdown),
-    'text/html': intl.formatMessage(messages.content_type_html),
-  }), [settings.locale]);
+  const defaultContentTypeOptions = React.useMemo(
+    () => ({
+      'text/plain': intl.formatMessage(messages.content_type_plaintext),
+      'text/markdown': intl.formatMessage(messages.content_type_markdown),
+      'text/html': intl.formatMessage(messages.content_type_html),
+    }),
+    [settings.locale],
+  );
 
   return (
     <Form>
       <List>
-        <ListItem label={<FormattedMessage id='home.column_settings.show_reblogs' defaultMessage='Show reposts' />}>
-          <SettingToggle settings={settings} settingPath={['home', 'shows', 'reblog']} onChange={onToggleChange} />
+        <ListItem
+          label={
+            <FormattedMessage
+              id='home.column_settings.show_reblogs'
+              defaultMessage='Show reposts'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['home', 'shows', 'reblog']}
+            onChange={onToggleChange}
+          />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='home.column_settings.show_replies' defaultMessage='Show replies' />}>
-          <SettingToggle settings={settings} settingPath={['home', 'shows', 'reply']} onChange={onToggleChange} />
+        <ListItem
+          label={
+            <FormattedMessage
+              id='home.column_settings.show_replies'
+              defaultMessage='Show replies'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['home', 'shows', 'reply']}
+            onChange={onToggleChange}
+          />
         </ListItem>
       </List>
 
       <List>
-        <ListItem label={<FormattedMessage id='preferences.fields.theme' defaultMessage='Theme' />}>
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.theme'
+              defaultMessage='Theme'
+            />
+          }
+        >
           <ThemeToggle />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='preferences.fields.language_label' defaultMessage='Display Language' />}>
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.language_label'
+              defaultMessage='Display Language'
+            />
+          }
+        >
           <SelectDropdown
             className='max-w-[200px]'
             items={languages}
             defaultValue={settings.locale}
-            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => onSelectChange(event, ['locale'])}
+            onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+              onSelectChange(event, ['locale'])
+            }
           />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='preferences.fields.spoilers_display_label' defaultMessage='Automatically expand text behind spoilers' />}>
-          <SettingToggle settings={settings} settingPath={['displaySpoilers']} onChange={onToggleChange} />
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.spoilers_display_label'
+              defaultMessage='Automatically expand text behind spoilers'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['displaySpoilers']}
+            onChange={onToggleChange}
+          />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='preferences.fields.media_display_label' defaultMessage='Sensitive content' />}>
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.media_display_label'
+              defaultMessage='Sensitive content'
+            />
+          }
+        >
           <SelectDropdown
             className='max-w-[200px]'
             items={displayMediaOptions}
             defaultValue={settings.displayMedia}
-            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => onSelectChange(event, ['displayMedia'])}
+            onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+              onSelectChange(event, ['displayMedia'])
+            }
           />
         </ListItem>
 
         {features.privacyScopes && (
-          <ListItem label={<FormattedMessage id='preferences.fields.privacy_label' defaultMessage='Default post privacy' />}>
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.privacy_label'
+                defaultMessage='Default post privacy'
+              />
+            }
+          >
             <SelectDropdown
               className='max-w-[200px]'
               items={defaultPrivacyOptions}
               defaultValue={settings.defaultPrivacy}
-              onChange={(event: React.ChangeEvent<HTMLSelectElement>) => onSelectChange(event, ['defaultPrivacy'])}
+              onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                onSelectChange(event, ['defaultPrivacy'])
+              }
             />
           </ListItem>
         )}
 
         {features.richText && (
-          <ListItem label={<FormattedMessage id='preferences.fields.content_type_label' defaultMessage='Default post format' />}>
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.content_type_label'
+                defaultMessage='Default post format'
+              />
+            }
+          >
             <SelectDropdown
               className='max-w-[200px]'
               items={defaultContentTypeOptions}
               defaultValue={settings.defaultContentType}
-              onChange={(event: React.ChangeEvent<HTMLSelectElement>) => onSelectChange(event, ['defaultContentType'])}
+              onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                onSelectChange(event, ['defaultContentType'])
+              }
             />
           </ListItem>
         )}
 
         {features.spoilers && (
-          <ListItem label={<FormattedMessage id='preferences.fields.preserve_spoilers_label' defaultMessage='Preserve content warning when replying' />}>
-            <SettingToggle settings={settings} settingPath={['preserveSpoilers']} onChange={onToggleChange} />
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.preserve_spoilers_label'
+                defaultMessage='Preserve content warning when replying'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['preserveSpoilers']}
+              onChange={onToggleChange}
+            />
           </ListItem>
         )}
 
-        <ListItem label={<FormattedMessage id='preferences.notifications.advanced' defaultMessage='Show all notification categories' />}>
-          <SettingToggle settings={settings} settingPath={['notifications', 'quickFilter', 'advanced']} onChange={onToggleChange} />
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.notifications.advanced'
+              defaultMessage='Show all notification categories'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['notifications', 'quickFilter', 'advanced']}
+            onChange={onToggleChange}
+          />
         </ListItem>
 
         <ListItem
-          label={<FormattedMessage id='preferences.fields.demetricator_label' defaultMessage='Hide social media counters' />}
-          hint={<FormattedMessage id='preferences.hints.demetricator' defaultMessage='Decrease social media anxiety by hiding all numbers from the site.' />}
+          label={
+            <FormattedMessage
+              id='preferences.fields.demetricator_label'
+              defaultMessage='Hide social media counters'
+            />
+          }
+          hint={
+            <FormattedMessage
+              id='preferences.hints.demetricator'
+              defaultMessage='Decrease social media anxiety by hiding all numbers from the site.'
+            />
+          }
         >
-          <SettingToggle settings={settings} settingPath={['demetricator']} onChange={onToggleChange} />
+          <SettingToggle
+            settings={settings}
+            settingPath={['demetricator']}
+            onChange={onToggleChange}
+          />
         </ListItem>
       </List>
 
       <List>
-        <ListItem label={<FormattedMessage id='preferences.fields.boost_modal_label' defaultMessage='Show confirmation dialog before reposting' />}>
-          <SettingToggle settings={settings} settingPath={['boostModal']} onChange={onToggleChange} />
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.boost_modal_label'
+              defaultMessage='Show confirmation dialog before reposting'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['boostModal']}
+            onChange={onToggleChange}
+          />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='preferences.fields.delete_modal_label' defaultMessage='Show confirmation dialog before deleting a post' />}>
-          <SettingToggle settings={settings} settingPath={['deleteModal']} onChange={onToggleChange} />
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.delete_modal_label'
+              defaultMessage='Show confirmation dialog before deleting a post'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['deleteModal']}
+            onChange={onToggleChange}
+          />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='preferences.fields.missing_description_modal_label' defaultMessage='Show confirmation dialog before sending a post without media descriptions' />}>
-          <SettingToggle settings={settings} settingPath={['missingDescriptionModal']} onChange={onToggleChange} />
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.missing_description_modal_label'
+              defaultMessage='Show confirmation dialog before sending a post without media descriptions'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['missingDescriptionModal']}
+            onChange={onToggleChange}
+          />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='preferences.fields.unfollow_modal_label' defaultMessage='Show confirmation dialog before unfollowing someone' />}>
-          <SettingToggle settings={settings} settingPath={['unfollowModal']} onChange={onToggleChange} />
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.unfollow_modal_label'
+              defaultMessage='Show confirmation dialog before unfollowing someone'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['unfollowModal']}
+            onChange={onToggleChange}
+          />
         </ListItem>
       </List>
 
       <List>
-        <ListItem label={<FormattedMessage id='preferences.fields.auto_play_gif_label' defaultMessage='Auto-play animated GIFs' />}>
-          <SettingToggle settings={settings} settingPath={['autoPlayGif']} onChange={onToggleChange} />
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.auto_play_gif_label'
+              defaultMessage='Auto-play animated GIFs'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['autoPlayGif']}
+            onChange={onToggleChange}
+          />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='preferences.fields.system_font_label' defaultMessage="Use system's default font" />}>
-          <SettingToggle settings={settings} settingPath={['systemFont']} onChange={onToggleChange} />
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.system_font_label'
+              defaultMessage="Use system's default font"
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['systemFont']}
+            onChange={onToggleChange}
+          />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='preferences.fields.reduce_motion_label' defaultMessage='Reduce motion in animations' />}>
-          <SettingToggle settings={settings} settingPath={['reduceMotion']} onChange={onToggleChange} />
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.reduce_motion_label'
+              defaultMessage='Reduce motion in animations'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['reduceMotion']}
+            onChange={onToggleChange}
+          />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='preferences.fields.underline_links_label' defaultMessage='Always underline links in posts' />}>
-          <SettingToggle settings={settings} settingPath={['underlineLinks']} onChange={onToggleChange} />
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.underline_links_label'
+              defaultMessage='Always underline links in posts'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['underlineLinks']}
+            onChange={onToggleChange}
+          />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='preferences.fields.autoload_timelines_label' defaultMessage='Automatically load new posts when scrolled to the top of the page' />}>
-          <SettingToggle settings={settings} settingPath={['autoloadTimelines']} onChange={onToggleChange} />
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.autoload_timelines_label'
+              defaultMessage='Automatically load new posts when scrolled to the top of the page'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['autoloadTimelines']}
+            onChange={onToggleChange}
+          />
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='preferences.fields.autoload_more_label' defaultMessage='Automatically load more items when scrolled to the bottom of the page' />}>
-          <SettingToggle settings={settings} settingPath={['autoloadMore']} onChange={onToggleChange} />
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.autoload_more_label'
+              defaultMessage='Automatically load more items when scrolled to the bottom of the page'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['autoloadMore']}
+            onChange={onToggleChange}
+          />
         </ListItem>
       </List>
 
       {features.translations && (
         <List>
-          <ListItem label={<FormattedMessage id='preferences.fields.auto_translate_label' defaultMessage='Automatically translate posts in unknown languages' />}>
-            <SettingToggle settings={settings} settingPath={['autoTranslate']} onChange={onToggleChange} />
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.auto_translate_label'
+                defaultMessage='Automatically translate posts in unknown languages'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['autoTranslate']}
+              onChange={onToggleChange}
+            />
           </ListItem>
 
-          <ListItem className='!overflow-visible' label={<FormattedMessage id='preferences.fields.known_languages_label' defaultMessage='Languages you know' />}>
+          <ListItem
+            className='!overflow-visible'
+            label={
+              <FormattedMessage
+                id='preferences.fields.known_languages_label'
+                defaultMessage='Languages you know'
+              />
+            }
+          >
             <Mutliselect
               className='max-w-[200px]'
               items={languages}
               value={settings.knownLanguages as string[] | undefined}
-              onChange={(selectedList) => onSelectMultiple(selectedList, ['knownLanguages'])}
+              onChange={(selectedList) =>
+                onSelectMultiple(selectedList, ['knownLanguages'])
+              }
               disabled={!settings.autoTranslate}
             />
           </ListItem>

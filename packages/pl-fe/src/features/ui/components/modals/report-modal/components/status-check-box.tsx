@@ -3,7 +3,11 @@ import React, { Suspense } from 'react';
 
 import StatusContent from 'pl-fe/components/status-content';
 import { Stack, Toggle } from 'pl-fe/components/ui';
-import { MediaGallery, Video, Audio } from 'pl-fe/features/ui/util/async-components';
+import {
+  Audio,
+  MediaGallery,
+  Video,
+} from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector } from 'pl-fe/hooks';
 
 interface IStatusCheckBox {
@@ -13,10 +17,16 @@ interface IStatusCheckBox {
   checked: boolean;
 }
 
-const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled, checked, toggleStatusReport }) => {
+const StatusCheckBox: React.FC<IStatusCheckBox> = ({
+  id,
+  disabled,
+  checked,
+  toggleStatusReport,
+}) => {
   const status = useAppSelector((state) => state.statuses.get(id));
 
-  const onToggle: React.ChangeEventHandler<HTMLInputElement> = (e) => toggleStatusReport(e.target.checked);
+  const onToggle: React.ChangeEventHandler<HTMLInputElement> = (e) =>
+    toggleStatusReport(e.target.checked);
 
   if (!status || status.reblog_id) {
     return null;
@@ -25,7 +35,7 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled, checked, togg
   let media;
 
   if (status.media_attachments.length > 0) {
-    if (status.media_attachments.some(item => item.type === 'unknown')) {
+    if (status.media_attachments.some((item) => item.type === 'unknown')) {
       // Do nothing
     } else if (status.media_attachments[0]?.type === 'video') {
       const video = status.media_attachments[0];
@@ -48,12 +58,7 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled, checked, togg
       const audio = status.media_attachments[0];
 
       if (audio) {
-        media = (
-          <Audio
-            src={audio.url}
-            alt={audio.description}
-          />
-        );
+        media = <Audio src={audio.url} alt={audio.description} />;
       }
     } else {
       media = (

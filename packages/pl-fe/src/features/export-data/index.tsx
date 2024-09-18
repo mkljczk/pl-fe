@@ -2,8 +2,8 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import {
-  exportFollows,
   exportBlocks,
+  exportFollows,
   exportMutes,
 } from 'pl-fe/actions/export-data';
 import { Column } from 'pl-fe/components/ui';
@@ -17,20 +17,38 @@ const messages = defineMessages({
 
 const followMessages = defineMessages({
   input_label: { id: 'export_data.follows_label', defaultMessage: 'Follows' },
-  input_hint: { id: 'export_data.hints.follows', defaultMessage: 'Get a CSV file containing a list of followed accounts' },
-  submit: { id: 'export_data.actions.export_follows', defaultMessage: 'Export follows' },
+  input_hint: {
+    id: 'export_data.hints.follows',
+    defaultMessage: 'Get a CSV file containing a list of followed accounts',
+  },
+  submit: {
+    id: 'export_data.actions.export_follows',
+    defaultMessage: 'Export follows',
+  },
 });
 
 const blockMessages = defineMessages({
   input_label: { id: 'export_data.blocks_label', defaultMessage: 'Blocks' },
-  input_hint: { id: 'export_data.hints.blocks', defaultMessage: 'Get a CSV file containing a list of blocked accounts' },
-  submit: { id: 'export_data.actions.export_blocks', defaultMessage: 'Export blocks' },
+  input_hint: {
+    id: 'export_data.hints.blocks',
+    defaultMessage: 'Get a CSV file containing a list of blocked accounts',
+  },
+  submit: {
+    id: 'export_data.actions.export_blocks',
+    defaultMessage: 'Export blocks',
+  },
 });
 
 const muteMessages = defineMessages({
   input_label: { id: 'export_data.mutes_label', defaultMessage: 'Mutes' },
-  input_hint: { id: 'export_data.hints.mutes', defaultMessage: 'Get a CSV file containing a list of muted accounts' },
-  submit: { id: 'export_data.actions.export_mutes', defaultMessage: 'Export mutes' },
+  input_hint: {
+    id: 'export_data.hints.mutes',
+    defaultMessage: 'Get a CSV file containing a list of muted accounts',
+  },
+  submit: {
+    id: 'export_data.actions.export_mutes',
+    defaultMessage: 'Export mutes',
+  },
 });
 
 const ExportData = () => {

@@ -2,11 +2,11 @@
 import LinkHeader from 'http-link-header';
 import { vi } from 'vitest';
 
-const api = await vi.importActual('../index') as Record<string, Function>;
+const api = (await vi.importActual('../index')) as Record<string, Function>;
 let mocks: Array<Function> = [];
 
 const __stub = (func: (mock: any) => void) => mocks.push(func);
-const __clear = (): Function[] => mocks = [];
+const __clear = (): Function[] => (mocks = []);
 
 // const setupMock = (axios: AxiosInstance) => {
 //   const mock = new MockAdapter(axios, { onNoMatch: 'throwException' });
@@ -20,12 +20,12 @@ const getLinks = (response: Response): LinkHeader =>
 
 const getNextLink = (response: Response) => {
   const nextLink = new LinkHeader(response.headers?.get('link') || undefined);
-  return nextLink.refs.find(link => link.rel === 'next')?.uri;
+  return nextLink.refs.find((link) => link.rel === 'next')?.uri;
 };
 
 const getPrevLink = (response: Response) => {
   const prevLink = new LinkHeader(response.headers?.get('link') || undefined);
-  return prevLink.refs.find(link => link.rel === 'prev')?.uri;
+  return prevLink.refs.find((link) => link.rel === 'prev')?.uri;
 };
 
 const baseClient = (...params: any[]) => {
@@ -40,4 +40,12 @@ export default (...params: any[]) => {
   return axios;
 };
 
-export { __stub, __clear, staticClient, getLinks, getNextLink, getPrevLink, baseClient };
+export {
+  __stub,
+  __clear,
+  staticClient,
+  getLinks,
+  getNextLink,
+  getPrevLink,
+  baseClient,
+};

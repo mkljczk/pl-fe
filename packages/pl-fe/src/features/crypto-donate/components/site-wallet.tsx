@@ -11,11 +11,12 @@ interface ISiteWallet {
 
 const SiteWallet: React.FC<ISiteWallet> = ({ limit }): JSX.Element => {
   const { cryptoAddresses } = usePlFeConfig();
-  const addresses = typeof limit === 'number' ? cryptoAddresses.take(limit) : cryptoAddresses;
+  const addresses =
+    typeof limit === 'number' ? cryptoAddresses.take(limit) : cryptoAddresses;
 
   return (
     <Stack space={4}>
-      {addresses.map(address => (
+      {addresses.map((address) => (
         <CryptoAddress
           key={address.ticker}
           address={address.address}

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchBubbleTimeline } from 'pl-fe/actions/timelines';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
@@ -28,14 +28,19 @@ const BubbleTimeline = () => {
     dispatch(fetchBubbleTimeline({ onlyMedia }, true));
   };
 
-  const handleRefresh = () => dispatch(fetchBubbleTimeline({ onlyMedia }, true));
+  const handleRefresh = () =>
+    dispatch(fetchBubbleTimeline({ onlyMedia }, true));
 
   useEffect(() => {
     dispatch(fetchBubbleTimeline({ onlyMedia }));
   }, [onlyMedia]);
 
   return (
-    <Column className='-mt-3 sm:mt-0' label={intl.formatMessage(messages.title)} transparent={!isMobile}>
+    <Column
+      className='-mt-3 sm:mt-0'
+      label={intl.formatMessage(messages.title)}
+      transparent={!isMobile}
+    >
       <PullToRefresh onRefresh={handleRefresh}>
         <Timeline
           className='black:p-0 black:sm:p-4'
@@ -44,8 +49,13 @@ const BubbleTimeline = () => {
           timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
           prefix='home'
           onLoadMore={handleLoadMore}
-          emptyMessage={<FormattedMessage id='empty_column.bubble' defaultMessage='There is nothing here! Write something publicly to fill it up' />}
-          divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
+          emptyMessage={
+            <FormattedMessage
+              id='empty_column.bubble'
+              defaultMessage='There is nothing here! Write something publicly to fill it up'
+            />
+          }
+          divideType={theme === 'black' || isMobile ? 'border' : 'space'}
         />
       </PullToRefresh>
     </Column>

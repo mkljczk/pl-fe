@@ -3,9 +3,9 @@ import {
   MenuButton,
   MenuItem,
   MenuItems,
-  MenuPopover,
   MenuLink,
   MenuListProps,
+  MenuPopover,
 } from '@reach/menu-button';
 import { positionDefault, positionRight } from '@reach/popover';
 import clsx from 'clsx';
@@ -24,12 +24,15 @@ const MenuList: React.FC<IMenuList> = (props) => {
   const { position, className, ...filteredProps } = props;
 
   return (
-    <MenuPopover position={props.position === 'left' ? positionDefault : positionRight}>
+    <MenuPopover
+      position={props.position === 'left' ? positionDefault : positionRight}
+    >
       <MenuItems
         onKeyDown={(event) => event.nativeEvent.stopImmediatePropagation()}
-        className={
-          clsx(className, 'shadow-menu rounded-lg bg-white py-1 black:bg-black dark:bg-primary-900')
-        }
+        className={clsx(
+          className,
+          'shadow-menu rounded-lg bg-white py-1 black:bg-black dark:bg-primary-900',
+        )}
         {...filteredProps}
       />
     </MenuPopover>
@@ -37,6 +40,16 @@ const MenuList: React.FC<IMenuList> = (props) => {
 };
 
 /** Divides menu items. */
-const MenuDivider = () => <hr className='mx-2 my-1 border-t-2 border-gray-100 black:border-t dark:border-gray-800' />;
+const MenuDivider = () => (
+  <hr className='mx-2 my-1 border-t-2 border-gray-100 black:border-t dark:border-gray-800' />
+);
 
-export { Menu, MenuButton, MenuDivider, MenuItems, MenuItem, MenuList, MenuLink };
+export {
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItems,
+  MenuItem,
+  MenuList,
+  MenuLink,
+};

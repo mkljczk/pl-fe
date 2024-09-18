@@ -1,16 +1,19 @@
-import { ONBOARDING_START, ONBOARDING_END } from 'pl-fe/actions/onboarding';
+import { ONBOARDING_END, ONBOARDING_START } from 'pl-fe/actions/onboarding';
 
 import type { OnboardingActions } from 'pl-fe/actions/onboarding';
 
 type OnboardingState = {
   needsOnboarding: boolean;
-}
+};
 
 const initialState: OnboardingState = {
   needsOnboarding: false,
 };
 
-const onboarding = (state: OnboardingState = initialState, action: OnboardingActions): OnboardingState => {
+const onboarding = (
+  state: OnboardingState = initialState,
+  action: OnboardingActions,
+): OnboardingState => {
   switch (action.type) {
     case ONBOARDING_START:
       return { ...state, needsOnboarding: true };

@@ -1,17 +1,37 @@
 import React, { useState, useCallback } from 'react';
-import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { disableMfa } from 'pl-fe/actions/mfa';
-import { Button, Form, FormGroup, Input, FormActions, Stack, Text } from 'pl-fe/components/ui';
+import {
+  Button,
+  Form,
+  FormActions,
+  FormGroup,
+  Input,
+  Stack,
+  Text,
+} from 'pl-fe/components/ui';
 import { useAppDispatch } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
-  mfa_setup_disable_button: { id: 'column.mfa_disable_button', defaultMessage: 'Disable' },
-  disableFail: { id: 'security.disable.fail', defaultMessage: 'Incorrect password. Try again.' },
-  mfaDisableSuccess: { id: 'mfa.disable.success_message', defaultMessage: 'MFA disabled' },
-  passwordPlaceholder: { id: 'mfa.mfa_setup.password_placeholder', defaultMessage: 'Password' },
+  mfa_setup_disable_button: {
+    id: 'column.mfa_disable_button',
+    defaultMessage: 'Disable',
+  },
+  disableFail: {
+    id: 'security.disable.fail',
+    defaultMessage: 'Incorrect password. Try again.',
+  },
+  mfaDisableSuccess: {
+    id: 'mfa.disable.success_message',
+    defaultMessage: 'MFA disabled',
+  },
+  passwordPlaceholder: {
+    id: 'mfa.mfa_setup.password_placeholder',
+    defaultMessage: 'Password',
+  },
 });
 
 const DisableOtpForm: React.FC = () => {
@@ -24,14 +44,17 @@ const DisableOtpForm: React.FC = () => {
 
   const handleSubmit = useCallback(() => {
     setIsLoading(true);
-    dispatch(disableMfa('totp', password)).then(() => {
-      toast.success(intl.formatMessage(messages.mfaDisableSuccess));
-      history.push('../auth/edit');
-    }).finally(() => {
-      setIsLoading(false);
-    }).catch(() => {
-      toast.error(intl.formatMessage(messages.disableFail));
-    });
+    dispatch(disableMfa('totp', password))
+      .then(() => {
+        toast.success(intl.formatMessage(messages.mfaDisableSuccess));
+        history.push('../auth/edit');
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+      .catch(() => {
+        toast.error(intl.formatMessage(messages.disableFail));
+      });
   }, [password, dispatch, intl]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,17 +65,28 @@ const DisableOtpForm: React.FC = () => {
     <Form onSubmit={handleSubmit}>
       <Stack>
         <Text weight='medium'>
-          <FormattedMessage id='mfa.otp_enabled_title' defaultMessage='OTP enabled' />
+          <FormattedMessage
+            id='mfa.otp_enabled_title'
+            defaultMessage='OTP enabled'
+          />
         </Text>
 
         <Text theme='muted'>
-          <FormattedMessage id='mfa.otp_enabled_description' defaultMessage='You have enabled two-factor authentication via OTP.' />
+          <FormattedMessage
+            id='mfa.otp_enabled_description'
+            defaultMessage='You have enabled two-factor authentication via OTP.'
+          />
         </Text>
       </Stack>
 
       <FormGroup
         labelText={intl.formatMessage(messages.passwordPlaceholder)}
-        hintText={<FormattedMessage id='mfa.mfa_disable_enter_password' defaultMessage='Enter your current password to disable two-factor auth.' />}
+        hintText={
+          <FormattedMessage
+            id='mfa.mfa_disable_enter_password'
+            defaultMessage='Enter your current password to disable two-factor auth.'
+          />
+        }
       >
         <Input
           type='password'

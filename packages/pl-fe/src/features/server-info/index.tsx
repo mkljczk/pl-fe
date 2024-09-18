@@ -19,7 +19,9 @@ const ServerInfo = () => {
     <Column label={intl.formatMessage(messages.heading)}>
       <Stack space={4}>
         <Stack>
-          <Text size='lg' weight='medium'>{instance.title}</Text>
+          <Text size='lg' weight='medium'>
+            {instance.title}
+          </Text>
           <Text theme='muted'>{instance.description}</Text>
         </Stack>
 

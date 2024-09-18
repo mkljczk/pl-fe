@@ -13,7 +13,11 @@ describe('<Button />', () => {
   });
 
   it('renders the children', () => {
-    render(<Button><p>children</p></Button>);
+    render(
+      <Button>
+        <p>children</p>
+      </Button>,
+    );
 
     expect(screen.getByRole('button')).toHaveTextContent('children');
   });
@@ -58,7 +62,9 @@ describe('<Button />', () => {
   it('handles Theme properly', () => {
     render(<Button theme='tertiary' />);
 
-    expect(screen.getByRole('button')).toHaveClass('bg-transparent border-gray-400');
+    expect(screen.getByRole('button')).toHaveClass(
+      'bg-transparent border-gray-400',
+    );
   });
 
   describe('to prop', () => {

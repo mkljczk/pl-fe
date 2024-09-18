@@ -17,14 +17,17 @@ interface ISpinner {
 const Spinner = ({ size = 30, withText = true }: ISpinner) => (
   <Stack space={2} justifyContent='center' alignItems='center'>
     <div className='spinner' style={{ width: size, height: size }}>
-      {Array.from(Array(12).keys()).map(i => (
+      {Array.from(Array(12).keys()).map((i) => (
         <div key={i}>&nbsp;</div>
       ))}
     </div>
 
     {withText && (
       <Text theme='muted' tracking='wide'>
-        <FormattedMessage id='loading_indicator.label' defaultMessage='Loading…' />
+        <FormattedMessage
+          id='loading_indicator.label'
+          defaultMessage='Loading…'
+        />
       </Text>
     )}
   </Stack>

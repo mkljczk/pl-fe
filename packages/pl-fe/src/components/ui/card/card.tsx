@@ -18,7 +18,7 @@ const messages = defineMessages({
   back: { id: 'card.back.label', defaultMessage: 'Back' },
 });
 
-type CardSizes = keyof typeof sizes
+type CardSizes = keyof typeof sizes;
 
 interface ICard {
   /** The type of card. */
@@ -33,20 +33,29 @@ interface ICard {
 }
 
 /** An opaque backdrop to hold a collection of related elements. */
-const Card = React.forwardRef<HTMLDivElement, ICard>(({ children, variant = 'default', size = 'md', className, ...filteredProps }, ref): JSX.Element => (
-  <div
-    ref={ref}
-    {...filteredProps}
-    className={clsx({
-      'bg-white dark:bg-primary-900 black:bg-black text-gray-900 dark:text-gray-100 shadow-lg dark:shadow-none': variant === 'rounded',
-      [sizes[size]]: variant === 'rounded',
-      'py-4': variant === 'slim',
-      'black:rounded-none': size !== 'xl',
-    }, className)}
-  >
-    {children}
-  </div>
-));
+const Card = React.forwardRef<HTMLDivElement, ICard>(
+  (
+    { children, variant = 'default', size = 'md', className, ...filteredProps },
+    ref,
+  ): JSX.Element => (
+    <div
+      ref={ref}
+      {...filteredProps}
+      className={clsx(
+        {
+          'bg-white dark:bg-primary-900 black:bg-black text-gray-900 dark:text-gray-100 shadow-lg dark:shadow-none':
+            variant === 'rounded',
+          [sizes[size]]: variant === 'rounded',
+          'py-4': variant === 'slim',
+          'black:rounded-none': size !== 'xl',
+        },
+        className,
+      )}
+    >
+      {children}
+    </div>
+  ),
+);
 
 interface ICardHeader {
   backHref?: string;
@@ -59,7 +68,12 @@ interface ICardHeader {
  * Card header container with back button.
  * Typically holds a CardTitle.
  */
-const CardHeader: React.FC<ICardHeader> = ({ className, children, backHref, onBackClick }): JSX.Element => {
+const CardHeader: React.FC<ICardHeader> = ({
+  className,
+  children,
+  backHref,
+  onBackClick,
+}): JSX.Element => {
   const intl = useIntl();
 
   const renderBackButton = () => {
@@ -68,12 +82,23 @@ const CardHeader: React.FC<ICardHeader> = ({ className, children, backHref, onBa
     }
 
     const Comp: React.ElementType = backHref ? Link : 'button';
-    const backAttributes = backHref ? { to: backHref } : { onClick: onBackClick };
+    const backAttributes = backHref
+      ? { to: backHref }
+      : { onClick: onBackClick };
 
     return (
-      <Comp {...backAttributes} className='rounded-full text-gray-900 focus:ring-2 focus:ring-primary-500 dark:text-gray-100' aria-label={intl.formatMessage(messages.back)}>
-        <SvgIcon src={require('@tabler/icons/outline/arrow-left.svg')} className='h-6 w-6 rtl:rotate-180' />
-        <span className='sr-only' data-testid='back-button'>{intl.formatMessage(messages.back)}</span>
+      <Comp
+        {...backAttributes}
+        className='rounded-full text-gray-900 focus:ring-2 focus:ring-primary-500 dark:text-gray-100'
+        aria-label={intl.formatMessage(messages.back)}
+      >
+        <SvgIcon
+          src={require('@tabler/icons/outline/arrow-left.svg')}
+          className='h-6 w-6 rtl:rotate-180'
+        />
+        <span className='sr-only' data-testid='back-button'>
+          {intl.formatMessage(messages.back)}
+        </span>
       </Comp>
     );
   };
@@ -93,7 +118,9 @@ interface ICardTitle {
 
 /** A card's title. */
 const CardTitle: React.FC<ICardTitle> = ({ title }): JSX.Element => (
-  <Text size='xl' weight='bold' tag='h1' data-testid='card-title' truncate>{title}</Text>
+  <Text size='xl' weight='bold' tag='h1' data-testid='card-title' truncate>
+    {title}
+  </Text>
 );
 
 interface ICardBody {
@@ -104,8 +131,13 @@ interface ICardBody {
 }
 
 /** A card's body. */
-const CardBody: React.FC<ICardBody> = ({ className, children }): JSX.Element => (
-  <div data-testid='card-body' className={className}>{children}</div>
+const CardBody: React.FC<ICardBody> = ({
+  className,
+  children,
+}): JSX.Element => (
+  <div data-testid='card-body' className={className}>
+    {children}
+  </div>
 );
 
 export { type CardSizes, Card, CardHeader, CardTitle, CardBody };

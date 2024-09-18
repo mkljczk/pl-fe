@@ -7,9 +7,7 @@
   "description": "Building the next generation of the Fediverse. Speak freely.",
   "description_limit": 5000,
   "email": "alex@alexgleason.me",
-  "languages": [
-    "en"
-  ],
+  "languages": ["en"],
   "max_toot_chars": 5000,
   "pleroma": {
     "metadata": {
@@ -40,9 +38,7 @@
         "mrf_hashtag": {
           "federated_timeline_removal": [],
           "reject": [],
-          "sensitive": [
-            "nsfw"
-          ]
+          "sensitive": ["nsfw"]
         },
         "mrf_policies": [
           "TagPolicy",
@@ -73,9 +69,7 @@
             "dajiaweibo.com",
             "baraag.net"
           ],
-          "reject": [
-            "solagg.com"
-          ],
+          "reject": ["solagg.com"],
           "reject_deletes": [],
           "report_removal": []
         },

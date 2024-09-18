@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Textarea, Form, Button, FormGroup, FormActions, Text } from 'pl-fe/components/ui';
+import {
+  Button,
+  Form,
+  FormActions,
+  FormGroup,
+  Text,
+  Textarea,
+} from 'pl-fe/components/ui';
 import { useOwnAccount } from 'pl-fe/hooks';
 import { captureSentryFeedback } from 'pl-fe/sentry';
 
@@ -17,7 +24,9 @@ const SentryFeedbackForm: React.FC<ISentryFeedbackForm> = ({ eventId }) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  const handleFeedbackChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+  const handleFeedbackChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
+    e,
+  ) => {
     setFeedback(e.target.value);
   };
 
@@ -37,7 +46,10 @@ const SentryFeedbackForm: React.FC<ISentryFeedbackForm> = ({ eventId }) => {
   if (isSubmitted) {
     return (
       <Text align='center'>
-        <FormattedMessage id='alert.unexpected.thanks' defaultMessage='Thanks for your feedback!' />
+        <FormattedMessage
+          id='alert.unexpected.thanks'
+          defaultMessage='Thanks for your feedback!'
+        />
       </Text>
     );
   }
@@ -55,8 +67,15 @@ const SentryFeedbackForm: React.FC<ISentryFeedbackForm> = ({ eventId }) => {
       </FormGroup>
 
       <FormActions>
-        <Button type='submit' className='mx-auto' disabled={!feedback || isSubmitting}>
-          <FormattedMessage id='alert.unexpected.submit_feedback' defaultMessage='Submit Feedback' />
+        <Button
+          type='submit'
+          className='mx-auto'
+          disabled={!feedback || isSubmitting}
+        >
+          <FormattedMessage
+            id='alert.unexpected.submit_feedback'
+            defaultMessage='Submit Feedback'
+          />
         </Button>
       </FormActions>
     </Form>

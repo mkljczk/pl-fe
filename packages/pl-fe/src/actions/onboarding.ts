@@ -5,21 +5,23 @@ const ONBOARDING_LOCAL_STORAGE_KEY = 'plfe:onboarding';
 
 type OnboardingStartAction = {
   type: typeof ONBOARDING_START;
-}
+};
 
 type OnboardingEndAction = {
   type: typeof ONBOARDING_END;
-}
-
-type OnboardingActions = OnboardingStartAction | OnboardingEndAction
-
-const checkOnboardingStatus = () => (dispatch: React.Dispatch<OnboardingActions>) => {
-  const needsOnboarding = localStorage.getItem(ONBOARDING_LOCAL_STORAGE_KEY) === '1';
-
-  if (needsOnboarding) {
-    dispatch({ type: ONBOARDING_START });
-  }
 };
+
+type OnboardingActions = OnboardingStartAction | OnboardingEndAction;
+
+const checkOnboardingStatus =
+  () => (dispatch: React.Dispatch<OnboardingActions>) => {
+    const needsOnboarding =
+      localStorage.getItem(ONBOARDING_LOCAL_STORAGE_KEY) === '1';
+
+    if (needsOnboarding) {
+      dispatch({ type: ONBOARDING_START });
+    }
+  };
 
 const startOnboarding = () => (dispatch: React.Dispatch<OnboardingActions>) => {
   localStorage.setItem(ONBOARDING_LOCAL_STORAGE_KEY, '1');

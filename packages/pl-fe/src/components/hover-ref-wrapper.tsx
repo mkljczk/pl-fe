@@ -3,7 +3,10 @@ import debounce from 'lodash/debounce';
 import React, { useRef } from 'react';
 
 import { fetchAccount } from 'pl-fe/actions/accounts';
-import { openProfileHoverCard, closeProfileHoverCard } from 'pl-fe/actions/profile-hover-card';
+import {
+  closeProfileHoverCard,
+  openProfileHoverCard,
+} from 'pl-fe/actions/profile-hover-card';
 import { useAppDispatch } from 'pl-fe/hooks';
 import { isMobile } from 'pl-fe/is-mobile';
 
@@ -19,7 +22,12 @@ interface IHoverRefWrapper {
 }
 
 /** Makes a profile hover card appear when the wrapped element is hovered. */
-const HoverRefWrapper: React.FC<IHoverRefWrapper> = ({ accountId, children, inline = false, className }) => {
+const HoverRefWrapper: React.FC<IHoverRefWrapper> = ({
+  accountId,
+  children,
+  inline = false,
+  className,
+}) => {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const Elem: keyof JSX.IntrinsicElements = inline ? 'span' : 'div';

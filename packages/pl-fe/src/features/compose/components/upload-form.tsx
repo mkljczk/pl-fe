@@ -16,23 +16,32 @@ interface IUploadForm {
 const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
   const dispatch = useAppDispatch();
 
-  const { is_uploading: isUploading, media_attachments: mediaAttachments } = useCompose(composeId);
+  const { is_uploading: isUploading, media_attachments: mediaAttachments } =
+    useCompose(composeId);
 
   const mediaIds = mediaAttachments.map((item) => item.id);
 
   const dragItem = useRef<string | null>();
   const dragOverItem = useRef<string | null>();
 
-  const handleDragStart = useCallback((id: string) => {
-    dragItem.current = id;
-  }, [dragItem]);
+  const handleDragStart = useCallback(
+    (id: string) => {
+      dragItem.current = id;
+    },
+    [dragItem],
+  );
 
-  const handleDragEnter = useCallback((id: string) => {
-    dragOverItem.current = id;
-  }, [dragOverItem]);
+  const handleDragEnter = useCallback(
+    (id: string) => {
+      dragOverItem.current = id;
+    },
+    [dragOverItem],
+  );
 
   const handleDragEnd = useCallback(() => {
-    dispatch(changeMediaOrder(composeId, dragItem.current!, dragOverItem.current!));
+    dispatch(
+      changeMediaOrder(composeId, dragItem.current!, dragOverItem.current!),
+    );
     dragItem.current = null;
     dragOverItem.current = null;
   }, [dragItem, dragOverItem]);
@@ -43,7 +52,10 @@ const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
     <div className='overflow-hidden'>
       <UploadProgress composeId={composeId} />
 
-      <HStack wrap className={clsx('overflow-hidden', mediaIds.size !== 0 && 'm-[-5px]')}>
+      <HStack
+        wrap
+        className={clsx('overflow-hidden', mediaIds.size !== 0 && 'm-[-5px]')}
+      >
         {mediaIds.map((id: string) => (
           <Upload
             id={id}

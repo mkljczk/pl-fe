@@ -16,7 +16,10 @@ import ThemeToggle from './theme-toggle';
 import type { Account as AccountEntity } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
-  add: { id: 'profile_dropdown.add_account', defaultMessage: 'Add an existing account' },
+  add: {
+    id: 'profile_dropdown.add_account',
+    defaultMessage: 'Add an existing account',
+  },
   theme: { id: 'profile_dropdown.theme', defaultMessage: 'Theme' },
   logout: { id: 'profile_dropdown.logout', defaultMessage: 'Log out @{acct}' },
 });
@@ -32,7 +35,7 @@ type IMenuItem = {
   toggle?: JSX.Element;
   icon?: string;
   action?: (event: React.MouseEvent) => void;
-}
+};
 
 const getAccount = makeGetAccount();
 
@@ -42,7 +45,9 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   const intl = useIntl();
 
   const authUsers = useAppSelector((state) => state.auth.users);
-  const otherAccounts = useAppSelector((state) => authUsers.map((authUser: any) => getAccount(state, authUser.id)!));
+  const otherAccounts = useAppSelector((state) =>
+    authUsers.map((authUser: any) => getAccount(state, authUser.id)!),
+  );
 
   const handleLogOut = () => {
     dispatch(logOut());
@@ -57,7 +62,12 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   }, 2000);
 
   const renderAccount = (account: AccountEntity) => (
-    <Account account={account} showProfileHoverCard={false} withLinkToProfile={false} hideActions />
+    <Account
+      account={account}
+      showProfileHoverCard={false}
+      withLinkToProfile={false}
+      hideActions
+    />
   );
 
   const ProfileDropdownMenu = useMemo(() => {
@@ -75,7 +85,10 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
     });
 
     menu.push({ text: null });
-    menu.push({ text: intl.formatMessage(messages.theme), toggle: <ThemeToggle /> });
+    menu.push({
+      text: intl.formatMessage(messages.theme),
+      toggle: <ThemeToggle />,
+    });
     menu.push({ text: null });
 
     menu.push({
@@ -105,9 +118,7 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   }, [account, authUsers]);
 
   return (
-    <DropdownMenu
-      component={ProfileDropdownMenu}
-    >
+    <DropdownMenu component={ProfileDropdownMenu}>
       <button
         className='w-full rounded-full focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:ring-gray-800 dark:ring-offset-0 dark:focus:ring-primary-500'
         type='button'
@@ -124,7 +135,10 @@ interface MenuItemProps {
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ className, menuItem }) => {
-  const baseClassName = clsx(className, 'block w-full cursor-pointer truncate px-4 py-2.5 text-left text-sm text-gray-700 outline-none hover:bg-gray-100 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rtl:text-right dark:text-gray-500 dark:hover:bg-gray-800 dark:focus:ring-offset-0');
+  const baseClassName = clsx(
+    className,
+    'block w-full cursor-pointer truncate px-4 py-2.5 text-left text-sm text-gray-700 outline-none hover:bg-gray-100 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rtl:text-right dark:text-gray-500 dark:hover:bg-gray-800 dark:focus:ring-offset-0',
+  );
 
   if (menuItem.toggle) {
     return (
@@ -138,20 +152,13 @@ const MenuItem: React.FC<MenuItemProps> = ({ className, menuItem }) => {
     return <MenuDivider />;
   } else if (menuItem.action) {
     return (
-      <button
-        type='button'
-        onClick={menuItem.action}
-        className={baseClassName}
-      >
+      <button type='button' onClick={menuItem.action} className={baseClassName}>
         {menuItem.text}
       </button>
     );
   } else if (menuItem.to) {
     return (
-      <Link
-        to={menuItem.to}
-        className={baseClassName}
-      >
+      <Link to={menuItem.to} className={baseClassName}>
         {menuItem.text}
       </Link>
     );

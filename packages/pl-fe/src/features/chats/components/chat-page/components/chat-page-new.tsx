@@ -10,8 +10,7 @@ const messages = defineMessages({
   title: { id: 'chat.new_message.title', defaultMessage: 'New Message' },
 });
 
-interface IChatPageNew {
-}
+interface IChatPageNew {}
 
 /** New message form to create a chat. */
 const ChatPageNew: React.FC<IChatPageNew> = () => {

@@ -5,18 +5,14 @@ import { mockStore } from 'pl-fe/jest/test-helpers';
 
 import { VERIFY_CREDENTIALS_REQUEST } from './auth';
 import { ACCOUNTS_IMPORT } from './importer';
-import {
-  MASTODON_PRELOAD_IMPORT,
-  preloadMastodon,
-} from './preload';
+import { MASTODON_PRELOAD_IMPORT, preloadMastodon } from './preload';
 
 describe('preloadMastodon()', () => {
   it('creates the expected actions', async () => {
     const data = await import('pl-fe/__fixtures__/mastodon_initial_state.json');
 
-    __stub(mock => {
-      mock.onGet('/api/v1/accounts/verify_credentials')
-        .reply(200, {});
+    __stub((mock) => {
+      mock.onGet('/api/v1/accounts/verify_credentials').reply(200, {});
     });
 
     const store = mockStore(ImmutableMap());

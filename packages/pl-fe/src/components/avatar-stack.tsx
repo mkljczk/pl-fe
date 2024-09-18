@@ -1,5 +1,8 @@
 import clsx from 'clsx';
-import { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
+import {
+  List as ImmutableList,
+  OrderedSet as ImmutableOrderedSet,
+} from 'immutable';
 import React from 'react';
 
 import { Avatar, HStack } from 'pl-fe/components/ui';
@@ -16,7 +19,14 @@ interface IAvatarStack {
 }
 
 const AvatarStack: React.FC<IAvatarStack> = ({ accountIds, limit = 3 }) => {
-  const accounts = useAppSelector(state => ImmutableList(accountIds.slice(0, limit).map(accountId => getAccount(state, accountId)).filter(account => account))) as ImmutableList<Account>;
+  const accounts = useAppSelector((state) =>
+    ImmutableList(
+      accountIds
+        .slice(0, limit)
+        .map((accountId) => getAccount(state, accountId))
+        .filter((account) => account),
+    ),
+  ) as ImmutableList<Account>;
 
   return (
     <HStack className='relative' aria-hidden>

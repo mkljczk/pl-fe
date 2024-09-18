@@ -15,12 +15,20 @@ import type { Emoji } from 'pl-fe/features/emoji';
 
 type AutoSuggestion = string | Emoji;
 
-interface IAutosuggestInput extends Pick<React.HTMLAttributes<HTMLInputElement>, 'onChange' | 'onKeyUp' | 'onKeyDown'> {
+interface IAutosuggestInput
+  extends Pick<
+    React.HTMLAttributes<HTMLInputElement>,
+    'onChange' | 'onKeyUp' | 'onKeyDown'
+  > {
   value: string;
   suggestions: ImmutableList<any>;
   disabled?: boolean;
   placeholder?: string;
-  onSuggestionSelected: (tokenStart: number, lastToken: string | null, suggestion: AutoSuggestion) => void;
+  onSuggestionSelected: (
+    tokenStart: number,
+    lastToken: string | null,
+    suggestion: AutoSuggestion,
+  ) => void;
   onSuggestionsClearRequested: () => void;
   onSuggestionsFetchRequested: (token: string) => void;
   autoFocus: boolean;
@@ -36,14 +44,13 @@ interface IAutosuggestInput extends Pick<React.HTMLAttributes<HTMLInputElement>,
 }
 
 class AutosuggestInput extends ImmutablePureComponent<IAutosuggestInput> {
-
   static defaultProps = {
     autoFocus: false,
     autoSelect: true,
     searchTokens: ImmutableList(['@', ':', '#']),
   };
 
-  getFirstIndex = () => this.props.autoSelect ? 0 : -1;
+  getFirstIndex = () => (this.props.autoSelect ? 0 : -1);
 
   state = {
     suggestionsHidden: true,
@@ -105,27 +112,39 @@ class AutosuggestInput extends ImmutablePureComponent<IAutosuggestInput> {
       case 'ArrowDown':
         if (!suggestionsHidden && (suggestions.size > 0 || menu)) {
           e.preventDefault();
-          this.setState({ selectedSuggestion: Math.min(selectedSuggestion + 1, lastIndex) });
+          this.setState({
+            selectedSuggestion: Math.min(selectedSuggestion + 1, lastIndex),
+          });
         }
 
         break;
       case 'ArrowUp':
         if (!suggestionsHidden && (suggestions.size > 0 || menu)) {
           e.preventDefault();
-          this.setState({ selectedSuggestion: Math.max(selectedSuggestion - 1, firstIndex) });
+          this.setState({
+            selectedSuggestion: Math.max(selectedSuggestion - 1, firstIndex),
+          });
         }
 
         break;
       case 'Enter':
       case 'Tab':
         // Select suggestion
-        if (!suggestionsHidden && selectedSuggestion > -1 && (suggestions.size > 0 || menu)) {
+        if (
+          !suggestionsHidden &&
+          selectedSuggestion > -1 &&
+          (suggestions.size > 0 || menu)
+        ) {
           e.preventDefault();
           e.stopPropagation();
           this.setState({ selectedSuggestion: firstIndex });
 
           if (selectedSuggestion < suggestions.size) {
-            this.props.onSuggestionSelected(this.state.tokenStart, this.state.lastToken, suggestions.get(selectedSuggestion));
+            this.props.onSuggestionSelected(
+              this.state.tokenStart,
+              this.state.lastToken,
+              suggestions.get(selectedSuggestion),
+            );
           } else if (menu) {
             const item = menu[selectedSuggestion - suggestions.size];
             this.handleMenuItemAction(item, e);
@@ -152,17 +171,28 @@ class AutosuggestInput extends ImmutablePureComponent<IAutosuggestInput> {
     this.setState({ focused: true });
   };
 
-  onSuggestionClick: React.EventHandler<React.MouseEvent | React.TouchEvent> = (e) => {
+  onSuggestionClick: React.EventHandler<React.MouseEvent | React.TouchEvent> = (
+    e,
+  ) => {
     const index = Number(e.currentTarget?.getAttribute('data-index'));
     const suggestion = this.props.suggestions.get(index);
-    this.props.onSuggestionSelected(this.state.tokenStart, this.state.lastToken, suggestion);
+    this.props.onSuggestionSelected(
+      this.state.tokenStart,
+      this.state.lastToken,
+      suggestion,
+    );
     this.input?.focus();
     e.preventDefault();
   };
 
   componentDidUpdate(prevProps: IAutosuggestInput, prevState: any) {
     const { suggestions } = this.props;
-    if (suggestions !== prevProps.suggestions && suggestions.size > 0 && prevState.suggestionsHidden && prevState.focused) {
+    if (
+      suggestions !== prevProps.suggestions &&
+      suggestions.size > 0 &&
+      prevState.suggestionsHidden &&
+      prevState.focused
+    ) {
       this.setState({ suggestionsHidden: false });
     }
   }
@@ -198,7 +228,8 @@ class AutosuggestInput extends ImmutablePureComponent<IAutosuggestInput> {
         data-index={i}
         className={clsx({
           'px-4 py-2.5 text-sm text-gray-700 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 focus:bg-gray-100 dark:focus:bg-primary-800 group black:hover:bg-gray-900 black:focus:bg-gray-900': true,
-          'bg-gray-100 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 black:bg-gray-900 black:hover:bg-gray-900': i === selectedSuggestion,
+          'bg-gray-100 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 black:bg-gray-900 black:hover:bg-gray-900':
+            i === selectedSuggestion,
         })}
         onMouseDown={this.onSuggestionClick}
         onTouchEnd={this.onSuggestionClick}
@@ -208,17 +239,22 @@ class AutosuggestInput extends ImmutablePureComponent<IAutosuggestInput> {
     );
   };
 
-  handleMenuItemAction = (item: MenuItem | null, e: React.MouseEvent | React.KeyboardEvent) => {
+  handleMenuItemAction = (
+    item: MenuItem | null,
+    e: React.MouseEvent | React.KeyboardEvent,
+  ) => {
     this.onBlur();
     if (item?.action) {
       item.action(e);
     }
   };
 
-  handleMenuItemClick = (item: MenuItem | null): React.MouseEventHandler => e => {
-    e.preventDefault();
-    this.handleMenuItemAction(item, e);
-  };
+  handleMenuItemClick =
+    (item: MenuItem | null): React.MouseEventHandler =>
+    (e) => {
+      e.preventDefault();
+      this.handleMenuItemAction(item, e);
+    };
 
   renderMenu = () => {
     const { menu, suggestions } = this.props;
@@ -230,16 +266,17 @@ class AutosuggestInput extends ImmutablePureComponent<IAutosuggestInput> {
 
     return menu.map((item, i) => (
       <a
-        className={clsx('flex cursor-pointer items-center space-x-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 dark:text-gray-500 dark:hover:bg-gray-800 dark:focus:bg-primary-800', { selected: suggestions.size - selectedSuggestion === i })}
+        className={clsx(
+          'flex cursor-pointer items-center space-x-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 dark:text-gray-500 dark:hover:bg-gray-800 dark:focus:bg-primary-800',
+          { selected: suggestions.size - selectedSuggestion === i },
+        )}
         href='#'
         role='button'
         tabIndex={0}
         onMouseDown={this.handleMenuItemClick(item)}
         key={i}
       >
-        {item?.icon && (
-          <Icon src={item.icon} />
-        )}
+        {item?.icon && <Icon src={item.icon} />}
 
         <span>{item?.text}</span>
       </a>
@@ -257,10 +294,23 @@ class AutosuggestInput extends ImmutablePureComponent<IAutosuggestInput> {
   }
 
   render() {
-    const { value, suggestions, disabled, placeholder, onKeyUp, autoFocus, className, id, maxLength, menu, theme } = this.props;
+    const {
+      value,
+      suggestions,
+      disabled,
+      placeholder,
+      onKeyUp,
+      autoFocus,
+      className,
+      id,
+      maxLength,
+      menu,
+      theme,
+    } = this.props;
     const { suggestionsHidden } = this.state;
 
-    const visible = !suggestionsHidden && (!suggestions.isEmpty() || (menu && value));
+    const visible =
+      !suggestionsHidden && (!suggestions.isEmpty() || (menu && value));
 
     return [
       <div key='input' className='relative w-full'>
@@ -305,7 +355,10 @@ class AutosuggestInput extends ImmutablePureComponent<IAutosuggestInput> {
       </Portal>,
     ];
   }
-
 }
 
-export { type AutoSuggestion, type IAutosuggestInput, AutosuggestInput as default };
+export {
+  type AutoSuggestion,
+  type IAutosuggestInput,
+  AutosuggestInput as default,
+};

@@ -3,7 +3,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { FormattedMessage } from 'react-intl';
 
 import { NODE_ENV } from 'pl-fe/build-config';
-import { HStack, Text, Stack, Textarea } from 'pl-fe/components/ui';
+import { HStack, Stack, Text, Textarea } from 'pl-fe/components/ui';
 import { useLogo, usePlFeConfig } from 'pl-fe/hooks';
 import { captureSentryException } from 'pl-fe/sentry';
 import KVStore from 'pl-fe/storage/kv-store';
@@ -66,7 +66,9 @@ const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
       .catch(console.error);
 
     import('bowser')
-      .then(({ default: Bowser }) => setBrowser(Bowser.getParser(window.navigator.userAgent)))
+      .then(({ default: Bowser }) =>
+        setBrowser(Bowser.getParser(window.navigator.userAgent)),
+      )
       .catch(() => {});
   };
 
@@ -88,7 +90,10 @@ const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
         <div className='py-8'>
           <div className='mx-auto max-w-xl space-y-2 text-center'>
             <h1 className='text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-gray-500'>
-              <FormattedMessage id='alert.unexpected.message' defaultMessage='Something went wrong.' />
+              <FormattedMessage
+                id='alert.unexpected.message'
+                defaultMessage='Something went wrong.'
+              />
             </h1>
             <p className='text-lg text-gray-700 dark:text-gray-600'>
               <FormattedMessage
@@ -96,7 +101,11 @@ const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
                 defaultMessage="We're sorry for the interruption. If the problem persists, please reach out to our support team. You may also try to {clearCookies} (this will log you out)."
                 values={{
                   clearCookies: (
-                    <a href='/' onClick={clearCookies} className='text-primary-600 hover:underline dark:text-accent-blue'>
+                    <a
+                      href='/'
+                      onClick={clearCookies}
+                      className='text-primary-600 hover:underline dark:text-accent-blue'
+                    >
                       <FormattedMessage
                         id='alert.unexpected.clear_cookies'
                         defaultMessage='clear cookies and browser data'
@@ -108,25 +117,35 @@ const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
             </p>
 
             <Text theme='muted'>
-              <Text weight='medium' tag='span' theme='muted'>{sourceCode.displayName}:</Text>
-
-              {' '}{sourceCode.version}
+              <Text weight='medium' tag='span' theme='muted'>
+                {sourceCode.displayName}:
+              </Text>{' '}
+              {sourceCode.version}
             </Text>
 
             <div className='mt-10'>
-              <a href='/' className='text-base font-medium text-primary-600 hover:underline dark:text-accent-blue'>
-                <FormattedMessage id='alert.unexpected.return_home' defaultMessage='Return Home' />
-                {' '}
-                <span className='inline-block rtl:rotate-180' aria-hidden='true'>&rarr;</span>
+              <a
+                href='/'
+                className='text-base font-medium text-primary-600 hover:underline dark:text-accent-blue'
+              >
+                <FormattedMessage
+                  id='alert.unexpected.return_home'
+                  defaultMessage='Return Home'
+                />{' '}
+                <span
+                  className='inline-block rtl:rotate-180'
+                  aria-hidden='true'
+                >
+                  &rarr;
+                </span>
               </a>
             </div>
           </div>
 
           <div className='mx-auto max-w-lg space-y-4 py-16'>
-            {(isProduction) ? (
-              (sentryEnabled && sentryEventId) && (
-                <SentryFeedbackForm eventId={sentryEventId} />
-              )
+            {isProduction ? (
+              sentryEnabled &&
+              sentryEventId && <SentryFeedbackForm eventId={sentryEventId} />
             ) : (
               <>
                 {errorText && (
@@ -142,8 +161,15 @@ const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
 
                 {browser && (
                   <Stack>
-                    <Text weight='semibold'><FormattedMessage id='alert.unexpected.browser' defaultMessage='Browser' /></Text>
-                    <Text theme='muted'>{browser.getBrowserName()} {browser.getBrowserVersion()}</Text>
+                    <Text weight='semibold'>
+                      <FormattedMessage
+                        id='alert.unexpected.browser'
+                        defaultMessage='Browser'
+                      />
+                    </Text>
+                    <Text theme='muted'>
+                      {browser.getBrowserName()} {browser.getBrowserVersion()}
+                    </Text>
                   </Stack>
                 )}
               </>
@@ -156,19 +182,28 @@ const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
         <HStack justifyContent='center' space={4} element='nav'>
           {links.get('status') && (
             <SiteErrorBoundaryLink href={links.get('status')!}>
-              <FormattedMessage id='alert.unexpected.links.status' defaultMessage='Status' />
+              <FormattedMessage
+                id='alert.unexpected.links.status'
+                defaultMessage='Status'
+              />
             </SiteErrorBoundaryLink>
           )}
 
           {links.get('help') && (
             <SiteErrorBoundaryLink href={links.get('help')!}>
-              <FormattedMessage id='alert.unexpected.links.help' defaultMessage='Help Center' />
+              <FormattedMessage
+                id='alert.unexpected.links.help'
+                defaultMessage='Help Center'
+              />
             </SiteErrorBoundaryLink>
           )}
 
           {links.get('support') && (
             <SiteErrorBoundaryLink href={links.get('support')!}>
-              <FormattedMessage id='alert.unexpected.links.support' defaultMessage='Support' />
+              <FormattedMessage
+                id='alert.unexpected.links.support'
+                defaultMessage='Support'
+              />
             </SiteErrorBoundaryLink>
           )}
         </HStack>
@@ -190,8 +225,14 @@ interface ISiteErrorBoundaryLink {
 
 const SiteErrorBoundaryLink = ({ href, children }: ISiteErrorBoundaryLink) => (
   <>
-    <span className='inline-block border-l border-gray-300' aria-hidden='true' />
-    <a href={href} className='text-sm font-medium text-gray-700 hover:underline dark:text-gray-600'>
+    <span
+      className='inline-block border-l border-gray-300'
+      aria-hidden='true'
+    />
+    <a
+      href={href}
+      className='text-sm font-medium text-gray-700 hover:underline dark:text-gray-600'
+    >
       {children}
     </a>
   </>

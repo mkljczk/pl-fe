@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import { deleteStatusModal } from 'pl-fe/actions/moderation';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
@@ -11,8 +11,14 @@ import { useAppDispatch } from 'pl-fe/hooks';
 import type { SelectedStatus } from 'pl-fe/selectors';
 
 const messages = defineMessages({
-  viewStatus: { id: 'admin.reports.actions.view_status', defaultMessage: 'View post' },
-  deleteStatus: { id: 'admin.statuses.actions.delete_status', defaultMessage: 'Delete post' },
+  viewStatus: {
+    id: 'admin.reports.actions.view_status',
+    defaultMessage: 'View post',
+  },
+  deleteStatus: {
+    id: 'admin.statuses.actions.delete_status',
+    defaultMessage: 'Delete post',
+  },
 });
 
 interface IReportStatus {
@@ -30,16 +36,19 @@ const ReportStatus: React.FC<IReportStatus> = ({ status }) => {
   const makeMenu = () => {
     const acct = status.account.acct;
 
-    return [{
-      text: intl.formatMessage(messages.viewStatus, { acct: `@${acct}` }),
-      to: `/@${acct}/posts/${status.id}`,
-      icon: require('@tabler/icons/outline/pencil.svg'),
-    }, {
-      text: intl.formatMessage(messages.deleteStatus, { acct: `@${acct}` }),
-      action: handleDeleteStatus,
-      icon: require('@tabler/icons/outline/trash.svg'),
-      destructive: true,
-    }];
+    return [
+      {
+        text: intl.formatMessage(messages.viewStatus, { acct: `@${acct}` }),
+        to: `/@${acct}/posts/${status.id}`,
+        icon: require('@tabler/icons/outline/pencil.svg'),
+      },
+      {
+        text: intl.formatMessage(messages.deleteStatus, { acct: `@${acct}` }),
+        action: handleDeleteStatus,
+        icon: require('@tabler/icons/outline/trash.svg'),
+        destructive: true,
+      },
+    ];
   };
 
   const menu = makeMenu();

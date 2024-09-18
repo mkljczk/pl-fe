@@ -5,7 +5,12 @@ import { ChatKeys } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
 
 import { compareDate } from './comparators';
-import { appendPageItem, flattenPages, sortQueryData, updatePageItem } from './queries';
+import {
+  appendPageItem,
+  flattenPages,
+  sortQueryData,
+  updatePageItem,
+} from './queries';
 
 import type { InfiniteData } from '@tanstack/react-query';
 import type { Chat, PaginatedResponse } from 'pl-api';
@@ -15,17 +20,23 @@ import type { Chat, PaginatedResponse } from 'pl-api';
  * @param newChat - Chat entity.
  */
 const updateChatInChatSearchQuery = (newChat: Chat) => {
-  updatePageItem<Chat>(['chats', 'search'], newChat as any, (o, n) => o.id === n.id);
+  updatePageItem<Chat>(
+    ['chats', 'search'],
+    newChat as any,
+    (o, n) => o.id === n.id,
+  );
 };
 
 /**
  * Re-order the ChatSearch query by the last message timestamp.
  */
 const reOrderChatListItems = () => {
-  sortQueryData<Chat>(['chats', 'search'], (chatA, chatB) => compareDate(
-    chatA.last_message?.created_at as string,
-    chatB.last_message?.created_at as string,
-  ));
+  sortQueryData<Chat>(['chats', 'search'], (chatA, chatB) =>
+    compareDate(
+      chatA.last_message?.created_at as string,
+      chatB.last_message?.created_at as string,
+    ),
+  );
 };
 
 /**
@@ -35,7 +46,10 @@ const reOrderChatListItems = () => {
  */
 const checkIfChatExists = (chatId: string) => {
   const currentChats = flattenPages(
-    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(['chats', 'search']),
+    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>([
+      'chats',
+      'search',
+    ]),
   );
 
   return currentChats?.find((chat: Chat) => chat.id === chatId);
@@ -68,17 +82,23 @@ const updateChatListItem = (newChat: Chat) => {
 
   if (lastMessage) {
     // Update the Chat Messages query data.
-    appendPageItem(ChatKeys.chatMessages(newChat.id), normalizeChatMessage(lastMessage));
+    appendPageItem(
+      ChatKeys.chatMessages(newChat.id),
+      normalizeChatMessage(lastMessage),
+    );
   }
 };
 
 /** Get unread chats count. */
 const getUnreadChatsCount = (): number => {
   const chats = flattenPages(
-    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(['chats', 'search']),
+    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>([
+      'chats',
+      'search',
+    ]),
   );
 
-  return sumBy(chats, chat => chat.unread);
+  return sumBy(chats, (chat) => chat.unread);
 };
 
 export { updateChatListItem, getUnreadChatsCount, reOrderChatListItems };

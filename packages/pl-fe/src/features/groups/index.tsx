@@ -24,7 +24,12 @@ const Groups: React.FC = () => {
   const createGroup = () => openModal('CREATE_GROUP');
 
   const renderBlankslate = () => (
-    <Stack space={4} alignItems='center' justifyContent='center' className='py-6'>
+    <Stack
+      space={4}
+      alignItems='center'
+      justifyContent='center'
+      className='py-6'
+    >
       <Stack space={2} className='max-w-sm'>
         <Text size='2xl' weight='bold' tag='h2' align='center'>
           <FormattedMessage
@@ -41,12 +46,11 @@ const Groups: React.FC = () => {
         </Text>
       </Stack>
 
-      <Button
-        className='self-center'
-        onClick={createGroup}
-        theme='secondary'
-      >
-        <FormattedMessage id='new_group_panel.action' defaultMessage='Create Group' />
+      <Button className='self-center' onClick={createGroup} theme='secondary'>
+        <FormattedMessage
+          id='new_group_panel.action'
+          defaultMessage='Create Group'
+        />
       </Button>
     </Stack>
   );
@@ -61,7 +65,10 @@ const Groups: React.FC = () => {
           theme='secondary'
           block
         >
-          <FormattedMessage id='new_group_panel.action' defaultMessage='Create Group' />
+          <FormattedMessage
+            id='new_group_panel.action'
+            defaultMessage='Create Group'
+          />
         </Button>
       )}
 

@@ -4,8 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import List, { ListItem } from 'pl-fe/components/list';
 import { Modal, Stack, Text, Toggle } from 'pl-fe/components/ui';
 
-import type { BaseModalProps } from '../modal-root';
 import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
+import type { BaseModalProps } from '../modal-root';
 
 interface ConfirmationModalProps {
   heading?: React.ReactNode;
@@ -48,7 +48,9 @@ const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
     if (onCancel) onCancel();
   };
 
-  const handleCheckboxChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleCheckboxChange: React.ChangeEventHandler<HTMLInputElement> = (
+    e,
+  ) => {
     setChecked(e.target.checked);
   };
 
@@ -59,15 +61,18 @@ const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
       confirmationText={confirm}
       confirmationDisabled={!!checkbox && !checked}
       confirmationTheme={confirmationTheme}
-      cancelText={<FormattedMessage id='confirmation_modal.cancel' defaultMessage='Cancel' />}
+      cancelText={
+        <FormattedMessage
+          id='confirmation_modal.cancel'
+          defaultMessage='Cancel'
+        />
+      }
       cancelAction={handleCancel}
       secondaryText={secondary}
       secondaryAction={onSecondary && handleSecondary}
     >
       <Stack space={4}>
-        <Text>
-          {message}
-        </Text>
+        <Text>{message}</Text>
 
         {checkbox && (
           <List>

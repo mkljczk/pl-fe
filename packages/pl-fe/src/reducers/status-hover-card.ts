@@ -1,8 +1,8 @@
 import { Record as ImmutableRecord } from 'immutable';
 
 import {
-  STATUS_HOVER_CARD_OPEN,
   STATUS_HOVER_CARD_CLOSE,
+  STATUS_HOVER_CARD_OPEN,
   STATUS_HOVER_CARD_UPDATE,
 } from 'pl-fe/actions/status-hover-card';
 
@@ -26,16 +26,11 @@ const statusHoverCard = (state: State = ReducerRecord(), action: AnyAction) => {
     case STATUS_HOVER_CARD_UPDATE:
       return state.set('hovered', true);
     case STATUS_HOVER_CARD_CLOSE:
-      if (state.hovered === true && !action.force)
-        return state;
-      else
-        return ReducerRecord();
+      if (state.hovered === true && !action.force) return state;
+      else return ReducerRecord();
     default:
       return state;
   }
 };
 
-export {
-  ReducerRecord,
-  statusHoverCard as default,
-};
+export { ReducerRecord, statusHoverCard as default };

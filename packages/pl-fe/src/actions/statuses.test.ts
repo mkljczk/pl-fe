@@ -1,4 +1,4 @@
-import { fromJS, Map as ImmutableMap } from 'immutable';
+import { Map as ImmutableMap, fromJS } from 'immutable';
 
 import { STATUSES_IMPORT } from 'pl-fe/actions/importer';
 import { __stub } from 'pl-fe/api';
@@ -11,8 +11,9 @@ describe('fetchContext()', () => {
   it('handles Mitra context', async () => {
     const statuses = await import('pl-fe/__fixtures__/mitra-context.json');
 
-    __stub(mock => {
-      mock.onGet('/api/v1/statuses/017ed505-5926-392f-256a-f86d5075df70/context')
+    __stub((mock) => {
+      mock
+        .onGet('/api/v1/statuses/017ed505-5926-392f-256a-f86d5075df70/context')
         .reply(200, statuses);
     });
 
@@ -21,7 +22,9 @@ describe('fetchContext()', () => {
     const actions = store.getActions();
 
     expect(actions[3].type).toEqual(STATUSES_IMPORT);
-    expect(actions[3].statuses[0].id).toEqual('017ed503-bc96-301a-e871-2c23b30ddd05');
+    expect(actions[3].statuses[0].id).toEqual(
+      '017ed503-bc96-301a-e871-2c23b30ddd05',
+    );
   });
 });
 
@@ -34,7 +37,7 @@ describe('deleteStatus()', () => {
       store = mockStore(state);
     });
 
-    it('should do nothing', async() => {
+    it('should do nothing', async () => {
       await store.dispatch(deleteStatus('1'));
       const actions = store.getActions();
 
@@ -49,11 +52,12 @@ describe('deleteStatus()', () => {
     });
 
     beforeEach(() => {
-      const state = rootState
-        .set('me', '1234')
-        .set('statuses', fromJS({
+      const state = rootState.set('me', '1234').set(
+        'statuses',
+        fromJS({
           [statusId]: cachedStatus,
-        }) as any);
+        }) as any,
+      );
       store = mockStore(state);
     });
 
@@ -68,7 +72,7 @@ describe('deleteStatus()', () => {
         });
       });
 
-      it('should delete the status from the API', async() => {
+      it('should delete the status from the API', async () => {
         const expectedActions = [
           {
             type: 'STATUS_DELETE_REQUEST',
@@ -89,7 +93,7 @@ describe('deleteStatus()', () => {
         expect(actions).toEqual(expectedActions);
       });
 
-      it('should handle redraft', async() => {
+      it('should handle redraft', async () => {
         const expectedActions = [
           {
             type: 'STATUS_DELETE_REQUEST',
@@ -136,7 +140,7 @@ describe('deleteStatus()', () => {
         });
       });
 
-      it('should dispatch failed action', async() => {
+      it('should dispatch failed action', async () => {
         const expectedActions = [
           {
             type: 'STATUS_DELETE_REQUEST',

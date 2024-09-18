@@ -25,19 +25,23 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
   const getStatus = useCallback(makeGetStatus(), []);
   const intl = useIntl();
 
-  const status = useAppSelector(state => getStatus(state, { id: params.statusId })) as StatusEntity;
-  
+  const status = useAppSelector((state) =>
+    getStatus(state, { id: params.statusId }),
+  ) as StatusEntity;
+
   const { openModal } = useModalsStore();
   const { tileServer } = usePlFeConfig();
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 
   useEffect(() => {
-    dispatch(fetchStatus(params.statusId, intl)).then(() => {
-      setIsLoaded(true);
-    }).catch(() => {
-      setIsLoaded(true);
-    });
+    dispatch(fetchStatus(params.statusId, intl))
+      .then(() => {
+        setIsLoaded(true);
+      })
+      .catch(() => {
+        setIsLoaded(true);
+      });
   }, [params.statusId]);
 
   const handleShowMap: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
@@ -54,20 +58,25 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
     if (!event.location) return null;
 
     const text = [
-      <React.Fragment key='event-name'>
-        {event.location.name}
-      </React.Fragment>,
+      <React.Fragment key='event-name'>{event.location.name}</React.Fragment>,
     ];
 
     if (event.location.street?.trim()) {
-      text.push (
+      text.push(
         <React.Fragment key='event-street'>
-          <br />{event.location.street}
+          <br />
+          {event.location.street}
         </React.Fragment>,
       );
     }
 
-    const address = [event.location.postal_code, event.location.locality, event.location.country].filter(text => text).join(', ');
+    const address = [
+      event.location.postal_code,
+      event.location.locality,
+      event.location.country,
+    ]
+      .filter((text) => text)
+      .join(', ');
 
     if (address) {
       text.push(
@@ -82,23 +91,32 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
       text.push(
         <React.Fragment key='event-map'>
           <br />
-          <a href='#' className='text-primary-600 hover:underline dark:text-accent-blue' onClick={handleShowMap}>
-            <FormattedMessage id='event.show_on_map' defaultMessage='Show on map' />
+          <a
+            href='#'
+            className='text-primary-600 hover:underline dark:text-accent-blue'
+            onClick={handleShowMap}
+          >
+            <FormattedMessage
+              id='event.show_on_map'
+              defaultMessage='Show on map'
+            />
           </a>
         </React.Fragment>,
       );
     }
 
-    return event.location && (
-      <Stack space={1}>
-        <Text size='xl' weight='bold'>
-          <FormattedMessage id='event.location' defaultMessage='Location' />
-        </Text>
-        <HStack space={2} alignItems='center'>
-          <Icon src={require('@tabler/icons/outline/map-pin.svg')} />
-          <Text>{text}</Text>
-        </HStack>
-      </Stack>
+    return (
+      event.location && (
+        <Stack space={1}>
+          <Text size='xl' weight='bold'>
+            <FormattedMessage id='event.location' defaultMessage='Location' />
+          </Text>
+          <HStack space={2} alignItems='center'>
+            <Icon src={require('@tabler/icons/outline/map-pin.svg')} />
+            <Text>{text}</Text>
+          </HStack>
+        </Stack>
+      )
     );
   }, [status]);
 
@@ -110,7 +128,11 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
     const startDate = new Date(event.start_time);
     const endDate = event.end_time && new Date(event.end_time);
 
-    const sameDay = endDate && startDate.getDate() === endDate.getDate() && startDate.getMonth() === endDate.getMonth() && startDate.getFullYear() === endDate.getFullYear();
+    const sameDay =
+      endDate &&
+      startDate.getDate() === endDate.getDate() &&
+      startDate.getMonth() === endDate.getMonth() &&
+      startDate.getFullYear() === endDate.getFullYear();
 
     return (
       <Stack space={1}>
@@ -129,18 +151,20 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
               hour='2-digit'
               minute='2-digit'
             />
-            {endDate && (<>
-              {' - '}
-              <FormattedDate
-                value={endDate}
-                year={sameDay ? undefined : 'numeric'}
-                month={sameDay ? undefined : 'long'}
-                day={sameDay ? undefined : '2-digit'}
-                weekday={sameDay ? undefined : 'long'}
-                hour='2-digit'
-                minute='2-digit'
-              />
-            </>)}
+            {endDate && (
+              <>
+                {' - '}
+                <FormattedDate
+                  value={endDate}
+                  year={sameDay ? undefined : 'numeric'}
+                  month={sameDay ? undefined : 'long'}
+                  day={sameDay ? undefined : '2-digit'}
+                  weekday={sameDay ? undefined : 'long'}
+                  hour='2-digit'
+                  minute='2-digit'
+                />
+              </>
+            )}
           </Text>
         </HStack>
       </Stack>
@@ -153,13 +177,20 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
     return (
       <Stack space={1}>
         <Text size='xl' weight='bold'>
-          <FormattedMessage id='event.website' defaultMessage='External links' />
+          <FormattedMessage
+            id='event.website'
+            defaultMessage='External links'
+          />
         </Text>
 
-        {status.event.links.map(link => (
+        {status.event.links.map((link) => (
           <HStack space={2} alignItems='center'>
             <Icon src={require('@tabler/icons/outline/link.svg')} />
-            <a href={link.remote_url || link.url} className='text-primary-600 hover:underline dark:text-accent-blue' target='_blank'>
+            <a
+              href={link.remote_url || link.url}
+              className='text-primary-600 hover:underline dark:text-accent-blue'
+              target='_blank'
+            >
               {(link.remote_url || link.url).replace(/^https?:\/\//, '')}
             </a>
           </HStack>
@@ -169,9 +200,7 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
   }, [status]);
 
   if (!status && isLoaded) {
-    return (
-      <MissingIndicator />
-    );
+    return <MissingIndicator />;
   } else if (!status) return null;
 
   return (
@@ -179,7 +208,10 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
       {!!status.contentHtml.trim() && (
         <Stack space={1}>
           <Text size='xl' weight='bold'>
-            <FormattedMessage id='event.description' defaultMessage='Description' />
+            <FormattedMessage
+              id='event.description'
+              defaultMessage='Description'
+            />
           </Text>
 
           <StatusContent status={status} translatable />

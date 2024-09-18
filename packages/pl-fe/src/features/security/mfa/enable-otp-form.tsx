@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { fetchBackupCodes } from 'pl-fe/actions/mfa';
@@ -9,8 +9,14 @@ import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   mfaCancelButton: { id: 'column.mfa_cancel', defaultMessage: 'Cancel' },
-  mfaSetupButton: { id: 'column.mfa_setup', defaultMessage: 'Proceed to Setup' },
-  codesFail: { id: 'security.codes.fail', defaultMessage: 'Failed to fetch backup codes' },
+  mfaSetupButton: {
+    id: 'column.mfa_setup',
+    defaultMessage: 'Proceed to Setup',
+  },
+  codesFail: {
+    id: 'security.codes.fail',
+    defaultMessage: 'Failed to fetch backup codes',
+  },
 });
 
 interface IEnableOtpForm {
@@ -18,7 +24,10 @@ interface IEnableOtpForm {
   handleSetupProceedClick: (event: React.MouseEvent) => void;
 }
 
-const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupProceedClick }) => {
+const EnableOtpForm: React.FC<IEnableOtpForm> = ({
+  displayOtpForm,
+  handleSetupProceedClick,
+}) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const history = useHistory();
@@ -26,9 +35,10 @@ const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupPr
   const [backupCodes, setBackupCodes] = useState<Array<string>>([]);
 
   useEffect(() => {
-    dispatch(fetchBackupCodes()).then(({ codes: backupCodes }) => {
-      setBackupCodes(backupCodes);
-    })
+    dispatch(fetchBackupCodes())
+      .then(({ codes: backupCodes }) => {
+        setBackupCodes(backupCodes);
+      })
       .catch(() => {
         toast.error(intl.formatMessage(messages.codesFail));
       });
@@ -38,13 +48,19 @@ const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupPr
     <Stack space={4}>
       <Stack space={4}>
         <Text theme='muted'>
-          <FormattedMessage id='mfa.setup_warning' defaultMessage="Write these codes down or save them somewhere secure - otherwise you won't see them again. If you lose access to your 2FA app and recovery codes you'll be locked out of your account." />
+          <FormattedMessage
+            id='mfa.setup_warning'
+            defaultMessage="Write these codes down or save them somewhere secure - otherwise you won't see them again. If you lose access to your 2FA app and recovery codes you'll be locked out of your account."
+          />
         </Text>
 
         <div className='rounded-lg border-2 border-solid border-gray-200 p-4 dark:border-gray-800'>
           <Stack space={3}>
             <Text weight='medium' align='center'>
-              <FormattedMessage id='mfa.setup_recoverycodes' defaultMessage='Recovery codes' />
+              <FormattedMessage
+                id='mfa.setup_recoverycodes'
+                defaultMessage='Recovery codes'
+              />
             </Text>
 
             {backupCodes.length > 0 ? (

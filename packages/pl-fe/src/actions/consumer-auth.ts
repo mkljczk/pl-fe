@@ -9,8 +9,8 @@ import { createApp } from './apps';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
-const createProviderApp = () =>
-  async(dispatch: AppDispatch, getState: () => RootState) => {
+const createProviderApp =
+  () => async (dispatch: AppDispatch, getState: () => RootState) => {
     const scopes = getScopes(getState());
 
     const params = {
@@ -23,9 +23,12 @@ const createProviderApp = () =>
     return dispatch(createApp(params));
   };
 
-const prepareRequest = (provider: string) =>
-  async(dispatch: AppDispatch, getState: () => RootState) => {
-    const baseURL = isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : '';
+const prepareRequest =
+  (provider: string) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    const baseURL = isURL(BuildConfig.BACKEND_URL)
+      ? BuildConfig.BACKEND_URL
+      : '';
 
     const scopes = getScopes(getState());
     const app = await dispatch(createProviderApp());
@@ -47,6 +50,4 @@ const prepareRequest = (provider: string) =>
     location.href = `${baseURL}/oauth/prepare_request?${query.toString()}`;
   };
 
-export {
-  prepareRequest,
-};
+export { prepareRequest };

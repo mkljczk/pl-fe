@@ -3,7 +3,12 @@ import { useHistory } from 'react-router-dom';
 
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useEntity } from 'pl-fe/entity-store/hooks';
-import { useAppSelector, useClient, useFeatures, useLoggedIn } from 'pl-fe/hooks';
+import {
+  useAppSelector,
+  useClient,
+  useFeatures,
+  useLoggedIn,
+} from 'pl-fe/hooks';
 import { type Account, normalizeAccount } from 'pl-fe/normalizers';
 
 import { useAccountScrobble } from './useAccountScrobble';
@@ -29,23 +34,34 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
     { enabled: !!accountId, transform: normalizeAccount },
   );
 
-  const meta = useAppSelector((state) => accountId && state.accounts_meta[accountId] || {});
+  const meta = useAppSelector(
+    (state) => (accountId && state.accounts_meta[accountId]) || {},
+  );
 
-  const {
-    relationship,
-    isLoading: isRelationshipLoading,
-  } = useRelationship(accountId, { enabled: withRelationship });
+  const { relationship, isLoading: isRelationshipLoading } = useRelationship(
+    accountId,
+    { enabled: withRelationship },
+  );
 
-  const {
-    scrobble,
-    isLoading: isScrobbleLoading,
-  } = useAccountScrobble(accountId, { enabled: withScrobble });
+  const { scrobble, isLoading: isScrobbleLoading } = useAccountScrobble(
+    accountId,
+    { enabled: withScrobble },
+  );
 
   const isBlocked = entity?.relationship?.blocked_by === true;
-  const isUnavailable = (me === entity?.id) ? false : (isBlocked && !features.blockersVisible);
+  const isUnavailable =
+    me === entity?.id ? false : isBlocked && !features.blockersVisible;
 
   const account = useMemo(
-    () => entity ? { ...entity, relationship, scrobble, __meta: { meta, ...entity.__meta } } : undefined,
+    () =>
+      entity
+        ? {
+            ...entity,
+            relationship,
+            scrobble,
+            __meta: { meta, ...entity.__meta },
+          }
+        : undefined,
     [entity, relationship, scrobble],
   );
 

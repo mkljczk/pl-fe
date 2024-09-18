@@ -11,7 +11,10 @@ import { HStack, Icon, Text } from './ui';
 import type { Status } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
-  languageVersions: { id: 'status.language_versions', defaultMessage: 'The post has multiple language versions.' },
+  languageVersions: {
+    id: 'status.language_versions',
+    defaultMessage: 'The post has multiple language versions.',
+  },
 });
 
 interface IStatusLanguagePicker {
@@ -19,17 +22,28 @@ interface IStatusLanguagePicker {
   showLabel?: boolean;
 }
 
-const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = ({ status, showLabel }) => {
+const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = ({
+  status,
+  showLabel,
+}) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  if (!status.contentMapHtml || Object.keys(status.contentMapHtml).length < 2) return null;
+  if (!status.contentMapHtml || Object.keys(status.contentMapHtml).length < 2)
+    return null;
 
-  const icon = <Icon className='h-4 w-4 text-gray-700 dark:text-gray-600' src={require('@tabler/icons/outline/language.svg')} />;
+  const icon = (
+    <Icon
+      className='h-4 w-4 text-gray-700 dark:text-gray-600'
+      src={require('@tabler/icons/outline/language.svg')}
+    />
+  );
 
   return (
     <>
-      <Text tag='span' theme='muted' size='sm'>&middot;</Text>
+      <Text tag='span' theme='muted' size='sm'>
+        &middot;
+      </Text>
 
       <DropdownMenu
         items={Object.keys(status.contentMapHtml).map((language) => ({
@@ -38,21 +52,25 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = ({ status, showLab
           active: language === status.currentLanguage,
         }))}
       >
-        <button title={intl.formatMessage(messages.languageVersions)} className='hover:underline'>
+        <button
+          title={intl.formatMessage(messages.languageVersions)}
+          className='hover:underline'
+        >
           {showLabel ? (
             <HStack space={1} alignItems='center'>
               {icon}
               <Text tag='span' theme='muted' size='sm'>
-                {languages[status.currentLanguage as Language] || status.currentLanguage}
+                {languages[status.currentLanguage as Language] ||
+                  status.currentLanguage}
               </Text>
             </HStack>
-          ) : icon}
+          ) : (
+            icon
+          )}
         </button>
       </DropdownMenu>
     </>
   );
 };
 
-export {
-  StatusLanguagePicker as default,
-};
+export { StatusLanguagePicker as default };

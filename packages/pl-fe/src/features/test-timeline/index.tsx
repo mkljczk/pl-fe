@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { importFetchedStatuses } from 'pl-fe/actions/importer';
 import { expandTimelineSuccess } from 'pl-fe/actions/timelines';
@@ -36,7 +36,16 @@ const TestTimeline: React.FC = () => {
 
   React.useEffect(() => {
     dispatch(importFetchedStatuses(MOCK_STATUSES));
-    dispatch(expandTimelineSuccess(timelineId, MOCK_STATUSES, null, null, false, false));
+    dispatch(
+      expandTimelineSuccess(
+        timelineId,
+        MOCK_STATUSES,
+        null,
+        null,
+        false,
+        false,
+      ),
+    );
   }, []);
 
   return (
@@ -44,8 +53,13 @@ const TestTimeline: React.FC = () => {
       <Timeline
         scrollKey={`${timelineId}_timeline`}
         timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
-        emptyMessage={<FormattedMessage id='empty_column.test' defaultMessage='The test timeline is empty.' />}
-        divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
+        emptyMessage={
+          <FormattedMessage
+            id='empty_column.test'
+            defaultMessage='The test timeline is empty.'
+          />
+        }
+        divideType={theme === 'black' || isMobile ? 'border' : 'space'}
       />
     </Column>
   );

@@ -2,7 +2,11 @@ import React, { useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { directComposeById } from 'pl-fe/actions/compose';
-import { mountConversations, unmountConversations, expandConversations } from 'pl-fe/actions/conversations';
+import {
+  expandConversations,
+  mountConversations,
+  unmountConversations,
+} from 'pl-fe/actions/conversations';
 import { useDirectStream } from 'pl-fe/api/hooks';
 import AccountSearch from 'pl-fe/components/account-search';
 import { Column } from 'pl-fe/components/ui';
@@ -12,7 +16,10 @@ import ConversationsList from './components/conversations-list';
 
 const messages = defineMessages({
   title: { id: 'column.direct', defaultMessage: 'Direct messages' },
-  searchPlaceholder: { id: 'direct.search_placeholder', defaultMessage: 'Send a message to…' },
+  searchPlaceholder: {
+    id: 'direct.search_placeholder',
+    defaultMessage: 'Send a message to…',
+  },
 });
 
 const ConversationsTimeline = () => {

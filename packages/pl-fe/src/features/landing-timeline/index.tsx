@@ -19,7 +19,8 @@ const LandingTimeline = () => {
   const theme = useTheme();
   const isMobile = useIsMobile();
 
-  const timelineEnabled = !instance.pleroma.metadata.restrict_unauthenticated.timelines.local;
+  const timelineEnabled =
+    !instance.pleroma.metadata.restrict_unauthenticated.timelines.local;
 
   const timelineId = 'public:local';
 
@@ -54,8 +55,13 @@ const LandingTimeline = () => {
             timelineId={timelineId}
             prefix='home'
             onLoadMore={handleLoadMore}
-            emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />}
-            divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
+            emptyMessage={
+              <FormattedMessage
+                id='empty_column.community'
+                defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!'
+              />
+            }
+            divideType={theme === 'black' || isMobile ? 'border' : 'space'}
           />
         </PullToRefresh>
       ) : (

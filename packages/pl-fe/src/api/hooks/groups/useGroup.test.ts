@@ -30,7 +30,7 @@ describe('useGroup hook', () => {
       });
     });
 
-    it('is has error state', async() => {
+    it('is has error state', async () => {
       const { result } = renderHook(() => useGroup(group.id));
 
       await waitFor(() => expect(result.current.isFetching).toBe(false));

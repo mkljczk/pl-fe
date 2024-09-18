@@ -1,4 +1,5 @@
-import clsx from 'clsx';import React from 'react';
+import clsx from 'clsx';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
@@ -10,10 +11,21 @@ import { useModalsStore } from 'pl-fe/stores';
 import type { Status } from 'pl-fe/normalizers';
 
 interface IStatusInteractionBar {
-  status: Pick<Status, 'id' | 'account' | 'dislikes_count' | 'favourited' | 'favourites_count' | 'reblogs_count' | 'quotes_count'>;
+  status: Pick<
+    Status,
+    | 'id'
+    | 'account'
+    | 'dislikes_count'
+    | 'favourited'
+    | 'favourites_count'
+    | 'reblogs_count'
+    | 'quotes_count'
+  >;
 }
 
-const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.Element | null => {
+const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
+  status,
+}): JSX.Element | null => {
   const { openModal } = useModalsStore();
   const features = useFeatures();
   const { account } = status;
@@ -42,7 +54,10 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
   const getReposts = () => {
     if (status.reblogs_count) {
       return (
-        <InteractionCounter count={status.reblogs_count} onClick={handleOpenReblogsModal}>
+        <InteractionCounter
+          count={status.reblogs_count}
+          onClick={handleOpenReblogsModal}
+        >
           <FormattedMessage
             id='status.interactions.reblogs'
             defaultMessage='{count, plural, one {Repost} other {Reposts}}'
@@ -58,7 +73,10 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
   const getQuotes = () => {
     if (status.quotes_count) {
       return (
-        <InteractionCounter count={status.quotes_count} to={`/@${status.account.acct}/posts/${status.id}/quotes`}>
+        <InteractionCounter
+          count={status.quotes_count}
+          to={`/@${status.account.acct}/posts/${status.id}/quotes`}
+        >
           <FormattedMessage
             id='status.interactions.quotes'
             defaultMessage='{count, plural, one {Quote} other {Quotes}}'
@@ -71,14 +89,18 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
     return null;
   };
 
-  const handleOpenFavouritesModal: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+  const handleOpenFavouritesModal: React.EventHandler<
+    React.MouseEvent<HTMLButtonElement>
+  > = (e) => {
     e.preventDefault();
 
     // if (!me) onOpenUnauthorizedModal();
     onOpenFavouritesModal(account.acct, status.id);
   };
 
-  const handleOpenDislikesModal: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+  const handleOpenDislikesModal: React.EventHandler<
+    React.MouseEvent<HTMLButtonElement>
+  > = (e) => {
     e.preventDefault();
 
     // if (!me) onOpenUnauthorizedModal();
@@ -88,7 +110,12 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
   const getFavourites = () => {
     if (status.favourites_count) {
       return (
-        <InteractionCounter count={status.favourites_count} onClick={features.exposableReactions ? handleOpenFavouritesModal : undefined}>
+        <InteractionCounter
+          count={status.favourites_count}
+          onClick={
+            features.exposableReactions ? handleOpenFavouritesModal : undefined
+          }
+        >
           <FormattedMessage
             id='status.interactions.favourites'
             defaultMessage='{count, plural, one {Like} other {Likes}}'
@@ -106,7 +133,12 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
 
     if (dislikesCount) {
       return (
-        <InteractionCounter count={status.dislikes_count} onClick={features.exposableReactions ? handleOpenDislikesModal : undefined}>
+        <InteractionCounter
+          count={status.dislikes_count}
+          onClick={
+            features.exposableReactions ? handleOpenDislikesModal : undefined
+          }
+        >
           <FormattedMessage
             id='status.interactions.dislikes'
             defaultMessage='{count, plural, one {Dislike} other {Dislikes}}'
@@ -136,7 +168,12 @@ interface IInteractionCounter {
   to?: string;
 }
 
-const InteractionCounter: React.FC<IInteractionCounter> = ({ count, children, onClick, to }) => {
+const InteractionCounter: React.FC<IInteractionCounter> = ({
+  count,
+  children,
+  onClick,
+  to,
+}) => {
   const features = useFeatures();
 
   const className = clsx({
@@ -166,11 +203,7 @@ const InteractionCounter: React.FC<IInteractionCounter> = ({ count, children, on
   }
 
   return (
-    <button
-      type='button'
-      onClick={onClick}
-      className={className}
-    >
+    <button type='button' onClick={onClick} className={className}>
       {body}
     </button>
   );

@@ -1,31 +1,46 @@
 import escapeTextContentForBrowser from 'escape-html';
 import DOMPurify from 'isomorphic-dompurify';
-import { Status as BaseStatus, StatusEdit as BaseStatusEdit, CustomEmoji } from 'pl-api';
+import {
+  Status as BaseStatus,
+  StatusEdit as BaseStatusEdit,
+  CustomEmoji,
+} from 'pl-api';
 
 import emojify from 'pl-fe/features/emoji';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
-const sanitizeTitle = (text: string, emojiMap: any) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { ALLOWED_TAGS: [] });
+const sanitizeTitle = (text: string, emojiMap: any) =>
+  DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), {
+    ALLOWED_TAGS: [],
+  });
 
 const normalizePoll = (poll: Exclude<BaseStatus['poll'], null>) => {
   const emojiMap = makeEmojiMap(poll.emojis);
   return {
     ...poll,
-    options: poll.options.map(option => ({
+    options: poll.options.map((option) => ({
       ...option,
       title_emojified: sanitizeTitle(option.title, emojiMap),
       title_map_emojified: option.title_map
-        ? Object.fromEntries(Object.entries(option.title_map).map(([key, title]) => [key, sanitizeTitle(title, emojiMap)]))
+        ? Object.fromEntries(
+            Object.entries(option.title_map).map(([key, title]) => [
+              key,
+              sanitizeTitle(title, emojiMap),
+            ]),
+          )
         : null,
     })),
   };
 };
 
-const normalizePollEdit = (poll: Exclude<BaseStatusEdit['poll'], null>, emojis?: Array<CustomEmoji>) => {
+const normalizePollEdit = (
+  poll: Exclude<BaseStatusEdit['poll'], null>,
+  emojis?: Array<CustomEmoji>,
+) => {
   const emojiMap = makeEmojiMap(emojis);
   return {
     ...poll,
-    options: poll.options.map(option => ({
+    options: poll.options.map((option) => ({
       ...option,
       title_emojified: sanitizeTitle(option.title, emojiMap),
     })),
@@ -35,9 +50,4 @@ const normalizePollEdit = (poll: Exclude<BaseStatusEdit['poll'], null>, emojis?:
 type Poll = ReturnType<typeof normalizePoll>;
 type PollEdit = ReturnType<typeof normalizePollEdit>;
 
-export {
-  normalizePoll,
-  normalizePollEdit,
-  type Poll,
-  type PollEdit,
-};
+export { normalizePoll, normalizePollEdit, type Poll, type PollEdit };

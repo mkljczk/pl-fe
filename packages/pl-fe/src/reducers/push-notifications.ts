@@ -1,6 +1,11 @@
 import { Map as ImmutableMap, Record as ImmutableRecord } from 'immutable';
 
-import { SET_BROWSER_SUPPORT, SET_SUBSCRIPTION, CLEAR_SUBSCRIPTION, SET_ALERTS } from '../actions/push-notifications';
+import {
+  CLEAR_SUBSCRIPTION,
+  SET_ALERTS,
+  SET_BROWSER_SUPPORT,
+  SET_SUBSCRIPTION,
+} from '../actions/push-notifications';
 
 import type { SetterAction } from 'pl-fe/actions/push-notifications/setter';
 
@@ -29,10 +34,13 @@ const push_subscriptions = (state = ReducerRecord(), action: SetterAction) => {
   switch (action.type) {
     case SET_SUBSCRIPTION:
       return state
-        .set('subscription', SubscriptionRecord({
-          id: action.subscription.id,
-          endpoint: action.subscription.endpoint,
-        }))
+        .set(
+          'subscription',
+          SubscriptionRecord({
+            id: action.subscription.id,
+            endpoint: action.subscription.endpoint,
+          }),
+        )
         .set('alerts', ImmutableMap(action.subscription.alerts))
         .set('isSubscribed', true);
     case SET_BROWSER_SUPPORT:

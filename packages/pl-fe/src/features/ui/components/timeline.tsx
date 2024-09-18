@@ -7,14 +7,19 @@ import { dequeueTimeline, scrollTopTimeline } from 'pl-fe/actions/timelines';
 import ScrollTopButton from 'pl-fe/components/scroll-top-button';
 import StatusList, { IStatusList } from 'pl-fe/components/status-list';
 import { Portal } from 'pl-fe/components/ui';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { makeGetStatusIds } from 'pl-fe/selectors';
 
 const messages = defineMessages({
-  queue: { id: 'status_list.queue_label', defaultMessage: 'Click to see {count} new {count, plural, one {post} other {posts}}' },
+  queue: {
+    id: 'status_list.queue_label',
+    defaultMessage:
+      'Click to see {count} new {count, plural, one {post} other {posts}}',
+  },
 });
 
-interface ITimeline extends Omit<IStatusList, 'statusIds' | 'isLoading' | 'hasMore'> {
+interface ITimeline
+  extends Omit<IStatusList, 'statusIds' | 'isLoading' | 'hasMore'> {
   /** ID of the timeline in Redux. */
   timelineId: string;
   /** Settings path to use instead of the timelineId. */
@@ -31,24 +36,47 @@ const Timeline: React.FC<ITimeline> = ({
   const dispatch = useAppDispatch();
   const getStatusIds = useCallback(makeGetStatusIds(), []);
 
-  const lastStatusId = useAppSelector(state => (state.timelines.get(timelineId)?.items || ImmutableOrderedSet()).last() as string | undefined);
-  const statusIds = useAppSelector(state => getStatusIds(state, { type: timelineId, prefix }));
-  const isLoading = useAppSelector(state => (state.timelines.get(timelineId) || { isLoading: true }).isLoading === true);
-  const isPartial = useAppSelector(state => (state.timelines.get(timelineId)?.isPartial || false) === true);
-  const hasMore = useAppSelector(state => state.timelines.get(timelineId)?.hasMore === true);
-  const totalQueuedItemsCount = useAppSelector(state => state.timelines.get(timelineId)?.totalQueuedItemsCount || 0);
+  const lastStatusId = useAppSelector(
+    (state) =>
+      (
+        state.timelines.get(timelineId)?.items || ImmutableOrderedSet()
+      ).last() as string | undefined,
+  );
+  const statusIds = useAppSelector((state) =>
+    getStatusIds(state, { type: timelineId, prefix }),
+  );
+  const isLoading = useAppSelector(
+    (state) =>
+      (state.timelines.get(timelineId) || { isLoading: true }).isLoading ===
+      true,
+  );
+  const isPartial = useAppSelector(
+    (state) => (state.timelines.get(timelineId)?.isPartial || false) === true,
+  );
+  const hasMore = useAppSelector(
+    (state) => state.timelines.get(timelineId)?.hasMore === true,
+  );
+  const totalQueuedItemsCount = useAppSelector(
+    (state) => state.timelines.get(timelineId)?.totalQueuedItemsCount || 0,
+  );
 
   const handleDequeueTimeline = useCallback(() => {
     dispatch(dequeueTimeline(timelineId, onLoadMore));
   }, []);
 
-  const handleScrollToTop = useCallback(debounce(() => {
-    dispatch(scrollTopTimeline(timelineId, true));
-  }, 100), [timelineId]);
+  const handleScrollToTop = useCallback(
+    debounce(() => {
+      dispatch(scrollTopTimeline(timelineId, true));
+    }, 100),
+    [timelineId],
+  );
 
-  const handleScroll = useCallback(debounce(() => {
-    dispatch(scrollTopTimeline(timelineId, false));
-  }, 100), [timelineId]);
+  const handleScroll = useCallback(
+    debounce(() => {
+      dispatch(scrollTopTimeline(timelineId, false));
+    }, 100),
+    [timelineId],
+  );
 
   return (
     <>

@@ -1,12 +1,12 @@
 import {
-  AUTH_LOGGED_OUT,
   AUTH_ACCOUNT_REMEMBER_SUCCESS,
+  AUTH_LOGGED_OUT,
   VERIFY_CREDENTIALS_SUCCESS,
 } from '../actions/auth';
 import {
-  ME_FETCH_SUCCESS,
   ME_FETCH_FAIL,
   ME_FETCH_SKIP,
+  ME_FETCH_SUCCESS,
   ME_PATCH_SUCCESS,
 } from '../actions/me';
 

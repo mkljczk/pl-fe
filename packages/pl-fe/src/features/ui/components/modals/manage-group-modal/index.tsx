@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { z } from 'zod';
 
 import { useCreateGroup } from 'pl-fe/api/hooks';
@@ -9,10 +9,10 @@ import toast from 'pl-fe/toast';
 import ConfirmationStep from './steps/confirmation-step';
 import DetailsStep from './steps/details-step';
 
-import type { BaseModalProps } from '../../modal-root';
 import type { CreateGroupParams } from 'pl-api';
 import type { PlfeResponse } from 'pl-fe/api';
 import type { Group } from 'pl-fe/normalizers';
+import type { BaseModalProps } from '../../modal-root';
 
 const messages = defineMessages({
   create: { id: 'manage_group.create', defaultMessage: 'Create Group' },
@@ -56,7 +56,9 @@ const CreateGroupModal: React.FC<BaseModalProps> = ({ onClose }) => {
             setGroup(group);
           },
           onError(error: { response?: PlfeResponse }) {
-            const msg = z.object({ error: z.string() }).safeParse(error?.response?.json);
+            const msg = z
+              .object({ error: z.string() })
+              .safeParse(error?.response?.json);
             if (msg.success) {
               toast.error(msg.data.error);
             }
@@ -80,7 +82,12 @@ const CreateGroupModal: React.FC<BaseModalProps> = ({ onClose }) => {
     }
   };
 
-  const renderModalTitle = () => <FormattedMessage id='navigation_bar.create_group' defaultMessage='Create group' />;
+  const renderModalTitle = () => (
+    <FormattedMessage
+      id='navigation_bar.create_group'
+      defaultMessage='Create group'
+    />
+  );
 
   return (
     <Modal
@@ -91,9 +98,7 @@ const CreateGroupModal: React.FC<BaseModalProps> = ({ onClose }) => {
       confirmationFullWidth
       onClose={handleClose}
     >
-      <Stack space={2}>
-        {renderStep()}
-      </Stack>
+      <Stack space={2}>{renderStep()}</Stack>
     </Modal>
   );
 };

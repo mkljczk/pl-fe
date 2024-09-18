@@ -1,12 +1,15 @@
 import {
   Map as ImmutableMap,
-  Record as ImmutableRecord,
   OrderedSet as ImmutableOrderedSet,
+  Record as ImmutableRecord,
 } from 'immutable';
 
-import { STATUS_IMPORT, STATUSES_IMPORT } from 'pl-fe/actions/importer';
+import { STATUSES_IMPORT, STATUS_IMPORT } from 'pl-fe/actions/importer';
 
-import { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS } from '../actions/accounts';
+import {
+  ACCOUNT_BLOCK_SUCCESS,
+  ACCOUNT_MUTE_SUCCESS,
+} from '../actions/accounts';
 import {
   CONTEXT_FETCH_SUCCESS,
   STATUS_CREATE_REQUEST,
@@ -25,11 +28,15 @@ const ReducerRecord = ImmutableRecord({
 type State = ReturnType<typeof ReducerRecord>;
 
 /** Import a single status into the reducer, setting replies and replyTos. */
-const importStatus = (state: State, status: Pick<Status, 'id' | 'in_reply_to_id'>, idempotencyKey?: string): State => {
+const importStatus = (
+  state: State,
+  status: Pick<Status, 'id' | 'in_reply_to_id'>,
+  idempotencyKey?: string,
+): State => {
   const { id, in_reply_to_id: inReplyToId } = status;
   if (!inReplyToId) return state;
 
-  return state.withMutations(state => {
+  return state.withMutations((state) => {
     const replies = state.replies.get(inReplyToId) || ImmutableOrderedSet();
     const newReplies = replies.add(id).sort();
 
@@ -43,22 +50,33 @@ const importStatus = (state: State, status: Pick<Status, 'id' | 'in_reply_to_id'
 };
 
 /** Import multiple statuses into the state. */
-const importStatuses = (state: State, statuses: Array<Pick<Status, 'id' | 'in_reply_to_id'>>): State =>
-  state.withMutations(state => {
-    statuses.forEach(status => importStatus(state, status));
+const importStatuses = (
+  state: State,
+  statuses: Array<Pick<Status, 'id' | 'in_reply_to_id'>>,
+): State =>
+  state.withMutations((state) => {
+    statuses.forEach((status) => importStatus(state, status));
   });
 
 /** Insert a fake status ID connecting descendant to ancestor. */
-const insertTombstone = (state: State, ancestorId: string, descendantId: string): State => {
+const insertTombstone = (
+  state: State,
+  ancestorId: string,
+  descendantId: string,
+): State => {
   const tombstoneId = `${descendantId}-tombstone`;
-  return state.withMutations(state => {
+  return state.withMutations((state) => {
     importStatus(state, { id: tombstoneId, in_reply_to_id: ancestorId });
     importStatus(state, { id: descendantId, in_reply_to_id: tombstoneId });
   });
 };
 
 /** Find the highest level status from this statusId. */
-const getRootNode = (state: State, statusId: string, initialId = statusId): string => {
+const getRootNode = (
+  state: State,
+  statusId: string,
+  initialId = statusId,
+): string => {
   const parent = state.inReplyTos.get(statusId);
 
   if (!parent) {
@@ -84,10 +102,15 @@ const connectNodes = (state: State, fromId: string, toId: string): State => {
 };
 
 /** Import a branch of ancestors or descendants, in relation to statusId. */
-const importBranch = (state: State, statuses: Array<Pick<Status, 'id' | 'in_reply_to_id'>>, statusId?: string): State =>
-  state.withMutations(state => {
+const importBranch = (
+  state: State,
+  statuses: Array<Pick<Status, 'id' | 'in_reply_to_id'>>,
+  statusId?: string,
+): State =>
+  state.withMutations((state) => {
     statuses.forEach((status, i) => {
-      const prevId = statusId && i === 0 ? statusId : (statuses[i - 1] || {}).id;
+      const prevId =
+        statusId && i === 0 ? statusId : (statuses[i - 1] || {}).id;
 
       if (status.in_reply_to_id) {
         importStatus(state, status);
@@ -111,29 +134,31 @@ const normalizeContext = (
   id: string,
   ancestors: Array<Pick<Status, 'id' | 'in_reply_to_id'>>,
   descendants: Array<Pick<Status, 'id' | 'in_reply_to_id'>>,
-) => state.withMutations(state => {
-  importBranch(state, ancestors);
-  importBranch(state, descendants, id);
+) =>
+  state.withMutations((state) => {
+    importBranch(state, ancestors);
+    importBranch(state, descendants, id);
 
-  if (ancestors.length > 0 && !state.getIn(['inReplyTos', id])) {
-    insertTombstone(state, ancestors[ancestors.length - 1].id, id);
-  }
-});
+    if (ancestors.length > 0 && !state.getIn(['inReplyTos', id])) {
+      insertTombstone(state, ancestors[ancestors.length - 1].id, id);
+    }
+  });
 
 /** Remove a status from the reducer. */
 const deleteStatus = (state: State, statusId: string): State =>
-  state.withMutations(state => {
+  state.withMutations((state) => {
     // Delete from its parent's tree
     const parentId = state.inReplyTos.get(statusId);
     if (parentId) {
-      const parentReplies = state.replies.get(parentId) || ImmutableOrderedSet();
+      const parentReplies =
+        state.replies.get(parentId) || ImmutableOrderedSet();
       const newParentReplies = parentReplies.delete(statusId);
       state.setIn(['replies', parentId], newParentReplies);
     }
 
     // Dereference children
     const replies = state.replies.get(statusId) || ImmutableOrderedSet();
-    replies.forEach(reply => state.deleteIn(['inReplyTos', reply]));
+    replies.forEach((reply) => state.deleteIn(['inReplyTos', reply]));
 
     state.deleteIn(['inReplyTos', statusId]);
     state.deleteIn(['replies', statusId]);
@@ -141,8 +166,8 @@ const deleteStatus = (state: State, statusId: string): State =>
 
 /** Delete multiple statuses from the reducer. */
 const deleteStatuses = (state: State, statusIds: string[]): State =>
-  state.withMutations(state => {
-    statusIds.forEach(statusId => deleteStatus(state, statusId));
+  state.withMutations((state) => {
+    statusIds.forEach((statusId) => deleteStatus(state, statusId));
   });
 
 /** Delete statuses upon blocking or muting a user. */
@@ -153,8 +178,8 @@ const filterContexts = (
   statuses: ImmutableMap<string, Status>,
 ): State => {
   const ownedStatusIds = statuses
-    .filter(status => status.account.id === relationship.id)
-    .map(status => status.id)
+    .filter((status) => status.account.id === relationship.id)
+    .map((status) => status.id)
     .toList()
     .toArray();
 
@@ -162,18 +187,26 @@ const filterContexts = (
 };
 
 /** Add a fake status ID for a pending status. */
-const importPendingStatus = (state: State, params: Pick<Status, 'id' | 'in_reply_to_id'>, idempotencyKey: string): State => {
+const importPendingStatus = (
+  state: State,
+  params: Pick<Status, 'id' | 'in_reply_to_id'>,
+  idempotencyKey: string,
+): State => {
   const id = `末pending-${idempotencyKey}`;
   const { in_reply_to_id } = params;
   return importStatus(state, { id, in_reply_to_id });
 };
 
 /** Delete a pending status from the reducer. */
-const deletePendingStatus = (state: State, params: Pick<Status, 'id' | 'in_reply_to_id'>, idempotencyKey: string): State => {
+const deletePendingStatus = (
+  state: State,
+  params: Pick<Status, 'id' | 'in_reply_to_id'>,
+  idempotencyKey: string,
+): State => {
   const id = `末pending-${idempotencyKey}`;
   const { in_reply_to_id: inReplyToId } = params;
 
-  return state.withMutations(state => {
+  return state.withMutations((state) => {
     state.deleteIn(['inReplyTos', id]);
 
     if (inReplyToId) {
@@ -191,7 +224,12 @@ const replies = (state = ReducerRecord(), action: AnyAction) => {
     case ACCOUNT_MUTE_SUCCESS:
       return filterContexts(state, action.relationship, action.statuses);
     case CONTEXT_FETCH_SUCCESS:
-      return normalizeContext(state, action.statusId, action.ancestors, action.descendants);
+      return normalizeContext(
+        state,
+        action.statusId,
+        action.ancestors,
+        action.descendants,
+      );
     case TIMELINE_DELETE:
       return deleteStatuses(state, [action.statusId]);
     case STATUS_CREATE_REQUEST:
@@ -207,7 +245,4 @@ const replies = (state = ReducerRecord(), action: AnyAction) => {
   }
 };
 
-export {
-  ReducerRecord,
-  replies as default,
-};
+export { ReducerRecord, replies as default };

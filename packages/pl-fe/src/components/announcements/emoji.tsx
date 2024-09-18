@@ -32,7 +32,10 @@ const Emoji: React.FC<IEmoji> = ({ emoji, emojiMap, hovered }) => {
       />
     );
   } else if (emojiMap.get(emoji as any)) {
-    const filename = (autoPlayGif || hovered) ? emojiMap.getIn([emoji, 'url']) : emojiMap.getIn([emoji, 'static_url']);
+    const filename =
+      autoPlayGif || hovered
+        ? emojiMap.getIn([emoji, 'url'])
+        : emojiMap.getIn([emoji, 'static_url']);
     const shortCode = `:${emoji}:`;
 
     return (

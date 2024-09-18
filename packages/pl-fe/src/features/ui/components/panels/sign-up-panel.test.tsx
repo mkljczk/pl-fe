@@ -6,7 +6,7 @@ import { render, screen } from 'pl-fe/jest/test-helpers';
 import SignUpPanel from './sign-up-panel';
 
 describe('<SignUpPanel />', () => {
-  it('doesn\'t render by default', () => {
+  it("doesn't render by default", () => {
     render(<SignUpPanel />);
     expect(screen.queryByTestId('sign-up-panel')).not.toBeInTheDocument();
   });

@@ -1,6 +1,6 @@
 import {
-  Map as ImmutableMap,
   List as ImmutableList,
+  Map as ImmutableMap,
   Record as ImmutableRecord,
   fromJS,
 } from 'immutable';
@@ -11,9 +11,9 @@ import { toTailwind } from 'pl-fe/utils/tailwind';
 import { generateAccent } from 'pl-fe/utils/theme';
 
 import type {
-  PromoPanelItem,
-  FooterItem,
   CryptoAddress,
+  FooterItem,
+  PromoPanelItem,
 } from 'pl-fe/types/pl-fe';
 
 const DEFAULT_COLORS = ImmutableMap<string, any>({
@@ -41,7 +41,7 @@ const DEFAULT_COLORS = ImmutableMap<string, any>({
     800: '#991b1b',
     900: '#7f1d1d',
   }),
-  'greentext': '#789922',
+  greentext: '#789922',
 });
 
 const PromoPanelItemRecord = ImmutableRecord({
@@ -66,73 +66,84 @@ const CryptoAddressRecord = ImmutableRecord({
   ticker: '',
 });
 
-const PlFeConfigRecord = ImmutableRecord({
-  appleAppId: null,
-  authProvider: '',
-  logo: '',
-  logoDarkMode: null,
-  banner: '',
-  brandColor: '', // Empty
-  accentColor: '',
-  colors: ImmutableMap(),
-  copyright: `♥${new Date().getFullYear()}. Copying is an act of love. Please copy and share.`,
-  customCss: ImmutableList<string>(),
-  defaultSettings: ImmutableMap<string, any>(),
-  extensions: ImmutableMap(),
-  gdpr: false,
-  gdprUrl: '',
-  greentext: false,
-  promoPanel: PromoPanelRecord(),
-  navlinks: ImmutableMap({
-    homeFooter: ImmutableList<FooterItem>(),
-  }),
-  verifiedIcon: '',
-  displayFqn: true,
-  cryptoAddresses: ImmutableList<CryptoAddress>(),
-  cryptoDonatePanel: ImmutableMap({
-    limit: 1,
-  }),
-  aboutPages: ImmutableMap<string, ImmutableMap<string, unknown>>(),
-  authenticatedProfile: false,
-  linkFooterMessage: '',
-  links: ImmutableMap<string, string>(),
-  displayCta: false,
-  /** Whether to inject suggested profiles into the Home feed. */
-  feedInjection: true,
-  tileServer: '',
-  tileServerAttribution: '',
-  redirectRootNoLogin: '',
-  /**
-   * Whether to use the preview URL for media thumbnails.
-   * On some platforms this can be too blurry without additional configuration.
-   */
-  mediaPreview: false,
-  sentryDsn: undefined as string | undefined,
-}, 'PlFeConfig');
+const PlFeConfigRecord = ImmutableRecord(
+  {
+    appleAppId: null,
+    authProvider: '',
+    logo: '',
+    logoDarkMode: null,
+    banner: '',
+    brandColor: '', // Empty
+    accentColor: '',
+    colors: ImmutableMap(),
+    copyright: `♥${new Date().getFullYear()}. Copying is an act of love. Please copy and share.`,
+    customCss: ImmutableList<string>(),
+    defaultSettings: ImmutableMap<string, any>(),
+    extensions: ImmutableMap(),
+    gdpr: false,
+    gdprUrl: '',
+    greentext: false,
+    promoPanel: PromoPanelRecord(),
+    navlinks: ImmutableMap({
+      homeFooter: ImmutableList<FooterItem>(),
+    }),
+    verifiedIcon: '',
+    displayFqn: true,
+    cryptoAddresses: ImmutableList<CryptoAddress>(),
+    cryptoDonatePanel: ImmutableMap({
+      limit: 1,
+    }),
+    aboutPages: ImmutableMap<string, ImmutableMap<string, unknown>>(),
+    authenticatedProfile: false,
+    linkFooterMessage: '',
+    links: ImmutableMap<string, string>(),
+    displayCta: false,
+    /** Whether to inject suggested profiles into the Home feed. */
+    feedInjection: true,
+    tileServer: '',
+    tileServerAttribution: '',
+    redirectRootNoLogin: '',
+    /**
+     * Whether to use the preview URL for media thumbnails.
+     * On some platforms this can be too blurry without additional configuration.
+     */
+    mediaPreview: false,
+    sentryDsn: undefined as string | undefined,
+  },
+  'PlFeConfig',
+);
 
 type PlFeConfigMap = ImmutableMap<string, any>;
 
 const normalizeCryptoAddress = (address: unknown): CryptoAddress =>
-  CryptoAddressRecord(ImmutableMap(fromJS(address))).update('ticker', ticker =>
-    trimStart(ticker, '$').toLowerCase(),
+  CryptoAddressRecord(ImmutableMap(fromJS(address))).update(
+    'ticker',
+    (ticker) => trimStart(ticker, '$').toLowerCase(),
   );
 
 const normalizeCryptoAddresses = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
   const addresses = ImmutableList(plFeConfig.get('cryptoAddresses'));
-  return plFeConfig.set('cryptoAddresses', addresses.map(normalizeCryptoAddress));
+  return plFeConfig.set(
+    'cryptoAddresses',
+    addresses.map(normalizeCryptoAddress),
+  );
 };
 
 const normalizeBrandColor = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
-  const brandColor = plFeConfig.get('brandColor') || plFeConfig.getIn(['colors', 'primary', '500']) || '';
+  const brandColor =
+    plFeConfig.get('brandColor') ||
+    plFeConfig.getIn(['colors', 'primary', '500']) ||
+    '';
   return plFeConfig.set('brandColor', brandColor);
 };
 
 const normalizeAccentColor = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
   const brandColor = plFeConfig.get('brandColor');
 
-  const accentColor = plFeConfig.get('accentColor')
-    || plFeConfig.getIn(['colors', 'accent', '500'])
-    || (brandColor ? generateAccent(brandColor) : '');
+  const accentColor =
+    plFeConfig.get('accentColor') ||
+    plFeConfig.getIn(['colors', 'accent', '500']) ||
+    (brandColor ? generateAccent(brandColor) : '');
 
   return plFeConfig.set('accentColor', accentColor);
 };
@@ -162,28 +173,40 @@ const normalizePromoPanel = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
 
 const normalizeFooterLinks = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
   const path = ['navlinks', 'homeFooter'];
-  const items = (plFeConfig.getIn(path, ImmutableList()) as ImmutableList<any>).map(FooterItemRecord);
+  const items = (
+    plFeConfig.getIn(path, ImmutableList()) as ImmutableList<any>
+  ).map(FooterItemRecord);
   return plFeConfig.setIn(path, items);
 };
 
 /** Single user mode is now managed by `redirectRootNoLogin`. */
 const upgradeSingleUserMode = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
-  const singleUserMode = plFeConfig.get('singleUserMode') as boolean | undefined;
-  const singleUserModeProfile = plFeConfig.get('singleUserModeProfile') as string | undefined;
-  const redirectRootNoLogin = plFeConfig.get('redirectRootNoLogin') as string | undefined;
+  const singleUserMode = plFeConfig.get('singleUserMode') as
+    | boolean
+    | undefined;
+  const singleUserModeProfile = plFeConfig.get('singleUserModeProfile') as
+    | string
+    | undefined;
+  const redirectRootNoLogin = plFeConfig.get('redirectRootNoLogin') as
+    | string
+    | undefined;
 
   if (!redirectRootNoLogin && singleUserMode && singleUserModeProfile) {
     return plFeConfig
-      .set('redirectRootNoLogin', `/@${normalizeUsername(singleUserModeProfile)}`)
+      .set(
+        'redirectRootNoLogin',
+        `/@${normalizeUsername(singleUserModeProfile)}`,
+      )
       .deleteAll(['singleUserMode', 'singleUserModeProfile']);
   } else {
-    return plFeConfig
-      .deleteAll(['singleUserMode', 'singleUserModeProfile']);
+    return plFeConfig.deleteAll(['singleUserMode', 'singleUserModeProfile']);
   }
 };
 
 /** Ensure a valid path is used. */
-const normalizeRedirectRootNoLogin = (plFeConfig: PlFeConfigMap): PlFeConfigMap => {
+const normalizeRedirectRootNoLogin = (
+  plFeConfig: PlFeConfigMap,
+): PlFeConfigMap => {
   const redirectRootNoLogin = plFeConfig.get('redirectRootNoLogin');
 
   if (!redirectRootNoLogin) return plFeConfig;
@@ -205,19 +228,20 @@ const normalizeRedirectRootNoLogin = (plFeConfig: PlFeConfigMap): PlFeConfigMap 
   }
 };
 
-const normalizePlFeConfig = (plFeConfig: Record<string, any>) => PlFeConfigRecord(
-  ImmutableMap(fromJS(plFeConfig)).withMutations(plFeConfig => {
-    normalizeBrandColor(plFeConfig);
-    normalizeAccentColor(plFeConfig);
-    normalizeColors(plFeConfig);
-    normalizePromoPanel(plFeConfig);
-    normalizeFooterLinks(plFeConfig);
-    maybeAddMissingColors(plFeConfig);
-    normalizeCryptoAddresses(plFeConfig);
-    upgradeSingleUserMode(plFeConfig);
-    normalizeRedirectRootNoLogin(plFeConfig);
-  }),
-);
+const normalizePlFeConfig = (plFeConfig: Record<string, any>) =>
+  PlFeConfigRecord(
+    ImmutableMap(fromJS(plFeConfig)).withMutations((plFeConfig) => {
+      normalizeBrandColor(plFeConfig);
+      normalizeAccentColor(plFeConfig);
+      normalizeColors(plFeConfig);
+      normalizePromoPanel(plFeConfig);
+      normalizeFooterLinks(plFeConfig);
+      maybeAddMissingColors(plFeConfig);
+      normalizeCryptoAddresses(plFeConfig);
+      upgradeSingleUserMode(plFeConfig);
+      normalizeRedirectRootNoLogin(plFeConfig);
+    }),
+  );
 
 export {
   PromoPanelItemRecord,

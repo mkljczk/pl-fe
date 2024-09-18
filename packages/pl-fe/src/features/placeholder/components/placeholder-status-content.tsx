@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { randomIntFromInterval, generateText } from '../utils';
+import { generateText, randomIntFromInterval } from '../utils';
 
 interface IPlaceholderStatusContent {
   maxLength: number;
@@ -8,7 +8,10 @@ interface IPlaceholderStatusContent {
 }
 
 /** Fake status content while data is loading. */
-const PlaceholderStatusContent: React.FC<IPlaceholderStatusContent> = ({ minLength, maxLength }) => {
+const PlaceholderStatusContent: React.FC<IPlaceholderStatusContent> = ({
+  minLength,
+  maxLength,
+}) => {
   const length = randomIntFromInterval(maxLength, minLength);
 
   return (

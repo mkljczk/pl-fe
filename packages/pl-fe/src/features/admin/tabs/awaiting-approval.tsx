@@ -3,27 +3,36 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { fetchUsers } from 'pl-fe/actions/admin';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import UnapprovedAccount from '../components/unapproved-account';
 
 const messages = defineMessages({
-  heading: { id: 'column.admin.awaiting_approval', defaultMessage: 'Awaiting Approval' },
-  emptyMessage: { id: 'admin.awaiting_approval.empty_message', defaultMessage: 'There is nobody waiting for approval. When a new user signs up, you can review them here.' },
+  heading: {
+    id: 'column.admin.awaiting_approval',
+    defaultMessage: 'Awaiting Approval',
+  },
+  emptyMessage: {
+    id: 'admin.awaiting_approval.empty_message',
+    defaultMessage:
+      'There is nobody waiting for approval. When a new user signs up, you can review them here.',
+  },
 });
 
 const AwaitingApproval: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const accountIds = useAppSelector(state => state.admin.awaitingApproval);
+  const accountIds = useAppSelector((state) => state.admin.awaitingApproval);
 
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchUsers({
-      origin: 'local',
-      status: 'pending',
-    }))
+    dispatch(
+      fetchUsers({
+        origin: 'local',
+        status: 'pending',
+      }),
+    )
       .then(() => setLoading(false))
       .catch(() => {});
   }, []);
@@ -38,7 +47,7 @@ const AwaitingApproval: React.FC = () => {
       emptyMessage={intl.formatMessage(messages.emptyMessage)}
       listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
     >
-      {accountIds.map(id => (
+      {accountIds.map((id) => (
         <div key={id} className='px-5 py-4'>
           <UnapprovedAccount accountId={id} />
         </div>

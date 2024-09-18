@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import { undoUploadCompose, changeUploadCompose } from 'pl-fe/actions/compose';
+import { changeUploadCompose, undoUploadCompose } from 'pl-fe/actions/compose';
 import Upload from 'pl-fe/components/upload';
 import { useAppDispatch, useCompose, useInstance } from 'pl-fe/hooks';
 
@@ -13,11 +13,24 @@ interface IUploadCompose {
   onDragEnd: () => void;
 }
 
-const UploadCompose: React.FC<IUploadCompose> = ({ composeId, id, onSubmit, onDragStart, onDragEnter, onDragEnd }) => {
+const UploadCompose: React.FC<IUploadCompose> = ({
+  composeId,
+  id,
+  onSubmit,
+  onDragStart,
+  onDragEnter,
+  onDragEnd,
+}) => {
   const dispatch = useAppDispatch();
-  const { pleroma: { metadata: { description_limit: descriptionLimit } } } = useInstance();
+  const {
+    pleroma: {
+      metadata: { description_limit: descriptionLimit },
+    },
+  } = useInstance();
 
-  const media = useCompose(composeId).media_attachments.find(item => item.id === id)!;
+  const media = useCompose(composeId).media_attachments.find(
+    (item) => item.id === id,
+  )!;
 
   const handleDescriptionChange = (description: string) => {
     dispatch(changeUploadCompose(composeId, media.id, { description }));

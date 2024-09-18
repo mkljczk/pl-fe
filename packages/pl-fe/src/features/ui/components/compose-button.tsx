@@ -27,12 +27,7 @@ const HomeComposeButton = () => {
   const onOpenCompose = () => openModal('COMPOSE');
 
   return (
-    <Button
-      theme='accent'
-      size='lg'
-      onClick={onOpenCompose}
-      block
-    >
+    <Button theme='accent' size='lg' onClick={onOpenCompose} block>
       <FormattedMessage id='navigation.compose' defaultMessage='Compose' />
     </Button>
   );
@@ -50,16 +45,19 @@ const GroupComposeButton = () => {
   };
 
   return (
-    <Button
-      theme='accent'
-      size='lg'
-      onClick={onOpenCompose}
-      block
-    >
+    <Button theme='accent' size='lg' onClick={onOpenCompose} block>
       <HStack space={3} alignItems='center'>
-        <Avatar className='-my-1 border-2 border-white' size={30} src={group.avatar} alt={group.avatar_description} />
+        <Avatar
+          className='-my-1 border-2 border-white'
+          size={30}
+          src={group.avatar}
+          alt={group.avatar_description}
+        />
         <span>
-          <FormattedMessage id='navigation.compose_group' defaultMessage='Compose to group' />
+          <FormattedMessage
+            id='navigation.compose_group'
+            defaultMessage='Compose to group'
+          />
         </span>
       </HStack>
     </Button>

@@ -27,17 +27,29 @@ const GroupPrivacy = ({ group }: IGroupPolicy) => (
         <Stack space={1} alignItems='center'>
           <Text size='lg' weight='bold' align='center'>
             {group.locked ? (
-              <FormattedMessage id='group.privacy.locked.full' defaultMessage='Private Group' />
+              <FormattedMessage
+                id='group.privacy.locked.full'
+                defaultMessage='Private Group'
+              />
             ) : (
-              <FormattedMessage id='group.privacy.public.full' defaultMessage='Public Group' />
+              <FormattedMessage
+                id='group.privacy.public.full'
+                defaultMessage='Public Group'
+              />
             )}
           </Text>
 
           <Text theme='muted' align='center'>
             {group.locked ? (
-              <FormattedMessage id='group.privacy.locked.info' defaultMessage='Discoverable. Users can join after their request is approved.' />
+              <FormattedMessage
+                id='group.privacy.locked.info'
+                defaultMessage='Discoverable. Users can join after their request is approved.'
+              />
             ) : (
-              <FormattedMessage id='group.privacy.public.info' defaultMessage='Discoverable. Anyone can join.' />
+              <FormattedMessage
+                id='group.privacy.public.info'
+                defaultMessage='Discoverable. Anyone can join.'
+              />
             )}
           </Text>
         </Stack>
@@ -56,7 +68,10 @@ const GroupPrivacy = ({ group }: IGroupPolicy) => (
 
       <Text theme='inherit' tag='span' size='sm' weight='medium'>
         {group.locked ? (
-          <FormattedMessage id='group.privacy.locked' defaultMessage='Private' />
+          <FormattedMessage
+            id='group.privacy.locked'
+            defaultMessage='Private'
+          />
         ) : (
           <FormattedMessage id='group.privacy.public' defaultMessage='Public' />
         )}

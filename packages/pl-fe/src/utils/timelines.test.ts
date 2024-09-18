@@ -54,20 +54,38 @@ describe('shouldFilter', () => {
   });
 
   it('multiple settings', () => {
-    const columnSettings = fromJS({ shows: { reblog: false, reply: false, direct: false } });
-    const status = buildStatus({ reblog: null, in_reply_to_id: null, visibility: 'direct' });
+    const columnSettings = fromJS({
+      shows: { reblog: false, reply: false, direct: false },
+    });
+    const status = buildStatus({
+      reblog: null,
+      in_reply_to_id: null,
+      visibility: 'direct',
+    });
     expect(shouldFilter(status, columnSettings)).toBe(true);
   });
 
   it('multiple settings', () => {
-    const columnSettings = fromJS({ shows: { reblog: false, reply: true, direct: false } });
-    const status = buildStatus({ reblog: null, in_reply_to_id: '1234', visibility: 'public' });
+    const columnSettings = fromJS({
+      shows: { reblog: false, reply: true, direct: false },
+    });
+    const status = buildStatus({
+      reblog: null,
+      in_reply_to_id: '1234',
+      visibility: 'public',
+    });
     expect(shouldFilter(status, columnSettings)).toBe(false);
   });
 
   it('multiple settings', () => {
-    const columnSettings = fromJS({ shows: { reblog: true, reply: false, direct: true } });
-    const status = buildStatus({ reblog: {}, in_reply_to_id: '1234', visibility: 'direct' });
+    const columnSettings = fromJS({
+      shows: { reblog: true, reply: false, direct: true },
+    });
+    const status = buildStatus({
+      reblog: {},
+      in_reply_to_id: '1234',
+      visibility: 'direct',
+    });
     expect(shouldFilter(status, columnSettings)).toBe(true);
   });
 });

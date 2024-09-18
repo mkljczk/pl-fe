@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import { HStack, Input } from 'pl-fe/components/ui';
 
@@ -7,16 +7,27 @@ import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield/strea
 import type { FooterItem } from 'pl-fe/types/pl-fe';
 
 const messages = defineMessages({
-  label: { id: 'plfe_config.home_footer.meta_fields.label_placeholder', defaultMessage: 'Label' },
-  url: { id: 'plfe_config.home_footer.meta_fields.url_placeholder', defaultMessage: 'URL' },
+  label: {
+    id: 'plfe_config.home_footer.meta_fields.label_placeholder',
+    defaultMessage: 'Label',
+  },
+  url: {
+    id: 'plfe_config.home_footer.meta_fields.url_placeholder',
+    defaultMessage: 'URL',
+  },
 });
 
-const PromoPanelInput: StreamfieldComponent<FooterItem> = ({ value, onChange }) => {
+const PromoPanelInput: StreamfieldComponent<FooterItem> = ({
+  value,
+  onChange,
+}) => {
   const intl = useIntl();
 
-  const handleChange = (key: 'title' | 'url'): React.ChangeEventHandler<HTMLInputElement> => e => {
-    onChange(value.set(key, e.currentTarget.value));
-  };
+  const handleChange =
+    (key: 'title' | 'url'): React.ChangeEventHandler<HTMLInputElement> =>
+    (e) => {
+      onChange(value.set(key, e.currentTarget.value));
+    };
 
   return (
     <HStack space={2} grow>

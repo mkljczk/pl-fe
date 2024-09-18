@@ -3,7 +3,21 @@ import React from 'react';
 
 import Icon from 'pl-fe/components/icon';
 
-interface IIconButton extends Pick<React.ButtonHTMLAttributes<HTMLButtonElement>, 'className' | 'disabled' | 'onClick' | 'onKeyDown' | 'onKeyPress' | 'onKeyUp' | 'onMouseDown' | 'onMouseEnter' | 'onMouseLeave' | 'tabIndex' | 'title'> {
+interface IIconButton
+  extends Pick<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    | 'className'
+    | 'disabled'
+    | 'onClick'
+    | 'onKeyDown'
+    | 'onKeyPress'
+    | 'onKeyUp'
+    | 'onMouseDown'
+    | 'onMouseEnter'
+    | 'onMouseLeave'
+    | 'tabIndex'
+    | 'title'
+  > {
   active?: boolean;
   expanded?: boolean;
   iconClassName?: string;

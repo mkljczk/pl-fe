@@ -11,16 +11,27 @@ import type { Status as StatusEntity } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   cancel: { id: 'scheduled_status.cancel', defaultMessage: 'Cancel' },
-  deleteConfirm: { id: 'confirmations.scheduled_status_delete.confirm', defaultMessage: 'Discard' },
-  deleteHeading: { id: 'confirmations.scheduled_status_delete.heading', defaultMessage: 'Cancel scheduled post' },
-  deleteMessage: { id: 'confirmations.scheduled_status_delete.message', defaultMessage: 'Are you sure you want to discard this scheduled post?' },
+  deleteConfirm: {
+    id: 'confirmations.scheduled_status_delete.confirm',
+    defaultMessage: 'Discard',
+  },
+  deleteHeading: {
+    id: 'confirmations.scheduled_status_delete.heading',
+    defaultMessage: 'Cancel scheduled post',
+  },
+  deleteMessage: {
+    id: 'confirmations.scheduled_status_delete.message',
+    defaultMessage: 'Are you sure you want to discard this scheduled post?',
+  },
 });
 
 interface IScheduledStatusActionBar {
   status: StatusEntity;
 }
 
-const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({ status }) => {
+const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({
+  status,
+}) => {
   const intl = useIntl();
 
   const dispatch = useAppDispatch();
@@ -28,7 +39,6 @@ const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({ status 
 
   const handleCancelClick = () => {
     dispatch((_, getState) => {
-
       const deleteModal = getSettings(getState()).get('deleteModal');
       if (!deleteModal) {
         dispatch(cancelScheduledStatus(status.id));
@@ -46,7 +56,10 @@ const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({ status 
   return (
     <HStack justifyContent='end'>
       <Button theme='danger' size='sm' onClick={handleCancelClick}>
-        <FormattedMessage id='scheduled_status.cancel' defaultMessage='Cancel' />
+        <FormattedMessage
+          id='scheduled_status.cancel'
+          defaultMessage='Cancel'
+        />
       </Button>
     </HStack>
   );

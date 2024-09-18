@@ -1,4 +1,4 @@
-import { getFeatures, PLEROMA, TOKI, type Instance } from 'pl-api';
+import { type Instance, PLEROMA, TOKI, getFeatures } from 'pl-api';
 
 import type { RootState } from 'pl-fe/store';
 
@@ -22,7 +22,4 @@ const getInstanceScopes = (instance: Instance) => {
 /** Convenience function to get scopes from instance in store. */
 const getScopes = (state: RootState) => getInstanceScopes(state.instance);
 
-export {
-  getInstanceScopes,
-  getScopes,
-};
+export { getInstanceScopes, getScopes };

@@ -1,47 +1,68 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 /** Controls the state of files being dragged over a node. */
-const useDraggedFiles = <R extends HTMLElement>(node: React.RefObject<R>, onDrop?: (files: FileList) => void) => {
+const useDraggedFiles = <R extends HTMLElement>(
+  node: React.RefObject<R>,
+  onDrop?: (files: FileList) => void,
+) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isDraggedOver, setIsDraggedOver] = useState(false);
 
-  const handleDocumentDragEnter = useCallback((e: DragEvent) => {
-    if (isDraggingFiles(e)) {
-      setIsDragging(true);
-    }
-  }, [setIsDragging]);
+  const handleDocumentDragEnter = useCallback(
+    (e: DragEvent) => {
+      if (isDraggingFiles(e)) {
+        setIsDragging(true);
+      }
+    },
+    [setIsDragging],
+  );
 
-  const handleDocumentDragLeave = useCallback((e: DragEvent) => {
-    if (isDraggedOffscreen(e)) {
+  const handleDocumentDragLeave = useCallback(
+    (e: DragEvent) => {
+      if (isDraggedOffscreen(e)) {
+        setIsDragging(false);
+      }
+    },
+    [setIsDragging],
+  );
+
+  const handleDocumentDrop = useCallback(
+    (e: DragEvent) => {
       setIsDragging(false);
-    }
-  }, [setIsDragging]);
-
-  const handleDocumentDrop = useCallback((e: DragEvent) => {
-    setIsDragging(false);
-    setIsDraggedOver(false);
-  }, [setIsDragging]);
-
-  const handleDragEnter = useCallback((e: DragEvent) => {
-    if (isDraggingFiles(e)) {
-      setIsDraggedOver(true);
-    }
-  }, [setIsDraggedOver]);
-
-  const handleDragLeave = useCallback((e: DragEvent) => {
-    if (!node.current || isDraggedOutOfNode(e, node.current)) {
       setIsDraggedOver(false);
-    }
-  }, [setIsDraggedOver]);
+    },
+    [setIsDragging],
+  );
 
-  const handleDrop = useCallback((e: DragEvent) => {
-    if (isDraggingFiles(e) && onDrop) {
-      onDrop(e.dataTransfer.files);
-    }
-    setIsDragging(false);
-    setIsDraggedOver(false);
-    e.preventDefault();
-  }, [onDrop]);
+  const handleDragEnter = useCallback(
+    (e: DragEvent) => {
+      if (isDraggingFiles(e)) {
+        setIsDraggedOver(true);
+      }
+    },
+    [setIsDraggedOver],
+  );
+
+  const handleDragLeave = useCallback(
+    (e: DragEvent) => {
+      if (!node.current || isDraggedOutOfNode(e, node.current)) {
+        setIsDraggedOver(false);
+      }
+    },
+    [setIsDraggedOver],
+  );
+
+  const handleDrop = useCallback(
+    (e: DragEvent) => {
+      if (isDraggingFiles(e) && onDrop) {
+        onDrop(e.dataTransfer.files);
+      }
+      setIsDragging(false);
+      setIsDraggedOver(false);
+      e.preventDefault();
+    },
+    [onDrop],
+  );
 
   useEffect(() => {
     document.addEventListener('dragenter', handleDocumentDragEnter);
@@ -74,7 +95,9 @@ const useDraggedFiles = <R extends HTMLElement>(node: React.RefObject<R>, onDrop
 };
 
 /** Ensure only files are being dragged, and not eg highlighted text. */
-const isDraggingFiles = (e: DragEvent): e is DragEvent & { dataTransfer: DataTransfer } => {
+const isDraggingFiles = (
+  e: DragEvent,
+): e is DragEvent & { dataTransfer: DataTransfer } => {
   if (e.dataTransfer) {
     const { types } = e.dataTransfer;
     return types.length === 1 && types[0] === 'Files';
@@ -84,7 +107,8 @@ const isDraggingFiles = (e: DragEvent): e is DragEvent & { dataTransfer: DataTra
 };
 
 /** Check whether the cursor is in the screen. Mostly useful for dragleave events. */
-const isDraggedOffscreen = (e: DragEvent): boolean => e.screenX === 0 && e.screenY === 0;
+const isDraggedOffscreen = (e: DragEvent): boolean =>
+  e.screenX === 0 && e.screenY === 0;
 
 /** Check whether the cursor is dragged out of the node. */
 const isDraggedOutOfNode = (e: DragEvent, node: Node): boolean =>

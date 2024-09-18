@@ -32,12 +32,20 @@ interface IDropdownMenuItem {
   onSetTab: (tab?: number) => void;
 }
 
-const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdownMenuItem) => {
+const DropdownMenuItem = ({
+  index,
+  item,
+  onClick,
+  autoFocus,
+  onSetTab,
+}: IDropdownMenuItem) => {
   const history = useHistory();
 
   const itemRef = useRef<HTMLAnchorElement>(null);
 
-  const handleClick: React.EventHandler<React.MouseEvent | React.KeyboardEvent> = (event) => {
+  const handleClick: React.EventHandler<
+    React.MouseEvent | React.KeyboardEvent
+  > = (event) => {
     event.stopPropagation();
 
     if (!item) return;
@@ -71,7 +79,9 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
     }
   };
 
-  const handleItemKeyPress: React.EventHandler<React.KeyboardEvent> = (event) => {
+  const handleItemKeyPress: React.EventHandler<React.KeyboardEvent> = (
+    event,
+  ) => {
     if (event.key === 'Enter' || event.key === ' ') {
       handleClick(event);
     }
@@ -111,15 +121,25 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         onKeyPress={handleItemKeyPress}
         target={item.target}
         title={item.text}
-        className={
-          clsx('mx-2 my-1 flex cursor-pointer items-center rounded-md px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-800 focus:bg-gray-100 focus:text-gray-800 focus:outline-none black:hover:bg-gray-900 black:focus:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200 dark:focus:bg-gray-800 dark:focus:text-gray-200', {
+        className={clsx(
+          'mx-2 my-1 flex cursor-pointer items-center rounded-md px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-800 focus:bg-gray-100 focus:text-gray-800 focus:outline-none black:hover:bg-gray-900 black:focus:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200 dark:focus:bg-gray-800 dark:focus:text-gray-200',
+          {
             'text-danger-600 dark:text-danger-400': item.destructive,
-          })
-        }
+          },
+        )}
       >
-        {item.icon && <Icon src={item.icon} className='mr-3 h-5 w-5 flex-none rtl:ml-3 rtl:mr-0' />}
+        {item.icon && (
+          <Icon
+            src={item.icon}
+            className='mr-3 h-5 w-5 flex-none rtl:ml-3 rtl:mr-0'
+          />
+        )}
 
-        <div className={clsx('text-xs', { 'mr-2': item.count || item.type === 'toggle' || item.items?.length })}>
+        <div
+          className={clsx('text-xs', {
+            'mr-2': item.count || item.type === 'toggle' || item.items?.length,
+          })}
+        >
           <div className='truncate text-base'>{item.text}</div>
           <div className='mt-0.5'>{item.meta}</div>
         </div>
@@ -137,7 +157,11 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         )}
 
         {!!item.items?.length && (
-          <Icon src={require('@tabler/icons/outline/chevron-right.svg')} containerClassName='ml-auto' className='h-5 w-5 flex-none' />
+          <Icon
+            src={require('@tabler/icons/outline/chevron-right.svg')}
+            containerClassName='ml-auto'
+            className='h-5 w-5 flex-none'
+          />
         )}
       </a>
     </li>

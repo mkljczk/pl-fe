@@ -9,16 +9,22 @@ interface IQuotedStatusIndicator {
   statusId: string;
 }
 
-const QuotedStatusIndicator: React.FC<IQuotedStatusIndicator> = ({ statusId }) => {
+const QuotedStatusIndicator: React.FC<IQuotedStatusIndicator> = ({
+  statusId,
+}) => {
   const getStatus = useCallback(makeGetStatus(), []);
 
-  const status = useAppSelector(state => getStatus(state, { id: statusId }));
+  const status = useAppSelector((state) => getStatus(state, { id: statusId }));
 
   if (!status) return null;
 
   return (
     <HStack alignItems='center' space={1}>
-      <Icon className='h-5 w-5' src={require('@tabler/icons/outline/quote.svg')} aria-hidden />
+      <Icon
+        className='h-5 w-5'
+        src={require('@tabler/icons/outline/quote.svg')}
+        aria-hidden
+      />
       <Text truncate>{status.url}</Text>
     </HStack>
   );

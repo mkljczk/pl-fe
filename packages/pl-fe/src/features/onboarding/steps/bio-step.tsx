@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { patchMe } from 'pl-fe/actions/me';
 import { BigCard } from 'pl-fe/components/big-card';
@@ -10,8 +10,15 @@ import toast from 'pl-fe/toast';
 import type { PlfeResponse } from 'pl-fe/api';
 
 const messages = defineMessages({
-  bioPlaceholder: { id: 'onboarding.bio.placeholder', defaultMessage: 'Tell the world a little about yourself…' },
-  error: { id: 'onboarding.error', defaultMessage: 'An unexpected error occurred. Please try again or skip this step.' },
+  bioPlaceholder: {
+    id: 'onboarding.bio.placeholder',
+    defaultMessage: 'Tell the world a little about yourself…',
+  },
+  error: {
+    id: 'onboarding.error',
+    defaultMessage:
+      'An unexpected error occurred. Please try again or skip this step.',
+  },
 });
 
 const BioStep = ({ onNext }: { onNext: () => void }) => {
@@ -19,7 +26,9 @@ const BioStep = ({ onNext }: { onNext: () => void }) => {
   const dispatch = useAppDispatch();
 
   const { account } = useOwnAccount();
-  const [value, setValue] = React.useState<string>(account?.__meta.source?.note ?? '');
+  const [value, setValue] = React.useState<string>(
+    account?.__meta.source?.note ?? '',
+  );
   const [isSubmitting, setSubmitting] = React.useState<boolean>(false);
   const [errors, setErrors] = React.useState<string[]>([]);
 
@@ -32,11 +41,17 @@ const BioStep = ({ onNext }: { onNext: () => void }) => {
       .then(() => {
         setSubmitting(false);
         onNext();
-      }).catch((error: { response: PlfeResponse }) => {
+      })
+      .catch((error: { response: PlfeResponse }) => {
         setSubmitting(false);
 
         if (error.response?.status === 422) {
-          setErrors([(error.response.json as any).error.replace('Validation failed: ', '')]);
+          setErrors([
+            (error.response.json as any).error.replace(
+              'Validation failed: ',
+              '',
+            ),
+          ]);
         } else {
           toast.error(messages.error);
         }
@@ -45,14 +60,34 @@ const BioStep = ({ onNext }: { onNext: () => void }) => {
 
   return (
     <BigCard
-      title={<FormattedMessage id='onboarding.note.title' defaultMessage='Write a short bio' />}
-      subtitle={<FormattedMessage id='onboarding.note.subtitle' defaultMessage='You can always edit this later.' />}
+      title={
+        <FormattedMessage
+          id='onboarding.note.title'
+          defaultMessage='Write a short bio'
+        />
+      }
+      subtitle={
+        <FormattedMessage
+          id='onboarding.note.subtitle'
+          defaultMessage='You can always edit this later.'
+        />
+      }
     >
       <Stack space={5}>
         <div>
           <FormGroup
-            hintText={<FormattedMessage id='onboarding.bio.hint' defaultMessage='Max 500 characters' />}
-            labelText={<FormattedMessage id='edit_profile.fields.bio_label' defaultMessage='Bio' />}
+            hintText={
+              <FormattedMessage
+                id='onboarding.bio.hint'
+                defaultMessage='Max 500 characters'
+              />
+            }
+            labelText={
+              <FormattedMessage
+                id='edit_profile.fields.bio_label'
+                defaultMessage='Bio'
+              />
+            }
             errors={errors}
           >
             <Textarea
@@ -74,14 +109,20 @@ const BioStep = ({ onNext }: { onNext: () => void }) => {
               onClick={handleSubmit}
             >
               {isSubmitting ? (
-                <FormattedMessage id='onboarding.saving' defaultMessage='Saving…' />
+                <FormattedMessage
+                  id='onboarding.saving'
+                  defaultMessage='Saving…'
+                />
               ) : (
                 <FormattedMessage id='onboarding.next' defaultMessage='Next' />
               )}
             </Button>
 
             <Button block theme='tertiary' type='button' onClick={onNext}>
-              <FormattedMessage id='onboarding.skip' defaultMessage='Skip for now' />
+              <FormattedMessage
+                id='onboarding.skip'
+                defaultMessage='Skip for now'
+              />
             </Button>
           </Stack>
         </div>

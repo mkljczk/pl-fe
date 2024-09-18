@@ -9,18 +9,21 @@ const HISTORY_FETCH_REQUEST = 'HISTORY_FETCH_REQUEST' as const;
 const HISTORY_FETCH_SUCCESS = 'HISTORY_FETCH_SUCCESS' as const;
 const HISTORY_FETCH_FAIL = 'HISTORY_FETCH_FAIL' as const;
 
-const fetchHistory = (statusId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const fetchHistory =
+  (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     const loading = getState().history.getIn([statusId, 'loading']);
 
     if (loading) return;
 
     dispatch(fetchHistoryRequest(statusId));
 
-    return getClient(getState()).statuses.getStatusHistory(statusId).then(data => {
-      dispatch(importFetchedAccounts(data.map((x) => x.account)));
-      dispatch(fetchHistorySuccess(statusId, data));
-    }).catch(error => dispatch(fetchHistoryFail(statusId, error)));
+    return getClient(getState())
+      .statuses.getStatusHistory(statusId)
+      .then((data) => {
+        dispatch(importFetchedAccounts(data.map((x) => x.account)));
+        dispatch(fetchHistorySuccess(statusId, data));
+      })
+      .catch((error) => dispatch(fetchHistoryFail(statusId, error)));
   };
 
 const fetchHistoryRequest = (statusId: string) => ({
@@ -40,7 +43,10 @@ const fetchHistoryFail = (statusId: string, error: unknown) => ({
   error,
 });
 
-type HistoryAction = ReturnType<typeof fetchHistoryRequest> | ReturnType<typeof fetchHistorySuccess> | ReturnType<typeof fetchHistoryFail>;
+type HistoryAction =
+  | ReturnType<typeof fetchHistoryRequest>
+  | ReturnType<typeof fetchHistorySuccess>
+  | ReturnType<typeof fetchHistoryFail>;
 
 export {
   HISTORY_FETCH_REQUEST,

@@ -7,8 +7,14 @@ import { useAppDispatch } from 'pl-fe/hooks';
 import { HStack, IconButton, Text } from './ui';
 
 const messages = defineMessages({
-  blockDomainConfirm: { id: 'confirmations.domain_block.confirm', defaultMessage: 'Hide entire domain' },
-  unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
+  blockDomainConfirm: {
+    id: 'confirmations.domain_block.confirm',
+    defaultMessage: 'Hide entire domain',
+  },
+  unblockDomain: {
+    id: 'account.unblock_domain',
+    defaultMessage: 'Unhide {domain}',
+  },
 });
 
 interface IDomain {
@@ -33,11 +39,19 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
   };
 
   return (
-    <HStack alignItems='center' justifyContent='between' space={1} className='p-2'>
-      <Text tag='span'>
-        {domain}
-      </Text>
-      <IconButton iconClassName='h-5 w-5' src={require('@tabler/icons/outline/lock-open.svg')} title={intl.formatMessage(messages.unblockDomain, { domain })} onClick={handleDomainUnblock} />
+    <HStack
+      alignItems='center'
+      justifyContent='between'
+      space={1}
+      className='p-2'
+    >
+      <Text tag='span'>{domain}</Text>
+      <IconButton
+        iconClassName='h-5 w-5'
+        src={require('@tabler/icons/outline/lock-open.svg')}
+        title={intl.formatMessage(messages.unblockDomain, { domain })}
+        onClick={handleDomainUnblock}
+      />
     </HStack>
   );
 };

@@ -1,6 +1,6 @@
 import {
-  Map as ImmutableMap,
   List as ImmutableList,
+  Map as ImmutableMap,
   Set as ImmutableSet,
 } from 'immutable';
 import trimStart from 'lodash/trimStart';
@@ -14,14 +14,16 @@ const find = (
   configs: ImmutableList<Config>,
   group: string,
   key: string,
-): Config | undefined => configs.find(config =>
-  config.isSuperset(ImmutableMap({ group, key })),
-);
+): Config | undefined =>
+  configs.find((config) => config.isSuperset(ImmutableMap({ group, key })));
 
 const toSimplePolicy = (configs: ImmutableList<Config>): MRFSimple => {
   const config = find(configs, ':pleroma', ':mrf_simple');
 
-  const reducer = (acc: ImmutableMap<string, any>, curr: ImmutableMap<string, any>) => {
+  const reducer = (
+    acc: ImmutableMap<string, any>,
+    curr: ImmutableMap<string, any>,
+  ) => {
     const key = curr.getIn(['tuple', 0]) as string;
     const hosts = curr.getIn(['tuple', 1]) as ImmutableList<string>;
     return acc.set(trimStart(key, ':'), ImmutableSet(hosts));
@@ -37,7 +39,10 @@ const toSimplePolicy = (configs: ImmutableList<Config>): MRFSimple => {
 };
 
 const fromSimplePolicy = (simplePolicy: Policy) => {
-  const mapper = ([key, hosts]: [key: string, hosts: ImmutableList<string>]) => ({ tuple: [`:${key}`, hosts] });
+  const mapper = ([key, hosts]: [
+    key: string,
+    hosts: ImmutableList<string>,
+  ]) => ({ tuple: [`:${key}`, hosts] });
 
   const value = Object.entries(simplePolicy).map(mapper);
 

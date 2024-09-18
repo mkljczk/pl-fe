@@ -1,6 +1,6 @@
 import throttle from 'lodash/throttle';
 import React, { useState, useEffect, useCallback } from 'react';
-import { useIntl, MessageDescriptor } from 'react-intl';
+import { MessageDescriptor, useIntl } from 'react-intl';
 
 import { Icon, Text } from 'pl-fe/components/ui';
 import { useSettings } from 'pl-fe/hooks';
@@ -37,7 +37,8 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   const visible = count > 0 && scrolled;
 
   /** Number of pixels scrolled down from the top of the page. */
-  const getScrollTop = (): number => (document.scrollingElement || document.documentElement).scrollTop;
+  const getScrollTop = (): number =>
+    (document.scrollingElement || document.documentElement).scrollTop;
 
   /** Unload feed items if scrolled to the top. */
   const maybeUnload = useCallback(() => {
@@ -47,12 +48,19 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   }, [autoloadTimelines, scrolledTop, count, onClick]);
 
   /** Set state while scrolling. */
-  const handleScroll = useCallback(throttle(() => {
-    const scrollTop = getScrollTop();
+  const handleScroll = useCallback(
+    throttle(
+      () => {
+        const scrollTop = getScrollTop();
 
-    setScrolled(scrollTop > threshold);
-    setScrolledTop(scrollTop <= autoloadThreshold);
-  }, 40, { trailing: true }), [threshold, autoloadThreshold]);
+        setScrolled(scrollTop > threshold);
+        setScrolledTop(scrollTop <= autoloadThreshold);
+      },
+      40,
+      { trailing: true },
+    ),
+    [threshold, autoloadThreshold],
+  );
 
   /** Scroll to top and trigger `onClick`. */
   const handleClick: React.MouseEventHandler = useCallback(() => {

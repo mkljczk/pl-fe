@@ -5,9 +5,9 @@ import { Map as ImmutableMap } from 'immutable';
 import { mockStore } from 'pl-fe/jest/test-helpers';
 
 import {
-  FETCH_ABOUT_PAGE_REQUEST,
   // FETCH_ABOUT_PAGE_SUCCESS,
   FETCH_ABOUT_PAGE_FAIL,
+  FETCH_ABOUT_PAGE_REQUEST,
   fetchAboutPage,
 } from './about';
 
@@ -33,7 +33,11 @@ describe('fetchAboutPage()', () => {
   it('creates the expected actions on failure', () => {
     const expectedActions = [
       { type: FETCH_ABOUT_PAGE_REQUEST, slug: 'asdf' },
-      { type: FETCH_ABOUT_PAGE_FAIL, slug: 'asdf', error: new Error('Request failed with status code 404') },
+      {
+        type: FETCH_ABOUT_PAGE_FAIL,
+        slug: 'asdf',
+        error: new Error('Request failed with status code 404'),
+      },
     ];
     const store = mockStore(ImmutableMap());
 

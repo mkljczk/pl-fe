@@ -1,4 +1,4 @@
-import { useFloating, shift } from '@floating-ui/react';
+import { shift, useFloating } from '@floating-ui/react';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
@@ -11,13 +11,22 @@ import { useClickOutside } from 'pl-fe/hooks';
 import { useTextField } from 'pl-fe/hooks/forms';
 import toast from 'pl-fe/toast';
 
-import type { BaseModalProps } from '../modal-root';
 import type { Emoji as EmojiType } from 'pl-fe/features/emoji';
+import type { BaseModalProps } from '../modal-root';
 
 const messages = defineMessages({
-  label: { id: 'bookmark_folders.new.title_placeholder', defaultMessage: 'New folder title' },
-  editSuccess: { id: 'bookmark_folders.edit.success', defaultMessage: 'Bookmark folder edited successfully' },
-  editFail: { id: 'bookmark_folders.edit.fail', defaultMessage: 'Failed to edit bookmark folder' },
+  label: {
+    id: 'bookmark_folders.new.title_placeholder',
+    defaultMessage: 'New folder title',
+  },
+  editSuccess: {
+    id: 'bookmark_folders.edit.success',
+    defaultMessage: 'Bookmark folder edited successfully',
+  },
+  editFail: {
+    id: 'bookmark_folders.edit.fail',
+    defaultMessage: 'Failed to edit bookmark folder',
+  },
 });
 
 interface IEmojiPicker {
@@ -39,7 +48,8 @@ const EmojiPicker: React.FC<IEmojiPicker> = ({ emoji, emojiUrl, ...props }) => {
     setVisible(false);
   });
 
-  const handleToggle: React.KeyboardEventHandler<HTMLButtonElement> & React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const handleToggle: React.KeyboardEventHandler<HTMLButtonElement> &
+    React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     setVisible(!visible);
   };
@@ -56,9 +66,14 @@ const EmojiPicker: React.FC<IEmojiPicker> = ({ emoji, emojiUrl, ...props }) => {
         onKeyDown={handleToggle}
         tabIndex={0}
       >
-        {emoji
-          ? <Emoji className='h-5 w-5' emoji={emoji} src={emojiUrl} />
-          : <Icon className='h-5 w-5 text-gray-600 hover:text-gray-700 dark:hover:text-gray-500' src={require('@tabler/icons/outline/mood-happy.svg')} />}
+        {emoji ? (
+          <Emoji className='h-5 w-5' emoji={emoji} src={emojiUrl} />
+        ) : (
+          <Icon
+            className='h-5 w-5 text-gray-600 hover:text-gray-700 dark:hover:text-gray-500'
+            src={require('@tabler/icons/outline/mood-happy.svg')}
+          />
+        )}
       </button>
 
       {createPortal(
@@ -89,14 +104,19 @@ interface EditBookmarkFolderModalProps {
   folderId: string;
 }
 
-const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModalProps> = ({ folderId, onClose }) => {
+const EditBookmarkFolderModal: React.FC<
+  BaseModalProps & EditBookmarkFolderModalProps
+> = ({ folderId, onClose }) => {
   const intl = useIntl();
 
   const { bookmarkFolder } = useBookmarkFolder(folderId);
-  const { updateBookmarkFolder, isSubmitting } = useUpdateBookmarkFolder(folderId);
+  const { updateBookmarkFolder, isSubmitting } =
+    useUpdateBookmarkFolder(folderId);
 
   const [emoji, setEmoji] = useState(bookmarkFolder?.emoji || undefined);
-  const [emojiUrl, setEmojiUrl] = useState(bookmarkFolder?.emoji_url || undefined);
+  const [emojiUrl, setEmojiUrl] = useState(
+    bookmarkFolder?.emoji_url || undefined,
+  );
   const name = useTextField(bookmarkFolder?.name);
 
   const handleEmojiPick = (data: EmojiType) => {
@@ -113,28 +133,41 @@ const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModal
   };
 
   const handleSubmit = () => {
-    updateBookmarkFolder({
-      name: name.value,
-      emoji,
-    }, {
-      onSuccess() {
-        toast.success(intl.formatMessage(messages.editSuccess));
-        onClose('EDIT_BOOKMARK_FOLDER');
+    updateBookmarkFolder(
+      {
+        name: name.value,
+        emoji,
       },
-      onError() {
-        toast.success(intl.formatMessage(messages.editFail));
+      {
+        onSuccess() {
+          toast.success(intl.formatMessage(messages.editSuccess));
+          onClose('EDIT_BOOKMARK_FOLDER');
+        },
+        onError() {
+          toast.success(intl.formatMessage(messages.editFail));
+        },
       },
-    });
+    );
   };
 
   const label = intl.formatMessage(messages.label);
 
   return (
     <Modal
-      title={<FormattedMessage id='edit_bookmark_folder_modal.header_title' defaultMessage='Edit folder' />}
+      title={
+        <FormattedMessage
+          id='edit_bookmark_folder_modal.header_title'
+          defaultMessage='Edit folder'
+        />
+      }
       onClose={onClickClose}
       confirmationAction={handleSubmit}
-      confirmationText={<FormattedMessage id='edit_bookmark_folder_modal.confirm' defaultMessage='Save' />}
+      confirmationText={
+        <FormattedMessage
+          id='edit_bookmark_folder_modal.confirm'
+          defaultMessage='Save'
+        />
+      }
     >
       <HStack space={2}>
         <EmojiPicker
@@ -157,4 +190,7 @@ const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModal
   );
 };
 
-export { EditBookmarkFolderModal as default, type EditBookmarkFolderModalProps };
+export {
+  EditBookmarkFolderModal as default,
+  type EditBookmarkFolderModalProps,
+};

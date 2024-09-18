@@ -9,18 +9,18 @@ interface IQuotedStatusContainer {
   statusId: string;
 }
 
-const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ statusId }) => {
+const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({
+  statusId,
+}) => {
   const getStatus = useCallback(makeGetStatus(), []);
 
-  const status = useAppSelector(state => getStatus(state, { id: statusId }));
+  const status = useAppSelector((state) => getStatus(state, { id: statusId }));
 
   if (!status) {
     return null;
   }
 
-  return (
-    <QuotedStatus status={status} />
-  );
+  return <QuotedStatus status={status} />;
 };
 
 export { QuotedStatusContainer as default };

@@ -111,19 +111,15 @@ const colors = (baseColor: string): TailwindColorObject => {
     900: 0.19,
   };
 
-  [50, 100, 200, 300, 400].forEach(level => {
+  [50, 100, 200, 300, 400].forEach((level) => {
     response[level] = lighten(baseColor, intensityMap[level]);
   });
 
-  [600, 700, 800, 900].forEach(level => {
+  [600, 700, 800, 900].forEach((level) => {
     response[level] = darken(baseColor, intensityMap[level]);
   });
 
   return response;
 };
 
-export {
-  hexToRgb,
-  getTextColor,
-  colors as default,
-};
+export { hexToRgb, getTextColor, colors as default };

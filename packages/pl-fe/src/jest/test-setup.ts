@@ -25,12 +25,17 @@ afterEach(() => {
   });
 });
 
-const intersectionObserverMock = () => ({ observe: () => null, disconnect: () => null });
-window.IntersectionObserver = vi.fn().mockImplementation(intersectionObserverMock);
+const intersectionObserverMock = () => ({
+  observe: () => null,
+  disconnect: () => null,
+});
+window.IntersectionObserver = vi
+  .fn()
+  .mockImplementation(intersectionObserverMock);
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation(query => ({
+  value: vi.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,

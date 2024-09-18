@@ -20,11 +20,14 @@ interface EventMapModalProps {
   statusId: string;
 }
 
-const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose, statusId }) => {
+const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({
+  onClose,
+  statusId,
+}) => {
   const { tileServer, tileServerAttribution } = usePlFeConfig();
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id: statusId }))!;
+  const status = useAppSelector((state) => getStatus(state, { id: statusId }))!;
   const location = status.event!.location!;
 
   const map = useRef<L.Map>();
@@ -52,18 +55,29 @@ const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose,
   };
 
   const onClickNavigate = () => {
-    window.open(`https://www.openstreetmap.org/directions?from=&to=${location.latitude},${location.longitude}#map=14/${location.latitude}/${location.longitude}`, '_blank');
+    window.open(
+      `https://www.openstreetmap.org/directions?from=&to=${location.latitude},${location.longitude}#map=14/${location.latitude}/${location.longitude}`,
+      '_blank',
+    );
   };
 
   return (
     <Modal
-      title={<FormattedMessage id='column.event_map' defaultMessage='Event location' />}
+      title={
+        <FormattedMessage
+          id='column.event_map'
+          defaultMessage='Event location'
+        />
+      }
       onClose={onClickClose}
       width='2xl'
     >
       <Stack alignItems='center' space={6}>
         <div className='h-96 w-full' id='event-map' />
-        <Button onClick={onClickNavigate} icon={require('@tabler/icons/outline/gps.svg')}>
+        <Button
+          onClick={onClickNavigate}
+          icon={require('@tabler/icons/outline/gps.svg')}
+        >
           <FormattedMessage id='event_map.navigate' defaultMessage='Navigate' />
         </Button>
       </Stack>

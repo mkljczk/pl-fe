@@ -1,16 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { externalLogin, loginWithCode } from 'pl-fe/actions/external-auth';
-import { Button, Form, FormActions, FormGroup, Input, Spinner } from 'pl-fe/components/ui';
+import {
+  Button,
+  Form,
+  FormActions,
+  FormGroup,
+  Input,
+  Spinner,
+} from 'pl-fe/components/ui';
 import { useAppDispatch } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
-  instanceLabel: { id: 'login.fields.instance_label', defaultMessage: 'Instance' },
-  instancePlaceholder: { id: 'login.fields.instance_placeholder', defaultMessage: 'example.com' },
-  instanceFailed: { id: 'login_external.errors.instance_fail', defaultMessage: 'The instance returned an error.' },
-  networkFailed: { id: 'login_external.errors.network_fail', defaultMessage: 'Connection failed. Is a browser extension blocking it?' },
+  instanceLabel: {
+    id: 'login.fields.instance_label',
+    defaultMessage: 'Instance',
+  },
+  instancePlaceholder: {
+    id: 'login.fields.instance_placeholder',
+    defaultMessage: 'example.com',
+  },
+  instanceFailed: {
+    id: 'login_external.errors.instance_fail',
+    defaultMessage: 'The instance returned an error.',
+  },
+  networkFailed: {
+    id: 'login_external.errors.network_fail',
+    defaultMessage: 'Connection failed. Is a browser extension blocking it?',
+  },
 });
 
 /** Form for logging into a remote instance */
@@ -25,7 +44,9 @@ const ExternalLoginForm: React.FC = () => {
   const [host, setHost] = useState(server || '');
   const [isLoading, setLoading] = useState(false);
 
-  const handleHostChange: React.ChangeEventHandler<HTMLInputElement> = ({ currentTarget }) => {
+  const handleHostChange: React.ChangeEventHandler<HTMLInputElement> = ({
+    currentTarget,
+  }) => {
     setHost(currentTarget.value);
   };
 
@@ -40,7 +61,10 @@ const ExternalLoginForm: React.FC = () => {
 
         if (status) {
           toast.error(intl.formatMessage(messages.instanceFailed));
-        } else if (!status && ['Network request failed', 'Timeout'].includes(error.message)) {
+        } else if (
+          !status &&
+          ['Network request failed', 'Timeout'].includes(error.message)
+        ) {
           toast.error(intl.formatMessage(messages.networkFailed));
         }
 

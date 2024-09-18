@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { SETTINGS_UPDATE, changeSetting, updateSettingsStore } from 'pl-fe/actions/settings';
+import {
+  SETTINGS_UPDATE,
+  changeSetting,
+  updateSettingsStore,
+} from 'pl-fe/actions/settings';
 import List, { ListItem } from 'pl-fe/components/list';
 import {
+  Button,
   CardHeader,
   CardTitle,
   Column,
-  Button,
   Form,
   FormActions,
   FormGroup,
   Textarea,
 } from 'pl-fe/components/ui';
 import SettingToggle from 'pl-fe/features/notifications/components/setting-toggle';
-import { useAppSelector, useAppDispatch, useSettings } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector, useSettings } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 
 const isJSONValid = (text: any): boolean => {
@@ -28,21 +32,32 @@ const isJSONValid = (text: any): boolean => {
 
 const messages = defineMessages({
   heading: { id: 'column.settings_store', defaultMessage: 'Settings store' },
-  advanced: { id: 'developers.settings_store.advanced', defaultMessage: 'Advanced settings' },
-  hint: { id: 'developers.settings_store.hint', defaultMessage: 'It is possible to directly edit your user settings here. BE CAREFUL! Editing this section can break your account, and you will only be able to recover through the API.' },
+  advanced: {
+    id: 'developers.settings_store.advanced',
+    defaultMessage: 'Advanced settings',
+  },
+  hint: {
+    id: 'developers.settings_store.hint',
+    defaultMessage:
+      'It is possible to directly edit your user settings here. BE CAREFUL! Editing this section can break your account, and you will only be able to recover through the API.',
+  },
 });
 
 const SettingsStore: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const settings = useSettings();
-  const settingsStore = useAppSelector(state => state.settings);
+  const settingsStore = useAppSelector((state) => state.settings);
 
-  const [rawJSON, setRawJSON] = useState<string>(JSON.stringify(settingsStore, null, 2));
+  const [rawJSON, setRawJSON] = useState<string>(
+    JSON.stringify(settingsStore, null, 2),
+  );
   const [jsonValid, setJsonValid] = useState(true);
   const [isLoading, setLoading] = useState(false);
 
-  const handleEditJSON: React.ChangeEventHandler<HTMLTextAreaElement> = ({ target }) => {
+  const handleEditJSON: React.ChangeEventHandler<HTMLTextAreaElement> = ({
+    target,
+  }) => {
     const rawJSON = target.value;
     setRawJSON(rawJSON);
     setJsonValid(isJSONValid(rawJSON));
@@ -52,17 +67,19 @@ const SettingsStore: React.FC = () => {
     dispatch(changeSetting(key, checked, { showAlert: true }));
   };
 
-  const handleSubmit: React.FormEventHandler = e => {
+  const handleSubmit: React.FormEventHandler = (e) => {
     const settings = JSON.parse(rawJSON);
 
     setLoading(true);
-    dispatch(updateSettingsStore(settings)).then(() => {
-      dispatch({ type: SETTINGS_UPDATE, settings });
-      setLoading(false);
-    }).catch(error => {
-      toast.showAlertForError(error);
-      setLoading(false);
-    });
+    dispatch(updateSettingsStore(settings))
+      .then(() => {
+        dispatch({ type: SETTINGS_UPDATE, settings });
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.showAlertForError(error);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -87,7 +104,11 @@ const SettingsStore: React.FC = () => {
         </FormGroup>
 
         <FormActions>
-          <Button theme='primary' type='submit' disabled={!jsonValid || isLoading}>
+          <Button
+            theme='primary'
+            type='submit'
+            disabled={!jsonValid || isLoading}
+          >
             <FormattedMessage id='plfe_config.save' defaultMessage='Save' />
           </Button>
         </FormActions>
@@ -99,10 +120,24 @@ const SettingsStore: React.FC = () => {
 
       <List>
         <ListItem
-          label={<FormattedMessage id='preferences.fields.demo_label' defaultMessage='Demo mode' />}
-          hint={<FormattedMessage id='preferences.fields.demo_hint' defaultMessage='Use the default pl-fe logo and color scheme. Useful for taking screenshots.' />}
+          label={
+            <FormattedMessage
+              id='preferences.fields.demo_label'
+              defaultMessage='Demo mode'
+            />
+          }
+          hint={
+            <FormattedMessage
+              id='preferences.fields.demo_hint'
+              defaultMessage='Use the default pl-fe logo and color scheme. Useful for taking screenshots.'
+            />
+          }
         >
-          <SettingToggle settings={settings} settingPath={['demo']} onChange={onToggleChange} />
+          <SettingToggle
+            settings={settings}
+            settingPath={['demo']}
+            onChange={onToggleChange}
+          />
         </ListItem>
       </List>
     </Column>

@@ -17,8 +17,7 @@ import {
   LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import * as React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -31,12 +30,18 @@ import { setFloatingElemPosition } from '../utils/set-floating-elem-position';
 import { ToolbarButton } from './floating-text-format-toolbar-plugin';
 
 const messages = defineMessages({
-  createHorizontalLine: { id: 'compose_form.lexical.create_horizontal_line', defaultMessage: 'Create horizontal line' },
-  uploadMedia: { id: 'compose_form.lexical.upload_media', defaultMessage: 'Upload media' },
+  createHorizontalLine: {
+    id: 'compose_form.lexical.create_horizontal_line',
+    defaultMessage: 'Create horizontal line',
+  },
+  uploadMedia: {
+    id: 'compose_form.lexical.upload_media',
+    defaultMessage: 'Upload media',
+  },
 });
 
 interface IUploadButton {
-  onSelectFile: (src: string) =>  void;
+  onSelectFile: (src: string) => void;
 }
 
 const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
@@ -53,15 +58,17 @@ const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
       setDisabled(true);
 
       // @ts-ignore
-      dispatch(uploadFile(
-        e.target.files.item(0) as File,
-        intl,
-        ({ url }) => {
-          onSelectFile(url);
-          setDisabled(false);
-        },
-        () => setDisabled(false),
-      ));
+      dispatch(
+        uploadFile(
+          e.target.files.item(0) as File,
+          intl,
+          ({ url }) => {
+            onSelectFile(url);
+            setDisabled(false);
+          },
+          () => setDisabled(false),
+        ),
+      );
     }
   };
 
@@ -82,7 +89,13 @@ const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
         ref={fileElement}
         type='file'
         multiple
-        accept={attachmentTypes ? attachmentTypes.filter(type => type.startsWith('image/')).join(',') : 'image/*'}
+        accept={
+          attachmentTypes
+            ? attachmentTypes
+                .filter((type) => type.startsWith('image/'))
+                .join(',')
+            : 'image/*'
+        }
         onChange={handleChange}
         disabled={disabled}
         className='hidden'
@@ -95,14 +108,15 @@ const BlockTypeFloatingToolbar = ({
   editor,
   anchorElem,
 }: {
-   editor: LexicalEditor;
-   anchorElem: HTMLElement;
- }): JSX.Element => {
+  editor: LexicalEditor;
+  anchorElem: HTMLElement;
+}): JSX.Element => {
   const intl = useIntl();
   const popupCharStylesEditorRef = useRef<HTMLDivElement | null>(null);
   const instance = useInstance();
 
-  const allowInlineImages = instance.pleroma.metadata.markup.allow_inline_images;
+  const allowInlineImages =
+    instance.pleroma.metadata.markup.allow_inline_images;
 
   const updateBlockTypeFloatingToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -122,7 +136,13 @@ const BlockTypeFloatingToolbar = ({
       rootElement !== null &&
       rootElement.contains(nativeSelection.anchorNode)
     ) {
-      setFloatingElemPosition((nativeSelection.focusNode as HTMLParagraphElement)?.getBoundingClientRect(), popupCharStylesEditorElem, anchorElem);
+      setFloatingElemPosition(
+        (
+          nativeSelection.focusNode as HTMLParagraphElement
+        )?.getBoundingClientRect(),
+        popupCharStylesEditorElem,
+        anchorElem,
+      );
     }
   }, [editor, anchorElem]);
 
@@ -245,7 +265,10 @@ const useFloatingBlockTypeToolbar = (
 
       const anchorNode = selection.anchor.getNode();
 
-      setIsEmptyBlock(anchorNode.getType() === 'paragraph' && anchorNode.getTextContentSize() === 0);
+      setIsEmptyBlock(
+        anchorNode.getType() === 'paragraph' &&
+          anchorNode.getTextContentSize() === 0,
+      );
     });
   }, [editor]);
 
@@ -274,10 +297,7 @@ const useFloatingBlockTypeToolbar = (
   }
 
   return createPortal(
-    <BlockTypeFloatingToolbar
-      editor={editor}
-      anchorElem={anchorElem}
-    />,
+    <BlockTypeFloatingToolbar editor={editor} anchorElem={anchorElem} />,
     anchorElem,
   );
 };
@@ -285,8 +305,8 @@ const useFloatingBlockTypeToolbar = (
 const FloatingBlockTypeToolbarPlugin = ({
   anchorElem = document.body,
 }: {
-   anchorElem?: HTMLElement;
- }): JSX.Element | null => {
+  anchorElem?: HTMLElement;
+}): JSX.Element | null => {
   const [editor] = useLexicalComposerContext();
   return useFloatingBlockTypeToolbar(editor, anchorElem);
 };

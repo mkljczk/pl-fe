@@ -1,10 +1,15 @@
 import { OrderedSet as ImmutableOrderedSet } from 'immutable';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchAccount, fetchAccountByUsername } from 'pl-fe/actions/accounts';
-import { fetchFavouritedStatuses, expandFavouritedStatuses, fetchAccountFavouritedStatuses, expandAccountFavouritedStatuses } from 'pl-fe/actions/favourites';
+import {
+  expandAccountFavouritedStatuses,
+  expandFavouritedStatuses,
+  fetchAccountFavouritedStatuses,
+  fetchFavouritedStatuses,
+} from 'pl-fe/actions/favourites';
 import { useAccountLookup } from 'pl-fe/api/hooks';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StatusList from 'pl-fe/components/status-list';
@@ -26,27 +31,44 @@ const Favourites: React.FC<IFavourites> = ({ params }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { account: ownAccount } = useOwnAccount();
-  const { account, isUnavailable } = useAccountLookup(params?.username, { withRelationship: true });
+  const { account, isUnavailable } = useAccountLookup(params?.username, {
+    withRelationship: true,
+  });
 
   const username = params?.username || '';
-  const isOwnAccount = username.toLowerCase() === ownAccount?.acct?.toLowerCase();
+  const isOwnAccount =
+    username.toLowerCase() === ownAccount?.acct?.toLowerCase();
 
   const timelineKey = isOwnAccount ? 'favourites' : `favourites:${account?.id}`;
-  const statusIds = useAppSelector(state => state.status_lists.get(timelineKey)?.items || ImmutableOrderedSet<string>());
-  const isLoading = useAppSelector(state => state.status_lists.get(timelineKey)?.isLoading === true);
-  const hasMore = useAppSelector(state => !!state.status_lists.get(timelineKey)?.next);
+  const statusIds = useAppSelector(
+    (state) =>
+      state.status_lists.get(timelineKey)?.items ||
+      ImmutableOrderedSet<string>(),
+  );
+  const isLoading = useAppSelector(
+    (state) => state.status_lists.get(timelineKey)?.isLoading === true,
+  );
+  const hasMore = useAppSelector(
+    (state) => !!state.status_lists.get(timelineKey)?.next,
+  );
 
-  const handleLoadMore = useCallback(debounce(() => {
-    if (isOwnAccount) {
-      dispatch(expandFavouritedStatuses());
-    } else if (account) {
-      dispatch(expandAccountFavouritedStatuses(account.id));
-    }
-  }, 300, { leading: true }), [account?.id]);
+  const handleLoadMore = useCallback(
+    debounce(
+      () => {
+        if (isOwnAccount) {
+          dispatch(expandFavouritedStatuses());
+        } else if (account) {
+          dispatch(expandAccountFavouritedStatuses(account.id));
+        }
+      },
+      300,
+      { leading: true },
+    ),
+    [account?.id],
+  );
 
   useEffect(() => {
-    if (isOwnAccount)
-      dispatch(fetchFavouritedStatuses());
+    if (isOwnAccount) dispatch(fetchFavouritedStatuses());
     else {
       if (account) {
         dispatch(fetchAccount(account.id));
@@ -68,24 +90,37 @@ const Favourites: React.FC<IFavourites> = ({ params }) => {
     return (
       <Column>
         <div className='empty-column-indicator'>
-          <FormattedMessage id='empty_column.account_unavailable' defaultMessage='Profile unavailable' />
+          <FormattedMessage
+            id='empty_column.account_unavailable'
+            defaultMessage='Profile unavailable'
+          />
         </div>
       </Column>
     );
   }
 
   if (!account) {
-    return (
-      <MissingIndicator />
-    );
+    return <MissingIndicator />;
   }
 
-  const emptyMessage = isOwnAccount
-    ? <FormattedMessage id='empty_column.favourited_statuses' defaultMessage="You don't have any liked posts yet. When you like one, it will show up here." />
-    : <FormattedMessage id='empty_column.account_favourited_statuses' defaultMessage="This user doesn't have any liked posts yet." />;
+  const emptyMessage = isOwnAccount ? (
+    <FormattedMessage
+      id='empty_column.favourited_statuses'
+      defaultMessage="You don't have any liked posts yet. When you like one, it will show up here."
+    />
+  ) : (
+    <FormattedMessage
+      id='empty_column.account_favourited_statuses'
+      defaultMessage="This user doesn't have any liked posts yet."
+    />
+  );
 
   return (
-    <Column label={intl.formatMessage(messages.heading)} withHeader={false} transparent>
+    <Column
+      label={intl.formatMessage(messages.heading)}
+      withHeader={false}
+      transparent
+    >
       <StatusList
         statusIds={statusIds}
         scrollKey='favourited_statuses'

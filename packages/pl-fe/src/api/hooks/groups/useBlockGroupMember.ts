@@ -5,12 +5,16 @@ import { useClient } from 'pl-fe/hooks';
 import type { Group } from 'pl-api';
 import type { Account } from 'pl-fe/normalizers';
 
-const useBlockGroupMember = (group: Pick<Group, 'id'>, account: Pick<Account, 'id'>) => {
+const useBlockGroupMember = (
+  group: Pick<Group, 'id'>,
+  account: Pick<Account, 'id'>,
+) => {
   const client = useClient();
 
   const { createEntity } = useCreateEntity(
     [Entities.GROUP_MEMBERSHIPS, account.id],
-    (accountIds: string[]) => client.experimental.groups.blockGroupUsers(group.id, accountIds),
+    (accountIds: string[]) =>
+      client.experimental.groups.blockGroupUsers(group.id, accountIds),
   );
 
   return createEntity;

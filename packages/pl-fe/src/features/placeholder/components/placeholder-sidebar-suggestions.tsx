@@ -2,7 +2,7 @@ import React from 'react';
 
 import { HStack, Stack } from 'pl-fe/components/ui';
 
-import { randomIntFromInterval, generateText } from '../utils';
+import { generateText, randomIntFromInterval } from '../utils';
 
 const PlaceholderSidebarSuggestions = ({ limit }: { limit: number }) => {
   const length = randomIntFromInterval(15, 3);
@@ -11,11 +11,14 @@ const PlaceholderSidebarSuggestions = ({ limit }: { limit: number }) => {
   return (
     <>
       {new Array(limit).fill(undefined).map((_, idx) => (
-        <HStack key={idx} alignItems='center' space={2} className='animate-pulse'>
+        <HStack
+          key={idx}
+          alignItems='center'
+          space={2}
+          className='animate-pulse'
+        >
           <Stack space={3} className='text-center'>
-            <div
-              className='mx-auto block h-9 w-9 rounded-full bg-primary-200 dark:bg-primary-700'
-            />
+            <div className='mx-auto block h-9 w-9 rounded-full bg-primary-200 dark:bg-primary-700' />
           </Stack>
 
           <Stack className='text-primary-200 dark:text-primary-700'>

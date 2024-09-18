@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import { fetchMfa } from 'pl-fe/actions/mfa';
 import { Column, Stack } from 'pl-fe/components/ui';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import DisableOtpForm from './mfa/disable-otp-form';
 import EnableOtpForm from './mfa/enable-otp-form';
@@ -42,7 +42,10 @@ const MfaForm: React.FC = () => {
         <DisableOtpForm />
       ) : (
         <Stack space={4}>
-          <EnableOtpForm displayOtpForm={displayOtpForm} handleSetupProceedClick={handleSetupProceedClick} />
+          <EnableOtpForm
+            displayOtpForm={displayOtpForm}
+            handleSetupProceedClick={handleSetupProceedClick}
+          />
           {displayOtpForm && <OtpConfirmForm />}
         </Stack>
       )}

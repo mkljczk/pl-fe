@@ -8,7 +8,10 @@ import type { Account, PaginatedResponse } from 'pl-api';
 const useAccountSearch = (q: string) => {
   const client = useClient();
 
-  const getAccountSearch = async(q: string, pageParam?: Pick<PaginatedResponse<Account>, 'next'>): Promise<PaginatedResponse<Account>> => {
+  const getAccountSearch = async (
+    q: string,
+    pageParam?: Pick<PaginatedResponse<Account>, 'next'>,
+  ): Promise<PaginatedResponse<Account>> => {
     if (pageParam?.next) return pageParam.next();
 
     const response = await client.accounts.searchAccounts(q, {
@@ -29,8 +32,10 @@ const useAccountSearch = (q: string) => {
     queryKey: ['search', 'accounts', q],
     queryFn: ({ pageParam }) => getAccountSearch(q, pageParam),
     placeholderData: keepPreviousData,
-    initialPageParam: { next: null as (() => Promise<PaginatedResponse<Account>>) | null },
-    getNextPageParam: (config) => config.next ? config : undefined,
+    initialPageParam: {
+      next: null as (() => Promise<PaginatedResponse<Account>>) | null,
+    },
+    getNextPageParam: (config) => (config.next ? config : undefined),
   });
 
   const data = flattenPages(queryInfo.data);

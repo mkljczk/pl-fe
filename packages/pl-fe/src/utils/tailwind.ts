@@ -14,18 +14,21 @@ const isHex = (value: any): boolean => /^#([0-9A-F]{3}){1,2}$/i.test(value);
 /** Expand hex colors into tints */
 const expandPalette = (palette: TailwindColorPalette): TailwindColorPalette => {
   // Generate palette only for present colors
-  return Object.entries(palette).reduce((result: TailwindColorPalette, colorData) => {
-    const [colorName, color] = colorData;
+  return Object.entries(palette).reduce(
+    (result: TailwindColorPalette, colorData) => {
+      const [colorName, color] = colorData;
 
-    // Conditionally handle hex color and Tailwind color object
-    if (typeof color === 'string' && isHex(color)) {
-      result[colorName] = tintify(color);
-    } else if (color && typeof color === 'object') {
-      result[colorName] = color;
-    }
+      // Conditionally handle hex color and Tailwind color object
+      if (typeof color === 'string' && isHex(color)) {
+        result[colorName] = tintify(color);
+      } else if (color && typeof color === 'object') {
+        result[colorName] = color;
+      }
 
-    return result;
-  }, {});
+      return result;
+    },
+    {},
+  );
 };
 
 // Generate accent color only if brandColor is present
@@ -36,7 +39,9 @@ const maybeGenerateAccentColor = (brandColor: any): string | null =>
 const fromLegacyColors = (plFeConfig: PlFeConfig): TailwindColorPalette => {
   const brandColor = plFeConfig.get('brandColor');
   const accentColor = plFeConfig.get('accentColor');
-  const accent = isHex(accentColor) ? accentColor : maybeGenerateAccentColor(brandColor);
+  const accent = isHex(accentColor)
+    ? accentColor
+    : maybeGenerateAccentColor(brandColor);
 
   return expandPalette({
     primary: isHex(brandColor) ? brandColor : null,
@@ -49,13 +54,11 @@ const fromLegacyColors = (plFeConfig: PlFeConfig): TailwindColorPalette => {
 /** Convert pl-fe Config into Tailwind colors */
 const toTailwind = (plFeConfig: PlFeConfig): PlFeConfig => {
   const colors: PlFeColors = ImmutableMap(plFeConfig.get('colors'));
-  const legacyColors = ImmutableMap(fromJS(fromLegacyColors(plFeConfig))) as PlFeColors;
+  const legacyColors = ImmutableMap(
+    fromJS(fromLegacyColors(plFeConfig)),
+  ) as PlFeColors;
 
   return plFeConfig.set('colors', legacyColors.mergeDeep(colors));
 };
 
-export {
-  expandPalette,
-  fromLegacyColors,
-  toTailwind,
-};
+export { expandPalette, fromLegacyColors, toTailwind };

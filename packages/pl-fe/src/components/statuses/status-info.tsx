@@ -27,10 +27,7 @@ const StatusInfo = (props: IStatusInfo) => {
         alignItems='center'
         className='cursor-default text-xs font-medium text-gray-700 rtl:space-x-reverse dark:text-gray-600'
       >
-        <div
-          className='flex justify-end'
-          style={{ width: avatarSize }}
-        >
+        <div className='flex justify-end' style={{ width: avatarSize }}>
           {icon}
         </div>
 

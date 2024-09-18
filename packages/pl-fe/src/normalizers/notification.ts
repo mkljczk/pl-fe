@@ -24,27 +24,44 @@ const normalizeNotification = (notification: BaseNotification) => ({
   account_ids: [notification.account.id],
 });
 
-const normalizeNotifications = (notifications: Array<BaseNotification>, stateNotifications?: ImmutableOrderedMap<string, MinifiedNotification>) => {
+const normalizeNotifications = (
+  notifications: Array<BaseNotification>,
+  stateNotifications?: ImmutableOrderedMap<string, MinifiedNotification>,
+) => {
   const deduplicatedNotifications: Notification[] = [];
 
   for (const notification of notifications) {
     const existingNotification = stateNotifications?.get(notification.id);
 
     // Do not update grouped notifications
-    if (existingNotification && (existingNotification.duplicate || existingNotification.account_ids.length)) continue;
+    if (
+      existingNotification &&
+      (existingNotification.duplicate ||
+        existingNotification.account_ids.length)
+    )
+      continue;
 
     if (STATUS_NOTIFICATION_TYPES.includes(notification.type)) {
-      const existingNotification = deduplicatedNotifications
-        .find(deduplicated =>
-          deduplicated.type === notification.type
-          && ((notification.type === 'emoji_reaction' && deduplicated.type === 'emoji_reaction') ? notification.emoji === deduplicated.emoji : true)
-          && getNotificationStatus(deduplicated)?.id === getNotificationStatus(notification)?.id,
-        );
+      const existingNotification = deduplicatedNotifications.find(
+        (deduplicated) =>
+          deduplicated.type === notification.type &&
+          (notification.type === 'emoji_reaction' &&
+          deduplicated.type === 'emoji_reaction'
+            ? notification.emoji === deduplicated.emoji
+            : true) &&
+          getNotificationStatus(deduplicated)?.id ===
+            getNotificationStatus(notification)?.id,
+      );
 
       if (existingNotification) {
-        existingNotification.accounts.push(normalizeAccount(notification.account));
+        existingNotification.accounts.push(
+          normalizeAccount(notification.account),
+        );
         existingNotification.account_ids.push(notification.account.id);
-        deduplicatedNotifications.push({ ...normalizeNotification(notification), duplicate: true });
+        deduplicatedNotifications.push({
+          ...normalizeNotification(notification),
+          duplicate: true,
+        });
       } else {
         deduplicatedNotifications.push(normalizeNotification(notification));
       }

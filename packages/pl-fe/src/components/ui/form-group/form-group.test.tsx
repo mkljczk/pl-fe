@@ -23,7 +23,9 @@ describe('<FormGroup />', () => {
     );
 
     expect(screen.getByLabelText('My label')).toHaveAttribute('data-testid');
-    expect(screen.getByLabelText('My other label')).not.toHaveAttribute('data-testid');
+    expect(screen.getByLabelText('My other label')).not.toHaveAttribute(
+      'data-testid',
+    );
     expect(screen.queryByTestId('form-group-error')).not.toBeInTheDocument();
   });
 
@@ -34,7 +36,9 @@ describe('<FormGroup />', () => {
       </FormGroup>,
     );
 
-    expect(screen.getByTestId('form-group-error')).toHaveTextContent('is invalid');
+    expect(screen.getByTestId('form-group-error')).toHaveTextContent(
+      'is invalid',
+    );
   });
 
   it('renders label', () => {
@@ -44,7 +48,9 @@ describe('<FormGroup />', () => {
       </FormGroup>,
     );
 
-    expect(screen.getByTestId('form-group-label')).toHaveTextContent('My label');
+    expect(screen.getByTestId('form-group-label')).toHaveTextContent(
+      'My label',
+    );
   });
 
   it('renders hint', () => {

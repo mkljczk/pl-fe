@@ -14,9 +14,15 @@ import ColumnForbidden from '../ui/components/column-forbidden';
 type RouteParams = { groupId: string };
 
 const messages = defineMessages({
-  heading: { id: 'column.group_blocked_members', defaultMessage: 'Banned Members' },
+  heading: {
+    id: 'column.group_blocked_members',
+    defaultMessage: 'Banned Members',
+  },
   unblock: { id: 'group.group_mod_unblock', defaultMessage: 'Unban' },
-  unblocked: { id: 'group.group_mod_unblock.success', defaultMessage: 'Unbanned @{name} from group' },
+  unblocked: {
+    id: 'group.group_mod_unblock.success',
+    defaultMessage: 'Unbanned @{name} from group',
+  },
 });
 
 interface IBlockedMember {
@@ -32,11 +38,19 @@ const BlockedMember: React.FC<IBlockedMember> = ({ accountId, groupId }) => {
   if (!account) return null;
 
   const handleUnblock = () =>
-    dispatch(groupUnblock(groupId, accountId))
-      .then(() => toast.success(intl.formatMessage(messages.unblocked, { name: account.acct })));
+    dispatch(groupUnblock(groupId, accountId)).then(() =>
+      toast.success(
+        intl.formatMessage(messages.unblocked, { name: account.acct }),
+      ),
+    );
 
   return (
-    <HStack space={1} alignItems='center' justifyContent='between' className='p-2.5'>
+    <HStack
+      space={1}
+      alignItems='center'
+      justifyContent='between'
+      className='p-2.5'
+    >
       <div className='w-full'>
         <Account account={account} withRelationship={false} />
       </div>
@@ -61,7 +75,9 @@ const GroupBlockedMembers: React.FC<IGroupBlockedMembers> = ({ params }) => {
   const groupId = params?.groupId;
 
   const { group } = useGroup(groupId);
-  const accountIds = useAppSelector((state) => state.user_lists.group_blocks.get(groupId)?.items);
+  const accountIds = useAppSelector(
+    (state) => state.user_lists.group_blocks.get(groupId)?.items,
+  );
 
   useEffect(() => {
     dispatch(fetchGroupBlocks(groupId));
@@ -75,22 +91,37 @@ const GroupBlockedMembers: React.FC<IGroupBlockedMembers> = ({ params }) => {
     );
   }
 
-  if (!group.relationship.role || !['owner', 'admin', 'moderator'].includes(group.relationship.role)) {
-    return (<ColumnForbidden />);
+  if (
+    !group.relationship.role ||
+    !['owner', 'admin', 'moderator'].includes(group.relationship.role)
+  ) {
+    return <ColumnForbidden />;
   }
 
-  const emptyMessage = <FormattedMessage id='empty_column.group_blocks' defaultMessage="The group hasn't banned any users yet." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.group_blocks'
+      defaultMessage="The group hasn't banned any users yet."
+    />
+  );
 
   return (
-    <Column label={intl.formatMessage(messages.heading)} backHref={`/groups/${group.id}/manage`}>
+    <Column
+      label={intl.formatMessage(messages.heading)}
+      backHref={`/groups/${group.id}/manage`}
+    >
       <ScrollableList
         scrollKey='group_blocks'
         emptyMessage={emptyMessage}
         emptyMessageCard={false}
       >
-        {accountIds.map((accountId) =>
-          <BlockedMember key={accountId} accountId={accountId} groupId={groupId} />,
-        )}
+        {accountIds.map((accountId) => (
+          <BlockedMember
+            key={accountId}
+            accountId={accountId}
+            groupId={groupId}
+          />
+        ))}
       </ScrollableList>
     </Column>
   );

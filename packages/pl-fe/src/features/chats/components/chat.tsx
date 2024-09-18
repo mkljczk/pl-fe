@@ -14,11 +14,17 @@ import ChatMessageList from './chat-message-list';
 import type { Chat as ChatEntity, MediaAttachment } from 'pl-api';
 import type { PlfeResponse } from 'pl-fe/api';
 
-const fileKeyGen = (): number => Math.floor((Math.random() * 0x10000));
+const fileKeyGen = (): number => Math.floor(Math.random() * 0x10000);
 
 const messages = defineMessages({
-  failedToSend: { id: 'chat.failed_to_send', defaultMessage: 'Message failed to send.' },
-  uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
+  failedToSend: {
+    id: 'chat.failed_to_send',
+    defaultMessage: 'Message failed to send.',
+  },
+  uploadErrorLimit: {
+    id: 'upload_error.limit',
+    defaultMessage: 'File upload limit exceeded.',
+  },
 });
 
 interface ChatInterface {
@@ -34,7 +40,10 @@ interface ChatInterface {
  * beyond one line
  */
 const clearNativeInputValue = (element: HTMLTextAreaElement) => {
-  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value')?.set;
+  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+    window.HTMLTextAreaElement.prototype,
+    'value',
+  )?.set;
   if (nativeInputValueSetter) {
     nativeInputValueSetter.call(element, '');
 
@@ -64,16 +73,19 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
   const isSubmitDisabled = content.length === 0 && !attachment;
 
   const submitMessage = () => {
-    createChatMessage.mutate({ chatId: chat.id, content, mediaId: attachment?.id }, {
-      onSuccess: () => {
-        setErrorMessage(undefined);
+    createChatMessage.mutate(
+      { chatId: chat.id, content, mediaId: attachment?.id },
+      {
+        onSuccess: () => {
+          setErrorMessage(undefined);
+        },
+        onError: (error: { response: PlfeResponse }, _variables, context) => {
+          const message = error.response?.json?.error;
+          setErrorMessage(message || intl.formatMessage(messages.failedToSend));
+          setContent(context.prevContent as string);
+        },
       },
-      onError: (error: { response: PlfeResponse }, _variables, context) => {
-        const message = error.response?.json?.error;
-        setErrorMessage(message || intl.formatMessage(messages.failedToSend));
-        setContent(context.prevContent as string);
-      },
-    });
+    );
 
     clearState();
   };
@@ -110,12 +122,18 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
     }
   };
 
-  const handleContentChange: React.ChangeEventHandler<HTMLTextAreaElement> = (event) => {
+  const handleContentChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
+    event,
+  ) => {
     setContent(event.target.value);
   };
 
   const handlePaste: React.ClipboardEventHandler<HTMLTextAreaElement> = (e) => {
-    if (isSubmitDisabled && e.clipboardData && e.clipboardData.files.length === 1) {
+    if (
+      isSubmitDisabled &&
+      e.clipboardData &&
+      e.clipboardData.files.length === 1
+    ) {
       handleFiles(e.clipboardData.files);
     }
   };
@@ -145,10 +163,11 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
 
     setUploading(true);
 
-    dispatch(uploadMedia({ file: files[0] }, onUploadProgress)).then(response => {
-      setAttachment(response);
-      setUploading(false);
-    })
+    dispatch(uploadMedia({ file: files[0] }, onUploadProgress))
+      .then((response) => {
+        setAttachment(response);
+        setUploading(false);
+      })
       .catch(() => setUploading(false));
   };
 
@@ -159,7 +178,10 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
   }, [chat.id, inputRef?.current]);
 
   return (
-    <Stack className={clsx('flex grow overflow-hidden', className)} onMouseOver={handleMouseOver}>
+    <Stack
+      className={clsx('flex grow overflow-hidden', className)}
+      onMouseOver={handleMouseOver}
+    >
       <div className='flex h-full grow justify-center overflow-hidden'>
         <ChatMessageList chat={chat} />
       </div>

@@ -7,7 +7,4 @@ const fetchTrendsSuccess = (tags: Array<Tag>) => ({
   tags,
 });
 
-export {
-  TRENDS_FETCH_SUCCESS,
-  fetchTrendsSuccess,
-};
+export { TRENDS_FETCH_SUCCESS, fetchTrendsSuccess };

@@ -14,7 +14,7 @@ const useGroupRelationship = (groupId: string | undefined) => {
     () => client.experimental.groups.getGroupRelationships([groupId!]),
     {
       enabled: !!groupId,
-      schema: z.any().transform(arr => arr[0]),
+      schema: z.any().transform((arr) => arr[0]),
     },
   );
 

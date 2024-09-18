@@ -14,7 +14,7 @@ interface ISlider {
 const Slider: React.FC<ISlider> = ({ value, onChange }) => {
   const node = useRef<HTMLDivElement>(null);
 
-  const handleMouseDown: React.MouseEventHandler = e => {
+  const handleMouseDown: React.MouseEventHandler = (e) => {
     document.addEventListener('mousemove', handleMouseSlide, true);
     document.addEventListener('mouseup', handleMouseUp, true);
     document.addEventListener('touchmove', handleMouseSlide, true);
@@ -33,7 +33,7 @@ const Slider: React.FC<ISlider> = ({ value, onChange }) => {
     document.removeEventListener('touchend', handleMouseUp, true);
   };
 
-  const handleMouseSlide = throttle(e => {
+  const handleMouseSlide = throttle((e) => {
     if (node.current) {
       const { x } = getPointerPosition(node.current, e);
 
@@ -58,7 +58,10 @@ const Slider: React.FC<ISlider> = ({ value, onChange }) => {
       ref={node}
     >
       <div className='absolute top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-primary-200 dark:bg-primary-700' />
-      <div className='absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-accent-500' style={{ width: `${value * 100}%` }} />
+      <div
+        className='absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-accent-500'
+        style={{ width: `${value * 100}%` }}
+      />
       <span
         className='absolute top-1/2 z-10 -ml-1.5 h-3 w-3 -translate-y-1/2 rounded-full bg-accent-500 shadow'
         tabIndex={0}
@@ -87,11 +90,11 @@ const findElementPosition = (el: HTMLElement) => {
 
   const clientLeft = docEl.clientLeft || body.clientLeft || 0;
   const scrollLeft = window.pageXOffset || body.scrollLeft;
-  const left = (box.left + scrollLeft) - clientLeft;
+  const left = box.left + scrollLeft - clientLeft;
 
   const clientTop = docEl.clientTop || body.clientTop || 0;
   const scrollTop = window.pageYOffset || body.scrollTop;
-  const top = (box.top + scrollTop) - clientTop;
+  const top = box.top + scrollTop - clientTop;
 
   return {
     left: Math.round(left),
@@ -99,7 +102,10 @@ const findElementPosition = (el: HTMLElement) => {
   };
 };
 
-const getPointerPosition = (el: HTMLElement, event: MouseEvent & TouchEvent): Point => {
+const getPointerPosition = (
+  el: HTMLElement,
+  event: MouseEvent & TouchEvent,
+): Point => {
   const box = findElementPosition(el);
   const boxW = el.offsetWidth;
   const boxH = el.offsetHeight;

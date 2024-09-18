@@ -20,7 +20,7 @@ const ME_PATCH_REQUEST = 'ME_PATCH_REQUEST' as const;
 const ME_PATCH_SUCCESS = 'ME_PATCH_SUCCESS' as const;
 const ME_PATCH_FAIL = 'ME_PATCH_FAIL' as const;
 
-const noOp = () => new Promise(f => f(undefined));
+const noOp = () => new Promise((f) => f(undefined));
 
 const getMeId = (state: RootState) => state.me || getAuthUserId(state);
 
@@ -37,33 +37,37 @@ const getMeToken = (state: RootState) => {
   return state.auth.users.get(accountUrl!)?.access_token;
 };
 
-const fetchMe = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const token = getMeToken(state);
-    const accountUrl = getMeUrl(state);
+const fetchMe = () => (dispatch: AppDispatch, getState: () => RootState) => {
+  const state = getState();
+  const token = getMeToken(state);
+  const accountUrl = getMeUrl(state);
 
-    if (!token) {
-      dispatch({ type: ME_FETCH_SKIP });
-      return noOp();
-    }
+  if (!token) {
+    dispatch({ type: ME_FETCH_SKIP });
+    return noOp();
+  }
 
-    dispatch(fetchMeRequest());
-    return dispatch(loadCredentials(token, accountUrl!))
-      .catch(error => dispatch(fetchMeFail(error)));
-  };
+  dispatch(fetchMeRequest());
+  return dispatch(loadCredentials(token, accountUrl!)).catch((error) =>
+    dispatch(fetchMeFail(error)),
+  );
+};
 
 /** Update the auth account in IndexedDB for Mastodon, etc. */
-const persistAuthAccount = (account: CredentialAccount, params: Record<string, any>) => {
+const persistAuthAccount = (
+  account: CredentialAccount,
+  params: Record<string, any>,
+) => {
   if (account && account.url) {
     const key = `authAccount:${account.url}`;
-    KVStore.getItem(key).then((oldAccount: any) => {
-      const settings = oldAccount?.settings_store || {};
-      if (!account.settings_store) {
-        account.settings_store = settings;
-      }
-      KVStore.setItem(key, account);
-    })
+    KVStore.getItem(key)
+      .then((oldAccount: any) => {
+        const settings = oldAccount?.settings_store || {};
+        if (!account.settings_store) {
+          account.settings_store = settings;
+        }
+        KVStore.setItem(key, account);
+      })
       .catch(console.error);
   }
   if (account && account.url) {
@@ -74,15 +78,18 @@ const persistAuthAccount = (account: CredentialAccount, params: Record<string, a
   }
 };
 
-const patchMe = (params: UpdateCredentialsParams) =>
+const patchMe =
+  (params: UpdateCredentialsParams) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(patchMeRequest());
 
-    return getClient(getState).settings.updateCredentials(params)
-      .then(response => {
+    return getClient(getState)
+      .settings.updateCredentials(params)
+      .then((response) => {
         persistAuthAccount(response, params);
         dispatch(patchMeSuccess(response));
-      }).catch(error => {
+      })
+      .catch((error) => {
         dispatch(patchMeFail(error));
         throw error;
       });
@@ -116,16 +123,15 @@ interface MePatchSuccessAction {
   me: CredentialAccount;
 }
 
-const patchMeSuccess = (me: CredentialAccount) =>
-  (dispatch: AppDispatch) => {
-    const action: MePatchSuccessAction = {
-      type: ME_PATCH_SUCCESS,
-      me,
-    };
-
-    dispatch(importFetchedAccount(me));
-    dispatch(action);
+const patchMeSuccess = (me: CredentialAccount) => (dispatch: AppDispatch) => {
+  const action: MePatchSuccessAction = {
+    type: ME_PATCH_SUCCESS,
+    me,
   };
+
+  dispatch(importFetchedAccount(me));
+  dispatch(action);
+};
 
 const patchMeFail = (error: unknown) => ({
   type: ME_PATCH_FAIL,

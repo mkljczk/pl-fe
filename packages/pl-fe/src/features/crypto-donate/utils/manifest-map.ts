@@ -4,10 +4,16 @@
 import manifest from 'cryptocurrency-icons/manifest.json';
 import { List as ImmutableList, Map as ImmutableMap, fromJS } from 'immutable';
 
-const manifestMap = (fromJS(manifest) as ImmutableList<ImmutableMap<string, string>>).reduce(
-  (acc: ImmutableMap<string, ImmutableMap<string, string>>, entry: ImmutableMap<string, string>) =>
-    acc.set(entry.get('symbol')!.toLowerCase(), entry),
-  ImmutableMap(),
-).toJS();
+const manifestMap = (
+  fromJS(manifest) as ImmutableList<ImmutableMap<string, string>>
+)
+  .reduce(
+    (
+      acc: ImmutableMap<string, ImmutableMap<string, string>>,
+      entry: ImmutableMap<string, string>,
+    ) => acc.set(entry.get('symbol')!.toLowerCase(), entry),
+    ImmutableMap(),
+  )
+  .toJS();
 
 export { manifestMap as default };

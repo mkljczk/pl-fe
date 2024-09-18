@@ -14,10 +14,7 @@ interface UseLocaleResult {
 const useLocale = (fallback = 'en'): UseLocaleResult => {
   const locale = useAppSelector((state) => getLocale(state, fallback));
 
-  const direction: 'ltr' | 'rtl' =
-    RTL_LOCALES.includes(locale)
-      ? 'rtl'
-      : 'ltr';
+  const direction: 'ltr' | 'rtl' = RTL_LOCALES.includes(locale) ? 'rtl' : 'ltr';
 
   return {
     locale,

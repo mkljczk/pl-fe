@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useState } from 'react';
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import ReactSwipeableViews from 'react-swipeable-views';
 
@@ -8,7 +8,7 @@ import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
 import ExtendedVideoPlayer from 'pl-fe/components/extended-video-player';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StatusActionBar from 'pl-fe/components/status-action-bar';
-import { Icon, IconButton, HStack, Stack } from 'pl-fe/components/ui';
+import { HStack, Icon, IconButton, Stack } from 'pl-fe/components/ui';
 import Audio from 'pl-fe/features/audio';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import Thread from 'pl-fe/features/status/components/thread';
@@ -19,8 +19,8 @@ import { makeGetStatus } from 'pl-fe/selectors';
 
 import ImageLoader from '../image-loader';
 
-import type { BaseModalProps } from '../modal-root';
 import type { MediaAttachment } from 'pl-api';
+import type { BaseModalProps } from '../modal-root';
 
 const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
@@ -51,19 +51,16 @@ interface MediaModalProps {
 }
 
 const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
-  const {
-    media,
-    statusId,
-    onClose,
-    time = 0,
-  } = props;
+  const { media, statusId, onClose, time = 0 } = props;
 
   const dispatch = useAppDispatch();
   const history = useHistory();
   const intl = useIntl();
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector((state) => statusId ? getStatus(state, { id: statusId }) : undefined);
+  const status = useAppSelector((state) =>
+    statusId ? getStatus(state, { id: statusId }) : undefined,
+  );
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
   const [index, setIndex] = useState<number | null>(null);
@@ -74,9 +71,12 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
   const handleSwipe = (index: number) => setIndex(index % media.length);
   const handleNextClick = () => setIndex((getIndex() + 1) % media.length);
-  const handlePrevClick = () => setIndex((media.length + getIndex() - 1) % media.length);
+  const handlePrevClick = () =>
+    setIndex((media.length + getIndex() - 1) % media.length);
 
-  const navigationHiddenClassName = navigationHidden ? 'pointer-events-none opacity-0' : '';
+  const navigationHiddenClassName = navigationHidden
+    ? 'pointer-events-none opacity-0'
+    : '';
 
   const handleKeyDown = (e: KeyboardEvent) => {
     switch (e.key) {
@@ -98,13 +98,13 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     window.open(mediaItem?.url);
   };
 
-  const getIndex = () => index !== null ? index : props.index;
+  const getIndex = () => (index !== null ? index : props.index);
 
   const toggleNavigation = () => {
-    setNavigationHidden(value => !value && userTouching.matches);
+    setNavigationHidden((value) => !value && userTouching.matches);
   };
 
-  const handleStatusClick: React.MouseEventHandler = e => {
+  const handleStatusClick: React.MouseEventHandler = (e) => {
     if (status && e.button === 0 && !(e.ctrlKey || e.metaKey)) {
       e.preventDefault();
       history.push(`/@${status.account.acct}/posts/${status?.id}`);
@@ -114,16 +114,23 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
   const content = media.map((attachment, i) => {
     let width: number | undefined, height: number | undefined;
-    if (attachment.type === 'image' || attachment.type === 'gifv' || attachment.type === 'video') {
-      width = (attachment.meta?.original?.width);
-      height = (attachment.meta?.original?.height);
+    if (
+      attachment.type === 'image' ||
+      attachment.type === 'gifv' ||
+      attachment.type === 'video'
+    ) {
+      width = attachment.meta?.original?.width;
+      height = attachment.meta?.original?.height;
     }
 
-    const link = (status && (
+    const link = status && (
       <a href={status.url} onClick={handleStatusClick}>
-        <FormattedMessage id='lightbox.view_context' defaultMessage='View context' />
+        <FormattedMessage
+          id='lightbox.view_context'
+          defaultMessage='View context'
+        />
       </a>
-    ));
+    );
 
     if (attachment.type === 'image') {
       return (
@@ -159,9 +166,17 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
         <Audio
           src={attachment.url}
           alt={attachment.description}
-          poster={attachment.preview_url !== attachment.url ? attachment.preview_url : (status?.account.avatar_static) as string | undefined}
-          backgroundColor={attachment.meta.colors?.background as string | undefined}
-          foregroundColor={attachment.meta.colors?.foreground as string | undefined}
+          poster={
+            attachment.preview_url !== attachment.url
+              ? attachment.preview_url
+              : (status?.account.avatar_static as string | undefined)
+          }
+          backgroundColor={
+            attachment.meta.colors?.background as string | undefined
+          }
+          foregroundColor={
+            attachment.meta.colors?.foreground as string | undefined
+          }
           accentColor={attachment.meta.colors?.accent as string | undefined}
           duration={attachment.meta.original?.duration || 0}
           key={attachment.url}
@@ -188,11 +203,13 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   // Load data.
   useEffect(() => {
     if (status?.id) {
-      dispatch(fetchStatusWithContext(status.id, intl)).then(() => {
-        setIsLoaded(true);
-      }).catch(() => {
-        setIsLoaded(true);
-      });
+      dispatch(fetchStatusWithContext(status.id, intl))
+        .then(() => {
+          setIsLoaded(true);
+        })
+        .catch(() => {
+          setIsLoaded(true);
+        });
     }
   }, [status?.id]);
 
@@ -206,9 +223,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
   if (statusId) {
     if (!isLoaded) {
-      return (
-        <MissingIndicator />
-      );
+      return <MissingIndicator />;
     } else if (!status) {
       return <PlaceholderStatus />;
     }
@@ -222,24 +237,22 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
   return (
     <div className='media-modal pointer-events-auto fixed inset-0 z-[9999] h-full bg-gray-900/90'>
-      <div
-        className='absolute inset-0'
-        role='presentation'
-      >
+      <div className='absolute inset-0' role='presentation'>
         <Stack
           onClick={handleClickOutside}
-          className={
-            clsx('fixed inset-0 h-full grow transition-all', {
-              'xl:pr-96': !isFullScreen,
-              'xl:pr-0': isFullScreen,
-            })
-          }
+          className={clsx('fixed inset-0 h-full grow transition-all', {
+            'xl:pr-96': !isFullScreen,
+            'xl:pr-0': isFullScreen,
+          })}
           justifyContent='between'
         >
           <HStack
             alignItems='center'
             justifyContent='between'
-            className={clsx('flex-[0_0_60px] p-4 transition-opacity', navigationHiddenClassName)}
+            className={clsx(
+              'flex-[0_0_60px] p-4 transition-opacity',
+              navigationHiddenClassName,
+            )}
           >
             <IconButton
               title={intl.formatMessage(messages.close)}
@@ -261,8 +274,14 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
               {status && (
                 <IconButton
-                  src={isFullScreen ? require('@tabler/icons/outline/arrows-minimize.svg') : require('@tabler/icons/outline/arrows-maximize.svg')}
-                  title={intl.formatMessage(isFullScreen ? messages.minimize : messages.expand)}
+                  src={
+                    isFullScreen
+                      ? require('@tabler/icons/outline/arrows-minimize.svg')
+                      : require('@tabler/icons/outline/arrows-maximize.svg')
+                  }
+                  title={intl.formatMessage(
+                    isFullScreen ? messages.minimize : messages.expand,
+                  )}
                   theme='dark'
                   className='hidden !p-1.5 hover:scale-105 hover:bg-gray-900 xl:block'
                   iconClassName='h-5 w-5'
@@ -273,18 +292,24 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           </HStack>
 
           {/* Height based on height of top/bottom bars */}
-          <div
-            className='relative h-[calc(100vh-120px)] w-full grow'
-          >
+          <div className='relative h-[calc(100vh-120px)] w-full grow'>
             {hasMultipleImages && (
-              <div className={clsx('absolute inset-y-0 left-5 z-10 flex items-center transition-opacity', navigationHiddenClassName)}>
+              <div
+                className={clsx(
+                  'absolute inset-y-0 left-5 z-10 flex items-center transition-opacity',
+                  navigationHiddenClassName,
+                )}
+              >
                 <button
                   tabIndex={0}
                   className='flex h-10 w-10 items-center justify-center rounded-full bg-gray-900 text-white'
                   onClick={handlePrevClick}
                   aria-label={intl.formatMessage(messages.previous)}
                 >
-                  <Icon src={require('@tabler/icons/outline/arrow-left.svg')} className='h-5 w-5' />
+                  <Icon
+                    src={require('@tabler/icons/outline/arrow-left.svg')}
+                    className='h-5 w-5'
+                  />
                 </button>
               </div>
             )}
@@ -299,14 +324,22 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             </ReactSwipeableViews>
 
             {hasMultipleImages && (
-              <div className={clsx('absolute inset-y-0 right-5 z-10 flex items-center transition-opacity', navigationHiddenClassName)}>
+              <div
+                className={clsx(
+                  'absolute inset-y-0 right-5 z-10 flex items-center transition-opacity',
+                  navigationHiddenClassName,
+                )}
+              >
                 <button
                   tabIndex={0}
                   className='flex h-10 w-10 items-center justify-center rounded-full bg-gray-900 text-white'
                   onClick={handleNextClick}
                   aria-label={intl.formatMessage(messages.next)}
                 >
-                  <Icon src={require('@tabler/icons/outline/arrow-right.svg')} className='h-5 w-5' />
+                  <Icon
+                    src={require('@tabler/icons/outline/arrow-right.svg')}
+                    className='h-5 w-5'
+                  />
                 </button>
               </div>
             )}
@@ -315,7 +348,10 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           {status && (
             <HStack
               justifyContent='center'
-              className={clsx('flex-[0_0_60px] transition-opacity', navigationHiddenClassName)}
+              className={clsx(
+                'flex-[0_0_60px] transition-opacity',
+                navigationHiddenClassName,
+              )}
             >
               <StatusActionBar
                 status={status}
@@ -328,11 +364,12 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
         {status && (
           <div
-            className={
-              clsx('-right-96 hidden bg-white transition-all xl:fixed xl:inset-y-0 xl:right-0 xl:flex xl:w-96 xl:flex-col', {
+            className={clsx(
+              '-right-96 hidden bg-white transition-all xl:fixed xl:inset-y-0 xl:right-0 xl:flex xl:w-96 xl:flex-col',
+              {
                 'xl:!-right-96': isFullScreen,
-              })
-            }
+              },
+            )}
           >
             <Thread
               status={status}

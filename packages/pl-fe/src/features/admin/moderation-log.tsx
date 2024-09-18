@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, FormattedDate, useIntl } from 'react-intl';
+import { FormattedDate, defineMessages, useIntl } from 'react-intl';
 
 import { useModerationLog } from 'pl-fe/api/hooks/admin';
 import ScrollableList from 'pl-fe/components/scrollable-list';
@@ -8,19 +8,21 @@ import { Column, Stack, Text } from 'pl-fe/components/ui';
 import type { AdminModerationLogEntry } from 'pl-api';
 
 const messages = defineMessages({
-  heading: { id: 'column.admin.moderation_log', defaultMessage: 'Moderation log' },
-  emptyMessage: { id: 'admin.moderation_log.empty_message', defaultMessage: 'You have not performed any moderation actions yet. When you do, a history will be shown here.' },
+  heading: {
+    id: 'column.admin.moderation_log',
+    defaultMessage: 'Moderation log',
+  },
+  emptyMessage: {
+    id: 'admin.moderation_log.empty_message',
+    defaultMessage:
+      'You have not performed any moderation actions yet. When you do, a history will be shown here.',
+  },
 });
 
 const ModerationLog = () => {
   const intl = useIntl();
 
-  const {
-    data,
-    hasNextPage,
-    isLoading,
-    fetchNextPage,
-  } = useModerationLog();
+  const { data, hasNextPage, isLoading, fetchNextPage } = useModerationLog();
 
   const showLoading = isLoading && data.length === 0;
 
@@ -39,9 +41,7 @@ const ModerationLog = () => {
         onLoadMore={handleLoadMore}
         listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
       >
-        {data.map(item => item && (
-          <LogItem key={item.id} log={item} />
-        ))}
+        {data.map((item) => item && <LogItem key={item.id} log={item} />)}
       </ScrollableList>
     </Column>
   );

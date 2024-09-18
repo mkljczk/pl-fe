@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { Accordion, Column, Stack } from 'pl-fe/components/ui';
 import { useInstance } from 'pl-fe/hooks';
@@ -7,7 +7,10 @@ import { useInstance } from 'pl-fe/hooks';
 import SiteWallet from './components/site-wallet';
 
 const messages = defineMessages({
-  heading: { id: 'column.crypto_donate', defaultMessage: 'Donate Cryptocurrency' },
+  heading: {
+    id: 'column.crypto_donate',
+    defaultMessage: 'Donate Cryptocurrency',
+  },
 });
 
 const CryptoDonate: React.FC = (): JSX.Element => {
@@ -20,7 +23,12 @@ const CryptoDonate: React.FC = (): JSX.Element => {
     <Column label={intl.formatMessage(messages.heading)} withHeader>
       <Stack space={5}>
         <Accordion
-          headline={<FormattedMessage id='crypto_donate.explanation_box.title' defaultMessage='Sending cryptocurrency donations' />}
+          headline={
+            <FormattedMessage
+              id='crypto_donate.explanation_box.title'
+              defaultMessage='Sending cryptocurrency donations'
+            />
+          }
           expanded={explanationBoxExpanded}
           onToggle={toggleExplanationBox}
         >

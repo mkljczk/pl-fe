@@ -33,15 +33,17 @@ import { useModalsStore } from 'pl-fe/stores';
 
 import { $isImageNode } from './image-node';
 
-import type {
-  BaseSelection,
-  LexicalEditor,
-  NodeKey,
-} from 'lexical';
+import type { BaseSelection, LexicalEditor, NodeKey } from 'lexical';
 
 const messages = defineMessages({
-  description: { id: 'upload_form.description', defaultMessage: 'Describe for the visually impaired' },
-  descriptionMissingTitle: { id: 'upload_form.description_missing.title', defaultMessage: 'This attachment doesn\'t have a description' },
+  description: {
+    id: 'upload_form.description',
+    defaultMessage: 'Describe for the visually impaired',
+  },
+  descriptionMissingTitle: {
+    id: 'upload_form.description_missing.title',
+    defaultMessage: "This attachment doesn't have a description",
+  },
 });
 
 const imageCache = new Set();
@@ -67,7 +69,7 @@ const LazyImage = ({
 }: {
   altText: string;
   className: string | null;
-  imageRef: {current: null | HTMLImageElement};
+  imageRef: { current: null | HTMLImageElement };
   src: string;
 }): JSX.Element => {
   useSuspenseImage(src);
@@ -100,26 +102,21 @@ const ImageComponent = ({
   const [isSelected, setSelected, clearSelection] =
     useLexicalNodeSelection(nodeKey);
   const [editor] = useLexicalComposerContext();
-  const [selection, setSelection] = useState<
-    BaseSelection | null
-  >(null);
+  const [selection, setSelection] = useState<BaseSelection | null>(null);
   const activeEditorRef = useRef<LexicalEditor | null>(null);
 
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [dirtyDescription, setDirtyDescription] = useState<string | null>(null);
 
-  const deleteNode = useCallback(
-    () => {
-      editor.update(() => {
-        const node = $getNodeByKey(nodeKey);
-        if ($isImageNode(node)) {
-          node.remove();
-        }
-      });
-    },
-    [nodeKey],
-  );
+  const deleteNode = useCallback(() => {
+    editor.update(() => {
+      const node = $getNodeByKey(nodeKey);
+      if ($isImageNode(node)) {
+        node.remove();
+      }
+    });
+  }, [nodeKey]);
 
   const previewImage = () => {
     const image = mediaAttachmentSchema.parse({
@@ -148,7 +145,11 @@ const ImageComponent = ({
     (event: KeyboardEvent) => {
       const latestSelection = $getSelection();
       const buttonElem = buttonRef.current;
-      if (isSelected && $isNodeSelection(latestSelection) && latestSelection.getNodes().length === 1) {
+      if (
+        isSelected &&
+        $isNodeSelection(latestSelection) &&
+        latestSelection.getNodes().length === 1
+      ) {
         if (buttonElem !== null && buttonElem !== document.activeElement) {
           event.preventDefault();
           buttonElem.focus();
@@ -199,7 +200,9 @@ const ImageComponent = ({
     }
   };
 
-  const handleInputChange: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
+  const handleInputChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
+    e,
+  ) => {
     setDirtyDescription(e.target.value);
   };
 
@@ -300,13 +303,21 @@ const ImageComponent = ({
   ]);
 
   const active = hovered || focused;
-  const description = dirtyDescription || (dirtyDescription !== '' && altText) || '';
+  const description =
+    dirtyDescription || (dirtyDescription !== '' && altText) || '';
   const draggable = isSelected && $isNodeSelection(selection);
 
   return (
     <Suspense fallback={null}>
       <>
-        <div className='relative' draggable={draggable} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onClick={handleClick} role='button'>
+        <div
+          className='relative'
+          draggable={draggable}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onClick={handleClick}
+          role='button'
+        >
           <HStack className='absolute right-2 top-2 z-10' space={2}>
             <IconButton
               onClick={previewImage}
@@ -325,12 +336,17 @@ const ImageComponent = ({
           </HStack>
 
           <div
-            className={clsx('absolute inset-x-0 bottom-0 z-[2px] bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900/80 p-2.5 opacity-0 transition-opacity duration-100 ease-linear', {
-              'opacity-100': active,
-            })}
+            className={clsx(
+              'absolute inset-x-0 bottom-0 z-[2px] bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900/80 p-2.5 opacity-0 transition-opacity duration-100 ease-linear',
+              {
+                'opacity-100': active,
+              },
+            )}
           >
             <label>
-              <span style={{ display: 'none' }}>{intl.formatMessage(messages.description)}</span>
+              <span style={{ display: 'none' }}>
+                {intl.formatMessage(messages.description)}
+              </span>
 
               <textarea
                 className='m-0 w-full rounded-md border border-solid border-white/25 bg-transparent p-2.5 text-sm text-white placeholder:text-white/60'
@@ -347,23 +363,31 @@ const ImageComponent = ({
           {missingDescriptionModal && !description && (
             <span
               title={intl.formatMessage(messages.descriptionMissingTitle)}
-              className={clsx('absolute bottom-2 left-2 z-10 inline-flex items-center gap-1 rounded bg-gray-900 px-2 py-1 text-xs font-medium uppercase text-white transition-opacity duration-100 ease-linear', {
-                'opacity-0 pointer-events-none': active,
-                'opacity-100': !active,
-              })}
+              className={clsx(
+                'absolute bottom-2 left-2 z-10 inline-flex items-center gap-1 rounded bg-gray-900 px-2 py-1 text-xs font-medium uppercase text-white transition-opacity duration-100 ease-linear',
+                {
+                  'opacity-0 pointer-events-none': active,
+                  'opacity-100': !active,
+                },
+              )}
             >
-              <Icon className='h-4 w-4' src={require('@tabler/icons/outline/alert-triangle.svg')} />
-              <FormattedMessage id='upload_form.description_missing.indicator' defaultMessage='Alt' />
+              <Icon
+                className='h-4 w-4'
+                src={require('@tabler/icons/outline/alert-triangle.svg')}
+              />
+              <FormattedMessage
+                id='upload_form.description_missing.indicator'
+                defaultMessage='Alt'
+              />
             </span>
           )}
 
           <LazyImage
-            className={
-              clsx('mx-auto cursor-default', {
-                'select-none': isSelected,
-                'cursor-grab active:cursor-grabbing': isSelected && $isNodeSelection(selection),
-              })
-            }
+            className={clsx('mx-auto cursor-default', {
+              'select-none': isSelected,
+              'cursor-grab active:cursor-grabbing':
+                isSelected && $isNodeSelection(selection),
+            })}
             src={src}
             altText={altText}
             imageRef={imageRef}

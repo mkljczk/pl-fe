@@ -1,7 +1,7 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { removeFromListAdder, addToListAdder } from 'pl-fe/actions/lists';
+import { addToListAdder, removeFromListAdder } from 'pl-fe/actions/lists';
 import Icon from 'pl-fe/components/icon';
 import IconButton from 'pl-fe/components/icon-button';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
@@ -20,7 +20,9 @@ const List: React.FC<IList> = ({ listId }) => {
   const dispatch = useAppDispatch();
 
   const list = useAppSelector((state) => state.lists.get(listId));
-  const added = useAppSelector((state) => state.listAdder.lists.items.includes(listId));
+  const added = useAppSelector((state) =>
+    state.listAdder.lists.items.includes(listId),
+  );
 
   const onRemove = () => dispatch(removeFromListAdder(listId));
   const onAdd = () => dispatch(addToListAdder(listId));
@@ -30,17 +32,29 @@ const List: React.FC<IList> = ({ listId }) => {
   let button;
 
   if (added) {
-    button = <IconButton iconClassName='h-5 w-5' src={require('@tabler/icons/outline/x.svg')} title={intl.formatMessage(messages.remove)} onClick={onRemove} />;
+    button = (
+      <IconButton
+        iconClassName='h-5 w-5'
+        src={require('@tabler/icons/outline/x.svg')}
+        title={intl.formatMessage(messages.remove)}
+        onClick={onRemove}
+      />
+    );
   } else {
-    button = <IconButton iconClassName='h-5 w-5' src={require('@tabler/icons/outline/plus.svg')} title={intl.formatMessage(messages.add)} onClick={onAdd} />;
+    button = (
+      <IconButton
+        iconClassName='h-5 w-5'
+        src={require('@tabler/icons/outline/plus.svg')}
+        title={intl.formatMessage(messages.add)}
+        onClick={onAdd}
+      />
+    );
   }
 
   return (
     <div className='flex items-center gap-1.5 px-2 py-4 text-black dark:text-white'>
       <Icon src={require('@tabler/icons/outline/list.svg')} />
-      <span className='grow'>
-        {list.title}
-      </span>
+      <span className='grow'>{list.title}</span>
       {button}
     </div>
   );

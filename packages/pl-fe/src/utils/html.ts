@@ -2,7 +2,10 @@
 // NB: This function can still return unsafe HTML
 const unescapeHTML = (html: string = ''): string => {
   const wrapper = document.createElement('div');
-  wrapper.innerHTML = html.replace(/<br\s*\/?>/g, '\n').replace(/<\/p><[^>]*>/g, '\n\n').replace(/<[^>]*>/g, '');
+  wrapper.innerHTML = html
+    .replace(/<br\s*\/?>/g, '\n')
+    .replace(/<\/p><[^>]*>/g, '\n\n')
+    .replace(/<[^>]*>/g, '');
   return wrapper.textContent || '';
 };
 
@@ -20,8 +23,8 @@ const stripCompatibilityFeatures = (html: string, hasQuote = true): string => {
   if (hasQuote) selectors.push('.quote-inline');
 
   // Remove all instances of all selectors
-  selectors.forEach(selector => {
-    node.querySelectorAll(selector).forEach(elem => {
+  selectors.forEach((selector) => {
+    node.querySelectorAll(selector).forEach((elem) => {
       elem.remove();
     });
   });
@@ -37,8 +40,4 @@ const stripHTML = (html: string) => {
   return div.textContent || div.innerText || '';
 };
 
-export {
-  unescapeHTML,
-  stripCompatibilityFeatures,
-  stripHTML,
-};
+export { unescapeHTML, stripCompatibilityFeatures, stripHTML };

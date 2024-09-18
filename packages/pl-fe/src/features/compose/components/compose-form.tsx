@@ -1,21 +1,34 @@
 import clsx from 'clsx';
-import { CLEAR_EDITOR_COMMAND, TextNode, type LexicalEditor } from 'lexical';
-import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { CLEAR_EDITOR_COMMAND, type LexicalEditor, TextNode } from 'lexical';
+import React, {
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import { length } from 'stringz';
 
 import {
-  submitCompose,
   clearComposeSuggestions,
   fetchComposeSuggestions,
   selectComposeSuggestion,
+  submitCompose,
   uploadCompose,
 } from 'pl-fe/actions/compose';
 import { Button, HStack, Stack } from 'pl-fe/components/ui';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import { ComposeEditor } from 'pl-fe/features/ui/util/async-components';
-import { useAppDispatch, useAppSelector, useCompose, useDraggedFiles, useFeatures, useInstance } from 'pl-fe/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useCompose,
+  useDraggedFiles,
+  useFeatures,
+  useInstance,
+} from 'pl-fe/hooks';
 
 import QuotedStatusContainer from '../containers/quoted-status-container';
 import ReplyIndicatorContainer from '../containers/reply-indicator-container';
@@ -43,14 +56,29 @@ import type { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
 import type { Emoji } from 'pl-fe/features/emoji';
 
 const messages = defineMessages({
-  placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What\'s on your mind?' },
-  pollPlaceholder: { id: 'compose_form.poll_placeholder', defaultMessage: 'Add a poll topic…' },
-  eventPlaceholder: { id: 'compose_form.event_placeholder', defaultMessage: 'Post to this event' },
+  placeholder: {
+    id: 'compose_form.placeholder',
+    defaultMessage: "What's on your mind?",
+  },
+  pollPlaceholder: {
+    id: 'compose_form.poll_placeholder',
+    defaultMessage: 'Add a poll topic…',
+  },
+  eventPlaceholder: {
+    id: 'compose_form.event_placeholder',
+    defaultMessage: 'Post to this event',
+  },
   publish: { id: 'compose_form.publish', defaultMessage: 'Post' },
-  publishLoud: { id: 'compose_form.publish_loud', defaultMessage: '{publish}!' },
+  publishLoud: {
+    id: 'compose_form.publish_loud',
+    defaultMessage: '{publish}!',
+  },
   message: { id: 'compose_form.message', defaultMessage: 'Message' },
   schedule: { id: 'compose_form.schedule', defaultMessage: 'Schedule' },
-  saveChanges: { id: 'compose_form.save_changes', defaultMessage: 'Save changes' },
+  saveChanges: {
+    id: 'compose_form.save_changes',
+    defaultMessage: 'Save changes',
+  },
 });
 
 interface IComposeForm<ID extends string> {
@@ -64,14 +92,25 @@ interface IComposeForm<ID extends string> {
   transparent?: boolean;
 }
 
-const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickableAreaRef, event, group, withAvatar, transparent }: IComposeForm<ID>) => {
+const ComposeForm = <ID extends string>({
+  id,
+  shouldCondense,
+  autoFocus,
+  clickableAreaRef,
+  event,
+  group,
+  withAvatar,
+  transparent,
+}: IComposeForm<ID>) => {
   const history = useHistory();
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { configuration } = useInstance();
 
   const compose = useCompose(id);
-  const showSearch = useAppSelector((state) => state.search.submitted && !state.search.hidden);
+  const showSearch = useAppSelector(
+    (state) => state.search.submitted && !state.search.hidden,
+  );
   const maxTootChars = configuration.statuses.max_characters;
   const features = useFeatures();
 
@@ -79,8 +118,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     spoiler_text: spoilerText,
     privacy,
     is_submitting: isSubmitting,
-    is_changing_upload:
-    isChangingUpload,
+    is_changing_upload: isChangingUpload,
     is_uploading: isUploading,
     schedule: scheduledAt,
     group_id: groupId,
@@ -102,26 +140,42 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   const fulltext = [spoilerText, countableText(text)].join('');
 
   const isEmpty = !(fulltext.trim() || anyMedia);
-  const condensed = shouldCondense && !isDraggedOver && !composeFocused && isEmpty && !isUploading;
+  const condensed =
+    shouldCondense &&
+    !isDraggedOver &&
+    !composeFocused &&
+    isEmpty &&
+    !isUploading;
   const shouldAutoFocus = autoFocus && !showSearch;
-  const canSubmit = !!editorRef.current && !isSubmitting && !isUploading && !isChangingUpload && !isEmpty && length(fulltext) <= maxTootChars;
+  const canSubmit =
+    !!editorRef.current &&
+    !isSubmitting &&
+    !isUploading &&
+    !isChangingUpload &&
+    !isEmpty &&
+    length(fulltext) <= maxTootChars;
 
-  const getClickableArea = () => clickableAreaRef ? clickableAreaRef.current : formRef.current;
+  const getClickableArea = () =>
+    clickableAreaRef ? clickableAreaRef.current : formRef.current;
 
-  const isClickOutside = (e: MouseEvent | React.MouseEvent) => ![
-    // List of elements that shouldn't collapse the composer when clicked
-    // FIXME: Make this less brittle
-    getClickableArea(),
-    document.getElementById('privacy-dropdown'),
-    document.querySelector('em-emoji-picker'),
-    document.getElementById('modal-overlay'),
-  ].some(element => element?.contains(e.target as any));
+  const isClickOutside = (e: MouseEvent | React.MouseEvent) =>
+    ![
+      // List of elements that shouldn't collapse the composer when clicked
+      // FIXME: Make this less brittle
+      getClickableArea(),
+      document.getElementById('privacy-dropdown'),
+      document.querySelector('em-emoji-picker'),
+      document.getElementById('modal-overlay'),
+    ].some((element) => element?.contains(e.target as any));
 
-  const handleClick = useCallback((e: MouseEvent | React.MouseEvent) => {
-    if (isEmpty && isClickOutside(e)) {
-      handleClickOutside();
-    }
-  }, [isEmpty]);
+  const handleClick = useCallback(
+    (e: MouseEvent | React.MouseEvent) => {
+      if (isEmpty && isClickOutside(e)) {
+        handleClickOutside();
+      }
+    },
+    [isEmpty],
+  );
 
   const handleClickOutside = () => {
     setComposeFocused(false);
@@ -135,9 +189,11 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     if (!canSubmit) return;
     e?.preventDefault();
 
-    dispatch(submitCompose(id, { history })).then(() => {
-      editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
-    }).catch(() => {});
+    dispatch(submitCompose(id, { history }))
+      .then(() => {
+        editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+      })
+      .catch(() => {});
   };
 
   const onSuggestionsClearRequested = () => {
@@ -148,8 +204,14 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     dispatch(fetchComposeSuggestions(id, token as string));
   };
 
-  const onSpoilerSuggestionSelected = (tokenStart: number, token: string | null, value: AutoSuggestion) => {
-    dispatch(selectComposeSuggestion(id, tokenStart, token, value, ['spoiler_text']));
+  const onSpoilerSuggestionSelected = (
+    tokenStart: number,
+    token: string | null,
+    value: AutoSuggestion,
+  ) => {
+    dispatch(
+      selectComposeSuggestion(id, tokenStart, token, value, ['spoiler_text']),
+    );
   };
 
   const handleEmojiPick = (data: Emoji) => {
@@ -157,7 +219,9 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     if (!editor) return;
 
     editor.update(() => {
-      editor.getEditorState()._selection?.insertNodes([$createEmojiNode(data), new TextNode(' ')]);
+      editor
+        .getEditorState()
+        ._selection?.insertNodes([$createEmojiNode(data), new TextNode(' ')]);
     });
   };
 
@@ -173,17 +237,30 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     };
   }, []);
 
-  const renderButtons = useCallback(() => (
-    <HStack alignItems='center' space={2}>
-      <UploadButtonContainer composeId={id} />
-      <EmojiPickerDropdown onPickEmoji={handleEmojiPick} condensed={shouldCondense} />
-      {features.polls && <PollButton composeId={id} />}
-      {features.scheduledStatuses && <ScheduleButton composeId={id} />}
-      {anyMedia && features.spoilers && <SensitiveMediaButton composeId={id} />}
-    </HStack>
-  ), [features, id, anyMedia]);
+  const renderButtons = useCallback(
+    () => (
+      <HStack alignItems='center' space={2}>
+        <UploadButtonContainer composeId={id} />
+        <EmojiPickerDropdown
+          onPickEmoji={handleEmojiPick}
+          condensed={shouldCondense}
+        />
+        {features.polls && <PollButton composeId={id} />}
+        {features.scheduledStatuses && <ScheduleButton composeId={id} />}
+        {anyMedia && features.spoilers && (
+          <SensitiveMediaButton composeId={id} />
+        )}
+      </HStack>
+    ),
+    [features, id, anyMedia],
+  );
 
-  const showModifiers = !condensed && (compose.media_attachments.size || compose.is_uploading || compose.poll?.options.size || compose.schedule);
+  const showModifiers =
+    !condensed &&
+    (compose.media_attachments.size ||
+      compose.is_uploading ||
+      compose.poll?.options.size ||
+      compose.schedule);
 
   const composeModifiers = showModifiers && (
     <Stack space={4} className='font-[inherit] text-sm text-gray-900'>
@@ -205,7 +282,12 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     publishIcon = require('@tabler/icons/outline/lock.svg');
     publishText = intl.formatMessage(messages.publish);
   } else {
-    publishText = privacy !== 'unlisted' ? intl.formatMessage(messages.publishLoud, { publish: intl.formatMessage(messages.publish) }) : intl.formatMessage(messages.publish);
+    publishText =
+      privacy !== 'unlisted'
+        ? intl.formatMessage(messages.publishLoud, {
+            publish: intl.formatMessage(messages.publish),
+          })
+        : intl.formatMessage(messages.publish);
   }
 
   if (scheduledAt) {
@@ -214,17 +296,37 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
 
   const selectButtons = [];
 
-  if (features.privacyScopes && !group && !groupId) selectButtons.push(<PrivacyDropdown key='privacy-dropdown' composeId={id} />);
-  if (features.richText) selectButtons.push(<ContentTypeButton key='compose-type-button' composeId={id} />);
-  if (features.postLanguages) selectButtons.push(<LanguageDropdown key='language-dropdown' composeId={id} />);
+  if (features.privacyScopes && !group && !groupId)
+    selectButtons.push(
+      <PrivacyDropdown key='privacy-dropdown' composeId={id} />,
+    );
+  if (features.richText)
+    selectButtons.push(
+      <ContentTypeButton key='compose-type-button' composeId={id} />,
+    );
+  if (features.postLanguages)
+    selectButtons.push(
+      <LanguageDropdown key='language-dropdown' composeId={id} />,
+    );
 
   return (
-    <Stack className='w-full' space={4} ref={formRef} onClick={handleClick} element='form' onSubmit={handleSubmit}>
+    <Stack
+      className='w-full'
+      space={4}
+      ref={formRef}
+      onClick={handleClick}
+      element='form'
+      onSubmit={handleSubmit}
+    >
       <WarningContainer composeId={id} />
 
-      {!shouldCondense && !event && !group && groupId && <ReplyGroupIndicator composeId={id} />}
+      {!shouldCondense && !event && !group && groupId && (
+        <ReplyGroupIndicator composeId={id} />
+      )}
 
-      {!shouldCondense && !event && !group && <ReplyIndicatorContainer composeId={id} />}
+      {!shouldCondense && !event && !group && (
+        <ReplyIndicatorContainer composeId={id} />
+      )}
 
       {!shouldCondense && !event && !group && <ReplyMentions composeId={id} />}
 
@@ -247,9 +349,11 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
           <ComposeEditor
             key={modifiedLanguage}
             ref={editorRef}
-            className={transparent
-              ? ''
-              : 'rounded-md border-gray-400 px-3 py-2 ring-2 focus-within:border-primary-500 focus-within:ring-primary-500 dark:border-gray-800 dark:ring-gray-800 dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500'}
+            className={
+              transparent
+                ? ''
+                : 'rounded-md border-gray-400 px-3 py-2 ring-2 focus-within:border-primary-500 focus-within:ring-primary-500 dark:border-gray-800 dark:ring-gray-800 dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500'
+            }
             placeholderClassName={transparent ? '' : 'pt-2'}
             composeId={id}
             condensed={condensed}
@@ -269,13 +373,17 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
 
       <div
         className={clsx('flex flex-wrap items-center justify-between', {
-          'hidden': condensed,
+          hidden: condensed,
           'ml-[-56px] sm:ml-0': withAvatar,
         })}
       >
         {renderButtons()}
 
-        <HStack space={4} alignItems='center' className='ml-auto rtl:ml-0 rtl:mr-auto'>
+        <HStack
+          space={4}
+          alignItems='center'
+          className='ml-auto rtl:ml-0 rtl:mr-auto'
+        >
           {maxTootChars && (
             <HStack space={1} alignItems='center'>
               <TextCharacterCounter max={maxTootChars} text={text} />
@@ -283,7 +391,13 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
             </HStack>
           )}
 
-          <Button type='submit' theme='primary' icon={publishIcon} text={publishText} disabled={!canSubmit} />
+          <Button
+            type='submit'
+            theme='primary'
+            icon={publishIcon}
+            text={publishText}
+            disabled={!canSubmit}
+          />
         </HStack>
       </div>
     </Stack>

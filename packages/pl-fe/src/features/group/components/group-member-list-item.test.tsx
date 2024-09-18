@@ -3,7 +3,11 @@ import { GroupRoles } from 'pl-api';
 import React from 'react';
 
 import { __stub } from 'pl-fe/api';
-import { buildGroup, buildGroupMember, buildGroupRelationship } from 'pl-fe/jest/factory';
+import {
+  buildGroup,
+  buildGroupMember,
+  buildGroupRelationship,
+} from 'pl-fe/jest/factory';
 import { render, screen, waitFor } from 'pl-fe/jest/test-helpers';
 
 import GroupMemberListItem from './group-member-list-item';
@@ -11,14 +15,19 @@ import GroupMemberListItem from './group-member-list-item';
 describe('<GroupMemberListItem />', () => {
   describe('account rendering', () => {
     const accountId = '4';
-    const groupMember = buildGroupMember({}, {
-      id: accountId,
-      display_name: 'tiger woods',
-    });
+    const groupMember = buildGroupMember(
+      {},
+      {
+        id: accountId,
+        display_name: 'tiger woods',
+      },
+    );
 
     beforeEach(() => {
       __stub((mock) => {
-        mock.onGet(`/api/v1/accounts/${accountId}`).reply(200, groupMember.account);
+        mock
+          .onGet(`/api/v1/accounts/${accountId}`)
+          .reply(200, groupMember.account);
       });
     });
 
@@ -30,7 +39,9 @@ describe('<GroupMemberListItem />', () => {
       render(<GroupMemberListItem group={group} member={groupMember} />);
 
       await waitFor(() => {
-        expect(screen.getByTestId('group-member-list-item')).toHaveTextContent(groupMember.account.display_name);
+        expect(screen.getByTestId('group-member-list-item')).toHaveTextContent(
+          groupMember.account.display_name,
+        );
       });
     });
   });
@@ -40,14 +51,19 @@ describe('<GroupMemberListItem />', () => {
     const group = buildGroup();
 
     describe('when the user is an Owner', () => {
-      const groupMember = buildGroupMember({ role: GroupRoles.OWNER }, {
-        id: accountId,
-        display_name: 'tiger woods',
-      });
+      const groupMember = buildGroupMember(
+        { role: GroupRoles.OWNER },
+        {
+          id: accountId,
+          display_name: 'tiger woods',
+        },
+      );
 
       beforeEach(() => {
         __stub((mock) => {
-          mock.onGet(`/api/v1/accounts/${accountId}`).reply(200, groupMember.account);
+          mock
+            .onGet(`/api/v1/accounts/${accountId}`)
+            .reply(200, groupMember.account);
         });
       });
 
@@ -61,14 +77,19 @@ describe('<GroupMemberListItem />', () => {
     });
 
     describe('when the user is an Admin', () => {
-      const groupMember = buildGroupMember({ role: GroupRoles.ADMIN }, {
-        id: accountId,
-        display_name: 'tiger woods',
-      });
+      const groupMember = buildGroupMember(
+        { role: GroupRoles.ADMIN },
+        {
+          id: accountId,
+          display_name: 'tiger woods',
+        },
+      );
 
       beforeEach(() => {
         __stub((mock) => {
-          mock.onGet(`/api/v1/accounts/${accountId}`).reply(200, groupMember.account);
+          mock
+            .onGet(`/api/v1/accounts/${accountId}`)
+            .reply(200, groupMember.account);
         });
       });
 
@@ -82,14 +103,19 @@ describe('<GroupMemberListItem />', () => {
     });
 
     describe('when the user is an User', () => {
-      const groupMember = buildGroupMember({ role: GroupRoles.USER }, {
-        id: accountId,
-        display_name: 'tiger woods',
-      });
+      const groupMember = buildGroupMember(
+        { role: GroupRoles.USER },
+        {
+          id: accountId,
+          display_name: 'tiger woods',
+        },
+      );
 
       beforeEach(() => {
         __stub((mock) => {
-          mock.onGet(`/api/v1/accounts/${accountId}`).reply(200, groupMember.account);
+          mock
+            .onGet(`/api/v1/accounts/${accountId}`)
+            .reply(200, groupMember.account);
         });
       });
 
@@ -113,15 +139,20 @@ describe('<GroupMemberListItem />', () => {
 
     describe('when the user has role of "user"', () => {
       const accountId = '4';
-      const groupMember = buildGroupMember({}, {
-        id: accountId,
-        display_name: 'tiger woods',
-        username: 'tiger',
-      });
+      const groupMember = buildGroupMember(
+        {},
+        {
+          id: accountId,
+          display_name: 'tiger woods',
+          username: 'tiger',
+        },
+      );
 
       beforeEach(() => {
         __stub((mock) => {
-          mock.onGet(`/api/v1/accounts/${accountId}`).reply(200, groupMember.account);
+          mock
+            .onGet(`/api/v1/accounts/${accountId}`)
+            .reply(200, groupMember.account);
         });
       });
 
@@ -130,7 +161,7 @@ describe('<GroupMemberListItem />', () => {
 
         render(<GroupMemberListItem group={group} member={groupMember} />);
 
-        await waitFor(async() => {
+        await waitFor(async () => {
           await user.click(screen.getByTestId('icon-button'));
         });
 
@@ -156,7 +187,9 @@ describe('<GroupMemberListItem />', () => {
 
       beforeEach(() => {
         __stub((mock) => {
-          mock.onGet(`/api/v1/accounts/${accountId}`).reply(200, groupMember.account);
+          mock
+            .onGet(`/api/v1/accounts/${accountId}`)
+            .reply(200, groupMember.account);
         });
       });
 
@@ -165,7 +198,7 @@ describe('<GroupMemberListItem />', () => {
 
         render(<GroupMemberListItem group={group} member={groupMember} />);
 
-        await waitFor(async() => {
+        await waitFor(async () => {
           await user.click(screen.getByTestId('icon-button'));
         });
 
@@ -187,15 +220,20 @@ describe('<GroupMemberListItem />', () => {
 
     describe('when the user has role of "user"', () => {
       const accountId = '4';
-      const groupMember = buildGroupMember({}, {
-        id: accountId,
-        display_name: 'tiger woods',
-        username: 'tiger',
-      });
+      const groupMember = buildGroupMember(
+        {},
+        {
+          id: accountId,
+          display_name: 'tiger woods',
+          username: 'tiger',
+        },
+      );
 
       beforeEach(() => {
         __stub((mock) => {
-          mock.onGet(`/api/v1/accounts/${accountId}`).reply(200, groupMember.account);
+          mock
+            .onGet(`/api/v1/accounts/${accountId}`)
+            .reply(200, groupMember.account);
         });
       });
 
@@ -204,7 +242,7 @@ describe('<GroupMemberListItem />', () => {
 
         render(<GroupMemberListItem group={group} member={groupMember} />);
 
-        await waitFor(async() => {
+        await waitFor(async () => {
           await user.click(screen.getByTestId('icon-button'));
         });
 
@@ -230,14 +268,16 @@ describe('<GroupMemberListItem />', () => {
 
       beforeEach(() => {
         __stub((mock) => {
-          mock.onGet(`/api/v1/accounts/${accountId}`).reply(200, groupMember.account);
+          mock
+            .onGet(`/api/v1/accounts/${accountId}`)
+            .reply(200, groupMember.account);
         });
       });
 
       it('should not render the dropdown', async () => {
         render(<GroupMemberListItem group={group} member={groupMember} />);
 
-        await waitFor(async() => {
+        await waitFor(async () => {
           expect(screen.queryAllByTestId('icon-button')).toHaveLength(0);
         });
       });
@@ -258,14 +298,16 @@ describe('<GroupMemberListItem />', () => {
 
       beforeEach(() => {
         __stub((mock) => {
-          mock.onGet(`/api/v1/accounts/${accountId}`).reply(200, groupMember.account);
+          mock
+            .onGet(`/api/v1/accounts/${accountId}`)
+            .reply(200, groupMember.account);
         });
       });
 
       it('should not render the dropdown', async () => {
         render(<GroupMemberListItem group={group} member={groupMember} />);
 
-        await waitFor(async() => {
+        await waitFor(async () => {
           expect(screen.queryAllByTestId('icon-button')).toHaveLength(0);
         });
       });
@@ -280,22 +322,27 @@ describe('<GroupMemberListItem />', () => {
       }),
     });
     const accountId = '4';
-    const groupMember = buildGroupMember({}, {
-      id: accountId,
-      display_name: 'tiger woods',
-      username: 'tiger',
-    });
+    const groupMember = buildGroupMember(
+      {},
+      {
+        id: accountId,
+        display_name: 'tiger woods',
+        username: 'tiger',
+      },
+    );
 
     beforeEach(() => {
       __stub((mock) => {
-        mock.onGet(`/api/v1/accounts/${accountId}`).reply(200, groupMember.account);
+        mock
+          .onGet(`/api/v1/accounts/${accountId}`)
+          .reply(200, groupMember.account);
       });
     });
 
     it('should not render the dropdown', async () => {
       render(<GroupMemberListItem group={group} member={groupMember} />);
 
-      await waitFor(async() => {
+      await waitFor(async () => {
         expect(screen.queryAllByTestId('icon-button')).toHaveLength(0);
       });
     });

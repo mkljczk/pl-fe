@@ -15,13 +15,18 @@ interface MentionsModalProps {
   statusId: string;
 }
 
-const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose, statusId }) => {
+const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({
+  onClose,
+  statusId,
+}) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const getStatus = useCallback(makeGetStatus(), []);
 
   const status = useAppSelector((state) => getStatus(state, { id: statusId }));
-  const accountIds = status ? ImmutableOrderedSet(status.mentions.map(m => m.id)) : null;
+  const accountIds = status
+    ? ImmutableOrderedSet(status.mentions.map((m) => m.id))
+    : null;
 
   const fetchData = () => {
     dispatch(fetchStatusWithContext(statusId, intl));
@@ -46,16 +51,18 @@ const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose,
         listClassName='max-w-full'
         itemClassName='pb-3'
       >
-        {accountIds.map(id =>
-          <AccountContainer key={id} id={id} />,
-        )}
+        {accountIds.map((id) => (
+          <AccountContainer key={id} id={id} />
+        ))}
       </ScrollableList>
     );
   }
 
   return (
     <Modal
-      title={<FormattedMessage id='column.mentions' defaultMessage='Mentions' />}
+      title={
+        <FormattedMessage id='column.mentions' defaultMessage='Mentions' />
+      }
       onClose={onClickClose}
     >
       {body}

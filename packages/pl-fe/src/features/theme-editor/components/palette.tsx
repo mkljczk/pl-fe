@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { HStack, Stack, Slider } from 'pl-fe/components/ui';
+import { HStack, Slider, Stack } from 'pl-fe/components/ui';
 import { usePrevious } from 'pl-fe/hooks';
 import { compareId } from 'pl-fe/utils/comparators';
 import { hueShift } from 'pl-fe/utils/theme';
@@ -34,10 +34,13 @@ const Palette: React.FC<IPalette> = ({ palette, onChange, resetKey }) => {
   useEffect(() => {
     const delta = hue - (lastHue || 0);
 
-    const adjusted = Object.entries(palette).reduce<ColorGroup>((result, [tint, hex]) => {
-      result[tint] = hueShift(hex, delta * 360);
-      return result;
-    }, {});
+    const adjusted = Object.entries(palette).reduce<ColorGroup>(
+      (result, [tint, hex]) => {
+        result[tint] = hueShift(hex, delta * 360);
+        return result;
+      },
+      {},
+    );
 
     onChange(adjusted);
   }, [hue]);
@@ -49,7 +52,7 @@ const Palette: React.FC<IPalette> = ({ palette, onChange, resetKey }) => {
   return (
     <Stack className='w-full'>
       <HStack className='h-8 overflow-hidden rounded-md'>
-        {tints.map(tint => (
+        {tints.map((tint) => (
           <Color color={palette[tint]} onChange={handleChange(tint)} />
         ))}
       </HStack>
@@ -59,7 +62,4 @@ const Palette: React.FC<IPalette> = ({ palette, onChange, resetKey }) => {
   );
 };
 
-export {
-  Palette as default,
-  ColorGroup,
-};
+export { Palette as default, ColorGroup };

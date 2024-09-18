@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { matchPath, Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, matchPath, useHistory } from 'react-router-dom';
 
 import { Stack } from 'pl-fe/components/ui';
 
@@ -62,9 +62,12 @@ const ChatPage: React.FC<IChatPage> = ({ chatId }) => {
         data-testid='chat-page'
       >
         <Stack
-          className={clsx('dark:inset col-span-9 overflow-hidden bg-gradient-to-r from-white to-gray-100 black:bg-black sm:col-span-3 dark:bg-gray-900 dark:bg-none', {
-            'hidden sm:block': isSidebarHidden,
-          })}
+          className={clsx(
+            'dark:inset col-span-9 overflow-hidden bg-gradient-to-r from-white to-gray-100 black:bg-black sm:col-span-3 dark:bg-gray-900 dark:bg-none',
+            {
+              'hidden sm:block': isSidebarHidden,
+            },
+          )}
         >
           <ChatPageSidebar />
         </Stack>

@@ -1,7 +1,7 @@
 import pick from 'lodash/pick';
 import { GOTOSOCIAL } from 'pl-api';
 import React, { useState, useEffect } from 'react';
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { updateNotificationSettings } from 'pl-fe/actions/accounts';
 import { patchMe } from 'pl-fe/actions/me';
@@ -19,7 +19,13 @@ import {
   Textarea,
   Toggle,
 } from 'pl-fe/components/ui';
-import { useAppDispatch, useOwnAccount, useFeatures, useInstance, useAppSelector } from 'pl-fe/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useFeatures,
+  useInstance,
+  useOwnAccount,
+} from 'pl-fe/hooks';
 import { useImageField } from 'pl-fe/hooks/forms';
 import toast from 'pl-fe/toast';
 import { isDefaultAvatar, isDefaultHeader } from 'pl-fe/utils/accounts';
@@ -30,28 +36,55 @@ import HeaderPicker from './components/header-picker';
 import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield/streamfield';
 import type { Account } from 'pl-fe/normalizers';
 
-const nonDefaultAvatar = (url: string | undefined) => url && isDefaultAvatar(url) ? undefined : url;
-const nonDefaultHeader = (url: string | undefined) => url && isDefaultHeader(url) ? undefined : url;
+const nonDefaultAvatar = (url: string | undefined) =>
+  url && isDefaultAvatar(url) ? undefined : url;
+const nonDefaultHeader = (url: string | undefined) =>
+  url && isDefaultHeader(url) ? undefined : url;
 
 /**
  * Whether the user is hiding their follows and/or followers.
  * Pleroma's config is granular, but we simplify it into one setting.
  */
-const hidesNetwork = ({ __meta }: Account): boolean => Boolean(
-  __meta.pleroma?.hide_followers && __meta.pleroma?.hide_follows && __meta.pleroma?.hide_followers_count && __meta.pleroma?.hide_follows_count,
-);
+const hidesNetwork = ({ __meta }: Account): boolean =>
+  Boolean(
+    __meta.pleroma?.hide_followers &&
+      __meta.pleroma?.hide_follows &&
+      __meta.pleroma?.hide_followers_count &&
+      __meta.pleroma?.hide_follows_count,
+  );
 
 const messages = defineMessages({
   heading: { id: 'column.edit_profile', defaultMessage: 'Edit profile' },
   header: { id: 'edit_profile.header', defaultMessage: 'Edit profile' },
-  metaFieldLabel: { id: 'edit_profile.fields.meta_fields.label_placeholder', defaultMessage: 'Label' },
-  metaFieldContent: { id: 'edit_profile.fields.meta_fields.content_placeholder', defaultMessage: 'Content' },
-  firstMetaFieldLabel: { id: 'edit_profile.fields.meta_fields.label_placeholder.first', defaultMessage: 'Label (e.g. pronouns)' },
-  success: { id: 'edit_profile.success', defaultMessage: 'Your profile has been successfully saved!' },
+  metaFieldLabel: {
+    id: 'edit_profile.fields.meta_fields.label_placeholder',
+    defaultMessage: 'Label',
+  },
+  metaFieldContent: {
+    id: 'edit_profile.fields.meta_fields.content_placeholder',
+    defaultMessage: 'Content',
+  },
+  firstMetaFieldLabel: {
+    id: 'edit_profile.fields.meta_fields.label_placeholder.first',
+    defaultMessage: 'Label (e.g. pronouns)',
+  },
+  success: {
+    id: 'edit_profile.success',
+    defaultMessage: 'Your profile has been successfully saved!',
+  },
   error: { id: 'edit_profile.error', defaultMessage: 'Profile update failed' },
-  bioPlaceholder: { id: 'edit_profile.fields.bio_placeholder', defaultMessage: 'Tell us about yourself.' },
-  displayNamePlaceholder: { id: 'edit_profile.fields.display_name_placeholder', defaultMessage: 'Name' },
-  locationPlaceholder: { id: 'edit_profile.fields.location_placeholder', defaultMessage: 'Location' },
+  bioPlaceholder: {
+    id: 'edit_profile.fields.bio_placeholder',
+    defaultMessage: 'Tell us about yourself.',
+  },
+  displayNamePlaceholder: {
+    id: 'edit_profile.fields.display_name_placeholder',
+    defaultMessage: 'Name',
+  },
+  locationPlaceholder: {
+    id: 'edit_profile.fields.location_placeholder',
+    defaultMessage: 'Location',
+  },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
 });
 
@@ -130,10 +163,22 @@ const accountToCredentials = (account: Account): AccountCredentials => {
   const hideNetwork = hidesNetwork(account);
 
   return {
-    ...(pick(account, ['discoverable', 'bot', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections'])),
+    ...pick(account, [
+      'discoverable',
+      'bot',
+      'display_name',
+      'locked',
+      'location',
+      'avatar_description',
+      'header_description',
+      'enable_rss',
+      'hide_collections',
+    ]),
     note: account.__meta.source?.note ?? '',
-    fields_attributes: [...account.__meta.source?.fields ?? []],
-    stranger_notifications: account.__meta.pleroma?.notification_settings?.block_from_strangers === true,
+    fields_attributes: [...(account.__meta.source?.fields ?? [])],
+    stranger_notifications:
+      account.__meta.pleroma?.notification_settings?.block_from_strangers ===
+      true,
     accepts_email_list: account.__meta.pleroma?.accepts_email_list === true,
     hide_followers: hideNetwork,
     hide_follows: hideNetwork,
@@ -143,12 +188,18 @@ const accountToCredentials = (account: Account): AccountCredentials => {
   };
 };
 
-const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({ index, value, onChange }) => {
+const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
+  index,
+  value,
+  onChange,
+}) => {
   const intl = useIntl();
 
-  const handleChange = (key: string): React.ChangeEventHandler<HTMLInputElement> => e => {
-    onChange({ ...value, [key]: e.currentTarget.value });
-  };
+  const handleChange =
+    (key: string): React.ChangeEventHandler<HTMLInputElement> =>
+    (e) => {
+      onChange({ ...value, [key]: e.currentTarget.value });
+    };
 
   return (
     <HStack space={2} grow>
@@ -157,7 +208,11 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({ index, va
         outerClassName='w-2/5 grow'
         value={value.name}
         onChange={handleChange('name')}
-        placeholder={index === 0 ? intl.formatMessage(messages.firstMetaFieldLabel) : intl.formatMessage(messages.metaFieldLabel)}
+        placeholder={
+          index === 0
+            ? intl.formatMessage(messages.firstMetaFieldLabel)
+            : intl.formatMessage(messages.metaFieldLabel)
+        }
       />
       <Input
         type='text'
@@ -183,21 +238,31 @@ const EditProfile: React.FC = () => {
     : instance.pleroma.metadata.fields_limits.max_fields;
 
   const attachmentTypes = useAppSelector(
-    state => state.instance.configuration.media_attachments.supported_mime_types)
-    ?.filter(type => type.startsWith('image/'))
+    (state) =>
+      state.instance.configuration.media_attachments.supported_mime_types,
+  )
+    ?.filter((type) => type.startsWith('image/'))
     .join(',');
 
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState<AccountCredentials>({});
   const [muteStrangers, setMuteStrangers] = useState(false);
 
-  const avatar = useImageField({ maxPixels: 400 * 400, preview: nonDefaultAvatar(account?.avatar) });
-  const header = useImageField({ maxPixels: 1920 * 1080, preview: nonDefaultHeader(account?.header) });
+  const avatar = useImageField({
+    maxPixels: 400 * 400,
+    preview: nonDefaultAvatar(account?.avatar),
+  });
+  const header = useImageField({
+    maxPixels: 1920 * 1080,
+    preview: nonDefaultHeader(account?.header),
+  });
 
   useEffect(() => {
     if (account) {
       const credentials = accountToCredentials(account);
-      const strangerNotifications = account.__meta.pleroma?.notification_settings?.block_from_strangers === true;
+      const strangerNotifications =
+        account.__meta.pleroma?.notification_settings?.block_from_strangers ===
+        true;
       setData(credentials);
       setMuteStrangers(strangerNotifications);
     }
@@ -205,14 +270,15 @@ const EditProfile: React.FC = () => {
 
   /** Set a single key in the request data. */
   const updateData = (key: string, value: any) => {
-    setData(prevData => ({ ...prevData, [key]: value }));
+    setData((prevData) => ({ ...prevData, [key]: value }));
   };
 
   const handleSubmit: React.FormEventHandler = (event) => {
     const promises = [];
 
     const params = { ...data };
-    if (params.fields_attributes?.length === 0) params.fields_attributes = [{ name: '', value: '' }];
+    if (params.fields_attributes?.length === 0)
+      params.fields_attributes = [{ name: '', value: '' }];
     if (header.file !== undefined) params.header = header.file || '';
     if (avatar.file !== undefined) params.avatar = avatar.file || '';
 
@@ -220,51 +286,69 @@ const EditProfile: React.FC = () => {
 
     if (features.muteStrangers) {
       promises.push(
-        dispatch(updateNotificationSettings({
-          block_from_strangers: muteStrangers,
-        })).catch(console.error),
+        dispatch(
+          updateNotificationSettings({
+            block_from_strangers: muteStrangers,
+          }),
+        ).catch(console.error),
       );
     }
 
     setLoading(true);
 
-    Promise.all(promises).then(() => {
-      setLoading(false);
-      toast.success(intl.formatMessage(messages.success));
-    }).catch(() => {
-      setLoading(false);
-      toast.error(intl.formatMessage(messages.error));
-    });
+    Promise.all(promises)
+      .then(() => {
+        setLoading(false);
+        toast.success(intl.formatMessage(messages.success));
+      })
+      .catch(() => {
+        setLoading(false);
+        toast.error(intl.formatMessage(messages.error));
+      });
 
     event.preventDefault();
   };
 
-  const handleFieldChange = <T = any>(key: keyof AccountCredentials) => (value: T) => {
-    updateData(key, value);
-  };
+  const handleFieldChange =
+    <T = any>(key: keyof AccountCredentials) =>
+    (value: T) => {
+      updateData(key, value);
+    };
 
-  const handleCheckboxChange = (key: keyof AccountCredentials): React.ChangeEventHandler<HTMLInputElement> => e => {
-    updateData(key, e.target.checked);
-  };
+  const handleCheckboxChange =
+    (
+      key: keyof AccountCredentials,
+    ): React.ChangeEventHandler<HTMLInputElement> =>
+    (e) => {
+      updateData(key, e.target.checked);
+    };
 
-  const handleTextChange = (key: keyof AccountCredentials): React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> => e => {
-    updateData(key, e.target.value);
-  };
+  const handleTextChange =
+    (
+      key: keyof AccountCredentials,
+    ): React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> =>
+    (e) => {
+      updateData(key, e.target.value);
+    };
 
   const handleBirthdayChange = (date: string) => {
     updateData('birthday', date);
   };
 
-  const handleHideNetworkChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleHideNetworkChange: React.ChangeEventHandler<HTMLInputElement> = (
+    e,
+  ) => {
     const hide = e.target.checked;
-    setData(prevData => ({
+    setData((prevData) => ({
       ...prevData,
-      ...(features.version.software === GOTOSOCIAL ? { hide_collections: hide } : {
-        hide_followers: hide,
-        hide_follows: hide,
-        hide_followers_count: hide,
-        hide_follows_count: hide,
-      }),
+      ...(features.version.software === GOTOSOCIAL
+        ? { hide_collections: hide }
+        : {
+            hide_followers: hide,
+            hide_follows: hide,
+            hide_followers_count: hide,
+            hide_follows_count: hide,
+          }),
     }));
   };
 
@@ -286,9 +370,11 @@ const EditProfile: React.FC = () => {
   };
 
   const handleAvatarChangeDescription = features.accountAvatarDescription
-    ? handleFieldChange<string>('avatar_description') : undefined;
+    ? handleFieldChange<string>('avatar_description')
+    : undefined;
   const handleHeaderChangeDescription = features.accountAvatarDescription
-    ? handleFieldChange<string>('header_description') : undefined;
+    ? handleFieldChange<string>('header_description')
+    : undefined;
 
   return (
     <Column label={intl.formatMessage(messages.header)}>
@@ -312,7 +398,12 @@ const EditProfile: React.FC = () => {
         </div>
 
         <FormGroup
-          labelText={<FormattedMessage id='edit_profile.fields.display_name_label' defaultMessage='Display name' />}
+          labelText={
+            <FormattedMessage
+              id='edit_profile.fields.display_name_label'
+              defaultMessage='Display name'
+            />
+          }
         >
           <Input
             type='text'
@@ -324,7 +415,12 @@ const EditProfile: React.FC = () => {
 
         {features.birthdays && (
           <FormGroup
-            labelText={<FormattedMessage id='edit_profile.fields.birthday_label' defaultMessage='Birthday' />}
+            labelText={
+              <FormattedMessage
+                id='edit_profile.fields.birthday_label'
+                defaultMessage='Birthday'
+              />
+            }
           >
             <BirthdayInput
               value={data.birthday}
@@ -335,7 +431,12 @@ const EditProfile: React.FC = () => {
 
         {features.accountLocation && (
           <FormGroup
-            labelText={<FormattedMessage id='edit_profile.fields.location_label' defaultMessage='Location' />}
+            labelText={
+              <FormattedMessage
+                id='edit_profile.fields.location_label'
+                defaultMessage='Location'
+              />
+            }
           >
             <Input
               type='text'
@@ -347,7 +448,12 @@ const EditProfile: React.FC = () => {
         )}
 
         <FormGroup
-          labelText={<FormattedMessage id='edit_profile.fields.bio_label' defaultMessage='Bio' />}
+          labelText={
+            <FormattedMessage
+              id='edit_profile.fields.bio_label'
+              defaultMessage='Bio'
+            />
+          }
         >
           <Textarea
             value={data.note}
@@ -360,8 +466,18 @@ const EditProfile: React.FC = () => {
         <List>
           {features.followRequests && (
             <ListItem
-              label={<FormattedMessage id='edit_profile.fields.locked_label' defaultMessage='Lock account' />}
-              hint={<FormattedMessage id='edit_profile.hints.locked' defaultMessage='Requires you to manually approve followers' />}
+              label={
+                <FormattedMessage
+                  id='edit_profile.fields.locked_label'
+                  defaultMessage='Lock account'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='edit_profile.hints.locked'
+                  defaultMessage='Requires you to manually approve followers'
+                />
+              }
             >
               <Toggle
                 checked={data.locked}
@@ -372,11 +488,30 @@ const EditProfile: React.FC = () => {
 
           {features.hideNetwork && (
             <ListItem
-              label={<FormattedMessage id='edit_profile.fields.hide_network_label' defaultMessage='Hide network' />}
-              hint={<FormattedMessage id='edit_profile.hints.hide_network' defaultMessage='Who you follow and who follows you will not be shown on your profile' />}
+              label={
+                <FormattedMessage
+                  id='edit_profile.fields.hide_network_label'
+                  defaultMessage='Hide network'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='edit_profile.hints.hide_network'
+                  defaultMessage='Who you follow and who follows you will not be shown on your profile'
+                />
+              }
             >
               <Toggle
-                checked={account ? (features.version.software === GOTOSOCIAL ? data.hide_collections : (data.hide_followers && data.hide_follows && data.hide_followers_count && data.hide_follows_count)) : false}
+                checked={
+                  account
+                    ? features.version.software === GOTOSOCIAL
+                      ? data.hide_collections
+                      : data.hide_followers &&
+                        data.hide_follows &&
+                        data.hide_followers_count &&
+                        data.hide_follows_count
+                    : false
+                }
                 onChange={handleHideNetworkChange}
               />
             </ListItem>
@@ -384,8 +519,18 @@ const EditProfile: React.FC = () => {
 
           {features.bots && (
             <ListItem
-              label={<FormattedMessage id='edit_profile.fields.bot_label' defaultMessage='This is a bot account' />}
-              hint={<FormattedMessage id='edit_profile.hints.bot' defaultMessage='This account mainly performs automated actions and might not be monitored' />}
+              label={
+                <FormattedMessage
+                  id='edit_profile.fields.bot_label'
+                  defaultMessage='This is a bot account'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='edit_profile.hints.bot'
+                  defaultMessage='This account mainly performs automated actions and might not be monitored'
+                />
+              }
             >
               <Toggle
                 checked={data.bot}
@@ -396,8 +541,18 @@ const EditProfile: React.FC = () => {
 
           {features.muteStrangers && (
             <ListItem
-              label={<FormattedMessage id='edit_profile.fields.stranger_notifications_label' defaultMessage='Block notifications from strangers' />}
-              hint={<FormattedMessage id='edit_profile.hints.stranger_notifications' defaultMessage='Only show notifications from people you follow' />}
+              label={
+                <FormattedMessage
+                  id='edit_profile.fields.stranger_notifications_label'
+                  defaultMessage='Block notifications from strangers'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='edit_profile.hints.stranger_notifications'
+                  defaultMessage='Only show notifications from people you follow'
+                />
+              }
             >
               <Toggle
                 checked={muteStrangers}
@@ -408,8 +563,18 @@ const EditProfile: React.FC = () => {
 
           {features.profileDirectory && (
             <ListItem
-              label={<FormattedMessage id='edit_profile.fields.discoverable_label' defaultMessage='Allow account discovery' />}
-              hint={<FormattedMessage id='edit_profile.hints.discoverable' defaultMessage='Display account in profile directory and allow indexing by external services' />}
+              label={
+                <FormattedMessage
+                  id='edit_profile.fields.discoverable_label'
+                  defaultMessage='Allow account discovery'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='edit_profile.hints.discoverable'
+                  defaultMessage='Display account in profile directory and allow indexing by external services'
+                />
+              }
             >
               <Toggle
                 checked={data.discoverable}
@@ -420,8 +585,18 @@ const EditProfile: React.FC = () => {
 
           {features.emailList && (
             <ListItem
-              label={<FormattedMessage id='edit_profile.fields.accepts_email_list_label' defaultMessage='Subscribe to newsletter' />}
-              hint={<FormattedMessage id='edit_profile.hints.accepts_email_list' defaultMessage='Opt-in to news and marketing updates.' />}
+              label={
+                <FormattedMessage
+                  id='edit_profile.fields.accepts_email_list_label'
+                  defaultMessage='Subscribe to newsletter'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='edit_profile.hints.accepts_email_list'
+                  defaultMessage='Opt-in to news and marketing updates.'
+                />
+              }
             >
               <Toggle
                 checked={data.accepts_email_list}
@@ -432,7 +607,12 @@ const EditProfile: React.FC = () => {
 
           {features.rssFeeds && features.version.software === GOTOSOCIAL && (
             <ListItem
-              label={<FormattedMessage id='edit_profile.fields.rss_label' defaultMessage='Enable RSS feed for public posts' />}
+              label={
+                <FormattedMessage
+                  id='edit_profile.fields.rss_label'
+                  defaultMessage='Enable RSS feed for public posts'
+                />
+              }
             >
               <Toggle
                 checked={data.enable_rss}
@@ -444,8 +624,19 @@ const EditProfile: React.FC = () => {
 
         {features.profileFields && (
           <Streamfield
-            label={<FormattedMessage id='edit_profile.fields.meta_fields_label' defaultMessage='Profile fields' />}
-            hint={<FormattedMessage id='edit_profile.hints.meta_fields' defaultMessage='You can have up to {count, plural, one {# custom field} other {# custom fields}} displayed on your profile.' values={{ count: maxFields }} />}
+            label={
+              <FormattedMessage
+                id='edit_profile.fields.meta_fields_label'
+                defaultMessage='Profile fields'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='edit_profile.hints.meta_fields'
+                defaultMessage='You can have up to {count, plural, one {# custom field} other {# custom fields}} displayed on your profile.'
+                values={{ count: maxFields }}
+              />
+            }
             values={data.fields_attributes || []}
             onChange={handleFieldsChange}
             onAddItem={handleAddField}

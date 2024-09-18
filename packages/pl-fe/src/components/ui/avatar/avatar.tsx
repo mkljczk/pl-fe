@@ -12,7 +12,8 @@ const messages = defineMessages({
   avatar: { id: 'account.avatar.alt', defaultMessage: 'Avatar' },
 });
 
-interface IAvatar extends Pick<IStillImage, 'alt' | 'src' | 'onError' | 'className'> {
+interface IAvatar
+  extends Pick<IStillImage, 'alt' | 'src' | 'onError' | 'className'> {
   /** Width and height of the avatar in pixels. */
   size?: number;
 }
@@ -27,10 +28,13 @@ const Avatar = (props: IAvatar) => {
 
   const handleLoadFailure = () => setIsAvatarMissing(true);
 
-  const style: React.CSSProperties = React.useMemo(() => ({
-    width: size,
-    height: size,
-  }), [size]);
+  const style: React.CSSProperties = React.useMemo(
+    () => ({
+      width: size,
+      height: size,
+    }),
+    [size],
+  );
 
   if (isAvatarMissing) {
     return (
@@ -39,7 +43,10 @@ const Avatar = (props: IAvatar) => {
           width: size,
           height: size,
         }}
-        className={clsx('flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-900', className)}
+        className={clsx(
+          'flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-900',
+          className,
+        )}
       >
         <Icon
           src={require('@tabler/icons/outline/photo-off.svg')}

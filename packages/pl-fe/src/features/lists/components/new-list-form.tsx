@@ -6,7 +6,10 @@ import { Button, Form, HStack, Input } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({
-  label: { id: 'lists.new.title_placeholder', defaultMessage: 'New list title' },
+  label: {
+    id: 'lists.new.title_placeholder',
+    defaultMessage: 'New list title',
+  },
   title: { id: 'lists.new.create', defaultMessage: 'Add list' },
   create: { id: 'lists.new.create_title', defaultMessage: 'Add list' },
 });
@@ -45,11 +48,7 @@ const NewListForm: React.FC = () => {
           />
         </label>
 
-        <Button
-          disabled={disabled}
-          onClick={handleSubmit}
-          theme='primary'
-        >
+        <Button disabled={disabled} onClick={handleSubmit} theme='primary'>
           {create}
         </Button>
       </HStack>

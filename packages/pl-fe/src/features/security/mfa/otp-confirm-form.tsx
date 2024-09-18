@@ -1,21 +1,47 @@
 import { QRCodeCanvas as QRCode } from 'qrcode.react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { setupMfa, confirmMfa } from 'pl-fe/actions/mfa';
-import { Button, Form, FormActions, FormGroup, Input, Stack, Text } from 'pl-fe/components/ui';
+import { confirmMfa, setupMfa } from 'pl-fe/actions/mfa';
+import {
+  Button,
+  Form,
+  FormActions,
+  FormGroup,
+  Input,
+  Stack,
+  Text,
+} from 'pl-fe/components/ui';
 import { useAppDispatch } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   mfaCancelButton: { id: 'column.mfa_cancel', defaultMessage: 'Cancel' },
-  mfaSetupConfirmButton: { id: 'column.mfa_confirm_button', defaultMessage: 'Confirm' },
-  confirmFail: { id: 'security.confirm.fail', defaultMessage: 'Incorrect code or password. Try again.' },
-  qrFail: { id: 'security.qr.fail', defaultMessage: 'Failed to fetch setup key' },
-  mfaConfirmSuccess: { id: 'mfa.confirm.success_message', defaultMessage: 'MFA confirmed' },
-  codePlaceholder: { id: 'mfa.mfa_setup.code_placeholder', defaultMessage: 'Code' },
-  passwordPlaceholder: { id: 'mfa.mfa_setup.password_placeholder', defaultMessage: 'Password' },
+  mfaSetupConfirmButton: {
+    id: 'column.mfa_confirm_button',
+    defaultMessage: 'Confirm',
+  },
+  confirmFail: {
+    id: 'security.confirm.fail',
+    defaultMessage: 'Incorrect code or password. Try again.',
+  },
+  qrFail: {
+    id: 'security.qr.fail',
+    defaultMessage: 'Failed to fetch setup key',
+  },
+  mfaConfirmSuccess: {
+    id: 'mfa.confirm.success_message',
+    defaultMessage: 'MFA confirmed',
+  },
+  codePlaceholder: {
+    id: 'mfa.mfa_setup.code_placeholder',
+    defaultMessage: 'Code',
+  },
+  passwordPlaceholder: {
+    id: 'mfa.mfa_setup.password_placeholder',
+    defaultMessage: 'Password',
+  },
 });
 
 const OtpConfirmForm: React.FC = () => {
@@ -23,7 +49,13 @@ const OtpConfirmForm: React.FC = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
 
-  const [state, setState] = useState<{ password: string; isLoading: boolean; code: string; qrCodeURI: string; confirmKey: string }>({
+  const [state, setState] = useState<{
+    password: string;
+    isLoading: boolean;
+    code: string;
+    qrCodeURI: string;
+    confirmKey: string;
+  }>({
     password: '',
     isLoading: false,
     code: '',
@@ -32,29 +64,41 @@ const OtpConfirmForm: React.FC = () => {
   });
 
   useEffect(() => {
-    dispatch(setupMfa('totp')).then((data) => {
-      setState((prevState) => ({ ...prevState, qrCodeURI: data.provisioning_uri, confirmKey: data.key }));
-    }).catch(() => {
-      toast.error(intl.formatMessage(messages.qrFail));
-    });
+    dispatch(setupMfa('totp'))
+      .then((data) => {
+        setState((prevState) => ({
+          ...prevState,
+          qrCodeURI: data.provisioning_uri,
+          confirmKey: data.key,
+        }));
+      })
+      .catch(() => {
+        toast.error(intl.formatMessage(messages.qrFail));
+      });
   }, []);
 
-  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((event) => {
-    event.persist();
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> =
+    useCallback((event) => {
+      event.persist();
 
-    setState((prevState) => ({ ...prevState, [event.target.name]: event.target.value }));
-  }, []);
+      setState((prevState) => ({
+        ...prevState,
+        [event.target.name]: event.target.value,
+      }));
+    }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     setState((prevState) => ({ ...prevState, isLoading: true }));
 
-    dispatch(confirmMfa('totp', state.code, state.password)).then((r) => {
-      toast.success(intl.formatMessage(messages.mfaConfirmSuccess));
-      history.push('../auth/edit');
-    }).catch(() => {
-      toast.error(intl.formatMessage(messages.confirmFail));
-      setState((prevState) => ({ ...prevState, isLoading: false }));
-    });
+    dispatch(confirmMfa('totp', state.code, state.password))
+      .then((r) => {
+        toast.success(intl.formatMessage(messages.mfaConfirmSuccess));
+        history.push('../auth/edit');
+      })
+      .catch(() => {
+        toast.error(intl.formatMessage(messages.confirmFail));
+        setState((prevState) => ({ ...prevState, isLoading: false }));
+      });
 
     e.preventDefault();
   };
@@ -64,11 +108,18 @@ const OtpConfirmForm: React.FC = () => {
       <Form onSubmit={handleSubmit}>
         <Stack>
           <Text weight='semibold' size='lg'>
-            1. <FormattedMessage id='mfa.mfa_setup_scan_title' defaultMessage='Scan' />
+            1.{' '}
+            <FormattedMessage
+              id='mfa.mfa_setup_scan_title'
+              defaultMessage='Scan'
+            />
           </Text>
 
           <Text theme='muted'>
-            <FormattedMessage id='mfa.mfa_setup_scan_description' defaultMessage='Using your two-factor app, scan this QR code or enter the text key.' />
+            <FormattedMessage
+              id='mfa.mfa_setup_scan_description'
+              defaultMessage='Using your two-factor app, scan this QR code or enter the text key.'
+            />
           </Text>
         </Stack>
 
@@ -76,12 +127,21 @@ const OtpConfirmForm: React.FC = () => {
         {state.confirmKey}
 
         <Text weight='semibold' size='lg'>
-          2. <FormattedMessage id='mfa.mfa_setup_verify_title' defaultMessage='Verify' />
+          2.{' '}
+          <FormattedMessage
+            id='mfa.mfa_setup_verify_title'
+            defaultMessage='Verify'
+          />
         </Text>
 
         <FormGroup
           labelText={intl.formatMessage(messages.codePlaceholder)}
-          hintText={<FormattedMessage id='mfa.mfa_setup.code_hint' defaultMessage='Enter the code from your two-factor app.' />}
+          hintText={
+            <FormattedMessage
+              id='mfa.mfa_setup.code_hint'
+              defaultMessage='Enter the code from your two-factor app.'
+            />
+          }
         >
           <Input
             name='code'
@@ -97,7 +157,12 @@ const OtpConfirmForm: React.FC = () => {
 
         <FormGroup
           labelText={intl.formatMessage(messages.passwordPlaceholder)}
-          hintText={<FormattedMessage id='mfa.mfa_setup.password_hint' defaultMessage='Enter your current password to confirm your identity.' />}
+          hintText={
+            <FormattedMessage
+              id='mfa.mfa_setup.password_hint'
+              defaultMessage='Enter your current password to confirm your identity.'
+            />
+          }
         >
           <Input
             type='password'

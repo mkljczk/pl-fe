@@ -12,13 +12,17 @@ const SubmitPlugin: React.FC<ISubmitPlugin> = ({ composeId, handleSubmit }) => {
 
   useEffect(() => {
     if (handleSubmit) {
-      return editor.registerCommand(KEY_ENTER_COMMAND, (event) => {
-        if (event?.ctrlKey) {
-          handleSubmit();
-          return true;
-        }
-        return false;
-      }, 1);
+      return editor.registerCommand(
+        KEY_ENTER_COMMAND,
+        (event) => {
+          if (event?.ctrlKey) {
+            handleSubmit();
+            return true;
+          }
+          return false;
+        },
+        1,
+      );
     }
   }, [handleSubmit]);
 

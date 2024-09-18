@@ -4,9 +4,15 @@
  * LICENSE file in the `/src/features/compose/editor` directory.
  */
 
-import { AutoLinkPlugin, createLinkMatcherWithRegExp } from '@lexical/react/LexicalAutoLinkPlugin';
+import {
+  AutoLinkPlugin,
+  createLinkMatcherWithRegExp,
+} from '@lexical/react/LexicalAutoLinkPlugin';
 import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin';
-import { LexicalComposer, InitialConfigType } from '@lexical/react/LexicalComposer';
+import {
+  InitialConfigType,
+  LexicalComposer,
+} from '@lexical/react/LexicalComposer';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin';
@@ -15,9 +21,18 @@ import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { $createRemarkExport, $createRemarkImport } from '@mkljczk/lexical-remark';
+import {
+  $createRemarkExport,
+  $createRemarkImport,
+} from '@mkljczk/lexical-remark';
 import clsx from 'clsx';
-import { $createParagraphNode, $createTextNode, $getRoot, type EditorState, type LexicalEditor } from 'lexical';
+import {
+  $createParagraphNode,
+  $createTextNode,
+  $getRoot,
+  type EditorState,
+  type LexicalEditor,
+} from 'lexical';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -37,7 +52,7 @@ import SubmitPlugin from './plugins/submit-plugin';
 const LINK_MATCHERS = [
   createLinkMatcherWithRegExp(
     /((https?:\/\/(www\.)?)|(www\.))[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/i,
-    (text) => text.startsWith('http') ? text : `https://${text}`,
+    (text) => (text.startsWith('http') ? text : `https://${text}`),
   ),
 ];
 
@@ -59,7 +74,8 @@ interface IComposeEditor {
 
 const theme: InitialConfigType['theme'] = {
   emoji: 'select-none',
-  hashtag: 'hover:underline text-primary-600 dark:text-accent-blue hover:text-primary-800 dark:hover:text-accent-blue',
+  hashtag:
+    'hover:underline text-primary-600 dark:text-accent-blue hover:text-primary-800 dark:hover:text-accent-blue',
   link: 'hover:underline text-primary-600 dark:text-accent-blue hover:text-primary-800 dark:hover:text-accent-blue',
   text: {
     bold: 'font-bold',
@@ -76,160 +92,204 @@ const theme: InitialConfigType['theme'] = {
   },
 };
 
-const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
-  className,
-  editableClassName,
-  placeholderClassName,
-  composeId,
-  condensed,
-  eventDiscussion,
-  hasPoll,
-  autoFocus,
-  handleSubmit,
-  onChange,
-  onFocus,
-  onPaste,
-  placeholder,
-}, ref) => {
-  const dispatch = useAppDispatch();
-  const { content_type: contentType } = useCompose(composeId);
-  const isWysiwyg = contentType === 'wysiwyg';
-  const nodes = useNodes(isWysiwyg);
+const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(
+  (
+    {
+      className,
+      editableClassName,
+      placeholderClassName,
+      composeId,
+      condensed,
+      eventDiscussion,
+      hasPoll,
+      autoFocus,
+      handleSubmit,
+      onChange,
+      onFocus,
+      onPaste,
+      placeholder,
+    },
+    ref,
+  ) => {
+    const dispatch = useAppDispatch();
+    const { content_type: contentType } = useCompose(composeId);
+    const isWysiwyg = contentType === 'wysiwyg';
+    const nodes = useNodes(isWysiwyg);
 
-  const [suggestionsHidden, setSuggestionsHidden] = useState(true);
+    const [suggestionsHidden, setSuggestionsHidden] = useState(true);
 
-  const initialConfig = useMemo<InitialConfigType>(() => ({
-    namespace: 'ComposeForm',
-    onError: console.error,
-    nodes,
-    theme,
-    editorState: dispatch((_, getState) => {
-      const state = getState();
-      const compose = state.compose.get(composeId);
+    const initialConfig = useMemo<InitialConfigType>(
+      () => ({
+        namespace: 'ComposeForm',
+        onError: console.error,
+        nodes,
+        theme,
+        editorState: dispatch((_, getState) => {
+          const state = getState();
+          const compose = state.compose.get(composeId);
 
-      if (!compose) return;
+          if (!compose) return;
 
-      const editorState = !compose.modified_language || compose.modified_language === compose.language
-        ? compose.editorState
-        : compose.editorStateMap.get(compose.modified_language, '');
+          const editorState =
+            !compose.modified_language ||
+            compose.modified_language === compose.language
+              ? compose.editorState
+              : compose.editorStateMap.get(compose.modified_language, '');
 
-      if (editorState) {
-        return editorState;
-      }
-
-      return () => {
-        const text = !compose.modified_language || compose.modified_language === compose.language
-          ? compose.text
-          : compose.textMap.get(compose.modified_language, '');
-
-        if (isWysiwyg) {
-          $createRemarkImport({
-            handlers: {
-              image: importImage,
-            },
-          })(text);
-        } else {
-          const paragraph = $createParagraphNode();
-          const textNode = $createTextNode(text);
-
-          paragraph.append(textNode);
-
-          $getRoot()
-            .clear()
-            .append(paragraph);
-        }
-      };
-    }),
-  }), [isWysiwyg]);
-
-  const [floatingAnchorElem, setFloatingAnchorElem] =
-    useState<HTMLDivElement | null>(null);
-
-  const onRef = (_floatingAnchorElem: HTMLDivElement) => {
-    if (_floatingAnchorElem !== null) {
-      setFloatingAnchorElem(_floatingAnchorElem);
-    }
-  };
-
-  const handlePaste: React.ClipboardEventHandler<HTMLDivElement> = (e) => {
-    if (onPaste && e.clipboardData && e.clipboardData.files.length === 1) {
-      onPaste(e.clipboardData.files);
-      e.preventDefault();
-    }
-  };
-
-  const handleChange = (_: EditorState, editor: LexicalEditor) => {
-    if (onChange) {
-      onChange(editor.getEditorState().read($createRemarkExport({
-        handlers: {
-          hashtag: (node) => ({ type: 'text', value: node.getTextContent() }),
-          mention: (node) => ({ type: 'text', value: node.getTextContent() }),
-        },
-      })));
-    }
-  };
-
-  let textareaPlaceholder = placeholder || <FormattedMessage id='compose_form.placeholder' defaultMessage="What's on your mind?" />;
-
-  if (eventDiscussion) {
-    textareaPlaceholder = <FormattedMessage id='compose_form.event_placeholder' defaultMessage='Post to this event' />;
-  } else if (hasPoll) {
-    textareaPlaceholder = <FormattedMessage id='compose_form.poll_placeholder' defaultMessage='Add a poll topic…' />;
-  }
-
-  return (
-    <LexicalComposer key={isWysiwyg ? 'wysiwyg' : ''} initialConfig={initialConfig}>
-      <div className={clsx('lexical relative', className)} data-markup>
-        <RichTextPlugin
-          contentEditable={
-            <div onFocus={onFocus} onPaste={handlePaste} ref={onRef}>
-              <ContentEditable
-                tabIndex={0}
-                className={clsx(
-                  'relative z-10 text-[1rem] outline-none transition-[min-height] motion-reduce:transition-none',
-                  editableClassName,
-                  {
-                    'min-h-[39px]': condensed,
-                    'min-h-[99px]': !condensed,
-                  },
-                )}
-              />
-            </div>
+          if (editorState) {
+            return editorState;
           }
-          placeholder={(
-            <div
-              className={clsx(
-                'pointer-events-none absolute top-0 select-none text-[1rem] text-gray-600 dark:placeholder:text-gray-600',
-                placeholderClassName,
-              )}
-            >
-              {textareaPlaceholder}
-            </div>
-          )}
-          ErrorBoundary={LexicalErrorBoundary}
+
+          return () => {
+            const text =
+              !compose.modified_language ||
+              compose.modified_language === compose.language
+                ? compose.text
+                : compose.textMap.get(compose.modified_language, '');
+
+            if (isWysiwyg) {
+              $createRemarkImport({
+                handlers: {
+                  image: importImage,
+                },
+              })(text);
+            } else {
+              const paragraph = $createParagraphNode();
+              const textNode = $createTextNode(text);
+
+              paragraph.append(textNode);
+
+              $getRoot().clear().append(paragraph);
+            }
+          };
+        }),
+      }),
+      [isWysiwyg],
+    );
+
+    const [floatingAnchorElem, setFloatingAnchorElem] =
+      useState<HTMLDivElement | null>(null);
+
+    const onRef = (_floatingAnchorElem: HTMLDivElement) => {
+      if (_floatingAnchorElem !== null) {
+        setFloatingAnchorElem(_floatingAnchorElem);
+      }
+    };
+
+    const handlePaste: React.ClipboardEventHandler<HTMLDivElement> = (e) => {
+      if (onPaste && e.clipboardData && e.clipboardData.files.length === 1) {
+        onPaste(e.clipboardData.files);
+        e.preventDefault();
+      }
+    };
+
+    const handleChange = (_: EditorState, editor: LexicalEditor) => {
+      if (onChange) {
+        onChange(
+          editor.getEditorState().read(
+            $createRemarkExport({
+              handlers: {
+                hashtag: (node) => ({
+                  type: 'text',
+                  value: node.getTextContent(),
+                }),
+                mention: (node) => ({
+                  type: 'text',
+                  value: node.getTextContent(),
+                }),
+              },
+            }),
+          ),
+        );
+      }
+    };
+
+    let textareaPlaceholder = placeholder || (
+      <FormattedMessage
+        id='compose_form.placeholder'
+        defaultMessage="What's on your mind?"
+      />
+    );
+
+    if (eventDiscussion) {
+      textareaPlaceholder = (
+        <FormattedMessage
+          id='compose_form.event_placeholder'
+          defaultMessage='Post to this event'
         />
-        <OnChangePlugin onChange={handleChange} />
-        <HistoryPlugin />
-        <HashtagPlugin />
-        <AutosuggestPlugin composeId={composeId} suggestionsHidden={suggestionsHidden} setSuggestionsHidden={setSuggestionsHidden} />
-        <AutoLinkPlugin matchers={LINK_MATCHERS} />
-        {isWysiwyg && <LinkPlugin />}
-        {isWysiwyg && <ListPlugin />}
-        {isWysiwyg && floatingAnchorElem && (
-          <>
-            <FloatingBlockTypeToolbarPlugin anchorElem={floatingAnchorElem} />
-            <FloatingTextFormatToolbarPlugin anchorElem={floatingAnchorElem} />
-            <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
-          </>
-        )}
-        <StatePlugin composeId={composeId} isWysiwyg={isWysiwyg} />
-        <SubmitPlugin composeId={composeId} handleSubmit={handleSubmit} />
-        <FocusPlugin autoFocus={autoFocus} />
-        <ClearEditorPlugin />
-        <RefPlugin ref={ref} />
-      </div>
-    </LexicalComposer>
-  );
-});
+      );
+    } else if (hasPoll) {
+      textareaPlaceholder = (
+        <FormattedMessage
+          id='compose_form.poll_placeholder'
+          defaultMessage='Add a poll topic…'
+        />
+      );
+    }
+
+    return (
+      <LexicalComposer
+        key={isWysiwyg ? 'wysiwyg' : ''}
+        initialConfig={initialConfig}
+      >
+        <div className={clsx('lexical relative', className)} data-markup>
+          <RichTextPlugin
+            contentEditable={
+              <div onFocus={onFocus} onPaste={handlePaste} ref={onRef}>
+                <ContentEditable
+                  tabIndex={0}
+                  className={clsx(
+                    'relative z-10 text-[1rem] outline-none transition-[min-height] motion-reduce:transition-none',
+                    editableClassName,
+                    {
+                      'min-h-[39px]': condensed,
+                      'min-h-[99px]': !condensed,
+                    },
+                  )}
+                />
+              </div>
+            }
+            placeholder={
+              <div
+                className={clsx(
+                  'pointer-events-none absolute top-0 select-none text-[1rem] text-gray-600 dark:placeholder:text-gray-600',
+                  placeholderClassName,
+                )}
+              >
+                {textareaPlaceholder}
+              </div>
+            }
+            ErrorBoundary={LexicalErrorBoundary}
+          />
+          <OnChangePlugin onChange={handleChange} />
+          <HistoryPlugin />
+          <HashtagPlugin />
+          <AutosuggestPlugin
+            composeId={composeId}
+            suggestionsHidden={suggestionsHidden}
+            setSuggestionsHidden={setSuggestionsHidden}
+          />
+          <AutoLinkPlugin matchers={LINK_MATCHERS} />
+          {isWysiwyg && <LinkPlugin />}
+          {isWysiwyg && <ListPlugin />}
+          {isWysiwyg && floatingAnchorElem && (
+            <>
+              <FloatingBlockTypeToolbarPlugin anchorElem={floatingAnchorElem} />
+              <FloatingTextFormatToolbarPlugin
+                anchorElem={floatingAnchorElem}
+              />
+              <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
+            </>
+          )}
+          <StatePlugin composeId={composeId} isWysiwyg={isWysiwyg} />
+          <SubmitPlugin composeId={composeId} handleSubmit={handleSubmit} />
+          <FocusPlugin autoFocus={autoFocus} />
+          <ClearEditorPlugin />
+          <RefPlugin ref={ref} />
+        </div>
+      </LexicalComposer>
+    );
+  },
+);
 
 export { ComposeEditor as default };

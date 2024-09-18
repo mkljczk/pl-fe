@@ -15,7 +15,9 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
   const compose = useCompose(composeId);
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id: compose.in_reply_to! }));
+  const status = useAppSelector((state) =>
+    getStatus(state, { id: compose.in_reply_to! }),
+  );
   const to = compose.to.toArray();
 
   if (!features.createStatusExplicitAddressing || !status || !to) {
@@ -36,7 +38,11 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
 
   if (to.length === 0) {
     return (
-      <a href='#' className='mb-1 text-sm text-gray-700 dark:text-gray-600' onClick={handleClick}>
+      <a
+        href='#'
+        className='mb-1 text-sm text-gray-700 dark:text-gray-600'
+        onClick={handleClick}
+      >
         <FormattedMessage
           id='reply_mentions.reply_empty'
           defaultMessage='Replying to post'
@@ -59,12 +65,20 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
 
   if (to.length > 2) {
     accounts.push(
-      <FormattedMessage id='reply_mentions.more' defaultMessage='{count} more' values={{ count: to.length - 2 }} />,
+      <FormattedMessage
+        id='reply_mentions.more'
+        defaultMessage='{count} more'
+        values={{ count: to.length - 2 }}
+      />,
     );
   }
 
   return (
-    <a href='#' className='mb-1 text-sm text-gray-700 dark:text-gray-600' onClick={handleClick}>
+    <a
+      href='#'
+      className='mb-1 text-sm text-gray-700 dark:text-gray-600'
+      onClick={handleClick}
+    >
       <FormattedMessage
         id='reply_mentions.reply'
         defaultMessage='Replying to {accounts}'

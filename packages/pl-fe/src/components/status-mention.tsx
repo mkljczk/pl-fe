@@ -13,11 +13,12 @@ interface IStatusMention {
 const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
   const { account } = useAccount(accountId);
 
-  if (!account) return (
-    <HoverRefWrapper accountId={accountId} inline>
-      {fallback}
-    </HoverRefWrapper>
-  );
+  if (!account)
+    return (
+      <HoverRefWrapper accountId={accountId} inline>
+        {fallback}
+      </HoverRefWrapper>
+    );
 
   return (
     <HoverRefWrapper accountId={accountId} inline>

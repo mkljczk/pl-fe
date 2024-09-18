@@ -24,9 +24,10 @@ const getBaseURL = (account: Pick<Account, 'url'>): string => {
   }
 };
 
-const getAcct = (account: Pick<Account, 'fqn' | 'acct'>, displayFqn: boolean): string => (
-  displayFqn === true ? account.fqn : account.acct
-);
+const getAcct = (
+  account: Pick<Account, 'fqn' | 'acct'>,
+  displayFqn: boolean,
+): string => (displayFqn === true ? account.fqn : account.acct);
 
 /** Default header filenames from various backends */
 const DEFAULT_HEADERS: string[] = [
@@ -38,11 +39,12 @@ const DEFAULT_HEADERS: string[] = [
 ];
 
 /** Check if the avatar is a default avatar */
-const isDefaultHeader = (url: string) => DEFAULT_HEADERS.some(header => url.endsWith(header));
+const isDefaultHeader = (url: string) =>
+  DEFAULT_HEADERS.some((header) => url.endsWith(header));
 
 /** Default avatar filenames from various backends */
 const DEFAULT_AVATARS = [
-  ...(range(1, 6).map(i => `/assets/default_avatars/GoToSocial_icon${i}.webp`)), // GoToSocial
+  ...range(1, 6).map((i) => `/assets/default_avatars/GoToSocial_icon${i}.webp`), // GoToSocial
   '/avatars/original/missing.png', // Mastodon
   '/api/v1/accounts/identicon', // Mitra
   '/images/avi.png', // Pleroma
@@ -50,12 +52,7 @@ const DEFAULT_AVATARS = [
 ];
 
 /** Check if the avatar is a default avatar */
-const isDefaultAvatar = (url: string) => DEFAULT_AVATARS.some(avatar => url.endsWith(avatar));
+const isDefaultAvatar = (url: string) =>
+  DEFAULT_AVATARS.some((avatar) => url.endsWith(avatar));
 
-export {
-  getDomain,
-  getBaseURL,
-  getAcct,
-  isDefaultHeader,
-  isDefaultAvatar,
-};
+export { getDomain, getBaseURL, getAcct, isDefaultHeader, isDefaultAvatar };

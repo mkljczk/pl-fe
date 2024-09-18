@@ -1,6 +1,14 @@
-import { mockStore, mockWindowProperty, rootState } from 'pl-fe/jest/test-helpers';
+import {
+  mockStore,
+  mockWindowProperty,
+  rootState,
+} from 'pl-fe/jest/test-helpers';
 
-import { checkOnboardingStatus, startOnboarding, endOnboarding } from './onboarding';
+import {
+  checkOnboardingStatus,
+  endOnboarding,
+  startOnboarding,
+} from './onboarding';
 
 describe('checkOnboarding()', () => {
   let mockGetItem: any;
@@ -13,7 +21,7 @@ describe('checkOnboarding()', () => {
     mockGetItem = vi.fn().mockReturnValue(null);
   });
 
-  it('does nothing if localStorage item is not set', async() => {
+  it('does nothing if localStorage item is not set', async () => {
     mockGetItem = vi.fn().mockReturnValue(null);
 
     const state = rootState.setIn(['onboarding', 'needsOnboarding'], false);
@@ -26,7 +34,7 @@ describe('checkOnboarding()', () => {
     expect(mockGetItem.mock.calls.length).toBe(1);
   });
 
-  it('does nothing if localStorage item is invalid', async() => {
+  it('does nothing if localStorage item is invalid', async () => {
     mockGetItem = vi.fn().mockReturnValue('invalid');
 
     const state = rootState.setIn(['onboarding', 'needsOnboarding'], false);
@@ -39,7 +47,7 @@ describe('checkOnboarding()', () => {
     expect(mockGetItem.mock.calls.length).toBe(1);
   });
 
-  it('dispatches the correct action', async() => {
+  it('dispatches the correct action', async () => {
     mockGetItem = vi.fn().mockReturnValue('1');
 
     const state = rootState.setIn(['onboarding', 'needsOnboarding'], false);
@@ -64,7 +72,7 @@ describe('startOnboarding()', () => {
     mockSetItem = vi.fn();
   });
 
-  it('dispatches the correct action', async() => {
+  it('dispatches the correct action', async () => {
     const state = rootState.setIn(['onboarding', 'needsOnboarding'], false);
     const store = mockStore(state);
 
@@ -87,7 +95,7 @@ describe('endOnboarding()', () => {
     mockRemoveItem = vi.fn();
   });
 
-  it('dispatches the correct action', async() => {
+  it('dispatches the correct action', async () => {
     const state = rootState.setIn(['onboarding', 'needsOnboarding'], false);
     const store = mockStore(state);
 

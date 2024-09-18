@@ -19,7 +19,9 @@ const StatusContainer: React.FC<IStatusContainer> = (props) => {
   const { id, contextType, ...rest } = props;
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id, contextType }));
+  const status = useAppSelector((state) =>
+    getStatus(state, { id, contextType }),
+  );
 
   if (status) {
     return <Status status={status} {...rest} />;

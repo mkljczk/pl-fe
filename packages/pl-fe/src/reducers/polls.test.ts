@@ -11,7 +11,9 @@ describe('polls reducer', () => {
 
   describe('POLLS_IMPORT', () => {
     it('normalizes the poll', () => {
-      const polls = [{ id: '3', options: [{ title: 'Apples' }, { title: 'Oranges' }] }];
+      const polls = [
+        { id: '3', options: [{ title: 'Apples' }, { title: 'Oranges' }] },
+      ];
       const action = { type: POLLS_IMPORT, polls };
 
       const result = reducer(undefined, action);

@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
-import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { createApp } from 'pl-fe/actions/apps';
 import { obtainOAuthToken } from 'pl-fe/actions/oauth';
-import { Column, Button, Form, FormActions, FormGroup, Input, Stack, Text, Textarea } from 'pl-fe/components/ui';
+import {
+  Button,
+  Column,
+  Form,
+  FormActions,
+  FormGroup,
+  Input,
+  Stack,
+  Text,
+  Textarea,
+} from 'pl-fe/components/ui';
 import { useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
 import { getBaseURL } from 'pl-fe/utils/accounts';
 
@@ -11,8 +21,14 @@ import type { Token } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.app_create', defaultMessage: 'Create app' },
-  namePlaceholder: { id: 'app_create.name_placeholder', defaultMessage: 'e.g. \'pl-fe\'' },
-  scopesPlaceholder: { id: 'app_create.scopes_placeholder', defaultMessage: 'e.g. \'read write follow\'' },
+  namePlaceholder: {
+    id: 'app_create.name_placeholder',
+    defaultMessage: "e.g. 'pl-fe'",
+  },
+  scopesPlaceholder: {
+    id: 'app_create.scopes_placeholder',
+    defaultMessage: "e.g. 'read write follow'",
+  },
 });
 
 const BLANK_PARAMS = {
@@ -37,26 +53,24 @@ const CreateApp: React.FC = () => {
   const handleCreateApp = () => {
     const baseURL = getBaseURL(account!);
 
-    return dispatch(createApp(params, baseURL))
-      .then(app => {
-        setApp(app);
-        return app;
-      });
+    return dispatch(createApp(params, baseURL)).then((app) => {
+      setApp(app);
+      return app;
+    });
   };
 
   const handleCreateToken = (app: Record<string, string>) => {
     const baseURL = getBaseURL(account!);
 
     const tokenParams = {
-      client_id:     app!.client_id,
+      client_id: app!.client_id,
       client_secret: app!.client_secret,
-      redirect_uri:  params.redirect_uris,
-      grant_type:    'client_credentials',
-      scope:         params.scopes,
+      redirect_uri: params.redirect_uris,
+      grant_type: 'client_credentials',
+      scope: params.scopes,
     };
 
-    return dispatch(obtainOAuthToken(tokenParams, baseURL))
-      .then(setToken);
+    return dispatch(obtainOAuthToken(tokenParams, baseURL)).then(setToken);
   };
 
   const handleSubmit = () => {
@@ -67,7 +81,8 @@ const CreateApp: React.FC = () => {
       .then(() => {
         scrollToTop();
         setLoading(false);
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.error(error);
         setLoading(false);
       });
@@ -77,9 +92,11 @@ const CreateApp: React.FC = () => {
     setParams({ ...params, [key]: value });
   };
 
-  const handleParamChange = (key: string): React.ChangeEventHandler<HTMLInputElement> => e => {
-    setParam(key, e.target.value);
-  };
+  const handleParamChange =
+    (key: string): React.ChangeEventHandler<HTMLInputElement> =>
+    (e) => {
+      setParam(key, e.target.value);
+    };
 
   const resetState = () => {
     setApp(null);
@@ -102,7 +119,10 @@ const CreateApp: React.FC = () => {
       <Form>
         <Stack>
           <Text size='lg' weight='medium'>
-            <FormattedMessage id='app_create.results.explanation_title' defaultMessage='App created successfully' />
+            <FormattedMessage
+              id='app_create.results.explanation_title'
+              defaultMessage='App created successfully'
+            />
           </Text>
           <Text theme='muted'>
             <FormattedMessage
@@ -112,7 +132,14 @@ const CreateApp: React.FC = () => {
           </Text>
         </Stack>
 
-        <FormGroup labelText={<FormattedMessage id='app_create.results.app_label' defaultMessage='App' />}>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='app_create.results.app_label'
+              defaultMessage='App'
+            />
+          }
+        >
           <Textarea
             value={JSON.stringify(app, null, 2)}
             rows={10}
@@ -121,7 +148,14 @@ const CreateApp: React.FC = () => {
           />
         </FormGroup>
 
-        <FormGroup labelText={<FormattedMessage id='app_create.results.token_label' defaultMessage='OAuth token' />}>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='app_create.results.token_label'
+              defaultMessage='OAuth token'
+            />
+          }
+        >
           <Textarea
             value={JSON.stringify(token, null, 2)}
             rows={10}
@@ -132,7 +166,10 @@ const CreateApp: React.FC = () => {
 
         <FormActions>
           <Button theme='primary' type='button' onClick={handleReset}>
-            <FormattedMessage id='app_create.restart' defaultMessage='Create another' />
+            <FormattedMessage
+              id='app_create.restart'
+              defaultMessage='Create another'
+            />
           </Button>
         </FormActions>
       </Form>
@@ -146,7 +183,14 @@ const CreateApp: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)} backHref='/developers'>
       <Form onSubmit={handleSubmit}>
-        <FormGroup labelText={<FormattedMessage id='app_create.name_label' defaultMessage='App name' />}>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='app_create.name_label'
+              defaultMessage='App name'
+            />
+          }
+        >
           <Input
             type='text'
             placeholder={intl.formatMessage(messages.namePlaceholder)}
@@ -156,7 +200,14 @@ const CreateApp: React.FC = () => {
           />
         </FormGroup>
 
-        <FormGroup labelText={<FormattedMessage id='app_create.website_label' defaultMessage='Website' />}>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='app_create.website_label'
+              defaultMessage='Website'
+            />
+          }
+        >
           <Input
             type='text'
             placeholder='https://github.com/mkljczk/pl-fe'
@@ -165,7 +216,14 @@ const CreateApp: React.FC = () => {
           />
         </FormGroup>
 
-        <FormGroup labelText={<FormattedMessage id='app_create.redirect_uri_label' defaultMessage='Redirect URIs' />}>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='app_create.redirect_uri_label'
+              defaultMessage='Redirect URIs'
+            />
+          }
+        >
           <Input
             type='text'
             placeholder='https://github.com/mkljczk/pl-fe'
@@ -175,7 +233,14 @@ const CreateApp: React.FC = () => {
           />
         </FormGroup>
 
-        <FormGroup labelText={<FormattedMessage id='app_create.scopes_label' defaultMessage='Scopes' />}>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='app_create.scopes_label'
+              defaultMessage='Scopes'
+            />
+          }
+        >
           <Input
             type='text'
             placeholder={intl.formatMessage(messages.scopesPlaceholder)}
@@ -187,7 +252,10 @@ const CreateApp: React.FC = () => {
 
         <FormActions>
           <Button theme='primary' type='submit' disabled={isLoading}>
-            <FormattedMessage id='app_create.submit' defaultMessage='Create app' />
+            <FormattedMessage
+              id='app_create.submit'
+              defaultMessage='Create app'
+            />
           </Button>
         </FormActions>
       </Form>

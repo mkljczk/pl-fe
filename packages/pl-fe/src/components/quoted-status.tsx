@@ -30,7 +30,11 @@ interface IQuotedStatus {
 }
 
 /** Status embedded in a quote post. */
-const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) => {
+const QuotedStatus: React.FC<IQuotedStatus> = ({
+  status,
+  onCancel,
+  compose,
+}) => {
   const intl = useIntl();
   const history = useHistory();
 
@@ -79,10 +83,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
         'group hover:bg-gray-100 dark:hover:bg-gray-800': !compose,
       })}
     >
-      <Stack
-        space={2}
-        onClick={handleExpandClick}
-      >
+      <Stack space={2} onClick={handleExpandClick}>
         <AccountContainer
           {...actions}
           id={account.id}
@@ -94,16 +95,16 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
 
         <StatusReplyMentions status={status} hoverable={false} />
 
-        {status.event ? <EventPreview status={status} hideAction /> : (
+        {status.event ? (
+          <EventPreview status={status} hideAction />
+        ) : (
           <Stack className='relative z-0'>
             <Stack space={4}>
-              <StatusContent
-                status={status}
-                collapsable
-                quote
-              />
+              <StatusContent status={status} collapsable quote />
 
-              {status.quote_id && <QuotedStatusIndicator statusId={status.quote_id} />}
+              {status.quote_id && (
+                <QuotedStatusIndicator statusId={status.quote_id} />
+              )}
 
               {status.media_attachments.length > 0 && (
                 <div className='relative'>

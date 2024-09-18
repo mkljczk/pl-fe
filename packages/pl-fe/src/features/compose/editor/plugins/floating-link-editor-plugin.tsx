@@ -4,13 +4,17 @@
  * LICENSE file in the /src/features/compose/editor directory.
  */
 
-import { $isAutoLinkNode, $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
+import {
+  $isAutoLinkNode,
+  $isLinkNode,
+  TOGGLE_LINK_COMMAND,
+} from '@lexical/link';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $findMatchingParent, mergeRegister } from '@lexical/utils';
 import {
-  type BaseSelection,
   $getSelection,
   $isRangeSelection,
+  type BaseSelection,
   COMMAND_PRIORITY_CRITICAL,
   COMMAND_PRIORITY_LOW,
   LexicalEditor,
@@ -30,14 +34,16 @@ const FloatingLinkEditor = ({
   editor,
   anchorElem,
 }: {
-   editor: LexicalEditor;
-   anchorElem: HTMLElement;
- }): JSX.Element => {
+  editor: LexicalEditor;
+  anchorElem: HTMLElement;
+}): JSX.Element => {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [linkUrl, setLinkUrl] = useState('');
   const [isEditMode, setEditMode] = useState(false);
-  const [lastSelection, setLastSelection] = useState<BaseSelection | null>(null);
+  const [lastSelection, setLastSelection] = useState<BaseSelection | null>(
+    null,
+  );
 
   const updateLinkEditor = useCallback(() => {
     const selection = $getSelection();
@@ -64,9 +70,9 @@ const FloatingLinkEditor = ({
 
     if (
       selection !== null &&
-       nativeSelection !== null &&
-       rootElement !== null &&
-       rootElement.contains(nativeSelection.anchorNode)
+      nativeSelection !== null &&
+      rootElement !== null &&
+      rootElement.contains(nativeSelection.anchorNode)
     ) {
       const domRange = nativeSelection.getRangeAt(0);
       let rect;
@@ -193,12 +199,20 @@ const FloatingLinkEditor = ({
                 editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
               }}
             >
-              <Icon className='h-5 w-5' src={require('@tabler/icons/outline/x.svg')} />
+              <Icon
+                className='h-5 w-5'
+                src={require('@tabler/icons/outline/x.svg')}
+              />
             </div>
           </>
         ) : (
           <>
-            <a className='mr-8 block truncate text-primary-600 no-underline hover:underline dark:text-accent-blue' href={linkUrl} target='_blank' rel='noopener noreferrer'>
+            <a
+              className='mr-8 block truncate text-primary-600 no-underline hover:underline dark:text-accent-blue'
+              href={linkUrl}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
               {linkUrl}
             </a>
             <div
@@ -210,7 +224,10 @@ const FloatingLinkEditor = ({
                 setEditMode(true);
               }}
             >
-              <Icon className='h-5 w-5' src={require('@tabler/icons/outline/pencil.svg')} />
+              <Icon
+                className='h-5 w-5'
+                src={require('@tabler/icons/outline/pencil.svg')}
+              />
             </div>
           </>
         )}
@@ -256,17 +273,17 @@ const useFloatingLinkEditorToolbar = (
 
   return isLink
     ? createPortal(
-      <FloatingLinkEditor editor={activeEditor} anchorElem={anchorElem} />,
-      anchorElem,
-    )
+        <FloatingLinkEditor editor={activeEditor} anchorElem={anchorElem} />,
+        anchorElem,
+      )
     : null;
 };
 
 const FloatingLinkEditorPlugin = ({
   anchorElem = document.body,
 }: {
-   anchorElem?: HTMLElement;
- }): JSX.Element | null => {
+  anchorElem?: HTMLElement;
+}): JSX.Element | null => {
   const [editor] = useLexicalComposerContext();
   return useFloatingLinkEditorToolbar(editor, anchorElem);
 };

@@ -5,16 +5,19 @@ import { type Relationship, relationshipSchema } from 'pl-api';
 import { ACCOUNT_NOTE_SUBMIT_SUCCESS } from '../actions/account-notes';
 import {
   ACCOUNT_BLOCK_SUCCESS,
-  ACCOUNT_UNBLOCK_SUCCESS,
   ACCOUNT_MUTE_SUCCESS,
-  ACCOUNT_UNMUTE_SUCCESS,
   ACCOUNT_PIN_SUCCESS,
-  ACCOUNT_UNPIN_SUCCESS,
   ACCOUNT_REMOVE_FROM_FOLLOWERS_SUCCESS,
+  ACCOUNT_UNBLOCK_SUCCESS,
+  ACCOUNT_UNMUTE_SUCCESS,
+  ACCOUNT_UNPIN_SUCCESS,
   RELATIONSHIPS_FETCH_SUCCESS,
 } from '../actions/accounts';
-import { DOMAIN_BLOCK_SUCCESS, DOMAIN_UNBLOCK_SUCCESS } from '../actions/domain-blocks';
-import { ACCOUNT_IMPORT, ACCOUNTS_IMPORT } from '../actions/importer';
+import {
+  DOMAIN_BLOCK_SUCCESS,
+  DOMAIN_UNBLOCK_SUCCESS,
+} from '../actions/domain-blocks';
+import { ACCOUNTS_IMPORT, ACCOUNT_IMPORT } from '../actions/importer';
 
 import type { APIEntity } from 'pl-fe/types/entities';
 import type { AnyAction } from 'redux';
@@ -23,9 +26,12 @@ type State = ImmutableMap<string, Relationship>;
 type APIEntities = Array<APIEntity>;
 
 const normalizeRelationships = (state: State, relationships: APIEntities) => {
-  relationships.forEach(relationship => {
+  relationships.forEach((relationship) => {
     try {
-      state = state.set(relationship.id, relationshipSchema.parse(relationship));
+      state = state.set(
+        relationship.id,
+        relationshipSchema.parse(relationship),
+      );
     } catch (_e) {
       // do nothing
     }
@@ -34,29 +40,35 @@ const normalizeRelationships = (state: State, relationships: APIEntities) => {
   return state;
 };
 
-const setDomainBlocking = (state: State, accounts: string[], blocking: boolean) =>
-  state.withMutations(map => {
-    accounts.forEach(id => {
+const setDomainBlocking = (
+  state: State,
+  accounts: string[],
+  blocking: boolean,
+) =>
+  state.withMutations((map) => {
+    accounts.forEach((id) => {
       map.setIn([id, 'domain_blocking'], blocking);
     });
   });
 
 const importPleromaAccount = (state: State, account: APIEntity) => {
   const relationship = get(account, ['pleroma', 'relationship'], {});
-  if (relationship.id)
-    return normalizeRelationships(state, [relationship]);
+  if (relationship.id) return normalizeRelationships(state, [relationship]);
   return state;
 };
 
 const importPleromaAccounts = (state: State, accounts: APIEntities) => {
-  accounts.forEach(account => {
+  accounts.forEach((account) => {
     state = importPleromaAccount(state, account);
   });
 
   return state;
 };
 
-const relationships = (state: State = ImmutableMap<string, Relationship>(), action: AnyAction) => {
+const relationships = (
+  state: State = ImmutableMap<string, Relationship>(),
+  action: AnyAction,
+) => {
   switch (action.type) {
     case ACCOUNT_IMPORT:
       return importPleromaAccount(state, action.account);

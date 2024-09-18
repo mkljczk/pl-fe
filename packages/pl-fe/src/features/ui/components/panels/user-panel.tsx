@@ -18,7 +18,12 @@ interface IUserPanel {
   domain?: string;
 }
 
-const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) => {
+const UserPanel: React.FC<IUserPanel> = ({
+  accountId,
+  action,
+  badges,
+  domain,
+}) => {
   const intl = useIntl();
   const { demetricator } = useSettings();
   const { account } = useAccount(accountId);
@@ -26,7 +31,10 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
 
   if (!account) return null;
   const displayNameHtml = { __html: account.display_name_html };
-  const acct = !account.acct.includes('@') && domain ? `${account.acct}@${domain}` : account.acct;
+  const acct =
+    !account.acct.includes('@') && domain
+      ? `${account.acct}@${domain}`
+      : account.acct;
   const header = account.header;
   const verified = account.verified;
 
@@ -36,7 +44,10 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
         <Stack>
           <div className='relative -mx-4 -mt-4 h-24 overflow-hidden bg-gray-200'>
             {header && (
-              <StillImage src={account.header} alt={account.header_description} />
+              <StillImage
+                src={account.header}
+                alt={account.header_description}
+              />
             )}
           </div>
 
@@ -54,16 +65,19 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
               />
             </Link>
 
-            {action && (
-              <div className='mt-2'>{action}</div>
-            )}
+            {action && <div className='mt-2'>{action}</div>}
           </HStack>
         </Stack>
 
         <Stack>
           <Link to={`/@${account.acct}`}>
             <HStack space={1} alignItems='center'>
-              <Text size='lg' weight='bold' dangerouslySetInnerHTML={displayNameHtml} truncate />
+              <Text
+                size='lg'
+                weight='bold'
+                dangerouslySetInnerHTML={displayNameHtml}
+                truncate
+              />
 
               {verified && <VerificationBadge />}
 
@@ -85,26 +99,38 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
         {!demetricator && (
           <HStack alignItems='center' space={3}>
             {account.followers_count >= 0 && (
-              <Link to={`/@${account.acct}/followers`} title={intl.formatNumber(account.followers_count)}>
+              <Link
+                to={`/@${account.acct}/followers`}
+                title={intl.formatNumber(account.followers_count)}
+              >
                 <HStack alignItems='center' space={1}>
                   <Text theme='primary' weight='bold' size='sm'>
                     {shortNumberFormat(account.followers_count)}
                   </Text>
                   <Text weight='bold' size='sm'>
-                    <FormattedMessage id='account.followers' defaultMessage='Followers' />
+                    <FormattedMessage
+                      id='account.followers'
+                      defaultMessage='Followers'
+                    />
                   </Text>
                 </HStack>
               </Link>
             )}
 
             {account.following_count >= 0 && (
-              <Link to={`/@${account.acct}/following`} title={intl.formatNumber(account.following_count)}>
+              <Link
+                to={`/@${account.acct}/following`}
+                title={intl.formatNumber(account.following_count)}
+              >
                 <HStack alignItems='center' space={1}>
                   <Text theme='primary' weight='bold' size='sm'>
                     {shortNumberFormat(account.following_count)}
                   </Text>
                   <Text weight='bold' size='sm'>
-                    <FormattedMessage id='account.follows' defaultMessage='Following' />
+                    <FormattedMessage
+                      id='account.follows'
+                      defaultMessage='Following'
+                    />
                   </Text>
                 </HStack>
               </Link>

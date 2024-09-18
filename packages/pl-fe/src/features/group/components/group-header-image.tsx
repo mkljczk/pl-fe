@@ -15,7 +15,10 @@ interface IGroupHeaderImage {
   className?: string;
 }
 
-const GroupHeaderImage: React.FC<IGroupHeaderImage> = ({ className, group }) => {
+const GroupHeaderImage: React.FC<IGroupHeaderImage> = ({
+  className,
+  group,
+}) => {
   const intl = useIntl();
 
   const [isHeaderMissing, setIsHeaderMissing] = useState<boolean>(false);
@@ -27,7 +30,10 @@ const GroupHeaderImage: React.FC<IGroupHeaderImage> = ({ className, group }) => 
   if (isHeaderMissing) {
     return (
       <div
-        className={clsx(className, 'flex items-center justify-center bg-gray-200 dark:bg-gray-800/30')}
+        className={clsx(
+          className,
+          'flex items-center justify-center bg-gray-200 dark:bg-gray-800/30',
+        )}
       >
         <Icon
           src={require('@tabler/icons/outline/photo-off.svg')}

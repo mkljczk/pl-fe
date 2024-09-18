@@ -3,8 +3,8 @@ import React from 'react';
 import { approveUser, deleteUser } from 'pl-fe/actions/admin';
 import { useAccount } from 'pl-fe/api/hooks';
 import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';
-import { Stack, HStack, Text } from 'pl-fe/components/ui';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import { HStack, Stack, Text } from 'pl-fe/components/ui';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 interface IUnapprovedAccount {
   accountId: string;
@@ -15,7 +15,9 @@ const UnapprovedAccount: React.FC<IUnapprovedAccount> = ({ accountId }) => {
   const dispatch = useAppDispatch();
 
   const { account } = useAccount(accountId);
-  const adminAccount = useAppSelector(state => state.admin.users.get(accountId));
+  const adminAccount = useAppSelector((state) =>
+    state.admin.users.get(accountId),
+  );
 
   if (!account) return null;
 
@@ -25,9 +27,7 @@ const UnapprovedAccount: React.FC<IUnapprovedAccount> = ({ accountId }) => {
   return (
     <HStack space={4} justifyContent='between'>
       <Stack space={1}>
-        <Text weight='semibold'>
-          @{account.acct}
-        </Text>
+        <Text weight='semibold'>@{account.acct}</Text>
         <Text tag='blockquote' size='sm'>
           {adminAccount?.invite_request || ''}
         </Text>

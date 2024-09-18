@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import { prepareRequest } from 'pl-fe/actions/consumer-auth';
 import { IconButton, Tooltip } from 'pl-fe/components/ui';
@@ -7,7 +7,10 @@ import { useAppDispatch } from 'pl-fe/hooks';
 import { capitalize } from 'pl-fe/utils/strings';
 
 const messages = defineMessages({
-  tooltip: { id: 'oauth_consumer.tooltip', defaultMessage: 'Sign in with {provider}' },
+  tooltip: {
+    id: 'oauth_consumer.tooltip',
+    defaultMessage: 'Sign in with {provider}',
+  },
 });
 
 /** Map between OAuth providers and brand icons. */
@@ -29,14 +32,19 @@ const ConsumerButton: React.FC<IConsumerButton> = ({ provider }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const icon = BRAND_ICONS[provider] || require('@tabler/icons/outline/key.svg');
+  const icon =
+    BRAND_ICONS[provider] || require('@tabler/icons/outline/key.svg');
 
   const handleClick = () => {
     dispatch(prepareRequest(provider));
   };
 
   return (
-    <Tooltip text={intl.formatMessage(messages.tooltip, { provider: capitalize(provider) })}>
+    <Tooltip
+      text={intl.formatMessage(messages.tooltip, {
+        provider: capitalize(provider),
+      })}
+    >
       <IconButton
         theme='outlined'
         className='p-2.5'

@@ -8,16 +8,20 @@ import { render, screen, waitFor } from 'pl-fe/jest/test-helpers';
 
 import ChatSearch from './chat-search';
 
-const renderComponent = () => render(
-  <VirtuosoMockContext.Provider value={{ viewportHeight: 300, itemHeight: 100 }}>
-    <ChatProvider>
-      <ChatSearch />
-    </ChatProvider>,
-  </VirtuosoMockContext.Provider>,
-);
+const renderComponent = () =>
+  render(
+    <VirtuosoMockContext.Provider
+      value={{ viewportHeight: 300, itemHeight: 100 }}
+    >
+      <ChatProvider>
+        <ChatSearch />
+      </ChatProvider>
+      ,
+    </VirtuosoMockContext.Provider>,
+  );
 
 describe('<ChatSearch />', () => {
-  beforeEach(async() => {
+  beforeEach(async () => {
     renderComponent();
   });
 
@@ -29,17 +33,19 @@ describe('<ChatSearch />', () => {
     describe('with results', () => {
       beforeEach(() => {
         __stub((mock) => {
-          mock.onGet('/api/v1/accounts/search').reply(200, [{
-            id: '1',
-            avatar: 'url',
-            verified: false,
-            display_name: 'steve',
-            acct: 'sjobs',
-          }]);
+          mock.onGet('/api/v1/accounts/search').reply(200, [
+            {
+              id: '1',
+              avatar: 'url',
+              verified: false,
+              display_name: 'steve',
+              acct: 'sjobs',
+            },
+          ]);
         });
       });
 
-      it('renders accounts', async() => {
+      it('renders accounts', async () => {
         const user = userEvent.setup();
         await user.type(screen.getByTestId('search'), 'ste');
 
@@ -56,7 +62,7 @@ describe('<ChatSearch />', () => {
         });
       });
 
-      it('renders accounts', async() => {
+      it('renders accounts', async () => {
         const user = userEvent.setup();
         await user.type(screen.getByTestId('search'), 'ste');
 

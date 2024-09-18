@@ -4,34 +4,47 @@ import { FormattedMessage } from 'react-intl';
 import { bookmark } from 'pl-fe/actions/interactions';
 import { useBookmarkFolders } from 'pl-fe/api/hooks';
 import { RadioGroup, RadioItem } from 'pl-fe/components/radio';
-import { Emoji, HStack, Icon, Modal, Spinner, Stack } from 'pl-fe/components/ui';
+import {
+  Emoji,
+  HStack,
+  Icon,
+  Modal,
+  Spinner,
+  Stack,
+} from 'pl-fe/components/ui';
 import NewFolderForm from 'pl-fe/features/bookmark-folders/components/new-folder-form';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { makeGetStatus } from 'pl-fe/selectors';
 
-import type { BaseModalProps } from '../modal-root';
 import type { Status as StatusEntity } from 'pl-fe/normalizers';
+import type { BaseModalProps } from '../modal-root';
 
 interface SelectBookmarkFolderModalProps {
   statusId: string;
 }
 
-const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseModalProps> = ({ statusId, onClose }) => {
+const SelectBookmarkFolderModal: React.FC<
+  SelectBookmarkFolderModalProps & BaseModalProps
+> = ({ statusId, onClose }) => {
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id: statusId })) as StatusEntity;
+  const status = useAppSelector((state) =>
+    getStatus(state, { id: statusId }),
+  ) as StatusEntity;
   const dispatch = useAppDispatch();
 
   const [selectedFolder, setSelectedFolder] = useState(status.bookmark_folder);
 
   const { isFetching, bookmarkFolders } = useBookmarkFolders();
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const folderId = e.target.value;
     setSelectedFolder(folderId);
 
-    dispatch(bookmark(status, folderId)).then(() => {
-      onClose('SELECT_BOOKMARK_FOLDER');
-    }).catch(() => {});
+    dispatch(bookmark(status, folderId))
+      .then(() => {
+        onClose('SELECT_BOOKMARK_FOLDER');
+      })
+      .catch(() => {});
   };
 
   const onClickClose = () => {
@@ -43,8 +56,16 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
       key='all'
       label={
         <HStack alignItems='center' space={2}>
-          <Icon src={require('@tabler/icons/outline/bookmarks.svg')} size={20} />
-          <span><FormattedMessage id='bookmark_folders.all_bookmarks' defaultMessage='All bookmarks' /></span>
+          <Icon
+            src={require('@tabler/icons/outline/bookmarks.svg')}
+            size={20}
+          />
+          <span>
+            <FormattedMessage
+              id='bookmark_folders.all_bookmarks'
+              defaultMessage='All bookmarks'
+            />
+          </span>
         </HStack>
       }
       checked={selectedFolder === null}
@@ -53,40 +74,52 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
   ];
 
   if (!isFetching) {
-    items.push(...(bookmarkFolders.map((folder) => (
-      <RadioItem
-        key={folder.id}
-        label={
-          <HStack alignItems='center' space={2}>
-            {folder.emoji ? (
-              <Emoji
-                emoji={folder.emoji}
-                src={folder.emoji_url || undefined}
-                className='h-5 w-5 flex-none'
-              />
-            ) : <Icon src={require('@tabler/icons/outline/folder.svg')} size={20} />}
-            <span>{folder.name}</span>
-          </HStack>
-        }
-        checked={selectedFolder === folder.id}
-        value={folder.id}
-      />
-    ))));
+    items.push(
+      ...bookmarkFolders.map((folder) => (
+        <RadioItem
+          key={folder.id}
+          label={
+            <HStack alignItems='center' space={2}>
+              {folder.emoji ? (
+                <Emoji
+                  emoji={folder.emoji}
+                  src={folder.emoji_url || undefined}
+                  className='h-5 w-5 flex-none'
+                />
+              ) : (
+                <Icon
+                  src={require('@tabler/icons/outline/folder.svg')}
+                  size={20}
+                />
+              )}
+              <span>{folder.name}</span>
+            </HStack>
+          }
+          checked={selectedFolder === folder.id}
+          value={folder.id}
+        />
+      )),
+    );
   }
 
-  const body = isFetching ? <Spinner /> : (
+  const body = isFetching ? (
+    <Spinner />
+  ) : (
     <Stack space={4}>
       <NewFolderForm />
 
-      <RadioGroup onChange={onChange}>
-        {items}
-      </RadioGroup>
+      <RadioGroup onChange={onChange}>{items}</RadioGroup>
     </Stack>
   );
 
   return (
     <Modal
-      title={<FormattedMessage id='select_bookmark_folder_modal.header_title' defaultMessage='Select folder' />}
+      title={
+        <FormattedMessage
+          id='select_bookmark_folder_modal.header_title'
+          defaultMessage='Select folder'
+        />
+      }
       onClose={onClickClose}
     >
       {body}
@@ -94,4 +127,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
   );
 };
 
-export { type SelectBookmarkFolderModalProps, SelectBookmarkFolderModal as default };
+export {
+  type SelectBookmarkFolderModalProps,
+  SelectBookmarkFolderModal as default,
+};

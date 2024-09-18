@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { setFilter } from 'pl-fe/actions/search';
@@ -39,7 +39,12 @@ const TrendsPanel = ({ limit }: ITrendsPanel) => {
       title={<FormattedMessage id='trends.title' defaultMessage='Trends' />}
       action={
         <Link className='text-right' to='/search' onClick={setHashtagsFilter}>
-          <Text tag='span' theme='primary' size='sm' className='hover:underline'>
+          <Text
+            tag='span'
+            theme='primary'
+            size='sm'
+            className='hover:underline'
+          >
             {intl.formatMessage(messages.viewAll)}
           </Text>
         </Link>
@@ -48,9 +53,9 @@ const TrendsPanel = ({ limit }: ITrendsPanel) => {
       {isFetching ? (
         <PlaceholderSidebarTrends limit={limit} />
       ) : (
-        trends?.slice(0, limit).map((hashtag) => (
-          <Hashtag key={hashtag.name} hashtag={hashtag} />
-        ))
+        trends
+          ?.slice(0, limit)
+          .map((hashtag) => <Hashtag key={hashtag.name} hashtag={hashtag} />)
       )}
     </Widget>
   );

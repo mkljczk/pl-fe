@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Column, Stack, Text } from 'pl-fe/components/ui';
@@ -7,7 +7,10 @@ import AccountContainer from 'pl-fe/containers/account-container';
 import { useSuggestions } from 'pl-fe/queries/suggestions';
 
 const messages = defineMessages({
-  heading: { id: 'follow_recommendations.heading', defaultMessage: 'Suggested profiles' },
+  heading: {
+    id: 'follow_recommendations.heading',
+    defaultMessage: 'Suggested profiles',
+  },
 });
 
 const FollowRecommendations: React.FC = () => {
@@ -19,7 +22,10 @@ const FollowRecommendations: React.FC = () => {
     return (
       <Column label={intl.formatMessage(messages.heading)}>
         <Text align='center'>
-          <FormattedMessage id='empty_column.follow_recommendations' defaultMessage='Looks like no suggestions could be generated for you. You can try using search to look for people you might know or explore trending hashtags.' />
+          <FormattedMessage
+            id='empty_column.follow_recommendations'
+            defaultMessage='Looks like no suggestions could be generated for you. You can try using search to look for people you might know or explore trending hashtags.'
+          />
         </Text>
       </Column>
     );

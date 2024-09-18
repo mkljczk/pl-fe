@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 import { useRouteMatch } from 'react-router-dom';
 
 import { Tabs } from 'pl-fe/components/ui';
@@ -15,24 +15,32 @@ const AdminTabs: React.FC = () => {
   const intl = useIntl();
   const match = useRouteMatch();
 
-  const approvalCount = useAppSelector(state => state.admin.awaitingApproval.count());
-  const reportsCount = useAppSelector(state => state.admin.openReports.count());
+  const approvalCount = useAppSelector((state) =>
+    state.admin.awaitingApproval.count(),
+  );
+  const reportsCount = useAppSelector((state) =>
+    state.admin.openReports.count(),
+  );
 
-  const tabs = [{
-    name: '/pl-fe/admin',
-    text: intl.formatMessage(messages.dashboard),
-    to: '/pl-fe/admin',
-  }, {
-    name: '/pl-fe/admin/reports',
-    text: intl.formatMessage(messages.reports),
-    to: '/pl-fe/admin/reports',
-    count: reportsCount,
-  }, {
-    name: '/pl-fe/admin/approval',
-    text: intl.formatMessage(messages.waitlist),
-    to: '/pl-fe/admin/approval',
-    count: approvalCount,
-  }];
+  const tabs = [
+    {
+      name: '/pl-fe/admin',
+      text: intl.formatMessage(messages.dashboard),
+      to: '/pl-fe/admin',
+    },
+    {
+      name: '/pl-fe/admin/reports',
+      text: intl.formatMessage(messages.reports),
+      to: '/pl-fe/admin/reports',
+      count: reportsCount,
+    },
+    {
+      name: '/pl-fe/admin/approval',
+      text: intl.formatMessage(messages.waitlist),
+      to: '/pl-fe/admin/approval',
+      count: approvalCount,
+    },
+  ];
 
   return <Tabs items={tabs} activeItem={match.path} />;
 };

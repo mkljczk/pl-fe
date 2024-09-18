@@ -11,7 +11,10 @@ interface ICSVExporter {
     input_hint: MessageDescriptor;
     submit: MessageDescriptor;
   };
-  action: () => (dispatch: AppDispatch, getState: () => RootState) => Promise<any>;
+  action: () => (
+    dispatch: AppDispatch,
+    getState: () => RootState,
+  ) => Promise<any>;
 }
 
 const CSVExporter: React.FC<ICSVExporter> = ({ messages, action }) => {
@@ -22,16 +25,20 @@ const CSVExporter: React.FC<ICSVExporter> = ({ messages, action }) => {
 
   const handleClick: React.MouseEventHandler = (event) => {
     setIsLoading(true);
-    dispatch(action()).then(() => {
-      setIsLoading(false);
-    }).catch(() => {
-      setIsLoading(false);
-    });
+    dispatch(action())
+      .then(() => {
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
     <Form>
-      <Text size='xl' weight='bold'>{intl.formatMessage(messages.input_label)}</Text>
+      <Text size='xl' weight='bold'>
+        {intl.formatMessage(messages.input_label)}
+      </Text>
       <Text theme='muted'>{intl.formatMessage(messages.input_hint)}</Text>
 
       <FormActions>

@@ -44,7 +44,6 @@ type SerializedImageNode = Spread<
 >;
 
 class ImageNode extends DecoratorNode<JSX.Element> {
-
   __src: string;
   __altText: string;
 
@@ -53,16 +52,11 @@ class ImageNode extends DecoratorNode<JSX.Element> {
   }
 
   static clone(node: ImageNode): ImageNode {
-    return new ImageNode(
-      node.__src,
-      node.__altText,
-      node.__key,
-    );
+    return new ImageNode(node.__src, node.__altText, node.__key);
   }
 
   static importJSON(serializedNode: SerializedImageNode): ImageNode {
-    const { altText, src } =
-      serializedNode;
+    const { altText, src } = serializedNode;
     const node = $createImageNode({
       altText,
       src,
@@ -86,11 +80,7 @@ class ImageNode extends DecoratorNode<JSX.Element> {
     };
   }
 
-  constructor(
-    src: string,
-    altText: string,
-    key?: NodeKey,
-  ) {
+  constructor(src: string, altText: string, key?: NodeKey) {
     super(key);
     this.__src = src;
     this.__altText = altText;
@@ -148,7 +138,6 @@ class ImageNode extends DecoratorNode<JSX.Element> {
       // </Suspense>
     );
   }
-
 }
 
 const $createImageNode = ({
@@ -156,13 +145,7 @@ const $createImageNode = ({
   src,
   key,
 }: ImagePayload): ImageNode => {
-  return $applyNodeReplacement(
-    new ImageNode(
-      src,
-      altText,
-      key,
-    ),
-  );
+  return $applyNodeReplacement(new ImageNode(src, altText, key));
 };
 
 const $isImageNode = (

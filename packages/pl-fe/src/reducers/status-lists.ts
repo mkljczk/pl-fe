@@ -15,53 +15,56 @@ import {
 import { STATUS_CREATE_SUCCESS } from 'pl-fe/actions/statuses';
 
 import {
-  BOOKMARKED_STATUSES_FETCH_REQUEST,
-  BOOKMARKED_STATUSES_FETCH_SUCCESS,
-  BOOKMARKED_STATUSES_FETCH_FAIL,
+  BOOKMARKED_STATUSES_EXPAND_FAIL,
   BOOKMARKED_STATUSES_EXPAND_REQUEST,
   BOOKMARKED_STATUSES_EXPAND_SUCCESS,
-  BOOKMARKED_STATUSES_EXPAND_FAIL,
+  BOOKMARKED_STATUSES_FETCH_FAIL,
+  BOOKMARKED_STATUSES_FETCH_REQUEST,
+  BOOKMARKED_STATUSES_FETCH_SUCCESS,
 } from '../actions/bookmarks';
 import {
-  RECENT_EVENTS_FETCH_REQUEST,
-  RECENT_EVENTS_FETCH_SUCCESS,
-  RECENT_EVENTS_FETCH_FAIL,
+  JOINED_EVENTS_FETCH_FAIL,
   JOINED_EVENTS_FETCH_REQUEST,
   JOINED_EVENTS_FETCH_SUCCESS,
-  JOINED_EVENTS_FETCH_FAIL,
+  RECENT_EVENTS_FETCH_FAIL,
+  RECENT_EVENTS_FETCH_REQUEST,
+  RECENT_EVENTS_FETCH_SUCCESS,
 } from '../actions/events';
 import {
-  FAVOURITED_STATUSES_FETCH_REQUEST,
-  FAVOURITED_STATUSES_FETCH_SUCCESS,
-  FAVOURITED_STATUSES_FETCH_FAIL,
-  FAVOURITED_STATUSES_EXPAND_REQUEST,
-  FAVOURITED_STATUSES_EXPAND_SUCCESS,
-  FAVOURITED_STATUSES_EXPAND_FAIL,
-  ACCOUNT_FAVOURITED_STATUSES_FETCH_REQUEST,
-  ACCOUNT_FAVOURITED_STATUSES_FETCH_SUCCESS,
-  ACCOUNT_FAVOURITED_STATUSES_FETCH_FAIL,
+  ACCOUNT_FAVOURITED_STATUSES_EXPAND_FAIL,
   ACCOUNT_FAVOURITED_STATUSES_EXPAND_REQUEST,
   ACCOUNT_FAVOURITED_STATUSES_EXPAND_SUCCESS,
-  ACCOUNT_FAVOURITED_STATUSES_EXPAND_FAIL,
+  ACCOUNT_FAVOURITED_STATUSES_FETCH_FAIL,
+  ACCOUNT_FAVOURITED_STATUSES_FETCH_REQUEST,
+  ACCOUNT_FAVOURITED_STATUSES_FETCH_SUCCESS,
+  FAVOURITED_STATUSES_EXPAND_FAIL,
+  FAVOURITED_STATUSES_EXPAND_REQUEST,
+  FAVOURITED_STATUSES_EXPAND_SUCCESS,
+  FAVOURITED_STATUSES_FETCH_FAIL,
+  FAVOURITED_STATUSES_FETCH_REQUEST,
+  FAVOURITED_STATUSES_FETCH_SUCCESS,
   type FavouritesAction,
 } from '../actions/favourites';
 import {
-  FAVOURITE_SUCCESS,
-  UNFAVOURITE_SUCCESS,
   BOOKMARK_SUCCESS,
-  UNBOOKMARK_SUCCESS,
-  PIN_SUCCESS,
-  UNPIN_SUCCESS,
+  FAVOURITE_SUCCESS,
   type InteractionsAction,
+  PIN_SUCCESS,
+  UNBOOKMARK_SUCCESS,
+  UNFAVOURITE_SUCCESS,
+  UNPIN_SUCCESS,
 } from '../actions/interactions';
-import { PINNED_STATUSES_FETCH_SUCCESS, type PinStatusesAction } from '../actions/pin-statuses';
 import {
-  SCHEDULED_STATUSES_FETCH_REQUEST,
-  SCHEDULED_STATUSES_FETCH_SUCCESS,
-  SCHEDULED_STATUSES_FETCH_FAIL,
+  PINNED_STATUSES_FETCH_SUCCESS,
+  type PinStatusesAction,
+} from '../actions/pin-statuses';
+import {
+  SCHEDULED_STATUSES_EXPAND_FAIL,
   SCHEDULED_STATUSES_EXPAND_REQUEST,
   SCHEDULED_STATUSES_EXPAND_SUCCESS,
-  SCHEDULED_STATUSES_EXPAND_FAIL,
+  SCHEDULED_STATUSES_FETCH_FAIL,
+  SCHEDULED_STATUSES_FETCH_REQUEST,
+  SCHEDULED_STATUSES_FETCH_SUCCESS,
   SCHEDULED_STATUS_CANCEL_REQUEST,
   SCHEDULED_STATUS_CANCEL_SUCCESS,
 } from '../actions/scheduled-statuses';
@@ -88,51 +91,87 @@ const initialState: State = ImmutableMap({
   joined_events: StatusListRecord(),
 });
 
-const getStatusId = (status: string | Pick<Status, 'id'>) => typeof status === 'string' ? status : status.id;
+const getStatusId = (status: string | Pick<Status, 'id'>) =>
+  typeof status === 'string' ? status : status.id;
 
-const getStatusIds = (statuses: Array<string | Pick<Status, 'id'>> = []) => (
-  ImmutableOrderedSet(statuses.map(getStatusId))
-);
+const getStatusIds = (statuses: Array<string | Pick<Status, 'id'>> = []) =>
+  ImmutableOrderedSet(statuses.map(getStatusId));
 
 const setLoading = (state: State, listType: string, loading: boolean) =>
-  state.update(listType, StatusListRecord(), listMap => listMap.set('isLoading', loading));
+  state.update(listType, StatusListRecord(), (listMap) =>
+    listMap.set('isLoading', loading),
+  );
 
-const normalizeList = (state: State, listType: string, statuses: Array<string | Pick<Status, 'id'>>, next: (() => Promise<PaginatedResponse<Status>>) | null) =>
-  state.update(listType, StatusListRecord(), listMap => listMap.withMutations(map => {
-    map.set('next', next);
-    map.set('loaded', true);
-    map.set('isLoading', false);
-    map.set('items', getStatusIds(statuses));
-  }));
+const normalizeList = (
+  state: State,
+  listType: string,
+  statuses: Array<string | Pick<Status, 'id'>>,
+  next: (() => Promise<PaginatedResponse<Status>>) | null,
+) =>
+  state.update(listType, StatusListRecord(), (listMap) =>
+    listMap.withMutations((map) => {
+      map.set('next', next);
+      map.set('loaded', true);
+      map.set('isLoading', false);
+      map.set('items', getStatusIds(statuses));
+    }),
+  );
 
-const appendToList = (state: State, listType: string, statuses: Array<string | Pick<Status, 'id'>>, next: (() => Promise<PaginatedResponse<Status>>) | null) => {
+const appendToList = (
+  state: State,
+  listType: string,
+  statuses: Array<string | Pick<Status, 'id'>>,
+  next: (() => Promise<PaginatedResponse<Status>>) | null,
+) => {
   const newIds = getStatusIds(statuses);
 
-  return state.update(listType, StatusListRecord(), listMap => listMap.withMutations(map => {
-    map.set('next', next);
-    map.set('isLoading', false);
-    map.update('items', items => items.union(newIds));
-  }));
+  return state.update(listType, StatusListRecord(), (listMap) =>
+    listMap.withMutations((map) => {
+      map.set('next', next);
+      map.set('isLoading', false);
+      map.update('items', (items) => items.union(newIds));
+    }),
+  );
 };
 
-const prependOneToList = (state: State, listType: string, status: string | Pick<Status, 'id'>) => {
+const prependOneToList = (
+  state: State,
+  listType: string,
+  status: string | Pick<Status, 'id'>,
+) => {
   const statusId = getStatusId(status);
-  return state.update(listType, StatusListRecord(), listMap => listMap.update('items', items =>
-    ImmutableOrderedSet([statusId]).union(items as ImmutableOrderedSet<string>),
-  ));
+  return state.update(listType, StatusListRecord(), (listMap) =>
+    listMap.update('items', (items) =>
+      ImmutableOrderedSet([statusId]).union(
+        items as ImmutableOrderedSet<string>,
+      ),
+    ),
+  );
 };
 
-const removeOneFromList = (state: State, listType: string, status: string | Pick<Status, 'id'>) => {
+const removeOneFromList = (
+  state: State,
+  listType: string,
+  status: string | Pick<Status, 'id'>,
+) => {
   const statusId = getStatusId(status);
-  return state.update(listType, StatusListRecord(), listMap => listMap.update('items', items => items.delete(statusId)));
+  return state.update(listType, StatusListRecord(), (listMap) =>
+    listMap.update('items', (items) => items.delete(statusId)),
+  );
 };
 
-const maybeAppendScheduledStatus = (state: State, status: Pick<ScheduledStatus | Status, 'id' | 'scheduled_at'>) => {
+const maybeAppendScheduledStatus = (
+  state: State,
+  status: Pick<ScheduledStatus | Status, 'id' | 'scheduled_at'>,
+) => {
   if (!status.scheduled_at) return state;
   return prependOneToList(state, 'scheduled_statuses', getStatusId(status));
 };
 
-const addBookmarkToLists = (state: State, status: Pick<Status, 'id' | 'bookmark_folder'>) => {
+const addBookmarkToLists = (
+  state: State,
+  status: Pick<Status, 'id' | 'bookmark_folder'>,
+) => {
   state = prependOneToList(state, 'bookmarks', status);
   const folderId = status.bookmark_folder;
   if (folderId) {
@@ -141,7 +180,10 @@ const addBookmarkToLists = (state: State, status: Pick<Status, 'id' | 'bookmark_
   return state;
 };
 
-const removeBookmarkFromLists = (state: State, status: Pick<Status, 'id' | 'bookmark_folder'>) => {
+const removeBookmarkFromLists = (
+  state: State,
+  status: Pick<Status, 'id' | 'bookmark_folder'>,
+) => {
   state = removeOneFromList(state, 'bookmarks', status);
   const folderId = status.bookmark_folder;
   if (folderId) {
@@ -150,7 +192,10 @@ const removeBookmarkFromLists = (state: State, status: Pick<Status, 'id' | 'book
   return state;
 };
 
-const statusLists = (state = initialState, action: AnyAction | FavouritesAction | InteractionsAction | PinStatusesAction) => {
+const statusLists = (
+  state = initialState,
+  action: AnyAction | FavouritesAction | InteractionsAction | PinStatusesAction,
+) => {
   switch (action.type) {
     case FAVOURITED_STATUSES_FETCH_REQUEST:
     case FAVOURITED_STATUSES_EXPAND_REQUEST:
@@ -169,19 +214,47 @@ const statusLists = (state = initialState, action: AnyAction | FavouritesAction 
     case ACCOUNT_FAVOURITED_STATUSES_EXPAND_FAIL:
       return setLoading(state, `favourites:${action.accountId}`, false);
     case ACCOUNT_FAVOURITED_STATUSES_FETCH_SUCCESS:
-      return normalizeList(state, `favourites:${action.accountId}`, action.statuses, action.next);
+      return normalizeList(
+        state,
+        `favourites:${action.accountId}`,
+        action.statuses,
+        action.next,
+      );
     case ACCOUNT_FAVOURITED_STATUSES_EXPAND_SUCCESS:
-      return appendToList(state, `favourites:${action.accountId}`, action.statuses, action.next);
+      return appendToList(
+        state,
+        `favourites:${action.accountId}`,
+        action.statuses,
+        action.next,
+      );
     case BOOKMARKED_STATUSES_FETCH_REQUEST:
     case BOOKMARKED_STATUSES_EXPAND_REQUEST:
-      return setLoading(state, action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks', true);
+      return setLoading(
+        state,
+        action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks',
+        true,
+      );
     case BOOKMARKED_STATUSES_FETCH_FAIL:
     case BOOKMARKED_STATUSES_EXPAND_FAIL:
-      return setLoading(state, action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks', false);
+      return setLoading(
+        state,
+        action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks',
+        false,
+      );
     case BOOKMARKED_STATUSES_FETCH_SUCCESS:
-      return normalizeList(state, action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks', action.statuses, action.next);
+      return normalizeList(
+        state,
+        action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks',
+        action.statuses,
+        action.next,
+      );
     case BOOKMARKED_STATUSES_EXPAND_SUCCESS:
-      return appendToList(state, action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks', action.statuses, action.next);
+      return appendToList(
+        state,
+        action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks',
+        action.statuses,
+        action.next,
+      );
     case FAVOURITE_SUCCESS:
       return prependOneToList(state, 'favourites', action.status);
     case UNFAVOURITE_SUCCESS:
@@ -203,9 +276,19 @@ const statusLists = (state = initialState, action: AnyAction | FavouritesAction 
     case SCHEDULED_STATUSES_EXPAND_FAIL:
       return setLoading(state, 'scheduled_statuses', false);
     case SCHEDULED_STATUSES_FETCH_SUCCESS:
-      return normalizeList(state, 'scheduled_statuses', action.statuses, action.next);
+      return normalizeList(
+        state,
+        'scheduled_statuses',
+        action.statuses,
+        action.next,
+      );
     case SCHEDULED_STATUSES_EXPAND_SUCCESS:
-      return appendToList(state, 'scheduled_statuses', action.statuses, action.next);
+      return appendToList(
+        state,
+        'scheduled_statuses',
+        action.statuses,
+        action.next,
+      );
     case SCHEDULED_STATUS_CANCEL_REQUEST:
     case SCHEDULED_STATUS_CANCEL_SUCCESS:
       return removeOneFromList(state, 'scheduled_statuses', action.statusId);
@@ -216,21 +299,41 @@ const statusLists = (state = initialState, action: AnyAction | FavouritesAction 
     case STATUS_QUOTES_EXPAND_FAIL:
       return setLoading(state, `quotes:${action.statusId}`, false);
     case STATUS_QUOTES_FETCH_SUCCESS:
-      return normalizeList(state, `quotes:${action.statusId}`, action.statuses, action.next);
+      return normalizeList(
+        state,
+        `quotes:${action.statusId}`,
+        action.statuses,
+        action.next,
+      );
     case STATUS_QUOTES_EXPAND_SUCCESS:
-      return appendToList(state, `quotes:${action.statusId}`, action.statuses, action.next);
+      return appendToList(
+        state,
+        `quotes:${action.statusId}`,
+        action.statuses,
+        action.next,
+      );
     case RECENT_EVENTS_FETCH_REQUEST:
       return setLoading(state, 'recent_events', true);
     case RECENT_EVENTS_FETCH_FAIL:
       return setLoading(state, 'recent_events', false);
     case RECENT_EVENTS_FETCH_SUCCESS:
-      return normalizeList(state, 'recent_events', action.statuses, action.next);
+      return normalizeList(
+        state,
+        'recent_events',
+        action.statuses,
+        action.next,
+      );
     case JOINED_EVENTS_FETCH_REQUEST:
       return setLoading(state, 'joined_events', true);
     case JOINED_EVENTS_FETCH_FAIL:
       return setLoading(state, 'joined_events', false);
     case JOINED_EVENTS_FETCH_SUCCESS:
-      return normalizeList(state, 'joined_events', action.statuses, action.next);
+      return normalizeList(
+        state,
+        'joined_events',
+        action.statuses,
+        action.next,
+      );
     case STATUS_CREATE_SUCCESS:
       return maybeAppendScheduledStatus(state, action.status);
     default:
@@ -238,7 +341,4 @@ const statusLists = (state = initialState, action: AnyAction | FavouritesAction 
   }
 };
 
-export {
-  StatusListRecord,
-  statusLists as default,
-};
+export { StatusListRecord, statusLists as default };

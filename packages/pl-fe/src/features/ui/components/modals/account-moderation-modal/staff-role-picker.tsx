@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { defineMessages, MessageDescriptor, useIntl } from 'react-intl';
+import { MessageDescriptor, defineMessages, useIntl } from 'react-intl';
 
 import { setRole } from 'pl-fe/actions/admin';
 import { SelectDropdown } from 'pl-fe/features/forms';
@@ -12,7 +12,9 @@ import type { Account as AccountEntity } from 'pl-fe/normalizers';
 type AccountRole = 'user' | 'moderator' | 'admin';
 
 /** Get the highest staff role associated with the account. */
-const getRole = (account: Pick<AccountEntity, 'is_admin' | 'is_moderator'>): AccountRole => {
+const getRole = (
+  account: Pick<AccountEntity, 'is_admin' | 'is_moderator'>,
+): AccountRole => {
   if (account.is_admin) {
     return 'admin';
   } else if (account.is_moderator) {
@@ -23,13 +25,34 @@ const getRole = (account: Pick<AccountEntity, 'is_admin' | 'is_moderator'>): Acc
 };
 
 const messages = defineMessages({
-  roleUser: { id: 'account_moderation_modal.roles.user', defaultMessage: 'User' },
-  roleModerator: { id: 'account_moderation_modal.roles.moderator', defaultMessage: 'Moderator' },
-  roleAdmin: { id: 'account_moderation_modal.roles.admin', defaultMessage: 'Admin' },
-  promotedToAdmin: { id: 'admin.users.actions.promote_to_admin_message', defaultMessage: '@{acct} was promoted to an admin' },
-  promotedToModerator: { id: 'admin.users.actions.promote_to_moderator_message', defaultMessage: '@{acct} was promoted to a moderator' },
-  demotedToModerator: { id: 'admin.users.actions.demote_to_moderator_message', defaultMessage: '@{acct} was demoted to a moderator' },
-  demotedToUser: { id: 'admin.users.actions.demote_to_user_message', defaultMessage: '@{acct} was demoted to a regular user' },
+  roleUser: {
+    id: 'account_moderation_modal.roles.user',
+    defaultMessage: 'User',
+  },
+  roleModerator: {
+    id: 'account_moderation_modal.roles.moderator',
+    defaultMessage: 'Moderator',
+  },
+  roleAdmin: {
+    id: 'account_moderation_modal.roles.admin',
+    defaultMessage: 'Admin',
+  },
+  promotedToAdmin: {
+    id: 'admin.users.actions.promote_to_admin_message',
+    defaultMessage: '@{acct} was promoted to an admin',
+  },
+  promotedToModerator: {
+    id: 'admin.users.actions.promote_to_moderator_message',
+    defaultMessage: '@{acct} was promoted to a moderator',
+  },
+  demotedToModerator: {
+    id: 'admin.users.actions.demote_to_moderator_message',
+    defaultMessage: '@{acct} was demoted to a moderator',
+  },
+  demotedToUser: {
+    id: 'admin.users.actions.demote_to_user_message',
+    defaultMessage: '@{acct} was demoted to a regular user',
+  },
 });
 
 interface IStaffRolePicker {
@@ -42,11 +65,14 @@ const StaffRolePicker: React.FC<IStaffRolePicker> = ({ account }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const roles: Record<AccountRole, string> = useMemo(() => ({
-    user: intl.formatMessage(messages.roleUser),
-    moderator: intl.formatMessage(messages.roleModerator),
-    admin: intl.formatMessage(messages.roleAdmin),
-  }), []);
+  const roles: Record<AccountRole, string> = useMemo(
+    () => ({
+      user: intl.formatMessage(messages.roleUser),
+      moderator: intl.formatMessage(messages.roleModerator),
+      admin: intl.formatMessage(messages.roleAdmin),
+    }),
+    [],
+  );
 
   const handleRoleChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
     const role = e.target.value as AccountRole;

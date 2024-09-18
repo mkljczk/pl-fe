@@ -4,10 +4,13 @@ import { useIntl } from 'react-intl';
 import { usePopper } from 'react-popper';
 import { useHistory } from 'react-router-dom';
 
-import { closeStatusHoverCard, updateStatusHoverCard } from 'pl-fe/actions/status-hover-card';
+import {
+  closeStatusHoverCard,
+  updateStatusHoverCard,
+} from 'pl-fe/actions/status-hover-card';
 import { fetchStatus } from 'pl-fe/actions/statuses';
 import StatusContainer from 'pl-fe/containers/status-container';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import { showStatusHoverCard } from './hover-status-wrapper';
 import { Card, CardBody } from './ui';
@@ -24,9 +27,13 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
 
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
 
-  const statusId: string | undefined = useAppSelector(state => state.status_hover_card.statusId || undefined);
-  const status = useAppSelector(state => state.statuses.get(statusId!));
-  const targetRef = useAppSelector(state => state.status_hover_card.ref?.current);
+  const statusId: string | undefined = useAppSelector(
+    (state) => state.status_hover_card.statusId || undefined,
+  );
+  const status = useAppSelector((state) => state.statuses.get(statusId!));
+  const targetRef = useAppSelector(
+    (state) => state.status_hover_card.ref?.current,
+  );
 
   useEffect(() => {
     if (statusId && !status) {
@@ -49,13 +56,19 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
     placement: 'top',
   });
 
-  const handleMouseEnter = useCallback((): React.MouseEventHandler => () => {
-    dispatch(updateStatusHoverCard());
-  }, []);
+  const handleMouseEnter = useCallback(
+    (): React.MouseEventHandler => () => {
+      dispatch(updateStatusHoverCard());
+    },
+    [],
+  );
 
-  const handleMouseLeave = useCallback((): React.MouseEventHandler => () => {
-    dispatch(closeStatusHoverCard(true));
-  }, []);
+  const handleMouseLeave = useCallback(
+    (): React.MouseEventHandler => () => {
+      dispatch(closeStatusHoverCard(true));
+    },
+    [],
+  );
 
   if (!statusId) return null;
 
@@ -84,9 +97,7 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
       onMouseLeave={handleMouseLeave()}
     >
       <Card className='relative black:rounded-xl black:border black:border-gray-800'>
-        <CardBody>
-          {renderStatus(statusId)}
-        </CardBody>
+        <CardBody>{renderStatus(statusId)}</CardBody>
       </Card>
     </div>
   );

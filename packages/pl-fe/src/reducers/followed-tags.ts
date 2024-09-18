@@ -1,12 +1,12 @@
 import { List as ImmutableList, Record as ImmutableRecord } from 'immutable';
 
 import {
-  FOLLOWED_HASHTAGS_FETCH_REQUEST,
-  FOLLOWED_HASHTAGS_FETCH_SUCCESS,
-  FOLLOWED_HASHTAGS_FETCH_FAIL,
+  FOLLOWED_HASHTAGS_EXPAND_FAIL,
   FOLLOWED_HASHTAGS_EXPAND_REQUEST,
   FOLLOWED_HASHTAGS_EXPAND_SUCCESS,
-  FOLLOWED_HASHTAGS_EXPAND_FAIL,
+  FOLLOWED_HASHTAGS_FETCH_FAIL,
+  FOLLOWED_HASHTAGS_FETCH_REQUEST,
+  FOLLOWED_HASHTAGS_FETCH_SUCCESS,
 } from 'pl-fe/actions/tags';
 
 import type { PaginatedResponse, Tag } from 'pl-api';
@@ -23,7 +23,7 @@ const followed_tags = (state = ReducerRecord(), action: AnyAction) => {
     case FOLLOWED_HASHTAGS_FETCH_REQUEST:
       return state.set('isLoading', true);
     case FOLLOWED_HASHTAGS_FETCH_SUCCESS:
-      return state.withMutations(map => {
+      return state.withMutations((map) => {
         map.set('items', ImmutableList(action.followed_tags));
         map.set('isLoading', false);
         map.set('next', action.next);
@@ -33,8 +33,8 @@ const followed_tags = (state = ReducerRecord(), action: AnyAction) => {
     case FOLLOWED_HASHTAGS_EXPAND_REQUEST:
       return state.set('isLoading', true);
     case FOLLOWED_HASHTAGS_EXPAND_SUCCESS:
-      return state.withMutations(map => {
-        map.update('items', list => list.concat(action.followed_tags));
+      return state.withMutations((map) => {
+        map.update('items', (list) => list.concat(action.followed_tags));
         map.set('isLoading', false);
         map.set('next', action.next);
       });

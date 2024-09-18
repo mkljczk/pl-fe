@@ -13,12 +13,18 @@ describe('useGroupMembers hook', () => {
   describe('with a successful request', () => {
     beforeEach(() => {
       __stub((mock) => {
-        mock.onGet(`/api/v1/groups/${groupId}/memberships?role=${GroupRoles.ADMIN}`).reply(200, [groupMember]);
+        mock
+          .onGet(
+            `/api/v1/groups/${groupId}/memberships?role=${GroupRoles.ADMIN}`,
+          )
+          .reply(200, [groupMember]);
       });
     });
 
     it('is successful', async () => {
-      const { result } = renderHook(() => useGroupMembers(groupId, GroupRoles.ADMIN));
+      const { result } = renderHook(() =>
+        useGroupMembers(groupId, GroupRoles.ADMIN),
+      );
 
       await waitFor(() => expect(result.current.isFetching).toBe(false));
 
@@ -30,12 +36,18 @@ describe('useGroupMembers hook', () => {
   describe('with an unsuccessful query', () => {
     beforeEach(() => {
       __stub((mock) => {
-        mock.onGet(`/api/v1/groups/${groupId}/memberships?role=${GroupRoles.ADMIN}`).networkError();
+        mock
+          .onGet(
+            `/api/v1/groups/${groupId}/memberships?role=${GroupRoles.ADMIN}`,
+          )
+          .networkError();
       });
     });
 
-    it('is has error state', async() => {
-      const { result } = renderHook(() => useGroupMembers(groupId, GroupRoles.ADMIN));
+    it('is has error state', async () => {
+      const { result } = renderHook(() =>
+        useGroupMembers(groupId, GroupRoles.ADMIN),
+      );
 
       await waitFor(() => expect(result.current.isFetching).toBe(false));
 

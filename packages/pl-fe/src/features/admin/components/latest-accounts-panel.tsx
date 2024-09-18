@@ -9,8 +9,15 @@ import AccountContainer from 'pl-fe/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({
-  title: { id: 'admin.latest_accounts_panel.title', defaultMessage: 'Latest Accounts' },
-  expand: { id: 'admin.latest_accounts_panel.more', defaultMessage: 'Click to see {count, plural, one {# account} other {# accounts}}' },
+  title: {
+    id: 'admin.latest_accounts_panel.title',
+    defaultMessage: 'Latest Accounts',
+  },
+  expand: {
+    id: 'admin.latest_accounts_panel.more',
+    defaultMessage:
+      'Click to see {count, plural, one {# account} other {# accounts}}',
+  },
 });
 
 interface ILatestAccountsPanel {
@@ -21,18 +28,24 @@ const LatestAccountsPanel: React.FC<ILatestAccountsPanel> = ({ limit = 5 }) => {
   const intl = useIntl();
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const accountIds = useAppSelector<ImmutableOrderedSet<string>>((state) => state.admin.get('latestUsers').take(limit));
+  const accountIds = useAppSelector<ImmutableOrderedSet<string>>((state) =>
+    state.admin.get('latestUsers').take(limit),
+  );
 
   const [total, setTotal] = useState<number | undefined>(accountIds.size);
 
   useEffect(() => {
-    dispatch(fetchUsers({
-      origin: 'local',
-      status: 'active',
-      limit,
-    })).then((value) => {
-      setTotal(value.total);
-    }).catch(() => {});
+    dispatch(
+      fetchUsers({
+        origin: 'local',
+        status: 'active',
+        limit,
+      }),
+    )
+      .then((value) => {
+        setTotal(value.total);
+      })
+      .catch(() => {});
   }, []);
 
   const handleAction = () => {
@@ -46,7 +59,12 @@ const LatestAccountsPanel: React.FC<ILatestAccountsPanel> = ({ limit = 5 }) => {
       actionTitle={intl.formatMessage(messages.expand, { count: total })}
     >
       {accountIds.take(limit).map((account) => (
-        <AccountContainer key={account} id={account} withRelationship={false} withDate />
+        <AccountContainer
+          key={account}
+          id={account}
+          withRelationship={false}
+          withDate
+        />
       ))}
     </Widget>
   );

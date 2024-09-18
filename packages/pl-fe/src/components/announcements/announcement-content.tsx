@@ -10,7 +10,9 @@ interface IAnnouncementContent {
   announcement: Announcement;
 }
 
-const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) => {
+const AnnouncementContent: React.FC<IAnnouncementContent> = ({
+  announcement,
+}) => {
   const history = useHistory();
 
   const node = useRef<HTMLDivElement>(null);
@@ -50,7 +52,7 @@ const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) =
 
     const links = node.current.querySelectorAll('a');
 
-    links.forEach(link => {
+    links.forEach((link) => {
       // Skip already processed
       if (link.classList.contains('status-link')) return;
 
@@ -59,18 +61,37 @@ const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) =
       link.setAttribute('rel', 'nofollow noopener');
       link.setAttribute('target', '_blank');
 
-      const mention = announcement.mentions.find(mention => link.href === `${mention.url}`);
+      const mention = announcement.mentions.find(
+        (mention) => link.href === `${mention.url}`,
+      );
 
       // Add event listeners on mentions, hashtags and statuses
       if (mention) {
-        link.addEventListener('click', onMentionClick.bind(link, mention), false);
+        link.addEventListener(
+          'click',
+          onMentionClick.bind(link, mention),
+          false,
+        );
         link.setAttribute('title', mention.acct);
-      } else if (link.textContent?.charAt(0) === '#' || (link.previousSibling?.textContent?.charAt(link.previousSibling.textContent.length - 1) === '#')) {
-        link.addEventListener('click', onHashtagClick.bind(link, link.text), false);
+      } else if (
+        link.textContent?.charAt(0) === '#' ||
+        link.previousSibling?.textContent?.charAt(
+          link.previousSibling.textContent.length - 1,
+        ) === '#'
+      ) {
+        link.addEventListener(
+          'click',
+          onHashtagClick.bind(link, link.text),
+          false,
+        );
       } else {
         const status = announcement.statuses[link.href];
         if (status) {
-          link.addEventListener('click', onStatusClick.bind(this, status), false);
+          link.addEventListener(
+            'click',
+            onStatusClick.bind(this, status),
+            false,
+          );
         }
         link.setAttribute('title', link.href);
         link.classList.add('unhandled-link');

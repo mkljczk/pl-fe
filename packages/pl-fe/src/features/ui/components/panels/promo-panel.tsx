@@ -2,8 +2,8 @@ import React from 'react';
 
 import ForkAwesomeIcon from 'pl-fe/components/fork-awesome-icon';
 import List, { ListItem } from 'pl-fe/components/list';
-import { Widget, HStack } from 'pl-fe/components/ui';
-import { useInstance, useSettings, usePlFeConfig } from 'pl-fe/hooks';
+import { HStack, Widget } from 'pl-fe/components/ui';
+import { useInstance, usePlFeConfig, useSettings } from 'pl-fe/hooks';
 
 const PromoPanel: React.FC = () => {
   const instance = useInstance();
@@ -23,7 +23,11 @@ const PromoPanel: React.FC = () => {
             href={item.url}
             label={
               <HStack alignItems='center' space={2}>
-                <ForkAwesomeIcon id={item.icon} className='flex-none text-lg' fixedWidth />
+                <ForkAwesomeIcon
+                  id={item.icon}
+                  className='flex-none text-lg'
+                  fixedWidth
+                />
                 <span>{item.textLocales.get(locale) || item.text}</span>
               </HStack>
             }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 
 import { HStack, Text } from 'pl-fe/components/ui';
@@ -15,7 +15,12 @@ const messages = defineMessages({
 });
 
 interface IProfileStats {
-  account: Pick<Account, 'acct' | 'followers_count' | 'following_count' | 'statuses_count'> | undefined;
+  account:
+    | Pick<
+        Account,
+        'acct' | 'followers_count' | 'following_count' | 'statuses_count'
+      >
+    | undefined;
   onClickHandler?: React.MouseEventHandler;
 }
 
@@ -41,7 +46,12 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
         </HStack>
       )}
 
-      <NavLink to={`/@${account.acct}/followers`} onClick={onClickHandler} title={intl.formatNumber(account.followers_count)} className='hover:underline'>
+      <NavLink
+        to={`/@${account.acct}/followers`}
+        onClick={onClickHandler}
+        title={intl.formatNumber(account.followers_count)}
+        className='hover:underline'
+      >
         <HStack alignItems='center' space={1}>
           {!demetricator && (
             <Text theme='primary' weight='bold' size='sm'>
@@ -54,7 +64,12 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
         </HStack>
       </NavLink>
 
-      <NavLink to={`/@${account.acct}/following`} onClick={onClickHandler} title={intl.formatNumber(account.following_count)} className='hover:underline'>
+      <NavLink
+        to={`/@${account.acct}/following`}
+        onClick={onClickHandler}
+        title={intl.formatNumber(account.following_count)}
+        className='hover:underline'
+      >
         <HStack alignItems='center' space={1}>
           {!demetricator && (
             <Text theme='primary' weight='bold' size='sm'>

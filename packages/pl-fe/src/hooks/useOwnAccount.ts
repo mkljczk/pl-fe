@@ -19,6 +19,4 @@ const useOwnAccount = () => {
   return { account: account || undefined };
 };
 
-export {
-  useOwnAccount,
-};
+export { useOwnAccount };

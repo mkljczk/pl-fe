@@ -1,6 +1,11 @@
 import { hexToRgb } from './colors';
 
-import type { Rgb, Hsl, TailwindColorPalette, TailwindColorObject } from 'pl-fe/types/colors';
+import type {
+  Hsl,
+  Rgb,
+  TailwindColorObject,
+  TailwindColorPalette,
+} from 'pl-fe/types/colors';
 import type { PlFeConfig } from 'pl-fe/types/pl-fe';
 
 // Taken from chromatism.js
@@ -9,7 +14,7 @@ const rgbToHsl = (value: Rgb): Hsl => {
   const r = value.r / 255;
   const g = value.g / 255;
   const b = value.b / 255;
-  const rgbOrdered = [ r, g, b ].sort();
+  const rgbOrdered = [r, g, b].sort();
   const l = ((rgbOrdered[0] + rgbOrdered[2]) / 2) * 100;
   let s, h;
   if (rgbOrdered[0] === rgbOrdered[2]) {
@@ -17,16 +22,21 @@ const rgbToHsl = (value: Rgb): Hsl => {
     h = 0;
   } else {
     if (l >= 50) {
-      s = ((rgbOrdered[2] - rgbOrdered[0]) / ((2.0 - rgbOrdered[2]) - rgbOrdered[0])) * 100;
+      s =
+        ((rgbOrdered[2] - rgbOrdered[0]) /
+          (2.0 - rgbOrdered[2] - rgbOrdered[0])) *
+        100;
     } else {
-      s = ((rgbOrdered[2] - rgbOrdered[0]) / (rgbOrdered[2] + rgbOrdered[0])) * 100;
+      s =
+        ((rgbOrdered[2] - rgbOrdered[0]) / (rgbOrdered[2] + rgbOrdered[0])) *
+        100;
     }
     if (rgbOrdered[2] === r) {
       h = ((g - b) / (rgbOrdered[2] - rgbOrdered[0])) * 60;
     } else if (rgbOrdered[2] === g) {
-      h = (2 + ((b - r) / (rgbOrdered[2] - rgbOrdered[0]))) * 60;
+      h = (2 + (b - r) / (rgbOrdered[2] - rgbOrdered[0])) * 60;
     } else {
-      h = (4 + ((r - g) / (rgbOrdered[2] - rgbOrdered[0]))) * 60;
+      h = (4 + (r - g) / (rgbOrdered[2] - rgbOrdered[0])) * 60;
     }
     if (h < 0) {
       h += 360;
@@ -48,12 +58,14 @@ const hslToHex = (color: Hsl): string => {
   let { l } = color;
 
   l /= 100;
-  const a = s * Math.min(l, 1 - l) / 100;
+  const a = (s * Math.min(l, 1 - l)) / 100;
 
   const f = (n: number) => {
     const k = (n + h / 30) % 12;
     const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-    return Math.round(255 * color).toString(16).padStart(2, '0'); // convert to Hex and prefix "0" if needed
+    return Math.round(255 * color)
+      .toString(16)
+      .padStart(2, '0'); // convert to Hex and prefix "0" if needed
   };
 
   return `#${f(0)}${f(8)}${f(4)}`;
@@ -77,7 +89,11 @@ const generateNeutral = (brandColor: string): string | null => {
   return hslToHex({ h, s: 20, l: 55 });
 };
 
-const parseShades = (obj: Record<string, any>, color: string, shades: Record<string, any>): void => {
+const parseShades = (
+  obj: Record<string, any>,
+  color: string,
+  shades: Record<string, any>,
+): void => {
   if (!shades) return;
 
   if (typeof shades === 'string') {
@@ -89,7 +105,7 @@ const parseShades = (obj: Record<string, any>, color: string, shades: Record<str
     return;
   }
 
-  Object.keys(shades).forEach(shade => {
+  Object.keys(shades).forEach((shade) => {
     const rgb = hexToRgb(shades[shade]);
     if (!rgb) return;
 
@@ -107,7 +123,10 @@ const parseColors = (colors: TailwindColorPalette): TailwindColorPalette =>
 
 const colorsToCss = (colors: TailwindColorPalette): string => {
   const parsed = parseColors(colors);
-  return Object.keys(parsed).reduce((css, variable) => css + `${variable}:${parsed[variable]};`, '');
+  return Object.keys(parsed).reduce(
+    (css, variable) => css + `${variable}:${parsed[variable]};`,
+    '',
+  );
 };
 
 const generateThemeCss = (plFeConfig: PlFeConfig): string =>

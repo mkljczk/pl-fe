@@ -17,11 +17,11 @@ const ListForm = () => {
   const value = useAppSelector((state) => state.listEditor.title);
   const disabled = useAppSelector((state) => !state.listEditor.isChanged);
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     dispatch(changeListEditorTitle(e.target.value));
   };
 
-  const handleSubmit: React.FormEventHandler<Element> = e => {
+  const handleSubmit: React.FormEventHandler<Element> = (e) => {
     e.preventDefault();
     dispatch(submitListEditor(false));
   };

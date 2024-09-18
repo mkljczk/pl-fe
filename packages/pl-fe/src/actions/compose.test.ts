@@ -4,7 +4,7 @@ import { buildInstance } from 'pl-fe/jest/factory';
 import { mockStore, rootState } from 'pl-fe/jest/test-helpers';
 import { ReducerCompose } from 'pl-fe/reducers/compose';
 
-import { uploadCompose, submitCompose } from './compose';
+import { submitCompose, uploadCompose } from './compose';
 import { STATUS_CREATE_REQUEST } from './statuses';
 
 import type { IntlShape } from 'react-intl';
@@ -31,17 +31,23 @@ describe('uploadCompose()', () => {
         .setIn(['compose', 'home'], ReducerCompose());
 
       store = mockStore(state);
-      files = [{
-        uri: 'image.png',
-        name: 'Image',
-        size: 15,
-        type: 'image/png',
-      }] as unknown as FileList;
+      files = [
+        {
+          uri: 'image.png',
+          name: 'Image',
+          size: 15,
+          type: 'image/png',
+        },
+      ] as unknown as FileList;
     });
 
-    it('creates an alert if exceeds max size', async() => {
+    it('creates an alert if exceeds max size', async () => {
       const mockIntl = {
-        formatMessage: vi.fn().mockReturnValue('Image exceeds the current file size limit (10 Bytes)'),
+        formatMessage: vi
+          .fn()
+          .mockReturnValue(
+            'Image exceeds the current file size limit (10 Bytes)',
+          ),
       } as unknown as IntlShape;
 
       const expectedActions = [
@@ -77,17 +83,23 @@ describe('uploadCompose()', () => {
         .setIn(['compose', 'home'], ReducerCompose());
 
       store = mockStore(state);
-      files = [{
-        uri: 'video.mp4',
-        name: 'Video',
-        size: 15,
-        type: 'video/mp4',
-      }] as unknown as FileList;
+      files = [
+        {
+          uri: 'video.mp4',
+          name: 'Video',
+          size: 15,
+          type: 'video/mp4',
+        },
+      ] as unknown as FileList;
     });
 
-    it('creates an alert if exceeds max size', async() => {
+    it('creates an alert if exceeds max size', async () => {
       const mockIntl = {
-        formatMessage: vi.fn().mockReturnValue('Video exceeds the current file size limit (10 Bytes)'),
+        formatMessage: vi
+          .fn()
+          .mockReturnValue(
+            'Video exceeds the current file size limit (10 Bytes)',
+          ),
       } as unknown as IntlShape;
 
       const expectedActions = [
@@ -104,23 +116,26 @@ describe('uploadCompose()', () => {
 });
 
 describe('submitCompose()', () => {
-  it('inserts mentions from text', async() => {
+  it('inserts mentions from text', async () => {
     const state = rootState
       .set('me', '123')
-      .setIn(['compose', 'home'], ReducerCompose({ text: '@alex hello @mkljczk@pl.fediverse.pl @gg@汉语/漢語.com alex@alexgleason.me' }));
+      .setIn(
+        ['compose', 'home'],
+        ReducerCompose({
+          text: '@alex hello @mkljczk@pl.fediverse.pl @gg@汉语/漢語.com alex@alexgleason.me',
+        }),
+      );
 
     const store = mockStore(state);
     await store.dispatch(submitCompose('home'));
     const actions = store.getActions();
 
-    const statusCreateRequest = actions.find(action => action.type === STATUS_CREATE_REQUEST);
+    const statusCreateRequest = actions.find(
+      (action) => action.type === STATUS_CREATE_REQUEST,
+    );
     const to = statusCreateRequest!.params.to as ImmutableOrderedSet<string>;
 
-    const expected = [
-      'alex',
-      'mkljczk@pl.fediverse.pl',
-      'gg@汉语/漢語.com',
-    ];
+    const expected = ['alex', 'mkljczk@pl.fediverse.pl', 'gg@汉语/漢語.com'];
 
     expect(to.toJS()).toEqual(expected);
   });

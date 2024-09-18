@@ -17,13 +17,22 @@ interface IThumbNavigationLink {
   paths?: Array<string>;
 }
 
-const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({ count, countMax, src, activeSrc, text, to, exact, paths }): JSX.Element => {
+const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({
+  count,
+  countMax,
+  src,
+  activeSrc,
+  text,
+  to,
+  exact,
+  paths,
+}): JSX.Element => {
   const { pathname } = useLocation();
   const { demetricator } = useSettings();
 
   const isActive = (): boolean => {
     if (paths) {
-      return paths.some(path => pathname.startsWith(path));
+      return paths.some((path) => pathname.startsWith(path));
     } else {
       return exact ? pathname === to : pathname.startsWith(to);
     }
@@ -34,7 +43,12 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({ count, countMax, 
   const icon = (active && activeSrc) || src;
 
   return (
-    <NavLink to={to} exact={exact} className='flex flex-1 flex-col items-center space-y-1 px-2 py-4 text-lg text-gray-600' title={text}>
+    <NavLink
+      to={to}
+      exact={exact}
+      className='flex flex-1 flex-col items-center space-y-1 px-2 py-4 text-lg text-gray-600'
+      title={text}
+    >
       {!demetricator && count !== undefined ? (
         <IconWithCounter
           src={icon}

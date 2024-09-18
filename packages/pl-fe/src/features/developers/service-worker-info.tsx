@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import List, { ListItem } from 'pl-fe/components/list';
-import { HStack, Text, Column, FormActions, Button, Stack, Icon } from 'pl-fe/components/ui';
+import {
+  Button,
+  Column,
+  FormActions,
+  HStack,
+  Icon,
+  Stack,
+  Text,
+} from 'pl-fe/components/ui';
 import { unregisterSW } from 'pl-fe/utils/sw';
 
 import Indicator from './components/indicator';
 
 const messages = defineMessages({
-  heading: { id: 'column.developers.service_worker', defaultMessage: 'Service Worker' },
+  heading: {
+    id: 'column.developers.service_worker',
+    defaultMessage: 'Service Worker',
+  },
   status: { id: 'sw.status', defaultMessage: 'Status' },
   url: { id: 'sw.url', defaultMessage: 'Script URL' },
 });
@@ -22,8 +33,9 @@ const useRegistration = () => {
 
   useEffect(() => {
     if (isSupported) {
-      navigator.serviceWorker.getRegistration()
-        .then(r => {
+      navigator.serviceWorker
+        .getRegistration()
+        .then((r) => {
           setRegistration(r);
           setLoading(false);
         })
@@ -39,8 +51,7 @@ const useRegistration = () => {
   };
 };
 
-interface IServiceWorkerInfo {
-}
+interface IServiceWorkerInfo {}
 
 /** Mini ServiceWorker debugging component. */
 const ServiceWorkerInfo: React.FC<IServiceWorkerInfo> = () => {
@@ -62,10 +73,7 @@ const ServiceWorkerInfo: React.FC<IServiceWorkerInfo> = () => {
   const getMessage = () => {
     if (isLoading) {
       return (
-        <FormattedMessage
-          id='sw.state.loading'
-          defaultMessage='Loading…'
-        />
+        <FormattedMessage id='sw.state.loading' defaultMessage='Loading…' />
       );
     } else if (!isLoading && !registration) {
       return (
@@ -76,29 +84,18 @@ const ServiceWorkerInfo: React.FC<IServiceWorkerInfo> = () => {
       );
     } else if (registration?.waiting) {
       return (
-        <FormattedMessage
-          id='sw.state.waiting'
-          defaultMessage='Waiting'
-        />
+        <FormattedMessage id='sw.state.waiting' defaultMessage='Waiting' />
       );
     } else if (registration?.active) {
-      return (
-        <FormattedMessage
-          id='sw.state.active'
-          defaultMessage='Active'
-        />
-      );
+      return <FormattedMessage id='sw.state.active' defaultMessage='Active' />;
     } else {
       return (
-        <FormattedMessage
-          id='sw.state.unknown'
-          defaultMessage='Unknown'
-        />
+        <FormattedMessage id='sw.state.unknown' defaultMessage='Unknown' />
       );
     }
   };
 
-  const handleRestart = async() => {
+  const handleRestart = async () => {
     await unregisterSW();
     window.location.reload();
   };
@@ -110,13 +107,19 @@ const ServiceWorkerInfo: React.FC<IServiceWorkerInfo> = () => {
           <ListItem label={intl.formatMessage(messages.status)}>
             <HStack alignItems='center' space={2}>
               <Indicator state={getState()} />
-              <Text size='md' theme='muted'>{getMessage()}</Text>
+              <Text size='md' theme='muted'>
+                {getMessage()}
+              </Text>
             </HStack>
           </ListItem>
 
           {url && (
             <ListItem label={intl.formatMessage(messages.url)}>
-              <a href={url} target='_blank' className='flex items-center space-x-1 truncate'>
+              <a
+                href={url}
+                target='_blank'
+                className='flex items-center space-x-1 truncate'
+              >
                 <span className='truncate'>{url}</span>
                 <Icon
                   className='h-4 w-4'

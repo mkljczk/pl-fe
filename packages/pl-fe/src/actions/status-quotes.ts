@@ -13,7 +13,7 @@ const STATUS_QUOTES_EXPAND_REQUEST = 'STATUS_QUOTES_EXPAND_REQUEST' as const;
 const STATUS_QUOTES_EXPAND_SUCCESS = 'STATUS_QUOTES_EXPAND_SUCCESS' as const;
 const STATUS_QUOTES_EXPAND_FAIL = 'STATUS_QUOTES_EXPAND_FAIL' as const;
 
-const noOp = () => new Promise(f => f(null));
+const noOp = () => new Promise((f) => f(null));
 
 interface FetchStatusQuotesRequestAction {
   type: typeof STATUS_QUOTES_FETCH_REQUEST;
@@ -33,32 +33,38 @@ interface FetchStatusQuotesFailAction {
   error: unknown;
 }
 
-const fetchStatusQuotes = (statusId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const fetchStatusQuotes =
+  (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     if (getState().status_lists.getIn([`quotes:${statusId}`, 'isLoading'])) {
       return dispatch(noOp);
     }
 
-    const action: FetchStatusQuotesRequestAction = { type: STATUS_QUOTES_FETCH_REQUEST, statusId };
+    const action: FetchStatusQuotesRequestAction = {
+      type: STATUS_QUOTES_FETCH_REQUEST,
+      statusId,
+    };
     dispatch(action);
 
-    return getClient(getState).statuses.getStatusQuotes(statusId).then(response => {
-      dispatch(importFetchedStatuses(response.items));
-      const action: FetchStatusQuotesSuccessAction = {
-        type: STATUS_QUOTES_FETCH_SUCCESS,
-        statusId,
-        statuses: response.items,
-        next: response.next,
-      };
-      return dispatch(action);
-    }).catch(error => {
-      const action: FetchStatusQuotesFailAction = {
-        type: STATUS_QUOTES_FETCH_FAIL,
-        statusId,
-        error,
-      };
-      dispatch(action);
-    });
+    return getClient(getState)
+      .statuses.getStatusQuotes(statusId)
+      .then((response) => {
+        dispatch(importFetchedStatuses(response.items));
+        const action: FetchStatusQuotesSuccessAction = {
+          type: STATUS_QUOTES_FETCH_SUCCESS,
+          statusId,
+          statuses: response.items,
+          next: response.next,
+        };
+        return dispatch(action);
+      })
+      .catch((error) => {
+        const action: FetchStatusQuotesFailAction = {
+          type: STATUS_QUOTES_FETCH_FAIL,
+          statusId,
+          error,
+        };
+        dispatch(action);
+      });
   };
 
 interface ExpandStatusQuotesRequestAction {
@@ -79,11 +85,15 @@ interface ExpandStatusQuotesFailAction {
   error: unknown;
 }
 
-const expandStatusQuotes = (statusId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const next = getState().status_lists.get(`quotes:${statusId}`)?.next || null;
+const expandStatusQuotes =
+  (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    const next =
+      getState().status_lists.get(`quotes:${statusId}`)?.next || null;
 
-    if (next === null || getState().status_lists.getIn([`quotes:${statusId}`, 'isLoading'])) {
+    if (
+      next === null ||
+      getState().status_lists.getIn([`quotes:${statusId}`, 'isLoading'])
+    ) {
       return dispatch(noOp);
     }
 
@@ -93,23 +103,25 @@ const expandStatusQuotes = (statusId: string) =>
     };
     dispatch(action);
 
-    return next().then(response => {
-      dispatch(importFetchedStatuses(response.items));
-      const action: ExpandStatusQuotesSuccessAction = {
-        type: STATUS_QUOTES_EXPAND_SUCCESS,
-        statusId,
-        statuses: response.items,
-        next: response.next,
-      };
-      dispatch(action);
-    }).catch(error => {
-      const action: ExpandStatusQuotesFailAction = {
-        type: STATUS_QUOTES_EXPAND_FAIL,
-        statusId,
-        error,
-      };
-      dispatch(action);
-    });
+    return next()
+      .then((response) => {
+        dispatch(importFetchedStatuses(response.items));
+        const action: ExpandStatusQuotesSuccessAction = {
+          type: STATUS_QUOTES_EXPAND_SUCCESS,
+          statusId,
+          statuses: response.items,
+          next: response.next,
+        };
+        dispatch(action);
+      })
+      .catch((error) => {
+        const action: ExpandStatusQuotesFailAction = {
+          type: STATUS_QUOTES_EXPAND_FAIL,
+          statusId,
+          error,
+        };
+        dispatch(action);
+      });
   };
 
 type StatusQuotesAction =

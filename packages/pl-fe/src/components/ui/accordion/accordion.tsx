@@ -30,7 +30,16 @@ interface IAccordion {
  * Accordion
  * An accordion is a vertically stacked group of collapsible sections.
  */
-const Accordion: React.FC<IAccordion> = ({ headline, children, menu, expanded = false, onToggle = () => {}, action, actionIcon, actionLabel }) => {
+const Accordion: React.FC<IAccordion> = ({
+  headline,
+  children,
+  menu,
+  expanded = false,
+  onToggle = () => {},
+  action,
+  actionIcon,
+  actionLabel,
+}) => {
   const intl = useIntl();
 
   const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -50,7 +59,9 @@ const Accordion: React.FC<IAccordion> = ({ headline, children, menu, expanded = 
       <button
         type='button'
         onClick={handleToggle}
-        title={intl.formatMessage(expanded ? messages.collapse : messages.expand)}
+        title={intl.formatMessage(
+          expanded ? messages.collapse : messages.expand,
+        )}
         aria-expanded={expanded}
         className='flex w-full items-center justify-between px-4 py-3 font-semibold'
       >
@@ -72,19 +83,21 @@ const Accordion: React.FC<IAccordion> = ({ headline, children, menu, expanded = 
             </button>
           )}
           <Icon
-            src={expanded ? require('@tabler/icons/outline/chevron-up.svg') : require('@tabler/icons/outline/chevron-down.svg')}
+            src={
+              expanded
+                ? require('@tabler/icons/outline/chevron-up.svg')
+                : require('@tabler/icons/outline/chevron-down.svg')
+            }
             className='h-5 w-5 text-gray-700 dark:text-gray-600'
           />
         </HStack>
       </button>
 
       <div
-        className={
-          clsx({
-            'p-4 rounded-b-lg border-t border-solid border-gray-100 dark:border-primary-900 black:border-black': true,
-            'h-0 hidden': !expanded,
-          })
-        }
+        className={clsx({
+          'p-4 rounded-b-lg border-t border-solid border-gray-100 dark:border-primary-900 black:border-black': true,
+          'h-0 hidden': !expanded,
+        })}
       >
         <Text>{children}</Text>
       </div>

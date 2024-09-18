@@ -5,6 +5,7 @@ import { useAppSelector } from './useAppSelector';
 import type { PlFeConfig } from 'pl-fe/types/pl-fe';
 
 /** Get the pl-fe config from the store */
-const usePlFeConfig = (): PlFeConfig => useAppSelector((state) => getPlFeConfig(state));
+const usePlFeConfig = (): PlFeConfig =>
+  useAppSelector((state) => getPlFeConfig(state));
 
 export { usePlFeConfig };

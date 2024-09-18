@@ -25,40 +25,54 @@ interface IEventLayout {
 }
 
 const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
   const features = useFeatures();
 
   const history = useHistory();
   const statusId = params?.statusId!;
 
-  const status = useAppSelector(state => getStatus(state, { id: statusId }) || undefined);
+  const status = useAppSelector(
+    (state) => getStatus(state, { id: statusId }) || undefined,
+  );
 
   const event = status?.event;
 
   if (status && !event) {
     history.push(`/@${status.account.acct}/posts/${status.id}`);
-    return (
-      <PlaceholderStatus />
-    );
+    return <PlaceholderStatus />;
   }
 
   const pathname = history.location.pathname;
   const activeItem = pathname.endsWith('/discussion') ? 'discussion' : 'info';
 
-  const tabs = status ? [
-    {
-      text: <FormattedMessage id='event.information' defaultMessage='Information' />,
-      to: `/@${status.account.acct}/events/${status.id}`,
-      name: 'info',
-    },
-    {
-      text: <FormattedMessage id='event.discussion' defaultMessage='Discussion' />,
-      to: `/@${status.account.acct}/events/${status.id}/discussion`,
-      name: 'discussion',
-    },
-  ] : [];
+  const tabs = status
+    ? [
+        {
+          text: (
+            <FormattedMessage
+              id='event.information'
+              defaultMessage='Information'
+            />
+          ),
+          to: `/@${status.account.acct}/events/${status.id}`,
+          name: 'info',
+        },
+        {
+          text: (
+            <FormattedMessage
+              id='event.discussion'
+              defaultMessage='Discussion'
+            />
+          ),
+          to: `/@${status.account.acct}/events/${status.id}/discussion`,
+          name: 'discussion',
+        },
+      ]
+    : [];
 
-  const showTabs = !['/participations', 'participation_requests'].some(path => pathname.endsWith(path));
+  const showTabs = !['/participations', 'participation_requests'].some((path) =>
+    pathname.endsWith(path),
+  );
 
   return (
     <>
@@ -73,7 +87,11 @@ const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
             <EventHeader status={status} />
 
             {status && showTabs && (
-              <Tabs key={`event-tabs-${status.id}`} items={tabs} activeItem={activeItem} />
+              <Tabs
+                key={`event-tabs-${status.id}`}
+                items={tabs}
+                activeItem={activeItem}
+              />
             )}
 
             {children}
@@ -82,15 +100,9 @@ const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
       </Layout.Main>
 
       <Layout.Aside>
-        {!me && (
-          <SignUpPanel />
-        )}
-        {features.trends && (
-          <TrendsPanel limit={5} />
-        )}
-        {features.suggestions && (
-          <WhoToFollowPanel limit={3} />
-        )}
+        {!me && <SignUpPanel />}
+        {features.trends && <TrendsPanel limit={5} />}
+        {features.suggestions && <WhoToFollowPanel limit={3} />}
         <LinkFooter key='link-footer' />
       </Layout.Aside>
     </>

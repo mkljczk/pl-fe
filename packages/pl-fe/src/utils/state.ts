@@ -12,7 +12,8 @@ import { isURL } from 'pl-fe/utils/auth';
 import type { RootState } from 'pl-fe/store';
 
 /** Whether to display the fqn instead of the acct. */
-const displayFqn = (state: RootState): boolean => getPlFeConfig(state).displayFqn;
+const displayFqn = (state: RootState): boolean =>
+  getPlFeConfig(state).displayFqn;
 
 /** Whether the instance exposes instance blocks through the API. */
 const federationRestrictionsDisclosed = (state: RootState): boolean =>
@@ -24,7 +25,9 @@ const federationRestrictionsDisclosed = (state: RootState): boolean =>
  */
 const isStandalone = (state: RootState): boolean => {
   const instanceFetchFailed = state.meta.instance_fetch_failed;
-  return isURL(BuildConfig.BACKEND_URL) ? false : (!isPrerendered && instanceFetchFailed);
+  return isURL(BuildConfig.BACKEND_URL)
+    ? false
+    : !isPrerendered && instanceFetchFailed;
 };
 
 const getHost = (url: any): string => {
@@ -38,7 +41,9 @@ const getHost = (url: any): string => {
 /** Get the baseURL of the instance. */
 const getBaseURL = (state: RootState): string => {
   const account = selectOwnAccount(state);
-  return isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : getHost(account?.url);
+  return isURL(BuildConfig.BACKEND_URL)
+    ? BuildConfig.BACKEND_URL
+    : getHost(account?.url);
 };
 
 export {

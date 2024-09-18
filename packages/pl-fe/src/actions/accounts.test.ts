@@ -40,7 +40,7 @@ describe('createAccount()', () => {
       });
     });
 
-    it('dispatches the correct actions', async() => {
+    it('dispatches the correct actions', async () => {
       const expectedActions = [
         { type: 'ACCOUNT_CREATE_REQUEST', params },
         {
@@ -69,15 +69,14 @@ describe('fetchAccount()', () => {
         avatar: 'test.jpg',
       });
 
-      const state = rootState
-        .set('entities', {
-          'ACCOUNTS': {
-            store: {
-              [id]: account,
-            },
-            lists: {},
+      const state = rootState.set('entities', {
+        ACCOUNTS: {
+          store: {
+            [id]: account,
           },
-        });
+          lists: {},
+        },
+      });
 
       store = mockStore(state);
 
@@ -86,7 +85,7 @@ describe('fetchAccount()', () => {
       });
     });
 
-    it('should do nothing', async() => {
+    it('should do nothing', async () => {
       await store.dispatch(fetchAccount(id));
       const actions = store.getActions();
 
@@ -106,7 +105,7 @@ describe('fetchAccount()', () => {
       });
     });
 
-    it('should dispatch the correct actions', async() => {
+    it('should dispatch the correct actions', async () => {
       const expectedActions = [
         { type: 'ACCOUNT_FETCH_REQUEST', id: '123' },
         { type: 'ACCOUNTS_IMPORT', accounts: [account] },
@@ -133,7 +132,7 @@ describe('fetchAccount()', () => {
       });
     });
 
-    it('should dispatch the correct actions', async() => {
+    it('should dispatch the correct actions', async () => {
       const expectedActions = [
         { type: 'ACCOUNT_FETCH_REQUEST', id: '123' },
         {
@@ -166,15 +165,14 @@ describe('fetchAccountByUsername()', () => {
       birthday: undefined,
     });
 
-    state = rootState
-      .set('entities', {
-        'ACCOUNTS': {
-          store: {
-            [id]: account,
-          },
-          lists: {},
+    state = rootState.set('entities', {
+      ACCOUNTS: {
+        store: {
+          [id]: account,
         },
-      });
+        lists: {},
+      },
+    });
 
     store = mockStore(state);
 
@@ -186,14 +184,18 @@ describe('fetchAccountByUsername()', () => {
   describe('when "accountByUsername" feature is enabled', () => {
     beforeEach(() => {
       const state = rootState
-        .set('instance', buildInstance({
-          version: '2.7.2 (compatible; Pleroma 2.4.52-1337-g4779199e.gleasonator+soapbox)',
-          pleroma: {
-            metadata: {
-              features: [],
+        .set(
+          'instance',
+          buildInstance({
+            version:
+              '2.7.2 (compatible; Pleroma 2.4.52-1337-g4779199e.gleasonator+soapbox)',
+            pleroma: {
+              metadata: {
+                features: [],
+              },
             },
-          },
-        }))
+          }),
+        )
         .set('me', '123');
       store = mockStore(state);
     });
@@ -202,11 +204,13 @@ describe('fetchAccountByUsername()', () => {
       beforeEach(() => {
         __stub((mock) => {
           mock.onGet(`/api/v1/accounts/${username}`).reply(200, account);
-          mock.onGet(`/api/v1/accounts/relationships?${[account.id].map(id => `id[]=${id}`).join('&')}`);
+          mock.onGet(
+            `/api/v1/accounts/relationships?${[account.id].map((id) => `id[]=${id}`).join('&')}`,
+          );
         });
       });
 
-      it('should return dispatch the proper actions', async() => {
+      it('should return dispatch the proper actions', async () => {
         await store.dispatch(fetchAccountByUsername(username));
         const actions = store.getActions();
 
@@ -226,7 +230,7 @@ describe('fetchAccountByUsername()', () => {
         });
       });
 
-      it('should return dispatch the proper actions', async() => {
+      it('should return dispatch the proper actions', async () => {
         const expectedActions = [
           {
             type: 'ACCOUNT_FETCH_FAIL',
@@ -248,14 +252,17 @@ describe('fetchAccountByUsername()', () => {
   describe('when "accountLookup" feature is enabled', () => {
     beforeEach(() => {
       const state = rootState
-        .set('instance', buildInstance({
-          version: '3.4.1 (compatible; TruthSocial 1.0.0)',
-          pleroma: {
-            metadata: {
-              features: [],
+        .set(
+          'instance',
+          buildInstance({
+            version: '3.4.1 (compatible; TruthSocial 1.0.0)',
+            pleroma: {
+              metadata: {
+                features: [],
+              },
             },
-          },
-        }))
+          }),
+        )
         .set('me', '123');
       store = mockStore(state);
     });
@@ -267,7 +274,7 @@ describe('fetchAccountByUsername()', () => {
         });
       });
 
-      it('should return dispatch the proper actions', async() => {
+      it('should return dispatch the proper actions', async () => {
         await store.dispatch(fetchAccountByUsername(username));
         const actions = store.getActions();
 
@@ -289,7 +296,7 @@ describe('fetchAccountByUsername()', () => {
         });
       });
 
-      it('should return dispatch the proper actions', async() => {
+      it('should return dispatch the proper actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_LOOKUP_REQUEST', acct: 'tiger' },
           { type: 'ACCOUNT_LOOKUP_FAIL' },
@@ -323,7 +330,7 @@ describe('fetchAccountByUsername()', () => {
         });
       });
 
-      it('should return dispatch the proper actions', async() => {
+      it('should return dispatch the proper actions', async () => {
         await store.dispatch(fetchAccountByUsername(username));
         const actions = store.getActions();
 
@@ -335,7 +342,7 @@ describe('fetchAccountByUsername()', () => {
         expect(actions[2].type).toEqual('ACCOUNT_SEARCH_SUCCESS');
         expect(actions[3]).toEqual({
           type: 'RELATIONSHIPS_FETCH_REQUEST',
-          ids: [ '123' ],
+          ids: ['123'],
         });
         expect(actions[4].type).toEqual('ACCOUNT_FETCH_SUCCESS');
       });
@@ -348,7 +355,7 @@ describe('fetchAccountByUsername()', () => {
         });
       });
 
-      it('should return dispatch the proper actions', async() => {
+      it('should return dispatch the proper actions', async () => {
         const expectedActions = [
           {
             type: 'ACCOUNT_SEARCH_REQUEST',
@@ -382,7 +389,7 @@ describe('blockAccount()', () => {
       store = mockStore(state);
     });
 
-    it('should do nothing', async() => {
+    it('should do nothing', async () => {
       await store.dispatch(blockAccount(id));
       const actions = store.getActions();
 
@@ -403,7 +410,7 @@ describe('blockAccount()', () => {
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_BLOCK_REQUEST', id },
           {
@@ -426,7 +433,7 @@ describe('blockAccount()', () => {
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_BLOCK_REQUEST', id },
           { type: 'ACCOUNT_BLOCK_FAIL', error: new Error('Network Error') },
@@ -449,7 +456,7 @@ describe('unblockAccount()', () => {
       store = mockStore(state);
     });
 
-    it('should do nothing', async() => {
+    it('should do nothing', async () => {
       await store.dispatch(unblockAccount(id));
       const actions = store.getActions();
 
@@ -470,7 +477,7 @@ describe('unblockAccount()', () => {
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_UNBLOCK_REQUEST', id },
           {
@@ -492,7 +499,7 @@ describe('unblockAccount()', () => {
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_UNBLOCK_REQUEST', id },
           { type: 'ACCOUNT_UNBLOCK_FAIL', error: new Error('Network Error') },
@@ -515,7 +522,7 @@ describe('muteAccount()', () => {
       store = mockStore(state);
     });
 
-    it('should do nothing', async() => {
+    it('should do nothing', async () => {
       await store.dispatch(unblockAccount(id));
       const actions = store.getActions();
 
@@ -536,7 +543,7 @@ describe('muteAccount()', () => {
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_MUTE_REQUEST', id },
           {
@@ -559,7 +566,7 @@ describe('muteAccount()', () => {
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_MUTE_REQUEST', id },
           { type: 'ACCOUNT_MUTE_FAIL', error: new Error('Network Error') },
@@ -582,7 +589,7 @@ describe('unmuteAccount()', () => {
       store = mockStore(state);
     });
 
-    it('should do nothing', async() => {
+    it('should do nothing', async () => {
       await store.dispatch(unblockAccount(id));
       const actions = store.getActions();
 
@@ -603,7 +610,7 @@ describe('unmuteAccount()', () => {
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_UNMUTE_REQUEST', id },
           {
@@ -625,7 +632,7 @@ describe('unmuteAccount()', () => {
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_UNMUTE_REQUEST', id },
           { type: 'ACCOUNT_UNMUTE_FAIL', error: new Error('Network Error') },
@@ -648,7 +655,7 @@ describe('subscribeAccount()', () => {
       store = mockStore(state);
     });
 
-    it('should do nothing', async() => {
+    it('should do nothing', async () => {
       await store.dispatch(subscribeAccount(id));
       const actions = store.getActions();
 
@@ -665,11 +672,13 @@ describe('subscribeAccount()', () => {
     describe('with a successful API request', () => {
       beforeEach(() => {
         __stub((mock) => {
-          mock.onPost(`/api/v1/pleroma/accounts/${id}/subscribe`).reply(200, {});
+          mock
+            .onPost(`/api/v1/pleroma/accounts/${id}/subscribe`)
+            .reply(200, {});
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_SUBSCRIBE_REQUEST', id },
           {
@@ -687,11 +696,13 @@ describe('subscribeAccount()', () => {
     describe('with an unsuccessful API request', () => {
       beforeEach(() => {
         __stub((mock) => {
-          mock.onPost(`/api/v1/pleroma/accounts/${id}/subscribe`).networkError();
+          mock
+            .onPost(`/api/v1/pleroma/accounts/${id}/subscribe`)
+            .networkError();
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_SUBSCRIBE_REQUEST', id },
           { type: 'ACCOUNT_SUBSCRIBE_FAIL', error: new Error('Network Error') },
@@ -714,7 +725,7 @@ describe('unsubscribeAccount()', () => {
       store = mockStore(state);
     });
 
-    it('should do nothing', async() => {
+    it('should do nothing', async () => {
       await store.dispatch(subscribeAccount(id));
       const actions = store.getActions();
 
@@ -731,11 +742,13 @@ describe('unsubscribeAccount()', () => {
     describe('with a successful API request', () => {
       beforeEach(() => {
         __stub((mock) => {
-          mock.onPost(`/api/v1/pleroma/accounts/${id}/unsubscribe`).reply(200, {});
+          mock
+            .onPost(`/api/v1/pleroma/accounts/${id}/unsubscribe`)
+            .reply(200, {});
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_UNSUBSCRIBE_REQUEST', id },
           {
@@ -753,14 +766,19 @@ describe('unsubscribeAccount()', () => {
     describe('with an unsuccessful API request', () => {
       beforeEach(() => {
         __stub((mock) => {
-          mock.onPost(`/api/v1/pleroma/accounts/${id}/unsubscribe`).networkError();
+          mock
+            .onPost(`/api/v1/pleroma/accounts/${id}/unsubscribe`)
+            .networkError();
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_UNSUBSCRIBE_REQUEST', id },
-          { type: 'ACCOUNT_UNSUBSCRIBE_FAIL', error: new Error('Network Error') },
+          {
+            type: 'ACCOUNT_UNSUBSCRIBE_FAIL',
+            error: new Error('Network Error'),
+          },
         ];
         await store.dispatch(unsubscribeAccount(id));
         const actions = store.getActions();
@@ -780,7 +798,7 @@ describe('removeFromFollowers()', () => {
       store = mockStore(state);
     });
 
-    it('should do nothing', async() => {
+    it('should do nothing', async () => {
       await store.dispatch(removeFromFollowers(id));
       const actions = store.getActions();
 
@@ -797,11 +815,13 @@ describe('removeFromFollowers()', () => {
     describe('with a successful API request', () => {
       beforeEach(() => {
         __stub((mock) => {
-          mock.onPost(`/api/v1/accounts/${id}/remove_from_followers`).reply(200, {});
+          mock
+            .onPost(`/api/v1/accounts/${id}/remove_from_followers`)
+            .reply(200, {});
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_REMOVE_FROM_FOLLOWERS_REQUEST', id },
           {
@@ -819,14 +839,20 @@ describe('removeFromFollowers()', () => {
     describe('with an unsuccessful API request', () => {
       beforeEach(() => {
         __stub((mock) => {
-          mock.onPost(`/api/v1/accounts/${id}/remove_from_followers`).networkError();
+          mock
+            .onPost(`/api/v1/accounts/${id}/remove_from_followers`)
+            .networkError();
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'ACCOUNT_REMOVE_FROM_FOLLOWERS_REQUEST', id },
-          { type: 'ACCOUNT_REMOVE_FROM_FOLLOWERS_FAIL', id, error: new Error('Network Error') },
+          {
+            type: 'ACCOUNT_REMOVE_FROM_FOLLOWERS_FAIL',
+            id,
+            error: new Error('Network Error'),
+          },
         ];
         await store.dispatch(removeFromFollowers(id));
         const actions = store.getActions();
@@ -846,7 +872,7 @@ describe('fetchRelationships()', () => {
       store = mockStore(state);
     });
 
-    it('should do nothing', async() => {
+    it('should do nothing', async () => {
       await store.dispatch(fetchRelationships([id]));
       const actions = store.getActions();
 
@@ -856,8 +882,7 @@ describe('fetchRelationships()', () => {
 
   describe('when logged in', () => {
     beforeEach(() => {
-      const state = rootState
-        .set('me', '123');
+      const state = rootState.set('me', '123');
       store = mockStore(state);
     });
 
@@ -869,7 +894,7 @@ describe('fetchRelationships()', () => {
         store = mockStore(state);
       });
 
-      it('should do nothing', async() => {
+      it('should do nothing', async () => {
         await store.dispatch(fetchRelationships([id]));
         const actions = store.getActions();
 
@@ -886,12 +911,14 @@ describe('fetchRelationships()', () => {
 
         __stub((mock) => {
           mock
-            .onGet(`/api/v1/accounts/relationships?${[id].map(id => `id[]=${id}`).join('&')}`)
+            .onGet(
+              `/api/v1/accounts/relationships?${[id].map((id) => `id[]=${id}`).join('&')}`,
+            )
             .reply(200, []);
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'RELATIONSHIPS_FETCH_REQUEST', ids: [id] },
           { type: 'RELATIONSHIPS_FETCH_SUCCESS', relationships: [] },
@@ -907,15 +934,20 @@ describe('fetchRelationships()', () => {
       beforeEach(() => {
         __stub((mock) => {
           mock
-            .onGet(`/api/v1/accounts/relationships?${[id].map(id => `id[]=${id}`).join('&')}`)
+            .onGet(
+              `/api/v1/accounts/relationships?${[id].map((id) => `id[]=${id}`).join('&')}`,
+            )
             .networkError();
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'RELATIONSHIPS_FETCH_REQUEST', ids: [id] },
-          { type: 'RELATIONSHIPS_FETCH_FAIL', error: new Error('Network Error') },
+          {
+            type: 'RELATIONSHIPS_FETCH_FAIL',
+            error: new Error('Network Error'),
+          },
         ];
         await store.dispatch(fetchRelationships([id]));
         const actions = store.getActions();
@@ -933,7 +965,7 @@ describe('fetchFollowRequests()', () => {
       store = mockStore(state);
     });
 
-    it('should do nothing', async() => {
+    it('should do nothing', async () => {
       await store.dispatch(fetchFollowRequests());
       const actions = store.getActions();
 
@@ -943,8 +975,7 @@ describe('fetchFollowRequests()', () => {
 
   describe('when logged in', () => {
     beforeEach(() => {
-      const state = rootState
-        .set('me', '123');
+      const state = rootState.set('me', '123');
       store = mockStore(state);
     });
 
@@ -957,12 +988,12 @@ describe('fetchFollowRequests()', () => {
 
         __stub((mock) => {
           mock.onGet('/api/v1/follow_requests').reply(200, [], {
-            link: '<https://example.com/api/v1/follow_requests?since_id=1>; rel=\'prev\'',
+            link: "<https://example.com/api/v1/follow_requests?since_id=1>; rel='prev'",
           });
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'FOLLOW_REQUESTS_FETCH_REQUEST' },
           { type: 'ACCOUNTS_IMPORT', accounts: [] },
@@ -986,10 +1017,13 @@ describe('fetchFollowRequests()', () => {
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'FOLLOW_REQUESTS_FETCH_REQUEST' },
-          { type: 'FOLLOW_REQUESTS_FETCH_FAIL', error: new Error('Network Error') },
+          {
+            type: 'FOLLOW_REQUESTS_FETCH_FAIL',
+            error: new Error('Network Error'),
+          },
         ];
         await store.dispatch(fetchFollowRequests());
         const actions = store.getActions();
@@ -1007,7 +1041,7 @@ describe('expandFollowRequests()', () => {
       store = mockStore(state);
     });
 
-    it('should do nothing', async() => {
+    it('should do nothing', async () => {
       await store.dispatch(expandFollowRequests());
       const actions = store.getActions();
 
@@ -1018,11 +1052,14 @@ describe('expandFollowRequests()', () => {
   describe('when logged in', () => {
     beforeEach(() => {
       const state = rootState
-        .set('user_lists', ReducerRecord({
-          follow_requests: ListRecord({
-            next: 'next_url',
+        .set(
+          'user_lists',
+          ReducerRecord({
+            follow_requests: ListRecord({
+              next: 'next_url',
+            }),
           }),
-        }))
+        )
         .set('me', '123');
       store = mockStore(state);
     });
@@ -1030,16 +1067,19 @@ describe('expandFollowRequests()', () => {
     describe('when the url is null', () => {
       beforeEach(() => {
         const state = rootState
-          .set('user_lists', ReducerRecord({
-            follow_requests: ListRecord({
-              next: null,
+          .set(
+            'user_lists',
+            ReducerRecord({
+              follow_requests: ListRecord({
+                next: null,
+              }),
             }),
-          }))
+          )
           .set('me', '123');
         store = mockStore(state);
       });
 
-      it('should do nothing', async() => {
+      it('should do nothing', async () => {
         await store.dispatch(expandFollowRequests());
         const actions = store.getActions();
 
@@ -1051,12 +1091,12 @@ describe('expandFollowRequests()', () => {
       beforeEach(() => {
         __stub((mock) => {
           mock.onGet('next_url').reply(200, [], {
-            link: '<next_url>; rel=\'prev\'',
+            link: "<next_url>; rel='prev'",
           });
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'FOLLOW_REQUESTS_EXPAND_REQUEST' },
           { type: 'ACCOUNTS_IMPORT', accounts: [] },
@@ -1080,10 +1120,13 @@ describe('expandFollowRequests()', () => {
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'FOLLOW_REQUESTS_EXPAND_REQUEST' },
-          { type: 'FOLLOW_REQUESTS_EXPAND_FAIL', error: new Error('Network Error') },
+          {
+            type: 'FOLLOW_REQUESTS_EXPAND_FAIL',
+            error: new Error('Network Error'),
+          },
         ];
         await store.dispatch(expandFollowRequests());
         const actions = store.getActions();
@@ -1103,7 +1146,7 @@ describe('authorizeFollowRequest()', () => {
       store = mockStore(state);
     });
 
-    it('should do nothing', async() => {
+    it('should do nothing', async () => {
       await store.dispatch(authorizeFollowRequest(id));
       const actions = store.getActions();
 
@@ -1124,7 +1167,7 @@ describe('authorizeFollowRequest()', () => {
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'FOLLOW_REQUEST_AUTHORIZE_REQUEST', id },
           { type: 'FOLLOW_REQUEST_AUTHORIZE_SUCCESS', id },
@@ -1143,10 +1186,14 @@ describe('authorizeFollowRequest()', () => {
         });
       });
 
-      it('should dispatch the correct actions', async() => {
+      it('should dispatch the correct actions', async () => {
         const expectedActions = [
           { type: 'FOLLOW_REQUEST_AUTHORIZE_REQUEST', id },
-          { type: 'FOLLOW_REQUEST_AUTHORIZE_FAIL', id, error: new Error('Network Error') },
+          {
+            type: 'FOLLOW_REQUEST_AUTHORIZE_FAIL',
+            id,
+            error: new Error('Network Error'),
+          },
         ];
         await store.dispatch(authorizeFollowRequest(id));
         const actions = store.getActions();

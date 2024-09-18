@@ -2,7 +2,7 @@ import { Entities } from 'pl-fe/entity-store/entities';
 import { useEntities } from 'pl-fe/entity-store/hooks';
 import { useClient } from 'pl-fe/hooks';
 import { useFeatures } from 'pl-fe/hooks/useFeatures';
-import { normalizeGroup, type Group } from 'pl-fe/normalizers';
+import { type Group, normalizeGroup } from 'pl-fe/normalizers';
 
 import { useGroupRelationships } from './useGroupRelationships';
 
@@ -19,7 +19,7 @@ const useGroups = () => {
   );
   const { relationships } = useGroupRelationships(
     ['search', ''],
-    entities.map(entity => entity.id),
+    entities.map((entity) => entity.id),
   );
 
   const groups = entities.map((group) => ({

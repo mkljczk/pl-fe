@@ -7,12 +7,17 @@ const stylesToKeep = ['opacity', 'backgroundOpacity'];
 
 const extractValue = (value: any) => {
   // This is either an object with a "val" property or it's a number
-  return (typeof value === 'object' && value && 'val' in value) ? value.val : value;
+  return typeof value === 'object' && value && 'val' in value
+    ? value.val
+    : value;
 };
 
-const ReducedMotion: React.FC<MotionProps> = ({ style = {}, defaultStyle = {}, children }) => {
-
-  Object.keys(style).forEach(key => {
+const ReducedMotion: React.FC<MotionProps> = ({
+  style = {},
+  defaultStyle = {},
+  children,
+}) => {
+  Object.keys(style).forEach((key) => {
     if (stylesToKeep.includes(key)) {
       return;
     }

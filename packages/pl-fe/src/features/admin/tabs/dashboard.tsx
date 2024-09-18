@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import List, { ListItem } from 'pl-fe/components/list';
 import { CardTitle, Icon, Stack } from 'pl-fe/components/ui';
-import { useOwnAccount, useFeatures, useInstance } from 'pl-fe/hooks';
+import { useFeatures, useInstance, useOwnAccount } from 'pl-fe/hooks';
 import sourceCode from 'pl-fe/utils/code';
 
 import { DashCounter, DashCounters } from '../components/dashcounter';
@@ -23,7 +23,8 @@ const Dashboard: React.FC = () => {
   } = instance.stats;
 
   const mau = instance.pleroma.stats.mau;
-  const retention = (userCount && mau) ? Math.round(mau / userCount * 100) : undefined;
+  const retention =
+    userCount && mau ? Math.round((mau / userCount) * 100) : undefined;
 
   if (!account) return null;
 
@@ -32,26 +33,51 @@ const Dashboard: React.FC = () => {
       <DashCounters>
         <DashCounter
           count={mau}
-          label={<FormattedMessage id='admin.dashcounters.mau_label' defaultMessage='monthly active users' />}
+          label={
+            <FormattedMessage
+              id='admin.dashcounters.mau_label'
+              defaultMessage='monthly active users'
+            />
+          }
         />
         <DashCounter
           to='/pl-fe/admin/users'
           count={userCount}
-          label={<FormattedMessage id='admin.dashcounters.user_count_label' defaultMessage='total users' />}
+          label={
+            <FormattedMessage
+              id='admin.dashcounters.user_count_label'
+              defaultMessage='total users'
+            />
+          }
         />
         <DashCounter
           count={retention}
-          label={<FormattedMessage id='admin.dashcounters.retention_label' defaultMessage='user retention' />}
+          label={
+            <FormattedMessage
+              id='admin.dashcounters.retention_label'
+              defaultMessage='user retention'
+            />
+          }
           percent
         />
         <DashCounter
           to='/timeline/local'
           count={statusCount}
-          label={<FormattedMessage id='admin.dashcounters.status_count_label' defaultMessage='posts' />}
+          label={
+            <FormattedMessage
+              id='admin.dashcounters.status_count_label'
+              defaultMessage='posts'
+            />
+          }
         />
         <DashCounter
           count={domainCount}
-          label={<FormattedMessage id='admin.dashcounters.domain_count_label' defaultMessage='peers' />}
+          label={
+            <FormattedMessage
+              id='admin.dashcounters.domain_count_label'
+              defaultMessage='peers'
+            />
+          }
         />
       </DashCounters>
 
@@ -59,33 +85,58 @@ const Dashboard: React.FC = () => {
         {account.is_admin && (
           <ListItem
             to='/pl-fe/config'
-            label={<FormattedMessage id='navigation_bar.plfe_config' defaultMessage='Front-end configuration' />}
+            label={
+              <FormattedMessage
+                id='navigation_bar.plfe_config'
+                defaultMessage='Front-end configuration'
+              />
+            }
           />
         )}
 
         <ListItem
           to='/pl-fe/admin/log'
-          label={<FormattedMessage id='column.admin.moderation_log' defaultMessage='Moderation log' />}
+          label={
+            <FormattedMessage
+              id='column.admin.moderation_log'
+              defaultMessage='Moderation log'
+            />
+          }
         />
 
         {features.pleromaAdminAnnouncements && (
           <ListItem
             to='/pl-fe/admin/announcements'
-            label={<FormattedMessage id='column.admin.announcements' defaultMessage='Announcements' />}
+            label={
+              <FormattedMessage
+                id='column.admin.announcements'
+                defaultMessage='Announcements'
+              />
+            }
           />
         )}
 
         {features.pleromaAdminRules && (
           <ListItem
             to='/pl-fe/admin/rules'
-            label={<FormattedMessage id='column.admin.rules' defaultMessage='Instance rules' />}
+            label={
+              <FormattedMessage
+                id='column.admin.rules'
+                defaultMessage='Instance rules'
+              />
+            }
           />
         )}
 
         {features.domains && (
           <ListItem
             to='/pl-fe/admin/domains'
-            label={<FormattedMessage id='column.admin.domains' defaultMessage='Domains' />}
+            label={
+              <FormattedMessage
+                id='column.admin.domains'
+                defaultMessage='Domains'
+              />
+            }
           />
         )}
       </List>
@@ -93,7 +144,12 @@ const Dashboard: React.FC = () => {
       {account.is_admin && (
         <>
           <CardTitle
-            title={<FormattedMessage id='admin.dashboard.registration_mode_label' defaultMessage='Registrations' />}
+            title={
+              <FormattedMessage
+                id='admin.dashboard.registration_mode_label'
+                defaultMessage='Registrations'
+              />
+            }
           />
 
           <RegistrationModePicker />
@@ -101,17 +157,35 @@ const Dashboard: React.FC = () => {
       )}
 
       <CardTitle
-        title={<FormattedMessage id='admin.dashwidgets.software_header' defaultMessage='Software' />}
+        title={
+          <FormattedMessage
+            id='admin.dashwidgets.software_header'
+            defaultMessage='Software'
+          />
+        }
       />
 
       <List>
-        <ListItem label={<FormattedMessage id='admin.software.frontend' defaultMessage='Frontend' />}>
+        <ListItem
+          label={
+            <FormattedMessage
+              id='admin.software.frontend'
+              defaultMessage='Frontend'
+            />
+          }
+        >
           <a
-            href={sourceCode.ref ? `${sourceCode.url}/tree/${sourceCode.ref}` : sourceCode.url}
+            href={
+              sourceCode.ref
+                ? `${sourceCode.url}/tree/${sourceCode.ref}`
+                : sourceCode.url
+            }
             className='flex items-center space-x-1 truncate'
             target='_blank'
           >
-            <span>{sourceCode.displayName} {sourceCode.version}</span>
+            <span>
+              {sourceCode.displayName} {sourceCode.version}
+            </span>
 
             <Icon
               className='h-4 w-4'
@@ -120,8 +194,17 @@ const Dashboard: React.FC = () => {
           </a>
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='admin.software.backend' defaultMessage='Backend' />}>
-          <span>{v.software + (v.build ? `+${v.build}` : '')} {v.version}</span>
+        <ListItem
+          label={
+            <FormattedMessage
+              id='admin.software.backend'
+              defaultMessage='Backend'
+            />
+          }
+        >
+          <span>
+            {v.software + (v.build ? `+${v.build}` : '')} {v.version}
+          </span>
         </ListItem>
       </List>
     </Stack>

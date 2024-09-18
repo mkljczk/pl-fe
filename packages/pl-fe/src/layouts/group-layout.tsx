@@ -3,7 +3,7 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useRouteMatch } from 'react-router-dom';
 
 import { useGroup, useGroupMembershipRequests } from 'pl-fe/api/hooks';
-import { Column, Icon, Layout, Stack, Text, Tabs } from 'pl-fe/components/ui';
+import { Column, Icon, Layout, Stack, Tabs, Text } from 'pl-fe/components/ui';
 import GroupHeader from 'pl-fe/features/group/components/group-header';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
@@ -93,7 +93,11 @@ const GroupLayout: React.FC<IGroupLayout> = ({ params, children }) => {
   return (
     <>
       <Layout.Main>
-        <Column size='lg' label={group ? group.display_name : ''} withHeader={false}>
+        <Column
+          size='lg'
+          label={group ? group.display_name : ''}
+          withHeader={false}
+        >
           <GroupHeader group={group} />
 
           <Tabs
@@ -107,9 +111,7 @@ const GroupLayout: React.FC<IGroupLayout> = ({ params, children }) => {
       </Layout.Main>
 
       <Layout.Aside>
-        {!me && (
-          <SignUpPanel />
-        )}
+        {!me && <SignUpPanel />}
         <GroupMediaPanel group={group} />
         <LinkFooter />
       </Layout.Aside>

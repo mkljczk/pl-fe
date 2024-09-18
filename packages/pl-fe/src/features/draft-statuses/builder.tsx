@@ -11,7 +11,10 @@ const buildPoll = (draftStatus: DraftStatus) => {
     return {
       ...draftStatus.poll!.toJS(),
       id: `${draftStatus.draft_id}-poll`,
-      options: draftStatus.poll!.get('options').map((title: string) => ({ title })).toArray(),
+      options: draftStatus
+        .poll!.get('options')
+        .map((title: string) => ({ title }))
+        .toArray(),
     };
   } else {
     return null;
@@ -24,7 +27,10 @@ const buildStatus = (state: RootState, draftStatus: DraftStatus) => {
 
   const status = statusSchema.parse({
     account,
-    content: draftStatus.text.replace(new RegExp('\n', 'g'), '<br>'), /* eslint-disable-line no-control-regex */
+    content: draftStatus.text.replace(
+      new RegExp('\n', 'g'),
+      '<br>',
+    ) /* eslint-disable-line no-control-regex */,
     created_at: draftStatus.schedule,
     group: draftStatus.group_id,
     in_reply_to_id: draftStatus.in_reply_to,

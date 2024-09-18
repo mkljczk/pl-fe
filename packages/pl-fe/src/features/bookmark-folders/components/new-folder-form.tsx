@@ -7,9 +7,18 @@ import { useTextField } from 'pl-fe/hooks/forms';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
-  label: { id: 'bookmark_folders.new.title_placeholder', defaultMessage: 'New folder title' },
-  createSuccess: { id: 'bookmark_folders.add.success', defaultMessage: 'Bookmark folder created successfully' },
-  createFail: { id: 'bookmark_folders.add.fail', defaultMessage: 'Failed to create bookmark folder' },
+  label: {
+    id: 'bookmark_folders.new.title_placeholder',
+    defaultMessage: 'New folder title',
+  },
+  createSuccess: {
+    id: 'bookmark_folders.add.success',
+    defaultMessage: 'Bookmark folder created successfully',
+  },
+  createFail: {
+    id: 'bookmark_folders.add.fail',
+    defaultMessage: 'Failed to create bookmark folder',
+  },
 });
 
 const NewFolderForm: React.FC = () => {
@@ -21,16 +30,19 @@ const NewFolderForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<Element>) => {
     e.preventDefault();
-    createBookmarkFolder({
-      name: name.value,
-    }, {
-      onSuccess() {
-        toast.success(messages.createSuccess);
+    createBookmarkFolder(
+      {
+        name: name.value,
       },
-      onError() {
-        toast.success(messages.createFail);
+      {
+        onSuccess() {
+          toast.success(messages.createSuccess);
+        },
+        onError() {
+          toast.success(messages.createFail);
+        },
       },
-    });
+    );
   };
 
   const label = intl.formatMessage(messages.label);
@@ -49,12 +61,11 @@ const NewFolderForm: React.FC = () => {
           />
         </label>
 
-        <Button
-          disabled={isSubmitting}
-          onClick={handleSubmit}
-          theme='primary'
-        >
-          <FormattedMessage id='bookmark_folders.new.create_title' defaultMessage='Add folder' />
+        <Button disabled={isSubmitting} onClick={handleSubmit} theme='primary'>
+          <FormattedMessage
+            id='bookmark_folders.new.create_title'
+            defaultMessage='Add folder'
+          />
         </Button>
       </HStack>
     </Form>

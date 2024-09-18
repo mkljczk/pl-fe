@@ -10,9 +10,7 @@ const NewStatus = () => {
     openModal('COMPOSE');
   }, []);
 
-  return (
-    <Redirect to='/' />
-  );
+  return <Redirect to='/' />;
 };
 
 export { NewStatus as default };

@@ -27,7 +27,9 @@ describe('<ChatPaneHeader />', () => {
     describe('when it is a node', () => {
       it('renders the title', () => {
         const title = (
-          <div><p>hello world</p></div>
+          <div>
+            <p>hello world</p>
+          </div>
         );
         render(<ChatPaneHeader title={title} onToggle={vi.fn()} isOpen />);
 
@@ -40,16 +42,32 @@ describe('<ChatPaneHeader />', () => {
     describe('when present', () => {
       it('renders the unread count', () => {
         const count = 14;
-        render(<ChatPaneHeader title='title' onToggle={vi.fn()} isOpen unreadCount={count} />);
+        render(
+          <ChatPaneHeader
+            title='title'
+            onToggle={vi.fn()}
+            isOpen
+            unreadCount={count}
+          />,
+        );
 
-        expect(screen.getByTestId('unread-count')).toHaveTextContent(String(count));
+        expect(screen.getByTestId('unread-count')).toHaveTextContent(
+          String(count),
+        );
       });
     });
 
     describe('when 0', () => {
       it('does not render the unread count', () => {
         const count = 0;
-        render(<ChatPaneHeader title='title' onToggle={vi.fn()} isOpen unreadCount={count} />);
+        render(
+          <ChatPaneHeader
+            title='title'
+            onToggle={vi.fn()}
+            isOpen
+            unreadCount={count}
+          />,
+        );
 
         expect(screen.queryAllByTestId('unread-count')).toHaveLength(0);
       });

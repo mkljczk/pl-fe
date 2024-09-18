@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { Form, FormGroup, Input, Textarea } from 'pl-fe/components/ui';
 import AvatarPicker from 'pl-fe/features/edit-profile/components/avatar-picker';
@@ -11,9 +11,18 @@ import resizeImage from 'pl-fe/utils/resize-image';
 import type { CreateGroupParams } from 'pl-api';
 
 const messages = defineMessages({
-  groupNamePlaceholder: { id: 'manage_group.fields.name_placeholder', defaultMessage: 'Group Name' },
-  groupDescriptionPlaceholder: { id: 'manage_group.fields.description_placeholder', defaultMessage: 'Description' },
-  hashtagPlaceholder: { id: 'manage_group.fields.hashtag_placeholder', defaultMessage: 'Add a topic' },
+  groupNamePlaceholder: {
+    id: 'manage_group.fields.name_placeholder',
+    defaultMessage: 'Group Name',
+  },
+  groupDescriptionPlaceholder: {
+    id: 'manage_group.fields.description_placeholder',
+    defaultMessage: 'Description',
+  },
+  hashtagPlaceholder: {
+    id: 'manage_group.fields.hashtag_placeholder',
+    defaultMessage: 'Add a topic',
+  },
 });
 
 interface IDetailsStep {
@@ -25,23 +34,28 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
   const intl = useIntl();
   const instance = useInstance();
 
-  const {
-    display_name: displayName = '',
-    note = '',
-  } = params;
+  const { display_name: displayName = '', note = '' } = params;
 
   const avatarSrc = usePreview(params.avatar);
   const headerSrc = usePreview(params.header);
 
-  const attachmentTypes = useAppSelector(state => state.instance.configuration.media_attachments.supported_mime_types)
+  const attachmentTypes = useAppSelector(
+    (state) =>
+      state.instance.configuration.media_attachments.supported_mime_types,
+  )
     ?.filter((type) => type.startsWith('image/'))
     .join(',');
 
-  const handleTextChange = (property: keyof CreateGroupParams): React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> => (e) => {
-    onChange({ ...params, [property]: e.target.value });
-  };
+  const handleTextChange =
+    (
+      property: keyof CreateGroupParams,
+    ): React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> =>
+    (e) => {
+      onChange({ ...params, [property]: e.target.value });
+    };
 
-  const handleImageChange = (property: 'header' | 'avatar', maxPixels?: number) =>
+  const handleImageChange =
+    (property: 'header' | 'avatar', maxPixels?: number) =>
     async (files: FileList | null) => {
       const file = files ? files[0] : undefined;
       if (file) {
@@ -53,21 +67,41 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
       }
     };
 
-  const handleImageClear = (property: keyof CreateGroupParams) => () => onChange({
-    ...params,
-    [property]: undefined,
-  });
+  const handleImageClear = (property: keyof CreateGroupParams) => () =>
+    onChange({
+      ...params,
+      [property]: undefined,
+    });
 
   return (
     <Form>
       <div className='relative mb-12 flex'>
-        <HeaderPicker src={headerSrc} accept={attachmentTypes} onChange={handleImageChange('header', 1920 * 1080)} onClear={handleImageClear('header')} />
-        <AvatarPicker src={avatarSrc} accept={attachmentTypes} onChange={handleImageChange('avatar', 400 * 400)} />
+        <HeaderPicker
+          src={headerSrc}
+          accept={attachmentTypes}
+          onChange={handleImageChange('header', 1920 * 1080)}
+          onClear={handleImageClear('header')}
+        />
+        <AvatarPicker
+          src={avatarSrc}
+          accept={attachmentTypes}
+          onChange={handleImageChange('avatar', 400 * 400)}
+        />
       </div>
 
       <FormGroup
-        labelText={<FormattedMessage id='manage_group.fields.name_label' defaultMessage='Group name (required)' />}
-        hintText={<FormattedMessage id='manage_group.fields.name_help' defaultMessage='This cannot be changed after the group is created.' />}
+        labelText={
+          <FormattedMessage
+            id='manage_group.fields.name_label'
+            defaultMessage='Group name (required)'
+          />
+        }
+        hintText={
+          <FormattedMessage
+            id='manage_group.fields.name_help'
+            defaultMessage='This cannot be changed after the group is created.'
+          />
+        }
       >
         <Input
           type='text'
@@ -79,14 +113,21 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
       </FormGroup>
 
       <FormGroup
-        labelText={<FormattedMessage id='manage_group.fields.description_label' defaultMessage='Description' />}
+        labelText={
+          <FormattedMessage
+            id='manage_group.fields.description_label'
+            defaultMessage='Description'
+          />
+        }
       >
         <Textarea
           autoComplete='off'
           placeholder={intl.formatMessage(messages.groupDescriptionPlaceholder)}
           value={note}
           onChange={handleTextChange('note')}
-          maxLength={Number(instance.configuration.groups.max_characters_description)}
+          maxLength={Number(
+            instance.configuration.groups.max_characters_description,
+          )}
         />
       </FormGroup>
     </Form>

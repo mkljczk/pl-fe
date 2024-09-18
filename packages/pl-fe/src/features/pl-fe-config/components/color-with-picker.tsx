@@ -14,7 +14,11 @@ interface IColorWithPicker {
   className?: string;
 }
 
-const ColorWithPicker: React.FC<IColorWithPicker> = ({ value, onChange, className }) => {
+const ColorWithPicker: React.FC<IColorWithPicker> = ({
+  value,
+  onChange,
+  className,
+}) => {
   const node = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
   const [placement, setPlacement] = useState<string | null>(null);

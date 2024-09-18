@@ -8,7 +8,10 @@ interface DropdownMenuModalProps {
   content?: JSX.Element;
 }
 
-const DropdownMenuModal: React.FC<BaseModalProps & DropdownMenuModalProps> = ({ content, onClose }) => {
+const DropdownMenuModal: React.FC<BaseModalProps & DropdownMenuModalProps> = ({
+  content,
+  onClose,
+}) => {
   const handleClick: React.MouseEventHandler<HTMLElement> = (e) => {
     onClose('DROPDOWN_MENU');
     e.stopPropagation();
@@ -33,10 +36,13 @@ const DropdownMenuModal: React.FC<BaseModalProps & DropdownMenuModalProps> = ({ 
       onClick={handleClickOutside}
     >
       <div
-        className={clsx('pointer-events-auto fixed inset-x-0 z-[1001] mx-auto max-h-[calc(100dvh-1rem)] w-[calc(100vw-2rem)] max-w-lg overflow-auto rounded-t-xl bg-white py-1 shadow-lg duration-200 ease-in-out focus:outline-none black:bg-black no-reduce-motion:transition-all dark:bg-gray-900 dark:ring-2 dark:ring-primary-700', {
-          'bottom-0 opacity-100': !firstRender,
-          '-bottom-32 opacity-0': firstRender,
-        })}
+        className={clsx(
+          'pointer-events-auto fixed inset-x-0 z-[1001] mx-auto max-h-[calc(100dvh-1rem)] w-[calc(100vw-2rem)] max-w-lg overflow-auto rounded-t-xl bg-white py-1 shadow-lg duration-200 ease-in-out focus:outline-none black:bg-black no-reduce-motion:transition-all dark:bg-gray-900 dark:ring-2 dark:ring-primary-700',
+          {
+            'bottom-0 opacity-100': !firstRender,
+            '-bottom-32 opacity-0': firstRender,
+          },
+        )}
       >
         {content}
         <div className='p-2 px-3'>

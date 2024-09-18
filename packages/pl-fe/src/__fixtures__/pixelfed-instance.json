@@ -14,9 +14,7 @@
     "domain_count": 5028
   },
   "thumbnail": "https://pixelfed.social/img/pixelfed-icon-color.png",
-  "languages": [
-    "en"
-  ],
+  "languages": ["en"],
   "registrations": true,
   "approval_required": false,
   "contact_account": {

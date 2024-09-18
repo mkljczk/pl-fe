@@ -10,21 +10,26 @@ import Chat from '../chat';
 import ChatPaneHeader from './chat-pane-header';
 import ChatSettings from './chat-settings';
 
-const LinkWrapper = ({ enabled, to, children }: { enabled: boolean; to: string; children: React.ReactNode }): JSX.Element => {
+const LinkWrapper = ({
+  enabled,
+  to,
+  children,
+}: {
+  enabled: boolean;
+  to: string;
+  children: React.ReactNode;
+}): JSX.Element => {
   if (!enabled) {
     return <>{children}</>;
   }
 
-  return (
-    <Link to={to}>
-      {children}
-    </Link>
-  );
+  return <Link to={to}>{children}</Link>;
 };
 
 /** Floating desktop chat window. */
 const ChatWindow = () => {
-  const { chat, currentChatId, screen, changeScreen, isOpen, toggleChatPane } = useChatContext();
+  const { chat, currentChatId, screen, changeScreen, isOpen, toggleChatPane } =
+    useChatContext();
 
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -41,7 +46,7 @@ const ChatWindow = () => {
     changeScreen(ChatWidgetScreens.CHAT_SETTINGS, currentChatId);
   };
 
-  const secondaryAction = () => isOpen ? openChatSettings : openSearch;
+  const secondaryAction = () => (isOpen ? openChatSettings : openSearch);
 
   if (!chat) return null;
 
@@ -66,14 +71,20 @@ const ChatWindow = () => {
             <HStack alignItems='center' space={3}>
               {isOpen && (
                 <Link to={`/@${chat.account.acct}`}>
-                  <Avatar src={chat.account.avatar} alt={chat.account.avatar_description} size={40} />
+                  <Avatar
+                    src={chat.account.avatar}
+                    alt={chat.account.avatar_description}
+                    size={40}
+                  />
                 </Link>
               )}
 
               <Stack alignItems='start'>
                 <LinkWrapper enabled={isOpen} to={`/@${chat.account.acct}`}>
                   <div className='flex grow items-center space-x-1'>
-                    <Text size='sm' weight='bold' truncate>{chat.account.display_name || `@${chat.account.acct}`}</Text>
+                    <Text size='sm' weight='bold' truncate>
+                      {chat.account.display_name || `@${chat.account.acct}`}
+                    </Text>
                     {chat.account.verified && <VerificationBadge />}
                   </div>
                 </LinkWrapper>
@@ -82,7 +93,11 @@ const ChatWindow = () => {
           </HStack>
         }
         secondaryAction={secondaryAction()}
-        secondaryActionIcon={isOpen ? require('@tabler/icons/outline/info-circle.svg') : require('@tabler/icons/outline/edit.svg')}
+        secondaryActionIcon={
+          isOpen
+            ? require('@tabler/icons/outline/info-circle.svg')
+            : require('@tabler/icons/outline/edit.svg')
+        }
         isToggleable={!isOpen}
         isOpen={isOpen}
         onToggle={toggleChatPane}

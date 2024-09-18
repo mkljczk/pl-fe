@@ -16,7 +16,7 @@ describe('<DurationSelector />', () => {
   });
 
   describe('when changing the day', () => {
-    it('calls the "onDurationChange" callback', async() => {
+    it('calls the "onDurationChange" callback', async () => {
       const handler = vi.fn();
       render(<DurationSelector onDurationChange={handler} />);
 
@@ -29,12 +29,14 @@ describe('<DurationSelector />', () => {
       expect(handler.mock.calls[1][0]).toEqual(86400); // 1 day
     });
 
-    it('should disable the hour/minute select if 7 days selected', async() => {
+    it('should disable the hour/minute select if 7 days selected', async () => {
       const handler = vi.fn();
       render(<DurationSelector onDurationChange={handler} />);
 
       expect(screen.getByTestId('duration-selector-hours')).not.toBeDisabled();
-      expect(screen.getByTestId('duration-selector-minutes')).not.toBeDisabled();
+      expect(
+        screen.getByTestId('duration-selector-minutes'),
+      ).not.toBeDisabled();
 
       await userEvent.selectOptions(
         screen.getByTestId('duration-selector-days'),
@@ -47,7 +49,7 @@ describe('<DurationSelector />', () => {
   });
 
   describe('when changing the hour', () => {
-    it('calls the "onDurationChange" callback', async() => {
+    it('calls the "onDurationChange" callback', async () => {
       const handler = vi.fn();
       render(<DurationSelector onDurationChange={handler} />);
 
@@ -62,7 +64,7 @@ describe('<DurationSelector />', () => {
   });
 
   describe('when changing the minute', () => {
-    it('calls the "onDurationChange" callback', async() => {
+    it('calls the "onDurationChange" callback', async () => {
       const handler = vi.fn();
       render(<DurationSelector onDurationChange={handler} />);
 

@@ -22,23 +22,32 @@ import type { ChatMessage as ChatMessageEntity } from 'pl-fe/normalizers';
 const messages = defineMessages({
   copy: { id: 'chats.actions.copy', defaultMessage: 'Copy' },
   delete: { id: 'chats.actions.delete', defaultMessage: 'Delete for both' },
-  deleteForMe: { id: 'chats.actions.delete_for_me', defaultMessage: 'Delete for me' },
+  deleteForMe: {
+    id: 'chats.actions.delete_for_me',
+    defaultMessage: 'Delete for me',
+  },
   more: { id: 'chats.actions.more', defaultMessage: 'More' },
 });
 
 const BIG_EMOJI_LIMIT = 3;
 
 const makeEmojiMap = (record: ChatMessageEntity) =>
-  record.emojis.reduce((map: Record<string, CustomEmoji>, emoji: CustomEmoji) =>
-    (map[`:${emoji.shortcode}:`] = emoji, map), {});
+  record.emojis.reduce(
+    (map: Record<string, CustomEmoji>, emoji: CustomEmoji) => (
+      (map[`:${emoji.shortcode}:`] = emoji), map
+    ),
+    {},
+  );
 
-const parsePendingContent = (content: string) => escape(content).replace(/(?:\r\n|\r|\n)/g, '<br>');
+const parsePendingContent = (content: string) =>
+  escape(content).replace(/(?:\r\n|\r|\n)/g, '<br>');
 
 const parseContent = (chatMessage: ChatMessageEntity) => {
   const content = chatMessage.content || '';
   const pending = chatMessage.pending;
   const deleting = chatMessage.deleting;
-  const formatted = (pending && !deleting) ? parsePendingContent(content) : content;
+  const formatted =
+    pending && !deleting ? parsePendingContent(content) : content;
   const emojiMap = makeEmojiMap(chatMessage);
   return emojify(formatted, emojiMap);
 };
@@ -106,7 +115,7 @@ const ChatMessage = (props: IChatMessage) => {
     if (!c) return;
     const links = c.querySelectorAll('a[rel="ugc"]');
 
-    links.forEach(link => {
+    links.forEach((link) => {
       link.classList.add('chat-link');
       link.setAttribute('rel', 'ugc nofollow noopener');
       link.setAttribute('target', '_blank');
@@ -155,25 +164,20 @@ const ChatMessage = (props: IChatMessage) => {
 
   return (
     <div
-      className={
-        clsx({
-          'group relative px-4 py-2 hover:bg-gray-200/40 dark:hover:bg-gray-800/40': true,
-          'bg-gray-200/40 dark:bg-gray-800/40': isMenuOpen,
-        })
-      }
+      className={clsx({
+        'group relative px-4 py-2 hover:bg-gray-200/40 dark:hover:bg-gray-800/40': true,
+        'bg-gray-200/40 dark:bg-gray-800/40': isMenuOpen,
+      })}
       data-testid='chat-message'
     >
       <div
-        className={
-          clsx({
-            'p-1 flex items-center space-x-0.5 z-10 absolute opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100 rounded-md shadow-lg bg-white dark:bg-gray-900 dark:ring-2 dark:ring-primary-700': true,
-            'top-2 right-2': !isMyMessage,
-            'top-2 left-2': isMyMessage,
-            '!opacity-100': isMenuOpen,
-          })
-        }
+        className={clsx({
+          'p-1 flex items-center space-x-0.5 z-10 absolute opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100 rounded-md shadow-lg bg-white dark:bg-gray-900 dark:ring-2 dark:ring-primary-700': true,
+          'top-2 right-2': !isMyMessage,
+          'top-2 left-2': isMyMessage,
+          '!opacity-100': isMenuOpen,
+        })}
       >
-
         {menu.length > 0 && (
           <DropdownMenu
             items={menu}
@@ -226,18 +230,19 @@ const ChatMessage = (props: IChatMessage) => {
               <HStack alignItems='bottom' className='max-w-full'>
                 <div
                   title={getFormattedTimestamp(chatMessage)}
-                  className={
-                    clsx({
-                      'text-ellipsis break-words relative rounded-md py-2 px-3 max-w-full space-y-2 [&_.mention]:underline': true,
-                      'rounded-tr-sm': (!!chatMessage.attachment) && isMyMessage,
-                      'rounded-tl-sm': (!!chatMessage.attachment) && !isMyMessage,
-                      '[&_.mention]:text-primary-600 dark:[&_.mention]:text-accent-blue': !isMyMessage,
-                      '[&_.mention]:text-white dark:[&_.mention]:white': isMyMessage,
-                      'bg-primary-500 text-white': isMyMessage,
-                      'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100': !isMyMessage,
-                      '!bg-transparent !p-0 emoji-lg': isOnlyEmoji,
-                    })
-                  }
+                  className={clsx({
+                    'text-ellipsis break-words relative rounded-md py-2 px-3 max-w-full space-y-2 [&_.mention]:underline': true,
+                    'rounded-tr-sm': !!chatMessage.attachment && isMyMessage,
+                    'rounded-tl-sm': !!chatMessage.attachment && !isMyMessage,
+                    '[&_.mention]:text-primary-600 dark:[&_.mention]:text-accent-blue':
+                      !isMyMessage,
+                    '[&_.mention]:text-white dark:[&_.mention]:white':
+                      isMyMessage,
+                    'bg-primary-500 text-white': isMyMessage,
+                    'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100':
+                      !isMyMessage,
+                    '!bg-transparent !p-0 emoji-lg': isOnlyEmoji,
+                  })}
                   ref={setBubbleRef}
                   tabIndex={0}
                 >

@@ -14,7 +14,11 @@ interface IPullToRefresh {
  * PullToRefresh:
  * Wrapper around a third-party PTR component with pl-fe defaults.
  */
-const PullToRefresh: React.FC<IPullToRefresh> = ({ children, onRefresh, ...rest }): JSX.Element => {
+const PullToRefresh: React.FC<IPullToRefresh> = ({
+  children,
+  onRefresh,
+  ...rest
+}): JSX.Element => {
   const handleRefresh = () => {
     if (onRefresh) {
       return onRefresh();
@@ -29,7 +33,9 @@ const PullToRefresh: React.FC<IPullToRefresh> = ({ children, onRefresh, ...rest 
       onRefresh={handleRefresh}
       pullingContent={<></>}
       // `undefined` will fallback to the default, while `<></>` will render nothing
-      refreshingContent={onRefresh ? <Spinner size={30} withText={false} /> : <></>}
+      refreshingContent={
+        onRefresh ? <Spinner size={30} withText={false} /> : <></>
+      }
       pullDownThreshold={67}
       maxPullDownDistance={95}
       resistance={2}

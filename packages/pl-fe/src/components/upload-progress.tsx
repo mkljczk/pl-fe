@@ -18,7 +18,10 @@ const UploadProgress: React.FC<IUploadProgress> = ({ progress }) => (
 
     <Stack space={1}>
       <Text theme='muted'>
-        <FormattedMessage id='upload_progress.label' defaultMessage='Uploading…' />
+        <FormattedMessage
+          id='upload_progress.label'
+          defaultMessage='Uploading…'
+        />
       </Text>
 
       <ProgressBar progress={progress / 100} size='sm' />

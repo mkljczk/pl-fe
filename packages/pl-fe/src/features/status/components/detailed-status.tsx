@@ -56,10 +56,17 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                 defaultMessage='Posted in {group}'
                 values={{
                   group: (
-                    <Link to={`/groups/${status.group.id}`} className='hover:underline'>
+                    <Link
+                      to={`/groups/${status.group.id}`}
+                      className='hover:underline'
+                    >
                       <bdi className='truncate'>
                         <strong className='text-gray-800 dark:text-gray-200'>
-                          <span dangerouslySetInnerHTML={{ __html: status.group.display_name_html }} />
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: status.group.display_name_html,
+                            }}
+                          />
                         </strong>
                       </bdi>
                     </Link>
@@ -84,7 +91,12 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
     if (actualStatus.quote_visible === false) {
       quote = (
         <div className='quoted-actualStatus-tombstone'>
-          <p><FormattedMessage id='status.quote_tombstone' defaultMessage='Post is unavailable.' /></p>
+          <p>
+            <FormattedMessage
+              id='status.quote_tombstone'
+              defaultMessage='Post is unavailable.'
+            />
+          </p>
         </div>
       );
     } else {
@@ -111,39 +123,57 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
         <Stack className='relative z-0'>
           <Stack space={4}>
-            <StatusContent
-              status={actualStatus}
-              textSize='lg'
-              translatable
-            />
+            <StatusContent status={actualStatus} textSize='lg' translatable />
 
             <TranslateButton status={actualStatus} />
 
-            {(withMedia && (quote || actualStatus.card || actualStatus.media_attachments.length > 0)) && (
-              <Stack space={4}>
-                {(actualStatus.media_attachments.length > 0 || (actualStatus.card && !quote)) && (
-                  <div className='relative'>
-                    <SensitiveContentOverlay status={status} />
-                    <StatusMedia status={actualStatus} />
-                  </div>
-                )}
+            {withMedia &&
+              (quote ||
+                actualStatus.card ||
+                actualStatus.media_attachments.length > 0) && (
+                <Stack space={4}>
+                  {(actualStatus.media_attachments.length > 0 ||
+                    (actualStatus.card && !quote)) && (
+                    <div className='relative'>
+                      <SensitiveContentOverlay status={status} />
+                      <StatusMedia status={actualStatus} />
+                    </div>
+                  )}
 
-                {quote}
-              </Stack>
-            )}
+                  {quote}
+                </Stack>
+              )}
           </Stack>
         </Stack>
 
         <StatusReactionsBar status={actualStatus} />
 
-        <HStack justifyContent='between' alignItems='center' className='py-3' wrap>
+        <HStack
+          justifyContent='between'
+          alignItems='center'
+          className='py-3'
+          wrap
+        >
           <StatusInteractionBar status={actualStatus} />
 
           <HStack space={1} alignItems='center'>
             <span>
-              <a href={actualStatus.url} target='_blank' rel='noopener' className='hover:underline'>
+              <a
+                href={actualStatus.url}
+                target='_blank'
+                rel='noopener'
+                className='hover:underline'
+              >
                 <Text tag='span' theme='muted' size='sm'>
-                  <FormattedDate value={new Date(actualStatus.created_at)} hour12 year='numeric' month='short' day='2-digit' hour='numeric' minute='2-digit' />
+                  <FormattedDate
+                    value={new Date(actualStatus.created_at)}
+                    hour12
+                    year='numeric'
+                    month='short'
+                    day='2-digit'
+                    hour='numeric'
+                    minute='2-digit'
+                  />
                 </Text>
               </a>
 
@@ -157,7 +187,22 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                     tabIndex={0}
                   >
                     <Text tag='span' theme='muted' size='sm'>
-                      <FormattedMessage id='status.edited' defaultMessage='Edited {date}' values={{ date: intl.formatDate(new Date(actualStatus.edited_at), { hour12: true, month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit' }) }} />
+                      <FormattedMessage
+                        id='status.edited'
+                        defaultMessage='Edited {date}'
+                        values={{
+                          date: intl.formatDate(
+                            new Date(actualStatus.edited_at),
+                            {
+                              hour12: true,
+                              month: 'short',
+                              day: '2-digit',
+                              hour: 'numeric',
+                              minute: '2-digit',
+                            },
+                          ),
+                        }}
+                      />
                     </Text>
                   </div>
                 </>

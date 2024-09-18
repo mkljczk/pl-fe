@@ -3,7 +3,10 @@ import split from 'graphemesplit';
 import unicodeMapping from './mapping';
 
 import type { CustomEmoji as BaseCustomEmoji } from 'pl-api';
-import type { Emoji as EmojiMart, CustomEmoji as EmojiMartCustom } from 'pl-fe/features/emoji/data';
+import type {
+  Emoji as EmojiMart,
+  CustomEmoji as EmojiMartCustom,
+} from 'pl-fe/features/emoji/data';
 
 /*
  * TODO: Consolate emoji object types
@@ -45,9 +48,12 @@ const isNativeEmoji = (emoji: Emoji): emoji is NativeEmoji =>
 const isAlphaNumeric = (c: string) => {
   const code = c.charCodeAt(0);
 
-  if (!(code > 47 && code < 58) &&  // numeric (0-9)
-      !(code > 64 && code < 91) &&  // upper alpha (A-Z)
-      !(code > 96 && code < 123)) { // lower alpha (a-z)
+  if (
+    !(code > 47 && code < 58) && // numeric (0-9)
+    !(code > 64 && code < 91) && // upper alpha (A-Z)
+    !(code > 96 && code < 123)
+  ) {
+    // lower alpha (a-z)
     return false;
   } else {
     return true;
@@ -101,13 +107,15 @@ const emojifyText = (str: string, customEmojis = {}) => {
     const unqualified = c + String.fromCodePoint(65039);
 
     if (c in unicodeMapping) {
-      if (open) { // unicode emoji inside colon
+      if (open) {
+        // unicode emoji inside colon
         clearStack();
       }
 
       buf += convertUnicode(c);
     } else if (unqualified in unicodeMapping) {
-      if (open) { // unicode emoji inside colon
+      if (open) {
+        // unicode emoji inside colon
         clearStack();
       }
 
@@ -170,7 +178,6 @@ const parseHTML = (str: string): { text: boolean; data: string }[] => {
       } else {
         buf += '>';
       }
-
     } else {
       if (open) {
         stack += c;

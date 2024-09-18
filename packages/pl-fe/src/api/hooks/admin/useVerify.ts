@@ -11,7 +11,9 @@ const useVerify = () => {
   const verifyEffect = (accountId: string, verified: boolean) => {
     const updater = (account: Account): Account => {
       if (account.__meta.pleroma) {
-        const tags = account.__meta.pleroma.tags.filter((tag: string) => tag !== 'verified');
+        const tags = account.__meta.pleroma.tags.filter(
+          (tag: string) => tag !== 'verified',
+        );
         if (verified) {
           tags.push('verified');
         }
@@ -22,11 +24,14 @@ const useVerify = () => {
     };
 
     transaction({
-      Accounts: ({ [accountId]: updater }),
+      Accounts: { [accountId]: updater },
     });
   };
 
-  const verify = async (accountId: string, callbacks?: EntityCallbacks<void, unknown>) => {
+  const verify = async (
+    accountId: string,
+    callbacks?: EntityCallbacks<void, unknown>,
+  ) => {
     verifyEffect(accountId, true);
     try {
       await client.admin.accounts.tagUser(accountId, ['verified']);
@@ -37,7 +42,10 @@ const useVerify = () => {
     }
   };
 
-  const unverify = async (accountId: string, callbacks?: EntityCallbacks<void, unknown>) => {
+  const unverify = async (
+    accountId: string,
+    callbacks?: EntityCallbacks<void, unknown>,
+  ) => {
     verifyEffect(accountId, false);
     try {
       await client.admin.accounts.untagUser(accountId, ['verified']);

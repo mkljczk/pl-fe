@@ -10,7 +10,7 @@ const INSTANCE_FETCH_FAIL = 'INSTANCE_FETCH_FAIL' as const;
 
 /** Figure out the appropriate instance to fetch depending on the state */
 const getHost = (state: RootState) => {
-  const accountUrl = getMeUrl(state) || getAuthUserUrl(state) as string;
+  const accountUrl = getMeUrl(state) || (getAuthUserUrl(state) as string);
 
   try {
     return new URL(accountUrl).host;
@@ -29,20 +29,22 @@ interface InstanceFetchFailAction {
   error: any;
 }
 
-const fetchInstance = () => async (dispatch: AppDispatch, getState: () => RootState) => {
-  try {
-    const instance = await getClient(getState).instance.getInstance();
+const fetchInstance =
+  () => async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const instance = await getClient(getState).instance.getInstance();
 
-    const action: InstanceFetchSuccessAction = { type: INSTANCE_FETCH_SUCCESS, instance };
-    dispatch(action);
-  } catch (error) {
-    dispatch({ type: INSTANCE_FETCH_FAIL, error });
-  }
-};
+      const action: InstanceFetchSuccessAction = {
+        type: INSTANCE_FETCH_SUCCESS,
+        instance,
+      };
+      dispatch(action);
+    } catch (error) {
+      dispatch({ type: INSTANCE_FETCH_FAIL, error });
+    }
+  };
 
-type InstanceAction =
-  InstanceFetchSuccessAction
-  | InstanceFetchFailAction
+type InstanceAction = InstanceFetchSuccessAction | InstanceFetchFailAction;
 
 export {
   INSTANCE_FETCH_SUCCESS,

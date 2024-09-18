@@ -4,7 +4,14 @@ import { Redirect } from 'react-router-dom';
 
 import { useBookmarkFolders } from 'pl-fe/api/hooks';
 import List, { ListItem } from 'pl-fe/components/list';
-import { Column, Emoji, HStack, Icon, Spinner, Stack } from 'pl-fe/components/ui';
+import {
+  Column,
+  Emoji,
+  HStack,
+  Icon,
+  Spinner,
+  Stack,
+} from 'pl-fe/components/ui';
 import { useFeatures } from 'pl-fe/hooks';
 
 import NewFolderForm from './components/new-folder-form';
@@ -39,8 +46,16 @@ const BookmarkFolders: React.FC = () => {
             to='/bookmarks/all'
             label={
               <HStack alignItems='center' space={2}>
-                <Icon src={require('@tabler/icons/outline/bookmarks.svg')} size={20} />
-                <span><FormattedMessage id='bookmark_folders.all_bookmarks' defaultMessage='All bookmarks' /></span>
+                <Icon
+                  src={require('@tabler/icons/outline/bookmarks.svg')}
+                  size={20}
+                />
+                <span>
+                  <FormattedMessage
+                    id='bookmark_folders.all_bookmarks'
+                    defaultMessage='All bookmarks'
+                  />
+                </span>
               </HStack>
             }
           />
@@ -56,7 +71,12 @@ const BookmarkFolders: React.FC = () => {
                       src={folder.emoji_url || undefined}
                       className='h-5 w-5 flex-none'
                     />
-                  ) : <Icon src={require('@tabler/icons/outline/folder.svg')} size={20} />}
+                  ) : (
+                    <Icon
+                      src={require('@tabler/icons/outline/folder.svg')}
+                      size={20}
+                    />
+                  )}
                   <span>{folder.name}</span>
                 </HStack>
               }

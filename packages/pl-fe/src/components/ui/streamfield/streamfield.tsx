@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import Button from '../button/button';
 import HStack from '../hstack/hstack';
@@ -64,41 +64,47 @@ const Streamfield: React.FC<IStreamfield> = ({
   return (
     <Stack space={4}>
       <Stack>
-        {label && <Text size='sm' weight='medium'>{label}</Text>}
-        {hint && <Text size='xs' theme='muted'>{hint}</Text>}
+        {label && (
+          <Text size='sm' weight='medium'>
+            {label}
+          </Text>
+        )}
+        {hint && (
+          <Text size='xs' theme='muted'>
+            {hint}
+          </Text>
+        )}
       </Stack>
 
-      {(values.length > 0) && (
+      {values.length > 0 && (
         <Stack space={1}>
-          {values.map((value, i) => value?._destroy ? null : (
-            <HStack key={i} space={2} alignItems='center'>
-              <Component
-                key={i}
-                index={i}
-                onChange={handleChange(i)}
-                value={value}
-                autoFocus={i > 0}
-              />
-              {values.length > minItems && onRemoveItem && (
-                <IconButton
-                  iconClassName='h-4 w-4'
-                  className='bg-transparent text-gray-600 hover:text-gray-600'
-                  src={require('@tabler/icons/outline/x.svg')}
-                  onClick={() => onRemoveItem(i)}
-                  title={intl.formatMessage(messages.remove)}
+          {values.map((value, i) =>
+            value?._destroy ? null : (
+              <HStack key={i} space={2} alignItems='center'>
+                <Component
+                  key={i}
+                  index={i}
+                  onChange={handleChange(i)}
+                  value={value}
+                  autoFocus={i > 0}
                 />
-              )}
-            </HStack>
-          ))}
+                {values.length > minItems && onRemoveItem && (
+                  <IconButton
+                    iconClassName='h-4 w-4'
+                    className='bg-transparent text-gray-600 hover:text-gray-600'
+                    src={require('@tabler/icons/outline/x.svg')}
+                    onClick={() => onRemoveItem(i)}
+                    title={intl.formatMessage(messages.remove)}
+                  />
+                )}
+              </HStack>
+            ),
+          )}
         </Stack>
       )}
 
-      {(onAddItem && (values.length < maxItems)) && (
-        <Button
-          onClick={onAddItem}
-          theme='secondary'
-          block
-        >
+      {onAddItem && values.length < maxItems && (
+        <Button onClick={onAddItem} theme='secondary' block>
           {intl.formatMessage(messages.add)}
         </Button>
       )}

@@ -17,7 +17,7 @@ describe('submitAccountNote()', () => {
       });
     });
 
-    it('post the note to the API', async() => {
+    it('post the note to the API', async () => {
       const expectedActions = [
         { type: 'ACCOUNT_NOTE_SUBMIT_REQUEST' },
         { type: 'ACCOUNT_NOTE_SUBMIT_SUCCESS', relationship: {} },
@@ -36,7 +36,7 @@ describe('submitAccountNote()', () => {
       });
     });
 
-    it('should dispatch failed action', async() => {
+    it('should dispatch failed action', async () => {
       const expectedActions = [
         { type: 'ACCOUNT_NOTE_SUBMIT_REQUEST' },
         {

@@ -23,7 +23,7 @@ describe('fetchMe()', () => {
       store = mockStore(state);
     });
 
-    it('dispatches the correct actions', async() => {
+    it('dispatches the correct actions', async () => {
       const expectedActions = [{ type: 'ME_FETCH_SKIP' }];
       await store.dispatch(fetchMe());
       const actions = store.getActions();
@@ -38,16 +38,19 @@ describe('fetchMe()', () => {
 
     beforeEach(() => {
       const state = rootState
-        .set('auth', ReducerRecord({
-          me: accountUrl,
-          users: ImmutableMap({
-            [accountUrl]: AuthUserRecord({
-              'access_token': token,
+        .set(
+          'auth',
+          ReducerRecord({
+            me: accountUrl,
+            users: ImmutableMap({
+              [accountUrl]: AuthUserRecord({
+                access_token: token,
+              }),
             }),
           }),
-        }))
+        )
         .set('entities', {
-          'ACCOUNTS': {
+          ACCOUNTS: {
             store: {
               [accountUrl]: buildAccount({ url: accountUrl }),
             },
@@ -65,7 +68,7 @@ describe('fetchMe()', () => {
         });
       });
 
-      it('dispatches the correct actions', async() => {
+      it('dispatches the correct actions', async () => {
         const expectedActions = [
           { type: 'ME_FETCH_REQUEST' },
           { type: 'AUTH_ACCOUNT_REMEMBER_REQUEST', accountUrl },
@@ -101,7 +104,7 @@ describe('patchMe()', () => {
       });
     });
 
-    it('dispatches the correct actions', async() => {
+    it('dispatches the correct actions', async () => {
       const expectedActions = [
         { type: 'ME_PATCH_REQUEST' },
         { type: 'ACCOUNTS_IMPORT', accounts: [] },

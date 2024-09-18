@@ -4,20 +4,17 @@ import { useAppSelector } from 'pl-fe/hooks';
 
 import { useBookmarkFolders } from './useBookmarkFolders';
 
-import type{ BookmarkFolder } from 'pl-api';
+import type { BookmarkFolder } from 'pl-api';
 
 const useBookmarkFolder = (folderId?: string) => {
-  const {
-    isError,
-    isFetched,
-    isFetching,
-    isLoading,
-    invalidate,
-  } = useBookmarkFolders();
+  const { isError, isFetched, isFetching, isLoading, invalidate } =
+    useBookmarkFolders();
 
-  const bookmarkFolder = useAppSelector(state => folderId
-    ? selectEntity<BookmarkFolder>(state, Entities.BOOKMARK_FOLDERS, folderId)
-    : undefined);
+  const bookmarkFolder = useAppSelector((state) =>
+    folderId
+      ? selectEntity<BookmarkFolder>(state, Entities.BOOKMARK_FOLDERS, folderId)
+      : undefined,
+  );
 
   return {
     bookmarkFolder,

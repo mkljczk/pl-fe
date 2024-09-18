@@ -8,7 +8,9 @@ interface IComposeUploadProgress {
 }
 
 /** File upload progress bar for post composer. */
-const ComposeUploadProgress: React.FC<IComposeUploadProgress> = ({ composeId }) => {
+const ComposeUploadProgress: React.FC<IComposeUploadProgress> = ({
+  composeId,
+}) => {
   const compose = useCompose(composeId);
 
   const active = compose.is_uploading;
@@ -18,9 +20,7 @@ const ComposeUploadProgress: React.FC<IComposeUploadProgress> = ({ composeId }) 
     return null;
   }
 
-  return (
-    <UploadProgress progress={progress} />
-  );
+  return <UploadProgress progress={progress} />;
 };
 
 export { ComposeUploadProgress as default };

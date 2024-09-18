@@ -6,7 +6,10 @@ import { MARKER_FETCH_SUCCESS } from 'pl-fe/actions/markers';
 import { updateNotificationsQueue } from 'pl-fe/actions/notifications';
 import { getLocale, getSettings } from 'pl-fe/actions/settings';
 import { updateStatus } from 'pl-fe/actions/statuses';
-import { deleteFromTimelines, processTimelineUpdate } from 'pl-fe/actions/timelines';
+import {
+  deleteFromTimelines,
+  processTimelineUpdate,
+} from 'pl-fe/actions/timelines';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { importEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
@@ -21,12 +24,21 @@ import { updateReactions } from '../announcements/useAnnouncements';
 
 import { useTimelineStream } from './useTimelineStream';
 
-import type { Announcement, AnnouncementReaction, FollowRelationshipUpdate, Relationship, StreamingEvent } from 'pl-api';
+import type {
+  Announcement,
+  AnnouncementReaction,
+  FollowRelationshipUpdate,
+  Relationship,
+  StreamingEvent,
+} from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
-const updateAnnouncementReactions = ({ announcement_id: id, name }: AnnouncementReaction) => {
+const updateAnnouncementReactions = ({
+  announcement_id: id,
+  name,
+}: AnnouncementReaction) => {
   queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-    prevResult.map(value => {
+    prevResult.map((value) => {
       if (value.id !== id) return value;
 
       return {
@@ -41,19 +53,21 @@ const updateAnnouncement = (announcement: Announcement) =>
   queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) => {
     let updated = false;
 
-    const result = prevResult.map(value => value.id === announcement.id
-      ? (updated = true, announcement)
-      : value);
+    const result = prevResult.map((value) =>
+      value.id === announcement.id ? ((updated = true), announcement) : value,
+    );
 
     if (!updated) return [announcement, ...result];
   });
 
 const deleteAnnouncement = (announcementId: string) =>
   queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-    prevResult.filter(value => value.id !== announcementId),
+    prevResult.filter((value) => value.id !== announcementId),
   );
 
-const followStateToRelationship = (followState: FollowRelationshipUpdate['state']) => {
+const followStateToRelationship = (
+  followState: FollowRelationshipUpdate['state'],
+) => {
   switch (followState) {
     case 'follow_pending':
       return { following: false, requested: true };
@@ -66,12 +80,17 @@ const followStateToRelationship = (followState: FollowRelationshipUpdate['state'
   }
 };
 
-const updateFollowRelationships = (update: FollowRelationshipUpdate) =>
+const updateFollowRelationships =
+  (update: FollowRelationshipUpdate) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
 
     const me = state.me;
-    const relationship = selectEntity<Relationship>(state, Entities.RELATIONSHIPS, update.following.id);
+    const relationship = selectEntity<Relationship>(
+      state,
+      Entities.RELATIONSHIPS,
+      update.following.id,
+    );
 
     if (update.follower.id === me && relationship) {
       const updated = {
@@ -80,7 +99,10 @@ const updateFollowRelationships = (update: FollowRelationshipUpdate) =>
       };
 
       // Add a small delay to deal with API race conditions.
-      setTimeout(() => dispatch(importEntities([updated], Entities.RELATIONSHIPS)), 300);
+      setTimeout(
+        () => dispatch(importEntities([updated], Entities.RELATIONSHIPS)),
+        300,
+      );
     }
   };
 
@@ -105,7 +127,12 @@ const useUserStream = () => {
   const listener = useCallback((event: StreamingEvent) => {
     switch (event.event) {
       case 'update':
-        dispatch(processTimelineUpdate(getTimelineFromStream(event.stream), event.payload));
+        dispatch(
+          processTimelineUpdate(
+            getTimelineFromStream(event.stream),
+            event.payload,
+          ),
+        );
         break;
       case 'status.update':
         dispatch(updateStatus(event.payload));
@@ -116,18 +143,20 @@ const useUserStream = () => {
       case 'notification':
         dispatch((dispatch, getState) => {
           const locale = getLocale(getState());
-          messages[locale]().then(messages => {
-            dispatch(
-              updateNotificationsQueue(
-                event.payload,
-                messages,
-                locale,
-                window.location.pathname,
-              ),
-            );
-          }).catch(error => {
-            console.error(error);
-          });
+          messages[locale]()
+            .then((messages) => {
+              dispatch(
+                updateNotificationsQueue(
+                  event.payload,
+                  messages,
+                  locale,
+                  window.location.pathname,
+                ),
+              );
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         });
         break;
       case 'conversation':

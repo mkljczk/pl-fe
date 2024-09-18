@@ -1,4 +1,4 @@
-import { ONBOARDING_START, ONBOARDING_END } from 'pl-fe/actions/onboarding';
+import { ONBOARDING_END, ONBOARDING_START } from 'pl-fe/actions/onboarding';
 
 import reducer from './onboarding';
 

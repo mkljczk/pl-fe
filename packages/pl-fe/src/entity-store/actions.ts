@@ -1,4 +1,9 @@
-import type { EntitiesTransaction, Entity, EntityListState, ImportPosition } from './types';
+import type {
+  EntitiesTransaction,
+  Entity,
+  EntityListState,
+  ImportPosition,
+} from './types';
 
 const ENTITIES_IMPORT = 'ENTITIES_IMPORT' as const;
 const ENTITIES_DELETE = 'ENTITIES_DELETE' as const;
@@ -28,21 +33,33 @@ interface DeleteEntitiesOpts {
   preserveLists?: boolean;
 }
 
-const deleteEntities = (ids: Iterable<string>, entityType: string, opts: DeleteEntitiesOpts = {}) => ({
+const deleteEntities = (
+  ids: Iterable<string>,
+  entityType: string,
+  opts: DeleteEntitiesOpts = {},
+) => ({
   type: ENTITIES_DELETE,
   ids,
   entityType,
   opts,
 });
 
-const dismissEntities = (ids: Iterable<string>, entityType: string, listKey: string) => ({
+const dismissEntities = (
+  ids: Iterable<string>,
+  entityType: string,
+  listKey: string,
+) => ({
   type: ENTITIES_DISMISS,
   ids,
   entityType,
   listKey,
 });
 
-const incrementEntities = (entityType: string, listKey: string, diff: number) => ({
+const incrementEntities = (
+  entityType: string,
+  listKey: string,
+  diff: number,
+) => ({
   type: ENTITIES_INCREMENT,
   entityType,
   listKey,
@@ -72,7 +89,11 @@ const entitiesFetchSuccess = (
   overwrite,
 });
 
-const entitiesFetchFail = (entityType: string, listKey: string | undefined, error: any) => ({
+const entitiesFetchFail = (
+  entityType: string,
+  listKey: string | undefined,
+  error: any,
+) => ({
   type: ENTITIES_FETCH_FAIL,
   entityType,
   listKey,
@@ -92,7 +113,7 @@ const entitiesTransaction = (transaction: EntitiesTransaction) => ({
 
 /** Any action pertaining to entities. */
 type EntityAction =
-  ReturnType<typeof importEntities>
+  | ReturnType<typeof importEntities>
   | ReturnType<typeof deleteEntities>
   | ReturnType<typeof dismissEntities>
   | ReturnType<typeof incrementEntities>

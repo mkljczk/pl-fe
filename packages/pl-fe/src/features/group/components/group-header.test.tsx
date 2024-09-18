@@ -18,7 +18,10 @@ describe('<GroupHeader />', () => {
 
   describe('when the Group has been deleted', () => {
     it('only shows name, header, and avatar', () => {
-      group = buildGroup({ display_name: 'my group', deleted_at: new Date().toISOString() });
+      group = buildGroup({
+        display_name: 'my group',
+        deleted_at: new Date().toISOString(),
+      });
       render(<GroupHeader group={group} />);
 
       expect(screen.queryAllByTestId('group-header-missing')).toHaveLength(0);

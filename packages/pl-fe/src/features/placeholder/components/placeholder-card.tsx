@@ -1,13 +1,14 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import { randomIntFromInterval, generateText } from '../utils';
+import { generateText, randomIntFromInterval } from '../utils';
 
 /** Fake link preview to display while data is loading. */
 const PlaceholderCard: React.FC = React.memo(() => (
-  <div className={clsx('status-card', {
-    'animate-pulse': true,
-  })}
+  <div
+    className={clsx('status-card', {
+      'animate-pulse': true,
+    })}
   >
     <div className='primary-500 w-2/5 rounded-l'>&nbsp;</div>
 

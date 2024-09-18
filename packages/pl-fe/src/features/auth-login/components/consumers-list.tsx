@@ -6,8 +6,7 @@ import { useInstance } from 'pl-fe/hooks';
 
 import ConsumerButton from './consumer-button';
 
-interface IConsumersList {
-}
+interface IConsumersList {}
 
 /** Displays OAuth consumers to log in with. */
 const ConsumersList: React.FC<IConsumersList> = () => {
@@ -19,10 +18,13 @@ const ConsumersList: React.FC<IConsumersList> = () => {
       <Card className='bg-gray-50 p-2 black:bg-black black:p-0 sm:rounded-xl dark:bg-primary-800'>
         <Stack space={2}>
           <Text size='xs' theme='muted'>
-            <FormattedMessage id='oauth_consumers.title' defaultMessage='Other ways to sign in' />
+            <FormattedMessage
+              id='oauth_consumers.title'
+              defaultMessage='Other ways to sign in'
+            />
           </Text>
           <HStack space={2}>
-            {providers.map(provider => (
+            {providers.map((provider) => (
               <ConsumerButton provider={provider} />
             ))}
           </HStack>

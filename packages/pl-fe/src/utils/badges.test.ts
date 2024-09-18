@@ -1,11 +1,11 @@
 import { buildAccount } from 'pl-fe/jest/factory';
 
 import {
-  tagToBadge,
   badgeToTag,
   filterBadges,
-  getTagDiff,
   getBadges,
+  getTagDiff,
+  tagToBadge,
 } from './badges';
 
 test('tagToBadge', () => {
@@ -36,6 +36,9 @@ test('getTagDiff', () => {
 });
 
 test('getBadges', () => {
-  const account = buildAccount({ id: '1', pleroma: { tags: ['a', 'b', 'badge:c'] } });
+  const account = buildAccount({
+    id: '1',
+    pleroma: { tags: ['a', 'b', 'badge:c'] },
+  });
   expect(getBadges(account)).toEqual(['badge:c']);
 });

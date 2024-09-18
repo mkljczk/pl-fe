@@ -11,10 +11,22 @@ import type { AdminRule } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.rules', defaultMessage: 'Instance rules' },
-  deleteConfirm: { id: 'confirmations.admin.delete_rule.confirm', defaultMessage: 'Delete' },
-  deleteHeading: { id: 'confirmations.admin.delete_rule.heading', defaultMessage: 'Delete rule' },
-  deleteMessage: { id: 'confirmations.admin.delete_rule.message', defaultMessage: 'Are you sure you want to delete the rule?' },
-  ruleDeleteSuccess: { id: 'admin.edit_rule.deleted', defaultMessage: 'Rule deleted' },
+  deleteConfirm: {
+    id: 'confirmations.admin.delete_rule.confirm',
+    defaultMessage: 'Delete',
+  },
+  deleteHeading: {
+    id: 'confirmations.admin.delete_rule.heading',
+    defaultMessage: 'Delete rule',
+  },
+  deleteMessage: {
+    id: 'confirmations.admin.delete_rule.message',
+    defaultMessage: 'Are you sure you want to delete the rule?',
+  },
+  ruleDeleteSuccess: {
+    id: 'admin.edit_rule.deleted',
+    defaultMessage: 'Rule deleted',
+  },
 });
 
 interface IRule {
@@ -35,23 +47,31 @@ const Rule: React.FC<IRule> = ({ rule }) => {
       heading: intl.formatMessage(messages.deleteHeading),
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
-      onConfirm: () => deleteRule(id, {
-        onSuccess: () => toast.success(messages.ruleDeleteSuccess),
-      }),
+      onConfirm: () =>
+        deleteRule(id, {
+          onSuccess: () => toast.success(messages.ruleDeleteSuccess),
+        }),
     });
   };
 
   return (
-    <div key={rule.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
+    <div
+      key={rule.id}
+      className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'
+    >
       <Stack space={2}>
         <Text>{rule.text}</Text>
-        <Text tag='span' theme='muted' size='sm'>{rule.hint}</Text>
+        <Text tag='span' theme='muted' size='sm'>
+          {rule.hint}
+        </Text>
         {rule.priority !== null && (
           <Text size='sm'>
             <Text tag='span' size='sm' weight='medium'>
-              <FormattedMessage id='admin.rule.priority' defaultMessage='Priority:' />
-            </Text>
-            {' '}
+              <FormattedMessage
+                id='admin.rule.priority'
+                defaultMessage='Priority:'
+              />
+            </Text>{' '}
             {rule.priority}
           </Text>
         )}
@@ -78,7 +98,12 @@ const Rules: React.FC = () => {
     openModal('EDIT_RULE');
   };
 
-  const emptyMessage = <FormattedMessage id='empty_column.admin.rules' defaultMessage='There are no instance rules yet.' />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.admin.rules'
+      defaultMessage='There are no instance rules yet.'
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -90,7 +115,10 @@ const Rules: React.FC = () => {
           theme='secondary'
           block
         >
-          <FormattedMessage id='admin.rules.action' defaultMessage='Create rule' />
+          <FormattedMessage
+            id='admin.rules.action'
+            defaultMessage='Create rule'
+          />
         </Button>
         <ScrollableList
           scrollKey='rules'

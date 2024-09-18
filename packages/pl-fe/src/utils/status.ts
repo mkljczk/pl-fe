@@ -7,10 +7,14 @@ import type { IntlShape } from 'react-intl';
 const defaultMediaVisibility = (
   status: Pick<Status, 'sensitive'>,
   displayMedia: string,
-): boolean => (displayMedia !== 'hide_all' && !status.sensitive || displayMedia === 'show_all');
+): boolean =>
+  (displayMedia !== 'hide_all' && !status.sensitive) ||
+  displayMedia === 'show_all';
 
 /** Grab the first external link from a status. */
-const getFirstExternalLink = (status: Pick<Status, 'content'>): HTMLAnchorElement | null => {
+const getFirstExternalLink = (
+  status: Pick<Status, 'content'>,
+): HTMLAnchorElement | null => {
   try {
     // Pulled from Pleroma's media parser
     const selector = 'a:not(.mention,.hashtag,.attachment,[rel~="tag"])';
@@ -28,13 +32,17 @@ const shouldHaveCard = (status: Pick<Status, 'content'>): boolean =>
 
 /** Whether the media IDs on this status have integer IDs (opposed to FlakeIds). */
 // https://gitlab.com/soapbox-pub/soapbox/-/merge_requests/1087
-const hasIntegerMediaIds = (status: Pick<Status, 'media_attachments'>): boolean =>
-  status.media_attachments.some(({ id }) => isIntegerId(id));
+const hasIntegerMediaIds = (
+  status: Pick<Status, 'media_attachments'>,
+): boolean => status.media_attachments.some(({ id }) => isIntegerId(id));
 
 /** Sanitize status text for use with screen readers. */
 const textForScreenReader = (
   intl: IntlShape,
-  status: Pick<Status, 'account' | 'spoiler_text' | 'hidden' | 'search_index' | 'created_at'>,
+  status: Pick<
+    Status,
+    'account' | 'spoiler_text' | 'hidden' | 'search_index' | 'created_at'
+  >,
   rebloggedByText?: string,
 ): string => {
   const { account } = status;
@@ -44,8 +52,15 @@ const textForScreenReader = (
 
   const values = [
     displayName.length === 0 ? account.acct.split('@')[0] : displayName,
-    status.spoiler_text && status.hidden ? status.spoiler_text : status.search_index.slice(status.spoiler_text.length),
-    intl.formatDate(status.created_at, { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }),
+    status.spoiler_text && status.hidden
+      ? status.spoiler_text
+      : status.search_index.slice(status.spoiler_text.length),
+    intl.formatDate(status.created_at, {
+      hour: '2-digit',
+      minute: '2-digit',
+      month: 'short',
+      day: 'numeric',
+    }),
     account.acct,
   ];
 
@@ -57,13 +72,20 @@ const textForScreenReader = (
 };
 
 const getStatusIdsFromLinksInContent = (content: string): string[] => {
-  const urls = content.match(RegExp(`${window.location.origin}/@([a-z\\d_-]+(?:@[^@\\s]+)?)/posts/[a-z0-9]+(?!\\S)`, 'gi'));
+  const urls = content.match(
+    RegExp(
+      `${window.location.origin}/@([a-z\\d_-]+(?:@[^@\\s]+)?)/posts/[a-z0-9]+(?!\\S)`,
+      'gi',
+    ),
+  );
 
   if (!urls) return [];
 
-  return Array.from(new Set(urls
-    .map(url => url.split('/').at(-1) as string)
-    .filter(url => url)));
+  return Array.from(
+    new Set(
+      urls.map((url) => url.split('/').at(-1) as string).filter((url) => url),
+    ),
+  );
 };
 
 export {

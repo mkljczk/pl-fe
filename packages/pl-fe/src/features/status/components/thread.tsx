@@ -1,12 +1,19 @@
 import { createSelector } from '@reduxjs/toolkit';
 import clsx from 'clsx';
-import { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
+import {
+  List as ImmutableList,
+  OrderedSet as ImmutableOrderedSet,
+} from 'immutable';
 import React, { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { type ComposeReplyAction, mentionCompose, replyCompose } from 'pl-fe/actions/compose';
+import {
+  type ComposeReplyAction,
+  mentionCompose,
+  replyCompose,
+} from 'pl-fe/actions/compose';
 import { reblog, toggleFavourite, unreblog } from 'pl-fe/actions/interactions';
 import { getSettings } from 'pl-fe/actions/settings';
 import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
@@ -29,51 +36,57 @@ import type { Account, Status } from 'pl-fe/normalizers';
 import type { SelectedStatus } from 'pl-fe/selectors';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
-const getAncestorsIds = createSelector([
-  (_: RootState, statusId: string | undefined) => statusId,
-  (state: RootState) => state.contexts.inReplyTos,
-], (statusId, inReplyTos) => {
-  let ancestorsIds = ImmutableOrderedSet<string>();
-  let id: string | undefined = statusId;
+const getAncestorsIds = createSelector(
+  [
+    (_: RootState, statusId: string | undefined) => statusId,
+    (state: RootState) => state.contexts.inReplyTos,
+  ],
+  (statusId, inReplyTos) => {
+    let ancestorsIds = ImmutableOrderedSet<string>();
+    let id: string | undefined = statusId;
 
-  while (id && !ancestorsIds.includes(id)) {
-    ancestorsIds = ImmutableOrderedSet([id]).union(ancestorsIds);
-    id = inReplyTos.get(id);
-  }
-
-  return ancestorsIds;
-});
-
-const getDescendantsIds = createSelector([
-  (_: RootState, statusId: string) => statusId,
-  (state: RootState) => state.contexts.replies,
-], (statusId, contextReplies) => {
-  let descendantsIds = ImmutableOrderedSet<string>();
-  const ids = [statusId];
-
-  while (ids.length > 0) {
-    const id = ids.shift();
-    if (!id) break;
-
-    const replies = contextReplies.get(id);
-
-    if (descendantsIds.includes(id)) {
-      break;
+    while (id && !ancestorsIds.includes(id)) {
+      ancestorsIds = ImmutableOrderedSet([id]).union(ancestorsIds);
+      id = inReplyTos.get(id);
     }
 
-    if (statusId !== id) {
-      descendantsIds = descendantsIds.union([id]);
+    return ancestorsIds;
+  },
+);
+
+const getDescendantsIds = createSelector(
+  [
+    (_: RootState, statusId: string) => statusId,
+    (state: RootState) => state.contexts.replies,
+  ],
+  (statusId, contextReplies) => {
+    let descendantsIds = ImmutableOrderedSet<string>();
+    const ids = [statusId];
+
+    while (ids.length > 0) {
+      const id = ids.shift();
+      if (!id) break;
+
+      const replies = contextReplies.get(id);
+
+      if (descendantsIds.includes(id)) {
+        break;
+      }
+
+      if (statusId !== id) {
+        descendantsIds = descendantsIds.union([id]);
+      }
+
+      if (replies) {
+        replies.reverse().forEach((reply: string) => {
+          ids.unshift(reply);
+        });
+      }
     }
 
-    if (replies) {
-      replies.reverse().forEach((reply: string) => {
-        ids.unshift(reply);
-      });
-    }
-  }
-
-  return descendantsIds;
-});
+    return descendantsIds;
+  },
+);
 
 interface IThread {
   status: SelectedStatus;
@@ -100,7 +113,10 @@ const Thread: React.FC<IThread> = ({
 
     if (status) {
       const statusId = status.id;
-      ancestorsIds = getAncestorsIds(state, state.contexts.inReplyTos.get(statusId));
+      ancestorsIds = getAncestorsIds(
+        state,
+        state.contexts.inReplyTos.get(statusId),
+      );
       descendantsIds = getDescendantsIds(state, statusId);
       ancestorsIds = ancestorsIds.delete(statusId).subtract(descendantsIds);
       descendantsIds = descendantsIds.delete(statusId).subtract(ancestorsIds);
@@ -114,7 +130,8 @@ const Thread: React.FC<IThread> = ({
   });
 
   let initialTopMostItemIndex = ancestorsIds.size;
-  if (!useWindowScroll && initialTopMostItemIndex !== 0) initialTopMostItemIndex = ancestorsIds.size + 1;
+  if (!useWindowScroll && initialTopMostItemIndex !== 0)
+    initialTopMostItemIndex = ancestorsIds.size + 1;
 
   const node = useRef<HTMLDivElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
@@ -122,7 +139,11 @@ const Thread: React.FC<IThread> = ({
 
   const handleHotkeyReact = () => {
     if (statusRef.current) {
-      (node.current?.querySelector('.emoji-picker-dropdown') as HTMLButtonElement)?.click();
+      (
+        node.current?.querySelector(
+          '.emoji-picker-dropdown',
+        ) as HTMLButtonElement
+      )?.click();
     }
   };
 
@@ -130,9 +151,11 @@ const Thread: React.FC<IThread> = ({
     dispatch(toggleFavourite(status));
   };
 
-  const handleReplyClick = (status: ComposeReplyAction['status']) => dispatch(replyCompose(status));
+  const handleReplyClick = (status: ComposeReplyAction['status']) =>
+    dispatch(replyCompose(status));
 
-  const handleModalReblog = (status: Pick<SelectedStatus, 'id'>) => dispatch(reblog(status));
+  const handleModalReblog = (status: Pick<SelectedStatus, 'id'>) =>
+    dispatch(reblog(status));
 
   const handleReblogClick = (status: SelectedStatus, e?: React.MouseEvent) => {
     dispatch((_, getState) => {
@@ -143,13 +166,17 @@ const Thread: React.FC<IThread> = ({
         if ((e && e.shiftKey) || !boostModal) {
           handleModalReblog(status);
         } else {
-          openModal('BOOST', { statusId: status.id, onReblog: handleModalReblog });
+          openModal('BOOST', {
+            statusId: status.id,
+            onReblog: handleModalReblog,
+          });
         }
       }
     });
   };
 
-  const handleMentionClick = (account: Pick<Account, 'acct'>) => dispatch(mentionCompose(account));
+  const handleMentionClick = (account: Pick<Account, 'acct'>) =>
+    dispatch(mentionCompose(account));
 
   const handleHotkeyOpenMedia = (e?: KeyboardEvent) => {
     const media = status?.media_attachments;
@@ -245,7 +272,8 @@ const Thread: React.FC<IThread> = ({
       index,
       behavior: 'smooth',
       done: () => {
-        if (!element) node.current?.querySelector<HTMLDivElement>(selector)?.focus();
+        if (!element)
+          node.current?.querySelector<HTMLDivElement>(selector)?.focus();
       },
     });
   };
@@ -284,15 +312,16 @@ const Thread: React.FC<IThread> = ({
     );
   };
 
-  const renderChildren = (list: ImmutableOrderedSet<string>) => list.map(id => {
-    if (id.endsWith('-tombstone')) {
-      return renderTombstone(id);
-    } else if (id.startsWith('末pending-')) {
-      return renderPendingStatus(id);
-    } else {
-      return renderStatus(id);
-    }
-  });
+  const renderChildren = (list: ImmutableOrderedSet<string>) =>
+    list.map((id) => {
+      if (id.endsWith('-tombstone')) {
+        return renderTombstone(id);
+      } else if (id.startsWith('末pending-')) {
+        return renderPendingStatus(id);
+      } else {
+        return renderStatus(id);
+      }
+    });
 
   // Scroll focused status into view when thread updates.
   useEffect(() => {
@@ -308,7 +337,13 @@ const Thread: React.FC<IThread> = ({
         offset: -146,
       });
 
-      setTimeout(() => statusRef.current?.querySelector<HTMLDivElement>('.detailed-actualStatus')?.focus(), 0);
+      setTimeout(
+        () =>
+          statusRef.current
+            ?.querySelector<HTMLDivElement>('.detailed-actualStatus')
+            ?.focus(),
+        0,
+      );
     }, 0);
   }, [status.id, ancestorsIds.size]);
 
@@ -346,7 +381,6 @@ const Thread: React.FC<IThread> = ({
           // FIXME: no "reblogged by" text is added for the screen reader
           aria-label={textForScreenReader(intl, status)}
         >
-
           <DetailedStatus
             status={status}
             withMedia={withMedia}
@@ -390,12 +424,10 @@ const Thread: React.FC<IThread> = ({
   return (
     <Stack
       space={2}
-      className={
-        clsx({
-          'h-full': !useWindowScroll,
-          'mt-2': useWindowScroll,
-        })
-      }
+      className={clsx({
+        'h-full': !useWindowScroll,
+        'mt-2': useWindowScroll,
+      })}
     >
       {status.account.local === false && (
         <Helmet>
@@ -405,11 +437,9 @@ const Thread: React.FC<IThread> = ({
 
       <div
         ref={node}
-        className={
-          clsx('bg-white black:bg-black dark:bg-primary-900', {
-            'h-full': !useWindowScroll,
-          })
-        }
+        className={clsx('bg-white black:bg-black dark:bg-primary-900', {
+          'h-full': !useWindowScroll,
+        })}
       >
         <ScrollableList
           id='thread'
@@ -418,11 +448,9 @@ const Thread: React.FC<IThread> = ({
           initialTopMostItemIndex={initialTopMostItemIndex}
           useWindowScroll={useWindowScroll}
           itemClassName={itemClassName}
-          listClassName={
-            clsx({
-              'h-full': !useWindowScroll,
-            })
-          }
+          listClassName={clsx({
+            'h-full': !useWindowScroll,
+          })}
         >
           {children}
         </ScrollableList>

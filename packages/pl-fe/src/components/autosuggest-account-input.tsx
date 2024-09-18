@@ -3,13 +3,15 @@ import throttle from 'lodash/throttle';
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
 import { accountSearch } from 'pl-fe/actions/accounts';
-import AutosuggestInput, { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
+import AutosuggestInput, {
+  AutoSuggestion,
+} from 'pl-fe/components/autosuggest-input';
 import { useAppDispatch } from 'pl-fe/hooks';
 
 import type { Menu } from 'pl-fe/components/dropdown-menu';
 import type { InputThemes } from 'pl-fe/components/ui/input/input';
 
-const noOp = () => { };
+const noOp = () => {};
 
 interface IAutosuggestAccountInput {
   onChange: React.ChangeEventHandler<HTMLInputElement>;
@@ -42,22 +44,33 @@ const AutosuggestAccountInput: React.FC<IAutosuggestAccountInput> = ({
     setAccountIds(ImmutableOrderedSet());
   };
 
-  const handleAccountSearch = useCallback(throttle((q) => {
-    dispatch(accountSearch(q, controller.current.signal))
-      .then((accounts: { id: string }[]) => {
-        const accountIds = accounts.map(account => account.id);
-        setAccountIds(ImmutableOrderedSet(accountIds));
-      })
-      .catch(noOp);
-  }, 900, { leading: true, trailing: true }), []);
+  const handleAccountSearch = useCallback(
+    throttle(
+      (q) => {
+        dispatch(accountSearch(q, controller.current.signal))
+          .then((accounts: { id: string }[]) => {
+            const accountIds = accounts.map((account) => account.id);
+            setAccountIds(ImmutableOrderedSet(accountIds));
+          })
+          .catch(noOp);
+      },
+      900,
+      { leading: true, trailing: true },
+    ),
+    [],
+  );
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     refreshCancelToken();
     handleAccountSearch(e.target.value);
     onChange(e);
   };
 
-  const handleSelected = (_tokenStart: number, _lastToken: string | null, suggestion: AutoSuggestion) => {
+  const handleSelected = (
+    _tokenStart: number,
+    _lastToken: string | null,
+    suggestion: AutoSuggestion,
+  ) => {
     if (typeof suggestion === 'string' && suggestion[0] !== '#') {
       onSelected(suggestion);
     }

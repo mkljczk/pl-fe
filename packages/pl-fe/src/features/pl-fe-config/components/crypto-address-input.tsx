@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import { HStack, Input } from 'pl-fe/components/ui';
 
@@ -7,17 +7,33 @@ import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield/strea
 import type { CryptoAddress } from 'pl-fe/types/pl-fe';
 
 const messages = defineMessages({
-  ticker: { id: 'plfe_config.crypto_address.meta_fields.ticker_placeholder', defaultMessage: 'Ticker' },
-  address: { id: 'plfe_config.crypto_address.meta_fields.address_placeholder', defaultMessage: 'Address' },
-  note: { id: 'plfe_config.crypto_address.meta_fields.note_placeholder', defaultMessage: 'Note (optional)' },
+  ticker: {
+    id: 'plfe_config.crypto_address.meta_fields.ticker_placeholder',
+    defaultMessage: 'Ticker',
+  },
+  address: {
+    id: 'plfe_config.crypto_address.meta_fields.address_placeholder',
+    defaultMessage: 'Address',
+  },
+  note: {
+    id: 'plfe_config.crypto_address.meta_fields.note_placeholder',
+    defaultMessage: 'Note (optional)',
+  },
 });
 
-const CryptoAddressInput: StreamfieldComponent<CryptoAddress> = ({ value, onChange }) => {
+const CryptoAddressInput: StreamfieldComponent<CryptoAddress> = ({
+  value,
+  onChange,
+}) => {
   const intl = useIntl();
 
-  const handleChange = (key: 'ticker' | 'address' | 'note'): React.ChangeEventHandler<HTMLInputElement> => e => {
-    onChange(value.set(key, e.currentTarget.value));
-  };
+  const handleChange =
+    (
+      key: 'ticker' | 'address' | 'note',
+    ): React.ChangeEventHandler<HTMLInputElement> =>
+    (e) => {
+      onChange(value.set(key, e.currentTarget.value));
+    };
 
   return (
     <HStack space={2} grow>

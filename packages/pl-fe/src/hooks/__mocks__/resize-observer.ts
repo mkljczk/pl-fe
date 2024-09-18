@@ -2,7 +2,6 @@ let listener: ((rect: any) => void) | undefined = undefined;
 const mockDisconnect = vi.fn();
 
 class ResizeObserver {
-
   constructor(ls: any) {
     listener = ls;
   }
@@ -16,7 +15,6 @@ class ResizeObserver {
   disconnect() {
     mockDisconnect();
   }
-
 }
 
 // eslint-disable-next-line compat/compat

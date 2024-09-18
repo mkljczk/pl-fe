@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import { resetCompose } from 'pl-fe/actions/compose';
 import { FOCUS_EDITOR_COMMAND } from 'pl-fe/features/compose/editor/plugins/focus-plugin';
-import { useAppSelector, useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector, useOwnAccount } from 'pl-fe/hooks';
 import { useModalsStore } from 'pl-fe/stores';
 
 import { HotKeys } from '../components/hotkeys';
@@ -46,17 +46,22 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
 
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
   const { account } = useOwnAccount();
   const { openModal } = useModalsStore();
 
   const handleHotkeyNew = (e?: KeyboardEvent) => {
     e?.preventDefault();
 
-    const element = node.current?.querySelector('div[data-lexical-editor="true"]') as HTMLTextAreaElement;
+    const element = node.current?.querySelector(
+      'div[data-lexical-editor="true"]',
+    ) as HTMLTextAreaElement;
 
     if (element) {
-      ((element as any).__lexicalEditor as LexicalEditor).dispatchCommand(FOCUS_EDITOR_COMMAND, undefined);
+      ((element as any).__lexicalEditor as LexicalEditor).dispatchCommand(
+        FOCUS_EDITOR_COMMAND,
+        undefined,
+      );
     } else {
       openModal('COMPOSE');
     }
@@ -66,7 +71,9 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
     e?.preventDefault();
     if (!node.current) return;
 
-    const element = node.current.querySelector('input#search') as HTMLInputElement;
+    const element = node.current.querySelector(
+      'input#search',
+    ) as HTMLInputElement;
 
     if (element?.checkVisibility()) {
       element.focus();
@@ -95,7 +102,9 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
 
     // @ts-ignore
     hotkeys.current.__mousetrap__.stopCallback = (_e, element) =>
-      ['TEXTAREA', 'SELECT', 'INPUT', 'EM-EMOJI-PICKER'].includes(element.tagName) || !!element.closest('[contenteditable]');
+      ['TEXTAREA', 'SELECT', 'INPUT', 'EM-EMOJI-PICKER'].includes(
+        element.tagName,
+      ) || !!element.closest('[contenteditable]');
   };
 
   const handleHotkeyToggleHelp = () => {
@@ -150,7 +159,13 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
   };
 
   return (
-    <HotKeys keyMap={keyMap} handlers={me ? handlers : undefined} ref={setHotkeysRef} attach={window} focused>
+    <HotKeys
+      keyMap={keyMap}
+      handlers={me ? handlers : undefined}
+      ref={setHotkeysRef}
+      attach={window}
+      focused
+    >
       {children}
     </HotKeys>
   );

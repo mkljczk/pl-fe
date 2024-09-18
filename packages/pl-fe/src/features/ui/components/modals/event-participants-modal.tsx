@@ -13,10 +13,14 @@ interface EventParticipantsModalProps {
   statusId: string;
 }
 
-const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalProps> = ({ onClose, statusId }) => {
+const EventParticipantsModal: React.FC<
+  BaseModalProps & EventParticipantsModalProps
+> = ({ onClose, statusId }) => {
   const dispatch = useAppDispatch();
 
-  const accountIds = useAppSelector((state) => state.user_lists.event_participations.get(statusId)?.items);
+  const accountIds = useAppSelector(
+    (state) => state.user_lists.event_participations.get(statusId)?.items,
+  );
 
   const fetchData = () => {
     dispatch(fetchEventParticipations(statusId));
@@ -35,7 +39,12 @@ const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalPr
   if (!accountIds) {
     body = <Spinner />;
   } else {
-    const emptyMessage = <FormattedMessage id='empty_column.event_participants' defaultMessage='No one joined this event yet. When someone does, they will show up here.' />;
+    const emptyMessage = (
+      <FormattedMessage
+        id='empty_column.event_participants'
+        defaultMessage='No one joined this event yet. When someone does, they will show up here.'
+      />
+    );
 
     body = (
       <ScrollableList
@@ -44,16 +53,21 @@ const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalPr
         listClassName='max-w-full'
         itemClassName='pb-3'
       >
-        {accountIds.map(id =>
-          <AccountContainer key={id} id={id} />,
-        )}
+        {accountIds.map((id) => (
+          <AccountContainer key={id} id={id} />
+        ))}
       </ScrollableList>
     );
   }
 
   return (
     <Modal
-      title={<FormattedMessage id='column.event_participants' defaultMessage='Event participants' />}
+      title={
+        <FormattedMessage
+          id='column.event_participants'
+          defaultMessage='Event participants'
+        />
+      }
       onClose={onClickClose}
     >
       {body}

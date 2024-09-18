@@ -16,9 +16,15 @@ interface ISettingToggle {
 }
 
 /** Stateful toggle to change user settings. */
-const SettingToggle: React.FC<ISettingToggle> = ({ id, settings, settingPath, onChange }) => {
-
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
+const SettingToggle: React.FC<ISettingToggle> = ({
+  id,
+  settings,
+  settingPath,
+  onChange,
+}) => {
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = ({
+    target,
+  }) => {
     onChange(settingPath, target.checked);
   };
 

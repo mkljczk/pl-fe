@@ -16,16 +16,19 @@ interface IMediaItem {
 
 const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia }) => {
   const { autoPlayGif, displayMedia } = useSettings();
-  const [visible, setVisible] = useState<boolean>(displayMedia !== 'hide_all' && !attachment.status?.sensitive || displayMedia === 'show_all');
+  const [visible, setVisible] = useState<boolean>(
+    (displayMedia !== 'hide_all' && !attachment.status?.sensitive) ||
+      displayMedia === 'show_all',
+  );
 
-  const handleMouseEnter: React.MouseEventHandler<HTMLVideoElement> = e => {
+  const handleMouseEnter: React.MouseEventHandler<HTMLVideoElement> = (e) => {
     const video = e.target as HTMLVideoElement;
     if (hoverToPlay()) {
       video.play();
     }
   };
 
-  const handleMouseLeave: React.MouseEventHandler<HTMLVideoElement> = e => {
+  const handleMouseLeave: React.MouseEventHandler<HTMLVideoElement> = (e) => {
     const video = e.target as HTMLVideoElement;
     if (hoverToPlay()) {
       video.pause();
@@ -33,9 +36,10 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia }) => {
     }
   };
 
-  const hoverToPlay = () => !autoPlayGif && ['gifv', 'video'].includes(attachment.type);
+  const hoverToPlay = () =>
+    !autoPlayGif && ['gifv', 'video'].includes(attachment.type);
 
-  const handleClick: React.MouseEventHandler = e => {
+  const handleClick: React.MouseEventHandler = (e) => {
     if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
       e.preventDefault();
 
@@ -58,8 +62,8 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia }) => {
   } else if (attachment.type === 'image') {
     const focusX = Number(attachment.meta?.focus?.x) || 0;
     const focusY = Number(attachment.meta?.focus?.y) || 0;
-    const x = ((focusX /  2) + .5) * 100;
-    const y = ((focusY / -2) + .5) * 100;
+    const x = (focusX / 2 + 0.5) * 100;
+    const y = (focusY / -2 + 0.5) * 100;
 
     thumbnail = (
       <StillImage
@@ -70,7 +74,8 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia }) => {
       />
     );
   } else if (['gifv', 'video'].indexOf(attachment.type) !== -1) {
-    const conditionalAttributes: React.VideoHTMLAttributes<HTMLVideoElement> = {};
+    const conditionalAttributes: React.VideoHTMLAttributes<HTMLVideoElement> =
+      {};
     if (isIOS()) {
       conditionalAttributes.playsInline = true;
     }
@@ -98,11 +103,17 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia }) => {
   } else if (attachment.type === 'audio') {
     const remoteURL = attachment.remote_url || '';
     const fileExtensionLastIndex = remoteURL.lastIndexOf('.');
-    const fileExtension = remoteURL.slice(fileExtensionLastIndex + 1).toUpperCase();
+    const fileExtension = remoteURL
+      .slice(fileExtensionLastIndex + 1)
+      .toUpperCase();
     thumbnail = (
       <div className='media-gallery__item-thumbnail'>
-        <span className='media-gallery__item__icons'><Icon src={require('@tabler/icons/outline/volume.svg')} /></span>
-        <span className='media-gallery__file-extension__label'>{fileExtension}</span>
+        <span className='media-gallery__item__icons'>
+          <Icon src={require('@tabler/icons/outline/volume.svg')} />
+        </span>
+        <span className='media-gallery__file-extension__label'>
+          {fileExtension}
+        </span>
       </div>
     );
   }
@@ -117,11 +128,17 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia }) => {
 
   return (
     <div className='col-span-1'>
-      <a className='media-gallery__item-thumbnail aspect-1' href={status.url} target='_blank' onClick={handleClick} title={title}>
+      <a
+        className='media-gallery__item-thumbnail aspect-1'
+        href={status.url}
+        target='_blank'
+        onClick={handleClick}
+        title={title}
+      >
         <Blurhash
           hash={attachment.blurhash}
           className={clsx('media-gallery__preview', {
-            'hidden': visible,
+            hidden: visible,
           })}
         />
         {visible && thumbnail}

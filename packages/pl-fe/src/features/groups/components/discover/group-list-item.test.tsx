@@ -14,8 +14,12 @@ describe('<GroupListItem', () => {
     });
     render(<GroupListItem group={group} />);
 
-    expect(screen.getByTestId('group-list-item')).toHaveTextContent(group.display_name);
+    expect(screen.getByTestId('group-list-item')).toHaveTextContent(
+      group.display_name,
+    );
     expect(screen.getByTestId('group-list-item')).toHaveTextContent('Public');
-    expect(screen.getByTestId('group-list-item')).toHaveTextContent('6 members');
+    expect(screen.getByTestId('group-list-item')).toHaveTextContent(
+      '6 members',
+    );
   });
 });

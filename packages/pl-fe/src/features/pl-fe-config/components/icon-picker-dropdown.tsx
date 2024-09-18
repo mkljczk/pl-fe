@@ -16,7 +16,10 @@ interface IIconPickerDropdown {
   onPickIcon: (icon: string) => void;
 }
 
-const IconPickerDropdown: React.FC<IIconPickerDropdown> = ({ value, onPickIcon }) => {
+const IconPickerDropdown: React.FC<IIconPickerDropdown> = ({
+  value,
+  onPickIcon,
+}) => {
   const intl = useIntl();
 
   const [active, setActive] = useState(false);
@@ -24,7 +27,9 @@ const IconPickerDropdown: React.FC<IIconPickerDropdown> = ({ value, onPickIcon }
 
   const target = useRef(null);
 
-  const onShowDropdown: React.KeyboardEventHandler<HTMLDivElement> = ({ target }) => {
+  const onShowDropdown: React.KeyboardEventHandler<HTMLDivElement> = ({
+    target,
+  }) => {
     setActive(true);
 
     const { top } = (target as any).getBoundingClientRect();

@@ -37,7 +37,8 @@ const LIST_ACCOUNTS_FETCH_REQUEST = 'LIST_ACCOUNTS_FETCH_REQUEST' as const;
 const LIST_ACCOUNTS_FETCH_SUCCESS = 'LIST_ACCOUNTS_FETCH_SUCCESS' as const;
 const LIST_ACCOUNTS_FETCH_FAIL = 'LIST_ACCOUNTS_FETCH_FAIL' as const;
 
-const LIST_EDITOR_SUGGESTIONS_CHANGE = 'LIST_EDITOR_SUGGESTIONS_CHANGE' as const;
+const LIST_EDITOR_SUGGESTIONS_CHANGE =
+  'LIST_EDITOR_SUGGESTIONS_CHANGE' as const;
 const LIST_EDITOR_SUGGESTIONS_READY = 'LIST_EDITOR_SUGGESTIONS_READY' as const;
 const LIST_EDITOR_SUGGESTIONS_CLEAR = 'LIST_EDITOR_SUGGESTIONS_CLEAR' as const;
 
@@ -52,23 +53,27 @@ const LIST_EDITOR_REMOVE_FAIL = 'LIST_EDITOR_REMOVE_FAIL' as const;
 const LIST_ADDER_RESET = 'LIST_ADDER_RESET' as const;
 const LIST_ADDER_SETUP = 'LIST_ADDER_SETUP' as const;
 
-const LIST_ADDER_LISTS_FETCH_REQUEST = 'LIST_ADDER_LISTS_FETCH_REQUEST' as const;
-const LIST_ADDER_LISTS_FETCH_SUCCESS = 'LIST_ADDER_LISTS_FETCH_SUCCESS' as const;
+const LIST_ADDER_LISTS_FETCH_REQUEST =
+  'LIST_ADDER_LISTS_FETCH_REQUEST' as const;
+const LIST_ADDER_LISTS_FETCH_SUCCESS =
+  'LIST_ADDER_LISTS_FETCH_SUCCESS' as const;
 const LIST_ADDER_LISTS_FETCH_FAIL = 'LIST_ADDER_LISTS_FETCH_FAIL' as const;
 
-const fetchList = (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
+const fetchList =
+  (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!isLoggedIn(getState)) return;
 
-  if (getState().lists.get(listId)) {
-    return;
-  }
+    if (getState().lists.get(listId)) {
+      return;
+    }
 
-  dispatch(fetchListRequest(listId));
+    dispatch(fetchListRequest(listId));
 
-  return getClient(getState()).lists.getList(listId)
-    .then((data) => dispatch(fetchListSuccess(data)))
-    .catch(err => dispatch(fetchListFail(listId, err)));
-};
+    return getClient(getState())
+      .lists.getList(listId)
+      .then((data) => dispatch(fetchListSuccess(data)))
+      .catch((err) => dispatch(fetchListFail(listId, err)));
+  };
 
 const fetchListRequest = (listId: string) => ({
   type: LIST_FETCH_REQUEST,
@@ -91,9 +96,10 @@ const fetchLists = () => (dispatch: AppDispatch, getState: () => RootState) => {
 
   dispatch(fetchListsRequest());
 
-  return getClient(getState()).lists.getLists()
+  return getClient(getState())
+    .lists.getLists()
     .then((data) => dispatch(fetchListsSuccess(data)))
-    .catch(err => dispatch(fetchListsFail(err)));
+    .catch((err) => dispatch(fetchListsFail(err)));
 };
 
 const fetchListsRequest = () => ({
@@ -110,44 +116,52 @@ const fetchListsFail = (error: unknown) => ({
   error,
 });
 
-const submitListEditor = (shouldReset?: boolean) => (dispatch: AppDispatch, getState: () => RootState) => {
-  const listId = getState().listEditor.listId!;
-  const title = getState().listEditor.title;
+const submitListEditor =
+  (shouldReset?: boolean) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    const listId = getState().listEditor.listId!;
+    const title = getState().listEditor.title;
 
-  if (listId === null) {
-    dispatch(createList(title, shouldReset));
-  } else {
-    dispatch(updateList(listId, title, shouldReset));
-  }
-};
+    if (listId === null) {
+      dispatch(createList(title, shouldReset));
+    } else {
+      dispatch(updateList(listId, title, shouldReset));
+    }
+  };
 
-const setupListEditor = (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  dispatch({
-    type: LIST_EDITOR_SETUP,
-    list: getState().lists.get(String(listId)),
-  });
+const setupListEditor =
+  (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch({
+      type: LIST_EDITOR_SETUP,
+      list: getState().lists.get(String(listId)),
+    });
 
-  dispatch(fetchListAccounts(listId));
-};
+    dispatch(fetchListAccounts(listId));
+  };
 
 const changeListEditorTitle = (value: string) => ({
   type: LIST_EDITOR_TITLE_CHANGE,
   value,
 });
 
-const createList = (title: string, shouldReset?: boolean) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
+const createList =
+  (title: string, shouldReset?: boolean) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!isLoggedIn(getState)) return;
 
-  dispatch(createListRequest());
+    dispatch(createListRequest());
 
-  return getClient(getState()).lists.createList({ title }).then((data) => {
-    dispatch(createListSuccess(data));
+    return getClient(getState())
+      .lists.createList({ title })
+      .then((data) => {
+        dispatch(createListSuccess(data));
 
-    if (shouldReset) {
-      dispatch(resetListEditor());
-    }
-  }).catch(err => dispatch(createListFail(err)));
-};
+        if (shouldReset) {
+          dispatch(resetListEditor());
+        }
+      })
+      .catch((err) => dispatch(createListFail(err)));
+  };
 
 const createListRequest = () => ({
   type: LIST_CREATE_REQUEST,
@@ -163,19 +177,24 @@ const createListFail = (error: unknown) => ({
   error,
 });
 
-const updateList = (listId: string, title: string, shouldReset?: boolean) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
+const updateList =
+  (listId: string, title: string, shouldReset?: boolean) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!isLoggedIn(getState)) return;
 
-  dispatch(updateListRequest(listId));
+    dispatch(updateListRequest(listId));
 
-  return getClient(getState()).lists.updateList(listId, { title }).then((data) => {
-    dispatch(updateListSuccess(data));
+    return getClient(getState())
+      .lists.updateList(listId, { title })
+      .then((data) => {
+        dispatch(updateListSuccess(data));
 
-    if (shouldReset) {
-      dispatch(resetListEditor());
-    }
-  }).catch(err => dispatch(updateListFail(listId, err)));
-};
+        if (shouldReset) {
+          dispatch(resetListEditor());
+        }
+      })
+      .catch((err) => dispatch(updateListFail(listId, err)));
+  };
 
 const updateListRequest = (listId: string) => ({
   type: LIST_UPDATE_REQUEST,
@@ -197,15 +216,17 @@ const resetListEditor = () => ({
   type: LIST_EDITOR_RESET,
 });
 
-const deleteList = (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
+const deleteList =
+  (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!isLoggedIn(getState)) return;
 
-  dispatch(deleteListRequest(listId));
+    dispatch(deleteListRequest(listId));
 
-  return getClient(getState()).lists.deleteList(listId)
-    .then(() => dispatch(deleteListSuccess(listId)))
-    .catch(err => dispatch(deleteListFail(listId, err)));
-};
+    return getClient(getState())
+      .lists.deleteList(listId)
+      .then(() => dispatch(deleteListSuccess(listId)))
+      .catch((err) => dispatch(deleteListFail(listId, err)));
+  };
 
 const deleteListRequest = (listId: string) => ({
   type: LIST_DELETE_REQUEST,
@@ -223,23 +244,31 @@ const deleteListFail = (listId: string, error: unknown) => ({
   error,
 });
 
-const fetchListAccounts = (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
+const fetchListAccounts =
+  (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!isLoggedIn(getState)) return;
 
-  dispatch(fetchListAccountsRequest(listId));
+    dispatch(fetchListAccountsRequest(listId));
 
-  return getClient(getState()).lists.getListAccounts(listId).then(({ items, next }) => {
-    dispatch(importFetchedAccounts(items));
-    dispatch(fetchListAccountsSuccess(listId, items, next));
-  }).catch(err => dispatch(fetchListAccountsFail(listId, err)));
-};
+    return getClient(getState())
+      .lists.getListAccounts(listId)
+      .then(({ items, next }) => {
+        dispatch(importFetchedAccounts(items));
+        dispatch(fetchListAccountsSuccess(listId, items, next));
+      })
+      .catch((err) => dispatch(fetchListAccountsFail(listId, err)));
+  };
 
 const fetchListAccountsRequest = (listId: string) => ({
   type: LIST_ACCOUNTS_FETCH_REQUEST,
   listId,
 });
 
-const fetchListAccountsSuccess = (listId: string, accounts: Account[], next: (() => Promise<PaginatedResponse<Account>>) | null) => ({
+const fetchListAccountsSuccess = (
+  listId: string,
+  accounts: Account[],
+  next: (() => Promise<PaginatedResponse<Account>>) | null,
+) => ({
   type: LIST_ACCOUNTS_FETCH_SUCCESS,
   listId,
   accounts,
@@ -252,16 +281,23 @@ const fetchListAccountsFail = (listId: string, error: unknown) => ({
   error,
 });
 
-const fetchListSuggestions = (q: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
+const fetchListSuggestions =
+  (q: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!isLoggedIn(getState)) return;
 
-  return getClient(getState()).accounts.searchAccounts(q, { resolve: false, limit: 4, following: true }).then((data) => {
-    dispatch(importFetchedAccounts(data));
-    dispatch(fetchListSuggestionsReady(q, data));
-  }).catch(error => toast.showAlertForError(error));
-};
+    return getClient(getState())
+      .accounts.searchAccounts(q, { resolve: false, limit: 4, following: true })
+      .then((data) => {
+        dispatch(importFetchedAccounts(data));
+        dispatch(fetchListSuggestionsReady(q, data));
+      })
+      .catch((error) => toast.showAlertForError(error));
+  };
 
-const fetchListSuggestionsReady = (query: string, accounts: Array<Account>) => ({
+const fetchListSuggestionsReady = (
+  query: string,
+  accounts: Array<Account>,
+) => ({
   type: LIST_EDITOR_SUGGESTIONS_READY,
   query,
   accounts,
@@ -276,19 +312,23 @@ const changeListSuggestions = (value: string) => ({
   value,
 });
 
-const addToListEditor = (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  dispatch(addToList(getState().listEditor.listId!, accountId));
-};
+const addToListEditor =
+  (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(addToList(getState().listEditor.listId!, accountId));
+  };
 
-const addToList = (listId: string, accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
+const addToList =
+  (listId: string, accountId: string) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!isLoggedIn(getState)) return;
 
-  dispatch(addToListRequest(listId, accountId));
+    dispatch(addToListRequest(listId, accountId));
 
-  return getClient(getState()).lists.addListAccounts(listId, [accountId])
-    .then(() => dispatch(addToListSuccess(listId, accountId)))
-    .catch(err => dispatch(addToListFail(listId, accountId, err)));
-};
+    return getClient(getState())
+      .lists.addListAccounts(listId, [accountId])
+      .then(() => dispatch(addToListSuccess(listId, accountId)))
+      .catch((err) => dispatch(addToListFail(listId, accountId, err)));
+  };
 
 const addToListRequest = (listId: string, accountId: string) => ({
   type: LIST_EDITOR_ADD_REQUEST,
@@ -309,19 +349,23 @@ const addToListFail = (listId: string, accountId: string, error: any) => ({
   error,
 });
 
-const removeFromListEditor = (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  dispatch(removeFromList(getState().listEditor.listId!, accountId));
-};
+const removeFromListEditor =
+  (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(removeFromList(getState().listEditor.listId!, accountId));
+  };
 
-const removeFromList = (listId: string, accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
+const removeFromList =
+  (listId: string, accountId: string) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!isLoggedIn(getState)) return;
 
-  dispatch(removeFromListRequest(listId, accountId));
+    dispatch(removeFromListRequest(listId, accountId));
 
-  return getClient(getState()).lists.deleteListAccounts(listId, [accountId])
-    .then(() => dispatch(removeFromListSuccess(listId, accountId)))
-    .catch(err => dispatch(removeFromListFail(listId, accountId, err)));
-};
+    return getClient(getState())
+      .lists.deleteListAccounts(listId, [accountId])
+      .then(() => dispatch(removeFromListSuccess(listId, accountId)))
+      .catch((err) => dispatch(removeFromListFail(listId, accountId, err)));
+  };
 
 const removeFromListRequest = (listId: string, accountId: string) => ({
   type: LIST_EDITOR_REMOVE_REQUEST,
@@ -335,7 +379,11 @@ const removeFromListSuccess = (listId: string, accountId: string) => ({
   accountId,
 });
 
-const removeFromListFail = (listId: string, accountId: string, error: unknown) => ({
+const removeFromListFail = (
+  listId: string,
+  accountId: string,
+  error: unknown,
+) => ({
   type: LIST_EDITOR_REMOVE_FAIL,
   listId,
   accountId,
@@ -346,24 +394,27 @@ const resetListAdder = () => ({
   type: LIST_ADDER_RESET,
 });
 
-const setupListAdder = (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  dispatch({
-    type: LIST_ADDER_SETUP,
-    account: selectAccount(getState(), accountId),
-  });
-  dispatch(fetchLists());
-  dispatch(fetchAccountLists(accountId));
-};
+const setupListAdder =
+  (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch({
+      type: LIST_ADDER_SETUP,
+      account: selectAccount(getState(), accountId),
+    });
+    dispatch(fetchLists());
+    dispatch(fetchAccountLists(accountId));
+  };
 
-const fetchAccountLists = (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
+const fetchAccountLists =
+  (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!isLoggedIn(getState)) return;
 
-  dispatch(fetchAccountListsRequest(accountId));
+    dispatch(fetchAccountListsRequest(accountId));
 
-  return getClient(getState()).accounts.getAccountLists(accountId)
-    .then((data) => dispatch(fetchAccountListsSuccess(accountId, data)))
-    .catch(err => dispatch(fetchAccountListsFail(accountId, err)));
-};
+    return getClient(getState())
+      .accounts.getAccountLists(accountId)
+      .then((data) => dispatch(fetchAccountListsSuccess(accountId, data)))
+      .catch((err) => dispatch(fetchAccountListsFail(accountId, err)));
+  };
 
 const fetchAccountListsRequest = (listId: string) => ({
   type: LIST_ADDER_LISTS_FETCH_REQUEST,
@@ -382,13 +433,15 @@ const fetchAccountListsFail = (listId: string, err: unknown) => ({
   err,
 });
 
-const addToListAdder = (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  dispatch(addToList(listId, getState().listAdder.accountId!));
-};
+const addToListAdder =
+  (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(addToList(listId, getState().listAdder.accountId!));
+  };
 
-const removeFromListAdder = (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  dispatch(removeFromList(listId, getState().listAdder.accountId!));
-};
+const removeFromListAdder =
+  (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(removeFromList(listId, getState().listAdder.accountId!));
+  };
 
 export {
   LIST_FETCH_REQUEST,

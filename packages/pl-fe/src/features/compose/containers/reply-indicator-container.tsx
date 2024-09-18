@@ -10,11 +10,15 @@ interface IReplyIndicatorContainer {
   composeId: string;
 }
 
-const ReplyIndicatorContainer: React.FC<IReplyIndicatorContainer> = ({ composeId }) => {
+const ReplyIndicatorContainer: React.FC<IReplyIndicatorContainer> = ({
+  composeId,
+}) => {
   const getStatus = useCallback(makeGetStatus(), []);
 
   const { in_reply_to: inReplyToId, id: statusId } = useCompose(composeId);
-  const status = useAppSelector(state => getStatus(state, { id: inReplyToId! }));
+  const status = useAppSelector((state) =>
+    getStatus(state, { id: inReplyToId! }),
+  );
   const dispatch = useAppDispatch();
 
   const onCancel = () => {
@@ -24,7 +28,11 @@ const ReplyIndicatorContainer: React.FC<IReplyIndicatorContainer> = ({ composeId
   if (!status) return null;
 
   return (
-    <ReplyIndicator status={status} hideActions={!!statusId} onCancel={onCancel} />
+    <ReplyIndicator
+      status={status}
+      hideActions={!!statusId}
+      onCancel={onCancel}
+    />
   );
 };
 

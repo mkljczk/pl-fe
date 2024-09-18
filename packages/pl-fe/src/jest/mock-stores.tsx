@@ -8,7 +8,9 @@ import { buildAccount } from './factory';
 const storeOpen = { instance: instanceSchema.parse({ registrations: true }) };
 
 /** Store with registrations closed. */
-const storeClosed = { instance: instanceSchema.parse({ registrations: false }) };
+const storeClosed = {
+  instance: instanceSchema.parse({ registrations: false }),
+};
 
 /** Store with a logged-in user. */
 const storeLoggedIn = {
@@ -18,8 +20,4 @@ const storeLoggedIn = {
   },
 };
 
-export {
-  storeOpen,
-  storeClosed,
-  storeLoggedIn,
-};
+export { storeOpen, storeClosed, storeLoggedIn };

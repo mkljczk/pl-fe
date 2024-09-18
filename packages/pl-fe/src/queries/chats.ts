@@ -1,11 +1,32 @@
-import { InfiniteData, keepPreviousData, useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  keepPreviousData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+} from '@tanstack/react-query';
 import sumBy from 'lodash/sumBy';
-import { type Chat, type ChatMessage as BaseChatMessage, type PaginatedResponse, chatMessageSchema } from 'pl-api';
+import {
+  type ChatMessage as BaseChatMessage,
+  type Chat,
+  type PaginatedResponse,
+  chatMessageSchema,
+} from 'pl-api';
 
-import { importFetchedAccount, importFetchedAccounts } from 'pl-fe/actions/importer';
+import {
+  importFetchedAccount,
+  importFetchedAccounts,
+} from 'pl-fe/actions/importer';
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
-import { useAppDispatch, useAppSelector, useClient, useFeatures, useLoggedIn, useOwnAccount } from 'pl-fe/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useClient,
+  useFeatures,
+  useLoggedIn,
+  useOwnAccount,
+} from 'pl-fe/hooks';
 import { type ChatMessage, normalizeChatMessage } from 'pl-fe/normalizers';
 import { reOrderChatListItems } from 'pl-fe/utils/chats';
 import { flattenPages, updatePageItem } from 'pl-fe/utils/queries';
@@ -20,10 +41,17 @@ const ChatKeys = {
 
 const useChatMessages = (chat: Chat) => {
   const client = useClient();
-  const isBlocked = useAppSelector((state) => state.getIn(['relationships', chat.account.id, 'blocked_by']));
+  const isBlocked = useAppSelector((state) =>
+    state.getIn(['relationships', chat.account.id, 'blocked_by']),
+  );
 
-  const getChatMessages = async (chatId: string, pageParam?: Pick<PaginatedResponse<BaseChatMessage>, 'next'>) => {
-    const response = await (pageParam?.next ? pageParam.next() : client.chats.getChatMessages(chatId));
+  const getChatMessages = async (
+    chatId: string,
+    pageParam?: Pick<PaginatedResponse<BaseChatMessage>, 'next'>,
+  ) => {
+    const response = await (pageParam?.next
+      ? pageParam.next()
+      : client.chats.getChatMessages(chatId));
 
     return {
       ...response,
@@ -37,8 +65,10 @@ const useChatMessages = (chat: Chat) => {
     enabled: !isBlocked,
     gcTime: 0,
     staleTime: 0,
-    initialPageParam: { next: null as (() => Promise<PaginatedResponse<BaseChatMessage>>) | null },
-    getNextPageParam: (config) => config.next ? config : undefined,
+    initialPageParam: {
+      next: null as (() => Promise<PaginatedResponse<BaseChatMessage>>) | null,
+    },
+    getNextPageParam: (config) => (config.next ? config : undefined),
   });
 
   const data = flattenPages<ChatMessage>(queryInfo.data as any)?.toReversed();
@@ -57,14 +87,18 @@ const useChats = () => {
   const fetchRelationships = useFetchRelationships();
   const { me } = useLoggedIn();
 
-  const getChats = async (pageParam?: Pick<PaginatedResponse<Chat>, 'next'>): Promise<PaginatedResponse<Chat>> => {
+  const getChats = async (
+    pageParam?: Pick<PaginatedResponse<Chat>, 'next'>,
+  ): Promise<PaginatedResponse<Chat>> => {
     const response = await (pageParam?.next || client.chats.getChats)();
     const { items } = response;
 
     setUnreadChatsCount(sumBy(data, (chat) => chat.unread));
 
     // Set the relationships to these users in the redux store.
-    fetchRelationships.mutate({ accountIds: items.map((item) => item.account.id) });
+    fetchRelationships.mutate({
+      accountIds: items.map((item) => item.account.id),
+    });
     dispatch(importFetchedAccounts(items.map((item) => item.account)));
 
     return response;
@@ -75,8 +109,10 @@ const useChats = () => {
     queryFn: ({ pageParam }) => getChats(pageParam),
     placeholderData: keepPreviousData,
     enabled: features.chats && !!me,
-    initialPageParam: { next: null as (() => Promise<PaginatedResponse<Chat>>) | null },
-    getNextPageParam: (config) => config.next ? config : undefined,
+    initialPageParam: {
+      next: null as (() => Promise<PaginatedResponse<Chat>>) | null,
+    },
+    getNextPageParam: (config) => (config.next ? config : undefined),
   });
 
   const data = flattenPages(queryInfo.data);
@@ -125,20 +161,27 @@ const useChatActions = (chatId: string) => {
   const { chat, changeScreen } = useChatContext();
 
   const markChatAsRead = async (lastReadId: string) =>
-    client.chats.markChatAsRead(chatId, lastReadId)
+    client.chats
+      .markChatAsRead(chatId, lastReadId)
       .then((data) => {
         updatePageItem(['chats', 'search'], data, (o, n) => o.id === n.id);
-        const queryData = queryClient.getQueryData<InfiniteData<PaginatedResponse<unknown>>>(['chats', 'search']);
+        const queryData = queryClient.getQueryData<
+          InfiniteData<PaginatedResponse<unknown>>
+        >(['chats', 'search']);
 
         if (queryData) {
-          const flattenedQueryData: any = flattenPages(queryData)?.map((chat: any) => {
-            if (chat.id === data.id) {
-              return data;
-            } else {
-              return chat;
-            }
-          });
-          setUnreadChatsCount(sumBy(flattenedQueryData, (chat: Chat) => chat.unread));
+          const flattenedQueryData: any = flattenPages(queryData)?.map(
+            (chat: any) => {
+              if (chat.id === data.id) {
+                return data;
+              } else {
+                return chat;
+              }
+            },
+          );
+          setUnreadChatsCount(
+            sumBy(flattenedQueryData, (chat: Chat) => chat.unread),
+          );
         }
 
         return data;
@@ -146,8 +189,15 @@ const useChatActions = (chatId: string) => {
       .catch(() => null);
 
   const createChatMessage = useMutation({
-    mutationFn: ({ chatId, content, mediaId }: { chatId: string; content: string; mediaId?: string }) => {
-      return client.chats.createChatMessage(chatId, { content, media_id: mediaId });
+    mutationFn: ({
+      chatId,
+      content,
+      mediaId,
+    }: { chatId: string; content: string; mediaId?: string }) => {
+      return client.chats.createChatMessage(chatId, {
+        content,
+        media_id: mediaId,
+      });
     },
     retry: false,
     onMutate: async (variables) => {
@@ -158,44 +208,54 @@ const useChatActions = (chatId: string) => {
 
       // Snapshot the previous value
       const prevContent = variables.content;
-      const prevChatMessages = queryClient.getQueryData(['chats', 'messages', variables.chatId]);
+      const prevChatMessages = queryClient.getQueryData([
+        'chats',
+        'messages',
+        variables.chatId,
+      ]);
       const pendingId = String(Number(new Date()));
 
       // Optimistically update to the new value
-      queryClient.setQueryData(ChatKeys.chatMessages(variables.chatId), (prevResult: any) => {
-        const newResult = { ...prevResult };
-        newResult.pages = newResult.pages.map((page: any, idx: number) => {
-          if (idx === 0) {
-            return {
-              ...page,
-              items: [
-                normalizeChatMessage({
-                  ...chatMessageSchema.parse({
-                    chat_id: variables.chatId,
-                    content: variables.content,
-                    id: pendingId,
-                    created_at: new Date(),
-                    account_id: account?.id,
-                    unread: true,
+      queryClient.setQueryData(
+        ChatKeys.chatMessages(variables.chatId),
+        (prevResult: any) => {
+          const newResult = { ...prevResult };
+          newResult.pages = newResult.pages.map((page: any, idx: number) => {
+            if (idx === 0) {
+              return {
+                ...page,
+                items: [
+                  normalizeChatMessage({
+                    ...chatMessageSchema.parse({
+                      chat_id: variables.chatId,
+                      content: variables.content,
+                      id: pendingId,
+                      created_at: new Date(),
+                      account_id: account?.id,
+                      unread: true,
+                    }),
+                    pending: true,
                   }),
-                  pending: true,
-                }),
-                ...page.items,
-              ],
-            };
-          }
+                  ...page.items,
+                ],
+              };
+            }
 
-          return page;
-        });
+            return page;
+          });
 
-        return newResult;
-      });
+          return newResult;
+        },
+      );
 
       return { prevChatMessages, prevContent, pendingId };
     },
     // If the mutation fails, use the context returned from onMutate to roll back
     onError: (_error: any, variables, context: any) => {
-      queryClient.setQueryData(['chats', 'messages', variables.chatId], context.prevChatMessages);
+      queryClient.setQueryData(
+        ['chats', 'messages', variables.chatId],
+        context.prevChatMessages,
+      );
     },
     onSuccess: (response: any, variables, context) => {
       const nextChat = { ...chat, last_message: response };
@@ -215,7 +275,9 @@ const useChatActions = (chatId: string) => {
     mutationFn: () => client.chats.deleteChat(chatId),
     onSuccess() {
       changeScreen(ChatWidgetScreens.INBOX);
-      queryClient.invalidateQueries({ queryKey: ChatKeys.chatMessages(chatId) });
+      queryClient.invalidateQueries({
+        queryKey: ChatKeys.chatMessages(chatId),
+      });
       queryClient.invalidateQueries({ queryKey: ['chats', 'search'] });
     },
   });

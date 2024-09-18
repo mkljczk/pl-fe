@@ -5,10 +5,7 @@
       "key": ":format_encoders",
       "value": [
         {
-          "tuple": [
-            ":json",
-            "Jason"
-          ]
+          "tuple": [":json", "Jason"]
         }
       ]
     },
@@ -20,10 +17,7 @@
     {
       "group": ":phoenix",
       "key": ":filter_parameters",
-      "value": [
-        "password",
-        "confirm"
-      ]
+      "value": ["password", "confirm"]
     },
     {
       "group": ":phoenix",
@@ -35,30 +29,16 @@
       "key": ":ex_syslogger",
       "value": [
         {
-          "tuple": [
-            ":level",
-            ":debug"
-          ]
+          "tuple": [":level", ":debug"]
         },
         {
-          "tuple": [
-            ":ident",
-            "pleroma"
-          ]
+          "tuple": [":ident", "pleroma"]
         },
         {
-          "tuple": [
-            ":format",
-            "$metadata[$level] $message"
-          ]
+          "tuple": [":format", "$metadata[$level] $message"]
         },
         {
-          "tuple": [
-            ":metadata",
-            [
-              ":request_id"
-            ]
-          ]
+          "tuple": [":metadata", [":request_id"]]
         }
       ]
     },
@@ -67,24 +47,13 @@
       "key": ":console",
       "value": [
         {
-          "tuple": [
-            ":level",
-            ":debug"
-          ]
+          "tuple": [":level", ":debug"]
         },
         {
-          "tuple": [
-            ":metadata",
-            [
-              ":request_id"
-            ]
-          ]
+          "tuple": [":metadata", [":request_id"]]
         },
         {
-          "tuple": [
-            ":format",
-            "[$level] $message\n"
-          ]
+          "tuple": [":format", "[$level] $message\n"]
         }
       ]
     },
@@ -108,10 +77,7 @@
       "key": "Pleroma.Web.Endpoint.MetricsExporter",
       "value": [
         {
-          "tuple": [
-            ":path",
-            "/api/pleroma/app_metrics"
-          ]
+          "tuple": [":path", "/api/pleroma/app_metrics"]
         }
       ]
     },
@@ -120,16 +86,10 @@
       "key": "Ueberauth",
       "value": [
         {
-          "tuple": [
-            ":base_path",
-            "/oauth"
-          ]
+          "tuple": [":base_path", "/oauth"]
         },
         {
-          "tuple": [
-            ":providers",
-            []
-          ]
+          "tuple": [":providers", []]
         }
       ]
     },
@@ -146,14 +106,7 @@
     {
       "group": ":cors_plug",
       "key": ":methods",
-      "value": [
-        "POST",
-        "PUT",
-        "DELETE",
-        "GET",
-        "PATCH",
-        "OPTIONS"
-      ]
+      "value": ["POST", "PUT", "DELETE", "GET", "PATCH", "OPTIONS"]
     },
     {
       "group": ":cors_plug",
@@ -175,31 +128,17 @@
     {
       "group": ":cors_plug",
       "key": ":headers",
-      "value": [
-        "Authorization",
-        "Content-Type",
-        "Idempotency-Key"
-      ]
+      "value": ["Authorization", "Content-Type", "Idempotency-Key"]
     },
     {
       "group": ":mime",
       "key": ":types",
       "value": {
-        "application/activity+json": [
-          "activity+json"
-        ],
-        "application/jrd+json": [
-          "jrd+json"
-        ],
-        "application/ld+json": [
-          "activity+json"
-        ],
-        "application/xml": [
-          "xml"
-        ],
-        "application/xrd+xml": [
-          "xrd+xml"
-        ]
+        "application/activity+json": ["activity+json"],
+        "application/jrd+json": ["jrd+json"],
+        "application/ld+json": ["activity+json"],
+        "application/xml": ["xml"],
+        "application/xrd+xml": ["xrd+xml"]
       }
     },
     {
@@ -210,9 +149,7 @@
     {
       "group": ":quack",
       "key": ":meta",
-      "value": [
-        ":all"
-      ]
+      "value": [":all"]
     },
     {
       "group": ":quack",
@@ -220,19 +157,12 @@
       "value": "https://hooks.slack.com/services/YOUR-KEY-HERE"
     },
     {
-      "db": [
-        ":subject",
-        ":public_key",
-        ":private_key"
-      ],
+      "db": [":subject", ":public_key", ":private_key"],
       "group": ":web_push_encryption",
       "key": ":vapid_details",
       "value": [
         {
-          "tuple": [
-            ":subject",
-            "mailto:alex@alexgleason.me"
-          ]
+          "tuple": [":subject", "mailto:alex@alexgleason.me"]
         },
         {
           "tuple": [
@@ -265,10 +195,7 @@
       "key": ":s3",
       "value": [
         {
-          "tuple": [
-            ":access_key_id",
-            "3WJHLX5DH6LQT5NKXKU2"
-          ]
+          "tuple": [":access_key_id", "3WJHLX5DH6LQT5NKXKU2"]
         },
         {
           "tuple": [
@@ -277,29 +204,18 @@
           ]
         },
         {
-          "tuple": [
-            ":scheme",
-            "https://"
-          ]
+          "tuple": [":scheme", "https://"]
         },
         {
-          "tuple": [
-            ":host",
-            "sfo2.digitaloceanspaces.com"
-          ]
+          "tuple": [":host", "sfo2.digitaloceanspaces.com"]
         },
         {
-          "tuple": [
-            ":region",
-            "sfo2"
-          ]
+          "tuple": [":region", "sfo2"]
         }
       ]
     },
     {
-      "db": [
-        ":default_signer"
-      ],
+      "db": [":default_signer"],
       "group": ":joken",
       "key": ":default_signer",
       "value": "AvRdJr2XiCKeLDrU33rsKA1nTzu1aHypRDpRDCmN00oSHM8+f7Z9BkilF6nWwwv6"
@@ -307,31 +223,20 @@
     {
       "group": ":pleroma",
       "key": ":ecto_repos",
-      "value": [
-        "Pleroma.Repo"
-      ]
+      "value": ["Pleroma.Repo"]
     },
     {
       "group": ":pleroma",
       "key": "Pleroma.Captcha",
       "value": [
         {
-          "tuple": [
-            ":enabled",
-            true
-          ]
+          "tuple": [":enabled", true]
         },
         {
-          "tuple": [
-            ":seconds_valid",
-            300
-          ]
+          "tuple": [":seconds_valid", 300]
         },
         {
-          "tuple": [
-            ":method",
-            "Pleroma.Captcha.Native"
-          ]
+          "tuple": [":method", "Pleroma.Captcha.Native"]
         }
       ]
     },
@@ -340,10 +245,7 @@
       "key": "Pleroma.Captcha.Kocaptcha",
       "value": [
         {
-          "tuple": [
-            ":endpoint",
-            "https://captcha.kotobank.ch"
-          ]
+          "tuple": [":endpoint", "https://captcha.kotobank.ch"]
         }
       ]
     },
@@ -352,34 +254,17 @@
       "key": ":emoji",
       "value": [
         {
-          "tuple": [
-            ":shortcode_globs",
-            [
-              "/emoji/custom/**/*.png"
-            ]
-          ]
+          "tuple": [":shortcode_globs", ["/emoji/custom/**/*.png"]]
         },
         {
-          "tuple": [
-            ":pack_extensions",
-            [
-              ".png",
-              ".gif"
-            ]
-          ]
+          "tuple": [":pack_extensions", [".png", ".gif"]]
         },
         {
           "tuple": [
             ":groups",
             [
               {
-                "tuple": [
-                  ":Custom",
-                  [
-                    "/emoji/*.png",
-                    "/emoji/**/*.png"
-                  ]
-                ]
+                "tuple": [":Custom", ["/emoji/*.png", "/emoji/**/*.png"]]
               }
             ]
           ]
@@ -391,10 +276,7 @@
           ]
         },
         {
-          "tuple": [
-            ":shared_pack_cache_seconds_per_file",
-            60
-          ]
+          "tuple": [":shared_pack_cache_seconds_per_file", 60]
         }
       ]
     },
@@ -431,28 +313,16 @@
       "key": ":http",
       "value": [
         {
-          "tuple": [
-            ":proxy_url",
-            null
-          ]
+          "tuple": [":proxy_url", null]
         },
         {
-          "tuple": [
-            ":send_user_agent",
-            true
-          ]
+          "tuple": [":send_user_agent", true]
         },
         {
-          "tuple": [
-            ":user_agent",
-            ":default"
-          ]
+          "tuple": [":user_agent", ":default"]
         },
         {
-          "tuple": [
-            ":adapter",
-            []
-          ]
+          "tuple": [":adapter", []]
         }
       ]
     },
@@ -465,22 +335,13 @@
             ":direct_message",
             [
               {
-                "tuple": [
-                  ":enabled",
-                  false
-                ]
+                "tuple": [":enabled", false]
               },
               {
-                "tuple": [
-                  ":sender_nickname",
-                  null
-                ]
+                "tuple": [":sender_nickname", null]
               },
               {
-                "tuple": [
-                  ":message",
-                  null
-                ]
+                "tuple": [":message", null]
               }
             ]
           ]
@@ -490,22 +351,13 @@
             ":chat_message",
             [
               {
-                "tuple": [
-                  ":enabled",
-                  false
-                ]
+                "tuple": [":enabled", false]
               },
               {
-                "tuple": [
-                  ":sender_nickname",
-                  null
-                ]
+                "tuple": [":sender_nickname", null]
               },
               {
-                "tuple": [
-                  ":message",
-                  null
-                ]
+                "tuple": [":message", null]
               }
             ]
           ]
@@ -515,34 +367,19 @@
             ":email",
             [
               {
-                "tuple": [
-                  ":enabled",
-                  false
-                ]
+                "tuple": [":enabled", false]
               },
               {
-                "tuple": [
-                  ":sender",
-                  null
-                ]
+                "tuple": [":sender", null]
               },
               {
-                "tuple": [
-                  ":subject",
-                  "Welcome to <%= instance_name %>"
-                ]
+                "tuple": [":subject", "Welcome to <%= instance_name %>"]
               },
               {
-                "tuple": [
-                  ":html",
-                  "Welcome to <%= instance_name %>"
-                ]
+                "tuple": [":html", "Welcome to <%= instance_name %>"]
               },
               {
-                "tuple": [
-                  ":text",
-                  "Welcome to <%= instance_name %>"
-                ]
+                "tuple": [":text", "Welcome to <%= instance_name %>"]
               }
             ]
           ]
@@ -569,28 +406,16 @@
       "key": ":markup",
       "value": [
         {
-          "tuple": [
-            ":allow_inline_images",
-            true
-          ]
+          "tuple": [":allow_inline_images", true]
         },
         {
-          "tuple": [
-            ":allow_headings",
-            false
-          ]
+          "tuple": [":allow_headings", false]
         },
         {
-          "tuple": [
-            ":allow_tables",
-            false
-          ]
+          "tuple": [":allow_tables", false]
         },
         {
-          "tuple": [
-            ":allow_fonts",
-            false
-          ]
+          "tuple": [":allow_fonts", false]
         },
         {
           "tuple": [
@@ -633,10 +458,7 @@
           ]
         },
         {
-          "tuple": [
-            ":default_mascot",
-            ":pleroma_fox_tan"
-          ]
+          "tuple": [":default_mascot", ":pleroma_fox_tan"]
         }
       ]
     },
@@ -656,16 +478,10 @@
           ]
         },
         {
-          "tuple": [
-            ":theme_color",
-            "#282c37"
-          ]
+          "tuple": [":theme_color", "#282c37"]
         },
         {
-          "tuple": [
-            ":background_color",
-            "#191b22"
-          ]
+          "tuple": [":background_color", "#191b22"]
         }
       ]
     },
@@ -674,40 +490,22 @@
       "key": ":activitypub",
       "value": [
         {
-          "tuple": [
-            ":unfollow_blocked",
-            true
-          ]
+          "tuple": [":unfollow_blocked", true]
         },
         {
-          "tuple": [
-            ":outgoing_blocks",
-            true
-          ]
+          "tuple": [":outgoing_blocks", true]
         },
         {
-          "tuple": [
-            ":follow_handshake_timeout",
-            500
-          ]
+          "tuple": [":follow_handshake_timeout", 500]
         },
         {
-          "tuple": [
-            ":note_replies_output_limit",
-            5
-          ]
+          "tuple": [":note_replies_output_limit", 5]
         },
         {
-          "tuple": [
-            ":sign_object_fetches",
-            true
-          ]
+          "tuple": [":sign_object_fetches", true]
         },
         {
-          "tuple": [
-            ":authorized_fetch_mode",
-            false
-          ]
+          "tuple": [":authorized_fetch_mode", false]
         }
       ]
     },
@@ -716,16 +514,10 @@
       "key": ":streamer",
       "value": [
         {
-          "tuple": [
-            ":workers",
-            3
-          ]
+          "tuple": [":workers", 3]
         },
         {
-          "tuple": [
-            ":overflow_workers",
-            2
-          ]
+          "tuple": [":overflow_workers", 2]
         }
       ]
     },
@@ -734,10 +526,7 @@
       "key": ":user",
       "value": [
         {
-          "tuple": [
-            ":deny_follow_blocked",
-            true
-          ]
+          "tuple": [":deny_follow_blocked", true]
         }
       ]
     },
@@ -746,10 +535,7 @@
       "key": ":mrf_normalize_markup",
       "value": [
         {
-          "tuple": [
-            ":scrub_policy",
-            "Pleroma.HTML.Scrubber.Default"
-          ]
+          "tuple": [":scrub_policy", "Pleroma.HTML.Scrubber.Default"]
         }
       ]
     },
@@ -758,16 +544,10 @@
       "key": ":mrf_rejectnonpublic",
       "value": [
         {
-          "tuple": [
-            ":allow_followersonly",
-            false
-          ]
+          "tuple": [":allow_followersonly", false]
         },
         {
-          "tuple": [
-            ":allow_direct",
-            false
-          ]
+          "tuple": [":allow_direct", false]
         }
       ]
     },
@@ -776,16 +556,10 @@
       "key": ":mrf_hellthread",
       "value": [
         {
-          "tuple": [
-            ":delist_threshold",
-            10
-          ]
+          "tuple": [":delist_threshold", 10]
         },
         {
-          "tuple": [
-            ":reject_threshold",
-            20
-          ]
+          "tuple": [":reject_threshold", 20]
         }
       ]
     },
@@ -794,64 +568,34 @@
       "key": ":mrf_simple",
       "value": [
         {
-          "tuple": [
-            ":media_removal",
-            []
-          ]
+          "tuple": [":media_removal", []]
         },
         {
-          "tuple": [
-            ":media_nsfw",
-            []
-          ]
+          "tuple": [":media_nsfw", []]
         },
         {
-          "tuple": [
-            ":federated_timeline_removal",
-            []
-          ]
+          "tuple": [":federated_timeline_removal", []]
         },
         {
-          "tuple": [
-            ":report_removal",
-            []
-          ]
+          "tuple": [":report_removal", []]
         },
         {
-          "tuple": [
-            ":reject",
-            []
-          ]
+          "tuple": [":reject", []]
         },
         {
-          "tuple": [
-            ":followers_only",
-            []
-          ]
+          "tuple": [":followers_only", []]
         },
         {
-          "tuple": [
-            ":accept",
-            []
-          ]
+          "tuple": [":accept", []]
         },
         {
-          "tuple": [
-            ":avatar_removal",
-            []
-          ]
+          "tuple": [":avatar_removal", []]
         },
         {
-          "tuple": [
-            ":banner_removal",
-            []
-          ]
+          "tuple": [":banner_removal", []]
         },
         {
-          "tuple": [
-            ":reject_deletes",
-            []
-          ]
+          "tuple": [":reject_deletes", []]
         }
       ]
     },
@@ -860,22 +604,13 @@
       "key": ":mrf_keyword",
       "value": [
         {
-          "tuple": [
-            ":reject",
-            []
-          ]
+          "tuple": [":reject", []]
         },
         {
-          "tuple": [
-            ":federated_timeline_removal",
-            []
-          ]
+          "tuple": [":federated_timeline_removal", []]
         },
         {
-          "tuple": [
-            ":replace",
-            []
-          ]
+          "tuple": [":replace", []]
         }
       ]
     },
@@ -884,10 +619,7 @@
       "key": ":mrf_subchain",
       "value": [
         {
-          "tuple": [
-            ":match_actor",
-            {}
-          ]
+          "tuple": [":match_actor", {}]
         }
       ]
     },
@@ -896,10 +628,7 @@
       "key": ":mrf_activity_expiration",
       "value": [
         {
-          "tuple": [
-            ":days",
-            365
-          ]
+          "tuple": [":days", 365]
         }
       ]
     },
@@ -908,16 +637,10 @@
       "key": ":mrf_vocabulary",
       "value": [
         {
-          "tuple": [
-            ":accept",
-            []
-          ]
+          "tuple": [":accept", []]
         },
         {
-          "tuple": [
-            ":reject",
-            []
-          ]
+          "tuple": [":reject", []]
         }
       ]
     },
@@ -926,19 +649,10 @@
       "key": ":mrf_object_age",
       "value": [
         {
-          "tuple": [
-            ":threshold",
-            604800
-          ]
+          "tuple": [":threshold", 604800]
         },
         {
-          "tuple": [
-            ":actions",
-            [
-              ":delist",
-              ":strip_followers"
-            ]
-          ]
+          "tuple": [":actions", [":delist", ":strip_followers"]]
         }
       ]
     },
@@ -947,22 +661,13 @@
       "key": "Pleroma.Web.MediaProxy.Invalidation.Http",
       "value": [
         {
-          "tuple": [
-            ":method",
-            ":purge"
-          ]
+          "tuple": [":method", ":purge"]
         },
         {
-          "tuple": [
-            ":headers",
-            []
-          ]
+          "tuple": [":headers", []]
         },
         {
-          "tuple": [
-            ":options",
-            []
-          ]
+          "tuple": [":options", []]
         }
       ]
     },
@@ -971,10 +676,7 @@
       "key": "Pleroma.Web.MediaProxy.Invalidation.Script",
       "value": [
         {
-          "tuple": [
-            ":script_path",
-            null
-          ]
+          "tuple": [":script_path", null]
         }
       ]
     },
@@ -983,10 +685,7 @@
       "key": ":chat",
       "value": [
         {
-          "tuple": [
-            ":enabled",
-            true
-          ]
+          "tuple": [":enabled", true]
         }
       ]
     },
@@ -995,29 +694,18 @@
       "key": ":gopher",
       "value": [
         {
-          "tuple": [
-            ":enabled",
-            false
-          ]
+          "tuple": [":enabled", false]
         },
         {
           "tuple": [
             ":ip",
             {
-              "tuple": [
-                0,
-                0,
-                0,
-                0
-              ]
+              "tuple": [0, 0, 0, 0]
             }
           ]
         },
         {
-          "tuple": [
-            ":port",
-            9999
-          ]
+          "tuple": [":port", 9999]
         }
       ]
     },
@@ -1037,10 +725,7 @@
           ]
         },
         {
-          "tuple": [
-            ":unfurl_nsfw",
-            false
-          ]
+          "tuple": [":unfurl_nsfw", false]
         }
       ]
     },
@@ -1049,12 +734,7 @@
       "key": "Pleroma.Web.Preload",
       "value": [
         {
-          "tuple": [
-            ":providers",
-            [
-              "Pleroma.Web.Preload.Providers.Instance"
-            ]
-          ]
+          "tuple": [":providers", ["Pleroma.Web.Preload.Providers.Instance"]]
         }
       ]
     },
@@ -1063,34 +743,19 @@
       "key": ":http_security",
       "value": [
         {
-          "tuple": [
-            ":enabled",
-            true
-          ]
+          "tuple": [":enabled", true]
         },
         {
-          "tuple": [
-            ":sts",
-            false
-          ]
+          "tuple": [":sts", false]
         },
         {
-          "tuple": [
-            ":sts_max_age",
-            31536000
-          ]
+          "tuple": [":sts_max_age", 31536000]
         },
         {
-          "tuple": [
-            ":ct_max_age",
-            2592000
-          ]
+          "tuple": [":ct_max_age", 2592000]
         },
         {
-          "tuple": [
-            ":referrer_policy",
-            "same-origin"
-          ]
+          "tuple": [":referrer_policy", "same-origin"]
         }
       ]
     },
@@ -1142,10 +807,7 @@
           ]
         },
         {
-          "tuple": [
-            ":email_blacklist",
-            []
-          ]
+          "tuple": [":email_blacklist", []]
         }
       ]
     },
@@ -1154,97 +816,53 @@
       "key": "Oban",
       "value": [
         {
-          "tuple": [
-            ":repo",
-            "Pleroma.Repo"
-          ]
+          "tuple": [":repo", "Pleroma.Repo"]
         },
         {
-          "tuple": [
-            ":log",
-            false
-          ]
+          "tuple": [":log", false]
         },
         {
           "tuple": [
             ":queues",
             [
               {
-                "tuple": [
-                  ":activity_expiration",
-                  10
-                ]
+                "tuple": [":activity_expiration", 10]
               },
               {
-                "tuple": [
-                  ":federator_incoming",
-                  50
-                ]
+                "tuple": [":federator_incoming", 50]
               },
               {
-                "tuple": [
-                  ":federator_outgoing",
-                  50
-                ]
+                "tuple": [":federator_outgoing", 50]
               },
               {
-                "tuple": [
-                  ":web_push",
-                  50
-                ]
+                "tuple": [":web_push", 50]
               },
               {
-                "tuple": [
-                  ":mailer",
-                  10
-                ]
+                "tuple": [":mailer", 10]
               },
               {
-                "tuple": [
-                  ":transmogrifier",
-                  20
-                ]
+                "tuple": [":transmogrifier", 20]
               },
               {
-                "tuple": [
-                  ":scheduled_activities",
-                  10
-                ]
+                "tuple": [":scheduled_activities", 10]
               },
               {
-                "tuple": [
-                  ":background",
-                  5
-                ]
+                "tuple": [":background", 5]
               },
               {
-                "tuple": [
-                  ":remote_fetcher",
-                  2
-                ]
+                "tuple": [":remote_fetcher", 2]
               },
               {
-                "tuple": [
-                  ":attachments_cleanup",
-                  5
-                ]
+                "tuple": [":attachments_cleanup", 5]
               },
               {
-                "tuple": [
-                  ":new_users_digest",
-                  1
-                ]
+                "tuple": [":new_users_digest", 1]
               }
             ]
           ]
         },
         {
-          "tuple": [
-            ":plugins",
-            [
-              "Oban.Plugins.Pruner"
-            ]
-          ]
+          "tuple": [":plugins", ["Oban.Plugins.Pruner"]]
         },
         {
           "tuple": [
@@ -1257,10 +875,7 @@
                 ]
               },
               {
-                "tuple": [
-                  "0 * * * *",
-                  "Pleroma.Workers.Cron.StatsWorker"
-                ]
+                "tuple": ["0 * * * *", "Pleroma.Workers.Cron.StatsWorker"]
               },
               {
                 "tuple": [
@@ -1294,16 +909,10 @@
             ":retries",
             [
               {
-                "tuple": [
-                  ":federator_incoming",
-                  5
-                ]
+                "tuple": [":federator_incoming", 5]
               },
               {
-                "tuple": [
-                  ":federator_outgoing",
-                  5
-                ]
+                "tuple": [":federator_outgoing", 5]
               }
             ]
           ]
@@ -1315,46 +924,25 @@
       "key": "Pleroma.Formatter",
       "value": [
         {
-          "tuple": [
-            ":class",
-            false
-          ]
+          "tuple": [":class", false]
         },
         {
-          "tuple": [
-            ":rel",
-            "ugc"
-          ]
+          "tuple": [":rel", "ugc"]
         },
         {
-          "tuple": [
-            ":new_window",
-            false
-          ]
+          "tuple": [":new_window", false]
         },
         {
-          "tuple": [
-            ":truncate",
-            false
-          ]
+          "tuple": [":truncate", false]
         },
         {
-          "tuple": [
-            ":strip_prefix",
-            false
-          ]
+          "tuple": [":strip_prefix", false]
         },
         {
-          "tuple": [
-            ":extra",
-            true
-          ]
+          "tuple": [":extra", true]
         },
         {
-          "tuple": [
-            ":validate_tld",
-            ":no_scheme"
-          ]
+          "tuple": [":validate_tld", ":no_scheme"]
         }
       ]
     },
@@ -1363,58 +951,31 @@
       "key": ":ldap",
       "value": [
         {
-          "tuple": [
-            ":enabled",
-            false
-          ]
+          "tuple": [":enabled", false]
         },
         {
-          "tuple": [
-            ":host",
-            "localhost"
-          ]
+          "tuple": [":host", "localhost"]
         },
         {
-          "tuple": [
-            ":port",
-            389
-          ]
+          "tuple": [":port", 389]
         },
         {
-          "tuple": [
-            ":ssl",
-            false
-          ]
+          "tuple": [":ssl", false]
         },
         {
-          "tuple": [
-            ":sslopts",
-            []
-          ]
+          "tuple": [":sslopts", []]
         },
         {
-          "tuple": [
-            ":tls",
-            false
-          ]
+          "tuple": [":tls", false]
         },
         {
-          "tuple": [
-            ":tlsopts",
-            []
-          ]
+          "tuple": [":tlsopts", []]
         },
         {
-          "tuple": [
-            ":base",
-            "dc=example,dc=com"
-          ]
+          "tuple": [":base", "dc=example,dc=com"]
         },
         {
-          "tuple": [
-            ":uid",
-            "cn"
-          ]
+          "tuple": [":uid", "cn"]
         }
       ]
     },
@@ -1423,16 +984,10 @@
       "key": ":auth",
       "value": [
         {
-          "tuple": [
-            ":enforce_oauth_admin_scope_usage",
-            true
-          ]
+          "tuple": [":enforce_oauth_admin_scope_usage", true]
         },
         {
-          "tuple": [
-            ":oauth_consumer_strategies",
-            []
-          ]
+          "tuple": [":oauth_consumer_strategies", []]
         }
       ]
     },
@@ -1441,10 +996,7 @@
       "key": "Pleroma.Emails.UserEmail",
       "value": [
         {
-          "tuple": [
-            ":logo",
-            null
-          ]
+          "tuple": [":logo", null]
         },
         {
           "tuple": [
@@ -1466,10 +1018,7 @@
       "key": "Pleroma.Emails.NewUsersDigestEmail",
       "value": [
         {
-          "tuple": [
-            ":enabled",
-            false
-          ]
+          "tuple": [":enabled", false]
         }
       ]
     },
@@ -1478,22 +1027,13 @@
       "key": "Pleroma.ScheduledActivity",
       "value": [
         {
-          "tuple": [
-            ":daily_user_limit",
-            25
-          ]
+          "tuple": [":daily_user_limit", 25]
         },
         {
-          "tuple": [
-            ":total_user_limit",
-            300
-          ]
+          "tuple": [":total_user_limit", 300]
         },
         {
-          "tuple": [
-            ":enabled",
-            true
-          ]
+          "tuple": [":enabled", true]
         }
       ]
     },
@@ -1518,22 +1058,13 @@
       "key": ":oauth2",
       "value": [
         {
-          "tuple": [
-            ":token_expires_in",
-            600
-          ]
+          "tuple": [":token_expires_in", 600]
         },
         {
-          "tuple": [
-            ":issue_new_refresh_token",
-            true
-          ]
+          "tuple": [":issue_new_refresh_token", true]
         },
         {
-          "tuple": [
-            ":clean_expired_tokens",
-            false
-          ]
+          "tuple": [":clean_expired_tokens", false]
         }
       ]
     },
@@ -1545,10 +1076,7 @@
           "tuple": [
             ":authentication",
             {
-              "tuple": [
-                60000,
-                15
-              ]
+              "tuple": [60000, 15]
             }
           ]
         },
@@ -1556,10 +1084,7 @@
           "tuple": [
             ":timeline",
             {
-              "tuple": [
-                500,
-                3
-              ]
+              "tuple": [500, 3]
             }
           ]
         },
@@ -1568,16 +1093,10 @@
             ":search",
             [
               {
-                "tuple": [
-                  1000,
-                  10
-                ]
+                "tuple": [1000, 10]
               },
               {
-                "tuple": [
-                  1000,
-                  30
-                ]
+                "tuple": [1000, 30]
               }
             ]
           ]
@@ -1586,10 +1105,7 @@
           "tuple": [
             ":app_account_creation",
             {
-              "tuple": [
-                1800000,
-                25
-              ]
+              "tuple": [1800000, 25]
             }
           ]
         },
@@ -1597,10 +1113,7 @@
           "tuple": [
             ":relations_actions",
             {
-              "tuple": [
-                10000,
-                10
-              ]
+              "tuple": [10000, 10]
             }
           ]
         },
@@ -1608,10 +1121,7 @@
           "tuple": [
             ":relation_id_action",
             {
-              "tuple": [
-                60000,
-                2
-              ]
+              "tuple": [60000, 2]
             }
           ]
         },
@@ -1619,10 +1129,7 @@
           "tuple": [
             ":statuses_actions",
             {
-              "tuple": [
-                10000,
-                15
-              ]
+              "tuple": [10000, 15]
             }
           ]
         },
@@ -1630,10 +1137,7 @@
           "tuple": [
             ":status_id_action",
             {
-              "tuple": [
-                60000,
-                3
-              ]
+              "tuple": [60000, 3]
             }
           ]
         },
@@ -1641,10 +1145,7 @@
           "tuple": [
             ":password_reset",
             {
-              "tuple": [
-                1800000,
-                5
-              ]
+              "tuple": [1800000, 5]
             }
           ]
         },
@@ -1652,10 +1153,7 @@
           "tuple": [
             ":account_confirmation_resend",
             {
-              "tuple": [
-                8640000,
-                5
-              ]
+              "tuple": [8640000, 5]
             }
           ]
         },
@@ -1663,10 +1161,7 @@
           "tuple": [
             ":ap_routes",
             {
-              "tuple": [
-                60000,
-                15
-              ]
+              "tuple": [60000, 15]
             }
           ]
         }
@@ -1677,10 +1172,7 @@
       "key": "Pleroma.ActivityExpiration",
       "value": [
         {
-          "tuple": [
-            ":enabled",
-            true
-          ]
+          "tuple": [":enabled", true]
         }
       ]
     },
@@ -1689,10 +1181,7 @@
       "key": "Pleroma.Plugs.RemoteIp",
       "value": [
         {
-          "tuple": [
-            ":enabled",
-            true
-          ]
+          "tuple": [":enabled", true]
         }
       ]
     },
@@ -1701,16 +1190,10 @@
       "key": ":web_cache_ttl",
       "value": [
         {
-          "tuple": [
-            ":activity_pub",
-            null
-          ]
+          "tuple": [":activity_pub", null]
         },
         {
-          "tuple": [
-            ":activity_pub_question",
-            30000
-          ]
+          "tuple": [":activity_pub_question", 30000]
         }
       ]
     },
@@ -1719,10 +1202,7 @@
       "key": ":modules",
       "value": [
         {
-          "tuple": [
-            ":runtime_dir",
-            "instance/modules"
-          ]
+          "tuple": [":runtime_dir", "instance/modules"]
         }
       ]
     },
@@ -1731,46 +1211,25 @@
       "key": ":connections_pool",
       "value": [
         {
-          "tuple": [
-            ":reclaim_multiplier",
-            0.1
-          ]
+          "tuple": [":reclaim_multiplier", 0.1]
         },
         {
-          "tuple": [
-            ":connection_acquisition_wait",
-            250
-          ]
+          "tuple": [":connection_acquisition_wait", 250]
         },
         {
-          "tuple": [
-            ":connection_acquisition_retries",
-            5
-          ]
+          "tuple": [":connection_acquisition_retries", 5]
         },
         {
-          "tuple": [
-            ":max_connections",
-            250
-          ]
+          "tuple": [":max_connections", 250]
         },
         {
-          "tuple": [
-            ":max_idle_time",
-            30000
-          ]
+          "tuple": [":max_idle_time", 30000]
         },
         {
-          "tuple": [
-            ":retry",
-            0
-          ]
+          "tuple": [":retry", 0]
         },
         {
-          "tuple": [
-            ":await_up_timeout",
-            5000
-          ]
+          "tuple": [":await_up_timeout", 5000]
         }
       ]
     },
@@ -1783,16 +1242,10 @@
             ":federation",
             [
               {
-                "tuple": [
-                  ":size",
-                  50
-                ]
+                "tuple": [":size", 50]
               },
               {
-                "tuple": [
-                  ":max_waiting",
-                  10
-                ]
+                "tuple": [":max_waiting", 10]
               }
             ]
           ]
@@ -1802,16 +1255,10 @@
             ":media",
             [
               {
-                "tuple": [
-                  ":size",
-                  50
-                ]
+                "tuple": [":size", 50]
               },
               {
-                "tuple": [
-                  ":max_waiting",
-                  10
-                ]
+                "tuple": [":max_waiting", 10]
               }
             ]
           ]
@@ -1821,16 +1268,10 @@
             ":upload",
             [
               {
-                "tuple": [
-                  ":size",
-                  25
-                ]
+                "tuple": [":size", 25]
               },
               {
-                "tuple": [
-                  ":max_waiting",
-                  5
-                ]
+                "tuple": [":max_waiting", 5]
               }
             ]
           ]
@@ -1840,16 +1281,10 @@
             ":default",
             [
               {
-                "tuple": [
-                  ":size",
-                  10
-                ]
+                "tuple": [":size", 10]
               },
               {
-                "tuple": [
-                  ":max_waiting",
-                  2
-                ]
+                "tuple": [":max_waiting", 2]
               }
             ]
           ]
@@ -1865,16 +1300,10 @@
             ":federation",
             [
               {
-                "tuple": [
-                  ":max_connections",
-                  50
-                ]
+                "tuple": [":max_connections", 50]
               },
               {
-                "tuple": [
-                  ":timeout",
-                  150000
-                ]
+                "tuple": [":timeout", 150000]
               }
             ]
           ]
@@ -1884,16 +1313,10 @@
             ":media",
             [
               {
-                "tuple": [
-                  ":max_connections",
-                  50
-                ]
+                "tuple": [":max_connections", 50]
               },
               {
-                "tuple": [
-                  ":timeout",
-                  150000
-                ]
+                "tuple": [":timeout", 150000]
               }
             ]
           ]
@@ -1903,16 +1326,10 @@
             ":upload",
             [
               {
-                "tuple": [
-                  ":max_connections",
-                  25
-                ]
+                "tuple": [":max_connections", 25]
               },
               {
-                "tuple": [
-                  ":timeout",
-                  300000
-                ]
+                "tuple": [":timeout", 300000]
               }
             ]
           ]
@@ -1957,22 +1374,13 @@
       "key": ":mrf",
       "value": [
         {
-          "tuple": [
-            ":policies",
-            "Pleroma.Web.ActivityPub.MRF.ObjectAgePolicy"
-          ]
+          "tuple": [":policies", "Pleroma.Web.ActivityPub.MRF.ObjectAgePolicy"]
         },
         {
-          "tuple": [
-            ":transparency",
-            true
-          ]
+          "tuple": [":transparency", true]
         },
         {
-          "tuple": [
-            ":transparency_exclusions",
-            []
-          ]
+          "tuple": [":transparency_exclusions", []]
         }
       ]
     },
@@ -1981,10 +1389,7 @@
       "key": ":instances_favicons",
       "value": [
         {
-          "tuple": [
-            ":enabled",
-            false
-          ]
+          "tuple": [":enabled", false]
         }
       ]
     },
@@ -1998,16 +1403,10 @@
       "key": "Pleroma.Emails.Mailer",
       "value": [
         {
-          "tuple": [
-            ":enabled",
-            false
-          ]
+          "tuple": [":enabled", false]
         },
         {
-          "tuple": [
-            ":adapter",
-            "Swoosh.Adapters.Local"
-          ]
+          "tuple": [":adapter", "Swoosh.Adapters.Local"]
         }
       ]
     },
@@ -2016,10 +1415,7 @@
       "key": "Pleroma.Web.ApiSpec.CastAndValidate",
       "value": [
         {
-          "tuple": [
-            ":strict",
-            true
-          ]
+          "tuple": [":strict", true]
         }
       ]
     },
@@ -2028,45 +1424,28 @@
       "key": "Pleroma.Uploaders.S3",
       "value": [
         {
-          "tuple": [
-            ":streaming_enabled",
-            true
-          ]
+          "tuple": [":streaming_enabled", true]
         },
         {
-          "tuple": [
-            ":public_endpoint",
-            "https://media.gleasonator.com"
-          ]
+          "tuple": [":public_endpoint", "https://media.gleasonator.com"]
         },
         {
-          "tuple": [
-            ":bucket",
-            "gleasonator-media"
-          ]
+          "tuple": [":bucket", "gleasonator-media"]
         }
       ]
     },
     {
-      "db": [
-        ":enabled"
-      ],
+      "db": [":enabled"],
       "group": ":pleroma",
       "key": ":static_fe",
       "value": [
         {
-          "tuple": [
-            ":enabled",
-            true
-          ]
+          "tuple": [":enabled", true]
         }
       ]
     },
     {
-      "db": [
-        ":enabled",
-        ":redirect_on_failure"
-      ],
+      "db": [":enabled", ":redirect_on_failure"],
       "group": ":pleroma",
       "key": ":media_proxy",
       "value": [
@@ -2075,10 +1454,7 @@
             ":invalidation",
             [
               {
-                "tuple": [
-                  ":enabled",
-                  false
-                ]
+                "tuple": [":enabled", false]
               },
               {
                 "tuple": [
@@ -2094,32 +1470,20 @@
             ":proxy_opts",
             [
               {
-                "tuple": [
-                  ":redirect_on_failure",
-                  false
-                ]
+                "tuple": [":redirect_on_failure", false]
               },
               {
-                "tuple": [
-                  ":max_body_length",
-                  26214400
-                ]
+                "tuple": [":max_body_length", 26214400]
               },
               {
                 "tuple": [
                   ":http",
                   [
                     {
-                      "tuple": [
-                        ":follow_redirect",
-                        true
-                      ]
+                      "tuple": [":follow_redirect", true]
                     },
                     {
-                      "tuple": [
-                        ":pool",
-                        ":media"
-                      ]
+                      "tuple": [":pool", ":media"]
                     }
                   ]
                 ]
@@ -2128,22 +1492,13 @@
           ]
         },
         {
-          "tuple": [
-            ":whitelist",
-            []
-          ]
+          "tuple": [":whitelist", []]
         },
         {
-          "tuple": [
-            ":enabled",
-            false
-          ]
+          "tuple": [":enabled", false]
         },
         {
-          "tuple": [
-            ":redirect_on_failure",
-            true
-          ]
+          "tuple": [":redirect_on_failure", true]
         }
       ]
     },
@@ -2169,58 +1524,31 @@
           ]
         },
         {
-          "tuple": [
-            ":background_image",
-            "/images/city.jpg"
-          ]
+          "tuple": [":background_image", "/images/city.jpg"]
         },
         {
-          "tuple": [
-            ":instance_thumbnail",
-            "/instance/thumbnail.jpeg"
-          ]
+          "tuple": [":instance_thumbnail", "/instance/thumbnail.jpeg"]
         },
         {
-          "tuple": [
-            ":description_limit",
-            5000
-          ]
+          "tuple": [":description_limit", 5000]
         },
         {
-          "tuple": [
-            ":chat_limit",
-            5000
-          ]
+          "tuple": [":chat_limit", 5000]
         },
         {
-          "tuple": [
-            ":remote_limit",
-            100000
-          ]
+          "tuple": [":remote_limit", 100000]
         },
         {
-          "tuple": [
-            ":upload_limit",
-            16000000
-          ]
+          "tuple": [":upload_limit", 16000000]
         },
         {
-          "tuple": [
-            ":avatar_upload_limit",
-            2000000
-          ]
+          "tuple": [":avatar_upload_limit", 2000000]
         },
         {
-          "tuple": [
-            ":background_upload_limit",
-            4000000
-          ]
+          "tuple": [":background_upload_limit", 4000000]
         },
         {
-          "tuple": [
-            ":banner_upload_limit",
-            4000000
-          ]
+          "tuple": [":banner_upload_limit", 4000000]
         },
         {
           "tuple": [
@@ -2234,185 +1562,97 @@
           ]
         },
         {
-          "tuple": [
-            ":invites_enabled",
-            false
-          ]
+          "tuple": [":invites_enabled", false]
         },
         {
-          "tuple": [
-            ":account_activation_required",
-            false
-          ]
+          "tuple": [":account_activation_required", false]
         },
         {
-          "tuple": [
-            ":account_approval_required",
-            false
-          ]
+          "tuple": [":account_approval_required", false]
         },
         {
-          "tuple": [
-            ":federation_incoming_replies_max_depth",
-            100
-          ]
+          "tuple": [":federation_incoming_replies_max_depth", 100]
         },
         {
-          "tuple": [
-            ":federation_reachability_timeout_days",
-            7
-          ]
+          "tuple": [":federation_reachability_timeout_days", 7]
         },
         {
           "tuple": [
             ":federation_publisher_modules",
-            [
-              "Pleroma.Web.ActivityPub.Publisher"
-            ]
+            ["Pleroma.Web.ActivityPub.Publisher"]
           ]
         },
         {
-          "tuple": [
-            ":allow_relay",
-            true
-          ]
+          "tuple": [":allow_relay", true]
         },
         {
-          "tuple": [
-            ":public",
-            true
-          ]
+          "tuple": [":public", true]
         },
         {
-          "tuple": [
-            ":quarantined_instances",
-            []
-          ]
+          "tuple": [":quarantined_instances", []]
         },
         {
-          "tuple": [
-            ":managed_config",
-            true
-          ]
+          "tuple": [":managed_config", true]
         },
         {
           "tuple": [
             ":allowed_post_formats",
-            [
-              "text/plain",
-              "text/html",
-              "text/markdown",
-              "text/bbcode"
-            ]
+            ["text/plain", "text/html", "text/markdown", "text/bbcode"]
           ]
         },
         {
-          "tuple": [
-            ":autofollowed_nicknames",
-            []
-          ]
+          "tuple": [":autofollowed_nicknames", []]
         },
         {
-          "tuple": [
-            ":attachment_links",
-            false
-          ]
+          "tuple": [":attachment_links", false]
         },
         {
-          "tuple": [
-            ":max_report_comment_size",
-            1000
-          ]
+          "tuple": [":max_report_comment_size", 1000]
         },
         {
-          "tuple": [
-            ":safe_dm_mentions",
-            false
-          ]
+          "tuple": [":safe_dm_mentions", false]
         },
         {
-          "tuple": [
-            ":healthcheck",
-            false
-          ]
+          "tuple": [":healthcheck", false]
         },
         {
-          "tuple": [
-            ":remote_post_retention_days",
-            90
-          ]
+          "tuple": [":remote_post_retention_days", 90]
         },
         {
-          "tuple": [
-            ":skip_thread_containment",
-            true
-          ]
+          "tuple": [":skip_thread_containment", true]
         },
         {
-          "tuple": [
-            ":limit_to_local_content",
-            ":unauthenticated"
-          ]
+          "tuple": [":limit_to_local_content", ":unauthenticated"]
         },
         {
-          "tuple": [
-            ":user_bio_length",
-            5000
-          ]
+          "tuple": [":user_bio_length", 5000]
         },
         {
-          "tuple": [
-            ":user_name_length",
-            100
-          ]
+          "tuple": [":user_name_length", 100]
         },
         {
-          "tuple": [
-            ":max_account_fields",
-            10
-          ]
+          "tuple": [":max_account_fields", 10]
         },
         {
-          "tuple": [
-            ":max_remote_account_fields",
-            20
-          ]
+          "tuple": [":max_remote_account_fields", 20]
         },
         {
-          "tuple": [
-            ":account_field_name_length",
-            512
-          ]
+          "tuple": [":account_field_name_length", 512]
         },
         {
-          "tuple": [
-            ":account_field_value_length",
-            2048
-          ]
+          "tuple": [":account_field_value_length", 2048]
         },
         {
-          "tuple": [
-            ":registration_reason_length",
-            500
-          ]
+          "tuple": [":registration_reason_length", 500]
         },
         {
-          "tuple": [
-            ":external_user_synchronization",
-            true
-          ]
+          "tuple": [":external_user_synchronization", true]
         },
         {
-          "tuple": [
-            ":extended_nickname_format",
-            true
-          ]
+          "tuple": [":extended_nickname_format", true]
         },
         {
-          "tuple": [
-            ":cleanup_attachments",
-            false
-          ]
+          "tuple": [":cleanup_attachments", false]
         },
         {
           "tuple": [
@@ -2423,16 +1663,10 @@
                   ":totp",
                   [
                     {
-                      "tuple": [
-                        ":digits",
-                        6
-                      ]
+                      "tuple": [":digits", 6]
                     },
                     {
-                      "tuple": [
-                        ":period",
-                        30
-                      ]
+                      "tuple": [":period", 30]
                     }
                   ]
                 ]
@@ -2442,16 +1676,10 @@
                   ":backup_codes",
                   [
                     {
-                      "tuple": [
-                        ":number",
-                        5
-                      ]
+                      "tuple": [":number", 5]
                     },
                     {
-                      "tuple": [
-                        ":length",
-                        16
-                      ]
+                      "tuple": [":length", 16]
                     }
                   ]
                 ]
@@ -2460,40 +1688,22 @@
           ]
         },
         {
-          "tuple": [
-            ":show_reactions",
-            true
-          ]
+          "tuple": [":show_reactions", true]
         },
         {
-          "tuple": [
-            ":name",
-            "Soapbox FE Demo"
-          ]
+          "tuple": [":name", "Soapbox FE Demo"]
         },
         {
-          "tuple": [
-            ":email",
-            "alex@alexgleason.me"
-          ]
+          "tuple": [":email", "alex@alexgleason.me"]
         },
         {
-          "tuple": [
-            ":notify_email",
-            "alex@alexgleason.me"
-          ]
+          "tuple": [":notify_email", "alex@alexgleason.me"]
         },
         {
-          "tuple": [
-            ":limit",
-            5000
-          ]
+          "tuple": [":limit", 5000]
         },
         {
-          "tuple": [
-            ":registrations_open",
-            true
-          ]
+          "tuple": [":registrations_open", true]
         },
         {
           "tuple": [
@@ -2502,75 +1712,44 @@
           ]
         },
         {
-          "tuple": [
-            ":max_pinned_statuses",
-            10
-          ]
+          "tuple": [":max_pinned_statuses", 10]
         },
         {
-          "tuple": [
-            ":federating",
-            false
-          ]
+          "tuple": [":federating", false]
         },
         {
-          "tuple": [
-            ":static_dir",
-            "instance/static"
-          ]
+          "tuple": [":static_dir", "instance/static"]
         }
       ]
     },
     {
-      "db": [
-        ":uploads"
-      ],
+      "db": [":uploads"],
       "group": ":pleroma",
       "key": "Pleroma.Uploaders.Local",
       "value": [
         {
-          "tuple": [
-            ":uploads",
-            "uploads"
-          ]
+          "tuple": [":uploads", "uploads"]
         }
       ]
     },
     {
-      "db": [
-        ":parsers"
-      ],
+      "db": [":parsers"],
       "group": ":pleroma",
       "key": ":rich_media",
       "value": [
         {
-          "tuple": [
-            ":enabled",
-            true
-          ]
+          "tuple": [":enabled", true]
         },
         {
-          "tuple": [
-            ":ignore_hosts",
-            []
-          ]
+          "tuple": [":ignore_hosts", []]
         },
         {
-          "tuple": [
-            ":ignore_tld",
-            [
-              "local",
-              "localdomain",
-              "lan"
-            ]
-          ]
+          "tuple": [":ignore_tld", ["local", "localdomain", "lan"]]
         },
         {
           "tuple": [
             ":ttl_setters",
-            [
-              "Pleroma.Web.RichMedia.Parser.TTL.AwsSignedUrl"
-            ]
+            ["Pleroma.Web.RichMedia.Parser.TTL.AwsSignedUrl"]
           ]
         },
         {
@@ -2585,63 +1764,38 @@
       ]
     },
     {
-      "db": [
-        ":uploader"
-      ],
+      "db": [":uploader"],
       "group": ":pleroma",
       "key": "Pleroma.Upload",
       "value": [
         {
-          "tuple": [
-            ":filters",
-            [
-              "Pleroma.Upload.Filter.Dedupe"
-            ]
-          ]
+          "tuple": [":filters", ["Pleroma.Upload.Filter.Dedupe"]]
         },
         {
-          "tuple": [
-            ":link_name",
-            false
-          ]
+          "tuple": [":link_name", false]
         },
         {
-          "tuple": [
-            ":proxy_remote",
-            false
-          ]
+          "tuple": [":proxy_remote", false]
         },
         {
           "tuple": [
             ":proxy_opts",
             [
               {
-                "tuple": [
-                  ":redirect_on_failure",
-                  false
-                ]
+                "tuple": [":redirect_on_failure", false]
               },
               {
-                "tuple": [
-                  ":max_body_length",
-                  26214400
-                ]
+                "tuple": [":max_body_length", 26214400]
               },
               {
                 "tuple": [
                   ":http",
                   [
                     {
-                      "tuple": [
-                        ":follow_redirect",
-                        true
-                      ]
+                      "tuple": [":follow_redirect", true]
                     },
                     {
-                      "tuple": [
-                        ":pool",
-                        ":upload"
-                      ]
+                      "tuple": [":pool", ":upload"]
                     }
                   ]
                 ]
@@ -2650,23 +1804,15 @@
           ]
         },
         {
-          "tuple": [
-            ":filename_display_max_length",
-            30
-          ]
+          "tuple": [":filename_display_max_length", 30]
         },
         {
-          "tuple": [
-            ":uploader",
-            "Pleroma.Uploaders.Local"
-          ]
+          "tuple": [":uploader", "Pleroma.Uploaders.Local"]
         }
       ]
     },
     {
-      "db": [
-        ":pl_fe"
-      ],
+      "db": [":pl_fe"],
       "group": ":pleroma",
       "key": ":frontend_configurations",
       "value": [

@@ -6,7 +6,10 @@
 import { produce } from 'immer';
 import { Account, accountSchema } from 'pl-api';
 
-import { VERIFY_CREDENTIALS_SUCCESS, AUTH_ACCOUNT_REMEMBER_SUCCESS } from 'pl-fe/actions/auth';
+import {
+  AUTH_ACCOUNT_REMEMBER_SUCCESS,
+  VERIFY_CREDENTIALS_SUCCESS,
+} from 'pl-fe/actions/auth';
 import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS } from 'pl-fe/actions/me';
 
 import type { AnyAction } from 'redux';
@@ -27,7 +30,7 @@ const importAccount = (state: State, data: unknown): State => {
 
   const account = result.data;
 
-  return produce(state, draft => {
+  return produce(state, (draft) => {
     const existing = draft[account.id];
 
     draft[account.id] = {
@@ -37,7 +40,10 @@ const importAccount = (state: State, data: unknown): State => {
   });
 };
 
-const accounts_meta = (state: Readonly<State> = {}, action: AnyAction): State => {
+const accounts_meta = (
+  state: Readonly<State> = {},
+  action: AnyAction,
+): State => {
   switch (action.type) {
     case ME_FETCH_SUCCESS:
     case ME_PATCH_SUCCESS:

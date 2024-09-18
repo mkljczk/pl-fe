@@ -8,9 +8,7 @@ interface IEmptyLayout {
 
 const EmptyLayout: React.FC<IEmptyLayout> = ({ children }) => (
   <>
-    <Layout.Main>
-      {children}
-    </Layout.Main>
+    <Layout.Main>{children}</Layout.Main>
 
     <Layout.Aside />
   </>

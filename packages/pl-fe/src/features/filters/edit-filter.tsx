@@ -1,11 +1,23 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { createFilter, fetchFilter, updateFilter } from 'pl-fe/actions/filters';
 import List, { ListItem } from 'pl-fe/components/list';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
-import { Button, Column, Form, FormActions, FormGroup, HStack, Input, Stack, Streamfield, Text, Toggle } from 'pl-fe/components/ui';
+import {
+  Button,
+  Column,
+  Form,
+  FormActions,
+  FormGroup,
+  HStack,
+  Input,
+  Stack,
+  Streamfield,
+  Text,
+  Toggle,
+} from 'pl-fe/components/ui';
 import { useAppDispatch, useFeatures } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 
@@ -26,37 +38,107 @@ interface IEditFilter {
 }
 
 const messages = defineMessages({
-  subheading_add_new: { id: 'column.filters.subheading_add_new', defaultMessage: 'Add new filter' },
+  subheading_add_new: {
+    id: 'column.filters.subheading_add_new',
+    defaultMessage: 'Add new filter',
+  },
   title: { id: 'column.filters.title', defaultMessage: 'Title' },
-  keyword: { id: 'column.filters.keyword', defaultMessage: 'Keyword or phrase' },
-  keywords: { id: 'column.filters.keywords', defaultMessage: 'Keywords or phrases' },
+  keyword: {
+    id: 'column.filters.keyword',
+    defaultMessage: 'Keyword or phrase',
+  },
+  keywords: {
+    id: 'column.filters.keywords',
+    defaultMessage: 'Keywords or phrases',
+  },
   expires: { id: 'column.filters.expires', defaultMessage: 'Expire after' },
-  home_timeline: { id: 'column.filters.home_timeline', defaultMessage: 'Home timeline' },
-  public_timeline: { id: 'column.filters.public_timeline', defaultMessage: 'Public timeline' },
-  notifications: { id: 'column.filters.notifications', defaultMessage: 'Notifications' },
-  conversations: { id: 'column.filters.conversations', defaultMessage: 'Conversations' },
+  home_timeline: {
+    id: 'column.filters.home_timeline',
+    defaultMessage: 'Home timeline',
+  },
+  public_timeline: {
+    id: 'column.filters.public_timeline',
+    defaultMessage: 'Public timeline',
+  },
+  notifications: {
+    id: 'column.filters.notifications',
+    defaultMessage: 'Notifications',
+  },
+  conversations: {
+    id: 'column.filters.conversations',
+    defaultMessage: 'Conversations',
+  },
   accounts: { id: 'column.filters.accounts', defaultMessage: 'Accounts' },
-  drop_header: { id: 'column.filters.drop_header', defaultMessage: 'Drop instead of hide' },
-  drop_hint: { id: 'column.filters.drop_hint', defaultMessage: 'Filtered posts will disappear irreversibly, even if filter is later removed' },
-  hide_header: { id: 'column.filters.hide_header', defaultMessage: 'Hide completely' },
-  hide_hint: { id: 'column.filters.hide_hint', defaultMessage: 'Completely hide the filtered content, instead of showing a warning' },
+  drop_header: {
+    id: 'column.filters.drop_header',
+    defaultMessage: 'Drop instead of hide',
+  },
+  drop_hint: {
+    id: 'column.filters.drop_hint',
+    defaultMessage:
+      'Filtered posts will disappear irreversibly, even if filter is later removed',
+  },
+  hide_header: {
+    id: 'column.filters.hide_header',
+    defaultMessage: 'Hide completely',
+  },
+  hide_hint: {
+    id: 'column.filters.hide_hint',
+    defaultMessage:
+      'Completely hide the filtered content, instead of showing a warning',
+  },
   add_new: { id: 'column.filters.add_new', defaultMessage: 'Add new filter' },
   edit: { id: 'column.filters.edit', defaultMessage: 'Edit filter' },
-  create_error: { id: 'column.filters.create_error', defaultMessage: 'Error adding filter' },
-  expiration_never: { id: 'column.filters.expiration.never', defaultMessage: 'Never' },
-  expiration_1800: { id: 'column.filters.expiration.1800', defaultMessage: '30 minutes' },
-  expiration_3600: { id: 'column.filters.expiration.3600', defaultMessage: '1 hour' },
-  expiration_21600: { id: 'column.filters.expiration.21600', defaultMessage: '6 hours' },
-  expiration_43200: { id: 'column.filters.expiration.43200', defaultMessage: '12 hours' },
-  expiration_86400: { id: 'column.filters.expiration.86400', defaultMessage: '1 day' },
-  expiration_604800: { id: 'column.filters.expiration.604800', defaultMessage: '1 week' },
+  create_error: {
+    id: 'column.filters.create_error',
+    defaultMessage: 'Error adding filter',
+  },
+  expiration_never: {
+    id: 'column.filters.expiration.never',
+    defaultMessage: 'Never',
+  },
+  expiration_1800: {
+    id: 'column.filters.expiration.1800',
+    defaultMessage: '30 minutes',
+  },
+  expiration_3600: {
+    id: 'column.filters.expiration.3600',
+    defaultMessage: '1 hour',
+  },
+  expiration_21600: {
+    id: 'column.filters.expiration.21600',
+    defaultMessage: '6 hours',
+  },
+  expiration_43200: {
+    id: 'column.filters.expiration.43200',
+    defaultMessage: '12 hours',
+  },
+  expiration_86400: {
+    id: 'column.filters.expiration.86400',
+    defaultMessage: '1 day',
+  },
+  expiration_604800: {
+    id: 'column.filters.expiration.604800',
+    defaultMessage: '1 week',
+  },
 });
 
-const FilterField: StreamfieldComponent<IFilterField> = ({ value, onChange }) => {
+const FilterField: StreamfieldComponent<IFilterField> = ({
+  value,
+  onChange,
+}) => {
   const intl = useIntl();
 
-  const handleChange = (key: string): React.ChangeEventHandler<HTMLInputElement> =>
-    e => onChange({ ...value, [key]: e.currentTarget[e.currentTarget.type === 'checkbox' ? 'checked' : 'value'] });
+  const handleChange =
+    (key: string): React.ChangeEventHandler<HTMLInputElement> =>
+    (e) =>
+      onChange({
+        ...value,
+        [key]:
+          e.currentTarget[
+            e.currentTarget.type === 'checkbox' ? 'checked' : 'value'
+          ],
+      });
 
   return (
     <HStack space={2} grow>
@@ -74,7 +156,10 @@ const FilterField: StreamfieldComponent<IFilterField> = ({ value, onChange }) =>
         />
 
         <Text tag='span' theme='muted'>
-          <FormattedMessage id='column.filters.whole_word' defaultMessage='Whole word' />
+          <FormattedMessage
+            id='column.filters.whole_word'
+            defaultMessage='Whole word'
+          />
         </Text>
       </HStack>
     </HStack>
@@ -98,23 +183,30 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
   const [conversations, setConversations] = useState(false);
   const [accounts, setAccounts] = useState(false);
   const [hide, setHide] = useState(false);
-  const [keywords, setKeywords] = useState<IFilterField[]>([{ keyword: '', whole_word: false }]);
+  const [keywords, setKeywords] = useState<IFilterField[]>([
+    { keyword: '', whole_word: false },
+  ]);
 
-  const expirations = useMemo(() => ({
-    '': intl.formatMessage(messages.expiration_never),
-    1800: intl.formatMessage(messages.expiration_1800),
-    3600: intl.formatMessage(messages.expiration_3600),
-    21600: intl.formatMessage(messages.expiration_21600),
-    43200: intl.formatMessage(messages.expiration_43200),
-    86400: intl.formatMessage(messages.expiration_86400),
-    604800: intl.formatMessage(messages.expiration_604800),
-  }), []);
+  const expirations = useMemo(
+    () => ({
+      '': intl.formatMessage(messages.expiration_never),
+      1800: intl.formatMessage(messages.expiration_1800),
+      3600: intl.formatMessage(messages.expiration_3600),
+      21600: intl.formatMessage(messages.expiration_21600),
+      43200: intl.formatMessage(messages.expiration_43200),
+      86400: intl.formatMessage(messages.expiration_86400),
+      604800: intl.formatMessage(messages.expiration_604800),
+    }),
+    [],
+  );
 
-  const handleSelectChange: React.ChangeEventHandler<HTMLSelectElement> = e => {
+  const handleSelectChange: React.ChangeEventHandler<HTMLSelectElement> = (
+    e,
+  ) => {
     setExpiresIn(+e.target.value || undefined);
   };
 
-  const handleAddNew: React.FormEventHandler = e => {
+  const handleAddNew: React.FormEventHandler = (e) => {
     e.preventDefault();
     const context: Array<FilterContext> = [];
 
@@ -134,22 +226,37 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
       context.push('account');
     }
 
-    dispatch(params.id
-      ? updateFilter(params.id, title, expiresIn, context, hide, keywords)
-      : createFilter(title, expiresIn, context, hide, keywords)).then(() => {
-      history.push('/filters');
-    }).catch(() => {
-      toast.error(intl.formatMessage(messages.create_error));
-    });
+    dispatch(
+      params.id
+        ? updateFilter(params.id, title, expiresIn, context, hide, keywords)
+        : createFilter(title, expiresIn, context, hide, keywords),
+    )
+      .then(() => {
+        history.push('/filters');
+      })
+      .catch(() => {
+        toast.error(intl.formatMessage(messages.create_error));
+      });
   };
 
-  const handleChangeKeyword = (keywords: { keyword: string; whole_word: boolean }[]) => setKeywords(keywords);
+  const handleChangeKeyword = (
+    keywords: { keyword: string; whole_word: boolean }[],
+  ) => setKeywords(keywords);
 
-  const handleAddKeyword = () => setKeywords(keywords => [...keywords, { keyword: '', whole_word: false }]);
+  const handleAddKeyword = () =>
+    setKeywords((keywords) => [
+      ...keywords,
+      { keyword: '', whole_word: false },
+    ]);
 
-  const handleRemoveKeyword = (i: number) => setKeywords(keywords => keywords[i].id
-    ? keywords.map((keyword, index) => index === i ? { ...keyword, _destroy: true } : keyword)
-    : keywords.filter((_, index) => index !== i));
+  const handleRemoveKeyword = (i: number) =>
+    setKeywords((keywords) =>
+      keywords[i].id
+        ? keywords.map((keyword, index) =>
+            index === i ? { ...keyword, _destroy: true } : keyword,
+          )
+        : keywords.filter((_, index) => index !== i),
+    );
 
   useEffect(() => {
     if (params.id) {
@@ -188,7 +295,10 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
   );
 
   return (
-    <Column className='filter-settings-panel' label={intl.formatMessage(messages.subheading_add_new)}>
+    <Column
+      className='filter-settings-panel'
+      label={intl.formatMessage(messages.subheading_add_new)}
+    >
       <Form onSubmit={handleAddNew}>
         {features.filtersV2 ? (
           <FormGroup labelText={intl.formatMessage(messages.title)}>
@@ -200,7 +310,9 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
               onChange={({ target }) => setTitle(target.value)}
             />
           </FormGroup>
-        ) : keywordsField}
+        ) : (
+          keywordsField
+        )}
 
         <FormGroup labelText={intl.formatMessage(messages.expires)}>
           <SelectDropdown
@@ -212,10 +324,16 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
 
         <Stack>
           <Text size='sm' weight='medium'>
-            <FormattedMessage id='filters.context_header' defaultMessage='Filter contexts' />
+            <FormattedMessage
+              id='filters.context_header'
+              defaultMessage='Filter contexts'
+            />
           </Text>
           <Text size='xs' theme='muted'>
-            <FormattedMessage id='filters.context_hint' defaultMessage='One or multiple contexts where the filter should apply' />
+            <FormattedMessage
+              id='filters.context_hint'
+              defaultMessage='One or multiple contexts where the filter should apply'
+            />
           </Text>
         </Stack>
 
@@ -256,8 +374,12 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
 
         <List>
           <ListItem
-            label={intl.formatMessage(features.filtersV2 ? messages.hide_header : messages.drop_header)}
-            hint={intl.formatMessage(features.filtersV2 ? messages.hide_hint : messages.drop_hint)}
+            label={intl.formatMessage(
+              features.filtersV2 ? messages.hide_header : messages.drop_header,
+            )}
+            hint={intl.formatMessage(
+              features.filtersV2 ? messages.hide_hint : messages.drop_hint,
+            )}
           >
             <Toggle
               checked={hide}

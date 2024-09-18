@@ -1,6 +1,6 @@
 import { GroupRoles } from 'pl-api';
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { useJoinGroup, useLeaveGroup } from 'pl-fe/api/hooks';
 import { Button } from 'pl-fe/components/ui';
@@ -17,11 +17,27 @@ interface IGroupActionButton {
 }
 
 const messages = defineMessages({
-  confirmationConfirm: { id: 'confirmations.leave_group.confirm', defaultMessage: 'Leave' },
-  confirmationHeading: { id: 'confirmations.leave_group.heading', defaultMessage: 'Leave group' },
-  confirmationMessage: { id: 'confirmations.leave_group.message', defaultMessage: 'You are about to leave the group. Do you want to continue?' },
-  joinRequestSuccess: { id: 'group.join.request_success', defaultMessage: 'Request sent to group owner' },
-  joinSuccess: { id: 'group.join.success', defaultMessage: 'Group joined successfully!' },
+  confirmationConfirm: {
+    id: 'confirmations.leave_group.confirm',
+    defaultMessage: 'Leave',
+  },
+  confirmationHeading: {
+    id: 'confirmations.leave_group.heading',
+    defaultMessage: 'Leave group',
+  },
+  confirmationMessage: {
+    id: 'confirmations.leave_group.message',
+    defaultMessage:
+      'You are about to leave the group. Do you want to continue?',
+  },
+  joinRequestSuccess: {
+    id: 'group.join.request_success',
+    defaultMessage: 'Request sent to group owner',
+  },
+  joinSuccess: {
+    id: 'group.join.success',
+    defaultMessage: 'Group joined successfully!',
+  },
   leaveSuccess: { id: 'group.leave.success', defaultMessage: 'Left the group' },
 });
 
@@ -38,53 +54,56 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
   const isOwner = group.relationship?.role === GroupRoles.OWNER;
   const isAdmin = group.relationship?.role === GroupRoles.ADMIN;
 
-  const onJoinGroup = () => joinGroup.mutate({}, {
-    onSuccess() {
-      joinGroup.invalidate();
+  const onJoinGroup = () =>
+    joinGroup.mutate(
+      {},
+      {
+        onSuccess() {
+          joinGroup.invalidate();
 
-      toast.success(
-        group.locked
-          ? intl.formatMessage(messages.joinRequestSuccess)
-          : intl.formatMessage(messages.joinSuccess),
-      );
-    },
-    onError(error) {
-      const message = error.response?.json?.error;
-      if (message) {
-        toast.error(message);
-      }
-    },
-  });
+          toast.success(
+            group.locked
+              ? intl.formatMessage(messages.joinRequestSuccess)
+              : intl.formatMessage(messages.joinSuccess),
+          );
+        },
+        onError(error) {
+          const message = error.response?.json?.error;
+          if (message) {
+            toast.error(message);
+          }
+        },
+      },
+    );
 
   const onLeaveGroup = () =>
     openModal('CONFIRM', {
       heading: intl.formatMessage(messages.confirmationHeading),
       message: intl.formatMessage(messages.confirmationMessage),
       confirm: intl.formatMessage(messages.confirmationConfirm),
-      onConfirm: () => leaveGroup.mutate(group.relationship?.id as string, {
-        onSuccess() {
-          leaveGroup.invalidate();
-          toast.success(intl.formatMessage(messages.leaveSuccess));
-        },
-      }),
+      onConfirm: () =>
+        leaveGroup.mutate(group.relationship?.id as string, {
+          onSuccess() {
+            leaveGroup.invalidate();
+            toast.success(intl.formatMessage(messages.leaveSuccess));
+          },
+        }),
     });
 
-  const onCancelRequest = () => leaveGroup.mutate(group.relationship?.id as string, {
-    onSuccess() {
-      const entity = {
-        ...group.relationship as GroupRelationship,
-        requested: false,
-      };
-      dispatch(importEntities([entity], Entities.GROUP_RELATIONSHIPS));
-    },
-  });
+  const onCancelRequest = () =>
+    leaveGroup.mutate(group.relationship?.id as string, {
+      onSuccess() {
+        const entity = {
+          ...(group.relationship as GroupRelationship),
+          requested: false,
+        };
+        dispatch(importEntities([entity], Entities.GROUP_RELATIONSHIPS));
+      },
+    });
 
   if (isOwner || isAdmin) {
     return (
-      <Button
-        theme='secondary'
-        to={`/groups/${group.id}/manage`}
-      >
+      <Button theme='secondary' to={`/groups/${group.id}/manage`}>
         <FormattedMessage id='group.manage' defaultMessage='Manage group' />
       </Button>
     );
@@ -97,9 +116,17 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
         onClick={onJoinGroup}
         disabled={joinGroup.isSubmitting}
       >
-        {group.locked
-          ? <FormattedMessage id='group.join.private' defaultMessage='Request access' />
-          : <FormattedMessage id='group.join.public' defaultMessage='Join group' />}
+        {group.locked ? (
+          <FormattedMessage
+            id='group.join.private'
+            defaultMessage='Request access'
+          />
+        ) : (
+          <FormattedMessage
+            id='group.join.public'
+            defaultMessage='Join group'
+          />
+        )}
       </Button>
     );
   }
@@ -111,7 +138,10 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
         onClick={onCancelRequest}
         disabled={leaveGroup.isSubmitting}
       >
-        <FormattedMessage id='group.cancel_request' defaultMessage='Cancel request' />
+        <FormattedMessage
+          id='group.cancel_request'
+          defaultMessage='Cancel request'
+        />
       </Button>
     );
   }

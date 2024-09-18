@@ -8,10 +8,10 @@ import { EMOJI_CHOOSE } from '../actions/emojis';
 import { NOTIFICATIONS_FILTER_SET } from '../actions/notifications';
 import { SEARCH_FILTER_SET } from '../actions/search';
 import {
+  FE_NAME,
+  SETTINGS_UPDATE,
   SETTING_CHANGE,
   SETTING_SAVE,
-  SETTINGS_UPDATE,
-  FE_NAME,
 } from '../actions/settings';
 
 import type { Emoji } from 'pl-fe/features/emoji';
@@ -20,10 +20,18 @@ import type { APIEntity } from 'pl-fe/types/entities';
 type State = ImmutableMap<string, any>;
 
 const updateFrequentEmojis = (state: State, emoji: Emoji) =>
-  state.update('frequentlyUsedEmojis', ImmutableMap(), map => map.update(emoji.id, 0, (count: number) => count + 1)).set('saved', false);
+  state
+    .update('frequentlyUsedEmojis', ImmutableMap(), (map) =>
+      map.update(emoji.id, 0, (count: number) => count + 1),
+    )
+    .set('saved', false);
 
 const updateFrequentLanguages = (state: State, language: string) =>
-  state.update('frequentlyUsedLanguages', ImmutableMap<string, number>(), map => map.update(language, 0, (count: number) => count + 1)).set('saved', false);
+  state
+    .update('frequentlyUsedLanguages', ImmutableMap<string, number>(), (map) =>
+      map.update(language, 0, (count: number) => count + 1),
+    )
+    .set('saved', false);
 
 const importSettings = (state: State, account: APIEntity) => {
   account = fromJS(account);
@@ -45,9 +53,7 @@ const settings = (
     case NOTIFICATIONS_FILTER_SET:
     case SEARCH_FILTER_SET:
     case SETTING_CHANGE:
-      return state
-        .setIn(action.path, action.value)
-        .set('saved', false);
+      return state.setIn(action.path, action.value).set('saved', false);
     case EMOJI_CHOOSE:
       return updateFrequentEmojis(state, action.emoji);
     case LANGUAGE_USE:

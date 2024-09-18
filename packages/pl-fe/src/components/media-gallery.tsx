@@ -5,11 +5,17 @@ import Blurhash from 'pl-fe/components/blurhash';
 import Icon from 'pl-fe/components/icon';
 import StillImage from 'pl-fe/components/still-image';
 import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
-import { useSettings, usePlFeConfig } from 'pl-fe/hooks';
+import { usePlFeConfig, useSettings } from 'pl-fe/hooks';
 import { truncateFilename } from 'pl-fe/utils/media';
 
 import { isIOS } from '../is-mobile';
-import { isPanoramic, isPortrait, isNonConformingRatio, minimumAspectRatio, maximumAspectRatio } from '../utils/media-aspect-ratio';
+import {
+  isNonConformingRatio,
+  isPanoramic,
+  isPortrait,
+  maximumAspectRatio,
+  minimumAspectRatio,
+} from '../utils/media-aspect-ratio';
 
 import type { Property } from 'csstype';
 import type { MediaAttachment } from 'pl-api';
@@ -36,7 +42,11 @@ interface SizeData {
 }
 
 const getAspectRatio = (attachment: MediaAttachment) =>
-  (attachment.type === 'gifv' || attachment.type === 'image' || attachment.type === 'video') && attachment.meta.original?.aspect || null;
+  ((attachment.type === 'gifv' ||
+    attachment.type === 'image' ||
+    attachment.type === 'video') &&
+    attachment.meta.original?.aspect) ||
+  null;
 
 const withinLimits = (aspectRatio: number) =>
   aspectRatio >= minimumAspectRatio && aspectRatio <= maximumAspectRatio;
@@ -74,13 +84,17 @@ const Item: React.FC<IItem> = ({
   const { autoPlayGif } = useSettings();
   const { mediaPreview } = usePlFeConfig();
 
-  const handleMouseEnter: React.MouseEventHandler<HTMLVideoElement> = ({ currentTarget: video }) => {
+  const handleMouseEnter: React.MouseEventHandler<HTMLVideoElement> = ({
+    currentTarget: video,
+  }) => {
     if (hoverToPlay()) {
       video.play();
     }
   };
 
-  const handleMouseLeave: React.MouseEventHandler<HTMLVideoElement> = ({ currentTarget: video }) => {
+  const handleMouseLeave: React.MouseEventHandler<HTMLVideoElement> = ({
+    currentTarget: video,
+  }) => {
     if (hoverToPlay()) {
       video.pause();
       video.currentTime = 0;
@@ -108,12 +122,16 @@ const Item: React.FC<IItem> = ({
     e.stopPropagation();
   };
 
-  const handleVideoHover: React.MouseEventHandler<HTMLVideoElement> = ({ currentTarget: video }) => {
+  const handleVideoHover: React.MouseEventHandler<HTMLVideoElement> = ({
+    currentTarget: video,
+  }) => {
     video.playbackRate = 3.0;
     video.play();
   };
 
-  const handleVideoLeave: React.MouseEventHandler<HTMLVideoElement> = ({ currentTarget: video }) => {
+  const handleVideoLeave: React.MouseEventHandler<HTMLVideoElement> = ({
+    currentTarget: video,
+  }) => {
     video.pause();
     video.currentTime = 0;
   };
@@ -146,7 +164,10 @@ const Item: React.FC<IItem> = ({
     const attachmentIcon = (
       <Icon
         className='h-16 w-16 text-gray-800 dark:text-gray-200'
-        src={MIMETYPE_ICONS[attachment.mime_type as string] || require('@tabler/icons/outline/paperclip.svg')}
+        src={
+          MIMETYPE_ICONS[attachment.mime_type as string] ||
+          require('@tabler/icons/outline/paperclip.svg')
+        }
       />
     );
 
@@ -157,10 +178,27 @@ const Item: React.FC<IItem> = ({
           'rounded-md': total > 1,
         })}
         key={attachment.id}
-        style={{ position, float, left, top, right, bottom, height, width: `${width}%` }}
+        style={{
+          position,
+          float,
+          left,
+          top,
+          right,
+          bottom,
+          height,
+          width: `${width}%`,
+        }}
       >
-        <a className='media-gallery__item-thumbnail' href={attachment.url} target='_blank' style={{ cursor: 'pointer' }}>
-          <Blurhash hash={attachment.blurhash} className='media-gallery__preview' />
+        <a
+          className='media-gallery__item-thumbnail'
+          href={attachment.url}
+          target='_blank'
+          style={{ cursor: 'pointer' }}
+        >
+          <Blurhash
+            hash={attachment.blurhash}
+            className='media-gallery__preview'
+          />
           <span className='media-gallery__item__icons'>{attachmentIcon}</span>
           <span className='media-gallery__filename__label'>{filename}</span>
         </a>
@@ -186,7 +224,8 @@ const Item: React.FC<IItem> = ({
       </a>
     );
   } else if (attachment.type === 'gifv') {
-    const conditionalAttributes: React.VideoHTMLAttributes<HTMLVideoElement> = {};
+    const conditionalAttributes: React.VideoHTMLAttributes<HTMLVideoElement> =
+      {};
     if (isIOS()) {
       conditionalAttributes.playsInline = true;
     }
@@ -222,8 +261,12 @@ const Item: React.FC<IItem> = ({
         target='_blank'
         title={attachment.description}
       >
-        <span className='media-gallery__item__icons'><Icon src={require('@tabler/icons/outline/volume.svg')} /></span>
-        <span className='media-gallery__file-extension__label uppercase'>{ext}</span>
+        <span className='media-gallery__item__icons'>
+          <Icon src={require('@tabler/icons/outline/volume.svg')} />
+        </span>
+        <span className='media-gallery__file-extension__label uppercase'>
+          {ext}
+        </span>
       </a>
     );
   } else if (attachment.type === 'video') {
@@ -243,29 +286,41 @@ const Item: React.FC<IItem> = ({
         >
           <source src={attachment.url} />
         </video>
-        <span className='media-gallery__file-extension__label uppercase'>{ext}</span>
+        <span className='media-gallery__file-extension__label uppercase'>
+          {ext}
+        </span>
       </a>
     );
   }
 
   return (
     <div
-      className={clsx('media-gallery__item', `media-gallery__item--${attachment.type}`, {
-        standalone,
-        'rounded-md': total > 1,
-      })}
+      className={clsx(
+        'media-gallery__item',
+        `media-gallery__item--${attachment.type}`,
+        {
+          standalone,
+          'rounded-md': total > 1,
+        },
+      )}
       key={attachment.id}
-      style={{ position, float, left, top, right, bottom, height, width: `${width}%` }}
+      style={{
+        position,
+        float,
+        left,
+        top,
+        right,
+        bottom,
+        height,
+        width: `${width}%`,
+      }}
     >
       {last && total > ATTACHMENT_LIMIT && (
         <div className='media-gallery__item-overflow'>
           +{total - ATTACHMENT_LIMIT + 1}
         </div>
       )}
-      <Blurhash
-        hash={attachment.blurhash}
-        className='media-gallery__preview'
-      />
+      <Blurhash hash={attachment.blurhash} className='media-gallery__preview' />
       {(visible || !attachment.blurhash) && thumbnail}
     </div>
   );
@@ -307,7 +362,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
     const aspectRatio = getAspectRatio(media[0]);
 
     const getHeight = () => {
-      if (!aspectRatio) return w * 9 / 16;
+      if (!aspectRatio) return (w * 9) / 16;
       if (isPanoramic(aspectRatio)) return Math.floor(w / maximumAspectRatio);
       if (isPortrait(aspectRatio)) return Math.floor(w / minimumAspectRatio);
       return Math.floor(w / aspectRatio);
@@ -329,13 +384,15 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
     const style: React.CSSProperties = {};
     let itemsDimensions: Dimensions[] = [];
 
-    const ratios = Array(size).fill(null).map((_, i) => getAspectRatio(media[i]));
+    const ratios = Array(size)
+      .fill(null)
+      .map((_, i) => getAspectRatio(media[i]));
 
     const [ar1, ar2, ar3, ar4] = ratios;
 
     if (size === 2) {
       if (isPortrait(ar1) && isPortrait(ar2)) {
-        style.height = w - (w / maximumAspectRatio);
+        style.height = w - w / maximumAspectRatio;
       } else if (isPanoramic(ar1) && isPanoramic(ar2)) {
         style.height = panoSize * 2;
       } else if (
@@ -344,7 +401,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
         (isPanoramic(ar1) && isNonConformingRatio(ar2)) ||
         (isNonConformingRatio(ar1) && isPanoramic(ar2))
       ) {
-        style.height = (w * 0.6) + (w / maximumAspectRatio);
+        style.height = w * 0.6 + w / maximumAspectRatio;
       } else {
         style.height = w / 2;
       }
@@ -364,16 +421,16 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
         (isPanoramic(ar1) && isNonConformingRatio(ar2))
       ) {
         itemsDimensions = [
-          { w: 100, h: `${(w / maximumAspectRatio)}px`, b: '2px' },
-          { w: 100, h: `${(w * 0.6)}px`, t: '2px' },
+          { w: 100, h: `${w / maximumAspectRatio}px`, b: '2px' },
+          { w: 100, h: `${w * 0.6}px`, t: '2px' },
         ];
       } else if (
         (isPortrait(ar1) && isPanoramic(ar2)) ||
         (isNonConformingRatio(ar1) && isPanoramic(ar2))
       ) {
         itemsDimensions = [
-          { w: 100, h: `${(w * 0.6)}px`, b: '2px' },
-          { w: 100, h: `${(w / maximumAspectRatio)}px`, t: '2px' },
+          { w: 100, h: `${w * 0.6}px`, b: '2px' },
+          { w: 100, h: `${w / maximumAspectRatio}px`, t: '2px' },
         ];
       } else {
         itemsDimensions = [
@@ -390,7 +447,11 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
         style.height = w;
       }
 
-      if (isPanoramic(ar1) && isNonConformingRatio(ar2) && isNonConformingRatio(ar3)) {
+      if (
+        isPanoramic(ar1) &&
+        isNonConformingRatio(ar2) &&
+        isNonConformingRatio(ar3)
+      ) {
         itemsDimensions = [
           { w: 100, h: '50%', b: '2px' },
           { w: 50, h: '50%', t: '2px', r: '2px' },
@@ -402,20 +463,45 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
           { w: 100, h: panoSize_px },
           { w: 100, h: panoSize_px, t: '4px' },
         ];
-      } else if (isPortrait(ar1) && isNonConformingRatio(ar2) && isNonConformingRatio(ar3)) {
+      } else if (
+        isPortrait(ar1) &&
+        isNonConformingRatio(ar2) &&
+        isNonConformingRatio(ar3)
+      ) {
         itemsDimensions = [
           { w: 50, h: '100%', r: '2px' },
           { w: 50, h: '50%', b: '2px', l: '2px' },
           { w: 50, h: '50%', t: '2px', l: '2px' },
         ];
-      } else if (isNonConformingRatio(ar1) && isNonConformingRatio(ar2) && isPortrait(ar3)) {
+      } else if (
+        isNonConformingRatio(ar1) &&
+        isNonConformingRatio(ar2) &&
+        isPortrait(ar3)
+      ) {
         itemsDimensions = [
           { w: 50, h: '50%', b: '2px', r: '2px' },
-          { w: 50, h: '50%', l: '-2px', b: '-2px', pos: 'absolute', float: 'none' },
-          { w: 50, h: '100%', r: '-2px', t: '0px', b: '0px', pos: 'absolute', float: 'none' },
+          {
+            w: 50,
+            h: '50%',
+            l: '-2px',
+            b: '-2px',
+            pos: 'absolute',
+            float: 'none',
+          },
+          {
+            w: 50,
+            h: '100%',
+            r: '-2px',
+            t: '0px',
+            b: '0px',
+            pos: 'absolute',
+            float: 'none',
+          },
         ];
       } else if (
-        (isNonConformingRatio(ar1) && isPortrait(ar2) && isNonConformingRatio(ar3)) ||
+        (isNonConformingRatio(ar1) &&
+          isPortrait(ar2) &&
+          isNonConformingRatio(ar3)) ||
         (isPortrait(ar1) && isPortrait(ar2) && isPortrait(ar3))
       ) {
         itemsDimensions = [
@@ -450,41 +536,83 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
       }
     } else if (size >= 4) {
       if (
-        (isPortrait(ar1) && isPortrait(ar2) && isPortrait(ar3) && isPortrait(ar4)) ||
-        (isPortrait(ar1) && isPortrait(ar2) && isPortrait(ar3) && isNonConformingRatio(ar4)) ||
-        (isPortrait(ar1) && isPortrait(ar2) && isNonConformingRatio(ar3) && isPortrait(ar4)) ||
-        (isPortrait(ar1) && isNonConformingRatio(ar2) && isPortrait(ar3) && isPortrait(ar4)) ||
-        (isNonConformingRatio(ar1) && isPortrait(ar2) && isPortrait(ar3) && isPortrait(ar4))
+        (isPortrait(ar1) &&
+          isPortrait(ar2) &&
+          isPortrait(ar3) &&
+          isPortrait(ar4)) ||
+        (isPortrait(ar1) &&
+          isPortrait(ar2) &&
+          isPortrait(ar3) &&
+          isNonConformingRatio(ar4)) ||
+        (isPortrait(ar1) &&
+          isPortrait(ar2) &&
+          isNonConformingRatio(ar3) &&
+          isPortrait(ar4)) ||
+        (isPortrait(ar1) &&
+          isNonConformingRatio(ar2) &&
+          isPortrait(ar3) &&
+          isPortrait(ar4)) ||
+        (isNonConformingRatio(ar1) &&
+          isPortrait(ar2) &&
+          isPortrait(ar3) &&
+          isPortrait(ar4))
       ) {
         style.height = Math.floor(w / minimumAspectRatio);
-      } else if (isPanoramic(ar1) && isPanoramic(ar2) && isPanoramic(ar3) && isPanoramic(ar4)) {
+      } else if (
+        isPanoramic(ar1) &&
+        isPanoramic(ar2) &&
+        isPanoramic(ar3) &&
+        isPanoramic(ar4)
+      ) {
         style.height = panoSize * 2;
       } else if (
-        (isPanoramic(ar1) && isPanoramic(ar2) && isNonConformingRatio(ar3) && isNonConformingRatio(ar4)) ||
-        (isNonConformingRatio(ar1) && isNonConformingRatio(ar2) && isPanoramic(ar3) && isPanoramic(ar4))
+        (isPanoramic(ar1) &&
+          isPanoramic(ar2) &&
+          isNonConformingRatio(ar3) &&
+          isNonConformingRatio(ar4)) ||
+        (isNonConformingRatio(ar1) &&
+          isNonConformingRatio(ar2) &&
+          isPanoramic(ar3) &&
+          isPanoramic(ar4))
       ) {
-        style.height = panoSize + (w / 2);
+        style.height = panoSize + w / 2;
       } else {
         style.height = w;
       }
 
-      if (isPanoramic(ar1) && isPanoramic(ar2) && isNonConformingRatio(ar3) && isNonConformingRatio(ar4)) {
+      if (
+        isPanoramic(ar1) &&
+        isPanoramic(ar2) &&
+        isNonConformingRatio(ar3) &&
+        isNonConformingRatio(ar4)
+      ) {
         itemsDimensions = [
           { w: 50, h: panoSize_px, b: '2px', r: '2px' },
           { w: 50, h: panoSize_px, b: '2px', l: '2px' },
-          { w: 50, h: `${(w / 2)}px`, t: '2px', r: '2px' },
-          { w: 50, h: `${(w / 2)}px`, t: '2px', l: '2px' },
+          { w: 50, h: `${w / 2}px`, t: '2px', r: '2px' },
+          { w: 50, h: `${w / 2}px`, t: '2px', l: '2px' },
         ];
-      } else if (isNonConformingRatio(ar1) && isNonConformingRatio(ar2) && isPanoramic(ar3) && isPanoramic(ar4)) {
+      } else if (
+        isNonConformingRatio(ar1) &&
+        isNonConformingRatio(ar2) &&
+        isPanoramic(ar3) &&
+        isPanoramic(ar4)
+      ) {
         itemsDimensions = [
-          { w: 50, h: `${(w / 2)}px`, b: '2px', r: '2px' },
-          { w: 50, h: `${(w / 2)}px`, b: '2px', l: '2px' },
+          { w: 50, h: `${w / 2}px`, b: '2px', r: '2px' },
+          { w: 50, h: `${w / 2}px`, b: '2px', l: '2px' },
           { w: 50, h: panoSize_px, t: '2px', r: '2px' },
           { w: 50, h: panoSize_px, t: '2px', l: '2px' },
         ];
       } else if (
-        (isPortrait(ar1) && isNonConformingRatio(ar2) && isNonConformingRatio(ar3) && isNonConformingRatio(ar4)) ||
-        (isPortrait(ar1) && isPanoramic(ar2) && isPanoramic(ar3) && isPanoramic(ar4))
+        (isPortrait(ar1) &&
+          isNonConformingRatio(ar2) &&
+          isNonConformingRatio(ar3) &&
+          isNonConformingRatio(ar4)) ||
+        (isPortrait(ar1) &&
+          isPanoramic(ar2) &&
+          isPanoramic(ar3) &&
+          isPanoramic(ar4))
       ) {
         itemsDimensions = [
           { w: 67, h: '100%', r: '2px' },
@@ -528,20 +656,22 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
 
   const sizeData: SizeData = getSizeData(media.length);
 
-  const children = media.slice(0, ATTACHMENT_LIMIT).map((attachment, i) => (
-    <Item
-      key={attachment.id}
-      onClick={handleClick}
-      attachment={attachment}
-      index={i}
-      size={sizeData.size}
-      displayWidth={sizeData.width}
-      dimensions={sizeData.itemsDimensions[i]}
-      last={i === ATTACHMENT_LIMIT - 1}
-      total={media.length}
-      visible={visible}
-    />
-  ));
+  const children = media
+    .slice(0, ATTACHMENT_LIMIT)
+    .map((attachment, i) => (
+      <Item
+        key={attachment.id}
+        onClick={handleClick}
+        attachment={attachment}
+        index={i}
+        size={sizeData.size}
+        displayWidth={sizeData.width}
+        dimensions={sizeData.itemsDimensions[i]}
+        last={i === ATTACHMENT_LIMIT - 1}
+        total={media.length}
+        visible={visible}
+      />
+    ));
 
   useLayoutEffect(() => {
     if (node.current) {
@@ -557,7 +687,9 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
 
   return (
     <div
-      className={clsx(className, 'media-gallery', { 'media-gallery--compact !h-12 bg-transparent': compact })}
+      className={clsx(className, 'media-gallery', {
+        'media-gallery--compact !h-12 bg-transparent': compact,
+      })}
       style={sizeData.style}
       ref={node}
     >
@@ -566,7 +698,4 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
   );
 };
 
-export {
-  type IMediaGallery,
-  MediaGallery as default,
-};
+export { type IMediaGallery, MediaGallery as default };

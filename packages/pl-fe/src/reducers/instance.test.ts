@@ -31,7 +31,9 @@ describe('instance reducer', () => {
   });
 
   describe('ADMIN_CONFIG_UPDATE_REQUEST', async () => {
-    const { configs } = await import('pl-fe/__fixtures__/pleroma-admin-config.json');
+    const { configs } = await import(
+      'pl-fe/__fixtures__/pleroma-admin-config.json'
+    );
 
     it('imports the configs', () => {
       const action = {

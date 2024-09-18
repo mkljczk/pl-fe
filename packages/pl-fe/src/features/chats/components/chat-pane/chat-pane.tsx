@@ -22,7 +22,9 @@ const ChatPane = () => {
   const { unreadChatsCount } = useStatContext();
 
   const { screen, changeScreen, isOpen, toggleChatPane } = useChatContext();
-  const { chatsQuery: { data: chats, isLoading } } = useChats();
+  const {
+    chatsQuery: { data: chats, isLoading },
+  } = useChats();
 
   const handleClickChat = (nextChat: Chat) => {
     changeScreen(ChatWidgetScreens.CHAT, nextChat.id);
@@ -32,10 +34,8 @@ const ChatPane = () => {
     if (Number(chats?.length) > 0 || isLoading) {
       return (
         <Stack space={4} className='h-full grow'>
-          {(Number(chats?.length) > 0 || isLoading) ? (
-            <ChatList
-              onClickChat={handleClickChat}
-            />
+          {Number(chats?.length) > 0 || isLoading ? (
+            <ChatList onClickChat={handleClickChat} />
           ) : (
             <EmptyResultsBlankslate />
           )}
@@ -53,7 +53,10 @@ const ChatPane = () => {
   };
 
   // Active chat
-  if (screen === ChatWidgetScreens.CHAT || screen === ChatWidgetScreens.CHAT_SETTINGS) {
+  if (
+    screen === ChatWidgetScreens.CHAT ||
+    screen === ChatWidgetScreens.CHAT_SETTINGS
+  ) {
     return (
       <Pane isOpen={isOpen}>
         <ChatWindow />

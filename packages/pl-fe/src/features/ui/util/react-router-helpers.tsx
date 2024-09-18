@@ -1,6 +1,14 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import { ErrorBoundary, type FallbackProps } from 'react-error-boundary';
-import { Redirect, Route, useHistory, RouteProps, RouteComponentProps, match as MatchType, useLocation } from 'react-router-dom';
+import {
+  match as MatchType,
+  Redirect,
+  Route,
+  RouteComponentProps,
+  RouteProps,
+  useHistory,
+  useLocation,
+} from 'react-router-dom';
 
 import { Layout } from 'pl-fe/components/ui';
 import { useOwnAccount, useSettings } from 'pl-fe/hooks';
@@ -54,7 +62,9 @@ const WrappedRoute: React.FC<IWrappedRoute> = ({
   );
 
   const loginRedirect = () => {
-    const actualUrl = encodeURIComponent(`${history.location.pathname}${history.location.search}`);
+    const actualUrl = encodeURIComponent(
+      `${history.location.pathname}${history.location.search}`,
+    );
     localStorage.setItem('plfe:redirect_uri', actualUrl);
     return <Redirect to='/login' />;
   };
@@ -64,7 +74,7 @@ const WrappedRoute: React.FC<IWrappedRoute> = ({
     developerOnly ? isDeveloper : true,
     staffOnly ? account && (account.is_admin || account.is_moderator) : true,
     adminOnly ? account && account.is_admin : true,
-  ].every(c => c);
+  ].every((c) => c);
 
   if (!authorized) {
     if (!account) {
@@ -83,9 +93,7 @@ interface IFallbackLayout {
 
 const FallbackLayout: React.FC<IFallbackLayout> = ({ children }) => (
   <>
-    <Layout.Main>
-      {children}
-    </Layout.Main>
+    <Layout.Main>{children}</Layout.Main>
 
     <Layout.Aside />
   </>
@@ -103,7 +111,10 @@ const FallbackForbidden: React.FC = () => (
   </FallbackLayout>
 );
 
-const FallbackError: React.FC<FallbackProps> = ({ error, resetErrorBoundary }) => {
+const FallbackError: React.FC<FallbackProps> = ({
+  error,
+  resetErrorBoundary,
+}) => {
   const location = useLocation();
   const firstUpdate = useRef(true);
 
@@ -122,6 +133,4 @@ const FallbackError: React.FC<FallbackProps> = ({ error, resetErrorBoundary }) =
   );
 };
 
-export {
-  WrappedRoute,
-};
+export { WrappedRoute };

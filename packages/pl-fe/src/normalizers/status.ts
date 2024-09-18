@@ -5,7 +5,13 @@
  */
 import escapeTextContentForBrowser from 'escape-html';
 import DOMPurify from 'isomorphic-dompurify';
-import { type Account as BaseAccount, type Status as BaseStatus, type MediaAttachment, mentionSchema, type Translation } from 'pl-api';
+import {
+  type Account as BaseAccount,
+  type Status as BaseStatus,
+  type MediaAttachment,
+  type Translation,
+  mentionSchema,
+} from 'pl-api';
 
 import emojify from 'pl-fe/features/emoji';
 import { stripCompatibilityFeatures, unescapeHTML } from 'pl-fe/utils/html';
@@ -18,7 +24,14 @@ import { normalizePoll } from './poll';
 const domParser = new DOMParser();
 
 type StatusApprovalStatus = Exclude<BaseStatus['approval_status'], null>;
-type StatusVisibility = 'public' | 'unlisted' | 'private' | 'direct' | 'group' | 'mutuals_only' | 'local';
+type StatusVisibility =
+  | 'public'
+  | 'unlisted'
+  | 'private'
+  | 'direct'
+  | 'group'
+  | 'mutuals_only'
+  | 'local';
 
 type CalculatedValues = {
   search_index: string;
@@ -32,10 +45,13 @@ type CalculatedValues = {
   currentLanguage?: string;
 };
 
-type OldStatus = Pick<BaseStatus, 'content' | 'spoiler_text'> & CalculatedValues;
+type OldStatus = Pick<BaseStatus, 'content' | 'spoiler_text'> &
+  CalculatedValues;
 
 // Gets titles of poll options from status
-const getPollOptionTitles = ({ poll }: Pick<BaseStatus, 'poll'>): readonly string[] => {
+const getPollOptionTitles = ({
+  poll,
+}: Pick<BaseStatus, 'poll'>): readonly string[] => {
   if (poll && typeof poll === 'object') {
     return poll.options.map(({ title }) => title);
   } else {
@@ -44,11 +60,14 @@ const getPollOptionTitles = ({ poll }: Pick<BaseStatus, 'poll'>): readonly strin
 };
 
 // Gets usernames of mentioned users from status
-const getMentionedUsernames = (status: Pick<BaseStatus, 'mentions'>): Array<string> =>
-  status.mentions.map(({ acct }) => `@${acct}`);
+const getMentionedUsernames = (
+  status: Pick<BaseStatus, 'mentions'>,
+): Array<string> => status.mentions.map(({ acct }) => `@${acct}`);
 
 // Creates search text from the status
-const buildSearchContent = (status: Pick<BaseStatus, 'poll' | 'mentions' | 'spoiler_text' | 'content'>): string => {
+const buildSearchContent = (
+  status: Pick<BaseStatus, 'poll' | 'mentions' | 'spoiler_text' | 'content'>,
+): string => {
   const pollOptionTitles = getPollOptionTitles(status);
   const mentionedUsernames = getMentionedUsernames(status);
 
@@ -62,39 +81,84 @@ const buildSearchContent = (status: Pick<BaseStatus, 'poll' | 'mentions' | 'spoi
   return unescapeHTML(fields.join('\n\n')) || '';
 };
 
-const calculateContent = (text: string, emojiMap: any, hasQuote?: boolean) => DOMPurify.sanitize(stripCompatibilityFeatures(emojify(text, emojiMap), hasQuote), { USE_PROFILES: { html: true } });
-const calculateSpoiler = (text: string, emojiMap: any) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { USE_PROFILES: { html: true } });
+const calculateContent = (text: string, emojiMap: any, hasQuote?: boolean) =>
+  DOMPurify.sanitize(
+    stripCompatibilityFeatures(emojify(text, emojiMap), hasQuote),
+    { USE_PROFILES: { html: true } },
+  );
+const calculateSpoiler = (text: string, emojiMap: any) =>
+  DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), {
+    USE_PROFILES: { html: true },
+  });
 
-const calculateStatus = (status: BaseStatus, oldStatus?: OldStatus): CalculatedValues => {
-  if (oldStatus && oldStatus.content === status.content && oldStatus.spoiler_text === status.spoiler_text) {
+const calculateStatus = (
+  status: BaseStatus,
+  oldStatus?: OldStatus,
+): CalculatedValues => {
+  if (
+    oldStatus &&
+    oldStatus.content === status.content &&
+    oldStatus.spoiler_text === status.spoiler_text
+  ) {
     const {
-      search_index, contentHtml, spoilerHtml, contentMapHtml, spoilerMapHtml, hidden, expanded, translation, currentLanguage,
+      search_index,
+      contentHtml,
+      spoilerHtml,
+      contentMapHtml,
+      spoilerMapHtml,
+      hidden,
+      expanded,
+      translation,
+      currentLanguage,
     } = oldStatus;
 
     return {
-      search_index, contentHtml, spoilerHtml, contentMapHtml, spoilerMapHtml, hidden, expanded, translation, currentLanguage,
+      search_index,
+      contentHtml,
+      spoilerHtml,
+      contentMapHtml,
+      spoilerMapHtml,
+      hidden,
+      expanded,
+      translation,
+      currentLanguage,
     };
   } else {
     const searchContent = buildSearchContent(status);
     const emojiMap = makeEmojiMap(status.emojis);
 
     return {
-      search_index: domParser.parseFromString(searchContent, 'text/html').documentElement.textContent || '',
+      search_index:
+        domParser.parseFromString(searchContent, 'text/html').documentElement
+          .textContent || '',
       contentHtml: calculateContent(status.content, emojiMap, !!status.quote),
       spoilerHtml: calculateSpoiler(status.spoiler_text, emojiMap),
       contentMapHtml: status.content_map
-        ? Object.fromEntries(Object.entries(status.content_map)?.map(([key, value]) => [key, calculateContent(value, emojiMap, !!status.quote)]))
+        ? Object.fromEntries(
+            Object.entries(status.content_map)?.map(([key, value]) => [
+              key,
+              calculateContent(value, emojiMap, !!status.quote),
+            ]),
+          )
         : undefined,
       spoilerMapHtml: status.spoiler_text_map
-        ? Object.fromEntries(Object.entries(status.spoiler_text_map).map(([key, value]) => [key, calculateSpoiler(value, emojiMap)]))
+        ? Object.fromEntries(
+            Object.entries(status.spoiler_text_map).map(([key, value]) => [
+              key,
+              calculateSpoiler(value, emojiMap),
+            ]),
+          )
         : undefined,
     };
   }
 };
 
-const normalizeStatus = (status: BaseStatus & {
-  accounts?: Array<BaseAccount>;
-}, oldStatus?: OldStatus) => {
+const normalizeStatus = (
+  status: BaseStatus & {
+    accounts?: Array<BaseAccount>;
+  },
+  oldStatus?: OldStatus,
+) => {
   const calculated = calculateStatus(status, oldStatus);
 
   // Sort the replied-to mention to the top
@@ -108,7 +172,9 @@ const normalizeStatus = (status: BaseStatus & {
 
   // Add self to mentions if it's a reply to self
   const isSelfReply = status.account.id === status.in_reply_to_account_id;
-  const hasSelfMention = status.mentions.some(mention => status.account.id === mention.id);
+  const hasSelfMention = status.mentions.some(
+    (mention) => status.account.id === mention.id,
+  );
 
   if (isSelfReply && !hasSelfMention) {
     const selfMention = mentionSchema.parse(status.account);
@@ -116,10 +182,11 @@ const normalizeStatus = (status: BaseStatus & {
   }
 
   // Normalize event
-  let event: BaseStatus['event'] & ({
-    banner: MediaAttachment | null;
-    links: Array<MediaAttachment>;
-  } | null) = null;
+  let event: BaseStatus['event'] &
+    ({
+      banner: MediaAttachment | null;
+      links: Array<MediaAttachment>;
+    } | null) = null;
   let media_attachments = status.media_attachments;
 
   // Normalize poll
@@ -129,13 +196,20 @@ const normalizeStatus = (status: BaseStatus & {
     const firstAttachment = status.media_attachments[0];
     let banner: MediaAttachment | null = null;
 
-    if (firstAttachment?.description === 'Banner' && firstAttachment.type === 'image') {
+    if (
+      firstAttachment?.description === 'Banner' &&
+      firstAttachment.type === 'image'
+    ) {
       banner = firstAttachment;
       media_attachments = media_attachments.slice(1);
     }
 
-    const links = media_attachments.filter(attachment => attachment.mime_type === 'text/html');
-    media_attachments = media_attachments.filter(attachment => attachment.mime_type !== 'text/html');
+    const links = media_attachments.filter(
+      (attachment) => attachment.mime_type === 'text/html',
+    );
+    media_attachments = media_attachments.filter(
+      (attachment) => attachment.mime_type !== 'text/html',
+    );
 
     event = {
       ...status.event,
@@ -164,13 +238,16 @@ const normalizeStatus = (status: BaseStatus & {
     hidden: null,
     /** Rewrite `<p></p>` to empty string. */
     content: status.content === '<p></p>' ? '' : status.content,
-    filtered: status.filtered?.map(result => result.filter.title),
+    filtered: status.filtered?.map((result) => result.filter.title),
     event,
     poll,
     group,
     media_attachments,
     ...calculated,
-    translation: (status.translation || calculated.translation || null) as Translation | null | false,
+    translation: (status.translation || calculated.translation || null) as
+      | Translation
+      | null
+      | false,
     // quote: status.quote ? normalizeStatus(status.quote as any) : null,
   };
 };

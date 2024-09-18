@@ -1,4 +1,4 @@
-import { useMutation, keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 
 import { fetchRelationships } from 'pl-fe/actions/accounts';
 import { importFetchedAccounts } from 'pl-fe/actions/importer';
@@ -22,7 +22,10 @@ const useSuggestions = () => {
     dispatch(importFetchedAccounts(accounts));
     dispatch(fetchRelationships(accountIds));
 
-    return response.map(({ account, ...x }) => ({ ...x, account_id: account.id }));
+    return response.map(({ account, ...x }) => ({
+      ...x,
+      account_id: account.id,
+    }));
   };
 
   const result = useQuery({
@@ -43,9 +46,14 @@ const useDismissSuggestion = () => {
   const client = useClient();
 
   return useMutation({
-    mutationFn: (accountId: string) => client.myAccount.dismissSuggestions(accountId),
+    mutationFn: (accountId: string) =>
+      client.myAccount.dismissSuggestions(accountId),
     onMutate(accountId: string) {
-      removePageItem(SuggestionKeys.suggestions, accountId, (o: any, n: any) => o.account === n);
+      removePageItem(
+        SuggestionKeys.suggestions,
+        accountId,
+        (o: any, n: any) => o.account === n,
+      );
     },
   });
 };

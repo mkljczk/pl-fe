@@ -38,11 +38,17 @@ const Sidebar: React.FC<ISidebar> = ({ children }) => (
 );
 
 /** Center column container in the UI. */
-const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, className }) => (
+const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+  children,
+  className,
+}) => (
   <main
-    className={clsx({
-      'md:col-span-12 lg:col-span-9 xl:col-span-6 pb-36 black:border-gray-800 lg:black:border-l xl:black:border-r': true,
-    }, className)}
+    className={clsx(
+      {
+        'md:col-span-12 lg:col-span-9 xl:col-span-6 pb-36 black:border-gray-800 lg:black:border-l xl:black:border-r': true,
+      },
+      className,
+    )}
   >
     {children}
   </main>
@@ -52,9 +58,7 @@ const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, classN
 const Aside: React.FC<IAside> = ({ children }) => (
   <aside className='hidden xl:col-span-3 xl:block'>
     <StickyBox offsetTop={16} className='space-y-6 pb-12'>
-      <Suspense>
-        {children}
-      </Suspense>
+      <Suspense>{children}</Suspense>
     </StickyBox>
   </aside>
 );

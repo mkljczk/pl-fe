@@ -1,4 +1,11 @@
-import { offset, Placement, useFloating, flip, arrow, shift } from '@floating-ui/react';
+import {
+  Placement,
+  arrow,
+  flip,
+  offset,
+  shift,
+  useFloating,
+} from '@floating-ui/react';
 import clsx from 'clsx';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -35,78 +42,95 @@ interface IDropdownMenu {
 
 const listenerOptions = supportsPassiveEvents ? { passive: true } : false;
 
-const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, items, component: Component, touchscreen }) => {
+const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
+  handleClose,
+  items,
+  component: Component,
+  touchscreen,
+}) => {
   const [tab, setTab] = useState<number>();
   const ref = useRef<HTMLDivElement>(null);
 
   const autoFocus = items && !items.some((item) => item?.active);
 
-  const handleKeyDown = useMemo(() => (e: KeyboardEvent) => {
-    if (!ref.current) return;
+  const handleKeyDown = useMemo(
+    () => (e: KeyboardEvent) => {
+      if (!ref.current) return;
 
-    const elements = Array.from(ref.current.querySelectorAll('a, button'));
-    const index = elements.indexOf(document.activeElement as any);
+      const elements = Array.from(ref.current.querySelectorAll('a, button'));
+      const index = elements.indexOf(document.activeElement as any);
 
-    let element = null;
+      let element = null;
 
-    switch (e.key) {
-      case 'ArrowLeft':
-        setTab(tab => {
-          if (tab !== undefined) {
-            (elements[tab] as HTMLElement)?.focus();
-            return undefined;
-          }
-          return tab;
-        });
-        break;
-      case 'ArrowRight':
-        // eslint-disable-next-line no-case-declarations
-        const itemIndex = +(elements[index]?.getAttribute('data-index') || '');
+      switch (e.key) {
+        case 'ArrowLeft':
+          setTab((tab) => {
+            if (tab !== undefined) {
+              (elements[tab] as HTMLElement)?.focus();
+              return undefined;
+            }
+            return tab;
+          });
+          break;
+        case 'ArrowRight':
+          // eslint-disable-next-line no-case-declarations
+          const itemIndex = +(
+            elements[index]?.getAttribute('data-index') || ''
+          );
 
-        if (items?.[itemIndex]?.items) setTab(itemIndex);
-        break;
-      case 'ArrowDown':
-        element = elements[index + 1] || elements[0];
-        break;
-      case 'ArrowUp':
-        element = elements[index - 1] || elements[elements.length - 1];
-        break;
-      case 'Tab':
-        if (e.shiftKey) {
-          element = elements[index - 1] || elements[elements.length - 1];
-        } else {
+          if (items?.[itemIndex]?.items) setTab(itemIndex);
+          break;
+        case 'ArrowDown':
           element = elements[index + 1] || elements[0];
-        }
-        break;
-      case 'Home':
-        element = elements[0];
-        break;
-      case 'End':
-        element = elements[elements.length - 1];
-        break;
-      case 'Escape':
+          break;
+        case 'ArrowUp':
+          element = elements[index - 1] || elements[elements.length - 1];
+          break;
+        case 'Tab':
+          if (e.shiftKey) {
+            element = elements[index - 1] || elements[elements.length - 1];
+          } else {
+            element = elements[index + 1] || elements[0];
+          }
+          break;
+        case 'Home':
+          element = elements[0];
+          break;
+        case 'End':
+          element = elements[elements.length - 1];
+          break;
+        case 'Escape':
+          handleClose();
+          break;
+      }
+
+      if (element) {
+        (element as HTMLAnchorElement).focus();
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    },
+    [ref.current],
+  );
+
+  const handleDocumentClick = useMemo(
+    () => (event: Event) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
         handleClose();
-        break;
-    }
-
-    if (element) {
-      (element as HTMLAnchorElement).focus();
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  }, [ref.current]);
-
-  const handleDocumentClick = useMemo(() => (event: Event) => {
-    if (ref.current && !ref.current.contains(event.target as Node)) {
-      handleClose();
-      event.stopPropagation();
-    }
-  }, [ref.current]);
+        event.stopPropagation();
+      }
+    },
+    [ref.current],
+  );
 
   useEffect(() => {
     if (!touchscreen) {
       document.addEventListener('click', handleDocumentClick, false);
-      document.addEventListener('touchend', handleDocumentClick, listenerOptions);
+      document.addEventListener(
+        'touchend',
+        handleDocumentClick,
+        listenerOptions,
+      );
     }
     document.addEventListener('keydown', handleKeyDown, false);
 
@@ -139,16 +163,25 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
 
   return (
     <div ref={ref}>
-      {items?.some(item => item?.items?.length) ? (
+      {items?.some((item) => item?.items?.length) ? (
         <ReactSwipeableViews animateHeight index={tab === undefined ? 0 : 1}>
           <div className={clsx({ 'w-full': touchscreen })}>
             {Component && <Component handleClose={handleClose} />}
             {(items?.length || touchscreen) && renderItems(items)}
           </div>
-          <div className={clsx({ 'w-full': touchscreen, 'fit-content': !touchscreen })}>
+          <div
+            className={clsx({
+              'w-full': touchscreen,
+              'fit-content': !touchscreen,
+            })}
+          >
             {tab !== undefined && (
               <>
-                <HStack className='mx-2 my-1 text-gray-700 dark:text-gray-300' space={3} alignItems='center'>
+                <HStack
+                  className='mx-2 my-1 text-gray-700 dark:text-gray-300'
+                  space={3}
+                  alignItems='center'
+                >
                   <IconButton
                     theme='transparent'
                     src={require('@tabler/icons/outline/arrow-left.svg')}
@@ -195,19 +228,20 @@ const DropdownMenu = (props: IDropdownMenu) => {
 
   const arrowRef = useRef<HTMLDivElement>(null);
 
-  const { x, y, strategy, refs, middlewareData, placement } = useFloating<HTMLButtonElement>({
-    placement: initialPlacement,
-    middleware: [
-      offset(12),
-      flip(),
-      shift({
-        padding: 8,
-      }),
-      arrow({
-        element: arrowRef,
-      }),
-    ],
-  });
+  const { x, y, strategy, refs, middlewareData, placement } =
+    useFloating<HTMLButtonElement>({
+      placement: initialPlacement,
+      middleware: [
+        offset(12),
+        flip(),
+        shift({
+          padding: 8,
+        }),
+        arrow({
+          element: arrowRef,
+        }),
+      ],
+    });
 
   const handleClick: React.EventHandler<
     React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>
@@ -234,7 +268,14 @@ const DropdownMenu = (props: IDropdownMenu) => {
         closeModal('DROPDOWN_MENU');
       };
       openModal('DROPDOWN_MENU', {
-        content: <DropdownMenuContent handleClose={handleClose} items={items} component={component} touchscreen />,
+        content: (
+          <DropdownMenuContent
+            handleClose={handleClose}
+            items={items}
+            component={component}
+            touchscreen
+          />
+        ),
       });
     } else {
       openDropdownMenu();
@@ -257,7 +298,9 @@ const DropdownMenu = (props: IDropdownMenu) => {
     }
   };
 
-  const handleKeyPress: React.EventHandler<React.KeyboardEvent<HTMLButtonElement>> = (event) => {
+  const handleKeyPress: React.EventHandler<
+    React.KeyboardEvent<HTMLButtonElement>
+  > = (event) => {
     switch (event.key) {
       case ' ':
       case 'Enter':
@@ -286,7 +329,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
         // flipping to other placements' axes.
         right: '',
         bottom: '',
-        [staticPlacement as string]: `${(-(arrowRef.current?.offsetWidth || 0)) / 2}px`,
+        [staticPlacement as string]: `${-(arrowRef.current?.offsetWidth || 0) / 2}px`,
         transform: 'rotate(45deg)',
       };
     }
@@ -294,13 +337,15 @@ const DropdownMenu = (props: IDropdownMenu) => {
     return {};
   }, [middlewareData.arrow, placement]);
 
-  useEffect(() => () => {
-    closeDropdownMenu();
-  }, []);
+  useEffect(
+    () => () => {
+      closeDropdownMenu();
+    },
+    [],
+  );
 
   useEffect(() => {
     setTimeout(() => setIsDisplayed(isOpen), isOpen ? 0 : 150);
-
   }, [isOpen]);
 
   if (items?.length === 0 && !component) {
@@ -308,19 +353,22 @@ const DropdownMenu = (props: IDropdownMenu) => {
   }
 
   const getClassName = () => {
-    const className = clsx('z-[1001] bg-white py-1 shadow-lg ease-in-out focus:outline-none black:bg-black no-reduce-motion:transition-all dark:bg-gray-900 dark:ring-2 dark:ring-primary-700', {
-      'rounded-md min-w-56 max-w-sm duration-100': true,
-      'scale-0': !(isDisplayed && isOpen),
-      'scale-100': isDisplayed && isOpen,
-      'origin-bottom': placement === 'top',
-      'origin-left': placement === 'right',
-      'origin-top': placement === 'bottom',
-      'origin-right': placement === 'left',
-      'origin-bottom-left': placement === 'top-start',
-      'origin-bottom-right': placement === 'top-end',
-      'origin-top-left': placement === 'bottom-start',
-      'origin-top-right': placement === 'bottom-end',
-    });
+    const className = clsx(
+      'z-[1001] bg-white py-1 shadow-lg ease-in-out focus:outline-none black:bg-black no-reduce-motion:transition-all dark:bg-gray-900 dark:ring-2 dark:ring-primary-700',
+      {
+        'rounded-md min-w-56 max-w-sm duration-100': true,
+        'scale-0': !(isDisplayed && isOpen),
+        'scale-100': isDisplayed && isOpen,
+        'origin-bottom': placement === 'top',
+        'origin-left': placement === 'right',
+        'origin-top': placement === 'bottom',
+        'origin-right': placement === 'left',
+        'origin-bottom-left': placement === 'top-start',
+        'origin-bottom-right': placement === 'top-end',
+        'origin-top-left': placement === 'bottom-start',
+        'origin-top-right': placement === 'bottom-end',
+      },
+    );
 
     return className;
   };
@@ -362,7 +410,11 @@ const DropdownMenu = (props: IDropdownMenu) => {
             }}
           >
             <div className={getClassName()}>
-              <DropdownMenuContent handleClose={handleClose} items={items} component={component} />
+              <DropdownMenuContent
+                handleClose={handleClose}
+                items={items}
+                component={component}
+              />
 
               {/* Arrow */}
               <div

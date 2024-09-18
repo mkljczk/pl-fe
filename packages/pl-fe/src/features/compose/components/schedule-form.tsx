@@ -1,15 +1,16 @@
 import clsx from 'clsx';
 import React, { Suspense } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { setSchedule, removeSchedule } from 'pl-fe/actions/compose';
+import { removeSchedule, setSchedule } from 'pl-fe/actions/compose';
 import IconButton from 'pl-fe/components/icon-button';
 import { HStack, Input, Stack, Text } from 'pl-fe/components/ui';
 import { DatePicker } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch, useCompose } from 'pl-fe/hooks';
 
 const isCurrentOrFutureDate = (date: Date) =>
-  date && new Date().setHours(0, 0, 0, 0) <= new Date(date).setHours(0, 0, 0, 0);
+  date &&
+  new Date().setHours(0, 0, 0, 0) <= new Date(date).setHours(0, 0, 0, 0);
 
 const isFiveMinutesFromNow = (time: Date) => {
   const fiveMinutesFromNow = new Date(new Date().getTime() + 300000); // now, plus five minutes (Pleroma won't schedule posts )
@@ -50,7 +51,10 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
   return (
     <Stack space={2}>
       <Text weight='medium'>
-        <FormattedMessage id='datepicker.hint' defaultMessage='Scheduled to post at…' />
+        <FormattedMessage
+          id='datepicker.hint'
+          defaultMessage='Scheduled to post at…'
+        />
       </Text>
       <HStack space={2} alignItems='center'>
         <Suspense fallback={<Input type='text' disabled />}>
@@ -81,8 +85,4 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
   );
 };
 
-export {
-  isCurrentOrFutureDate,
-  type IScheduleForm,
-  ScheduleForm as default,
-};
+export { isCurrentOrFutureDate, type IScheduleForm, ScheduleForm as default };

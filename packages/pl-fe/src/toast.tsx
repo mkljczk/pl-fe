@@ -1,14 +1,14 @@
 import React from 'react';
 import toast from 'react-hot-toast';
-import { defineMessages, MessageDescriptor } from 'react-intl';
+import { MessageDescriptor, defineMessages } from 'react-intl';
 
 import { Toast } from './components/ui';
 import { httpErrorMessages } from './utils/errors';
 
 import type { PlfeResponse } from './api';
 
-type ToastText = string | MessageDescriptor
-type ToastType = 'success' | 'error' | 'info'
+type ToastText = string | MessageDescriptor;
+type ToastType = 'success' | 'error' | 'info';
 
 interface IToastOptions {
   action?(): void;
@@ -20,7 +20,11 @@ interface IToastOptions {
 
 const DEFAULT_DURATION = 4000;
 
-const createToast = (type: ToastType, message: ToastText, opts?: IToastOptions) => {
+const createToast = (
+  type: ToastType,
+  message: ToastText,
+  opts?: IToastOptions,
+) => {
   const duration = opts?.duration || DEFAULT_DURATION;
 
   toast.custom((t) => <Toast t={t} message={message} type={type} {...opts} />, {
@@ -38,7 +42,10 @@ const error = (message: ToastText, opts?: IToastOptions) =>
   createToast('error', message, opts);
 
 const messages = defineMessages({
-  unexpectedMessage: { id: 'alert.unexpected.message', defaultMessage: 'Something went wrong.' },
+  unexpectedMessage: {
+    id: 'alert.unexpected.message',
+    defaultMessage: 'Something went wrong.',
+  },
 });
 
 const showAlertForError = (networkError: { response: PlfeResponse }) => {
@@ -61,7 +68,9 @@ const showAlertForError = (networkError: { response: PlfeResponse }) => {
     }
 
     if (!message) {
-      message = httpErrorMessages.find((httpError) => httpError.code === status)?.description;
+      message = httpErrorMessages.find(
+        (httpError) => httpError.code === status,
+      )?.description;
     }
 
     if (message) {
@@ -73,11 +82,7 @@ const showAlertForError = (networkError: { response: PlfeResponse }) => {
   }
 };
 
-export {
-  type ToastText,
-  type IToastOptions,
-  type ToastType,
-};
+export { type ToastText, type IToastOptions, type ToastType };
 
 export default {
   info,

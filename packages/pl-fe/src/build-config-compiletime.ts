@@ -8,11 +8,7 @@ import trim from 'lodash/trim.js';
 // eslint-disable-next-line import/extensions
 import trimEnd from 'lodash/trimEnd.js';
 
-const {
-  NODE_ENV,
-  BACKEND_URL,
-  FE_SUBDIRECTORY,
-} = process.env;
+const { NODE_ENV, BACKEND_URL, FE_SUBDIRECTORY } = process.env;
 
 const sanitizeURL = (url: string | undefined = ''): string => {
   try {
@@ -22,7 +18,8 @@ const sanitizeURL = (url: string | undefined = ''): string => {
   }
 };
 
-const sanitizeBasename = (path: string | undefined = ''): string => `/${trim(path, '/')}`;
+const sanitizeBasename = (path: string | undefined = ''): string =>
+  `/${trim(path, '/')}`;
 
 const env = {
   NODE_ENV: NODE_ENV || 'development',

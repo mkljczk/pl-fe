@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
 import { useCommunityStream } from 'pl-fe/api/hooks';
@@ -29,7 +29,8 @@ const CommunityTimeline = () => {
     dispatch(fetchPublicTimeline({ onlyMedia, local: true }, true));
   };
 
-  const handleRefresh = () => dispatch(fetchPublicTimeline({ onlyMedia, local: true }));
+  const handleRefresh = () =>
+    dispatch(fetchPublicTimeline({ onlyMedia, local: true }));
 
   useCommunityStream({ onlyMedia });
 
@@ -38,7 +39,11 @@ const CommunityTimeline = () => {
   }, [onlyMedia]);
 
   return (
-    <Column className='-mt-3 sm:mt-0' label={intl.formatMessage(messages.title)} transparent={!isMobile}>
+    <Column
+      className='-mt-3 sm:mt-0'
+      label={intl.formatMessage(messages.title)}
+      transparent={!isMobile}
+    >
       <PullToRefresh onRefresh={handleRefresh}>
         <Timeline
           className='black:p-0 black:sm:p-4'
@@ -47,8 +52,13 @@ const CommunityTimeline = () => {
           timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
           prefix='home'
           onLoadMore={handleLoadMore}
-          emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />}
-          divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
+          emptyMessage={
+            <FormattedMessage
+              id='empty_column.community'
+              defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!'
+            />
+          }
+          divideType={theme === 'black' || isMobile ? 'border' : 'space'}
         />
       </PullToRefresh>
     </Column>

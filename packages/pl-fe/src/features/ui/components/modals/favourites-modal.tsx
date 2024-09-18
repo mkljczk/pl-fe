@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { fetchFavourites, expandFavourites } from 'pl-fe/actions/interactions';
+import { expandFavourites, fetchFavourites } from 'pl-fe/actions/interactions';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Modal, Spinner } from 'pl-fe/components/ui';
 import AccountContainer from 'pl-fe/containers/account-container';
@@ -13,11 +13,18 @@ interface FavouritesModalProps {
   statusId: string;
 }
 
-const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onClose, statusId }) => {
+const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({
+  onClose,
+  statusId,
+}) => {
   const dispatch = useAppDispatch();
 
-  const accountIds = useAppSelector((state) => state.user_lists.favourited_by.get(statusId)?.items);
-  const next = useAppSelector((state) => state.user_lists.favourited_by.get(statusId)?.next);
+  const accountIds = useAppSelector(
+    (state) => state.user_lists.favourited_by.get(statusId)?.items,
+  );
+  const next = useAppSelector(
+    (state) => state.user_lists.favourited_by.get(statusId)?.next,
+  );
 
   const fetchData = () => {
     dispatch(fetchFavourites(statusId));
@@ -42,7 +49,12 @@ const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onCl
   if (!accountIds) {
     body = <Spinner />;
   } else {
-    const emptyMessage = <FormattedMessage id='empty_column.favourites' defaultMessage='No one has liked this post yet. When someone does, they will show up here.' />;
+    const emptyMessage = (
+      <FormattedMessage
+        id='empty_column.favourites'
+        defaultMessage='No one has liked this post yet. When someone does, they will show up here.'
+      />
+    );
 
     body = (
       <ScrollableList
@@ -55,9 +67,9 @@ const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onCl
         onLoadMore={handleLoadMore}
         hasMore={!!next}
       >
-        {accountIds.map(id =>
-          <AccountContainer key={id} id={id} />,
-        )}
+        {accountIds.map((id) => (
+          <AccountContainer key={id} id={id} />
+        ))}
       </ScrollableList>
     );
   }

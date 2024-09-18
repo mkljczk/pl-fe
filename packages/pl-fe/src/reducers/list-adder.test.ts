@@ -112,5 +112,4 @@ describe('list_adder reducer', () => {
   //     }),
   //   }));
   // });
-
 });

@@ -18,7 +18,12 @@ interface IIconPickerMenu {
   style?: React.CSSProperties;
 }
 
-const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onClose, onPick, style }) => {
+const IconPickerMenu: React.FC<IIconPickerMenu> = ({
+  icons,
+  onClose,
+  onPick,
+  style,
+}) => {
   const intl = useIntl();
 
   const node = useRef<HTMLDivElement | null>(null);
@@ -35,8 +40,11 @@ const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onClose, onPick, sty
 
     return () => {
       document.removeEventListener('click', handleDocumentClick, false);
-      document.removeEventListener('touchend', handleDocumentClick, listenerOptions as any);
-
+      document.removeEventListener(
+        'touchend',
+        handleDocumentClick,
+        listenerOptions as any,
+      );
     };
   }, []);
 
@@ -46,7 +54,7 @@ const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onClose, onPick, sty
     if (!c) return;
 
     // Nice and dirty hack to display the icons
-    c.querySelectorAll('button.emoji-mart-emoji > img').forEach(elem => {
+    c.querySelectorAll('button.emoji-mart-emoji > img').forEach((elem) => {
       const newIcon = document.createElement('span');
       newIcon.innerHTML = `<i class="fa fa-${(elem.parentNode as any).getAttribute('title')} fa-hack"></i>`;
       (elem.parentNode as any).replaceChild(newIcon, elem);
@@ -69,7 +77,12 @@ const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onClose, onPick, sty
           title={name}
           onClick={() => handleClick(name)}
         >
-          <i className={clsx(icon, 'h-[1.375rem] w-[1.375rem] text-lg leading-[1.15]')} />
+          <i
+            className={clsx(
+              icon,
+              'h-[1.375rem] w-[1.375rem] text-lg leading-[1.15]',
+            )}
+          />
         </button>
       </li>
     );
@@ -80,13 +93,23 @@ const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onClose, onPick, sty
   return (
     <div
       className='absolute z-[101] -my-0.5'
-      style={{ transform: 'translateX(calc(-1 * env(safe-area-inset-right)))', ...style }}
+      style={{
+        transform: 'translateX(calc(-1 * env(safe-area-inset-right)))',
+        ...style,
+      }}
       ref={setRef}
     >
-      <div className='h-[270px] overflow-x-hidden overflow-y-scroll rounded bg-white p-1.5 text-gray-900 dark:bg-primary-900 dark:text-gray-100' aria-label={title}>
-        <Text className='px-1.5 py-1'><FormattedMessage id='icon_button.icons' defaultMessage='Icons' /></Text>
+      <div
+        className='h-[270px] overflow-x-hidden overflow-y-scroll rounded bg-white p-1.5 text-gray-900 dark:bg-primary-900 dark:text-gray-100'
+        aria-label={title}
+      >
+        <Text className='px-1.5 py-1'>
+          <FormattedMessage id='icon_button.icons' defaultMessage='Icons' />
+        </Text>
         <ul className='grid grid-cols-8'>
-          {Object.values(icons).flat().map(icon => renderIcon(icon))}
+          {Object.values(icons)
+            .flat()
+            .map((icon) => renderIcon(icon))}
         </ul>
       </div>
     </div>

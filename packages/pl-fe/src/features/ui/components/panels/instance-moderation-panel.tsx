@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import { Widget } from 'pl-fe/components/ui';
@@ -11,7 +11,10 @@ import { useModalsStore } from 'pl-fe/stores';
 const getRemoteInstance = makeGetRemoteInstance();
 
 const messages = defineMessages({
-  editFederation: { id: 'remote_instance.edit_federation', defaultMessage: 'Edit federation' },
+  editFederation: {
+    id: 'remote_instance.edit_federation',
+    defaultMessage: 'Edit federation',
+  },
 });
 
 interface IInstanceModerationPanel {
@@ -20,31 +23,47 @@ interface IInstanceModerationPanel {
 }
 
 /** Widget for moderators to manage a remote instance. */
-const InstanceModerationPanel: React.FC<IInstanceModerationPanel> = ({ host }) => {
+const InstanceModerationPanel: React.FC<IInstanceModerationPanel> = ({
+  host,
+}) => {
   const intl = useIntl();
   const { openModal } = useModalsStore();
 
   const { account } = useOwnAccount();
-  const remoteInstance = useAppSelector(state => getRemoteInstance(state, host));
+  const remoteInstance = useAppSelector((state) =>
+    getRemoteInstance(state, host),
+  );
 
   const handleEditFederation = () => {
     openModal('EDIT_FEDERATION', { host });
   };
 
-  const makeMenu = () => [{
-    text: intl.formatMessage(messages.editFederation),
-    action: handleEditFederation,
-    icon: require('@tabler/icons/outline/edit.svg'),
-  }];
+  const makeMenu = () => [
+    {
+      text: intl.formatMessage(messages.editFederation),
+      action: handleEditFederation,
+      icon: require('@tabler/icons/outline/edit.svg'),
+    },
+  ];
 
   const menu = makeMenu();
 
   return (
     <Widget
-      title={<FormattedMessage id='remote_instance.federation_panel.heading' defaultMessage='Federation Restrictions' />}
-      action={account?.is_admin ? (
-        <DropdownMenu items={menu} src={require('@tabler/icons/outline/dots-vertical.svg')} />
-      ) : undefined}
+      title={
+        <FormattedMessage
+          id='remote_instance.federation_panel.heading'
+          defaultMessage='Federation Restrictions'
+        />
+      }
+      action={
+        account?.is_admin ? (
+          <DropdownMenu
+            items={menu}
+            src={require('@tabler/icons/outline/dots-vertical.svg')}
+          />
+        ) : undefined
+      }
     >
       <InstanceRestrictions remoteInstance={remoteInstance} />
     </Widget>

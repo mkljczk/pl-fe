@@ -14,7 +14,13 @@ interface IRadioButton {
 /**
  * A group for radio input with label.
  */
-const RadioButton: React.FC<IRadioButton> = ({ name, value, checked, onChange, label }) => {
+const RadioButton: React.FC<IRadioButton> = ({
+  name,
+  value,
+  checked,
+  onChange,
+  label,
+}) => {
   const formFieldId: string = useMemo(() => `radio-${uuidv4()}`, []);
 
   return (
@@ -29,7 +35,10 @@ const RadioButton: React.FC<IRadioButton> = ({ name, value, checked, onChange, l
         className='h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-500'
       />
 
-      <label htmlFor={formFieldId} className='block text-sm font-medium text-gray-700'>
+      <label
+        htmlFor={formFieldId}
+        className='block text-sm font-medium text-gray-700'
+      >
         {label}
       </label>
     </HStack>

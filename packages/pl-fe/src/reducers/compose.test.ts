@@ -1,4 +1,8 @@
-import { List as ImmutableList, Record as ImmutableRecord, fromJS } from 'immutable';
+import {
+  List as ImmutableList,
+  Record as ImmutableRecord,
+  fromJS,
+} from 'immutable';
 
 import * as actions from 'pl-fe/actions/compose';
 import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS } from 'pl-fe/actions/me';
@@ -40,7 +44,9 @@ describe('compose reducer', () => {
 
   describe('COMPOSE_SET_STATUS', () => {
     it('strips Pleroma integer attachments', async () => {
-      const status = await import('pl-fe/__fixtures__/pleroma-status-deleted.json');
+      const status = await import(
+        'pl-fe/__fixtures__/pleroma-status-deleted.json'
+      );
 
       const action = {
         type: actions.COMPOSE_SET_STATUS,
@@ -51,11 +57,15 @@ describe('compose reducer', () => {
       };
 
       const result = reducer(undefined, action as any);
-      expect(result.get('compose-modal')!.media_attachments.isEmpty()).toBe(true);
+      expect(result.get('compose-modal')!.media_attachments.isEmpty()).toBe(
+        true,
+      );
     });
 
     it('leaves non-Pleroma integer attachments alone', async () => {
-      const status = await import('pl-fe/__fixtures__/pleroma-status-deleted.json');
+      const status = await import(
+        'pl-fe/__fixtures__/pleroma-status-deleted.json'
+      );
 
       const action = {
         type: actions.COMPOSE_SET_STATUS,
@@ -64,11 +74,15 @@ describe('compose reducer', () => {
       };
 
       const result = reducer(undefined, action as any);
-      expect(result.get('compose-modal')!.media_attachments.getIn([0, 'id'])).toEqual('508107650');
+      expect(
+        result.get('compose-modal')!.media_attachments.getIn([0, 'id']),
+      ).toEqual('508107650');
     });
 
     it('sets the id when editing a post', async () => {
-      const status = await import('pl-fe/__fixtures__/pleroma-status-deleted.json');
+      const status = await import(
+        'pl-fe/__fixtures__/pleroma-status-deleted.json'
+      );
 
       const action = {
         id: 'compose-modal',
@@ -82,7 +96,9 @@ describe('compose reducer', () => {
     });
 
     it('does not set the id when redrafting a post', async () => {
-      const status = await import('pl-fe/__fixtures__/pleroma-status-deleted.json');
+      const status = await import(
+        'pl-fe/__fixtures__/pleroma-status-deleted.json'
+      );
 
       const action = {
         id: 'compose-modal',
@@ -96,76 +112,108 @@ describe('compose reducer', () => {
     });
   });
 
-  it('uses \'public\' scope as default', () => {
+  it("uses 'public' scope as default", () => {
     const action = {
       type: actions.COMPOSE_REPLY,
       id: 'compose-modal',
       status: ImmutableRecord({})(),
       account: ImmutableRecord({})(),
     };
-    expect(reducer(undefined, action as any).toJS()['compose-modal']).toMatchObject({ privacy: 'public' });
+    expect(
+      reducer(undefined, action as any).toJS()['compose-modal'],
+    ).toMatchObject({ privacy: 'public' });
   });
 
-  it('uses \'direct\' scope when replying to a DM', () => {
-    const state = initialState.set('default', ReducerCompose({ privacy: 'public' }));
+  it("uses 'direct' scope when replying to a DM", () => {
+    const state = initialState.set(
+      'default',
+      ReducerCompose({ privacy: 'public' }),
+    );
     const action = {
       type: actions.COMPOSE_REPLY,
       id: 'compose-modal',
       status: ImmutableRecord({ visibility: 'direct' })(),
       account: ImmutableRecord({})(),
     };
-    expect(reducer(state as any, action as any).toJS()['compose-modal']).toMatchObject({ privacy: 'direct' });
+    expect(
+      reducer(state as any, action as any).toJS()['compose-modal'],
+    ).toMatchObject({ privacy: 'direct' });
   });
 
-  it('uses \'private\' scope when replying to a private post', () => {
-    const state = initialState.set('default', ReducerCompose({ privacy: 'public' }));
+  it("uses 'private' scope when replying to a private post", () => {
+    const state = initialState.set(
+      'default',
+      ReducerCompose({ privacy: 'public' }),
+    );
     const action = {
       type: actions.COMPOSE_REPLY,
       id: 'compose-modal',
       status: ImmutableRecord({ visibility: 'private' })(),
       account: ImmutableRecord({})(),
     };
-    expect(reducer(state as any, action as any).toJS()['compose-modal']).toMatchObject({ privacy: 'private' });
+    expect(
+      reducer(state as any, action as any).toJS()['compose-modal'],
+    ).toMatchObject({ privacy: 'private' });
   });
 
-  it('uses \'unlisted\' scope when replying to an unlisted post', () => {
-    const state = initialState.set('default', ReducerCompose({ privacy: 'public' }));
+  it("uses 'unlisted' scope when replying to an unlisted post", () => {
+    const state = initialState.set(
+      'default',
+      ReducerCompose({ privacy: 'public' }),
+    );
     const action = {
       type: actions.COMPOSE_REPLY,
       id: 'compose-modal',
       status: ImmutableRecord({ visibility: 'unlisted' })(),
       account: ImmutableRecord({})(),
     };
-    expect(reducer(state, action as any).toJS()['compose-modal']).toMatchObject({ privacy: 'unlisted' });
+    expect(reducer(state, action as any).toJS()['compose-modal']).toMatchObject(
+      { privacy: 'unlisted' },
+    );
   });
 
-  it('uses \'private\' scope when set as preference and replying to a public post', () => {
-    const state = initialState.set('default', ReducerCompose({ privacy: 'private' }));
+  it("uses 'private' scope when set as preference and replying to a public post", () => {
+    const state = initialState.set(
+      'default',
+      ReducerCompose({ privacy: 'private' }),
+    );
     const action = {
       type: actions.COMPOSE_REPLY,
       id: 'compose-modal',
       status: ImmutableRecord({ visibility: 'public' })(),
       account: ImmutableRecord({})(),
     };
-    expect(reducer(state, action as any).toJS()['compose-modal']).toMatchObject({ privacy: 'private' });
+    expect(reducer(state, action as any).toJS()['compose-modal']).toMatchObject(
+      { privacy: 'private' },
+    );
   });
 
-  it('uses \'unlisted\' scope when set as preference and replying to a public post', () => {
-    const state = initialState.set('default', ReducerCompose({ privacy: 'unlisted' }));
+  it("uses 'unlisted' scope when set as preference and replying to a public post", () => {
+    const state = initialState.set(
+      'default',
+      ReducerCompose({ privacy: 'unlisted' }),
+    );
     const action = {
       type: actions.COMPOSE_REPLY,
       id: 'compose-modal',
       status: ImmutableRecord({ visibility: 'public' })(),
       account: ImmutableRecord({})(),
     };
-    expect(reducer(state, action as any).toJS()['compose-modal']).toMatchObject({ privacy: 'unlisted' });
+    expect(reducer(state, action as any).toJS()['compose-modal']).toMatchObject(
+      { privacy: 'unlisted' },
+    );
   });
 
   it('sets preferred scope on user login', () => {
-    const state = initialState.set('default', ReducerCompose({ privacy: 'public' }));
+    const state = initialState.set(
+      'default',
+      ReducerCompose({ privacy: 'public' }),
+    );
     const action = {
       type: ME_FETCH_SUCCESS,
-      me: { pleroma: { settings_store: { pl_fe: { defaultPrivacy: 'unlisted' } } } },
+      me: {
+        pleroma: { settings_store: { pl_fe: { defaultPrivacy: 'unlisted' } } },
+      },
     };
     expect(reducer(state, action as any).toJS().default).toMatchObject({
       privacy: 'unlisted',
@@ -173,7 +221,10 @@ describe('compose reducer', () => {
   });
 
   it('sets preferred scope on settings change', () => {
-    const state = initialState.set('default', ReducerCompose({ privacy: 'public' }));
+    const state = initialState.set(
+      'default',
+      ReducerCompose({ privacy: 'public' }),
+    );
     const action = {
       type: SETTING_CHANGE,
       path: ['defaultPrivacy'],
@@ -185,10 +236,15 @@ describe('compose reducer', () => {
   });
 
   it('sets default scope on settings save', () => {
-    const state = initialState.set('default', ReducerCompose({ privacy: 'public' }));
+    const state = initialState.set(
+      'default',
+      ReducerCompose({ privacy: 'public' }),
+    );
     const action = {
       type: ME_PATCH_SUCCESS,
-      me: { pleroma: { settings_store: { pl_fe: { defaultPrivacy: 'unlisted' } } } },
+      me: {
+        pleroma: { settings_store: { pl_fe: { defaultPrivacy: 'unlisted' } } },
+      },
     };
     expect(reducer(state, action).toJS().default).toMatchObject({
       privacy: 'unlisted',
@@ -196,7 +252,15 @@ describe('compose reducer', () => {
   });
 
   it('should handle COMPOSE_SPOILERNESS_CHANGE on CW button click', () => {
-    const state = initialState.set('home', ReducerCompose({ spoiler_text: 'spoiler text', spoiler: true, sensitive: true, media_attachments: ImmutableList() }));
+    const state = initialState.set(
+      'home',
+      ReducerCompose({
+        spoiler_text: 'spoiler text',
+        spoiler: true,
+        sensitive: true,
+        media_attachments: ImmutableList(),
+      }),
+    );
     const action = {
       type: actions.COMPOSE_SPOILERNESS_CHANGE,
       id: 'home',
@@ -209,7 +273,10 @@ describe('compose reducer', () => {
   });
 
   it('should handle COMPOSE_SPOILER_TEXT_CHANGE', () => {
-    const state = initialState.set('home', ReducerCompose({ spoiler_text: 'prevtext' }));
+    const state = initialState.set(
+      'home',
+      ReducerCompose({ spoiler_text: 'prevtext' }),
+    );
     const action = {
       type: actions.COMPOSE_SPOILER_TEXT_CHANGE,
       id: 'home',
@@ -221,7 +288,10 @@ describe('compose reducer', () => {
   });
 
   it('should handle COMPOSE_VISIBILITY_CHANGE', () => {
-    const state = initialState.set('home', ReducerCompose({ privacy: 'public' }));
+    const state = initialState.set(
+      'home',
+      ReducerCompose({ privacy: 'public' }),
+    );
     const action = {
       type: actions.COMPOSE_VISIBILITY_CHANGE,
       id: 'home',
@@ -234,7 +304,10 @@ describe('compose reducer', () => {
 
   describe('COMPOSE_CHANGE', () => {
     it('should handle text changing', () => {
-      const state = initialState.set('home', ReducerCompose({ text: 'prevtext' }));
+      const state = initialState.set(
+        'home',
+        ReducerCompose({ text: 'prevtext' }),
+      );
       const action = {
         type: actions.COMPOSE_CHANGE,
         id: 'home',
@@ -247,7 +320,10 @@ describe('compose reducer', () => {
   });
 
   it('should handle COMPOSE_SUBMIT_REQUEST', () => {
-    const state = initialState.set('home', ReducerCompose({ is_submitting: false }));
+    const state = initialState.set(
+      'home',
+      ReducerCompose({ is_submitting: false }),
+    );
     const action = {
       type: actions.COMPOSE_SUBMIT_REQUEST,
       id: 'home',
@@ -258,7 +334,10 @@ describe('compose reducer', () => {
   });
 
   it('should handle COMPOSE_UPLOAD_CHANGE_REQUEST', () => {
-    const state = initialState.set('home', ReducerCompose({ is_changing_upload: false }));
+    const state = initialState.set(
+      'home',
+      ReducerCompose({ is_changing_upload: false }),
+    );
     const action = {
       type: actions.COMPOSE_UPLOAD_CHANGE_REQUEST,
       id: 'home',
@@ -269,7 +348,10 @@ describe('compose reducer', () => {
   });
 
   it('should handle COMPOSE_SUBMIT_SUCCESS', () => {
-    const state = initialState.set('home', ReducerCompose({ privacy: 'private' }));
+    const state = initialState.set(
+      'home',
+      ReducerCompose({ privacy: 'private' }),
+    );
     const action = {
       type: actions.COMPOSE_SUBMIT_SUCCESS,
       id: 'home',
@@ -280,7 +362,10 @@ describe('compose reducer', () => {
   });
 
   it('should handle COMPOSE_SUBMIT_FAIL', () => {
-    const state = initialState.set('home', ReducerCompose({ is_submitting: true }));
+    const state = initialState.set(
+      'home',
+      ReducerCompose({ is_submitting: true }),
+    );
     const action = {
       type: actions.COMPOSE_SUBMIT_FAIL,
       id: 'home',
@@ -291,7 +376,10 @@ describe('compose reducer', () => {
   });
 
   it('should handle COMPOSE_UPLOAD_CHANGE_FAIL', () => {
-    const state = initialState.set('home', ReducerCompose({ is_changing_upload: true }));
+    const state = initialState.set(
+      'home',
+      ReducerCompose({ is_changing_upload: true }),
+    );
     const action = {
       type: actions.COMPOSE_UPLOAD_CHANGE_FAIL,
       composeId: 'home',
@@ -302,7 +390,10 @@ describe('compose reducer', () => {
   });
 
   it('should handle COMPOSE_UPLOAD_REQUEST', () => {
-    const state = initialState.set('home', ReducerCompose({ is_uploading: false }));
+    const state = initialState.set(
+      'home',
+      ReducerCompose({ is_uploading: false }),
+    );
     const action = {
       type: actions.COMPOSE_UPLOAD_REQUEST,
       id: 'home',
@@ -313,7 +404,10 @@ describe('compose reducer', () => {
   });
 
   it('should handle COMPOSE_UPLOAD_SUCCESS', () => {
-    const state = initialState.set('home', ReducerCompose({ media_attachments: ImmutableList() }));
+    const state = initialState.set(
+      'home',
+      ReducerCompose({ media_attachments: ImmutableList() }),
+    );
     const media = [
       {
         description: null,
@@ -321,9 +415,12 @@ describe('compose reducer', () => {
         pleroma: {
           mime_type: 'image/jpeg',
         },
-        preview_url: 'https://media.gleasonator.com/media_attachments/files/000/853/856/original/7035d67937053e1d.jpg',
-        remote_url: 'https://media.gleasonator.com/media_attachments/files/000/853/856/original/7035d67937053e1d.jpg',
-        text_url: 'https://media.gleasonator.com/media_attachments/files/000/853/856/original/7035d67937053e1d.jpg',
+        preview_url:
+          'https://media.gleasonator.com/media_attachments/files/000/853/856/original/7035d67937053e1d.jpg',
+        remote_url:
+          'https://media.gleasonator.com/media_attachments/files/000/853/856/original/7035d67937053e1d.jpg',
+        text_url:
+          'https://media.gleasonator.com/media_attachments/files/000/853/856/original/7035d67937053e1d.jpg',
         type: 'image',
         url: 'https://media.gleasonator.com/media_attachments/files/000/853/856/original/7035d67937053e1d.jpg',
       },
@@ -339,7 +436,10 @@ describe('compose reducer', () => {
   });
 
   it('should handle COMPOSE_UPLOAD_FAIL', () => {
-    const state = initialState.set('home', ReducerCompose({ is_uploading: true }));
+    const state = initialState.set(
+      'home',
+      ReducerCompose({ is_uploading: true }),
+    );
     const action = {
       type: actions.COMPOSE_UPLOAD_FAIL,
       id: 'home',
@@ -376,19 +476,20 @@ describe('compose reducer', () => {
   });
 
   it('should handle COMPOSE_SUGGESTION_TAGS_UPDATE', () => {
-    const state = initialState.set('home', ReducerCompose({ tagHistory: ImmutableList([ 'hashtag' ]) }));
+    const state = initialState.set(
+      'home',
+      ReducerCompose({ tagHistory: ImmutableList(['hashtag']) }),
+    );
     const action = {
       type: actions.COMPOSE_SUGGESTION_TAGS_UPDATE,
       id: 'home',
       token: 'aaadken3',
-      tags: ImmutableList([
-        TagRecord({ name: 'hashtag' }),
-      ]),
+      tags: ImmutableList([TagRecord({ name: 'hashtag' })]),
     };
     expect(reducer(state, action).toJS().home).toMatchObject({
       suggestion_token: 'aaadken3',
       suggestions: [],
-      tagHistory: [ 'hashtag' ],
+      tagHistory: ['hashtag'],
     });
   });
 
@@ -396,31 +497,33 @@ describe('compose reducer', () => {
     const action = {
       type: actions.COMPOSE_TAG_HISTORY_UPDATE,
       id: 'home',
-      tags: [ 'hashtag', 'hashtag2'],
+      tags: ['hashtag', 'hashtag2'],
     };
     expect(reducer(undefined, action).toJS().home).toMatchObject({
-      tagHistory: [ 'hashtag', 'hashtag2' ],
+      tagHistory: ['hashtag', 'hashtag2'],
     });
   });
 
   it('should handle TIMELINE_DELETE - delete status from timeline', () => {
-    const state = initialState.set('compose-modal', ReducerCompose({ in_reply_to: '9wk6pmImMrZjgrK7iC' }));
+    const state = initialState.set(
+      'compose-modal',
+      ReducerCompose({ in_reply_to: '9wk6pmImMrZjgrK7iC' }),
+    );
     const action = {
       type: TIMELINE_DELETE,
       id: '9wk6pmImMrZjgrK7iC',
     };
-    expect(reducer(state, action as any).toJS()['compose-modal']).toMatchObject({
-      in_reply_to: null,
-    });
+    expect(reducer(state, action as any).toJS()['compose-modal']).toMatchObject(
+      {
+        in_reply_to: null,
+      },
+    );
   });
 
   it('should handle COMPOSE_POLL_ADD', () => {
     const state = initialState.set('home', ReducerCompose({ poll: null }));
     const initialPoll = Object({
-      options: [
-        '',
-        '',
-      ],
+      options: ['', ''],
       expires_in: 86400,
       multiple: false,
     });
@@ -446,14 +549,14 @@ describe('compose reducer', () => {
 
   it('should handle COMPOSE_POLL_OPTION_CHANGE', () => {
     const initialPoll = Object({
-      options: [
-        'option 1',
-        'option 2',
-      ],
+      options: ['option 1', 'option 2'],
       expires_in: 86400,
       multiple: false,
     });
-    const state = initialState.set('home', ReducerCompose({ poll: initialPoll }));
+    const state = initialState.set(
+      'home',
+      ReducerCompose({ poll: initialPoll }),
+    );
     const action = {
       type: actions.COMPOSE_POLL_OPTION_CHANGE,
       id: 'home',
@@ -461,10 +564,7 @@ describe('compose reducer', () => {
       title: 'change option',
     };
     const updatedPoll = Object({
-      options: [
-        'change option',
-        'option 2',
-      ],
+      options: ['change option', 'option 2'],
       expires_in: 86400,
       multiple: false,
     });
@@ -480,6 +580,8 @@ describe('compose reducer', () => {
       id: 'home',
       value: 'text/plain',
     };
-    expect(reducer(state, action).toJS().home).toMatchObject({ content_type: 'text/plain' });
+    expect(reducer(state, action).toJS().home).toMatchObject({
+      content_type: 'text/plain',
+    });
   });
 });

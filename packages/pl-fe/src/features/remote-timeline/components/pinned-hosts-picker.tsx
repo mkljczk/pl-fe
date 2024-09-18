@@ -8,7 +8,9 @@ interface IPinnedHostsPicker {
   host?: string;
 }
 
-const PinnedHostsPicker: React.FC<IPinnedHostsPicker> = ({ host: activeHost }) => {
+const PinnedHostsPicker: React.FC<IPinnedHostsPicker> = ({
+  host: activeHost,
+}) => {
   const settings = useSettings();
   const pinnedHosts = settings.remote_timeline.pinnedHosts;
 

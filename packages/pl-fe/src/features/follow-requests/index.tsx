@@ -1,8 +1,11 @@
 import debounce from 'lodash/debounce';
 import React from 'react';
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { fetchFollowRequests, expandFollowRequests } from 'pl-fe/actions/accounts';
+import {
+  expandFollowRequests,
+  fetchFollowRequests,
+} from 'pl-fe/actions/accounts';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Column, Spinner } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
@@ -13,16 +16,24 @@ const messages = defineMessages({
   heading: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
 });
 
-const handleLoadMore = debounce((dispatch) => {
-  dispatch(expandFollowRequests());
-}, 300, { leading: true });
+const handleLoadMore = debounce(
+  (dispatch) => {
+    dispatch(expandFollowRequests());
+  },
+  300,
+  { leading: true },
+);
 
 const FollowRequests: React.FC = () => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const accountIds = useAppSelector((state) => state.user_lists.follow_requests.items);
-  const hasMore = useAppSelector((state) => !!state.user_lists.follow_requests.next);
+  const accountIds = useAppSelector(
+    (state) => state.user_lists.follow_requests.items,
+  );
+  const hasMore = useAppSelector(
+    (state) => !!state.user_lists.follow_requests.next,
+  );
 
   React.useEffect(() => {
     dispatch(fetchFollowRequests());
@@ -36,7 +47,12 @@ const FollowRequests: React.FC = () => {
     );
   }
 
-  const emptyMessage = <FormattedMessage id='empty_column.follow_requests' defaultMessage="You don't have any follow requests yet. When you receive one, it will show up here." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.follow_requests'
+      defaultMessage="You don't have any follow requests yet. When you receive one, it will show up here."
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -46,9 +62,9 @@ const FollowRequests: React.FC = () => {
         hasMore={hasMore}
         emptyMessage={emptyMessage}
       >
-        {accountIds.map(id =>
-          <AccountAuthorize key={id} id={id} />,
-        )}
+        {accountIds.map((id) => (
+          <AccountAuthorize key={id} id={id} />
+        ))}
       </ScrollableList>
     </Column>
   );

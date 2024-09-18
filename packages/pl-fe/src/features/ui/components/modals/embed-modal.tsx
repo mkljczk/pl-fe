@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import CopyableInput from 'pl-fe/components/copyable-input';
 import SafeEmbed from 'pl-fe/components/safe-embed';
-import { Modal, Stack, Text, Divider } from 'pl-fe/components/ui';
+import { Divider, Modal, Stack, Text } from 'pl-fe/components/ui';
 import useEmbed from 'pl-fe/queries/embed';
 
 import type { BaseModalProps } from '../modal-root';
@@ -13,7 +13,11 @@ interface EmbedModalProps {
   onError: (error: any) => void;
 }
 
-const EmbedModal: React.FC<BaseModalProps & EmbedModalProps> = ({ onClose, onError, url }) => {
+const EmbedModal: React.FC<BaseModalProps & EmbedModalProps> = ({
+  onClose,
+  onError,
+  url,
+}) => {
   const { data: embed, error, isError } = useEmbed(url);
 
   useEffect(() => {
@@ -33,7 +37,10 @@ const EmbedModal: React.FC<BaseModalProps & EmbedModalProps> = ({ onClose, onErr
     >
       <Stack space={4}>
         <Text theme='muted'>
-          <FormattedMessage id='embed.instructions' defaultMessage='Embed this post on your website by copying the code below.' />
+          <FormattedMessage
+            id='embed.instructions'
+            defaultMessage='Embed this post on your website by copying the code below.'
+          />
         </Text>
 
         <CopyableInput value={embed?.html || ''} />

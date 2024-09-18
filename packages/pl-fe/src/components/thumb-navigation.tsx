@@ -7,7 +7,12 @@ import { openSidebar } from 'pl-fe/actions/sidebar';
 import ThumbNavigationLink from 'pl-fe/components/thumb-navigation-link';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'pl-fe/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useFeatures,
+  useOwnAccount,
+} from 'pl-fe/hooks';
 import { useModalsStore } from 'pl-fe/stores';
 import { isStandalone } from 'pl-fe/utils/state';
 
@@ -16,7 +21,10 @@ import { Icon } from './ui';
 const messages = defineMessages({
   home: { id: 'navigation.home', defaultMessage: 'Home' },
   search: { id: 'navigation.search', defaultMessage: 'Search' },
-  notifications: { id: 'navigation.notifications', defaultMessage: 'Notifications' },
+  notifications: {
+    id: 'navigation.notifications',
+    defaultMessage: 'Notifications',
+  },
   chats: { id: 'navigation.chats', defaultMessage: 'Chats' },
   compose: { id: 'navigation.compose', defaultMessage: 'Compose' },
   sidebar: { id: 'navigation.sidebar', defaultMessage: 'Open sidebar' },
@@ -34,14 +42,17 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
   const { unreadChatsCount } = useStatContext();
 
   const standalone = useAppSelector(isStandalone);
-  const notificationCount = useAppSelector((state) => state.notifications.unread);
+  const notificationCount = useAppSelector(
+    (state) => state.notifications.unread,
+  );
 
   const handleOpenSidebar = () => dispatch(openSidebar());
 
   const handleOpenComposeModal = () => {
     if (match?.params.groupId) {
       dispatch((_, getState) => {
-        const group = getState().entities[Entities.GROUPS]?.store[match.params.groupId];
+        const group =
+          getState().entities[Entities.GROUPS]?.store[match.params.groupId];
         if (group) dispatch(groupComposeModal(group));
       });
     } else {

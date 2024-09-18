@@ -59,9 +59,7 @@
       "accepts_chat_messages": true,
       "accepts_email_list": true,
       "allow_following_move": true,
-      "also_known_as": [
-        "https://mitra.social/users/alex"
-      ],
+      "also_known_as": ["https://mitra.social/users/alex"],
       "ap_id": "https://gleasonator.com/users/alex",
       "background_image": null,
       "birthday": "1993-07-03",

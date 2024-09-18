@@ -15,37 +15,49 @@ const UNEMOJI_REACT_REQUEST = 'UNEMOJI_REACT_REQUEST' as const;
 const UNEMOJI_REACT_SUCCESS = 'UNEMOJI_REACT_SUCCESS' as const;
 const UNEMOJI_REACT_FAIL = 'UNEMOJI_REACT_FAIL' as const;
 
-const noOp = () => () => new Promise(f => f(undefined));
+const noOp = () => () => new Promise((f) => f(undefined));
 
-const emojiReact = (status: Pick<Status, 'id'>, emoji: string, custom?: string) =>
+const emojiReact =
+  (status: Pick<Status, 'id'>, emoji: string, custom?: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return dispatch(noOp());
 
     dispatch(emojiReactRequest(status.id, emoji, custom));
 
-    return getClient(getState).statuses.createStatusReaction(status.id, emoji).then((response) => {
-      dispatch(importFetchedStatus(response));
-      dispatch(emojiReactSuccess(response, emoji));
-    }).catch((error) => {
-      dispatch(emojiReactFail(status.id, emoji, error));
-    });
+    return getClient(getState)
+      .statuses.createStatusReaction(status.id, emoji)
+      .then((response) => {
+        dispatch(importFetchedStatus(response));
+        dispatch(emojiReactSuccess(response, emoji));
+      })
+      .catch((error) => {
+        dispatch(emojiReactFail(status.id, emoji, error));
+      });
   };
 
-const unEmojiReact = (status: Pick<Status, 'id'>, emoji: string) =>
+const unEmojiReact =
+  (status: Pick<Status, 'id'>, emoji: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return dispatch(noOp());
 
     dispatch(unEmojiReactRequest(status.id, emoji));
 
-    return getClient(getState).statuses.deleteStatusReaction(status.id, emoji).then(response => {
-      dispatch(importFetchedStatus(response));
-      dispatch(unEmojiReactSuccess(response, emoji));
-    }).catch(error => {
-      dispatch(unEmojiReactFail(status.id, emoji, error));
-    });
+    return getClient(getState)
+      .statuses.deleteStatusReaction(status.id, emoji)
+      .then((response) => {
+        dispatch(importFetchedStatus(response));
+        dispatch(unEmojiReactSuccess(response, emoji));
+      })
+      .catch((error) => {
+        dispatch(unEmojiReactFail(status.id, emoji, error));
+      });
   };
 
-const emojiReactRequest = (statusId: string, emoji: string, custom?: string) => ({
+const emojiReactRequest = (
+  statusId: string,
+  emoji: string,
+  custom?: string,
+) => ({
   type: EMOJI_REACT_REQUEST,
   statusId,
   emoji,
@@ -92,7 +104,7 @@ type EmojiReactsAction =
   | ReturnType<typeof emojiReactFail>
   | ReturnType<typeof unEmojiReactRequest>
   | ReturnType<typeof unEmojiReactSuccess>
-  | ReturnType<typeof unEmojiReactFail>
+  | ReturnType<typeof unEmojiReactFail>;
 
 export {
   EMOJI_REACT_REQUEST,

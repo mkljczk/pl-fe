@@ -18,17 +18,15 @@ const useInteractionPolicies = () => {
     enabled: isLoggedIn && features.interactionRequests,
   });
 
-  const {
-    mutate: updateInteractionPolicies,
-    isPending: isUpdating,
-  } = useMutation({
-    mutationFn: (policy: InteractionPolicies) =>
-      client.settings.updateInteractionPolicies(policy),
-    retry: false,
-    onSuccess: (policy) => {
-      queryClient.setQueryData(['interactionPolicies'], policy);
-    },
-  });
+  const { mutate: updateInteractionPolicies, isPending: isUpdating } =
+    useMutation({
+      mutationFn: (policy: InteractionPolicies) =>
+        client.settings.updateInteractionPolicies(policy),
+      retry: false,
+      onSuccess: (policy) => {
+        queryClient.setQueryData(['interactionPolicies'], policy);
+      },
+    });
 
   return {
     interactionPolicies: data || emptySchema,

@@ -7,7 +7,7 @@ import { fetchListTimeline } from 'pl-fe/actions/timelines';
 import { useListStream } from 'pl-fe/api/hooks';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
-import { Column, Button, Spinner } from 'pl-fe/components/ui';
+import { Button, Column, Spinner } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector, useTheme } from 'pl-fe/hooks';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 import { useModalsStore } from 'pl-fe/stores';
@@ -15,9 +15,18 @@ import { useModalsStore } from 'pl-fe/stores';
 import Timeline from '../ui/components/timeline';
 
 const messages = defineMessages({
-  deleteHeading: { id: 'confirmations.delete_list.heading', defaultMessage: 'Delete list' },
-  deleteMessage: { id: 'confirmations.delete_list.message', defaultMessage: 'Are you sure you want to permanently delete this list?' },
-  deleteConfirm: { id: 'confirmations.delete_list.confirm', defaultMessage: 'Delete' },
+  deleteHeading: {
+    id: 'confirmations.delete_list.heading',
+    defaultMessage: 'Delete list',
+  },
+  deleteMessage: {
+    id: 'confirmations.delete_list.message',
+    defaultMessage: 'Are you sure you want to permanently delete this list?',
+  },
+  deleteConfirm: {
+    id: 'confirmations.delete_list.confirm',
+    defaultMessage: 'Delete',
+  },
   editList: { id: 'lists.edit', defaultMessage: 'Edit list' },
   deleteList: { id: 'lists.delete', defaultMessage: 'Delete list' },
 });
@@ -71,16 +80,23 @@ const ListTimeline: React.FC = () => {
       </Column>
     );
   } else if (list === false) {
-    return (
-      <MissingIndicator />
-    );
+    return <MissingIndicator />;
   }
 
   const emptyMessage = (
     <div>
-      <FormattedMessage id='empty_column.list' defaultMessage='There is nothing in this list yet. When members of this list create new posts, they will appear here.' />
-      <br /><br />
-      <Button onClick={handleEditClick}><FormattedMessage id='list.click_to_add' defaultMessage='Click here to add people' /></Button>
+      <FormattedMessage
+        id='empty_column.list'
+        defaultMessage='There is nothing in this list yet. When members of this list create new posts, they will appear here.'
+      />
+      <br />
+      <br />
+      <Button onClick={handleEditClick}>
+        <FormattedMessage
+          id='list.click_to_add'
+          defaultMessage='Click here to add people'
+        />
+      </Button>
     </div>
   );
 
@@ -100,7 +116,12 @@ const ListTimeline: React.FC = () => {
   return (
     <Column
       label={title}
-      action={<DropdownMenu items={items} src={require('@tabler/icons/outline/dots-vertical.svg')} />}
+      action={
+        <DropdownMenu
+          items={items}
+          src={require('@tabler/icons/outline/dots-vertical.svg')}
+        />
+      }
       transparent={!isMobile}
     >
       <Timeline
@@ -110,7 +131,7 @@ const ListTimeline: React.FC = () => {
         timelineId={`list:${id}`}
         onLoadMore={handleLoadMore}
         emptyMessage={emptyMessage}
-        divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
+        divideType={theme === 'black' || isMobile ? 'border' : 'space'}
       />
     </Column>
   );

@@ -4,9 +4,18 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Select } from 'pl-fe/components/ui';
 
 const messages = defineMessages({
-  minutes: { id: 'intervals.full.minutes', defaultMessage: '{number, plural, one {# minute} other {# minutes}}' },
-  hours: { id: 'intervals.full.hours', defaultMessage: '{number, plural, one {# hour} other {# hours}}' },
-  days: { id: 'intervals.full.days', defaultMessage: '{number, plural, one {# day} other {# days}}' },
+  minutes: {
+    id: 'intervals.full.minutes',
+    defaultMessage: '{number, plural, one {# minute} other {# minutes}}',
+  },
+  hours: {
+    id: 'intervals.full.hours',
+    defaultMessage: '{number, plural, one {# hour} other {# hours}}',
+  },
+  days: {
+    id: 'intervals.full.days',
+    defaultMessage: '{number, plural, one {# day} other {# days}}',
+  },
 });
 
 interface IDurationSelector {
@@ -20,7 +29,7 @@ const DurationSelector = ({ onDurationChange }: IDurationSelector) => {
   const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
 
-  const value = (days * 24 * 60 * 60) + (hours * 60 * 60) + (minutes * 60);
+  const value = days * 24 * 60 * 60 + hours * 60 * 60 + minutes * 60;
 
   useEffect(() => {
     if (days === 7) {

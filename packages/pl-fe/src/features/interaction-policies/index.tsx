@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { useInteractionPolicies } from 'pl-fe/api/hooks';
 import List, { ListItem } from 'pl-fe/components/list';
-import { Button, CardTitle, Column, Form, FormActions, Tabs } from 'pl-fe/components/ui';
+import {
+  Button,
+  CardTitle,
+  Column,
+  Form,
+  FormActions,
+  Tabs,
+} from 'pl-fe/components/ui';
 import { InlineMultiselect } from 'pl-fe/components/ui/inline-multiselect/inline-multiselect';
 import toast from 'pl-fe/toast';
 
@@ -17,39 +24,96 @@ type Scope = 'followers' | 'following' | 'mentioned' | 'public';
 const policies: Array<Policy> = ['can_favourite', 'can_reply', 'can_reblog'];
 
 const messages = defineMessages({
-  heading: { id: 'column.interaction_policies', defaultMessage: 'Interaction policies' },
+  heading: {
+    id: 'column.interaction_policies',
+    defaultMessage: 'Interaction policies',
+  },
   public: { id: 'interaction_policies.tabs.public', defaultMessage: 'Public' },
-  unlisted: { id: 'interaction_policies.tabs.unlisted', defaultMessage: 'Unlisted' },
-  private: { id: 'interaction_policies.tabs.private', defaultMessage: 'Followers-only' },
+  unlisted: {
+    id: 'interaction_policies.tabs.unlisted',
+    defaultMessage: 'Unlisted',
+  },
+  private: {
+    id: 'interaction_policies.tabs.private',
+    defaultMessage: 'Followers-only',
+  },
   submit: { id: 'interaction_policies.update', defaultMessage: 'Update' },
-  success: { id: 'interaction_policies.success', defaultMessage: 'Updated interaction policies' },
-  fail: { id: 'interaction_policies.fail', defaultMessage: 'Failed to update interaction policies' },
+  success: {
+    id: 'interaction_policies.success',
+    defaultMessage: 'Updated interaction policies',
+  },
+  fail: {
+    id: 'interaction_policies.fail',
+    defaultMessage: 'Failed to update interaction policies',
+  },
   always: { id: 'interaction_policies.rule.always', defaultMessage: 'Always' },
-  with_approval: { id: 'interaction_policies.rule.with_approval', defaultMessage: 'Require approval' },
+  with_approval: {
+    id: 'interaction_policies.rule.with_approval',
+    defaultMessage: 'Require approval',
+  },
 });
 
 const scopeMessages = defineMessages({
-  followers: { id: 'interaction_policies.entry.followers', defaultMessage: 'Followers' },
-  following: { id: 'interaction_policies.entry.following', defaultMessage: 'People I follow' },
-  mentioned: { id: 'interaction_policies.entry.mentioned', defaultMessage: 'Mentioned' },
-  public: { id: 'interaction_policies.entry.public', defaultMessage: 'Everyone' },
+  followers: {
+    id: 'interaction_policies.entry.followers',
+    defaultMessage: 'Followers',
+  },
+  following: {
+    id: 'interaction_policies.entry.following',
+    defaultMessage: 'People I follow',
+  },
+  mentioned: {
+    id: 'interaction_policies.entry.mentioned',
+    defaultMessage: 'Mentioned',
+  },
+  public: {
+    id: 'interaction_policies.entry.public',
+    defaultMessage: 'Everyone',
+  },
 });
 
 const titleMessages = {
   public: defineMessages({
-    can_favourite: { id: 'interaction_policies.title.public.can_favourite', defaultMessage: 'Who can like a public post?' },
-    can_reply: { id: 'interaction_policies.title.public.can_reply', defaultMessage: 'Who can reply to a public post?' },
-    can_reblog: { id: 'interaction_policies.title.public.can_reblog', defaultMessage: 'Who can repost a public post?' },
+    can_favourite: {
+      id: 'interaction_policies.title.public.can_favourite',
+      defaultMessage: 'Who can like a public post?',
+    },
+    can_reply: {
+      id: 'interaction_policies.title.public.can_reply',
+      defaultMessage: 'Who can reply to a public post?',
+    },
+    can_reblog: {
+      id: 'interaction_policies.title.public.can_reblog',
+      defaultMessage: 'Who can repost a public post?',
+    },
   }),
   unlisted: defineMessages({
-    can_favourite: { id: 'interaction_policies.title.unlisted.can_favourite', defaultMessage: 'Who can like an unlisted post?' },
-    can_reply: { id: 'interaction_policies.title.unlisted.can_reply', defaultMessage: 'Who can reply to an unlisted post?' },
-    can_reblog: { id: 'interaction_policies.title.unlisted.can_reblog', defaultMessage: 'Who can repost an unlisted post?' },
+    can_favourite: {
+      id: 'interaction_policies.title.unlisted.can_favourite',
+      defaultMessage: 'Who can like an unlisted post?',
+    },
+    can_reply: {
+      id: 'interaction_policies.title.unlisted.can_reply',
+      defaultMessage: 'Who can reply to an unlisted post?',
+    },
+    can_reblog: {
+      id: 'interaction_policies.title.unlisted.can_reblog',
+      defaultMessage: 'Who can repost an unlisted post?',
+    },
   }),
   private: defineMessages({
-    can_favourite: { id: 'interaction_policies.title.private.can_favourite', defaultMessage: 'Who can like a followers-only post?' },
-    can_reply: { id: 'interaction_policies.title.private.can_reply', defaultMessage: 'Who can reply to a followers-only post?' },
-    can_reblog: { id: 'interaction_policies.title.private.can_reblog', defaultMessage: 'Who can repost a followers-only post?' },
+    can_favourite: {
+      id: 'interaction_policies.title.private.can_favourite',
+      defaultMessage: 'Who can like a followers-only post?',
+    },
+    can_reply: {
+      id: 'interaction_policies.title.private.can_reply',
+      defaultMessage: 'Who can reply to a followers-only post?',
+    },
+    can_reblog: {
+      id: 'interaction_policies.title.private.can_reblog',
+      defaultMessage: 'Who can repost a followers-only post?',
+    },
   }),
 };
 
@@ -72,7 +136,11 @@ const options: Record<Visibility, Record<Policy, Array<Scope>>> = {
 };
 
 const InteractionPolicies = () => {
-  const { interactionPolicies: initial, updateInteractionPolicies, isUpdating } = useInteractionPolicies();
+  const {
+    interactionPolicies: initial,
+    updateInteractionPolicies,
+    isUpdating,
+  } = useInteractionPolicies();
   const intl = useIntl();
   const [interactionPolicies, setInteractionPolicies] = useState(initial);
   const [visibility, setVisibility] = useState<Visibility>('public');
@@ -81,15 +149,27 @@ const InteractionPolicies = () => {
     setInteractionPolicies(initial);
   }, [initial]);
 
-  const getItems = (visibility: Visibility, policy: Policy) => Object.fromEntries(options[visibility][policy].map(scope => [scope, intl.formatMessage(scopeMessages[scope])])) as Record<Scope, string>;
+  const getItems = (visibility: Visibility, policy: Policy) =>
+    Object.fromEntries(
+      options[visibility][policy].map((scope) => [
+        scope,
+        intl.formatMessage(scopeMessages[scope]),
+      ]),
+    ) as Record<Scope, string>;
 
-  const handleChange = (visibility: Visibility, policy: Policy, rule: Rule) => (value: Array<Scope>) => {
-    const newPolicies = { ...interactionPolicies };
-    newPolicies[visibility][policy][rule] = value;
-    newPolicies[visibility][policy][rule === 'always' ? 'with_approval' : 'always'] = newPolicies[visibility][policy][rule === 'always' ? 'with_approval' : 'always'].filter(rule => !value.includes(rule as any));
+  const handleChange =
+    (visibility: Visibility, policy: Policy, rule: Rule) =>
+    (value: Array<Scope>) => {
+      const newPolicies = { ...interactionPolicies };
+      newPolicies[visibility][policy][rule] = value;
+      newPolicies[visibility][policy][
+        rule === 'always' ? 'with_approval' : 'always'
+      ] = newPolicies[visibility][policy][
+        rule === 'always' ? 'with_approval' : 'always'
+      ].filter((rule) => !value.includes(rule as any));
 
-    setInteractionPolicies(newPolicies);
-  };
+      setInteractionPolicies(newPolicies);
+    };
 
   const handleSubmit = () => {
     updateInteractionPolicies(interactionPolicies, {
@@ -112,14 +192,24 @@ const InteractionPolicies = () => {
             />
 
             {policy === 'can_reply' && (
-              <Warning message={<FormattedMessage id='interaction_policies.mentioned_warning' defaultMessage='Mentioned users can always reply.' />} />
+              <Warning
+                message={
+                  <FormattedMessage
+                    id='interaction_policies.mentioned_warning'
+                    defaultMessage='Mentioned users can always reply.'
+                  />
+                }
+              />
             )}
 
             <List>
               <ListItem label={intl.formatMessage(messages.always)}>
                 <InlineMultiselect<Scope>
                   items={items}
-                  value={interactionPolicies[visibility][policy].always as Array<Scope>}
+                  value={
+                    interactionPolicies[visibility][policy]
+                      .always as Array<Scope>
+                  }
                   onChange={handleChange(visibility, policy, 'always')}
                   disabled={isUpdating}
                 />
@@ -127,7 +217,10 @@ const InteractionPolicies = () => {
               <ListItem label={intl.formatMessage(messages.with_approval)}>
                 <InlineMultiselect
                   items={items}
-                  value={interactionPolicies[visibility][policy].with_approval as Array<Scope>}
+                  value={
+                    interactionPolicies[visibility][policy]
+                      .with_approval as Array<Scope>
+                  }
                   onChange={handleChange(visibility, policy, 'with_approval')}
                   disabled={isUpdating}
                 />
@@ -158,7 +251,8 @@ const InteractionPolicies = () => {
               text: intl.formatMessage(messages.private),
               action: () => setVisibility('private'),
               name: 'private',
-            }]}
+            },
+          ]}
           activeItem={visibility}
         />
 

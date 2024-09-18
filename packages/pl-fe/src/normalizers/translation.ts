@@ -2,11 +2,16 @@ import emojify from 'pl-fe/features/emoji';
 import { stripCompatibilityFeatures } from 'pl-fe/utils/html';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
-import type { Status, Translation as BaseTranslation } from 'pl-api';
+import type { Translation as BaseTranslation, Status } from 'pl-api';
 
-const normalizeTranslation = (translation: BaseTranslation, status: Pick<Status, 'emojis'>) => {
+const normalizeTranslation = (
+  translation: BaseTranslation,
+  status: Pick<Status, 'emojis'>,
+) => {
   const emojiMap = makeEmojiMap(status.emojis);
-  const content = stripCompatibilityFeatures(emojify(translation.content, emojiMap));
+  const content = stripCompatibilityFeatures(
+    emojify(translation.content, emojiMap),
+  );
 
   return {
     ...translation,

@@ -1,6 +1,9 @@
 import { Record as ImmutableRecord } from 'immutable';
 
-import { INSTANCE_FETCH_FAIL, type InstanceAction } from 'pl-fe/actions/instance';
+import {
+  INSTANCE_FETCH_FAIL,
+  type InstanceAction,
+} from 'pl-fe/actions/instance';
 import { SW_UPDATING, type SwAction } from 'pl-fe/actions/sw';
 
 const ReducerRecord = ImmutableRecord({

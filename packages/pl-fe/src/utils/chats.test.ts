@@ -21,14 +21,15 @@ const chat: IChat = {
   unread: 0,
 };
 
-const buildChatMessage = (id: string) => normalizeChatMessage({
-  id,
-  chat_id: '1',
-  account_id: '1',
-  content: `chat message #${id}`,
-  created_at: '2020-06-10T02:05:06.000Z',
-  unread: true,
-});
+const buildChatMessage = (id: string) =>
+  normalizeChatMessage({
+    id,
+    chat_id: '1',
+    account_id: '1',
+    content: `chat message #${id}`,
+    created_at: '2020-06-10T02:05:06.000Z',
+    unread: true,
+  });
 
 describe('chat utils', () => {
   describe('updateChatMessage()', () => {
@@ -42,12 +43,16 @@ describe('chat utils', () => {
         pageParams: [undefined],
       };
 
-      queryClient.setQueryData(ChatKeys.chatMessages(chat.id), initialQueryData);
+      queryClient.setQueryData(
+        ChatKeys.chatMessages(chat.id),
+        initialQueryData,
+      );
     });
 
     it('correctly updates the chat message', () => {
       expect(
-        (queryClient.getQueryData(ChatKeys.chatMessages(chat.id)) as any).pages[0].result[0].content,
+        (queryClient.getQueryData(ChatKeys.chatMessages(chat.id)) as any)
+          .pages[0].result[0].content,
       ).toEqual(initialChatMessage.content);
 
       const nextChatMessage = normalizeChatMessage({
@@ -57,7 +62,8 @@ describe('chat utils', () => {
 
       updateChatMessage(nextChatMessage);
       expect(
-        (queryClient.getQueryData(ChatKeys.chatMessages(chat.id)) as any).pages[0].result[0].content,
+        (queryClient.getQueryData(ChatKeys.chatMessages(chat.id)) as any)
+          .pages[0].result[0].content,
       ).toEqual(nextChatMessage.content);
     });
   });

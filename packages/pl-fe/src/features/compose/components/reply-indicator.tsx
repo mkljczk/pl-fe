@@ -11,12 +11,26 @@ import type { Account, Status } from 'pl-fe/normalizers';
 
 interface IReplyIndicator {
   className?: string;
-  status?: Pick<Status, | 'contentHtml' | 'created_at' | 'hidden' | 'media_attachments' | 'search_index' | 'sensitive' | 'spoiler_text'> & { account: Pick<Account, 'id'> };
+  status?: Pick<
+    Status,
+    | 'contentHtml'
+    | 'created_at'
+    | 'hidden'
+    | 'media_attachments'
+    | 'search_index'
+    | 'sensitive'
+    | 'spoiler_text'
+  > & { account: Pick<Account, 'id'> };
   onCancel?: () => void;
   hideActions: boolean;
 }
 
-const ReplyIndicator: React.FC<IReplyIndicator> = ({ className, status, hideActions, onCancel }) => {
+const ReplyIndicator: React.FC<IReplyIndicator> = ({
+  className,
+  status,
+  hideActions,
+  onCancel,
+}) => {
   const handleClick = () => {
     onCancel!();
   };
@@ -36,7 +50,13 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({ className, status, hideActi
   }
 
   return (
-    <Stack space={2} className={clsx('max-h-72 overflow-y-auto rounded-lg bg-gray-100 p-4 black:bg-gray-900 dark:bg-gray-800', className)}>
+    <Stack
+      space={2}
+      className={clsx(
+        'max-h-72 overflow-y-auto rounded-lg bg-gray-100 p-4 black:bg-gray-900 dark:bg-gray-800',
+        className,
+      )}
+    >
       <AccountContainer
         {...actions}
         id={status.account.id}
@@ -54,9 +74,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({ className, status, hideActi
       />
 
       {status.media_attachments.length > 0 && (
-        <AttachmentThumbs
-          status={status}
-        />
+        <AttachmentThumbs status={status} />
       )}
     </Stack>
   );

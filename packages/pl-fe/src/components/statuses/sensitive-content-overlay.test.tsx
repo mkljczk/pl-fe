@@ -17,7 +17,9 @@ describe('<SensitiveContentOverlay />', () => {
 
     it('displays the "Sensitive content" warning', () => {
       render(<SensitiveContentOverlay status={status} />);
-      expect(screen.getByTestId('sensitive-overlay')).toHaveTextContent('Sensitive content');
+      expect(screen.getByTestId('sensitive-overlay')).toHaveTextContent(
+        'Sensitive content',
+      );
     });
 
     it('does not allow user to delete the status', () => {
@@ -29,12 +31,18 @@ describe('<SensitiveContentOverlay />', () => {
       render(<SensitiveContentOverlay status={status} />);
 
       fireEvent.click(screen.getByTestId('button'));
-      expect(screen.getByTestId('sensitive-overlay')).not.toHaveTextContent('Sensitive content');
+      expect(screen.getByTestId('sensitive-overlay')).not.toHaveTextContent(
+        'Sensitive content',
+      );
       expect(screen.getByTestId('sensitive-overlay')).toHaveTextContent('Hide');
 
       fireEvent.click(screen.getByTestId('button'));
-      expect(screen.getByTestId('sensitive-overlay')).toHaveTextContent('Sensitive content');
-      expect(screen.getByTestId('sensitive-overlay')).not.toHaveTextContent('Hide');
+      expect(screen.getByTestId('sensitive-overlay')).toHaveTextContent(
+        'Sensitive content',
+      );
+      expect(screen.getByTestId('sensitive-overlay')).not.toHaveTextContent(
+        'Hide',
+      );
     });
   });
 
@@ -43,21 +51,29 @@ describe('<SensitiveContentOverlay />', () => {
 
     beforeEach(() => {
       status = normalizeStatus({ sensitive: true }) as ReducerStatus;
-      store = rootState
-        .set('settings', ImmutableMap({
+      store = rootState.set(
+        'settings',
+        ImmutableMap({
           displayMedia: 'show_all',
-        }));
+        }),
+      );
     });
 
     it('can be toggled', () => {
       render(<SensitiveContentOverlay status={status} />, undefined, store);
 
       fireEvent.click(screen.getByTestId('button'));
-      expect(screen.getByTestId('sensitive-overlay')).toHaveTextContent('Sensitive content');
-      expect(screen.getByTestId('sensitive-overlay')).not.toHaveTextContent('Hide');
+      expect(screen.getByTestId('sensitive-overlay')).toHaveTextContent(
+        'Sensitive content',
+      );
+      expect(screen.getByTestId('sensitive-overlay')).not.toHaveTextContent(
+        'Hide',
+      );
 
       fireEvent.click(screen.getByTestId('button'));
-      expect(screen.getByTestId('sensitive-overlay')).not.toHaveTextContent('Sensitive content');
+      expect(screen.getByTestId('sensitive-overlay')).not.toHaveTextContent(
+        'Sensitive content',
+      );
       expect(screen.getByTestId('sensitive-overlay')).toHaveTextContent('Hide');
     });
   });

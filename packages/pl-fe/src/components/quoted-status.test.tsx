@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { render, screen, rootState } from 'pl-fe/jest/test-helpers';
-import { normalizeStatus, normalizeAccount } from 'pl-fe/normalizers';
+import { render, rootState, screen } from 'pl-fe/jest/test-helpers';
+import { normalizeAccount, normalizeStatus } from 'pl-fe/normalizers';
 
 import QuotedStatus from './quoted-status';
 
@@ -26,6 +26,8 @@ describe('<QuotedStatus />', () => {
 
     render(<QuotedStatus status={status} />, undefined, state);
     screen.getByText(/hello world/i);
-    expect(screen.getByTestId('quoted-status')).toHaveTextContent(/hello world/i);
+    expect(screen.getByTestId('quoted-status')).toHaveTextContent(
+      /hello world/i,
+    );
   });
 });

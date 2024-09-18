@@ -26,7 +26,7 @@ import './styles/tailwind.css';
 
 import './precheck';
 import ready from './ready';
-import { registerSW, lockSW } from './utils/sw';
+import { lockSW, registerSW } from './utils/sw';
 
 if (BuildConfig.NODE_ENV === 'production') {
   printConsoleWarning();

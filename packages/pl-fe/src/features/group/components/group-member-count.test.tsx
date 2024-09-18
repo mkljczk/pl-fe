@@ -20,7 +20,9 @@ describe('<GroupMemberCount />', () => {
       it('should render correctly', () => {
         render(<GroupMemberCount group={group} />);
 
-        expect(screen.getByTestId('group-member-count').textContent).toEqual('1 member');
+        expect(screen.getByTestId('group-member-count').textContent).toEqual(
+          '1 member',
+        );
       });
     });
 
@@ -34,7 +36,9 @@ describe('<GroupMemberCount />', () => {
       it('should render correctly', () => {
         render(<GroupMemberCount group={group} />);
 
-        expect(screen.getByTestId('group-member-count').textContent).toEqual('2 members');
+        expect(screen.getByTestId('group-member-count').textContent).toEqual(
+          '2 members',
+        );
       });
     });
 
@@ -48,7 +52,9 @@ describe('<GroupMemberCount />', () => {
       it('should render correctly', () => {
         render(<GroupMemberCount group={group} />);
 
-        expect(screen.getByTestId('group-member-count').textContent).toEqual('1k members');
+        expect(screen.getByTestId('group-member-count').textContent).toEqual(
+          '1k members',
+        );
       });
     });
   });

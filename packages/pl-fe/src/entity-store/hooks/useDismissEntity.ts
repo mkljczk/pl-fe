@@ -11,7 +11,10 @@ import type { EntityFn, ExpandedEntitiesPath } from './types';
  * Removes an entity from a specific list.
  * To remove an entity globally from all lists, see `useDeleteEntity`.
  */
-const useDismissEntity = (expandedPath: ExpandedEntitiesPath, entityFn: EntityFn<string>) => {
+const useDismissEntity = (
+  expandedPath: ExpandedEntitiesPath,
+  entityFn: EntityFn<string>,
+) => {
   const dispatch = useAppDispatch();
 
   const [isLoading, setPromise] = useLoading();

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
 import { fetchPinnedStatuses } from 'pl-fe/actions/pin-statuses';
@@ -18,10 +18,18 @@ const PinnedStatuses = () => {
   const dispatch = useAppDispatch();
   const { username } = useParams<{ username: string }>();
 
-  const meUsername = useAppSelector((state) => selectOwnAccount(state)?.username || '');
-  const statusIds = useAppSelector((state) => state.status_lists.get('pins')!.items);
-  const isLoading = useAppSelector((state) => !!state.status_lists.get('pins')!.isLoading);
-  const hasMore = useAppSelector((state) => !!state.status_lists.get('pins')!.next);
+  const meUsername = useAppSelector(
+    (state) => selectOwnAccount(state)?.username || '',
+  );
+  const statusIds = useAppSelector(
+    (state) => state.status_lists.get('pins')!.items,
+  );
+  const isLoading = useAppSelector(
+    (state) => !!state.status_lists.get('pins')!.isLoading,
+  );
+  const hasMore = useAppSelector(
+    (state) => !!state.status_lists.get('pins')!.next,
+  );
 
   const isMyAccount = username.toLowerCase() === meUsername.toLowerCase();
 
@@ -30,9 +38,7 @@ const PinnedStatuses = () => {
   }, []);
 
   if (!isMyAccount) {
-    return (
-      <MissingIndicator />
-    );
+    return <MissingIndicator />;
   }
 
   return (
@@ -42,7 +48,12 @@ const PinnedStatuses = () => {
         scrollKey='pinned_statuses'
         hasMore={hasMore}
         isLoading={isLoading}
-        emptyMessage={<FormattedMessage id='pinned_statuses.none' defaultMessage='No pins to show.' />}
+        emptyMessage={
+          <FormattedMessage
+            id='pinned_statuses.none'
+            defaultMessage='No pins to show.'
+          />
+        }
       />
     </Column>
   );

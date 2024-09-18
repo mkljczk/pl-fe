@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { buildAccount } from 'pl-fe/jest/factory';
-import { render, screen, rootState } from 'pl-fe/jest/test-helpers';
+import { render, rootState, screen } from 'pl-fe/jest/test-helpers';
 import { normalizeStatus } from 'pl-fe/normalizers';
 
 import Status from './status';

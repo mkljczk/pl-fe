@@ -8,12 +8,15 @@ import { useLoading } from 'pl-fe/hooks/useLoading';
 import { importEntities } from '../actions';
 import { selectEntity } from '../selectors';
 
-import type { EntitySchema, EntityPath, EntityFn } from './types';
-import type { Entity } from '../types';
 import type { PlfeResponse } from 'pl-fe/api';
+import type { Entity } from '../types';
+import type { EntityFn, EntityPath, EntitySchema } from './types';
 
 /** Additional options for the hook. */
-interface UseEntityOpts<TEntity extends Entity, TTransformedEntity extends Entity> {
+interface UseEntityOpts<
+  TEntity extends Entity,
+  TTransformedEntity extends Entity,
+> {
   /** A zod schema to parse the API entity. */
   schema?: EntitySchema<TEntity>;
   /** Whether to refetch this entity every time the hook mounts, even if it's already in the store. */
@@ -23,7 +26,10 @@ interface UseEntityOpts<TEntity extends Entity, TTransformedEntity extends Entit
   transform?: (schema: TEntity) => TTransformedEntity;
 }
 
-const useEntity = <TEntity extends Entity, TTransformedEntity extends Entity = TEntity>(
+const useEntity = <
+  TEntity extends Entity,
+  TTransformedEntity extends Entity = TEntity,
+>(
   path: EntityPath,
   entityFn: EntityFn<void>,
   opts: UseEntityOpts<TEntity, TTransformedEntity> = {},
@@ -38,7 +44,9 @@ const useEntity = <TEntity extends Entity, TTransformedEntity extends Entity = T
   const defaultSchema = z.custom<TEntity>();
   const schema = opts.schema || defaultSchema;
 
-  const entity = useAppSelector(state => selectEntity<TTransformedEntity>(state, entityType, entityId));
+  const entity = useAppSelector((state) =>
+    selectEntity<TTransformedEntity>(state, entityType, entityId),
+  );
 
   const isEnabled = opts.enabled ?? true;
   const isLoading = isFetching && !entity;
@@ -69,12 +77,11 @@ const useEntity = <TEntity extends Entity, TTransformedEntity extends Entity = T
     isLoading,
     isLoaded,
     error,
-    isUnauthorized: (error as { response?: PlfeResponse })?.response?.status === 401,
-    isForbidden: (error as { response?: PlfeResponse })?.response?.status === 403,
+    isUnauthorized:
+      (error as { response?: PlfeResponse })?.response?.status === 401,
+    isForbidden:
+      (error as { response?: PlfeResponse })?.response?.status === 403,
   };
 };
 
-export {
-  useEntity,
-  type UseEntityOpts,
-};
+export { useEntity, type UseEntityOpts };

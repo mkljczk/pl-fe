@@ -7,12 +7,16 @@ import { flattenPages } from 'pl-fe/utils/queries';
 
 import { useRelationships } from './useRelationships';
 
-import type { PaginatedResponse, Account as BaseAccount } from 'pl-api';
+import type { Account as BaseAccount, PaginatedResponse } from 'pl-api';
 import type { EntityFn } from 'pl-fe/entity-store/hooks/types';
 
 const useAccountList = (listKey: string[], entityFn: EntityFn<void>) => {
-  const getAccounts = async (pageParam?: Pick<PaginatedResponse<BaseAccount>, 'next'>) => {
-    const response = await (pageParam?.next ? pageParam.next() : entityFn()) as PaginatedResponse<BaseAccount>;
+  const getAccounts = async (
+    pageParam?: Pick<PaginatedResponse<BaseAccount>, 'next'>,
+  ) => {
+    const response = (await (pageParam?.next
+      ? pageParam.next()
+      : entityFn())) as PaginatedResponse<BaseAccount>;
 
     return {
       ...response,
@@ -24,8 +28,10 @@ const useAccountList = (listKey: string[], entityFn: EntityFn<void>) => {
     queryKey: [Entities.ACCOUNTS, ...listKey],
     queryFn: ({ pageParam }) => getAccounts(pageParam),
     enabled: true,
-    initialPageParam: { next: null as (() => Promise<PaginatedResponse<BaseAccount>>) | null },
-    getNextPageParam: (config) => config.next ? config : undefined,
+    initialPageParam: {
+      next: null as (() => Promise<PaginatedResponse<BaseAccount>>) | null,
+    },
+    getNextPageParam: (config) => (config.next ? config : undefined),
   });
 
   const data = flattenPages<Account>(queryInfo.data as any)?.toReversed() || [];
@@ -56,25 +62,17 @@ const useMutes = () => {
 const useFollowing = (accountId: string | undefined) => {
   const client = useClient();
 
-  return useAccountList(
-    [accountId!, 'following'],
-    () => client.accounts.getAccountFollowing(accountId!),
+  return useAccountList([accountId!, 'following'], () =>
+    client.accounts.getAccountFollowing(accountId!),
   );
 };
 
 const useFollowers = (accountId: string | undefined) => {
   const client = useClient();
 
-  return useAccountList(
-    [accountId!, 'followers'],
-    () => client.accounts.getAccountFollowers(accountId!),
+  return useAccountList([accountId!, 'followers'], () =>
+    client.accounts.getAccountFollowers(accountId!),
   );
 };
 
-export {
-  useAccountList,
-  useBlocks,
-  useMutes,
-  useFollowing,
-  useFollowers,
-};
+export { useAccountList, useBlocks, useMutes, useFollowing, useFollowers };

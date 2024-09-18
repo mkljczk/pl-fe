@@ -179,9 +179,7 @@
           "votes_count": 1
         }
       ],
-      "own_votes": [
-        0
-      ],
+      "own_votes": [0],
       "voted": true,
       "voters_count": 12,
       "votes_count": 12

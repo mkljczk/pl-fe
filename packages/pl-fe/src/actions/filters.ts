@@ -35,31 +35,37 @@ const messages = defineMessages({
 
 type FilterKeywords = { keyword: string; whole_word: boolean }[];
 
-const fetchFilters = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const fetchFilters =
+  () => (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
     dispatch({
       type: FILTERS_FETCH_REQUEST,
     });
 
-    return getClient(getState).filtering.getFilters()
-      .then((data) => dispatch({
-        type: FILTERS_FETCH_SUCCESS,
-        filters: data,
-      }))
-      .catch(err => dispatch({
-        type: FILTERS_FETCH_FAIL,
-        err,
-        skipAlert: true,
-      }));
+    return getClient(getState)
+      .filtering.getFilters()
+      .then((data) =>
+        dispatch({
+          type: FILTERS_FETCH_SUCCESS,
+          filters: data,
+        }),
+      )
+      .catch((err) =>
+        dispatch({
+          type: FILTERS_FETCH_FAIL,
+          err,
+          skipAlert: true,
+        }),
+      );
   };
 
-const fetchFilter = (filterId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const fetchFilter =
+  (filterId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FILTER_FETCH_REQUEST });
 
-    return getClient(getState).filtering.getFilter(filterId)
+    return getClient(getState)
+      .filtering.getFilter(filterId)
       .then((data) => {
         dispatch({
           type: FILTER_FETCH_SUCCESS,
@@ -68,7 +74,7 @@ const fetchFilter = (filterId: string) =>
 
         return data;
       })
-      .catch(err => {
+      .catch((err) => {
         dispatch({
           type: FILTER_FETCH_FAIL,
           err,
@@ -77,57 +83,81 @@ const fetchFilter = (filterId: string) =>
       });
   };
 
-const createFilter = (title: string, expires_in: number | undefined, context: Array<FilterContext>, hide: boolean, keywords_attributes: FilterKeywords) =>
+const createFilter =
+  (
+    title: string,
+    expires_in: number | undefined,
+    context: Array<FilterContext>,
+    hide: boolean,
+    keywords_attributes: FilterKeywords,
+  ) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FILTERS_CREATE_REQUEST });
 
-    return getClient(getState).filtering.createFilter({
-      title,
-      context,
-      filter_action: hide ? 'hide' : 'warn',
-      expires_in,
-      keywords_attributes,
-    }).then(response => {
-      dispatch({ type: FILTERS_CREATE_SUCCESS, filter: response });
-      toast.success(messages.added);
+    return getClient(getState)
+      .filtering.createFilter({
+        title,
+        context,
+        filter_action: hide ? 'hide' : 'warn',
+        expires_in,
+        keywords_attributes,
+      })
+      .then((response) => {
+        dispatch({ type: FILTERS_CREATE_SUCCESS, filter: response });
+        toast.success(messages.added);
 
-      return response;
-    }).catch(error => {
-      dispatch({ type: FILTERS_CREATE_FAIL, error });
-    });
+        return response;
+      })
+      .catch((error) => {
+        dispatch({ type: FILTERS_CREATE_FAIL, error });
+      });
   };
 
-const updateFilter = (filterId: string, title: string, expires_in: number | undefined, context: Array<FilterContext>, hide: boolean, keywords_attributes: FilterKeywords) =>
+const updateFilter =
+  (
+    filterId: string,
+    title: string,
+    expires_in: number | undefined,
+    context: Array<FilterContext>,
+    hide: boolean,
+    keywords_attributes: FilterKeywords,
+  ) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FILTERS_UPDATE_REQUEST });
 
-    return getClient(getState).filtering.updateFilter(filterId, {
-      title,
-      context,
-      filter_action: hide ? 'hide' : 'warn',
-      expires_in,
-      keywords_attributes,
-    }).then(response => {
-      dispatch({ type: FILTERS_UPDATE_SUCCESS, filter: response });
-      toast.success(messages.added);
+    return getClient(getState)
+      .filtering.updateFilter(filterId, {
+        title,
+        context,
+        filter_action: hide ? 'hide' : 'warn',
+        expires_in,
+        keywords_attributes,
+      })
+      .then((response) => {
+        dispatch({ type: FILTERS_UPDATE_SUCCESS, filter: response });
+        toast.success(messages.added);
 
-      return response;
-    }).catch(error => {
-      dispatch({ type: FILTERS_UPDATE_FAIL, filterId, error });
-    });
+        return response;
+      })
+      .catch((error) => {
+        dispatch({ type: FILTERS_UPDATE_FAIL, filterId, error });
+      });
   };
 
-const deleteFilter = (filterId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const deleteFilter =
+  (filterId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: FILTERS_DELETE_REQUEST });
-    return getClient(getState).filtering.deleteFilter(filterId).then(response => {
-      dispatch({ type: FILTERS_DELETE_SUCCESS, filterId });
-      toast.success(messages.removed);
+    return getClient(getState)
+      .filtering.deleteFilter(filterId)
+      .then((response) => {
+        dispatch({ type: FILTERS_DELETE_SUCCESS, filterId });
+        toast.success(messages.removed);
 
-      return response;
-    }).catch(error => {
-      dispatch({ type: FILTERS_DELETE_FAIL, filterId, error });
-    });
+        return response;
+      })
+      .catch((error) => {
+        dispatch({ type: FILTERS_DELETE_FAIL, filterId, error });
+      });
   };
 
 export {

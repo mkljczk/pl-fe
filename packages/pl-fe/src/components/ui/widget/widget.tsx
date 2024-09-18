@@ -12,7 +12,9 @@ interface IWidgetTitle {
 
 /** Title of a widget. */
 const WidgetTitle = ({ title }: IWidgetTitle): JSX.Element => (
-  <Text size='xl' weight='bold' tag='h1'>{title}</Text>
+  <Text size='xl' weight='bold' tag='h1'>
+    {title}
+  </Text>
 );
 
 interface IWidgetBody {
@@ -49,14 +51,15 @@ const Widget: React.FC<IWidget> = ({
   <Stack space={4}>
     <HStack space={2} alignItems='center' justifyContent='between'>
       <WidgetTitle title={title} />
-      {action || (onActionClick && (
-        <IconButton
-          className='ml-2 h-6 w-6 text-black rtl:rotate-180 dark:text-white'
-          src={actionIcon}
-          onClick={onActionClick}
-          title={actionTitle}
-        />
-      ))}
+      {action ||
+        (onActionClick && (
+          <IconButton
+            className='ml-2 h-6 w-6 text-black rtl:rotate-180 dark:text-white'
+            src={actionIcon}
+            onClick={onActionClick}
+            title={actionTitle}
+          />
+        ))}
     </HStack>
     <WidgetBody>{children}</WidgetBody>
   </Stack>

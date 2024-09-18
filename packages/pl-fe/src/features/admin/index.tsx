@@ -1,6 +1,6 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Switch, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import { Column } from 'pl-fe/components/ui';
 import { useOwnAccount } from 'pl-fe/hooks';

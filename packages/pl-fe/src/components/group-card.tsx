@@ -20,7 +20,10 @@ const GroupCard: React.FC<IGroupCard> = ({ group }) => (
     data-testid='group-card'
   >
     {/* Group Cover Image */}
-    <Stack grow className='relative basis-1/2 rounded-t-lg bg-primary-100 dark:bg-gray-800'>
+    <Stack
+      grow
+      className='relative basis-1/2 rounded-t-lg bg-primary-100 dark:bg-gray-800'
+    >
       <GroupHeaderImage
         group={group}
         className='absolute inset-0 h-full w-full rounded-t-lg object-cover'
@@ -33,9 +36,19 @@ const GroupCard: React.FC<IGroupCard> = ({ group }) => (
     </div>
 
     {/* Group Info */}
-    <Stack alignItems='center' justifyContent='end' grow className='basis-1/2 py-4' space={0.5}>
+    <Stack
+      alignItems='center'
+      justifyContent='end'
+      grow
+      className='basis-1/2 py-4'
+      space={0.5}
+    >
       <HStack alignItems='center' space={1.5}>
-        <Text size='lg' weight='bold' dangerouslySetInnerHTML={{ __html: group.display_name_html }} />
+        <Text
+          size='lg'
+          weight='bold'
+          dangerouslySetInnerHTML={{ __html: group.display_name_html }}
+        />
       </HStack>
 
       <HStack className='text-gray-700 dark:text-gray-600' space={2} wrap>

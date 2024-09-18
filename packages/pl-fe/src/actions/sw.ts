@@ -9,8 +9,4 @@ const setSwUpdating = (isUpdating: boolean) => ({
 
 type SwAction = ReturnType<typeof setSwUpdating>;
 
-export {
-  SW_UPDATING,
-  setSwUpdating,
-  type SwAction,
-};
+export { SW_UPDATING, setSwUpdating, type SwAction };

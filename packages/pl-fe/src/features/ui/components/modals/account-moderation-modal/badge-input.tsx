@@ -1,11 +1,14 @@
 import React from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import { TagInput } from 'pl-fe/components/ui';
 import { badgeToTag, tagToBadge } from 'pl-fe/utils/badges';
 
 const messages = defineMessages({
-  placeholder: { id: 'badge_input.placeholder', defaultMessage: 'Enter a badge…' },
+  placeholder: {
+    id: 'badge_input.placeholder',
+    defaultMessage: 'Enter a badge…',
+  },
 });
 
 interface IBadgeInput {

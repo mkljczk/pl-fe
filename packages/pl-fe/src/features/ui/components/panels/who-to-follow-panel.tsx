@@ -1,17 +1,23 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { Text, Widget } from 'pl-fe/components/ui';
 import AccountContainer from 'pl-fe/containers/account-container';
 import PlaceholderSidebarSuggestions from 'pl-fe/features/placeholder/components/placeholder-sidebar-suggestions';
 import { useFeatures } from 'pl-fe/hooks';
-import { useDismissSuggestion, useSuggestions } from 'pl-fe/queries/suggestions';
+import {
+  useDismissSuggestion,
+  useSuggestions,
+} from 'pl-fe/queries/suggestions';
 
 import type { Account as AccountEntity } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
-  dismissSuggestion: { id: 'suggestions.dismiss', defaultMessage: 'Dismiss suggestion' },
+  dismissSuggestion: {
+    id: 'suggestions.dismiss',
+    defaultMessage: 'Dismiss suggestion',
+  },
 });
 
 interface IWhoToFollowPanel {
@@ -37,11 +43,24 @@ const WhoToFollowPanel = ({ limit }: IWhoToFollowPanel) => {
 
   return (
     <Widget
-      title={<FormattedMessage id='who_to_follow.title' defaultMessage='People to follow' />}
+      title={
+        <FormattedMessage
+          id='who_to_follow.title'
+          defaultMessage='People to follow'
+        />
+      }
       action={
         <Link className='text-right' to='/suggestions'>
-          <Text tag='span' theme='primary' size='sm' className='hover:underline'>
-            <FormattedMessage id='feed_suggestions.view_all' defaultMessage='View all' />
+          <Text
+            tag='span'
+            theme='primary'
+            size='sm'
+            className='hover:underline'
+          >
+            <FormattedMessage
+              id='feed_suggestions.view_all'
+              defaultMessage='View all'
+            />
           </Text>
         </Link>
       }
@@ -55,7 +74,9 @@ const WhoToFollowPanel = ({ limit }: IWhoToFollowPanel) => {
             id={suggestion.account_id}
             actionIcon={require('@tabler/icons/outline/x.svg')}
             actionTitle={intl.formatMessage(messages.dismissSuggestion)}
-            onActionClick={features.suggestionsDismiss ? handleDismiss : undefined}
+            onActionClick={
+              features.suggestionsDismiss ? handleDismiss : undefined
+            }
           />
         ))
       )}

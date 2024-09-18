@@ -135,7 +135,4 @@ const rootReducer: typeof appReducer = (state, action) => {
   }
 };
 
-export {
-  StateRecord,
-  rootReducer as default,
-};
+export { StateRecord, rootReducer as default };

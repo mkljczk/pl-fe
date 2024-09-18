@@ -1,14 +1,29 @@
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Blurhash from 'pl-fe/components/blurhash';
 import Icon from 'pl-fe/components/icon';
-import { isPanoramic, isPortrait, minimumAspectRatio, maximumAspectRatio } from 'pl-fe/utils/media-aspect-ratio';
+import {
+  isPanoramic,
+  isPortrait,
+  maximumAspectRatio,
+  minimumAspectRatio,
+} from 'pl-fe/utils/media-aspect-ratio';
 
-import { isFullscreen, requestFullscreen, exitFullscreen } from '../ui/util/fullscreen';
+import {
+  exitFullscreen,
+  isFullscreen,
+  requestFullscreen,
+} from '../ui/util/fullscreen';
 
 const DEFAULT_HEIGHT = 300;
 
@@ -20,15 +35,18 @@ const messages = defineMessages({
   mute: { id: 'video.mute', defaultMessage: 'Mute sound' },
   unmute: { id: 'video.unmute', defaultMessage: 'Unmute sound' },
   fullscreen: { id: 'video.fullscreen', defaultMessage: 'Full screen' },
-  exit_fullscreen: { id: 'video.exit_fullscreen', defaultMessage: 'Exit full screen' },
+  exit_fullscreen: {
+    id: 'video.exit_fullscreen',
+    defaultMessage: 'Exit full screen',
+  },
 });
 
 const formatTime = (secondsNum: number): string => {
   let hours: number | string = Math.floor(secondsNum / 3600);
-  let minutes: number | string = Math.floor((secondsNum - (hours * 3600)) / 60);
-  let seconds: number | string = secondsNum - (hours * 3600) - (minutes * 60);
+  let minutes: number | string = Math.floor((secondsNum - hours * 3600) / 60);
+  let seconds: number | string = secondsNum - hours * 3600 - minutes * 60;
 
-  if (hours   < 10) hours = '0' + hours;
+  if (hours < 10) hours = '0' + hours;
   if (minutes < 10) minutes = '0' + minutes;
   if (seconds < 10) seconds = '0' + seconds;
 
@@ -54,11 +72,11 @@ const findElementPosition = (el: HTMLElement) => {
 
   const clientLeft = docEl.clientLeft || body.clientLeft || 0;
   const scrollLeft = window.pageXOffset || body.scrollLeft;
-  const left = (box.left + scrollLeft) - clientLeft;
+  const left = box.left + scrollLeft - clientLeft;
 
   const clientTop = docEl.clientTop || body.clientTop || 0;
   const scrollTop = window.pageYOffset || body.scrollTop;
-  const top = (box.top + scrollTop) - clientTop;
+  const top = box.top + scrollTop - clientTop;
 
   return {
     left: Math.round(left),
@@ -66,7 +84,10 @@ const findElementPosition = (el: HTMLElement) => {
   };
 };
 
-const getPointerPosition = (el: HTMLElement, event: MouseEvent & TouchEvent): Position => {
+const getPointerPosition = (
+  el: HTMLElement,
+  event: MouseEvent & TouchEvent,
+): Position => {
   const box = findElementPosition(el);
   const boxW = el.offsetWidth;
   const boxH = el.offsetHeight;
@@ -169,7 +190,7 @@ const Video: React.FC<IVideo> = ({
     }
   }, [video.current]);
 
-  const handleClickRoot: React.MouseEventHandler = e => e.stopPropagation();
+  const handleClickRoot: React.MouseEventHandler = (e) => e.stopPropagation();
 
   const handlePlay = () => {
     setPaused(false);
@@ -186,7 +207,7 @@ const Video: React.FC<IVideo> = ({
     }
   };
 
-  const handleVolumeMouseDown: React.MouseEventHandler = e => {
+  const handleVolumeMouseDown: React.MouseEventHandler = (e) => {
     document.addEventListener('mousemove', handleMouseVolSlide, true);
     document.addEventListener('mouseup', handleVolumeMouseUp, true);
     document.addEventListener('touchmove', handleMouseVolSlide, true);
@@ -205,7 +226,7 @@ const Video: React.FC<IVideo> = ({
     document.removeEventListener('touchend', handleVolumeMouseUp, true);
   };
 
-  const handleMouseVolSlide = throttle(e => {
+  const handleMouseVolSlide = throttle((e) => {
     if (slider.current) {
       const { x } = getPointerPosition(slider.current, e);
 
@@ -227,7 +248,7 @@ const Video: React.FC<IVideo> = ({
     }
   }, 60);
 
-  const handleMouseDown: React.MouseEventHandler = e => {
+  const handleMouseDown: React.MouseEventHandler = (e) => {
     document.addEventListener('mousemove', handleMouseMove, true);
     document.addEventListener('mouseup', handleMouseUp, true);
     document.addEventListener('touchmove', handleMouseMove, true);
@@ -251,7 +272,7 @@ const Video: React.FC<IVideo> = ({
     video.current?.play();
   };
 
-  const handleMouseMove = throttle(e => {
+  const handleMouseMove = throttle((e) => {
     if (seek.current && video.current) {
       const { x } = getPointerPosition(seek.current, e);
       const currentTime = Math.floor(video.current.duration * x);
@@ -274,7 +295,7 @@ const Video: React.FC<IVideo> = ({
     }
   };
 
-  const handleVideoKeyDown: React.KeyboardEventHandler = e => {
+  const handleVideoKeyDown: React.KeyboardEventHandler = (e) => {
     // On the video element or the seek bar, we can safely use the space bar
     // for playback control because there are no buttons to press
 
@@ -285,7 +306,7 @@ const Video: React.FC<IVideo> = ({
     }
   };
 
-  const handleKeyDown: React.KeyboardEventHandler = e => {
+  const handleKeyDown: React.KeyboardEventHandler = (e) => {
     const frameTime = 1 / 25;
 
     switch (e.key) {
@@ -358,23 +379,40 @@ const Video: React.FC<IVideo> = ({
     }
   };
 
-  const handleResize = useCallback(debounce(() => {
-    setDimensions();
-  }, 250, {
-    trailing: true,
-  }), [player.current, cacheWidth]);
+  const handleResize = useCallback(
+    debounce(
+      () => {
+        setDimensions();
+      },
+      250,
+      {
+        trailing: true,
+      },
+    ),
+    [player.current, cacheWidth],
+  );
 
-  const handleScroll = useCallback(throttle(() => {
-    if (!video.current) return;
+  const handleScroll = useCallback(
+    throttle(
+      () => {
+        if (!video.current) return;
 
-    const { top, height } = video.current.getBoundingClientRect();
-    const inView = (top <= (window.innerHeight || document.documentElement.clientHeight)) && (top + height >= 0);
+        const { top, height } = video.current.getBoundingClientRect();
+        const inView =
+          top <=
+            (window.innerHeight || document.documentElement.clientHeight) &&
+          top + height >= 0;
 
-    if (!paused && !inView) {
-      setPaused(true);
-      video.current.pause();
-    }
-  }, 150, { trailing: true }), [video.current, paused]);
+        if (!paused && !inView) {
+          setPaused(true);
+          video.current.pause();
+        }
+      },
+      150,
+      { trailing: true },
+    ),
+    [video.current, paused],
+  );
 
   const handleFullscreenChange = useCallback(() => {
     setFullscreen(isFullscreen());
@@ -405,7 +443,7 @@ const Video: React.FC<IVideo> = ({
 
   const handleProgress = () => {
     if (video.current && video.current.buffered.length > 0) {
-      setBuffer(video.current.buffered.end(0) / video.current.duration * 100);
+      setBuffer((video.current.buffered.end(0) / video.current.duration) * 100);
     }
   };
 
@@ -424,9 +462,15 @@ const Video: React.FC<IVideo> = ({
     const minSize = containerWidth / (16 / 9);
 
     if (isPanoramic(aspectRatio)) {
-      height = Math.max(Math.floor(containerWidth / maximumAspectRatio), minSize);
+      height = Math.max(
+        Math.floor(containerWidth / maximumAspectRatio),
+        minSize,
+      );
     } else if (isPortrait(aspectRatio)) {
-      height = Math.max(Math.floor(containerWidth / minimumAspectRatio), minSize);
+      height = Math.max(
+        Math.floor(containerWidth / minimumAspectRatio),
+        minSize,
+      );
     } else {
       height = Math.floor(containerWidth / aspectRatio);
     }
@@ -436,9 +480,21 @@ const Video: React.FC<IVideo> = ({
 
   useEffect(() => {
     document.addEventListener('fullscreenchange', handleFullscreenChange, true);
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange, true);
-    document.addEventListener('mozfullscreenchange', handleFullscreenChange, true);
-    document.addEventListener('MSFullscreenChange', handleFullscreenChange, true);
+    document.addEventListener(
+      'webkitfullscreenchange',
+      handleFullscreenChange,
+      true,
+    );
+    document.addEventListener(
+      'mozfullscreenchange',
+      handleFullscreenChange,
+      true,
+    );
+    document.addEventListener(
+      'MSFullscreenChange',
+      handleFullscreenChange,
+      true,
+    );
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('resize', handleResize, { passive: true });
@@ -447,10 +503,26 @@ const Video: React.FC<IVideo> = ({
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
 
-      document.removeEventListener('fullscreenchange', handleFullscreenChange, true);
-      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange, true);
-      document.removeEventListener('mozfullscreenchange', handleFullscreenChange, true);
-      document.removeEventListener('MSFullscreenChange', handleFullscreenChange, true);
+      document.removeEventListener(
+        'fullscreenchange',
+        handleFullscreenChange,
+        true,
+      );
+      document.removeEventListener(
+        'webkitfullscreenchange',
+        handleFullscreenChange,
+        true,
+      );
+      document.removeEventListener(
+        'mozfullscreenchange',
+        handleFullscreenChange,
+        true,
+      );
+      document.removeEventListener(
+        'MSFullscreenChange',
+        handleFullscreenChange,
+        true,
+      );
     };
   }, []);
 
@@ -463,7 +535,10 @@ const Video: React.FC<IVideo> = ({
   return (
     <div
       role='menuitem'
-      className={clsx('video-player relative box-border max-h-screen max-w-full overflow-hidden rounded-[10px] bg-black text-white [direction:ltr] focus:outline-0', { 'h-full w-full m-0': fullscreen })}
+      className={clsx(
+        'video-player relative box-border max-h-screen max-w-full overflow-hidden rounded-[10px] bg-black text-white [direction:ltr] focus:outline-0',
+        { 'h-full w-full m-0': fullscreen },
+      )}
       style={playerStyle}
       ref={player}
       onMouseEnter={handleMouseEnter}
@@ -500,13 +575,30 @@ const Video: React.FC<IVideo> = ({
         onVolumeChange={handleVolumeChange}
       />
 
-      <div className={clsx('video-player__controls absolute inset-x-0 bottom-0 z-[2] box-border px-4 py-0 opacity-0 ring-0 transition-opacity duration-100 ease-in-out', { 'opacity-100': paused || hovered })}>
-        <div className='video-player__seek' onMouseDown={handleMouseDown} ref={seek}>
-          <div className='absolute top-3.5 block h-1 rounded bg-white/20' style={{ width: `${buffer}%` }} />
-          <div className='absolute top-3.5 block h-1 rounded bg-accent-500' style={{ width: `${progress}%` }} />
+      <div
+        className={clsx(
+          'video-player__controls absolute inset-x-0 bottom-0 z-[2] box-border px-4 py-0 opacity-0 ring-0 transition-opacity duration-100 ease-in-out',
+          { 'opacity-100': paused || hovered },
+        )}
+      >
+        <div
+          className='video-player__seek'
+          onMouseDown={handleMouseDown}
+          ref={seek}
+        >
+          <div
+            className='absolute top-3.5 block h-1 rounded bg-white/20'
+            style={{ width: `${buffer}%` }}
+          />
+          <div
+            className='absolute top-3.5 block h-1 rounded bg-accent-500'
+            style={{ width: `${progress}%` }}
+          />
 
           <span
-            className={clsx('video-player__seek__handle', { 'opacity-100': dragging })}
+            className={clsx('video-player__seek__handle', {
+              'opacity-100': dragging,
+            })}
             tabIndex={0}
             style={{ left: `${progress}%` }}
             onKeyDown={handleVideoKeyDown}
@@ -517,29 +609,66 @@ const Video: React.FC<IVideo> = ({
           <div className='video-player__buttons left'>
             <button
               type='button'
-              title={intl.formatMessage(paused ? messages.play : messages.pause)}
-              aria-label={intl.formatMessage(paused ? messages.play : messages.pause)}
-              className={clsx('player-button', detailed || fullscreen && 'py-2.5')}
+              title={intl.formatMessage(
+                paused ? messages.play : messages.pause,
+              )}
+              aria-label={intl.formatMessage(
+                paused ? messages.play : messages.pause,
+              )}
+              className={clsx(
+                'player-button',
+                detailed || (fullscreen && 'py-2.5'),
+              )}
               onClick={togglePlay}
               autoFocus={autoFocus}
             >
-              <Icon src={paused ? require('@tabler/icons/outline/player-play.svg') : require('@tabler/icons/outline/player-pause.svg')} />
+              <Icon
+                src={
+                  paused
+                    ? require('@tabler/icons/outline/player-play.svg')
+                    : require('@tabler/icons/outline/player-pause.svg')
+                }
+              />
             </button>
 
             <button
               type='button'
-              title={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-              aria-label={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-              className={clsx('player-button', detailed || fullscreen && 'py-2.5')}
+              title={intl.formatMessage(
+                muted ? messages.unmute : messages.mute,
+              )}
+              aria-label={intl.formatMessage(
+                muted ? messages.unmute : messages.mute,
+              )}
+              className={clsx(
+                'player-button',
+                detailed || (fullscreen && 'py-2.5'),
+              )}
               onClick={toggleMute}
             >
-              <Icon src={muted ? require('@tabler/icons/outline/volume-3.svg') : require('@tabler/icons/outline/volume.svg')} />
+              <Icon
+                src={
+                  muted
+                    ? require('@tabler/icons/outline/volume-3.svg')
+                    : require('@tabler/icons/outline/volume.svg')
+                }
+              />
             </button>
 
-            <div className={clsx('video-player__volume', { 'overflow-visible w-12 mr-4': hovered })} onMouseDown={handleVolumeMouseDown} ref={slider}>
-              <div className='video-player__volume__current' style={{ width: `${volume * 100}%` }} />
+            <div
+              className={clsx('video-player__volume', {
+                'overflow-visible w-12 mr-4': hovered,
+              })}
+              onMouseDown={handleVolumeMouseDown}
+              ref={slider}
+            >
+              <div
+                className='video-player__volume__current'
+                style={{ width: `${volume * 100}%` }}
+              />
               <span
-                className={clsx('video-player__volume__handle', { 'opacity-100': dragging || hovered })}
+                className={clsx('video-player__volume__handle', {
+                  'opacity-100': dragging || hovered,
+                })}
                 tabIndex={0}
                 style={{ left: `${volume * 100}%` }}
               />
@@ -547,9 +676,15 @@ const Video: React.FC<IVideo> = ({
 
             {(detailed || fullscreen) && (
               <span>
-                <span className='text-sm font-medium text-white'>{formatTime(currentTime)}</span>
-                <span className='mx-1.5 my-0 inline-block text-sm font-medium text-white'>/</span>
-                <span className='text-sm font-medium'>{formatTime(duration)}</span>
+                <span className='text-sm font-medium text-white'>
+                  {formatTime(currentTime)}
+                </span>
+                <span className='mx-1.5 my-0 inline-block text-sm font-medium text-white'>
+                  /
+                </span>
+                <span className='text-sm font-medium'>
+                  {formatTime(duration)}
+                </span>
               </span>
             )}
 
@@ -561,12 +696,25 @@ const Video: React.FC<IVideo> = ({
           <div className='video-player__buttons right'>
             <button
               type='button'
-              title={intl.formatMessage(fullscreen ? messages.exit_fullscreen : messages.fullscreen)}
-              aria-label={intl.formatMessage(fullscreen ? messages.exit_fullscreen : messages.fullscreen)}
-              className={clsx('player-button', detailed || fullscreen && 'py-2.5')}
+              title={intl.formatMessage(
+                fullscreen ? messages.exit_fullscreen : messages.fullscreen,
+              )}
+              aria-label={intl.formatMessage(
+                fullscreen ? messages.exit_fullscreen : messages.fullscreen,
+              )}
+              className={clsx(
+                'player-button',
+                detailed || (fullscreen && 'py-2.5'),
+              )}
               onClick={toggleFullscreen}
             >
-              <Icon src={fullscreen ? require('@tabler/icons/outline/arrows-minimize.svg') : require('@tabler/icons/outline/arrows-maximize.svg')} />
+              <Icon
+                src={
+                  fullscreen
+                    ? require('@tabler/icons/outline/arrows-minimize.svg')
+                    : require('@tabler/icons/outline/arrows-maximize.svg')
+                }
+              />
             </button>
           </div>
         </div>

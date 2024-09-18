@@ -42,7 +42,8 @@ const useNodes = (isWysiwyg?: boolean) => {
   }
 
   if (instance.pleroma.metadata.markup.allow_headings) nodes.push(HeadingNode);
-  if (instance.pleroma.metadata.markup.allow_inline_images) nodes.push(ImageNode);
+  if (instance.pleroma.metadata.markup.allow_inline_images)
+    nodes.push(ImageNode);
 
   return nodes;
 };

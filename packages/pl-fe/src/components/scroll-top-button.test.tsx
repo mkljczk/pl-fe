@@ -6,11 +6,15 @@ import { render, screen } from 'pl-fe/jest/test-helpers';
 import ScrollTopButton from './scroll-top-button';
 
 const messages = defineMessages({
-  queue: { id: 'status_list.queue_label', defaultMessage: 'Click to see {count} new {count, plural, one {post} other {posts}}' },
+  queue: {
+    id: 'status_list.queue_label',
+    defaultMessage:
+      'Click to see {count} new {count, plural, one {post} other {posts}}',
+  },
 });
 
 describe('<ScrollTopButton />', () => {
-  it('renders correctly', async() => {
+  it('renders correctly', async () => {
     render(
       <ScrollTopButton
         key='scroll-top-button'
@@ -39,6 +43,8 @@ describe('<ScrollTopButton />', () => {
         message={messages.queue}
       />,
     );
-    expect(screen.getByText('Click to see 9999999 new posts')).toBeInTheDocument();
+    expect(
+      screen.getByText('Click to see 9999999 new posts'),
+    ).toBeInTheDocument();
   });
 });

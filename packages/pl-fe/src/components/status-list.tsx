@@ -68,9 +68,12 @@ const StatusList: React.FC<IStatusList> = ({
 
   const getCurrentStatusIndex = (id: string, featured: boolean): number => {
     if (featured) {
-      return featuredStatusIds?.keySeq().findIndex(key => key === id) || 0;
+      return featuredStatusIds?.keySeq().findIndex((key) => key === id) || 0;
     } else {
-      return statusIds.keySeq().findIndex(key => key === id) + getFeaturedStatusCount();
+      return (
+        statusIds.keySeq().findIndex((key) => key === id) +
+        getFeaturedStatusCount()
+      );
     }
   };
 
@@ -84,12 +87,19 @@ const StatusList: React.FC<IStatusList> = ({
     selectChild(elementIndex);
   };
 
-  const handleLoadOlder = useCallback(debounce(() => {
-    const maxId = lastStatusId || statusIds.last();
-    if (onLoadMore && maxId) {
-      onLoadMore(maxId.replace('末suggestions-', ''));
-    }
-  }, 300, { leading: true }), [onLoadMore, lastStatusId, statusIds.last()]);
+  const handleLoadOlder = useCallback(
+    debounce(
+      () => {
+        const maxId = lastStatusId || statusIds.last();
+        if (onLoadMore && maxId) {
+          onLoadMore(maxId.replace('末suggestions-', ''));
+        }
+      },
+      300,
+      { leading: true },
+    ),
+    [onLoadMore, lastStatusId, statusIds.last()],
+  );
 
   const selectChild = (index: number) => {
     const selector = `#status-list [data-index="${index}"] .focusable`;
@@ -151,18 +161,20 @@ const StatusList: React.FC<IStatusList> = ({
   const renderFeaturedStatuses = (): React.ReactNode[] => {
     if (!featuredStatusIds) return [];
 
-    return featuredStatusIds.toArray().map(statusId => (
-      <StatusContainer
-        key={`f-${statusId}`}
-        id={statusId}
-        featured
-        onMoveUp={handleMoveUp}
-        onMoveDown={handleMoveDown}
-        contextType={timelineId}
-        showGroup={showGroup}
-        variant={divideType === 'border' ? 'slim' : 'default'}
-      />
-    ));
+    return featuredStatusIds
+      .toArray()
+      .map((statusId) => (
+        <StatusContainer
+          key={`f-${statusId}`}
+          id={statusId}
+          featured
+          onMoveUp={handleMoveUp}
+          onMoveDown={handleMoveDown}
+          contextType={timelineId}
+          showGroup={showGroup}
+          variant={divideType === 'border' ? 'slim' : 'default'}
+        />
+      ));
   };
 
   const renderFeedSuggestions = (statusId: string): React.ReactNode => (
@@ -215,11 +227,18 @@ const StatusList: React.FC<IStatusList> = ({
     return (
       <Stack className='py-2' space={2}>
         <Text size='2xl' weight='bold' tag='h2' align='center'>
-          <FormattedMessage id='regeneration_indicator.label' tagName='strong' defaultMessage='Loading…' />
+          <FormattedMessage
+            id='regeneration_indicator.label'
+            tagName='strong'
+            defaultMessage='Loading…'
+          />
         </Text>
 
         <Text size='sm' theme='muted' align='center'>
-          <FormattedMessage id='regeneration_indicator.sublabel' defaultMessage='Your home feed is being prepared!' />
+          <FormattedMessage
+            id='regeneration_indicator.sublabel'
+            defaultMessage='Your home feed is being prepared!'
+          />
         </Text>
       </Stack>
     );
@@ -232,12 +251,20 @@ const StatusList: React.FC<IStatusList> = ({
       isLoading={isLoading}
       showLoading={isLoading && statusIds.size === 0}
       onLoadMore={handleLoadOlder}
-      placeholderComponent={() => <PlaceholderStatus variant={divideType === 'border' ? 'slim' : 'rounded'} />}
+      placeholderComponent={() => (
+        <PlaceholderStatus
+          variant={divideType === 'border' ? 'slim' : 'rounded'}
+        />
+      )}
       placeholderCount={20}
       ref={node}
-      listClassName={clsx('divide-y divide-solid divide-gray-200 dark:divide-gray-800', {
-        'divide-none': divideType !== 'border',
-      }, className)}
+      listClassName={clsx(
+        'divide-y divide-solid divide-gray-200 dark:divide-gray-800',
+        {
+          'divide-none': divideType !== 'border',
+        },
+        className,
+      )}
       itemClassName={clsx({
         'pb-3': divideType !== 'border',
       })}

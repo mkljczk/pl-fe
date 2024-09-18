@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { v4 as uuidv4 } from 'uuid';
 
 import { updatePlFeConfig } from 'pl-fe/actions/admin';
@@ -21,24 +21,50 @@ import type { ColorChangeHandler } from 'react-color';
 const messages = defineMessages({
   title: { id: 'admin.theme.title', defaultMessage: 'Theme' },
   saved: { id: 'theme_editor.saved', defaultMessage: 'Theme updated!' },
-  restore: { id: 'theme_editor.restore', defaultMessage: 'Restore default theme' },
+  restore: {
+    id: 'theme_editor.restore',
+    defaultMessage: 'Restore default theme',
+  },
   export: { id: 'theme_editor.export', defaultMessage: 'Export theme' },
   import: { id: 'theme_editor.import', defaultMessage: 'Import theme' },
-  importSuccess: { id: 'theme_editor.import_success', defaultMessage: 'Theme was successfully imported!' },
-  colorPrimary: { id: 'theme_editor.colors.primary', defaultMessage: 'Primary' },
-  colorSecondary: { id: 'theme_editor.colors.secondary', defaultMessage: 'Secondary' },
+  importSuccess: {
+    id: 'theme_editor.import_success',
+    defaultMessage: 'Theme was successfully imported!',
+  },
+  colorPrimary: {
+    id: 'theme_editor.colors.primary',
+    defaultMessage: 'Primary',
+  },
+  colorSecondary: {
+    id: 'theme_editor.colors.secondary',
+    defaultMessage: 'Secondary',
+  },
   colorAccent: { id: 'theme_editor.colors.accent', defaultMessage: 'Accent' },
   colorGray: { id: 'theme_editor.colors.gray', defaultMessage: 'Gray' },
-  colorSuccess: { id: 'theme_editor.colors.success', defaultMessage: 'Success' },
+  colorSuccess: {
+    id: 'theme_editor.colors.success',
+    defaultMessage: 'Success',
+  },
   colorDanger: { id: 'theme_editor.colors.danger', defaultMessage: 'Danger' },
-  colorGreentext: { id: 'theme_editor.colors.greentext', defaultMessage: 'Greentext' },
-  colorAccentBlue: { id: 'theme_editor.colors.accent_blue', defaultMessage: 'Accent Blue' },
-  colorGradientStart: { id: 'theme_editor.colors.gradient_start', defaultMessage: 'Gradient Start' },
-  colorGradientEnd: { id: 'theme_editor.colors.gradient_end', defaultMessage: 'Gradient End' },
+  colorGreentext: {
+    id: 'theme_editor.colors.greentext',
+    defaultMessage: 'Greentext',
+  },
+  colorAccentBlue: {
+    id: 'theme_editor.colors.accent_blue',
+    defaultMessage: 'Accent Blue',
+  },
+  colorGradientStart: {
+    id: 'theme_editor.colors.gradient_start',
+    defaultMessage: 'Gradient Start',
+  },
+  colorGradientEnd: {
+    id: 'theme_editor.colors.gradient_end',
+    defaultMessage: 'Gradient End',
+  },
 });
 
-interface IThemeEditor {
-}
+interface IThemeEditor {}
 
 /** UI for editing Tailwind theme colors. */
 const ThemeEditor: React.FC<IThemeEditor> = () => {
@@ -46,8 +72,8 @@ const ThemeEditor: React.FC<IThemeEditor> = () => {
   const dispatch = useAppDispatch();
 
   const plFe = usePlFeConfig();
-  const host = useAppSelector(state => getHost(state));
-  const rawConfig = useAppSelector(state => state.plfe);
+  const host = useAppSelector((state) => getHost(state));
+  const rawConfig = useAppSelector((state) => state.plfe);
 
   const [colors, setColors] = useState(plFe.colors.toJS() as any);
   const [submitting, setSubmitting] = useState(false);
@@ -100,7 +126,9 @@ const ThemeEditor: React.FC<IThemeEditor> = () => {
     fileInput.current?.click();
   };
 
-  const handleSelectFile: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
+  const handleSelectFile: React.ChangeEventHandler<HTMLInputElement> = async (
+    e,
+  ) => {
     const file = e.target.files?.item(0);
 
     if (file) {
@@ -113,7 +141,7 @@ const ThemeEditor: React.FC<IThemeEditor> = () => {
     }
   };
 
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     setSubmitting(true);
 
     try {
@@ -201,26 +229,33 @@ const ThemeEditor: React.FC<IThemeEditor> = () => {
 
         <FormActions>
           <DropdownMenu
-            items={[{
-              text: intl.formatMessage(messages.restore),
-              action: restoreDefaultTheme,
-              icon: require('@tabler/icons/outline/refresh.svg'),
-            }, {
-              text: intl.formatMessage(messages.import),
-              action: importTheme,
-              icon: require('@tabler/icons/outline/upload.svg'),
-            }, {
-              text: intl.formatMessage(messages.export),
-              action: exportTheme,
-              icon: require('@tabler/icons/outline/download.svg'),
-            }]}
+            items={[
+              {
+                text: intl.formatMessage(messages.restore),
+                action: restoreDefaultTheme,
+                icon: require('@tabler/icons/outline/refresh.svg'),
+              },
+              {
+                text: intl.formatMessage(messages.import),
+                action: importTheme,
+                icon: require('@tabler/icons/outline/upload.svg'),
+              },
+              {
+                text: intl.formatMessage(messages.export),
+                action: exportTheme,
+                icon: require('@tabler/icons/outline/download.svg'),
+              },
+            ]}
           />
           <Button theme='secondary' onClick={resetTheme}>
             <FormattedMessage id='theme_editor.reset' defaultMessage='Reset' />
           </Button>
 
           <Button type='submit' theme='primary' disabled={submitting}>
-            <FormattedMessage id='theme_editor.save' defaultMessage='Save theme' />
+            <FormattedMessage
+              id='theme_editor.save'
+              defaultMessage='Save theme'
+            />
           </Button>
         </FormActions>
       </Form>
@@ -245,7 +280,12 @@ interface IPaletteListItem {
 }
 
 /** Palette editor inside a ListItem. */
-const PaletteListItem: React.FC<IPaletteListItem> = ({ label, palette, onChange, resetKey }) => (
+const PaletteListItem: React.FC<IPaletteListItem> = ({
+  label,
+  palette,
+  onChange,
+  resetKey,
+}) => (
   <ListItem label={<div className='w-20'>{label}</div>}>
     <Palette palette={palette} onChange={onChange} resetKey={resetKey} />
   </ListItem>
@@ -258,7 +298,11 @@ interface IColorListItem {
 }
 
 /** Single-color picker. */
-const ColorListItem: React.FC<IColorListItem> = ({ label, value, onChange }) => {
+const ColorListItem: React.FC<IColorListItem> = ({
+  label,
+  value,
+  onChange,
+}) => {
   const handleChange: ColorChangeHandler = (color, _e) => {
     onChange(color.hex);
   };

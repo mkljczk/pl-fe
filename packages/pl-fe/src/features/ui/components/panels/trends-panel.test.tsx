@@ -13,33 +13,36 @@ describe('<TrendsPanel />', () => {
   describe('with hashtags', () => {
     beforeEach(() => {
       __stub((mock) => {
-        mock.onGet('/api/v1/trends')
-          .reply(200, [
-            {
-              name: 'hashtag 1',
-              url: 'https://example.com',
-              history: [{
+        mock.onGet('/api/v1/trends').reply(200, [
+          {
+            name: 'hashtag 1',
+            url: 'https://example.com',
+            history: [
+              {
                 day: '1652745600',
                 uses: '294',
                 accounts: '180',
-              }],
-            },
-            { name: 'hashtag 2', url: 'https://example.com' },
-          ]);
+              },
+            ],
+          },
+          { name: 'hashtag 2', url: 'https://example.com' },
+        ]);
       });
     });
 
-    it('renders trending hashtags', async() => {
+    it('renders trending hashtags', async () => {
       render(<TrendsPanel limit={1} />);
 
       await waitFor(() => {
         expect(screen.getByTestId('hashtag')).toHaveTextContent(/hashtag 1/i);
-        expect(screen.getByTestId('hashtag')).toHaveTextContent(/180 people talking/i);
+        expect(screen.getByTestId('hashtag')).toHaveTextContent(
+          /180 people talking/i,
+        );
         expect(screen.getByTestId('sparklines')).toBeInTheDocument();
       });
     });
 
-    it('renders multiple trends', async() => {
+    it('renders multiple trends', async () => {
       render(<TrendsPanel limit={3} />);
 
       await waitFor(() => {
@@ -47,7 +50,7 @@ describe('<TrendsPanel />', () => {
       });
     });
 
-    it('respects the limit prop', async() => {
+    it('respects the limit prop', async () => {
       render(<TrendsPanel limit={1} />);
 
       await waitFor(() => {
@@ -63,7 +66,7 @@ describe('<TrendsPanel />', () => {
       });
     });
 
-    it('renders empty', async() => {
+    it('renders empty', async () => {
       render(<TrendsPanel limit={1} />);
 
       await waitFor(() => {

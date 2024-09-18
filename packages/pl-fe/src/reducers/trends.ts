@@ -15,7 +15,7 @@ type State = ReturnType<typeof ReducerRecord>;
 const trendsReducer = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
     case TRENDS_FETCH_SUCCESS:
-      return state.withMutations(map => {
+      return state.withMutations((map) => {
         map.set('items', ImmutableList(action.tags));
         map.set('isLoading', false);
       });

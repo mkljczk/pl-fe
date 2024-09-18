@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchDraftStatuses } from 'pl-fe/actions/draft-statuses';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Column } from 'pl-fe/components/ui';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import DraftStatus from './components/draft-status';
 
@@ -22,7 +22,12 @@ const DraftStatuses = () => {
     dispatch(fetchDraftStatuses());
   }, []);
 
-  const emptyMessage = <FormattedMessage id='empty_column.draft_statuses' defaultMessage="You don't have any draft statuses yet. When you add one, it will show up here." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.draft_statuses'
+      defaultMessage="You don't have any draft statuses yet. When you add one, it will show up here."
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -31,7 +36,12 @@ const DraftStatuses = () => {
         emptyMessage={emptyMessage}
         listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
       >
-        {drafts.toOrderedSet().reverse().map((draft) => <DraftStatus key={draft.draft_id} draftStatus={draft} />)}
+        {drafts
+          .toOrderedSet()
+          .reverse()
+          .map((draft) => (
+            <DraftStatus key={draft.draft_id} draftStatus={draft} />
+          ))}
       </ScrollableList>
     </Column>
   );

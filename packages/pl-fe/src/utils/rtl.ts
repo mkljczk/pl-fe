@@ -1,5 +1,6 @@
 /** Unicode character ranges for RTL characters. */
-const rtlChars = /[\u0590-\u083F]|[\u08A0-\u08FF]|[\uFB1D-\uFDFF]|[\uFE70-\uFEFF]/mg;
+const rtlChars =
+  /[\u0590-\u083F]|[\u08A0-\u08FF]|[\uFB1D-\uFDFF]|[\uFE70-\uFEFF]/gm;
 
 /**
  * Check if text is right-to-left (eg Arabic).
@@ -22,15 +23,18 @@ const isRtl = (text: string, confidence = 0.3): boolean => {
   }
 
   // Remove http(s), (s)ftp, ws(s), blob and smtp(s) links
-  text = text.replace(/(?:https?|ftp|sftp|ws|wss|blob|smtp|smtps):\/\/[\S]+/g, '');
+  text = text.replace(
+    /(?:https?|ftp|sftp|ws|wss|blob|smtp|smtps):\/\/[\S]+/g,
+    '',
+  );
   // Remove email address links
   text = text.replace(/(mailto:)([^\s@]+@[^\s@]+\.[^\s@]+)/g, '');
   // Remove phone number links
   text = text.replace(/(tel:)([+\d\s()-]+)/g, '');
   // Remove mentions
-  text = text.replace(/(?:^|[^/\w])@([a-z0-9_]+(@[a-z0-9.-]+)?)/ig, '');
+  text = text.replace(/(?:^|[^/\w])@([a-z0-9_]+(@[a-z0-9.-]+)?)/gi, '');
   // Remove hashtags
-  text = text.replace(/(?:^|[^/\w])#([\S]+)/ig, '');
+  text = text.replace(/(?:^|[^/\w])#([\S]+)/gi, '');
   // Remove all non-word characters
   text = text.replace(/\s+/g, '');
 
@@ -51,7 +55,10 @@ interface GetTextDirectionOpts {
 }
 
 /** Get the direction of the text. */
-const getTextDirection = (text: string, { fallback = 'ltr', confidence }: GetTextDirectionOpts = {}): 'ltr' | 'rtl' => {
+const getTextDirection = (
+  text: string,
+  { fallback = 'ltr', confidence }: GetTextDirectionOpts = {},
+): 'ltr' | 'rtl' => {
   if (!text) return fallback;
   return isRtl(text, confidence) ? 'rtl' : 'ltr';
 };

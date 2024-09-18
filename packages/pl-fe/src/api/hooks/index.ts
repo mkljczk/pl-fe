@@ -13,7 +13,10 @@ export { useRelationships } from './accounts/useRelationships';
 
 // Groups
 export { useBlockGroupMember } from './groups/useBlockGroupMember';
-export { useCreateGroup, type CreateGroupParams } from './groups/useCreateGroup';
+export {
+  useCreateGroup,
+  type CreateGroupParams,
+} from './groups/useCreateGroup';
 export { useDeleteGroup } from './groups/useDeleteGroup';
 export { useDemoteGroupMember } from './groups/useDemoteGroupMember';
 export { useGroup } from './groups/useGroup';

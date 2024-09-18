@@ -5,17 +5,13 @@ import type { AppDispatch } from 'pl-fe/store';
 
 const EMOJI_CHOOSE = 'EMOJI_CHOOSE';
 
-const chooseEmoji = (emoji: Emoji) =>
-  (dispatch: AppDispatch) => {
-    dispatch({
-      type: EMOJI_CHOOSE,
-      emoji,
-    });
+const chooseEmoji = (emoji: Emoji) => (dispatch: AppDispatch) => {
+  dispatch({
+    type: EMOJI_CHOOSE,
+    emoji,
+  });
 
-    dispatch(saveSettings());
-  };
-
-export {
-  EMOJI_CHOOSE,
-  chooseEmoji,
+  dispatch(saveSettings());
 };
+
+export { EMOJI_CHOOSE, chooseEmoji };

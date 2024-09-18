@@ -8,14 +8,16 @@ const useRelationships = (listKey: string[], accountIds: string[]) => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
 
-  const fetchRelationships = (accountIds: string[]) => client.accounts.getRelationships(accountIds);
+  const fetchRelationships = (accountIds: string[]) =>
+    client.accounts.getRelationships(accountIds);
 
-  const { entityMap: relationships, ...result } = useBatchedEntities<Relationship>(
-    [Entities.RELATIONSHIPS, ...listKey],
-    accountIds,
-    fetchRelationships,
-    { enabled: isLoggedIn },
-  );
+  const { entityMap: relationships, ...result } =
+    useBatchedEntities<Relationship>(
+      [Entities.RELATIONSHIPS, ...listKey],
+      accountIds,
+      fetchRelationships,
+      { enabled: isLoggedIn },
+    );
 
   return { relationships, ...result };
 };

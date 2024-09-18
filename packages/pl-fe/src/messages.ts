@@ -6,15 +6,18 @@ const importCustom = async (locale: string): Promise<MessageModule> => {
   try {
     return await import(`../custom/locales/${locale}.json`);
   } catch {
-    return ({ default: {} });
+    return { default: {} };
   }
 };
 
 /** Import git-checked messages */
-const importMessages = (locale: string): Promise<MessageModule> => import(`./locales/${locale}.json`);
+const importMessages = (locale: string): Promise<MessageModule> =>
+  import(`./locales/${locale}.json`);
 
 /** Override custom messages */
-const importMessagesWithCustom = async (locale: string): Promise<MessageJson> => {
+const importMessagesWithCustom = async (
+  locale: string,
+): Promise<MessageJson> => {
   try {
     const messages = await Promise.all([
       importMessages(locale),
@@ -96,9 +99,12 @@ const locales = [
 ] as const;
 
 /** pl-fe locales map */
-const messages = locales.reduce((acc, locale) => {
-  acc[locale] = () => importMessagesWithCustom(locale);
-  return acc;
-}, {} as Record<string, () => Promise<MessageJson>>);
+const messages = locales.reduce(
+  (acc, locale) => {
+    acc[locale] = () => importMessagesWithCustom(locale);
+    return acc;
+  },
+  {} as Record<string, () => Promise<MessageJson>>,
+);
 
 export { locales, messages as default };

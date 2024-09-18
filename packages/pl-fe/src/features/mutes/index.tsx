@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { useMutes } from 'pl-fe/api/hooks';
 import ScrollableList from 'pl-fe/components/scrollable-list';
@@ -35,12 +35,19 @@ const Mutes: React.FC = () => {
           onLoadMore={fetchNextAccounts}
           hasMore={hasNextAccountsPage}
           emptyMessage={
-            <FormattedMessage id='empty_column.mutes' defaultMessage="You haven't muted any users yet." />
+            <FormattedMessage
+              id='empty_column.mutes'
+              defaultMessage="You haven't muted any users yet."
+            />
           }
         >
-          {accounts.map((accounts) =>
-            <AccountContainer key={accounts.id} id={accounts.id} actionType='muting' />,
-          )}
+          {accounts.map((accounts) => (
+            <AccountContainer
+              key={accounts.id}
+              id={accounts.id}
+              actionType='muting'
+            />
+          ))}
         </ScrollableList>
       </Stack>
     </Column>

@@ -1,4 +1,7 @@
-import { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
+import {
+  List as ImmutableList,
+  OrderedSet as ImmutableOrderedSet,
+} from 'immutable';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -33,11 +36,13 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
   const dispatch = useAppDispatch();
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id: props.params.statusId }));
+  const status = useAppSelector((state) =>
+    getStatus(state, { id: props.params.statusId }),
+  );
 
   const me = useAppSelector((state) => state.me);
 
-  const descendantsIds = useAppSelector(state => {
+  const descendantsIds = useAppSelector((state) => {
     let descendantsIds = ImmutableOrderedSet<string>();
 
     if (status) {
@@ -61,15 +66,20 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
   };
 
   useEffect(() => {
-    fetchData().then(() => {
-      setIsLoaded(true);
-    }).catch(() => {
-      setIsLoaded(true);
-    });
+    fetchData()
+      .then(() => {
+        setIsLoaded(true);
+      })
+      .catch(() => {
+        setIsLoaded(true);
+      });
   }, [props.params.statusId]);
 
   useEffect(() => {
-    if (isLoaded && me) dispatch(eventDiscussionCompose(`reply:${props.params.statusId}`, status!));
+    if (isLoaded && me)
+      dispatch(
+        eventDiscussionCompose(`reply:${props.params.statusId}`, status!),
+      );
   }, [isLoaded, me]);
 
   const handleMoveUp = (id: string) => {
@@ -130,26 +140,23 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
     );
   };
 
-  const renderChildren = (list: ImmutableOrderedSet<string>) => list.map(id => {
-    if (id.endsWith('-tombstone')) {
-      return renderTombstone(id);
-    } else if (id.startsWith('末pending-')) {
-      return renderPendingStatus(id);
-    } else {
-      return renderStatus(id);
-    }
-  });
+  const renderChildren = (list: ImmutableOrderedSet<string>) =>
+    list.map((id) => {
+      if (id.endsWith('-tombstone')) {
+        return renderTombstone(id);
+      } else if (id.startsWith('末pending-')) {
+        return renderPendingStatus(id);
+      } else {
+        return renderStatus(id);
+      }
+    });
 
   const hasDescendants = descendantsIds.size > 0;
 
   if (!status && isLoaded) {
-    return (
-      <MissingIndicator />
-    );
+    return <MissingIndicator />;
   } else if (!status) {
-    return (
-      <PlaceholderStatus />
-    );
+    return <PlaceholderStatus />;
   }
 
   const children: JSX.Element[] = [];
@@ -160,16 +167,28 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
 
   return (
     <Stack space={2}>
-      {me && <div className='border-b border-solid border-gray-200 p-2 pt-0 dark:border-gray-800'>
-        <ComposeForm id={`reply:${status.id}`} autoFocus={false} event={status.id} transparent />
-      </div>}
+      {me && (
+        <div className='border-b border-solid border-gray-200 p-2 pt-0 dark:border-gray-800'>
+          <ComposeForm
+            id={`reply:${status.id}`}
+            autoFocus={false}
+            event={status.id}
+            transparent
+          />
+        </div>
+      )}
       <div ref={node} className='thread p-0 shadow-none sm:p-2'>
         <ScrollableList
           id='thread'
           ref={scroller}
           placeholderComponent={() => <PlaceholderStatus variant='slim' />}
           initialTopMostItemIndex={0}
-          emptyMessage={<FormattedMessage id='event.discussion.empty' defaultMessage='No one has commented this event yet. When someone does, they will appear here.' />}
+          emptyMessage={
+            <FormattedMessage
+              id='event.discussion.empty'
+              defaultMessage='No one has commented this event yet. When someone does, they will appear here.'
+            />
+          }
         >
           {children}
         </ScrollableList>

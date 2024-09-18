@@ -4,11 +4,15 @@ import path from 'path';
 const filtered: Record<string, Record<string, string>> = {};
 const filenames = fs.readdirSync(path.resolve(__dirname, '../locales'));
 
-filenames.forEach(filename => {
-  if (!filename.match(/\.json$/) || filename.match(/defaultMessages|whitelist/)) return;
+filenames.forEach((filename) => {
+  if (!filename.match(/\.json$/) || filename.match(/defaultMessages|whitelist/))
+    return;
 
-  const content = fs.readFileSync(path.resolve(__dirname, `../locales/${filename}`), 'utf-8');
-  const full  = JSON.parse(content) as Record<string, string>;
+  const content = fs.readFileSync(
+    path.resolve(__dirname, `../locales/${filename}`),
+    'utf-8',
+  );
+  const full = JSON.parse(content) as Record<string, string>;
   const locale = filename.split('.')[0];
 
   filtered[locale] = {
@@ -21,8 +25,10 @@ filenames.forEach(filename => {
     'notification.status': full['notification.status'] || '',
     'notification.move': full['notification.move'] || '',
 
-    'notification.pleroma:chat_mention': full['notification.pleroma:chat_mention'] || '',
-    'notification.pleroma:emoji_reaction': full['notification.pleroma:emoji_reaction'] || '',
+    'notification.pleroma:chat_mention':
+      full['notification.pleroma:chat_mention'] || '',
+    'notification.pleroma:emoji_reaction':
+      full['notification.pleroma:emoji_reaction'] || '',
 
     'status.show_more': full['status.show_more'] || '',
     'status.reblog': full['status.reblog'] || '',

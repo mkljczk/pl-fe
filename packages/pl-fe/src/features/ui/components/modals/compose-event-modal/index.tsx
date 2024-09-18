@@ -1,42 +1,86 @@
 import React, { useEffect, useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { resetCompose } from 'pl-fe/actions/compose';
 import {
-  submitEvent,
-  fetchEventParticipationRequests,
-  rejectEventParticipationRequest,
   authorizeEventParticipationRequest,
   cancelEventCompose,
+  fetchEventParticipationRequests,
+  rejectEventParticipationRequest,
+  submitEvent,
 } from 'pl-fe/actions/events';
 import { uploadFile } from 'pl-fe/actions/media';
 import { ADDRESS_ICONS } from 'pl-fe/components/autosuggest-location';
 import LocationSearch from 'pl-fe/components/location-search';
-import { Button, Form, FormGroup, HStack, Icon, IconButton, Input, Modal, Spinner, Stack, Tabs, Text, Toggle } from 'pl-fe/components/ui';
+import {
+  Button,
+  Form,
+  FormGroup,
+  HStack,
+  Icon,
+  IconButton,
+  Input,
+  Modal,
+  Spinner,
+  Stack,
+  Tabs,
+  Text,
+  Toggle,
+} from 'pl-fe/components/ui';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { isCurrentOrFutureDate } from 'pl-fe/features/compose/components/schedule-form';
-import { ComposeEditor, DatePicker } from 'pl-fe/features/ui/util/async-components';
+import {
+  ComposeEditor,
+  DatePicker,
+} from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { useModalsStore } from 'pl-fe/stores';
 
 import UploadButton from './upload-button';
 
-import type { BaseModalProps } from '../../modal-root';
 import type { Location } from 'pl-api';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
+import type { BaseModalProps } from '../../modal-root';
 
 const messages = defineMessages({
-  eventNamePlaceholder: { id: 'compose_event.fields.name_placeholder', defaultMessage: 'Name' },
-  eventDescriptionPlaceholder: { id: 'compose_event.fields.description_placeholder', defaultMessage: 'Description' },
-  eventStartTimePlaceholder: { id: 'compose_event.fields.start_time_placeholder', defaultMessage: 'Event begins on…' },
-  eventEndTimePlaceholder: { id: 'compose_event.fields.end_time_placeholder', defaultMessage: 'Event ends on…' },
-  resetLocation: { id: 'compose_event.reset_location', defaultMessage: 'Reset location' },
+  eventNamePlaceholder: {
+    id: 'compose_event.fields.name_placeholder',
+    defaultMessage: 'Name',
+  },
+  eventDescriptionPlaceholder: {
+    id: 'compose_event.fields.description_placeholder',
+    defaultMessage: 'Description',
+  },
+  eventStartTimePlaceholder: {
+    id: 'compose_event.fields.start_time_placeholder',
+    defaultMessage: 'Event begins on…',
+  },
+  eventEndTimePlaceholder: {
+    id: 'compose_event.fields.end_time_placeholder',
+    defaultMessage: 'Event ends on…',
+  },
+  resetLocation: {
+    id: 'compose_event.reset_location',
+    defaultMessage: 'Reset location',
+  },
   edit: { id: 'compose_event.tabs.edit', defaultMessage: 'Edit details' },
-  pending: { id: 'compose_event.tabs.pending', defaultMessage: 'Manage requests' },
-  authorize: { id: 'compose_event.participation_requests.authorize', defaultMessage: 'Authorize' },
-  reject: { id: 'compose_event.participation_requests.reject', defaultMessage: 'Reject' },
+  pending: {
+    id: 'compose_event.tabs.pending',
+    defaultMessage: 'Manage requests',
+  },
+  authorize: {
+    id: 'compose_event.participation_requests.authorize',
+    defaultMessage: 'Authorize',
+  },
+  reject: {
+    id: 'compose_event.participation_requests.reject',
+    defaultMessage: 'Reject',
+  },
   confirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
-  cancelEditing: { id: 'confirmations.cancel_editing.confirm', defaultMessage: 'Cancel editing' },
+  cancelEditing: {
+    id: 'confirmations.cancel_editing.confirm',
+    defaultMessage: 'Cancel editing',
+  },
 });
 
 interface IAccount {
@@ -101,9 +145,15 @@ const ComposeEventModal: React.FC<BaseModalProps & ComposeEventModalProps> = ({
 
   const [name, setName] = useState(status?.event?.name || '');
   const [text, setText] = useState(statusText || '');
-  const [startTime, setStartTime] = useState(status?.event?.start_time ? new Date(status.event.start_time) : new Date());
-  const [endTime, setEndTime] = useState(status?.event?.end_time ? new Date(status.event.end_time) : null);
-  const [approvalRequired, setApprovalRequired] = useState(status?.event?.join_mode !== 'free');
+  const [startTime, setStartTime] = useState(
+    status?.event?.start_time ? new Date(status.event.start_time) : new Date(),
+  );
+  const [endTime, setEndTime] = useState(
+    status?.event?.end_time ? new Date(status.event.end_time) : null,
+  );
+  const [approvalRequired, setApprovalRequired] = useState(
+    status?.event?.join_mode !== 'free',
+  );
   const [banner, setBanner] = useState(status?.event?.banner || null);
   const [location, setLocation] = useState(sourceLocation || null);
 
@@ -111,9 +161,13 @@ const ComposeEventModal: React.FC<BaseModalProps & ComposeEventModalProps> = ({
   const [isUploading, setIsUploading] = useState(false);
 
   const statusId = status?.id || null;
-  const composeId = statusId ? `compose-event-modal-${statusId}` : 'compose-event-modal';
+  const composeId = statusId
+    ? `compose-event-modal-${statusId}`
+    : 'compose-event-modal';
 
-  const onChangeName: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
+  const onChangeName: React.ChangeEventHandler<HTMLInputElement> = ({
+    target,
+  }) => {
     setName(target.value);
   };
 
@@ -125,7 +179,9 @@ const ComposeEventModal: React.FC<BaseModalProps & ComposeEventModalProps> = ({
     setEndTime(date);
   };
 
-  const onChangeHasEndTime: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
+  const onChangeHasEndTime: React.ChangeEventHandler<HTMLInputElement> = ({
+    target,
+  }) => {
     if (target.checked) {
       const endTime = new Date(startTime);
       endTime.setHours(endTime.getHours() + 2);
@@ -134,7 +190,9 @@ const ComposeEventModal: React.FC<BaseModalProps & ComposeEventModalProps> = ({
     } else setEndTime(null);
   };
 
-  const onChangeApprovalRequired: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
+  const onChangeApprovalRequired: React.ChangeEventHandler<
+    HTMLInputElement
+  > = ({ target }) => {
     setApprovalRequired(target.checked);
   };
 
@@ -153,12 +211,28 @@ const ComposeEventModal: React.FC<BaseModalProps & ComposeEventModalProps> = ({
   const onClickClose = () => {
     if (name.length || text.length || location || banner) {
       openModal('CONFIRM', {
-        heading: statusId
-          ? <FormattedMessage id='confirmations.cancel_event_editing.heading' defaultMessage='Cancel event editing' />
-          : <FormattedMessage id='confirmations.delete_event.heading' defaultMessage='Delete event' />,
-        message: statusId
-          ? <FormattedMessage id='confirmations.cancel_event_editing.message' defaultMessage='Are you sure you want to cancel editing this event? All changes will be lost.' />
-          : <FormattedMessage id='confirmations.delete_event.message' defaultMessage='Are you sure you want to delete this event?' />,
+        heading: statusId ? (
+          <FormattedMessage
+            id='confirmations.cancel_event_editing.heading'
+            defaultMessage='Cancel event editing'
+          />
+        ) : (
+          <FormattedMessage
+            id='confirmations.delete_event.heading'
+            defaultMessage='Delete event'
+          />
+        ),
+        message: statusId ? (
+          <FormattedMessage
+            id='confirmations.cancel_event_editing.message'
+            defaultMessage='Are you sure you want to cancel editing this event? All changes will be lost.'
+          />
+        ) : (
+          <FormattedMessage
+            id='confirmations.delete_event.message'
+            defaultMessage='Are you sure you want to delete this event?'
+          />
+        ),
         confirm: intl.formatMessage(messages.confirm),
         onConfirm: () => {
           onClose('COMPOSE_EVENT');
@@ -173,15 +247,17 @@ const ComposeEventModal: React.FC<BaseModalProps & ComposeEventModalProps> = ({
   const handleFiles = (files: FileList) => {
     setIsUploading(true);
 
-    dispatch(uploadFile(
-      files[0],
-      intl,
-      (data) => {
-        setBanner(data);
-        setIsUploading(false);
-      },
-      () => setIsUploading(false),
-    ));
+    dispatch(
+      uploadFile(
+        files[0],
+        intl,
+        (data) => {
+          setBanner(data);
+          setIsUploading(false);
+        },
+        () => setIsUploading(false),
+      ),
+    );
   };
 
   const handleClearBanner = () => {
@@ -191,39 +267,64 @@ const ComposeEventModal: React.FC<BaseModalProps & ComposeEventModalProps> = ({
   const handleSubmit = () => {
     setIsSubmitting(true);
 
-    dispatch(submitEvent({
-      statusId,
-      name,
-      status: text,
-      banner,
-      startTime,
-      endTime,
-      joinMode: approvalRequired ? 'restricted' : 'free',
-      location,
-    })).then(() => {
-      setIsSubmitting(false);
-      dispatch(resetCompose(composeId));
-    }).catch(() => {
-      setIsSubmitting(false);
-    });
+    dispatch(
+      submitEvent({
+        statusId,
+        name,
+        status: text,
+        banner,
+        startTime,
+        endTime,
+        joinMode: approvalRequired ? 'restricted' : 'free',
+        location,
+      }),
+    )
+      .then(() => {
+        setIsSubmitting(false);
+        dispatch(resetCompose(composeId));
+      })
+      .catch(() => {
+        setIsSubmitting(false);
+      });
   };
 
-  const accounts = useAppSelector((state) => state.user_lists.event_participation_requests.get(statusId!)?.items);
+  const accounts = useAppSelector(
+    (state) =>
+      state.user_lists.event_participation_requests.get(statusId!)?.items,
+  );
 
   useEffect(() => {
     if (statusId) dispatch(fetchEventParticipationRequests(statusId));
   }, []);
 
-  const renderLocation = () => location && (
-    <HStack className='h-[38px] text-gray-700 dark:text-gray-500' alignItems='center' space={2}>
-      <Icon src={ADDRESS_ICONS[location.type] || require('@tabler/icons/outline/map-pin.svg')} />
-      <Stack className='grow'>
-        <Text>{location.description}</Text>
-        <Text theme='muted' size='xs'>{[location.street, location.locality, location.country].filter(val => val?.trim()).join(' · ')}</Text>
-      </Stack>
-      <IconButton title={intl.formatMessage(messages.resetLocation)} src={require('@tabler/icons/outline/x.svg')} onClick={() => onChangeLocation(null)} />
-    </HStack>
-  );
+  const renderLocation = () =>
+    location && (
+      <HStack
+        className='h-[38px] text-gray-700 dark:text-gray-500'
+        alignItems='center'
+        space={2}
+      >
+        <Icon
+          src={
+            ADDRESS_ICONS[location.type] ||
+            require('@tabler/icons/outline/map-pin.svg')
+          }
+        />
+        <Stack className='grow'>
+          <Text>{location.description}</Text>
+          <Text theme='muted' size='xs'>
+            {[location.street, location.locality, location.country]
+              .filter((val) => val?.trim())
+              .join(' · ')}
+          </Text>
+        </Stack>
+        <IconButton
+          title={intl.formatMessage(messages.resetLocation)}
+          src={require('@tabler/icons/outline/x.svg')}
+          onClick={() => onChangeLocation(null)}
+        />
+      </HStack>
+    );
 
   const renderTabs = () => {
     const items = [
@@ -243,127 +344,205 @@ const ComposeEventModal: React.FC<BaseModalProps & ComposeEventModalProps> = ({
   };
 
   let body;
-  if (tab === 'edit') body = (
-    <Form>
-      <FormGroup
-        labelText={<FormattedMessage id='compose_event.fields.banner_label' defaultMessage='Event banner' />}
-        hintText={<FormattedMessage id='compose_event.fields.banner_hint' defaultMessage='PNG, GIF or JPG. Landscape format is preferred.' />}
-      >
-        <div className='dark:sm:shadow-inset relative flex h-24 items-center justify-center overflow-hidden rounded-lg bg-primary-100 text-primary-500 sm:h-32 sm:shadow dark:bg-gray-800 dark:text-white'>
-          {banner ? (
-            <>
-              <img className='h-full w-full object-cover' src={banner.url} alt='' />
-              <IconButton className='absolute right-2 top-2' src={require('@tabler/icons/outline/x.svg')} onClick={handleClearBanner} />
-            </>
-          ) : (
-            <UploadButton disabled={isUploading} onSelectFile={handleFiles} />
-          )}
-        </div>
-      </FormGroup>
-      <FormGroup
-        labelText={<FormattedMessage id='compose_event.fields.name_label' defaultMessage='Event name' />}
-      >
-        <Input
-          type='text'
-          placeholder={intl.formatMessage(messages.eventNamePlaceholder)}
-          value={name}
-          onChange={onChangeName}
-        />
-      </FormGroup>
-      <FormGroup
-        labelText={<FormattedMessage id='compose_event.fields.description_label' defaultMessage='Event description' />}
-      >
-        <ComposeEditor
-          className='block w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-base text-gray-900 ring-1 placeholder:text-gray-600 focus-within:border-primary-500 focus-within:ring-primary-500 black:bg-black sm:text-sm dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-gray-800 dark:placeholder:text-gray-600 dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500'
-          placeholderClassName='pt-2'
-          composeId={composeId}
-          placeholder={intl.formatMessage(messages.eventDescriptionPlaceholder)}
-          handleSubmit={handleSubmit}
-          onChange={setText}
-        />
-      </FormGroup>
-      <FormGroup
-        labelText={<FormattedMessage id='compose_event.fields.location_label' defaultMessage='Event location' />}
-      >
-        {location ? renderLocation() : (
-          <LocationSearch
-            onSelected={onChangeLocation}
-          />
-        )}
-      </FormGroup>
-      <FormGroup
-        labelText={<FormattedMessage id='compose_event.fields.start_time_label' defaultMessage='Event start date' />}
-      >
-        <DatePicker
-          showTimeSelect
-          dateFormat='MMMM d, yyyy h:mm aa'
-          timeIntervals={15}
-          wrapperClassName='react-datepicker-wrapper'
-          placeholderText={intl.formatMessage(messages.eventStartTimePlaceholder)}
-          filterDate={isCurrentOrFutureDate}
-          selected={startTime}
-          onChange={onChangeStartTime}
-        />
-      </FormGroup>
-      <HStack alignItems='center' space={2}>
-        <Toggle
-          checked={!!endTime}
-          onChange={onChangeHasEndTime}
-        />
-        <Text tag='span' theme='muted'>
-          <FormattedMessage id='compose_event.fields.has_end_time' defaultMessage='The event has an end date' />
-        </Text>
-      </HStack>
-      {endTime && (
+  if (tab === 'edit')
+    body = (
+      <Form>
         <FormGroup
-          labelText={<FormattedMessage id='compose_event.fields.end_time_label' defaultMessage='Event end date' />}
+          labelText={
+            <FormattedMessage
+              id='compose_event.fields.banner_label'
+              defaultMessage='Event banner'
+            />
+          }
+          hintText={
+            <FormattedMessage
+              id='compose_event.fields.banner_hint'
+              defaultMessage='PNG, GIF or JPG. Landscape format is preferred.'
+            />
+          }
+        >
+          <div className='dark:sm:shadow-inset relative flex h-24 items-center justify-center overflow-hidden rounded-lg bg-primary-100 text-primary-500 sm:h-32 sm:shadow dark:bg-gray-800 dark:text-white'>
+            {banner ? (
+              <>
+                <img
+                  className='h-full w-full object-cover'
+                  src={banner.url}
+                  alt=''
+                />
+                <IconButton
+                  className='absolute right-2 top-2'
+                  src={require('@tabler/icons/outline/x.svg')}
+                  onClick={handleClearBanner}
+                />
+              </>
+            ) : (
+              <UploadButton disabled={isUploading} onSelectFile={handleFiles} />
+            )}
+          </div>
+        </FormGroup>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='compose_event.fields.name_label'
+              defaultMessage='Event name'
+            />
+          }
+        >
+          <Input
+            type='text'
+            placeholder={intl.formatMessage(messages.eventNamePlaceholder)}
+            value={name}
+            onChange={onChangeName}
+          />
+        </FormGroup>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='compose_event.fields.description_label'
+              defaultMessage='Event description'
+            />
+          }
+        >
+          <ComposeEditor
+            className='block w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-base text-gray-900 ring-1 placeholder:text-gray-600 focus-within:border-primary-500 focus-within:ring-primary-500 black:bg-black sm:text-sm dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-gray-800 dark:placeholder:text-gray-600 dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500'
+            placeholderClassName='pt-2'
+            composeId={composeId}
+            placeholder={intl.formatMessage(
+              messages.eventDescriptionPlaceholder,
+            )}
+            handleSubmit={handleSubmit}
+            onChange={setText}
+          />
+        </FormGroup>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='compose_event.fields.location_label'
+              defaultMessage='Event location'
+            />
+          }
+        >
+          {location ? (
+            renderLocation()
+          ) : (
+            <LocationSearch onSelected={onChangeLocation} />
+          )}
+        </FormGroup>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='compose_event.fields.start_time_label'
+              defaultMessage='Event start date'
+            />
+          }
         >
           <DatePicker
             showTimeSelect
             dateFormat='MMMM d, yyyy h:mm aa'
             timeIntervals={15}
             wrapperClassName='react-datepicker-wrapper'
-            placeholderText={intl.formatMessage(messages.eventEndTimePlaceholder)}
+            placeholderText={intl.formatMessage(
+              messages.eventStartTimePlaceholder,
+            )}
             filterDate={isCurrentOrFutureDate}
-            selected={endTime}
-            onChange={onChangeEndTime}
+            selected={startTime}
+            onChange={onChangeStartTime}
           />
         </FormGroup>
-      )}
-      {!statusId && (
         <HStack alignItems='center' space={2}>
-          <Toggle
-            checked={approvalRequired}
-            onChange={onChangeApprovalRequired}
-          />
+          <Toggle checked={!!endTime} onChange={onChangeHasEndTime} />
           <Text tag='span' theme='muted'>
-            <FormattedMessage id='compose_event.fields.approval_required' defaultMessage='I want to approve participation requests manually' />
+            <FormattedMessage
+              id='compose_event.fields.has_end_time'
+              defaultMessage='The event has an end date'
+            />
           </Text>
         </HStack>
-      )}
-    </Form>
-  );
-  else body = accounts ? (
-    <Stack space={3}>
-      {accounts.size > 0 ? (
-        accounts.map(({ account, participation_message }) =>
-          <Account key={account} eventId={statusId!} id={account} participationMessage={participation_message} />,
-        )
-      ) : (
-        <FormattedMessage id='empty_column.event_participant_requests' defaultMessage='There are no pending event participation requests.' />
-      )}
-    </Stack>
-  ) : <Spinner />;
+        {endTime && (
+          <FormGroup
+            labelText={
+              <FormattedMessage
+                id='compose_event.fields.end_time_label'
+                defaultMessage='Event end date'
+              />
+            }
+          >
+            <DatePicker
+              showTimeSelect
+              dateFormat='MMMM d, yyyy h:mm aa'
+              timeIntervals={15}
+              wrapperClassName='react-datepicker-wrapper'
+              placeholderText={intl.formatMessage(
+                messages.eventEndTimePlaceholder,
+              )}
+              filterDate={isCurrentOrFutureDate}
+              selected={endTime}
+              onChange={onChangeEndTime}
+            />
+          </FormGroup>
+        )}
+        {!statusId && (
+          <HStack alignItems='center' space={2}>
+            <Toggle
+              checked={approvalRequired}
+              onChange={onChangeApprovalRequired}
+            />
+            <Text tag='span' theme='muted'>
+              <FormattedMessage
+                id='compose_event.fields.approval_required'
+                defaultMessage='I want to approve participation requests manually'
+              />
+            </Text>
+          </HStack>
+        )}
+      </Form>
+    );
+  else
+    body = accounts ? (
+      <Stack space={3}>
+        {accounts.size > 0 ? (
+          accounts.map(({ account, participation_message }) => (
+            <Account
+              key={account}
+              eventId={statusId!}
+              id={account}
+              participationMessage={participation_message}
+            />
+          ))
+        ) : (
+          <FormattedMessage
+            id='empty_column.event_participant_requests'
+            defaultMessage='There are no pending event participation requests.'
+          />
+        )}
+      </Stack>
+    ) : (
+      <Spinner />
+    );
 
   return (
     <Modal
-      title={statusId
-        ? <FormattedMessage id='navigation_bar.compose_event' defaultMessage='Manage event' />
-        : <FormattedMessage id='navigation_bar.create_event' defaultMessage='Create new event' />}
+      title={
+        statusId ? (
+          <FormattedMessage
+            id='navigation_bar.compose_event'
+            defaultMessage='Manage event'
+          />
+        ) : (
+          <FormattedMessage
+            id='navigation_bar.create_event'
+            defaultMessage='Create new event'
+          />
+        )
+      }
       confirmationAction={tab === 'edit' ? handleSubmit : undefined}
-      confirmationText={statusId
-        ? <FormattedMessage id='compose_event.update' defaultMessage='Update' />
-        : <FormattedMessage id='compose_event.create' defaultMessage='Create' />}
+      confirmationText={
+        statusId ? (
+          <FormattedMessage id='compose_event.update' defaultMessage='Update' />
+        ) : (
+          <FormattedMessage id='compose_event.create' defaultMessage='Create' />
+        )
+      }
       confirmationDisabled={isSubmitting}
       onClose={onClickClose}
     >

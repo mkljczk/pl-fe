@@ -1,4 +1,4 @@
-import { GroupRoles, type Group } from 'pl-api';
+import { type Group, GroupRoles } from 'pl-api';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -33,9 +33,11 @@ const GroupRelationship = ({ group }: IGroupRelationship) => {
       />
 
       <Text tag='span' weight='medium' size='sm' theme='inherit'>
-        {isOwner
-          ? <FormattedMessage id='group.role.owner' defaultMessage='Owner' />
-          : <FormattedMessage id='group.role.admin' defaultMessage='Admin' />}
+        {isOwner ? (
+          <FormattedMessage id='group.role.owner' defaultMessage='Owner' />
+        ) : (
+          <FormattedMessage id='group.role.admin' defaultMessage='Admin' />
+        )}
       </Text>
     </HStack>
   );

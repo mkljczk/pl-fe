@@ -32,7 +32,10 @@ const normalizeGroup = (group: BaseGroup) => {
     header_static: group.header_static || group.header || missingHeader,
     domain,
     note,
-    display_name_html: emojify(escapeTextContentForBrowser(group.display_name), emojiMap),
+    display_name_html: emojify(
+      escapeTextContentForBrowser(group.display_name),
+      emojiMap,
+    ),
     note_emojified: emojify(group.note, emojiMap),
     note_plain: unescapeHTML(group.note),
   };

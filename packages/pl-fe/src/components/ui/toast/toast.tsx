@@ -67,7 +67,8 @@ const Toast = (props: IToast) => {
   };
 
   const renderAction = () => {
-    const classNames = 'mt-0.5 flex-shrink-0 rounded-full text-sm font-medium text-primary-600 dark:text-accent-blue hover:underline focus:outline-none';
+    const classNames =
+      'mt-0.5 flex-shrink-0 rounded-full text-sm font-medium text-primary-600 dark:text-accent-blue hover:underline focus:outline-none';
 
     if (action && actionLabel) {
       return (
@@ -104,21 +105,22 @@ const Toast = (props: IToast) => {
   return (
     <div
       data-testid='toast'
-      className={
-        clsx({
-          'p-4 pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white black:bg-black dark:bg-gray-900 shadow-lg dark:ring-2 dark:ring-gray-800': true,
-          'animate-enter': t.visible,
-          'animate-leave': !t.visible,
-        })
-      }
+      className={clsx({
+        'p-4 pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white black:bg-black dark:bg-gray-900 shadow-lg dark:ring-2 dark:ring-gray-800': true,
+        'animate-enter': t.visible,
+        'animate-leave': !t.visible,
+      })}
     >
       <Stack space={2}>
         <HStack space={4} alignItems='start'>
-          <HStack space={3} justifyContent='between' alignItems='start' className='w-0 flex-1'>
+          <HStack
+            space={3}
+            justifyContent='between'
+            alignItems='start'
+            className='w-0 flex-1'
+          >
             <HStack space={3} alignItems='start' className='w-0 flex-1'>
-              <div className='shrink-0'>
-                {renderIcon()}
-              </div>
+              <div className='shrink-0'>{renderIcon()}</div>
 
               <Text
                 size='sm'
@@ -142,14 +144,21 @@ const Toast = (props: IToast) => {
               onClick={dismissToast}
               data-testid='toast-dismiss'
             >
-              <span className='sr-only'><FormattedMessage id='lightbox.close' defaultMessage='Close' /></span>
-              <Icon src={require('@tabler/icons/outline/x.svg')} className='h-5 w-5' />
+              <span className='sr-only'>
+                <FormattedMessage id='lightbox.close' defaultMessage='Close' />
+              </span>
+              <Icon
+                src={require('@tabler/icons/outline/x.svg')}
+                className='h-5 w-5'
+              />
             </button>
           </div>
         </HStack>
 
         {summary ? (
-          <Text theme='muted' size='sm'>{summary}</Text>
+          <Text theme='muted' size='sm'>
+            {summary}
+          </Text>
         ) : null}
       </Stack>
     </div>

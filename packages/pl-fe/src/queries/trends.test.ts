@@ -11,15 +11,14 @@ describe('useTrends', () => {
   describe('with a successful query', () => {
     beforeEach(() => {
       __stub((mock) => {
-        mock.onGet('/api/v1/trends')
-          .reply(200, [
-            { name: '#golf', url: 'https://example.com' },
-            { name: '#tennis', url: 'https://example.com' },
-          ]);
+        mock.onGet('/api/v1/trends').reply(200, [
+          { name: '#golf', url: 'https://example.com' },
+          { name: '#tennis', url: 'https://example.com' },
+        ]);
       });
     });
 
-    it('is successful', async() => {
+    it('is successful', async () => {
       const { result } = renderHook(() => useTrends());
 
       await waitFor(() => expect(result.current.isFetching).toBe(false));
@@ -35,7 +34,7 @@ describe('useTrends', () => {
       });
     });
 
-    it('is successful', async() => {
+    it('is successful', async () => {
       const { result } = renderHook(() => useTrends());
 
       await waitFor(() => expect(result.current.isFetching).toBe(false));

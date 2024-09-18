@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { fetchAboutPage } from 'pl-fe/actions/about';
 import { Navlinks } from 'pl-fe/components/navlinks';
 import { Card } from 'pl-fe/components/ui';
-import { usePlFeConfig, useSettings, useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch, usePlFeConfig, useSettings } from 'pl-fe/hooks';
 
 import { languages } from '../preferences';
 
@@ -27,19 +27,25 @@ const AboutPage: React.FC = () => {
   const pageLocales = page?.get('locales', []) as string[];
 
   useEffect(() => {
-    const fetchLocale = Boolean(page && locale !== defaultLocale && pageLocales.includes(locale));
-    dispatch(fetchAboutPage(slug, fetchLocale ? locale : undefined)).then(html => {
-      setPageHtml(html);
-    }).catch(error => {
-      // TODO: Better error handling. 404 page?
-      setPageHtml('<h1>Page not found</h1>');
-    });
+    const fetchLocale = Boolean(
+      page && locale !== defaultLocale && pageLocales.includes(locale),
+    );
+    dispatch(fetchAboutPage(slug, fetchLocale ? locale : undefined))
+      .then((html) => {
+        setPageHtml(html);
+      })
+      .catch((error) => {
+        // TODO: Better error handling. 404 page?
+        setPageHtml('<h1>Page not found</h1>');
+      });
   }, [locale, slug]);
 
-  const alsoAvailable = (defaultLocale) && (
+  const alsoAvailable = defaultLocale && (
     <div>
-      <FormattedMessage id='about.also_available' defaultMessage='Available in:' />
-      {' '}
+      <FormattedMessage
+        id='about.also_available'
+        defaultMessage='Available in:'
+      />{' '}
       <ul className='inline list-none p-0'>
         <li className="inline after:content-['_·_']">
           <a href='#' onClick={() => setLocale(defaultLocale)}>
@@ -47,16 +53,17 @@ const AboutPage: React.FC = () => {
             {languages[defaultLocale] || defaultLocale}
           </a>
         </li>
-        {
-          pageLocales?.map(locale => (
-            <li className="inline after:content-['_·_'] last:after:content-none" key={locale}>
-              <a href='#' onClick={() => setLocale(locale)}>
-                {/* @ts-ignore */}
-                {languages[locale] || locale}
-              </a>
-            </li>
-          ))
-        }
+        {pageLocales?.map((locale) => (
+          <li
+            className="inline after:content-['_·_'] last:after:content-none"
+            key={locale}
+          >
+            <a href='#' onClick={() => setLocale(locale)}>
+              {/* @ts-ignore */}
+              {languages[locale] || locale}
+            </a>
+          </li>
+        ))}
       </ul>
     </div>
   );

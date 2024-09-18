@@ -7,7 +7,7 @@ import { normalizeNotification } from 'pl-fe/normalizers';
 import { markReadNotifications } from './notifications';
 
 describe('markReadNotifications()', () => {
-  it('fires off marker when top notification is newer than lastRead', async() => {
+  it('fires off marker when top notification is newer than lastRead', async () => {
     __stub((mock) => mock.onPost('/api/v1/markers').reply(200, {}));
 
     const items = ImmutableOrderedMap({
@@ -21,14 +21,16 @@ describe('markReadNotifications()', () => {
 
     const store = mockStore(state);
 
-    const expectedActions = [{
-      type: 'MARKER_SAVE_REQUEST',
-      marker: {
-        notifications: {
-          last_read_id: '10',
+    const expectedActions = [
+      {
+        type: 'MARKER_SAVE_REQUEST',
+        marker: {
+          notifications: {
+            last_read_id: '10',
+          },
         },
       },
-    }];
+    ];
 
     store.dispatch(markReadNotifications());
     const actions = store.getActions();

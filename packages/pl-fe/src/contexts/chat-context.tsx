@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { toggleMainWindow } from 'pl-fe/actions/chats';
@@ -15,7 +21,7 @@ enum ChatWidgetScreens {
   INBOX = 'INBOX',
   SEARCH = 'SEARCH',
   CHAT = 'CHAT',
-  CHAT_SETTINGS = 'CHAT_SETTINGS'
+  CHAT_SETTINGS = 'CHAT_SETTINGS',
 }
 
 interface IChatProvider {
@@ -31,29 +37,37 @@ const ChatProvider: React.FC<IChatProvider> = ({ children }) => {
   const isUsingMainChatPage = Boolean(path.match(/^\/chats/));
   const { chatId } = useParams<{ chatId: string }>();
 
-  const [screen, setScreen] = useState<ChatWidgetScreens>(ChatWidgetScreens.INBOX);
+  const [screen, setScreen] = useState<ChatWidgetScreens>(
+    ChatWidgetScreens.INBOX,
+  );
   const [currentChatId, setCurrentChatId] = useState<null | string>(chatId);
 
   const { data: chat } = useChat(currentChatId as string);
 
   const isOpen = chats.mainWindow === 'open';
 
-  const changeScreen = (screen: ChatWidgetScreens, currentChatId?: string | null) => {
+  const changeScreen = (
+    screen: ChatWidgetScreens,
+    currentChatId?: string | null,
+  ) => {
     setCurrentChatId(currentChatId || null);
     setScreen(screen);
   };
 
   const toggleChatPane = () => dispatch(toggleMainWindow());
 
-  const value = useMemo(() => ({
-    chat,
-    isOpen,
-    isUsingMainChatPage,
-    toggleChatPane,
-    screen,
-    changeScreen,
-    currentChatId,
-  }), [chat, currentChatId, isUsingMainChatPage, isOpen, screen, changeScreen]);
+  const value = useMemo(
+    () => ({
+      chat,
+      isOpen,
+      isUsingMainChatPage,
+      toggleChatPane,
+      screen,
+      changeScreen,
+      currentChatId,
+    }),
+    [chat, currentChatId, isUsingMainChatPage, isOpen, screen, changeScreen],
+  );
 
   useEffect(() => {
     if (chatId) {
@@ -63,11 +77,7 @@ const ChatProvider: React.FC<IChatProvider> = ({ children }) => {
     }
   }, [chatId]);
 
-  return (
-    <ChatContext.Provider value={value}>
-      {children}
-    </ChatContext.Provider>
-  );
+  return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 };
 
 interface IChatContext {

@@ -6,17 +6,25 @@ import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useGetState } from 'pl-fe/hooks/useGetState';
 import { filteredArray } from 'pl-fe/schemas/utils';
 
-import { entitiesFetchFail, entitiesFetchRequest, entitiesFetchSuccess, invalidateEntityList } from '../actions';
+import {
+  entitiesFetchFail,
+  entitiesFetchRequest,
+  entitiesFetchSuccess,
+  invalidateEntityList,
+} from '../actions';
 import { selectEntities, selectListState, useListState } from '../selectors';
 
 import { parseEntitiesPath } from './utils';
 
-import type { EntityFn, EntitySchema, ExpandedEntitiesPath } from './types';
-import type { Entity } from '../types';
 import type { PaginatedResponse } from 'pl-api';
+import type { Entity } from '../types';
+import type { EntityFn, EntitySchema, ExpandedEntitiesPath } from './types';
 
 /** Additional options for the hook. */
-interface UseEntitiesOpts<TEntity extends Entity, TTransformedEntity extends Entity> {
+interface UseEntitiesOpts<
+  TEntity extends Entity,
+  TTransformedEntity extends Entity,
+> {
   /** A zod schema to parse the API entities. */
   schema?: EntitySchema<TEntity>;
   /**
@@ -30,7 +38,10 @@ interface UseEntitiesOpts<TEntity extends Entity, TTransformedEntity extends Ent
 }
 
 /** A hook for fetching and displaying API entities. */
-const useEntities = <TEntity extends Entity, TTransformedEntity extends Entity = TEntity>(
+const useEntities = <
+  TEntity extends Entity,
+  TTransformedEntity extends Entity = TEntity,
+>(
   /** Tells us where to find/store the entity in the cache. */
   expandedPath: ExpandedEntitiesPath,
   /** API route to GET, eg `'/api/v1/notifications'`. If undefined, nothing will be fetched. */
@@ -42,7 +53,9 @@ const useEntities = <TEntity extends Entity, TTransformedEntity extends Entity =
   const getState = useGetState();
 
   const { entityType, listKey, path } = parseEntitiesPath(expandedPath);
-  const entities = useAppSelector(state => selectEntities<TTransformedEntity>(state, path));
+  const entities = useAppSelector((state) =>
+    selectEntities<TTransformedEntity>(state, path),
+  );
   const schema = opts.schema || z.custom<TEntity>();
 
   const isEnabled = opts.enabled ?? true;
@@ -56,7 +69,11 @@ const useEntities = <TEntity extends Entity, TTransformedEntity extends Entity =
   const next = useListState(path, 'next');
   const prev = useListState(path, 'prev');
 
-  const fetchPage = async(req: () => Promise<PaginatedResponse<any>>, pos: 'start' | 'end', overwrite = false): Promise<void> => {
+  const fetchPage = async (
+    req: () => Promise<PaginatedResponse<any>>,
+    pos: 'start' | 'end',
+    overwrite = false,
+  ): Promise<void> => {
     // Get `isFetching` state from the store again to prevent race conditions.
     const isFetching = selectListState(getState(), path, 'fetching');
     if (isFetching) return;
@@ -65,34 +82,44 @@ const useEntities = <TEntity extends Entity, TTransformedEntity extends Entity =
     try {
       const response = await req();
       const entities = filteredArray(schema).parse(response);
-      const transformedEntities = opts.transform && entities.map(opts.transform);
+      const transformedEntities =
+        opts.transform && entities.map(opts.transform);
 
-      dispatch(entitiesFetchSuccess(transformedEntities || entities, entityType, listKey, pos, {
-        next: response.next,
-        prev: response.previous,
-        totalCount: undefined,
-        fetching: false,
-        fetched: true,
-        error: null,
-        lastFetchedAt: new Date(),
-        invalid: false,
-      }, overwrite));
+      dispatch(
+        entitiesFetchSuccess(
+          transformedEntities || entities,
+          entityType,
+          listKey,
+          pos,
+          {
+            next: response.next,
+            prev: response.previous,
+            totalCount: undefined,
+            fetching: false,
+            fetched: true,
+            error: null,
+            lastFetchedAt: new Date(),
+            invalid: false,
+          },
+          overwrite,
+        ),
+      );
     } catch (error) {
       dispatch(entitiesFetchFail(entityType, listKey, error));
     }
   };
 
-  const fetchEntities = async(): Promise<void> => {
+  const fetchEntities = async (): Promise<void> => {
     await fetchPage(entityFn, 'end', true);
   };
 
-  const fetchNextPage = async(): Promise<void> => {
+  const fetchNextPage = async (): Promise<void> => {
     if (next) {
       await fetchPage(() => next(), 'end');
     }
   };
 
-  const fetchPreviousPage = async(): Promise<void> => {
+  const fetchPreviousPage = async (): Promise<void> => {
     if (prev) {
       await fetchPage(() => prev(), 'start');
     }
@@ -108,7 +135,9 @@ const useEntities = <TEntity extends Entity, TTransformedEntity extends Entity =
     if (!isEnabled) return;
     if (isFetching) return;
     const isUnset = !lastFetchedAt;
-    const isStale = lastFetchedAt ? Date.now() >= lastFetchedAt.getTime() + staleTime : false;
+    const isStale = lastFetchedAt
+      ? Date.now() >= lastFetchedAt.getTime() + staleTime
+      : false;
 
     if (isInvalid || isUnset || isStale) {
       fetchEntities();
@@ -133,6 +162,4 @@ const useEntities = <TEntity extends Entity, TTransformedEntity extends Entity =
   };
 };
 
-export {
-  useEntities,
-};
+export { useEntities };

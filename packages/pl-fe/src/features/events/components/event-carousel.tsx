@@ -13,7 +13,7 @@ import type { OrderedSet as ImmutableOrderedSet } from 'immutable';
 
 const Event = ({ id }: { id: string }) => {
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id }));
+  const status = useAppSelector((state) => getStatus(state, { id }));
 
   if (!status) return null;
 
@@ -33,7 +33,11 @@ interface IEventCarousel {
   emptyMessage: React.ReactNode;
 }
 
-const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMessage }) => {
+const EventCarousel: React.FC<IEventCarousel> = ({
+  statusIds,
+  isLoading,
+  emptyMessage,
+}) => {
   const [index, setIndex] = useState(0);
 
   const handleChangeIndex = (index: number) => {
@@ -59,12 +63,21 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
             onClick={() => handleChangeIndex(index - 1)}
             className='flex h-8 w-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
-            <Icon src={require('@tabler/icons/outline/chevron-left.svg')} className='h-6 w-6 text-black dark:text-white' />
+            <Icon
+              src={require('@tabler/icons/outline/chevron-left.svg')}
+              className='h-6 w-6 text-black dark:text-white'
+            />
           </button>
         </div>
       )}
-      <ReactSwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
-        {statusIds.map(statusId => <Event key={statusId} id={statusId} />)}
+      <ReactSwipeableViews
+        animateHeight
+        index={index}
+        onChangeIndex={handleChangeIndex}
+      >
+        {statusIds.map((statusId) => (
+          <Event key={statusId} id={statusId} />
+        ))}
       </ReactSwipeableViews>
       {index !== statusIds.size - 1 && (
         <div className='absolute right-3 top-1/2 z-10 -mt-4'>
@@ -72,7 +85,10 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
             onClick={() => handleChangeIndex(index + 1)}
             className='flex h-8 w-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
-            <Icon src={require('@tabler/icons/outline/chevron-right.svg')} className='h-6 w-6 text-black dark:text-white' />
+            <Icon
+              src={require('@tabler/icons/outline/chevron-right.svg')}
+              className='h-6 w-6 text-black dark:text-white'
+            />
           </button>
         </div>
       )}

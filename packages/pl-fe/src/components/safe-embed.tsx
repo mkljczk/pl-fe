@@ -45,7 +45,10 @@ const SafeEmbed: React.FC<ISafeEmbed> = ({
     }
 
     return () => {
-      iframe.current?.contentWindow?.removeEventListener('message', handleMessage);
+      iframe.current?.contentWindow?.removeEventListener(
+        'message',
+        handleMessage,
+      );
     };
   }, [iframe.current, html]);
 

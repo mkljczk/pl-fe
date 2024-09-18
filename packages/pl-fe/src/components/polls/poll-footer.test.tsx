@@ -4,7 +4,7 @@ import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 
 import { __stub } from 'pl-fe/api';
-import { mockStore, render, screen, rootState } from 'pl-fe/jest/test-helpers';
+import { mockStore, render, rootState, screen } from 'pl-fe/jest/test-helpers';
 
 import PollFooter from './poll-footer';
 
@@ -12,15 +12,18 @@ import type { Poll } from 'pl-api';
 
 let poll: Poll = {
   id: '1',
-  options: [{
-    title: 'Apples',
-    votes_count: 0,
-    title_emojified: 'Apples',
-  }, {
-    title: 'Oranges',
-    votes_count: 0,
-    title_emojified: 'Oranges',
-  }],
+  options: [
+    {
+      title: 'Apples',
+      votes_count: 0,
+      title_emojified: 'Apples',
+    },
+    {
+      title: 'Oranges',
+      votes_count: 0,
+      title_emojified: 'Oranges',
+    },
+  ],
   emojis: [],
   expired: false,
   expires_at: '2020-03-24T19:33:06.000Z',
@@ -39,7 +42,7 @@ describe('<PollFooter />', () => {
       expect(screen.getByTestId('poll-footer')).toHaveTextContent('Refresh');
     });
 
-    it('responds to the Refresh button', async() => {
+    it('responds to the Refresh button', async () => {
       __stub((mock) => {
         mock.onGet('/api/v1/polls/1').reply(200, {});
       });
@@ -80,7 +83,9 @@ describe('<PollFooter />', () => {
       it('renders time remaining', () => {
         render(<PollFooter poll={poll} showResults selected={{}} />);
 
-        expect(screen.getByTestId('poll-expiration')).toHaveTextContent('Moments remaining');
+        expect(screen.getByTestId('poll-expiration')).toHaveTextContent(
+          'Moments remaining',
+        );
       });
     });
 
@@ -95,7 +100,9 @@ describe('<PollFooter />', () => {
       it('renders closed', () => {
         render(<PollFooter poll={poll} showResults selected={{}} />);
 
-        expect(screen.getByTestId('poll-expiration')).toHaveTextContent('Closed');
+        expect(screen.getByTestId('poll-expiration')).toHaveTextContent(
+          'Closed',
+        );
       });
     });
   });
@@ -104,7 +111,9 @@ describe('<PollFooter />', () => {
     it('does not render the Refresh button', () => {
       render(<PollFooter poll={poll} showResults={false} selected={{}} />);
 
-      expect(screen.getByTestId('poll-footer')).not.toHaveTextContent('Refresh');
+      expect(screen.getByTestId('poll-footer')).not.toHaveTextContent(
+        'Refresh',
+      );
     });
 
     describe('when the Poll is multiple', () => {

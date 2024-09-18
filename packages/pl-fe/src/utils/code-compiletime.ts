@@ -4,7 +4,8 @@ import pkg from '../../package.json';
 
 const { CI_COMMIT_TAG, CI_COMMIT_REF_NAME, CI_COMMIT_SHA } = process.env;
 
-const shortRepoName = (url: string): string => new URL(url).pathname.substring(1);
+const shortRepoName = (url: string): string =>
+  new URL(url).pathname.substring(1);
 const trimHash = (hash: string): string => hash.substring(0, 7);
 
 const tryGit = (cmd: string): string | undefined => {

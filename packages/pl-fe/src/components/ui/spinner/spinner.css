@@ -15,7 +15,7 @@
 
 .spinner > div::after {
   @apply block absolute rounded-full bg-gray-700 dark:bg-gray-400;
-  content: ' ';
+  content: " ";
   top: 3.75%;
   left: 46.25%;
   width: 7.5%;

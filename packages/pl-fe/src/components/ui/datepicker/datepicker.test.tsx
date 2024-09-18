@@ -11,12 +11,18 @@ describe('<Datepicker />', () => {
     render(<Datepicker onChange={handler} />);
     const today = new Date();
 
-    expect(screen.getByTestId('datepicker-month')).toHaveValue(String(today.getMonth()));
-    expect(screen.getByTestId('datepicker-day')).toHaveValue(String(today.getDate()));
-    expect(screen.getByTestId('datepicker-year')).toHaveValue(String(today.getFullYear()));
+    expect(screen.getByTestId('datepicker-month')).toHaveValue(
+      String(today.getMonth()),
+    );
+    expect(screen.getByTestId('datepicker-day')).toHaveValue(
+      String(today.getDate()),
+    );
+    expect(screen.getByTestId('datepicker-year')).toHaveValue(
+      String(today.getFullYear()),
+    );
   });
 
-  it('changes number of days based on selected month and year', async() => {
+  it('changes number of days based on selected month and year', async () => {
     const handler = vi.fn();
     render(<Datepicker onChange={handler} />);
 
@@ -31,7 +37,9 @@ describe('<Datepicker />', () => {
     );
 
     let daySelect: HTMLElement;
-    daySelect = document.querySelector('[data-testid="datepicker-day"]') as HTMLElement;
+    daySelect = document.querySelector(
+      '[data-testid="datepicker-day"]',
+    ) as HTMLElement;
     expect(queryAllByRole(daySelect, 'option')).toHaveLength(29);
 
     await userEvent.selectOptions(
@@ -39,7 +47,9 @@ describe('<Datepicker />', () => {
       screen.getByRole('option', { name: '2021' }),
     );
 
-    daySelect = document.querySelector('[data-testid="datepicker-day"]') as HTMLElement;
+    daySelect = document.querySelector(
+      '[data-testid="datepicker-day"]',
+    ) as HTMLElement;
     expect(queryAllByRole(daySelect, 'option')).toHaveLength(28);
   });
 
@@ -48,13 +58,19 @@ describe('<Datepicker />', () => {
     render(<Datepicker onChange={handler} />);
     const today = new Date();
 
-    const yearSelect = document.querySelector('[data-testid="datepicker-year"]') as HTMLElement;
+    const yearSelect = document.querySelector(
+      '[data-testid="datepicker-year"]',
+    ) as HTMLElement;
     expect(queryAllByRole(yearSelect, 'option')).toHaveLength(121);
-    expect(queryAllByRole(yearSelect, 'option')[0]).toHaveValue(String(today.getFullYear()));
-    expect(queryAllByRole(yearSelect, 'option')[120]).toHaveValue(String(today.getFullYear() - 120));
+    expect(queryAllByRole(yearSelect, 'option')[0]).toHaveValue(
+      String(today.getFullYear()),
+    );
+    expect(queryAllByRole(yearSelect, 'option')[120]).toHaveValue(
+      String(today.getFullYear() - 120),
+    );
   });
 
-  it('calls the onChange function when the inputs change', async() => {
+  it('calls the onChange function when the inputs change', async () => {
     const handler = vi.fn();
     render(<Datepicker onChange={handler} />);
     const today = new Date();
