@@ -102,7 +102,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
       data-testid='modal'
       className={clsx(className, 'pointer-events-auto relative mx-auto flex max-h-[90vh] w-full flex-col overflow-auto rounded-2xl bg-white text-start align-middle text-gray-900 shadow-xl transition-all ease-in-out black:bg-black md:max-h-[80vh] dark:bg-primary-900 dark:text-gray-100', widths[width], {
         'bottom-0': !firstRender,
-        '-bottom-32': firstRender,
+        'no-reduce-motion:-bottom-32': firstRender,
       })}
     >
       {title && (

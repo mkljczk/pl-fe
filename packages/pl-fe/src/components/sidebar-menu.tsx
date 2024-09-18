@@ -178,7 +178,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
     >
       <div
         className={clsx('fixed inset-0 cursor-default bg-gray-500 black:bg-gray-900 no-reduce-motion:transition-opacity dark:bg-gray-700', {
-          'opacity-0': !(sidebarVisible && sidebarOpen),
+          'no-reduce-motion:opacity-0': !(sidebarVisible && sidebarOpen),
           'opacity-40': (sidebarVisible && sidebarOpen),
         })}
         role='button'
@@ -189,7 +189,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
         className={
           clsx('fixed bottom-[60px] left-2 z-[1000] flex max-h-[calc(100dvh-68px)] w-full max-w-xs flex-1 origin-bottom-left flex-col overflow-hidden rounded-xl bg-white shadow-lg ease-in-out black:bg-black no-reduce-motion:transition-transform rtl:right-2 rtl:origin-bottom-right dark:border dark:border-gray-800 dark:bg-primary-900 dark:shadow-none', {
             'scale-100': sidebarVisible && sidebarOpen,
-            'scale-0': !(sidebarVisible && sidebarOpen),
+            'no-reduce-motion:scale-0': !(sidebarVisible && sidebarOpen),
           })
         }
       >

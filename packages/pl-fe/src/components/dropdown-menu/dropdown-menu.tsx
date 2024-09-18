@@ -310,7 +310,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
   const getClassName = () => {
     const className = clsx('z-[1001] bg-white py-1 shadow-lg ease-in-out focus:outline-none black:bg-black no-reduce-motion:transition-all dark:bg-gray-900 dark:ring-2 dark:ring-primary-700', {
       'rounded-md min-w-56 max-w-sm duration-100': true,
-      'scale-0': !(isDisplayed && isOpen),
+      'no-reduce-motion:scale-0': !(isDisplayed && isOpen),
       'scale-100': isDisplayed && isOpen,
       'origin-bottom': placement === 'top',
       'origin-left': placement === 'right',
