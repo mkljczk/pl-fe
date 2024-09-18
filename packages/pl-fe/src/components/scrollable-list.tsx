@@ -93,12 +93,10 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
   const virtualizer = useWindowScroll ? useWindowVirtualizer({
     count: data.length + (hasMore ? 1 : 0),
     overscan: 3,
-    // scrollMargin: parentRef.current?.offsetTop ?? 0,
     estimateSize: () => estimatedSize,
   }) : useVirtualizer({
     count: data.length + (hasMore ? 1 : 0),
     overscan: 3,
-    // scrollMargin: parentRef.current?.offsetTop ?? 0,
     estimateSize: () => estimatedSize,
     getScrollElement: () => parentRef.current,
   });
