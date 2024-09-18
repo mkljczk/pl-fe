@@ -9,36 +9,29 @@ module.exports = (api) => {
   };
 
   const config = {
-    presets: [
-      '@babel/react',
-      '@babel/typescript',
-      ['@babel/env', envOptions],
-    ],
-    plugins: [
-      'formatjs',
-      'preval',
-    ],
-    'sourceType': 'unambiguous',
+    presets: ['@babel/react', '@babel/typescript', ['@babel/env', envOptions]],
+    plugins: ['formatjs', 'preval'],
+    sourceType: 'unambiguous',
   };
 
   switch (env) {
     case 'production':
-      config.plugins.push(...[
-        '@babel/transform-react-inline-elements',
-        [
-          '@babel/transform-runtime',
-          {
-            helpers: true,
-            regenerator: false,
-            useESModules: true,
-          },
+      config.plugins.push(
+        ...[
+          '@babel/transform-react-inline-elements',
+          [
+            '@babel/transform-runtime',
+            {
+              helpers: true,
+              regenerator: false,
+              useESModules: true,
+            },
+          ],
         ],
-      ]);
+      );
       break;
     case 'test':
-      config.plugins.push(...[
-        'transform-require-context',
-      ]);
+      config.plugins.push(...['transform-require-context']);
       envOptions.modules = 'commonjs';
       break;
   }
