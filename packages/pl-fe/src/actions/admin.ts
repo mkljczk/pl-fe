@@ -1,5 +1,5 @@
 import { fetchRelationships } from 'pl-fe/actions/accounts';
-import { importFetchedAccount, importFetchedAccounts, importFetchedStatuses } from 'pl-fe/actions/importer';
+import { importFetchedAccount, importFetchedAccounts, importFetchedStatus, importFetchedStatuses } from 'pl-fe/actions/importer';
 import { filterBadges, getTagDiff } from 'pl-fe/utils/badges';
 
 import { getClient } from '../api';
@@ -202,8 +202,9 @@ const toggleStatusSensitivity = (statusId: string, sensitive: boolean) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: ADMIN_STATUS_TOGGLE_SENSITIVITY_REQUEST, statusId });
     return getClient(getState).admin.statuses.updateStatus(statusId, { sensitive: !sensitive })
-      .then(() => {
-        dispatch({ type: ADMIN_STATUS_TOGGLE_SENSITIVITY_SUCCESS, statusId });
+      .then((status) => {
+        dispatch(importFetchedStatus(status));
+        dispatch({ type: ADMIN_STATUS_TOGGLE_SENSITIVITY_SUCCESS, statusId, status });
       }).catch(error => {
         dispatch({ type: ADMIN_STATUS_TOGGLE_SENSITIVITY_FAIL, error, statusId });
       });
