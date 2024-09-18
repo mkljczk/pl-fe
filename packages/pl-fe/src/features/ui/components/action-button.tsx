@@ -297,8 +297,8 @@ const ActionButton: React.FC<IActionButton> = ({
           {isFollowing
             ? intl.formatMessage(messages.unfollow)
             : intl.formatMessage(
-                blockedBy ? messages.blocked : messages.follow,
-              )}
+              blockedBy ? messages.blocked : messages.follow,
+            )}
         </Button>
       );
     } else if (account.relationship?.blocking) {

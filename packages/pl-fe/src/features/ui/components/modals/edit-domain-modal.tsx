@@ -14,8 +14,8 @@ import {
 } from 'pl-fe/components/ui';
 import toast from 'pl-fe/toast';
 
-import type { AdminDomain } from 'pl-api';
 import type { BaseModalProps } from '../modal-root';
+import type { AdminDomain } from 'pl-api';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_domain.save', defaultMessage: 'Save' },

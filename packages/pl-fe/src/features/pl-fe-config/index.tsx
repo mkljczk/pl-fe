@@ -187,29 +187,29 @@ const PlFeConfig: React.FC = () => {
 
   const handleChange =
     (path: ConfigPath, getValue: ValueGetter<any>): React.ChangeEventHandler =>
-    (e) => {
-      setConfig(path, getValue(e));
-    };
+      (e) => {
+        setConfig(path, getValue(e));
+      };
 
   const handleThemeChange =
     (path: ConfigPath): ThemeChangeHandler =>
-    (theme) => {
-      setConfig(path, theme);
-    };
+      (theme) => {
+        setConfig(path, theme);
+      };
 
   const handleFileChange =
     (path: ConfigPath): React.ChangeEventHandler<HTMLInputElement> =>
-    (e) => {
-      const file = e.target.files?.item(0);
+      (e) => {
+        const file = e.target.files?.item(0);
 
-      if (file) {
-        dispatch(uploadMedia({ file }))
-          .then((data: any) => {
-            handleChange(path, () => data.url)(e);
-          })
-          .catch(console.error);
-      }
-    };
+        if (file) {
+          dispatch(uploadMedia({ file }))
+            .then((data: any) => {
+              handleChange(path, () => data.url)(e);
+            })
+            .catch(console.error);
+        }
+      };
 
   const handleStreamItemChange = (path: ConfigPath) => (values: any[]) => {
     setConfig(path, ImmutableList(values));

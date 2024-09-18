@@ -19,39 +19,39 @@ const noOp = () => () => new Promise((f) => f(undefined));
 
 const emojiReact =
   (status: Pick<Status, 'id'>, emoji: string, custom?: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return dispatch(noOp());
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return dispatch(noOp());
 
-    dispatch(emojiReactRequest(status.id, emoji, custom));
+      dispatch(emojiReactRequest(status.id, emoji, custom));
 
-    return getClient(getState)
-      .statuses.createStatusReaction(status.id, emoji)
-      .then((response) => {
-        dispatch(importFetchedStatus(response));
-        dispatch(emojiReactSuccess(response, emoji));
-      })
-      .catch((error) => {
-        dispatch(emojiReactFail(status.id, emoji, error));
-      });
-  };
+      return getClient(getState)
+        .statuses.createStatusReaction(status.id, emoji)
+        .then((response) => {
+          dispatch(importFetchedStatus(response));
+          dispatch(emojiReactSuccess(response, emoji));
+        })
+        .catch((error) => {
+          dispatch(emojiReactFail(status.id, emoji, error));
+        });
+    };
 
 const unEmojiReact =
   (status: Pick<Status, 'id'>, emoji: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return dispatch(noOp());
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return dispatch(noOp());
 
-    dispatch(unEmojiReactRequest(status.id, emoji));
+      dispatch(unEmojiReactRequest(status.id, emoji));
 
-    return getClient(getState)
-      .statuses.deleteStatusReaction(status.id, emoji)
-      .then((response) => {
-        dispatch(importFetchedStatus(response));
-        dispatch(unEmojiReactSuccess(response, emoji));
-      })
-      .catch((error) => {
-        dispatch(unEmojiReactFail(status.id, emoji, error));
-      });
-  };
+      return getClient(getState)
+        .statuses.deleteStatusReaction(status.id, emoji)
+        .then((response) => {
+          dispatch(importFetchedStatus(response));
+          dispatch(unEmojiReactSuccess(response, emoji));
+        })
+        .catch((error) => {
+          dispatch(unEmojiReactFail(status.id, emoji, error));
+        });
+    };
 
 const emojiReactRequest = (
   statusId: string,

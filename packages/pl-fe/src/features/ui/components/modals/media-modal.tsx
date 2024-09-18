@@ -19,8 +19,8 @@ import { makeGetStatus } from 'pl-fe/selectors';
 
 import ImageLoader from '../image-loader';
 
-import type { MediaAttachment } from 'pl-api';
 import type { BaseModalProps } from '../modal-root';
+import type { MediaAttachment } from 'pl-api';
 
 const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },

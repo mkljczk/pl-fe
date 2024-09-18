@@ -94,14 +94,12 @@ describe('expandStatusQuotes()', () => {
 
   describe('without a url', () => {
     beforeEach(() => {
-      const state = rootState
-        .set('me', '1234')
-        .set(
-          'status_lists',
-          ImmutableMap({
-            [`quotes:${statusId}`]: StatusListRecord({ next: null }),
-          }),
-        );
+      const state = rootState.set('me', '1234').set(
+        'status_lists',
+        ImmutableMap({
+          [`quotes:${statusId}`]: StatusListRecord({ next: null }),
+        }),
+      );
       store = mockStore(state);
     });
 
@@ -115,14 +113,12 @@ describe('expandStatusQuotes()', () => {
 
   describe('with a url', () => {
     beforeEach(() => {
-      const state = rootState
-        .set('me', '1234')
-        .set(
-          'status_lists',
-          ImmutableMap({
-            [`quotes:${statusId}`]: StatusListRecord({ next: 'example' }),
-          }),
-        );
+      const state = rootState.set('me', '1234').set(
+        'status_lists',
+        ImmutableMap({
+          [`quotes:${statusId}`]: StatusListRecord({ next: 'example' }),
+        }),
+      );
       store = mockStore(state);
     });
 

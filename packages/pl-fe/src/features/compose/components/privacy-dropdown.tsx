@@ -102,11 +102,11 @@ const getItems = (
     },
     features.visibilityMutualsOnly
       ? {
-          icon: require('@tabler/icons/outline/users-group.svg'),
-          value: 'mutuals_only',
-          text: intl.formatMessage(messages.mutuals_only_short),
-          meta: intl.formatMessage(messages.mutuals_only_long),
-        }
+        icon: require('@tabler/icons/outline/users-group.svg'),
+        value: 'mutuals_only',
+        text: intl.formatMessage(messages.mutuals_only_short),
+        meta: intl.formatMessage(messages.mutuals_only_long),
+      }
       : undefined,
     {
       icon: require('@tabler/icons/outline/mail.svg'),
@@ -116,24 +116,24 @@ const getItems = (
     },
     features.visibilityLocalOnly
       ? {
-          icon: require('@tabler/icons/outline/affiliate.svg'),
-          value: 'local',
-          text: intl.formatMessage(messages.local_short),
-          meta: intl.formatMessage(messages.local_long),
-        }
+        icon: require('@tabler/icons/outline/affiliate.svg'),
+        value: 'local',
+        text: intl.formatMessage(messages.local_short),
+        meta: intl.formatMessage(messages.local_long),
+      }
       : undefined,
     features.addressableLists && !lists.isEmpty()
       ? ({
+        icon: require('@tabler/icons/outline/list.svg'),
+        value: '',
+        items: lists.toArray().map((list) => ({
           icon: require('@tabler/icons/outline/list.svg'),
-          value: '',
-          items: lists.toArray().map((list) => ({
-            icon: require('@tabler/icons/outline/list.svg'),
-            value: `list:${list.id}`,
-            text: list.title,
-          })),
-          text: intl.formatMessage(messages.list_short),
-          meta: intl.formatMessage(messages.list_long),
-        } as Option)
+          value: `list:${list.id}`,
+          text: list.title,
+        })),
+        text: intl.formatMessage(messages.list_short),
+        meta: intl.formatMessage(messages.list_long),
+      } as Option)
       : undefined,
   ].filter((option): option is Option => !!option);
 
@@ -212,8 +212,8 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId }) => {
           compose.federated
             ? valueOption?.text
             : intl.formatMessage(messages.local, {
-                privacy: valueOption?.text,
-              })
+              privacy: valueOption?.text,
+            })
         }
         icon={valueOption?.icon}
         secondaryIcon={require('@tabler/icons/outline/chevron-down.svg')}

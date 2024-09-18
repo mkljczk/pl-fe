@@ -27,59 +27,59 @@ const unmountConversations = () => ({ type: CONVERSATIONS_UNMOUNT });
 
 const markConversationRead =
   (conversationId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return;
 
-    dispatch({
-      type: CONVERSATIONS_READ,
-      conversationId,
-    });
+      dispatch({
+        type: CONVERSATIONS_READ,
+        conversationId,
+      });
 
-    return getClient(getState).timelines.markConversationRead(conversationId);
-  };
+      return getClient(getState).timelines.markConversationRead(conversationId);
+    };
 
 const expandConversations =
   (expand = true) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
-    const state = getState();
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return;
+      const state = getState();
 
-    dispatch(expandConversationsRequest());
+      dispatch(expandConversationsRequest());
 
-    const isLoadingRecent = !!state.conversations.next;
+      const isLoadingRecent = !!state.conversations.next;
 
-    if (isLoadingRecent && !expand) return;
+      if (isLoadingRecent && !expand) return;
 
-    return (
-      state.conversations.next?.() ||
+      return (
+        state.conversations.next?.() ||
       getClient(state).timelines.getConversations()
-    )
-      .then((response) => {
-        dispatch(
-          importFetchedAccounts(
-            response.items.reduce(
-              (aggr: Array<Account>, item) => aggr.concat(item.accounts),
-              [],
+      )
+        .then((response) => {
+          dispatch(
+            importFetchedAccounts(
+              response.items.reduce(
+                (aggr: Array<Account>, item) => aggr.concat(item.accounts),
+                [],
+              ),
             ),
-          ),
-        );
-        dispatch(
-          importFetchedStatuses(
-            response.items
-              .map((item) => item.last_status)
-              .filter((x): x is Status => x !== null),
-          ),
-        );
-        dispatch(
-          expandConversationsSuccess(
-            response.items,
-            response.next,
-            isLoadingRecent,
-          ),
-        );
-      })
-      .catch((err) => dispatch(expandConversationsFail(err)));
-  };
+          );
+          dispatch(
+            importFetchedStatuses(
+              response.items
+                .map((item) => item.last_status)
+                .filter((x): x is Status => x !== null),
+            ),
+          );
+          dispatch(
+            expandConversationsSuccess(
+              response.items,
+              response.next,
+              isLoadingRecent,
+            ),
+          );
+        })
+        .catch((err) => dispatch(expandConversationsFail(err)));
+    };
 
 const expandConversationsRequest = () => ({
   type: CONVERSATIONS_FETCH_REQUEST,

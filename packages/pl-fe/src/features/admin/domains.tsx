@@ -92,8 +92,8 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
   }[domainState];
   const domainStateTitle = domain.last_checked_at
     ? intl.formatMessage(messages.domainLastChecked, {
-        date: intl.formatDate(domain.last_checked_at, dateFormatOptions),
-      })
+      date: intl.formatDate(domain.last_checked_at, dateFormatOptions),
+    })
     : undefined;
 
   return (

@@ -15,17 +15,17 @@ const POLL_FETCH_FAIL = 'POLL_FETCH_FAIL' as const;
 
 const vote =
   (pollId: string, choices: number[]) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(voteRequest());
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch(voteRequest());
 
-    return getClient(getState())
-      .polls.vote(pollId, choices)
-      .then((data) => {
-        dispatch(importFetchedPoll(data));
-        dispatch(voteSuccess(data));
-      })
-      .catch((err) => dispatch(voteFail(err)));
-  };
+      return getClient(getState())
+        .polls.vote(pollId, choices)
+        .then((data) => {
+          dispatch(importFetchedPoll(data));
+          dispatch(voteSuccess(data));
+        })
+        .catch((err) => dispatch(voteFail(err)));
+    };
 
 const fetchPoll =
   (pollId: string) => (dispatch: AppDispatch, getState: () => RootState) => {

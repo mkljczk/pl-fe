@@ -273,9 +273,9 @@ const useFloatingLinkEditorToolbar = (
 
   return isLink
     ? createPortal(
-        <FloatingLinkEditor editor={activeEditor} anchorElem={anchorElem} />,
-        anchorElem,
-      )
+      <FloatingLinkEditor editor={activeEditor} anchorElem={anchorElem} />,
+      anchorElem,
+    )
     : null;
 };
 

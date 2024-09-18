@@ -75,56 +75,56 @@ const revokeOAuthTokenById =
 
 const changePassword =
   (oldPassword: string, newPassword: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: CHANGE_PASSWORD_REQUEST });
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: CHANGE_PASSWORD_REQUEST });
 
-    return getClient(getState)
-      .settings.changePassword(oldPassword, newPassword)
-      .then((response) => {
-        dispatch({ type: CHANGE_PASSWORD_SUCCESS, response });
-      })
-      .catch((error) => {
-        dispatch({ type: CHANGE_PASSWORD_FAIL, error, skipAlert: true });
-        throw error;
-      });
-  };
+      return getClient(getState)
+        .settings.changePassword(oldPassword, newPassword)
+        .then((response) => {
+          dispatch({ type: CHANGE_PASSWORD_SUCCESS, response });
+        })
+        .catch((error) => {
+          dispatch({ type: CHANGE_PASSWORD_FAIL, error, skipAlert: true });
+          throw error;
+        });
+    };
 
 const resetPassword =
   (usernameOrEmail: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const input = normalizeUsername(usernameOrEmail);
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const input = normalizeUsername(usernameOrEmail);
 
-    dispatch({ type: RESET_PASSWORD_REQUEST });
+      dispatch({ type: RESET_PASSWORD_REQUEST });
 
-    return getClient(getState)
-      .settings.resetPassword(
-        input.includes('@') ? input : undefined,
-        input.includes('@') ? undefined : input,
-      )
-      .then(() => {
-        dispatch({ type: RESET_PASSWORD_SUCCESS });
-      })
-      .catch((error) => {
-        dispatch({ type: RESET_PASSWORD_FAIL, error });
-        throw error;
-      });
-  };
+      return getClient(getState)
+        .settings.resetPassword(
+          input.includes('@') ? input : undefined,
+          input.includes('@') ? undefined : input,
+        )
+        .then(() => {
+          dispatch({ type: RESET_PASSWORD_SUCCESS });
+        })
+        .catch((error) => {
+          dispatch({ type: RESET_PASSWORD_FAIL, error });
+          throw error;
+        });
+    };
 
 const changeEmail =
   (email: string, password: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: CHANGE_EMAIL_REQUEST, email });
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: CHANGE_EMAIL_REQUEST, email });
 
-    return getClient(getState)
-      .settings.changeEmail(email, password)
-      .then((response) => {
-        dispatch({ type: CHANGE_EMAIL_SUCCESS, email, response });
-      })
-      .catch((error) => {
-        dispatch({ type: CHANGE_EMAIL_FAIL, email, error, skipAlert: true });
-        throw error;
-      });
-  };
+      return getClient(getState)
+        .settings.changeEmail(email, password)
+        .then((response) => {
+          dispatch({ type: CHANGE_EMAIL_SUCCESS, email, response });
+        })
+        .catch((error) => {
+          dispatch({ type: CHANGE_EMAIL_FAIL, email, error, skipAlert: true });
+          throw error;
+        });
+    };
 
 const deleteAccount =
   (password: string) => (dispatch: AppDispatch, getState: () => RootState) => {
@@ -147,18 +147,18 @@ const deleteAccount =
 
 const moveAccount =
   (targetAccount: string, password: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: MOVE_ACCOUNT_REQUEST });
-    return getClient(getState)
-      .settings.moveAccount(targetAccount, password)
-      .then((response) => {
-        dispatch({ type: MOVE_ACCOUNT_SUCCESS, response });
-      })
-      .catch((error) => {
-        dispatch({ type: MOVE_ACCOUNT_FAIL, error, skipAlert: true });
-        throw error;
-      });
-  };
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: MOVE_ACCOUNT_REQUEST });
+      return getClient(getState)
+        .settings.moveAccount(targetAccount, password)
+        .then((response) => {
+          dispatch({ type: MOVE_ACCOUNT_SUCCESS, response });
+        })
+        .catch((error) => {
+          dispatch({ type: MOVE_ACCOUNT_FAIL, error, skipAlert: true });
+          throw error;
+        });
+    };
 
 export {
   FETCH_TOKENS_REQUEST,

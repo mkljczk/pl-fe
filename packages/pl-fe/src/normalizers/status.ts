@@ -135,19 +135,19 @@ const calculateStatus = (
       spoilerHtml: calculateSpoiler(status.spoiler_text, emojiMap),
       contentMapHtml: status.content_map
         ? Object.fromEntries(
-            Object.entries(status.content_map)?.map(([key, value]) => [
-              key,
-              calculateContent(value, emojiMap, !!status.quote),
-            ]),
-          )
+          Object.entries(status.content_map)?.map(([key, value]) => [
+            key,
+            calculateContent(value, emojiMap, !!status.quote),
+          ]),
+        )
         : undefined,
       spoilerMapHtml: status.spoiler_text_map
         ? Object.fromEntries(
-            Object.entries(status.spoiler_text_map).map(([key, value]) => [
-              key,
-              calculateSpoiler(value, emojiMap),
-            ]),
-          )
+          Object.entries(status.spoiler_text_map).map(([key, value]) => [
+            key,
+            calculateSpoiler(value, emojiMap),
+          ]),
+        )
         : undefined,
     };
   }

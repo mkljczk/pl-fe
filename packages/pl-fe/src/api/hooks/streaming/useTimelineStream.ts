@@ -34,7 +34,7 @@ const useTimelineStream = (
       },
     ) => void;
     close: () => void;
-  } | null>(null);
+      } | null>(null);
 
   const accessToken = useAppSelector(getAccessToken);
   const streamingUrl = instance.configuration.urls.streaming;

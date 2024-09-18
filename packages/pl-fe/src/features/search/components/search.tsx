@@ -25,13 +25,13 @@ const messages = defineMessages({
 
 const redirectToAccount =
   (accountId: string, routerHistory: any) =>
-  (_dispatch: AppDispatch, getState: () => RootState) => {
-    const acct = selectAccount(getState(), accountId)!.acct;
+    (_dispatch: AppDispatch, getState: () => RootState) => {
+      const acct = selectAccount(getState(), accountId)!.acct;
 
-    if (acct && routerHistory) {
-      routerHistory.push(`/@${acct}`);
-    }
-  };
+      if (acct && routerHistory) {
+        routerHistory.push(`/@${acct}`);
+      }
+    };
 
 interface ISearch {
   autoFocus?: boolean;

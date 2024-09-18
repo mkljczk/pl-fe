@@ -124,18 +124,18 @@ const noOp = () => new Promise((f) => f(undefined));
 
 const createAccount =
   (params: CreateAccountParams) =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: ACCOUNT_CREATE_REQUEST, params });
-    return getClient(getState())
-      .settings.createAccount(params)
-      .then((token) =>
-        dispatch({ type: ACCOUNT_CREATE_SUCCESS, params, token }),
-      )
-      .catch((error) => {
-        dispatch({ type: ACCOUNT_CREATE_FAIL, error, params });
-        throw error;
-      });
-  };
+    async (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: ACCOUNT_CREATE_REQUEST, params });
+      return getClient(getState())
+        .settings.createAccount(params)
+        .then((token) =>
+          dispatch({ type: ACCOUNT_CREATE_SUCCESS, params, token }),
+        )
+        .catch((error) => {
+          dispatch({ type: ACCOUNT_CREATE_FAIL, error, params });
+          throw error;
+        });
+    };
 
 const fetchAccount =
   (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
@@ -162,49 +162,49 @@ const fetchAccount =
 
 const fetchAccountByUsername =
   (username: string, history?: History) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const { auth, me } = getState();
-    const features = auth.client.features;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const { auth, me } = getState();
+      const features = auth.client.features;
 
-    if (features.accountByUsername && (me || !features.accountLookup)) {
-      return getClient(getState())
-        .accounts.getAccount(username)
-        .then((response) => {
-          dispatch(fetchRelationships([response.id]));
-          dispatch(importFetchedAccount(response));
-          dispatch(fetchAccountSuccess(response));
-        })
-        .catch((error) => {
-          dispatch(fetchAccountFail(null, error));
-        });
-    } else if (features.accountLookup) {
-      return dispatch(accountLookup(username))
-        .then((account) => {
-          dispatch(fetchRelationships([account.id]));
-          dispatch(fetchAccountSuccess(account));
-        })
-        .catch((error) => {
-          dispatch(fetchAccountFail(null, error));
-          maybeRedirectLogin(error, history);
-        });
-    } else {
-      return getClient(getState())
-        .accounts.searchAccounts(username, { resolve: true, limit: 1 })
-        .then((accounts) => {
-          const found = accounts.find((a) => a.acct === username);
+      if (features.accountByUsername && (me || !features.accountLookup)) {
+        return getClient(getState())
+          .accounts.getAccount(username)
+          .then((response) => {
+            dispatch(fetchRelationships([response.id]));
+            dispatch(importFetchedAccount(response));
+            dispatch(fetchAccountSuccess(response));
+          })
+          .catch((error) => {
+            dispatch(fetchAccountFail(null, error));
+          });
+      } else if (features.accountLookup) {
+        return dispatch(accountLookup(username))
+          .then((account) => {
+            dispatch(fetchRelationships([account.id]));
+            dispatch(fetchAccountSuccess(account));
+          })
+          .catch((error) => {
+            dispatch(fetchAccountFail(null, error));
+            maybeRedirectLogin(error, history);
+          });
+      } else {
+        return getClient(getState())
+          .accounts.searchAccounts(username, { resolve: true, limit: 1 })
+          .then((accounts) => {
+            const found = accounts.find((a) => a.acct === username);
 
-          if (found) {
-            dispatch(fetchRelationships([found.id]));
-            dispatch(fetchAccountSuccess(found));
-          } else {
-            throw accounts;
-          }
-        })
-        .catch((error) => {
-          dispatch(fetchAccountFail(null, error));
-        });
-    }
-  };
+            if (found) {
+              dispatch(fetchRelationships([found.id]));
+              dispatch(fetchAccountSuccess(found));
+            } else {
+              throw accounts;
+            }
+          })
+          .catch((error) => {
+            dispatch(fetchAccountFail(null, error));
+          });
+      }
+    };
 
 const fetchAccountRequest = (accountId: string) => ({
   type: ACCOUNT_FETCH_REQUEST,
@@ -290,36 +290,36 @@ const unblockAccountFail = (error: unknown) => ({
 
 const muteAccount =
   (accountId: string, notifications?: boolean, duration = 0) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return null;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return null;
 
-    const client = getClient(getState);
+      const client = getClient(getState);
 
-    dispatch(muteAccountRequest(accountId));
+      dispatch(muteAccountRequest(accountId));
 
-    const params: Record<string, any> = {
-      notifications,
-    };
+      const params: Record<string, any> = {
+        notifications,
+      };
 
-    if (duration) {
-      const v = client.features.version;
+      if (duration) {
+        const v = client.features.version;
 
-      if (v.software === PLEROMA) {
-        params.expires_in = duration;
-      } else {
-        params.duration = duration;
+        if (v.software === PLEROMA) {
+          params.expires_in = duration;
+        } else {
+          params.duration = duration;
+        }
       }
-    }
 
-    return client.filtering
-      .muteAccount(accountId, params)
-      .then((response) => {
-        dispatch(importEntities([response], Entities.RELATIONSHIPS));
-        // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
-        return dispatch(muteAccountSuccess(response, getState().statuses));
-      })
-      .catch((error) => dispatch(muteAccountFail(accountId, error)));
-  };
+      return client.filtering
+        .muteAccount(accountId, params)
+        .then((response) => {
+          dispatch(importEntities([response], Entities.RELATIONSHIPS));
+          // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
+          return dispatch(muteAccountSuccess(response, getState().statuses));
+        })
+        .catch((error) => dispatch(muteAccountFail(accountId, error)));
+    };
 
 const unmuteAccount =
   (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
@@ -402,28 +402,28 @@ const removeFromFollowersFail = (accountId: string, error: unknown) => ({
 
 const fetchRelationships =
   (accountIds: string[]) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return null;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return null;
 
-    const loadedRelationships = getState().relationships;
-    const newAccountIds = accountIds.filter(
-      (id) => loadedRelationships.get(id, null) === null,
-    );
+      const loadedRelationships = getState().relationships;
+      const newAccountIds = accountIds.filter(
+        (id) => loadedRelationships.get(id, null) === null,
+      );
 
-    if (newAccountIds.length === 0) {
-      return null;
-    }
+      if (newAccountIds.length === 0) {
+        return null;
+      }
 
-    dispatch(fetchRelationshipsRequest(newAccountIds));
+      dispatch(fetchRelationshipsRequest(newAccountIds));
 
-    return getClient(getState())
-      .accounts.getRelationships(newAccountIds)
-      .then((response) => {
-        dispatch(importEntities(response, Entities.RELATIONSHIPS));
-        dispatch(fetchRelationshipsSuccess(response));
-      })
-      .catch((error) => dispatch(fetchRelationshipsFail(error)));
-  };
+      return getClient(getState())
+        .accounts.getRelationships(newAccountIds)
+        .then((response) => {
+          dispatch(importEntities(response, Entities.RELATIONSHIPS));
+          dispatch(fetchRelationshipsSuccess(response));
+        })
+        .catch((error) => dispatch(fetchRelationshipsFail(error)));
+    };
 
 const fetchRelationshipsRequest = (accountIds: string[]) => ({
   type: RELATIONSHIPS_FETCH_REQUEST,
@@ -599,18 +599,18 @@ const unpinAccount =
 
 const updateNotificationSettings =
   (params: UpdateNotificationSettingsParams) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: NOTIFICATION_SETTINGS_REQUEST, params });
-    return getClient(getState)
-      .settings.updateNotificationSettings(params)
-      .then((data) => {
-        dispatch({ type: NOTIFICATION_SETTINGS_SUCCESS, params, data });
-      })
-      .catch((error) => {
-        dispatch({ type: NOTIFICATION_SETTINGS_FAIL, params, error });
-        throw error;
-      });
-  };
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: NOTIFICATION_SETTINGS_REQUEST, params });
+      return getClient(getState)
+        .settings.updateNotificationSettings(params)
+        .then((data) => {
+          dispatch({ type: NOTIFICATION_SETTINGS_SUCCESS, params, data });
+        })
+        .catch((error) => {
+          dispatch({ type: NOTIFICATION_SETTINGS_FAIL, params, error });
+          throw error;
+        });
+    };
 
 const pinAccountRequest = (accountId: string) => ({
   type: ACCOUNT_PIN_REQUEST,
@@ -681,77 +681,77 @@ const fetchPinnedAccountsFail = (accountId: string, error: unknown) => ({
 
 const accountSearch =
   (q: string, signal?: AbortSignal) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: ACCOUNT_SEARCH_REQUEST, params: { q } });
-    return getClient(getState())
-      .accounts.searchAccounts(
-        q,
-        { resolve: false, limit: 4, following: true },
-        { signal },
-      )
-      .then((accounts) => {
-        dispatch(importFetchedAccounts(accounts));
-        dispatch({ type: ACCOUNT_SEARCH_SUCCESS, accounts });
-        return accounts;
-      })
-      .catch((error) => {
-        dispatch({ type: ACCOUNT_SEARCH_FAIL, skipAlert: true });
-        throw error;
-      });
-  };
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: ACCOUNT_SEARCH_REQUEST, params: { q } });
+      return getClient(getState())
+        .accounts.searchAccounts(
+          q,
+          { resolve: false, limit: 4, following: true },
+          { signal },
+        )
+        .then((accounts) => {
+          dispatch(importFetchedAccounts(accounts));
+          dispatch({ type: ACCOUNT_SEARCH_SUCCESS, accounts });
+          return accounts;
+        })
+        .catch((error) => {
+          dispatch({ type: ACCOUNT_SEARCH_FAIL, skipAlert: true });
+          throw error;
+        });
+    };
 
 const accountLookup =
   (acct: string, signal?: AbortSignal) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: ACCOUNT_LOOKUP_REQUEST, acct });
-    return getClient(getState())
-      .accounts.lookupAccount(acct, { signal })
-      .then((account) => {
-        if (account && account.id) dispatch(importFetchedAccount(account));
-        dispatch({ type: ACCOUNT_LOOKUP_SUCCESS, account });
-        return account;
-      })
-      .catch((error) => {
-        dispatch({ type: ACCOUNT_LOOKUP_FAIL });
-        throw error;
-      });
-  };
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: ACCOUNT_LOOKUP_REQUEST, acct });
+      return getClient(getState())
+        .accounts.lookupAccount(acct, { signal })
+        .then((account) => {
+          if (account && account.id) dispatch(importFetchedAccount(account));
+          dispatch({ type: ACCOUNT_LOOKUP_SUCCESS, account });
+          return account;
+        })
+        .catch((error) => {
+          dispatch({ type: ACCOUNT_LOOKUP_FAIL });
+          throw error;
+        });
+    };
 
 const fetchBirthdayReminders =
   (month: number, day: number) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return;
 
-    const me = getState().me;
+      const me = getState().me;
 
-    dispatch({
-      type: BIRTHDAY_REMINDERS_FETCH_REQUEST,
-      day,
-      month,
-      accountId: me,
-    });
-
-    return getClient(getState)
-      .accounts.getBirthdays(day, month)
-      .then((response) => {
-        dispatch(importFetchedAccounts(response));
-        dispatch({
-          type: BIRTHDAY_REMINDERS_FETCH_SUCCESS,
-          accounts: response,
-          day,
-          month,
-          accountId: me,
-        });
-      })
-      .catch(() => {
-        dispatch({
-          type: BIRTHDAY_REMINDERS_FETCH_FAIL,
-          day,
-          month,
-          accountId: me,
-        });
+      dispatch({
+        type: BIRTHDAY_REMINDERS_FETCH_REQUEST,
+        day,
+        month,
+        accountId: me,
       });
-  };
+
+      return getClient(getState)
+        .accounts.getBirthdays(day, month)
+        .then((response) => {
+          dispatch(importFetchedAccounts(response));
+          dispatch({
+            type: BIRTHDAY_REMINDERS_FETCH_SUCCESS,
+            accounts: response,
+            day,
+            month,
+            accountId: me,
+          });
+        })
+        .catch(() => {
+          dispatch({
+            type: BIRTHDAY_REMINDERS_FETCH_FAIL,
+            day,
+            month,
+            accountId: me,
+          });
+        });
+    };
 
 const biteAccount =
   (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {

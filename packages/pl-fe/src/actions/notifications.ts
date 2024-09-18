@@ -91,36 +91,36 @@ const fetchRelatedRelationships = (
 
 const updateNotifications =
   (notification: BaseNotification) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const showInColumn = getSettings(getState()).getIn(
-      ['notifications', 'shows', notification.type],
-      true,
-    );
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const showInColumn = getSettings(getState()).getIn(
+        ['notifications', 'shows', notification.type],
+        true,
+      );
 
-    if (notification.account) {
-      dispatch(importFetchedAccount(notification.account));
-    }
+      if (notification.account) {
+        dispatch(importFetchedAccount(notification.account));
+      }
 
-    // Used by Move notification
-    if (notification.type === 'move' && notification.target) {
-      dispatch(importFetchedAccount(notification.target));
-    }
+      // Used by Move notification
+      if (notification.type === 'move' && notification.target) {
+        dispatch(importFetchedAccount(notification.target));
+      }
 
-    const status = getNotificationStatus(notification);
+      const status = getNotificationStatus(notification);
 
-    if (status) {
-      dispatch(importFetchedStatus(status));
-    }
+      if (status) {
+        dispatch(importFetchedStatus(status));
+      }
 
-    if (showInColumn) {
-      dispatch({
-        type: NOTIFICATIONS_UPDATE,
-        notification: normalizeNotification(notification),
-      });
+      if (showInColumn) {
+        dispatch({
+          type: NOTIFICATIONS_UPDATE,
+          notification: normalizeNotification(notification),
+        });
 
-      fetchRelatedRelationships(dispatch, [notification]);
-    }
-  };
+        fetchRelatedRelationships(dispatch, [notification]);
+      }
+    };
 
 const updateNotificationsQueue =
   (
@@ -129,90 +129,89 @@ const updateNotificationsQueue =
     intlLocale: string,
     curPath: string,
   ) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!notification.type) return; // drop invalid notifications
-    if (notification.type === 'chat_mention') return; // Drop chat notifications, handle them per-chat
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!notification.type) return; // drop invalid notifications
+      if (notification.type === 'chat_mention') return; // Drop chat notifications, handle them per-chat
 
-    const filters = getFilters(getState(), { contextType: 'notifications' });
-    const playSound = getSettings(getState()).getIn([
-      'notifications',
-      'sounds',
-      notification.type,
-    ]);
+      const filters = getFilters(getState(), { contextType: 'notifications' });
+      const playSound = getSettings(getState()).getIn([
+        'notifications',
+        'sounds',
+        notification.type,
+      ]);
 
-    const status = getNotificationStatus(notification);
+      const status = getNotificationStatus(notification);
 
-    let filtered: boolean | null = false;
+      let filtered: boolean | null = false;
 
-    const isOnNotificationsPage = curPath === '/notifications';
+      const isOnNotificationsPage = curPath === '/notifications';
 
-    if (notification.type === 'mention' || notification.type === 'status') {
-      const regex = regexFromFilters(filters);
-      const searchIndex =
+      if (notification.type === 'mention' || notification.type === 'status') {
+        const regex = regexFromFilters(filters);
+        const searchIndex =
         notification.status.spoiler_text +
         '\n' +
         unescapeHTML(notification.status.content);
-      filtered = regex && regex.test(searchIndex);
-    }
+        filtered = regex && regex.test(searchIndex);
+      }
 
-    // Desktop notifications
-    try {
+      // Desktop notifications
+      try {
       // eslint-disable-next-line compat/compat
-      const isNotificationsEnabled =
-        window.Notification?.permission === 'granted';
+        const isNotificationsEnabled = window.Notification?.permission === 'granted';
 
-      if (!filtered && isNotificationsEnabled) {
-        const title = new IntlMessageFormat(
-          intlMessages[`notification.${notification.type}`],
-          intlLocale,
-        ).format({
-          name:
+        if (!filtered && isNotificationsEnabled) {
+          const title = new IntlMessageFormat(
+            intlMessages[`notification.${notification.type}`],
+            intlLocale,
+          ).format({
+            name:
             notification.account.display_name.length > 0
               ? notification.account.display_name
               : notification.account.username,
-        }) as string;
-        const body =
+          }) as string;
+          const body =
           status && status.spoiler_text.length > 0
             ? status.spoiler_text
             : unescapeHTML(status ? status.content : '');
 
-        navigator.serviceWorker.ready
-          .then((serviceWorkerRegistration) => {
-            serviceWorkerRegistration
-              .showNotification(title, {
-                body,
-                icon: notification.account.avatar,
-                tag: notification.id,
-                data: {
-                  url: joinPublicPath('/notifications'),
-                },
-              })
-              .catch(console.error);
-          })
-          .catch(console.error);
+          navigator.serviceWorker.ready
+            .then((serviceWorkerRegistration) => {
+              serviceWorkerRegistration
+                .showNotification(title, {
+                  body,
+                  icon: notification.account.avatar,
+                  tag: notification.id,
+                  data: {
+                    url: joinPublicPath('/notifications'),
+                  },
+                })
+                .catch(console.error);
+            })
+            .catch(console.error);
+        }
+      } catch (e) {
+        console.warn(e);
       }
-    } catch (e) {
-      console.warn(e);
-    }
 
-    if (playSound && !filtered) {
-      dispatch({
-        type: NOTIFICATIONS_UPDATE_NOOP,
-        meta: { sound: 'boop' },
-      });
-    }
+      if (playSound && !filtered) {
+        dispatch({
+          type: NOTIFICATIONS_UPDATE_NOOP,
+          meta: { sound: 'boop' },
+        });
+      }
 
-    if (isOnNotificationsPage) {
-      dispatch({
-        type: NOTIFICATIONS_UPDATE_QUEUE,
-        notification,
-        intlMessages,
-        intlLocale,
-      });
-    } else {
-      dispatch(updateNotifications(notification));
-    }
-  };
+      if (isOnNotificationsPage) {
+        dispatch({
+          type: NOTIFICATIONS_UPDATE_QUEUE,
+          notification,
+          intlMessages,
+          intlLocale,
+        });
+      } else {
+        dispatch(updateNotifications(notification));
+      }
+    };
 
 const dequeueNotifications =
   () => (dispatch: AppDispatch, getState: () => RootState) => {
@@ -252,105 +251,105 @@ const expandNotifications =
     done: () => any = noOp,
     abort?: boolean,
   ) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return dispatch(noOp);
-    const state = getState();
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return dispatch(noOp);
+      const state = getState();
 
-    const features = state.auth.client.features;
-    const activeFilter = getSettings(state).getIn([
-      'notifications',
-      'quickFilter',
-      'active',
-    ]) as FilterType;
-    const notifications = state.notifications;
+      const features = state.auth.client.features;
+      const activeFilter = getSettings(state).getIn([
+        'notifications',
+        'quickFilter',
+        'active',
+      ]) as FilterType;
+      const notifications = state.notifications;
 
-    if (notifications.isLoading) {
-      if (abort) {
-        abortExpandNotifications.abort();
-        abortExpandNotifications = new AbortController();
-      } else {
-        done();
-        return dispatch(noOp);
+      if (notifications.isLoading) {
+        if (abort) {
+          abortExpandNotifications.abort();
+          abortExpandNotifications = new AbortController();
+        } else {
+          done();
+          return dispatch(noOp);
+        }
       }
-    }
 
-    const params: Record<string, any> = {
-      max_id: maxId,
-    };
+      const params: Record<string, any> = {
+        max_id: maxId,
+      };
 
-    if (activeFilter === 'all') {
-      if (features.notificationsIncludeTypes) {
-        params.types = NOTIFICATION_TYPES.filter(
-          (type) => !EXCLUDE_TYPES.includes(type as any),
-        );
+      if (activeFilter === 'all') {
+        if (features.notificationsIncludeTypes) {
+          params.types = NOTIFICATION_TYPES.filter(
+            (type) => !EXCLUDE_TYPES.includes(type as any),
+          );
+        } else {
+          params.exclude_types = EXCLUDE_TYPES;
+        }
       } else {
-        params.exclude_types = EXCLUDE_TYPES;
+        const filtered = FILTER_TYPES[activeFilter] || [activeFilter];
+        if (features.notificationsIncludeTypes) {
+          params.types = filtered;
+        } else {
+          params.exclude_types = excludeTypesFromFilter(filtered);
+        }
       }
-    } else {
-      const filtered = FILTER_TYPES[activeFilter] || [activeFilter];
-      if (features.notificationsIncludeTypes) {
-        params.types = filtered;
-      } else {
-        params.exclude_types = excludeTypesFromFilter(filtered);
+
+      if (!maxId && notifications.items.size > 0) {
+        params.since_id = notifications.getIn(['items', 0, 'id']);
       }
-    }
 
-    if (!maxId && notifications.items.size > 0) {
-      params.since_id = notifications.getIn(['items', 0, 'id']);
-    }
+      dispatch(expandNotificationsRequest());
 
-    dispatch(expandNotificationsRequest());
+      return getClient(state)
+        .notifications.getNotifications(params, {
+          signal: abortExpandNotifications.signal,
+        })
+        .then((response) => {
+          const entries = response.items.reduce(
+            (acc, item) => {
+              if (item.account?.id) {
+                acc.accounts[item.account.id] = item.account;
+              }
 
-    return getClient(state)
-      .notifications.getNotifications(params, {
-        signal: abortExpandNotifications.signal,
-      })
-      .then((response) => {
-        const entries = response.items.reduce(
-          (acc, item) => {
-            if (item.account?.id) {
-              acc.accounts[item.account.id] = item.account;
-            }
+              // Used by Move notification
+              if (item.type === 'move' && item.target.id) {
+                acc.accounts[item.target.id] = item.target;
+              }
 
-            // Used by Move notification
-            if (item.type === 'move' && item.target.id) {
-              acc.accounts[item.target.id] = item.target;
-            }
-
-            // TODO actually check for type
-            // @ts-ignore
-            if (item.status?.id) {
+              // TODO actually check for type
               // @ts-ignore
-              acc.statuses[item.status.id] = item.status;
-            }
+              if (item.status?.id) {
+              // @ts-ignore
+                acc.statuses[item.status.id] = item.status;
+              }
 
-            return acc;
-          },
+              return acc;
+            },
           { accounts: {}, statuses: {} } as {
             accounts: Record<string, Account>;
             statuses: Record<string, Status>;
           },
-        );
+          );
 
-        dispatch(importFetchedAccounts(Object.values(entries.accounts)));
-        dispatch(importFetchedStatuses(Object.values(entries.statuses)));
+          dispatch(importFetchedAccounts(Object.values(entries.accounts)));
+          dispatch(importFetchedStatuses(Object.values(entries.statuses)));
 
-        const deduplicatedNotifications = normalizeNotifications(
-          response.items,
-          state.notifications.items,
-        );
+          const deduplicatedNotifications = normalizeNotifications(
+            response.items,
+            state.notifications.items,
+          );
 
-        dispatch(
-          expandNotificationsSuccess(deduplicatedNotifications, response.next),
-        );
-        fetchRelatedRelationships(dispatch, response.items);
-        done();
-      })
-      .catch((error) => {
-        dispatch(expandNotificationsFail(error));
-        done();
-      });
-  };
+          dispatch(
+            expandNotificationsSuccess(deduplicatedNotifications, response.next),
+          );
+          fetchRelatedRelationships(dispatch, response.items);
+          done();
+        })
+        .catch((error) => {
+          dispatch(expandNotificationsFail(error));
+          done();
+        });
+    };
 
 const expandNotificationsRequest = () => ({
   type: NOTIFICATIONS_EXPAND_REQUEST,
@@ -380,21 +379,21 @@ const scrollTopNotifications = (top: boolean) => (dispatch: AppDispatch) => {
 
 const setFilter =
   (filterType: FilterType, abort?: boolean) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const activeFilter = getSettings(getState()).getIn([
-      'notifications',
-      'quickFilter',
-      'active',
-    ]);
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const activeFilter = getSettings(getState()).getIn([
+        'notifications',
+        'quickFilter',
+        'active',
+      ]);
 
-    dispatch({
-      type: NOTIFICATIONS_FILTER_SET,
-      path: ['notifications', 'quickFilter', 'active'],
-      value: filterType,
-    });
-    dispatch(expandNotifications(undefined, undefined, abort));
-    if (activeFilter !== filterType) dispatch(saveSettings());
-  };
+      dispatch({
+        type: NOTIFICATIONS_FILTER_SET,
+        path: ['notifications', 'quickFilter', 'active'],
+        value: filterType,
+      });
+      dispatch(expandNotifications(undefined, undefined, abort));
+      if (activeFilter !== filterType) dispatch(saveSettings());
+    };
 
 const markReadNotifications =
   () => (dispatch: AppDispatch, getState: () => RootState) => {

@@ -15,14 +15,14 @@ import { selectCache, selectListState, useListState } from '../selectors';
 
 import { parseEntitiesPath } from './utils';
 
-import type { RootState } from 'pl-fe/store';
-import type { Entity } from '../types';
 import type {
   EntitiesPath,
   EntityFn,
   EntitySchema,
   ExpandedEntitiesPath,
 } from './types';
+import type { Entity } from '../types';
+import type { RootState } from 'pl-fe/store';
 
 interface UseBatchedEntitiesOpts<TEntity extends Entity> {
   schema?: EntitySchema<TEntity>;

@@ -16,18 +16,18 @@ const DIRECTORY_EXPAND_FAIL = 'DIRECTORY_EXPAND_FAIL' as const;
 
 const fetchDirectory =
   (params: ProfileDirectoryParams) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(fetchDirectoryRequest());
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch(fetchDirectoryRequest());
 
-    return getClient(getState())
-      .instance.profileDirectory({ ...params, limit: 20 })
-      .then((data) => {
-        dispatch(importFetchedAccounts(data));
-        dispatch(fetchDirectorySuccess(data));
-        dispatch(fetchRelationships(data.map((x) => x.id)));
-      })
-      .catch((error) => dispatch(fetchDirectoryFail(error)));
-  };
+      return getClient(getState())
+        .instance.profileDirectory({ ...params, limit: 20 })
+        .then((data) => {
+          dispatch(importFetchedAccounts(data));
+          dispatch(fetchDirectorySuccess(data));
+          dispatch(fetchRelationships(data.map((x) => x.id)));
+        })
+        .catch((error) => dispatch(fetchDirectoryFail(error)));
+    };
 
 const fetchDirectoryRequest = () => ({
   type: DIRECTORY_FETCH_REQUEST,
@@ -45,20 +45,20 @@ const fetchDirectoryFail = (error: unknown) => ({
 
 const expandDirectory =
   (params: Record<string, any>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(expandDirectoryRequest());
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch(expandDirectoryRequest());
 
-    const loadedItems = getState().user_lists.directory.items.size;
+      const loadedItems = getState().user_lists.directory.items.size;
 
-    return getClient(getState())
-      .instance.profileDirectory({ ...params, offset: loadedItems, limit: 20 })
-      .then((data) => {
-        dispatch(importFetchedAccounts(data));
-        dispatch(expandDirectorySuccess(data));
-        dispatch(fetchRelationships(data.map((x) => x.id)));
-      })
-      .catch((error) => dispatch(expandDirectoryFail(error)));
-  };
+      return getClient(getState())
+        .instance.profileDirectory({ ...params, offset: loadedItems, limit: 20 })
+        .then((data) => {
+          dispatch(importFetchedAccounts(data));
+          dispatch(expandDirectorySuccess(data));
+          dispatch(fetchRelationships(data.map((x) => x.id)));
+        })
+        .catch((error) => dispatch(expandDirectoryFail(error)));
+    };
 
 const expandDirectoryRequest = () => ({
   type: DIRECTORY_EXPAND_REQUEST,

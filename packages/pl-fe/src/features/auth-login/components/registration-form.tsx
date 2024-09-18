@@ -108,8 +108,8 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const birthdayRequired = instance.pleroma.metadata.birthday_required;
   const domains = instance.pleroma.metadata.multitenancy.enabled
     ? instance.pleroma.metadata.multitenancy.domains!.filter(
-        (domain) => domain.public,
-      )
+      (domain) => domain.public,
+    )
     : undefined;
 
   const [captchaLoading, setCaptchaLoading] = useState(true);

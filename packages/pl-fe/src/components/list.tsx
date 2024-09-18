@@ -159,12 +159,12 @@ const ListItem: React.FC<IListItem> = ({
   const linkProps =
     onClick || onSelect || href
       ? {
-          onClick: onClick || onSelect,
-          onKeyDown,
-          tabIndex: 0,
-          role: 'link',
-          ...(href && { href, target: '_blank' }),
-        }
+        onClick: onClick || onSelect,
+        onKeyDown,
+        tabIndex: 0,
+        role: 'link',
+        ...(href && { href, target: '_blank' }),
+      }
       : {};
 
   return (

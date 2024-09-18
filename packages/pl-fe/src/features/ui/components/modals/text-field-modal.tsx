@@ -3,8 +3,8 @@ import { FormattedMessage } from 'react-intl';
 
 import { Modal, Stack, Textarea } from 'pl-fe/components/ui';
 
-import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
 import type { BaseModalProps } from '../modal-root';
+import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
 
 interface TextFieldModalProps {
   heading: React.ReactNode;

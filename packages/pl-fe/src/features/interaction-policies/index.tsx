@@ -159,17 +159,17 @@ const InteractionPolicies = () => {
 
   const handleChange =
     (visibility: Visibility, policy: Policy, rule: Rule) =>
-    (value: Array<Scope>) => {
-      const newPolicies = { ...interactionPolicies };
-      newPolicies[visibility][policy][rule] = value;
-      newPolicies[visibility][policy][
-        rule === 'always' ? 'with_approval' : 'always'
-      ] = newPolicies[visibility][policy][
-        rule === 'always' ? 'with_approval' : 'always'
-      ].filter((rule) => !value.includes(rule as any));
+      (value: Array<Scope>) => {
+        const newPolicies = { ...interactionPolicies };
+        newPolicies[visibility][policy][rule] = value;
+        newPolicies[visibility][policy][
+          rule === 'always' ? 'with_approval' : 'always'
+        ] = newPolicies[visibility][policy][
+          rule === 'always' ? 'with_approval' : 'always'
+        ].filter((rule) => !value.includes(rule as any));
 
-      setInteractionPolicies(newPolicies);
-    };
+        setInteractionPolicies(newPolicies);
+      };
 
   const handleSubmit = () => {
     updateInteractionPolicies(interactionPolicies, {

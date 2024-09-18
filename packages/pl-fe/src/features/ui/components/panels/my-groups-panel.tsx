@@ -17,19 +17,19 @@ const MyGroupsPanel = () => {
     <Widget title='My Groups'>
       {isFetching
         ? new Array(3)
-            .fill(0)
-            .map((_, idx) => (
-              <PlaceholderGroupSearch key={idx} withJoinAction={false} />
-            ))
+          .fill(0)
+          .map((_, idx) => (
+            <PlaceholderGroupSearch key={idx} withJoinAction={false} />
+          ))
         : groups
-            .slice(0, 3)
-            .map((group) => (
-              <GroupListItem
-                group={group}
-                withJoinAction={false}
-                key={group.id}
-              />
-            ))}
+          .slice(0, 3)
+          .map((group) => (
+            <GroupListItem
+              group={group}
+              withJoinAction={false}
+              key={group.id}
+            />
+          ))}
     </Widget>
   );
 };

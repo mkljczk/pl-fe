@@ -15,11 +15,11 @@ const GROUP_UNBLOCK_FAIL = 'GROUP_UNBLOCK_FAIL' as const;
 
 const groupKick =
   (groupId: string, accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    return getClient(getState).experimental.groups.kickGroupUsers(groupId, [
-      accountId,
-    ]);
-  };
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      return getClient(getState).experimental.groups.kickGroupUsers(groupId, [
+        accountId,
+      ]);
+    };
 
 const fetchGroupBlocks =
   (groupId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
@@ -63,14 +63,14 @@ const fetchGroupBlocksFail = (groupId: string, error: unknown) => ({
 
 const groupUnblock =
   (groupId: string, accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(groupUnblockRequest(groupId, accountId));
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch(groupUnblockRequest(groupId, accountId));
 
-    return getClient(getState)
-      .experimental.groups.unblockGroupUsers(groupId, [accountId])
-      .then(() => dispatch(groupUnblockSuccess(groupId, accountId)))
-      .catch((err) => dispatch(groupUnblockFail(groupId, accountId, err)));
-  };
+      return getClient(getState)
+        .experimental.groups.unblockGroupUsers(groupId, [accountId])
+        .then(() => dispatch(groupUnblockSuccess(groupId, accountId)))
+        .catch((err) => dispatch(groupUnblockFail(groupId, accountId, err)));
+    };
 
 const groupUnblockRequest = (groupId: string, accountId: string) => ({
   type: GROUP_UNBLOCK_REQUEST,

@@ -285,8 +285,8 @@ const ComposeForm = <ID extends string>({
     publishText =
       privacy !== 'unlisted'
         ? intl.formatMessage(messages.publishLoud, {
-            publish: intl.formatMessage(messages.publish),
-          })
+          publish: intl.formatMessage(messages.publish),
+        })
         : intl.formatMessage(messages.publish);
   }
 

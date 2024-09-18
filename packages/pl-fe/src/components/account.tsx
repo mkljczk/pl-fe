@@ -194,10 +194,10 @@ const Account = ({
   const LinkEl: any = withLinkToProfile ? Link : 'div';
   const linkProps = withLinkToProfile
     ? {
-        to: `/@${account.acct}`,
-        title: account.acct,
-        onClick: (event: React.MouseEvent) => event.stopPropagation(),
-      }
+      to: `/@${account.acct}`,
+      title: account.acct,
+      onClick: (event: React.MouseEvent) => event.stopPropagation(),
+    }
     : {};
 
   if (disabled)
@@ -387,26 +387,26 @@ const Account = ({
 
                 {approvalStatus &&
                   ['pending', 'rejected'].includes(approvalStatus) && (
-                    <>
-                      <Text tag='span' theme='muted' size='sm'>
-                        &middot;
-                      </Text>
+                  <>
+                    <Text tag='span' theme='muted' size='sm'>
+                      &middot;
+                    </Text>
 
-                      <Text tag='span' theme='muted' size='sm'>
-                        {approvalStatus === 'pending' ? (
-                          <FormattedMessage
-                            id='status.approval.pending'
-                            defaultMessage='Pending approval'
-                          />
-                        ) : (
-                          <FormattedMessage
-                            id='status.approval.rejected'
-                            defaultMessage='Rejected'
-                          />
-                        )}
-                      </Text>
-                    </>
-                  )}
+                    <Text tag='span' theme='muted' size='sm'>
+                      {approvalStatus === 'pending' ? (
+                        <FormattedMessage
+                          id='status.approval.pending'
+                          defaultMessage='Pending approval'
+                        />
+                      ) : (
+                        <FormattedMessage
+                          id='status.approval.rejected'
+                          defaultMessage='Rejected'
+                        />
+                      )}
+                    </Text>
+                  </>
+                )}
 
                 {showEdit ? (
                   <>

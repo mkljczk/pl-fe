@@ -15,8 +15,8 @@ import {
 import { DatePicker } from 'pl-fe/features/ui/util/async-components';
 import toast from 'pl-fe/toast';
 
-import type { AdminAnnouncement } from 'pl-api';
 import type { BaseModalProps } from '../modal-root';
+import type { AdminAnnouncement } from 'pl-api';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_announcement.save', defaultMessage: 'Save' },

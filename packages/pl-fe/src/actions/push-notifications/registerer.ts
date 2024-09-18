@@ -58,28 +58,28 @@ const unsubscribe = ({
 
 const sendSubscriptionToBackend =
   (subscription: PushSubscription, me: Me) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const alerts = getState().push_notifications.alerts.toJS() as Record<
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const alerts = getState().push_notifications.alerts.toJS() as Record<
       string,
       boolean
     >;
-    const params = { subscription, data: { alerts } };
+      const params = { subscription, data: { alerts } };
 
-    if (me) {
-      const data = pushNotificationsSetting.get(me);
-      if (data) {
-        params.data = data;
+      if (me) {
+        const data = pushNotificationsSetting.get(me);
+        if (data) {
+          params.data = data;
+        }
       }
-    }
 
-    return dispatch(createPushSubscription(params));
-  };
+      return dispatch(createPushSubscription(params));
+    };
 
 // Last one checks for payload support: https://web-push-book.gauntface.com/chapter-06/01-non-standards-browsers/#no-payload
-// eslint-disable-next-line compat/compat
 const supportsPushNotifications =
-  'serviceWorker' in navigator &&
-  'PushManager' in window &&
+'serviceWorker' in navigator &&
+'PushManager' in window &&
+// eslint-disable-next-line compat/compat
   'getKey' in PushSubscription.prototype;
 
 const register = () => (dispatch: AppDispatch, getState: () => RootState) => {

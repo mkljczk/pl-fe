@@ -7,8 +7,8 @@ import { useAppDispatch } from 'pl-fe/hooks';
 import RelativeTimestamp from '../relative-timestamp';
 import { Button, HStack, Stack, Text, Tooltip } from '../ui';
 
-import type { Poll } from 'pl-fe/normalizers';
 import type { Selected } from './poll';
+import type { Poll } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   closed: { id: 'poll.closed', defaultMessage: 'Closed' },

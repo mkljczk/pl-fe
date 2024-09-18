@@ -251,10 +251,10 @@ class AutosuggestInput extends ImmutablePureComponent<IAutosuggestInput> {
 
   handleMenuItemClick =
     (item: MenuItem | null): React.MouseEventHandler =>
-    (e) => {
-      e.preventDefault();
-      this.handleMenuItemAction(item, e);
-    };
+      (e) => {
+        e.preventDefault();
+        this.handleMenuItemAction(item, e);
+      };
 
   renderMenu = () => {
     const { menu, suggestions } = this.props;

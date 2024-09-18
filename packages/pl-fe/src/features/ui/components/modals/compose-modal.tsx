@@ -87,10 +87,10 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
         onSecondary: statusId
           ? undefined
           : () => {
-              dispatch(saveDraftStatus(composeId));
-              onClose('COMPOSE');
-              dispatch(cancelReplyCompose());
-            },
+            dispatch(saveDraftStatus(composeId));
+            onClose('COMPOSE');
+            dispatch(cancelReplyCompose());
+          },
       });
     } else {
       onClose('COMPOSE');

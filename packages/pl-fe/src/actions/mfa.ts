@@ -68,41 +68,41 @@ const setupMfa =
 
 const confirmMfa =
   (method: 'totp', code: string, password: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: MFA_CONFIRM_REQUEST, method, code });
-    return getClient(getState)
-      .settings.mfa.confirmMfaSetup(method, code, password)
-      .then((data) => {
-        dispatch({ type: MFA_CONFIRM_SUCCESS, method, code });
-        return data;
-      })
-      .catch((error: unknown) => {
-        dispatch({
-          type: MFA_CONFIRM_FAIL,
-          method,
-          code,
-          error,
-          skipAlert: true,
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: MFA_CONFIRM_REQUEST, method, code });
+      return getClient(getState)
+        .settings.mfa.confirmMfaSetup(method, code, password)
+        .then((data) => {
+          dispatch({ type: MFA_CONFIRM_SUCCESS, method, code });
+          return data;
+        })
+        .catch((error: unknown) => {
+          dispatch({
+            type: MFA_CONFIRM_FAIL,
+            method,
+            code,
+            error,
+            skipAlert: true,
+          });
+          throw error;
         });
-        throw error;
-      });
-  };
+    };
 
 const disableMfa =
   (method: 'totp', password: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: MFA_DISABLE_REQUEST, method });
-    return getClient(getState)
-      .settings.mfa.disableMfa(method, password)
-      .then((data) => {
-        dispatch({ type: MFA_DISABLE_SUCCESS, method });
-        return data;
-      })
-      .catch((error: unknown) => {
-        dispatch({ type: MFA_DISABLE_FAIL, method, skipAlert: true });
-        throw error;
-      });
-  };
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: MFA_DISABLE_REQUEST, method });
+      return getClient(getState)
+        .settings.mfa.disableMfa(method, password)
+        .then((data) => {
+          dispatch({ type: MFA_DISABLE_SUCCESS, method });
+          return data;
+        })
+        .catch((error: unknown) => {
+          dispatch({ type: MFA_DISABLE_FAIL, method, skipAlert: true });
+          throw error;
+        });
+    };
 
 export {
   MFA_FETCH_REQUEST,

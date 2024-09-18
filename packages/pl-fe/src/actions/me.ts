@@ -80,20 +80,20 @@ const persistAuthAccount = (
 
 const patchMe =
   (params: UpdateCredentialsParams) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(patchMeRequest());
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch(patchMeRequest());
 
-    return getClient(getState)
-      .settings.updateCredentials(params)
-      .then((response) => {
-        persistAuthAccount(response, params);
-        dispatch(patchMeSuccess(response));
-      })
-      .catch((error) => {
-        dispatch(patchMeFail(error));
-        throw error;
-      });
-  };
+      return getClient(getState)
+        .settings.updateCredentials(params)
+        .then((response) => {
+          persistAuthAccount(response, params);
+          dispatch(patchMeSuccess(response));
+        })
+        .catch((error) => {
+          dispatch(patchMeFail(error));
+          throw error;
+        });
+    };
 
 const fetchMeRequest = () => ({
   type: ME_FETCH_REQUEST,

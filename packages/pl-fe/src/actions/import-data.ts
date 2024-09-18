@@ -50,48 +50,48 @@ const messages = defineMessages({
 
 const importFollows =
   (list: File | string, overwrite?: boolean) =>
-  (dispatch: React.Dispatch<ImportDataActions>, getState: () => RootState) => {
-    dispatch({ type: IMPORT_FOLLOWS_REQUEST });
-    return getClient(getState)
-      .settings.importFollows(list, overwrite ? 'overwrite' : 'merge')
-      .then((response) => {
-        toast.success(messages.followersSuccess);
-        dispatch({ type: IMPORT_FOLLOWS_SUCCESS, response });
-      })
-      .catch((error) => {
-        dispatch({ type: IMPORT_FOLLOWS_FAIL, error });
-      });
-  };
+    (dispatch: React.Dispatch<ImportDataActions>, getState: () => RootState) => {
+      dispatch({ type: IMPORT_FOLLOWS_REQUEST });
+      return getClient(getState)
+        .settings.importFollows(list, overwrite ? 'overwrite' : 'merge')
+        .then((response) => {
+          toast.success(messages.followersSuccess);
+          dispatch({ type: IMPORT_FOLLOWS_SUCCESS, response });
+        })
+        .catch((error) => {
+          dispatch({ type: IMPORT_FOLLOWS_FAIL, error });
+        });
+    };
 
 const importBlocks =
   (list: File | string, overwrite?: boolean) =>
-  (dispatch: React.Dispatch<ImportDataActions>, getState: () => RootState) => {
-    dispatch({ type: IMPORT_BLOCKS_REQUEST });
-    return getClient(getState)
-      .settings.importBlocks(list, overwrite ? 'overwrite' : 'merge')
-      .then((response) => {
-        toast.success(messages.blocksSuccess);
-        dispatch({ type: IMPORT_BLOCKS_SUCCESS, response });
-      })
-      .catch((error) => {
-        dispatch({ type: IMPORT_BLOCKS_FAIL, error });
-      });
-  };
+    (dispatch: React.Dispatch<ImportDataActions>, getState: () => RootState) => {
+      dispatch({ type: IMPORT_BLOCKS_REQUEST });
+      return getClient(getState)
+        .settings.importBlocks(list, overwrite ? 'overwrite' : 'merge')
+        .then((response) => {
+          toast.success(messages.blocksSuccess);
+          dispatch({ type: IMPORT_BLOCKS_SUCCESS, response });
+        })
+        .catch((error) => {
+          dispatch({ type: IMPORT_BLOCKS_FAIL, error });
+        });
+    };
 
 const importMutes =
   (list: File | string) =>
-  (dispatch: React.Dispatch<ImportDataActions>, getState: () => RootState) => {
-    dispatch({ type: IMPORT_MUTES_REQUEST });
-    return getClient(getState)
-      .settings.importMutes(list)
-      .then((response) => {
-        toast.success(messages.mutesSuccess);
-        dispatch({ type: IMPORT_MUTES_SUCCESS, response });
-      })
-      .catch((error) => {
-        dispatch({ type: IMPORT_MUTES_FAIL, error });
-      });
-  };
+    (dispatch: React.Dispatch<ImportDataActions>, getState: () => RootState) => {
+      dispatch({ type: IMPORT_MUTES_REQUEST });
+      return getClient(getState)
+        .settings.importMutes(list)
+        .then((response) => {
+          toast.success(messages.mutesSuccess);
+          dispatch({ type: IMPORT_MUTES_SUCCESS, response });
+        })
+        .catch((error) => {
+          dispatch({ type: IMPORT_MUTES_FAIL, error });
+        });
+    };
 
 export {
   IMPORT_FOLLOWS_REQUEST,

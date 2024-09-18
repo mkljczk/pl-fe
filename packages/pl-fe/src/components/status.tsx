@@ -383,9 +383,9 @@ const Status: React.FC<IStatus> = (props) => {
     const minHandlers = muted
       ? undefined
       : {
-          moveUp: handleHotkeyMoveUp,
-          moveDown: handleHotkeyMoveDown,
-        };
+        moveUp: handleHotkeyMoveUp,
+        moveDown: handleHotkeyMoveDown,
+      };
 
     return (
       <HotKeys handlers={minHandlers}>
@@ -441,18 +441,18 @@ const Status: React.FC<IStatus> = (props) => {
   const handlers = muted
     ? undefined
     : {
-        reply: handleHotkeyReply,
-        favourite: handleHotkeyFavourite,
-        boost: handleHotkeyBoost,
-        mention: handleHotkeyMention,
-        open: handleHotkeyOpen,
-        openProfile: handleHotkeyOpenProfile,
-        moveUp: handleHotkeyMoveUp,
-        moveDown: handleHotkeyMoveDown,
-        toggleSensitive: handleHotkeyToggleSensitive,
-        openMedia: handleHotkeyOpenMedia,
-        react: handleHotkeyReact,
-      };
+      reply: handleHotkeyReply,
+      favourite: handleHotkeyFavourite,
+      boost: handleHotkeyBoost,
+      mention: handleHotkeyMention,
+      open: handleHotkeyOpen,
+      openProfile: handleHotkeyOpenProfile,
+      moveUp: handleHotkeyMoveUp,
+      moveDown: handleHotkeyMoveDown,
+      toggleSensitive: handleHotkeyToggleSensitive,
+      openMedia: handleHotkeyOpenMedia,
+      react: handleHotkeyReact,
+    };
 
   return (
     <HotKeys handlers={handlers} data-testid='status'>

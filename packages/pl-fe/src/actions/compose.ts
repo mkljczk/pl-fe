@@ -184,28 +184,28 @@ const setComposeToStatus =
     draftId?: string,
     editorState?: string | null,
   ) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const client = getClient(getState);
-    const { createStatusExplicitAddressing: explicitAddressing, version: v } =
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const client = getClient(getState);
+      const { createStatusExplicitAddressing: explicitAddressing, version: v } =
       client.features;
 
-    const action: ComposeSetStatusAction = {
-      type: COMPOSE_SET_STATUS,
-      composeId: 'compose-modal',
-      status,
-      poll,
-      rawText,
-      explicitAddressing,
-      spoilerText,
-      contentType,
-      v,
-      withRedraft,
-      draftId,
-      editorState,
-    };
+      const action: ComposeSetStatusAction = {
+        type: COMPOSE_SET_STATUS,
+        composeId: 'compose-modal',
+        status,
+        poll,
+        rawText,
+        explicitAddressing,
+        spoilerText,
+        contentType,
+        v,
+        withRedraft,
+        draftId,
+        editorState,
+      };
 
-    dispatch(action);
-  };
+      dispatch(action);
+    };
 
 const changeCompose = (composeId: string, text: string) => ({
   type: COMPOSE_CHANGE,
@@ -231,29 +231,29 @@ const replyCompose =
     status: ComposeReplyAction['status'],
     rebloggedBy?: ComposeReplyAction['rebloggedBy'],
   ) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const client = getClient(state);
-    const { createStatusExplicitAddressing: explicitAddressing } =
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
+      const client = getClient(state);
+      const { createStatusExplicitAddressing: explicitAddressing } =
       client.features;
-    const preserveSpoilers = !!getSettings(state).get('preserveSpoilers');
-    const account = selectOwnAccount(state);
+      const preserveSpoilers = !!getSettings(state).get('preserveSpoilers');
+      const account = selectOwnAccount(state);
 
-    if (!account) return;
+      if (!account) return;
 
-    const action: ComposeReplyAction = {
-      type: COMPOSE_REPLY,
-      composeId: 'compose-modal',
-      status,
-      account,
-      explicitAddressing,
-      preserveSpoilers,
-      rebloggedBy,
+      const action: ComposeReplyAction = {
+        type: COMPOSE_REPLY,
+        composeId: 'compose-modal',
+        status,
+        account,
+        explicitAddressing,
+        preserveSpoilers,
+        rebloggedBy,
+      };
+
+      dispatch(action);
+      useModalsStore.getState().openModal('COMPOSE');
     };
-
-    dispatch(action);
-    useModalsStore.getState().openModal('COMPOSE');
-  };
 
 const cancelReplyCompose = () => ({
   type: COMPOSE_REPLY_CANCEL,
@@ -270,22 +270,22 @@ interface ComposeQuoteAction {
 
 const quoteCompose =
   (status: ComposeQuoteAction['status']) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const { createStatusExplicitAddressing: explicitAddressing } =
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
+      const { createStatusExplicitAddressing: explicitAddressing } =
       state.auth.client.features;
 
-    const action: ComposeQuoteAction = {
-      type: COMPOSE_QUOTE,
-      composeId: 'compose-modal',
-      status,
-      account: selectOwnAccount(state),
-      explicitAddressing,
-    };
+      const action: ComposeQuoteAction = {
+        type: COMPOSE_QUOTE,
+        composeId: 'compose-modal',
+        status,
+        account: selectOwnAccount(state),
+        explicitAddressing,
+      };
 
-    dispatch(action);
-    useModalsStore.getState().openModal('COMPOSE');
-  };
+      dispatch(action);
+      useModalsStore.getState().openModal('COMPOSE');
+    };
 
 const cancelQuoteCompose = (composeId: string) => ({
   type: COMPOSE_QUOTE_CANCEL,
@@ -294,12 +294,12 @@ const cancelQuoteCompose = (composeId: string) => ({
 
 const groupComposeModal =
   (group: Pick<Group, 'id'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const composeId = `group:${group.id}`;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const composeId = `group:${group.id}`;
 
-    dispatch(groupCompose(composeId, group.id));
-    useModalsStore.getState().openModal('COMPOSE', { composeId });
-  };
+      dispatch(groupCompose(composeId, group.id));
+      useModalsStore.getState().openModal('COMPOSE', { composeId });
+    };
 
 const resetCompose = (composeId = 'compose-modal') => ({
   type: COMPOSE_RESET,
@@ -414,138 +414,138 @@ interface SubmitComposeOpts {
 
 const submitCompose =
   (composeId: string, opts: SubmitComposeOpts = {}) =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    const { history, force = false } = opts;
+    async (dispatch: AppDispatch, getState: () => RootState) => {
+      const { history, force = false } = opts;
 
-    if (!isLoggedIn(getState)) return;
-    const state = getState();
+      if (!isLoggedIn(getState)) return;
+      const state = getState();
 
-    const compose = state.compose.get(composeId)!;
+      const compose = state.compose.get(composeId)!;
 
-    const status = compose.text;
-    const media = compose.media_attachments;
-    const statusId = compose.id;
-    let to = compose.to;
+      const status = compose.text;
+      const media = compose.media_attachments;
+      const statusId = compose.id;
+      let to = compose.to;
 
-    if (!validateSchedule(state, composeId)) {
-      toast.error(messages.scheduleError);
-      return;
-    }
+      if (!validateSchedule(state, composeId)) {
+        toast.error(messages.scheduleError);
+        return;
+      }
 
-    if ((!status || !status.length) && media.size === 0) {
-      return;
-    }
+      if ((!status || !status.length) && media.size === 0) {
+        return;
+      }
 
-    if (!force && needsDescriptions(state, composeId)) {
-      useModalsStore.getState().openModal('MISSING_DESCRIPTION', {
-        onContinue: () => {
-          useModalsStore.getState().closeModal('MISSING_DESCRIPTION');
-          dispatch(submitCompose(composeId, { history, force: true }));
-        },
-      });
-      return;
-    }
+      if (!force && needsDescriptions(state, composeId)) {
+        useModalsStore.getState().openModal('MISSING_DESCRIPTION', {
+          onContinue: () => {
+            useModalsStore.getState().closeModal('MISSING_DESCRIPTION');
+            dispatch(submitCompose(composeId, { history, force: true }));
+          },
+        });
+        return;
+      }
 
-    // https://stackoverflow.com/a/30007882 for domain regex
-    const mentions: string[] | null = status.match(
-      /(?:^|\s)@([a-z\d_-]+(?:@(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]+)?)/gi,
-    );
-
-    if (mentions) {
-      to = to.union(
-        mentions.map((mention) =>
-          mention
-            .replace(/&#x20;/g, '')
-            .trim()
-            .slice(1),
-        ),
+      // https://stackoverflow.com/a/30007882 for domain regex
+      const mentions: string[] | null = status.match(
+        /(?:^|\s)@([a-z\d_-]+(?:@(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]+)?)/gi,
       );
-    }
 
-    dispatch(submitComposeRequest(composeId));
-    useModalsStore.getState().closeModal('COMPOSE');
+      if (mentions) {
+        to = to.union(
+          mentions.map((mention) =>
+            mention
+              .replace(/&#x20;/g, '')
+              .trim()
+              .slice(1),
+          ),
+        );
+      }
 
-    if (compose.language && !statusId) {
-      dispatch(rememberLanguageUse(compose.language));
-    }
+      dispatch(submitComposeRequest(composeId));
+      useModalsStore.getState().closeModal('COMPOSE');
 
-    const idempotencyKey = compose.idempotencyKey;
-    const contentType =
+      if (compose.language && !statusId) {
+        dispatch(rememberLanguageUse(compose.language));
+      }
+
+      const idempotencyKey = compose.idempotencyKey;
+      const contentType =
       compose.content_type === 'wysiwyg'
         ? 'text/markdown'
         : compose.content_type;
 
-    const params: CreateStatusParams = {
-      status,
-      in_reply_to_id: compose.in_reply_to || undefined,
-      quote_id: compose.quote || undefined,
-      media_ids: media.map((item) => item.id).toArray(),
-      sensitive: compose.sensitive,
-      spoiler_text: compose.spoiler_text,
-      visibility: compose.privacy,
-      content_type: contentType,
-      scheduled_at: compose.schedule?.toISOString(),
-      language: compose.language || compose.suggested_language || undefined,
-      to: to.size ? to.toArray() : undefined,
-      local_only: !compose.federated,
-    };
-
-    if (compose.poll) {
-      params.poll = {
-        options: compose.poll.options.toArray(),
-        expires_in: compose.poll.expires_in,
-        multiple: compose.poll.multiple,
-        hide_totals: compose.poll.hide_totals,
-        options_map: compose.poll.options_map.toJS(),
+      const params: CreateStatusParams = {
+        status,
+        in_reply_to_id: compose.in_reply_to || undefined,
+        quote_id: compose.quote || undefined,
+        media_ids: media.map((item) => item.id).toArray(),
+        sensitive: compose.sensitive,
+        spoiler_text: compose.spoiler_text,
+        visibility: compose.privacy,
+        content_type: contentType,
+        scheduled_at: compose.schedule?.toISOString(),
+        language: compose.language || compose.suggested_language || undefined,
+        to: to.size ? to.toArray() : undefined,
+        local_only: !compose.federated,
       };
-    }
 
-    if (compose.language && compose.textMap.size) {
-      params.status_map = compose.textMap.toJS();
-      params.status_map[compose.language] = status;
-
-      if (params.spoiler_text) {
-        params.spoiler_text_map = compose.spoilerTextMap.toJS();
-        params.spoiler_text_map[compose.language] = compose.spoiler_text;
+      if (compose.poll) {
+        params.poll = {
+          options: compose.poll.options.toArray(),
+          expires_in: compose.poll.expires_in,
+          multiple: compose.poll.multiple,
+          hide_totals: compose.poll.hide_totals,
+          options_map: compose.poll.options_map.toJS(),
+        };
       }
 
-      const poll = params.poll;
-      if (poll?.options_map) {
-        poll.options.forEach(
-          (option: any, index: number) =>
-            (poll.options_map![index][compose.language!] = option),
-        );
+      if (compose.language && compose.textMap.size) {
+        params.status_map = compose.textMap.toJS();
+        params.status_map[compose.language] = status;
+
+        if (params.spoiler_text) {
+          params.spoiler_text_map = compose.spoilerTextMap.toJS();
+          params.spoiler_text_map[compose.language] = compose.spoiler_text;
+        }
+
+        const poll = params.poll;
+        if (poll?.options_map) {
+          poll.options.forEach(
+            (option: any, index: number) =>
+              (poll.options_map![index][compose.language!] = option),
+          );
+        }
       }
-    }
 
-    if (compose.privacy === 'group' && compose.group_id) {
-      params.group_id = compose.group_id;
-    }
+      if (compose.privacy === 'group' && compose.group_id) {
+        params.group_id = compose.group_id;
+      }
 
-    return dispatch(createStatus(params, idempotencyKey, statusId))
-      .then((data) => {
-        if (
-          !statusId &&
+      return dispatch(createStatus(params, idempotencyKey, statusId))
+        .then((data) => {
+          if (
+            !statusId &&
           data.scheduled_at === null &&
           data.visibility === 'direct' &&
           getState().conversations.mounted <= 0 &&
           history
-        ) {
-          history.push('/conversations');
-        }
-        handleComposeSubmit(
-          dispatch,
-          getState,
-          composeId,
-          data,
-          status,
-          !!statusId,
-        );
-      })
-      .catch((error) => {
-        dispatch(submitComposeFail(composeId, error));
-      });
-  };
+          ) {
+            history.push('/conversations');
+          }
+          handleComposeSubmit(
+            dispatch,
+            getState,
+            composeId,
+            data,
+            status,
+            !!statusId,
+          );
+        })
+        .catch((error) => {
+          dispatch(submitComposeFail(composeId, error));
+        });
+    };
 
 const submitComposeRequest = (composeId: string) => ({
   type: COMPOSE_SUBMIT_REQUEST,
@@ -573,48 +573,48 @@ const submitComposeFail = (composeId: string, error: unknown) => ({
 
 const uploadCompose =
   (composeId: string, files: FileList, intl: IntlShape) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
-    const attachmentLimit =
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return;
+      const attachmentLimit =
       getState().instance.configuration.statuses.max_media_attachments;
 
-    const media = getState().compose.get(composeId)?.media_attachments;
-    const progress = new Array(files.length).fill(0);
-    let total = Array.from(files).reduce((a, v) => a + v.size, 0);
+      const media = getState().compose.get(composeId)?.media_attachments;
+      const progress = new Array(files.length).fill(0);
+      let total = Array.from(files).reduce((a, v) => a + v.size, 0);
 
-    const mediaCount = media ? media.size : 0;
+      const mediaCount = media ? media.size : 0;
 
-    if (files.length + mediaCount > attachmentLimit) {
-      toast.error(messages.uploadErrorLimit);
-      return;
-    }
+      if (files.length + mediaCount > attachmentLimit) {
+        toast.error(messages.uploadErrorLimit);
+        return;
+      }
 
-    dispatch(uploadComposeRequest(composeId));
+      dispatch(uploadComposeRequest(composeId));
 
-    Array.from(files).forEach(async (f, i) => {
-      if (mediaCount + i > attachmentLimit - 1) return;
+      Array.from(files).forEach(async (f, i) => {
+        if (mediaCount + i > attachmentLimit - 1) return;
 
-      dispatch(
-        uploadFile(
-          f,
-          intl,
-          (data) => dispatch(uploadComposeSuccess(composeId, data, f)),
-          (error) => dispatch(uploadComposeFail(composeId, error)),
-          ({ loaded }: any) => {
-            progress[i] = loaded;
-            dispatch(
-              uploadComposeProgress(
-                composeId,
-                progress.reduce((a, v) => a + v, 0),
-                total,
-              ),
-            );
-          },
-          (value) => (total += value),
-        ),
-      );
-    });
-  };
+        dispatch(
+          uploadFile(
+            f,
+            intl,
+            (data) => dispatch(uploadComposeSuccess(composeId, data, f)),
+            (error) => dispatch(uploadComposeFail(composeId, error)),
+            ({ loaded }: any) => {
+              progress[i] = loaded;
+              dispatch(
+                uploadComposeProgress(
+                  composeId,
+                  progress.reduce((a, v) => a + v, 0),
+                  total,
+                ),
+              );
+            },
+            (value) => (total += value),
+          ),
+        );
+      });
+    };
 
 const uploadComposeRequest = (composeId: string) => ({
   type: COMPOSE_UPLOAD_REQUEST,
@@ -651,19 +651,19 @@ const uploadComposeFail = (composeId: string, error: unknown) => ({
 
 const changeUploadCompose =
   (composeId: string, mediaId: string, params: Record<string, any>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return;
 
-    dispatch(changeUploadComposeRequest(composeId));
+      dispatch(changeUploadComposeRequest(composeId));
 
-    dispatch(updateMedia(mediaId, params))
-      .then((response) => {
-        dispatch(changeUploadComposeSuccess(composeId, response));
-      })
-      .catch((error) => {
-        dispatch(changeUploadComposeFail(composeId, mediaId, error));
-      });
-  };
+      dispatch(updateMedia(mediaId, params))
+        .then((response) => {
+          dispatch(changeUploadComposeSuccess(composeId, response));
+        })
+        .catch((error) => {
+          dispatch(changeUploadComposeFail(composeId, mediaId, error));
+        });
+    };
 
 const changeUploadComposeRequest = (composeId: string) => ({
   type: COMPOSE_UPLOAD_CHANGE_REQUEST,
@@ -795,19 +795,19 @@ const fetchComposeSuggestionsTags = (
 
 const fetchComposeSuggestions =
   (composeId: string, token: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    switch (token[0]) {
-      case ':':
-        fetchComposeSuggestionsEmojis(dispatch, getState, composeId, token);
-        break;
-      case '#':
-        fetchComposeSuggestionsTags(dispatch, getState, composeId, token);
-        break;
-      default:
-        fetchComposeSuggestionsAccounts(dispatch, getState, composeId, token);
-        break;
-    }
-  };
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      switch (token[0]) {
+        case ':':
+          fetchComposeSuggestionsEmojis(dispatch, getState, composeId, token);
+          break;
+        case '#':
+          fetchComposeSuggestionsTags(dispatch, getState, composeId, token);
+          break;
+        default:
+          fetchComposeSuggestionsAccounts(dispatch, getState, composeId, token);
+          break;
+      }
+    };
 
 interface ComposeSuggestionsReadyAction {
   type: typeof COMPOSE_SUGGESTIONS_READY;
@@ -856,36 +856,36 @@ const selectComposeSuggestion =
     suggestion: AutoSuggestion,
     path: Array<string | number>,
   ) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    let completion = '',
-      startPosition = position;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      let completion = '',
+        startPosition = position;
 
-    if (typeof suggestion === 'object' && suggestion.id) {
-      completion = isNativeEmoji(suggestion)
-        ? suggestion.native
-        : suggestion.colons;
-      startPosition = position - 1;
+      if (typeof suggestion === 'object' && suggestion.id) {
+        completion = isNativeEmoji(suggestion)
+          ? suggestion.native
+          : suggestion.colons;
+        startPosition = position - 1;
 
-      dispatch(chooseEmoji(suggestion));
-    } else if (typeof suggestion === 'string' && suggestion[0] === '#') {
-      completion = suggestion;
-      startPosition = position - 1;
-    } else if (typeof suggestion === 'string') {
-      completion = selectAccount(getState(), suggestion)!.acct;
-      startPosition = position;
-    }
+        dispatch(chooseEmoji(suggestion));
+      } else if (typeof suggestion === 'string' && suggestion[0] === '#') {
+        completion = suggestion;
+        startPosition = position - 1;
+      } else if (typeof suggestion === 'string') {
+        completion = selectAccount(getState(), suggestion)!.acct;
+        startPosition = position;
+      }
 
-    const action: ComposeSuggestionSelectAction = {
-      type: COMPOSE_SUGGESTION_SELECT,
-      composeId,
-      position: startPosition,
-      token,
-      completion,
-      path,
+      const action: ComposeSuggestionSelectAction = {
+        type: COMPOSE_SUGGESTION_SELECT,
+        composeId,
+        position: startPosition,
+        token,
+        completion,
+        path,
+      };
+
+      dispatch(action);
     };
-
-    dispatch(action);
-  };
 
 const updateSuggestionTags = (
   composeId: string,
@@ -906,27 +906,27 @@ const updateTagHistory = (composeId: string, tags: string[]) => ({
 
 const insertIntoTagHistory =
   (composeId: string, recognizedTags: Array<Tag>, text: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const oldHistory = state.compose.get(composeId)!.tagHistory;
-    const me = state.me;
-    const names = recognizedTags
-      .filter((tag) => text.match(new RegExp(`#${tag.name}`, 'i')))
-      .map((tag) => tag.name);
-    const intersectedOldHistory = oldHistory.filter(
-      (name) =>
-        names.findIndex(
-          (newName) => newName.toLowerCase() === name.toLowerCase(),
-        ) === -1,
-    );
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
+      const oldHistory = state.compose.get(composeId)!.tagHistory;
+      const me = state.me;
+      const names = recognizedTags
+        .filter((tag) => text.match(new RegExp(`#${tag.name}`, 'i')))
+        .map((tag) => tag.name);
+      const intersectedOldHistory = oldHistory.filter(
+        (name) =>
+          names.findIndex(
+            (newName) => newName.toLowerCase() === name.toLowerCase(),
+          ) === -1,
+      );
 
-    names.push(...intersectedOldHistory.toJS());
+      names.push(...intersectedOldHistory.toJS());
 
-    const newHistory = names.slice(0, 1000);
+      const newHistory = names.slice(0, 1000);
 
-    tagHistory.set(me as string, newHistory);
-    dispatch(updateTagHistory(composeId, newHistory));
-  };
+      tagHistory.set(me as string, newHistory);
+      dispatch(updateTagHistory(composeId, newHistory));
+    };
 
 const changeComposeSpoilerness = (composeId: string) => ({
   type: COMPOSE_SPOILERNESS_CHANGE,
@@ -1049,11 +1049,11 @@ const changePollSettings = (
 
 const openComposeWithText =
   (composeId: string, text = '') =>
-  (dispatch: AppDispatch) => {
-    dispatch(resetCompose(composeId));
-    useModalsStore.getState().openModal('COMPOSE');
-    dispatch(changeCompose(composeId, text));
-  };
+    (dispatch: AppDispatch) => {
+      dispatch(resetCompose(composeId));
+      useModalsStore.getState().openModal('COMPOSE');
+      dispatch(changeCompose(composeId, text));
+    };
 
 interface ComposeAddToMentionsAction {
   type: typeof COMPOSE_ADD_TO_MENTIONS;
@@ -1063,19 +1063,19 @@ interface ComposeAddToMentionsAction {
 
 const addToMentions =
   (composeId: string, accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const account = selectAccount(state, accountId);
-    if (!account) return;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
+      const account = selectAccount(state, accountId);
+      if (!account) return;
 
-    const action: ComposeAddToMentionsAction = {
-      type: COMPOSE_ADD_TO_MENTIONS,
-      composeId,
-      account: account.acct,
+      const action: ComposeAddToMentionsAction = {
+        type: COMPOSE_ADD_TO_MENTIONS,
+        composeId,
+        account: account.acct,
+      };
+
+      return dispatch(action);
     };
-
-    return dispatch(action);
-  };
 
 interface ComposeRemoveFromMentionsAction {
   type: typeof COMPOSE_REMOVE_FROM_MENTIONS;
@@ -1085,19 +1085,19 @@ interface ComposeRemoveFromMentionsAction {
 
 const removeFromMentions =
   (composeId: string, accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const account = selectAccount(state, accountId);
-    if (!account) return;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
+      const account = selectAccount(state, accountId);
+      if (!account) return;
 
-    const action: ComposeRemoveFromMentionsAction = {
-      type: COMPOSE_REMOVE_FROM_MENTIONS,
-      composeId,
-      account: account.acct,
+      const action: ComposeRemoveFromMentionsAction = {
+        type: COMPOSE_REMOVE_FROM_MENTIONS,
+        composeId,
+        account: account.acct,
+      };
+
+      return dispatch(action);
     };
-
-    return dispatch(action);
-  };
 
 interface ComposeEventReplyAction {
   type: typeof COMPOSE_EVENT_REPLY;
@@ -1109,19 +1109,19 @@ interface ComposeEventReplyAction {
 
 const eventDiscussionCompose =
   (composeId: string, status: ComposeEventReplyAction['status']) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const { createStatusExplicitAddressing: explicitAddressing } =
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
+      const { createStatusExplicitAddressing: explicitAddressing } =
       state.auth.client.features;
 
-    return dispatch({
-      type: COMPOSE_EVENT_REPLY,
-      composeId,
-      status,
-      account: selectOwnAccount(state),
-      explicitAddressing,
-    });
-  };
+      return dispatch({
+        type: COMPOSE_EVENT_REPLY,
+        composeId,
+        status,
+        account: selectOwnAccount(state),
+        explicitAddressing,
+      });
+    };
 
 const setEditorState = (
   composeId: string,

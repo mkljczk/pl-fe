@@ -187,8 +187,8 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
     !modifiedLanguage || modifiedLanguage === language
       ? poll?.options
       : poll?.options_map.map((option, key) =>
-          option.get(modifiedLanguage, poll.options.get(key)!),
-        );
+        option.get(modifiedLanguage, poll.options.get(key)!),
+      );
   const expiresIn = poll?.expires_in;
   const isMultiple = poll?.multiple;
 

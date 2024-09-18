@@ -49,21 +49,21 @@ const obtainOAuthToken =
 
 const revokeOAuthToken =
   (params: RevokeTokenParams) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: OAUTH_TOKEN_REVOKE_REQUEST, params });
-    const baseURL = getBaseURL(getState());
-    const client = new PlApiClient(baseURL || '');
-    return client.oauth
-      .revokeToken(params)
-      .then((data) => {
-        dispatch({ type: OAUTH_TOKEN_REVOKE_SUCCESS, params, data });
-        return data;
-      })
-      .catch((error) => {
-        dispatch({ type: OAUTH_TOKEN_REVOKE_FAIL, params, error });
-        throw error;
-      });
-  };
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: OAUTH_TOKEN_REVOKE_REQUEST, params });
+      const baseURL = getBaseURL(getState());
+      const client = new PlApiClient(baseURL || '');
+      return client.oauth
+        .revokeToken(params)
+        .then((data) => {
+          dispatch({ type: OAUTH_TOKEN_REVOKE_SUCCESS, params, data });
+          return data;
+        })
+        .catch((error) => {
+          dispatch({ type: OAUTH_TOKEN_REVOKE_FAIL, params, error });
+          throw error;
+        });
+    };
 
 export {
   OAUTH_TOKEN_CREATE_REQUEST,

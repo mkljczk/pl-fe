@@ -25,29 +25,29 @@ const createProviderApp =
 
 const prepareRequest =
   (provider: string) =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    const baseURL = isURL(BuildConfig.BACKEND_URL)
-      ? BuildConfig.BACKEND_URL
-      : '';
+    async (dispatch: AppDispatch, getState: () => RootState) => {
+      const baseURL = isURL(BuildConfig.BACKEND_URL)
+        ? BuildConfig.BACKEND_URL
+        : '';
 
-    const scopes = getScopes(getState());
-    const app = await dispatch(createProviderApp());
-    const { client_id, redirect_uri } = app;
+      const scopes = getScopes(getState());
+      const app = await dispatch(createProviderApp());
+      const { client_id, redirect_uri } = app;
 
-    localStorage.setItem('plfe:external:app', JSON.stringify(app));
-    localStorage.setItem('plfe:external:baseurl', baseURL);
-    localStorage.setItem('plfe:external:scopes', scopes);
+      localStorage.setItem('plfe:external:app', JSON.stringify(app));
+      localStorage.setItem('plfe:external:baseurl', baseURL);
+      localStorage.setItem('plfe:external:scopes', scopes);
 
-    const params = {
-      provider,
-      'authorization[client_id]': client_id,
-      'authorization[redirect_uri]': redirect_uri,
-      'authorization[scope]': scopes,
+      const params = {
+        provider,
+        'authorization[client_id]': client_id,
+        'authorization[redirect_uri]': redirect_uri,
+        'authorization[scope]': scopes,
+      };
+
+      const query = queryString.stringify(params);
+
+      location.href = `${baseURL}/oauth/prepare_request?${query.toString()}`;
     };
-
-    const query = queryString.stringify(params);
-
-    location.href = `${baseURL}/oauth/prepare_request?${query.toString()}`;
-  };
 
 export { prepareRequest };

@@ -47,10 +47,10 @@ const pending_statuses = (state = initialState, action: AnyAction) => {
       return action.editing
         ? state
         : importStatus(
-            state,
-            ImmutableMap(fromJS(action.params)),
-            action.idempotencyKey,
-          );
+          state,
+          ImmutableMap(fromJS(action.params)),
+          action.idempotencyKey,
+        );
     case STATUS_CREATE_FAIL:
     case STATUS_CREATE_SUCCESS:
       return deleteStatus(state, action.idempotencyKey);

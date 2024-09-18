@@ -16,9 +16,9 @@ import { selectEntities, selectListState, useListState } from '../selectors';
 
 import { parseEntitiesPath } from './utils';
 
-import type { PaginatedResponse } from 'pl-api';
-import type { Entity } from '../types';
 import type { EntityFn, EntitySchema, ExpandedEntitiesPath } from './types';
+import type { Entity } from '../types';
+import type { PaginatedResponse } from 'pl-api';
 
 /** Additional options for the hook. */
 interface UseEntitiesOpts<
@@ -43,12 +43,12 @@ const useEntities = <
   TTransformedEntity extends Entity = TEntity,
 >(
   /** Tells us where to find/store the entity in the cache. */
-  expandedPath: ExpandedEntitiesPath,
+    expandedPath: ExpandedEntitiesPath,
   /** API route to GET, eg `'/api/v1/notifications'`. If undefined, nothing will be fetched. */
-  entityFn: EntityFn<void>,
+    entityFn: EntityFn<void>,
   /** Additional options for the hook. */
-  opts: UseEntitiesOpts<TEntity, TTransformedEntity> = {},
-) => {
+    opts: UseEntitiesOpts<TEntity, TTransformedEntity> = {},
+  ) => {
   const dispatch = useAppDispatch();
   const getState = useGetState();
 

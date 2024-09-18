@@ -122,82 +122,82 @@ const messages = defineMessages({
 
 const deactivateUserModal =
   (intl: IntlShape, accountId: string, afterConfirm = () => {}) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const acct = selectAccount(state, accountId)!.acct;
-    const name = selectAccount(state, accountId)!.username;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
+      const acct = selectAccount(state, accountId)!.acct;
+      const name = selectAccount(state, accountId)!.username;
 
-    const message = (
-      <Stack space={4}>
-        <OutlineBox>
-          <AccountContainer id={accountId} hideActions />
-        </OutlineBox>
+      const message = (
+        <Stack space={4}>
+          <OutlineBox>
+            <AccountContainer id={accountId} hideActions />
+          </OutlineBox>
 
-        <Text>
-          {intl.formatMessage(messages.deactivateUserPrompt, { acct })}
-        </Text>
-      </Stack>
-    );
+          <Text>
+            {intl.formatMessage(messages.deactivateUserPrompt, { acct })}
+          </Text>
+        </Stack>
+      );
 
-    useModalsStore.getState().openModal('CONFIRM', {
-      heading: intl.formatMessage(messages.deactivateUserHeading, { acct }),
-      message,
-      confirm: intl.formatMessage(messages.deactivateUserConfirm, { name }),
-      onConfirm: () => {
-        dispatch(deactivateUser(accountId))
-          .then(() => {
-            const message = intl.formatMessage(messages.userDeactivated, {
-              acct,
-            });
-            toast.success(message);
-            afterConfirm();
-          })
-          .catch(() => {});
-      },
-    });
-  };
+      useModalsStore.getState().openModal('CONFIRM', {
+        heading: intl.formatMessage(messages.deactivateUserHeading, { acct }),
+        message,
+        confirm: intl.formatMessage(messages.deactivateUserConfirm, { name }),
+        onConfirm: () => {
+          dispatch(deactivateUser(accountId))
+            .then(() => {
+              const message = intl.formatMessage(messages.userDeactivated, {
+                acct,
+              });
+              toast.success(message);
+              afterConfirm();
+            })
+            .catch(() => {});
+        },
+      });
+    };
 
 const deleteUserModal =
   (intl: IntlShape, accountId: string, afterConfirm = () => {}) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const account = selectAccount(state, accountId)!;
-    const acct = account.acct;
-    const name = account.username;
-    const local = account.local;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
+      const account = selectAccount(state, accountId)!;
+      const acct = account.acct;
+      const name = account.username;
+      const local = account.local;
 
-    const message = (
-      <Stack space={4}>
-        <OutlineBox>
-          <AccountContainer id={accountId} hideActions />
-        </OutlineBox>
+      const message = (
+        <Stack space={4}>
+          <OutlineBox>
+            <AccountContainer id={accountId} hideActions />
+          </OutlineBox>
 
-        <Text>{intl.formatMessage(messages.deleteUserPrompt, { acct })}</Text>
-      </Stack>
-    );
+          <Text>{intl.formatMessage(messages.deleteUserPrompt, { acct })}</Text>
+        </Stack>
+      );
 
-    const confirm = intl.formatMessage(messages.deleteUserConfirm, { name });
-    const checkbox = local
-      ? intl.formatMessage(messages.deleteLocalUserCheckbox)
-      : false;
+      const confirm = intl.formatMessage(messages.deleteUserConfirm, { name });
+      const checkbox = local
+        ? intl.formatMessage(messages.deleteLocalUserCheckbox)
+        : false;
 
-    useModalsStore.getState().openModal('CONFIRM', {
-      heading: intl.formatMessage(messages.deleteUserHeading, { acct }),
-      message,
-      confirm,
-      checkbox,
-      onConfirm: () => {
-        dispatch(deleteUser(accountId))
-          .then(() => {
-            const message = intl.formatMessage(messages.userDeleted, { acct });
-            dispatch(fetchAccountByUsername(acct));
-            toast.success(message);
-            afterConfirm();
-          })
-          .catch(() => {});
-      },
-    });
-  };
+      useModalsStore.getState().openModal('CONFIRM', {
+        heading: intl.formatMessage(messages.deleteUserHeading, { acct }),
+        message,
+        confirm,
+        checkbox,
+        onConfirm: () => {
+          dispatch(deleteUser(accountId))
+            .then(() => {
+              const message = intl.formatMessage(messages.userDeleted, { acct });
+              dispatch(fetchAccountByUsername(acct));
+              toast.success(message);
+              afterConfirm();
+            })
+            .catch(() => {});
+        },
+      });
+    };
 
 const toggleStatusSensitivityModal =
   (
@@ -206,69 +206,69 @@ const toggleStatusSensitivityModal =
     sensitive: boolean,
     afterConfirm = () => {},
   ) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const acct = state.statuses.get(statusId)!.account.acct;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
+      const acct = state.statuses.get(statusId)!.account.acct;
 
-    useModalsStore.getState().openModal('CONFIRM', {
-      heading: intl.formatMessage(
-        sensitive === false
-          ? messages.markStatusSensitiveHeading
-          : messages.markStatusNotSensitiveHeading,
-      ),
-      message: intl.formatMessage(
-        sensitive === false
-          ? messages.markStatusSensitivePrompt
-          : messages.markStatusNotSensitivePrompt,
-        { acct },
-      ),
-      confirm: intl.formatMessage(
-        sensitive === false
-          ? messages.markStatusSensitiveConfirm
-          : messages.markStatusNotSensitiveConfirm,
-      ),
-      onConfirm: () => {
-        dispatch(toggleStatusSensitivity(statusId, sensitive))
-          .then(() => {
-            const message = intl.formatMessage(
-              sensitive === false
-                ? messages.statusMarkedSensitive
-                : messages.statusMarkedNotSensitive,
-              { acct },
-            );
-            toast.success(message);
-          })
-          .catch(() => {});
-        afterConfirm();
-      },
-    });
-  };
+      useModalsStore.getState().openModal('CONFIRM', {
+        heading: intl.formatMessage(
+          sensitive === false
+            ? messages.markStatusSensitiveHeading
+            : messages.markStatusNotSensitiveHeading,
+        ),
+        message: intl.formatMessage(
+          sensitive === false
+            ? messages.markStatusSensitivePrompt
+            : messages.markStatusNotSensitivePrompt,
+          { acct },
+        ),
+        confirm: intl.formatMessage(
+          sensitive === false
+            ? messages.markStatusSensitiveConfirm
+            : messages.markStatusNotSensitiveConfirm,
+        ),
+        onConfirm: () => {
+          dispatch(toggleStatusSensitivity(statusId, sensitive))
+            .then(() => {
+              const message = intl.formatMessage(
+                sensitive === false
+                  ? messages.statusMarkedSensitive
+                  : messages.statusMarkedNotSensitive,
+                { acct },
+              );
+              toast.success(message);
+            })
+            .catch(() => {});
+          afterConfirm();
+        },
+      });
+    };
 
 const deleteStatusModal =
   (intl: IntlShape, statusId: string, afterConfirm = () => {}) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const acct = state.statuses.get(statusId)!.account.acct;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
+      const acct = state.statuses.get(statusId)!.account.acct;
 
-    useModalsStore.getState().openModal('CONFIRM', {
-      heading: intl.formatMessage(messages.deleteStatusHeading),
-      message: intl.formatMessage(messages.deleteStatusPrompt, {
-        acct: <strong className='break-words'>{acct}</strong>,
-      }),
-      confirm: intl.formatMessage(messages.deleteStatusConfirm),
-      onConfirm: () => {
-        dispatch(deleteStatus(statusId))
-          .then(() => {
-            const message = intl.formatMessage(messages.statusDeleted, {
-              acct,
-            });
-            toast.success(message);
-          })
-          .catch(() => {});
-        afterConfirm();
-      },
-    });
-  };
+      useModalsStore.getState().openModal('CONFIRM', {
+        heading: intl.formatMessage(messages.deleteStatusHeading),
+        message: intl.formatMessage(messages.deleteStatusPrompt, {
+          acct: <strong className='break-words'>{acct}</strong>,
+        }),
+        confirm: intl.formatMessage(messages.deleteStatusConfirm),
+        onConfirm: () => {
+          dispatch(deleteStatus(statusId))
+            .then(() => {
+              const message = intl.formatMessage(messages.statusDeleted, {
+                acct,
+              });
+              toast.success(message);
+            })
+            .catch(() => {});
+          afterConfirm();
+        },
+      });
+    };
 
 export {
   deactivateUserModal,

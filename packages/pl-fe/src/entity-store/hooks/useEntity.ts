@@ -8,9 +8,9 @@ import { useLoading } from 'pl-fe/hooks/useLoading';
 import { importEntities } from '../actions';
 import { selectEntity } from '../selectors';
 
-import type { PlfeResponse } from 'pl-fe/api';
-import type { Entity } from '../types';
 import type { EntityFn, EntityPath, EntitySchema } from './types';
+import type { Entity } from '../types';
+import type { PlfeResponse } from 'pl-fe/api';
 
 /** Additional options for the hook. */
 interface UseEntityOpts<
@@ -30,10 +30,10 @@ const useEntity = <
   TEntity extends Entity,
   TTransformedEntity extends Entity = TEntity,
 >(
-  path: EntityPath,
-  entityFn: EntityFn<void>,
-  opts: UseEntityOpts<TEntity, TTransformedEntity> = {},
-) => {
+    path: EntityPath,
+    entityFn: EntityFn<void>,
+    opts: UseEntityOpts<TEntity, TTransformedEntity> = {},
+  ) => {
   const [isFetching, setPromise] = useLoading(true);
   const [error, setError] = useState<unknown>();
 

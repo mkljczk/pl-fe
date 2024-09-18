@@ -128,8 +128,8 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({
     onChange(
       date
         ? new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-            .toISOString()
-            .slice(0, 10)
+          .toISOString()
+          .slice(0, 10)
         : '',
     );
 

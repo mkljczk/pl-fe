@@ -167,16 +167,13 @@
       "error",
       "always"
     ],
-    "padded-blocks": [
-      "error",
-      {
-        "classes": "always"
-      }
-    ],
     "prefer-const": "error",
     "quotes": [
       "error",
-      "single"
+      "single",
+      {
+        "avoidEscape": true
+      }
     ],
     "semi": "error",
     "space-unary-ops": [

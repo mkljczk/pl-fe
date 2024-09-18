@@ -131,14 +131,14 @@ const FilterField: StreamfieldComponent<IFilterField> = ({
 
   const handleChange =
     (key: string): React.ChangeEventHandler<HTMLInputElement> =>
-    (e) =>
-      onChange({
-        ...value,
-        [key]:
+      (e) =>
+        onChange({
+          ...value,
+          [key]:
           e.currentTarget[
             e.currentTarget.type === 'checkbox' ? 'checked' : 'value'
           ],
-      });
+        });
 
   return (
     <HStack space={2} grow>
@@ -253,8 +253,8 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
     setKeywords((keywords) =>
       keywords[i].id
         ? keywords.map((keyword, index) =>
-            index === i ? { ...keyword, _destroy: true } : keyword,
-          )
+          index === i ? { ...keyword, _destroy: true } : keyword,
+        )
         : keywords.filter((_, index) => index !== i),
     );
 

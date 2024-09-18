@@ -94,9 +94,9 @@ const CreateApp: React.FC = () => {
 
   const handleParamChange =
     (key: string): React.ChangeEventHandler<HTMLInputElement> =>
-    (e) => {
-      setParam(key, e.target.value);
-    };
+      (e) => {
+        setParam(key, e.target.value);
+      };
 
   const resetState = () => {
     setApp(null);

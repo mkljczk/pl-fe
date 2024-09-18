@@ -212,13 +212,13 @@ const upgradeNonUrlId = (state: State, account: CredentialAccount) => {
 // Returns a predicate function for filtering a mismatched user/token
 const userMismatch =
   (token: string, account: CredentialAccount) =>
-  (user: AuthUser, url: string) => {
-    const sameToken = user.get('access_token') === token;
-    const differentUrl = url !== account.url || user.get('url') !== account.url;
-    const differentId = user.get('id') !== account.id;
+    (user: AuthUser, url: string) => {
+      const sameToken = user.get('access_token') === token;
+      const differentUrl = url !== account.url || user.get('url') !== account.url;
+      const differentId = user.get('id') !== account.id;
 
-    return sameToken && (differentUrl || differentId);
-  };
+      return sameToken && (differentUrl || differentId);
+    };
 
 const importCredentials = (
   state: State,
@@ -351,9 +351,9 @@ const reducer = (state: State, action: AnyAction) => {
           client.baseURL === parseBaseURL(action.account.url)
             ? ((client.accessToken = action.account.access_token), client)
             : new PlApiClient(
-                parseBaseURL(action.account.url) || backendUrl,
-                action.account.access_token,
-              ),
+              parseBaseURL(action.account.url) || backendUrl,
+              action.account.access_token,
+            ),
         );
     case ME_FETCH_SKIP:
       return state.set('me', null);

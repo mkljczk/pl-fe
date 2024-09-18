@@ -82,29 +82,29 @@ const followStateToRelationship = (
 
 const updateFollowRelationships =
   (update: FollowRelationshipUpdate) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
 
-    const me = state.me;
-    const relationship = selectEntity<Relationship>(
-      state,
-      Entities.RELATIONSHIPS,
-      update.following.id,
-    );
-
-    if (update.follower.id === me && relationship) {
-      const updated = {
-        ...relationship,
-        ...followStateToRelationship(update.state),
-      };
-
-      // Add a small delay to deal with API race conditions.
-      setTimeout(
-        () => dispatch(importEntities([updated], Entities.RELATIONSHIPS)),
-        300,
+      const me = state.me;
+      const relationship = selectEntity<Relationship>(
+        state,
+        Entities.RELATIONSHIPS,
+        update.following.id,
       );
-    }
-  };
+
+      if (update.follower.id === me && relationship) {
+        const updated = {
+          ...relationship,
+          ...followStateToRelationship(update.state),
+        };
+
+        // Add a small delay to deal with API race conditions.
+        setTimeout(
+          () => dispatch(importEntities([updated], Entities.RELATIONSHIPS)),
+          300,
+        );
+      }
+    };
 
 const getTimelineFromStream = (stream: Array<string>) => {
   switch (stream[0]) {

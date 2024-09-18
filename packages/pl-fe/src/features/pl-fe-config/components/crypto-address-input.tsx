@@ -31,9 +31,9 @@ const CryptoAddressInput: StreamfieldComponent<CryptoAddress> = ({
     (
       key: 'ticker' | 'address' | 'note',
     ): React.ChangeEventHandler<HTMLInputElement> =>
-    (e) => {
-      onChange(value.set(key, e.currentTarget.value));
-    };
+      (e) => {
+        onChange(value.set(key, e.currentTarget.value));
+      };
 
   return (
     <HStack space={2} grow>

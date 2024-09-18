@@ -23,11 +23,11 @@ const normalizePoll = (poll: Exclude<BaseStatus['poll'], null>) => {
       title_emojified: sanitizeTitle(option.title, emojiMap),
       title_map_emojified: option.title_map
         ? Object.fromEntries(
-            Object.entries(option.title_map).map(([key, title]) => [
-              key,
-              sanitizeTitle(title, emojiMap),
-            ]),
-          )
+          Object.entries(option.title_map).map(([key, title]) => [
+            key,
+            sanitizeTitle(title, emojiMap),
+          ]),
+        )
         : null,
     })),
   };

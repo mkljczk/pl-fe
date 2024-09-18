@@ -63,14 +63,12 @@ Object.assign(navigator, {
   },
 });
 
-const store = rootState
-  .set('me', '1')
-  .set(
-    'instance',
-    buildInstance({
-      version: '3.4.1 (compatible; TruthSocial 1.0.0+unreleased)',
-    }),
-  );
+const store = rootState.set('me', '1').set(
+  'instance',
+  buildInstance({
+    version: '3.4.1 (compatible; TruthSocial 1.0.0+unreleased)',
+  }),
+);
 
 const renderComponentWithChatContext = () =>
   render(

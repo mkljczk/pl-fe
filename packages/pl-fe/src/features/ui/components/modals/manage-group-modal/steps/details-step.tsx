@@ -50,22 +50,22 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
     (
       property: keyof CreateGroupParams,
     ): React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> =>
-    (e) => {
-      onChange({ ...params, [property]: e.target.value });
-    };
+      (e) => {
+        onChange({ ...params, [property]: e.target.value });
+      };
 
   const handleImageChange =
     (property: 'header' | 'avatar', maxPixels?: number) =>
-    async (files: FileList | null) => {
-      const file = files ? files[0] : undefined;
-      if (file) {
-        const resized = await resizeImage(file, maxPixels);
-        onChange({
-          ...params,
-          [property]: resized,
-        });
-      }
-    };
+      async (files: FileList | null) => {
+        const file = files ? files[0] : undefined;
+        if (file) {
+          const resized = await resizeImage(file, maxPixels);
+          onChange({
+            ...params,
+            [property]: resized,
+          });
+        }
+      };
 
   const handleImageClear = (property: keyof CreateGroupParams) => () =>
     onChange({

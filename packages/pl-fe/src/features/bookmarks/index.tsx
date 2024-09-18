@@ -135,17 +135,17 @@ const Bookmarks: React.FC<IBookmarks> = ({ params }) => {
 
   const items = folderId
     ? [
-        {
-          text: intl.formatMessage(messages.editFolder),
-          action: handleEditFolder,
-          icon: require('@tabler/icons/outline/edit.svg'),
-        },
-        {
-          text: intl.formatMessage(messages.deleteFolder),
-          action: handleDeleteFolder,
-          icon: require('@tabler/icons/outline/trash.svg'),
-        },
-      ]
+      {
+        text: intl.formatMessage(messages.editFolder),
+        action: handleEditFolder,
+        icon: require('@tabler/icons/outline/edit.svg'),
+      },
+      {
+        text: intl.formatMessage(messages.deleteFolder),
+        action: handleDeleteFolder,
+        icon: require('@tabler/icons/outline/trash.svg'),
+      },
+    ]
     : [];
 
   return (

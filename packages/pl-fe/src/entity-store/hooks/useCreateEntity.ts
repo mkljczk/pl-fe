@@ -7,14 +7,14 @@ import { importEntities } from '../actions';
 
 import { parseEntitiesPath } from './utils';
 
-import type { PlfeResponse } from 'pl-fe/api';
-import type { Entity } from '../types';
 import type {
   EntityCallbacks,
   EntityFn,
   EntitySchema,
   ExpandedEntitiesPath,
 } from './types';
+import type { Entity } from '../types';
+import type { PlfeResponse } from 'pl-fe/api';
 
 interface UseCreateEntityOpts<
   TEntity extends Entity = Entity,
@@ -29,10 +29,10 @@ const useCreateEntity = <
   TTransformedEntity extends Entity = TEntity,
   Data = unknown,
 >(
-  expandedPath: ExpandedEntitiesPath,
-  entityFn: EntityFn<Data>,
-  opts: UseCreateEntityOpts<TEntity, TTransformedEntity> = {},
-) => {
+    expandedPath: ExpandedEntitiesPath,
+    entityFn: EntityFn<Data>,
+    opts: UseCreateEntityOpts<TEntity, TTransformedEntity> = {},
+  ) => {
   const dispatch = useAppDispatch();
 
   const [isSubmitting, setPromise] = useLoading();

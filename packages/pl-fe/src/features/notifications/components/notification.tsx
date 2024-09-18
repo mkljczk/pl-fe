@@ -409,13 +409,13 @@ const Notification: React.FC<INotification> = (props) => {
           typeof account === 'object' &&
           notification.target &&
           typeof notification.target === 'object' ? (
-          <AccountContainer
-            id={notification.target.id}
-            hidden={hidden}
-            avatarSize={avatarSize}
-            withRelationship
-          />
-        ) : null;
+            <AccountContainer
+              id={notification.target.id}
+              hidden={hidden}
+              avatarSize={avatarSize}
+              withRelationship
+            />
+          ) : null;
       case 'favourite':
       case 'mention':
       case 'reblog':

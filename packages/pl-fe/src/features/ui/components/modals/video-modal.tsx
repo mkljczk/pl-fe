@@ -6,9 +6,9 @@ import Video from 'pl-fe/features/video';
 import { useAppSelector } from 'pl-fe/hooks';
 import { makeGetStatus } from 'pl-fe/selectors';
 
+import type { BaseModalProps } from '../modal-root';
 import type { MediaAttachment } from 'pl-api';
 import type { Account } from 'pl-fe/normalizers';
-import type { BaseModalProps } from '../modal-root';
 
 type VideoModalProps = {
   media: MediaAttachment;

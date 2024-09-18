@@ -12,11 +12,11 @@ const simulateEmojiReact = (
     return emojiReacts.map((reaction, id) =>
       id === idx
         ? emojiReactionSchema.parse({
-            ...emojiReact,
-            count: (emojiReact.count || 0) + 1,
-            me: true,
-            url,
-          })
+          ...emojiReact,
+          count: (emojiReact.count || 0) + 1,
+          me: true,
+          url,
+        })
         : reaction,
     );
   } else {
@@ -46,10 +46,10 @@ const simulateUnEmojiReact = (
     return emojiReacts.map((reaction, id) =>
       id === idx
         ? emojiReactionSchema.parse({
-            ...emojiReact,
-            count: (emojiReact.count || 1) - 1,
-            me: false,
-          })
+          ...emojiReact,
+          count: (emojiReact.count || 1) - 1,
+          me: false,
+        })
         : reaction,
     );
   } else {

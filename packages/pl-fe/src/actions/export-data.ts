@@ -76,65 +76,65 @@ const listAccounts = async (response: PaginatedResponse<Account>) => {
 
 const exportFollows =
   () =>
-  async (
-    dispatch: React.Dispatch<ExportDataAction>,
-    getState: () => RootState,
-  ) => {
-    dispatch({ type: EXPORT_FOLLOWS_REQUEST });
-    const me = getState().me;
-    if (!me) return;
+    async (
+      dispatch: React.Dispatch<ExportDataAction>,
+      getState: () => RootState,
+    ) => {
+      dispatch({ type: EXPORT_FOLLOWS_REQUEST });
+      const me = getState().me;
+      if (!me) return;
 
-    return getClient(getState())
-      .accounts.getAccountFollowing(me, { limit: 40 })
-      .then(listAccounts)
-      .then((followings) => {
-        followings = followings.map((fqn) => fqn + ',true');
-        followings.unshift('Account address,Show boosts');
-        fileExport(followings.join('\n'), 'export_followings.csv');
+      return getClient(getState())
+        .accounts.getAccountFollowing(me, { limit: 40 })
+        .then(listAccounts)
+        .then((followings) => {
+          followings = followings.map((fqn) => fqn + ',true');
+          followings.unshift('Account address,Show boosts');
+          fileExport(followings.join('\n'), 'export_followings.csv');
 
-        toast.success(messages.followersSuccess);
-        dispatch({ type: EXPORT_FOLLOWS_SUCCESS });
-      })
-      .catch((error) => {
-        dispatch({ type: EXPORT_FOLLOWS_FAIL, error });
-      });
-  };
+          toast.success(messages.followersSuccess);
+          dispatch({ type: EXPORT_FOLLOWS_SUCCESS });
+        })
+        .catch((error) => {
+          dispatch({ type: EXPORT_FOLLOWS_FAIL, error });
+        });
+    };
 
 const exportBlocks =
   () =>
-  (dispatch: React.Dispatch<ExportDataAction>, getState: () => RootState) => {
-    dispatch({ type: EXPORT_BLOCKS_REQUEST });
-    return getClient(getState())
-      .filtering.getBlocks({ limit: 40 })
-      .then(listAccounts)
-      .then((blocks) => {
-        fileExport(blocks.join('\n'), 'export_block.csv');
+    (dispatch: React.Dispatch<ExportDataAction>, getState: () => RootState) => {
+      dispatch({ type: EXPORT_BLOCKS_REQUEST });
+      return getClient(getState())
+        .filtering.getBlocks({ limit: 40 })
+        .then(listAccounts)
+        .then((blocks) => {
+          fileExport(blocks.join('\n'), 'export_block.csv');
 
-        toast.success(messages.blocksSuccess);
-        dispatch({ type: EXPORT_BLOCKS_SUCCESS });
-      })
-      .catch((error) => {
-        dispatch({ type: EXPORT_BLOCKS_FAIL, error });
-      });
-  };
+          toast.success(messages.blocksSuccess);
+          dispatch({ type: EXPORT_BLOCKS_SUCCESS });
+        })
+        .catch((error) => {
+          dispatch({ type: EXPORT_BLOCKS_FAIL, error });
+        });
+    };
 
 const exportMutes =
   () =>
-  (dispatch: React.Dispatch<ExportDataAction>, getState: () => RootState) => {
-    dispatch({ type: EXPORT_MUTES_REQUEST });
-    return getClient(getState())
-      .filtering.getMutes({ limit: 40 })
-      .then(listAccounts)
-      .then((mutes) => {
-        fileExport(mutes.join('\n'), 'export_mutes.csv');
+    (dispatch: React.Dispatch<ExportDataAction>, getState: () => RootState) => {
+      dispatch({ type: EXPORT_MUTES_REQUEST });
+      return getClient(getState())
+        .filtering.getMutes({ limit: 40 })
+        .then(listAccounts)
+        .then((mutes) => {
+          fileExport(mutes.join('\n'), 'export_mutes.csv');
 
-        toast.success(messages.mutesSuccess);
-        dispatch({ type: EXPORT_MUTES_SUCCESS });
-      })
-      .catch((error) => {
-        dispatch({ type: EXPORT_MUTES_FAIL, error });
-      });
-  };
+          toast.success(messages.mutesSuccess);
+          dispatch({ type: EXPORT_MUTES_SUCCESS });
+        })
+        .catch((error) => {
+          dispatch({ type: EXPORT_MUTES_FAIL, error });
+        });
+    };
 
 export {
   EXPORT_FOLLOWS_REQUEST,

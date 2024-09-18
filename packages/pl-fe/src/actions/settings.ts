@@ -155,52 +155,52 @@ interface SettingChangeAction {
 
 const changeSettingImmediate =
   (path: string[], value: any, opts?: SettingOpts) =>
-  (dispatch: AppDispatch) => {
-    const action: SettingChangeAction = {
-      type: SETTING_CHANGE,
-      path,
-      value,
-    };
+    (dispatch: AppDispatch) => {
+      const action: SettingChangeAction = {
+        type: SETTING_CHANGE,
+        path,
+        value,
+      };
 
-    dispatch(action);
-    dispatch(saveSettings(opts));
-  };
+      dispatch(action);
+      dispatch(saveSettings(opts));
+    };
 
 const changeSetting =
   (path: string[], value: any, opts?: SettingOpts) =>
-  (dispatch: AppDispatch) => {
-    const action: SettingChangeAction = {
-      type: SETTING_CHANGE,
-      path,
-      value,
-    };
+    (dispatch: AppDispatch) => {
+      const action: SettingChangeAction = {
+        type: SETTING_CHANGE,
+        path,
+        value,
+      };
 
-    dispatch(action);
-    return dispatch(saveSettings(opts));
-  };
+      dispatch(action);
+      return dispatch(saveSettings(opts));
+    };
 
 const saveSettings =
   (opts?: SettingOpts) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return;
 
-    const state = getState();
-    if (getSettings(state).getIn(['saved'])) return;
+      const state = getState();
+      if (getSettings(state).getIn(['saved'])) return;
 
-    const data = state.settings.delete('saved').toJS();
+      const data = state.settings.delete('saved').toJS();
 
-    dispatch(updateSettingsStore(data))
-      .then(() => {
-        dispatch({ type: SETTING_SAVE });
+      dispatch(updateSettingsStore(data))
+        .then(() => {
+          dispatch({ type: SETTING_SAVE });
 
-        if (opts?.showAlert) {
-          toast.success(saveSuccessMessage);
-        }
-      })
-      .catch((error) => {
-        toast.showAlertForError(error);
-      });
-  };
+          if (opts?.showAlert) {
+            toast.success(saveSuccessMessage);
+          }
+        })
+        .catch((error) => {
+          toast.showAlertForError(error);
+        });
+    };
 
 /** Update settings store for Mastodon, etc. */
 const updateAuthAccount = (url: string, settings: any) => {

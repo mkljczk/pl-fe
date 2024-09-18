@@ -47,27 +47,27 @@ const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
 
   const tabs = status
     ? [
-        {
-          text: (
-            <FormattedMessage
-              id='event.information'
-              defaultMessage='Information'
-            />
-          ),
-          to: `/@${status.account.acct}/events/${status.id}`,
-          name: 'info',
-        },
-        {
-          text: (
-            <FormattedMessage
-              id='event.discussion'
-              defaultMessage='Discussion'
-            />
-          ),
-          to: `/@${status.account.acct}/events/${status.id}/discussion`,
-          name: 'discussion',
-        },
-      ]
+      {
+        text: (
+          <FormattedMessage
+            id='event.information'
+            defaultMessage='Information'
+          />
+        ),
+        to: `/@${status.account.acct}/events/${status.id}`,
+        name: 'info',
+      },
+      {
+        text: (
+          <FormattedMessage
+            id='event.discussion'
+            defaultMessage='Discussion'
+          />
+        ),
+        to: `/@${status.account.acct}/events/${status.id}/discussion`,
+        name: 'discussion',
+      },
+    ]
     : [];
 
   const showTabs = !['/participations', 'participation_requests'].some((path) =>

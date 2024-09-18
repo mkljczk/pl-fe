@@ -8,10 +8,10 @@ import { useLoading } from 'pl-fe/hooks/useLoading';
 import { importEntities } from '../actions';
 import { findEntity } from '../selectors';
 
-import type { PlfeResponse } from 'pl-fe/api';
-import type { Entity } from '../types';
 import type { EntityFn } from './types';
 import type { UseEntityOpts } from './useEntity';
+import type { Entity } from '../types';
+import type { PlfeResponse } from 'pl-fe/api';
 
 /** Entities will be filtered through this function until it returns true. */
 type LookupFn<TEntity extends Entity> = (entity: TEntity) => boolean;
@@ -20,11 +20,11 @@ const useEntityLookup = <
   TEntity extends Entity,
   TTransformedEntity extends Entity = TEntity,
 >(
-  entityType: string,
-  lookupFn: LookupFn<TTransformedEntity>,
-  entityFn: EntityFn<void>,
-  opts: UseEntityOpts<TEntity, TTransformedEntity> = {},
-) => {
+    entityType: string,
+    lookupFn: LookupFn<TTransformedEntity>,
+    entityFn: EntityFn<void>,
+    opts: UseEntityOpts<TEntity, TTransformedEntity> = {},
+  ) => {
   const { schema = z.custom<TEntity>() } = opts;
 
   const dispatch = useAppDispatch();

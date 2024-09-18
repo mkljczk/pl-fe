@@ -52,14 +52,14 @@ const ChatPaneHeader = (props: IChatPaneHeader) => {
         {!demetricator &&
           typeof unreadCount !== 'undefined' &&
           unreadCount > 0 && (
-            <HStack alignItems='center' space={2}>
-              <Text weight='semibold' data-testid='unread-count'>
-                ({unreadCount})
-              </Text>
+          <HStack alignItems='center' space={2}>
+            <Text weight='semibold' data-testid='unread-count'>
+              ({unreadCount})
+            </Text>
 
-              <div className='h-2.5 w-2.5 rounded-full bg-accent-300' />
-            </HStack>
-          )}
+            <div className='h-2.5 w-2.5 rounded-full bg-accent-300' />
+          </HStack>
+        )}
       </ButtonComp>
 
       <HStack space={2} alignItems='center'>

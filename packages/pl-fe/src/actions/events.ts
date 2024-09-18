@@ -127,19 +127,19 @@ const messages = defineMessages({
 
 const locationSearch =
   (query: string, signal?: AbortSignal) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: LOCATION_SEARCH_REQUEST, query });
-    return getClient(getState)
-      .search.searchLocation(query, { signal })
-      .then((locations) => {
-        dispatch({ type: LOCATION_SEARCH_SUCCESS, locations });
-        return locations;
-      })
-      .catch((error) => {
-        dispatch({ type: LOCATION_SEARCH_FAIL });
-        throw error;
-      });
-  };
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: LOCATION_SEARCH_REQUEST, query });
+      return getClient(getState)
+        .search.searchLocation(query, { signal })
+        .then((locations) => {
+          dispatch({ type: LOCATION_SEARCH_SUCCESS, locations });
+          return locations;
+        })
+        .catch((error) => {
+          dispatch({ type: LOCATION_SEARCH_FAIL });
+          throw error;
+        });
+    };
 
 const submitEvent =
   ({
@@ -161,45 +161,45 @@ const submitEvent =
     joinMode: 'restricted' | 'free';
     location: Location | null;
   }) =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
+    async (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
 
-    if (!name || !name.length) {
-      return;
-    }
+      if (!name || !name.length) {
+        return;
+      }
 
-    dispatch(submitEventRequest());
+      dispatch(submitEventRequest());
 
-    const params: CreateEventParams = {
-      name,
-      status,
-      start_time: startTime.toISOString(),
-      join_mode: joinMode,
-      content_type: 'text/markdown',
-    };
+      const params: CreateEventParams = {
+        name,
+        status,
+        start_time: startTime.toISOString(),
+        join_mode: joinMode,
+        content_type: 'text/markdown',
+      };
 
-    if (endTime) params.end_time = endTime?.toISOString();
-    if (banner) params.banner_id = banner.id;
-    if (location) params.location_id = location.origin_id;
+      if (endTime) params.end_time = endTime?.toISOString();
+      if (banner) params.banner_id = banner.id;
+      if (location) params.location_id = location.origin_id;
 
-    return (
-      statusId === null
-        ? getClient(state).events.createEvent(params)
-        : getClient(state).events.editEvent(statusId, params)
-    )
-      .then((data) => {
-        useModalsStore.getState().closeModal('COMPOSE_EVENT');
-        dispatch(importFetchedStatus(data));
-        dispatch(submitEventSuccess(data));
-        toast.success(statusId ? messages.editSuccess : messages.success, {
-          actionLabel: messages.view,
-          actionLink: `/@${data.account.acct}/events/${data.id}`,
+      return (
+        statusId === null
+          ? getClient(state).events.createEvent(params)
+          : getClient(state).events.editEvent(statusId, params)
+      )
+        .then((data) => {
+          useModalsStore.getState().closeModal('COMPOSE_EVENT');
+          dispatch(importFetchedStatus(data));
+          dispatch(submitEventSuccess(data));
+          toast.success(statusId ? messages.editSuccess : messages.success, {
+            actionLabel: messages.view,
+            actionLink: `/@${data.account.acct}/events/${data.id}`,
+          });
+        })
+        .catch((error) => {
+          dispatch(submitEventFail(error));
         });
-      })
-      .catch((error) => {
-        dispatch(submitEventFail(error));
-      });
-  };
+    };
 
 const submitEventRequest = () => ({
   type: EVENT_SUBMIT_REQUEST,
@@ -217,36 +217,36 @@ const submitEventFail = (error: unknown) => ({
 
 const joinEvent =
   (statusId: string, participationMessage?: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const status = getState().statuses.get(statusId);
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const status = getState().statuses.get(statusId);
 
-    if (!status || !status.event || status.event.join_state) {
-      return dispatch(noOp);
-    }
+      if (!status || !status.event || status.event.join_state) {
+        return dispatch(noOp);
+      }
 
-    dispatch(joinEventRequest(status.id));
+      dispatch(joinEventRequest(status.id));
 
-    return getClient(getState)
-      .events.joinEvent(statusId, participationMessage)
-      .then((data) => {
-        dispatch(importFetchedStatus(data));
-        dispatch(joinEventSuccess(status.id));
-        toast.success(
-          data.event?.join_state === 'pending'
-            ? messages.joinRequestSuccess
-            : messages.joinSuccess,
-          {
-            actionLabel: messages.view,
-            actionLink: `/@${data.account.acct}/events/${data.id}`,
-          },
-        );
-      })
-      .catch((error) => {
-        dispatch(
-          joinEventFail(error, status.id, status?.event?.join_state || null),
-        );
-      });
-  };
+      return getClient(getState)
+        .events.joinEvent(statusId, participationMessage)
+        .then((data) => {
+          dispatch(importFetchedStatus(data));
+          dispatch(joinEventSuccess(status.id));
+          toast.success(
+            data.event?.join_state === 'pending'
+              ? messages.joinRequestSuccess
+              : messages.joinSuccess,
+            {
+              actionLabel: messages.view,
+              actionLink: `/@${data.account.acct}/events/${data.id}`,
+            },
+          );
+        })
+        .catch((error) => {
+          dispatch(
+            joinEventFail(error, status.id, status?.event?.join_state || null),
+          );
+        });
+    };
 
 const joinEventRequest = (statusId: string) => ({
   type: EVENT_JOIN_REQUEST,
@@ -509,23 +509,23 @@ const expandEventParticipationRequestsFail = (
 
 const authorizeEventParticipationRequest =
   (statusId: string, accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(authorizeEventParticipationRequestRequest(statusId, accountId));
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch(authorizeEventParticipationRequestRequest(statusId, accountId));
 
-    return getClient(getState)
-      .events.acceptEventParticipationRequest(statusId, accountId)
-      .then(() => {
-        dispatch(
-          authorizeEventParticipationRequestSuccess(statusId, accountId),
+      return getClient(getState)
+        .events.acceptEventParticipationRequest(statusId, accountId)
+        .then(() => {
+          dispatch(
+            authorizeEventParticipationRequestSuccess(statusId, accountId),
+          );
+          toast.success(messages.authorized);
+        })
+        .catch((error) =>
+          dispatch(
+            authorizeEventParticipationRequestFail(statusId, accountId, error),
+          ),
         );
-        toast.success(messages.authorized);
-      })
-      .catch((error) =>
-        dispatch(
-          authorizeEventParticipationRequestFail(statusId, accountId, error),
-        ),
-      );
-  };
+    };
 
 const authorizeEventParticipationRequestRequest = (
   statusId: string,
@@ -558,21 +558,21 @@ const authorizeEventParticipationRequestFail = (
 
 const rejectEventParticipationRequest =
   (statusId: string, accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(rejectEventParticipationRequestRequest(statusId, accountId));
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch(rejectEventParticipationRequestRequest(statusId, accountId));
 
-    return getClient(getState)
-      .events.rejectEventParticipationRequest(statusId, accountId)
-      .then(() => {
-        dispatch(rejectEventParticipationRequestSuccess(statusId, accountId));
-        toast.success(messages.rejected);
-      })
-      .catch((error) =>
-        dispatch(
-          rejectEventParticipationRequestFail(statusId, accountId, error),
-        ),
-      );
-  };
+      return getClient(getState)
+        .events.rejectEventParticipationRequest(statusId, accountId)
+        .then(() => {
+          dispatch(rejectEventParticipationRequestSuccess(statusId, accountId));
+          toast.success(messages.rejected);
+        })
+        .catch((error) =>
+          dispatch(
+            rejectEventParticipationRequestFail(statusId, accountId, error),
+          ),
+        );
+    };
 
 const rejectEventParticipationRequestRequest = (
   statusId: string,

@@ -16,8 +16,8 @@ import NewFolderForm from 'pl-fe/features/bookmark-folders/components/new-folder
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { makeGetStatus } from 'pl-fe/selectors';
 
-import type { Status as StatusEntity } from 'pl-fe/normalizers';
 import type { BaseModalProps } from '../modal-root';
+import type { Status as StatusEntity } from 'pl-fe/normalizers';
 
 interface SelectBookmarkFolderModalProps {
   statusId: string;

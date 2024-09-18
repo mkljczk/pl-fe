@@ -41,22 +41,22 @@ const fetchFrontendConfigurations =
 /** Conditionally fetches pl-fe config depending on backend features */
 const fetchPlFeConfig =
   (host: string | null) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const features = getState().auth.client.features;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const features = getState().auth.client.features;
 
-    if (features.frontendConfigurations) {
-      return dispatch(fetchFrontendConfigurations()).then((data) => {
-        if (data.pl_fe) {
-          dispatch(importPlFeConfig(data.pl_fe, host));
-          return data.pl_fe;
-        } else {
-          return dispatch(fetchPlFeJson(host));
-        }
-      });
-    } else {
-      return dispatch(fetchPlFeJson(host));
-    }
-  };
+      if (features.frontendConfigurations) {
+        return dispatch(fetchFrontendConfigurations()).then((data) => {
+          if (data.pl_fe) {
+            dispatch(importPlFeConfig(data.pl_fe, host));
+            return data.pl_fe;
+          } else {
+            return dispatch(fetchPlFeJson(host));
+          }
+        });
+      } else {
+        return dispatch(fetchPlFeJson(host));
+      }
+    };
 
 /** Tries to remember the config from browser storage before fetching it */
 const loadPlFeConfig =

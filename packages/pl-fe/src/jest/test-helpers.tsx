@@ -93,12 +93,12 @@ const customRenderHook = <T extends { children?: React.ReactNode }>(
   options?: Omit<RenderHookOptions<T>, 'wrapper'>,
   store?: any,
 ) =>
-  renderHook(callback, {
-    wrapper: ({ children }) => (
-      <TestApp children={children} storeProps={store} />
-    ),
-    ...options,
-  });
+    renderHook(callback, {
+      wrapper: ({ children }) => (
+        <TestApp children={children} storeProps={store} />
+      ),
+      ...options,
+    });
 
 const mockWindowProperty = (property: any, value: any) => {
   const { [property]: originalProperty } = window;

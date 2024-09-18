@@ -92,8 +92,8 @@ const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
         accept={
           attachmentTypes
             ? attachmentTypes
-                .filter((type) => type.startsWith('image/'))
-                .join(',')
+              .filter((type) => type.startsWith('image/'))
+              .join(',')
             : 'image/*'
         }
         onChange={handleChange}

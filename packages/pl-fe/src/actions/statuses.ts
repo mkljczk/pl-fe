@@ -63,71 +63,71 @@ const createStatus =
     idempotencyKey: string,
     statusId: string | null,
   ) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({
-      type: STATUS_CREATE_REQUEST,
-      params,
-      idempotencyKey,
-      editing: !!statusId,
-    });
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({
+        type: STATUS_CREATE_REQUEST,
+        params,
+        idempotencyKey,
+        editing: !!statusId,
+      });
 
-    return (
-      statusId === null
-        ? getClient(getState()).statuses.createStatus(params)
-        : getClient(getState()).statuses.editStatus(statusId, params)
-    )
-      .then((status) => {
+      return (
+        statusId === null
+          ? getClient(getState()).statuses.createStatus(params)
+          : getClient(getState()).statuses.editStatus(statusId, params)
+      )
+        .then((status) => {
         // The backend might still be processing the rich media attachment
-        const expectsCard =
+          const expectsCard =
           status.scheduled_at === null &&
           !status.card &&
           shouldHaveCard(status);
 
-        if (status.scheduled_at === null)
-          dispatch(
-            importFetchedStatus({ ...status, expectsCard }, idempotencyKey),
-          );
-        dispatch({
-          type: STATUS_CREATE_SUCCESS,
-          status,
-          params,
-          idempotencyKey,
-          editing: !!statusId,
+          if (status.scheduled_at === null)
+            dispatch(
+              importFetchedStatus({ ...status, expectsCard }, idempotencyKey),
+            );
+          dispatch({
+            type: STATUS_CREATE_SUCCESS,
+            status,
+            params,
+            idempotencyKey,
+            editing: !!statusId,
+          });
+
+          // Poll the backend for the updated card
+          if (expectsCard) {
+            const delay = 1000;
+
+            const poll = (retries = 5) => {
+              return getClient(getState())
+                .statuses.getStatus(status.id)
+                .then((response) => {
+                  if (response.card) {
+                    dispatch(importFetchedStatus(response));
+                  } else if (retries > 0 && response) {
+                    setTimeout(() => poll(retries - 1), delay);
+                  }
+                })
+                .catch(console.error);
+            };
+
+            setTimeout(() => poll(), delay);
+          }
+
+          return status;
+        })
+        .catch((error) => {
+          dispatch({
+            type: STATUS_CREATE_FAIL,
+            error,
+            params,
+            idempotencyKey,
+            editing: !!statusId,
+          });
+          throw error;
         });
-
-        // Poll the backend for the updated card
-        if (expectsCard) {
-          const delay = 1000;
-
-          const poll = (retries = 5) => {
-            return getClient(getState())
-              .statuses.getStatus(status.id)
-              .then((response) => {
-                if (response.card) {
-                  dispatch(importFetchedStatus(response));
-                } else if (retries > 0 && response) {
-                  setTimeout(() => poll(retries - 1), delay);
-                }
-              })
-              .catch(console.error);
-          };
-
-          setTimeout(() => poll(), delay);
-        }
-
-        return status;
-      })
-      .catch((error) => {
-        dispatch({
-          type: STATUS_CREATE_FAIL,
-          error,
-          params,
-          idempotencyKey,
-          editing: !!statusId,
-        });
-        throw error;
-      });
-  };
+    };
 
 const editStatus =
   (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
@@ -161,111 +161,111 @@ const editStatus =
 
 const fetchStatus =
   (statusId: string, intl?: IntlShape) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: STATUS_FETCH_REQUEST, statusId });
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: STATUS_FETCH_REQUEST, statusId });
 
-    const params =
+      const params =
       intl && getSettings(getState()).get('autoTranslate')
         ? {
-            language: intl.locale,
-          }
+          language: intl.locale,
+        }
         : undefined;
 
-    return getClient(getState())
-      .statuses.getStatus(statusId, params)
-      .then((status) => {
-        dispatch(importFetchedStatus(status));
-        dispatch({ type: STATUS_FETCH_SUCCESS, status });
-        return status;
-      })
-      .catch((error) => {
-        dispatch({ type: STATUS_FETCH_FAIL, statusId, error, skipAlert: true });
-      });
-  };
+      return getClient(getState())
+        .statuses.getStatus(statusId, params)
+        .then((status) => {
+          dispatch(importFetchedStatus(status));
+          dispatch({ type: STATUS_FETCH_SUCCESS, status });
+          return status;
+        })
+        .catch((error) => {
+          dispatch({ type: STATUS_FETCH_FAIL, statusId, error, skipAlert: true });
+        });
+    };
 
 const deleteStatus =
   (statusId: string, withRedraft = false) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return null;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return null;
 
-    const state = getState();
+      const state = getState();
 
-    const status = state.statuses.get(statusId)!;
-    const poll = status.poll_id ? state.polls.get(status.poll_id) : undefined;
+      const status = state.statuses.get(statusId)!;
+      const poll = status.poll_id ? state.polls.get(status.poll_id) : undefined;
 
-    dispatch({ type: STATUS_DELETE_REQUEST, params: status });
+      dispatch({ type: STATUS_DELETE_REQUEST, params: status });
 
-    return getClient(state)
-      .statuses.deleteStatus(statusId)
-      .then((response) => {
-        dispatch({ type: STATUS_DELETE_SUCCESS, statusId });
-        dispatch(deleteFromTimelines(statusId));
+      return getClient(state)
+        .statuses.deleteStatus(statusId)
+        .then((response) => {
+          dispatch({ type: STATUS_DELETE_SUCCESS, statusId });
+          dispatch(deleteFromTimelines(statusId));
 
-        if (withRedraft) {
-          dispatch(
-            setComposeToStatus(
-              status,
-              poll,
-              response.text || '',
-              response.spoiler_text,
-              response.content_type,
-              withRedraft,
-            ),
-          );
-          useModalsStore.getState().openModal('COMPOSE');
-        }
-      })
-      .catch((error) => {
-        dispatch({ type: STATUS_DELETE_FAIL, params: status, error });
-      });
-  };
+          if (withRedraft) {
+            dispatch(
+              setComposeToStatus(
+                status,
+                poll,
+                response.text || '',
+                response.spoiler_text,
+                response.content_type,
+                withRedraft,
+              ),
+            );
+            useModalsStore.getState().openModal('COMPOSE');
+          }
+        })
+        .catch((error) => {
+          dispatch({ type: STATUS_DELETE_FAIL, params: status, error });
+        });
+    };
 
 const updateStatus = (status: BaseStatus) => (dispatch: AppDispatch) =>
   dispatch(importFetchedStatus(status));
 
 const fetchContext =
   (statusId: string, intl?: IntlShape) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: CONTEXT_FETCH_REQUEST, statusId });
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: CONTEXT_FETCH_REQUEST, statusId });
 
-    const params =
+      const params =
       intl && getSettings(getState()).get('autoTranslate')
         ? {
-            language: intl.locale,
-          }
+          language: intl.locale,
+        }
         : undefined;
 
-    return getClient(getState())
-      .statuses.getContext(statusId, params)
-      .then((context) => {
-        if (typeof context === 'object') {
-          const { ancestors, descendants } = context;
-          const statuses = ancestors.concat(descendants);
-          dispatch(importFetchedStatuses(statuses));
-          dispatch({
-            type: CONTEXT_FETCH_SUCCESS,
-            statusId,
-            ancestors,
-            descendants,
-          });
-        } else {
-          throw context;
-        }
-        return context;
-      })
-      .catch((error) => {
-        if (error.response?.status === 404) {
-          dispatch(deleteFromTimelines(statusId));
-        }
+      return getClient(getState())
+        .statuses.getContext(statusId, params)
+        .then((context) => {
+          if (typeof context === 'object') {
+            const { ancestors, descendants } = context;
+            const statuses = ancestors.concat(descendants);
+            dispatch(importFetchedStatuses(statuses));
+            dispatch({
+              type: CONTEXT_FETCH_SUCCESS,
+              statusId,
+              ancestors,
+              descendants,
+            });
+          } else {
+            throw context;
+          }
+          return context;
+        })
+        .catch((error) => {
+          if (error.response?.status === 404) {
+            dispatch(deleteFromTimelines(statusId));
+          }
 
-        dispatch({
-          type: CONTEXT_FETCH_FAIL,
-          statusId,
-          error,
-          skipAlert: true,
+          dispatch({
+            type: CONTEXT_FETCH_FAIL,
+            statusId,
+            error,
+            skipAlert: true,
+          });
         });
-      });
-  };
+    };
 
 const fetchStatusWithContext =
   (statusId: string, intl?: IntlShape) => async (dispatch: AppDispatch) =>
@@ -380,74 +380,74 @@ let TRANSLATIONS_TIMEOUT: NodeJS.Timeout | null = null;
 
 const translateStatus =
   (statusId: string, targetLanguage: string, lazy?: boolean) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const client = getClient(getState);
-    const features = client.features;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const client = getClient(getState);
+      const features = client.features;
 
-    dispatch({ type: STATUS_TRANSLATE_REQUEST, statusId });
+      dispatch({ type: STATUS_TRANSLATE_REQUEST, statusId });
 
-    const handleTranslateMany = () => {
-      const copy = [...TRANSLATIONS_QUEUE];
-      TRANSLATIONS_QUEUE = new Set();
-      if (TRANSLATIONS_TIMEOUT) clearTimeout(TRANSLATIONS_TIMEOUT);
+      const handleTranslateMany = () => {
+        const copy = [...TRANSLATIONS_QUEUE];
+        TRANSLATIONS_QUEUE = new Set();
+        if (TRANSLATIONS_TIMEOUT) clearTimeout(TRANSLATIONS_TIMEOUT);
 
-      return client.statuses
-        .translateStatuses(copy, targetLanguage)
-        .then((response) => {
-          response.forEach((translation) => {
+        return client.statuses
+          .translateStatuses(copy, targetLanguage)
+          .then((response) => {
+            response.forEach((translation) => {
+              dispatch({
+                type: STATUS_TRANSLATE_SUCCESS,
+                statusId: translation.id,
+                translation: translation,
+              });
+
+              copy
+                .filter((statusId) => !response.some(({ id }) => id === statusId))
+                .forEach((statusId) =>
+                  dispatch({
+                    type: STATUS_TRANSLATE_FAIL,
+                    statusId,
+                  }),
+                );
+            });
+          })
+          .catch((error) => {
+            dispatch({
+              type: STATUS_TRANSLATE_FAIL,
+              statusId,
+              error,
+            });
+          });
+      };
+
+      if (features.lazyTranslations && lazy) {
+        TRANSLATIONS_QUEUE.add(statusId);
+
+        if (TRANSLATIONS_TIMEOUT) clearTimeout(TRANSLATIONS_TIMEOUT);
+        TRANSLATIONS_TIMEOUT = setTimeout(() => handleTranslateMany(), 3000);
+      } else if (features.lazyTranslations && TRANSLATIONS_QUEUE.size) {
+        TRANSLATIONS_QUEUE.add(statusId);
+
+        handleTranslateMany();
+      } else {
+        return client.statuses
+          .translateStatus(statusId, targetLanguage)
+          .then((response) => {
             dispatch({
               type: STATUS_TRANSLATE_SUCCESS,
-              statusId: translation.id,
-              translation: translation,
+              statusId,
+              translation: response,
             });
-
-            copy
-              .filter((statusId) => !response.some(({ id }) => id === statusId))
-              .forEach((statusId) =>
-                dispatch({
-                  type: STATUS_TRANSLATE_FAIL,
-                  statusId,
-                }),
-              );
+          })
+          .catch((error) => {
+            dispatch({
+              type: STATUS_TRANSLATE_FAIL,
+              statusId,
+              error,
+            });
           });
-        })
-        .catch((error) => {
-          dispatch({
-            type: STATUS_TRANSLATE_FAIL,
-            statusId,
-            error,
-          });
-        });
+      }
     };
-
-    if (features.lazyTranslations && lazy) {
-      TRANSLATIONS_QUEUE.add(statusId);
-
-      if (TRANSLATIONS_TIMEOUT) clearTimeout(TRANSLATIONS_TIMEOUT);
-      TRANSLATIONS_TIMEOUT = setTimeout(() => handleTranslateMany(), 3000);
-    } else if (features.lazyTranslations && TRANSLATIONS_QUEUE.size) {
-      TRANSLATIONS_QUEUE.add(statusId);
-
-      handleTranslateMany();
-    } else {
-      return client.statuses
-        .translateStatus(statusId, targetLanguage)
-        .then((response) => {
-          dispatch({
-            type: STATUS_TRANSLATE_SUCCESS,
-            statusId,
-            translation: response,
-          });
-        })
-        .catch((error) => {
-          dispatch({
-            type: STATUS_TRANSLATE_FAIL,
-            statusId,
-            error,
-          });
-        });
-    }
-  };
 
 const undoStatusTranslation = (statusId: string) => ({
   type: STATUS_TRANSLATE_UNDO,

@@ -29,6 +29,7 @@ import {
   TIMELINE_UPDATE_QUEUE,
 } from '../actions/timelines';
 
+import type { Status } from '../normalizers';
 import type {
   Status as BaseStatus,
   PaginatedResponse,
@@ -36,7 +37,6 @@ import type {
 } from 'pl-api';
 import type { ImportPosition } from 'pl-fe/entity-store/types';
 import type { AnyAction } from 'redux';
-import type { Status } from '../normalizers';
 
 const TRUNCATE_LIMIT = 40;
 const TRUNCATE_SIZE = 20;

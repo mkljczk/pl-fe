@@ -117,14 +117,12 @@ describe('uploadCompose()', () => {
 
 describe('submitCompose()', () => {
   it('inserts mentions from text', async () => {
-    const state = rootState
-      .set('me', '123')
-      .setIn(
-        ['compose', 'home'],
-        ReducerCompose({
-          text: '@alex hello @mkljczk@pl.fediverse.pl @gg@汉语/漢語.com alex@alexgleason.me',
-        }),
-      );
+    const state = rootState.set('me', '123').setIn(
+      ['compose', 'home'],
+      ReducerCompose({
+        text: '@alex hello @mkljczk@pl.fediverse.pl @gg@汉语/漢語.com alex@alexgleason.me',
+      }),
+    );
 
     const store = mockStore(state);
     await store.dispatch(submitCompose('home'));

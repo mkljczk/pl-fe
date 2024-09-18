@@ -5,9 +5,9 @@ import type { OpenModalProps } from 'pl-fe/stores/modals';
 
 const openModal =
   (...props: OpenModalProps) =>
-  () => {
-    useModalsStore.getState().openModal(...props);
-  };
+    () => {
+      useModalsStore.getState().openModal(...props);
+    };
 
 const closeModal = (type?: ModalType) => () => {
   useModalsStore.getState().closeModal(type);

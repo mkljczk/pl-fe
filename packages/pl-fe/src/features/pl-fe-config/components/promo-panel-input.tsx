@@ -35,9 +35,9 @@ const PromoPanelInput: StreamfieldComponent<PromoPanelItem> = ({
 
   const handleChange =
     (key: 'text' | 'url'): React.ChangeEventHandler<HTMLInputElement> =>
-    (e) => {
-      onChange(value.set(key, e.currentTarget.value));
-    };
+      (e) => {
+        onChange(value.set(key, e.currentTarget.value));
+      };
 
   return (
     <HStack space={2} alignItems='center' grow>

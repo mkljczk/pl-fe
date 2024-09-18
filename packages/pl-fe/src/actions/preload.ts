@@ -39,14 +39,14 @@ const preloadFromMarkup =
     decoder: (json: string) => Record<string, any>,
     action: (data: Record<string, any>) => any,
   ) =>
-  (dispatch: AppDispatch) => {
-    try {
-      const data = decodeFromMarkup(elementId, decoder);
-      dispatch(action(data));
-    } catch {
+    (dispatch: AppDispatch) => {
+      try {
+        const data = decodeFromMarkup(elementId, decoder);
+        dispatch(action(data));
+      } catch {
       // Do nothing
-    }
-  };
+      }
+    };
 
 const preload = () => (dispatch: AppDispatch) => {
   dispatch(

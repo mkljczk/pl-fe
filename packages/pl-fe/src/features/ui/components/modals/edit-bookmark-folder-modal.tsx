@@ -11,8 +11,8 @@ import { useClickOutside } from 'pl-fe/hooks';
 import { useTextField } from 'pl-fe/hooks/forms';
 import toast from 'pl-fe/toast';
 
-import type { Emoji as EmojiType } from 'pl-fe/features/emoji';
 import type { BaseModalProps } from '../modal-root';
+import type { Emoji as EmojiType } from 'pl-fe/features/emoji';
 
 const messages = defineMessages({
   label: {
@@ -50,9 +50,9 @@ const EmojiPicker: React.FC<IEmojiPicker> = ({ emoji, emojiUrl, ...props }) => {
 
   const handleToggle: React.KeyboardEventHandler<HTMLButtonElement> &
     React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.stopPropagation();
-    setVisible(!visible);
-  };
+      e.stopPropagation();
+      setVisible(!visible);
+    };
 
   return (
     <div className='relative'>

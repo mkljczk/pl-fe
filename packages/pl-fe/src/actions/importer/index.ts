@@ -75,36 +75,36 @@ const importFetchedAccounts = (accounts: Array<BaseAccount>) => {
 
 const importFetchedStatus =
   (status: BaseStatus & { expectsCard?: boolean }, idempotencyKey?: string) =>
-  (dispatch: AppDispatch) => {
+    (dispatch: AppDispatch) => {
     // Skip broken statuses
-    if (isBroken(status)) return;
+      if (isBroken(status)) return;
 
-    if (status.reblog?.id) {
-      dispatch(importFetchedStatus(status.reblog as BaseStatus));
-    }
+      if (status.reblog?.id) {
+        dispatch(importFetchedStatus(status.reblog as BaseStatus));
+      }
 
-    // Fedibird quotes
-    if (status.quote?.id) {
-      dispatch(importFetchedStatus(status.quote as BaseStatus));
-    }
+      // Fedibird quotes
+      if (status.quote?.id) {
+        dispatch(importFetchedStatus(status.quote as BaseStatus));
+      }
 
-    // WIP restore this
-    // Fedibird quote from reblog
-    // if (status.reblog?.quote?.id) {
-    //   dispatch(importFetchedStatus(status.reblog.quote));
-    // }
+      // WIP restore this
+      // Fedibird quote from reblog
+      // if (status.reblog?.quote?.id) {
+      //   dispatch(importFetchedStatus(status.reblog.quote));
+      // }
 
-    if (status.poll?.id) {
-      dispatch(importFetchedPoll(status.poll));
-    }
+      if (status.poll?.id) {
+        dispatch(importFetchedPoll(status.poll));
+      }
 
-    if (status.group?.id) {
-      dispatch(importGroup(status.group));
-    }
+      if (status.group?.id) {
+        dispatch(importGroup(status.group));
+      }
 
-    dispatch(importFetchedAccount(status.account));
-    dispatch(importStatus(status, idempotencyKey));
-  };
+      dispatch(importFetchedAccount(status.account));
+      dispatch(importStatus(status, idempotencyKey));
+    };
 
 // Sometimes Pleroma can return an empty account,
 // or a repost can appear of a deleted account. Skip these statuses.
@@ -129,43 +129,43 @@ const importFetchedStatuses =
       Omit<BaseStatus, 'account'> & { account: BaseAccount | null }
     >,
   ) =>
-  (dispatch: AppDispatch) => {
-    const accounts: Array<BaseAccount> = [];
-    const normalStatuses: Array<BaseStatus> = [];
-    const polls: Array<Poll> = [];
+    (dispatch: AppDispatch) => {
+      const accounts: Array<BaseAccount> = [];
+      const normalStatuses: Array<BaseStatus> = [];
+      const polls: Array<Poll> = [];
 
-    const processStatus = (status: BaseStatus) => {
-      if (status.account === null) return;
-      // Skip broken statuses
-      if (isBroken(status)) return;
+      const processStatus = (status: BaseStatus) => {
+        if (status.account === null) return;
+        // Skip broken statuses
+        if (isBroken(status)) return;
 
-      normalStatuses.push(status);
+        normalStatuses.push(status);
 
-      if (status.account !== null) accounts.push(status.account);
-      // if (status.accounts) {
-      //   accounts.push(...status.accounts);
-      // }
+        if (status.account !== null) accounts.push(status.account);
+        // if (status.accounts) {
+        //   accounts.push(...status.accounts);
+        // }
 
-      if (status.reblog?.id) {
-        processStatus(status.reblog as BaseStatus);
-      }
+        if (status.reblog?.id) {
+          processStatus(status.reblog as BaseStatus);
+        }
 
-      // Fedibird quotes
-      if (status.quote?.id) {
-        processStatus(status.quote as BaseStatus);
-      }
+        // Fedibird quotes
+        if (status.quote?.id) {
+          processStatus(status.quote as BaseStatus);
+        }
 
-      if (status.poll?.id) {
-        polls.push(status.poll);
-      }
+        if (status.poll?.id) {
+          polls.push(status.poll);
+        }
+      };
+
+      (statuses as Array<BaseStatus>).forEach(processStatus);
+
+      dispatch(importPolls(polls));
+      dispatch(importFetchedAccounts(accounts));
+      dispatch(importStatuses(normalStatuses));
     };
-
-    (statuses as Array<BaseStatus>).forEach(processStatus);
-
-    dispatch(importPolls(polls));
-    dispatch(importFetchedAccounts(accounts));
-    dispatch(importStatuses(normalStatuses));
-  };
 
 const importFetchedPoll = (poll: Poll) => (dispatch: AppDispatch) => {
   dispatch(importPolls([poll]));

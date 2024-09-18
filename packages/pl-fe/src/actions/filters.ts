@@ -91,27 +91,27 @@ const createFilter =
     hide: boolean,
     keywords_attributes: FilterKeywords,
   ) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: FILTERS_CREATE_REQUEST });
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: FILTERS_CREATE_REQUEST });
 
-    return getClient(getState)
-      .filtering.createFilter({
-        title,
-        context,
-        filter_action: hide ? 'hide' : 'warn',
-        expires_in,
-        keywords_attributes,
-      })
-      .then((response) => {
-        dispatch({ type: FILTERS_CREATE_SUCCESS, filter: response });
-        toast.success(messages.added);
+      return getClient(getState)
+        .filtering.createFilter({
+          title,
+          context,
+          filter_action: hide ? 'hide' : 'warn',
+          expires_in,
+          keywords_attributes,
+        })
+        .then((response) => {
+          dispatch({ type: FILTERS_CREATE_SUCCESS, filter: response });
+          toast.success(messages.added);
 
-        return response;
-      })
-      .catch((error) => {
-        dispatch({ type: FILTERS_CREATE_FAIL, error });
-      });
-  };
+          return response;
+        })
+        .catch((error) => {
+          dispatch({ type: FILTERS_CREATE_FAIL, error });
+        });
+    };
 
 const updateFilter =
   (
@@ -122,27 +122,27 @@ const updateFilter =
     hide: boolean,
     keywords_attributes: FilterKeywords,
   ) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: FILTERS_UPDATE_REQUEST });
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: FILTERS_UPDATE_REQUEST });
 
-    return getClient(getState)
-      .filtering.updateFilter(filterId, {
-        title,
-        context,
-        filter_action: hide ? 'hide' : 'warn',
-        expires_in,
-        keywords_attributes,
-      })
-      .then((response) => {
-        dispatch({ type: FILTERS_UPDATE_SUCCESS, filter: response });
-        toast.success(messages.added);
+      return getClient(getState)
+        .filtering.updateFilter(filterId, {
+          title,
+          context,
+          filter_action: hide ? 'hide' : 'warn',
+          expires_in,
+          keywords_attributes,
+        })
+        .then((response) => {
+          dispatch({ type: FILTERS_UPDATE_SUCCESS, filter: response });
+          toast.success(messages.added);
 
-        return response;
-      })
-      .catch((error) => {
-        dispatch({ type: FILTERS_UPDATE_FAIL, filterId, error });
-      });
-  };
+          return response;
+        })
+        .catch((error) => {
+          dispatch({ type: FILTERS_UPDATE_FAIL, filterId, error });
+        });
+    };
 
 const deleteFilter =
   (filterId: string) => (dispatch: AppDispatch, getState: () => RootState) => {

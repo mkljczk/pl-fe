@@ -122,10 +122,10 @@ const ModalRoot: React.FC<IModalRoot> = ({
           onSecondary: isEditing
             ? undefined
             : () => {
-                dispatch(saveDraftStatus('compose-modal'));
-                onClose('COMPOSE');
-                dispatch(cancelReplyCompose());
-              },
+              dispatch(saveDraftStatus('compose-modal'));
+              onClose('COMPOSE');
+              dispatch(cancelReplyCompose());
+            },
         });
         // TODO: restore this functionality
         // } else if (hasEventComposeContent && type === 'COMPOSE_EVENT') {

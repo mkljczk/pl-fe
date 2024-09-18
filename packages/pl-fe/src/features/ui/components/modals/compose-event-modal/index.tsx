@@ -38,9 +38,9 @@ import { useModalsStore } from 'pl-fe/stores';
 
 import UploadButton from './upload-button';
 
+import type { BaseModalProps } from '../../modal-root';
 import type { Location } from 'pl-api';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
-import type { BaseModalProps } from '../../modal-root';
 
 const messages = defineMessages({
   eventNamePlaceholder: {

@@ -56,11 +56,11 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
     () =>
       entity
         ? {
-            ...entity,
-            relationship,
-            scrobble,
-            __meta: { meta, ...entity.__meta },
-          }
+          ...entity,
+          relationship,
+          scrobble,
+          __meta: { meta, ...entity.__meta },
+        }
         : undefined,
     [entity, relationship, scrobble],
   );

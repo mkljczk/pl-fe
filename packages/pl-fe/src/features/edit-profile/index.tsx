@@ -197,9 +197,9 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
 
   const handleChange =
     (key: string): React.ChangeEventHandler<HTMLInputElement> =>
-    (e) => {
-      onChange({ ...value, [key]: e.currentTarget.value });
-    };
+      (e) => {
+        onChange({ ...value, [key]: e.currentTarget.value });
+      };
 
   return (
     <HStack space={2} grow>
@@ -311,25 +311,25 @@ const EditProfile: React.FC = () => {
 
   const handleFieldChange =
     <T = any>(key: keyof AccountCredentials) =>
-    (value: T) => {
-      updateData(key, value);
-    };
+      (value: T) => {
+        updateData(key, value);
+      };
 
   const handleCheckboxChange =
     (
       key: keyof AccountCredentials,
     ): React.ChangeEventHandler<HTMLInputElement> =>
-    (e) => {
-      updateData(key, e.target.checked);
-    };
+      (e) => {
+        updateData(key, e.target.checked);
+      };
 
   const handleTextChange =
     (
       key: keyof AccountCredentials,
     ): React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> =>
-    (e) => {
-      updateData(key, e.target.value);
-    };
+      (e) => {
+        updateData(key, e.target.value);
+      };
 
   const handleBirthdayChange = (date: string) => {
     updateData('birthday', date);
@@ -344,11 +344,11 @@ const EditProfile: React.FC = () => {
       ...(features.version.software === GOTOSOCIAL
         ? { hide_collections: hide }
         : {
-            hide_followers: hide,
-            hide_follows: hide,
-            hide_followers_count: hide,
-            hide_follows_count: hide,
-          }),
+          hide_followers: hide,
+          hide_follows: hide,
+          hide_followers_count: hide,
+          hide_follows_count: hide,
+        }),
     }));
   };
 

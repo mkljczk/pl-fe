@@ -6,8 +6,8 @@ import type { ReducerCompose } from 'pl-fe/reducers/compose';
 const useCompose = <ID extends string>(
   composeId: ID extends 'default' ? never : ID,
 ): ReturnType<typeof ReducerCompose> =>
-  useAppSelector((state) =>
-    state.compose.get(composeId, state.compose.get('default')!),
-  );
+    useAppSelector((state) =>
+      state.compose.get(composeId, state.compose.get('default')!),
+    );
 
 export { useCompose };

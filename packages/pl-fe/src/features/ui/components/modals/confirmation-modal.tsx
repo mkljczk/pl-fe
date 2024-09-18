@@ -4,8 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import List, { ListItem } from 'pl-fe/components/list';
 import { Modal, Stack, Text, Toggle } from 'pl-fe/components/ui';
 
-import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
 import type { BaseModalProps } from '../modal-root';
+import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
 
 interface ConfirmationModalProps {
   heading?: React.ReactNode;

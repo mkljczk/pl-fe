@@ -161,12 +161,12 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
 
   const handleSwitchAccount =
     (account: AccountEntity): React.MouseEventHandler =>
-    (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+      (e) => {
+        e.preventDefault();
+        e.stopPropagation();
 
-      dispatch(switchAccount(account.id));
-    };
+        dispatch(switchAccount(account.id));
+      };
 
   const onClickLogOut: React.MouseEventHandler = (e) => {
     e.preventDefault();
@@ -558,33 +558,33 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
 
                     {features.bubbleTimeline &&
                       !restrictUnauth.timelines.bubble && (
-                        <SidebarLink
-                          to='/timeline/bubble'
-                          icon={require('@tabler/icons/outline/chart-bubble.svg')}
-                          text={
-                            <FormattedMessage
-                              id='tabs_bar.bubble'
-                              defaultMessage='Bubble'
-                            />
-                          }
-                          onClick={onClose}
-                        />
-                      )}
+                      <SidebarLink
+                        to='/timeline/bubble'
+                        icon={require('@tabler/icons/outline/chart-bubble.svg')}
+                        text={
+                          <FormattedMessage
+                            id='tabs_bar.bubble'
+                            defaultMessage='Bubble'
+                          />
+                        }
+                        onClick={onClose}
+                      />
+                    )}
 
                     {features.federating &&
                       !restrictUnauth.timelines.federated && (
-                        <SidebarLink
-                          to='/timeline/fediverse'
-                          icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
-                          text={
-                            <FormattedMessage
-                              id='tabs_bar.fediverse'
-                              defaultMessage='Fediverse'
-                            />
-                          }
-                          onClick={onClose}
-                        />
-                      )}
+                      <SidebarLink
+                        to='/timeline/fediverse'
+                        icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
+                        text={
+                          <FormattedMessage
+                            id='tabs_bar.fediverse'
+                            defaultMessage='Fediverse'
+                          />
+                        }
+                        onClick={onClose}
+                      />
+                    )}
 
                     <Divider />
                   </>

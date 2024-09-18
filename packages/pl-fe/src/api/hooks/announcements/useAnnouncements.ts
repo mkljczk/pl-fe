@@ -74,9 +74,9 @@ const useAnnouncements = () => {
             value.id !== id
               ? value
               : {
-                  ...value,
-                  reactions: updateReactions(value.reactions, name, 1, true),
-                },
+                ...value,
+                reactions: updateReactions(value.reactions, name, 1, true),
+              },
           ),
       );
     },
@@ -88,9 +88,9 @@ const useAnnouncements = () => {
             value.id !== id
               ? value
               : {
-                  ...value,
-                  reactions: updateReactions(value.reactions, name, -1, false),
-                },
+                ...value,
+                reactions: updateReactions(value.reactions, name, -1, false),
+              },
           ),
       );
     },
@@ -111,9 +111,9 @@ const useAnnouncements = () => {
             value.id !== id
               ? value
               : {
-                  ...value,
-                  reactions: updateReactions(value.reactions, name, -1, false),
-                },
+                ...value,
+                reactions: updateReactions(value.reactions, name, -1, false),
+              },
           ),
       );
     },
@@ -125,9 +125,9 @@ const useAnnouncements = () => {
             value.id !== id
               ? value
               : {
-                  ...value,
-                  reactions: updateReactions(value.reactions, name, 1, true),
-                },
+                ...value,
+                reactions: updateReactions(value.reactions, name, 1, true),
+              },
           ),
       );
     },

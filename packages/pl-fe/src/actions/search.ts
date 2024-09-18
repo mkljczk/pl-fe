@@ -33,43 +33,43 @@ const clearSearchResults = () => ({
 
 const submitSearch =
   (value: string, filter?: SearchFilter) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const type = filter || getState().search.filter || 'accounts';
-    const accountId = getState().search.accountId;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const type = filter || getState().search.filter || 'accounts';
+      const accountId = getState().search.accountId;
 
-    // An empty search doesn't return any results
-    if (value.length === 0) {
-      return dispatch(clearSearchResults());
-    }
+      // An empty search doesn't return any results
+      if (value.length === 0) {
+        return dispatch(clearSearchResults());
+      }
 
-    dispatch(fetchSearchRequest(value));
+      dispatch(fetchSearchRequest(value));
 
-    const params: Record<string, any> = {
-      resolve: true,
-      limit: 20,
-      type: type as any,
+      const params: Record<string, any> = {
+        resolve: true,
+        limit: 20,
+        type: type as any,
+      };
+
+      if (accountId) params.account_id = accountId;
+
+      return getClient(getState())
+        .search.search(value, params)
+        .then((response) => {
+          if (response.accounts) {
+            dispatch(importFetchedAccounts(response.accounts));
+          }
+
+          if (response.statuses) {
+            dispatch(importFetchedStatuses(response.statuses));
+          }
+
+          dispatch(fetchSearchSuccess(response, value, type));
+          dispatch(fetchRelationships(response.accounts.map((item) => item.id)));
+        })
+        .catch((error) => {
+          dispatch(fetchSearchFail(error));
+        });
     };
-
-    if (accountId) params.account_id = accountId;
-
-    return getClient(getState())
-      .search.search(value, params)
-      .then((response) => {
-        if (response.accounts) {
-          dispatch(importFetchedAccounts(response.accounts));
-        }
-
-        if (response.statuses) {
-          dispatch(importFetchedStatuses(response.statuses));
-        }
-
-        dispatch(fetchSearchSuccess(response, value, type));
-        dispatch(fetchRelationships(response.accounts.map((item) => item.id)));
-      })
-      .catch((error) => {
-        dispatch(fetchSearchFail(error));
-      });
-  };
 
 const fetchSearchRequest = (value: string) => ({
   type: SEARCH_FETCH_REQUEST,
@@ -105,38 +105,38 @@ const setFilter =
 
 const expandSearch =
   (type: SearchFilter) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (type === 'links') return;
-    const value = getState().search.submittedValue;
-    const offset = getState().search.results[type].size;
-    const accountId = getState().search.accountId;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (type === 'links') return;
+      const value = getState().search.submittedValue;
+      const offset = getState().search.results[type].size;
+      const accountId = getState().search.accountId;
 
-    dispatch(expandSearchRequest(type));
+      dispatch(expandSearchRequest(type));
 
-    const params: Record<string, any> = {
-      type,
-      offset,
+      const params: Record<string, any> = {
+        type,
+        offset,
+      };
+      if (accountId) params.account_id = accountId;
+
+      return getClient(getState())
+        .search.search(value, params)
+        .then((response) => {
+          if (response.accounts) {
+            dispatch(importFetchedAccounts(response.accounts));
+          }
+
+          if (response.statuses) {
+            dispatch(importFetchedStatuses(response.statuses));
+          }
+
+          dispatch(expandSearchSuccess(response, value, type));
+          dispatch(fetchRelationships(response.accounts.map((item) => item.id)));
+        })
+        .catch((error) => {
+          dispatch(expandSearchFail(error));
+        });
     };
-    if (accountId) params.account_id = accountId;
-
-    return getClient(getState())
-      .search.search(value, params)
-      .then((response) => {
-        if (response.accounts) {
-          dispatch(importFetchedAccounts(response.accounts));
-        }
-
-        if (response.statuses) {
-          dispatch(importFetchedStatuses(response.statuses));
-        }
-
-        dispatch(expandSearchSuccess(response, value, type));
-        dispatch(fetchRelationships(response.accounts.map((item) => item.id)));
-      })
-      .catch((error) => {
-        dispatch(expandSearchFail(error));
-      });
-  };
 
 const expandSearchRequest = (searchType: SearchFilter) => ({
   type: SEARCH_EXPAND_REQUEST,

@@ -117,105 +117,105 @@ const createAppToken =
 
 const createUserToken =
   (username: string, password: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const app = getState().auth.app;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const app = getState().auth.app;
 
-    const params = {
-      client_id: app?.client_id!,
-      client_secret: app?.client_secret!,
-      redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
-      grant_type: 'password',
-      username: username,
-      password: password,
-      scope: getScopes(getState()),
+      const params = {
+        client_id: app?.client_id!,
+        client_secret: app?.client_secret!,
+        redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
+        grant_type: 'password',
+        username: username,
+        password: password,
+        scope: getScopes(getState()),
+      };
+
+      return dispatch(obtainOAuthToken(params)).then((token) =>
+        dispatch(authLoggedIn(token)),
+      );
     };
-
-    return dispatch(obtainOAuthToken(params)).then((token) =>
-      dispatch(authLoggedIn(token)),
-    );
-  };
 
 const otpVerify =
   (code: string, mfa_token: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const app = state.auth.app;
-    const baseUrl = parseBaseURL(state.me) || BuildConfig.BACKEND_URL;
-    const client = new PlApiClient(baseUrl);
-    return client.oauth
-      .mfaChallenge({
-        client_id: app?.client_id!,
-        client_secret: app?.client_secret!,
-        mfa_token: mfa_token,
-        code: code,
-        challenge_type: 'totp',
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
+      const app = state.auth.app;
+      const baseUrl = parseBaseURL(state.me) || BuildConfig.BACKEND_URL;
+      const client = new PlApiClient(baseUrl);
+      return client.oauth
+        .mfaChallenge({
+          client_id: app?.client_id!,
+          client_secret: app?.client_secret!,
+          mfa_token: mfa_token,
+          code: code,
+          challenge_type: 'totp',
         // redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
         // scope: getScopes(getState()),
-      })
-      .then((token) => dispatch(authLoggedIn(token)));
-  };
+        })
+        .then((token) => dispatch(authLoggedIn(token)));
+    };
 
 const verifyCredentials =
   (token: string, accountUrl?: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const baseURL = parseBaseURL(accountUrl) || BuildConfig.BACKEND_URL;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const baseURL = parseBaseURL(accountUrl) || BuildConfig.BACKEND_URL;
 
-    dispatch({ type: VERIFY_CREDENTIALS_REQUEST, token });
+      dispatch({ type: VERIFY_CREDENTIALS_REQUEST, token });
 
-    const client = new PlApiClient(baseURL, token);
+      const client = new PlApiClient(baseURL, token);
 
-    return client.settings
-      .verifyCredentials()
-      .then((account) => {
-        dispatch(importFetchedAccount(account));
-        dispatch({ type: VERIFY_CREDENTIALS_SUCCESS, token, account });
-        if (account.id === getState().me) dispatch(fetchMeSuccess(account));
-        return account;
-      })
-      .catch((error) => {
-        if (error?.response?.status === 403 && error?.response?.json?.id) {
+      return client.settings
+        .verifyCredentials()
+        .then((account) => {
+          dispatch(importFetchedAccount(account));
+          dispatch({ type: VERIFY_CREDENTIALS_SUCCESS, token, account });
+          if (account.id === getState().me) dispatch(fetchMeSuccess(account));
+          return account;
+        })
+        .catch((error) => {
+          if (error?.response?.status === 403 && error?.response?.json?.id) {
           // The user is waitlisted
-          const account = error.response.json;
-          const parsedAccount = credentialAccountSchema.parse(
-            error.response.json,
-          );
-          dispatch(importFetchedAccount(parsedAccount));
-          dispatch({
-            type: VERIFY_CREDENTIALS_SUCCESS,
-            token,
-            account: parsedAccount,
-          });
-          if (account.id === getState().me)
-            dispatch(fetchMeSuccess(parsedAccount));
-          return parsedAccount;
-        } else {
-          if (getState().me === null) dispatch(fetchMeFail(error));
-          dispatch({ type: VERIFY_CREDENTIALS_FAIL, token, error });
-          throw error;
-        }
-      });
-  };
+            const account = error.response.json;
+            const parsedAccount = credentialAccountSchema.parse(
+              error.response.json,
+            );
+            dispatch(importFetchedAccount(parsedAccount));
+            dispatch({
+              type: VERIFY_CREDENTIALS_SUCCESS,
+              token,
+              account: parsedAccount,
+            });
+            if (account.id === getState().me)
+              dispatch(fetchMeSuccess(parsedAccount));
+            return parsedAccount;
+          } else {
+            if (getState().me === null) dispatch(fetchMeFail(error));
+            dispatch({ type: VERIFY_CREDENTIALS_FAIL, token, error });
+            throw error;
+          }
+        });
+    };
 
 const rememberAuthAccount =
   (accountUrl: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: AUTH_ACCOUNT_REMEMBER_REQUEST, accountUrl });
-    return KVStore.getItemOrError(`authAccount:${accountUrl}`)
-      .then((account) => {
-        dispatch(importFetchedAccount(account));
-        dispatch({ type: AUTH_ACCOUNT_REMEMBER_SUCCESS, account, accountUrl });
-        if (account.id === getState().me) dispatch(fetchMeSuccess(account));
-        return account;
-      })
-      .catch((error) => {
-        dispatch({
-          type: AUTH_ACCOUNT_REMEMBER_FAIL,
-          error,
-          accountUrl,
-          skipAlert: true,
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: AUTH_ACCOUNT_REMEMBER_REQUEST, accountUrl });
+      return KVStore.getItemOrError(`authAccount:${accountUrl}`)
+        .then((account) => {
+          dispatch(importFetchedAccount(account));
+          dispatch({ type: AUTH_ACCOUNT_REMEMBER_SUCCESS, account, accountUrl });
+          if (account.id === getState().me) dispatch(fetchMeSuccess(account));
+          return account;
+        })
+        .catch((error) => {
+          dispatch({
+            type: AUTH_ACCOUNT_REMEMBER_FAIL,
+            error,
+            accountUrl,
+            skipAlert: true,
+          });
         });
-      });
-  };
+    };
 
 const loadCredentials =
   (token: string, accountUrl: string) => (dispatch: AppDispatch) =>
@@ -272,14 +272,14 @@ const logOut = () => (dispatch: AppDispatch, getState: () => RootState) => {
 
 const switchAccount =
   (accountId: string, background = false) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const account = selectAccount(getState(), accountId);
-    // Clear all stored cache from React Query
-    queryClient.invalidateQueries();
-    queryClient.clear();
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const account = selectAccount(getState(), accountId);
+      // Clear all stored cache from React Query
+      queryClient.invalidateQueries();
+      queryClient.clear();
 
-    return dispatch({ type: SWITCH_ACCOUNT, account, background });
-  };
+      return dispatch({ type: SWITCH_ACCOUNT, account, background });
+    };
 
 const fetchOwnAccounts =
   () => (dispatch: AppDispatch, getState: () => RootState) => {

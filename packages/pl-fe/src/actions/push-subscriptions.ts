@@ -8,8 +8,8 @@ import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const createPushSubscription =
   (params: CreatePushNotificationsSubscriptionParams) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).pushNotifications.createSubscription(params);
+    (dispatch: AppDispatch, getState: () => RootState) =>
+      getClient(getState).pushNotifications.createSubscription(params);
 
 const fetchPushSubscription =
   () => (dispatch: AppDispatch, getState: () => RootState) =>
@@ -17,8 +17,8 @@ const fetchPushSubscription =
 
 const updatePushSubscription =
   (params: UpdatePushNotificationsSubscriptionParams) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).pushNotifications.updateSubscription(params);
+    (dispatch: AppDispatch, getState: () => RootState) =>
+      getClient(getState).pushNotifications.updateSubscription(params);
 
 const deletePushSubscription =
   () => (dispatch: AppDispatch, getState: () => RootState) =>

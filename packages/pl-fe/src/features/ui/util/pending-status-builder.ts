@@ -42,10 +42,7 @@ const buildStatus = (
 
   const status = {
     account,
-    content: pendingStatus.status.replace(
-      new RegExp('\n', 'g'),
-      '<br>',
-    ) /* eslint-disable-line no-control-regex */,
+    content: pendingStatus.status.replaceAll('\n', '<br>'),
     id: `末pending-${idempotencyKey}`,
     in_reply_to_account_id: state.statuses.getIn(
       [inReplyToId, 'account'],

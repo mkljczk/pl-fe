@@ -7,8 +7,8 @@ import ReplyIndicator from 'pl-fe/features/compose/components/reply-indicator';
 import { useAppSelector } from 'pl-fe/hooks';
 import { makeGetStatus } from 'pl-fe/selectors';
 
-import type { Status as StatusEntity } from 'pl-fe/normalizers';
 import type { BaseModalProps } from '../modal-root';
+import type { Status as StatusEntity } from 'pl-fe/normalizers';
 
 const messages = defineMessages({
   cancel_reblog: {

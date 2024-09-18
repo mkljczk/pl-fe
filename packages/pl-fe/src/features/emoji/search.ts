@@ -2,8 +2,8 @@ import Index from '@akryum/flexsearch-es';
 
 import data from './data';
 
-import type { CustomEmoji } from 'pl-api';
 import type { Emoji } from './index';
+import type { CustomEmoji } from 'pl-api';
 
 // @ts-ignore Wrong default export.
 const index: Index.Index = new Index({

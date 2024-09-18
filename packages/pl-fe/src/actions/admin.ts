@@ -103,21 +103,21 @@ const fetchConfig =
 
 const updateConfig =
   (configs: PleromaConfig['configs']) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: ADMIN_CONFIG_UPDATE_REQUEST, configs });
-    return getClient(getState)
-      .admin.config.updatePleromaConfig(configs)
-      .then((data) => {
-        dispatch({
-          type: ADMIN_CONFIG_UPDATE_SUCCESS,
-          configs: data.configs,
-          needsReboot: data.need_reboot,
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: ADMIN_CONFIG_UPDATE_REQUEST, configs });
+      return getClient(getState)
+        .admin.config.updatePleromaConfig(configs)
+        .then((data) => {
+          dispatch({
+            type: ADMIN_CONFIG_UPDATE_SUCCESS,
+            configs: data.configs,
+            needsReboot: data.need_reboot,
+          });
+        })
+        .catch((error) => {
+          dispatch({ type: ADMIN_CONFIG_UPDATE_FAIL, error, configs });
         });
-      })
-      .catch((error) => {
-        dispatch({ type: ADMIN_CONFIG_UPDATE_FAIL, error, configs });
-      });
-  };
+    };
 
 const updatePlFeConfig =
   (data: Record<string, any>) => (dispatch: AppDispatch) => {
@@ -138,31 +138,31 @@ const updatePlFeConfig =
 
 const fetchReports =
   (params?: AdminGetReportsParams) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
 
-    dispatch({ type: ADMIN_REPORTS_FETCH_REQUEST, params });
+      dispatch({ type: ADMIN_REPORTS_FETCH_REQUEST, params });
 
-    return getClient(state)
-      .admin.reports.getReports(params)
-      .then(({ items }) => {
-        items.forEach((report) => {
-          if (report.account?.account)
-            dispatch(importFetchedAccount(report.account.account));
-          if (report.target_account?.account)
-            dispatch(importFetchedAccount(report.target_account.account));
-          dispatch(importFetchedStatuses(report.statuses));
-          dispatch({
-            type: ADMIN_REPORTS_FETCH_SUCCESS,
-            reports: items,
-            params,
+      return getClient(state)
+        .admin.reports.getReports(params)
+        .then(({ items }) => {
+          items.forEach((report) => {
+            if (report.account?.account)
+              dispatch(importFetchedAccount(report.account.account));
+            if (report.target_account?.account)
+              dispatch(importFetchedAccount(report.target_account.account));
+            dispatch(importFetchedStatuses(report.statuses));
+            dispatch({
+              type: ADMIN_REPORTS_FETCH_SUCCESS,
+              reports: items,
+              params,
+            });
           });
+        })
+        .catch((error) => {
+          dispatch({ type: ADMIN_REPORTS_FETCH_FAIL, error, params });
         });
-      })
-      .catch((error) => {
-        dispatch({ type: ADMIN_REPORTS_FETCH_FAIL, error, params });
-      });
-  };
+    };
 
 const closeReport =
   (reportId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
@@ -182,49 +182,49 @@ const closeReport =
 
 const fetchUsers =
   (params?: AdminGetAccountsParams) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
 
-    dispatch({ type: ADMIN_USERS_FETCH_REQUEST, params });
+      dispatch({ type: ADMIN_USERS_FETCH_REQUEST, params });
 
-    return getClient(state)
-      .admin.accounts.getAccounts(params)
-      .then((res) => {
-        dispatch(
-          importFetchedAccounts(
-            res.items
-              .map(({ account }) => account)
-              .filter((account): account is Account => account !== null),
-          ),
-        );
-        dispatch(fetchRelationships(res.items.map((account) => account.id)));
-        dispatch({
-          type: ADMIN_USERS_FETCH_SUCCESS,
-          users: res.items,
-          params,
-          next: res.next,
+      return getClient(state)
+        .admin.accounts.getAccounts(params)
+        .then((res) => {
+          dispatch(
+            importFetchedAccounts(
+              res.items
+                .map(({ account }) => account)
+                .filter((account): account is Account => account !== null),
+            ),
+          );
+          dispatch(fetchRelationships(res.items.map((account) => account.id)));
+          dispatch({
+            type: ADMIN_USERS_FETCH_SUCCESS,
+            users: res.items,
+            params,
+            next: res.next,
+          });
+          return res;
+        })
+        .catch((error) => {
+          dispatch({ type: ADMIN_USERS_FETCH_FAIL, error, params });
+          throw error;
         });
-        return res;
-      })
-      .catch((error) => {
-        dispatch({ type: ADMIN_USERS_FETCH_FAIL, error, params });
-        throw error;
-      });
-  };
+    };
 
 const deactivateUser =
   (accountId: string, report_id?: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
 
-    dispatch({ type: ADMIN_USER_DEACTIVATE_REQUEST, accountId });
+      dispatch({ type: ADMIN_USER_DEACTIVATE_REQUEST, accountId });
 
-    return getClient(state).admin.accounts.performAccountAction(
-      accountId,
-      'suspend',
-      { report_id },
-    );
-  };
+      return getClient(state).admin.accounts.performAccountAction(
+        accountId,
+        'suspend',
+        { report_id },
+      );
+    };
 
 const deleteUser =
   (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
@@ -272,74 +272,74 @@ const deleteStatus =
 
 const toggleStatusSensitivity =
   (statusId: string, sensitive: boolean) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: ADMIN_STATUS_TOGGLE_SENSITIVITY_REQUEST, statusId });
-    return getClient(getState)
-      .admin.statuses.updateStatus(statusId, { sensitive: !sensitive })
-      .then((status) => {
-        dispatch(importFetchedStatus(status));
-        dispatch({
-          type: ADMIN_STATUS_TOGGLE_SENSITIVITY_SUCCESS,
-          statusId,
-          status,
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: ADMIN_STATUS_TOGGLE_SENSITIVITY_REQUEST, statusId });
+      return getClient(getState)
+        .admin.statuses.updateStatus(statusId, { sensitive: !sensitive })
+        .then((status) => {
+          dispatch(importFetchedStatus(status));
+          dispatch({
+            type: ADMIN_STATUS_TOGGLE_SENSITIVITY_SUCCESS,
+            statusId,
+            status,
+          });
+        })
+        .catch((error) => {
+          dispatch({
+            type: ADMIN_STATUS_TOGGLE_SENSITIVITY_FAIL,
+            error,
+            statusId,
+          });
         });
-      })
-      .catch((error) => {
-        dispatch({
-          type: ADMIN_STATUS_TOGGLE_SENSITIVITY_FAIL,
-          error,
-          statusId,
-        });
-      });
-  };
+    };
 
 const tagUser =
   (accountId: string, tags: string[]) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: ADMIN_USER_TAG_REQUEST, accountId, tags });
-    return getClient(getState)
-      .admin.accounts.tagUser(accountId, tags)
-      .then(() => {
-        dispatch({ type: ADMIN_USER_TAG_SUCCESS, accountId, tags });
-      })
-      .catch((error) => {
-        dispatch({ type: ADMIN_USER_TAG_FAIL, error, accountId, tags });
-      });
-  };
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: ADMIN_USER_TAG_REQUEST, accountId, tags });
+      return getClient(getState)
+        .admin.accounts.tagUser(accountId, tags)
+        .then(() => {
+          dispatch({ type: ADMIN_USER_TAG_SUCCESS, accountId, tags });
+        })
+        .catch((error) => {
+          dispatch({ type: ADMIN_USER_TAG_FAIL, error, accountId, tags });
+        });
+    };
 
 const untagUser =
   (accountId: string, tags: string[]) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch({ type: ADMIN_USER_UNTAG_REQUEST, accountId, tags });
-    return getClient(getState)
-      .admin.accounts.untagUser(accountId, tags)
-      .then(() => {
-        dispatch({ type: ADMIN_USER_UNTAG_SUCCESS, accountId, tags });
-      })
-      .catch((error) => {
-        dispatch({ type: ADMIN_USER_UNTAG_FAIL, error, accountId, tags });
-      });
-  };
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch({ type: ADMIN_USER_UNTAG_REQUEST, accountId, tags });
+      return getClient(getState)
+        .admin.accounts.untagUser(accountId, tags)
+        .then(() => {
+          dispatch({ type: ADMIN_USER_UNTAG_SUCCESS, accountId, tags });
+        })
+        .catch((error) => {
+          dispatch({ type: ADMIN_USER_UNTAG_FAIL, error, accountId, tags });
+        });
+    };
 
 /** Synchronizes user tags to the backend. */
 const setTags =
   (accountId: string, oldTags: string[], newTags: string[]) =>
-  async (dispatch: AppDispatch) => {
-    const diff = getTagDiff(oldTags, newTags);
+    async (dispatch: AppDispatch) => {
+      const diff = getTagDiff(oldTags, newTags);
 
-    if (diff.added.length) await dispatch(tagUser(accountId, diff.added));
-    if (diff.removed.length) await dispatch(untagUser(accountId, diff.removed));
-  };
+      if (diff.added.length) await dispatch(tagUser(accountId, diff.added));
+      if (diff.removed.length) await dispatch(untagUser(accountId, diff.removed));
+    };
 
 /** Synchronizes badges to the backend. */
 const setBadges =
   (accountId: string, oldTags: string[], newTags: string[]) =>
-  (dispatch: AppDispatch) => {
-    const oldBadges = filterBadges(oldTags);
-    const newBadges = filterBadges(newTags);
+    (dispatch: AppDispatch) => {
+      const oldBadges = filterBadges(oldTags);
+      const newBadges = filterBadges(newTags);
 
-    return dispatch(setTags(accountId, oldBadges, newBadges));
-  };
+      return dispatch(setTags(accountId, oldBadges, newBadges));
+    };
 
 const promoteToAdmin =
   (accountId: string) => (_dispatch: AppDispatch, getState: () => RootState) =>
@@ -355,16 +355,16 @@ const demoteToUser =
 
 const setRole =
   (accountId: string, role: 'user' | 'moderator' | 'admin') =>
-  (dispatch: AppDispatch) => {
-    switch (role) {
-      case 'user':
-        return dispatch(demoteToUser(accountId));
-      case 'moderator':
-        return dispatch(promoteToModerator(accountId));
-      case 'admin':
-        return dispatch(promoteToAdmin(accountId));
-    }
-  };
+    (dispatch: AppDispatch) => {
+      switch (role) {
+        case 'user':
+          return dispatch(demoteToUser(accountId));
+        case 'moderator':
+          return dispatch(promoteToModerator(accountId));
+        case 'admin':
+          return dispatch(promoteToAdmin(accountId));
+      }
+    };
 
 const setUserIndexQuery = (query: string) => ({
   type: ADMIN_USER_INDEX_QUERY_SET,

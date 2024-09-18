@@ -58,9 +58,9 @@ const EditFederationModal: React.FC<
 
   const handleDataChange =
     (key: string): React.ChangeEventHandler<HTMLInputElement> =>
-    ({ target }) => {
-      setData({ ...data, [key]: target.checked });
-    };
+      ({ target }) => {
+        setData({ ...data, [key]: target.checked });
+      };
 
   const handleMediaRemoval: React.ChangeEventHandler<HTMLInputElement> = ({
     target: { checked },

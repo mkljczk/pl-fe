@@ -433,10 +433,10 @@ const compose = (
 
           const to = action.explicitAddressing
             ? statusToMentionsArray(
-                action.status,
-                action.account,
-                action.rebloggedBy,
-              )
+              action.status,
+              action.account,
+              action.rebloggedBy,
+            )
             : ImmutableOrderedSet<string>();
 
           map.set('group_id', action.status.group_id);

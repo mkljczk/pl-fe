@@ -1,8 +1,8 @@
 import { useAppSelector } from 'pl-fe/hooks';
 
-import type { RootState } from 'pl-fe/store';
 import type { EntitiesPath } from './hooks/types';
 import type { Entity, EntityListState } from './types';
+import type { RootState } from 'pl-fe/store';
 
 /** Get cache at path from Redux. */
 const selectCache = (state: RootState, path: EntitiesPath) =>
@@ -52,12 +52,12 @@ const selectEntities = <TEntity extends Entity>(
 
   return entityIds
     ? Array.from(entityIds).reduce<TEntity[]>((result, id) => {
-        const entity = cache?.store[id];
-        if (entity) {
-          result.push(entity as TEntity);
-        }
-        return result;
-      }, [])
+      const entity = cache?.store[id];
+      if (entity) {
+        result.push(entity as TEntity);
+      }
+      return result;
+    }, [])
     : [];
 };
 

@@ -18,21 +18,21 @@ const APP_CREATE_FAIL = 'APP_CREATE_FAIL' as const;
 
 const createApp =
   (params: CreateApplicationParams, baseURL?: string) =>
-  (dispatch: AppDispatch) => {
-    dispatch({ type: APP_CREATE_REQUEST, params });
+    (dispatch: AppDispatch) => {
+      dispatch({ type: APP_CREATE_REQUEST, params });
 
-    const client = new PlApiClient(baseURL || BuildConfig.BACKEND_URL || '');
+      const client = new PlApiClient(baseURL || BuildConfig.BACKEND_URL || '');
 
-    return client.apps
-      .createApplication(params)
-      .then((app) => {
-        dispatch({ type: APP_CREATE_SUCCESS, params, app });
-        return app as Record<string, string>;
-      })
-      .catch((error) => {
-        dispatch({ type: APP_CREATE_FAIL, params, error });
-        throw error;
-      });
-  };
+      return client.apps
+        .createApplication(params)
+        .then((app) => {
+          dispatch({ type: APP_CREATE_SUCCESS, params, app });
+          return app as Record<string, string>;
+        })
+        .catch((error) => {
+          dispatch({ type: APP_CREATE_FAIL, params, error });
+          throw error;
+        });
+    };
 
 export { APP_CREATE_REQUEST, APP_CREATE_SUCCESS, APP_CREATE_FAIL, createApp };

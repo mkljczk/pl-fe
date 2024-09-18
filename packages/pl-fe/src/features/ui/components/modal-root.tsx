@@ -166,7 +166,7 @@ const ModalRoot: React.FC = () => {
             keyof typeof MODAL_COMPONENTS,
             React.LazyExoticComponent<any>
           >
-        )[type]
+      )[type]
       : null;
 
   return (

@@ -99,41 +99,41 @@ const messages = defineMessages({
 
 const reblog =
   (status: Pick<Status, 'id'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return;
 
-    dispatch(reblogRequest(status.id));
+      dispatch(reblogRequest(status.id));
 
-    return getClient(getState())
-      .statuses.reblogStatus(status.id)
-      .then((response) => {
+      return getClient(getState())
+        .statuses.reblogStatus(status.id)
+        .then((response) => {
         // The reblog API method returns a new status wrapped around the original. In this case we are only
         // interested in how the original is modified, hence passing it skipping the wrapper
-        if (response.reblog)
-          dispatch(importFetchedStatus(response.reblog as Status));
-        dispatch(reblogSuccess(response));
-      })
-      .catch((error) => {
-        dispatch(reblogFail(status.id, error));
-      });
-  };
+          if (response.reblog)
+            dispatch(importFetchedStatus(response.reblog as Status));
+          dispatch(reblogSuccess(response));
+        })
+        .catch((error) => {
+          dispatch(reblogFail(status.id, error));
+        });
+    };
 
 const unreblog =
   (status: Pick<Status, 'id'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return;
 
-    dispatch(unreblogRequest(status.id));
+      dispatch(unreblogRequest(status.id));
 
-    return getClient(getState())
-      .statuses.unreblogStatus(status.id)
-      .then((status) => {
-        dispatch(unreblogSuccess(status));
-      })
-      .catch((error) => {
-        dispatch(unreblogFail(status.id, error));
-      });
-  };
+      return getClient(getState())
+        .statuses.unreblogStatus(status.id)
+        .then((status) => {
+          dispatch(unreblogSuccess(status));
+        })
+        .catch((error) => {
+          dispatch(unreblogFail(status.id, error));
+        });
+    };
 
 const toggleReblog =
   (status: Pick<Status, 'id' | 'reblogged'>) => (dispatch: AppDispatch) => {
@@ -180,37 +180,37 @@ const unreblogFail = (statusId: string, error: unknown) => ({
 
 const favourite =
   (status: Pick<Status, 'id'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return;
 
-    dispatch(favouriteRequest(status.id));
+      dispatch(favouriteRequest(status.id));
 
-    return getClient(getState())
-      .statuses.favouriteStatus(status.id)
-      .then((response) => {
-        dispatch(favouriteSuccess(response));
-      })
-      .catch((error) => {
-        dispatch(favouriteFail(status.id, error));
-      });
-  };
+      return getClient(getState())
+        .statuses.favouriteStatus(status.id)
+        .then((response) => {
+          dispatch(favouriteSuccess(response));
+        })
+        .catch((error) => {
+          dispatch(favouriteFail(status.id, error));
+        });
+    };
 
 const unfavourite =
   (status: Pick<Status, 'id'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return;
 
-    dispatch(unfavouriteRequest(status.id));
+      dispatch(unfavouriteRequest(status.id));
 
-    return getClient(getState())
-      .statuses.unfavouriteStatus(status.id)
-      .then((response) => {
-        dispatch(unfavouriteSuccess(response));
-      })
-      .catch((error) => {
-        dispatch(unfavouriteFail(status.id, error));
-      });
-  };
+      return getClient(getState())
+        .statuses.unfavouriteStatus(status.id)
+        .then((response) => {
+          dispatch(unfavouriteSuccess(response));
+        })
+        .catch((error) => {
+          dispatch(unfavouriteFail(status.id, error));
+        });
+    };
 
 const toggleFavourite =
   (status: Pick<Status, 'id' | 'favourited'>) => (dispatch: AppDispatch) => {
@@ -257,37 +257,37 @@ const unfavouriteFail = (statusId: string, error: unknown) => ({
 
 const dislike =
   (status: Pick<Status, 'id'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return;
 
-    dispatch(dislikeRequest(status.id));
+      dispatch(dislikeRequest(status.id));
 
-    return getClient(getState)
-      .statuses.dislikeStatus(status.id)
-      .then((response) => {
-        dispatch(dislikeSuccess(response));
-      })
-      .catch((error) => {
-        dispatch(dislikeFail(status.id, error));
-      });
-  };
+      return getClient(getState)
+        .statuses.dislikeStatus(status.id)
+        .then((response) => {
+          dispatch(dislikeSuccess(response));
+        })
+        .catch((error) => {
+          dispatch(dislikeFail(status.id, error));
+        });
+    };
 
 const undislike =
   (status: Pick<Status, 'id'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return;
 
-    dispatch(undislikeRequest(status.id));
+      dispatch(undislikeRequest(status.id));
 
-    return getClient(getState)
-      .statuses.undislikeStatus(status.id)
-      .then((response) => {
-        dispatch(undislikeSuccess(response));
-      })
-      .catch((error) => {
-        dispatch(undislikeFail(status.id, error));
-      });
-  };
+      return getClient(getState)
+        .statuses.undislikeStatus(status.id)
+        .then((response) => {
+          dispatch(undislikeSuccess(response));
+        })
+        .catch((error) => {
+          dispatch(undislikeFail(status.id, error));
+        });
+    };
 
 const toggleDislike =
   (status: Pick<Status, 'id' | 'disliked'>) => (dispatch: AppDispatch) => {
@@ -334,62 +334,62 @@ const undislikeFail = (statusId: string, error: unknown) => ({
 
 const bookmark =
   (status: Pick<Status, 'id'>, folderId?: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const state = getState();
 
-    const features = state.auth.client.features;
+      const features = state.auth.client.features;
 
-    dispatch(bookmarkRequest(status.id));
+      dispatch(bookmarkRequest(status.id));
 
-    return getClient(getState())
-      .statuses.bookmarkStatus(status.id, folderId)
-      .then((response) => {
-        dispatch(importFetchedStatus(response));
-        dispatch(bookmarkSuccess(response));
+      return getClient(getState())
+        .statuses.bookmarkStatus(status.id, folderId)
+        .then((response) => {
+          dispatch(importFetchedStatus(response));
+          dispatch(bookmarkSuccess(response));
 
-        let opts: IToastOptions = {
-          actionLabel: messages.view,
-          actionLink: folderId ? `/bookmarks/${folderId}` : '/bookmarks/all',
-        };
-
-        if (features.bookmarkFolders && typeof folderId !== 'string') {
-          opts = {
-            actionLabel: messages.selectFolder,
-            action: () =>
-              useModalsStore.getState().openModal('SELECT_BOOKMARK_FOLDER', {
-                statusId: status.id,
-              }),
+          let opts: IToastOptions = {
+            actionLabel: messages.view,
+            actionLink: folderId ? `/bookmarks/${folderId}` : '/bookmarks/all',
           };
-        }
 
-        toast.success(
-          typeof folderId === 'string'
-            ? messages.folderChanged
-            : messages.bookmarkAdded,
-          opts,
-        );
-      })
-      .catch((error) => {
-        dispatch(bookmarkFail(status.id, error));
-      });
-  };
+          if (features.bookmarkFolders && typeof folderId !== 'string') {
+            opts = {
+              actionLabel: messages.selectFolder,
+              action: () =>
+                useModalsStore.getState().openModal('SELECT_BOOKMARK_FOLDER', {
+                  statusId: status.id,
+                }),
+            };
+          }
+
+          toast.success(
+            typeof folderId === 'string'
+              ? messages.folderChanged
+              : messages.bookmarkAdded,
+            opts,
+          );
+        })
+        .catch((error) => {
+          dispatch(bookmarkFail(status.id, error));
+        });
+    };
 
 const unbookmark =
   (status: Pick<Status, 'id'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(unbookmarkRequest(status.id));
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch(unbookmarkRequest(status.id));
 
-    return getClient(getState())
-      .statuses.unbookmarkStatus(status.id)
-      .then((response) => {
-        dispatch(importFetchedStatus(response));
-        dispatch(unbookmarkSuccess(response));
-        toast.success(messages.bookmarkRemoved);
-      })
-      .catch((error) => {
-        dispatch(unbookmarkFail(status.id, error));
-      });
-  };
+      return getClient(getState())
+        .statuses.unbookmarkStatus(status.id)
+        .then((response) => {
+          dispatch(importFetchedStatus(response));
+          dispatch(unbookmarkSuccess(response));
+          toast.success(messages.bookmarkRemoved);
+        })
+        .catch((error) => {
+          dispatch(unbookmarkFail(status.id, error));
+        });
+    };
 
 const toggleBookmark =
   (status: Pick<Status, 'id' | 'bookmarked'>) => (dispatch: AppDispatch) => {
@@ -474,17 +474,17 @@ const fetchReblogsFail = (statusId: string, error: unknown) => ({
 
 const expandReblogs =
   (statusId: string, next: AccountListLink) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    next()
-      .then((response) => {
-        dispatch(importFetchedAccounts(response.items));
-        dispatch(fetchRelationships(response.items.map((item) => item.id)));
-        dispatch(expandReblogsSuccess(statusId, response.items, response.next));
-      })
-      .catch((error) => {
-        dispatch(expandReblogsFail(statusId, error));
-      });
-  };
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      next()
+        .then((response) => {
+          dispatch(importFetchedAccounts(response.items));
+          dispatch(fetchRelationships(response.items.map((item) => item.id)));
+          dispatch(expandReblogsSuccess(statusId, response.items, response.next));
+        })
+        .catch((error) => {
+          dispatch(expandReblogsFail(statusId, error));
+        });
+    };
 
 const expandReblogsSuccess = (
   statusId: string,
@@ -649,21 +649,21 @@ const fetchReactionsFail = (statusId: string, error: unknown) => ({
 
 const pin =
   (status: Pick<Status, 'id'>, accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return;
 
-    dispatch(pinRequest(status.id, accountId));
+      dispatch(pinRequest(status.id, accountId));
 
-    return getClient(getState())
-      .statuses.pinStatus(status.id)
-      .then((response) => {
-        dispatch(importFetchedStatus(response));
-        dispatch(pinSuccess(response, accountId));
-      })
-      .catch((error) => {
-        dispatch(pinFail(status.id, error, accountId));
-      });
-  };
+      return getClient(getState())
+        .statuses.pinStatus(status.id)
+        .then((response) => {
+          dispatch(importFetchedStatus(response));
+          dispatch(pinSuccess(response, accountId));
+        })
+        .catch((error) => {
+          dispatch(pinFail(status.id, error, accountId));
+        });
+    };
 
 const pinRequest = (statusId: string, accountId: string) => ({
   type: PIN_REQUEST,
@@ -687,35 +687,35 @@ const pinFail = (statusId: string, error: unknown, accountId: string) => ({
 
 const unpin =
   (status: Pick<Status, 'id'>, accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      if (!isLoggedIn(getState)) return;
 
-    dispatch(unpinRequest(status.id, accountId));
+      dispatch(unpinRequest(status.id, accountId));
 
-    return getClient(getState())
-      .statuses.unpinStatus(status.id)
-      .then((response) => {
-        dispatch(importFetchedStatus(response));
-        dispatch(unpinSuccess(response, accountId));
-      })
-      .catch((error) => {
-        dispatch(unpinFail(status.id, error, accountId));
-      });
-  };
+      return getClient(getState())
+        .statuses.unpinStatus(status.id)
+        .then((response) => {
+          dispatch(importFetchedStatus(response));
+          dispatch(unpinSuccess(response, accountId));
+        })
+        .catch((error) => {
+          dispatch(unpinFail(status.id, error, accountId));
+        });
+    };
 
 const togglePin =
   (status: Pick<Status, 'id' | 'pinned'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const accountId = getState().me;
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      const accountId = getState().me;
 
-    if (!accountId) return;
+      if (!accountId) return;
 
-    if (status.pinned) {
-      dispatch(unpin(status, accountId));
-    } else {
-      dispatch(pin(status, accountId));
-    }
-  };
+      if (status.pinned) {
+        dispatch(unpin(status, accountId));
+      } else {
+        dispatch(pin(status, accountId));
+      }
+    };
 
 const unpinRequest = (statusId: string, accountId: string) => ({
   type: UNPIN_REQUEST,
@@ -739,21 +739,21 @@ const unpinFail = (statusId: string, error: unknown, accountId: string) => ({
 
 const remoteInteraction =
   (ap_id: string, profile: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(remoteInteractionRequest(ap_id, profile));
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch(remoteInteractionRequest(ap_id, profile));
 
-    return getClient(getState)
-      .accounts.remoteInteraction(ap_id, profile)
-      .then((data) => {
-        dispatch(remoteInteractionSuccess(ap_id, profile, data.url));
+      return getClient(getState)
+        .accounts.remoteInteraction(ap_id, profile)
+        .then((data) => {
+          dispatch(remoteInteractionSuccess(ap_id, profile, data.url));
 
-        return data.url;
-      })
-      .catch((error) => {
-        dispatch(remoteInteractionFail(ap_id, profile, error));
-        throw error;
-      });
-  };
+          return data.url;
+        })
+        .catch((error) => {
+          dispatch(remoteInteractionFail(ap_id, profile, error));
+          throw error;
+        });
+    };
 
 const remoteInteractionRequest = (ap_id: string, profile: string) => ({
   type: REMOTE_INTERACTION_REQUEST,

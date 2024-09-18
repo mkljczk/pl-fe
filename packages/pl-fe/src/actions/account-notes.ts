@@ -9,16 +9,16 @@ const ACCOUNT_NOTE_SUBMIT_FAIL = 'ACCOUNT_NOTE_SUBMIT_FAIL' as const;
 
 const submitAccountNote =
   (accountId: string, value: string) =>
-  (dispatch: React.Dispatch<AnyAction>, getState: () => RootState) => {
-    dispatch(submitAccountNoteRequest(accountId));
+    (dispatch: React.Dispatch<AnyAction>, getState: () => RootState) => {
+      dispatch(submitAccountNoteRequest(accountId));
 
-    return getClient(getState)
-      .accounts.updateAccountNote(accountId, value)
-      .then((response) => {
-        dispatch(submitAccountNoteSuccess(response));
-      })
-      .catch((error) => dispatch(submitAccountNoteFail(accountId, error)));
-  };
+      return getClient(getState)
+        .accounts.updateAccountNote(accountId, value)
+        .then((response) => {
+          dispatch(submitAccountNoteSuccess(response));
+        })
+        .catch((error) => dispatch(submitAccountNoteFail(accountId, error)));
+    };
 
 const submitAccountNoteRequest = (accountId: string) => ({
   type: ACCOUNT_NOTE_SUBMIT_REQUEST,

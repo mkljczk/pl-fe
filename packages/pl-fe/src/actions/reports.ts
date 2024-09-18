@@ -24,15 +24,15 @@ const initReport =
     account: Pick<Account, 'id'>,
     entities?: ReportedEntity,
   ) =>
-  (dispatch: AppDispatch) => {
-    const { status } = entities || {};
+    (dispatch: AppDispatch) => {
+      const { status } = entities || {};
 
-    return useModalsStore.getState().openModal('REPORT', {
-      accountId: account.id,
-      entityType,
-      statusIds: status ? [status.id] : [],
-    });
-  };
+      return useModalsStore.getState().openModal('REPORT', {
+        accountId: account.id,
+        entityType,
+        statusIds: status ? [status.id] : [],
+      });
+    };
 
 const submitReport =
   (
@@ -42,16 +42,16 @@ const submitReport =
     comment?: string,
     forward?: boolean,
   ) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(submitReportRequest());
+    (dispatch: AppDispatch, getState: () => RootState) => {
+      dispatch(submitReportRequest());
 
-    return getClient(getState()).accounts.reportAccount(accountId, {
-      status_ids: statusIds,
-      rule_ids: ruleIds,
-      comment: comment,
-      forward: forward,
-    });
-  };
+      return getClient(getState()).accounts.reportAccount(accountId, {
+        status_ids: statusIds,
+        rule_ids: ruleIds,
+        comment: comment,
+        forward: forward,
+      });
+    };
 
 const submitReportRequest = () => ({
   type: REPORT_SUBMIT_REQUEST,
