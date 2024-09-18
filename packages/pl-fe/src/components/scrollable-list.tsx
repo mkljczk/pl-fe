@@ -94,6 +94,7 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
     count: data.length + (hasMore ? 1 : 0),
     overscan: 3,
     estimateSize: () => estimatedSize,
+    enabled: true,
   }) : useVirtualizer({
     count: data.length + (hasMore ? 1 : 0),
     overscan: 3,
@@ -129,7 +130,7 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
     if (autoloadMore || !hasMore || !onLoadMore) {
       return null;
     } else {
-      const button = <LoadMore className='mt-2' visible={!isLoading} onClick={onLoadMore} />;
+      const button = <LoadMore className='mt-4' visible={!isLoading} onClick={onLoadMore} />;
 
       if (loadMoreClassName) return <div className={loadMoreClassName}>{button}</div>;
 
