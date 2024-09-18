@@ -12,7 +12,7 @@ import { HStack, Text, Emoji } from 'pl-fe/components/ui';
 import AccountContainer from 'pl-fe/containers/account-container';
 import StatusContainer from 'pl-fe/containers/status-container';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
-import { useAppDispatch, useAppSelector, useInstance } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector, useInstance, useLoggedIn } from 'pl-fe/hooks';
 import { makeGetNotification } from 'pl-fe/selectors';
 import { useModalsStore } from 'pl-fe/stores';
 import { NotificationType } from 'pl-fe/utils/notification';
@@ -194,6 +194,7 @@ const Notification: React.FC<INotification> = (props) => {
 
   const getNotification = useCallback(makeGetNotification(), []);
 
+  const { me } = useLoggedIn();
   const { openModal } = useModalsStore();
   const notification = useAppSelector((state) => getNotification(state, props.notification));
 
@@ -289,6 +290,8 @@ const Notification: React.FC<INotification> = (props) => {
     }
   };
 
+  const displayedType = notification.type === 'mention' && (notification.subtype === 'reply' || status.in_reply_to_account_id === me) ? 'reply' : notification.type;
+
   const renderIcon = (): React.ReactNode => {
     if (type === 'emoji_reaction' && notification.emoji) {
       return (
@@ -298,10 +301,10 @@ const Notification: React.FC<INotification> = (props) => {
           className='h-4 w-4 flex-none'
         />
       );
-    } else if (icons[type]) {
+    } else if (icons[displayedType]) {
       return (
         <Icon
-          src={icons[type === 'mention' ? notification.subtype || type : type]!}
+          src={icons[displayedType]!}
           className='flex-none text-primary-600 dark:text-primary-400'
         />
       );
@@ -371,13 +374,13 @@ const Notification: React.FC<INotification> = (props) => {
   const targetName = notification.type === 'move' ? notification.target.acct : '';
 
   const message: React.ReactNode = account && typeof account === 'object'
-    ? buildMessage(intl, type === 'mention' ? notification.subtype || type : type, accounts, targetName, instance.title)
+    ? buildMessage(intl, displayedType, accounts, targetName, instance.title)
     : null;
 
   const ariaLabel = (
     notificationForScreenReader(
       intl,
-      intl.formatMessage(messages[type], {
+      intl.formatMessage(messages[displayedType], {
         name: account && typeof account === 'object' ? account.acct : '',
         targetName,
       }),
