@@ -18,7 +18,6 @@ import { getDescendantsIds } from '../status/components/thread';
 import ThreadStatus from '../status/components/thread-status';
 
 import type { MediaAttachment } from 'pl-api';
-import type { VirtuosoHandle } from 'react-virtuoso';
 
 type RouteParams = { statusId: string };
 
@@ -52,7 +51,6 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 
   const node = useRef<HTMLDivElement>(null);
-  const scroller = useRef<VirtuosoHandle>(null);
 
   const fetchData = () => {
     const { params } = props;
@@ -87,14 +85,6 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
     const element = document.querySelector<HTMLDivElement>(selector);
 
     if (element) element.focus();
-
-    scroller.current?.scrollIntoView({
-      index,
-      behavior: 'smooth',
-      done: () => {
-        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
-      },
-    });
   };
 
   const renderTombstone = (id: string) => (
@@ -166,9 +156,7 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
       <div ref={node} className='thread p-0 shadow-none sm:p-2'>
         <ScrollableList
           id='thread'
-          ref={scroller}
           placeholderComponent={() => <PlaceholderStatus variant='slim' />}
-          initialTopMostItemIndex={0}
           emptyMessage={<FormattedMessage id='event.discussion.empty' defaultMessage='No one has commented this event yet. When someone does, they will appear here.' />}
         >
           {children}

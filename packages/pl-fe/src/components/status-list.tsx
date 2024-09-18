@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
-import React, { useRef, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import LoadGap from 'pl-fe/components/load-gap';
@@ -15,7 +15,6 @@ import { Stack, Text } from './ui';
 
 import type { OrderedSet as ImmutableOrderedSet } from 'immutable';
 import type { IScrollableList } from 'pl-fe/components/scrollable-list';
-import type { VirtuosoHandle } from 'react-virtuoso';
 
 interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
   /** Unique key to preserve the scroll position when navigating back. */
@@ -62,7 +61,6 @@ const StatusList: React.FC<IStatusList> = ({
   ...other
 }) => {
   const plFeConfig = usePlFeConfig();
-  const node = useRef<VirtuosoHandle>(null);
 
   const getFeaturedStatusCount = () => featuredStatusIds?.size || 0;
 
@@ -96,14 +94,6 @@ const StatusList: React.FC<IStatusList> = ({
     const element = document.querySelector<HTMLDivElement>(selector);
 
     if (element) element.focus();
-
-    node.current?.scrollIntoView({
-      index,
-      behavior: 'smooth',
-      done: () => {
-        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
-      },
-    });
   };
 
   const renderLoadGap = (index: number) => {
@@ -179,7 +169,6 @@ const StatusList: React.FC<IStatusList> = ({
       return statusIds.toList().reduce((acc, statusId, index) => {
         if (statusId === null) {
           const gap = renderLoadGap(index);
-          // one does not simply push a null item to Virtuoso: https://github.com/petyosi/react-virtuoso/issues/206#issuecomment-747363793
           if (gap) {
             acc.push(gap);
           }
@@ -234,10 +223,10 @@ const StatusList: React.FC<IStatusList> = ({
       onLoadMore={handleLoadOlder}
       placeholderComponent={() => <PlaceholderStatus variant={divideType === 'border' ? 'slim' : 'rounded'} />}
       placeholderCount={20}
-      ref={node}
+      className={className}
       listClassName={clsx('divide-y divide-solid divide-gray-200 dark:divide-gray-800', {
         'divide-none': divideType !== 'border',
-      }, className)}
+      })}
       itemClassName={clsx({
         'pb-3': divideType !== 'border',
       })}

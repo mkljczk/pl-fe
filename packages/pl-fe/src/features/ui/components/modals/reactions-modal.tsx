@@ -86,7 +86,6 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
     body = (<>
       {reactions.size > 0 && renderFilterBar()}
       <ScrollableList
-        scrollKey='reactions'
         emptyMessage={emptyMessage}
         className={clsx({
           'mt-4': reactions.size > 0,
@@ -95,6 +94,7 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
         itemClassName='pb-3'
         style={{ height: 'calc(80vh - 88px)' }}
         useWindowScroll={false}
+        estimatedSize={42}
       >
         {accounts.map((account) =>
           <AccountContainer key={`${account.id}-${account.reaction}`} id={account.id} emoji={account.reaction} emojiUrl={account.reactionUrl} />,

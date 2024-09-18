@@ -128,7 +128,6 @@ const Domains: React.FC = () => {
         </Button>
         {domains && (
           <ScrollableList
-            scrollKey='domains'
             emptyMessage={emptyMessage}
             itemClassName='py-3 first:pt-0 last:pb-0'
             isLoading={isFetching}

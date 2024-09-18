@@ -46,7 +46,6 @@ const Quotes: React.FC = () => {
         hasMore={hasMore}
         isLoading={typeof isLoading === 'boolean' ? isLoading : true}
         onLoadMore={() => handleLoadMore(statusId, dispatch)}
-        onRefresh={handleRefresh}
         emptyMessage={emptyMessage}
         divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
       />

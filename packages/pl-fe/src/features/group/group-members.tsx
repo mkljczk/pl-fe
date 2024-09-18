@@ -34,7 +34,6 @@ const GroupMembers: React.FC<IGroupMembers> = (props) => {
   return (
     <>
       <ScrollableList
-        scrollKey='group-members'
         hasMore={hasNextPage}
         onLoadMore={fetchNextPage}
         isLoading={!group || isLoading}

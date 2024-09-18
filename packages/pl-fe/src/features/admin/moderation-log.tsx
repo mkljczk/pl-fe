@@ -33,7 +33,6 @@ const ModerationLog = () => {
       <ScrollableList
         isLoading={isLoading}
         showLoading={showLoading}
-        scrollKey='moderation-log'
         emptyMessage={intl.formatMessage(messages.emptyMessage)}
         hasMore={hasNextPage}
         onLoadMore={handleLoadMore}

@@ -25,9 +25,9 @@ import { textForScreenReader } from 'pl-fe/utils/status';
 import DetailedStatus from './detailed-status';
 import ThreadStatus from './thread-status';
 
+import type { Virtualizer } from '@tanstack/react-virtual';
 import type { Account, Status } from 'pl-fe/normalizers';
 import type { SelectedStatus } from 'pl-fe/selectors';
-import type { VirtuosoHandle } from 'react-virtuoso';
 
 const getAncestorsIds = createSelector([
   (_: RootState, statusId: string | undefined) => statusId,
@@ -113,12 +113,12 @@ const Thread: React.FC<IThread> = ({
     };
   });
 
-  let initialTopMostItemIndex = ancestorsIds.size;
-  if (!useWindowScroll && initialTopMostItemIndex !== 0) initialTopMostItemIndex = ancestorsIds.size + 1;
+  let initialIndex = ancestorsIds.size;
+  if (!useWindowScroll && initialIndex !== 0) initialIndex = ancestorsIds.size + 1;
 
   const node = useRef<HTMLDivElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
-  const scroller = useRef<VirtuosoHandle>(null);
+  const virtualizer = useRef<Virtualizer<any, any>>(null);
 
   const handleHotkeyReact = () => {
     if (statusRef.current) {
@@ -241,13 +241,10 @@ const Thread: React.FC<IThread> = ({
 
     if (element) element.focus();
 
-    scroller.current?.scrollIntoView({
-      index,
-      behavior: 'smooth',
-      done: () => {
-        if (!element) node.current?.querySelector<HTMLDivElement>(selector)?.focus();
-      },
-    });
+    if (!element) {
+      virtualizer.current?.scrollToIndex(index, { behavior: 'smooth' });
+      setTimeout(() => node.current?.querySelector<HTMLDivElement>(selector)?.focus(), 0);
+    }
   };
 
   const renderTombstone = (id: string) => (
@@ -296,20 +293,7 @@ const Thread: React.FC<IThread> = ({
 
   // Scroll focused status into view when thread updates.
   useEffect(() => {
-    scroller.current?.scrollToIndex({
-      index: ancestorsIds.size,
-      offset: -146,
-    });
-
-    // TODO: Actually fix this
-    setTimeout(() => {
-      scroller.current?.scrollToIndex({
-        index: ancestorsIds.size,
-        offset: -146,
-      });
-
-      setTimeout(() => statusRef.current?.querySelector<HTMLDivElement>('.detailed-actualStatus')?.focus(), 0);
-    }, 0);
+    virtualizer.current?.scrollToIndex(ancestorsIds.size);
   }, [status.id, ancestorsIds.size]);
 
   const handleOpenCompareHistoryModal = (status: Pick<Status, 'id'>) => {
@@ -413,9 +397,9 @@ const Thread: React.FC<IThread> = ({
       >
         <ScrollableList
           id='thread'
-          ref={scroller}
+          ref={virtualizer}
           placeholderComponent={() => <PlaceholderStatus variant='slim' />}
-          initialTopMostItemIndex={initialTopMostItemIndex}
+          initialIndex={initialIndex}
           useWindowScroll={useWindowScroll}
           itemClassName={itemClassName}
           listClassName={

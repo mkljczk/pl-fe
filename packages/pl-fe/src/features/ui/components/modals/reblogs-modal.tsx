@@ -48,7 +48,6 @@ const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, s
 
     body = (
       <ScrollableList
-        scrollKey='reblogs'
         emptyMessage={emptyMessage}
         listClassName='max-w-full'
         itemClassName='pb-3'
@@ -56,6 +55,7 @@ const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, s
         useWindowScroll={false}
         onLoadMore={handleLoadMore}
         hasMore={!!next}
+        estimatedSize={42}
       >
         {accountIds.map((id) =>
           <AccountContainer key={id} id={id} />,

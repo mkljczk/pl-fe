@@ -46,7 +46,6 @@ const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onCl
 
     body = (
       <ScrollableList
-        scrollKey='favourites'
         emptyMessage={emptyMessage}
         listClassName='max-w-full'
         itemClassName='pb-3'
@@ -54,6 +53,7 @@ const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onCl
         useWindowScroll={false}
         onLoadMore={handleLoadMore}
         hasMore={!!next}
+        estimatedSize={42}
       >
         {accountIds.map(id =>
           <AccountContainer key={id} id={id} />,

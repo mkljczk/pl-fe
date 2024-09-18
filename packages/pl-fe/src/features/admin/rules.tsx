@@ -93,7 +93,6 @@ const Rules: React.FC = () => {
           <FormattedMessage id='admin.rules.action' defaultMessage='Create rule' />
         </Button>
         <ScrollableList
-          scrollKey='rules'
           emptyMessage={emptyMessage}
           itemClassName='py-3 first:pt-0 last:pb-0'
           isLoading={isLoading}

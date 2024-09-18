@@ -49,7 +49,6 @@ const UserIndex: React.FC = () => {
         placeholder={intl.formatMessage(messages.searchPlaceholder)}
       />
       <ScrollableList
-        scrollKey='user-index'
         hasMore={hasMore}
         isLoading={isLoading}
         showLoading={showLoading}

@@ -19,7 +19,6 @@ const SuggestedAccountsStep = ({ onNext }: { onNext: () => void }) => {
       <div className='flex flex-col sm:pb-10 sm:pt-4'>
         <ScrollableList
           isLoading={isFetching}
-          scrollKey='suggestions'
           useWindowScroll={false}
           style={{ height: 320 }}
         >

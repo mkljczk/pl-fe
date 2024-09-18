@@ -41,7 +41,6 @@ const FollowRequests: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <ScrollableList
-        scrollKey='follow_requests'
         onLoadMore={() => handleLoadMore(dispatch)}
         hasMore={hasMore}
         emptyMessage={emptyMessage}

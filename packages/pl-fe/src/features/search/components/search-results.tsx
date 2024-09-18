@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { List as ImmutableList, type OrderedSet as ImmutableOrderedSet } from 'immutable';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { expandSearch, setFilter, setSearchAccount } from 'pl-fe/actions/search';
@@ -19,7 +19,6 @@ import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder
 import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 
 import type { SearchFilter } from 'pl-fe/reducers/search';
-import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
   accounts: { id: 'search_results.accounts', defaultMessage: 'People' },
@@ -29,8 +28,6 @@ const messages = defineMessages({
 });
 
 const SearchResults = () => {
-  const node = useRef<VirtuosoHandle>(null);
-
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const features = useFeatures();
@@ -104,14 +101,6 @@ const SearchResults = () => {
     const element = document.querySelector<HTMLDivElement>(selector);
 
     if (element) element.focus();
-
-    node.current?.scrollIntoView({
-      index,
-      behavior: 'smooth',
-      done: () => {
-        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
-      },
-    });
   };
 
   useEffect(() => {
@@ -237,9 +226,7 @@ const SearchResults = () => {
       {noResultsMessage || (
         <ScrollableList
           id='search-results'
-          ref={node}
           key={selectedFilter}
-          scrollKey={`${selectedFilter}:${value}`}
           isLoading={submitted && !loaded}
           showLoading={submitted && !loaded && (!searchResults || searchResults?.isEmpty())}
           hasMore={hasMore}

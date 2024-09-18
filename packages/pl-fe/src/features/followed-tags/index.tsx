@@ -34,7 +34,6 @@ const FollowedTags = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <ScrollableList
-        scrollKey='followed_tags'
         emptyMessage={emptyMessage}
         isLoading={isLoading}
         hasMore={hasMore}

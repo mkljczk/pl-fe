@@ -34,7 +34,6 @@ const AwaitingApproval: React.FC = () => {
     <ScrollableList
       isLoading={isLoading}
       showLoading={showLoading}
-      scrollKey='awaiting-approval'
       emptyMessage={intl.formatMessage(messages.emptyMessage)}
       listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
     >

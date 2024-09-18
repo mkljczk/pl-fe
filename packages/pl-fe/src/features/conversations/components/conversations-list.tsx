@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import React, { useRef } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { expandConversations } from 'pl-fe/actions/conversations';
@@ -8,11 +8,8 @@ import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import Conversation from './conversation';
 
-import type { VirtuosoHandle } from 'react-virtuoso';
-
 const ConversationsList: React.FC = () => {
   const dispatch = useAppDispatch();
-  const ref = useRef<VirtuosoHandle>(null);
 
   const conversations = useAppSelector((state) => state.conversations.items);
   const isLoading = useAppSelector((state) => state.conversations.isLoading);
@@ -35,14 +32,6 @@ const ConversationsList: React.FC = () => {
     const element = document.querySelector<HTMLDivElement>(selector);
 
     if (element) element.focus();
-
-    ref.current?.scrollIntoView({
-      index,
-      behavior: 'smooth',
-      done: () => {
-        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
-      },
-    });
   };
 
   const handleLoadOlder = debounce(() => {
@@ -54,8 +43,6 @@ const ConversationsList: React.FC = () => {
       hasMore={hasMore}
       onLoadMore={handleLoadOlder}
       id='direct-list'
-      scrollKey='direct'
-      ref={ref}
       isLoading={isLoading}
       showLoading={isLoading && conversations.size === 0}
       emptyMessage={<FormattedMessage id='empty_column.direct' defaultMessage="You don't have any direct messages yet. When you send or receive one, it will show up here." />}

@@ -42,9 +42,9 @@ const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose,
   } else {
     body = (
       <ScrollableList
-        scrollKey='mentions'
         listClassName='max-w-full'
         itemClassName='pb-3'
+        estimatedSize={42}
       >
         {accountIds.map(id =>
           <AccountContainer key={id} id={id} />,

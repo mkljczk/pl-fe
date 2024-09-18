@@ -15,6 +15,8 @@ const messages = defineMessages({
 });
 
 interface ITimeline extends Omit<IStatusList, 'statusIds' | 'isLoading' | 'hasMore'> {
+  /** Unique key to preserve the scroll position when navigating back. */
+  scrollKey: string;
   /** ID of the timeline in Redux. */
   timelineId: string;
   /** Settings path to use instead of the timelineId. */

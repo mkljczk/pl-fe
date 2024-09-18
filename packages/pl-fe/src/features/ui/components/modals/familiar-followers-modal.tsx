@@ -33,11 +33,11 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
 
     body = (
       <ScrollableList
-        scrollKey='familiar_followers'
         emptyMessage={emptyMessage}
         itemClassName='pb-3'
         style={{ height: 'calc(80vh - 88px)' }}
         useWindowScroll={false}
+        estimatedSize={42}
       >
         {familiarFollowerIds.map(id =>
           <AccountContainer key={id} id={id} />,

@@ -111,7 +111,6 @@ const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params })
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <ScrollableList
-        scrollKey='group_membership_requests'
         emptyMessage={<FormattedMessage id='empty_column.group_membership_requests' defaultMessage='There are no pending membership requests for this group.' />}
       >
         {accounts.map((account) => (

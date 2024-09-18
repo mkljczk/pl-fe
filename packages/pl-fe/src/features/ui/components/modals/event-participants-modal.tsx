@@ -39,10 +39,10 @@ const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalPr
 
     body = (
       <ScrollableList
-        scrollKey='event_participations'
         emptyMessage={emptyMessage}
         listClassName='max-w-full'
         itemClassName='pb-3'
+        estimatedSize={42}
       >
         {accountIds.map(id =>
           <AccountContainer key={id} id={id} />,

@@ -21,7 +21,6 @@ import FilterBar from './components/filter-bar';
 import Notification from './components/notification';
 
 import type { RootState } from 'pl-fe/store';
-import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },
@@ -45,7 +44,6 @@ const Notifications = () => {
   const hasMore = useAppSelector(state => state.notifications.hasMore);
   const totalQueuedNotificationsCount = useAppSelector(state => state.notifications.totalQueuedNotificationsCount || 0);
 
-  const node = useRef<VirtuosoHandle>(null);
   const column = useRef<HTMLDivElement>(null);
   const scrollableContentRef = useRef<ImmutableList<JSX.Element> | null>(null);
 
@@ -81,14 +79,6 @@ const Notifications = () => {
     const element = document.querySelector<HTMLDivElement>(selector);
 
     if (element) element.focus();
-
-    node.current?.scrollIntoView({
-      index,
-      behavior: 'smooth',
-      done: () => {
-        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
-      },
-    });
   };
 
   const handleDequeueNotifications = useCallback(() => {
@@ -138,8 +128,6 @@ const Notifications = () => {
 
   const scrollContainer = (
     <ScrollableList
-      ref={node}
-      scrollKey='notifications'
       isLoading={isLoading}
       showLoading={isLoading && notifications.size === 0}
       hasMore={hasMore}

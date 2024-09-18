@@ -67,10 +67,7 @@ const Aliases = () => {
         <CardTitle title={intl.formatMessage(messages.subheading_aliases)} />
       </CardHeader>
       <div className='flex-1'>
-        <ScrollableList
-          scrollKey='aliases'
-          emptyMessage={emptyMessage}
-        >
+        <ScrollableList emptyMessage={emptyMessage}>
           {aliases.map((alias, i) => (
             <HStack alignItems='center' justifyContent='between' space={1} key={i} className='p-2'>
               <div>

@@ -33,7 +33,6 @@ const Reports: React.FC = () => {
     <ScrollableList
       isLoading={isLoading}
       showLoading={showLoading}
-      scrollKey='admin-reports'
       emptyMessage={intl.formatMessage(messages.emptyMessage)}
       listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
     >

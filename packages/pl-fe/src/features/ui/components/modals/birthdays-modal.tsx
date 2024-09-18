@@ -24,10 +24,10 @@ const BirthdaysModal = ({ onClose }: BaseModalProps) => {
 
     body = (
       <ScrollableList
-        scrollKey='birthdays'
         emptyMessage={emptyMessage}
         listClassName='max-w-full'
         itemClassName='pb-3'
+        estimatedSize={42}
       >
         {accountIds.map(id =>
           <Account key={id} accountId={id} />,
