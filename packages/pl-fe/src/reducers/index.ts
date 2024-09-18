@@ -12,7 +12,6 @@ import aliases from './aliases';
 import auth from './auth';
 import backups from './backups';
 import compose from './compose';
-import compose_event from './compose-event';
 import contexts from './contexts';
 import conversations from './conversations';
 import custom_emojis from './custom-emojis';
@@ -60,7 +59,6 @@ const reducers = {
   auth,
   backups,
   compose,
-  compose_event,
   contexts,
   conversations,
   custom_emojis,

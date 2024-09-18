@@ -1,38 +1,18 @@
-import { defineMessages, IntlShape } from 'react-intl';
+import { defineMessages } from 'react-intl';
 
 import { getClient } from 'pl-fe/api';
 import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 
 import { importFetchedAccounts, importFetchedStatus, importFetchedStatuses } from './importer';
-import { uploadFile } from './media';
-import {
-  STATUS_FETCH_SOURCE_FAIL,
-  STATUS_FETCH_SOURCE_REQUEST,
-  STATUS_FETCH_SOURCE_SUCCESS,
-} from './statuses';
+import { STATUS_FETCH_SOURCE_FAIL, STATUS_FETCH_SOURCE_REQUEST, STATUS_FETCH_SOURCE_SUCCESS } from './statuses';
 
-import type { Account, CreateEventParams, MediaAttachment, PaginatedResponse, Status } from 'pl-api';
-import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
+import type { Account, CreateEventParams, Location, MediaAttachment, PaginatedResponse, Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const LOCATION_SEARCH_REQUEST = 'LOCATION_SEARCH_REQUEST' as const;
 const LOCATION_SEARCH_SUCCESS = 'LOCATION_SEARCH_SUCCESS' as const;
 const LOCATION_SEARCH_FAIL = 'LOCATION_SEARCH_FAIL' as const;
-
-const EDIT_EVENT_NAME_CHANGE = 'EDIT_EVENT_NAME_CHANGE' as const;
-const EDIT_EVENT_DESCRIPTION_CHANGE = 'EDIT_EVENT_DESCRIPTION_CHANGE' as const;
-const EDIT_EVENT_START_TIME_CHANGE = 'EDIT_EVENT_START_TIME_CHANGE' as const;
-const EDIT_EVENT_HAS_END_TIME_CHANGE = 'EDIT_EVENT_HAS_END_TIME_CHANGE' as const;
-const EDIT_EVENT_END_TIME_CHANGE = 'EDIT_EVENT_END_TIME_CHANGE' as const;
-const EDIT_EVENT_APPROVAL_REQUIRED_CHANGE = 'EDIT_EVENT_APPROVAL_REQUIRED_CHANGE' as const;
-const EDIT_EVENT_LOCATION_CHANGE = 'EDIT_EVENT_LOCATION_CHANGE' as const;
-
-const EVENT_BANNER_UPLOAD_REQUEST = 'EVENT_BANNER_UPLOAD_REQUEST' as const;
-const EVENT_BANNER_UPLOAD_PROGRESS = 'EVENT_BANNER_UPLOAD_PROGRESS' as const;
-const EVENT_BANNER_UPLOAD_SUCCESS = 'EVENT_BANNER_UPLOAD_SUCCESS' as const;
-const EVENT_BANNER_UPLOAD_FAIL = 'EVENT_BANNER_UPLOAD_FAIL' as const;
-const EVENT_BANNER_UPLOAD_UNDO = 'EVENT_BANNER_UPLOAD_UNDO' as const;
 
 const EVENT_SUBMIT_REQUEST = 'EVENT_SUBMIT_REQUEST' as const;
 const EVENT_SUBMIT_SUCCESS = 'EVENT_SUBMIT_SUCCESS' as const;
@@ -106,104 +86,27 @@ const locationSearch = (query: string, signal?: AbortSignal) =>
     });
   };
 
-const changeEditEventName = (value: string) => ({
-  type: EDIT_EVENT_NAME_CHANGE,
-  value,
-});
-
-const changeEditEventDescription = (value: string) => ({
-  type: EDIT_EVENT_DESCRIPTION_CHANGE,
-  value,
-});
-
-const changeEditEventStartTime = (value: Date) => ({
-  type: EDIT_EVENT_START_TIME_CHANGE,
-  value,
-});
-
-const changeEditEventEndTime = (value: Date) => ({
-  type: EDIT_EVENT_END_TIME_CHANGE,
-  value,
-});
-
-const changeEditEventHasEndTime = (value: boolean) => ({
-  type: EDIT_EVENT_HAS_END_TIME_CHANGE,
-  value,
-});
-
-const changeEditEventApprovalRequired = (value: boolean) => ({
-  type: EDIT_EVENT_APPROVAL_REQUIRED_CHANGE,
-  value,
-});
-
-const changeEditEventLocation = (value: string | null) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    let location = null;
-
-    if (value) {
-      location = getState().locations.get(value);
-    }
-
-    dispatch({
-      type: EDIT_EVENT_LOCATION_CHANGE,
-      value: location,
-    });
-  };
-
-const uploadEventBanner = (file: File, intl: IntlShape) =>
-  (dispatch: AppDispatch) => {
-    let progress = 0;
-
-    dispatch(uploadEventBannerRequest());
-
-    dispatch(uploadFile(
-      file,
-      intl,
-      (data) => dispatch(uploadEventBannerSuccess(data, file)),
-      (error) => dispatch(uploadEventBannerFail(error)),
-      ({ loaded }: any) => {
-        progress = loaded;
-        dispatch(uploadEventBannerProgress(progress));
-      },
-    ));
-  };
-
-const uploadEventBannerRequest = () => ({
-  type: EVENT_BANNER_UPLOAD_REQUEST,
-});
-
-const uploadEventBannerProgress = (loaded: number) => ({
-  type: EVENT_BANNER_UPLOAD_PROGRESS,
-  loaded,
-});
-
-const uploadEventBannerSuccess = (media: MediaAttachment, file: File) => ({
-  type: EVENT_BANNER_UPLOAD_SUCCESS,
-  media,
-  file,
-});
-
-const uploadEventBannerFail = (error: unknown) => ({
-  type: EVENT_BANNER_UPLOAD_FAIL,
-  error,
-});
-
-const undoUploadEventBanner = () => ({
-  type: EVENT_BANNER_UPLOAD_UNDO,
-});
-
-const submitEvent = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const submitEvent = ({
+  statusId,
+  name,
+  status,
+  banner,
+  startTime,
+  endTime,
+  joinMode,
+  location,
+}: {
+  statusId: string | null;
+  name: string;
+  status: string;
+  banner: MediaAttachment | null;
+  startTime: Date;
+  endTime: Date | null;
+  joinMode: 'restricted' | 'free';
+  location: Location | null;
+}) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-
-    const statusId = state.compose_event.id;
-    const name = state.compose_event.name;
-    const status = state.compose_event.status;
-    const banner = state.compose_event.banner;
-    const startTime = state.compose_event.start_time;
-    const endTime = state.compose_event.end_time;
-    const joinMode = state.compose_event.approval_required ? 'restricted' : 'free';
-    const location = state.compose_event.location;
 
     if (!name || !name.length) {
       return;
@@ -539,9 +442,8 @@ const cancelEventCompose = () => ({
 
 interface EventFormSetAction {
   type: typeof EVENT_FORM_SET;
-  status: MinifiedStatus;
+  composeId: string;
   text: string;
-  location: Record<string, any>;
 }
 
 const editEvent = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
@@ -553,11 +455,14 @@ const editEvent = (statusId: string) => (dispatch: AppDispatch, getState: () => 
     dispatch({ type: STATUS_FETCH_SOURCE_SUCCESS, statusId });
     dispatch({
       type: EVENT_FORM_SET,
-      status,
+      composeId: `compose-event-modal-${statusId}`,
       text: response.text,
-      location: response.location,
     });
-    useModalsStore.getState().openModal('COMPOSE_EVENT');
+    useModalsStore.getState().openModal('COMPOSE_EVENT', {
+      status,
+      statusText: response.text,
+      location: response.location || undefined,
+    });
   }).catch(error => {
     dispatch({ type: STATUS_FETCH_SOURCE_FAIL, statusId, error });
   });
@@ -613,18 +518,6 @@ export {
   LOCATION_SEARCH_REQUEST,
   LOCATION_SEARCH_SUCCESS,
   LOCATION_SEARCH_FAIL,
-  EDIT_EVENT_NAME_CHANGE,
-  EDIT_EVENT_DESCRIPTION_CHANGE,
-  EDIT_EVENT_START_TIME_CHANGE,
-  EDIT_EVENT_END_TIME_CHANGE,
-  EDIT_EVENT_HAS_END_TIME_CHANGE,
-  EDIT_EVENT_APPROVAL_REQUIRED_CHANGE,
-  EDIT_EVENT_LOCATION_CHANGE,
-  EVENT_BANNER_UPLOAD_REQUEST,
-  EVENT_BANNER_UPLOAD_PROGRESS,
-  EVENT_BANNER_UPLOAD_SUCCESS,
-  EVENT_BANNER_UPLOAD_FAIL,
-  EVENT_BANNER_UPLOAD_UNDO,
   EVENT_SUBMIT_REQUEST,
   EVENT_SUBMIT_SUCCESS,
   EVENT_SUBMIT_FAIL,
@@ -661,19 +554,6 @@ export {
   JOINED_EVENTS_FETCH_SUCCESS,
   JOINED_EVENTS_FETCH_FAIL,
   locationSearch,
-  changeEditEventName,
-  changeEditEventDescription,
-  changeEditEventStartTime,
-  changeEditEventEndTime,
-  changeEditEventHasEndTime,
-  changeEditEventApprovalRequired,
-  changeEditEventLocation,
-  uploadEventBanner,
-  uploadEventBannerRequest,
-  uploadEventBannerProgress,
-  uploadEventBannerSuccess,
-  uploadEventBannerFail,
-  undoUploadEventBanner,
   submitEvent,
   submitEventRequest,
   submitEventSuccess,

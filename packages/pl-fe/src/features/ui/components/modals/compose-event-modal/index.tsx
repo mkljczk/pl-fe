@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import { resetCompose } from 'pl-fe/actions/compose';
 import {
-  changeEditEventApprovalRequired,
-  changeEditEventDescription,
-  changeEditEventEndTime,
-  changeEditEventHasEndTime,
-  changeEditEventName,
-  changeEditEventStartTime,
-  changeEditEventLocation,
-  uploadEventBanner,
-  undoUploadEventBanner,
   submitEvent,
   fetchEventParticipationRequests,
   rejectEventParticipationRequest,
   authorizeEventParticipationRequest,
   cancelEventCompose,
 } from 'pl-fe/actions/events';
+import { uploadFile } from 'pl-fe/actions/media';
 import { ADDRESS_ICONS } from 'pl-fe/components/autosuggest-location';
 import LocationSearch from 'pl-fe/components/location-search';
-import { checkEventComposeContent } from 'pl-fe/components/modal-root';
 import { Button, Form, FormGroup, HStack, Icon, IconButton, Input, Modal, Spinner, Stack, Tabs, Text, Toggle } from 'pl-fe/components/ui';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { isCurrentOrFutureDate } from 'pl-fe/features/compose/components/schedule-form';
@@ -30,6 +22,8 @@ import { useModalsStore } from 'pl-fe/stores';
 import UploadButton from './upload-button';
 
 import type { BaseModalProps } from '../../modal-root';
+import type { Location } from 'pl-api';
+import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 
 const messages = defineMessages({
   eventNamePlaceholder: { id: 'compose_event.fields.name_placeholder', defaultMessage: 'Name' },
@@ -87,84 +81,131 @@ const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
   );
 };
 
-const ComposeEventModal: React.FC<BaseModalProps> = ({ onClose }) => {
+interface ComposeEventModalProps {
+  status?: MinifiedStatus;
+  statusText?: string;
+  location?: Location;
+}
+
+const ComposeEventModal: React.FC<BaseModalProps & ComposeEventModalProps> = ({
+  onClose,
+  status,
+  statusText,
+  location: sourceLocation,
+}) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { openModal } = useModalsStore();
 
   const [tab, setTab] = useState<'edit' | 'pending'>('edit');
-  const [text, setText] = useState('');
 
-  const banner = useAppSelector((state) => state.compose_event.banner);
-  const isUploading = useAppSelector((state) => state.compose_event.is_uploading);
+  const [name, setName] = useState(status?.event?.name || '');
+  const [text, setText] = useState(statusText || '');
+  const [startTime, setStartTime] = useState(status?.event?.start_time ? new Date(status.event.start_time) : new Date());
+  const [endTime, setEndTime] = useState(status?.event?.end_time ? new Date(status.event.end_time) : null);
+  const [approvalRequired, setApprovalRequired] = useState(status?.event?.join_mode !== 'free');
+  const [banner, setBanner] = useState(status?.event?.banner || null);
+  const [location, setLocation] = useState(sourceLocation || null);
 
-  const name = useAppSelector((state) => state.compose_event.name);
-  const startTime = useAppSelector((state) => state.compose_event.start_time);
-  const endTime = useAppSelector((state) => state.compose_event.end_time);
-  const approvalRequired = useAppSelector((state) => state.compose_event.approval_required);
-  const location = useAppSelector((state) => state.compose_event.location);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
-  const statusId = useAppSelector((state) => state.compose_event.id);
-
-  const isSubmitting = useAppSelector((state) => state.compose_event.is_submitting);
+  const statusId = status?.id || null;
+  const composeId = statusId ? `compose-event-modal-${statusId}` : 'compose-event-modal';
 
   const onChangeName: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
-    dispatch(changeEditEventName(target.value));
+    setName(target.value);
   };
 
   const onChangeStartTime = (date: Date) => {
-    dispatch(changeEditEventStartTime(date));
+    setStartTime(date);
   };
 
   const onChangeEndTime = (date: Date) => {
-    dispatch(changeEditEventEndTime(date));
+    setEndTime(date);
   };
 
   const onChangeHasEndTime: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
-    dispatch(changeEditEventHasEndTime(target.checked));
+    if (target.checked) {
+      const endTime = new Date(startTime);
+      endTime.setHours(endTime.getHours() + 2);
+
+      setEndTime(endTime);
+    } else setEndTime(null);
   };
 
   const onChangeApprovalRequired: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
-    dispatch(changeEditEventApprovalRequired(target.checked));
+    setApprovalRequired(target.checked);
   };
 
   const onChangeLocation = (value: string | null) => {
-    dispatch(changeEditEventLocation(value));
-  };
+    dispatch((_, getState) => {
+      let location = null;
 
-  const onClickClose = () => {
-    dispatch((dispatch, getState) => {
-      if (checkEventComposeContent(getState().compose_event)) {
-        openModal('CONFIRM', {
-          heading: statusId
-            ? <FormattedMessage id='confirmations.cancel_event_editing.heading' defaultMessage='Cancel event editing' />
-            : <FormattedMessage id='confirmations.delete_event.heading' defaultMessage='Delete event' />,
-          message: statusId
-            ? <FormattedMessage id='confirmations.cancel_event_editing.message' defaultMessage='Are you sure you want to cancel editing this event? All changes will be lost.' />
-            : <FormattedMessage id='confirmations.delete_event.message' defaultMessage='Are you sure you want to delete this event?' />,
-          confirm: intl.formatMessage(messages.confirm),
-          onConfirm: () => {
-            onClose('COMPOSE_EVENT');
-            dispatch(cancelEventCompose());
-          },
-        });
-      } else {
-        onClose('COMPOSE_EVENT');
+      if (value) {
+        location = getState().locations.get(value, null);
       }
+
+      setLocation(location);
     });
   };
 
+  const onClickClose = () => {
+    if (name.length || text.length || location || banner) {
+      openModal('CONFIRM', {
+        heading: statusId
+          ? <FormattedMessage id='confirmations.cancel_event_editing.heading' defaultMessage='Cancel event editing' />
+          : <FormattedMessage id='confirmations.delete_event.heading' defaultMessage='Delete event' />,
+        message: statusId
+          ? <FormattedMessage id='confirmations.cancel_event_editing.message' defaultMessage='Are you sure you want to cancel editing this event? All changes will be lost.' />
+          : <FormattedMessage id='confirmations.delete_event.message' defaultMessage='Are you sure you want to delete this event?' />,
+        confirm: intl.formatMessage(messages.confirm),
+        onConfirm: () => {
+          onClose('COMPOSE_EVENT');
+          dispatch(cancelEventCompose());
+        },
+      });
+    } else {
+      onClose('COMPOSE_EVENT');
+    }
+  };
+
   const handleFiles = (files: FileList) => {
-    dispatch(uploadEventBanner(files[0], intl));
+    setIsUploading(true);
+
+    dispatch(uploadFile(
+      files[0],
+      intl,
+      (data) => {
+        setBanner(data);
+        setIsUploading(false);
+      },
+      () => setIsUploading(false),
+    ));
   };
 
   const handleClearBanner = () => {
-    dispatch(undoUploadEventBanner());
+    setBanner(null);
   };
 
   const handleSubmit = () => {
-    dispatch(changeEditEventDescription(text));
-    dispatch(submitEvent());
+    setIsSubmitting(true);
+
+    dispatch(submitEvent({
+      statusId,
+      name,
+      status: text,
+      banner,
+      startTime,
+      endTime,
+      joinMode: approvalRequired ? 'restricted' : 'free',
+      location,
+    })).then(() => {
+      setIsSubmitting(false);
+      dispatch(resetCompose(composeId));
+    }).catch(() => {
+      setIsSubmitting(false);
+    });
   };
 
   const accounts = useAppSelector((state) => state.user_lists.event_participation_requests.get(statusId!)?.items);
@@ -235,7 +276,7 @@ const ComposeEventModal: React.FC<BaseModalProps> = ({ onClose }) => {
         <ComposeEditor
           className='block w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-base text-gray-900 ring-1 placeholder:text-gray-600 focus-within:border-primary-500 focus-within:ring-primary-500 sm:text-sm dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-gray-800 dark:placeholder:text-gray-600 dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500'
           placeholderClassName='pt-2'
-          composeId='compose-event-modal'
+          composeId={composeId}
           placeholder={intl.formatMessage(messages.eventDescriptionPlaceholder)}
           handleSubmit={handleSubmit}
           onChange={setText}
@@ -334,4 +375,4 @@ const ComposeEventModal: React.FC<BaseModalProps> = ({ onClose }) => {
   );
 };
 
-export { ComposeEventModal as default };
+export { ComposeEventModal as default, type ComposeEventModalProps };

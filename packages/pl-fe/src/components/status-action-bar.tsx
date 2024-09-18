@@ -234,18 +234,16 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   };
 
   const doDeleteStatus = (withRedraft = false) => {
-    dispatch((_) => {
-      if (!deleteModal) {
-        dispatch(deleteStatus(status.id, withRedraft));
-      } else {
-        openModal('CONFIRM', {
-          heading: intl.formatMessage(withRedraft ? messages.redraftHeading : messages.deleteHeading),
-          message: intl.formatMessage(withRedraft ? messages.redraftMessage : messages.deleteMessage),
-          confirm: intl.formatMessage(withRedraft ? messages.redraftConfirm : messages.deleteConfirm),
-          onConfirm: () => dispatch(deleteStatus(status.id, withRedraft)),
-        });
-      }
-    });
+    if (!deleteModal) {
+      dispatch(deleteStatus(status.id, withRedraft));
+    } else {
+      openModal('CONFIRM', {
+        heading: intl.formatMessage(withRedraft ? messages.redraftHeading : messages.deleteHeading),
+        message: intl.formatMessage(withRedraft ? messages.redraftMessage : messages.deleteMessage),
+        confirm: intl.formatMessage(withRedraft ? messages.redraftConfirm : messages.deleteConfirm),
+        onConfirm: () => dispatch(deleteStatus(status.id, withRedraft)),
+      });
+    }
   };
 
   const handleDeleteClick: React.EventHandler<React.MouseEvent> = (e) => {

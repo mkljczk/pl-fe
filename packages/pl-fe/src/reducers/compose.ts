@@ -554,7 +554,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
     case EVENT_COMPOSE_CANCEL:
       return updateCompose(state, 'event-compose-modal', compose => compose.set('text', ''));
     case EVENT_FORM_SET:
-      return updateCompose(state, 'event-compose-modal', compose => compose.set('text', action.text));
+      return updateCompose(state, action.composeId, compose => compose.set('text', action.text));
     case COMPOSE_CHANGE_MEDIA_ORDER:
       return updateCompose(state, action.composeId, compose => compose.update('media_attachments', list => {
         const indexA = list.findIndex(x => x.id === action.a);
