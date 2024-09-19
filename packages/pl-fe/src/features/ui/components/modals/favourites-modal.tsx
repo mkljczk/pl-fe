@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchFavourites, expandFavourites } from 'pl-fe/actions/interactions';
@@ -14,6 +14,7 @@ interface FavouritesModalProps {
 }
 
 const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onClose, statusId }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
 
   const accountIds = useAppSelector((state) => state.user_lists.favourited_by.get(statusId)?.items);
@@ -50,10 +51,11 @@ const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onCl
         listClassName='max-w-full'
         itemClassName='pb-3'
         style={{ height: 'calc(80vh - 88px)' }}
-        useWindowScroll={false}
         onLoadMore={handleLoadMore}
         hasMore={!!next}
         estimatedSize={42}
+        useWindowScroll={false}
+        parentRef={modalRef}
       >
         {accountIds.map(id =>
           <AccountContainer key={id} id={id} />,

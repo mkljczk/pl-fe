@@ -400,13 +400,14 @@ const Thread: React.FC<IThread> = ({
           ref={virtualizer}
           placeholderComponent={() => <PlaceholderStatus variant='slim' />}
           initialIndex={initialIndex}
-          useWindowScroll={useWindowScroll}
           itemClassName={itemClassName}
           listClassName={
             clsx({
               'h-full': !useWindowScroll,
             })
           }
+          useWindowScroll={useWindowScroll}
+          parentRef={node}
         >
           {children}
         </ScrollableList>

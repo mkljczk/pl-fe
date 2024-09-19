@@ -56,12 +56,8 @@ const Notifications = () => {
     dispatch(expandNotifications({ maxId: last && last.id }));
   }, 300, { leading: true }), [notifications]);
 
-  const handleScrollToTop = useCallback(debounce(() => {
-    dispatch(scrollTopNotifications(true));
-  }, 100), []);
-
-  const handleScroll = useCallback(debounce(() => {
-    dispatch(scrollTopNotifications(false));
+  const handleScroll = useCallback(debounce((startIndex?: number) => {
+    dispatch(scrollTopNotifications(startIndex === 0));
   }, 100), []);
 
   const handleMoveUp = (id: string) => {
@@ -93,7 +89,6 @@ const Notifications = () => {
 
     return () => {
       handleLoadOlder.cancel();
-      handleScrollToTop.cancel();
       handleScroll.cancel();
       dispatch(scrollTopNotifications(false));
     };
@@ -135,7 +130,6 @@ const Notifications = () => {
       placeholderComponent={PlaceholderNotification}
       placeholderCount={20}
       onLoadMore={handleLoadOlder}
-      onScrollToTop={handleScrollToTop}
       onScroll={handleScroll}
       listClassName={clsx('divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800', {
         'animate-pulse': notifications.size === 0,

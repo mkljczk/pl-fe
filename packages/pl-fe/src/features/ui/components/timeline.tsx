@@ -44,12 +44,8 @@ const Timeline: React.FC<ITimeline> = ({
     dispatch(dequeueTimeline(timelineId, onLoadMore));
   }, []);
 
-  const handleScrollToTop = useCallback(debounce(() => {
-    dispatch(scrollTopTimeline(timelineId, true));
-  }, 100), [timelineId]);
-
-  const handleScroll = useCallback(debounce(() => {
-    dispatch(scrollTopTimeline(timelineId, false));
+  const handleScroll = useCallback(debounce((startIndex?: number) => {
+    dispatch(scrollTopTimeline(timelineId, startIndex === 0));
   }, 100), [timelineId]);
 
   return (
@@ -65,7 +61,6 @@ const Timeline: React.FC<ITimeline> = ({
 
       <StatusList
         timelineId={timelineId}
-        onScrollToTop={handleScrollToTop}
         onScroll={handleScroll}
         lastStatusId={lastStatusId}
         statusIds={statusIds}
