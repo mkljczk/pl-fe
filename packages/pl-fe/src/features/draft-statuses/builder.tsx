@@ -23,6 +23,7 @@ const buildStatus = (state: RootState, draftStatus: DraftStatus) => {
   const account = state.entities[Entities.ACCOUNTS]?.store[me];
 
   const status = statusSchema.parse({
+    id: 'draft',
     account,
     content: draftStatus.text.replace(new RegExp('\n', 'g'), '<br>'), /* eslint-disable-line no-control-regex */
     created_at: draftStatus.schedule,
