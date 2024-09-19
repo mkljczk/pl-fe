@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
@@ -34,8 +34,6 @@ const timeChange = (prev: Pick<ChatMessageEntity, 'created_at'>, curr: Pick<Chat
   return null;
 };
 
-const START_INDEX = 10000;
-
 interface IChatMessageList {
   /** Chat the messages are being rendered from. */
   chat: Chat;
@@ -46,7 +44,6 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
   const intl = useIntl();
 
   const parentRef = useRef<HTMLDivElement>(null);
-  const [firstItemIndex, setFirstItemIndex] = useState(START_INDEX - 20);
 
   const { markChatAsRead } = useChatActions(chat.id);
   const {
@@ -63,17 +60,6 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
   const formattedChatMessages = chatMessages || [];
 
   const isBlocked = useAppSelector((state) => state.getIn(['relationships', chat.account.id, 'blocked_by']));
-
-  const lastChatMessage = chatMessages ? chatMessages[chatMessages.length - 1] : null;
-
-  useEffect(() => {
-    if (!chatMessages) {
-      return;
-    }
-
-    const nextFirstItemIndex = START_INDEX - chatMessages.length;
-    setFirstItemIndex(nextFirstItemIndex);
-  }, [lastChatMessage]);
 
   const buildCachedMessages = (): Array<ChatMessageEntity | { type: 'divider'; text: string }> => {
     if (!chatMessages) {
@@ -117,12 +103,11 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
   };
   const cachedChatMessages = buildCachedMessages();
 
-  const handleStartReached = useCallback(() => {
-    if (hasNextPage && !isFetching) {
+  const handleStartReached = () => {
+    if (hasNextPage && !isLoading && !isFetching && !isFetchingNextPage) {
       fetchNextPage();
     }
-    return false;
-  }, [firstItemIndex, hasNextPage, isFetching]);
+  };
 
   const renderDivider = (key: React.Key, text: string) => <Divider key={key} text={text} textSize='xs' />;
 
@@ -200,7 +185,7 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
   }
 
   return (
-    <div className='flex h-full grow flex-col space-y-6 overflow-auto' style={{ scrollbarGutter: 'auto' }}>
+    <div className='flex h-full grow flex-col-reverse space-y-6 overflow-auto' style={{ scrollbarGutter: 'auto' }}>
       <div className='flex grow flex-col justify-end' ref={parentRef}>
         <ScrollableList
           listClassName='mb-2'
