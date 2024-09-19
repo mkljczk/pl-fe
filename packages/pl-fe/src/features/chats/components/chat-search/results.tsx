@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useCallback, useState } from 'react';
-import { Virtuoso } from 'react-virtuoso';
 
+import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Avatar, HStack, Stack, Text } from 'pl-fe/components/ui';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import useAccountSearch from 'pl-fe/queries/search';
@@ -25,7 +25,7 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
     }
   };
 
-  const renderAccount = useCallback((_index: number, account: Account) => (
+  const renderAccount = useCallback((account: Account) => (
     <button
       key={account.id}
       type='button'
@@ -49,17 +49,19 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
 
   return (
     <div className='relative grow'>
-      <Virtuoso
-        data={accounts}
-        itemContent={(index, chat) => (
-          <div className='px-2'>
-            {renderAccount(index, chat)}
-          </div>
-        )}
-        endReached={handleLoadMore}
-        atTopStateChange={(atTop) => setNearTop(atTop)}
-        atBottomStateChange={(atBottom) => setNearBottom(atBottom)}
-      />
+      <ScrollableList
+        itemClassName='px-2'
+        loadMoreClassName='mx-4 mb-4'
+        onScroll={(startIndex, endIndex) => {
+          setNearTop(startIndex === 0);
+          setNearBottom(endIndex === accounts?.length);
+        }}
+        isLoading={isFetching}
+        hasMore={hasNextPage}
+        onLoadMore={handleLoadMore}
+      >
+        {(accounts || []).map((chat) => renderAccount(chat))}
+      </ScrollableList>
 
       <>
         <div

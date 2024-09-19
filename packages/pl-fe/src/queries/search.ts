@@ -11,18 +11,22 @@ const useAccountSearch = (q: string) => {
   const getAccountSearch = async(q: string, pageParam?: Pick<PaginatedResponse<Account>, 'next'>): Promise<PaginatedResponse<Account>> => {
     if (pageParam?.next) return pageParam.next();
 
-    const response = await client.accounts.searchAccounts(q, {
-      limit: 10,
-      following: true,
-      offset: 0,
-    });
+    const _getAccountSearch = async (offset = 0) => {
+      const response = await client.accounts.searchAccounts(q, {
+        limit: 10,
+        following: true,
+        offset: offset,
+      });
 
-    return {
-      previous: null,
-      next: null,
-      items: response,
-      partial: false,
+      return {
+        previous: null,
+        next: response.length ? () => _getAccountSearch(offset + 10) : null,
+        items: response,
+        partial: false,
+      };
     };
+
+    return _getAccountSearch(0);
   };
 
   const queryInfo = useInfiniteQuery({
