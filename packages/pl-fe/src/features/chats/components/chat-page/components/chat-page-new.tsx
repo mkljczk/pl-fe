@@ -19,7 +19,7 @@ const ChatPageNew: React.FC<IChatPageNew> = () => {
   const history = useHistory();
 
   return (
-    <Stack className='h-full space-y-4'>
+    <Stack className='h-full gap-4'>
       <Stack className='grow px-4 pt-6 sm:px-6'>
         <HStack alignItems='center'>
           <IconButton

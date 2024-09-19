@@ -86,8 +86,8 @@ const ChatSearch = (props: IChatSearch) => {
   };
 
   return (
-    <Stack space={4} className='h-full relative overflow-auto'>
-      <div className='px-4'>
+    <Stack space={4} className='relative -mt-1 h-full overflow-auto'>
+      <div className='px-4 pt-1'>
         <Input
           data-testid='search'
           type='text'
