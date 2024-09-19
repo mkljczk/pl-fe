@@ -8,6 +8,15 @@ import { useSettings } from 'pl-fe/hooks';
 import LoadMore from './load-more';
 import { Card, Spinner } from './ui';
 
+type IScrollableListWindowScroll = {
+  /** Whether to use the window to scroll the content instead of the container. */
+  useWindowScroll?: true;
+} | {
+  /** Whether to use the window to scroll the content instead of the container. */
+  useWindowScroll: false;
+  parentRef: React.RefObject<HTMLElement>;
+};
+
 interface IScrollableList {
   /** Pagination callback when the end of the list is reached. */
   onLoadMore?: () => void;
@@ -27,10 +36,8 @@ interface IScrollableList {
   emptyMessageCard?: boolean;
   /** Scrollable content. */
   children: Iterable<React.ReactNode>;
-  /** Callback when the list is scrolled to the top. */
-  onScrollToTop?: () => void;
   /** Callback when the list is scrolled. */
-  onScroll?: () => void;
+  onScroll?: (startIndex?: number, endIndex?: number) => void;
   /** Placeholder component to render while loading. */
   placeholderComponent?: React.ComponentType | React.NamedExoticComponent;
   /** Number of placeholders to render while loading. */
@@ -47,15 +54,13 @@ interface IScrollableList {
   id?: string;
   /** CSS styles on the parent element. */
   style?: React.CSSProperties;
-  /** Whether to use the window to scroll the content instead of the container. */
-  useWindowScroll?: boolean;
   /** Initial item index to scroll to. */
   initialIndex?: number;
   /** Estimated size for items */
   estimatedSize?: number;
 }
 
-const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(({
+const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList & IScrollableListWindowScroll>(({
   prepend = null,
   alwaysPrepend,
   children,
@@ -64,7 +69,6 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
   emptyMessageCard = true,
   showLoading,
   onScroll,
-  onScrollToTop,
   onLoadMore,
   className,
   listClassName,
@@ -76,8 +80,8 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
   placeholderCount = 0,
   initialIndex = 0,
   style = {},
-  useWindowScroll = true,
   estimatedSize = 300,
+  ...props
 }, ref) => {
   const { autoloadMore } = useSettings();
 
@@ -90,16 +94,15 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
 
   const data = showPlaceholder ? Array(placeholderCount).fill('') : elements;
 
-  const virtualizer = useWindowScroll ? useWindowVirtualizer({
+  const virtualizer = props.useWindowScroll === false ? useVirtualizer({
     count: data.length + (hasMore ? 1 : 0),
     overscan: 3,
     estimateSize: () => estimatedSize,
-    enabled: true,
-  }) : useVirtualizer({
+    getScrollElement: () => props.parentRef.current || parentRef.current,
+  }) : useWindowVirtualizer({
     count: data.length + (hasMore ? 1 : 0),
     overscan: 3,
     estimateSize: () => estimatedSize,
-    getScrollElement: () => parentRef.current,
   });
 
   useEffect(() => {
@@ -115,10 +118,8 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
   }, [showLoading, initialIndex]);
 
   useEffect(() => {
-    if (range?.startIndex === 0) {
-      onScrollToTop?.();
-    } else onScroll?.();
-  }, [range?.startIndex === 0]);
+    onScroll?.(range?.startIndex, range?.endIndex);
+  }, [range?.startIndex, range?.endIndex]);
 
   useEffect(() => {
     if (onLoadMore && range?.endIndex === data.length && !showLoading && autoloadMore && hasMore) {

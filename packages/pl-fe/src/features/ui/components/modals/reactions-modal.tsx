@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { List as ImmutableList } from 'immutable';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchReactions } from 'pl-fe/actions/interactions';
@@ -28,6 +28,7 @@ interface ReactionsModalProps {
 }
 
 const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClose, statusId, reaction: initialReaction }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const [reaction, setReaction] = useState(initialReaction);
@@ -93,8 +94,9 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
         listClassName='max-w-full'
         itemClassName='pb-3'
         style={{ height: 'calc(80vh - 88px)' }}
-        useWindowScroll={false}
         estimatedSize={42}
+        useWindowScroll={false}
+        parentRef={modalRef}
       >
         {accounts.map((account) =>
           <AccountContainer key={`${account.id}-${account.reaction}`} id={account.id} emoji={account.reaction} emojiUrl={account.reactionUrl} />,

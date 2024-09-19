@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { Stack } from 'pl-fe/components/ui';
@@ -19,6 +19,8 @@ import Blankslate from './blankslate';
 import type { Chat } from 'pl-api';
 
 const ChatPane = () => {
+  const ref = useRef<HTMLDivElement>(null);
+
   const { unreadChatsCount } = useStatContext();
 
   const { screen, changeScreen, isOpen, toggleChatPane } = useChatContext();
@@ -31,11 +33,9 @@ const ChatPane = () => {
   const renderBody = () => {
     if (Number(chats?.length) > 0 || isLoading) {
       return (
-        <Stack space={4} className='h-full grow'>
+        <Stack space={4} className='h-full grow overflow-auto' ref={ref}>
           {(Number(chats?.length) > 0 || isLoading) ? (
-            <ChatList
-              onClickChat={handleClickChat}
-            />
+            <ChatList onClickChat={handleClickChat} parentRef={ref} topOffset={64} />
           ) : (
             <EmptyResultsBlankslate />
           )}

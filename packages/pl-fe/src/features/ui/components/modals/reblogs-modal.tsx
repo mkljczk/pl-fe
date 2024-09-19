@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchReblogs, expandReblogs } from 'pl-fe/actions/interactions';
@@ -19,6 +19,7 @@ const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, s
   const intl = useIntl();
   const accountIds = useAppSelector((state) => state.user_lists.reblogged_by.get(statusId)?.items);
   const next = useAppSelector((state) => state.user_lists.reblogged_by.get(statusId)?.next);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const fetchData = () => {
     dispatch(fetchReblogs(statusId));
@@ -52,10 +53,11 @@ const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, s
         listClassName='max-w-full'
         itemClassName='pb-3'
         style={{ height: 'calc(80vh - 88px)' }}
-        useWindowScroll={false}
         onLoadMore={handleLoadMore}
         hasMore={!!next}
         estimatedSize={42}
+        useWindowScroll={false}
+        parentRef={modalRef}
       >
         {accountIds.map((id) =>
           <AccountContainer key={id} id={id} />,
@@ -68,6 +70,7 @@ const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, s
     <Modal
       title={<FormattedMessage id='column.reblogs' defaultMessage='Reposts' />}
       onClose={onClickClose}
+      ref={modalRef}
     >
       {body}
     </Modal>

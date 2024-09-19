@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { BigCard } from 'pl-fe/components/big-card';
@@ -8,6 +8,7 @@ import AccountContainer from 'pl-fe/containers/account-container';
 import { useOnboardingSuggestions } from 'pl-fe/queries/suggestions';
 
 const SuggestedAccountsStep = ({ onNext }: { onNext: () => void }) => {
+  const parentRef = useRef<HTMLDivElement>(null);
   const { data, isFetching } = useOnboardingSuggestions();
 
   const renderSuggestions = () => {
@@ -16,11 +17,12 @@ const SuggestedAccountsStep = ({ onNext }: { onNext: () => void }) => {
     }
 
     return (
-      <div className='flex flex-col sm:pb-10 sm:pt-4'>
+      <div className='flex flex-col sm:pb-10 sm:pt-4' ref={parentRef}>
         <ScrollableList
           isLoading={isFetching}
-          useWindowScroll={false}
           style={{ height: 320 }}
+          useWindowScroll={false}
+          parentRef={parentRef}
         >
           {data.map((suggestion) => (
             <div key={suggestion.account.id} className='py-2'>

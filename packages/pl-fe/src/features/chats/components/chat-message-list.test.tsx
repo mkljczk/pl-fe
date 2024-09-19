@@ -1,6 +1,5 @@
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { VirtuosoMockContext } from 'react-virtuoso';
 
 import { __stub } from 'pl-fe/api';
 import { ChatContext } from 'pl-fe/contexts/chat-context';
@@ -62,11 +61,11 @@ const store = rootState
   .set('instance', buildInstance({ version: '3.4.1 (compatible; TruthSocial 1.0.0+unreleased)' }));
 
 const renderComponentWithChatContext = () => render(
-  <VirtuosoMockContext.Provider value={{ viewportHeight: 300, itemHeight: 100 }}>
-    <ChatContext.Provider value={{ chat }}>
-      <ChatMessageList chat={chat} />
-    </ChatContext.Provider>
-  </VirtuosoMockContext.Provider>,
+  // <VirtuosoMockContext.Provider value={{ viewportHeight: 300, itemHeight: 100 }}>
+  <ChatContext.Provider value={{ chat }}>
+    <ChatMessageList chat={chat} />
+  </ChatContext.Provider>,
+  // </VirtuosoMockContext.Provider>,
   undefined,
   store,
 );

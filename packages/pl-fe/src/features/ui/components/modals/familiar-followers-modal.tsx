@@ -1,5 +1,5 @@
 import { OrderedSet as ImmutableOrderedSet } from 'immutable';
-import React from 'react';
+import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
@@ -17,6 +17,7 @@ interface FamiliarFollowersModalProps {
 }
 
 const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalProps> = ({ accountId, onClose }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
   const account = useAppSelector(state => getAccount(state, accountId));
   const familiarFollowerIds: ImmutableOrderedSet<string> = useAppSelector(state => state.user_lists.familiar_followers.get(accountId)?.items || ImmutableOrderedSet());
 
@@ -36,8 +37,9 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
         emptyMessage={emptyMessage}
         itemClassName='pb-3'
         style={{ height: 'calc(80vh - 88px)' }}
-        useWindowScroll={false}
         estimatedSize={42}
+        useWindowScroll={false}
+        parentRef={modalRef}
       >
         {familiarFollowerIds.map(id =>
           <AccountContainer key={id} id={id} />,
