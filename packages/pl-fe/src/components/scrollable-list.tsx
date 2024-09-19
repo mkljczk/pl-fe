@@ -56,8 +56,10 @@ interface IScrollableList {
   style?: React.CSSProperties;
   /** Initial item index to scroll to. */
   initialIndex?: number;
-  /** Estimated size for items */
+  /** Estimated size for items. */
   estimatedSize?: number;
+  /** Align the items to the bottom of the list. */
+  alignToBottom?: boolean;
 }
 
 const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList & IScrollableListWindowScroll>(({
@@ -81,6 +83,7 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList &
   initialIndex = 0,
   style = {},
   estimatedSize = 300,
+  alignToBottom,
   ...props
 }, ref) => {
   const { autoloadMore } = useSettings();
@@ -160,9 +163,9 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList &
 
   const renderItem = (index: number): JSX.Element => {
     const PlaceholderComponent = Placeholder || Spinner;
-    if (index === data.length) return (isLoading) ? <PlaceholderComponent /> : loadMore || <div className='h-4' />;
+    if (alignToBottom && hasMore ? index === 0 : index === data.length) return (isLoading) ? <PlaceholderComponent /> : loadMore || <div className='h-4' />;
     if (showPlaceholder) return <PlaceholderComponent />;
-    return data[index];
+    return data[alignToBottom && hasMore ? index - 1 : index];
   };
 
   const virtualItems = virtualizer.getVirtualItems();

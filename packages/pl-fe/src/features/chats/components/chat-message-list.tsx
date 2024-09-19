@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useIntl, defineMessages } from 'react-intl';
-import { Components, Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 
-import { Avatar, Button, Divider, Spinner, Stack, Text } from 'pl-fe/components/ui';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import { Avatar, Button, Divider, Stack, Text } from 'pl-fe/components/ui';
 import PlaceholderChatMessage from 'pl-fe/features/placeholder/components/placeholder-chat-message';
 import { useAppSelector } from 'pl-fe/hooks';
 import { useChatActions, useChatMessages } from 'pl-fe/queries/chats';
@@ -36,25 +36,25 @@ const timeChange = (prev: Pick<ChatMessageEntity, 'created_at'>, curr: Pick<Chat
 
 const START_INDEX = 10000;
 
-const List: Components['List'] = React.forwardRef((props, ref) => {
-  const { context, ...rest } = props;
-  return <div ref={ref} {...rest} className='mb-2' />;
-});
+// const List: Components['List'] = React.forwardRef((props, ref) => {
+//   const { context, ...rest } = props;
+//   return <div ref={ref} {...rest} className='mb-2' />;
+// });
 
-const Scroller: Components['Scroller'] = React.forwardRef((props, ref) => {
-  const { style, context, ...rest } = props;
+// const Scroller: Components['Scroller'] = React.forwardRef((props, ref) => {
+//   const { style, context, ...rest } = props;
 
-  return (
-    <div
-      {...rest}
-      ref={ref}
-      style={{
-        ...style,
-        scrollbarGutter: 'stable',
-      }}
-    />
-  );
-});
+//   return (
+//     <div
+//       {...rest}
+//       ref={ref}
+//       style={{
+//         ...style,
+//         scrollbarGutter: 'stable',
+//       }}
+//     />
+//   );
+// });
 
 interface IChatMessageList {
   /** Chat the messages are being rendered from. */
@@ -65,7 +65,7 @@ interface IChatMessageList {
 const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
   const intl = useIntl();
 
-  const node = useRef<VirtuosoHandle>(null);
+  const parentRef = useRef<HTMLDivElement>(null);
   const [firstItemIndex, setFirstItemIndex] = useState(START_INDEX - 20);
 
   const { markChatAsRead } = useChatActions(chat.id);
@@ -137,16 +137,16 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
   };
   const cachedChatMessages = buildCachedMessages();
 
-  const initialScrollPositionProps = useMemo(() => {
-    if (process.env.NODE_ENV === 'test') {
-      return {};
-    }
+  // const initialScrollPositionProps = useMemo(() => {
+  //   if (process.env.NODE_ENV === 'test') {
+  //     return {};
+  //   }
 
-    return {
-      initialTopMostItemIndex: cachedChatMessages.length - 1,
-      firstItemIndex: Math.max(0, firstItemIndex),
-    };
-  }, [cachedChatMessages.length, firstItemIndex]);
+  //   return {
+  //     initialTopMostItemIndex: cachedChatMessages.length - 1,
+  //     firstItemIndex: Math.max(0, firstItemIndex),
+  //   };
+  // }, [cachedChatMessages.length, firstItemIndex]);
 
   const handleStartReached = useCallback(() => {
     if (hasNextPage && !isFetching) {
@@ -231,14 +231,30 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
   }
 
   return (
-    <div className='flex h-full grow flex-col space-y-6'>
-      <div className='flex grow flex-col justify-end'>
-        <Virtuoso
-          ref={node}
+    <div className='flex h-full grow flex-col space-y-6 overflow-auto' style={{ scrollbarGutter: 'auto' }}>
+      <div className='flex grow flex-col justify-end' ref={parentRef}>
+        <ScrollableList
+          listClassName='mb-2'
+          loadMoreClassName='w-fit mx-auto mb-2'
           alignToBottom
-          {...initialScrollPositionProps}
-          data={cachedChatMessages}
-          startReached={handleStartReached}
+          initialIndex={cachedChatMessages.length - 1}
+          hasMore={hasNextPage}
+          isLoading={isFetching}
+          showLoading={isFetching && !isFetchingNextPage}
+          onLoadMore={handleStartReached}
+          useWindowScroll={false}
+          parentRef={parentRef}
+        >
+          {cachedChatMessages.map((chatMessage, index) => {
+            if (chatMessage.type === 'divider') {
+              return renderDivider(index, chatMessage.text);
+            } else {
+              return <ChatMessage chat={chat} chatMessage={chatMessage} />;
+            }
+          })}
+        </ScrollableList>
+        {/* <Virtuoso
+          alignToBottom
           followOutput='auto'
           itemContent={(index, chatMessage) => {
             if (chatMessage.type === 'divider') {
@@ -258,7 +274,7 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
               return null;
             },
           }}
-        />
+        /> */}
       </div>
     </div>
   );

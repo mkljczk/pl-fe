@@ -11,9 +11,10 @@ import type { Account } from 'pl-api';
 interface IResults {
   accountSearchResult: ReturnType<typeof useAccountSearch>;
   onSelect(id: string): void;
+  parentRef: React.RefObject<HTMLElement>;
 }
 
-const Results = ({ accountSearchResult, onSelect }: IResults) => {
+const Results = ({ accountSearchResult, onSelect, parentRef }: IResults) => {
   const { data: accounts, isFetching, hasNextPage, fetchNextPage } = accountSearchResult;
 
   const [isNearBottom, setNearBottom] = useState<boolean>(false);
@@ -47,8 +48,9 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
     </button>
   ), []);
 
+  // <div className='relative grow'>
   return (
-    <div className='relative grow'>
+    <>
       <ScrollableList
         itemClassName='px-2'
         loadMoreClassName='mx-4 mb-4'
@@ -59,25 +61,25 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
         isLoading={isFetching}
         hasMore={hasNextPage}
         onLoadMore={handleLoadMore}
+        useWindowScroll={false}
+        parentRef={parentRef}
       >
         {(accounts || []).map((chat) => renderAccount(chat))}
       </ScrollableList>
 
-      <>
-        <div
-          className={clsx('pointer-events-none absolute inset-x-0 top-0 flex justify-center rounded-t-lg bg-gradient-to-b from-white to-transparent pb-12 pt-8 transition-opacity duration-500 dark:from-gray-900', {
-            'opacity-0': isNearTop,
-            'opacity-100': !isNearTop,
-          })}
-        />
-        <div
-          className={clsx('pointer-events-none absolute inset-x-0 bottom-0 flex justify-center rounded-b-lg bg-gradient-to-t from-white to-transparent pb-8 pt-12 transition-opacity duration-500 dark:from-gray-900', {
-            'opacity-0': isNearBottom,
-            'opacity-100': !isNearBottom,
-          })}
-        />
-      </>
-    </div>
+      <div
+        className={clsx('pointer-events-none absolute inset-x-0 top-[58px] flex justify-center rounded-t-lg bg-gradient-to-b from-white to-transparent pb-12 pt-8 transition-opacity duration-500 black:from-black dark:from-gray-900', {
+          'opacity-0': isNearTop,
+          'opacity-100': !isNearTop,
+        })}
+      />
+      <div
+        className={clsx('pointer-events-none absolute inset-x-0 bottom-0 flex justify-center rounded-b-lg bg-gradient-to-t from-white to-transparent pb-8 pt-12 transition-opacity duration-500 black:from-black dark:from-gray-900', {
+          'opacity-0': isNearBottom,
+          'opacity-100': !isNearBottom,
+        })}
+      />
+    </>
   );
 };
 

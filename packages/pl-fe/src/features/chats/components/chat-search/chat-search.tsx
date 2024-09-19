@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
@@ -25,9 +25,9 @@ interface IChatSearch {
   isMainPage?: boolean;
 }
 
-const ChatSearch = (props: IChatSearch) => {
+const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
+  const parentRef = useRef<HTMLDivElement>(null);
   const intl = useIntl();
-  const { isMainPage = false } = props;
 
   const debounce = useDebounce;
   const history = useHistory();
@@ -70,6 +70,7 @@ const ChatSearch = (props: IChatSearch) => {
             handleClickOnSearchResult.mutate(id);
             clearValue();
           }}
+          parentRef={parentRef}
         />
       );
     } else if (hasSearchValue && !hasSearchResults && !isFetching) {
@@ -109,7 +110,7 @@ const ChatSearch = (props: IChatSearch) => {
         />
       </div>
 
-      <Stack className='h-full grow overflow-auto'>
+      <Stack className='h-full grow overflow-auto' ref={parentRef}>
         {renderBody()}
       </Stack>
     </Stack>
