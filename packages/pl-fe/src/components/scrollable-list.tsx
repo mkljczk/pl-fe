@@ -80,7 +80,7 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList &
   hasMore,
   placeholderComponent: Placeholder,
   placeholderCount = 0,
-  initialIndex = 0,
+  initialIndex,
   style = {},
   estimatedSize = 300,
   alignToBottom,
