@@ -36,26 +36,6 @@ const timeChange = (prev: Pick<ChatMessageEntity, 'created_at'>, curr: Pick<Chat
 
 const START_INDEX = 10000;
 
-// const List: Components['List'] = React.forwardRef((props, ref) => {
-//   const { context, ...rest } = props;
-//   return <div ref={ref} {...rest} className='mb-2' />;
-// });
-
-// const Scroller: Components['Scroller'] = React.forwardRef((props, ref) => {
-//   const { style, context, ...rest } = props;
-
-//   return (
-//     <div
-//       {...rest}
-//       ref={ref}
-//       style={{
-//         ...style,
-//         scrollbarGutter: 'stable',
-//       }}
-//     />
-//   );
-// });
-
 interface IChatMessageList {
   /** Chat the messages are being rendered from. */
   chat: Chat;
@@ -136,17 +116,6 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
     }, []);
   };
   const cachedChatMessages = buildCachedMessages();
-
-  // const initialScrollPositionProps = useMemo(() => {
-  //   if (process.env.NODE_ENV === 'test') {
-  //     return {};
-  //   }
-
-  //   return {
-  //     initialTopMostItemIndex: cachedChatMessages.length - 1,
-  //     firstItemIndex: Math.max(0, firstItemIndex),
-  //   };
-  // }, [cachedChatMessages.length, firstItemIndex]);
 
   const handleStartReached = useCallback(() => {
     if (hasNextPage && !isFetching) {
@@ -253,28 +222,6 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
             }
           })}
         </ScrollableList>
-        {/* <Virtuoso
-          alignToBottom
-          followOutput='auto'
-          itemContent={(index, chatMessage) => {
-            if (chatMessage.type === 'divider') {
-              return renderDivider(index, (chatMessage as any).text);
-            } else {
-              return <ChatMessage chat={chat} chatMessage={chatMessage} />;
-            }
-          }}
-          components={{
-            List,
-            Scroller,
-            Header: () => {
-              if (hasNextPage || isFetchingNextPage) {
-                return <Spinner withText={false} />;
-              }
-
-              return null;
-            },
-          }}
-        /> */}
       </div>
     </div>
   );
