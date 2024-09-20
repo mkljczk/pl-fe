@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
-import { IconButton } from 'pl-fe/components/ui';
+import { IconButton, HStack } from 'pl-fe/components/ui';
 import { useInstance } from 'pl-fe/hooks';
+
 
 const messages = defineMessages({
   upload: { id: 'upload_button.label', defaultMessage: 'Add media attachment' },
@@ -43,30 +44,42 @@ const UploadButton: React.FC<IUploadButton> = ({
     }
   };
 
-  const handleClick = () => {
+  let isMedia = true;
+
+  const handleClickMedia = () => {
     fileElement.current?.click();
+    isMedia = true;
   };
 
+  const handleClickFile = () => {
+    fileElement.current?.click();
+    isMedia = false;
+  };
   if (unavailable) {
     return null;
   }
 
-  const src = icon || (
-    onlyImages(attachmentTypes)
-      ? require('@tabler/icons/outline/photo.svg')
-      : require('@tabler/icons/outline/paperclip.svg')
-  );
 
   return (
     <div>
-      <IconButton
-        src={src}
-        className={className}
-        iconClassName={iconClassName}
-        title={intl.formatMessage(messages.upload)}
-        disabled={disabled}
-        onClick={handleClick}
-      />
+      <HStack className='gap-2'>
+        <IconButton
+          src={require('@tabler/icons/outline/photo-up.svg')}
+          className={className}
+          iconClassName={iconClassName}
+          title={intl.formatMessage(messages.upload)}
+          disabled={disabled}
+          onClick={handleClickMedia}
+        />
+        <IconButton
+          src={require('@tabler/icons/outline/paperclip.svg')}
+          className={className}
+          iconClassName={iconClassName}
+          title={intl.formatMessage(messages.upload)}
+          disabled={disabled}
+          onClick={handleClickFile}
+        />
+      </HStack>
 
       <label>
         <span className='sr-only'>{intl.formatMessage(messages.upload)}</span>
@@ -75,7 +88,7 @@ const UploadButton: React.FC<IUploadButton> = ({
           ref={fileElement}
           type='file'
           multiple
-          accept={attachmentTypes?.join(',')}
+          accept={isMedia ? 'image/*,video/*,audio/*' : attachmentTypes?.join(',')}
           onChange={handleChange}
           disabled={disabled}
           className='hidden'
