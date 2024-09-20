@@ -12,8 +12,12 @@ interface IUploadButton {
 
 const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
   const fileElement = useRef<HTMLInputElement>(null);
+
   const attachmentTypes = useAppSelector(state => state.instance.configuration.media_attachments.supported_mime_types)
     ?.filter((type) => type.startsWith('image/'));
+
+  let accept = attachmentTypes?.join(',');
+  if (accept === 'application/octet-stream') accept = undefined;
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     if (e.target.files?.length) {
@@ -24,6 +28,7 @@ const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
   const handleClick = () => {
     fileElement.current?.click();
   };
+
 
   return (
     <HStack className='h-full w-full cursor-pointer text-primary-500 dark:text-accent-blue' space={3} alignItems='center' justifyContent='center' element='label'>
@@ -39,7 +44,7 @@ const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
       <input
         ref={fileElement}
         type='file'
-        accept={attachmentTypes?.join(',')}
+        accept={accept}
         onChange={handleChange}
         disabled={disabled}
         className='hidden'

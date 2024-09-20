@@ -37,6 +37,9 @@ const UploadButton: React.FC<IUploadButton> = ({
   const fileElement = useRef<HTMLInputElement>(null);
   const attachmentTypes = configuration.media_attachments.supported_mime_types;
 
+  let accept = attachmentTypes?.join(',');
+  if (accept === 'application/octet-stream') accept = undefined;
+
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     if (e.target.files?.length) {
       onSelectFile(e.target.files, intl);
@@ -75,7 +78,7 @@ const UploadButton: React.FC<IUploadButton> = ({
           ref={fileElement}
           type='file'
           multiple
-          accept={attachmentTypes?.join(',')}
+          accept={accept}
           onChange={handleChange}
           disabled={disabled}
           className='hidden'
