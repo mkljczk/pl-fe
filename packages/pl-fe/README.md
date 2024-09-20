@@ -1,4 +1,4 @@
-`pl-fe` is a social networking client app forked from [Soapbox](https://gitlab.com/soapbox-pub/soapbox/). It is intended to be used with [`pl`](https://github.com/mkljczk/pl) backend, but works with any Mastodon API-compatible software.
+`pl-fe` is a social networking client app forked from [Soapbox](https://gitlab.com/soapbox-pub/soapbox/). It works with any Mastodon API-compatible software, but it's focused on supporting alternative backends, like Pleroma or GoToSocial.
 
 ## Differences compared to Soapbox
 
