@@ -655,12 +655,12 @@ const Header: React.FC<IHeader> = ({ account }) => {
                 src={account.avatar}
                 alt={account.avatar_description}
                 size={96}
-                className='relative h-24 w-24 rounded-full bg-white ring-4 ring-white black:ring-black dark:bg-primary-900 dark:ring-primary-900'
+                className='relative size-24 rounded-full bg-white ring-4 ring-white black:ring-black dark:bg-primary-900 dark:ring-primary-900'
               />
             </a>
             {account.verified && (
               <div className='absolute bottom-0 right-0'>
-                <VerificationBadge className='h-6 w-6 rounded-full bg-white ring-2 ring-white dark:bg-primary-900 dark:ring-primary-900' />
+                <VerificationBadge className='!size-[24px] rounded-full !p-[2px] ring-2 ring-white black:ring-black dark:ring-primary-900' />
               </div>
             )}
           </div>
