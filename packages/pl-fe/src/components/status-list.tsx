@@ -39,8 +39,6 @@ interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
   timelineId?: string;
   /** Whether to display a gap or border between statuses in the list. */
   divideType?: 'space' | 'border';
-  /** Whether to display ads. */
-  showAds?: boolean;
   /** Whether to show group information. */
   showGroup?: boolean;
 }
@@ -55,7 +53,6 @@ const StatusList: React.FC<IStatusList> = ({
   timelineId,
   isLoading,
   isPartial,
-  showAds = false,
   showGroup = true,
   className,
   ...other
