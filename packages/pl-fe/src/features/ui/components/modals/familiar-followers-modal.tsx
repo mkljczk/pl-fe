@@ -58,6 +58,7 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
         />
       }
       onClose={onClickClose}
+      ref={modalRef}
     >
       {body}
     </Modal>

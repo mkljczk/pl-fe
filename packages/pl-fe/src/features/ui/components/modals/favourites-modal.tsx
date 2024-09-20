@@ -68,6 +68,7 @@ const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onCl
     <Modal
       title={<FormattedMessage id='column.favourites' defaultMessage='Likes' />}
       onClose={onClickClose}
+      ref={modalRef}
     >
       {body}
     </Modal>

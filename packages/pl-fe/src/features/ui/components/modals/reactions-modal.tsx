@@ -109,6 +109,7 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
     <Modal
       title={<FormattedMessage id='column.reactions' defaultMessage='Reactions' />}
       onClose={onClickClose}
+      ref={modalRef}
     >
       {body}
     </Modal>
