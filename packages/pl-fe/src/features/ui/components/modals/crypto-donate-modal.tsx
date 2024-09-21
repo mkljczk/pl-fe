@@ -11,9 +11,7 @@ const CryptoDonateModal: React.FC<BaseModalProps & ICryptoAddress> = ({ onClose,
 
   return (
     <Modal onClose={onClose} width='xs'>
-      <div className='crypto-donate-modal'>
-        <DetailedCryptoAddress {...props} />
-      </div>
+      <DetailedCryptoAddress {...props} />
     </Modal>
   );
 
