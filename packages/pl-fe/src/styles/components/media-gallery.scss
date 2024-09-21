@@ -60,6 +60,8 @@
   }
 
   &--compact {
+    @apply rounded-sm;
+
     .media-gallery__item {
       @apply h-12 w-12 inset-auto float-left mr-[5px] #{!important};
 
