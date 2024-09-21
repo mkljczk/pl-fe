@@ -96,7 +96,7 @@
     "@types/semver": "^7.3.9",
     "@types/uuid": "^9.0.0",
     "@uidotdev/usehooks": "^2.4.1",
-    "@vitejs/plugin-react": "^4.0.4",
+    "@vitejs/plugin-react": "^4.3.1",
     "@webbtc/webln-types": "^3.0.0",
     "autoprefixer": "^10.4.15",
     "babel-plugin-formatjs": "^10.5.6",
@@ -176,11 +176,11 @@
     "typescript": "^5.4.5",
     "util": "^0.12.5",
     "uuid": "^9.0.0",
-    "vite": "^5.0.13",
+    "vite": "^5.4.7",
     "vite-plugin-compile-time": "^0.2.1",
-    "vite-plugin-html": "^3.2.0",
-    "vite-plugin-require": "^1.1.10",
-    "vite-plugin-static-copy": "^1.0.0",
+    "vite-plugin-html": "^3.2.2",
+    "vite-plugin-require": "^1.2.14",
+    "vite-plugin-static-copy": "^1.0.6",
     "wicg-inert": "^3.1.1",
     "zod": "^3.23.8",
     "zustand": "^5.0.0-rc.2"
@@ -219,9 +219,9 @@
     "stylelint": "^16.0.2",
     "stylelint-config-standard-scss": "^12.0.0",
     "tailwindcss": "^3.4.12",
-    "vite-plugin-checker": "^0.6.2",
-    "vite-plugin-pwa": "^0.17.0",
-    "vitest": "^1.0.0"
+    "vite-plugin-checker": "^0.8.0",
+    "vite-plugin-pwa": "^0.20.5",
+    "vitest": "^2.1.1"
   },
   "resolutions": {
     "@types/react": "^18.0.26",
