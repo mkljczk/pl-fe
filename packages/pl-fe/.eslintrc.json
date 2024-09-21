@@ -16,14 +16,15 @@
     "ATTACHMENT_HOST": false
   },
   "plugins": [
-    "jsdoc",
-    "react",
-    "jsx-a11y",
-    "import",
-    "promise",
-    "react-hooks",
+    "@stylistic",
     "@typescript-eslint",
-    "formatjs"
+    "formatjs",
+    "import",
+    "jsdoc",
+    "jsx-a11y",
+    "promise",
+    "react",
+    "react-hooks"
   ],
   "parserOptions": {
     "sourceType": "module",
@@ -303,7 +304,7 @@
         }
       }
     ],
-    "@typescript-eslint/member-delimiter-style": "error",
+    "@stylistic/member-delimiter-style": "error",
     "promise/catch-or-return": "error",
     "react-hooks/rules-of-hooks": "error",
     "tailwindcss/classnames-order": [
