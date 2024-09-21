@@ -159,7 +159,8 @@
       {
         "vars": "all",
         "args": "none",
-        "ignoreRestSiblings": true
+        "ignoreRestSiblings": true,
+        "caughtErrors": "none"
       }
     ],
     "no-useless-escape": "warn",
