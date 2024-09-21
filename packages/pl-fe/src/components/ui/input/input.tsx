@@ -87,7 +87,7 @@ const Input = React.forwardRef<HTMLInputElement, IInput>(
           {...filteredProps}
           type={revealed ? 'text' : type}
           ref={ref}
-          className={clsx('block w-full text-base placeholder:text-gray-600 focus:border-primary-500 sm:text-sm dark:placeholder:text-gray-600 dark:focus:border-primary-500', {
+          className={clsx('block w-full text-base placeholder:text-gray-600 focus:border-primary-500 dark:placeholder:text-gray-600 dark:focus:border-primary-500 sm:text-sm', {
             'ring-1 focus:ring-primary-500 dark:ring-gray-800 dark:focus:ring-primary-500': ['search', 'normal'].includes(theme),
             'px-0 border-none !ring-0': theme === 'transparent',
             'text-gray-900 dark:text-gray-100': !props.disabled,

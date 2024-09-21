@@ -63,7 +63,7 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
   );
 
   return (
-    <div className='fixed inset-x-0 bottom-0 z-50 flex w-full overflow-x-auto border-t border-solid border-gray-200 bg-white/90 shadow-2xl backdrop-blur-md black:bg-black/80 lg:hidden dark:border-gray-800 dark:bg-primary-900/90'>
+    <div className='fixed inset-x-0 bottom-0 z-50 flex w-full overflow-x-auto border-t border-solid border-gray-200 bg-white/90 shadow-2xl backdrop-blur-md black:bg-black/80 dark:border-gray-800 dark:bg-primary-900/90 lg:hidden'>
       <button
         className='flex flex-1 flex-col items-center px-2 py-4 text-lg text-gray-600'
         onClick={handleOpenSidebar}

@@ -187,7 +187,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
 
       <div
         className={
-          clsx('fixed bottom-[60px] left-2 z-[1000] flex max-h-[calc(100dvh-68px)] w-full max-w-xs flex-1 origin-bottom-left flex-col overflow-hidden rounded-xl bg-white shadow-lg ease-in-out black:bg-black no-reduce-motion:transition-transform rtl:right-2 rtl:origin-bottom-right dark:border dark:border-gray-800 dark:bg-primary-900 dark:shadow-none', {
+          clsx('fixed bottom-[60px] left-2 z-[1000] flex max-h-[calc(100dvh-68px)] w-full max-w-xs flex-1 origin-bottom-left flex-col overflow-hidden rounded-xl bg-white shadow-lg ease-in-out black:bg-black no-reduce-motion:transition-transform dark:border dark:border-gray-800 dark:bg-primary-900 dark:shadow-none rtl:right-2 rtl:origin-bottom-right', {
             'scale-100': sidebarVisible && sidebarOpen,
             'no-reduce-motion:scale-0': !(sidebarVisible && sidebarOpen),
           })
