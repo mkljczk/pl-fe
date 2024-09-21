@@ -69,9 +69,9 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
       title={intl.formatMessage(messages.title)}
       tabIndex={0}
     >
-      {src && <img className='h-full w-full object-cover' src={src} alt='' />}
+      {src && <img className='size-full object-cover' src={src} alt='' />}
       <HStack
-        className={clsx('absolute top-0 h-full w-full transition-opacity', {
+        className={clsx('absolute top-0 size-full transition-opacity', {
           'opacity-0 hover:opacity-90 bg-primary-100 dark:bg-gray-800': src,
         })}
         space={1.5}
@@ -80,7 +80,7 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
       >
         <Icon
           src={require('@tabler/icons/outline/photo-plus.svg')}
-          className='h-4.5 w-4.5'
+          className='size-4.5'
         />
 
         <Text size='md' theme='primary' weight='semibold'>

@@ -62,7 +62,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
               <Emoji
                 emoji={folder.emoji}
                 src={folder.emoji_url || undefined}
-                className='h-5 w-5 flex-none'
+                className='size-5 flex-none'
               />
             ) : <Icon src={require('@tabler/icons/outline/folder.svg')} size={20} />}
             <span>{folder.name}</span>

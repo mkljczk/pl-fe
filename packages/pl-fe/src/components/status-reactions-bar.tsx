@@ -89,7 +89,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, status, obfuscate
       disabled={unauthenticated}
       {...bind}
     >
-      <Emoji className='h-5 w-5' emoji={reaction.name} src={reaction.url || undefined} />
+      <Emoji className='size-5' emoji={reaction.name} src={reaction.url || undefined} />
 
       <Text size='xs' weight='semibold' theme='inherit'>
         <AnimatedNumber value={reaction.count} obfuscate={obfuscate} short />
@@ -130,7 +130,7 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
             title={intl.formatMessage(messages.addEmoji)}
           >
             <Icon
-              className='h-4 w-4'
+              className='size-4'
               src={require('@tabler/icons/outline/mood-plus.svg')}
             />
           </button>

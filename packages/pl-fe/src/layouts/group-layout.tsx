@@ -30,7 +30,7 @@ const PrivacyBlankslate = () => (
     <div className='rounded-full bg-gray-200 p-3 dark:bg-gray-800'>
       <Icon
         src={require('@tabler/icons/outline/eye-off.svg')}
-        className='h-6 w-6 text-gray-600 dark:text-gray-600'
+        className='size-6 text-gray-600 dark:text-gray-600'
       />
     </div>
 

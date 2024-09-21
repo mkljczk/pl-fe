@@ -57,7 +57,7 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
     >
       <Icon
         src={require('@tabler/icons/outline/square-rounded-plus.svg')}
-        className='h-6 w-6 text-gray-600 black:text-white'
+        className='size-6 text-gray-600 black:text-white'
       />
     </button>
   );
@@ -71,7 +71,7 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
       >
         <Icon
           src={require('@tabler/icons/outline/menu-2.svg')}
-          className='h-5 w-5 text-gray-600 black:text-white'
+          className='size-5 text-gray-600 black:text-white'
         />
       </button>
 

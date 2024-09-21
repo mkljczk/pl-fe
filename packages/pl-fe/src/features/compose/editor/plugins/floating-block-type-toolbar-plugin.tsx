@@ -197,7 +197,7 @@ const BlockTypeFloatingToolbar = ({
   return (
     <div
       ref={popupCharStylesEditorRef}
-      className='absolute left-0 top-0 z-10 flex h-[38px] gap-0.5 rounded-lg bg-white p-1 opacity-0 shadow-lg transition-[opacity] dark:bg-gray-900'
+      className='absolute left-0 top-0 z-10 flex h-[38px] gap-0.5 rounded-lg bg-white p-1 opacity-0 shadow-lg transition-opacity dark:bg-gray-900'
     >
       {editor.isEditable() && (
         <>

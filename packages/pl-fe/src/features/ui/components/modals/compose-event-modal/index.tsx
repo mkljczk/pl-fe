@@ -252,7 +252,7 @@ const ComposeEventModal: React.FC<BaseModalProps & ComposeEventModalProps> = ({
         <div className='dark:sm:shadow-inset relative flex h-24 items-center justify-center overflow-hidden rounded-lg bg-primary-100 text-primary-500 sm:h-32 sm:shadow dark:bg-gray-800 dark:text-white'>
           {banner ? (
             <>
-              <img className='h-full w-full object-cover' src={banner.url} alt='' />
+              <img className='size-full object-cover' src={banner.url} alt='' />
               <IconButton className='absolute right-2 top-2' src={require('@tabler/icons/outline/x.svg')} onClick={handleClearBanner} />
             </>
           ) : (

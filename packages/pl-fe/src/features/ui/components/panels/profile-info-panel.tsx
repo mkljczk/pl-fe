@@ -90,7 +90,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
       <HStack alignItems='center' space={0.5}>
         <Icon
           src={require('@tabler/icons/outline/balloon.svg')}
-          className='h-4 w-4 text-gray-800 dark:text-gray-200'
+          className='size-4 text-gray-800 dark:text-gray-200'
         />
 
         <Text size='sm'>
@@ -198,7 +198,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
               <Icon
                 src={require('@tabler/icons/outline/lock.svg')}
                 alt={intl.formatMessage(messages.account_locked)}
-                className='h-4 w-4 text-gray-600'
+                className='size-4 text-gray-600'
               />
             )}
           </HStack>
@@ -215,7 +215,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
             <HStack alignItems='center' space={0.5}>
               <Icon
                 src={require('@tabler/icons/outline/calendar.svg')}
-                className='h-4 w-4 text-gray-800 dark:text-gray-200'
+                className='size-4 text-gray-800 dark:text-gray-200'
               />
 
               <Text size='sm' title={intl.formatDate(account.created_at, dateFormatOptions)}>
@@ -232,7 +232,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
             <HStack alignItems='center' space={0.5}>
               <Icon
                 src={require('@tabler/icons/outline/map-pin.svg')}
-                className='h-4 w-4 text-gray-800 dark:text-gray-200'
+                className='size-4 text-gray-800 dark:text-gray-200'
               />
 
               <Text size='sm'>

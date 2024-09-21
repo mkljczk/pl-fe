@@ -190,7 +190,7 @@ const ChatMessage = (props: IChatMessage) => {
             >
               <Icon
                 src={require('@tabler/icons/outline/dots.svg')}
-                className='h-4 w-4'
+                className='size-4'
               />
             </button>
           </DropdownMenu>

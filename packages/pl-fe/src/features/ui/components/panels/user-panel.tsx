@@ -50,7 +50,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
                 src={account.avatar}
                 alt={account.avatar_description}
                 size={80}
-                className='h-20 w-20 overflow-hidden bg-gray-50 ring-2 ring-white'
+                className='size-20 overflow-hidden bg-gray-50 ring-2 ring-white'
               />
             </Link>
 

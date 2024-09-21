@@ -45,7 +45,7 @@ const Search = () => {
             placeholder={intl.formatMessage(messages.search)}
           />
           <div role='button' tabIndex={0} className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto' onClick={handleClear}>
-            <Icon src={require('@tabler/icons/outline/backspace.svg')} aria-label={intl.formatMessage(messages.search)} className={clsx('h-5 w-5 text-gray-600', { hidden: !hasValue })} />
+            <Icon src={require('@tabler/icons/outline/backspace.svg')} aria-label={intl.formatMessage(messages.search)} className={clsx('size-5 text-gray-600', { hidden: !hasValue })} />
           </div>
         </label>
 

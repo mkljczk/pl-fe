@@ -35,7 +35,7 @@ const Scrobble: React.FC<IScrobble> = ({ scrobble }) => {
     <HStack alignItems='center' space={0.5}>
       <Icon
         src={require('@tabler/icons/outline/music.svg')}
-        className='h-4 w-4 text-gray-800 dark:text-gray-200'
+        className='size-4 text-gray-800 dark:text-gray-200'
       />
 
       <div className='relative box-border w-full overflow-hidden whitespace-nowrap'>

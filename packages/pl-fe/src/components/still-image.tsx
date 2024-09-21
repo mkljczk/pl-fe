@@ -46,7 +46,7 @@ const StillImage: React.FC<IStillImage> = ({
   };
 
   /** ClassNames shared between the `<img>` and `<canvas>` elements. */
-  const baseClassName = clsx('block h-full w-full', {
+  const baseClassName = clsx('block size-full', {
     'object-contain': letterboxed,
     'object-cover': !letterboxed,
   });

@@ -26,7 +26,7 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
   const intl = useIntl();
 
   const status = useAppSelector(state => getStatus(state, { id: params.statusId })) as StatusEntity;
-  
+
   const { openModal } = useModalsStore();
   const { tileServer } = usePlFeConfig();
 

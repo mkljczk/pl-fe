@@ -117,7 +117,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
           })
         }
       >
-        {item.icon && <Icon src={item.icon} className='mr-3 h-5 w-5 flex-none rtl:ml-3 rtl:mr-0' />}
+        {item.icon && <Icon src={item.icon} className='mr-3 size-5 flex-none rtl:ml-3 rtl:mr-0' />}
 
         <div className={clsx('text-xs', { 'mr-2': item.count || item.type === 'toggle' || item.items?.length })}>
           <div className='truncate text-base'>{item.text}</div>
@@ -125,7 +125,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         </div>
 
         {item.count ? (
-          <span className='ml-auto h-5 w-5 flex-none'>
+          <span className='ml-auto size-5 flex-none'>
             <Counter count={item.count} />
           </span>
         ) : null}
@@ -137,7 +137,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         )}
 
         {!!item.items?.length && (
-          <Icon src={require('@tabler/icons/outline/chevron-right.svg')} containerClassName='ml-auto' className='h-5 w-5 flex-none' />
+          <Icon src={require('@tabler/icons/outline/chevron-right.svg')} containerClassName='ml-auto' className='size-5 flex-none' />
         )}
       </a>
     </li>

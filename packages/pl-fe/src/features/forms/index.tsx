@@ -178,7 +178,7 @@ const Mutliselect: React.FC<IMultiselect> = (props) => {
       onRemove={handleChange}
       displayValue='value'
       disable={disabled}
-      customCloseIcon={<Icon className='ml-1 h-4 w-4 hover:cursor-pointer' src={require('@tabler/icons/outline/circle-x.svg')} />}
+      customCloseIcon={<Icon className='ml-1 size-4 hover:cursor-pointer' src={require('@tabler/icons/outline/circle-x.svg')} />}
       placeholder={intl.formatMessage(messages.selectPlaceholder)}
       emptyRecordMsg={intl.formatMessage(messages.selectNoOptions)}
     />

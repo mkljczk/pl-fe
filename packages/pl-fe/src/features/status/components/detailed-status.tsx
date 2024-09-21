@@ -47,7 +47,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
             icon={
               <Icon
                 src={require('@tabler/icons/outline/circles.svg')}
-                className='h-4 w-4 text-primary-600 dark:text-accent-blue'
+                className='size-4 text-primary-600 dark:text-accent-blue'
               />
             }
             text={

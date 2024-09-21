@@ -23,7 +23,7 @@ const GroupCard: React.FC<IGroupCard> = ({ group }) => (
     <Stack grow className='relative basis-1/2 rounded-t-lg bg-primary-100 dark:bg-gray-800'>
       <GroupHeaderImage
         group={group}
-        className='absolute inset-0 h-full w-full rounded-t-lg object-cover'
+        className='absolute inset-0 size-full rounded-t-lg object-cover'
       />
     </Stack>
 

@@ -149,7 +149,7 @@ const Upload: React.FC<IUpload> = ({
 
   const uploadIcon = mediaType === 'unknown' && (
     <Icon
-      className='mx-auto my-12 h-16 w-16 text-gray-800 dark:text-gray-200'
+      className='mx-auto my-12 size-16 text-gray-800 dark:text-gray-200'
       src={MIMETYPE_ICONS[mimeType || ''] || defaultIcon}
     />
   );
@@ -235,9 +235,9 @@ const Upload: React.FC<IUpload> = ({
               />
             )}
 
-            <div className='absolute inset-0 -z-[1] h-full w-full'>
+            <div className='absolute inset-0 -z-[1] size-full'>
               {mediaType === 'video' && (
-                <video className='h-full w-full object-cover' autoPlay playsInline muted loop>
+                <video className='size-full object-cover' autoPlay playsInline muted loop>
                   <source src={media.preview_url} />
                 </video>
               )}

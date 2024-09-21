@@ -36,7 +36,7 @@ const AttachmentThumbs = ({ status, onClick }: IAttachmentThumbs) => {
       </Suspense>
 
       {onClick && (
-        <div className='absolute inset-0 h-full w-full cursor-pointer' onClick={onClick} />
+        <div className='absolute inset-0 size-full cursor-pointer' onClick={onClick} />
       )}
     </div>
   );

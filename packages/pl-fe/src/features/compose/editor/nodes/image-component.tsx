@@ -352,7 +352,7 @@ const ImageComponent = ({
                 'opacity-100': !active,
               })}
             >
-              <Icon className='h-4 w-4' src={require('@tabler/icons/outline/alert-triangle.svg')} />
+              <Icon className='size-4' src={require('@tabler/icons/outline/alert-triangle.svg')} />
               <FormattedMessage id='upload_form.description_missing.indicator' defaultMessage='Alt' />
             </span>
           )}

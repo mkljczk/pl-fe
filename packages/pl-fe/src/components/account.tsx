@@ -47,7 +47,7 @@ const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
 
   return (
     <button
-      className='h-4 w-4 flex-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2'
+      className='size-4 flex-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2'
       onClick={handleClick}
       disabled={disabled}
     >
@@ -199,7 +199,7 @@ const Account = ({
             <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} />
             {emoji && (
               <Emoji
-                className='!absolute -right-1.5 bottom-0 h-5 w-5'
+                className='!absolute -right-1.5 bottom-0 size-5'
                 emoji={emoji}
                 src={emojiUrl}
               />
@@ -254,7 +254,7 @@ const Account = ({
                 <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} />
                 {emoji && (
                   <Emoji
-                    className='!absolute -right-1.5 bottom-0 h-5 w-5'
+                    className='!absolute -right-1.5 bottom-0 size-5'
                     emoji={emoji}
                     src={emojiUrl}
                   />
@@ -322,7 +322,7 @@ const Account = ({
                   <>
                     <Text tag='span' theme='muted' size='sm'>&middot;</Text>
 
-                    <Icon className='h-4 w-4 text-gray-700 dark:text-gray-600' src={require('@tabler/icons/outline/pencil.svg')} />
+                    <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@tabler/icons/outline/pencil.svg')} />
                   </>
                 ) : null}
 

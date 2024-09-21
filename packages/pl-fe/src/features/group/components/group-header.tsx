@@ -41,7 +41,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
           <HStack alignItems='bottom' space={5} className='-mt-12'>
             <div className='relative flex'>
               <div
-                className='h-24 w-24 rounded-full bg-gray-400 ring-4 ring-white dark:ring-gray-800'
+                className='size-24 rounded-full bg-gray-400 ring-4 ring-white dark:ring-gray-800'
               />
             </div>
           </HStack>
@@ -110,7 +110,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
         className='flex h-32 w-full items-center justify-center bg-gray-200 md:rounded-t-xl lg:h-52 dark:bg-gray-800/30'
       >
         {isHeaderMissing ? (
-          <Icon src={require('@tabler/icons/outline/photo-off.svg')} className='h-6 w-6 text-gray-500 dark:text-gray-700' />
+          <Icon src={require('@tabler/icons/outline/photo-off.svg')} className='size-6 text-gray-500 dark:text-gray-700' />
         ) : header}
       </div>
     );

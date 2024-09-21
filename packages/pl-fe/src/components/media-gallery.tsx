@@ -145,7 +145,7 @@ const Item: React.FC<IItem> = ({
     const filename = truncateFilename(attachment.url, MAX_FILENAME_LENGTH);
     const attachmentIcon = (
       <Icon
-        className='h-16 w-16 text-gray-800 dark:text-gray-200'
+        className='size-16 text-gray-800 dark:text-gray-200'
         src={MIMETYPE_ICONS[attachment.mime_type as string] || require('@tabler/icons/outline/paperclip.svg')}
       />
     );
@@ -177,7 +177,7 @@ const Item: React.FC<IItem> = ({
         target='_blank'
       >
         <StillImage
-          className='h-full w-full'
+          className='size-full'
           src={mediaPreview ? attachment.preview_url : attachment.url}
           alt={attachment.description}
           letterboxed={letterboxed}

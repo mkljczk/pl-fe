@@ -120,7 +120,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
           <HStack alignItems='bottom' space={5} className='-mt-12'>
             <div className='relative flex'>
               <div
-                className='h-24 w-24 rounded-full bg-gray-400 ring-4 ring-white dark:ring-gray-800'
+                className='size-24 rounded-full bg-gray-400 ring-4 ring-white dark:ring-gray-800'
               />
             </div>
           </HStack>

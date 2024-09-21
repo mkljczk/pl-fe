@@ -61,7 +61,7 @@ const SidebarNavigationLink = React.forwardRef((props: ISidebarNavigationLink, r
           src={(isActive && activeIcon) || icon}
           count={demetricator ? undefined : count}
           countMax={countMax}
-          className={clsx('h-5 w-5', {
+          className={clsx('size-5', {
             'text-primary-700 dark:text-white': !isActive,
             'text-white': isActive,
           })}

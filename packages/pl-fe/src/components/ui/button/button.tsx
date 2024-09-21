@@ -69,13 +69,13 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>(({
       type={type}
       data-testid='button'
     >
-      {icon ? <Icon src={icon} className='h-4 w-4' /> : null}
+      {icon ? <Icon src={icon} className='size-4' /> : null}
 
       {body && (
         <span>{body}</span>
       )}
 
-      {secondaryIcon ? <Icon src={secondaryIcon} className='h-4 w-4' /> : null}
+      {secondaryIcon ? <Icon src={secondaryIcon} className='size-4' /> : null}
     </button>
   );
 
