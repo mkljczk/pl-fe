@@ -7,7 +7,7 @@ import { parseColorMatrix } from './tailwind/colors';
 
 import type { Config } from 'tailwindcss';
 
-const blackVariantPlugin = plugin(({ addVariant }) => addVariant('black', '.black &'));
+const blackVariantPlugin = plugin(({ addVariant }) => addVariant('black', '&:is(.dark.black *)'));
 const reducedMotionPlugin = plugin(({ addVariant }) => addVariant('no-reduce-motion', '.no-reduce-motion &'));
 
 const config: Config = {
