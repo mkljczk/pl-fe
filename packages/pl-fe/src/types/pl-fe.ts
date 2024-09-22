@@ -5,7 +5,7 @@ import {
   PlFeConfigRecord,
 } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
 
-type Me = string | null | false | undefined;
+type Me = string | null | false;
 
 type PromoPanelItem = ReturnType<typeof PromoPanelItemRecord>;
 type FooterItem = ReturnType<typeof FooterItemRecord>;
