@@ -20,7 +20,6 @@ import Poll from './polls/poll';
 import type { Sizes } from 'pl-fe/components/ui/text/text';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 
-const MAX_HEIGHT = 322; // 20px * 16 (+ 2px padding at the top)
 const BIG_EMOJI_LIMIT = 10;
 
 const nodesToText = (nodes: Array<DOMNode>): string =>
@@ -81,7 +80,8 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     if (!node.current) return;
 
     if (collapsable && !collapsed) {
-      if (node.current.clientHeight > MAX_HEIGHT) {
+      // 20px * x lines (+ 2px padding at the top)
+      if (node.current.clientHeight > (quote ? 202 : 282)) {
         setCollapsed(true);
       }
     }
@@ -189,7 +189,8 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   const direction = getTextDirection(status.search_index);
   const className = clsx('relative overflow-hidden text-ellipsis break-words text-gray-900 focus:outline-none dark:text-gray-100', {
     'cursor-pointer': onClick,
-    'max-h-[200px]': collapsed,
+    'max-h-[200px]': collapsed && !quote,
+    'max-h-[120px]': collapsed && quote,
     'leading-normal big-emoji': onlyEmoji,
   });
 
