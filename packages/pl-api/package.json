@@ -21,7 +21,7 @@
     "@types/lodash.pick": "^4.4.9",
     "@types/node": "^20.14.12",
     "@types/semver": "^7.5.8",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.0.0",
     "eslint": "^8.49.0",
     "eslint-import-resolver-typescript": "^3.6.0",
