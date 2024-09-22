@@ -75,7 +75,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
-    "@tanstack/react-query": "^5.0.0",
+    "@tanstack/react-query": "^5.56.2",
     "@tanstack/react-virtual": "^3.10.8",
     "@types/escape-html": "^1.0.1",
     "@types/http-link-header": "^1.0.3",
