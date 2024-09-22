@@ -88,7 +88,7 @@ const Announcements: React.FC = () => {
   const intl = useIntl();
   const { openModal } = useModalsStore();
 
-  const { data: announcements, isLoading } = useAnnouncements();
+  const { data: announcements, isLoading, isPending } = useAnnouncements();
 
   const handleCreateAnnouncement = () => {
     openModal('EDIT_ANNOUNCEMENT');
@@ -112,7 +112,7 @@ const Announcements: React.FC = () => {
           emptyMessage={emptyMessage}
           itemClassName='py-3 first:pt-0 last:pb-0'
           isLoading={isLoading}
-          showLoading={isLoading && !announcements?.length}
+          showLoading={isLoading && isPending}
         >
           {announcements!.map((announcement) => (
             <Announcement key={announcement.id} announcement={announcement} />

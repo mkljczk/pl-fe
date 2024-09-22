@@ -25,7 +25,7 @@ const useAnnouncements = () => {
   const result = useQuery<ReadonlyArray<AdminAnnouncement>>({
     queryKey: ['admin', 'announcements'],
     queryFn: getAnnouncements,
-    placeholderData: [],
+    placeholderData: [] as ReadonlyArray<AdminAnnouncement>,
   });
 
   const {
