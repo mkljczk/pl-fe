@@ -425,7 +425,7 @@ const getFeatures = (instance: Instance) => {
      * Ability to add emoji reactions to a status.
      * @see PUT /api/v1/pleroma/statuses/:id/reactions/:emoji
      * @see DELETE /api/v1/pleroma/statuses/:id/reactions/:emoji
-     * 
+     *
      * @see POST /v1/statuses/:id/react/:emoji
      * @see POST /v1/statuses/:id/unreact/:emoji
      */

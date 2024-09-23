@@ -135,9 +135,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
 
           paragraph.append(textNode);
 
-          $getRoot()
-            .clear()
-            .append(paragraph);
+          $getRoot().clear().append(paragraph);
 
           return;
         }
@@ -154,9 +152,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
 
           paragraph.append(textNode);
 
-          $getRoot()
-            .clear()
-            .append(paragraph);
+          $getRoot().clear().append(paragraph);
         }
       };
     }),
