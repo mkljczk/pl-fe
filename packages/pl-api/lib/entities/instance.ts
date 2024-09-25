@@ -298,7 +298,7 @@ const instanceSchema = z.preprocess((data: any) => {
 
   if (data.domain) return { account_domain: data.domain, ...data, api_versions: apiVersions };
 
-  return instanceV1ToV2({ api_versions: apiVersions, ...data });
+  return instanceV1ToV2({ ...data, api_versions: apiVersions });
 }, coerceObject({
   account_domain: z.string().catch(''),
   api_versions: z.record(z.number()).catch({}),
