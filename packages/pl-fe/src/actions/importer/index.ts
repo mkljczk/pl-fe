@@ -111,7 +111,7 @@ const isBroken = (status: BaseStatus) => {
 };
 
 const importFetchedStatuses = (statuses: Array<Omit<BaseStatus, 'account'> & { account: BaseAccount | null }>) => (dispatch: AppDispatch) => {
-  const accounts: Array<BaseAccount> = [];
+  const accounts: Record<string, BaseAccount> = {};
   const normalStatuses: Array<BaseStatus> = [];
   const polls: Array<Poll> = [];
 
@@ -122,7 +122,7 @@ const importFetchedStatuses = (statuses: Array<Omit<BaseStatus, 'account'> & { a
 
     normalStatuses.push(status);
 
-    if (status.account !== null) accounts.push(status.account);
+    accounts[status.account.id] = status.account;
     // if (status.accounts) {
     //   accounts.push(...status.accounts);
     // }
@@ -144,7 +144,7 @@ const importFetchedStatuses = (statuses: Array<Omit<BaseStatus, 'account'> & { a
   (statuses as Array<BaseStatus>).forEach(processStatus);
 
   dispatch(importPolls(polls));
-  dispatch(importFetchedAccounts(accounts));
+  dispatch(importFetchedAccounts(Object.values(accounts)));
   dispatch(importStatuses(normalStatuses));
 };
 
