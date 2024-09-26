@@ -75,11 +75,10 @@ const importFetchedStatus = (status: BaseStatus & { expectsCard?: boolean }, ide
       dispatch(importFetchedStatus(status.quote as BaseStatus));
     }
 
-    // WIP restore this
     // Fedibird quote from reblog
-    // if (status.reblog?.quote?.id) {
-    //   dispatch(importFetchedStatus(status.reblog.quote));
-    // }
+    if (status.reblog?.quote?.id) {
+      dispatch(importFetchedStatus(status.reblog.quote));
+    }
 
     if (status.poll?.id) {
       dispatch(importFetchedPoll(status.poll));
