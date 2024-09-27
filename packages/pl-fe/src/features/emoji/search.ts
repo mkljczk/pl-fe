@@ -1,12 +1,11 @@
-import Index from '@akryum/flexsearch-es';
+import FlexSearch from 'flexsearch';
 
 import data from './data';
 
 import type { Emoji } from './index';
 import type { CustomEmoji } from 'pl-api';
 
-// @ts-ignore Wrong default export.
-const index: Index.Index = new Index({
+const index = new FlexSearch.Index({
   tokenize: 'full',
   optimize: true,
   context: true,
