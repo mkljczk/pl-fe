@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
 import Button from '../button/button';
@@ -39,6 +39,8 @@ interface IStreamfield {
   minItems?: number;
   /** Maximum number of allowed inputs. */
   maxItems?: number;
+  /** Allow changing order of the items. */
+  draggable?: boolean;
 }
 
 /** List of inputs that can be added or removed. */
@@ -52,8 +54,28 @@ const Streamfield: React.FC<IStreamfield> = ({
   component: Component,
   maxItems = Infinity,
   minItems = 0,
+  draggable,
 }) => {
   const intl = useIntl();
+
+  const dragItem = useRef<number | null>();
+  const dragOverItem = useRef<number | null>();
+
+  const handleDragStart = (i: number) => () => {
+    dragItem.current = i;
+  };
+
+  const handleDragEnter = (i: number) => () => {
+    dragOverItem.current = i;
+  };
+
+  const handleDragEnd = () => {
+    const newData = [...values];
+    const item = newData.splice(dragItem.current!, 1)[0];
+    newData.splice(dragOverItem.current!, 0, item);
+
+    onChange(newData);
+  };
 
   const handleChange = (i: number) => (value: any) => {
     const newData = [...values];
@@ -71,7 +93,15 @@ const Streamfield: React.FC<IStreamfield> = ({
       {(values.length > 0) && (
         <Stack space={1}>
           {values.map((value, i) => value?._destroy ? null : (
-            <HStack key={i} space={2} alignItems='center'>
+            <HStack
+              key={i}
+              space={2}
+              alignItems='center'
+              draggable={draggable}
+              onDragStart={handleDragStart(i)}
+              onDragEnter={handleDragEnter(i)}
+              onDragEnd={handleDragEnd}
+            >
               <Component
                 key={i}
                 index={i}

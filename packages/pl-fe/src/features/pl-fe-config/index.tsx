@@ -288,6 +288,7 @@ const PlFeConfig: React.FC = () => {
             onChange={handleStreamItemChange(['promoPanel', 'items'])}
             onAddItem={addStreamItem(['promoPanel', 'items'], templates.promoPanel)}
             onRemoveItem={deleteStreamItem(['promoPanel', 'items'])}
+            draggable
           />
 
           <Streamfield
@@ -298,6 +299,7 @@ const PlFeConfig: React.FC = () => {
             onChange={handleStreamItemChange(['navlinks', 'homeFooter'])}
             onAddItem={addStreamItem(['navlinks', 'homeFooter'], templates.footerItem)}
             onRemoveItem={deleteStreamItem(['navlinks', 'homeFooter'])}
+            draggable
           />
 
           <FormGroup labelText={intl.formatMessage(messages.copyrightFooterLabel)}>
@@ -347,6 +349,7 @@ const PlFeConfig: React.FC = () => {
             onChange={handleStreamItemChange(['cryptoAddresses'])}
             onAddItem={addStreamItem(['cryptoAddresses'], templates.cryptoAddress)}
             onRemoveItem={deleteStreamItem(['cryptoAddresses'])}
+            draggable
           />
 
           <FormGroup labelText={intl.formatMessage(messages.cryptoDonatePanelLimitLabel)}>
