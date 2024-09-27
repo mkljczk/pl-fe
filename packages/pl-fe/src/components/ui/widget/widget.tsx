@@ -26,7 +26,7 @@ const WidgetBody: React.FC<IWidgetBody> = ({ children }): JSX.Element => (
 
 interface IWidget {
   /** Widget title text. */
-  title: React.ReactNode;
+  title?: React.ReactNode;
   /** Callback when the widget action is clicked. */
   onActionClick?: () => void;
   /** URL to the svg icon for the widget action. */
@@ -47,17 +47,19 @@ const Widget: React.FC<IWidget> = ({
   action,
 }): JSX.Element => (
   <Stack space={4}>
-    <HStack space={2} alignItems='center' justifyContent='between'>
-      <WidgetTitle title={title} />
-      {action || (onActionClick && (
-        <IconButton
-          className='ml-2 size-6 text-black dark:text-white rtl:rotate-180'
-          src={actionIcon}
-          onClick={onActionClick}
-          title={actionTitle}
-        />
-      ))}
-    </HStack>
+    {title || action || onActionClick && (
+      <HStack space={2} alignItems='center' justifyContent='between'>
+        {title && <WidgetTitle title={title} />}
+        {action || (onActionClick && (
+          <IconButton
+            className='ml-2 size-6 text-black dark:text-white rtl:rotate-180'
+            src={actionIcon}
+            onClick={onActionClick}
+            title={actionTitle}
+          />
+        ))}
+      </HStack>
+    )}
     <WidgetBody>{children}</WidgetBody>
   </Stack>
 );
