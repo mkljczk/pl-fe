@@ -39,11 +39,6 @@
     "not dead"
   ],
   "dependencies": {
-    "@babel/plugin-transform-react-inline-elements": "^7.22.5",
-    "@babel/plugin-transform-runtime": "^7.22.15",
-    "@babel/preset-env": "^7.22.15",
-    "@babel/preset-react": "^7.22.15",
-    "@babel/preset-typescript": "^7.22.15",
     "@emoji-mart/data": "^1.1.2",
     "@floating-ui/react": "^0.26.24",
     "@fontsource/inter": "^5.0.0",
@@ -80,8 +75,6 @@
     "@vitejs/plugin-react": "^4.3.1",
     "@webbtc/webln-types": "^3.0.0",
     "autoprefixer": "^10.4.15",
-    "babel-plugin-formatjs": "^10.5.6",
-    "babel-plugin-preval": "^5.1.0",
     "blurhash": "^2.0.0",
     "bowser": "^2.11.0",
     "browserslist": "^4.16.6",
@@ -195,7 +188,6 @@
     "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^8.6.0",
     "@typescript-eslint/parser": "^8.6.0",
-    "babel-plugin-transform-require-context": "^0.1.1",
     "eslint": "^8.57.1",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-compat": "^6.0.1",
