@@ -15,7 +15,7 @@ const useAccountScrobble = (accountId?: string, opts: UseScrobblesOpts = {}) => 
 
   const { data: scrobble, ...result } = useQuery<Scrobble>({
     queryKey: ['scrobbles', accountId!],
-    queryFn: async () => (await client.accounts.getScrobbles(accountId!, { limit: 1 })).items[0],
+    queryFn: async () => (await client.accounts.getScrobbles(accountId!, { limit: 1 })).items[0] || null,
     placeholderData: undefined,
     enabled: enabled && !!accountId && features.scrobbles,
     staleTime: 3 * 60 * 1000,
