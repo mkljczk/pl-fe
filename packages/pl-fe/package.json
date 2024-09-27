@@ -104,7 +104,7 @@
     "lexical": "^0.18.0",
     "line-awesome": "^1.3.0",
     "localforage": "^1.10.0",
-    "lodash": "^4.7.11",
+    "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.6.0",
     "multiselect-react-dropdown": "^2.0.25",
     "path-browserify": "^1.0.1",
