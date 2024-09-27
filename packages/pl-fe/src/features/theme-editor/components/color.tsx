@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ColorWithPicker from 'pl-fe/features/pl-fe-config/components/color-with-picker';
+import ColorPicker from 'pl-fe/features/pl-fe-config/components/color-picker';
 
 import type { ColorChangeHandler } from 'react-color';
 
@@ -17,7 +17,7 @@ const Color: React.FC<IColor> = ({ color, onChange }) => {
   };
 
   return (
-    <ColorWithPicker
+    <ColorPicker
       className='size-full'
       value={color}
       onChange={handleChange}

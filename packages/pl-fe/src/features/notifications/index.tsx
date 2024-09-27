@@ -7,13 +7,13 @@ import {
   scrollTopNotifications,
   dequeueNotifications,
 } from 'pl-fe/actions/notifications';
-import { useNotifications } from 'pl-fe/pl-hooks/hooks/notifications/useNotifications';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import ScrollTopButton from 'pl-fe/components/scroll-top-button';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Column, Portal } from 'pl-fe/components/ui';
 import PlaceholderNotification from 'pl-fe/features/placeholder/components/placeholder-notification';
 import { useAppDispatch, useAppSelector, useSettings } from 'pl-fe/hooks';
+import { useNotifications } from 'pl-fe/pl-hooks/hooks/notifications/useNotifications';
 import { NotificationType } from 'pl-fe/utils/notification';
 
 import FilterBar from './components/filter-bar';

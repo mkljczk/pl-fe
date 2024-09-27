@@ -6,7 +6,6 @@ import { mentionCompose } from 'pl-fe/actions/compose';
 import { reblog, favourite, unreblog, unfavourite } from 'pl-fe/actions/interactions';
 import { getSettings } from 'pl-fe/actions/settings';
 import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
-import { useNotification } from 'pl-fe/pl-hooks/hooks/notifications/useNotification';
 import Icon from 'pl-fe/components/icon';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
 import { HStack, Text, Emoji } from 'pl-fe/components/ui';
@@ -14,6 +13,7 @@ import AccountContainer from 'pl-fe/containers/account-container';
 import StatusContainer from 'pl-fe/containers/status-container';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch, useInstance, useLoggedIn } from 'pl-fe/hooks';
+import { useNotification } from 'pl-fe/pl-hooks/hooks/notifications/useNotification';
 import { useModalsStore } from 'pl-fe/stores';
 import { NotificationType } from 'pl-fe/utils/notification';
 

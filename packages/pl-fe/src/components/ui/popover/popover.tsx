@@ -3,12 +3,14 @@ import {
   autoPlacement,
   FloatingArrow,
   offset,
+  shift,
   useClick,
   useDismiss,
   useFloating,
   useHover,
   useInteractions,
   useTransitionStyles,
+  type OffsetOptions,
 } from '@floating-ui/react';
 import clsx from 'clsx';
 import React, { useRef, useState } from 'react';
@@ -25,6 +27,7 @@ interface IPopover {
   interaction?: 'click' | 'hover';
   /** Add a class to the reference (trigger) element */
   referenceElementClassName?: string;
+  offsetOptions?: OffsetOptions;
 }
 
 /**
@@ -33,14 +36,12 @@ interface IPopover {
  * Similar to tooltip, but requires a click and is used for larger blocks
  * of information.
  */
-const Popover: React.FC<IPopover> = (props) => {
-  const { children, content, referenceElementClassName, interaction = 'hover', isFlush = false } = props;
-
+const Popover: React.FC<IPopover> = ({ children, content, referenceElementClassName, interaction = 'hover', isFlush = false, offsetOptions = 10 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const arrowRef = useRef<SVGSVGElement>(null);
 
-  const { x, y, strategy, refs, context } = useFloating({
+  const { x, y, strategy, refs, context, placement } = useFloating({
     open: isOpen,
     onOpenChange: setIsOpen,
     placement: 'top',
@@ -48,7 +49,10 @@ const Popover: React.FC<IPopover> = (props) => {
       autoPlacement({
         allowedPlacements: ['top', 'bottom'],
       }),
-      offset(10),
+      offset(offsetOptions),
+      shift({
+        padding: 8,
+      }),
       arrow({
         element: arrowRef,
       }),
@@ -59,10 +63,11 @@ const Popover: React.FC<IPopover> = (props) => {
     initial: {
       opacity: 0,
       transform: 'scale(0.8)',
+      transformOrigin: placement === 'bottom' ? 'top' : 'bottom',
     },
     duration: {
-      open: 200,
-      close: 200,
+      open: 100,
+      close: 100,
     },
   });
 
@@ -82,6 +87,7 @@ const Popover: React.FC<IPopover> = (props) => {
         ref: refs.setReference,
         ...getReferenceProps(),
         className: clsx(children.props.className, referenceElementClassName),
+        'aria-expanded': isOpen,
       })}
 
       {(isMounted) && (
@@ -94,20 +100,23 @@ const Popover: React.FC<IPopover> = (props) => {
               left: x ?? 0,
               ...styles,
             }}
-            className={
-              clsx({
-                'z-40 rounded-lg bg-white shadow-2xl dark:bg-gray-900 dark:ring-2 dark:ring-primary-700': true,
-                'p-6': !isFlush,
-              })
-            }
-            {...getFloatingProps()}
           >
-            {content}
+            <div
+              className={
+                clsx(
+                  'z-40 overflow-hidden rounded-lg bg-white shadow-2xl dark:bg-gray-900 dark:ring-2 dark:ring-primary-700',
+                  { 'p-6': !isFlush },
+                )
+              }
+              {...getFloatingProps()}
+            >
+              {content}
 
+            </div>
             <FloatingArrow
               ref={arrowRef}
               context={context}
-              className='-ml-2 fill-white dark:hidden' /** -ml-2 to fix offcenter arrow */
+              className='fill-white dark:fill-primary-700'
               tipRadius={3}
             />
           </div>
