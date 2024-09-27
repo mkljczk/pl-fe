@@ -2,37 +2,29 @@ import IntlMessageFormat from 'intl-messageformat';
 import 'intl-pluralrules';
 import { defineMessages } from 'react-intl';
 
-import { getClient } from 'pl-fe/api';
 import { getNotificationStatus } from 'pl-fe/features/notifications/components/notification';
-import { normalizeNotification, normalizeNotifications, type Notification } from 'pl-fe/normalizers';
+import { normalizeNotification } from 'pl-fe/normalizers';
 import { getFilters, regexFromFilters } from 'pl-fe/selectors';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 import { compareId } from 'pl-fe/utils/comparators';
 import { unescapeHTML } from 'pl-fe/utils/html';
-import { EXCLUDE_TYPES, NOTIFICATION_TYPES } from 'pl-fe/utils/notification';
 import { joinPublicPath } from 'pl-fe/utils/static';
 
 import { fetchRelationships } from './accounts';
 import {
   importFetchedAccount,
-  importFetchedAccounts,
   importFetchedStatus,
-  importFetchedStatuses,
 } from './importer';
 import { saveMarker } from './markers';
 import { getSettings, saveSettings } from './settings';
 
-import type { Account, Notification as BaseNotification, PaginatedResponse, Status } from 'pl-api';
+import type { Notification as BaseNotification } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const NOTIFICATIONS_UPDATE = 'NOTIFICATIONS_UPDATE' as const;
 const NOTIFICATIONS_UPDATE_NOOP = 'NOTIFICATIONS_UPDATE_NOOP' as const;
 const NOTIFICATIONS_UPDATE_QUEUE = 'NOTIFICATIONS_UPDATE_QUEUE' as const;
 const NOTIFICATIONS_DEQUEUE = 'NOTIFICATIONS_DEQUEUE' as const;
-
-const NOTIFICATIONS_EXPAND_REQUEST = 'NOTIFICATIONS_EXPAND_REQUEST' as const;
-const NOTIFICATIONS_EXPAND_SUCCESS = 'NOTIFICATIONS_EXPAND_SUCCESS' as const;
-const NOTIFICATIONS_EXPAND_FAIL = 'NOTIFICATIONS_EXPAND_FAIL' as const;
 
 const NOTIFICATIONS_FILTER_SET = 'NOTIFICATIONS_FILTER_SET' as const;
 
@@ -45,18 +37,18 @@ const NOTIFICATIONS_MARK_READ_FAIL = 'NOTIFICATIONS_MARK_READ_FAIL' as const;
 
 const MAX_QUEUED_NOTIFICATIONS = 40;
 
-const FILTER_TYPES = {
-  all: undefined,
-  mention: ['mention'],
-  favourite: ['favourite', 'emoji_reaction'],
-  reblog: ['reblog'],
-  poll: ['poll'],
-  status: ['status'],
-  follow: ['follow', 'follow_request'],
-  events: ['event_reminder', 'participation_request', 'participation_accepted'],
+type FILTER_TYPES = {
+  all: undefined;
+  mention: ['mention'];
+  favourite: ['favourite', 'emoji_reaction'];
+  reblog: ['reblog'];
+  poll: ['poll'];
+  status: ['status'];
+  follow: ['follow', 'follow_request'];
+  events: ['event_reminder', 'participation_request', 'participation_accepted'];
 };
 
-type FilterType = keyof typeof FILTER_TYPES;
+type FilterType = keyof FILTER_TYPES;
 
 defineMessages({
   mention: { id: 'notification.mention', defaultMessage: '{name} mentioned you' },
@@ -174,7 +166,7 @@ const dequeueNotifications = () =>
         dispatch(updateNotifications(block.notification));
       });
     } else {
-      dispatch(expandNotifications());
+      // dispatch(expandNotifications());
     }
 
     dispatch({
@@ -182,104 +174,6 @@ const dequeueNotifications = () =>
     });
     dispatch(markReadNotifications());
   };
-
-const excludeTypesFromFilter = (filters: string[]) => NOTIFICATION_TYPES.filter(item => !filters.includes(item));
-
-const noOp = () => new Promise(f => f(undefined));
-
-let abortExpandNotifications = new AbortController();
-
-const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => any = noOp, abort?: boolean) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return dispatch(noOp);
-    const state = getState();
-
-    const features = state.auth.client.features;
-    const activeFilter = getSettings(state).getIn(['notifications', 'quickFilter', 'active']) as FilterType;
-    const notifications = state.notifications;
-
-    if (notifications.isLoading) {
-      if (abort) {
-        abortExpandNotifications.abort();
-        abortExpandNotifications = new AbortController();
-      } else {
-        done();
-        return dispatch(noOp);
-      }
-    }
-
-    const params: Record<string, any> = {
-      max_id: maxId,
-    };
-
-    if (activeFilter === 'all') {
-      if (features.notificationsIncludeTypes) {
-        params.types = NOTIFICATION_TYPES.filter(type => !EXCLUDE_TYPES.includes(type as any));
-      } else {
-        params.exclude_types = EXCLUDE_TYPES;
-      }
-    } else {
-      const filtered = FILTER_TYPES[activeFilter] || [activeFilter];
-      if (features.notificationsIncludeTypes) {
-        params.types = filtered;
-      } else {
-        params.exclude_types = excludeTypesFromFilter(filtered);
-      }
-    }
-
-    if (!maxId && notifications.items.size > 0) {
-      params.since_id = notifications.getIn(['items', 0, 'id']);
-    }
-
-    dispatch(expandNotificationsRequest());
-
-    return getClient(state).notifications.getNotifications(params, { signal: abortExpandNotifications.signal }).then(response => {
-      const entries = (response.items).reduce((acc, item) => {
-        if (item.account?.id) {
-          acc.accounts[item.account.id] = item.account;
-        }
-
-        // Used by Move notification
-        if (item.type === 'move' && item.target.id) {
-          acc.accounts[item.target.id] = item.target;
-        }
-
-        // TODO actually check for type
-        // @ts-ignore
-        if (item.status?.id) {
-          // @ts-ignore
-          acc.statuses[item.status.id] = item.status;
-        }
-
-        return acc;
-      }, { accounts: {}, statuses: {} } as { accounts: Record<string, Account>; statuses: Record<string, Status> });
-
-      dispatch(importFetchedAccounts(Object.values(entries.accounts)));
-      dispatch(importFetchedStatuses(Object.values(entries.statuses)));
-
-      const deduplicatedNotifications = normalizeNotifications(response.items, state.notifications.items);
-
-      dispatch(expandNotificationsSuccess(deduplicatedNotifications, response.next));
-      fetchRelatedRelationships(dispatch, response.items);
-      done();
-    }).catch(error => {
-      dispatch(expandNotificationsFail(error));
-      done();
-    });
-  };
-
-const expandNotificationsRequest = () => ({ type: NOTIFICATIONS_EXPAND_REQUEST });
-
-const expandNotificationsSuccess = (notifications: Array<Notification>, next: (() => Promise<PaginatedResponse<BaseNotification>>) | null) => ({
-  type: NOTIFICATIONS_EXPAND_SUCCESS,
-  notifications,
-  next,
-});
-
-const expandNotificationsFail = (error: unknown) => ({
-  type: NOTIFICATIONS_EXPAND_FAIL,
-  error,
-});
 
 const scrollTopNotifications = (top: boolean) =>
   (dispatch: AppDispatch) => {
@@ -299,7 +193,6 @@ const setFilter = (filterType: FilterType, abort?: boolean) =>
       path: ['notifications', 'quickFilter', 'active'],
       value: filterType,
     });
-    dispatch(expandNotifications(undefined, undefined, abort));
     if (activeFilter !== filterType) dispatch(saveSettings());
   };
 
@@ -327,9 +220,6 @@ export {
   NOTIFICATIONS_UPDATE_NOOP,
   NOTIFICATIONS_UPDATE_QUEUE,
   NOTIFICATIONS_DEQUEUE,
-  NOTIFICATIONS_EXPAND_REQUEST,
-  NOTIFICATIONS_EXPAND_SUCCESS,
-  NOTIFICATIONS_EXPAND_FAIL,
   NOTIFICATIONS_FILTER_SET,
   NOTIFICATIONS_CLEAR,
   NOTIFICATIONS_SCROLL_TOP,
@@ -341,10 +231,6 @@ export {
   updateNotifications,
   updateNotificationsQueue,
   dequeueNotifications,
-  expandNotifications,
-  expandNotificationsRequest,
-  expandNotificationsSuccess,
-  expandNotificationsFail,
   scrollTopNotifications,
   setFilter,
   markReadNotifications,

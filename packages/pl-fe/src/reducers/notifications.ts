@@ -14,9 +14,6 @@ import {
 } from '../actions/markers';
 import {
   NOTIFICATIONS_UPDATE,
-  NOTIFICATIONS_EXPAND_SUCCESS,
-  NOTIFICATIONS_EXPAND_REQUEST,
-  NOTIFICATIONS_EXPAND_FAIL,
   NOTIFICATIONS_FILTER_SET,
   NOTIFICATIONS_CLEAR,
   NOTIFICATIONS_SCROLL_TOP,
@@ -27,7 +24,7 @@ import {
 } from '../actions/notifications';
 import { TIMELINE_DELETE } from '../actions/timelines';
 
-import type { AccountWarning, Notification as BaseNotification, Markers, PaginatedResponse, Relationship, RelationshipSeveranceEvent, Report } from 'pl-api';
+import type { AccountWarning, Notification as BaseNotification, Markers, Relationship, RelationshipSeveranceEvent, Report } from 'pl-api';
 import type { Notification } from 'pl-fe/normalizers';
 import type { AnyAction } from 'redux';
 
@@ -149,17 +146,6 @@ const importNotification = (state: State, notification: Notification) => {
   });
 };
 
-const expandNormalizedNotifications = (state: State, notifications: Notification[], next: (() => Promise<PaginatedResponse<BaseNotification>>) | null) => {
-  const items = ImmutableOrderedMap(notifications.map(minifyNotification).map(n => [n.id, n]));
-
-  return state.withMutations(mutable => {
-    mutable.update('items', map => map.merge(items).sort(comparator));
-
-    if (!next) mutable.set('hasMore', false);
-    mutable.set('isLoading', false);
-  });
-};
-
 const filterNotifications = (state: State, relationship: Relationship) =>
   state.update('items', map => map.filterNot(item => item !== null && item.account_ids.includes(relationship.id)));
 
@@ -217,11 +203,6 @@ const importMarker = (state: State, marker: Markers) => {
 
 const notifications = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
-    case NOTIFICATIONS_EXPAND_REQUEST:
-      return state.set('isLoading', true);
-    case NOTIFICATIONS_EXPAND_FAIL:
-      if (action.error?.message === 'canceled') return state;
-      return state.set('isLoading', false);
     case NOTIFICATIONS_FILTER_SET:
       return state.set('items', ImmutableOrderedMap()).set('hasMore', true);
     case NOTIFICATIONS_SCROLL_TOP:
@@ -235,8 +216,6 @@ const notifications = (state: State = ReducerRecord(), action: AnyAction) => {
         mutable.delete('queuedNotifications');
         mutable.set('totalQueuedNotificationsCount', 0);
       });
-    case NOTIFICATIONS_EXPAND_SUCCESS:
-      return expandNormalizedNotifications(state, action.notifications, action.next);
     case ACCOUNT_BLOCK_SUCCESS:
       return filterNotifications(state, action.relationship);
     case ACCOUNT_MUTE_SUCCESS:

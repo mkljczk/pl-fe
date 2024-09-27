@@ -15,13 +15,10 @@ import { shouldFilter } from 'pl-fe/utils/timelines';
 
 import type { Account as BaseAccount, Filter, MediaAttachment } from 'pl-api';
 import type { EntityStore } from 'pl-fe/entity-store/types';
-import type { Account, Group, Notification } from 'pl-fe/normalizers';
-import type { MinifiedNotification } from 'pl-fe/reducers/notifications';
+import type { Account, Group } from 'pl-fe/normalizers';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 import type { MRFSimple } from 'pl-fe/schemas/pleroma';
 import type { RootState } from 'pl-fe/store';
-
-const normalizeId = (id: any): string => typeof id === 'string' ? id : typeof id === 'object' ? normalizeId(id.id) : '';
 
 const selectAccount = (state: RootState, accountId: string) =>
   state.entities[Entities.ACCOUNTS]?.store[accountId] as Account | undefined;
@@ -175,27 +172,6 @@ const makeGetStatus = () => createSelector(
 );
 
 type SelectedStatus = Exclude<ReturnType<ReturnType<typeof makeGetStatus>>, null>;
-
-const makeGetNotification = () => createSelector([
-  (_state: RootState, notification: MinifiedNotification) => notification,
-  // @ts-ignore
-  (state: RootState, notification: MinifiedNotification) => selectAccount(state, normalizeId(notification.account_id)),
-  // @ts-ignore
-  (state: RootState, notification: MinifiedNotification) => selectAccount(state, normalizeId(notification.target_id)),
-  // @ts-ignore
-  (state: RootState, notification: MinifiedNotification) => state.statuses.get(normalizeId(notification.status_id)),
-  (state: RootState, notification: MinifiedNotification) => notification.account_ids ? selectAccounts(state, notification.account_ids?.map(normalizeId)) : null,
-], (notification, account, target, status, accounts): Notification => ({
-  ...notification,
-  // @ts-ignore
-  account: account || null,
-  // @ts-ignore
-  target: target || null,
-  // @ts-ignore
-  status: status || null,
-  // @ts-ignore
-  accounts,
-}));
 
 type AccountGalleryAttachment = MediaAttachment & {
   status: MinifiedStatus;
@@ -357,7 +333,6 @@ export {
   regexFromFilters,
   makeGetStatus,
   type SelectedStatus,
-  makeGetNotification,
   type AccountGalleryAttachment,
   getAccountGallery,
   getGroupGallery,

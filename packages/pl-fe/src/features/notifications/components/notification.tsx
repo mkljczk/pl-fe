@@ -6,20 +6,19 @@ import { mentionCompose } from 'pl-fe/actions/compose';
 import { reblog, favourite, unreblog, unfavourite } from 'pl-fe/actions/interactions';
 import { getSettings } from 'pl-fe/actions/settings';
 import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
+import { useNotification } from 'pl-fe/pl-hooks/hooks/notifications/useNotification';
 import Icon from 'pl-fe/components/icon';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
 import { HStack, Text, Emoji } from 'pl-fe/components/ui';
 import AccountContainer from 'pl-fe/containers/account-container';
 import StatusContainer from 'pl-fe/containers/status-container';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
-import { useAppDispatch, useAppSelector, useInstance, useLoggedIn } from 'pl-fe/hooks';
-import { makeGetNotification } from 'pl-fe/selectors';
+import { useAppDispatch, useInstance, useLoggedIn } from 'pl-fe/hooks';
 import { useModalsStore } from 'pl-fe/stores';
 import { NotificationType } from 'pl-fe/utils/notification';
 
 import type { Notification as BaseNotification } from 'pl-api';
 import type { Account, Notification as NotificationEntity, Status as StatusEntity } from 'pl-fe/normalizers';
-import type { MinifiedNotification } from 'pl-fe/reducers/notifications';
 
 const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: string) => {
   const output = [message];
@@ -174,29 +173,28 @@ const avatarSize = 48;
 
 interface INotification {
   hidden?: boolean;
-  notification: MinifiedNotification;
+  id: string;
+  // notification: MinifiedNotification;
   onMoveUp?: (notificationId: string) => void;
   onMoveDown?: (notificationId: string) => void;
   onReblog?: (status: StatusEntity, e?: KeyboardEvent) => void;
 }
 
-const getNotificationStatus = (n: NotificationEntity | BaseNotification) => {
+const getNotificationStatus = (n: Pick<NotificationEntity | BaseNotification, 'type'>) => {
   if (['mention', 'status', 'reblog', 'favourite', 'poll', 'update', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request'].includes(n.type))
     // @ts-ignore
     return n.status;
   return null;
 };
 
-const Notification: React.FC<INotification> = (props) => {
-  const { hidden = false, onMoveUp, onMoveDown } = props;
+const Notification: React.FC<INotification> = ({ hidden = false, id, onMoveUp, onMoveDown }) => {
+  const notificationQuery = useNotification(id);
+  const notification = notificationQuery.data!;
 
   const dispatch = useAppDispatch();
 
-  const getNotification = useCallback(makeGetNotification(), []);
-
   const { me } = useLoggedIn();
   const { openModal } = useModalsStore();
-  const notification = useAppSelector((state) => getNotification(state, props.notification));
 
   const history = useHistory();
   const intl = useIntl();
