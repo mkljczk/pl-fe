@@ -72,7 +72,6 @@
     "@tanstack/react-virtual": "^3.10.8",
     "@uidotdev/usehooks": "^2.4.1",
     "@vitejs/plugin-react": "^4.3.1",
-    "@webbtc/webln-types": "^3.0.0",
     "autoprefixer": "^10.4.15",
     "blurhash": "^2.0.0",
     "bowser": "^2.11.0",
