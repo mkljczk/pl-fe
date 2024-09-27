@@ -1,6 +1,5 @@
 .status {
   @apply min-h-[54px] cursor-default opacity-100;
-
   animation: fade 150ms linear;
 
   @keyframes fade {
