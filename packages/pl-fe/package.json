@@ -29,7 +29,6 @@
     "lint": "${npm_execpath} run lint:js && ${npm_execpath} run lint:sass",
     "lint:js": "npx eslint --ext .js,.jsx,.cjs,.mjs,.ts,.tsx . --cache",
     "lint:sass": "npx stylelint src/styles/**/*.scss",
-    "prepare": "husky install",
     "precommit": "npx lint-staged"
   },
   "license": "AGPL-3.0-or-later",
@@ -45,6 +44,7 @@
     "@fontsource/noto-sans-javanese": "^5.0.16",
     "@fontsource/roboto-mono": "^5.0.0",
     "@fontsource/tajawal": "^5.0.8",
+    "@formatjs/intl-pluralrules": "^5.2.14",
     "@lexical/clipboard": "^0.18.0",
     "@lexical/code": "^0.18.0",
     "@lexical/hashtag": "^0.18.0",
@@ -94,8 +94,7 @@
     "immer": "^10.1.1",
     "immutable": "^4.3.7",
     "intersection-observer": "^0.12.2",
-    "intl-messageformat": "10.5.11",
-    "intl-pluralrules": "^2.0.0",
+    "intl-messageformat": "^10.5.14",
     "isomorphic-dompurify": "^2.3.0",
     "leaflet": "^1.8.0",
     "lexical": "^0.18.0",
@@ -120,7 +119,7 @@
     "react-hot-toast": "^2.4.0",
     "react-immutable-pure-component": "^2.2.2",
     "react-inlinesvg": "^4.0.0",
-    "react-intl": "^6.0.0",
+    "react-intl": "^6.7.0",
     "react-motion": "^0.5.2",
     "react-redux": "^9.0.4",
     "react-router-dom": "^5.3.4",
@@ -155,7 +154,7 @@
     "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
-    "@formatjs/cli": "^6.2.0",
+    "@formatjs/cli": "^6.2.12",
     "@gitbeaker/node": "^35.8.0",
     "@jedmao/redux-mock-store": "^3.0.5",
     "@stylistic/eslint-plugin": "^2.8.0",

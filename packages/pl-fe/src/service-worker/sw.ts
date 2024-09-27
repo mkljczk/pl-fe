@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
+import '@formatjs/intl-pluralrules';
 import IntlMessageFormat from 'intl-messageformat';
-import 'intl-pluralrules';
 import unescape from 'lodash/unescape';
 
 import type {

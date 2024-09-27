@@ -1,5 +1,5 @@
+import '@formatjs/intl-pluralrules';
 import IntlMessageFormat from 'intl-messageformat';
-import 'intl-pluralrules';
 import { defineMessages } from 'react-intl';
 
 import { getClient } from 'pl-fe/api';
