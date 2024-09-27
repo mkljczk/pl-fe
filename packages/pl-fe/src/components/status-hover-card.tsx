@@ -48,6 +48,7 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
     elements: {
       reference: targetRef,
     },
+    placement: 'top',
     middleware: [
       shift({
         padding: 8,
