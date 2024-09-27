@@ -1,6 +1,8 @@
 # `pl-api`
 
-This project should be considered unstable before the 1.0.0 release. I will not provide any changelog or information on breaking changes until then.
+A library for interacting with Mastodon API-compatible servers, focused on support for projects extending the official Mastodon API.
+
+> This project should be considered unstable before the 1.0.0 release. I will not provide any changelog or information on breaking changes until then.
 
 ## Projects using `pl-api`
 
