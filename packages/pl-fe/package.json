@@ -170,7 +170,7 @@
     "@types/escape-html": "^1.0.1",
     "@types/http-link-header": "^1.0.3",
     "@types/leaflet": "^1.8.0",
-    "@types/lodash": "^4.14.180",
+    "@types/lodash": "^4.17.9",
     "@types/object-assign": "^4.0.30",
     "@types/path-browserify": "^1.0.0",
     "@types/react": "^18.0.26",
