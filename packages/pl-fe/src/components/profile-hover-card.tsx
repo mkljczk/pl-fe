@@ -1,4 +1,4 @@
-import { useFloating, useTransitionStyles } from '@floating-ui/react';
+import { shift, useFloating, useTransitionStyles } from '@floating-ui/react';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
@@ -73,17 +73,23 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
     };
   }, []);
 
-  const { x, y, strategy, refs, context } = useFloating({
+  const { x, y, strategy, refs, context, placement } = useFloating({
     open: !!account,
     elements: {
       reference: targetRef,
     },
+    middleware: [
+      shift({
+        padding: 8,
+      }),
+    ],
   });
 
   const { styles } = useTransitionStyles(context, {
     initial: {
       opacity: 0,
       transform: 'scale(0.8)',
+      transformOrigin: placement === 'bottom' ? 'top' : 'bottom',
     },
     duration: {
       open: 100,
