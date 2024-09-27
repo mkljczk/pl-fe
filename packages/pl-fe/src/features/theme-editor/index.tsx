@@ -8,7 +8,7 @@ import { fetchPlFeConfig } from 'pl-fe/actions/pl-fe';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import List, { ListItem } from 'pl-fe/components/list';
 import { Button, Column, Form, FormActions } from 'pl-fe/components/ui';
-import ColorWithPicker from 'pl-fe/features/pl-fe-config/components/color-with-picker';
+import ColorPicker from 'pl-fe/features/pl-fe-config/components/color-picker';
 import { useAppDispatch, useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
 import { normalizePlFeConfig } from 'pl-fe/normalizers';
 import toast from 'pl-fe/toast';
@@ -265,7 +265,7 @@ const ColorListItem: React.FC<IColorListItem> = ({ label, value, onChange }) => 
 
   return (
     <ListItem label={label}>
-      <ColorWithPicker
+      <ColorPicker
         value={value}
         onChange={handleChange}
         className='h-8 w-10 overflow-hidden rounded-md'
