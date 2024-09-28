@@ -31,6 +31,8 @@
     "vite-plugin-dts": "^4.2.1"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.56.2",
+    "pl-api": "^0.0.37"
   },
   "module": "./dist/main.es.js",
   "types": "dist/main.d.ts",
