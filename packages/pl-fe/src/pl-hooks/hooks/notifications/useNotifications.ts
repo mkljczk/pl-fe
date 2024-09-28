@@ -1,20 +1,16 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { importFetchedAccounts, importFetchedStatuses } from 'pl-fe/actions/importer';
+import { getNotificationStatus } from 'pl-fe/features/notifications/components/notification';
 import { useClient } from 'pl-fe/hooks';
-import { normalizeNotifications } from 'pl-fe/normalizers';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { queryClient } from 'pl-fe/queries/client';
-import { AppDispatch, store } from 'pl-fe/store';
 import { flattenPages } from 'pl-fe/utils/queries';
-
-import { importNotification, minifyNotification } from './useNotification';
 
 import type {
   Account as BaseAccount,
   Notification as BaseNotification,
   PaginatedResponse,
   PlApiClient,
-  Status as BaseStatus,
 } from 'pl-api';
 import type { NotificationType } from 'pl-fe/utils/notification';
 
@@ -29,31 +25,59 @@ const getQueryKey = (params: UseNotificationParams) => [
   params.types ? params.types.join('|') : params.excludeTypes ? ('exclude:' + params.excludeTypes.join('|')) : 'all',
 ];
 
-const importNotifications = (response: PaginatedResponse<BaseNotification>) => {
-  const accounts: Record<string, BaseAccount> = {};
-  const statuses: Record<string, BaseStatus> = {};
+type DeduplicatedNotification = BaseNotification & {
+  accounts: Array<BaseAccount>;
+  duplicate?: boolean;
+}
 
-  response.items.forEach((notification) => {
-    accounts[notification.account.id] = notification.account;
+const STATUS_NOTIFICATION_TYPES = [
+  'favourite',
+  'reblog',
+  'emoji_reaction',
+  'event_reminder',
+  'participation_accepted',
+  'participation_request',
+];
 
-    if (notification.type === 'move') accounts[notification.target.id] = notification.target;
+const deduplicateNotifications = (notifications: Array<BaseNotification>) => {
+  const deduplicatedNotifications: DeduplicatedNotification[] = [];
 
-    // @ts-ignore
-    if (notification.status?.id) {
-      // @ts-ignore
-      statuses[notification.status.id] = notification.status;
+  for (const notification of notifications) {
+    if (STATUS_NOTIFICATION_TYPES.includes(notification.type)) {
+      const existingNotification = deduplicatedNotifications
+        .find(deduplicated =>
+          deduplicated.type === notification.type
+          && ((notification.type === 'emoji_reaction' && deduplicated.type === 'emoji_reaction') ? notification.emoji === deduplicated.emoji : true)
+          && getNotificationStatus(deduplicated)?.id === getNotificationStatus(notification)?.id,
+        );
+
+      if (existingNotification) {
+        existingNotification.accounts.push(notification.account);
+        deduplicatedNotifications.push({ ...notification, accounts: [notification.account], duplicate: true });
+      } else {
+        deduplicatedNotifications.push({ ...notification, accounts: [notification.account], duplicate: false });
+      }
+    } else {
+      deduplicatedNotifications.push({ ...notification, accounts: [notification.account], duplicate: false });
     }
+  }
+
+  return deduplicatedNotifications;
+};
+
+const importNotifications = (response: PaginatedResponse<BaseNotification>) => {
+  const deduplicatedNotifications = deduplicateNotifications(response.items);
+
+  importEntities({
+    notifications: deduplicatedNotifications,
   });
 
-  store.dispatch<AppDispatch>(importFetchedStatuses(Object.values(statuses)));
-  store.dispatch<AppDispatch>(importFetchedAccounts(Object.values(accounts)));
+  // const normalizedNotifications = normalizeNotifications(response.items);
 
-  const normalizedNotifications = normalizeNotifications(response.items);
-
-  normalizedNotifications.map(minifyNotification).forEach(importNotification);
+  // normalizedNotifications.map(minifyNotification).forEach(importNotification);
 
   return {
-    items: normalizedNotifications.filter(({ duplicate }) => !duplicate).map(({ id }) => id),
+    items: deduplicatedNotifications.filter(({ duplicate }) => !duplicate).map(({ id }) => id),
     previous: response.previous,
     next: response.next,
   };
@@ -91,4 +115,4 @@ const prefetchNotifications = (client: PlApiClient, params: UseNotificationParam
     getNextPageParam: (response) => response,
   });
 
-export { useNotifications, prefetchNotifications };
+export { useNotifications, prefetchNotifications, type DeduplicatedNotification };

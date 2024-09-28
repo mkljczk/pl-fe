@@ -1,13 +1,10 @@
 import { PLEROMA, type UpdateNotificationSettingsParams, type Account, type CreateAccountParams, type PaginatedResponse, type Relationship } from 'pl-api';
 
-import { importEntities } from 'pl-fe/entity-store/actions';
-import { Entities } from 'pl-fe/entity-store/entities';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { selectAccount } from 'pl-fe/selectors';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { getClient, type PlfeResponse } from '../api';
-
-import { importFetchedAccount, importFetchedAccounts } from './importer';
 
 import type { Map as ImmutableMap } from 'immutable';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
@@ -128,7 +125,7 @@ const fetchAccount = (accountId: string) =>
 
     return getClient(getState()).accounts.getAccount(accountId)
       .then(response => {
-        dispatch(importFetchedAccount(response));
+        importEntities({ accounts: [response] });
         dispatch(fetchAccountSuccess(response));
       })
       .catch(error => {
@@ -143,8 +140,8 @@ const fetchAccountByUsername = (username: string, history?: History) =>
 
     if (features.accountByUsername && (me || !features.accountLookup)) {
       return getClient(getState()).accounts.getAccount(username).then(response => {
+        importEntities({ accounts: [response] });
         dispatch(fetchRelationships([response.id]));
-        dispatch(importFetchedAccount(response));
         dispatch(fetchAccountSuccess(response));
       }).catch(error => {
         dispatch(fetchAccountFail(null, error));
@@ -198,7 +195,7 @@ const blockAccount = (accountId: string) =>
 
     return getClient(getState).filtering.blockAccount(accountId)
       .then(response => {
-        dispatch(importEntities([response], Entities.RELATIONSHIPS));
+        importEntities({ relationships: [response] });
         // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
         return dispatch(blockAccountSuccess(response, getState().statuses));
       }).catch(error => dispatch(blockAccountFail(error)));
@@ -212,7 +209,7 @@ const unblockAccount = (accountId: string) =>
 
     return getClient(getState).filtering.unblockAccount(accountId)
       .then(response => {
-        dispatch(importEntities([response], Entities.RELATIONSHIPS));
+        importEntities({ relationships: [response] });
         return dispatch(unblockAccountSuccess(response));
       })
       .catch(error => dispatch(unblockAccountFail(error)));
@@ -273,7 +270,7 @@ const muteAccount = (accountId: string, notifications?: boolean, duration = 0) =
 
     return client.filtering.muteAccount(accountId, params)
       .then(response => {
-        dispatch(importEntities([response], Entities.RELATIONSHIPS));
+        importEntities({ relationships: [response] });
         // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
         return dispatch(muteAccountSuccess(response, getState().statuses));
       })
@@ -288,7 +285,7 @@ const unmuteAccount = (accountId: string) =>
 
     return getClient(getState()).filtering.unmuteAccount(accountId)
       .then(response => {
-        dispatch(importEntities([response], Entities.RELATIONSHIPS));
+        importEntities({ relationships: [response] });
         return dispatch(unmuteAccountSuccess(response));
       })
       .catch(error => dispatch(unmuteAccountFail(accountId, error)));
@@ -369,7 +366,7 @@ const fetchRelationships = (accountIds: string[]) =>
 
     return getClient(getState()).accounts.getRelationships(newAccountIds)
       .then(response => {
-        dispatch(importEntities(response, Entities.RELATIONSHIPS));
+        importEntities({ relationships: response });
         dispatch(fetchRelationshipsSuccess(response));
       })
       .catch(error => dispatch(fetchRelationshipsFail(error)));
@@ -398,7 +395,7 @@ const fetchFollowRequests = () =>
 
     return getClient(getState()).myAccount.getFollowRequests()
       .then(response => {
-        dispatch(importFetchedAccounts(response.items));
+        importEntities({ accounts: response.items });
         dispatch(fetchFollowRequestsSuccess(response.items, response.next));
       })
       .catch(error => dispatch(fetchFollowRequestsFail(error)));
@@ -430,7 +427,7 @@ const expandFollowRequests = () =>
     dispatch(expandFollowRequestsRequest());
 
     return next().then(response => {
-      dispatch(importFetchedAccounts(response.items));
+      importEntities({ accounts: response.items });
       dispatch(expandFollowRequestsSuccess(response.items, response.next));
     }).catch(error => dispatch(expandFollowRequestsFail(error)));
   };
@@ -576,7 +573,7 @@ const fetchPinnedAccounts = (accountId: string) =>
     dispatch(fetchPinnedAccountsRequest(accountId));
 
     return getClient(getState).accounts.getAccountEndorsements(accountId).then(response => {
-      dispatch(importFetchedAccounts(response));
+      importEntities({ accounts: response });
       dispatch(fetchPinnedAccountsSuccess(accountId, response, null));
     }).catch(error => {
       dispatch(fetchPinnedAccountsFail(accountId, error));
@@ -604,10 +601,10 @@ const fetchPinnedAccountsFail = (accountId: string, error: unknown) => ({
 const accountSearch = (q: string, signal?: AbortSignal) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: ACCOUNT_SEARCH_REQUEST, params: { q } });
-    return getClient(getState()).accounts.searchAccounts(q, { resolve: false, limit: 4, following: true }, { signal }).then((accounts) => {
-      dispatch(importFetchedAccounts(accounts));
-      dispatch({ type: ACCOUNT_SEARCH_SUCCESS, accounts });
-      return accounts;
+    return getClient(getState()).accounts.searchAccounts(q, { resolve: false, limit: 4, following: true }, { signal }).then((response) => {
+      importEntities({ accounts: response });
+      dispatch({ type: ACCOUNT_SEARCH_SUCCESS, accounts: response });
+      return response;
     }).catch(error => {
       dispatch({ type: ACCOUNT_SEARCH_FAIL, skipAlert: true });
       throw error;
@@ -618,7 +615,7 @@ const accountLookup = (acct: string, signal?: AbortSignal) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: ACCOUNT_LOOKUP_REQUEST, acct });
     return getClient(getState()).accounts.lookupAccount(acct, { signal }).then((account) => {
-      if (account && account.id) dispatch(importFetchedAccount(account));
+      if (account && account.id) importEntities({ accounts: [account] });
       dispatch({ type: ACCOUNT_LOOKUP_SUCCESS, account });
       return account;
     }).catch(error => {
@@ -636,7 +633,7 @@ const fetchBirthdayReminders = (month: number, day: number) =>
     dispatch({ type: BIRTHDAY_REMINDERS_FETCH_REQUEST, day, month, accountId: me });
 
     return getClient(getState).accounts.getBirthdays(day, month).then(response => {
-      dispatch(importFetchedAccounts(response));
+      importEntities({ accounts: response });
       dispatch({
         type: BIRTHDAY_REMINDERS_FETCH_SUCCESS,
         accounts: response,

@@ -1,8 +1,8 @@
 import { importEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
-import { normalizeAccount, normalizeGroup } from 'pl-fe/normalizers';
+import { normalizeAccount, normalizeGroup, type Account, type Group } from 'pl-fe/normalizers';
 
-import type { Account as BaseAccount, Group, Poll, Status as BaseStatus } from 'pl-api';
+import type { Account as BaseAccount, Group as BaseGroup, Poll, Status as BaseStatus } from 'pl-api';
 import type { AppDispatch } from 'pl-fe/store';
 
 const ACCOUNT_IMPORT = 'ACCOUNT_IMPORT';
@@ -13,25 +13,29 @@ const POLLS_IMPORT = 'POLLS_IMPORT';
 
 const importAccount = (data: BaseAccount) => importAccounts([data]);
 
-const importAccounts = (data: Array<BaseAccount>) => (dispatch: AppDispatch) => {
-  dispatch({ type: ACCOUNTS_IMPORT, accounts: data });
+const importAccounts = (data: Array<BaseAccount>) => {
+  let accounts: Array<Account> = [];
+
   try {
-    const accounts = data.map(normalizeAccount);
-    dispatch(importEntities(accounts, Entities.ACCOUNTS));
+    accounts = data.map(normalizeAccount);
   } catch (e) {
     //
   }
+
+  return importEntities(accounts, Entities.ACCOUNTS);
 };
 
-const importGroup = (data: Group) => importGroups([data]);
+const importGroup = (data: BaseGroup) => importGroups([data]);
 
-const importGroups = (data: Array<Group>) => (dispatch: AppDispatch) => {
+const importGroups = (data: Array<BaseGroup>) => {
+  let groups: Array<Group> = [];
   try {
-    const groups = data.map(normalizeGroup);
-    dispatch(importEntities(groups, Entities.GROUPS));
+    groups = data.map(normalizeGroup);
   } catch (e) {
     //
   }
+
+  return importEntities(groups, Entities.GROUPS);
 };
 
 const importStatus = (status: BaseStatus & { expectsCard?: boolean }, idempotencyKey?: string) => ({ type: STATUS_IMPORT, status, idempotencyKey });

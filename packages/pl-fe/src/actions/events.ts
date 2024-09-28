@@ -1,10 +1,11 @@
 import { defineMessages } from 'react-intl';
 
 import { getClient } from 'pl-fe/api';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 
-import { importFetchedAccounts, importFetchedStatus, importFetchedStatuses } from './importer';
+import { importFetchedStatus, importFetchedStatuses } from './importer';
 import { STATUS_FETCH_SOURCE_FAIL, STATUS_FETCH_SOURCE_REQUEST, STATUS_FETCH_SOURCE_SUCCESS } from './statuses';
 
 import type { Account, CreateEventParams, Location, MediaAttachment, PaginatedResponse, Status } from 'pl-api';
@@ -241,7 +242,7 @@ const fetchEventParticipations = (statusId: string) =>
     dispatch(fetchEventParticipationsRequest(statusId));
 
     return getClient(getState).events.getEventParticipations(statusId).then(response => {
-      dispatch(importFetchedAccounts(response.items));
+      importEntities({ accounts: response.items });
       return dispatch(fetchEventParticipationsSuccess(statusId, response.items, response.next));
     }).catch(error => {
       dispatch(fetchEventParticipationsFail(statusId, error));
@@ -277,7 +278,7 @@ const expandEventParticipations = (statusId: string) =>
     dispatch(expandEventParticipationsRequest(statusId));
 
     return next().then(response => {
-      dispatch(importFetchedAccounts(response.items));
+      importEntities({ accounts: response.items });
       return dispatch(expandEventParticipationsSuccess(statusId, response.items, response.next));
     }).catch(error => {
       dispatch(expandEventParticipationsFail(statusId, error));
@@ -307,7 +308,7 @@ const fetchEventParticipationRequests = (statusId: string) =>
     dispatch(fetchEventParticipationRequestsRequest(statusId));
 
     return getClient(getState).events.getEventParticipationRequests(statusId).then(response => {
-      dispatch(importFetchedAccounts(response.items.map(({ account }) => account)));
+      importEntities({ accounts: response.items.map(({ account }) => account) });
       return dispatch(fetchEventParticipationRequestsSuccess(statusId, response.items, response.next));
     }).catch(error => {
       dispatch(fetchEventParticipationRequestsFail(statusId, error));
@@ -346,7 +347,7 @@ const expandEventParticipationRequests = (statusId: string) =>
     dispatch(expandEventParticipationRequestsRequest(statusId));
 
     return next().then(response => {
-      dispatch(importFetchedAccounts(response.items.map(({ account }) => account)));
+      importEntities({ accounts: response.items.map(({ account }) => account) });
       return dispatch(expandEventParticipationRequestsSuccess(statusId, response.items, response.next));
     }).catch(error => {
       dispatch(expandEventParticipationRequestsFail(statusId, error));
