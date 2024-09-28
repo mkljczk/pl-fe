@@ -5,8 +5,6 @@ import { normalizeAccount, normalizeGroup } from 'pl-fe/normalizers';
 import type { Account as BaseAccount, Group, Poll, Status as BaseStatus } from 'pl-api';
 import type { AppDispatch } from 'pl-fe/store';
 
-const ACCOUNT_IMPORT = 'ACCOUNT_IMPORT';
-const ACCOUNTS_IMPORT = 'ACCOUNTS_IMPORT';
 const STATUS_IMPORT = 'STATUS_IMPORT';
 const STATUSES_IMPORT = 'STATUSES_IMPORT';
 const POLLS_IMPORT = 'POLLS_IMPORT';
@@ -14,10 +12,12 @@ const POLLS_IMPORT = 'POLLS_IMPORT';
 const importAccount = (data: BaseAccount) => importAccounts([data]);
 
 const importAccounts = (data: Array<BaseAccount>) => (dispatch: AppDispatch) => {
-  dispatch({ type: ACCOUNTS_IMPORT, accounts: data });
   try {
     const accounts = data.map(normalizeAccount);
+    const relationships = accounts.map(account => account.relationship).filter(relationship => !!relationship);
+
     dispatch(importEntities(accounts, Entities.ACCOUNTS));
+    dispatch(importEntities(relationships, Entities.RELATIONSHIPS));
   } catch (e) {
     //
   }
@@ -153,8 +153,6 @@ const importFetchedPoll = (poll: Poll) =>
   };
 
 export {
-  ACCOUNT_IMPORT,
-  ACCOUNTS_IMPORT,
   STATUS_IMPORT,
   STATUSES_IMPORT,
   POLLS_IMPORT,

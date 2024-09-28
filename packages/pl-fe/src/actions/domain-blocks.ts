@@ -31,6 +31,7 @@ const blockDomain = (domain: string) =>
     dispatch(blockDomainRequest(domain));
 
     return getClient(getState).filtering.blockDomain(domain).then(() => {
+      // TODO: Update relationships on block
       const accounts = selectAccountsByDomain(getState(), domain);
       if (!accounts) return;
       dispatch(blockDomainSuccess(domain, accounts));
@@ -63,6 +64,7 @@ const unblockDomain = (domain: string) =>
     dispatch(unblockDomainRequest(domain));
 
     return getClient(getState).filtering.unblockDomain(domain).then(() => {
+      // TODO: Update relationships on unblock
       const accounts = selectAccountsByDomain(getState(), domain);
       if (!accounts) return;
       dispatch(unblockDomainSuccess(domain, accounts));
