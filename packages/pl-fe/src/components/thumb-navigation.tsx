@@ -3,12 +3,11 @@ import { defineMessages, useIntl } from 'react-intl';
 import { useRouteMatch } from 'react-router-dom';
 
 import { groupComposeModal } from 'pl-fe/actions/compose';
-import { openSidebar } from 'pl-fe/actions/sidebar';
 import ThumbNavigationLink from 'pl-fe/components/thumb-navigation-link';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore, useUiStore } from 'pl-fe/stores';
 import { isStandalone } from 'pl-fe/utils/state';
 
 import { Icon } from './ui';
@@ -30,13 +29,12 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
 
   const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
 
+  const { openSidebar } = useUiStore();
   const { openModal } = useModalsStore();
   const { unreadChatsCount } = useStatContext();
 
   const standalone = useAppSelector(isStandalone);
   const notificationCount = useAppSelector((state) => state.notifications.unread);
-
-  const handleOpenSidebar = () => dispatch(openSidebar());
 
   const handleOpenComposeModal = () => {
     if (match?.params.groupId) {
@@ -66,7 +64,7 @@ const ThumbNavigation: React.FC = (): JSX.Element => {
     <div className='fixed inset-x-0 bottom-0 z-50 flex w-full overflow-x-auto border-t border-solid border-gray-200 bg-white/90 shadow-2xl backdrop-blur-md black:bg-black/80 dark:border-gray-800 dark:bg-primary-900/90 lg:hidden'>
       <button
         className='flex flex-1 flex-col items-center px-2 py-4 text-lg text-gray-600'
-        onClick={handleOpenSidebar}
+        onClick={openSidebar}
         title={intl.formatMessage(messages.sidebar)}
       >
         <Icon

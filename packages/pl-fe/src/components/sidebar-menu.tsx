@@ -6,13 +6,13 @@ import { Link, NavLink } from 'react-router-dom';
 
 import { fetchOwnAccounts, logOut, switchAccount } from 'pl-fe/actions/auth';
 import { getSettings } from 'pl-fe/actions/settings';
-import { closeSidebar } from 'pl-fe/actions/sidebar';
 import { useAccount } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
 import { Stack, Divider, HStack, Icon, Text } from 'pl-fe/components/ui';
 import ProfileStats from 'pl-fe/features/ui/components/profile-stats';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance, useRegistrationStatus } from 'pl-fe/hooks';
 import { makeGetOtherAccounts } from 'pl-fe/selectors';
+import { useUiStore } from 'pl-fe/stores';
 import sourceCode from 'pl-fe/utils/code';
 
 import type { List as ImmutableList } from 'immutable';
@@ -79,18 +79,19 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
+  const { isSidebarOpen, closeSidebar } = useUiStore();
+
   const getOtherAccounts = useCallback(makeGetOtherAccounts(), []);
   const features = useFeatures();
   const me = useAppSelector((state) => state.me);
   const { account } = useAccount(me || undefined);
   const otherAccounts: ImmutableList<AccountEntity> = useAppSelector((state) => getOtherAccounts(state));
-  const sidebarOpen = useAppSelector((state) => state.sidebar.sidebarOpen);
   const settings = useAppSelector((state) => getSettings(state));
   const followRequestsCount = useAppSelector((state) => state.user_lists.follow_requests.items.count());
   const scheduledStatusCount = useAppSelector((state) => state.scheduled_statuses.size);
   const draftCount = useAppSelector((state) => state.draft_statuses.size);
   // const dashboardCount = useAppSelector((state) => state.admin.openReports.count() + state.admin.awaitingApproval.count());
-  const [sidebarVisible, setSidebarVisible] = useState(sidebarOpen);
+  const [sidebarVisible, setSidebarVisible] = useState(isSidebarOpen);
   const touchStart = useRef(0);
   const touchEnd = useRef<number | null>(null);
   const { isOpen } = useRegistrationStatus();
@@ -102,11 +103,9 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
 
   const [switcher, setSwitcher] = React.useState(false);
 
-  const onClose = () => dispatch(closeSidebar());
-
   const handleClose = () => {
     setSwitcher(false);
-    onClose();
+    closeSidebar();
   };
 
   const handleSwitchAccount = (account: AccountEntity): React.MouseEventHandler => (e) => {
@@ -157,17 +156,17 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   }, []);
 
   useEffect(() => {
-    if (sidebarOpen) containerRef.current?.querySelector('a')?.focus();
-    setTimeout(() => setSidebarVisible(sidebarOpen), sidebarOpen ? 0 : 150);
-  }, [sidebarOpen]);
+    if (isSidebarOpen) containerRef.current?.querySelector('a')?.focus();
+    setTimeout(() => setSidebarVisible(isSidebarOpen), isSidebarOpen ? 0 : 150);
+  }, [isSidebarOpen]);
 
   return (
     <div
-      aria-expanded={sidebarOpen}
+      aria-expanded={isSidebarOpen}
       className={
         clsx({
-          'z-[1000]': sidebarOpen || sidebarVisible,
-          hidden: !(sidebarOpen || sidebarVisible),
+          'z-[1000]': isSidebarOpen || sidebarVisible,
+          hidden: !(isSidebarOpen || sidebarVisible),
         })
       }
       ref={containerRef}
@@ -178,8 +177,8 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
     >
       <div
         className={clsx('fixed inset-0 cursor-default bg-gray-500 black:bg-gray-900 no-reduce-motion:transition-opacity dark:bg-gray-700', {
-          'no-reduce-motion:opacity-0': !(sidebarVisible && sidebarOpen),
-          'opacity-40': (sidebarVisible && sidebarOpen),
+          'no-reduce-motion:opacity-0': !(sidebarVisible && isSidebarOpen),
+          'opacity-40': (sidebarVisible && isSidebarOpen),
         })}
         role='button'
         onClick={handleClose}
@@ -188,8 +187,8 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
       <div
         className={
           clsx('fixed bottom-[60px] left-2 z-[1000] flex max-h-[calc(100dvh-68px)] w-full max-w-xs flex-1 origin-bottom-left flex-col overflow-hidden rounded-xl bg-white shadow-lg ease-in-out black:bg-black no-reduce-motion:transition-transform dark:border dark:border-gray-800 dark:bg-primary-900 dark:shadow-none rtl:right-2 rtl:origin-bottom-right', {
-            'scale-100': sidebarVisible && sidebarOpen,
-            'no-reduce-motion:scale-0': !(sidebarVisible && sidebarOpen),
+            'scale-100': sidebarVisible && isSidebarOpen,
+            'no-reduce-motion:scale-0': !(sidebarVisible && isSidebarOpen),
           })
         }
       >
@@ -197,7 +196,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
           <div className='p-4'>
             {account ? (
               <Stack space={4}>
-                <Link to={`/@${account.acct}`} onClick={onClose}>
+                <Link to={`/@${account.acct}`} onClick={closeSidebar}>
                   <Account account={account} showProfileHoverCard={false} withLinkToProfile={false} />
                 </Link>
 
@@ -213,7 +212,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                     to={`/@${account.acct}`}
                     icon={require('@tabler/icons/outline/user.svg')}
                     text={intl.formatMessage(messages.profile)}
-                    onClick={onClose}
+                    onClick={closeSidebar}
                   />
 
                   {(account.locked || followRequestsCount > 0) && (
@@ -221,7 +220,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/follow_requests'
                       icon={require('@tabler/icons/outline/user-plus.svg')}
                       text={intl.formatMessage(messages.followRequests)}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                     />
                   )}
 
@@ -230,7 +229,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/conversations'
                       icon={require('@tabler/icons/outline/mail.svg')}
                       text={intl.formatMessage(messages.conversations)}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                     />
                   )}
 
@@ -239,7 +238,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/bookmarks'
                       icon={require('@tabler/icons/outline/bookmark.svg')}
                       text={intl.formatMessage(messages.bookmarks)}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                     />
                   )}
 
@@ -248,7 +247,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/groups'
                       icon={require('@tabler/icons/outline/circles.svg')}
                       text={intl.formatMessage(messages.groups)}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                     />
                   )}
 
@@ -257,7 +256,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/lists'
                       icon={require('@tabler/icons/outline/list.svg')}
                       text={intl.formatMessage(messages.lists)}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                     />
                   )}
 
@@ -266,7 +265,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/events'
                       icon={require('@tabler/icons/outline/calendar-event.svg')}
                       text={intl.formatMessage(messages.events)}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                     />
                   )}
 
@@ -275,7 +274,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/directory'
                       icon={require('@tabler/icons/outline/address-book.svg')}
                       text={intl.formatMessage(messages.profileDirectory)}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                     />
                   )}
 
@@ -284,7 +283,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/scheduled_statuses'
                       icon={require('@tabler/icons/outline/calendar-stats.svg')}
                       text={intl.formatMessage(messages.scheduledStatuses)}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                     />
                   )}
 
@@ -293,7 +292,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/draft_statuses'
                       icon={require('@tabler/icons/outline/notes.svg')}
                       text={intl.formatMessage(messages.drafts)}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                     />
                   )}
 
@@ -304,7 +303,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/timeline/local'
                       icon={features.federating ? require('@tabler/icons/outline/affiliate.svg') : require('@tabler/icons/outline/world.svg')}
                       text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                     />
 
                     {features.bubbleTimeline && (
@@ -312,7 +311,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                         to='/timeline/bubble'
                         icon={require('@tabler/icons/outline/chart-bubble.svg')}
                         text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
-                        onClick={onClose}
+                        onClick={closeSidebar}
                       />
                     )}
 
@@ -321,7 +320,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                         to='/timeline/fediverse'
                         icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
                         text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-                        onClick={onClose}
+                        onClick={closeSidebar}
                       />
                     )}
                   </>}
@@ -332,7 +331,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                     to='/settings/preferences'
                     icon={require('@tabler/icons/outline/settings.svg')}
                     text={intl.formatMessage(messages.preferences)}
-                    onClick={onClose}
+                    onClick={closeSidebar}
                   />
 
                   {features.followedHashtagsList && (
@@ -340,7 +339,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/followed_tags'
                       icon={require('@tabler/icons/outline/hash.svg')}
                       text={intl.formatMessage(messages.followedTags)}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                     />
                   )}
 
@@ -349,7 +348,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/developers'
                       icon={require('@tabler/icons/outline/code.svg')}
                       text={intl.formatMessage(messages.developers)}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                     />
                   )}
 
@@ -358,7 +357,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/admin'
                       icon={require('@tabler/icons/outline/dashboard.svg')}
                       text={intl.formatMessage(messages.dashboard)}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                       // count={dashboardCount} WIP
                     />
                   )}
@@ -378,7 +377,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                     href={sourceCode.url}
                     icon={require('@tabler/icons/outline/code.svg')}
                     text={intl.formatMessage(messages.sourceCode)}
-                    onClick={onClose}
+                    onClick={closeSidebar}
                   />
 
                   <Divider />
@@ -419,7 +418,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                     to='/timeline/local'
                     icon={features.federating ? require('@tabler/icons/outline/affiliate.svg') : require('@tabler/icons/outline/world.svg')}
                     text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
-                    onClick={onClose}
+                    onClick={closeSidebar}
                   />
 
                   {features.bubbleTimeline && !restrictUnauth.timelines.bubble && (
@@ -427,7 +426,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/timeline/bubble'
                       icon={require('@tabler/icons/outline/chart-bubble.svg')}
                       text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                     />
                   )}
 
@@ -436,7 +435,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                       to='/timeline/fediverse'
                       icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
                       text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-                      onClick={onClose}
+                      onClick={closeSidebar}
                     />
                   )}
 
@@ -447,7 +446,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                   to='/login'
                   icon={require('@tabler/icons/outline/login.svg')}
                   text={intl.formatMessage(messages.login)}
-                  onClick={onClose}
+                  onClick={closeSidebar}
                 />
 
                 {isOpen && (
@@ -455,7 +454,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                     to='/signup'
                     icon={require('@tabler/icons/outline/user-plus.svg')}
                     text={intl.formatMessage(messages.register)}
-                    onClick={onClose}
+                    onClick={closeSidebar}
                   />
                 )}
 
@@ -465,7 +464,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                   href={sourceCode.url}
                   icon={require('@tabler/icons/outline/code.svg')}
                   text={intl.formatMessage(messages.sourceCode)}
-                  onClick={onClose}
+                  onClick={closeSidebar}
                 />
               </Stack>
             )}

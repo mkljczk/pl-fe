@@ -33,14 +33,11 @@ import onboarding from './onboarding';
 import pending_statuses from './pending-statuses';
 import plfe from './pl-fe';
 import polls from './polls';
-import profile_hover_card from './profile-hover-card';
 import push_notifications from './push-notifications';
 import scheduled_statuses from './scheduled-statuses';
 import search from './search';
 import security from './security';
 import settings from './settings';
-import sidebar from './sidebar';
-import status_hover_card from './status-hover-card';
 import status_lists from './status-lists';
 import statuses from './statuses';
 import suggestions from './suggestions';
@@ -80,14 +77,11 @@ const reducers = {
   pending_statuses,
   plfe,
   polls,
-  profile_hover_card,
   push_notifications,
   scheduled_statuses,
   search,
   security,
   settings,
-  sidebar,
-  status_hover_card,
   status_lists,
   statuses,
   suggestions,

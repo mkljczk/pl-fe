@@ -34,7 +34,7 @@ import ProfileLayout from 'pl-fe/layouts/profile-layout';
 import RemoteInstanceLayout from 'pl-fe/layouts/remote-instance-layout';
 import SearchLayout from 'pl-fe/layouts/search-layout';
 import StatusLayout from 'pl-fe/layouts/status-layout';
-import { useDropdownMenuStore } from 'pl-fe/stores';
+import { useUiStore } from 'pl-fe/stores';
 import { getVapidKey } from 'pl-fe/utils/auth';
 import { isStandalone } from 'pl-fe/utils/state';
 
@@ -352,7 +352,7 @@ const UI: React.FC<IUI> = ({ children }) => {
   const features = useFeatures();
   const vapidKey = useAppSelector(state => getVapidKey(state));
 
-  const { isOpen: dropdownMenuIsOpen } = useDropdownMenuStore();
+  const { isDropdownMenuOpen } = useUiStore();
   const standalone = useAppSelector(isStandalone);
 
   const { isDragging } = useDraggedFiles(node);
@@ -445,7 +445,7 @@ const UI: React.FC<IUI> = ({ children }) => {
   if (me === null) return null;
 
   const style: React.CSSProperties = {
-    pointerEvents: dropdownMenuIsOpen ? 'none' : undefined,
+    pointerEvents: isDropdownMenuOpen ? 'none' : undefined,
   };
 
   return (

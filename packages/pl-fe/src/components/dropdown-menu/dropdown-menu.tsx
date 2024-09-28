@@ -5,7 +5,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import ReactSwipeableViews from 'react-swipeable-views';
 
 import { userTouching } from 'pl-fe/is-mobile';
-import { useDropdownMenuStore, useModalsStore } from 'pl-fe/stores';
+import { useUiStore, useModalsStore } from 'pl-fe/stores';
 
 import { HStack, IconButton, Portal } from '../ui';
 
@@ -187,7 +187,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
     title = 'Menu',
   } = props;
 
-  const { openDropdownMenu, closeDropdownMenu } = useDropdownMenuStore();
+  const { openDropdownMenu, closeDropdownMenu } = useUiStore();
   const { openModal, closeModal } = useModalsStore();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
