@@ -1,12 +1,11 @@
+import { getClient } from 'pl-fe/api';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { selectAccount } from 'pl-fe/selectors';
 import { setSentryAccount } from 'pl-fe/sentry';
 import KVStore from 'pl-fe/storage/kv-store';
 import { getAuthUserId, getAuthUserUrl } from 'pl-fe/utils/auth';
 
-import { getClient } from '../api';
-
 import { loadCredentials } from './auth';
-import { importFetchedAccount } from './importer';
 
 import type { CredentialAccount, UpdateCredentialsParams } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
@@ -123,7 +122,7 @@ const patchMeSuccess = (me: CredentialAccount) =>
       me,
     };
 
-    dispatch(importFetchedAccount(me));
+    importEntities({ accounts: [me] });
     dispatch(action);
   };
 

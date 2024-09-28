@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { importFetchedStatuses } from 'pl-fe/actions/importer';
 import { expandTimelineSuccess } from 'pl-fe/actions/timelines';
 import { useAppDispatch, useTheme } from 'pl-fe/hooks';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 
 import { Column } from '../../components/ui';
 import Timeline from '../ui/components/timeline';
@@ -35,7 +35,7 @@ const TestTimeline: React.FC = () => {
   const isMobile = useIsMobile();
 
   React.useEffect(() => {
-    dispatch(importFetchedStatuses(MOCK_STATUSES));
+    importEntities({ statuses: MOCK_STATUSES });
     dispatch(expandTimelineSuccess(timelineId, MOCK_STATUSES, null, null, false, false));
   }, []);
 

@@ -1,94 +1,19 @@
-import omit from 'lodash/omit';
-
 import { importAccounts, importGroups, importPolls, importStatuses } from 'pl-fe/actions/importer';
 import { importEntities as importEntityStoreEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { queryClient } from 'pl-fe/queries/client';
 import { store } from 'pl-fe/store';
 
-import { DeduplicatedNotification } from './hooks/notifications/useNotifications';
+import { MinifiedNotification, minifyNotification } from './minifiers/minifyNotification';
+import { DeduplicatedNotification } from './normalizers/deduplicateNotifications';
 
 import type {
-  AccountWarning,
   Account as BaseAccount,
   Group as BaseGroup,
   Poll as BasePoll,
   Relationship as BaseRelationship,
-  Status as BaseStatus,
-  RelationshipSeveranceEvent,
+  StatusWithoutAccount as BaseStatus,
 } from 'pl-api';
-
-const minifyNotification = (notification: DeduplicatedNotification) => {
-  // @ts-ignore
-  const minifiedNotification: {
-    duplicate: boolean;
-    account_id: string;
-    account_ids: string[];
-    created_at: string;
-    id: string;
-    group_key: string;
-  } & (
-    | { type: 'follow' | 'follow_request' | 'admin.sign_up' | 'bite' }
-    | {
-      type: 'mention';
-      subtype?: 'reply';
-      status_id: string;
-    }
-    | {
-      type: 'status' | 'reblog' | 'favourite' | 'poll' | 'update' | 'event_reminder';
-      status_id: string;
-     }
-    | {
-      type: 'admin.report';
-      report: Report;
-    }
-    | {
-      type: 'severed_relationships';
-      relationship_severance_event: RelationshipSeveranceEvent;
-    }
-    | {
-      type: 'moderation_warning';
-      moderation_warning: AccountWarning;
-    }
-    | {
-      type: 'move';
-      target_id: string;
-    }
-    | {
-      type: 'emoji_reaction';
-      emoji: string;
-      emoji_url: string | null;
-      status_id: string;
-    }
-    | {
-      type: 'chat_mention';
-      chat_message_id: string;
-    }
-    | {
-      type: 'participation_accepted' | 'participation_request';
-      status_id: string;
-      participation_message: string | null;
-    }
-  ) = {
-    ...omit(notification, ['account', 'accounts', 'status', 'target', 'chat_message']),
-    account_id: notification.account.id,
-    account_ids: notification.accounts.map(({ id }) => id),
-    created_at: notification.created_at,
-    id: notification.id,
-    type: notification.type,
-  };
-
-  // @ts-ignore
-  if (notification.status) minifiedNotification.status_id = notification.status.id;
-  // @ts-ignore
-  if (notification.target) minifiedNotification.target_id = notification.target.id;
-  // @ts-ignore
-  if (notification.chat_message) minifiedNotification.chat_message_id = notification.chat_message.id;
-
-  return minifiedNotification;
-};
-
-type MinifiedNotification = ReturnType<typeof minifyNotification>;
 
 const importNotification = (notification: DeduplicatedNotification) => {
   queryClient.setQueryData<MinifiedNotification>(
@@ -104,6 +29,7 @@ const isEmpty = (object: Record<string, any>) => {
 
 const importEntities = (entities: {
   accounts?: Array<BaseAccount>;
+  groups?: Array<BaseGroup>;
   notifications?: Array<DeduplicatedNotification>;
   polls?: Array<BasePoll>;
   statuses?: Array<BaseStatus>;
@@ -136,8 +62,9 @@ const importEntities = (entities: {
   };
 
   const processStatus = (status: BaseStatus) => {
-    statuses[status.id] = status;
+    if (!statuses[status.id] || status.account || !statuses[status.id].account) statuses[status.id] = status;
 
+    if (status.account) processAccount(status.account);
     if (status.quote) processStatus(status.quote);
     if (status.reblog) processStatus(status.reblog);
     if (status.poll) polls[status.poll.id] = status.poll;
@@ -145,6 +72,7 @@ const importEntities = (entities: {
   };
 
   entities.accounts?.forEach(processAccount);
+  entities.groups?.forEach(group => groups[group.id] = group);
   entities.notifications?.forEach(processNotification);
   entities.polls?.forEach(poll => polls[poll.id] = poll);
   entities.relationships?.forEach(relationship => relationships[relationship.id] = relationship);

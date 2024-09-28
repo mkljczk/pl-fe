@@ -5,10 +5,10 @@ import KVStore from 'pl-fe/storage/kv-store';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
-const DRAFT_STATUSES_FETCH_SUCCESS = 'DRAFT_STATUSES_FETCH_SUCCESS';
+const DRAFT_STATUSES_FETCH_SUCCESS = 'DRAFT_STATUSES_FETCH_SUCCESS' as const;
 
-const PERSIST_DRAFT_STATUS = 'PERSIST_DRAFT_STATUS';
-const CANCEL_DRAFT_STATUS = 'DELETE_DRAFT_STATUS';
+const PERSIST_DRAFT_STATUS = 'PERSIST_DRAFT_STATUS' as const;
+const CANCEL_DRAFT_STATUS = 'DELETE_DRAFT_STATUS' as const;
 
 const getAccount = makeGetAccount();
 

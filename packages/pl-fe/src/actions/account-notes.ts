@@ -1,7 +1,6 @@
+import { getClient } from 'pl-fe/api';
 import { importEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
-
-import { getClient } from '../api';
 
 import type { RootState } from 'pl-fe/store';
 import type { AnyAction } from 'redux';

@@ -1,6 +1,5 @@
+import { getClient } from 'pl-fe/api';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
-
-import { getClient } from '../api';
 
 import { fetchRelationships } from './accounts';
 

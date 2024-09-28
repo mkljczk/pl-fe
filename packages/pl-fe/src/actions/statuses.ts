@@ -1,11 +1,11 @@
+import { getClient } from 'pl-fe/api';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { useModalsStore } from 'pl-fe/stores';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 import { shouldHaveCard } from 'pl-fe/utils/status';
 
-import { getClient } from '../api';
-
 import { setComposeToStatus } from './compose';
-import { importFetchedStatus, importFetchedStatuses } from './importer';
+import { importFetchedStatus } from './importer';
 import { getSettings } from './settings';
 import { deleteFromTimelines } from './timelines';
 
@@ -76,7 +76,7 @@ const createStatus = (params: CreateStatusParams, idempotencyKey: string, status
           const poll = (retries = 5) => {
             return getClient(getState()).statuses.getStatus(status.id).then(response => {
               if (response.card) {
-                dispatch(importFetchedStatus(response));
+                importEntities({ statuses: [response] });
               } else if (retries > 0 && response) {
                 setTimeout(() => poll(retries - 1), delay);
               }
@@ -119,7 +119,7 @@ const fetchStatus = (statusId: string, intl?: IntlShape) =>
     } : undefined;
 
     return getClient(getState()).statuses.getStatus(statusId, params).then(status => {
-      dispatch(importFetchedStatus(status));
+      importEntities({ statuses: [status] });
       dispatch({ type: STATUS_FETCH_SUCCESS, status });
       return status;
     }).catch(error => {
@@ -153,7 +153,7 @@ const deleteStatus = (statusId: string, withRedraft = false) =>
   };
 
 const updateStatus = (status: BaseStatus) => (dispatch: AppDispatch) =>
-  dispatch(importFetchedStatus(status));
+  importEntities({ statuses: [status] });
 
 const fetchContext = (statusId: string, intl?: IntlShape) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -167,7 +167,7 @@ const fetchContext = (statusId: string, intl?: IntlShape) =>
       if (typeof context === 'object') {
         const { ancestors, descendants } = context;
         const statuses = ancestors.concat(descendants);
-        dispatch(importFetchedStatuses(statuses));
+        importEntities({ statuses });
         dispatch({ type: CONTEXT_FETCH_SUCCESS, statusId, ancestors, descendants });
       } else {
         throw context;

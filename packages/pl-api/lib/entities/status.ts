@@ -1,7 +1,7 @@
 import pick from 'lodash.pick';
 import { z } from 'zod';
 
-import { accountSchema } from './account';
+import { type Account, accountSchema } from './account';
 import { customEmojiSchema } from './custom-emoji';
 import { emojiReactionSchema } from './emoji-reaction';
 import { filterResultSchema } from './filter-result';
@@ -147,9 +147,15 @@ const statusWithoutAccountSchema = z.preprocess(preprocess, baseStatusSchema.omi
   quote: z.lazy(() => statusSchema).nullable().catch(null),
 }));
 
+type StatusWithoutAccount = Omit<z.infer<typeof baseStatusSchema>, 'account'> & {
+  account: Account | null;
+  reblog: Status | null;
+  quote: Status | null;
+}
+
 type Status = z.infer<typeof baseStatusSchema> & {
   reblog: Status | null;
   quote: Status | null;
 }
 
-export { statusSchema, statusWithoutAccountSchema, type Status };
+export { statusSchema, statusWithoutAccountSchema, type Status, type StatusWithoutAccount };

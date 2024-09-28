@@ -1,11 +1,10 @@
 import { PLEROMA, type UpdateNotificationSettingsParams, type Account, type CreateAccountParams, type PaginatedResponse, type Relationship } from 'pl-api';
 
+import { getClient, type PlfeResponse } from 'pl-fe/api';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { selectAccount } from 'pl-fe/selectors';
 import { isLoggedIn } from 'pl-fe/utils/auth';
-
-import { getClient, type PlfeResponse } from '../api';
 
 import type { Map as ImmutableMap } from 'immutable';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';

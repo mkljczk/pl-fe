@@ -1,7 +1,6 @@
 import { Record as ImmutableRecord } from 'immutable';
 import { combineReducers } from 'redux-immutable';
 
-import { AUTH_LOGGED_OUT } from 'pl-fe/actions/auth';
 import * as BuildConfig from 'pl-fe/build-config';
 import entities from 'pl-fe/entity-store/reducer';
 
@@ -126,7 +125,7 @@ const logOut = (state: any = StateRecord()): ReturnType<typeof appReducer> => {
 
 const rootReducer: typeof appReducer = (state, action) => {
   switch (action.type) {
-    case AUTH_LOGGED_OUT:
+    case 'AUTH_LOGGED_OUT':
       return appReducer(logOut(state), action);
     default:
       return appReducer(state, action);

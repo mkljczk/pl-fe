@@ -1,10 +1,8 @@
+import { getClient } from 'pl-fe/api';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { selectAccount } from 'pl-fe/selectors';
 import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
-
-import { getClient } from '../api';
-
-import { importFetchedAccounts } from './importer';
 
 import type { Account, List, PaginatedResponse } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
@@ -229,7 +227,7 @@ const fetchListAccounts = (listId: string) => (dispatch: AppDispatch, getState: 
   dispatch(fetchListAccountsRequest(listId));
 
   return getClient(getState()).lists.getListAccounts(listId).then(({ items, next }) => {
-    dispatch(importFetchedAccounts(items));
+    importEntities({ accounts: items });
     dispatch(fetchListAccountsSuccess(listId, items, next));
   }).catch(err => dispatch(fetchListAccountsFail(listId, err)));
 };
@@ -256,7 +254,7 @@ const fetchListSuggestions = (q: string) => (dispatch: AppDispatch, getState: ()
   if (!isLoggedIn(getState)) return;
 
   return getClient(getState()).accounts.searchAccounts(q, { resolve: false, limit: 4, following: true }).then((data) => {
-    dispatch(importFetchedAccounts(data));
+    importEntities({ accounts: data });
     dispatch(fetchListSuggestionsReady(q, data));
   }).catch(error => toast.showAlertForError(error));
 };
