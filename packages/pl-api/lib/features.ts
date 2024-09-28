@@ -26,7 +26,7 @@ const FIREFISH = 'Firefish';
 const FRIENDICA = 'Friendica';
 
 /**
- * GoToSocial, an ActivityPub server writter in Golang.
+ * GoToSocial, an ActivityPub server written in Golang.
  * @see {@link https://gotosocial.org/}
  */
 const GOTOSOCIAL = 'GoToSocial';
@@ -517,6 +517,11 @@ const getFeatures = (instance: Instance) => {
       v.software === GOTOSOCIAL,
       v.software === MASTODON,
     ]),
+
+    /**
+     * TODO
+     */
+    // followAccountLanguages: any([]),
 
     /**
      * Ability to follow hashtags.

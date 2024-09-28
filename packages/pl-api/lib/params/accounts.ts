@@ -21,7 +21,7 @@ interface FollowAccountParams {
   notify?: boolean;
   /**
    * Array of String (ISO 639-1 language two-letter code). Filter received statuses for these languages. If not provided, you will receive this account’s posts in all languages.
-   * Requires `features.followAccountLangugaes`.
+   * Requires `features.followAccountLanguages`.
   */
   languages?: string[];
 }

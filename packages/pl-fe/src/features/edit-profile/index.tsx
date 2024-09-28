@@ -452,6 +452,7 @@ const EditProfile: React.FC = () => {
             onRemoveItem={handleRemoveField}
             component={ProfileField}
             maxItems={maxFields}
+            draggable
           />
         )}
 

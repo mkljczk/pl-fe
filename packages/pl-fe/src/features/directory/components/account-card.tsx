@@ -70,7 +70,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
         <Text
           truncate
           align='left'
-          className='line-clamp-2 [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
+          className='line-clamp-2 inline text-ellipsis [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
           dangerouslySetInnerHTML={{ __html: account.note_emojified || '&nbsp;' }}
         />
       </Stack>

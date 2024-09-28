@@ -1,7 +1,7 @@
+import { shift, useFloating, useTransitionStyles } from '@floating-ui/react';
 import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
-import { usePopper } from 'react-popper';
 import { useHistory } from 'react-router-dom';
 
 import { fetchRelationships } from 'pl-fe/actions/accounts';
@@ -52,8 +52,6 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
   const history = useHistory();
   const intl = useIntl();
 
-  const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
-
   const me = useAppSelector(state => state.me);
   const accountId: string | undefined = useAppSelector(state => state.profile_hover_card.accountId || undefined);
   const { account } = useAccount(accountId, { withRelationship: true, withScrobble: true });
@@ -75,7 +73,29 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
     };
   }, []);
 
-  const { styles, attributes } = usePopper(targetRef, popperElement);
+  const { x, y, strategy, refs, context, placement } = useFloating({
+    open: !!account,
+    elements: {
+      reference: targetRef,
+    },
+    middleware: [
+      shift({
+        padding: 8,
+      }),
+    ],
+  });
+
+  const { styles } = useTransitionStyles(context, {
+    initial: {
+      opacity: 0,
+      transform: 'scale(0.8)',
+      transformOrigin: placement === 'bottom' ? 'top' : 'bottom',
+    },
+    duration: {
+      open: 100,
+      close: 100,
+    },
+  });
 
   if (!account) return null;
   const accountBio = { __html: account.note_emojified };
@@ -89,9 +109,13 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
         'opacity-100': visible,
         'opacity-0 pointer-events-none': !visible,
       })}
-      ref={setPopperElement}
-      style={styles.popper}
-      {...attributes.popper}
+      ref={refs.setFloating}
+      style={{
+        position: strategy,
+        top: y ?? 0,
+        left: x ?? 0,
+        ...styles,
+      }}
       onMouseEnter={handleMouseEnter(dispatch)}
       onMouseLeave={handleMouseLeave(dispatch)}
     >

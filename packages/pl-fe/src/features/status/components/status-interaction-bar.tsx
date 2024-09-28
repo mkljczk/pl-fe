@@ -20,15 +20,15 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
 
   if (!account || typeof account !== 'object') return null;
 
-  const onOpenReblogsModal = (username: string, statusId: string): void => {
+  const onOpenReblogsModal = (statusId: string): void => {
     openModal('REBLOGS', { statusId });
   };
 
-  const onOpenFavouritesModal = (username: string, statusId: string): void => {
+  const onOpenFavouritesModal = (statusId: string): void => {
     openModal('FAVOURITES', { statusId });
   };
 
-  const onOpenDislikesModal = (username: string, statusId: string): void => {
+  const onOpenDislikesModal = (statusId: string): void => {
     openModal('DISLIKES', { statusId });
   };
 
@@ -36,7 +36,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
     e.preventDefault();
 
     // if (!me) onOpenUnauthorizedModal();
-    onOpenReblogsModal(account.acct, status.id);
+    onOpenReblogsModal(status.id);
   };
 
   const getReposts = () => {
@@ -75,14 +75,14 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
     e.preventDefault();
 
     // if (!me) onOpenUnauthorizedModal();
-    onOpenFavouritesModal(account.acct, status.id);
+    onOpenFavouritesModal(status.id);
   };
 
   const handleOpenDislikesModal: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     e.preventDefault();
 
     // if (!me) onOpenUnauthorizedModal();
-    onOpenDislikesModal(account.acct, status.id);
+    onOpenDislikesModal(status.id);
   };
 
   const getFavourites = () => {

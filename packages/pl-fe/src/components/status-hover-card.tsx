@@ -1,7 +1,7 @@
+import { shift, useFloating, useTransitionStyles } from '@floating-ui/react';
 import clsx from 'clsx';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
-import { usePopper } from 'react-popper';
 import { useHistory } from 'react-router-dom';
 
 import { closeStatusHoverCard, updateStatusHoverCard } from 'pl-fe/actions/status-hover-card';
@@ -21,8 +21,6 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const history = useHistory();
-
-  const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
 
   const statusId: string | undefined = useAppSelector(state => state.status_hover_card.statusId || undefined);
   const status = useAppSelector(state => state.statuses.get(statusId!));
@@ -45,8 +43,29 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
     };
   }, []);
 
-  const { styles, attributes } = usePopper(targetRef, popperElement, {
+  const { x, y, strategy, refs, context, placement } = useFloating({
+    open: !!statusId,
+    elements: {
+      reference: targetRef,
+    },
     placement: 'top',
+    middleware: [
+      shift({
+        padding: 8,
+      }),
+    ],
+  });
+
+  const { styles } = useTransitionStyles(context, {
+    initial: {
+      opacity: 0,
+      transform: 'scale(0.8)',
+      transformOrigin: placement === 'bottom' ? 'top' : 'bottom',
+    },
+    duration: {
+      open: 100,
+      close: 100,
+    },
   });
 
   const handleMouseEnter = useCallback((): React.MouseEventHandler => () => {
@@ -77,9 +96,13 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
         'opacity-100': visible,
         'opacity-0 pointer-events-none': !visible,
       })}
-      ref={setPopperElement}
-      style={styles.popper}
-      {...attributes.popper}
+      ref={refs.setFloating}
+      style={{
+        position: strategy,
+        top: y ?? 0,
+        left: x ?? 0,
+        ...styles,
+      }}
       onMouseEnter={handleMouseEnter()}
       onMouseLeave={handleMouseLeave()}
     >

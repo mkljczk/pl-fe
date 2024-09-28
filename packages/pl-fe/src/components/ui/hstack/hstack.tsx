@@ -31,7 +31,10 @@ const spaces = {
   8: 'gap-8',
 };
 
-interface IHStack extends Pick<React.HTMLAttributes<HTMLDivElement>, 'children' | 'className' | 'onClick' | 'style' | 'title'> {
+interface IHStack extends Pick<
+  React.HTMLAttributes<HTMLDivElement>,
+  'children' | 'className' | 'draggable' | 'onClick' | 'onDragEnd' | 'onDragEnter' | 'onDragStart' | 'style' | 'title'
+> {
   /** Vertical alignment of children. */
   alignItems?: keyof typeof alignItemsOptions;
   /** Horizontal alignment of children. */
