@@ -190,6 +190,10 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     }
   };
 
+  const handleFavouriteLongPress = status.favourites_count ? () => {
+    openModal('FAVOURITES', { statusId: status.id });
+  } : undefined;
+
   const handleDislikeClick: React.EventHandler<React.MouseEvent> = (e) => {
     if (me) {
       dispatch(toggleDislike(status));
@@ -197,6 +201,10 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       onOpenUnauthorizedModal('DISLIKE');
     }
   };
+
+  const handleDislikeLongPress = status.dislikes_count ? () => {
+    openModal('DISLIKES', { statusId: status.id });
+  } : undefined;
 
   const handlePickEmoji = (emoji: EmojiType) => {
     dispatch(emojiReact(status, emoji.custom ? emoji.id : emoji.native, emoji.custom ? emoji.imageUrl : undefined));
@@ -224,6 +232,10 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       onOpenUnauthorizedModal('REBLOG');
     }
   };
+
+  const handleReblogLongPress = status.reblogs_count ? () => {
+    openModal('REBLOGS', { statusId: status.id });
+  } : undefined;
 
   const handleQuoteClick: React.EventHandler<React.MouseEvent> = (e) => {
     if (me) {
@@ -670,6 +682,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       title={!publicStatus ? intl.formatMessage(messages.cannot_reblog) : intl.formatMessage(messages.reblog)}
       active={status.reblogged}
       onClick={handleReblogClick}
+      onLongPress={handleReblogLongPress}
       count={reblogCount + quoteCount}
       text={withLabels ? intl.formatMessage(messages.reblog) : undefined}
       theme={statusActionButtonTheme}
@@ -734,6 +747,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
           color='accent'
           filled
           onClick={handleFavouriteClick}
+          onLongPress={handleFavouriteLongPress}
           active={status.favourited}
           count={favouriteCount}
           text={withLabels ? intl.formatMessage(messages.favourite) : undefined}
@@ -747,6 +761,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
             color='accent'
             filled
             onClick={handleDislikeClick}
+            onLongPress={handleDislikeLongPress}
             active={status.disliked}
             count={status.dislikes_count}
             text={withLabels ? intl.formatMessage(messages.disfavourite) : undefined}

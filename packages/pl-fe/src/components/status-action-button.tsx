@@ -1,3 +1,4 @@
+import { useLongPress } from '@uidotdev/usehooks';
 import clsx from 'clsx';
 import React from 'react';
 
@@ -40,10 +41,20 @@ interface IStatusActionButton extends React.ButtonHTMLAttributes<HTMLButtonEleme
   emoji?: EmojiReaction;
   text?: React.ReactNode;
   theme?: 'default' | 'inverse';
+  onLongPress?: (event: Event) => void;
 }
 
 const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButton>((props, ref): JSX.Element => {
-  const { icon, className, iconClassName, active, color, filled = false, count = 0, emoji, text, theme = 'default', ...filteredProps } = props;
+  const { icon, className, iconClassName, active, color, filled = false, count = 0, emoji, text, theme = 'default', onLongPress, ...filteredProps } = props;
+
+  const longPressBind = useLongPress((e) => {
+    if (!onLongPress || e.type !== 'touchstart') return;
+
+    e.stopPropagation();
+
+    if ('vibrate' in navigator) navigator.vibrate(1);
+    onLongPress(e);
+  });
 
   const renderIcon = () => {
     if (emoji) {
@@ -100,6 +111,7 @@ const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButt
         },
         className,
       )}
+      {...longPressBind}
       {...filteredProps}
     >
       {renderIcon()}
