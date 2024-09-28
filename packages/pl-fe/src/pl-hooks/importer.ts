@@ -18,7 +18,6 @@ import type {
   RelationshipSeveranceEvent,
 } from 'pl-api';
 
-
 const minifyNotification = (notification: DeduplicatedNotification) => {
   // @ts-ignore
   const minifiedNotification: {
@@ -98,9 +97,15 @@ const importNotification = (notification: DeduplicatedNotification) => {
   );
 };
 
+const isEmpty = (object: Record<string, any>) => {
+  for (const i in object) return false;
+  return true;
+};
+
 const importEntities = (entities: {
   accounts?: Array<BaseAccount>;
   notifications?: Array<DeduplicatedNotification>;
+  polls?: Array<BasePoll>;
   statuses?: Array<BaseStatus>;
   relationships?: Array<BaseRelationship>;
 }) => {
@@ -141,14 +146,16 @@ const importEntities = (entities: {
 
   entities.accounts?.forEach(processAccount);
   entities.notifications?.forEach(processNotification);
+  entities.polls?.forEach(poll => polls[poll.id] = poll);
+  entities.relationships?.forEach(relationship => relationships[relationship.id] = relationship);
   entities.statuses?.forEach(processStatus);
 
-  dispatch(importAccounts(Object.values(accounts)));
-  dispatch(importGroups(Object.values(groups)));
-  Object.values(notifications).forEach(importNotification);
-  dispatch(importPolls(Object.values(polls)));
-  dispatch(importStatuses(Object.values(statuses)));
-  dispatch(importEntityStoreEntities(Object.values(relationships), Entities.RELATIONSHIPS));
+  if (!isEmpty(accounts)) dispatch(importAccounts(Object.values(accounts)));
+  if (!isEmpty(groups)) dispatch(importGroups(Object.values(groups)));
+  if (!isEmpty(notifications)) Object.values(notifications).forEach(importNotification);
+  if (!isEmpty(polls)) dispatch(importPolls(Object.values(polls)));
+  if (!isEmpty(relationships)) dispatch(importEntityStoreEntities(Object.values(relationships), Entities.RELATIONSHIPS));
+  if (!isEmpty(statuses)) dispatch(importStatuses(Object.values(statuses)));
 };
 
 export { importEntities };
