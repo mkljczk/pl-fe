@@ -54,8 +54,6 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
             <Account
               key={account.id}
               account={account}
-              timestamp={status.created_at}
-              futureTimestamp
               action={<DraftStatusActionBar source={draftStatus} status={status} {...other} />}
             />
           </HStack>
