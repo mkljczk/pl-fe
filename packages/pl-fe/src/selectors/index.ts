@@ -13,7 +13,7 @@ import { validId } from 'pl-fe/utils/auth';
 import ConfigDB from 'pl-fe/utils/config-db';
 import { shouldFilter } from 'pl-fe/utils/timelines';
 
-import type { Account as BaseAccount, Filter, MediaAttachment } from 'pl-api';
+import type { Account as BaseAccount, Filter, MediaAttachment, Relationship } from 'pl-api';
 import type { EntityStore } from 'pl-fe/entity-store/types';
 import type { Account, Group } from 'pl-fe/normalizers';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
@@ -33,7 +33,7 @@ const selectOwnAccount = (state: RootState) => {
 };
 
 const getAccountBase = (state: RootState, accountId: string) => state.entities[Entities.ACCOUNTS]?.store[accountId] as Account | undefined;
-const getAccountRelationship = (state: RootState, accountId: string) => state.relationships.get(accountId);
+const getAccountRelationship = (state: RootState, accountId: string) => state.entities[Entities.RELATIONSHIPS]?.store[accountId] as Relationship | undefined;
 const getAccountMeta = (state: RootState, accountId: string) => state.accounts_meta[accountId];
 
 const makeGetAccount = () => createSelector([

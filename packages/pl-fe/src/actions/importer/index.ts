@@ -5,8 +5,6 @@ import { normalizeAccount, normalizeGroup, type Account, type Group } from 'pl-f
 import type { Account as BaseAccount, Group as BaseGroup, Poll, Status as BaseStatus } from 'pl-api';
 import type { AppDispatch } from 'pl-fe/store';
 
-const ACCOUNT_IMPORT = 'ACCOUNT_IMPORT';
-const ACCOUNTS_IMPORT = 'ACCOUNTS_IMPORT';
 const STATUS_IMPORT = 'STATUS_IMPORT';
 const STATUSES_IMPORT = 'STATUSES_IMPORT';
 const POLLS_IMPORT = 'POLLS_IMPORT';
@@ -157,8 +155,6 @@ const importFetchedPoll = (poll: Poll) =>
   };
 
 export {
-  ACCOUNT_IMPORT,
-  ACCOUNTS_IMPORT,
   STATUS_IMPORT,
   STATUSES_IMPORT,
   POLLS_IMPORT,

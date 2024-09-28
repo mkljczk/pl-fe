@@ -1,5 +1,6 @@
 import { PLEROMA, type UpdateNotificationSettingsParams, type Account, type CreateAccountParams, type PaginatedResponse, type Relationship } from 'pl-api';
 
+import { Entities } from 'pl-fe/entity-store/entities';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { selectAccount } from 'pl-fe/selectors';
 import { isLoggedIn } from 'pl-fe/utils/auth';
@@ -23,29 +24,9 @@ const ACCOUNT_BLOCK_REQUEST = 'ACCOUNT_BLOCK_REQUEST' as const;
 const ACCOUNT_BLOCK_SUCCESS = 'ACCOUNT_BLOCK_SUCCESS' as const;
 const ACCOUNT_BLOCK_FAIL = 'ACCOUNT_BLOCK_FAIL' as const;
 
-const ACCOUNT_UNBLOCK_REQUEST = 'ACCOUNT_UNBLOCK_REQUEST' as const;
-const ACCOUNT_UNBLOCK_SUCCESS = 'ACCOUNT_UNBLOCK_SUCCESS' as const;
-const ACCOUNT_UNBLOCK_FAIL = 'ACCOUNT_UNBLOCK_FAIL' as const;
-
 const ACCOUNT_MUTE_REQUEST = 'ACCOUNT_MUTE_REQUEST' as const;
 const ACCOUNT_MUTE_SUCCESS = 'ACCOUNT_MUTE_SUCCESS' as const;
 const ACCOUNT_MUTE_FAIL = 'ACCOUNT_MUTE_FAIL' as const;
-
-const ACCOUNT_UNMUTE_REQUEST = 'ACCOUNT_UNMUTE_REQUEST' as const;
-const ACCOUNT_UNMUTE_SUCCESS = 'ACCOUNT_UNMUTE_SUCCESS' as const;
-const ACCOUNT_UNMUTE_FAIL = 'ACCOUNT_UNMUTE_FAIL' as const;
-
-const ACCOUNT_PIN_REQUEST = 'ACCOUNT_PIN_REQUEST' as const;
-const ACCOUNT_PIN_SUCCESS = 'ACCOUNT_PIN_SUCCESS' as const;
-const ACCOUNT_PIN_FAIL = 'ACCOUNT_PIN_FAIL' as const;
-
-const ACCOUNT_UNPIN_REQUEST = 'ACCOUNT_UNPIN_REQUEST' as const;
-const ACCOUNT_UNPIN_SUCCESS = 'ACCOUNT_UNPIN_SUCCESS' as const;
-const ACCOUNT_UNPIN_FAIL = 'ACCOUNT_UNPIN_FAIL' as const;
-
-const ACCOUNT_REMOVE_FROM_FOLLOWERS_REQUEST = 'ACCOUNT_REMOVE_FROM_FOLLOWERS_REQUEST' as const;
-const ACCOUNT_REMOVE_FROM_FOLLOWERS_SUCCESS = 'ACCOUNT_REMOVE_FROM_FOLLOWERS_SUCCESS' as const;
-const ACCOUNT_REMOVE_FROM_FOLLOWERS_FAIL = 'ACCOUNT_REMOVE_FROM_FOLLOWERS_FAIL' as const;
 
 const PINNED_ACCOUNTS_FETCH_REQUEST = 'PINNED_ACCOUNTS_FETCH_REQUEST' as const;
 const PINNED_ACCOUNTS_FETCH_SUCCESS = 'PINNED_ACCOUNTS_FETCH_SUCCESS' as const;
@@ -58,10 +39,6 @@ const ACCOUNT_SEARCH_FAIL = 'ACCOUNT_SEARCH_FAIL' as const;
 const ACCOUNT_LOOKUP_REQUEST = 'ACCOUNT_LOOKUP_REQUEST' as const;
 const ACCOUNT_LOOKUP_SUCCESS = 'ACCOUNT_LOOKUP_SUCCESS' as const;
 const ACCOUNT_LOOKUP_FAIL = 'ACCOUNT_LOOKUP_FAIL' as const;
-
-const RELATIONSHIPS_FETCH_REQUEST = 'RELATIONSHIPS_FETCH_REQUEST' as const;
-const RELATIONSHIPS_FETCH_SUCCESS = 'RELATIONSHIPS_FETCH_SUCCESS' as const;
-const RELATIONSHIPS_FETCH_FAIL = 'RELATIONSHIPS_FETCH_FAIL' as const;
 
 const FOLLOW_REQUESTS_FETCH_REQUEST = 'FOLLOW_REQUESTS_FETCH_REQUEST' as const;
 const FOLLOW_REQUESTS_FETCH_SUCCESS = 'FOLLOW_REQUESTS_FETCH_SUCCESS' as const;
@@ -86,10 +63,6 @@ const NOTIFICATION_SETTINGS_FAIL = 'NOTIFICATION_SETTINGS_FAIL' as const;
 const BIRTHDAY_REMINDERS_FETCH_REQUEST = 'BIRTHDAY_REMINDERS_FETCH_REQUEST' as const;
 const BIRTHDAY_REMINDERS_FETCH_SUCCESS = 'BIRTHDAY_REMINDERS_FETCH_SUCCESS' as const;
 const BIRTHDAY_REMINDERS_FETCH_FAIL = 'BIRTHDAY_REMINDERS_FETCH_FAIL' as const;
-
-const ACCOUNT_BITE_REQUEST = 'ACCOUNT_BITE_REQUEST' as const;
-const ACCOUNT_BITE_SUCCESS = 'ACCOUNT_BITE_SUCCESS' as const;
-const ACCOUNT_BITE_FAIL = 'ACCOUNT_BITE_FAIL' as const;
 
 const maybeRedirectLogin = (error: { response: PlfeResponse }, history?: History) => {
   // The client is unauthorized - redirect to login.
@@ -205,14 +178,8 @@ const unblockAccount = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    dispatch(unblockAccountRequest(accountId));
-
     return getClient(getState).filtering.unblockAccount(accountId)
-      .then(response => {
-        importEntities({ relationships: [response] });
-        return dispatch(unblockAccountSuccess(response));
-      })
-      .catch(error => dispatch(unblockAccountFail(error)));
+      .then(response => importEntities({ relationships: [response] }));
   };
 
 const blockAccountRequest = (accountId: string) => ({
@@ -228,21 +195,6 @@ const blockAccountSuccess = (relationship: Relationship, statuses: ImmutableMap<
 
 const blockAccountFail = (error: unknown) => ({
   type: ACCOUNT_BLOCK_FAIL,
-  error,
-});
-
-const unblockAccountRequest = (accountId: string) => ({
-  type: ACCOUNT_UNBLOCK_REQUEST,
-  accountId,
-});
-
-const unblockAccountSuccess = (relationship: Relationship) => ({
-  type: ACCOUNT_UNBLOCK_SUCCESS,
-  relationship,
-});
-
-const unblockAccountFail = (error: unknown) => ({
-  type: ACCOUNT_UNBLOCK_FAIL,
   error,
 });
 
@@ -281,14 +233,8 @@ const unmuteAccount = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    dispatch(unmuteAccountRequest(accountId));
-
     return getClient(getState()).filtering.unmuteAccount(accountId)
-      .then(response => {
-        importEntities({ relationships: [response] });
-        return dispatch(unmuteAccountSuccess(response));
-      })
-      .catch(error => dispatch(unmuteAccountFail(accountId, error)));
+      .then(response => importEntities({ relationships: [response] }));
   };
 
 const muteAccountRequest = (accountId: string) => ({
@@ -308,84 +254,28 @@ const muteAccountFail = (accountId: string, error: unknown) => ({
   error,
 });
 
-const unmuteAccountRequest = (accountId: string) => ({
-  type: ACCOUNT_UNMUTE_REQUEST,
-  accountId,
-});
-
-const unmuteAccountSuccess = (relationship: Relationship) => ({
-  type: ACCOUNT_UNMUTE_SUCCESS,
-  relationship,
-});
-
-const unmuteAccountFail = (accountId: string, error: unknown) => ({
-  type: ACCOUNT_UNMUTE_FAIL,
-  accountId,
-  error,
-});
-
 const removeFromFollowers = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    dispatch(removeFromFollowersRequest(accountId));
-
     return getClient(getState()).accounts.removeAccountFromFollowers(accountId)
-      .then(response => dispatch(removeFromFollowersSuccess(response)))
-      .catch(error => dispatch(removeFromFollowersFail(accountId, error)));
+      .then(response => importEntities({ relationships: [response] }));
   };
-
-const removeFromFollowersRequest = (accountId: string) => ({
-  type: ACCOUNT_REMOVE_FROM_FOLLOWERS_REQUEST,
-  accountId,
-});
-
-const removeFromFollowersSuccess = (relationship: Relationship) => ({
-  type: ACCOUNT_REMOVE_FROM_FOLLOWERS_SUCCESS,
-  relationship,
-});
-
-const removeFromFollowersFail = (accountId: string, error: unknown) => ({
-  type: ACCOUNT_REMOVE_FROM_FOLLOWERS_FAIL,
-  accountId,
-  error,
-});
 
 const fetchRelationships = (accountIds: string[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    const loadedRelationships = getState().relationships;
-    const newAccountIds = accountIds.filter(id => loadedRelationships.get(id, null) === null);
+    const loadedRelationships = getState().entities[Entities.RELATIONSHIPS]?.store;
+    const newAccountIds = accountIds.filter(id => !loadedRelationships?.[id]);
 
     if (newAccountIds.length === 0) {
       return null;
     }
 
-    dispatch(fetchRelationshipsRequest(newAccountIds));
-
     return getClient(getState()).accounts.getRelationships(newAccountIds)
-      .then(response => {
-        importEntities({ relationships: response });
-        dispatch(fetchRelationshipsSuccess(response));
-      })
-      .catch(error => dispatch(fetchRelationshipsFail(error)));
+      .then(response => importEntities({ relationships: response }));
   };
-
-const fetchRelationshipsRequest = (accountIds: string[]) => ({
-  type: RELATIONSHIPS_FETCH_REQUEST,
-  accountIds,
-});
-
-const fetchRelationshipsSuccess = (relationships: Array<Relationship>) => ({
-  type: RELATIONSHIPS_FETCH_SUCCESS,
-  relationships,
-});
-
-const fetchRelationshipsFail = (error: unknown) => ({
-  type: RELATIONSHIPS_FETCH_FAIL,
-  error,
-});
 
 const fetchFollowRequests = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -505,26 +395,16 @@ const pinAccount = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return dispatch(noOp);
 
-    dispatch(pinAccountRequest(accountId));
-
-    return getClient(getState).accounts.pinAccount(accountId).then(response => {
-      dispatch(pinAccountSuccess(response));
-    }).catch(error => {
-      dispatch(pinAccountFail(error));
-    });
+    return getClient(getState).accounts.pinAccount(accountId)
+      .then(response => importEntities({ relationships: [response] }));
   };
 
 const unpinAccount = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return dispatch(noOp);
 
-    dispatch(unpinAccountRequest(accountId));
-
-    return getClient(getState).accounts.unpinAccount(accountId).then(response => {
-      dispatch(unpinAccountSuccess(response));
-    }).catch(error => {
-      dispatch(unpinAccountFail(error));
-    });
+    return getClient(getState).accounts.unpinAccount(accountId)
+      .then(response => importEntities({ relationships: [response] }));
   };
 
 const updateNotificationSettings = (params: UpdateNotificationSettingsParams) =>
@@ -537,36 +417,6 @@ const updateNotificationSettings = (params: UpdateNotificationSettingsParams) =>
       throw error;
     });
   };
-
-const pinAccountRequest = (accountId: string) => ({
-  type: ACCOUNT_PIN_REQUEST,
-  accountId,
-});
-
-const pinAccountSuccess = (relationship: Relationship) => ({
-  type: ACCOUNT_PIN_SUCCESS,
-  relationship,
-});
-
-const pinAccountFail = (error: unknown) => ({
-  type: ACCOUNT_PIN_FAIL,
-  error,
-});
-
-const unpinAccountRequest = (accountId: string) => ({
-  type: ACCOUNT_UNPIN_REQUEST,
-  accountId,
-});
-
-const unpinAccountSuccess = (relationship: Relationship) => ({
-  type: ACCOUNT_UNPIN_SUCCESS,
-  relationship,
-});
-
-const unpinAccountFail = (error: unknown) => ({
-  type: ACCOUNT_UNPIN_FAIL,
-  error,
-});
 
 const fetchPinnedAccounts = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -650,32 +500,8 @@ const biteAccount = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const client = getClient(getState);
 
-    dispatch(biteAccountRequest(accountId));
-
-    return client.accounts.biteAccount(accountId)
-      .then(() => {
-        return dispatch(biteAccountSuccess(accountId));
-      })
-      .catch(error => {
-        dispatch(biteAccountFail(accountId, error));
-        throw error;
-      });
+    return client.accounts.biteAccount(accountId);
   };
-
-const biteAccountRequest = (accountId: string) => ({
-  type: ACCOUNT_BITE_REQUEST,
-  accountId,
-});
-
-const biteAccountSuccess = (accountId: string) => ({
-  type: ACCOUNT_BITE_SUCCESS,
-});
-
-const biteAccountFail = (accountId: string, error: unknown) => ({
-  type: ACCOUNT_BITE_FAIL,
-  accountId,
-  error,
-});
 
 export {
   ACCOUNT_CREATE_REQUEST,
@@ -687,24 +513,9 @@ export {
   ACCOUNT_BLOCK_REQUEST,
   ACCOUNT_BLOCK_SUCCESS,
   ACCOUNT_BLOCK_FAIL,
-  ACCOUNT_UNBLOCK_REQUEST,
-  ACCOUNT_UNBLOCK_SUCCESS,
-  ACCOUNT_UNBLOCK_FAIL,
   ACCOUNT_MUTE_REQUEST,
   ACCOUNT_MUTE_SUCCESS,
   ACCOUNT_MUTE_FAIL,
-  ACCOUNT_UNMUTE_REQUEST,
-  ACCOUNT_UNMUTE_SUCCESS,
-  ACCOUNT_UNMUTE_FAIL,
-  ACCOUNT_PIN_REQUEST,
-  ACCOUNT_PIN_SUCCESS,
-  ACCOUNT_PIN_FAIL,
-  ACCOUNT_UNPIN_REQUEST,
-  ACCOUNT_UNPIN_SUCCESS,
-  ACCOUNT_UNPIN_FAIL,
-  ACCOUNT_REMOVE_FROM_FOLLOWERS_REQUEST,
-  ACCOUNT_REMOVE_FROM_FOLLOWERS_SUCCESS,
-  ACCOUNT_REMOVE_FROM_FOLLOWERS_FAIL,
   PINNED_ACCOUNTS_FETCH_REQUEST,
   PINNED_ACCOUNTS_FETCH_SUCCESS,
   PINNED_ACCOUNTS_FETCH_FAIL,
@@ -714,9 +525,6 @@ export {
   ACCOUNT_LOOKUP_REQUEST,
   ACCOUNT_LOOKUP_SUCCESS,
   ACCOUNT_LOOKUP_FAIL,
-  RELATIONSHIPS_FETCH_REQUEST,
-  RELATIONSHIPS_FETCH_SUCCESS,
-  RELATIONSHIPS_FETCH_FAIL,
   FOLLOW_REQUESTS_FETCH_REQUEST,
   FOLLOW_REQUESTS_FETCH_SUCCESS,
   FOLLOW_REQUESTS_FETCH_FAIL,
@@ -735,9 +543,6 @@ export {
   BIRTHDAY_REMINDERS_FETCH_REQUEST,
   BIRTHDAY_REMINDERS_FETCH_SUCCESS,
   BIRTHDAY_REMINDERS_FETCH_FAIL,
-  ACCOUNT_BITE_REQUEST,
-  ACCOUNT_BITE_SUCCESS,
-  ACCOUNT_BITE_FAIL,
   createAccount,
   fetchAccount,
   fetchAccountByUsername,
@@ -749,25 +554,13 @@ export {
   blockAccountRequest,
   blockAccountSuccess,
   blockAccountFail,
-  unblockAccountRequest,
-  unblockAccountSuccess,
-  unblockAccountFail,
   muteAccount,
   unmuteAccount,
   muteAccountRequest,
   muteAccountSuccess,
   muteAccountFail,
-  unmuteAccountRequest,
-  unmuteAccountSuccess,
-  unmuteAccountFail,
   removeFromFollowers,
-  removeFromFollowersRequest,
-  removeFromFollowersSuccess,
-  removeFromFollowersFail,
   fetchRelationships,
-  fetchRelationshipsRequest,
-  fetchRelationshipsSuccess,
-  fetchRelationshipsFail,
   fetchFollowRequests,
   fetchFollowRequestsRequest,
   fetchFollowRequestsSuccess,
@@ -787,12 +580,6 @@ export {
   pinAccount,
   unpinAccount,
   updateNotificationSettings,
-  pinAccountRequest,
-  pinAccountSuccess,
-  pinAccountFail,
-  unpinAccountRequest,
-  unpinAccountSuccess,
-  unpinAccountFail,
   fetchPinnedAccounts,
   fetchPinnedAccountsRequest,
   fetchPinnedAccountsSuccess,
@@ -801,7 +588,4 @@ export {
   accountLookup,
   fetchBirthdayReminders,
   biteAccount,
-  biteAccountRequest,
-  biteAccountSuccess,
-  biteAccountFail,
 };
