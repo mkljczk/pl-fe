@@ -5,7 +5,7 @@ import { Status as BaseStatus, StatusEdit as BaseStatusEdit, CustomEmoji } from 
 import emojify from 'pl-fe/features/emoji';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
-const sanitizeTitle = (text: string, emojiMap: any) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { ALLOWED_TAGS: [] });
+const sanitizeTitle = (text: string, emojiMap: any) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { ALLOWED_TAGS: ['img'] });
 
 const normalizePoll = (poll: Exclude<BaseStatus['poll'], null>) => {
   const emojiMap = makeEmojiMap(poll.emojis);
