@@ -1,11 +1,9 @@
 import { defineMessages } from 'react-intl';
 
+import { getClient } from 'pl-fe/api';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
-
-import { getClient } from '../api';
-
-import { importFetchedAccounts } from './importer';
 
 import type { Account as BaseAccount } from 'pl-api';
 import type { Account } from 'pl-fe/normalizers';
@@ -63,7 +61,7 @@ const fetchAliasesSuggestions = (q: string) =>
 
     return getClient(getState()).accounts.searchAccounts(q, { resolve: true, limit: 4 })
       .then((data) => {
-        dispatch(importFetchedAccounts(data));
+        importEntities({ accounts: data });
         dispatch(fetchAliasesSuggestionsReady(q, data));
       }).catch(error => toast.showAlertForError(error));
   };

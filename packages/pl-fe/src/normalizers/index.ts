@@ -4,7 +4,7 @@ export { normalizeAnnouncement, type AdminAnnouncement, type Announcement } from
 export { normalizeChatMessage, type ChatMessage } from './chat-message';
 export { normalizeGroup, type Group } from './group';
 export { normalizeGroupMember, type GroupMember } from './group-member';
-export { normalizeNotification, normalizeNotifications, type Notification } from './notification';
+export { normalizeNotification, type Notification } from './notification';
 export { normalizePoll, normalizePollEdit, type Poll, type PollEdit } from './poll';
 export { normalizeStatus, type Status } from './status';
 export { normalizeStatusEdit, type StatusEdit } from './status-edit';

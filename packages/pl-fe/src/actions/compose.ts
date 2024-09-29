@@ -5,6 +5,7 @@ import { getClient } from 'pl-fe/api';
 import { isNativeEmoji } from 'pl-fe/features/emoji';
 import emojiSearch from 'pl-fe/features/emoji/search';
 import { Language } from 'pl-fe/features/preferences';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { selectAccount, selectOwnAccount, makeGetAccount } from 'pl-fe/selectors';
 import { tagHistory } from 'pl-fe/settings';
 import { useModalsStore } from 'pl-fe/stores';
@@ -12,7 +13,6 @@ import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { chooseEmoji } from './emojis';
-import { importFetchedAccounts } from './importer';
 import { rememberLanguageUse } from './languages';
 import { uploadFile, updateMedia } from './media';
 import { getSettings } from './settings';
@@ -590,7 +590,7 @@ const fetchComposeSuggestionsAccounts = throttle((dispatch, getState, composeId,
 
   return getClient(getState).accounts.searchAccounts(token.slice(1), { resolve: false, limit: 10 }, { signal })
     .then(response => {
-      dispatch(importFetchedAccounts(response));
+      importEntities({ accounts: response });
       dispatch(readyComposeSuggestionsAccounts(composeId, token, response));
     }).catch(error => {
       if (!signal.aborted) {

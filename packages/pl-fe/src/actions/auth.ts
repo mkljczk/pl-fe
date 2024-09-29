@@ -14,8 +14,10 @@ import { createApp } from 'pl-fe/actions/apps';
 import { fetchMeSuccess, fetchMeFail } from 'pl-fe/actions/me';
 import { obtainOAuthToken, revokeOAuthToken } from 'pl-fe/actions/oauth';
 import { startOnboarding } from 'pl-fe/actions/onboarding';
+import { type PlfeResponse, getClient } from 'pl-fe/api';
 import * as BuildConfig from 'pl-fe/build-config';
 import { custom } from 'pl-fe/custom';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { queryClient } from 'pl-fe/queries/client';
 import { selectAccount } from 'pl-fe/selectors';
 import { unsetSentryAccount } from 'pl-fe/sentry';
@@ -26,10 +28,6 @@ import sourceCode from 'pl-fe/utils/code';
 import { normalizeUsername } from 'pl-fe/utils/input';
 import { getScopes } from 'pl-fe/utils/scopes';
 import { isStandalone } from 'pl-fe/utils/state';
-
-import { type PlfeResponse, getClient } from '../api';
-
-import { importFetchedAccount } from './importer';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
@@ -149,7 +147,7 @@ const verifyCredentials = (token: string, accountUrl?: string) =>
     const client = new PlApiClient(baseURL, token);
 
     return client.settings.verifyCredentials().then((account) => {
-      dispatch(importFetchedAccount(account));
+      importEntities({ accounts: [account] });
       dispatch({ type: VERIFY_CREDENTIALS_SUCCESS, token, account });
       if (account.id === getState().me) dispatch(fetchMeSuccess(account));
       return account;
@@ -158,7 +156,7 @@ const verifyCredentials = (token: string, accountUrl?: string) =>
         // The user is waitlisted
         const account = error.response.json;
         const parsedAccount = credentialAccountSchema.parse(error.response.json);
-        dispatch(importFetchedAccount(parsedAccount));
+        importEntities({ accounts: [parsedAccount] });
         dispatch({ type: VERIFY_CREDENTIALS_SUCCESS, token, account: parsedAccount });
         if (account.id === getState().me) dispatch(fetchMeSuccess(parsedAccount));
         return parsedAccount;
@@ -174,7 +172,7 @@ const rememberAuthAccount = (accountUrl: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: AUTH_ACCOUNT_REMEMBER_REQUEST, accountUrl });
     return KVStore.getItemOrError(`authAccount:${accountUrl}`).then(account => {
-      dispatch(importFetchedAccount(account));
+      importEntities({ accounts: [account] });
       dispatch({ type: AUTH_ACCOUNT_REMEMBER_SUCCESS, account, accountUrl });
       if (account.id === getState().me) dispatch(fetchMeSuccess(account));
       return account;

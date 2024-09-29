@@ -1,6 +1,5 @@
-import { getClient } from '../api';
-
-import { importFetchedStatuses } from './importer';
+import { getClient } from 'pl-fe/api';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 
 import type { Status as BaseStatus, PaginatedResponse } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
@@ -43,7 +42,7 @@ const fetchStatusQuotes = (statusId: string) =>
     dispatch(action);
 
     return getClient(getState).statuses.getStatusQuotes(statusId).then(response => {
-      dispatch(importFetchedStatuses(response.items));
+      importEntities({ statuses: response.items });
       const action: FetchStatusQuotesSuccessAction = {
         type: STATUS_QUOTES_FETCH_SUCCESS,
         statusId,
@@ -94,7 +93,7 @@ const expandStatusQuotes = (statusId: string) =>
     dispatch(action);
 
     return next().then(response => {
-      dispatch(importFetchedStatuses(response.items));
+      importEntities({ statuses: response.items });
       const action: ExpandStatusQuotesSuccessAction = {
         type: STATUS_QUOTES_EXPAND_SUCCESS,
         statusId,

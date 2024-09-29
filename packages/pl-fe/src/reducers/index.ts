@@ -1,7 +1,6 @@
 import { Record as ImmutableRecord } from 'immutable';
 import { combineReducers } from 'redux-immutable';
 
-import { AUTH_LOGGED_OUT } from 'pl-fe/actions/auth';
 import * as BuildConfig from 'pl-fe/build-config';
 import entities from 'pl-fe/entity-store/reducer';
 
@@ -35,7 +34,6 @@ import plfe from './pl-fe';
 import polls from './polls';
 import profile_hover_card from './profile-hover-card';
 import push_notifications from './push-notifications';
-import relationships from './relationships';
 import scheduled_statuses from './scheduled-statuses';
 import search from './search';
 import security from './security';
@@ -83,7 +81,6 @@ const reducers = {
   polls,
   profile_hover_card,
   push_notifications,
-  relationships,
   scheduled_statuses,
   search,
   security,
@@ -128,7 +125,7 @@ const logOut = (state: any = StateRecord()): ReturnType<typeof appReducer> => {
 
 const rootReducer: typeof appReducer = (state, action) => {
   switch (action.type) {
-    case AUTH_LOGGED_OUT:
+    case 'AUTH_LOGGED_OUT':
       return appReducer(logOut(state), action);
     default:
       return appReducer(state, action);

@@ -4,6 +4,7 @@ import { defineMessages } from 'react-intl';
 
 import { getNotificationStatus } from 'pl-fe/features/notifications/components/notification';
 import { normalizeNotification } from 'pl-fe/normalizers';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { getFilters, regexFromFilters } from 'pl-fe/selectors';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 import { compareId } from 'pl-fe/utils/comparators';
@@ -11,14 +12,10 @@ import { unescapeHTML } from 'pl-fe/utils/html';
 import { joinPublicPath } from 'pl-fe/utils/static';
 
 import { fetchRelationships } from './accounts';
-import {
-  importFetchedAccount,
-  importFetchedStatus,
-} from './importer';
 import { saveMarker } from './markers';
 import { getSettings, saveSettings } from './settings';
 
-import type { Notification as BaseNotification } from 'pl-api';
+import type { Notification } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const NOTIFICATIONS_UPDATE = 'NOTIFICATIONS_UPDATE' as const;
@@ -54,7 +51,7 @@ defineMessages({
   mention: { id: 'notification.mention', defaultMessage: '{name} mentioned you' },
 });
 
-const fetchRelatedRelationships = (dispatch: AppDispatch, notifications: Array<BaseNotification>) => {
+const fetchRelatedRelationships = (dispatch: AppDispatch, notifications: Array<Notification>) => {
   const accountIds = notifications.filter(item => item.type === 'follow').map(item => item.account.id);
 
   if (accountIds.length > 0) {
@@ -62,24 +59,11 @@ const fetchRelatedRelationships = (dispatch: AppDispatch, notifications: Array<B
   }
 };
 
-const updateNotifications = (notification: BaseNotification) =>
+const updateNotifications = (notification: Notification) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const showInColumn = getSettings(getState()).getIn(['notifications', 'shows', notification.type], true);
 
-    if (notification.account) {
-      dispatch(importFetchedAccount(notification.account));
-    }
-
-    // Used by Move notification
-    if (notification.type === 'move' && notification.target) {
-      dispatch(importFetchedAccount(notification.target));
-    }
-
-    const status = getNotificationStatus(notification);
-
-    if (status) {
-      dispatch(importFetchedStatus(status));
-    }
+    importEntities({ notifications: [{ ...notification, accounts: [notification.account], duplicate: false }] });
 
     if (showInColumn) {
       dispatch({
@@ -91,7 +75,7 @@ const updateNotifications = (notification: BaseNotification) =>
     }
   };
 
-const updateNotificationsQueue = (notification: BaseNotification, intlMessages: Record<string, string>, intlLocale: string, curPath: string) =>
+const updateNotificationsQueue = (notification: Notification, intlMessages: Record<string, string>, intlLocale: string, curPath: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!notification.type) return; // drop invalid notifications
     if (notification.type === 'chat_mention') return; // Drop chat notifications, handle them per-chat

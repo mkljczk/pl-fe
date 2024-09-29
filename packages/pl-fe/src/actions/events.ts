@@ -1,12 +1,10 @@
 import { defineMessages } from 'react-intl';
 
+import { STATUS_FETCH_SOURCE_FAIL, STATUS_FETCH_SOURCE_REQUEST, STATUS_FETCH_SOURCE_SUCCESS } from 'pl-fe/actions/statuses';
 import { getClient } from 'pl-fe/api';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
-
-import { importFetchedStatus, importFetchedStatuses } from './importer';
-import { STATUS_FETCH_SOURCE_FAIL, STATUS_FETCH_SOURCE_REQUEST, STATUS_FETCH_SOURCE_SUCCESS } from './statuses';
 
 import type { Account, CreateEventParams, Location, MediaAttachment, PaginatedResponse, Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
@@ -133,7 +131,7 @@ const submitEvent = ({
         : getClient(state).events.editEvent(statusId, params)
     ).then((data) => {
       useModalsStore.getState().closeModal('COMPOSE_EVENT');
-      dispatch(importFetchedStatus(data));
+      importEntities({ statuses: [data] });
       dispatch(submitEventSuccess(data));
       toast.success(
         statusId ? messages.editSuccess : messages.success,
@@ -172,7 +170,7 @@ const joinEvent = (statusId: string, participationMessage?: string) =>
     dispatch(joinEventRequest(status.id));
 
     return getClient(getState).events.joinEvent(statusId, participationMessage).then((data) => {
-      dispatch(importFetchedStatus(data));
+      importEntities({ statuses: [data] });
       dispatch(joinEventSuccess(status.id));
       toast.success(
         data.event?.join_state === 'pending' ? messages.joinRequestSuccess : messages.joinSuccess,
@@ -214,7 +212,7 @@ const leaveEvent = (statusId: string) =>
     dispatch(leaveEventRequest(status.id));
 
     return getClient(getState).events.leaveEvent(statusId).then((data) => {
-      dispatch(importFetchedStatus(data));
+      importEntities({ statuses: [data] });
       dispatch(leaveEventSuccess(status.id));
     }).catch((error) => {
       dispatch(leaveEventFail(error, status.id));
@@ -480,7 +478,7 @@ const fetchRecentEvents = () =>
     return getClient(getState()).timelines.publicTimeline({
       only_events: true,
     }).then(response => {
-      dispatch(importFetchedStatuses(response.items));
+      importEntities({ statuses: response.items });
       dispatch({
         type: RECENT_EVENTS_FETCH_SUCCESS,
         statuses: response.items,
@@ -500,7 +498,7 @@ const fetchJoinedEvents = () =>
     dispatch({ type: JOINED_EVENTS_FETCH_REQUEST });
 
     getClient(getState).events.getJoinedEvents().then(response => {
-      dispatch(importFetchedStatuses(response.items));
+      importEntities({ statuses: response.items });
       dispatch({
         type: JOINED_EVENTS_FETCH_SUCCESS,
         statuses: response.items,

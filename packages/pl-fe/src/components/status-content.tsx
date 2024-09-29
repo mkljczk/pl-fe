@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import parse, { Element, type HTMLReactParserOptions, domToReact, type DOMNode } from 'html-react-parser';
 import React, { useState, useRef, useLayoutEffect, useMemo, useEffect } from 'react';
-import {  FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { collapseStatusSpoiler, expandStatusSpoiler } from 'pl-fe/actions/statuses';

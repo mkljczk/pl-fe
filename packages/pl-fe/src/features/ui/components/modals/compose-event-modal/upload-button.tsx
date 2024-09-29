@@ -29,7 +29,6 @@ const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
     fileElement.current?.click();
   };
 
-
   return (
     <HStack className='size-full cursor-pointer text-primary-500 dark:text-accent-blue' space={3} alignItems='center' justifyContent='center' element='label'>
       <Icon

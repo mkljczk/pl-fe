@@ -5,13 +5,9 @@ import { normalizeAccount, normalizeGroup, type Account, type Group } from 'pl-f
 import type { Account as BaseAccount, Group as BaseGroup, Poll, Status as BaseStatus } from 'pl-api';
 import type { AppDispatch } from 'pl-fe/store';
 
-const ACCOUNT_IMPORT = 'ACCOUNT_IMPORT';
-const ACCOUNTS_IMPORT = 'ACCOUNTS_IMPORT';
 const STATUS_IMPORT = 'STATUS_IMPORT';
 const STATUSES_IMPORT = 'STATUSES_IMPORT';
 const POLLS_IMPORT = 'POLLS_IMPORT';
-
-const importAccount = (data: BaseAccount) => importAccounts([data]);
 
 const importAccounts = (data: Array<BaseAccount>) => {
   let accounts: Array<Account> = [];
@@ -113,65 +109,19 @@ const isBroken = (status: BaseStatus) => {
   }
 };
 
-const importFetchedStatuses = (statuses: Array<Omit<BaseStatus, 'account'> & { account: BaseAccount | null }>) => (dispatch: AppDispatch) => {
-  const accounts: Record<string, BaseAccount> = {};
-  const normalStatuses: Array<BaseStatus> = [];
-  const polls: Array<Poll> = [];
-
-  const processStatus = (status: BaseStatus) => {
-    if (status.account === null) return;
-    // Skip broken statuses
-    if (isBroken(status)) return;
-
-    normalStatuses.push(status);
-
-    accounts[status.account.id] = status.account;
-    // if (status.accounts) {
-    //   accounts.push(...status.accounts);
-    // }
-
-    if (status.reblog?.id) {
-      processStatus(status.reblog as BaseStatus);
-    }
-
-    // Fedibird quotes
-    if (status.quote?.id) {
-      processStatus(status.quote as BaseStatus);
-    }
-
-    if (status.poll?.id) {
-      polls.push(status.poll);
-    }
-  };
-
-  (statuses as Array<BaseStatus>).forEach(processStatus);
-
-  dispatch(importPolls(polls));
-  dispatch(importFetchedAccounts(Object.values(accounts)));
-  dispatch(importStatuses(normalStatuses));
-};
-
 const importFetchedPoll = (poll: Poll) =>
   (dispatch: AppDispatch) => {
     dispatch(importPolls([poll]));
   };
 
 export {
-  ACCOUNT_IMPORT,
-  ACCOUNTS_IMPORT,
   STATUS_IMPORT,
   STATUSES_IMPORT,
   POLLS_IMPORT,
-  importAccount,
   importAccounts,
-  importGroup,
   importGroups,
   importStatus,
   importStatuses,
   importPolls,
-  importFetchedAccount,
-  importFetchedAccounts,
   importFetchedStatus,
-  importFetchedStatuses,
-  importFetchedPoll,
 };
