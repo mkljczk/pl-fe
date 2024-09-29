@@ -33,7 +33,7 @@ const importNotifications = (response: PaginatedResponse<BaseNotification>) => {
   };
 };
 
-const useNotifications = (params: UseNotificationParams) => {
+const useNotificationList = (params: UseNotificationParams) => {
   const client = useClient();
 
   const notificationsQuery = useInfiniteQuery({
@@ -57,12 +57,11 @@ const useNotifications = (params: UseNotificationParams) => {
 const prefetchNotifications = (client: PlApiClient, params: UseNotificationParams) =>
   queryClient.prefetchInfiniteQuery({
     queryKey: getQueryKey(params),
-    queryFn: ({ pageParam }) => (pageParam.next ? pageParam.next() : client.notifications.getNotifications({
+    queryFn: () => client.notifications.getNotifications({
       types: params.types,
       exclude_types: params.excludeTypes,
-    })).then(importNotifications),
+    }).then(importNotifications),
     initialPageParam: { previous: null, next: null } as Pick<PaginatedResponse<BaseNotification>, 'previous' | 'next'>,
-    getNextPageParam: (response) => response,
   });
 
-export { useNotifications, prefetchNotifications };
+export { useNotificationList, prefetchNotifications };

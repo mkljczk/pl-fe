@@ -6,13 +6,10 @@ import { getNotificationStatus } from 'pl-fe/features/notifications/components/n
 import { normalizeNotification } from 'pl-fe/normalizers';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { getFilters, regexFromFilters } from 'pl-fe/selectors';
-import { isLoggedIn } from 'pl-fe/utils/auth';
-import { compareId } from 'pl-fe/utils/comparators';
 import { unescapeHTML } from 'pl-fe/utils/html';
 import { joinPublicPath } from 'pl-fe/utils/static';
 
 import { fetchRelationships } from './accounts';
-import { saveMarker } from './markers';
 import { getSettings, saveSettings } from './settings';
 
 import type { Notification } from 'pl-api';
@@ -24,13 +21,6 @@ const NOTIFICATIONS_UPDATE_QUEUE = 'NOTIFICATIONS_UPDATE_QUEUE' as const;
 const NOTIFICATIONS_DEQUEUE = 'NOTIFICATIONS_DEQUEUE' as const;
 
 const NOTIFICATIONS_FILTER_SET = 'NOTIFICATIONS_FILTER_SET' as const;
-
-const NOTIFICATIONS_CLEAR = 'NOTIFICATIONS_CLEAR' as const;
-const NOTIFICATIONS_SCROLL_TOP = 'NOTIFICATIONS_SCROLL_TOP' as const;
-
-const NOTIFICATIONS_MARK_READ_REQUEST = 'NOTIFICATIONS_MARK_READ_REQUEST' as const;
-const NOTIFICATIONS_MARK_READ_SUCCESS = 'NOTIFICATIONS_MARK_READ_SUCCESS' as const;
-const NOTIFICATIONS_MARK_READ_FAIL = 'NOTIFICATIONS_MARK_READ_FAIL' as const;
 
 const MAX_QUEUED_NOTIFICATIONS = 40;
 
@@ -156,16 +146,7 @@ const dequeueNotifications = () =>
     dispatch({
       type: NOTIFICATIONS_DEQUEUE,
     });
-    dispatch(markReadNotifications());
-  };
-
-const scrollTopNotifications = (top: boolean) =>
-  (dispatch: AppDispatch) => {
-    dispatch({
-      type: NOTIFICATIONS_SCROLL_TOP,
-      top,
-    });
-    dispatch(markReadNotifications());
+    // dispatch(markReadNotifications());
   };
 
 const setFilter = (filterType: FilterType, abort?: boolean) =>
@@ -180,42 +161,16 @@ const setFilter = (filterType: FilterType, abort?: boolean) =>
     if (activeFilter !== filterType) dispatch(saveSettings());
   };
 
-const markReadNotifications = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
-
-    const state = getState();
-    const topNotificationId = state.notifications.items.first()?.id;
-    const lastReadId = state.notifications.lastRead;
-
-    if (topNotificationId && (lastReadId === -1 || compareId(topNotificationId, lastReadId) > 0)) {
-      const marker = {
-        notifications: {
-          last_read_id: topNotificationId,
-        },
-      };
-
-      dispatch(saveMarker(marker));
-    }
-  };
-
 export {
   NOTIFICATIONS_UPDATE,
   NOTIFICATIONS_UPDATE_NOOP,
   NOTIFICATIONS_UPDATE_QUEUE,
   NOTIFICATIONS_DEQUEUE,
   NOTIFICATIONS_FILTER_SET,
-  NOTIFICATIONS_CLEAR,
-  NOTIFICATIONS_SCROLL_TOP,
-  NOTIFICATIONS_MARK_READ_REQUEST,
-  NOTIFICATIONS_MARK_READ_SUCCESS,
-  NOTIFICATIONS_MARK_READ_FAIL,
   MAX_QUEUED_NOTIFICATIONS,
   type FilterType,
   updateNotifications,
   updateNotificationsQueue,
   dequeueNotifications,
-  scrollTopNotifications,
   setFilter,
-  markReadNotifications,
 };

@@ -3,17 +3,16 @@ import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import {
-  scrollTopNotifications,
-  dequeueNotifications,
-} from 'pl-fe/actions/notifications';
+import { dequeueNotifications } from 'pl-fe/actions/notifications';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import ScrollTopButton from 'pl-fe/components/scroll-top-button';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Column, Portal } from 'pl-fe/components/ui';
 import PlaceholderNotification from 'pl-fe/features/placeholder/components/placeholder-notification';
 import { useAppDispatch, useAppSelector, useSettings } from 'pl-fe/hooks';
-import { useNotifications } from 'pl-fe/pl-hooks/hooks/notifications/useNotifications';
+import { useMarker, useUpdateMarkerMutation } from 'pl-fe/pl-hooks/hooks/markers/useMarkers';
+import { useNotificationList } from 'pl-fe/pl-hooks/hooks/notifications/useNotificationList';
+import { compareId } from 'pl-fe/utils/comparators';
 import { NotificationType } from 'pl-fe/utils/notification';
 
 import FilterBar from './components/filter-bar';
@@ -42,15 +41,19 @@ const Notifications = () => {
   const intl = useIntl();
   const settings = useSettings();
 
+
   const activeFilter = settings.notifications.quickFilter.active as FilterType;
 
   const params = activeFilter === 'all' ? {} : {
     types: FILTER_TYPES[activeFilter] || [activeFilter] as Array<NotificationType>,
   };
 
-  const notificationsQuery = useNotifications(params);
+  const notificationListQuery = useNotificationList(params);
 
-  const notifications = notificationsQuery.data;
+  const markerQuery = useMarker('notifications');
+  const updateMarkerMutation = useUpdateMarkerMutation('notifications');
+
+  const notifications = notificationListQuery.data;
 
   const showFilterBar = settings.notifications.quickFilter.show;
   const totalQueuedNotificationsCount = useAppSelector(state => state.notifications.totalQueuedNotificationsCount || 0);
@@ -59,12 +62,23 @@ const Notifications = () => {
   const scrollableContentRef = useRef<Array<JSX.Element> | null>(null);
 
   const handleLoadOlder = useCallback(debounce(() => {
-    if (notificationsQuery.hasNextPage) notificationsQuery.fetchNextPage();
-  }, 300, { leading: true }), [notificationsQuery.hasNextPage]);
+    if (notificationListQuery.hasNextPage) notificationListQuery.fetchNextPage();
+  }, 300, { leading: true }), [notificationListQuery.hasNextPage]);
+
+  const handleScrollToTop = () => {
+    const topNotificationId = notificationListQuery.data[0];
+    const lastReadId = markerQuery.data?.last_read_id || -1;
+
+    if (topNotificationId && (lastReadId === -1 || compareId(topNotificationId, lastReadId) > 0)) {
+      updateMarkerMutation.mutate(topNotificationId);
+    }
+  };
 
   const handleScroll = useCallback(debounce((startIndex?: number) => {
-    dispatch(scrollTopNotifications(startIndex === 0));
-  }, 100), []);
+    if (startIndex !== 0) return;
+
+    handleScrollToTop();
+  }, 100), [handleScrollToTop]);
 
   const handleMoveUp = (id: string) => {
     const elementIndex = notifications.findIndex(item => item !== null && item === id) - 1;
@@ -87,16 +101,15 @@ const Notifications = () => {
     dispatch(dequeueNotifications());
   }, []);
 
-  const handleRefresh = useCallback(() => notificationsQuery.refetch(), []);
+  const handleRefresh = useCallback(() => notificationListQuery.refetch(), []);
 
   useEffect(() => {
     handleDequeueNotifications();
-    dispatch(scrollTopNotifications(true));
+    handleScrollToTop();
 
     return () => {
       handleLoadOlder.cancel();
       handleScroll.cancel();
-      dispatch(scrollTopNotifications(false));
     };
   }, []);
 
@@ -110,9 +123,9 @@ const Notifications = () => {
     ? (<FilterBar />)
     : null;
 
-  if (notificationsQuery.isLoading && scrollableContentRef.current) {
+  if (notificationListQuery.isLoading && scrollableContentRef.current) {
     scrollableContent = scrollableContentRef.current;
-  } else if (notifications.length > 0 || notificationsQuery.hasNextPage) {
+  } else if (notifications.length > 0 || notificationListQuery.hasNextPage) {
     scrollableContent = notifications.map((notificationId) => (
       <Notification
         key={notificationId}
@@ -129,9 +142,9 @@ const Notifications = () => {
 
   const scrollContainer = (
     <ScrollableList
-      isLoading={notificationsQuery.isFetching}
-      showLoading={notificationsQuery.isLoading}
-      hasMore={notificationsQuery.hasNextPage}
+      isLoading={notificationListQuery.isFetching}
+      showLoading={notificationListQuery.isLoading}
+      hasMore={notificationListQuery.hasNextPage}
       emptyMessage={emptyMessage}
       placeholderComponent={PlaceholderNotification}
       placeholderCount={20}

@@ -7,7 +7,6 @@ import { fetchReports, fetchUsers, fetchConfig } from 'pl-fe/actions/admin';
 import { fetchCustomEmojis } from 'pl-fe/actions/custom-emojis';
 import { fetchDraftStatuses } from 'pl-fe/actions/draft-statuses';
 import { fetchFilters } from 'pl-fe/actions/filters';
-import { fetchMarker } from 'pl-fe/actions/markers';
 import { FilterType } from 'pl-fe/actions/notifications';
 import { register as registerPushNotifications } from 'pl-fe/actions/push-notifications';
 import { fetchScheduledStatuses } from 'pl-fe/actions/scheduled-statuses';
@@ -34,7 +33,8 @@ import ProfileLayout from 'pl-fe/layouts/profile-layout';
 import RemoteInstanceLayout from 'pl-fe/layouts/remote-instance-layout';
 import SearchLayout from 'pl-fe/layouts/search-layout';
 import StatusLayout from 'pl-fe/layouts/status-layout';
-import { prefetchNotifications } from 'pl-fe/pl-hooks/hooks/notifications/useNotifications';
+import { prefetchMarker } from 'pl-fe/pl-hooks/hooks/markers/useMarkers';
+import { prefetchNotifications } from 'pl-fe/pl-hooks/hooks/notifications/useNotificationList';
 import { useUiStore } from 'pl-fe/stores';
 import { getVapidKey } from 'pl-fe/utils/auth';
 import { isStandalone } from 'pl-fe/utils/state';
@@ -391,7 +391,7 @@ const UI: React.FC<IUI> = ({ children }) => {
     }));
 
     prefetchNotifications(client, notificationsParams)
-      .then(() => dispatch(fetchMarker(['notifications'])))
+      .then(() => prefetchMarker(client, 'notifications'))
       .catch(console.error);
 
     if (account.is_admin || account.is_moderator) {
