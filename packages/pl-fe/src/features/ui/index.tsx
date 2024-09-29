@@ -35,7 +35,7 @@ import RemoteInstanceLayout from 'pl-fe/layouts/remote-instance-layout';
 import SearchLayout from 'pl-fe/layouts/search-layout';
 import StatusLayout from 'pl-fe/layouts/status-layout';
 import { prefetchNotifications } from 'pl-fe/pl-hooks/hooks/notifications/useNotifications';
-import { useDropdownMenuStore } from 'pl-fe/stores';
+import { useUiStore } from 'pl-fe/stores';
 import { getVapidKey } from 'pl-fe/utils/auth';
 import { isStandalone } from 'pl-fe/utils/state';
 
@@ -359,7 +359,7 @@ const UI: React.FC<IUI> = ({ children }) => {
   const vapidKey = useAppSelector(state => getVapidKey(state));
   const notificationFilter = useSettings().notifications.quickFilter.active as FilterType;
 
-  const { isOpen: dropdownMenuIsOpen } = useDropdownMenuStore();
+  const { isDropdownMenuOpen } = useUiStore();
   const standalone = useAppSelector(isStandalone);
 
   const { isDragging } = useDraggedFiles(node);
@@ -454,7 +454,7 @@ const UI: React.FC<IUI> = ({ children }) => {
   if (me === null) return null;
 
   const style: React.CSSProperties = {
-    pointerEvents: dropdownMenuIsOpen ? 'none' : undefined,
+    pointerEvents: isDropdownMenuOpen ? 'none' : undefined,
   };
 
   return (
