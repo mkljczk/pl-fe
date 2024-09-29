@@ -4,7 +4,10 @@ import { importAccounts, importGroups, importPolls, importStatuses } from 'pl-fe
 import { importEntities as importEntityStoreEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { queryClient } from 'pl-fe/queries/client';
-import { store } from 'pl-fe/store';
+
+let dispatch: AppDispatch;
+
+import('pl-fe/store').then(value => dispatch = value.store.dispatch).catch(() => {});
 
 import { DeduplicatedNotification } from './hooks/notifications/useNotifications';
 
@@ -17,6 +20,7 @@ import type {
   Status as BaseStatus,
   RelationshipSeveranceEvent,
 } from 'pl-api';
+import type { AppDispatch } from 'pl-fe/store';
 
 
 const minifyNotification = (notification: DeduplicatedNotification) => {
@@ -104,8 +108,6 @@ const importEntities = (entities: {
   statuses?: Array<BaseStatus>;
   relationships?: Array<BaseRelationship>;
 }) => {
-  const { dispatch } = store;
-
   const accounts: Record<string, BaseAccount> = {};
   const groups: Record<string, BaseGroup> = {};
   const notifications: Record<string, DeduplicatedNotification> = {};
