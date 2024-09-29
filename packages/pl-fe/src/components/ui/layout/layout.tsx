@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import React, { Suspense } from 'react';
 import StickyBox from 'react-sticky-box';
 
+import { useFeatures } from 'pl-fe/hooks';
+
 interface ISidebar {
   children: React.ReactNode;
 }
@@ -38,15 +40,20 @@ const Sidebar: React.FC<ISidebar> = ({ children }) => (
 );
 
 /** Center column container in the UI. */
-const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, className }) => (
-  <main
-    className={clsx({
-      'md:col-span-12 lg:col-span-9 xl:col-span-6 pb-36 black:border-gray-800 lg:black:border-l xl:black:border-r': true,
-    }, className)}
-  >
-    {children}
-  </main>
-);
+const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, className }) => {
+  const features = useFeatures();
+
+  return (
+    <main
+      className={clsx({
+        'md:col-span-12 lg:col-span-9 xl:col-span-6 pb-14 lg:pb-0 xl:pb-16 black:border-gray-800 lg:black:border-l xl:black:border-r': true,
+        'xl:pb-16': features.chats,
+      }, className)}
+    >
+      {children}
+    </main>
+  );
+};
 
 /** Right sidebar container in the UI. */
 const Aside: React.FC<IAside> = ({ children }) => (

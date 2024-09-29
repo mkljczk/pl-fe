@@ -66,7 +66,7 @@ const RemoteTimeline: React.FC<IRemoteTimeline> = ({ params }) => {
       )}
 
       <Timeline
-        className='black:p-0 black:sm:p-4'
+        className='black:p-0 black:sm:p-4 black:sm:pt-0'
         loadMoreClassName='black:sm:mx-4'
         scrollKey={`${timelineId}_${instance}_timeline`}
         timelineId={`${timelineId}${onlyMedia ? ':media' : ''}:${instance}`}
