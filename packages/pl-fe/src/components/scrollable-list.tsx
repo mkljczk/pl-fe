@@ -185,7 +185,7 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList &
           position: 'relative',
         }}
       >
-        {!showLoading && data.length ? (
+        {(!showLoading || showPlaceholder) && data.length ? (
           <>
             {prepend}
             {virtualItems.map((item) => (

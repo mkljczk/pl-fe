@@ -5,7 +5,7 @@ import { filterBadges, getTagDiff } from 'pl-fe/utils/badges';
 
 import { deleteFromTimelines } from './timelines';
 
-import type { Account, AdminGetAccountsParams, AdminGetReportsParams, PleromaConfig } from 'pl-api';
+import type { Account, AdminGetAccountsParams, AdminGetReportsParams, PleromaConfig, Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const ADMIN_CONFIG_FETCH_REQUEST = 'ADMIN_CONFIG_FETCH_REQUEST' as const;
@@ -109,13 +109,18 @@ const fetchReports = (params?: AdminGetReportsParams) =>
 
     return getClient(state).admin.reports.getReports(params)
       .then(({ items }) => {
+        const accounts: Array<Account> = [];
+        const statuses: Array<Status> = [];
+
         items.forEach((report) => {
-          const accounts = [];
           if (report.account?.account) accounts.push(report.account.account);
           if (report.target_account?.account) accounts.push(report.target_account.account);
-          importEntities({ accounts, statuses: report.statuses });
+          statuses.push(...report.statuses as Array<Status>);
+
           dispatch({ type: ADMIN_REPORTS_FETCH_SUCCESS, reports: items, params });
         });
+
+        importEntities({ accounts, statuses });
       }).catch(error => {
         dispatch({ type: ADMIN_REPORTS_FETCH_FAIL, error, params });
       });

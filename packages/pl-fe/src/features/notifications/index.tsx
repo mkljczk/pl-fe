@@ -129,8 +129,8 @@ const Notifications = () => {
 
   const scrollContainer = (
     <ScrollableList
-      isLoading={notificationsQuery.isLoading}
-      showLoading={notificationsQuery.isPending}
+      isLoading={notificationsQuery.isFetching}
+      showLoading={notificationsQuery.isLoading}
       hasMore={notificationsQuery.hasNextPage}
       emptyMessage={emptyMessage}
       placeholderComponent={PlaceholderNotification}

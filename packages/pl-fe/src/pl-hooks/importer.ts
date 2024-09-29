@@ -15,7 +15,7 @@ import type {
   Group as BaseGroup,
   Poll as BasePoll,
   Relationship as BaseRelationship,
-  StatusWithoutAccount as BaseStatus,
+  Status as BaseStatus,
 } from 'pl-api';
 import type { AppDispatch } from 'pl-fe/store';
 
@@ -64,9 +64,11 @@ const importEntities = (entities: {
   };
 
   const processStatus = (status: BaseStatus) => {
-    if (!statuses[status.id] || status.account || !statuses[status.id].account) statuses[status.id] = status;
+    if (status.account) {
+      statuses[status.id] = status;
+      processAccount(status.account);
+    }
 
-    if (status.account) processAccount(status.account);
     if (status.quote) processStatus(status.quote);
     if (status.reblog) processStatus(status.reblog);
     if (status.poll) polls[status.poll.id] = status.poll;
