@@ -1,5 +1,5 @@
 import { List as ImmutableList } from 'immutable';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
@@ -28,8 +28,6 @@ const AccountGallery = () => {
   const attachments: ImmutableList<AccountGalleryAttachment> = useAppSelector((state) => account ? getAccountGallery(state, account.id) : ImmutableList());
   const isLoading = useAppSelector((state) => state.timelines.get(`account:${account?.id}:with_replies:media`)?.isLoading);
   const hasMore = useAppSelector((state) => state.timelines.get(`account:${account?.id}:with_replies:media`)?.hasMore);
-
-  const node = useRef<HTMLDivElement>(null);
 
   const handleScrollToBottom = () => {
     if (hasMore) {
@@ -97,12 +95,13 @@ const AccountGallery = () => {
 
   return (
     <Column label={`@${account.acct}`} transparent withHeader={false}>
-      <div role='feed' className='grid grid-cols-2 gap-2 sm:grid-cols-3' ref={node}>
+      <div role='feed' className='grid grid-cols-2 gap-1 overflow-hidden rounded-md sm:grid-cols-3'>
         {attachments.map((attachment, index) => (
           <MediaItem
             key={`${attachment.status.id}+${attachment.id}`}
             attachment={attachment}
             onOpenMedia={handleOpenMedia}
+            isLast={index === attachments.size - 1}
           />
         ))}
 

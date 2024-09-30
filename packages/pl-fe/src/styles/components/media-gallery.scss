@@ -35,7 +35,7 @@
   }
 
   &__item-gifv-thumbnail {
-    @apply rounded-md cursor-zoom-in h-full object-cover relative w-full z-[1] transform-none top-0;
+    @apply cursor-zoom-in h-full object-cover relative w-full z-[1] transform-none top-0;
   }
 
   &__gifv__label,
