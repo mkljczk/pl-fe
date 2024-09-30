@@ -2,7 +2,7 @@
   @apply rounded-lg box-border overflow-hidden isolate relative w-full h-auto;
 
   &__item {
-    @apply rounded-sm border-0 box-border block float-left relative overflow-hidden;
+    @apply border-0 box-border block float-left relative overflow-hidden;
 
     &__icons {
       @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
@@ -60,10 +60,10 @@
   }
 
   &--compact {
-    @apply rounded-sm;
+    @apply flex rounded-sm w-fit gap-0.5;
 
     .media-gallery__item {
-      @apply h-12 w-12 inset-auto float-left mr-[5px] #{!important};
+      @apply h-12 w-12 inset-auto float-left #{!important};
 
       &-overflow {
         @apply text-xl;

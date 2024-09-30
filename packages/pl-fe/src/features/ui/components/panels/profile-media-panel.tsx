@@ -52,7 +52,7 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
 
     if (!nineAttachments.isEmpty()) {
       return (
-        <div className='grid grid-cols-3 gap-1 overflow-hidden rounded-md'>
+        <div className='grid grid-cols-3 gap-0.5 overflow-hidden rounded-md'>
           {nineAttachments.map((attachment, index) => (
             <MediaItem
               key={`${attachment.status.id}+${attachment.id}`}
