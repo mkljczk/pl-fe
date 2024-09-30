@@ -341,7 +341,7 @@ const Thread: React.FC<IThread> = ({
 
           <StatusActionBar
             status={status}
-            expandable={false}
+            expandable={!useWindowScroll}
             space='lg'
             withLabels
           />
@@ -391,7 +391,7 @@ const Thread: React.FC<IThread> = ({
         ref={node}
         className={
           clsx('bg-white black:bg-black dark:bg-primary-900', {
-            'h-full': !useWindowScroll,
+            'h-full overflow-auto': !useWindowScroll,
           })
         }
       >

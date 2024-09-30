@@ -316,7 +316,7 @@
       }
     ],
     "tailwindcss/migration-from-tailwind-2": "error",
-
+    "tailwindcss/no-custom-classname": "off",
 
     "formatjs/enforce-default-message": "error",
     "formatjs/enforce-id": "error",
