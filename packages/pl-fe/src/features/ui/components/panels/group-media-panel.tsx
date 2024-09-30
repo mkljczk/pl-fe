@@ -54,12 +54,13 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
 
     if (!nineAttachments.isEmpty()) {
       return (
-        <div className='grid grid-cols-3 gap-1'>
-          {nineAttachments.map((attachment, _index) => (
+        <div className='grid grid-cols-3 gap-1 overflow-hidden rounded-md'>
+          {nineAttachments.map((attachment, index) => (
             <MediaItem
               key={`${attachment.status.id}+${attachment.id}`}
               attachment={attachment}
               onOpenMedia={handleOpenMedia}
+              isLast={index === nineAttachments.size - 1}
             />
           ))}
         </div>
