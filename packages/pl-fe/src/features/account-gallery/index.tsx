@@ -14,21 +14,6 @@ import { useModalsStore } from 'pl-fe/stores';
 
 import MediaItem from './components/media-item';
 
-interface ILoadMoreMedia {
-  maxId: string | null;
-  onLoadMore: (value: string | null) => void;
-}
-
-const LoadMoreMedia: React.FC<ILoadMoreMedia> = ({ maxId, onLoadMore }) => {
-  const handleLoadMore = () => {
-    onLoadMore(maxId);
-  };
-
-  return (
-    <LoadMore onClick={handleLoadMore} />
-  );
-};
-
 const AccountGallery = () => {
   const dispatch = useAppDispatch();
   const { username } = useParams<{ username: string }>();
@@ -97,7 +82,7 @@ const AccountGallery = () => {
   let loadOlder = null;
 
   if (hasMore && !(isLoading && attachments.size === 0)) {
-    loadOlder = <LoadMore className='my-auto' visible={!isLoading} onClick={handleLoadOlder} />;
+    loadOlder = <LoadMore className='my-auto mt-4' visible={!isLoading} onClick={handleLoadOlder} />;
   }
 
   if (isUnavailable) {
@@ -113,9 +98,7 @@ const AccountGallery = () => {
   return (
     <Column label={`@${account.acct}`} transparent withHeader={false}>
       <div role='feed' className='grid grid-cols-2 gap-2 sm:grid-cols-3' ref={node}>
-        {attachments.map((attachment, index) => attachment === null ? (
-          <LoadMoreMedia key={'more:' + attachments.get(index + 1)?.id} maxId={index > 0 ? (attachments.get(index - 1)?.id || null) : null} onLoadMore={handleLoadMore} />
-        ) : (
+        {attachments.map((attachment, index) => (
           <MediaItem
             key={`${attachment.status.id}+${attachment.id}`}
             attachment={attachment}
@@ -128,9 +111,9 @@ const AccountGallery = () => {
             <FormattedMessage id='account_gallery.none' defaultMessage='No media to show.' />
           </div>
         )}
-
-        {loadOlder}
       </div>
+
+      {loadOlder}
 
       {isLoading && attachments.size === 0 && (
         <div className='relative flex-auto px-8 py-4'>
