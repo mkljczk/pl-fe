@@ -23,7 +23,9 @@ const messages = defineMessages({
   queue: { id: 'notifications.queue_label', defaultMessage: 'Click to see {count} new {count, plural, one {notification} other {notifications}}' },
 });
 
-const FILTER_TYPES: Record<string, Array<NotificationType> | undefined> = {
+type FilterType = 'mention' | 'favourite' | 'reblog' | 'poll' | 'status' | 'follow' | 'events';
+
+const FILTER_TYPES: { all: undefined } & Record<FilterType, Array<NotificationType>> = {
   all: undefined,
   mention: ['mention'],
   favourite: ['favourite', 'emoji_reaction'],
@@ -34,15 +36,13 @@ const FILTER_TYPES: Record<string, Array<NotificationType> | undefined> = {
   events: ['event_reminder', 'participation_request', 'participation_accepted'],
 };
 
-type FilterType = keyof typeof FILTER_TYPES;
-
 const Notifications = () => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const settings = useSettings();
 
 
-  const activeFilter = settings.notifications.quickFilter.active as FilterType;
+  const activeFilter = settings.notifications.quickFilter.active as FilterType | 'all';
 
   const params = activeFilter === 'all' ? {} : {
     types: FILTER_TYPES[activeFilter] || [activeFilter] as Array<NotificationType>,

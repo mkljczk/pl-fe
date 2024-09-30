@@ -2,9 +2,11 @@ import IntlMessageFormat from 'intl-messageformat';
 import 'intl-pluralrules';
 import { defineMessages } from 'react-intl';
 
+import { FILTER_TYPES, type FilterType } from 'pl-fe/features/notifications';
 import { getNotificationStatus } from 'pl-fe/features/notifications/components/notification';
 import { normalizeNotification } from 'pl-fe/normalizers';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
+import { queryClient } from 'pl-fe/queries/client';
 import { getFilters, regexFromFilters } from 'pl-fe/selectors';
 import { unescapeHTML } from 'pl-fe/utils/html';
 import { joinPublicPath } from 'pl-fe/utils/static';
@@ -16,26 +18,12 @@ import type { Notification } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const NOTIFICATIONS_UPDATE = 'NOTIFICATIONS_UPDATE' as const;
-const NOTIFICATIONS_UPDATE_NOOP = 'NOTIFICATIONS_UPDATE_NOOP' as const;
 const NOTIFICATIONS_UPDATE_QUEUE = 'NOTIFICATIONS_UPDATE_QUEUE' as const;
 const NOTIFICATIONS_DEQUEUE = 'NOTIFICATIONS_DEQUEUE' as const;
 
 const NOTIFICATIONS_FILTER_SET = 'NOTIFICATIONS_FILTER_SET' as const;
 
 const MAX_QUEUED_NOTIFICATIONS = 40;
-
-type FILTER_TYPES = {
-  all: undefined;
-  mention: ['mention'];
-  favourite: ['favourite', 'emoji_reaction'];
-  reblog: ['reblog'];
-  poll: ['poll'];
-  status: ['status'];
-  follow: ['follow', 'follow_request'];
-  events: ['event_reminder', 'participation_request', 'participation_accepted'];
-};
-
-type FilterType = keyof FILTER_TYPES;
 
 defineMessages({
   mention: { id: 'notification.mention', defaultMessage: '{name} mentioned you' },
@@ -71,7 +59,6 @@ const updateNotificationsQueue = (notification: Notification, intlMessages: Reco
     if (notification.type === 'chat_mention') return; // Drop chat notifications, handle them per-chat
 
     const filters = getFilters(getState(), { contextType: 'notifications' });
-    const playSound = getSettings(getState()).getIn(['notifications', 'sounds', notification.type]);
 
     const status = getNotificationStatus(notification);
 
@@ -109,13 +96,6 @@ const updateNotificationsQueue = (notification: Notification, intlMessages: Reco
       console.warn(e);
     }
 
-    if (playSound && !filtered) {
-      dispatch({
-        type: NOTIFICATIONS_UPDATE_NOOP,
-        meta: { sound: 'boop' },
-      });
-    }
-
     if (isOnNotificationsPage) {
       dispatch({
         type: NOTIFICATIONS_UPDATE_QUEUE,
@@ -149,9 +129,13 @@ const dequeueNotifications = () =>
     // dispatch(markReadNotifications());
   };
 
-const setFilter = (filterType: FilterType, abort?: boolean) =>
+const setFilter = (filterType: FilterType | 'all') =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const activeFilter = getSettings(getState()).getIn(['notifications', 'quickFilter', 'active']);
+
+    queryClient.resetQueries({
+      queryKey: ['notifications', 'lists', filterType === 'all' ? 'all' : FILTER_TYPES[filterType].join('|')],
+    });
 
     dispatch({
       type: NOTIFICATIONS_FILTER_SET,
@@ -163,7 +147,6 @@ const setFilter = (filterType: FilterType, abort?: boolean) =>
 
 export {
   NOTIFICATIONS_UPDATE,
-  NOTIFICATIONS_UPDATE_NOOP,
   NOTIFICATIONS_UPDATE_QUEUE,
   NOTIFICATIONS_DEQUEUE,
   NOTIFICATIONS_FILTER_SET,

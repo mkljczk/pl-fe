@@ -16,6 +16,7 @@ type UseNotificationParams = {
 
 const getQueryKey = (params: UseNotificationParams) => [
   'notifications',
+  'lists',
   params.types ? params.types.join('|') : params.excludeTypes ? ('exclude:' + params.excludeTypes.join('|')) : 'all',
 ];
 
