@@ -1,3 +1,4 @@
+import { useNotification } from 'pl-fe/pl-hooks/hooks/notifications/useNotification';
 import React, { useCallback } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage, IntlShape, MessageDescriptor } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
@@ -13,7 +14,6 @@ import AccountContainer from 'pl-fe/containers/account-container';
 import StatusContainer from 'pl-fe/containers/status-container';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch, useInstance, useLoggedIn } from 'pl-fe/hooks';
-import { useNotification } from 'pl-fe/pl-hooks/hooks/notifications/useNotification';
 import { useModalsStore } from 'pl-fe/stores';
 import { NotificationType } from 'pl-fe/utils/notification';
 
@@ -303,7 +303,7 @@ const Notification: React.FC<INotification> = ({ hidden = false, id, onMoveUp, o
       return (
         <Icon
           src={icons[displayedType]!}
-          className='flex-none text-primary-600 dark:text-primary-400'
+          className='text-primary-600 dark:text-primary-400 flex-none'
         />
       );
     } else {

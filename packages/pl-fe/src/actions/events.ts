@@ -1,8 +1,8 @@
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { defineMessages } from 'react-intl';
 
 import { STATUS_FETCH_SOURCE_FAIL, STATUS_FETCH_SOURCE_REQUEST, STATUS_FETCH_SOURCE_SUCCESS } from 'pl-fe/actions/statuses';
 import { getClient } from 'pl-fe/api';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 

@@ -139,7 +139,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
                 <HoverRefWrapper accountId={mention.id} inline>
                   <Link
                     to={`/@${mention.acct}`}
-                    className='text-primary-600 hover:underline dark:text-accent-blue'
+                    className='text-primary-600 dark:text-accent-blue hover:underline'
                     dir='ltr'
                     onClick={(e) => e.stopPropagation()}
                   >

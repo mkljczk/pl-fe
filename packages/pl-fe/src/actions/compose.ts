@@ -1,11 +1,11 @@
 import throttle from 'lodash/throttle';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { defineMessages, IntlShape } from 'react-intl';
 
 import { getClient } from 'pl-fe/api';
 import { isNativeEmoji } from 'pl-fe/features/emoji';
 import emojiSearch from 'pl-fe/features/emoji/search';
 import { Language } from 'pl-fe/features/preferences';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { selectAccount, selectOwnAccount, makeGetAccount } from 'pl-fe/selectors';
 import { tagHistory } from 'pl-fe/settings';
 import { useModalsStore } from 'pl-fe/stores';

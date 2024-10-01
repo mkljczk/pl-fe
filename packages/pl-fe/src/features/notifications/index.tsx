@@ -1,5 +1,7 @@
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
+import { useMarker, useUpdateMarkerMutation } from 'pl-fe/pl-hooks/hooks/markers/useMarkers';
+import { useNotificationList } from 'pl-fe/pl-hooks/hooks/notifications/useNotificationList';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -10,8 +12,6 @@ import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Column, Portal } from 'pl-fe/components/ui';
 import PlaceholderNotification from 'pl-fe/features/placeholder/components/placeholder-notification';
 import { useAppDispatch, useAppSelector, useSettings } from 'pl-fe/hooks';
-import { useMarker, useUpdateMarkerMutation } from 'pl-fe/pl-hooks/hooks/markers/useMarkers';
-import { useNotificationList } from 'pl-fe/pl-hooks/hooks/notifications/useNotificationList';
 import { compareId } from 'pl-fe/utils/comparators';
 import { NotificationType } from 'pl-fe/utils/notification';
 
@@ -23,9 +23,10 @@ const messages = defineMessages({
   queue: { id: 'notifications.queue_label', defaultMessage: 'Click to see {count} new {count, plural, one {notification} other {notifications}}' },
 });
 
-type FilterType = 'mention' | 'favourite' | 'reblog' | 'poll' | 'status' | 'follow' | 'events';
+type SpecifiedFilterType = 'mention' | 'favourite' | 'reblog' | 'poll' | 'status' | 'follow' | 'events';
+type FilterType = SpecifiedFilterType | 'all';
 
-const FILTER_TYPES: { all: undefined } & Record<FilterType, Array<NotificationType>> = {
+const FILTER_TYPES: { all: undefined } & Record<SpecifiedFilterType, Array<NotificationType>> = {
   all: undefined,
   mention: ['mention'],
   favourite: ['favourite', 'emoji_reaction'],
@@ -41,8 +42,7 @@ const Notifications = () => {
   const intl = useIntl();
   const settings = useSettings();
 
-
-  const activeFilter = settings.notifications.quickFilter.active as FilterType | 'all';
+  const activeFilter = settings.notifications.quickFilter.active as FilterType;
 
   const params = activeFilter === 'all' ? {} : {
     types: FILTER_TYPES[activeFilter] || [activeFilter] as Array<NotificationType>,
@@ -150,7 +150,7 @@ const Notifications = () => {
       placeholderCount={20}
       onLoadMore={handleLoadOlder}
       onScroll={handleScroll}
-      listClassName={clsx('divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800', {
+      listClassName={clsx('black:divide-gray-800 dark:divide-primary-800 divide-y divide-solid divide-gray-200', {
         'animate-pulse': notifications.length === 0,
       })}
     >

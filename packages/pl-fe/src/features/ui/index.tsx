@@ -1,4 +1,6 @@
 import clsx from 'clsx';
+import { prefetchMarker } from 'pl-fe/pl-hooks/hooks/markers/useMarkers';
+import { prefetchNotifications } from 'pl-fe/pl-hooks/hooks/notifications/useNotificationList';
 import React, { Suspense, lazy, useEffect, useRef } from 'react';
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom';
 
@@ -33,8 +35,6 @@ import ProfileLayout from 'pl-fe/layouts/profile-layout';
 import RemoteInstanceLayout from 'pl-fe/layouts/remote-instance-layout';
 import SearchLayout from 'pl-fe/layouts/search-layout';
 import StatusLayout from 'pl-fe/layouts/status-layout';
-import { prefetchMarker } from 'pl-fe/pl-hooks/hooks/markers/useMarkers';
-import { prefetchNotifications } from 'pl-fe/pl-hooks/hooks/notifications/useNotificationList';
 import { useUiStore } from 'pl-fe/stores';
 import { getVapidKey } from 'pl-fe/utils/auth';
 import { isStandalone } from 'pl-fe/utils/state';
@@ -485,7 +485,7 @@ const UI: React.FC<IUI> = ({ children }) => {
 
           {me && features.chats && (
             <div className='hidden xl:block'>
-              <Suspense fallback={<div className='fixed bottom-0 z-[99] flex h-16 w-96 animate-pulse flex-col rounded-t-lg bg-white shadow-3xl dark:bg-gray-900 ltr:right-5 rtl:left-5' />}>
+              <Suspense fallback={<div className='shadow-3xl fixed bottom-0 z-[99] flex h-16 w-96 animate-pulse flex-col rounded-t-lg bg-white ltr:right-5 rtl:left-5 dark:bg-gray-900' />}>
                 <ChatWidget />
               </Suspense>
             </div>

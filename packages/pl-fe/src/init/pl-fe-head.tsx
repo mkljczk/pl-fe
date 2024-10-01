@@ -30,7 +30,7 @@ const PlFeHead: React.FC<IPlFeHead> = ({ children }) => {
   const themeCss = generateThemeCss(demo ? normalizePlFeConfig({ brandColor: '#d80482' }) : plFeConfig);
   const dsn = plFeConfig.sentryDsn;
 
-  const bodyClass = clsx('h-full bg-white text-base antialiased black:bg-black dark:bg-gray-800', {
+  const bodyClass = clsx('black:bg-black h-full bg-white text-base antialiased dark:bg-gray-800', {
     'no-reduce-motion': !reduceMotion,
     'underline-links': underlineLinks,
     'demetricator': demetricator,

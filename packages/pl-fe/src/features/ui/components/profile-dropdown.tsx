@@ -109,7 +109,7 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
       component={ProfileDropdownMenu}
     >
       <button
-        className='w-full rounded-full focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:ring-gray-800 dark:ring-offset-0 dark:focus:ring-primary-500'
+        className='focus:ring-primary-500 dark:focus:ring-primary-500 w-full rounded-full focus:ring-2 focus:ring-offset-2 dark:ring-gray-800 dark:ring-offset-0'
         type='button'
       >
         {children}
@@ -124,7 +124,7 @@ interface MenuItemProps {
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ className, menuItem }) => {
-  const baseClassName = clsx(className, 'block w-full cursor-pointer truncate px-4 py-2.5 text-left text-sm text-gray-700 outline-none hover:bg-gray-100 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:text-gray-500 dark:hover:bg-gray-800 dark:focus:ring-offset-0 rtl:text-right');
+  const baseClassName = clsx(className, 'focus:ring-primary-500 block w-full cursor-pointer truncate px-4 py-2.5 text-left text-sm text-gray-700 outline-none hover:bg-gray-100 focus:ring-2 focus:ring-offset-2 rtl:text-right dark:text-gray-500 dark:hover:bg-gray-800 dark:focus:ring-offset-0');
 
   if (menuItem.toggle) {
     return (

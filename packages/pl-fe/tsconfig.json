@@ -9,12 +9,13 @@
     "target": "ESNext",
     "jsx": "react",
     "allowJs": true,
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "paths": {
       "pl-fe/*": ["src/*"],
+      "pl-hooks/*": ["src/pl-hooks/*"],
     },
     "typeRoots": [
       "./src/types",

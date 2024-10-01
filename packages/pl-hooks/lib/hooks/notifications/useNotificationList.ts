@@ -1,8 +1,8 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-
-import { useClient } from 'pl-fe/hooks';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { deduplicateNotifications } from 'pl-fe/pl-hooks/normalizers/deduplicateNotifications';
+
+import { useClient } from 'pl-fe/hooks';
 import { queryClient } from 'pl-fe/queries/client';
 import { flattenPages } from 'pl-fe/utils/queries';
 

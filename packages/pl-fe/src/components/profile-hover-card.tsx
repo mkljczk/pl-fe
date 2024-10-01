@@ -110,7 +110,7 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
       onMouseEnter={() => updateAccountHoverCard()}
       onMouseLeave={() => closeAccountHoverCard()}
     >
-      <Card variant='rounded' className='relative isolate overflow-hidden black:rounded-xl black:border black:border-gray-800'>
+      <Card variant='rounded' className='black:rounded-xl black:border black:border-gray-800 relative isolate overflow-hidden'>
         <CardBody>
           <Stack space={2}>
             <UserPanel

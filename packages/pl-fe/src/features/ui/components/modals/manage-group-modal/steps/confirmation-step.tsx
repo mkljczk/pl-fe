@@ -42,12 +42,12 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
       <Stack space={3}>
         <Stack>
           <label
-            className='dark:sm:shadow-inset relative h-24 w-full cursor-pointer overflow-hidden rounded-lg bg-primary-100 text-primary-500 dark:bg-gray-800 dark:text-accent-blue sm:h-36 sm:shadow'
+            className='dark:sm:shadow-inset bg-primary-100 text-primary-500 dark:text-accent-blue relative h-24 w-full cursor-pointer overflow-hidden rounded-lg sm:h-36 sm:shadow dark:bg-gray-800'
           >
             {group.header && <img className='size-full object-cover' src={group.header} alt={group.header_description} />}
           </label>
 
-          <label className='mx-auto -mt-10 cursor-pointer rounded-full bg-primary-500 ring-2 ring-white dark:ring-primary-900'>
+          <label className='bg-primary-500 dark:ring-primary-900 mx-auto -mt-10 cursor-pointer rounded-full ring-2 ring-white'>
             {group.avatar && <Avatar src={group.avatar} alt={group.avatar_description} size={80} />}
           </label>
         </Stack>
@@ -56,7 +56,7 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
           <Text size='2xl' weight='bold' align='center'>{group.display_name}</Text>
           <Text
             size='md'
-            className='mx-auto max-w-sm [&_a]:text-primary-600 [&_a]:hover:underline [&_a]:dark:text-accent-blue'
+            className='[&_a]:text-primary-600 [&_a]:dark:text-accent-blue mx-auto max-w-sm [&_a]:hover:underline'
             dangerouslySetInnerHTML={{ __html: group.note_emojified }}
           />
         </Stack>

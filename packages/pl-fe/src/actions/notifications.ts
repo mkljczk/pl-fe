@@ -1,11 +1,11 @@
 import IntlMessageFormat from 'intl-messageformat';
 import 'intl-pluralrules';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { defineMessages } from 'react-intl';
 
 import { FILTER_TYPES, type FilterType } from 'pl-fe/features/notifications';
 import { getNotificationStatus } from 'pl-fe/features/notifications/components/notification';
 import { normalizeNotification } from 'pl-fe/normalizers';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { queryClient } from 'pl-fe/queries/client';
 import { getFilters, regexFromFilters } from 'pl-fe/selectors';
 import { unescapeHTML } from 'pl-fe/utils/html';
@@ -129,7 +129,7 @@ const dequeueNotifications = () =>
     // dispatch(markReadNotifications());
   };
 
-const setFilter = (filterType: FilterType | 'all') =>
+const setFilter = (filterType: FilterType) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const activeFilter = getSettings(getState()).getIn(['notifications', 'quickFilter', 'active']);
 

@@ -1,5 +1,6 @@
-import { getClient } from 'pl-fe/api';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
+
+import { getClient } from 'pl-fe/api';
 import { selectAccount } from 'pl-fe/selectors';
 import { setSentryAccount } from 'pl-fe/sentry';
 import KVStore from 'pl-fe/storage/kv-store';

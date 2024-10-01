@@ -1,8 +1,8 @@
 import { Map as ImmutableMap } from 'immutable';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 
 import { getLocale, getSettings } from 'pl-fe/actions/settings';
 import { getClient } from 'pl-fe/api';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { shouldFilter } from 'pl-fe/utils/timelines';
 
 import type { PaginatedResponse, Status as BaseStatus, PublicTimelineParams, HomeTimelineParams, ListTimelineParams, HashtagTimelineParams, GetAccountStatusesParams, GroupTimelineParams } from 'pl-api';

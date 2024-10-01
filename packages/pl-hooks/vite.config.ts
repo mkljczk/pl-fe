@@ -11,7 +11,7 @@ export default defineConfig({
       entry: resolve(__dirname, 'lib/main.ts'),
       fileName: (format) => `main.${format}.js`,
       formats: ['es'],
-      name: 'pl-api',
+      name: 'pl-hooks',
     },
     target: 'esnext',
     sourcemap: true,
