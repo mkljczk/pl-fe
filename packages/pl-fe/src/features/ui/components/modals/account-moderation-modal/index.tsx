@@ -106,7 +106,7 @@ const AccountModerationModal: React.FC<AccountModerationModalProps & BaseModalPr
         <OutlineBox>
           <Account
             account={account}
-            showProfileHoverCard={false}
+            showAccountHoverCard={false}
             withLinkToProfile={false}
             hideActions
           />

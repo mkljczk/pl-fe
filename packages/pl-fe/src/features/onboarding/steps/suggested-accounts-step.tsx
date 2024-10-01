@@ -28,7 +28,7 @@ const SuggestedAccountsStep = ({ onNext }: { onNext: () => void }) => {
             <div key={suggestion.account.id} className='py-2'>
               <AccountContainer
                 id={suggestion.account.id}
-                showProfileHoverCard={false}
+                showAccountHoverCard={false}
                 withLinkToProfile={false}
               />
             </div>

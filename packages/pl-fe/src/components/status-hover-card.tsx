@@ -1,6 +1,6 @@
 import { shift, useFloating, useTransitionStyles } from '@floating-ui/react';
 import clsx from 'clsx';
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
@@ -35,7 +35,7 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
   useEffect(() => {
     const unlisten = history.listen(() => {
       showStatusHoverCard.cancel();
-      closeStatusHoverCard();
+      closeStatusHoverCard(true);
     });
 
     return () => {
@@ -68,13 +68,13 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
     },
   });
 
-  const handleMouseEnter = useCallback((): React.MouseEventHandler => () => {
+  const handleMouseEnter = () => {
     updateStatusHoverCard();
-  }, []);
+  };
 
-  const handleMouseLeave = useCallback((): React.MouseEventHandler => () => {
+  const handleMouseLeave = () => {
     closeStatusHoverCard(true);
-  }, []);
+  };
 
   if (!statusId) return null;
 
@@ -103,8 +103,8 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
         left: x ?? 0,
         ...styles,
       }}
-      onMouseEnter={handleMouseEnter()}
-      onMouseLeave={handleMouseLeave()}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Card className='relative overflow-hidden black:rounded-xl black:border black:border-gray-800'>
         <CardBody>

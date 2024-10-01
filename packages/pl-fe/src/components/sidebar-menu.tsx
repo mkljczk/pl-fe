@@ -132,7 +132,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   const renderAccount = (account: AccountEntity) => (
     <a href='#' className='block py-2' onClick={handleSwitchAccount(account)} key={account.id}>
       <div className='pointer-events-none'>
-        <Account account={account} showProfileHoverCard={false} withRelationship={false} withLinkToProfile={false} />
+        <Account account={account} showAccountHoverCard={false} withRelationship={false} withLinkToProfile={false} />
       </div>
     </a>
   );
@@ -197,7 +197,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
             {account ? (
               <Stack space={4}>
                 <Link to={`/@${account.acct}`} onClick={closeSidebar}>
-                  <Account account={account} showProfileHoverCard={false} withLinkToProfile={false} />
+                  <Account account={account} showAccountHoverCard={false} withLinkToProfile={false} />
                 </Link>
 
                 <ProfileStats

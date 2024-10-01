@@ -88,7 +88,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
           id={account.id}
           timestamp={status.created_at}
           withRelationship={false}
-          showProfileHoverCard={!compose}
+          showAccountHoverCard={!compose}
           withLinkToProfile={!compose}
         />
 

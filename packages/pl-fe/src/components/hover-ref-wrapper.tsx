@@ -7,7 +7,7 @@ import { useAppDispatch } from 'pl-fe/hooks';
 import { isMobile } from 'pl-fe/is-mobile';
 import { useAccountHoverCardStore } from 'pl-fe/stores';
 
-const showProfileHoverCard = debounce((openAccountHoverCard, ref, accountId) => {
+const showAccountHoverCard = debounce((openAccountHoverCard, ref, accountId) => {
   openAccountHoverCard(ref, accountId);
 }, 600);
 
@@ -30,17 +30,17 @@ const HoverRefWrapper: React.FC<IHoverRefWrapper> = ({ accountId, children, inli
   const handleMouseEnter = () => {
     if (!isMobile(window.innerWidth)) {
       dispatch(fetchAccount(accountId));
-      showProfileHoverCard(openAccountHoverCard, ref, accountId);
+      showAccountHoverCard(openAccountHoverCard, ref, accountId);
     }
   };
 
   const handleMouseLeave = () => {
-    showProfileHoverCard.cancel();
+    showAccountHoverCard.cancel();
     setTimeout(() => closeAccountHoverCard(), 300);
   };
 
   const handleClick = () => {
-    showProfileHoverCard.cancel();
+    showAccountHoverCard.cancel();
     closeAccountHoverCard(true);
   };
 
@@ -57,4 +57,4 @@ const HoverRefWrapper: React.FC<IHoverRefWrapper> = ({ accountId, children, inli
   );
 };
 
-export { HoverRefWrapper as default, showProfileHoverCard };
+export { HoverRefWrapper as default, showAccountHoverCard };

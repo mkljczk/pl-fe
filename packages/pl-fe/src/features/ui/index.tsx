@@ -89,7 +89,7 @@ import {
   FollowRecommendations,
   Directory,
   SidebarMenu,
-  ProfileHoverCard,
+  AccountHoverCard,
   StatusHoverCard,
   Share,
   NewStatus,
@@ -485,7 +485,7 @@ const UI: React.FC<IUI> = ({ children }) => {
           <ThumbNavigation />
 
           <Suspense>
-            <ProfileHoverCard />
+            <AccountHoverCard />
           </Suspense>
 
           <Suspense>

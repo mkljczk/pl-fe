@@ -57,7 +57,7 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   }, 2000);
 
   const renderAccount = (account: AccountEntity) => (
-    <Account account={account} showProfileHoverCard={false} withLinkToProfile={false} hideActions />
+    <Account account={account} showAccountHoverCard={false} withLinkToProfile={false} hideActions />
   );
 
   const ProfileDropdownMenu = useMemo(() => {

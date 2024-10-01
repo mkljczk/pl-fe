@@ -12,7 +12,7 @@ import { UserPanel } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 import { useAccountHoverCardStore } from 'pl-fe/stores';
 
-import { showProfileHoverCard } from './hover-ref-wrapper';
+import { showAccountHoverCard } from './hover-ref-wrapper';
 import { dateFormatOptions } from './relative-timestamp';
 import Scrobble from './scrobble';
 import { Card, CardBody, HStack, Icon, Stack, Text } from './ui';
@@ -33,12 +33,12 @@ const getBadges = (
   return badges;
 };
 
-interface IProfileHoverCard {
+interface IAccountHoverCard {
   visible?: boolean;
 }
 
 /** Popup profile preview that appears when hovering avatars and display names. */
-const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
+const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const intl = useIntl();
@@ -55,8 +55,8 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
 
   useEffect(() => {
     const unlisten = history.listen(() => {
-      showProfileHoverCard.cancel();
-      closeAccountHoverCard();
+      showAccountHoverCard.cancel();
+      closeAccountHoverCard(true);
     });
 
     return () => {
@@ -88,6 +88,14 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
     },
   });
 
+  const handleMouseEnter = () => {
+    updateAccountHoverCard();
+  };
+
+  const handleMouseLeave = () => {
+    closeAccountHoverCard(true);
+  };
+
   if (!account) return null;
   const accountBio = { __html: account.note_emojified };
   const memberSinceDate = intl.formatDate(account.created_at, { month: 'long', year: 'numeric' });
@@ -107,8 +115,8 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
         left: x ?? 0,
         ...styles,
       }}
-      onMouseEnter={() => updateAccountHoverCard()}
-      onMouseLeave={() => closeAccountHoverCard()}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Card variant='rounded' className='relative isolate overflow-hidden black:rounded-xl black:border black:border-gray-800'>
         <CardBody>
@@ -164,4 +172,4 @@ const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }) => {
   );
 };
 
-export { ProfileHoverCard as default };
+export { AccountHoverCard as default };

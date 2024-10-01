@@ -403,7 +403,7 @@ const Status: React.FC<IStatus> = (props) => {
             action={accountAction}
             hideActions={!accountAction}
             showEdit={!!actualStatus.edited_at}
-            showProfileHoverCard={hoverable}
+            showAccountHoverCard={hoverable}
             withLinkToProfile={hoverable}
             approvalStatus={actualStatus.approval_status}
             avatarSize={avatarSize}

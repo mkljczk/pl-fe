@@ -41,7 +41,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({ className, status, hideActi
         {...actions}
         id={status.account.id}
         timestamp={status.created_at}
-        showProfileHoverCard={false}
+        showAccountHoverCard={false}
         withLinkToProfile={false}
         hideActions={hideActions}
       />
