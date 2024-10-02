@@ -3,7 +3,6 @@ import debounce from 'lodash/debounce';
 import React, { useState, useRef, useCallback } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 
 import { accountLookup } from 'pl-fe/actions/accounts';
 import { register, verifyCredentials } from 'pl-fe/actions/auth';
@@ -63,7 +62,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
     agreement: false,
     locale: '',
   });
-  const [captchaIdempotencyKey, setCaptchaIdempotencyKey] = useState(uuidv4());
+  const [captchaIdempotencyKey, setCaptchaIdempotencyKey] = useState(crypto.randomUUID());
   const [usernameUnavailable, setUsernameUnavailable] = useState(false);
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [passwordMismatch, setPasswordMismatch] = useState(false);
@@ -227,7 +226,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   };
 
   const refreshCaptcha = () => {
-    setCaptchaIdempotencyKey(uuidv4());
+    setCaptchaIdempotencyKey(crypto.randomUUID());
     setParams(params => ({ ...params, captcha_solution: '' }));
   };
 

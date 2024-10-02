@@ -17,17 +17,18 @@ import {
   type Relationship,
   type Status,
 } from 'pl-api';
-import { v4 as uuidv4 } from 'uuid';
 
 import type { PartialDeep } from 'type-fest';
+
+const uuid = crypto.randomUUID;
 
 // TODO: there's probably a better way to create these factory functions.
 // This looks promising but didn't work on my first attempt: https://github.com/anatine/zod-plugins/tree/main/packages/zod-mock
 
 const buildAccount = (props: PartialDeep<Account> = {}): Account =>
   accountSchema.parse(Object.assign({
-    id: uuidv4(),
-    url: `https://soapbox.test/users/${uuidv4()}`,
+    id: uuid(),
+    url: `https://soapbox.test/users/${uuid()}`,
   }, props));
 
 const buildCard = (props: PartialDeep<PreviewCard> = {}): PreviewCard =>
@@ -37,22 +38,22 @@ const buildCard = (props: PartialDeep<PreviewCard> = {}): PreviewCard =>
 
 const buildGroup = (props: PartialDeep<Group> = {}): Group =>
   groupSchema.parse(Object.assign({
-    id: uuidv4(),
+    id: uuid(),
     owner: {
-      id: uuidv4(),
+      id: uuid(),
     },
   }, props));
 
 const buildGroupRelationship = (props: PartialDeep<GroupRelationship> = {}): GroupRelationship =>
   groupRelationshipSchema.parse(Object.assign({
-    id: uuidv4(),
+    id: uuid(),
   }, props));
 
 const buildGroupMember = (
   props: PartialDeep<GroupMember> = {},
   accountProps: PartialDeep<Account> = {},
 ): GroupMember => groupMemberSchema.parse(Object.assign({
-  id: uuidv4(),
+  id: uuid(),
   account: buildAccount(accountProps),
   role: GroupRoles.USER,
 }, props));
@@ -61,12 +62,12 @@ const buildInstance = (props: PartialDeep<Instance> = {}) => instanceSchema.pars
 
 const buildRelationship = (props: PartialDeep<Relationship> = {}): Relationship =>
   relationshipSchema.parse(Object.assign({
-    id: uuidv4(),
+    id: uuid(),
   }, props));
 
 const buildStatus = (props: PartialDeep<Status> = {}) =>
   statusSchema.parse(Object.assign({
-    id: uuidv4(),
+    id: uuid(),
     account: buildAccount(),
   }, props));
 

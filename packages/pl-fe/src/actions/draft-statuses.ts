@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 
 import { makeGetAccount } from 'pl-fe/selectors';
 import KVStore from 'pl-fe/storage/kv-store';
@@ -34,7 +33,7 @@ const saveDraftStatus = (composeId: string) =>
 
     const draft = {
       ...compose.toJS(),
-      draft_id: compose.draft_id || uuid(),
+      draft_id: compose.draft_id || crypto.randomUUID(),
     };
 
     dispatch({

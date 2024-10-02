@@ -1,6 +1,5 @@
 import { Map as ImmutableMap, List as ImmutableList, OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord, fromJS } from 'immutable';
 import { PLEROMA, type CredentialAccount, type MediaAttachment, type Tag } from 'pl-api';
-import { v4 as uuid } from 'uuid';
 
 import { isNativeEmoji } from 'pl-fe/features/emoji';
 import { tagHistory } from 'pl-fe/settings';
@@ -71,6 +70,8 @@ import type { Emoji } from 'pl-fe/features/emoji';
 import type { Language } from 'pl-fe/features/preferences';
 import type { Account, Status } from 'pl-fe/normalizers';
 import type { APIEntity } from 'pl-fe/types/entities';
+
+const uuid = crypto.randomUUID;
 
 const getResetFileKey = () => Math.floor((Math.random() * 0x10000));
 

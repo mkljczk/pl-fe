@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import MultiselectReactDropdown from 'multiselect-react-dropdown';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { v4 as uuidv4 } from 'uuid';
 
 import { Icon, Select } from '../../components/ui';
 
@@ -44,7 +43,7 @@ interface ILabelInputContainer {
 }
 
 const LabelInputContainer: React.FC<ILabelInputContainer> = ({ label, hint, children }) => {
-  const [id] = useState(uuidv4());
+  const [id] = useState(crypto.randomUUID());
   const childrenWithProps = React.Children.map(children, child => (
     // @ts-ignore: not sure how to get the right type here
     React.cloneElement(child, { id, key: id })
