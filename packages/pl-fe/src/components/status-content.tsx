@@ -187,8 +187,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     : status.spoilerHtml;
 
   const direction = getTextDirection(status.search_index);
-  const className = clsx('relative overflow-hidden text-ellipsis break-words text-gray-900 focus:outline-none dark:text-gray-100', {
+  const className = clsx('relative text-ellipsis break-words text-gray-900 focus:outline-none dark:text-gray-100', {
     'cursor-pointer': onClick,
+    'overflow-hidden': collapsed,
     'max-h-[200px]': collapsed && !quote,
     'max-h-[120px]': collapsed && quote,
     'leading-normal big-emoji': onlyEmoji,
