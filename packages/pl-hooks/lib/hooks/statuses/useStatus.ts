@@ -1,11 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
-import { useAccount } from 'pl-fe/api/hooks';
+
+import { useAccount, useGroup } from 'pl-fe/api/hooks';
 import { useAppSelector, useClient } from 'pl-fe/hooks';
 import { queryClient } from 'pl-fe/queries/client';
 import { selectAccount, selectAccounts } from 'pl-fe/selectors';
 
 import { type MinifiedStatus, minifyStatus } from '../../minifiers/minifyStatus';
 import { normalizeStatus, type Status } from '../../normalizers/normalizeStatus';
+import type { Group } from 'pl-fe/normalizers';
 
 type Account = ReturnType<typeof selectAccount>;
 
@@ -26,10 +28,14 @@ const useStatus = (statusId: string) => {
       .then(minifyStatus),
   });
 
-  const { account } = useAccount(statusQuery.data?.account_id!);
+  const status = statusQuery.data;
 
-  const data: Status | null = useAppSelector((state) => {
-    const status = statusQuery.data;
+  const { account } = useAccount(status?.account_id || undefined);
+  const { group } = useGroup(status?.group_id || undefined);
+
+  const data: Status & {
+    group: Group;
+  } | null = useAppSelector((state) => {
     if (!status) return null;
     const accounts = selectAccounts(state, status.account_ids).filter((account): account is Account => account !== undefined);
 
@@ -37,6 +43,7 @@ const useStatus = (statusId: string) => {
       ...status,
       account,
       accounts,
+      group,
     };
   });
 

@@ -8,7 +8,9 @@ let dispatch: AppDispatch;
 import('pl-fe/store').then(value => dispatch = value.store.dispatch).catch(() => {});
 
 import { MinifiedNotification, minifyNotification } from './minifiers/minifyNotification';
+import { MinifiedStatus, minifyStatus } from './minifiers/minifyStatus';
 import { DeduplicatedNotification } from './normalizers/deduplicateNotifications';
+import { normalizeStatus } from './normalizers/normalizeStatus';
 
 import type {
   Account as BaseAccount,
@@ -23,6 +25,13 @@ const importNotification = (notification: DeduplicatedNotification) => {
   queryClient.setQueryData<MinifiedNotification>(
     ['notifications', 'entities', notification.id],
     existingNotification => existingNotification?.duplicate ? existingNotification : minifyNotification(notification),
+  );
+};
+
+const importStatus = (status: BaseStatus) => {
+  queryClient.setQueryData<MinifiedStatus>(
+    ['statuses', 'entities', status.id],
+    _ => minifyStatus(normalizeStatus(status)),
   );
 };
 
@@ -88,6 +97,7 @@ const importEntities = (entities: {
   if (!isEmpty(polls)) dispatch(importPolls(Object.values(polls)));
   if (!isEmpty(relationships)) dispatch(importEntityStoreEntities(Object.values(relationships), Entities.RELATIONSHIPS));
   if (!isEmpty(statuses)) dispatch(importStatuses(Object.values(statuses)));
+  if (!isEmpty(statuses)) Object.values(statuses).forEach(importStatus);
 };
 
 export { importEntities };

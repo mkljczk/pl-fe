@@ -1,8 +1,7 @@
-import React, { useCallback } from 'react';
+import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
+import React from 'react';
 
 import { HStack, Icon, Text } from 'pl-fe/components/ui';
-import { useAppSelector } from 'pl-fe/hooks';
-import { makeGetStatus } from 'pl-fe/selectors';
 
 interface IQuotedStatusIndicator {
   /** The quoted status id. */
@@ -10,9 +9,7 @@ interface IQuotedStatusIndicator {
 }
 
 const QuotedStatusIndicator: React.FC<IQuotedStatusIndicator> = ({ statusId }) => {
-  const getStatus = useCallback(makeGetStatus(), []);
-
-  const status = useAppSelector(state => getStatus(state, { id: statusId }));
+  const { data: status } = useStatus(statusId);
 
   if (!status) return null;
 
