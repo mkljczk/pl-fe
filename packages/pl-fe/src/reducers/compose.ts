@@ -71,8 +71,6 @@ import type { Language } from 'pl-fe/features/preferences';
 import type { Account, Status } from 'pl-fe/normalizers';
 import type { APIEntity } from 'pl-fe/types/entities';
 
-const uuid = crypto.randomUUID;
-
 const getResetFileKey = () => Math.floor((Math.random() * 0x10000));
 
 const PollRecord = ImmutableRecord({
@@ -163,7 +161,7 @@ const appendMedia = (compose: Compose, media: MediaAttachment, defaultSensitive?
     map.update('media_attachments', list => list.push(media));
     map.set('is_uploading', false);
     map.set('resetFileKey', Math.floor((Math.random() * 0x10000)));
-    map.set('idempotencyKey', uuid());
+    map.set('idempotencyKey', crypto.randomUUID());
 
     if (prevSize === 0 && (defaultSensitive || compose.sensitive)) {
       map.set('sensitive', true);
@@ -176,7 +174,7 @@ const removeMedia = (compose: Compose, mediaId: string) => {
 
   return compose.withMutations(map => {
     map.update('media_attachments', list => list.filterNot(item => item.id === mediaId));
-    map.set('idempotencyKey', uuid());
+    map.set('idempotencyKey', crypto.randomUUID());
 
     if (prevSize === 1) {
       map.set('sensitive', false);
@@ -193,7 +191,7 @@ const insertSuggestion = (compose: Compose, position: number, token: string | nu
       map.set('focusDate', new Date());
       map.set('caretPosition', position + completion.length + 1);
     }
-    map.set('idempotencyKey', uuid());
+    map.set('idempotencyKey', crypto.randomUUID());
   });
 
 const updateSuggestionTags = (compose: Compose, token: string, tags: Tag[]) => {
@@ -217,7 +215,7 @@ const insertEmoji = (compose: Compose, position: number, emojiData: Emoji, needs
     text: `${oldText.slice(0, position)}${emoji} ${oldText.slice(position)}`,
     focusDate: new Date(),
     caretPosition: position + emoji.length + 1,
-    idempotencyKey: uuid(),
+    idempotencyKey: crypto.randomUUID(),
   });
 };
 
@@ -281,7 +279,7 @@ const updateCompose = (state: State, key: string, updater: (compose: Compose) =>
   state.update(key, state.get('default')!, updater);
 
 const initialState: State = ImmutableMap({
-  default: ReducerCompose({ idempotencyKey: uuid(), resetFileKey: getResetFileKey() }),
+  default: ReducerCompose({ idempotencyKey: crypto.randomUUID(), resetFileKey: getResetFileKey() }),
 });
 
 const compose = (state = initialState, action: ComposeAction | EventsAction | MeAction | SettingsAction | TimelineAction) => {
@@ -289,38 +287,38 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
     case COMPOSE_TYPE_CHANGE:
       return updateCompose(state, action.composeId, compose => compose.withMutations(map => {
         map.set('content_type', action.value);
-        map.set('idempotencyKey', uuid());
+        map.set('idempotencyKey', crypto.randomUUID());
       }));
     case COMPOSE_SPOILERNESS_CHANGE:
       return updateCompose(state, action.composeId, compose => compose.withMutations(map => {
         map.set('sensitive', !compose.sensitive);
-        map.set('idempotencyKey', uuid());
+        map.set('idempotencyKey', crypto.randomUUID());
       }));
     case COMPOSE_SPOILER_TEXT_CHANGE:
       return updateCompose(state, action.composeId, compose => {
         return compose
           .setIn(compose.modified_language === compose.language ? ['spoiler_text'] : ['spoilerTextMap', compose.modified_language], action.text)
-          .set('idempotencyKey', uuid());
+          .set('idempotencyKey', crypto.randomUUID());
       });
     case COMPOSE_VISIBILITY_CHANGE:
       return updateCompose(state, action.composeId, compose => compose
         .set('privacy', action.value)
-        .set('idempotencyKey', uuid()));
+        .set('idempotencyKey', crypto.randomUUID()));
     case COMPOSE_LANGUAGE_CHANGE:
       return updateCompose(state, action.composeId, compose => compose.withMutations(map => {
         map.set('language', action.value);
         map.set('modified_language', action.value);
-        map.set('idempotencyKey', uuid());
+        map.set('idempotencyKey', crypto.randomUUID());
       }));
     case COMPOSE_MODIFIED_LANGUAGE_CHANGE:
       return updateCompose(state, action.composeId, compose => compose.withMutations(map => {
         map.set('modified_language', action.value);
-        map.set('idempotencyKey', uuid());
+        map.set('idempotencyKey', crypto.randomUUID());
       }));
     case COMPOSE_CHANGE:
       return updateCompose(state, action.composeId, compose => compose
         .set('text', action.text)
-        .set('idempotencyKey', uuid()));
+        .set('idempotencyKey', crypto.randomUUID()));
     case COMPOSE_REPLY:
       return updateCompose(state, action.composeId, compose => compose.withMutations(map => {
         const defaultCompose = state.get('default')!;
@@ -337,7 +335,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
         map.set('privacy', privacyPreference(action.status.visibility, defaultCompose.privacy));
         map.set('focusDate', new Date());
         map.set('caretPosition', null);
-        map.set('idempotencyKey', uuid());
+        map.set('idempotencyKey', crypto.randomUUID());
         map.set('content_type', defaultCompose.content_type);
         if (action.preserveSpoilers && action.status.spoiler_text) {
           map.set('sensitive', true);
@@ -348,7 +346,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
       return updateCompose(state, action.composeId, compose => compose.withMutations(map => {
         map.set('in_reply_to', action.status.id);
         map.set('to', statusToMentionsArray(action.status, action.account));
-        map.set('idempotencyKey', uuid());
+        map.set('idempotencyKey', crypto.randomUUID());
       }));
     case COMPOSE_QUOTE:
       return updateCompose(state, 'compose-modal', compose => compose.withMutations(map => {
@@ -362,7 +360,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
         map.set('privacy', privacyPreference(action.status.visibility, defaultCompose.privacy));
         map.set('focusDate', new Date());
         map.set('caretPosition', null);
-        map.set('idempotencyKey', uuid());
+        map.set('idempotencyKey', crypto.randomUUID());
         map.set('content_type', defaultCompose.content_type);
         map.set('spoiler_text', '');
 
@@ -379,7 +377,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
     case COMPOSE_RESET:
     case COMPOSE_SUBMIT_SUCCESS:
       return updateCompose(state, action.composeId, () => state.get('default')!.withMutations(map => {
-        map.set('idempotencyKey', uuid());
+        map.set('idempotencyKey', crypto.randomUUID());
         map.set('in_reply_to', action.composeId.startsWith('reply:') ? action.composeId.slice(6) : null);
         if (action.composeId.startsWith('group:')) {
           map.set('privacy', 'group');
@@ -405,7 +403,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
         map.update('text', text => [text.trim(), `@${action.account.acct} `].filter((str) => str.length !== 0).join(' '));
         map.set('focusDate', new Date());
         map.set('caretPosition', null);
-        map.set('idempotencyKey', uuid());
+        map.set('idempotencyKey', crypto.randomUUID());
       }));
     case COMPOSE_DIRECT:
       return updateCompose(state, 'compose-modal', compose => compose.withMutations(map => {
@@ -413,7 +411,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
         map.set('privacy', 'direct');
         map.set('focusDate', new Date());
         map.set('caretPosition', null);
-        map.set('idempotencyKey', uuid());
+        map.set('idempotencyKey', crypto.randomUUID());
       }));
     case COMPOSE_GROUP_POST:
       return updateCompose(state, action.composeId, compose => compose.withMutations(map => {
@@ -421,7 +419,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
         map.set('group_id', action.groupId);
         map.set('focusDate', new Date());
         map.set('caretPosition', null);
-        map.set('idempotencyKey', uuid());
+        map.set('idempotencyKey', crypto.randomUUID());
       }));
     case COMPOSE_SUGGESTIONS_CLEAR:
       return updateCompose(state, action.composeId, compose => compose.update('suggestions', list => list?.clear()).set('suggestion_token', null));
@@ -468,7 +466,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
         map.set('privacy', action.status.visibility);
         map.set('focusDate', new Date());
         map.set('caretPosition', null);
-        map.set('idempotencyKey', uuid());
+        map.set('idempotencyKey', crypto.randomUUID());
         map.set('content_type', action.contentType || 'text/plain');
         map.set('quote', action.status.quote_id);
         map.set('group_id', action.status.group_id);
