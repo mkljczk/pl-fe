@@ -13,7 +13,7 @@ const startSentry = async (dsn: string): Promise<void> => {
     dsn,
     debug: false,
     enabled: NODE_ENV === 'production',
-    integrations: [new Sentry.BrowserTracing()],
+    integrations: [Sentry.browserTracingIntegration()],
 
     // Filter events.
     // https://docs.sentry.io/platforms/javascript/configuration/filtering/
