@@ -15,7 +15,7 @@ interface IChatTextarea extends React.ComponentProps<typeof Textarea> {
 }
 
 /** Custom textarea for chats. */
-const ChatTextarea: React.FC<IChatTextarea> = React.forwardRef(({
+const ChatTextarea = React.forwardRef<HTMLTextAreaElement, IChatTextarea>(({
   attachment,
   onDeleteAttachment,
   uploading,

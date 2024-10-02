@@ -81,7 +81,7 @@ interface IAccount {
   hideActions?: boolean;
   id?: string;
   onActionClick?: (account: any) => void;
-  showProfileHoverCard?: boolean;
+  showAccountHoverCard?: boolean;
   timestamp?: string;
   timestampUrl?: string;
   futureTimestamp?: boolean;
@@ -110,7 +110,7 @@ const Account = ({
   hidden = false,
   hideActions = false,
   onActionClick,
-  showProfileHoverCard = true,
+  showAccountHoverCard = true,
   timestamp,
   timestampUrl,
   futureTimestamp = false,
@@ -247,7 +247,7 @@ const Account = ({
         <HStack alignItems={withAccountNote || note ? 'top' : 'center'} space={3} className='overflow-hidden'>
           {withAvatar && (
             <ProfilePopper
-              condition={showProfileHoverCard}
+              condition={showAccountHoverCard}
               wrapper={(children) => <HoverRefWrapper className='relative' accountId={account.id} inline>{children}</HoverRefWrapper>}
             >
               <LinkEl className='rounded-full' {...linkProps}>
@@ -265,7 +265,7 @@ const Account = ({
 
           <div className='grow overflow-hidden'>
             <ProfilePopper
-              condition={showProfileHoverCard}
+              condition={showAccountHoverCard}
               wrapper={(children) => <HoverRefWrapper accountId={account.id} inline>{children}</HoverRefWrapper>}
             >
               <LinkEl {...linkProps}>

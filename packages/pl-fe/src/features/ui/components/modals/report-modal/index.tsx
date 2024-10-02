@@ -49,7 +49,7 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
     <Stack space={2} className='rounded-lg bg-gray-100 p-4 dark:bg-gray-800'>
       <AccountContainer
         id={status.account as any}
-        showProfileHoverCard={false}
+        showAccountHoverCard={false}
         withLinkToProfile={false}
         timestamp={status.created_at}
         hideActions

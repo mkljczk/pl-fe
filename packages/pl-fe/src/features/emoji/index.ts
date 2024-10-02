@@ -58,12 +58,12 @@ const validEmojiChar = (c: string) =>
   isAlphaNumeric(c) || ['_', '-', '.'].includes(c);
 
 const convertCustom = (shortname: string, filename: string) =>
-  `<img draggable="false" class="emojione" alt="${shortname}" title="${shortname}" src="${filename}" />`;
+  `<img draggable="false" class="emojione transition-transform ease-linear no-reduce-motion:hover:scale-125" alt="${shortname}" title="${shortname}" src="${filename}" />`;
 
 const convertUnicode = (c: string) => {
   const { unified, shortcode } = unicodeMapping[c];
 
-  return `<img draggable="false" class="emojione" alt="${c}" title=":${shortcode}:" src="/packs/emoji/${unified}.svg" />`;
+  return `<img draggable="false" class="emojione transition-transform ease-linear no-reduce-motion:hover:scale-125" alt="${c}" title=":${shortcode}:" src="/packs/emoji/${unified}.svg" />`;
 };
 
 const convertEmoji = (str: string, customEmojis: any) => {
@@ -224,8 +224,6 @@ export {
   type Emoji,
   isCustomEmoji,
   isNativeEmoji,
-  emojifyText,
-  parseHTML,
   buildCustomEmojis,
   emojify as default,
 };
