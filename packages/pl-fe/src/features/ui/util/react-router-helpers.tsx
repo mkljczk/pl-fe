@@ -15,7 +15,7 @@ type LayoutProps = {
 };
 
 interface IWrappedRoute extends RouteProps {
-  component: React.LazyExoticComponent<any>;
+  component: React.ExoticComponent<any>;
   layout: React.ComponentType<LayoutProps>;
   content?: React.ReactNode;
   componentParams?: Record<string, any>;

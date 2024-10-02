@@ -79,7 +79,7 @@ const ModalRoot: React.FC = () => {
     closeModal(type);
   };
 
-  const Component = type !== null ? (MODAL_COMPONENTS as Record<keyof typeof MODAL_COMPONENTS, React.LazyExoticComponent<any>>)[type] : null;
+  const Component = type !== null ? (MODAL_COMPONENTS as Record<keyof typeof MODAL_COMPONENTS, React.ExoticComponent<any>>)[type] : null;
 
   return (
     <Base onClose={onClickClose} type={type}>
