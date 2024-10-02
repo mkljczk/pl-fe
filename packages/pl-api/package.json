@@ -18,6 +18,7 @@
   },
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
+    "@stylistic/eslint-plugin": "^2.8.0",
     "@types/http-link-header": "^1.0.7",
     "@types/lodash.pick": "^4.4.9",
     "@types/node": "^22.7.4",
