@@ -46,6 +46,7 @@ const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose,
         listClassName='max-w-full'
         itemClassName='pb-3'
         estimatedSize={42}
+        useWindowScroll={false}
         parentRef={modalRef}
       >
         {accountIds.map(id =>

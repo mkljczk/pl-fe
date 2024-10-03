@@ -95,6 +95,7 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
         itemClassName='pb-3'
         style={{ height: 'calc(80vh - 88px)' }}
         estimatedSize={42}
+        useWindowScroll={false}
         parentRef={modalRef}
       >
         {accounts.map((account) =>

@@ -337,7 +337,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             <Thread
               status={status}
               withMedia={false}
-              isModal
+              useWindowScroll={false}
               itemClassName='px-4'
             />
           </div>

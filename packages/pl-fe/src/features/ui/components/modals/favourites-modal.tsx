@@ -54,6 +54,7 @@ const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onCl
         onLoadMore={handleLoadMore}
         hasMore={!!next}
         estimatedSize={42}
+        useWindowScroll={false}
         parentRef={modalRef}
       >
         {accountIds.map(id =>

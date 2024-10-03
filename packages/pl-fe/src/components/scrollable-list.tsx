@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useVirtualizer, type Virtualizer } from '@tanstack/react-virtual';
+import { useVirtualizer, useWindowVirtualizer, type Virtualizer } from '@tanstack/react-virtual';
 import clsx from 'clsx';
 import React, { useEffect, useMemo } from 'react';
 
@@ -8,7 +8,16 @@ import { useSettings } from 'pl-fe/hooks';
 import LoadMore from './load-more';
 import { Card, Spinner } from './ui';
 
-interface IScrollableListBase {
+type IScrollableListWindowScroll = {
+  /** Whether to use the window to scroll the content instead of the container. */
+  useWindowScroll?: true;
+} | {
+  /** Whether to use the window to scroll the content instead of the container. */
+  useWindowScroll: false;
+  parentRef: React.RefObject<HTMLElement>;
+};
+
+interface IScrollableList {
   /** Pagination callback when the end of the list is reached. */
   onLoadMore?: () => void;
   /** Whether the data is currently being fetched. */
@@ -33,6 +42,8 @@ interface IScrollableListBase {
   placeholderComponent?: React.ComponentType | React.NamedExoticComponent;
   /** Number of placeholders to render while loading. */
   placeholderCount?: number;
+  /** Extra class names on the parent element. */
+  className?: string;
   /** Extra class names on the list element. */
   listClassName?: string;
   /** Class names on each item container. */
@@ -41,6 +52,8 @@ interface IScrollableListBase {
   loadMoreClassName?: string;
   /** `id` attribute on the parent element. */
   id?: string;
+  /** CSS styles on the parent element. */
+  style?: React.CSSProperties;
   /** Initial item index to scroll to. */
   initialIndex?: number;
   /** Estimated size for items. */
@@ -49,20 +62,7 @@ interface IScrollableListBase {
   alignToBottom?: boolean;
 }
 
-interface IScrollableListWithContainer extends IScrollableListBase {
-  /** Extra class names on the container element. */
-  className?: string;
-  /** CSS styles on the container element. */
-  style?: React.CSSProperties;
-}
-
-interface IScrollableListWithoutContainer extends IScrollableListBase {
-  parentRef: React.RefObject<HTMLElement>;
-}
-
-type IScrollableList = IScrollableListWithContainer | IScrollableListWithoutContainer;
-
-const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(({
+const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList & IScrollableListWindowScroll>(({
   prepend = null,
   alwaysPrepend,
   children,
@@ -72,6 +72,7 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
   showLoading,
   onScroll,
   onLoadMore,
+  className,
   listClassName,
   itemClassName,
   loadMoreClassName,
@@ -80,6 +81,7 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
   placeholderComponent: Placeholder,
   placeholderCount = 0,
   initialIndex,
+  style = {},
   estimatedSize = 300,
   alignToBottom,
   ...props
@@ -95,11 +97,15 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
 
   const data = showPlaceholder ? Array(placeholderCount).fill('') : elements;
 
-  const virtualizer = useVirtualizer({
+  const virtualizer = props.useWindowScroll === false ? useVirtualizer({
     count: data.length + (hasMore ? 1 : 0),
-    overscan: 2,
+    overscan: 3,
     estimateSize: () => estimatedSize,
-    getScrollElement: () => ('parentRef' in props && props.parentRef.current) || parentRef.current,
+    getScrollElement: () => props.parentRef.current || parentRef.current,
+  }) : useWindowVirtualizer({
+    count: data.length + (hasMore ? 1 : 0),
+    overscan: 3,
+    estimateSize: () => estimatedSize,
   });
 
   useEffect(() => {
@@ -164,51 +170,44 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
 
   const virtualItems = virtualizer.getVirtualItems();
 
-  const body = (
-    <div
-      id={'parentRef' in props ? id : undefined}
-      className={listClassName}
-      style={{
-        height: !showLoading && data.length ? virtualizer.getTotalSize() : undefined,
-        width: '100%',
-        position: 'relative',
-      }}
-    >
-      {(!showLoading || showPlaceholder) && data.length ? (
-        <>
-          {prepend}
-          {virtualItems.map((item) => (
-            <div
-              className={item.index === data.length ? '' : itemClassName}
-              key={item.key as number}
-              data-index={item.index}
-              ref={virtualizer.measureElement}
-              style={{
-                position: 'absolute',
-                width: '100%',
-                transform: `translateY(${item.start}px)`,
-              }}
-            >
-              {renderItem(item.index)}
-            </div>
-          ))}
-        </>
-      ) : renderEmpty()}
-    </div>
-  );
-
-  if ('parentRef' in props) return body;
-
   return (
     <div
       ref={parentRef}
       id={id}
-      className={clsx(props.className, 'w-full')}
-      style={props.style}
+      className={clsx(className, 'w-full')}
+      style={style}
     >
-      {body}
+      <div
+        className={listClassName}
+        style={{
+          height: !showLoading && data.length ? virtualizer.getTotalSize() : undefined,
+          width: '100%',
+          position: 'relative',
+        }}
+      >
+        {(!showLoading || showPlaceholder) && data.length ? (
+          <>
+            {prepend}
+            {virtualItems.map((item) => (
+              <div
+                className={item.index === data.length ? '' : itemClassName}
+                key={item.key as number}
+                data-index={item.index}
+                ref={virtualizer.measureElement}
+                style={{
+                  position: 'absolute',
+                  width: '100%',
+                  transform: `translateY(${item.start}px)`,
+                }}
+              >
+                {renderItem(item.index)}
+              </div>
+            ))}
+          </>
+        ) : renderEmpty()}
+      </div>
     </div>
   );
 });
 
-export { type IScrollableList, type IScrollableListWithContainer, type IScrollableListWithoutContainer, ScrollableList as default };
+export { type IScrollableList, ScrollableList as default };
