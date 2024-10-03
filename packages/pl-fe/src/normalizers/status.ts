@@ -62,7 +62,7 @@ const buildSearchContent = (status: Pick<BaseStatus, 'poll' | 'mentions' | 'spoi
   return unescapeHTML(fields.join('\n\n')) || '';
 };
 
-const calculateContent = (text: string, emojiMap: any, hasQuote?: boolean) => DOMPurify.sanitize(emojify(text, emojiMap), { USE_PROFILES: { html: true } });
+const calculateContent = (text: string, emojiMap: any) => emojify(text, emojiMap);
 const calculateSpoiler = (text: string, emojiMap: any) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { USE_PROFILES: { html: true } });
 
 const calculateStatus = (status: BaseStatus, oldStatus?: OldStatus): CalculatedValues => {
@@ -80,10 +80,10 @@ const calculateStatus = (status: BaseStatus, oldStatus?: OldStatus): CalculatedV
 
     return {
       search_index: domParser.parseFromString(searchContent, 'text/html').documentElement.textContent || '',
-      contentHtml: calculateContent(status.content, emojiMap, !!status.quote),
+      contentHtml: calculateContent(status.content, emojiMap),
       spoilerHtml: calculateSpoiler(status.spoiler_text, emojiMap),
       contentMapHtml: status.content_map
-        ? Object.fromEntries(Object.entries(status.content_map)?.map(([key, value]) => [key, calculateContent(value, emojiMap, !!status.quote)]))
+        ? Object.fromEntries(Object.entries(status.content_map)?.map(([key, value]) => [key, calculateContent(value, emojiMap)]))
         : undefined,
       spoilerMapHtml: status.spoiler_text_map
         ? Object.fromEntries(Object.entries(status.spoiler_text_map).map(([key, value]) => [key, calculateSpoiler(value, emojiMap)]))

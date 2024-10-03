@@ -1,4 +1,5 @@
 import parse, { Element, type HTMLReactParserOptions, domToReact, type DOMNode } from 'html-react-parser';
+import DOMPurify from 'isomorphic-dompurify';
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -91,7 +92,7 @@ const ParsedContent: React.FC<IParsedContent> = (({ html, mentions, hasQuote }) 
       },
     };
 
-    return parse(html, options);
+    return parse(DOMPurify.sanitize(html, { ADD_ATTR: ['target'], USE_PROFILES: { html: true } }), options);
   }, [html]);
 });
 

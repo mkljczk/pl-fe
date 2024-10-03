@@ -2,7 +2,6 @@
  * Status edit normalizer
  */
 import escapeTextContentForBrowser from 'escape-html';
-import DOMPurify from 'isomorphic-dompurify';
 
 import emojify from 'pl-fe/features/emoji';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
@@ -19,8 +18,8 @@ const normalizeStatusEdit = (statusEdit: BaseStatusEdit) => {
   return {
     ...statusEdit,
     poll,
-    contentHtml: DOMPurify.sanitize(emojify(statusEdit.content, emojiMap), { ADD_ATTR: ['target'] }),
-    spoilerHtml: DOMPurify.sanitize(emojify(escapeTextContentForBrowser(statusEdit.spoiler_text), emojiMap), { ADD_ATTR: ['target'] }),
+    contentHtml: emojify(statusEdit.content, emojiMap),
+    spoilerHtml: emojify(escapeTextContentForBrowser(statusEdit.spoiler_text), emojiMap),
   };
 };
 
