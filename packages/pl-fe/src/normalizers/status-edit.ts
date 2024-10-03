@@ -5,7 +5,6 @@ import escapeTextContentForBrowser from 'escape-html';
 import DOMPurify from 'isomorphic-dompurify';
 
 import emojify from 'pl-fe/features/emoji';
-import { stripCompatibilityFeatures } from 'pl-fe/utils/html';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
 import { normalizePollEdit } from './poll';
@@ -20,7 +19,7 @@ const normalizeStatusEdit = (statusEdit: BaseStatusEdit) => {
   return {
     ...statusEdit,
     poll,
-    contentHtml: DOMPurify.sanitize(stripCompatibilityFeatures(emojify(statusEdit.content, emojiMap)), { ADD_ATTR: ['target'] }),
+    contentHtml: DOMPurify.sanitize(emojify(statusEdit.content, emojiMap), { ADD_ATTR: ['target'] }),
     spoilerHtml: DOMPurify.sanitize(emojify(escapeTextContentForBrowser(statusEdit.spoiler_text), emojiMap), { ADD_ATTR: ['target'] }),
   };
 };

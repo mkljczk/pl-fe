@@ -8,7 +8,7 @@ import DOMPurify from 'isomorphic-dompurify';
 import { type Account as BaseAccount, type Status as BaseStatus, type MediaAttachment, mentionSchema, type Translation } from 'pl-api';
 
 import emojify from 'pl-fe/features/emoji';
-import { stripCompatibilityFeatures, unescapeHTML } from 'pl-fe/utils/html';
+import { unescapeHTML } from 'pl-fe/utils/html';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
 import { normalizeAccount } from './account';
@@ -62,7 +62,7 @@ const buildSearchContent = (status: Pick<BaseStatus, 'poll' | 'mentions' | 'spoi
   return unescapeHTML(fields.join('\n\n')) || '';
 };
 
-const calculateContent = (text: string, emojiMap: any, hasQuote?: boolean) => DOMPurify.sanitize(stripCompatibilityFeatures(emojify(text, emojiMap), hasQuote), { USE_PROFILES: { html: true } });
+const calculateContent = (text: string, emojiMap: any, hasQuote?: boolean) => DOMPurify.sanitize(emojify(text, emojiMap), { USE_PROFILES: { html: true } });
 const calculateSpoiler = (text: string, emojiMap: any) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { USE_PROFILES: { html: true } });
 
 const calculateStatus = (status: BaseStatus, oldStatus?: OldStatus): CalculatedValues => {

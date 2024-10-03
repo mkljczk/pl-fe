@@ -176,7 +176,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
           lang={status.language || undefined}
           size={textSize}
         >
-          <ParsedContent html={parsedHtml} mentions={status.mentions} />
+          <ParsedContent html={parsedHtml} mentions={status.mentions} hasQuote={!!status.quote_id} />
         </Markup>,
       );
     }
@@ -204,7 +204,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
           lang={status.language || undefined}
           size={textSize}
         >
-          <ParsedContent html={parsedHtml} mentions={status.mentions} />
+          <ParsedContent html={parsedHtml} mentions={status.mentions} hasQuote={!!status.quote_id} />
         </Markup>,
       );
     }

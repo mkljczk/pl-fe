@@ -13,21 +13,39 @@ const nodesToText = (nodes: Array<DOMNode>): string =>
 interface IParsedContent {
   html: string;
   mentions?: Array<Mention>;
+  /** Whether it's a status which has a quote. */
+  hasQuote?: boolean;
 }
 
-const ParsedContent: React.FC<IParsedContent> = (({ html, mentions }) => {
+const ParsedContent: React.FC<IParsedContent> = (({ html, mentions, hasQuote }) => {
   return useMemo(() => {
     if (html.length === 0) {
       return null;
     }
 
+    const selectors: Array<string> = [];
+
+    // Explicit mentions
+    if (mentions) selectors.push('recipients-inline');
+
+    // Quote posting
+    if (hasQuote) selectors.push('quote-inline');
+
     const options: HTMLReactParserOptions = {
       replace(domNode) {
-        if (domNode instanceof Element && ['script', 'iframe'].includes(domNode.name)) {
-          return null;
+        if (!(domNode instanceof Element)) {
+          return;
         }
 
-        if (domNode instanceof Element && domNode.name === 'a') {
+        if (['script', 'iframe'].includes(domNode.name)) {
+          return <></>;
+        }
+
+        if (domNode.attribs.class?.split(' ').some(className => selectors.includes(className))) {
+          return <></>;
+        }
+
+        if (domNode.name === 'a') {
           const classes = domNode.attribs.class?.split(' ');
 
           const fallback = (
