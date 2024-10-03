@@ -21,7 +21,6 @@ const SuggestedAccountsStep = ({ onNext }: { onNext: () => void }) => {
         <ScrollableList
           isLoading={isFetching}
           style={{ height: 320 }}
-          useWindowScroll={false}
           parentRef={parentRef}
         >
           {data.map((suggestion) => (

@@ -196,7 +196,6 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
           isLoading={isFetching}
           showLoading={isFetching && !isFetchingNextPage}
           onLoadMore={handleStartReached}
-          useWindowScroll={false}
           parentRef={parentRef}
         >
           {cachedChatMessages.map((chatMessage, index) => {

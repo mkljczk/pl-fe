@@ -59,7 +59,6 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, parentRef, topOffset }) =>
             hasMore={hasNextPage}
             onLoadMore={handleLoadMore}
             estimatedSize={64}
-            useWindowScroll={false}
             parentRef={parentRef}
             loadMoreClassName='mx-4 mb-4'
           >

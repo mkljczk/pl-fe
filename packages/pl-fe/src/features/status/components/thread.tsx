@@ -78,14 +78,14 @@ const getDescendantsIds = createSelector([
 interface IThread {
   status: SelectedStatus;
   withMedia?: boolean;
-  useWindowScroll?: boolean;
+  isModal?: boolean;
   itemClassName?: string;
 }
 
 const Thread: React.FC<IThread> = ({
   itemClassName,
   status,
-  useWindowScroll = true,
+  isModal,
   withMedia = true,
 }) => {
   const dispatch = useAppDispatch();
@@ -114,7 +114,7 @@ const Thread: React.FC<IThread> = ({
   });
 
   let initialIndex = ancestorsIds.size;
-  if (!useWindowScroll && initialIndex !== 0) initialIndex = ancestorsIds.size + 1;
+  if (isModal && initialIndex !== 0) initialIndex = ancestorsIds.size + 1;
 
   const node = useRef<HTMLDivElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
@@ -234,7 +234,7 @@ const Thread: React.FC<IThread> = ({
   };
 
   const _selectChild = (index: number) => {
-    if (!useWindowScroll) index = index + 1;
+    if (isModal) index = index + 1;
 
     const selector = `[data-index="${index}"] .focusable`;
     const element = node.current?.querySelector<HTMLDivElement>(selector);
@@ -341,7 +341,7 @@ const Thread: React.FC<IThread> = ({
 
           <StatusActionBar
             status={status}
-            expandable={!useWindowScroll}
+            expandable={isModal}
             space='lg'
             withLabels
           />
@@ -356,7 +356,7 @@ const Thread: React.FC<IThread> = ({
 
   const children: JSX.Element[] = [];
 
-  if (!useWindowScroll) {
+  if (isModal) {
     // Add padding to the top of the Thread (for Media Modal)
     children.push(<div key='padding' className='h-4' />);
   }
@@ -376,8 +376,8 @@ const Thread: React.FC<IThread> = ({
       space={2}
       className={
         clsx({
-          'h-full': !useWindowScroll,
-          'mt-2': useWindowScroll,
+          'h-full': isModal,
+          'mt-2': !isModal,
         })
       }
     >
@@ -391,7 +391,7 @@ const Thread: React.FC<IThread> = ({
         ref={node}
         className={
           clsx('bg-white black:bg-black dark:bg-primary-900', {
-            'h-full overflow-auto': !useWindowScroll,
+            'h-full overflow-auto': isModal,
           })
         }
       >
@@ -403,10 +403,9 @@ const Thread: React.FC<IThread> = ({
           itemClassName={itemClassName}
           listClassName={
             clsx({
-              'h-full': !useWindowScroll,
+              'h-full': isModal,
             })
           }
-          useWindowScroll={useWindowScroll}
           parentRef={node}
         >
           {children}

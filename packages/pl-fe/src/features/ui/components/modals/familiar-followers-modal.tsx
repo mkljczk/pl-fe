@@ -38,7 +38,6 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
         itemClassName='pb-3'
         style={{ height: 'calc(80vh - 88px)' }}
         estimatedSize={42}
-        useWindowScroll={false}
         parentRef={modalRef}
       >
         {familiarFollowerIds.map(id =>
