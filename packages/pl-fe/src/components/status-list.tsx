@@ -14,9 +14,9 @@ import { usePlFeConfig } from 'pl-fe/hooks';
 import { Stack, Text } from './ui';
 
 import type { OrderedSet as ImmutableOrderedSet } from 'immutable';
-import type { IScrollableList } from 'pl-fe/components/scrollable-list';
+import type { IScrollableListWithContainer } from 'pl-fe/components/scrollable-list';
 
-interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
+interface IStatusList extends Omit<IScrollableListWithContainer, 'onLoadMore' | 'children'> {
   /** Unique key to preserve the scroll position when navigating back. */
   scrollKey: string;
   /** List of status IDs to display. */
@@ -54,7 +54,6 @@ const StatusList: React.FC<IStatusList> = ({
   isLoading,
   isPartial,
   showGroup = true,
-  className,
   ...other
 }) => {
   const plFeConfig = usePlFeConfig();
@@ -220,7 +219,6 @@ const StatusList: React.FC<IStatusList> = ({
       onLoadMore={handleLoadOlder}
       placeholderComponent={() => <PlaceholderStatus variant={divideType === 'border' ? 'slim' : 'rounded'} />}
       placeholderCount={20}
-      className={className}
       listClassName={clsx('divide-y divide-solid divide-gray-200 dark:divide-gray-800', {
         'divide-none': divideType !== 'border',
       })}
