@@ -70,25 +70,27 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
           tabIndex={0}
         />)}
 
-      <Portal>
-        <div
-          className='z-[101]'
-          ref={refs.setFloating}
-          style={{
-            position: strategy,
-            top: y ?? 0,
-            left: x ?? 0,
-            width: 'max-content',
-          }}
-        >
-          <EmojiPickerDropdown
-            visible={visible}
-            setVisible={setVisible}
-            update={update}
-            {...props}
-          />
-        </div>
-      </Portal>
+      {visible && (
+        <Portal>
+          <div
+            className='z-[101]'
+            ref={refs.setFloating}
+            style={{
+              position: strategy,
+              top: y ?? 0,
+              left: x ?? 0,
+              width: 'max-content',
+            }}
+          >
+            <EmojiPickerDropdown
+              visible
+              setVisible={setVisible}
+              update={update}
+              {...props}
+            />
+          </div>
+        </Portal>
+      )}
     </div>
   );
 };
