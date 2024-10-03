@@ -3,6 +3,7 @@ import React from 'react';
 
 import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
 import Markup from 'pl-fe/components/markup';
+import { ParsedContent } from 'pl-fe/components/parsed-content';
 import { Stack } from 'pl-fe/components/ui';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { getTextDirection } from 'pl-fe/utils/rtl';
@@ -11,7 +12,7 @@ import type { Account, Status } from 'pl-fe/normalizers';
 
 interface IReplyIndicator {
   className?: string;
-  status?: Pick<Status, | 'contentHtml' | 'created_at' | 'hidden' | 'media_attachments' | 'search_index' | 'sensitive' | 'spoiler_text'> & { account: Pick<Account, 'id'> };
+  status?: Pick<Status, | 'contentHtml' | 'created_at' | 'hidden' | 'media_attachments' | 'mentions' | 'search_index' | 'sensitive' | 'spoiler_text'> & { account: Pick<Account, 'id'> };
   onCancel?: () => void;
   hideActions: boolean;
 }
@@ -49,9 +50,10 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({ className, status, hideActi
       <Markup
         className='break-words'
         size='sm'
-        dangerouslySetInnerHTML={{ __html: status.contentHtml }}
         direction={getTextDirection(status.search_index)}
-      />
+      >
+        <ParsedContent html={status.contentHtml} mentions={status.mentions} />
+      </Markup>
 
       {status.media_attachments.length > 0 && (
         <AttachmentThumbs

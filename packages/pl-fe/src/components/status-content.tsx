@@ -1,8 +1,6 @@
 import clsx from 'clsx';
-import parse, { Element, type HTMLReactParserOptions, domToReact, type DOMNode } from 'html-react-parser';
 import React, { useState, useRef, useLayoutEffect, useMemo, useEffect } from 'react';
 import {  FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import { collapseStatusSpoiler, expandStatusSpoiler } from 'pl-fe/actions/statuses';
 import Icon from 'pl-fe/components/icon';
@@ -12,18 +10,14 @@ import { onlyEmoji as isOnlyEmoji } from 'pl-fe/utils/rich-content';
 
 import { getTextDirection } from '../utils/rtl';
 
-import HashtagLink from './hashtag-link';
-import HoverRefWrapper from './hover-ref-wrapper';
 import Markup from './markup';
+import { ParsedContent } from './parsed-content';
 import Poll from './polls/poll';
 
 import type { Sizes } from 'pl-fe/components/ui/text/text';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 
 const BIG_EMOJI_LIMIT = 10;
-
-const nodesToText = (nodes: Array<DOMNode>): string =>
-  nodes.map(node => node.type === 'text' ? node.data : node.type === 'tag' ? nodesToText(node.children as Array<DOMNode>) : '').join('');
 
 interface IReadMoreButton {
   onClick: React.MouseEventHandler;
@@ -118,64 +112,6 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     [status.contentHtml, status.translation, status.currentLanguage],
   );
 
-  const content = useMemo(() => {
-    if (status.content.length === 0) {
-      return null;
-    }
-
-    const options: HTMLReactParserOptions = {
-      replace(domNode) {
-        if (domNode instanceof Element && ['script', 'iframe'].includes(domNode.name)) {
-          return null;
-        }
-
-        if (domNode instanceof Element && domNode.name === 'a') {
-          const classes = domNode.attribs.class?.split(' ');
-
-          if (classes?.includes('mention')) {
-            const mention = status.mentions.find(({ url }) => domNode.attribs.href === url);
-            if (mention) {
-              return (
-                <HoverRefWrapper accountId={mention.id} inline>
-                  <Link
-                    to={`/@${mention.acct}`}
-                    className='text-primary-600 hover:underline dark:text-accent-blue'
-                    dir='ltr'
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    @{mention.username}
-                  </Link>
-                </HoverRefWrapper>
-              );
-            }
-          }
-
-          if (classes?.includes('hashtag')) {
-            const hashtag = nodesToText(domNode.children as Array<DOMNode>);
-            if (hashtag) {
-              return <HashtagLink hashtag={hashtag.replace(/^#/, '')} />;
-            }
-          }
-
-          return (
-            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-            <a
-              {...domNode.attribs}
-              onClick={(e) => e.stopPropagation()}
-              rel='nofollow noopener'
-              target='_blank'
-              title={domNode.attribs.href}
-            >
-              {domToReact(domNode.children as DOMNode[], options)}
-            </a>
-          );
-        }
-      },
-    };
-
-    return parse(parsedHtml, options);
-  }, [parsedHtml]);
-
   useEffect(() => {
     setLineClamp(!spoilerNode.current || spoilerNode.current.clientHeight >= 96);
   }, [spoilerNode.current]);
@@ -208,7 +144,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
           dangerouslySetInnerHTML={{ __html: spoilerText }}
           ref={spoilerNode}
         />
-        {content && expandable && (
+        {status.content && expandable && (
           <Button
             className='ml-2 align-middle'
             type='button'
@@ -229,7 +165,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   if (expandable && !expanded) return <>{output}</>;
 
   if (onClick) {
-    if (content) {
+    if (status.content) {
       output.push(
         <Markup
           ref={node}
@@ -240,7 +176,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
           lang={status.language || undefined}
           size={textSize}
         >
-          {content}
+          <ParsedContent html={parsedHtml} mentions={status.mentions} />
         </Markup>,
       );
     }
@@ -257,7 +193,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
 
     return <Stack space={4} className={clsx({ 'bg-gray-100 dark:bg-primary-800 rounded-md p-4': hasPoll })}>{output}</Stack>;
   } else {
-    if (content) {
+    if (status.content) {
       output.push(
         <Markup
           ref={node}
@@ -268,7 +204,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
           lang={status.language || undefined}
           size={textSize}
         >
-          {content}
+          <ParsedContent html={parsedHtml} mentions={status.mentions} />
         </Markup>,
       );
     }
