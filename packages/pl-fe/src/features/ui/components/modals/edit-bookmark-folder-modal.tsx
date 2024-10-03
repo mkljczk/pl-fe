@@ -1,4 +1,4 @@
-import { useFloating, shift } from '@floating-ui/react';
+import { useFloating, shift, autoUpdate } from '@floating-ui/react';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
@@ -33,6 +33,7 @@ const EmojiPicker: React.FC<IEmojiPicker> = ({ emoji, emojiUrl, ...props }) => {
 
   const { x, y, strategy, refs, update } = useFloating<HTMLButtonElement>({
     middleware: [shift()],
+    whileElementsMounted: autoUpdate,
   });
 
   useClickOutside(refs, () => {

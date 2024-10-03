@@ -1,4 +1,4 @@
-import { shift, useFloating, useTransitionStyles } from '@floating-ui/react';
+import { autoUpdate, shift, useFloating, useTransitionStyles } from '@floating-ui/react';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
@@ -54,6 +54,7 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
         padding: 8,
       }),
     ],
+    whileElementsMounted: autoUpdate,
   });
 
   const { styles } = useTransitionStyles(context, {

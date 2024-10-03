@@ -1,6 +1,7 @@
 import {
   arrow,
   autoPlacement,
+  autoUpdate,
   FloatingArrow,
   offset,
   shift,
@@ -57,6 +58,7 @@ const Popover: React.FC<IPopover> = ({ children, content, referenceElementClassN
         element: arrowRef,
       }),
     ],
+    whileElementsMounted: autoUpdate,
   });
 
   const { isMounted, styles } = useTransitionStyles(context, {
@@ -94,6 +96,7 @@ const Popover: React.FC<IPopover> = ({ children, content, referenceElementClassN
         <Portal>
           <div
             ref={refs.setFloating}
+            className='z-40'
             style={{
               position: strategy,
               top: y ?? 0,
@@ -104,7 +107,7 @@ const Popover: React.FC<IPopover> = ({ children, content, referenceElementClassN
             <div
               className={
                 clsx(
-                  'z-40 overflow-hidden rounded-lg bg-white shadow-2xl dark:bg-gray-900 dark:ring-2 dark:ring-primary-700',
+                  'overflow-hidden rounded-lg bg-white shadow-2xl dark:bg-gray-900 dark:ring-2 dark:ring-primary-700',
                   { 'p-6': !isFlush },
                 )
               }

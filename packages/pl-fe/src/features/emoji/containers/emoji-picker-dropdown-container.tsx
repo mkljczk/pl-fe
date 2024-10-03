@@ -1,4 +1,4 @@
-import { useFloating, shift, flip } from '@floating-ui/react';
+import { useFloating, shift, flip, autoUpdate } from '@floating-ui/react';
 import clsx from 'clsx';
 import React, { KeyboardEvent, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -24,6 +24,7 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
 
   const { x, y, strategy, refs, update } = useFloating<HTMLButtonElement>({
     middleware: [flip(), shift()],
+    whileElementsMounted: autoUpdate,
   });
 
   useClickOutside(refs, () => {

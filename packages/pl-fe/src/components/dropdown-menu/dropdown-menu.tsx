@@ -1,4 +1,4 @@
-import { offset, Placement, useFloating, flip, arrow, shift } from '@floating-ui/react';
+import { offset, Placement, useFloating, flip, arrow, shift, autoUpdate } from '@floating-ui/react';
 import clsx from 'clsx';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -207,6 +207,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
         element: arrowRef,
       }),
     ],
+    whileElementsMounted: autoUpdate,
   });
 
   const handleClick: React.EventHandler<
