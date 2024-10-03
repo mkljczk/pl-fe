@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useVirtualizer, useWindowVirtualizer, type Virtualizer } from '@tanstack/react-virtual';
 import clsx from 'clsx';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 
 import { useSettings } from 'pl-fe/hooks';
 
@@ -62,7 +62,8 @@ interface IScrollableListWithoutContainer extends IScrollableListBase {
 
 type IScrollableList = IScrollableListWithContainer | IScrollableListWithoutContainer;
 
-const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(({  prepend = null,
+const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(({
+  prepend = null,
   alwaysPrepend,
   children,
   isLoading,
@@ -83,6 +84,8 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
   alignToBottom,
   ...props
 }, ref) => {
+  const listRef = useRef<HTMLDivElement>(null);
+
   const { autoloadMore } = useSettings();
 
   /** Normalized children. */
@@ -101,6 +104,7 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
     count: data.length + (hasMore ? 1 : 0),
     overscan: 3,
     estimateSize: () => estimatedSize,
+    scrollMargin: listRef.current ? listRef.current.getBoundingClientRect().top + window.scrollY : 0,
   });
 
   useEffect(() => {
@@ -167,6 +171,7 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
 
   const body = (
     <div
+      ref={listRef}
       id={'parentRef' in props ? id : undefined}
       className={listClassName}
       style={{
