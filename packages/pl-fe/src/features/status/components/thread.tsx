@@ -406,7 +406,7 @@ const Thread: React.FC<IThread> = ({
               'h-full': isModal,
             })
           }
-          parentRef={node}
+          {...(isModal ? { parentRef: node } : undefined)}
         >
           {children}
         </ScrollableList>
