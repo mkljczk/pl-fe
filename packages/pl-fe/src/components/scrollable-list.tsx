@@ -197,7 +197,7 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList &
                 style={{
                   position: 'absolute',
                   width: '100%',
-                  transform: `translateY(${item.start}px)`,
+                  transform: `translateY(${item.start - virtualizer.options.scrollMargin}px)`,
                 }}
               >
                 {renderItem(item.index)}
