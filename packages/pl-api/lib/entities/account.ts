@@ -85,6 +85,7 @@ const baseAccountSchema = z.object({
   group: z.boolean().catch(false),
   discoverable: z.boolean().catch(false),
   noindex: z.boolean().nullable().catch(null),
+  moved: z.null().catch(null),
   suspended: z.boolean().optional().catch(undefined),
   limited: z.boolean().optional().catch(undefined),
   created_at: z.string().datetime().catch(new Date().toUTCString()),
@@ -127,13 +128,15 @@ const baseAccountSchema = z.object({
 });
 
 const accountWithMovedAccountSchema = baseAccountSchema.extend({
-  moved: baseAccountSchema.optional().catch(undefined),
+  moved: z.lazy((): typeof baseAccountSchema => accountWithMovedAccountSchema as any).nullable().catch(null),
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Account/} */
 const accountSchema = z.preprocess(preprocessAccount, accountWithMovedAccountSchema);
 
-type Account = z.infer<typeof accountSchema>;
+type Account = z.infer<typeof baseAccountSchema> & {
+  moved: Account | null;
+};
 
 const credentialAccountSchema = z.preprocess(preprocessAccount, accountWithMovedAccountSchema.extend({
   source: z.object({

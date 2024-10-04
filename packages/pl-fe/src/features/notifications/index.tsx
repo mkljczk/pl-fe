@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
-import { useMarker, useUpdateMarkerMutation } from 'pl-fe/pl-hooks/hooks/markers/useMarkers';
+import { useMarker } from 'pl-fe/pl-hooks/hooks/markers/useMarkers';
+import { useUpdateMarkerMutation } from 'pl-fe/pl-hooks/hooks/markers/useUpdateMarkerMutation';
 import { useNotificationList } from 'pl-fe/pl-hooks/hooks/notifications/useNotificationList';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -150,7 +151,7 @@ const Notifications = () => {
       placeholderCount={20}
       onLoadMore={handleLoadOlder}
       onScroll={handleScroll}
-      listClassName={clsx('black:divide-gray-800 dark:divide-primary-800 divide-y divide-solid divide-gray-200', {
+      listClassName={clsx('divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800', {
         'animate-pulse': notifications.length === 0,
       })}
     >

@@ -1,8 +1,8 @@
 import { PLEROMA, type UpdateNotificationSettingsParams, type Account, type CreateAccountParams, type PaginatedResponse, type Relationship } from 'pl-api';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
 
 import { getClient, type PlfeResponse } from 'pl-fe/api';
 import { Entities } from 'pl-fe/entity-store/entities';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { selectAccount } from 'pl-fe/selectors';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 
