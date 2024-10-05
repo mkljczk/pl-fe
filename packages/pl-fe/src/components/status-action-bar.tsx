@@ -113,7 +113,7 @@ interface IStatusActionBar {
 const StatusActionBar: React.FC<IStatusActionBar> = ({
   status,
   withLabels = false,
-  expandable = true,
+  expandable,
   space = 'sm',
   statusActionButtonTheme = 'default',
   fromBookmarks = false,
@@ -769,7 +769,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
           />
         )}
 
-        {me && expandable && (features.emojiReacts) && (
+        {me && expandable && features.emojiReacts && (
           <EmojiPickerDropdown
             onPickEmoji={handlePickEmoji}
             theme={statusActionButtonTheme}

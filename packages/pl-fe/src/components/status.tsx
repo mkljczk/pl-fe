@@ -459,7 +459,12 @@ const Status: React.FC<IStatus> = (props) => {
                   'pt-4': !actualStatus.emoji_reactions.length,
                 })}
               >
-                <StatusActionBar status={actualStatus} rebloggedBy={isReblog ? status.account : undefined} fromBookmarks={fromBookmarks} />
+                <StatusActionBar
+                  status={actualStatus}
+                  rebloggedBy={isReblog ? status.account : undefined}
+                  fromBookmarks={fromBookmarks}
+                  expandable
+                />
               </div>
             )}
           </div>

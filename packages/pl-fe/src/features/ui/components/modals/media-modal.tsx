@@ -321,6 +321,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                 status={status}
                 space='md'
                 statusActionButtonTheme='inverse'
+                expandable
               />
             </HStack>
           )}
