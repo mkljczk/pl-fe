@@ -372,7 +372,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       message: intl.formatMessage(messages.groupBlockFromGroupMessage, { name: status.account.username }),
       confirm: intl.formatMessage(messages.groupBlockConfirm),
       onConfirm: () => {
-        blockGroupMember([status.account.id], {
+        blockGroupMember([status.account_id], {
           onSuccess() {
             toast.success(intl.formatMessage(messages.blocked, { name: account?.acct }));
           },
@@ -395,7 +395,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
 
   const _makeMenu = (publicStatus: boolean) => {
     const mutingConversation = status.muted;
-    const ownAccount = status.account.id === me;
+    const ownAccount = status.account_id === me;
     const username = status.account.username;
     const account = status.account;
 

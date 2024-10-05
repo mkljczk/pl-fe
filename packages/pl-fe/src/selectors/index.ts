@@ -183,7 +183,7 @@ const makeGetNotification = () => createSelector([
   // @ts-ignore
   (state: RootState, notification: MinifiedNotification) => state.statuses.get(notification.status_id),
   (state: RootState, notification: MinifiedNotification) => notification.account_ids ? selectAccounts(state, notification.account_ids) : null,
-], (notification, account, target, status, accounts): Notification => ({
+], (notification, account, target, status, accounts): MinifiedNotification & Notification => ({
   ...notification,
   // @ts-ignore
   account: account || null,

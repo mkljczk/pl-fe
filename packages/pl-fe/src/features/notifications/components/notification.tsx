@@ -339,7 +339,7 @@ const Notification: React.FC<INotification> = (props) => {
       case 'move':
         return account && typeof account === 'object' && notification.target && typeof notification.target === 'object' ? (
           <AccountContainer
-            id={notification.target.id}
+            id={notification.target_id}
             hidden={hidden}
             avatarSize={avatarSize}
             withRelationship

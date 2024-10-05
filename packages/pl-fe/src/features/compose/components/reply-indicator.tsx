@@ -8,11 +8,11 @@ import { Stack } from 'pl-fe/components/ui';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { getTextDirection } from 'pl-fe/utils/rtl';
 
-import type { Account, Status } from 'pl-fe/normalizers';
+import type { Status } from 'pl-fe/normalizers';
 
 interface IReplyIndicator {
   className?: string;
-  status?: Pick<Status, | 'contentHtml' | 'created_at' | 'hidden' | 'media_attachments' | 'mentions' | 'search_index' | 'sensitive' | 'spoiler_text' | 'quote_id'> & { account: Pick<Account, 'id'> };
+  status?: Pick<Status, 'account_id' | 'contentHtml' | 'created_at' | 'hidden' | 'media_attachments' | 'mentions' | 'search_index' | 'sensitive' | 'spoiler_text' | 'quote_id'>;
   onCancel?: () => void;
   hideActions: boolean;
 }
@@ -40,7 +40,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({ className, status, hideActi
     <Stack space={2} className={clsx('max-h-72 overflow-y-auto rounded-lg bg-gray-100 p-4 black:bg-gray-900 dark:bg-gray-800', className)}>
       <AccountContainer
         {...actions}
-        id={status.account.id}
+        id={status.account_id}
         timestamp={status.created_at}
         showAccountHoverCard={false}
         withLinkToProfile={false}

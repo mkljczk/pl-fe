@@ -396,8 +396,8 @@ const Status: React.FC<IStatus> = (props) => {
           {renderStatusInfo()}
 
           <AccountContainer
-            key={actualStatus.account.id}
-            id={actualStatus.account.id}
+            key={actualStatus.account_id}
+            id={actualStatus.account_id}
             timestamp={actualStatus.created_at}
             timestampUrl={statusUrl}
             action={accountAction}

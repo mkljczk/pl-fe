@@ -21,7 +21,7 @@ const ReplyMentionsModal: React.FC<BaseModalProps & ReplyMentionsModalProps> = (
   const { account } = useOwnAccount();
 
   const mentions = statusToMentionsAccountIdsArray(status!, account!, compose.parent_reblogged_by);
-  const author = status?.account.id;
+  const author = status?.account_id;
 
   const onClickClose = () => {
     onClose('REPLY_MENTIONS');
