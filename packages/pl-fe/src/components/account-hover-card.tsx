@@ -13,6 +13,7 @@ import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 import { useAccountHoverCardStore } from 'pl-fe/stores';
 
 import { showAccountHoverCard } from './hover-ref-wrapper';
+import { ParsedContent } from './parsed-content';
 import { dateFormatOptions } from './relative-timestamp';
 import Scrobble from './scrobble';
 import { Card, CardBody, HStack, Icon, Stack, Text } from './ui';
@@ -98,7 +99,6 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   };
 
   if (!account) return null;
-  const accountBio = { __html: account.note_emojified };
   const memberSinceDate = intl.formatDate(account.created_at, { month: 'long', year: 'numeric' });
   const followedBy = me !== account.id && account.relationship?.followed_by === true;
 
@@ -153,9 +153,10 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
               <Text
                 truncate
                 size='sm'
-                dangerouslySetInnerHTML={accountBio}
                 className='mr-2 rtl:ml-2 rtl:mr-0 [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
-              />
+              >
+                <ParsedContent html={account.note_emojified} />
+              </Text>
             )}
           </Stack>
 

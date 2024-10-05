@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import HashtagLink from './hashtag-link';
 import HoverRefWrapper from './hover-ref-wrapper';
+import StatusMention from './status-mention';
 
 import type { Mention } from 'pl-api';
 
@@ -12,7 +13,9 @@ const nodesToText = (nodes: Array<DOMNode>): string =>
   nodes.map(node => node.type === 'text' ? node.data : node.type === 'tag' ? nodesToText(node.children as Array<DOMNode>) : '').join('');
 
 interface IParsedContent {
+  /** HTML content to display. */
   html: string;
+  /** Array of mentioned accounts. */
   mentions?: Array<Mention>;
   /** Whether it's a status which has a quote. */
   hasQuote?: boolean;
@@ -62,20 +65,26 @@ const ParsedContent: React.FC<IParsedContent> = (({ html, mentions, hasQuote }) 
             </a>
           );
 
-          if (classes?.includes('mention') && mentions) {
-            const mention = mentions.find(({ url }) => domNode.attribs.href === url);
-            if (mention) {
+          if (classes?.includes('mention')) {
+            if (mentions) {
+              const mention = mentions.find(({ url }) => domNode.attribs.href === url);
+              if (mention) {
+                return (
+                  <HoverRefWrapper accountId={mention.id} inline>
+                    <Link
+                      to={`/@${mention.acct}`}
+                      className='text-primary-600 hover:underline dark:text-accent-blue'
+                      dir='ltr'
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      @{mention.username}
+                    </Link>
+                  </HoverRefWrapper>
+                );
+              }
+            } else if (domNode.attribs['data-user']) {
               return (
-                <HoverRefWrapper accountId={mention.id} inline>
-                  <Link
-                    to={`/@${mention.acct}`}
-                    className='text-primary-600 hover:underline dark:text-accent-blue'
-                    dir='ltr'
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    @{mention.username}
-                  </Link>
-                </HoverRefWrapper>
+                <StatusMention accountId={domNode.attribs['data-user']} fallback={fallback} />
               );
             }
           }

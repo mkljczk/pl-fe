@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
+import { ParsedContent } from 'pl-fe/components/parsed-content';
 import { Avatar, Divider, HStack, Stack, Text, Button } from 'pl-fe/components/ui';
 import toast from 'pl-fe/toast';
 import copy from 'pl-fe/utils/copy';
@@ -57,8 +58,9 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
           <Text
             size='md'
             className='mx-auto max-w-sm [&_a]:text-primary-600 [&_a]:hover:underline [&_a]:dark:text-accent-blue'
-            dangerouslySetInnerHTML={{ __html: group.note_emojified }}
-          />
+          >
+            <ParsedContent html={group.note_emojified} />
+          </Text>
         </Stack>
       </Stack>
 

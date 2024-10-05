@@ -10,6 +10,7 @@ import { getAcct } from 'pl-fe/utils/accounts';
 import { displayFqn } from 'pl-fe/utils/state';
 
 import Badge from './badge';
+import { ParsedContent } from './parsed-content';
 import RelativeTimestamp from './relative-timestamp';
 import { Avatar, Emoji, HStack, Icon, IconButton, Stack, Text } from './ui';
 
@@ -348,9 +349,9 @@ const Account = ({
                 <Text
                   truncate
                   size='sm'
-                  dangerouslySetInnerHTML={{ __html: account.note_emojified }}
-                  className='mr-2 rtl:ml-2 rtl:mr-0 [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
-                />
+                >
+                  <ParsedContent html={account.note_emojified} />
+                </Text>
               )}
             </Stack>
           </div>

@@ -7,6 +7,7 @@ import { useAccount } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
 import Badge from 'pl-fe/components/badge';
 import HoverRefWrapper from 'pl-fe/components/hover-ref-wrapper';
+import { ParsedContent } from 'pl-fe/components/parsed-content';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
 import { Avatar, Stack, Text } from 'pl-fe/components/ui';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
@@ -67,12 +68,15 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           withRelationship={false}
         />
 
-        <Text
-          truncate
-          align='left'
-          className='line-clamp-2 inline text-ellipsis [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
-          dangerouslySetInnerHTML={{ __html: account.note_emojified || '&nbsp;' }}
-        />
+        {!!account.note_emojified && (
+          <Text
+            truncate
+            align='left'
+            className='line-clamp-2 inline text-ellipsis [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
+          >
+            <ParsedContent html={account.note_emojified} />
+          </Text>
+        )}
       </Stack>
 
       <div className='grid grid-cols-3 gap-1 py-4'>
