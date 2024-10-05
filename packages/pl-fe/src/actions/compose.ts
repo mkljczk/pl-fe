@@ -428,7 +428,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
 
       const poll = params.poll;
       if (poll?.options_map) {
-        poll.options.forEach((option: any, index: number) => poll.options_map![index][compose.language!] = option);
+        poll.options.forEach((option, index: number) => poll.options_map![index][compose.language!] = option);
       }
     }
 
@@ -491,7 +491,7 @@ const uploadCompose = (composeId: string, files: FileList, intl: IntlShape) =>
         intl,
         (data) => dispatch(uploadComposeSuccess(composeId, data, f)),
         (error) => dispatch(uploadComposeFail(composeId, error)),
-        ({ loaded }: any) => {
+        ({ loaded }) => {
           progress[i] = loaded;
           dispatch(uploadComposeProgress(composeId, progress.reduce((a, v) => a + v, 0), total));
         },

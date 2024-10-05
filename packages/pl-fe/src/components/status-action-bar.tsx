@@ -664,6 +664,18 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     replyTitle = intl.formatMessage(messages.replies_disabled_group);
   }
 
+  const replyButton = (
+    <StatusActionButton
+      title={replyTitle}
+      icon={require('@tabler/icons/outline/message-circle.svg')}
+      onClick={handleReplyClick}
+      count={replyCount}
+      text={withLabels ? intl.formatMessage(messages.reply) : undefined}
+      disabled={replyDisabled}
+      theme={statusActionButtonTheme}
+    />
+  );
+
   const reblogMenu = [{
     text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog),
     action: handleReblogClick,
@@ -714,20 +726,14 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
         onClick={e => e.stopPropagation()}
         alignItems='center'
       >
-        <GroupPopover
-          group={status.group as any}
-          isEnabled={replyDisabled}
-        >
-          <StatusActionButton
-            title={replyTitle}
-            icon={require('@tabler/icons/outline/message-circle.svg')}
-            onClick={handleReplyClick}
-            count={replyCount}
-            text={withLabels ? intl.formatMessage(messages.reply) : undefined}
-            disabled={replyDisabled}
-            theme={statusActionButtonTheme}
-          />
-        </GroupPopover>
+        {status.group ? (
+          <GroupPopover
+            group={status.group}
+            isEnabled={replyDisabled}
+          >
+            {replyButton}
+          </GroupPopover>
+        ) : replyButton}
 
         {(features.quotePosts && me) ? (
           <DropdownMenu

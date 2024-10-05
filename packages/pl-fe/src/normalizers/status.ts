@@ -5,7 +5,7 @@
  */
 import escapeTextContentForBrowser from 'escape-html';
 import DOMPurify from 'isomorphic-dompurify';
-import { type Account as BaseAccount, type Status as BaseStatus, type MediaAttachment, mentionSchema, type Translation } from 'pl-api';
+import { type Account as BaseAccount, type Status as BaseStatus, type CustomEmoji, type MediaAttachment, mentionSchema, type Translation } from 'pl-api';
 
 import emojify from 'pl-fe/features/emoji';
 import { unescapeHTML } from 'pl-fe/utils/html';
@@ -62,8 +62,8 @@ const buildSearchContent = (status: Pick<BaseStatus, 'poll' | 'mentions' | 'spoi
   return unescapeHTML(fields.join('\n\n')) || '';
 };
 
-const calculateContent = (text: string, emojiMap: any) => emojify(text, emojiMap);
-const calculateSpoiler = (text: string, emojiMap: any) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { USE_PROFILES: { html: true } });
+const calculateContent = (text: string, emojiMap: Record<string, CustomEmoji>) => emojify(text, emojiMap);
+const calculateSpoiler = (text: string, emojiMap: Record<string, CustomEmoji>) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { USE_PROFILES: { html: true } });
 
 const calculateStatus = (status: BaseStatus, oldStatus?: OldStatus): CalculatedValues => {
   if (oldStatus && oldStatus.content === status.content && oldStatus.spoiler_text === status.spoiler_text) {

@@ -81,7 +81,7 @@ interface IAccount {
   hidden?: boolean;
   hideActions?: boolean;
   id?: string;
-  onActionClick?: (account: any) => void;
+  onActionClick?: (account: AccountSchema) => void;
   showAccountHoverCard?: boolean;
   timestamp?: string;
   timestampUrl?: string;

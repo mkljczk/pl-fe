@@ -82,7 +82,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
           accounts: <FormattedList type='conjunction' value={accounts} />,
           // @ts-ignore wtf?
           hover: (children: React.ReactNode) => {
-            if (hoverable) {
+            if (hoverable && status.in_reply_to_id) {
               return (
                 <HoverStatusWrapper statusId={status.in_reply_to_id} inline>
                   <span
