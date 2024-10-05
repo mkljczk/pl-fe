@@ -13,7 +13,7 @@ import type { StatusEdit as BaseStatusEdit } from 'pl-api';
 const normalizeStatusEdit = (statusEdit: BaseStatusEdit) => {
   const emojiMap = makeEmojiMap(statusEdit.emojis);
 
-  const poll = statusEdit.poll ? normalizePollEdit(statusEdit.poll) : null;
+  const poll = statusEdit.poll ? normalizePollEdit(statusEdit.poll, statusEdit.emojis) : null;
 
   return {
     ...statusEdit,

@@ -21,7 +21,7 @@ const normalizePoll = (poll: Exclude<BaseStatus['poll'], null>) => {
   };
 };
 
-const normalizePollEdit = (poll: Exclude<BaseStatusEdit['poll'], null>, emojis?: Array<CustomEmoji>) => {
+const normalizePollEdit = (poll: Exclude<BaseStatusEdit['poll'], null>, emojis: Array<CustomEmoji>) => {
   const emojiMap = makeEmojiMap(emojis);
   return {
     ...poll,
