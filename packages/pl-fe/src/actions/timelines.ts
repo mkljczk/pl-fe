@@ -132,11 +132,11 @@ const noOp = () => { };
 const parseTags = (tags: Record<string, any[]> = {}, mode: 'any' | 'all' | 'none') =>
   (tags[mode] || []).map((tag) => tag.value);
 
-const deduplicateStatuses = (statuses: any[]) => {
+const deduplicateStatuses = (statuses: Array<BaseStatus>) => {
   const deduplicatedStatuses: any[] = [];
 
   for (const status of statuses) {
-    const reblogged = status.reblog && deduplicatedStatuses.find((deduplicatedStatus) => deduplicatedStatus.reblog?.id === status.reblog.id);
+    const reblogged = status.reblog && deduplicatedStatuses.find((deduplicatedStatus) => deduplicatedStatus.reblog?.id === status.reblog?.id);
 
     if (reblogged) {
       if (reblogged.accounts) {
