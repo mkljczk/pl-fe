@@ -1,7 +1,15 @@
 {
   "name": "pl-mobile",
+  "version": "0.0.0",
   "main": "expo-router/entry",
-  "version": "1.0.0",
+  "homepage": "https://github.com/mkljczk/pl-fe/tree/fork/packages/pl-mobile",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mkljczk/pl-fe"
+  },
+  "bugs": {
+    "url": "https://github.com/mkljczk/pl-fe/issues"
+  },
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -10,6 +18,7 @@
     "test": "jest --watchAll",
     "lint": "expo lint"
   },
+  "license": "AGPL-3.0-or-later",
   "jest": {
     "preset": "jest-expo"
   },
