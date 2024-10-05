@@ -619,7 +619,7 @@ const fetchComposeSuggestionsTags = (dispatch: AppDispatch, getState: () => Root
   const { trends } = state.auth.client.features;
 
   if (trends) {
-    const currentTrends = state.trends.items.toArray();
+    const currentTrends = state.trends.items;
 
     return dispatch(updateSuggestionTags(composeId, token, currentTrends));
   }

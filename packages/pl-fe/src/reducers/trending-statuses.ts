@@ -1,4 +1,4 @@
-import { OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord } from 'immutable';
+import { Record as ImmutableRecord } from 'immutable';
 
 import { TRENDING_STATUSES_FETCH_REQUEST, TRENDING_STATUSES_FETCH_SUCCESS } from 'pl-fe/actions/trending-statuses';
 
@@ -6,13 +6,13 @@ import type { Status } from 'pl-api';
 import type { AnyAction } from 'redux';
 
 const ReducerRecord = ImmutableRecord({
-  items: ImmutableOrderedSet<string>(),
+  items: Array<string>(),
   isLoading: false,
 });
 
 type State = ReturnType<typeof ReducerRecord>;
 
-const toIds = (items: Array<Status>) => ImmutableOrderedSet(items.map(item => item.id));
+const toIds = (items: Array<Status>) => items.map(item => item.id);
 
 const importStatuses = (state: State, statuses: Array<Status>) =>
   state.withMutations(state => {
