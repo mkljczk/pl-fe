@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
-import { useAppSelector, useCompose, useFeatures } from 'pl-fe/hooks';
-import { makeGetStatus } from 'pl-fe/selectors';
+import { useCompose, useFeatures } from 'pl-fe/hooks';
+import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 import { useModalsStore } from 'pl-fe/stores';
 
 interface IReplyMentions {
@@ -14,8 +14,7 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
   const features = useFeatures();
   const compose = useCompose(composeId);
 
-  const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id: compose.in_reply_to! }));
+  const status = useStatus(compose.in_reply_to!);
   const to = compose.to.toArray();
 
   if (!features.createStatusExplicitAddressing || !status || !to) {
@@ -50,7 +49,7 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
     return (
       <span
         key={acct}
-        className='text-primary-600 hover:text-primary-700 dark:text-accent-blue dark:hover:text-accent-blue inline-block no-underline [direction:ltr] hover:underline'
+        className='inline-block text-primary-600 no-underline [direction:ltr] hover:text-primary-700 hover:underline dark:text-accent-blue dark:hover:text-accent-blue'
       >
         @{username}
       </span>

@@ -1,18 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
+import React, { useCallback } from 'react';
+import { FormattedDate, FormattedMessage } from 'react-intl';
 
-import { fetchStatus } from 'pl-fe/actions/statuses';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StatusContent from 'pl-fe/components/status-content';
 import StatusMedia from 'pl-fe/components/status-media';
 import TranslateButton from 'pl-fe/components/translate-button';
 import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
-import { useAppDispatch, useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
-import { makeGetStatus } from 'pl-fe/selectors';
+import { usePlFeConfig } from 'pl-fe/hooks';
+import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 import { useModalsStore } from 'pl-fe/stores';
-
-import type { Status as StatusEntity } from 'pl-fe/normalizers';
 
 type RouteParams = { statusId: string };
 
@@ -20,31 +17,17 @@ interface IEventInformation {
   params: RouteParams;
 }
 
-const EventInformation: React.FC<IEventInformation> = ({ params }) => {
-  const dispatch = useAppDispatch();
-  const getStatus = useCallback(makeGetStatus(), []);
-  const intl = useIntl();
-
-  const status = useAppSelector(state => getStatus(state, { id: params.statusId })) as StatusEntity;
+const EventInformation: React.FC<IEventInformation> = ({ params: { statusId: statusId } }) => {
+  const { data: status, isSuccess } = useStatus(statusId);
 
   const { openModal } = useModalsStore();
   const { tileServer } = usePlFeConfig();
-
-  const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
-
-  useEffect(() => {
-    dispatch(fetchStatus(params.statusId, intl)).then(() => {
-      setIsLoaded(true);
-    }).catch(() => {
-      setIsLoaded(true);
-    });
-  }, [params.statusId]);
 
   const handleShowMap: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();
 
     openModal('EVENT_MAP', {
-      statusId: status.id,
+      statusId,
     });
   };
 
@@ -82,7 +65,7 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
       text.push(
         <React.Fragment key='event-map'>
           <br />
-          <a href='#' className='text-primary-600 dark:text-accent-blue hover:underline' onClick={handleShowMap}>
+          <a href='#' className='text-primary-600 hover:underline dark:text-accent-blue' onClick={handleShowMap}>
             <FormattedMessage id='event.show_on_map' defaultMessage='Show on map' />
           </a>
         </React.Fragment>,
@@ -159,7 +142,7 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
         {status.event.links.map(link => (
           <HStack space={2} alignItems='center'>
             <Icon src={require('@tabler/icons/outline/link.svg')} />
-            <a href={link.remote_url || link.url} className='text-primary-600 dark:text-accent-blue hover:underline' target='_blank'>
+            <a href={link.remote_url || link.url} className='text-primary-600 hover:underline dark:text-accent-blue' target='_blank'>
               {(link.remote_url || link.url).replace(/^https?:\/\//, '')}
             </a>
           </HStack>
@@ -168,7 +151,7 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
     );
   }, [status]);
 
-  if (!status && isLoaded) {
+  if (!isSuccess) {
     return (
       <MissingIndicator />
     );

@@ -1,26 +1,24 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ReactSwipeableViews from 'react-swipeable-views';
 
 import EventPreview from 'pl-fe/components/event-preview';
 import { Card, Icon } from 'pl-fe/components/ui';
-import { useAppSelector } from 'pl-fe/hooks';
-import { makeGetStatus } from 'pl-fe/selectors';
+import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import PlaceholderEventPreview from '../../placeholder/components/placeholder-event-preview';
 
 import type { OrderedSet as ImmutableOrderedSet } from 'immutable';
 
-const Event = ({ id }: { id: string }) => {
-  const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id }));
+const Event = ({ statusId }: { statusId: string }) => {
+  const { data: status } = useStatus(statusId);
 
   if (!status) return null;
 
   return (
     <Link
       className='w-full px-1'
-      to={`/@${status.account.acct}/events/${status.id}`}
+      to={`/@${status.account.acct}/events/${statusId}`}
     >
       <EventPreview status={status} floatingAction={false} />
     </Link>
@@ -64,7 +62,7 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
         </div>
       )}
       <ReactSwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
-        {statusIds.map(statusId => <Event key={statusId} id={statusId} />)}
+        {statusIds.map(statusId => <Event key={statusId} statusId={statusId} />)}
       </ReactSwipeableViews>
       {index !== statusIds.size - 1 && (
         <div className='absolute right-3 top-1/2 z-10 -mt-4'>

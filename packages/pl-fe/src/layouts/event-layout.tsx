@@ -13,9 +13,7 @@ import {
   WhoToFollowPanel,
 } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector, useFeatures } from 'pl-fe/hooks';
-import { makeGetStatus } from 'pl-fe/selectors';
-
-const getStatus = makeGetStatus();
+import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 interface IEventLayout {
   params?: {
@@ -31,7 +29,7 @@ const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
   const history = useHistory();
   const statusId = params?.statusId!;
 
-  const status = useAppSelector(state => getStatus(state, { id: statusId }) || undefined);
+  const { data: status } = useStatus(statusId);
 
   const event = status?.event;
 
@@ -70,10 +68,10 @@ const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
       <Layout.Main>
         <Column label={event?.name} withHeader={false}>
           <div className='space-y-4'>
-            <EventHeader status={status} />
+            <EventHeader status={status || undefined} />
 
             {status && showTabs && (
-              <Tabs key={`event-tabs-${status.id}`} items={tabs} activeItem={activeItem} />
+              <Tabs key={`event-tabs-${statusId}`} items={tabs} activeItem={activeItem} />
             )}
 
             {children}

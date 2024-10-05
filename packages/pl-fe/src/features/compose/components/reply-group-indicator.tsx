@@ -1,10 +1,10 @@
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Link from 'pl-fe/components/link';
 import { Text } from 'pl-fe/components/ui';
 import { useCompose } from 'pl-fe/hooks';
+import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 interface IReplyGroupIndicator {
   composeId: string;

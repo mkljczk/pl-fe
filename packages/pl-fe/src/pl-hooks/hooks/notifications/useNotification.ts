@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { type MinifiedNotification, minifyNotification } from 'pl-fe/pl-hooks/minifiers/minifyNotification';
+
 
 import { useAppSelector, useClient } from 'pl-fe/hooks';
 import { normalizeNotification, type Notification } from 'pl-fe/normalizers';
+import { type MinifiedNotification, minifyNotification } from 'pl-fe/pl-hooks/minifiers/minifyNotification';
 import { queryClient } from 'pl-fe/queries/client';
 import { selectAccount, selectAccounts } from 'pl-fe/selectors';
 

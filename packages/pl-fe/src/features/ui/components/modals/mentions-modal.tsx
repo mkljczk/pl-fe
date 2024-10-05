@@ -1,13 +1,12 @@
-import { OrderedSet as ImmutableOrderedSet } from 'immutable';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Modal, Spinner } from 'pl-fe/components/ui';
 import AccountContainer from 'pl-fe/containers/account-container';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
-import { makeGetStatus } from 'pl-fe/selectors';
+import { useAppDispatch } from 'pl-fe/hooks';
+import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import type { BaseModalProps } from '../modal-root';
 
@@ -19,10 +18,9 @@ const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose,
   const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const intl = useIntl();
-  const getStatus = useCallback(makeGetStatus(), []);
 
-  const status = useAppSelector((state) => getStatus(state, { id: statusId }));
-  const accountIds = status ? ImmutableOrderedSet(status.mentions.map(m => m.id)) : null;
+  const { data: status } = useStatus(statusId);
+  const accountIds = status ? status.mentions.map(m => m.id) : null;
 
   const fetchData = () => {
     dispatch(fetchStatusWithContext(statusId, intl));

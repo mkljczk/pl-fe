@@ -1,4 +1,3 @@
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 import React, { useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Redirect } from 'react-router-dom';
@@ -9,6 +8,7 @@ import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import { Column, Stack } from 'pl-fe/components/ui';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import { useAppDispatch, useLoggedIn } from 'pl-fe/hooks';
+import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import Thread from './components/thread';
 import ThreadLoginCta from './components/thread-login-cta';

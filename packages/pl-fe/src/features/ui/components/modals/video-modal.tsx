@@ -1,10 +1,9 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import Video from 'pl-fe/features/video';
-import { useAppSelector } from 'pl-fe/hooks';
-import { makeGetStatus } from 'pl-fe/selectors';
+import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import type { BaseModalProps } from '../modal-root';
 import type { MediaAttachment } from 'pl-api';
@@ -18,9 +17,7 @@ type VideoModalProps = {
 };
 
 const VideoModal: React.FC<VideoModalProps & BaseModalProps> = ({ statusId, account, media, time }) => {
-  const getStatus = useCallback(makeGetStatus(), []);
-
-  const status = useAppSelector(state => getStatus(state, { id: statusId }))!;
+  const { data: status } = useStatus(statusId);
   const history = useHistory();
 
   const handleStatusClick: React.MouseEventHandler = e => {
@@ -28,7 +25,7 @@ const VideoModal: React.FC<VideoModalProps & BaseModalProps> = ({ statusId, acco
 
     if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
       e.preventDefault();
-      history.push(`/@${account.acct}/posts/${status.id}`);
+      history.push(`/@${account.acct}/posts/${statusId}`);
     }
   };
 

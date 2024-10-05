@@ -53,7 +53,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
     <label
       ref={picker}
       className={clsx(
-        'bg-primary-300 absolute bottom-0 left-1/2 size-20 -translate-x-1/2 translate-y-1/2 cursor-pointer ring-2',
+        'absolute bottom-0 left-1/2 size-20 -translate-x-1/2 translate-y-1/2 cursor-pointer bg-primary-300 ring-2',
         {
           'rounded-lg': onChangeDescription,
           'rounded-full': !onChangeDescription,

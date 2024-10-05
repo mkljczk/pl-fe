@@ -56,7 +56,7 @@ const Carousel: React.FC<ICarousel> = (props): JSX.Element => {
   return (
     <HStack alignItems='stretch'>
       <div
-        className='dark:bg-primary-900 z-10 flex w-5 items-center justify-center self-stretch rounded-l-xl bg-white'
+        className='z-10 flex w-5 items-center justify-center self-stretch rounded-l-xl bg-white dark:bg-primary-900'
         style={{
           height: controlsHeight || 'auto',
         }}
@@ -88,7 +88,7 @@ const Carousel: React.FC<ICarousel> = (props): JSX.Element => {
       </div>
 
       <div
-        className='dark:bg-primary-900 z-10 flex w-5 items-center justify-center self-stretch rounded-r-xl bg-white'
+        className='z-10 flex w-5 items-center justify-center self-stretch rounded-r-xl bg-white dark:bg-primary-900'
         style={{
           height: controlsHeight || 'auto',
         }}

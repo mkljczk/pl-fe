@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { useRelationship } from 'pl-fe/api/hooks/accounts/useRelationship';
 
+import { useRelationship } from 'pl-fe/api/hooks/accounts/useRelationship';
 import { useAppSelector, useClient } from 'pl-fe/hooks';
 
 interface UseAccountOpts {
@@ -40,3 +40,5 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
 
   return { ...accountQuery, data };
 };
+
+export { useAccount };

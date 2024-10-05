@@ -1,5 +1,5 @@
 import { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { eventDiscussionCompose } from 'pl-fe/actions/compose';
@@ -11,7 +11,7 @@ import { Stack } from 'pl-fe/components/ui';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import PendingStatus from 'pl-fe/features/ui/components/pending-status';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
-import { makeGetStatus } from 'pl-fe/selectors';
+import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import ComposeForm from '../compose/components/compose-form';
 import { getDescendantsIds } from '../status/components/thread';
@@ -27,34 +27,21 @@ interface IEventDiscussion {
   onOpenVideo: (video: MediaAttachment, time: number) => void;
 }
 
-const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
+const EventDiscussion: React.FC<IEventDiscussion> = ({ params: { statusId: statusId } }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id: props.params.statusId }));
+  const { data: status } = useStatus(statusId);
 
   const me = useAppSelector((state) => state.me);
 
-  const descendantsIds = useAppSelector(state => {
-    let descendantsIds = ImmutableOrderedSet<string>();
-
-    if (status) {
-      const statusId = status.id;
-      descendantsIds = getDescendantsIds(state, statusId);
-      descendantsIds = descendantsIds.delete(statusId);
-    }
-
-    return descendantsIds;
-  });
+  const descendantsIds = useAppSelector(state => getDescendantsIds(state, statusId).delete(statusId));
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 
   const node = useRef<HTMLDivElement>(null);
 
   const fetchData = () => {
-    const { params } = props;
-    const { statusId } = params;
     return dispatch(fetchStatusWithContext(statusId, intl));
   };
 
@@ -64,10 +51,10 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
     }).catch(() => {
       setIsLoaded(true);
     });
-  }, [props.params.statusId]);
+  }, [statusId]);
 
   useEffect(() => {
-    if (isLoaded && me) dispatch(eventDiscussionCompose(`reply:${props.params.statusId}`, status!));
+    if (isLoaded && me) dispatch(eventDiscussionCompose(`reply:${statusId}`, status!));
   }, [isLoaded, me]);
 
   const handleMoveUp = (id: string) => {
@@ -102,7 +89,7 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
     <ThreadStatus
       key={id}
       id={id}
-      focusedStatusId={status!.id}
+      focusedStatusId={statusId}
       onMoveUp={handleMoveUp}
       onMoveDown={handleMoveDown}
     />

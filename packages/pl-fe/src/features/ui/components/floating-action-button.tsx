@@ -37,7 +37,7 @@ const HomeFAB: React.FC = () => {
       onClick={handleOpenComposeModal}
       className={clsx(
         'inline-flex appearance-none items-center rounded-full border p-4 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2',
-        'bg-secondary-500 hover:bg-secondary-400 focus:bg-secondary-500 focus:ring-secondary-300 border-transparent text-gray-100',
+        'border-transparent bg-secondary-500 text-gray-100 hover:bg-secondary-400 focus:bg-secondary-500 focus:ring-secondary-300',
       )}
       aria-label={intl.formatMessage(messages.publish)}
     >
@@ -67,7 +67,7 @@ const GroupFAB: React.FC = () => {
       onClick={handleOpenComposeModal}
       className={clsx(
         'inline-flex appearance-none items-center rounded-full border p-4 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2',
-        'bg-secondary-500 hover:bg-secondary-400 focus:bg-secondary-500 focus:ring-secondary-300 border-transparent text-gray-100',
+        'border-transparent bg-secondary-500 text-gray-100 hover:bg-secondary-400 focus:bg-secondary-500 focus:ring-secondary-300',
       )}
       aria-label={intl.formatMessage(messages.publish)}
     >

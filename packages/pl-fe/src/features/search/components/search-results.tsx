@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { List as ImmutableList, type OrderedSet as ImmutableOrderedSet } from 'immutable';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -80,7 +79,7 @@ const SearchResults = () => {
     return <Tabs key={tabKey} items={items} activeItem={selectedFilter} />;
   };
 
-  const getCurrentIndex = (id: string): number => resultsIds?.keySeq().findIndex(key => key === id);
+  const getCurrentIndex = (id: string): number => resultsIds?.findIndex(key => key === id);
 
   const handleMoveUp = (id: string) => {
     if (!resultsIds) return;
@@ -112,16 +111,16 @@ const SearchResults = () => {
   let loaded;
   let noResultsMessage;
   let placeholderComponent = PlaceholderStatus as React.ComponentType;
-  let resultsIds: ImmutableOrderedSet<string>;
+  let resultsIds: Array<string>;
 
   if (selectedFilter === 'accounts') {
     hasMore = results.accountsHasMore;
     loaded = results.accountsLoaded;
     placeholderComponent = PlaceholderAccount;
 
-    if (results.accounts && results.accounts.size > 0) {
+    if (results.accounts && results.accounts.length > 0) {
       searchResults = results.accounts.map(accountId => <AccountContainer key={accountId} id={accountId} />);
-    } else if (!submitted && suggestions && !suggestions.isEmpty()) {
+    } else if (!submitted && suggestions && suggestions.length !== 0) {
       searchResults = suggestions.map(suggestion => <AccountContainer key={suggestion.account_id} id={suggestion.account_id} />);
     } else if (loaded) {
       noResultsMessage = (
@@ -140,7 +139,7 @@ const SearchResults = () => {
     hasMore = results.statusesHasMore;
     loaded = results.statusesLoaded;
 
-    if (results.statuses && results.statuses.size > 0) {
+    if (results.statuses && results.statuses.length > 0) {
       searchResults = results.statuses.map((statusId: string) => (
         // @ts-ignore
         <StatusContainer
@@ -151,7 +150,7 @@ const SearchResults = () => {
         />
       ));
       resultsIds = results.statuses;
-    } else if (!submitted && !filterByAccount && trendingStatuses && !trendingStatuses.isEmpty()) {
+    } else if (!submitted && !filterByAccount && trendingStatuses && trendingStatuses.length !== 0) {
       searchResults = trendingStatuses.map((statusId: string) => (
         // @ts-ignore
         <StatusContainer
@@ -180,9 +179,9 @@ const SearchResults = () => {
     loaded = results.hashtagsLoaded;
     placeholderComponent = PlaceholderHashtag;
 
-    if (results.hashtags && results.hashtags.size > 0) {
+    if (results.hashtags && results.hashtags.length > 0) {
       searchResults = results.hashtags.map(hashtag => <Hashtag key={hashtag.name} hashtag={hashtag} />);
-    } else if (!submitted && suggestions && !suggestions.isEmpty()) {
+    } else if (!submitted && suggestions && suggestions.length !== 0) {
       searchResults = trends.map(hashtag => <Hashtag key={hashtag.name} hashtag={hashtag} />);
     } else if (loaded) {
       noResultsMessage = (
@@ -204,7 +203,7 @@ const SearchResults = () => {
       selectFilter('accounts');
       setTabKey(key => ++key);
     } else if (!submitted && trendingLinks) {
-      searchResults = ImmutableList(trendingLinks.map(trendingLink => <TrendingLink trendingLink={trendingLink} />));
+      searchResults = trendingLinks.map(trendingLink => <TrendingLink trendingLink={trendingLink} />);
     }
   }
 
@@ -228,7 +227,7 @@ const SearchResults = () => {
           id='search-results'
           key={selectedFilter}
           isLoading={submitted && !loaded}
-          showLoading={submitted && !loaded && (!searchResults || searchResults?.isEmpty())}
+          showLoading={submitted && !loaded && (!searchResults || searchResults?.length === 0)}
           hasMore={hasMore}
           onLoadMore={handleLoadMore}
           placeholderComponent={placeholderComponent}

@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import { cancelReplyCompose } from 'pl-fe/actions/compose';
-import { useAppDispatch, useAppSelector, useCompose } from 'pl-fe/hooks';
-import { makeGetStatus } from 'pl-fe/selectors';
+import { useAppDispatch, useCompose } from 'pl-fe/hooks';
+import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import ReplyIndicator from '../components/reply-indicator';
 
@@ -11,10 +11,8 @@ interface IReplyIndicatorContainer {
 }
 
 const ReplyIndicatorContainer: React.FC<IReplyIndicatorContainer> = ({ composeId }) => {
-  const getStatus = useCallback(makeGetStatus(), []);
-
   const { in_reply_to: inReplyToId, id: statusId } = useCompose(composeId);
-  const status = useAppSelector(state => getStatus(state, { id: inReplyToId! }));
+  const { data: status } = useStatus(inReplyToId!);
   const dispatch = useAppDispatch();
 
   const onCancel = () => {
@@ -24,7 +22,7 @@ const ReplyIndicatorContainer: React.FC<IReplyIndicatorContainer> = ({ composeId
   if (!status) return null;
 
   return (
-    <ReplyIndicator status={status} hideActions={!!statusId} onCancel={onCancel} />
+    <ReplyIndicator status={status.account} hideActions={!!statusId} onCancel={onCancel} />
   );
 };
 

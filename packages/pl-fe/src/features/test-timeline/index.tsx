@@ -1,10 +1,10 @@
-import { importEntities } from 'pl-fe/pl-hooks/importer';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { expandTimelineSuccess } from 'pl-fe/actions/timelines';
 import { useAppDispatch, useTheme } from 'pl-fe/hooks';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 
 import { Column } from '../../components/ui';
 import Timeline from '../ui/components/timeline';

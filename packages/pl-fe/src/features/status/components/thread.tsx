@@ -337,7 +337,7 @@ const Thread: React.FC<IThread> = ({
             onOpenCompareHistoryModal={handleOpenCompareHistoryModal}
           />
 
-          <hr className='black:border-t -mx-4 mb-2 max-w-[100vw] border-t-2 dark:border-gray-800' />
+          <hr className='-mx-4 mb-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
 
           <StatusActionBar
             status={status}
@@ -349,7 +349,7 @@ const Thread: React.FC<IThread> = ({
       </HotKeys>
 
       {hasDescendants && (
-        <hr className='black:border-t -mx-4 mt-2 max-w-[100vw] border-t-2 dark:border-gray-800' />
+        <hr className='-mx-4 mt-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
       )}
     </div>
   );
@@ -390,7 +390,7 @@ const Thread: React.FC<IThread> = ({
       <div
         ref={node}
         className={
-          clsx('black:bg-black dark:bg-primary-900 bg-white', {
+          clsx('bg-white black:bg-black dark:bg-primary-900', {
             'h-full overflow-auto': !useWindowScroll,
           })
         }

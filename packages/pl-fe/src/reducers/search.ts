@@ -23,10 +23,10 @@ import {
 import type { Search, Tag } from 'pl-api';
 
 const ResultsRecord = ImmutableRecord({
-  accounts: ImmutableOrderedSet<string>(),
-  statuses: ImmutableOrderedSet<string>(),
-  groups: ImmutableOrderedSet<string>(),
-  hashtags: ImmutableOrderedSet<Tag>(), // it's a list of maps
+  accounts: Array<string>(),
+  statuses: Array<string>(),
+  groups: Array<string>(),
+  hashtags: Array<Tag>(), // it's a list of maps
   accountsHasMore: false,
   statusesHasMore: false,
   groupsHasMore: false,
@@ -49,7 +49,7 @@ const ReducerRecord = ImmutableRecord({
 type State = ReturnType<typeof ReducerRecord>;
 type SearchFilter = 'accounts' | 'statuses' | 'groups' | 'hashtags' | 'links';
 
-const toIds = (items: Array<{ id: string }> = []) => ImmutableOrderedSet(items.map(item => item.id));
+const toIds = (items: Array<{ id: string }> = []) => items.map(item => item.id);
 
 const importResults = (state: State, results: Search, searchTerm: string, searchType: SearchFilter) =>
   state.withMutations(state => {
@@ -58,7 +58,7 @@ const importResults = (state: State, results: Search, searchTerm: string, search
         accounts: toIds(results.accounts),
         statuses: toIds(results.statuses),
         groups: toIds(results.groups),
-        hashtags: ImmutableOrderedSet(results.hashtags), // it's a list of records
+        hashtags: results.hashtags, // it's a list of records
         accountsHasMore: results.accounts.length !== 0,
         statusesHasMore: results.statuses.length !== 0,
         groupsHasMore: results.groups?.length !== 0,

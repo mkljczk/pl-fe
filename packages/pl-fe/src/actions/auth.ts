@@ -7,7 +7,6 @@
  * @see module:pl-fe/actions/security
 */
 import { credentialAccountSchema, PlApiClient, type CreateAccountParams, type Token } from 'pl-api';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { defineMessages } from 'react-intl';
 
 import { createAccount } from 'pl-fe/actions/accounts';
@@ -18,6 +17,7 @@ import { startOnboarding } from 'pl-fe/actions/onboarding';
 import { type PlfeResponse, getClient } from 'pl-fe/api';
 import * as BuildConfig from 'pl-fe/build-config';
 import { custom } from 'pl-fe/custom';
+import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { queryClient } from 'pl-fe/queries/client';
 import { selectAccount } from 'pl-fe/selectors';
 import { unsetSentryAccount } from 'pl-fe/sentry';
