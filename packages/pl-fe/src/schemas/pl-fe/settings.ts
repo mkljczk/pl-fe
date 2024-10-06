@@ -77,9 +77,24 @@ const settingsSchema = z.object({
       advanced: z.boolean().catch(false),
       show: z.boolean().catch(true),
     }),
+    sounds: z.record(z.boolean()).catch({}),
   }),
   autoTranslate: z.boolean().catch(false),
   knownLanguages: z.array(z.string()).catch([]),
+  frequentlyUsedEmojis: z.record(z.number()).catch({}),
+  frequentlyUsedLanguages: z.record(z.number()).catch({}),
+  timelines: z.record(coerceObject({
+    shows: coerceObject({
+      reblog: z.boolean().catch(true),
+      reply: z.boolean().catch(true),
+      direct: z.boolean().catch(false),
+    }),
+    other: coerceObject({
+      onlyMedia: z.boolean().catch(false),
+    }),
+  })).catch({}),
+
+  saved: z.boolean().catch(true),
 });
 
 type Settings = z.infer<typeof settingsSchema>;

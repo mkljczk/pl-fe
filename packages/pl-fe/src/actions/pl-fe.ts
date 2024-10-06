@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 import { getHost } from 'pl-fe/actions/instance';
 import { normalizePlFeConfig } from 'pl-fe/normalizers';
 import KVStore from 'pl-fe/storage/kv-store';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 
 import { getClient, staticFetch } from '../api';
 
@@ -77,6 +78,9 @@ const importPlFeConfig = (plFeConfig: APIEntity, host: string | null) => {
   if (!plFeConfig.brandColor) {
     plFeConfig.brandColor = '#d80482';
   }
+
+  useSettingsStore.getState().loadDefaultSettings(plFeConfig?.defaultSettings);
+
   return {
     type: PLFE_CONFIG_REQUEST_SUCCESS,
     plFeConfig,

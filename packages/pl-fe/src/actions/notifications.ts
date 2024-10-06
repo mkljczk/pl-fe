@@ -6,6 +6,7 @@ import { getClient } from 'pl-fe/api';
 import { getNotificationStatus } from 'pl-fe/features/notifications/components/notification';
 import { normalizeNotification, normalizeNotifications, type Notification } from 'pl-fe/normalizers';
 import { getFilters, regexFromFilters } from 'pl-fe/selectors';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 import { compareId } from 'pl-fe/utils/comparators';
 import { unescapeHTML } from 'pl-fe/utils/html';
@@ -20,7 +21,7 @@ import {
   importFetchedStatuses,
 } from './importer';
 import { saveMarker } from './markers';
-import { getSettings, saveSettings } from './settings';
+import { saveSettings } from './settings';
 
 import type { Account, Notification as BaseNotification, PaginatedResponse, Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
@@ -72,7 +73,8 @@ const fetchRelatedRelationships = (dispatch: AppDispatch, notifications: Array<B
 
 const updateNotifications = (notification: BaseNotification) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const showInColumn = getSettings(getState()).getIn(['notifications', 'shows', notification.type], true);
+    const selectedFilter = useSettingsStore().settings.notifications.quickFilter.active;
+    const showInColumn = selectedFilter === 'all' ? true : (FILTER_TYPES[selectedFilter as FilterType] || [notification.type]).includes(notification.type);
 
     if (notification.account) {
       dispatch(importFetchedAccount(notification.account));
@@ -105,7 +107,7 @@ const updateNotificationsQueue = (notification: BaseNotification, intlMessages: 
     if (notification.type === 'chat_mention') return; // Drop chat notifications, handle them per-chat
 
     const filters = getFilters(getState(), { contextType: 'notifications' });
-    const playSound = getSettings(getState()).getIn(['notifications', 'sounds', notification.type]);
+    const playSound = useSettingsStore.getState().settings.notifications.sounds[notification.type];
 
     const status = getNotificationStatus(notification);
 
@@ -195,7 +197,7 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
     const state = getState();
 
     const features = state.auth.client.features;
-    const activeFilter = getSettings(state).getIn(['notifications', 'quickFilter', 'active']) as FilterType;
+    const activeFilter = useSettingsStore.getState().settings.notifications.quickFilter.active as FilterType;
     const notifications = state.notifications;
 
     if (notifications.isLoading) {
@@ -291,8 +293,8 @@ const scrollTopNotifications = (top: boolean) =>
   };
 
 const setFilter = (filterType: FilterType, abort?: boolean) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const activeFilter = getSettings(getState()).getIn(['notifications', 'quickFilter', 'active']);
+  (dispatch: AppDispatch) => {
+    const activeFilter = useSettingsStore.getState().settings.notifications.quickFilter.active as FilterType;
 
     dispatch({
       type: NOTIFICATIONS_FILTER_SET,
