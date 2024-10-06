@@ -27,34 +27,22 @@ interface IEventDiscussion {
   onOpenVideo: (video: MediaAttachment, time: number) => void;
 }
 
-const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
+const EventDiscussion: React.FC<IEventDiscussion> = ({ params: { statusId: statusId } }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id: props.params.statusId }));
+  const status = useAppSelector(state => getStatus(state, { id: statusId }));
 
   const me = useAppSelector((state) => state.me);
 
-  const descendantsIds = useAppSelector(state => {
-    let descendantsIds = ImmutableOrderedSet<string>();
-
-    if (status) {
-      const statusId = status.id;
-      descendantsIds = getDescendantsIds(state, statusId);
-      descendantsIds = descendantsIds.delete(statusId);
-    }
-
-    return descendantsIds;
-  });
+  const descendantsIds = useAppSelector(state => getDescendantsIds(state, statusId).delete(statusId));
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 
   const node = useRef<HTMLDivElement>(null);
 
   const fetchData = () => {
-    const { params } = props;
-    const { statusId } = params;
     return dispatch(fetchStatusWithContext(statusId, intl));
   };
 
@@ -64,10 +52,10 @@ const EventDiscussion: React.FC<IEventDiscussion> = (props) => {
     }).catch(() => {
       setIsLoaded(true);
     });
-  }, [props.params.statusId]);
+  }, [statusId]);
 
   useEffect(() => {
-    if (isLoaded && me) dispatch(eventDiscussionCompose(`reply:${props.params.statusId}`, status!));
+    if (isLoaded && me) dispatch(eventDiscussionCompose(`reply:${statusId}`, status!));
   }, [isLoaded, me]);
 
   const handleMoveUp = (id: string) => {
