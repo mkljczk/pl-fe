@@ -111,7 +111,7 @@ interface TimelineDeleteAction {
 const deleteFromTimelines = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const accountId = getState().statuses.get(statusId)?.account?.id!;
-    const references = getState().statuses.filter(status => status.reblog_id === statusId).map(status => [status.id, status.account.id] as const);
+    const references = getState().statuses.filter(status => status.reblog_id === statusId).map(status => [status.id, status.account_id] as const);
     const reblogOf = getState().statuses.get(statusId)?.reblog_id || null;
 
     const action: TimelineDeleteAction = {
