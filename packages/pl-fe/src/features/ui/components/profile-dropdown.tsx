@@ -102,7 +102,7 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
 
   useEffect(() => {
     fetchOwnAccountThrottled();
-  }, [account, authUsers]);
+  }, [account.id, authUsers]);
 
   return (
     <DropdownMenu
