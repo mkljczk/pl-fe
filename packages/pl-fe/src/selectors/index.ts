@@ -13,7 +13,7 @@ import { validId } from 'pl-fe/utils/auth';
 import ConfigDB from 'pl-fe/utils/config-db';
 import { shouldFilter } from 'pl-fe/utils/timelines';
 
-import type { Account as BaseAccount, Filter, MediaAttachment, Relationship } from 'pl-api';
+import type { Account as BaseAccount, MediaAttachment, Relationship } from 'pl-api';
 import type { EntityStore } from 'pl-fe/entity-store/types';
 import type { Account, Group } from 'pl-fe/normalizers';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
@@ -49,76 +49,6 @@ const makeGetAccount = () => createSelector([
   };
 });
 
-const toServerSideType = (columnType: string): Filter['context'][0] => {
-  switch (columnType) {
-    case 'home':
-    case 'notifications':
-    case 'public':
-    case 'thread':
-      return columnType;
-    default:
-      if (columnType.includes('list:')) {
-        return 'home';
-      } else {
-        return 'public'; // community, account, hashtag
-      }
-  }
-};
-
-type FilterContext = { contextType?: string };
-
-const getFilters = (state: RootState, query: FilterContext) =>
-  state.filters.filter((filter) =>
-    (!query?.contextType || filter.context.includes(toServerSideType(query.contextType)))
-      && (filter.expires_at === null || Date.parse(filter.expires_at) > new Date().getTime()),
-  );
-
-const escapeRegExp = (string: string) =>
-  string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-
-const regexFromFilters = (filters: ImmutableList<Filter>) => {
-  if (filters.size === 0) return null;
-
-  return new RegExp(filters.map(filter =>
-    filter.keywords.map(keyword => {
-      let expr = escapeRegExp(keyword.keyword);
-
-      if (keyword.whole_word) {
-        if (/^[\w]/.test(expr)) {
-          expr = `\\b${expr}`;
-        }
-
-        if (/[\w]$/.test(expr)) {
-          expr = `${expr}\\b`;
-        }
-      }
-
-      return expr;
-    }).join('|'),
-  ).join('|'), 'i');
-};
-
-const checkFiltered = (index: string, filters: ImmutableList<Filter>) =>
-  filters.reduce((result: Array<string>, filter) =>
-    result.concat(filter.keywords.reduce((result: Array<string>, keyword) => {
-      let expr = escapeRegExp(keyword.keyword);
-
-      if (keyword.whole_word) {
-        if (/^[\w]/.test(expr)) {
-          expr = `\\b${expr}`;
-        }
-
-        if (/[\w]$/.test(expr)) {
-          expr = `${expr}\\b`;
-        }
-      }
-
-      const regex = new RegExp(expr);
-
-      if (regex.test(index)) return result.concat(filter.title);
-      return result;
-    }, [])), []);
-
 type APIStatus = { id: string; username?: string };
 
 const makeGetStatus = () => createSelector(
@@ -133,13 +63,12 @@ const makeGetStatus = () => createSelector(
     },
     (state: RootState, { id }: APIStatus) => state.polls.get(id) || null,
     (_state: RootState, { username }: APIStatus) => username,
-    getFilters,
     (state: RootState) => state.me,
     (state: RootState) => state.auth.client.features,
     (state: RootState) => getLocale('en'),
   ],
 
-  (statusBase, statusReblog, statusQuote, statusGroup, poll, username, filters, me, features, locale) => {
+  (statusBase, statusReblog, statusQuote, statusGroup, poll, username, me, features, locale) => {
     if (!statusBase) return null;
     const { account } = statusBase;
     const accountUsername = account.acct;
@@ -149,17 +78,12 @@ const makeGetStatus = () => createSelector(
       return null;
     }
 
-    const filtered = features.filtersV2
-      ? statusBase.filtered
-      : features.filters && account.id !== me && checkFiltered(statusReblog?.search_index || statusBase.search_index || '', filters) || [];
-
     return {
       ...statusBase,
       reblog: statusReblog || null,
       quote: statusQuote || null,
       group: statusGroup || null,
       poll,
-      filtered,
     };
     // if (map.currentLanguage === null && map.content_map?.size) {
     //   let currentLanguage: string | null = null;
@@ -329,9 +253,6 @@ export {
   selectAccounts,
   selectOwnAccount,
   makeGetAccount,
-  getFilters,
-  regexFromFilters,
-  makeGetStatus,
   type SelectedStatus,
   type AccountGalleryAttachment,
   getAccountGallery,

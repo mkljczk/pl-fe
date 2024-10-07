@@ -47,6 +47,8 @@ const importEntities = (entities: {
   polls?: Array<BasePoll>;
   statuses?: Array<BaseStatus>;
   relationships?: Array<BaseRelationship>;
+}, options = {
+  withParents: true,
 }) => {
   const accounts: Record<string, BaseAccount> = {};
   const groups: Record<string, BaseGroup> = {};
@@ -55,14 +57,15 @@ const importEntities = (entities: {
   const relationships: Record<string, BaseRelationship> = {};
   const statuses: Record<string, BaseStatus> = {};
 
-  const processAccount = (account: BaseAccount) => {
-    accounts[account.id] = account;
+  const processAccount = (account: BaseAccount, withParent = true) => {
+    if (withParent) accounts[account.id] = account;
+
     if (account.moved) processAccount(account.moved);
     if (account.relationship) relationships[account.relationship.id] = account.relationship;
   };
 
-  const processNotification = (notification: DeduplicatedNotification) => {
-    notifications[notification.id] = notification;
+  const processNotification = (notification: DeduplicatedNotification, withParent = true) => {
+    if (withParent) notifications[notification.id] = notification;
 
     processAccount(notification.account);
     if (notification.type === 'move') processAccount(notification.target);
@@ -72,9 +75,9 @@ const importEntities = (entities: {
       processStatus(notification.status);
   };
 
-  const processStatus = (status: BaseStatus) => {
+  const processStatus = (status: BaseStatus, withParent = true) => {
     if (status.account) {
-      statuses[status.id] = status;
+      if (withParent) statuses[status.id] = status;
       processAccount(status.account);
     }
 
@@ -84,12 +87,15 @@ const importEntities = (entities: {
     if (status.group) groups[status.group.id] = status.group;
   };
 
-  entities.accounts?.forEach(processAccount);
-  entities.groups?.forEach(group => groups[group.id] = group);
-  entities.notifications?.forEach(processNotification);
-  entities.polls?.forEach(poll => polls[poll.id] = poll);
-  entities.relationships?.forEach(relationship => relationships[relationship.id] = relationship);
-  entities.statuses?.forEach(processStatus);
+  if (options.withParents) {
+    entities.groups?.forEach(group => groups[group.id] = group);
+    entities.polls?.forEach(poll => polls[poll.id] = poll);
+    entities.relationships?.forEach(relationship => relationships[relationship.id] = relationship);
+  }
+
+  entities.accounts?.forEach((account) => processAccount(account, options.withParents));
+  entities.notifications?.forEach((notification) => processNotification(notification, options.withParents));
+  entities.statuses?.forEach((status) => processStatus(status, options.withParents));
 
   if (!isEmpty(accounts)) dispatch(importAccounts(Object.values(accounts)));
   if (!isEmpty(groups)) dispatch(importGroups(Object.values(groups)));

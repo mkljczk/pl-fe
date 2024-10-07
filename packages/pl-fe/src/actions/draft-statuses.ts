@@ -1,7 +1,8 @@
 
-import { makeGetAccount } from 'pl-fe/selectors';
+import { queryClient } from 'pl-fe/queries/client';
 import KVStore from 'pl-fe/storage/kv-store';
 
+import type { MinifiedAccount } from 'pl-fe/pl-hooks/minifiers/minifyAccount';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const DRAFT_STATUSES_FETCH_SUCCESS = 'DRAFT_STATUSES_FETCH_SUCCESS' as const;
@@ -9,12 +10,10 @@ const DRAFT_STATUSES_FETCH_SUCCESS = 'DRAFT_STATUSES_FETCH_SUCCESS' as const;
 const PERSIST_DRAFT_STATUS = 'PERSIST_DRAFT_STATUS' as const;
 const CANCEL_DRAFT_STATUS = 'DELETE_DRAFT_STATUS' as const;
 
-const getAccount = makeGetAccount();
-
 const fetchDraftStatuses = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const accountUrl = getAccount(state, state.me as string)!.url;
+    const accountUrl = queryClient.getQueryData<MinifiedAccount>(['accounts', 'entities', state.me])!.url;
 
     return KVStore.getItem(`drafts:${accountUrl}`).then((statuses) => {
       dispatch({
@@ -27,7 +26,7 @@ const fetchDraftStatuses = () =>
 const saveDraftStatus = (composeId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const accountUrl = getAccount(state, state.me as string)!.url;
+    const accountUrl = queryClient.getQueryData<MinifiedAccount>(['accounts', 'entities', state.me])!.url;
 
     const compose = state.compose.get(composeId)!;
 
@@ -46,7 +45,7 @@ const saveDraftStatus = (composeId: string) =>
 const cancelDraftStatus = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const accountUrl = getAccount(state, state.me as string)!.url;
+    const accountUrl = queryClient.getQueryData<MinifiedAccount>(['accounts', 'entities', state.me])!.url;
 
     dispatch({
       type: CANCEL_DRAFT_STATUS,

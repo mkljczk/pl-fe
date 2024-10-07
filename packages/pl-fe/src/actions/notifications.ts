@@ -7,7 +7,7 @@ import { getNotificationStatus } from 'pl-fe/features/notifications/components/n
 import { normalizeNotification } from 'pl-fe/normalizers';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { queryClient } from 'pl-fe/queries/client';
-import { getFilters, regexFromFilters } from 'pl-fe/selectors';
+// import { getFilters, regexFromFilters } from 'pl-fe/selectors';
 import { useSettingsStore } from 'pl-fe/stores/settings';
 import { unescapeHTML } from 'pl-fe/utils/html';
 import { joinPublicPath } from 'pl-fe/utils/static';
@@ -60,26 +60,27 @@ const updateNotificationsQueue = (notification: Notification, intlMessages: Reco
     if (!notification.type) return; // drop invalid notifications
     if (notification.type === 'chat_mention') return; // Drop chat notifications, handle them per-chat
 
-    const filters = getFilters(getState(), { contextType: 'notifications' });
+    // TODO: Restore filtering
+    // const filters = getFilters(getState(), { contextType: 'notifications' });
 
     const status = getNotificationStatus(notification);
 
-    let filtered: boolean | null = false;
+    // let filtered: boolean | null = false;
 
     const isOnNotificationsPage = curPath === '/notifications';
 
-    if (notification.type === 'mention' || notification.type === 'status') {
-      const regex = regexFromFilters(filters);
-      const searchIndex = notification.status.spoiler_text + '\n' + unescapeHTML(notification.status.content);
-      filtered = regex && regex.test(searchIndex);
-    }
+    // if (notification.type === 'mention' || notification.type === 'status') {
+    //   const regex = regexFromFilters(filters);
+    //   const searchIndex = notification.status.spoiler_text + '\n' + unescapeHTML(notification.status.content);
+    //   filtered = regex && regex.test(searchIndex);
+    // }
 
     // Desktop notifications
     try {
       // eslint-disable-next-line compat/compat
       const isNotificationsEnabled = window.Notification?.permission === 'granted';
 
-      if (!filtered && isNotificationsEnabled) {
+      if (/* !filtered && */ isNotificationsEnabled) {
         const title = new IntlMessageFormat(intlMessages[`notification.${notification.type}`], intlLocale).format({ name: notification.account.display_name.length > 0 ? notification.account.display_name : notification.account.username }) as string;
         const body = (status && status.spoiler_text.length > 0) ? status.spoiler_text : unescapeHTML(status ? status.content : '');
 

@@ -6,6 +6,26 @@ import { relationshipSchema } from './relationship';
 import { roleSchema } from './role';
 import { coerceObject, dateSchema, filteredArray } from './utils';
 
+const getDomainFromURL = (account: Pick<Account, 'url'>): string => {
+  try {
+    const url = account.url;
+    return new URL(url).host;
+  } catch {
+    return '';
+  }
+};
+
+const guessFqn = (account: Pick<Account, 'acct' | 'url'>): string => {
+  const acct = account.acct;
+  const [user, domain] = acct.split('@');
+
+  if (domain) {
+    return acct;
+  } else {
+    return [user, getDomainFromURL(account)].join('@');
+  }
+};
+
 const filterBadges = (tags?: string[]) =>
   tags?.filter(tag => tag.startsWith('badge:')).map(tag => roleSchema.parse({ id: tag, name: tag.replace(/^badge:/, '') }));
 
@@ -13,9 +33,12 @@ const preprocessAccount = (account: any) => {
   if (!account?.acct) return null;
 
   const username = account.username || account.acct.split('@')[0];
+  const fqn = guessFqn(account);
 
   return {
     username,
+    fqn,
+    domain: fqn.split('@')[1] || '',
     avatar_static: account.avatar_static || account.avatar,
     header_static: account.header_static || account.header,
     local: typeof account.pleroma?.is_local === 'boolean' ? account.pleroma.is_local : account.acct.split('@')[1] === undefined,
@@ -120,6 +143,7 @@ const baseAccountSchema = z.object({
   header_description: z.string().catch(''),
 
   verified: z.boolean().optional().catch(undefined),
+  domain: z.string().catch(''),
 
   __meta: coerceObject({
     pleroma: z.any().optional().catch(undefined),

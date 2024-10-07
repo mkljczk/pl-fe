@@ -1,7 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { useRelationship } from 'pl-fe/api/hooks/accounts/useRelationship';
-import { useAppSelector, useClient } from 'pl-fe/hooks';
+import { useClient } from 'pl-fe/hooks';
+import { type MinifiedAccount, minifyAccount } from 'pl-fe/pl-hooks/minifiers/minifyAccount';
+import { normalizeAccount } from 'pl-fe/pl-hooks/normalizers/normalizeAccount';
+import { queryClient } from 'pl-fe/queries/client';
 
 interface UseAccountOpts {
   withRelationship?: boolean;
@@ -24,19 +27,14 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
     enabled: opts.withRelationship,
   });
 
-  const movedQuery = useAccount(opts.withMoveTarget && accountQuery.data?.moved_id || undefined);
-
-  const data: Account | null = useAppSelector((state) => {
-    const account = accountQuery.data;
-    if (!account) return null;
-
-    return {
-      ...account,
-      account,
+  let data;
+  if (accountQuery.data) {
+    data = {
+      ...accountQuery.data,
       relationship: relationshipQuery.relationship,
-      moved: movedQuery.data || null,
+      moved: opts.withMoveTarget && queryClient.getQueryData(['accounts', 'entities', accountQuery.data?.moved_id]) as MinifiedAccount || null,
     };
-  });
+  } else data = null;
 
   return { ...accountQuery, data };
 };
