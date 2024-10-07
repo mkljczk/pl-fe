@@ -17,9 +17,20 @@ type State = {
   loadDefaultSettings: (settings: APIEntity) => void;
   loadUserSettings: (settings: APIEntity) => void;
   userSettingsSaving: () => void;
+  changeSetting: (path: string[], value: any) => void;
   rememberEmojiUse: (emoji: Emoji) => void;
   rememberLanguageUse: (language: string) => void;
 }
+
+const changeSetting = (object: APIEntity, path: string[], value: any) => {
+  if (path.length === 1) {
+    object[path[0]] = value;
+    return;
+  }
+
+  if (typeof object[path[0]] !== 'object') object[path[0]] = {};
+  return changeSetting(object[path[0]], path.slice(1), value);
+};
 
 const mergeSettings = (state: State) => state.settings = { ...state.defaultSettings, ...state.userSettings };
 
@@ -45,6 +56,12 @@ const useSettingsStore = create<State>((set) => ({
 
   userSettingsSaving: () => set(produce((state: State) => {
     state.userSettings.saved = true;
+
+    mergeSettings(state);
+  })),
+
+  changeSetting: (path: string[], value: any) => set(produce((state: State) => {
+    changeSetting(state.userSettings, path, value);
 
     mergeSettings(state);
   })),

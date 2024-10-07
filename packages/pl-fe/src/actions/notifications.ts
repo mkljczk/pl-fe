@@ -294,14 +294,14 @@ const scrollTopNotifications = (top: boolean) =>
 
 const setFilter = (filterType: FilterType, abort?: boolean) =>
   (dispatch: AppDispatch) => {
-    const activeFilter = useSettingsStore.getState().settings.notifications.quickFilter.active as FilterType;
+    const settingsStore = useSettingsStore.getState();
+    const activeFilter = settingsStore.settings.notifications.quickFilter.active as FilterType;
 
-    dispatch({
-      type: NOTIFICATIONS_FILTER_SET,
-      path: ['notifications', 'quickFilter', 'active'],
-      value: filterType,
-    });
+    settingsStore.changeSetting(['notifications', 'quickFilter', 'active'], filterType);
+
+    dispatch({ type: NOTIFICATIONS_FILTER_SET });
     dispatch(expandNotifications(undefined, undefined, abort));
+
     if (activeFilter !== filterType) dispatch(saveSettings());
   };
 

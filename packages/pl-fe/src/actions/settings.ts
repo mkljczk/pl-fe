@@ -11,8 +11,6 @@ import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
-const SETTING_CHANGE = 'SETTING_CHANGE' as const;
-
 const FE_NAME = 'pl_fe';
 
 const getAccount = makeGetAccount();
@@ -129,33 +127,9 @@ const saveSuccessMessage = defineMessage({ id: 'settings.save.success', defaultM
 //   }),
 // });
 
-interface SettingChangeAction {
-  type: typeof SETTING_CHANGE;
-  path: string[];
-  value: any;
-}
-
-const changeSettingImmediate = (path: string[], value: any, opts?: SettingOpts) =>
-  (dispatch: AppDispatch) => {
-    const action: SettingChangeAction = {
-      type: SETTING_CHANGE,
-      path,
-      value,
-    };
-
-    dispatch(action);
-    dispatch(saveSettings(opts));
-  };
-
 const changeSetting = (path: string[], value: any, opts?: SettingOpts) =>
   (dispatch: AppDispatch) => {
-    const action: SettingChangeAction = {
-      type: SETTING_CHANGE,
-      path,
-      value,
-    };
-
-    dispatch(action);
+    useSettingsStore.getState().changeSetting(path, value);
     return dispatch(saveSettings(opts));
   };
 
@@ -214,16 +188,10 @@ const getLocale = (fallback = 'en') => {
   return Object.keys(messages).includes(localeWithVariant) ? localeWithVariant : Object.keys(messages).includes(locale) ? locale : fallback;
 };
 
-type SettingsAction =
-  | SettingChangeAction
-
 export {
-  SETTING_CHANGE,
   FE_NAME,
-  changeSettingImmediate,
   changeSetting,
   saveSettings,
   updateSettingsStore,
   getLocale,
-  type SettingsAction,
 };
