@@ -1,13 +1,13 @@
 import {
-  Map as ImmutableMap,
   List as ImmutableList,
   OrderedSet as ImmutableOrderedSet,
   Record as ImmutableRecord,
 } from 'immutable';
 import { createSelector } from 'reselect';
 
-import { getLocale, getSettings } from 'pl-fe/actions/settings';
+import { getLocale } from 'pl-fe/actions/settings';
 import { Entities } from 'pl-fe/entity-store/entities';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { getDomain } from 'pl-fe/utils/accounts';
 import { validId } from 'pl-fe/utils/auth';
 import ConfigDB from 'pl-fe/utils/config-db';
@@ -137,7 +137,7 @@ const makeGetStatus = () => createSelector(
     getFilters,
     (state: RootState) => state.me,
     (state: RootState) => state.auth.client.features,
-    (state: RootState) => getLocale(state, 'en'),
+    (state: RootState) => getLocale('en'),
   ],
 
   (statusBase, statusReblog, statusQuote, statusGroup, poll, username, filters, me, features, locale) => {
@@ -333,7 +333,7 @@ const makeGetRemoteInstance = () =>
 type ColumnQuery = { type: string; prefix?: string };
 
 const makeGetStatusIds = () => createSelector([
-  (state: RootState, { type, prefix }: ColumnQuery) => getSettings(state).get(prefix || type, ImmutableMap()),
+  (state: RootState, { type, prefix }: ColumnQuery) => useSettingsStore.getState().settings.timelines[prefix || type],
   (state: RootState, { type }: ColumnQuery) => state.timelines.get(type)?.items || ImmutableOrderedSet(),
   (state: RootState) => state.statuses,
 ], (columnSettings: any, statusIds: ImmutableOrderedSet<string>, statuses) =>

@@ -46,7 +46,7 @@ const persistPlFeConfig = (plFeConfig: ImmutableMap<string, any>, host: string) 
   }
 };
 
-const importPlFeConfig = (state: ImmutableMap<string, any>, plFeConfig: ImmutableMap<string, any>, host: string) => {
+const importPlFeConfig = (plFeConfig: ImmutableMap<string, any>, host: string) => {
   persistPlFeConfig(plFeConfig, host);
   return plFeConfig;
 };
@@ -58,7 +58,7 @@ const plfe = (state = initialState, action: Record<string, any>) => {
     case PLFE_CONFIG_REMEMBER_SUCCESS:
       return fromJS(action.plFeConfig);
     case PLFE_CONFIG_REQUEST_SUCCESS:
-      return importPlFeConfig(state, fromJS(action.plFeConfig) as ImmutableMap<string, any>, action.host);
+      return importPlFeConfig(fromJS(action.plFeConfig) as ImmutableMap<string, any>, action.host);
     case PLFE_CONFIG_REQUEST_FAIL:
       return fallbackState.mergeDeep(state);
     case ADMIN_CONFIG_UPDATE_SUCCESS:

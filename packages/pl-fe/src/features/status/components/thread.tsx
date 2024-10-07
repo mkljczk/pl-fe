@@ -8,7 +8,6 @@ import { useHistory } from 'react-router-dom';
 
 import { type ComposeReplyAction, mentionCompose, replyCompose } from 'pl-fe/actions/compose';
 import { reblog, toggleFavourite, unreblog } from 'pl-fe/actions/interactions';
-import { getSettings } from 'pl-fe/actions/settings';
 import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import StatusActionBar from 'pl-fe/components/status-action-bar';
@@ -20,6 +19,7 @@ import PendingStatus from 'pl-fe/features/ui/components/pending-status';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { RootState } from 'pl-fe/store';
 import { useModalsStore } from 'pl-fe/stores';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { textForScreenReader } from 'pl-fe/utils/status';
 
 import DetailedStatus from './detailed-status';
@@ -93,6 +93,7 @@ const Thread: React.FC<IThread> = ({
   const intl = useIntl();
 
   const { openModal } = useModalsStore();
+  const { settings } = useSettingsStore();
 
   const { ancestorsIds, descendantsIds } = useAppSelector((state) => {
     let ancestorsIds = ImmutableOrderedSet<string>();
@@ -136,7 +137,7 @@ const Thread: React.FC<IThread> = ({
 
   const handleReblogClick = (status: SelectedStatus, e?: React.MouseEvent) => {
     dispatch((_, getState) => {
-      const boostModal = getSettings(getState()).get('boostModal');
+      const boostModal = settings.boostModal;
       if (status.reblogged) {
         dispatch(unreblog(status));
       } else {

@@ -22,8 +22,8 @@ const STATUS_TYPE_ICONS: Record<string, string> = {
   direct: require('@tabler/icons/outline/mail.svg'),
   private: require('@tabler/icons/outline/lock.svg'),
   mutuals_only: require('@tabler/icons/outline/users-group.svg'),
-  local:  require('@tabler/icons/outline/affiliate.svg'),
-  list:  require('@tabler/icons/outline/list.svg'),
+  local: require('@tabler/icons/outline/affiliate.svg'),
+  list: require('@tabler/icons/outline/list.svg'),
 };
 
 const StatusTypeIcon: React.FC<IStatusTypeIcon> = ({ status }) => {

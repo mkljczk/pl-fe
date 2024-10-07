@@ -10,7 +10,6 @@ import { blockDomain, unblockDomain } from 'pl-fe/actions/domain-blocks';
 import { initMuteModal } from 'pl-fe/actions/mutes';
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { setSearchAccount } from 'pl-fe/actions/search';
-import { getSettings } from 'pl-fe/actions/settings';
 import { useFollow } from 'pl-fe/api/hooks';
 import Badge from 'pl-fe/components/badge';
 import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
@@ -24,6 +23,7 @@ import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'pl-f
 import { useChats } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
 import { useModalsStore } from 'pl-fe/stores';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
 import { isDefaultHeader } from 'pl-fe/utils/accounts';
 import copy from 'pl-fe/utils/copy';
@@ -90,6 +90,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const { account: ownAccount } = useOwnAccount();
   const { follow } = useFollow();
   const { openModal } = useModalsStore();
+  const { settings } = useSettingsStore();
 
   const { software } = useAppSelector((state) => state.auth.client.features.version);
 
@@ -221,19 +222,17 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const onRemoveFromFollowers = () => {
-    dispatch((_, getState) => {
-      const unfollowModal = getSettings(getState()).get('unfollowModal');
-      if (unfollowModal) {
-        openModal('CONFIRM', {
-          heading: <FormattedMessage id='confirmations.remove_from_followers.heading' defaultMessage='Remove {name} from followers' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
-          message: <FormattedMessage id='confirmations.remove_from_followers.message' defaultMessage='Are you sure you want to remove {name} from your followers?' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
-          confirm: intl.formatMessage(messages.removeFromFollowersConfirm),
-          onConfirm: () => dispatch(removeFromFollowers(account.id)),
-        });
-      } else {
-        dispatch(removeFromFollowers(account.id));
-      }
-    });
+    const unfollowModal = settings.unfollowModal;
+    if (unfollowModal) {
+      openModal('CONFIRM', {
+        heading: <FormattedMessage id='confirmations.remove_from_followers.heading' defaultMessage='Remove {name} from followers' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
+        message: <FormattedMessage id='confirmations.remove_from_followers.message' defaultMessage='Are you sure you want to remove {name} from your followers?' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
+        confirm: intl.formatMessage(messages.removeFromFollowersConfirm),
+        onConfirm: () => dispatch(removeFromFollowers(account.id)),
+      });
+    } else {
+      dispatch(removeFromFollowers(account.id));
+    }
   };
 
   const onSearch = () => {

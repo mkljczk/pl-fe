@@ -2,7 +2,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { getSettings } from 'pl-fe/actions/settings';
 import { useAccount } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
 import Badge from 'pl-fe/components/badge';
@@ -12,6 +11,7 @@ import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
 import { Avatar, Stack, Text } from 'pl-fe/components/ui';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
 import { useAppSelector } from 'pl-fe/hooks';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
 interface IAccountCard {
@@ -21,7 +21,7 @@ interface IAccountCard {
 const AccountCard: React.FC<IAccountCard> = ({ id }) => {
   const me = useAppSelector((state) => state.me);
   const { account } = useAccount(id);
-  const autoPlayGif = useAppSelector((state) => getSettings(state).get('autoPlayGif'));
+  const { autoPlayGif } = useSettingsStore().settings;
 
   if (!account) return null;
 

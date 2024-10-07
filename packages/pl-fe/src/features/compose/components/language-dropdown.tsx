@@ -1,24 +1,19 @@
 import clsx from 'clsx';
 import fuzzysort from 'fuzzysort';
-import { Map as ImmutableMap } from 'immutable';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { createSelector } from 'reselect';
 
 import { addComposeLanguage, changeComposeLanguage, changeComposeModifiedLanguage, deleteComposeLanguage } from 'pl-fe/actions/compose';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import { Button, Icon, Input } from 'pl-fe/components/ui';
 import { type Language, languages as languagesObject } from 'pl-fe/features/preferences';
-import { useAppDispatch, useAppSelector, useCompose, useFeatures } from 'pl-fe/hooks';
+import { useAppDispatch, useCompose, useFeatures, useSettings } from 'pl-fe/hooks';
 
-const getFrequentlyUsedLanguages = createSelector([
-  state => state.settings.get('frequentlyUsedLanguages', ImmutableMap()),
-], (languageCounters: ImmutableMap<Language, number>) => (
-  languageCounters.keySeq()
-    .sort((a, b) => languageCounters.get(a, 0) - languageCounters.get(b, 0))
-    .reverse()
-    .toArray()
-));
+const getFrequentlyUsedLanguages = (languageCounters: Record<string, number>) => (
+  Object.keys(languageCounters)
+    .toSorted((a, b) => languageCounters[a] - languageCounters[b])
+    .toReversed()
+);
 
 const languages = Object.entries(languagesObject) as Array<[Language, string]>;
 
@@ -39,7 +34,8 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
   const intl = useIntl();
   const features = useFeatures();
   const dispatch = useAppDispatch();
-  const frequentlyUsedLanguages = useAppSelector(getFrequentlyUsedLanguages);
+  const settings = useSettings();
+  const frequentlyUsedLanguages = useMemo(() => getFrequentlyUsedLanguages(settings.frequentlyUsedLanguages), [settings.frequentlyUsedLanguages]);
 
   const node = useRef<HTMLDivElement>(null);
   const focusedItem = useRef<HTMLButtonElement>(null);

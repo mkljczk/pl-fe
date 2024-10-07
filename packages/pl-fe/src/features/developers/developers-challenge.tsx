@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { changeSettingImmediate } from 'pl-fe/actions/settings';
+import { changeSetting } from 'pl-fe/actions/settings';
 import { Column, Button, Form, FormActions, FormGroup, Input, Text } from 'pl-fe/components/ui';
 import { useAppDispatch } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
@@ -26,7 +26,7 @@ const DevelopersChallenge = () => {
 
   const handleSubmit = () => {
     if (answer === 'fe-pl') {
-      dispatch(changeSettingImmediate(['isDeveloper'], true));
+      dispatch(changeSetting(['isDeveloper'], true));
       toast.success(intl.formatMessage(messages.success));
     } else {
       toast.error(intl.formatMessage(messages.fail));

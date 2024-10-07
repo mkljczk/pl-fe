@@ -19,7 +19,7 @@ const BubbleTimeline = () => {
   const theme = useTheme();
 
   const settings = useSettings();
-  const onlyMedia = settings.bubble.other.onlyMedia;
+  const onlyMedia = settings.timelines.bubble?.other.onlyMedia ?? false;
 
   const timelineId = 'bubble';
   const isMobile = useIsMobile();

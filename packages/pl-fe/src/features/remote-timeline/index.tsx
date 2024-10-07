@@ -29,7 +29,7 @@ const RemoteTimeline: React.FC<IRemoteTimeline> = ({ params }) => {
   const settings = useSettings();
 
   const timelineId = 'remote';
-  const onlyMedia = settings.remote.other.onlyMedia;
+  const onlyMedia = settings.timelines.remote?.other.onlyMedia ?? false;
 
   const pinned = settings.remote_timeline.pinnedHosts.includes(instance);
   const isMobile = useIsMobile();

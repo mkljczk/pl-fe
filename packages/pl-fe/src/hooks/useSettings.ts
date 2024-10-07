@@ -1,14 +1,6 @@
-import { useMemo } from 'react';
-
-import { getSettings } from 'pl-fe/actions/settings';
-import { settingsSchema } from 'pl-fe/schemas/pl-fe/settings';
-
-import { useAppSelector } from './useAppSelector';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 
 /** Get the user settings from the store */
-const useSettings = () => {
-  const data = useAppSelector((state) => getSettings(state));
-  return useMemo(() => settingsSchema.parse(data.toJS()), [data]);
-};
+const useSettings = () => useSettingsStore().settings;
 
 export { useSettings };
