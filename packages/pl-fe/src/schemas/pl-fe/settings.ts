@@ -16,11 +16,10 @@ const settingsSchema = z.object({
   autoPlayGif: z.boolean().catch(true),
   displayMedia: z.enum(['default', 'hide_all', 'show_all']).catch('default'),
   displaySpoilers: z.boolean().catch(false),
-  preserveSpoilers: z.boolean().catch(false),
-  unfollowModal: z.boolean().catch(false),
+  unfollowModal: z.boolean().catch(true),
   boostModal: z.boolean().catch(false),
   deleteModal: z.boolean().catch(true),
-  missingDescriptionModal: z.boolean().catch(false),
+  missingDescriptionModal: z.boolean().catch(true),
   defaultPrivacy: z.enum(['public', 'unlisted', 'private', 'direct']).catch('public'),
   defaultContentType: z.enum(['text/plain', 'text/markdown']).catch('text/plain'),
   themeMode: z.enum(['system', 'light', 'dark', 'black']).catch('system'),
@@ -29,60 +28,20 @@ const settingsSchema = z.object({
   explanationBox: z.boolean().catch(true),
   autoloadTimelines: z.boolean().catch(true),
   autoloadMore: z.boolean().catch(true),
+  preserveSpoilers: z.boolean().catch(false),
+  autoTranslate: z.boolean().catch(false),
+  knownLanguages: z.array(z.string()).catch([]),
+
   systemFont: z.boolean().catch(false),
   demetricator: z.boolean().catch(false),
+
   isDeveloper: z.boolean().catch(false),
-  demo: z.boolean().catch(false),
+
   chats: coerceObject({
     mainWindow: z.enum(['minimized', 'open']).catch('minimized'),
     sound: z.boolean().catch(true),
   }),
-  home: coerceObject({
-    shows: coerceObject({
-      reblog: z.boolean().catch(true),
-      reply: z.boolean().catch(true),
-    }),
-  }),
-  account_timeline: coerceObject({
-    shows: coerceObject({
-      pinned: z.boolean().catch(true),
-    }),
-  }),
-  remote_timeline: coerceObject({
-    pinnedHosts: z.string().array().catch([]),
-  }),
-  public: coerceObject({
-    other: coerceObject({
-      onlyMedia: z.boolean().catch(false),
-    }),
-  }),
-  'public:local': coerceObject({
-    other: coerceObject({
-      onlyMedia: z.boolean().catch(false),
-    }),
-  }),
-  remote: coerceObject({
-    other: coerceObject({
-      onlyMedia: z.boolean().catch(false),
-    }),
-  }),
-  bubble: coerceObject({
-    other: coerceObject({
-      onlyMedia: z.boolean().catch(false),
-    }),
-  }),
-  notifications: coerceObject({
-    quickFilter: coerceObject({
-      active: z.string().catch('all'),
-      advanced: z.boolean().catch(false),
-      show: z.boolean().catch(true),
-    }),
-    sounds: z.record(z.boolean()).catch({}),
-  }),
-  autoTranslate: z.boolean().catch(false),
-  knownLanguages: z.array(z.string()).catch([]),
-  frequentlyUsedEmojis: z.record(z.number()).catch({}),
-  frequentlyUsedLanguages: z.record(z.number()).catch({}),
+
   timelines: z.record(coerceObject({
     shows: coerceObject({
       reblog: z.boolean().catch(true),
@@ -94,7 +53,31 @@ const settingsSchema = z.object({
     }),
   })).catch({}),
 
+  account_timeline: coerceObject({
+    shows: coerceObject({
+      pinned: z.boolean().catch(true),
+    }),
+  }),
+
+  remote_timeline: coerceObject({
+    pinnedHosts: z.string().array().catch([]),
+  }),
+
+  notifications: coerceObject({
+    quickFilter: coerceObject({
+      active: z.string().catch('all'),
+      advanced: z.boolean().catch(false),
+      show: z.boolean().catch(true),
+    }),
+    sounds: z.record(z.boolean()).catch({}),
+  }),
+
+  frequentlyUsedEmojis: z.record(z.number()).catch({}),
+  frequentlyUsedLanguages: z.record(z.number()).catch({}),
+
   saved: z.boolean().catch(true),
+
+  demo: z.boolean().catch(false),
 });
 
 type Settings = z.infer<typeof settingsSchema>;
