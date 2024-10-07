@@ -5,10 +5,10 @@
  */
 import escapeTextContentForBrowser from 'escape-html';
 import DOMPurify from 'isomorphic-dompurify';
-import { type Account as BaseAccount, type Status as BaseStatus, type MediaAttachment, mentionSchema, type Translation } from 'pl-api';
+import { type Account as BaseAccount, type Status as BaseStatus, type CustomEmoji, type MediaAttachment, mentionSchema, type Translation } from 'pl-api';
 
 import emojify from 'pl-fe/features/emoji';
-import { stripCompatibilityFeatures, unescapeHTML } from 'pl-fe/utils/html';
+import { unescapeHTML } from 'pl-fe/utils/html';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
 import { normalizeAccount } from './account';
@@ -62,8 +62,8 @@ const buildSearchContent = (status: Pick<BaseStatus, 'poll' | 'mentions' | 'spoi
   return unescapeHTML(fields.join('\n\n')) || '';
 };
 
-const calculateContent = (text: string, emojiMap: any, hasQuote?: boolean) => DOMPurify.sanitize(stripCompatibilityFeatures(emojify(text, emojiMap), hasQuote), { USE_PROFILES: { html: true } });
-const calculateSpoiler = (text: string, emojiMap: any) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { USE_PROFILES: { html: true } });
+const calculateContent = (text: string, emojiMap: Record<string, CustomEmoji>) => emojify(text, emojiMap);
+const calculateSpoiler = (text: string, emojiMap: Record<string, CustomEmoji>) => DOMPurify.sanitize(emojify(escapeTextContentForBrowser(text), emojiMap), { USE_PROFILES: { html: true } });
 
 const calculateStatus = (status: BaseStatus, oldStatus?: OldStatus): CalculatedValues => {
   if (oldStatus && oldStatus.content === status.content && oldStatus.spoiler_text === status.spoiler_text) {
@@ -80,10 +80,10 @@ const calculateStatus = (status: BaseStatus, oldStatus?: OldStatus): CalculatedV
 
     return {
       search_index: domParser.parseFromString(searchContent, 'text/html').documentElement.textContent || '',
-      contentHtml: calculateContent(status.content, emojiMap, !!status.quote),
+      contentHtml: calculateContent(status.content, emojiMap),
       spoilerHtml: calculateSpoiler(status.spoiler_text, emojiMap),
       contentMapHtml: status.content_map
-        ? Object.fromEntries(Object.entries(status.content_map)?.map(([key, value]) => [key, calculateContent(value, emojiMap, !!status.quote)]))
+        ? Object.fromEntries(Object.entries(status.content_map)?.map(([key, value]) => [key, calculateContent(value, emojiMap)]))
         : undefined,
       spoilerMapHtml: status.spoiler_text_map
         ? Object.fromEntries(Object.entries(status.spoiler_text_map).map(([key, value]) => [key, calculateSpoiler(value, emojiMap)]))

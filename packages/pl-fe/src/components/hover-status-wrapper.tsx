@@ -10,7 +10,7 @@ const showStatusHoverCard = debounce((openStatusHoverCard, ref, statusId) => {
 }, 300);
 
 interface IHoverStatusWrapper {
-  statusId: any;
+  statusId: string;
   inline: boolean;
   className?: string;
   children: React.ReactNode;

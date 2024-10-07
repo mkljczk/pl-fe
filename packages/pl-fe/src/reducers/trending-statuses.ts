@@ -6,7 +6,7 @@ import type { Status } from 'pl-api';
 import type { AnyAction } from 'redux';
 
 const ReducerRecord = ImmutableRecord({
-  items: [] as Array<string>,
+  items: Array<string>(),
   isLoading: false,
 });
 

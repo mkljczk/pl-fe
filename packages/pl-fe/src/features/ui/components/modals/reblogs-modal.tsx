@@ -56,7 +56,6 @@ const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, s
         onLoadMore={handleLoadMore}
         hasMore={!!next}
         estimatedSize={42}
-        useWindowScroll={false}
         parentRef={modalRef}
       >
         {accountIds.map((id) =>

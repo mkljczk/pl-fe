@@ -1,5 +1,5 @@
 import DOMPurify from 'isomorphic-dompurify';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import Markup from 'pl-fe/components/markup';
 import { Stack } from 'pl-fe/components/ui';
@@ -10,7 +10,7 @@ import { LogoText } from './logo-text';
 
 const SiteBanner: React.FC = () => {
   const instance = useInstance();
-  const description = DOMPurify.sanitize(instance.description);
+  const description = useMemo(() => DOMPurify.sanitize(instance.description), [instance.description]);
 
   return (
     <Stack space={6}>

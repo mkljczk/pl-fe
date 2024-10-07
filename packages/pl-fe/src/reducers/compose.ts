@@ -62,7 +62,7 @@ import {
 } from '../actions/compose';
 import { EVENT_COMPOSE_CANCEL, EVENT_FORM_SET, type EventsAction } from '../actions/events';
 import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS, MeAction } from '../actions/me';
-import { SETTING_CHANGE, FE_NAME, SettingsAction } from '../actions/settings';
+import { FE_NAME } from '../actions/settings';
 import { TIMELINE_DELETE, TimelineAction } from '../actions/timelines';
 import { unescapeHTML } from '../utils/html';
 
@@ -262,17 +262,17 @@ const importAccount = (compose: Compose, account: CredentialAccount) => {
   });
 };
 
-const updateSetting = (compose: Compose, path: string[], value: string) => {
-  const pathString = path.join(',');
-  switch (pathString) {
-    case 'defaultPrivacy':
-      return compose.set('privacy', value);
-    case 'defaultContentType':
-      return compose.set('content_type', value);
-    default:
-      return compose;
-  }
-};
+// const updateSetting = (compose: Compose, path: string[], value: string) => {
+//   const pathString = path.join(',');
+//   switch (pathString) {
+//     case 'defaultPrivacy':
+//       return compose.set('privacy', value);
+//     case 'defaultContentType':
+//       return compose.set('content_type', value);
+//     default:
+//       return compose;
+//   }
+// };
 
 const updateCompose = (state: State, key: string, updater: (compose: Compose) => Compose) =>
   state.update(key, state.get('default')!, updater);
@@ -281,7 +281,7 @@ const initialState: State = ImmutableMap({
   default: ReducerCompose({ idempotencyKey: crypto.randomUUID(), resetFileKey: getResetFileKey() }),
 });
 
-const compose = (state = initialState, action: ComposeAction | EventsAction | MeAction | SettingsAction | TimelineAction) => {
+const compose = (state = initialState, action: ComposeAction | EventsAction | MeAction | TimelineAction) => {
   switch (action.type) {
     case COMPOSE_TYPE_CHANGE:
       return updateCompose(state, action.composeId, compose => compose.withMutations(map => {
@@ -543,8 +543,8 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
     case ME_FETCH_SUCCESS:
     case ME_PATCH_SUCCESS:
       return updateCompose(state, 'default', compose => importAccount(compose, action.me));
-    case SETTING_CHANGE:
-      return updateCompose(state, 'default', compose => updateSetting(compose, action.path, action.value));
+    // case SETTING_CHANGE:
+    //   return updateCompose(state, 'default', compose => updateSetting(compose, action.path, action.value));
     case COMPOSE_EDITOR_STATE_SET:
       return updateCompose(state, action.composeId, compose => compose
         .setIn(!compose.modified_language || compose.modified_language === compose.language ? ['editorState'] : ['editorStateMap', compose.modified_language], action.editorState as string)

@@ -20,7 +20,7 @@ const CommunityTimeline = () => {
   const theme = useTheme();
 
   const settings = useSettings();
-  const onlyMedia = settings['public:local'].other.onlyMedia;
+  const onlyMedia = settings.timelines['public:local']?.other.onlyMedia ?? false;
 
   const timelineId = 'public:local';
   const isMobile = useIsMobile();

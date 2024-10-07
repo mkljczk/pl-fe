@@ -25,7 +25,7 @@ const CommunityTimeline = () => {
 
   const instance = useInstance();
   const settings = useSettings();
-  const onlyMedia = settings.public.other.onlyMedia;
+  const onlyMedia = settings.timelines.public?.other.onlyMedia ?? false;
 
   const timelineId = 'public';
   const isMobile = useIsMobile();

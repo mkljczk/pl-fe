@@ -3,6 +3,7 @@ import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import { fetchHistory } from 'pl-fe/actions/history';
 import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
+import { ParsedContent } from 'pl-fe/components/parsed-content';
 import { HStack, Modal, Spinner, Stack, Text } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
@@ -17,6 +18,8 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
 
   const loading = useAppSelector(state => state.history.getIn([statusId, 'loading']));
   const versions = useAppSelector(state => state.history.get(statusId)?.items);
+
+  const status = useAppSelector(state => state.statuses.get(statusId));
 
   const onClickClose = () => {
     onClose('COMPARE_HISTORY');
@@ -34,7 +37,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
     body = (
       <div className='divide-y divide-solid divide-gray-200 dark:divide-gray-800'>
         {versions?.map((version) => {
-          const content = { __html: version.contentHtml };
+          const content = <ParsedContent html={version.contentHtml} mentions={status?.mentions} hasQuote={!!status?.quote_id} />;
           const spoilerContent = { __html: version.spoilerHtml };
 
           const poll = typeof version.poll !== 'string' && version.poll;
@@ -48,7 +51,9 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
                 </>
               )}
 
-              <div className='status__content' dangerouslySetInnerHTML={content} />
+              <div className='status__content'>
+                {content}
+              </div>
 
               {poll && (
                 <div className='poll'>

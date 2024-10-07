@@ -1,9 +1,10 @@
 import { Map as ImmutableMap } from 'immutable';
 
 
-import { getLocale, getSettings } from 'pl-fe/actions/settings';
+import { getLocale } from 'pl-fe/actions/settings';
 import { getClient } from 'pl-fe/api';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { shouldFilter } from 'pl-fe/utils/timelines';
 
 import type { PaginatedResponse, Status as BaseStatus, PublicTimelineParams, HomeTimelineParams, ListTimelineParams, HashtagTimelineParams, GetAccountStatusesParams, GroupTimelineParams } from 'pl-api';
@@ -30,12 +31,12 @@ const processTimelineUpdate = (timeline: string, status: BaseStatus) =>
     const ownStatus = status.account?.id === me;
     const hasPendingStatuses = !getState().pending_statuses.isEmpty();
 
-    const columnSettings = getSettings(getState()).get(timeline, ImmutableMap());
+    const columnSettings = useSettingsStore.getState().settings.timelines[timeline];
     const shouldSkipQueue = shouldFilter({
       in_reply_to_id: status.in_reply_to_id,
       visibility: status.visibility,
       reblog_id: status.reblog?.id || null,
-    }, columnSettings as any);
+    }, columnSettings);
 
     if (ownStatus && hasPendingStatuses) {
       // WebSockets push statuses without the Idempotency-Key,
@@ -110,7 +111,7 @@ interface TimelineDeleteAction {
 const deleteFromTimelines = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const accountId = getState().statuses.get(statusId)?.account?.id!;
-    const references = getState().statuses.filter(status => status.reblog_id === statusId).map(status => [status.id, status.account.id] as const);
+    const references = getState().statuses.filter(status => status.reblog_id === statusId).map(status => [status.id, status.account_id] as const);
     const reblogOf = getState().statuses.get(statusId)?.reblog_id || null;
 
     const action: TimelineDeleteAction = {
@@ -131,11 +132,11 @@ const noOp = () => { };
 const parseTags = (tags: Record<string, any[]> = {}, mode: 'any' | 'all' | 'none') =>
   (tags[mode] || []).map((tag) => tag.value);
 
-const deduplicateStatuses = (statuses: any[]) => {
+const deduplicateStatuses = (statuses: Array<BaseStatus>) => {
   const deduplicatedStatuses: any[] = [];
 
   for (const status of statuses) {
-    const reblogged = status.reblog && deduplicatedStatuses.find((deduplicatedStatus) => deduplicatedStatus.reblog?.id === status.reblog.id);
+    const reblogged = status.reblog && deduplicatedStatuses.find((deduplicatedStatus) => deduplicatedStatus.reblog?.id === status.reblog?.id);
 
     if (reblogged) {
       if (reblogged.accounts) {
@@ -181,7 +182,7 @@ const fetchHomeTimeline = (expand = false, done = noOp) =>
     const state = getState();
 
     const params: HomeTimelineParams = {};
-    if (getSettings(state).get('autoTranslate')) params.language = getLocale(state);
+    if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
 
     if (expand && state.timelines.get('home')?.isLoading) return;
 
@@ -196,7 +197,7 @@ const fetchPublicTimeline = ({ onlyMedia, local, instance }: Record<string, any>
     const timelineId = `${instance ? 'remote' : 'public'}${local ? ':local' : ''}${onlyMedia ? ':media' : ''}${instance ? `:${instance}` : ''}`;
 
     const params: PublicTimelineParams = { only_media: onlyMedia, local: instance ? false : local, instance };
-    if (getSettings(state).get('autoTranslate')) params.language = getLocale(state);
+    if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
 
     if (expand && state.timelines.get(timelineId)?.isLoading) return;
 
@@ -211,7 +212,7 @@ const fetchBubbleTimeline = ({ onlyMedia }: Record<string, any> = {}, expand = f
     const timelineId = `bubble${onlyMedia ? ':media' : ''}`;
 
     const params: PublicTimelineParams = { only_media: onlyMedia };
-    if (getSettings(state).get('autoTranslate')) params.language = getLocale(state);
+    if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
 
     if (expand && state.timelines.get(timelineId)?.isLoading) return;
 
@@ -227,7 +228,7 @@ const fetchAccountTimeline = (accountId: string, { exclude_replies, pinned, only
 
     const params: GetAccountStatusesParams = { exclude_replies, pinned, only_media, limit };
     if (pinned || only_media) params.with_muted = true;
-    if (getSettings(state).get('autoTranslate')) params.language = getLocale(state);
+    if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
 
     if (expand && state.timelines.get(timelineId)?.isLoading) return;
 
@@ -242,7 +243,7 @@ const fetchListTimeline = (listId: string, expand = false, done = noOp) =>
     const timelineId = `list:${listId}`;
 
     const params: ListTimelineParams = {};
-    if (getSettings(state).get('autoTranslate')) params.language = getLocale(state);
+    if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
 
     if (expand && state.timelines.get(timelineId)?.isLoading) return;
 
@@ -258,7 +259,7 @@ const fetchGroupTimeline = (groupId: string, { only_media, limit }: Record<strin
 
     const params: GroupTimelineParams = { only_media, limit };
     if (only_media) params.with_muted = true;
-    if (getSettings(state).get('autoTranslate')) params.language = getLocale(state);
+    if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
 
     if (expand && state.timelines.get(timelineId)?.isLoading) return;
 
@@ -280,7 +281,7 @@ const fetchHashtagTimeline = (hashtag: string, { tags }: Record<string, any> = {
 
     if (expand && state.timelines.get(timelineId)?.isLoading) return;
 
-    if (getSettings(state).get('autoTranslate')) params.language = getLocale(state);
+    if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
 
     const fn = (expand && state.timelines.get(timelineId)?.next?.()) || getClient(state).timelines.hashtagTimeline(hashtag, params);
 

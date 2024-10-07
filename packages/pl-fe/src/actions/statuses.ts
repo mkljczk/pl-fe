@@ -1,12 +1,12 @@
 import { getClient } from 'pl-fe/api';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { useModalsStore } from 'pl-fe/stores';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 import { shouldHaveCard } from 'pl-fe/utils/status';
 
 import { setComposeToStatus } from './compose';
 import { importFetchedStatus } from './importer';
-import { getSettings } from './settings';
 import { deleteFromTimelines } from './timelines';
 
 import type { CreateStatusParams, Status as BaseStatus } from 'pl-api';
@@ -114,7 +114,7 @@ const fetchStatus = (statusId: string, intl?: IntlShape) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: STATUS_FETCH_REQUEST, statusId });
 
-    const params = intl && getSettings(getState()).get('autoTranslate') ? {
+    const params = intl && useSettingsStore.getState().settings.autoTranslate ? {
       language: intl.locale,
     } : undefined;
 
@@ -159,7 +159,7 @@ const fetchContext = (statusId: string, intl?: IntlShape) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({ type: CONTEXT_FETCH_REQUEST, statusId });
 
-    const params = intl && getSettings(getState()).get('autoTranslate') ? {
+    const params = intl && useSettingsStore.getState().settings.autoTranslate ? {
       language: intl.locale,
     } : undefined;
 

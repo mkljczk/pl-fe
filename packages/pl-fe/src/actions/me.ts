@@ -3,9 +3,11 @@ import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { selectAccount } from 'pl-fe/selectors';
 import { setSentryAccount } from 'pl-fe/sentry';
 import KVStore from 'pl-fe/storage/kv-store';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { getAuthUserId, getAuthUserUrl } from 'pl-fe/utils/auth';
 
 import { loadCredentials } from './auth';
+import { FE_NAME } from './settings';
 
 import type { CredentialAccount, UpdateCredentialsParams } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
@@ -93,6 +95,8 @@ const fetchMeRequest = () => ({
 
 const fetchMeSuccess = (account: CredentialAccount) => {
   setSentryAccount(account);
+
+  useSettingsStore.getState().loadUserSettings(account.settings_store?.[FE_NAME]);
 
   return {
     type: ME_FETCH_SUCCESS,

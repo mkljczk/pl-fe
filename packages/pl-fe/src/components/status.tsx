@@ -396,8 +396,8 @@ const Status: React.FC<IStatus> = (props) => {
           {renderStatusInfo()}
 
           <AccountContainer
-            key={actualStatus.account.id}
-            id={actualStatus.account.id}
+            key={actualStatus.account_id}
+            id={actualStatus.account_id}
             timestamp={actualStatus.created_at}
             timestampUrl={statusUrl}
             action={accountAction}
@@ -459,7 +459,12 @@ const Status: React.FC<IStatus> = (props) => {
                   'pt-4': !actualStatus.emoji_reactions.length,
                 })}
               >
-                <StatusActionBar status={actualStatus} rebloggedBy={isReblog ? status.account : undefined} fromBookmarks={fromBookmarks} />
+                <StatusActionBar
+                  status={actualStatus}
+                  rebloggedBy={isReblog ? status.account : undefined}
+                  fromBookmarks={fromBookmarks}
+                  expandable
+                />
               </div>
             )}
           </div>

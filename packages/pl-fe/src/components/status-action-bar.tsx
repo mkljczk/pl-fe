@@ -113,7 +113,7 @@ interface IStatusActionBar {
 const StatusActionBar: React.FC<IStatusActionBar> = ({
   status,
   withLabels = false,
-  expandable = true,
+  expandable,
   space = 'sm',
   statusActionButtonTheme = 'default',
   fromBookmarks = false,
@@ -372,7 +372,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       message: intl.formatMessage(messages.groupBlockFromGroupMessage, { name: status.account.username }),
       confirm: intl.formatMessage(messages.groupBlockConfirm),
       onConfirm: () => {
-        blockGroupMember([status.account.id], {
+        blockGroupMember([status.account_id], {
           onSuccess() {
             toast.success(intl.formatMessage(messages.blocked, { name: account?.acct }));
           },
@@ -395,7 +395,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
 
   const _makeMenu = (publicStatus: boolean) => {
     const mutingConversation = status.muted;
-    const ownAccount = status.account.id === me;
+    const ownAccount = status.account_id === me;
     const username = status.account.username;
     const account = status.account;
 
@@ -664,6 +664,18 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     replyTitle = intl.formatMessage(messages.replies_disabled_group);
   }
 
+  const replyButton = (
+    <StatusActionButton
+      title={replyTitle}
+      icon={require('@tabler/icons/outline/message-circle.svg')}
+      onClick={handleReplyClick}
+      count={replyCount}
+      text={withLabels ? intl.formatMessage(messages.reply) : undefined}
+      disabled={replyDisabled}
+      theme={statusActionButtonTheme}
+    />
+  );
+
   const reblogMenu = [{
     text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog),
     action: handleReblogClick,
@@ -714,20 +726,14 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
         onClick={e => e.stopPropagation()}
         alignItems='center'
       >
-        <GroupPopover
-          group={status.group as any}
-          isEnabled={replyDisabled}
-        >
-          <StatusActionButton
-            title={replyTitle}
-            icon={require('@tabler/icons/outline/message-circle.svg')}
-            onClick={handleReplyClick}
-            count={replyCount}
-            text={withLabels ? intl.formatMessage(messages.reply) : undefined}
-            disabled={replyDisabled}
-            theme={statusActionButtonTheme}
-          />
-        </GroupPopover>
+        {status.group ? (
+          <GroupPopover
+            group={status.group}
+            isEnabled={replyDisabled}
+          >
+            {replyButton}
+          </GroupPopover>
+        ) : replyButton}
 
         {(features.quotePosts && me) ? (
           <DropdownMenu
@@ -769,7 +775,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
           />
         )}
 
-        {me && expandable && (features.emojiReacts) && (
+        {me && expandable && features.emojiReacts && (
           <EmojiPickerDropdown
             onPickEmoji={handlePickEmoji}
             theme={statusActionButtonTheme}

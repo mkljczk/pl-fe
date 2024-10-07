@@ -9,13 +9,13 @@ import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { selectAccount, selectOwnAccount, makeGetAccount } from 'pl-fe/selectors';
 import { tagHistory } from 'pl-fe/settings';
 import { useModalsStore } from 'pl-fe/stores';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { chooseEmoji } from './emojis';
 import { rememberLanguageUse } from './languages';
 import { uploadFile, updateMedia } from './media';
-import { getSettings } from './settings';
 import { createStatus } from './statuses';
 
 import type { EditorState } from 'lexical';
@@ -178,7 +178,7 @@ const replyCompose = (
     const state = getState();
     const client = getClient(state);
     const { createStatusExplicitAddressing: explicitAddressing } = client.features;
-    const preserveSpoilers = !!getSettings(state).get('preserveSpoilers');
+    const preserveSpoilers = useSettingsStore.getState().settings.preserveSpoilers;
     const account = selectOwnAccount(state);
 
     if (!account) return;
@@ -321,7 +321,7 @@ const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, c
 
 const needsDescriptions = (state: RootState, composeId: string) => {
   const media = state.compose.get(composeId)!.media_attachments;
-  const missingDescriptionModal = getSettings(state).get('missingDescriptionModal');
+  const missingDescriptionModal = useSettingsStore.getState().settings.missingDescriptionModal;
 
   const hasMissing = media.filter(item => !item.description).size > 0;
 
@@ -428,7 +428,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
 
       const poll = params.poll;
       if (poll?.options_map) {
-        poll.options.forEach((option: any, index: number) => poll.options_map![index][compose.language!] = option);
+        poll.options.forEach((option, index: number) => poll.options_map![index][compose.language!] = option);
       }
     }
 
@@ -491,7 +491,7 @@ const uploadCompose = (composeId: string, files: FileList, intl: IntlShape) =>
         intl,
         (data) => dispatch(uploadComposeSuccess(composeId, data, f)),
         (error) => dispatch(uploadComposeFail(composeId, error)),
-        ({ loaded }: any) => {
+        ({ loaded }) => {
           progress[i] = loaded;
           dispatch(uploadComposeProgress(composeId, progress.reduce((a, v) => a + v, 0), total));
         },

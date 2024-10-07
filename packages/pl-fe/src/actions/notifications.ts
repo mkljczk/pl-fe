@@ -8,11 +8,12 @@ import { normalizeNotification } from 'pl-fe/normalizers';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { queryClient } from 'pl-fe/queries/client';
 import { getFilters, regexFromFilters } from 'pl-fe/selectors';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { unescapeHTML } from 'pl-fe/utils/html';
 import { joinPublicPath } from 'pl-fe/utils/static';
 
 import { fetchRelationships } from './accounts';
-import { getSettings, saveSettings } from './settings';
+import { saveSettings } from './settings';
 
 import type { Notification } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
@@ -39,7 +40,8 @@ const fetchRelatedRelationships = (dispatch: AppDispatch, notifications: Array<N
 
 const updateNotifications = (notification: Notification) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const showInColumn = getSettings(getState()).getIn(['notifications', 'shows', notification.type], true);
+    const selectedFilter = useSettingsStore().settings.notifications.quickFilter.active;
+    const showInColumn = selectedFilter === 'all' ? true : (FILTER_TYPES[selectedFilter as FilterType] || [notification.type]).includes(notification.type);
 
     importEntities({ notifications: [{ ...notification, accounts: [notification.account], duplicate: false }] });
 
@@ -129,19 +131,17 @@ const dequeueNotifications = () =>
     // dispatch(markReadNotifications());
   };
 
-const setFilter = (filterType: FilterType) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const activeFilter = getSettings(getState()).getIn(['notifications', 'quickFilter', 'active']);
+const setFilter = (filterType: FilterType, abort?: boolean) =>
+  (dispatch: AppDispatch) => {
+    const settingsStore = useSettingsStore.getState();
+    const activeFilter = settingsStore.settings.notifications.quickFilter.active as FilterType;
+
+    settingsStore.changeSetting(['notifications', 'quickFilter', 'active'], filterType);
 
     queryClient.resetQueries({
       queryKey: ['notifications', 'lists', filterType === 'all' ? 'all' : FILTER_TYPES[filterType].join('|')],
     });
 
-    dispatch({
-      type: NOTIFICATIONS_FILTER_SET,
-      path: ['notifications', 'quickFilter', 'active'],
-      value: filterType,
-    });
     if (activeFilter !== filterType) dispatch(saveSettings());
   };
 

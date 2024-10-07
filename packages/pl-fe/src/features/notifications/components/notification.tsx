@@ -4,7 +4,6 @@ import { Link, useHistory } from 'react-router-dom';
 
 import { mentionCompose } from 'pl-fe/actions/compose';
 import { reblog, favourite, unreblog, unfavourite } from 'pl-fe/actions/interactions';
-import { getSettings } from 'pl-fe/actions/settings';
 import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
 import Icon from 'pl-fe/components/icon';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
@@ -15,6 +14,7 @@ import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch, useInstance, useLoggedIn } from 'pl-fe/hooks';
 import { useNotification } from 'pl-fe/pl-hooks/hooks/notifications/useNotification';
 import { useModalsStore } from 'pl-fe/stores';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { NotificationType } from 'pl-fe/utils/notification';
 
 import type { Notification as BaseNotification } from 'pl-api';
@@ -195,6 +195,7 @@ const Notification: React.FC<INotification> = ({ hidden = false, id, onMoveUp, o
 
   const { me } = useLoggedIn();
   const { openModal } = useModalsStore();
+  const { settings } = useSettingsStore();
 
   const history = useHistory();
   const intl = useIntl();
@@ -250,23 +251,21 @@ const Notification: React.FC<INotification> = ({ hidden = false, id, onMoveUp, o
 
   const handleHotkeyBoost = useCallback((e?: KeyboardEvent) => {
     if (status && typeof status === 'object') {
-      dispatch((_, getState) => {
-        const boostModal = getSettings(getState()).get('boostModal');
-        if (status.reblogged) {
-          dispatch(unreblog(status));
+      const boostModal = settings.boostModal;
+      if (status.reblogged) {
+        dispatch(unreblog(status));
+      } else {
+        if (e?.shiftKey || !boostModal) {
+          dispatch(reblog(status));
         } else {
-          if (e?.shiftKey || !boostModal) {
-            dispatch(reblog(status));
-          } else {
-            openModal('BOOST', {
-              statusId: status.id,
-              onReblog: (status) => {
-                dispatch(reblog(status));
-              },
-            });
-          }
+          openModal('BOOST', {
+            statusId: status.id,
+            onReblog: (status) => {
+              dispatch(reblog(status));
+            },
+          });
         }
-      });
+      }
     }
   }, [status]);
 
@@ -337,7 +336,7 @@ const Notification: React.FC<INotification> = ({ hidden = false, id, onMoveUp, o
       case 'move':
         return account && typeof account === 'object' && notification.target && typeof notification.target === 'object' ? (
           <AccountContainer
-            id={notification.target.id}
+            id={notification.target_id}
             hidden={hidden}
             avatarSize={avatarSize}
             withRelationship

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import GroupAvatar from 'pl-fe/components/groups/group-avatar';
+import { ParsedContent } from 'pl-fe/components/parsed-content';
 import StillImage from 'pl-fe/components/still-image';
 import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
 import { useModalsStore } from 'pl-fe/stores';
@@ -150,9 +151,10 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
           <Text
             theme='muted'
             align='center'
-            dangerouslySetInnerHTML={{ __html: group.note_emojified }}
             className='[&_a]:text-primary-600 [&_a]:hover:underline [&_a]:dark:text-accent-blue'
-          />
+          >
+            <ParsedContent html={group.note_emojified} />
+          </Text>
         </Stack>
 
         <HStack alignItems='center' space={2} data-testid='group-actions'>

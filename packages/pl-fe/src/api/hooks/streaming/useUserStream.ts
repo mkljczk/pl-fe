@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { updateConversations } from 'pl-fe/actions/conversations';
 import { fetchFilters } from 'pl-fe/actions/filters';
 import { updateNotificationsQueue } from 'pl-fe/actions/notifications';
-import { getLocale, getSettings } from 'pl-fe/actions/settings';
+import { getLocale } from 'pl-fe/actions/settings';
 import { updateStatus } from 'pl-fe/actions/statuses';
 import { deleteFromTimelines, processTimelineUpdate } from 'pl-fe/actions/timelines';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
@@ -13,6 +13,7 @@ import { selectEntity } from 'pl-fe/entity-store/selectors';
 import { useAppDispatch, useLoggedIn } from 'pl-fe/hooks';
 import messages from 'pl-fe/messages';
 import { queryClient } from 'pl-fe/queries/client';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { getUnreadChatsCount, updateChatListItem } from 'pl-fe/utils/chats';
 import { play, soundCache } from 'pl-fe/utils/sounds';
 
@@ -100,6 +101,7 @@ const useUserStream = () => {
   const { isLoggedIn } = useLoggedIn();
   const dispatch = useAppDispatch();
   const statContext = useStatContext();
+  const { settings } = useSettingsStore();
 
   const listener = useCallback((event: StreamingEvent) => {
     switch (event.event) {
@@ -113,20 +115,17 @@ const useUserStream = () => {
         dispatch(deleteFromTimelines(event.payload));
         break;
       case 'notification':
-        dispatch((dispatch, getState) => {
-          const locale = getLocale(getState());
-          messages[locale]().then(messages => {
-            dispatch(
-              updateNotificationsQueue(
-                event.payload,
-                messages,
-                locale,
-                window.location.pathname,
-              ),
-            );
-          }).catch(error => {
-            console.error(error);
-          });
+        messages[getLocale()]().then(messages => {
+          dispatch(
+            updateNotificationsQueue(
+              event.payload,
+              messages,
+              getLocale(),
+              window.location.pathname,
+            ),
+          );
+        }).catch(error => {
+          console.error(error);
         });
         break;
       case 'conversation':
@@ -140,13 +139,12 @@ const useUserStream = () => {
           const chat = event.payload;
           const me = getState().me;
           const messageOwned = chat.last_message?.account_id === me;
-          const settings = getSettings(getState());
 
           // Don't update own messages from streaming
           if (!messageOwned) {
             updateChatListItem(chat);
 
-            if (settings.getIn(['chats', 'sound'])) {
+            if (settings.chats.sound) {
               play(soundCache.chat);
             }
 

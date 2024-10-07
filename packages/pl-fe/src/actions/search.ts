@@ -1,6 +1,6 @@
 import { getClient } from 'pl-fe/api';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
-
+import { useSettingsStore } from 'pl-fe/stores/settings';
 
 import { fetchRelationships } from './accounts';
 
@@ -83,9 +83,10 @@ const setFilter = (value: string, filterType: SearchFilter) =>
   (dispatch: AppDispatch) => {
     dispatch(submitSearch(value, filterType));
 
+    useSettingsStore.getState().changeSetting(['search', 'filter'], filterType);
+
     return dispatch({
       type: SEARCH_FILTER_SET,
-      path: ['search', 'filter'],
       value: filterType,
     });
   };

@@ -31,7 +31,7 @@ const Emoji: React.FC<IEmoji> = ({ emoji, emojiMap, hovered }) => {
         src={joinPublicPath(`packs/emoji/${filename}.svg`)}
       />
     );
-  } else if (emojiMap.get(emoji as any)) {
+  } else if (emojiMap.get(emoji)) {
     const filename = (autoPlayGif || hovered) ? emojiMap.getIn([emoji, 'url']) : emojiMap.getIn([emoji, 'static_url']);
     const shortCode = `:${emoji}:`;
 

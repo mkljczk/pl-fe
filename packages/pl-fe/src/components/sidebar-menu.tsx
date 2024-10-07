@@ -5,7 +5,6 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link, NavLink } from 'react-router-dom';
 
 import { fetchOwnAccounts, logOut, switchAccount } from 'pl-fe/actions/auth';
-import { getSettings } from 'pl-fe/actions/settings';
 import { useAccount } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
 import { Stack, Divider, HStack, Icon, Text } from 'pl-fe/components/ui';
@@ -13,6 +12,7 @@ import ProfileStats from 'pl-fe/features/ui/components/profile-stats';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance, useRegistrationStatus } from 'pl-fe/hooks';
 import { makeGetOtherAccounts } from 'pl-fe/selectors';
 import { useUiStore } from 'pl-fe/stores';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import sourceCode from 'pl-fe/utils/code';
 
 import type { List as ImmutableList } from 'immutable';
@@ -86,7 +86,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
   const me = useAppSelector((state) => state.me);
   const { account } = useAccount(me || undefined);
   const otherAccounts: ImmutableList<AccountEntity> = useAppSelector((state) => getOtherAccounts(state));
-  const settings = useAppSelector((state) => getSettings(state));
+  const { settings } = useSettingsStore();
   const followRequestsCount = useAppSelector((state) => state.user_lists.follow_requests.items.count());
   const scheduledStatusCount = useAppSelector((state) => state.scheduled_statuses.size);
   const draftCount = useAppSelector((state) => state.draft_statuses.size);
@@ -343,7 +343,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                     />
                   )}
 
-                  {settings.get('isDeveloper') && (
+                  {settings.isDeveloper && (
                     <SidebarLink
                       to='/developers'
                       icon={require('@tabler/icons/outline/code.svg')}

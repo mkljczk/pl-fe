@@ -73,7 +73,7 @@ const FeedSuggestions: React.FC<IFeedSuggesetions> = ({ statusId, onMoveUp, onMo
   const suggestedProfiles = useAppSelector((state) => state.suggestions.items);
   const isLoading = useAppSelector((state) => state.suggestions.isLoading);
 
-  if (!isLoading && suggestedProfiles.size === 0) return null;
+  if (!isLoading && suggestedProfiles.length === 0) return null;
 
   const handleHotkeyMoveUp = (e?: KeyboardEvent): void => {
     if (onMoveUp) {

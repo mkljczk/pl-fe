@@ -1,5 +1,6 @@
 import {
   arrow,
+  autoUpdate,
   FloatingArrow,
   FloatingPortal,
   offset,
@@ -39,6 +40,7 @@ const Tooltip: React.FC<ITooltip> = (props) => {
         element: arrowRef,
       }),
     ],
+    whileElementsMounted: autoUpdate,
   });
 
   const hover = useHover(context);

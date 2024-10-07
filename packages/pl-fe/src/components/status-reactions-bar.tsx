@@ -1,6 +1,5 @@
 import { useLongPress } from '@uidotdev/usehooks';
 import clsx from 'clsx';
-import { EmojiReaction } from 'pl-api';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -13,6 +12,7 @@ import { useModalsStore } from 'pl-fe/stores';
 import AnimatedNumber from './animated-number';
 import { Emoji, HStack, Icon, Text } from './ui';
 
+import type { EmojiReaction } from 'pl-api';
 import type { Emoji as EmojiType } from 'pl-fe/features/emoji';
 import type { SelectedStatus } from 'pl-fe/selectors';
 
@@ -103,12 +103,14 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
   const intl = useIntl();
   const { me } = useLoggedIn();
   const { demetricator } = useSettings();
+  const features = useFeatures();
 
   const handlePickEmoji = (emoji: EmojiType) => {
     dispatch(emojiReact(status, emoji.custom ? emoji.id : emoji.native, emoji.custom ? emoji.imageUrl : undefined));
   };
 
   if ((demetricator || status.emoji_reactions.length === 0) && collapsed) return null;
+  if (status.emoji_reactions.length === 0 && !features.emojiReacts) return null;
 
   const sortedReactions = status.emoji_reactions.toSorted((a, b) => (b.count || 0) - (a.count || 0));
 

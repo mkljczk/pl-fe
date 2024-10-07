@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
-import { changeSettingImmediate } from 'pl-fe/actions/settings';
+import { changeSetting } from 'pl-fe/actions/settings';
 import { Column, Text } from 'pl-fe/components/ui';
 import SvgIcon from 'pl-fe/components/ui/icon/svg-icon';
 import { useAppDispatch } from 'pl-fe/hooks';
@@ -38,7 +38,7 @@ const Developers: React.FC = () => {
   const leaveDevelopers = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    dispatch(changeSettingImmediate(['isDeveloper'], false));
+    dispatch(changeSetting(['isDeveloper'], false));
     toast.success(intl.formatMessage(messages.leave));
     history.push('/');
   };

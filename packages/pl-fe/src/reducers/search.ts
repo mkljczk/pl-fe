@@ -1,4 +1,4 @@
-import { OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord } from 'immutable';
+import { Record as ImmutableRecord } from 'immutable';
 
 import {
   COMPOSE_MENTION,
@@ -82,9 +82,9 @@ const paginateResults = (state: State, searchType: Exclude<SearchFilter, 'links'
         const data = results[searchType];
         // Hashtags are a list of maps. Others are IDs.
         if (searchType === 'hashtags') {
-          return (items as ImmutableOrderedSet<Tag>).concat(data as Search['hashtags']);
+          return (items as Array<Tag>).concat(data as Search['hashtags']);
         } else {
-          return (items as ImmutableOrderedSet<string>).concat(toIds(data as Search['accounts']));
+          return (items as Array<string>).concat(toIds(data as Search['accounts']));
         }
       });
     }

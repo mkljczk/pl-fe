@@ -1,9 +1,8 @@
 import { Record as ImmutableRecord } from 'immutable';
 
-import { TRENDS_FETCH_SUCCESS } from '../actions/trends';
+import { TRENDS_FETCH_SUCCESS, type TrendsAction } from '../actions/trends';
 
 import type { Tag } from 'pl-api';
-import type { AnyAction } from 'redux';
 
 const ReducerRecord = ImmutableRecord({
   items: Array<Tag>(),
@@ -12,7 +11,7 @@ const ReducerRecord = ImmutableRecord({
 
 type State = ReturnType<typeof ReducerRecord>;
 
-const trendsReducer = (state: State = ReducerRecord(), action: AnyAction) => {
+const trendsReducer = (state: State = ReducerRecord(), action: TrendsAction) => {
   switch (action.type) {
     case TRENDS_FETCH_SUCCESS:
       return state.withMutations(map => {

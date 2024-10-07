@@ -36,7 +36,6 @@ import push_notifications from './push-notifications';
 import scheduled_statuses from './scheduled-statuses';
 import search from './search';
 import security from './security';
-import settings from './settings';
 import status_lists from './status-lists';
 import statuses from './statuses';
 import suggestions from './suggestions';
@@ -80,7 +79,6 @@ const reducers = {
   scheduled_statuses,
   search,
   security,
-  settings,
   status_lists,
   statuses,
   suggestions,

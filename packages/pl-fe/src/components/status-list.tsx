@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import LoadGap from 'pl-fe/components/load-gap';
-import ScrollableList from 'pl-fe/components/scrollable-list';
+import ScrollableList, { type IScrollableListWithContainer } from 'pl-fe/components/scrollable-list';
 import StatusContainer from 'pl-fe/containers/status-container';
 import FeedSuggestions from 'pl-fe/features/feed-suggestions/feed-suggestions';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
@@ -14,9 +14,8 @@ import { usePlFeConfig } from 'pl-fe/hooks';
 import { Stack, Text } from './ui';
 
 import type { OrderedSet as ImmutableOrderedSet } from 'immutable';
-import type { IScrollableList } from 'pl-fe/components/scrollable-list';
 
-interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
+interface IStatusList extends Omit<IScrollableListWithContainer, 'onLoadMore' | 'children'> {
   /** Unique key to preserve the scroll position when navigating back. */
   scrollKey: string;
   /** List of status IDs to display. */

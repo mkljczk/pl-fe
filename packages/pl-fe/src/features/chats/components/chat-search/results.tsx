@@ -61,7 +61,6 @@ const Results = ({ accountSearchResult, onSelect, parentRef }: IResults) => {
         isLoading={isFetching}
         hasMore={hasNextPage}
         onLoadMore={handleLoadMore}
-        useWindowScroll={false}
         parentRef={parentRef}
       >
         {(accounts || []).map((chat) => renderAccount(chat))}

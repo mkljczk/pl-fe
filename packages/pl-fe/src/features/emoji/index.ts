@@ -189,7 +189,7 @@ const parseHTML = (str: string): { text: boolean; data: string }[] => {
   return tokens;
 };
 
-const emojify = (str: string, customEmojis = {}) =>
+const emojify = (str: string, customEmojis: Record<string, BaseCustomEmoji> = {}) =>
   parseHTML(str)
     .map(({ text, data }) => {
       if (!text) return data;
