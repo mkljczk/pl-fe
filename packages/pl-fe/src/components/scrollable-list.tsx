@@ -175,7 +175,7 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
       id={'parentRef' in props ? id : undefined}
       className={listClassName}
       style={{
-        height: !showLoading && data.length ? virtualizer.getTotalSize() : undefined,
+        height: (!showLoading || showPlaceholder) && data.length ? virtualizer.getTotalSize() : undefined,
         width: '100%',
         position: 'relative',
       }}
