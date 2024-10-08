@@ -409,8 +409,8 @@ const Status: React.FC<IStatus> = (props) => {
             avatarSize={avatarSize}
             items={(
               <>
-                <StatusTypeIcon status={status} />
-                <StatusLanguagePicker status={status} />
+                <StatusTypeIcon status={actualStatus} />
+                <StatusLanguagePicker status={actualStatus} />
               </>
             )}
           />
