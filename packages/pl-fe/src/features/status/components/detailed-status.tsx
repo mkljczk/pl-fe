@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
+import { useGroup } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
 import StatusContent from 'pl-fe/components/status-content';
 import StatusLanguagePicker from 'pl-fe/components/status-language-picker';
@@ -34,12 +35,14 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
   const node = useRef<HTMLDivElement>(null);
 
+  const groupQuery = useGroup(status.group_id || undefined);
+
   const handleOpenCompareHistoryModal = () => {
     onOpenCompareHistoryModal(status);
   };
 
   const renderStatusInfo = () => {
-    if (status.group) {
+    if (groupQuery.group) {
       return (
         <div className='mb-4'>
           <StatusInfo
@@ -56,10 +59,10 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                 defaultMessage='Posted in {group}'
                 values={{
                   group: (
-                    <Link to={`/groups/${status.group.id}`} className='hover:underline'>
+                    <Link to={`/groups/${status.group_id}`} className='hover:underline'>
                       <bdi className='truncate'>
                         <strong className='text-gray-800 dark:text-gray-200'>
-                          <span dangerouslySetInnerHTML={{ __html: status.group.display_name_html }} />
+                          <span dangerouslySetInnerHTML={{ __html: groupQuery.group?.display_name_html }} />
                         </strong>
                       </bdi>
                     </Link>

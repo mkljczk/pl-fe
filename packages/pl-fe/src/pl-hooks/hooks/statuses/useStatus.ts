@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useIntl } from 'react-intl';
 
-import { useAccount, useGroup } from 'pl-fe/api/hooks';
+import { useAccount } from 'pl-fe/api/hooks';
 import { useAppSelector, useClient } from 'pl-fe/hooks';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { queryClient } from 'pl-fe/queries/client';
@@ -109,12 +109,10 @@ const useStatus = (statusId?: string) => {
   const status = statusQuery.data;
 
   const { account } = useAccount(status?.account_id || undefined);
-  const { group } = useGroup(status?.group_id || undefined);
 
   // : (Status & {
   //   account: Account;
   //   accounts: Array<Account>;
-  //   group: Group | null;
   //   reblog: Status | null;
   // }) | null
   const data = useAppSelector((state) => {
@@ -125,11 +123,9 @@ const useStatus = (statusId?: string) => {
       ...status,
       account: account!,
       accounts,
-      group,
       // quote,
       // reblog,
       // poll
-      
     };
   });
 
