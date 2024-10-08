@@ -166,7 +166,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
             <StatusTypeIcon status={actualStatus} />
 
-            <StatusLanguagePicker status={status} showLabel />
+            <StatusLanguagePicker status={actualStatus} showLabel />
           </HStack>
         </HStack>
       </div>
