@@ -88,10 +88,9 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
       {reactions.size > 0 && renderFilterBar()}
       <ScrollableList
         emptyMessage={emptyMessage}
-        className={clsx({
+        listClassName={clsx('max-w-full', {
           'mt-4': reactions.size > 0,
         })}
-        listClassName='max-w-full'
         itemClassName='pb-3'
         style={{ height: 'calc(80vh - 88px)' }}
         estimatedSize={42}
