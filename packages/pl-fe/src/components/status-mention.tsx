@@ -14,13 +14,13 @@ const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
   const { account } = useAccount(accountId);
 
   if (!account) return (
-    <HoverRefWrapper accountId={accountId} inline>
+    <HoverRefWrapper accountId={accountId} element='span'>
       {fallback}
     </HoverRefWrapper>
   );
 
   return (
-    <HoverRefWrapper accountId={accountId} inline>
+    <HoverRefWrapper accountId={accountId} element='span'>
       <Link
         to={`/@${account.acct}`}
         className='text-primary-600 hover:underline dark:text-accent-blue'

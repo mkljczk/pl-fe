@@ -56,7 +56,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
 
     if (hoverable) {
       return (
-        <HoverRefWrapper key={account.id} accountId={account.id} inline>
+        <HoverRefWrapper key={account.id} accountId={account.id} element='span'>
           {link}
         </HoverRefWrapper>
       );

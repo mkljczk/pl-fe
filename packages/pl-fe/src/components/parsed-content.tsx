@@ -70,7 +70,7 @@ const ParsedContent: React.FC<IParsedContent> = (({ html, mentions, hasQuote }) 
               const mention = mentions.find(({ url }) => domNode.attribs.href === url);
               if (mention) {
                 return (
-                  <HoverRefWrapper accountId={mention.id} inline>
+                  <HoverRefWrapper accountId={mention.id} element='span'>
                     <Link
                       to={`/@${mention.acct}`}
                       className='text-primary-600 hover:underline dark:text-accent-blue'

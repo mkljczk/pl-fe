@@ -78,7 +78,7 @@ const Report: React.FC<IReport> = ({ id }) => {
 
   return (
     <HStack space={3} className='p-3' key={report.id}>
-      <HoverRefWrapper accountId={targetAccount.id} inline>
+      <HoverRefWrapper accountId={targetAccount.id} element='span'>
         <Link to={`/@${acct}`} title={acct}>
           <Avatar
             src={targetAccount.avatar}
@@ -95,7 +95,7 @@ const Report: React.FC<IReport> = ({ id }) => {
             id='admin.reports.report_title'
             defaultMessage='Report on {acct}'
             values={{ acct: (
-              <HoverRefWrapper accountId={targetAccount.id} inline>
+              <HoverRefWrapper accountId={targetAccount.id} element='span'>
                 <Link to={`/@${acct}`} title={acct}>@{acct}</Link>
               </HoverRefWrapper>
             ) }}
@@ -131,7 +131,7 @@ const Report: React.FC<IReport> = ({ id }) => {
             <HStack space={1}>
               <Text theme='muted' tag='span'>&mdash;</Text>
 
-              <HoverRefWrapper accountId={account.id} inline>
+              <HoverRefWrapper accountId={account.id} element='span'>
                 <Link
                   to={`/@${reporterAcct}`}
                   title={reporterAcct}

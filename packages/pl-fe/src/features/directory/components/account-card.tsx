@@ -49,7 +49,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           className='h-32 w-full rounded-t-lg object-cover'
         />
 
-        <HoverRefWrapper key={account.id} accountId={account.id} inline>
+        <HoverRefWrapper key={account.id} accountId={account.id} element='span'>
           <Link to={`/@${account.acct}`} title={account.acct}>
             <Avatar
               src={account.avatar}

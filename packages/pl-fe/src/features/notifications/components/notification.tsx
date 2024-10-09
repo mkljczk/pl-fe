@@ -5,6 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { mentionCompose } from 'pl-fe/actions/compose';
 import { reblog, favourite, unreblog, unfavourite } from 'pl-fe/actions/interactions';
 import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
+import HoverRefWrapper from 'pl-fe/components/hover-ref-wrapper';
 import Icon from 'pl-fe/components/icon';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
 import { HStack, Text, Emoji } from 'pl-fe/components/ui';
@@ -29,15 +30,15 @@ const notificationForScreenReader = (intl: IntlShape, message: string, timestamp
   return output.join(', ');
 };
 
-const buildLink = (account: Pick<Account, 'acct' | 'display_name_html'>): JSX.Element => (
-  <bdi key={account.acct}>
+const buildLink = (account: Pick<Account, 'acct' | 'display_name_html' | 'id'>): JSX.Element => (
+  <HoverRefWrapper key={account.acct} element='bdi' accountId={account.id}>
     <Link
       className='font-bold text-gray-800 hover:underline dark:text-gray-200'
       title={account.acct}
       to={`/@${account.acct}`}
       dangerouslySetInnerHTML={{ __html: account.display_name_html }}
     />
-  </bdi>
+  </HoverRefWrapper>
 );
 
 const icons: Partial<Record<NotificationType | 'reply', string>> = {
@@ -145,7 +146,7 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
 const buildMessage = (
   intl: IntlShape,
   type: NotificationType | 'reply',
-  accounts: Array<Pick<Account, 'acct' | 'display_name_html'>>,
+  accounts: Array<Pick<Account, 'acct' | 'display_name_html' | 'id'>>,
   targetName: string,
   instanceTitle: string,
 ): React.ReactNode => {

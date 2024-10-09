@@ -249,7 +249,7 @@ const Account = ({
           {withAvatar && (
             <ProfilePopper
               condition={showAccountHoverCard}
-              wrapper={(children) => <HoverRefWrapper className='relative' accountId={account.id} inline>{children}</HoverRefWrapper>}
+              wrapper={(children) => <HoverRefWrapper className='relative' accountId={account.id} element='span'>{children}</HoverRefWrapper>}
             >
               <LinkEl className='rounded-full' {...linkProps}>
                 <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} />
@@ -267,7 +267,7 @@ const Account = ({
           <div className='grow overflow-hidden'>
             <ProfilePopper
               condition={showAccountHoverCard}
-              wrapper={(children) => <HoverRefWrapper accountId={account.id} inline>{children}</HoverRefWrapper>}
+              wrapper={(children) => <HoverRefWrapper accountId={account.id} element='span'>{children}</HoverRefWrapper>}
             >
               <LinkEl {...linkProps}>
                 <HStack space={1} alignItems='center' grow>
