@@ -85,7 +85,6 @@ const baseAccountSchema = z.object({
   group: z.boolean().catch(false),
   discoverable: z.boolean().catch(false),
   noindex: z.boolean().nullable().catch(null),
-  moved: z.null().catch(null),
   suspended: z.boolean().optional().catch(undefined),
   limited: z.boolean().optional().catch(undefined),
   created_at: z.string().datetime().catch(new Date().toUTCString()),
@@ -138,7 +137,7 @@ type WithMoved = {
   moved: Account | null;
 };
 
-type Account = z.infer<typeof baseAccountSchema> & WithMoved;
+type Account = z.infer<typeof accountWithMovedAccountSchema> & WithMoved;
 
 const accountSchema: z.ZodType<Account> = untypedAccountSchema as any;
 
