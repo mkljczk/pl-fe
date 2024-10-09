@@ -8128,10 +8128,10 @@ pirates@^4.0.1:
   resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.6.tgz#3018ae32ecfcff6c29ba2267cbf21166ac1f36b9"
   integrity sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==
 
-pl-api@^0.0.38:
-  version "0.0.38"
-  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.0.38.tgz#aef6449b994fdc018dbacf4bc81cb2a2e5733c90"
-  integrity sha512-nFACUbhEndMe+Iwif+lKnbtDpvPgpiyMqfXTqV/dG6+B7yY5ECV1CnOKWcq2tojLaw5jmnO1DBC2KNJ7+VD/Cg==
+pl-api@^0.0.39:
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.0.39.tgz#7db536d1566b4f8c741b8d01dbdd7faa3ecb66cc"
+  integrity sha512-kkg1e8V21Xfa9ajOXo+3aa7o7rwPy9aTfBM21APvzt1vdQqINhbPspw1IZEXkQQCR/9kittaTnc/XFQKLuTfhA==
   dependencies:
     blurhash "^2.0.5"
     http-link-header "^1.1.3"

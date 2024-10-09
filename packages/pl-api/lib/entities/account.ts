@@ -132,7 +132,7 @@ const accountWithMovedAccountSchema = baseAccountSchema.extend({
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Account/} */
-const accountSchema = z.preprocess(preprocessAccount, accountWithMovedAccountSchema);
+const accountSchema: z.ZodType<Account> = z.preprocess(preprocessAccount, accountWithMovedAccountSchema) as any;
 
 type Account = z.infer<typeof baseAccountSchema> & {
   moved: Account | null;
