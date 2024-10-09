@@ -132,13 +132,17 @@ const accountWithMovedAccountSchema = baseAccountSchema.extend({
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Account/} */
-const accountSchema: z.ZodType<Account> = z.preprocess(preprocessAccount, accountWithMovedAccountSchema) as any;
+const untypedAccountSchema = z.preprocess(preprocessAccount, accountWithMovedAccountSchema);
 
-type Account = z.infer<typeof baseAccountSchema> & {
+type WithMoved = {
   moved: Account | null;
 };
 
-const credentialAccountSchema = z.preprocess(preprocessAccount, accountWithMovedAccountSchema.extend({
+type Account = z.infer<typeof baseAccountSchema> & WithMoved;
+
+const accountSchema: z.ZodType<Account> = untypedAccountSchema as any;
+
+const untypedCredentialAccountSchema = z.preprocess(preprocessAccount, accountWithMovedAccountSchema.extend({
   source: z.object({
     note: z.string().catch(''),
     fields: filteredArray(fieldSchema),
@@ -166,13 +170,17 @@ const credentialAccountSchema = z.preprocess(preprocessAccount, accountWithMoved
   }).optional().catch(undefined),
 }));
 
-type CredentialAccount = z.infer<typeof credentialAccountSchema>;
+type CredentialAccount = z.infer<typeof untypedCredentialAccountSchema> & WithMoved;
 
-const mutedAccountSchema = z.preprocess(preprocessAccount, accountWithMovedAccountSchema.extend({
+const credentialAccountSchema: z.ZodType<CredentialAccount> = untypedCredentialAccountSchema as any;
+
+const untypedMutedAccountSchema = z.preprocess(preprocessAccount, accountWithMovedAccountSchema.extend({
   mute_expires_at: dateSchema.nullable().catch(null),
 }));
 
-type MutedAccount = z.infer<typeof mutedAccountSchema>;
+type MutedAccount = z.infer<typeof untypedMutedAccountSchema> & WithMoved;
+
+const mutedAccountSchema: z.ZodType<MutedAccount> = untypedMutedAccountSchema as any;
 
 export {
   accountSchema,
