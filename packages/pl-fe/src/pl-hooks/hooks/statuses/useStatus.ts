@@ -7,8 +7,7 @@ import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { queryClient } from 'pl-fe/queries/client';
 import { selectAccount, selectAccounts } from 'pl-fe/selectors';
 
-import { type MinifiedStatus, minifyStatus } from '../../minifiers/minifyStatus';
-import { normalizeStatus } from '../../normalizers/normalizeStatus';
+import { normalizeStatus, type Status } from '../../normalizers/normalizeStatus';
 
 // import type { Group } from 'pl-fe/normalizers';
 
@@ -84,8 +83,8 @@ type Account = ReturnType<typeof selectAccount>;
 //       return result;
 //     }, [])), []);
 
-const importStatus = (status: MinifiedStatus) => {
-  queryClient.setQueryData<MinifiedStatus>(
+const importStatus = (status: Status) => {
+  queryClient.setQueryData<Status>(
     ['statuses', 'entities', status.id],
     status,
   );
@@ -101,8 +100,7 @@ const useStatus = (statusId?: string) => {
       language: intl.locale,
     })
       .then(status => (importEntities({ statuses: [status] }, { withParents: false }), status))
-      .then(normalizeStatus)
-      .then(minifyStatus),
+      .then(normalizeStatus),
     enabled: !!statusId,
   });
 

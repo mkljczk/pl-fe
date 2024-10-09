@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 
 import { useRelationship } from 'pl-fe/api/hooks/accounts/useRelationship';
 import { useClient } from 'pl-fe/hooks';
-import { type MinifiedAccount, minifyAccount } from 'pl-fe/pl-hooks/minifiers/minifyAccount';
 import { normalizeAccount } from 'pl-fe/pl-hooks/normalizers/normalizeAccount';
 import { queryClient } from 'pl-fe/queries/client';
 
@@ -18,8 +17,7 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
   const accountQuery = useQuery({
     queryKey: ['accounts', 'entities', accountId],
     queryFn: () => client.accounts.getAccount(accountId!)
-      .then(normalizeAccount)
-      .then(minifyAccount),
+      .then(normalizeAccount),
     enabled: !!accountId,
   });
 

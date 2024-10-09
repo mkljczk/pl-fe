@@ -3,14 +3,9 @@ import { importEntities as importEntityStoreEntities } from 'pl-fe/entity-store/
 import { Entities } from 'pl-fe/entity-store/entities';
 import { queryClient } from 'pl-fe/queries/client';
 
-let dispatch: AppDispatch;
-
-import('pl-fe/store').then(value => dispatch = value.store.dispatch).catch(() => {});
-
-import { MinifiedNotification, minifyNotification } from './minifiers/minifyNotification';
-import { MinifiedStatus, minifyStatus } from './minifiers/minifyStatus';
+import { minifyNotification, type MinifiedNotification } from './minifiers/minifyNotification';
 import { DeduplicatedNotification } from './normalizers/deduplicateNotifications';
-import { normalizeStatus } from './normalizers/normalizeStatus';
+import { normalizeStatus, type Status } from './normalizers/normalizeStatus';
 
 import type {
   Account as BaseAccount,
@@ -21,6 +16,10 @@ import type {
 } from 'pl-api';
 import type { AppDispatch } from 'pl-fe/store';
 
+let dispatch: AppDispatch;
+
+import('pl-fe/store').then(value => dispatch = value.store.dispatch).catch(() => {});
+
 const importNotification = (notification: DeduplicatedNotification) => {
   queryClient.setQueryData<MinifiedNotification>(
     ['notifications', 'entities', notification.id],
@@ -29,9 +28,9 @@ const importNotification = (notification: DeduplicatedNotification) => {
 };
 
 const importStatus = (status: BaseStatus) => {
-  queryClient.setQueryData<MinifiedStatus>(
+  queryClient.setQueryData<Status>(
     ['statuses', 'entities', status.id],
-    _ => minifyStatus(normalizeStatus(status)),
+    _ => normalizeStatus(status),
   );
 };
 

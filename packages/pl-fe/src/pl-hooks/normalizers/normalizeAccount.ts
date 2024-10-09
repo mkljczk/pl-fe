@@ -6,7 +6,7 @@ import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
 import type { Account as BaseAccount } from 'pl-api';
 
-const normalizeAccount = (account: BaseAccount) => {
+const normalizeAccount = ({ moved, ...account }: BaseAccount) => {
   const missingAvatar = require('pl-fe/assets/images/avatar-missing.png');
   const missingHeader = require('pl-fe/assets/images/header-missing.png');
   const note = account.note === '<p></p>' ? '' : account.note;
@@ -15,6 +15,7 @@ const normalizeAccount = (account: BaseAccount) => {
 
   return {
     ...account,
+    moved_id: moved?.id || null,
     avatar: account.avatar || account.avatar_static || missingAvatar,
     avatar_static: account.avatar_static || account.avatar || missingAvatar,
     header: account.header || account.header_static || missingHeader,

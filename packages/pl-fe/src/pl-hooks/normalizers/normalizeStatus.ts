@@ -8,6 +8,7 @@ import DOMPurify from 'isomorphic-dompurify';
 import { type Account as BaseAccount, type Status as BaseStatus, type MediaAttachment, mentionSchema, type Translation } from 'pl-api';
 
 import emojify from 'pl-fe/features/emoji';
+import { queryClient } from 'pl-fe/queries/client';
 import { unescapeHTML } from 'pl-fe/utils/html';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
@@ -88,9 +89,8 @@ const calculateStatus = (status: BaseStatus, oldStatus?: OldStatus): CalculatedV
   }
 };
 
-const normalizeStatus = (status: BaseStatus & {
-  accounts?: Array<BaseAccount>;
-}, oldStatus?: OldStatus) => {
+const normalizeStatus = ({ account, accounts, reblog, poll, group, quote, ...status }: BaseStatus & { accounts?: Array<BaseAccount> }) => {
+  const oldStatus = queryClient.getQueryData<OldStatus>(['statuses', 'entities', status.id]);
   const calculated = calculateStatus(status, oldStatus);
 
   // Sort the replied-to mention to the top
@@ -103,8 +103,8 @@ const normalizeStatus = (status: BaseStatus & {
   });
 
   // Add self to mentions if it's a reply to self
-  const isSelfReply = status.account.id === status.in_reply_to_account_id;
-  const hasSelfMention = status.mentions.some(mention => status.account.id === mention.id);
+  const isSelfReply = account.id === status.in_reply_to_account_id;
+  const hasSelfMention = status.mentions.some(mention => account.id === mention.id);
 
   if (isSelfReply && !hasSelfMention) {
     const selfMention = mentionSchema.parse(status.account);
@@ -138,15 +138,16 @@ const normalizeStatus = (status: BaseStatus & {
   }
 
   return {
-    account_id: status.account.id,
-    reblog_id: status.reblog?.id || null,
-    poll_id: status.poll?.id || null,
-    group_id: status.group?.id || null,
+    account_id: account.id,
+    account_ids: accounts?.map(account => account.id) || [account.id],
+    reblog_id: reblog?.id || null,
+    poll_id: poll?.id || null,
+    group_id: group?.id || null,
     translating: false,
     expectsCard: false,
     showFiltered: null as null | boolean,
     ...status,
-    quote_id: status.quote?.id || status.quote_id || null,
+    quote_id: quote?.id || status.quote_id || null,
     mentions,
     expanded: null,
     hidden: null,

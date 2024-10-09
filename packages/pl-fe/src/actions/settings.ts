@@ -3,7 +3,7 @@ import { defineMessage } from 'react-intl';
 import { patchMe } from 'pl-fe/actions/me';
 import { getClient } from 'pl-fe/api';
 import messages from 'pl-fe/messages';
-import { MinifiedAccount } from 'pl-fe/pl-hooks/minifiers/minifyAccount';
+import { Account } from 'pl-fe/pl-hooks/normalizers/normalizeAccount';
 import { queryClient } from 'pl-fe/queries/client';
 import KVStore from 'pl-fe/storage/kv-store';
 import { useSettingsStore } from 'pl-fe/stores/settings';
@@ -70,7 +70,7 @@ const updateSettingsStore = (settings: any) =>
         },
       }));
     } else {
-      const accountUrl = queryClient.getQueryData<MinifiedAccount>(['accounts', 'entities', state.me])!.url;
+      const accountUrl = queryClient.getQueryData<Account>(['accounts', 'entities', state.me])!.url;
 
       return updateAuthAccount(accountUrl, settings);
     }
