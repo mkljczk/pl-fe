@@ -51,7 +51,7 @@ const preprocessAccount = (account: any) => {
     ...(pick(account.other_settings || {}), ['birthday', 'location']),
     __meta: pick(account, ['pleroma', 'source']),
     ...account,
-    display_name: account.display_name.trim() || username,
+    display_name: account.display_name?.trim() || username,
     roles: account.roles?.length ? account.roles : filterBadges(account.pleroma?.tags),
     source: account.source
       ? { ...(pick(account.pleroma?.source || {}, [
