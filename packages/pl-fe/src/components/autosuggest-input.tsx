@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import { List as ImmutableList } from 'immutable';
-import React from 'react';
-import ImmutablePureComponent from 'react-immutable-pure-component';
+import React, { PureComponent } from 'react';
 
 import AutosuggestEmoji from 'pl-fe/components/autosuggest-emoji';
 import Icon from 'pl-fe/components/icon';
@@ -35,7 +34,7 @@ interface IAutosuggestInput extends Pick<React.HTMLAttributes<HTMLInputElement>,
   theme?: InputThemes;
 }
 
-class AutosuggestInput extends ImmutablePureComponent<IAutosuggestInput> {
+class AutosuggestInput extends PureComponent<IAutosuggestInput> {
 
   static defaultProps = {
     autoFocus: false,
