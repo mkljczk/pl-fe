@@ -72,8 +72,8 @@ const fetchRelatedRelationships = (dispatch: AppDispatch, notifications: Array<B
 };
 
 const updateNotifications = (notification: BaseNotification) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const selectedFilter = useSettingsStore().settings.notifications.quickFilter.active;
+  (dispatch: AppDispatch) => {
+    const selectedFilter = useSettingsStore.getState().settings.notifications.quickFilter.active;
     const showInColumn = selectedFilter === 'all' ? true : (FILTER_TYPES[selectedFilter as FilterType] || [notification.type]).includes(notification.type);
 
     if (notification.account) {
