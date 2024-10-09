@@ -4,6 +4,7 @@ import { defineMessages, IntlShape, useIntl } from 'react-intl';
 import { unblockAccount } from 'pl-fe/actions/accounts';
 import { Button, Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover, HStack, IconButton, Stack, Text } from 'pl-fe/components/ui';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
+import { Entities } from 'pl-fe/entity-store/entities';
 import UploadButton from 'pl-fe/features/compose/components/upload-button';
 import emojiSearch from 'pl-fe/features/emoji/search';
 import { useAppDispatch, useAppSelector, useInstance } from 'pl-fe/hooks';
@@ -12,7 +13,7 @@ import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
 
 import ChatTextarea from './chat-textarea';
 
-import type { MediaAttachment } from 'pl-api';
+import type { MediaAttachment, Relationship } from 'pl-api';
 import type { Emoji, NativeEmoji } from 'pl-fe/features/emoji';
 
 const messages = defineMessages({
@@ -74,8 +75,10 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
   const { openModal } = useModalsStore();
   const { chat } = useChatContext();
 
-  const isBlocked = useAppSelector((state) => state.getIn(['relationships', chat?.account?.id, 'blocked_by']));
-  const isBlocking = useAppSelector((state) => state.getIn(['relationships', chat?.account?.id, 'blocking']));
+  const {
+    blocked_by: isBlocked,
+    blocking: isBlocking,
+  } = useAppSelector((state) => (chat?.account?.id && (state.entities[Entities.RELATIONSHIPS]?.store[chat.account.id]) || {}) as Relationship);
   const maxCharacterCount = useInstance().configuration.chats.max_characters;
 
   const [suggestions, setSuggestions] = useState<Suggestion>(initialSuggestionState);

@@ -7,11 +7,12 @@ import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
 import { Avatar, HStack, IconButton, Stack, Text } from 'pl-fe/components/ui';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
+import { Entities } from 'pl-fe/entity-store/entities';
 import { useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { useChatActions } from 'pl-fe/queries/chats';
 import { useModalsStore } from 'pl-fe/stores';
 
-import type { Chat } from 'pl-api';
+import type { Chat, Relationship } from 'pl-api';
 import type { Menu } from 'pl-fe/components/dropdown-menu';
 
 const messages = defineMessages({
@@ -36,8 +37,10 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
 
   const { isUsingMainChatPage } = useChatContext();
   const { deleteChat } = useChatActions(chat?.id as string);
-  const isBlocked = useAppSelector((state) => state.getIn(['relationships', chat.account.id, 'blocked_by']));
-  const isBlocking = useAppSelector((state) => state.getIn(['relationships', chat?.account?.id, 'blocking']));
+  const {
+    blocked_by: isBlocked,
+    blocking: isBlocking,
+  } = useAppSelector((state) => (state.entities[Entities.RELATIONSHIPS]?.store[chat.account.id] as Relationship) || {});
 
   const menu = useMemo((): Menu => [{
     text: intl.formatMessage(messages.leaveChat),
