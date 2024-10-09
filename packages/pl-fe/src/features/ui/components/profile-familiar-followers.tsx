@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { fetchAccountFamiliarFollowers } from 'pl-fe/actions/familiar-followers';
 import AvatarStack from 'pl-fe/components/avatar-stack';
-import HoverRefWrapper from 'pl-fe/components/hover-ref-wrapper';
+import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import { HStack, Text } from 'pl-fe/components/ui';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
@@ -45,7 +45,7 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
   }
 
   const accounts: Array<React.ReactNode> = familiarFollowers.map(account => !!account && (
-    <HoverRefWrapper accountId={account.id} key={account.id} element='span'>
+    <HoverAccountWrapper accountId={account.id} key={account.id} element='span'>
       <Link className='mention inline-block' to={`/@${account.acct}`}>
         <HStack space={1} alignItems='center' grow>
           <Text
@@ -58,7 +58,7 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
           {account.verified && <VerificationBadge />}
         </HStack>
       </Link>
-    </HoverRefWrapper>
+    </HoverAccountWrapper>
   )).toArray().filter(Boolean);
 
   if (familiarFollowerIds.size > 2) {

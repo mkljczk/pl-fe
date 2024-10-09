@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import HashtagLink from './hashtag-link';
-import HoverRefWrapper from './hover-ref-wrapper';
+import HoverAccountWrapper from './hover-account-wrapper';
 import StatusMention from './status-mention';
 
 import type { Mention } from 'pl-api';
@@ -70,7 +70,7 @@ const ParsedContent: React.FC<IParsedContent> = (({ html, mentions, hasQuote }) 
               const mention = mentions.find(({ url }) => domNode.attribs.href === url);
               if (mention) {
                 return (
-                  <HoverRefWrapper accountId={mention.id} element='span'>
+                  <HoverAccountWrapper accountId={mention.id} element='span'>
                     <Link
                       to={`/@${mention.acct}`}
                       className='text-primary-600 hover:underline dark:text-accent-blue'
@@ -79,7 +79,7 @@ const ParsedContent: React.FC<IParsedContent> = (({ html, mentions, hasQuote }) 
                     >
                       @{mention.username}
                     </Link>
-                  </HoverRefWrapper>
+                  </HoverAccountWrapper>
                 );
               }
             } else if (domNode.attribs['data-user']) {

@@ -12,7 +12,7 @@ import { UserPanel } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 import { useAccountHoverCardStore } from 'pl-fe/stores';
 
-import { showAccountHoverCard } from './hover-ref-wrapper';
+import { showAccountHoverCard } from './hover-account-wrapper';
 import { ParsedContent } from './parsed-content';
 import { dateFormatOptions } from './relative-timestamp';
 import Scrobble from './scrobble';

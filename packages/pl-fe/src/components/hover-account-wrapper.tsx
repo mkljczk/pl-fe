@@ -11,7 +11,7 @@ const showAccountHoverCard = debounce((openAccountHoverCard, ref, accountId) => 
   openAccountHoverCard(ref, accountId);
 }, 600);
 
-interface IHoverRefWrapper {
+interface IHoverAccountWrapper {
   accountId: string;
   element?: 'div' | 'span' | 'bdi';
   className?: string;
@@ -19,7 +19,7 @@ interface IHoverRefWrapper {
 }
 
 /** Makes a profile hover card appear when the wrapped element is hovered. */
-const HoverRefWrapper: React.FC<IHoverRefWrapper> = ({ accountId, children, element: Elem = 'div', className }) => {
+const HoverAccountWrapper: React.FC<IHoverAccountWrapper> = ({ accountId, children, element: Elem = 'div', className }) => {
   const dispatch = useAppDispatch();
 
   const { openAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardStore();
@@ -46,7 +46,7 @@ const HoverRefWrapper: React.FC<IHoverRefWrapper> = ({ accountId, children, elem
   return (
     <Elem
       ref={ref}
-      className={clsx('hover-ref-wrapper', className)}
+      className={clsx('hover-account-wrapper', className)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
@@ -56,4 +56,4 @@ const HoverRefWrapper: React.FC<IHoverRefWrapper> = ({ accountId, children, elem
   );
 };
 
-export { HoverRefWrapper as default, showAccountHoverCard };
+export { HoverAccountWrapper as default, showAccountHoverCard };

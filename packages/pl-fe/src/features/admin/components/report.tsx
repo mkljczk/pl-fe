@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { closeReport } from 'pl-fe/actions/admin';
 import { deactivateUserModal, deleteUserModal } from 'pl-fe/actions/moderation';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import HoverRefWrapper from 'pl-fe/components/hover-ref-wrapper';
+import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import { Accordion, Avatar, Button, Stack, HStack, Text } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { makeGetReport } from 'pl-fe/selectors';
@@ -78,7 +78,7 @@ const Report: React.FC<IReport> = ({ id }) => {
 
   return (
     <HStack space={3} className='p-3' key={report.id}>
-      <HoverRefWrapper accountId={targetAccount.id} element='span'>
+      <HoverAccountWrapper accountId={targetAccount.id} element='span'>
         <Link to={`/@${acct}`} title={acct}>
           <Avatar
             src={targetAccount.avatar}
@@ -87,7 +87,7 @@ const Report: React.FC<IReport> = ({ id }) => {
             className='overflow-hidden'
           />
         </Link>
-      </HoverRefWrapper>
+      </HoverAccountWrapper>
 
       <Stack space={3} className='overflow-hidden' grow>
         <Text tag='h4' weight='bold'>
@@ -95,9 +95,9 @@ const Report: React.FC<IReport> = ({ id }) => {
             id='admin.reports.report_title'
             defaultMessage='Report on {acct}'
             values={{ acct: (
-              <HoverRefWrapper accountId={targetAccount.id} element='span'>
+              <HoverAccountWrapper accountId={targetAccount.id} element='span'>
                 <Link to={`/@${acct}`} title={acct}>@{acct}</Link>
-              </HoverRefWrapper>
+              </HoverAccountWrapper>
             ) }}
           />
         </Text>
@@ -131,7 +131,7 @@ const Report: React.FC<IReport> = ({ id }) => {
             <HStack space={1}>
               <Text theme='muted' tag='span'>&mdash;</Text>
 
-              <HoverRefWrapper accountId={account.id} element='span'>
+              <HoverAccountWrapper accountId={account.id} element='span'>
                 <Link
                   to={`/@${reporterAcct}`}
                   title={reporterAcct}
@@ -139,7 +139,7 @@ const Report: React.FC<IReport> = ({ id }) => {
                 >
                   @{reporterAcct}
                 </Link>
-              </HoverRefWrapper>
+              </HoverAccountWrapper>
             </HStack>
           )}
         </Stack>
