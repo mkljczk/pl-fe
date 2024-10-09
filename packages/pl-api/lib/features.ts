@@ -1078,7 +1078,7 @@ const getFeatures = (instance: Instance) => {
      * Can set content warnings on statuses.
      * @see POST /api/v1/statuses
      */
-    spoilers: true,
+    spoilers: v.software !== MITRA,
 
     /**
      * @see POST /api/friendica/statuses/:id/dislike
