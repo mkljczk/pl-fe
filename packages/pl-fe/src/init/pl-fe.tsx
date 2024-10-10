@@ -1,5 +1,6 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
+import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 
 import { StatProvider } from 'pl-fe/contexts/stat-context';
@@ -28,11 +29,13 @@ const PlFe: React.FC = () => (
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
       <StatProvider>
-        <PlFeHead>
-          <PlFeLoad>
-            <PlFeMount />
-          </PlFeLoad>
-        </PlFeHead>
+        <HelmetProvider>
+          <PlFeHead>
+            <PlFeLoad>
+              <PlFeMount />
+            </PlFeLoad>
+          </PlFeHead>
+        </HelmetProvider>
       </StatProvider>
     </QueryClientProvider>
   </Provider>

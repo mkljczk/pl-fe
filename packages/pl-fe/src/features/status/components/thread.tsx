@@ -2,7 +2,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import clsx from 'clsx';
 import { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
 import React, { useEffect, useRef } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
