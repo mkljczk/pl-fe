@@ -3,7 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { Modal } from 'pl-fe/components/ui';
-import { useFeatures } from 'pl-fe/hooks';
+import { useFeatures, useLoggedIn } from 'pl-fe/hooks';
 
 import type { BaseModalProps } from '../modal-root';
 
@@ -21,13 +21,14 @@ const TableCell: React.FC<{ className?: string; children: React.ReactNode }> = (
 
 const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
   const features = useFeatures();
+  const { isLoggedIn } = useLoggedIn();
 
   const hotkeys = [
-    {
+    isLoggedIn && {
       key: <Hotkey>r</Hotkey>,
       label: <FormattedMessage id='keyboard_shortcuts.reply' defaultMessage='to reply' />,
     },
-    {
+    isLoggedIn && {
       key: <Hotkey>m</Hotkey>,
       label: <FormattedMessage id='keyboard_shortcuts.mention' defaultMessage='to mention author' />,
     },
@@ -35,15 +36,15 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       key: <Hotkey>p</Hotkey>,
       label: <FormattedMessage id='keyboard_shortcuts.profile' defaultMessage="to open author's profile" />,
     },
-    {
+    isLoggedIn && {
       key: <Hotkey>f</Hotkey>,
       label: <FormattedMessage id='keyboard_shortcuts.favourite' defaultMessage='to like' />,
     },
-    features.emojiReacts && {
+    isLoggedIn && features.emojiReacts && {
       key: <Hotkey>e</Hotkey>,
       label: <FormattedMessage id='keyboard_shortcuts.react' defaultMessage='to react' />,
     },
-    {
+    isLoggedIn && {
       key: <Hotkey>b</Hotkey>,
       label: <FormattedMessage id='keyboard_shortcuts.boost' defaultMessage='to repost' />,
     },
@@ -71,11 +72,11 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       key: <><Hotkey>down</Hotkey>, <Hotkey>j</Hotkey></>,
       label: <FormattedMessage id='keyboard_shortcuts.down' defaultMessage='to move down in the list' />,
     },
-    {
+    isLoggedIn && {
       key: <Hotkey>n</Hotkey>,
       label: <FormattedMessage id='keyboard_shortcuts.compose' defaultMessage='to open the compose textarea' />,
     },
-    {
+    isLoggedIn && {
       key: <><Hotkey>alt</Hotkey> + <Hotkey>n</Hotkey></>,
       label: <FormattedMessage id='keyboard_shortcuts.toot' defaultMessage='to start a new post' />,
     },
@@ -83,7 +84,7 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       key: <Hotkey>backspace</Hotkey>,
       label: <FormattedMessage id='keyboard_shortcuts.back' defaultMessage='to navigate back' />,
     },
-    {
+    isLoggedIn && {
       key: <><Hotkey>s</Hotkey>, <Hotkey>/</Hotkey></>,
       label: <FormattedMessage id='keyboard_shortcuts.search' defaultMessage='to focus search' />,
     },
@@ -91,31 +92,31 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       key: <Hotkey>esc</Hotkey>,
       label: <FormattedMessage id='keyboard_shortcuts.unfocus' defaultMessage='to un-focus compose textarea/search' />,
     },
-    {
+    isLoggedIn && {
       key: <><Hotkey>g</Hotkey> + <Hotkey>h</Hotkey></>,
       label: <FormattedMessage id='keyboard_shortcuts.home' defaultMessage='to open home timeline' />,
     },
-    {
+    isLoggedIn && {
       key: <><Hotkey>g</Hotkey> + <Hotkey>n</Hotkey></>,
       label: <FormattedMessage id='keyboard_shortcuts.notifications' defaultMessage='to open notifications list' />,
     },
-    {
+    isLoggedIn && {
       key: <><Hotkey>g</Hotkey> + <Hotkey>f</Hotkey></>,
       label: <FormattedMessage id='keyboard_shortcuts.favourites' defaultMessage='to open likes list' />,
     },
-    {
+    isLoggedIn && {
       key: <><Hotkey>g</Hotkey> + <Hotkey>p</Hotkey></>,
       label: <FormattedMessage id='keyboard_shortcuts.my_profile' defaultMessage='to open your profile' />,
     },
-    {
+    isLoggedIn && {
       key: <><Hotkey>g</Hotkey> + <Hotkey>b</Hotkey></>,
       label: <FormattedMessage id='keyboard_shortcuts.blocked' defaultMessage='to open blocked users list' />,
     },
-    {
+    isLoggedIn && {
       key: <><Hotkey>g</Hotkey> + <Hotkey>m</Hotkey></>,
       label: <FormattedMessage id='keyboard_shortcuts.muted' defaultMessage='to open muted users list' />,
     },
-    features.followRequests && {
+    isLoggedIn && features.followRequests && {
       key: <><Hotkey>g</Hotkey> + <Hotkey>r</Hotkey></>,
       label: <FormattedMessage id='keyboard_shortcuts.requests' defaultMessage='to open follow requests list' />,
     },
