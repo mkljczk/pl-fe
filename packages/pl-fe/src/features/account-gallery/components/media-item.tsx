@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import Blurhash from 'pl-fe/components/blurhash';
 import Icon from 'pl-fe/components/icon';
@@ -118,7 +119,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
 
   return (
     <div className='col-span-1'>
-      <a className='media-gallery__item-thumbnail aspect-1' href={status.url} target='_blank' onClick={handleClick} title={title}>
+      <Link className='media-gallery__item-thumbnail aspect-1' to={`/@${status.account.acct}/posts/${status.id}`} onClick={handleClick} title={title}>
         <Blurhash
           hash={attachment.blurhash}
           className={clsx('media-gallery__preview', {
@@ -128,7 +129,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
         />
         {visible && thumbnail}
         {!visible && icon}
-      </a>
+      </Link>
     </div>
   );
 };

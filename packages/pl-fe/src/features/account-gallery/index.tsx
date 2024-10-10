@@ -48,7 +48,7 @@ const AccountGallery = () => {
 
   const handleOpenMedia = (attachment: AccountGalleryAttachment) => {
     if (attachment.type === 'video') {
-      openModal('VIDEO', { media: attachment, statusId: attachment.status.id, account: attachment.account });
+      openModal('VIDEO', { media: attachment, statusId: attachment.status.id });
     } else {
       const media = attachment.status.media_attachments;
       const index = media.findIndex((x) => x.id === attachment.id);
