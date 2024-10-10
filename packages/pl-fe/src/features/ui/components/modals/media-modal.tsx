@@ -32,7 +32,7 @@ const messages = defineMessages({
 
 // you can't use 100vh, because the viewport height is taller
 // than the visible part of the document in some mobile
-// browsers when it's address bar is visible.
+// browsers when its address bar is visible.
 // https://developers.google.com/web/updates/2016/12/url-bar-resizing
 const swipeableViewsStyle: React.CSSProperties = {
   width: '100%',
