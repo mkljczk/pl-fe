@@ -19,6 +19,22 @@ const TableCell: React.FC<{ className?: string; children: React.ReactNode }> = (
   </td>
 );
 
+const getColumnSizes = (n: number) => {
+  let part1 = Math.ceil(n / 3);
+  let part2 = Math.floor(n / 3);
+  const part3 = Math.floor(n / 3);
+
+  const total = part1 + part2 + part3;
+  if (total < n) {
+    part2++;
+  } else if (total > n) {
+    part1--;
+  }
+
+  // Return the parts in descending order
+  return [part1, part2, part3];
+};
+
 const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
   const features = useFeatures();
   const { isLoggedIn } = useLoggedIn();
@@ -126,7 +142,16 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
     },
   ].filter(hotkey => hotkey !== false);
 
-  const columnSize = Math.ceil(hotkeys.length / 3);
+  const columnSizes = getColumnSizes(hotkeys.length);
+
+  const columns = columnSizes.reduce<Array<Array<{
+    key: JSX.Element;
+    label: JSX.Element;
+  }>>>((prev, cur) => {
+    const addedItems = prev.flat().length;
+    prev.push(hotkeys.slice(addedItems, addedItems + cur));
+    return prev;
+  }, []);
 
   return (
     <Modal
@@ -135,51 +160,23 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       width='4xl'
     >
       <div className='flex flex-col text-xs lg:flex-row'>
-        <table>
-          <thead>
-            <tr>
-              <th className='pb-2 font-bold'><FormattedMessage id='keyboard_shortcuts.hotkey' defaultMessage='Hotkey' /></th>
-            </tr>
-          </thead>
-          <tbody>
-            {hotkeys.slice(0, columnSize).map((hotkey, i) => (
-              <tr key={i}>
-                <TableCell className='whitespace-nowrap'>{hotkey.key}</TableCell>
-                <TableCell>{hotkey.label}</TableCell>
+        {columns.map((column, i) => (
+          <table key={i}>
+            <thead>
+              <tr>
+                <th className='pb-2 font-bold'><FormattedMessage id='keyboard_shortcuts.hotkey' defaultMessage='Hotkey' /></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <table>
-          <thead>
-            <tr>
-              <th className='pb-2 font-bold'><FormattedMessage id='keyboard_shortcuts.hotkey' defaultMessage='Hotkey' /></th>
-            </tr>
-          </thead>
-          <tbody>
-            {hotkeys.slice(columnSize, columnSize * 2).map((hotkey, i) => (
-              <tr key={i}>
-                <TableCell className='whitespace-nowrap'>{hotkey.key}</TableCell>
-                <TableCell>{hotkey.label}</TableCell>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <table>
-          <thead>
-            <tr>
-              <th className='pb-2 font-bold'><FormattedMessage id='keyboard_shortcuts.hotkey' defaultMessage='Hotkey' /></th>
-            </tr>
-          </thead>
-          <tbody>
-            {hotkeys.slice(columnSize * 2).map((hotkey, i) => (
-              <tr key={i}>
-                <TableCell className='whitespace-nowrap'>{hotkey.key}</TableCell>
-                <TableCell>{hotkey.label}</TableCell>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {column.map((hotkey, i) => (
+                <tr key={i}>
+                  <TableCell className='whitespace-nowrap'>{hotkey.key}</TableCell>
+                  <TableCell>{hotkey.label}</TableCell>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ))}
       </div>
     </Modal>
   );
