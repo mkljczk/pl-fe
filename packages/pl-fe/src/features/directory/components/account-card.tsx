@@ -11,7 +11,7 @@ import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
 import { Avatar, Stack, Text } from 'pl-fe/components/ui';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
 import { useAppSelector } from 'pl-fe/hooks';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStore } from 'pl-fe/stores';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
 interface IAccountCard {

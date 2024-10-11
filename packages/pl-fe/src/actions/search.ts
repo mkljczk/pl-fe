@@ -1,4 +1,4 @@
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStore } from 'pl-fe/stores';
 
 import { getClient } from '../api';
 

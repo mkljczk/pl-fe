@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStore } from 'pl-fe/stores';
 
 import DevelopersChallenge from './developers-challenge';
 import DevelopersMenu from './developers-menu';

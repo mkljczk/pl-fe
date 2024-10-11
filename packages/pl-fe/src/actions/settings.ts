@@ -5,7 +5,7 @@ import { getClient } from 'pl-fe/api';
 import messages from 'pl-fe/messages';
 import { makeGetAccount } from 'pl-fe/selectors';
 import KVStore from 'pl-fe/storage/kv-store';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 

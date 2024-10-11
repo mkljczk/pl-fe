@@ -1,7 +1,7 @@
 import { Map as ImmutableMap } from 'immutable';
 
 import { getLocale } from 'pl-fe/actions/settings';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStore } from 'pl-fe/stores';
 import { shouldFilter } from 'pl-fe/utils/timelines';
 
 import { getClient } from '../api';

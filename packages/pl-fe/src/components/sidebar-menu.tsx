@@ -11,8 +11,7 @@ import { Stack, Divider, HStack, Icon, Text } from 'pl-fe/components/ui';
 import ProfileStats from 'pl-fe/features/ui/components/profile-stats';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance, useRegistrationStatus } from 'pl-fe/hooks';
 import { makeGetOtherAccounts } from 'pl-fe/selectors';
-import { useUiStore } from 'pl-fe/stores';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useUiStore, useSettingsStore } from 'pl-fe/stores';
 import sourceCode from 'pl-fe/utils/code';
 
 import type { List as ImmutableList } from 'immutable';

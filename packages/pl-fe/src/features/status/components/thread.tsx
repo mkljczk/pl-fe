@@ -18,8 +18,7 @@ import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import PendingStatus from 'pl-fe/features/ui/components/pending-status';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { RootState } from 'pl-fe/store';
-import { useModalsStore } from 'pl-fe/stores';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useModalsStore, useSettingsStore } from 'pl-fe/stores';
 import { textForScreenReader } from 'pl-fe/utils/status';
 
 import DetailedStatus from './detailed-status';

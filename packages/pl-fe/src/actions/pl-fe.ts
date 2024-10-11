@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { getHost } from 'pl-fe/actions/instance';
 import { normalizePlFeConfig } from 'pl-fe/normalizers';
 import KVStore from 'pl-fe/storage/kv-store';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStore } from 'pl-fe/stores';
 
 import { getClient, staticFetch } from '../api';
 

@@ -6,7 +6,7 @@ import { getClient } from 'pl-fe/api';
 import { getNotificationStatus } from 'pl-fe/features/notifications/components/notification';
 import { normalizeNotification, normalizeNotifications, type Notification } from 'pl-fe/normalizers';
 import { getFilters, regexFromFilters } from 'pl-fe/selectors';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStore } from 'pl-fe/stores';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 import { compareId } from 'pl-fe/utils/comparators';
 import { unescapeHTML } from 'pl-fe/utils/html';

@@ -14,8 +14,7 @@ import StatusContainer from 'pl-fe/containers/status-container';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch, useAppSelector, useInstance, useLoggedIn } from 'pl-fe/hooks';
 import { makeGetNotification } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useModalsStore, useSettingsStore } from 'pl-fe/stores';
 import { NotificationType } from 'pl-fe/utils/notification';
 
 import type { Notification as BaseNotification } from 'pl-api';
