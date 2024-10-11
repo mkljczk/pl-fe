@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
-import HoverRefWrapper from 'pl-fe/components/hover-ref-wrapper';
+import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
 import { useAppSelector } from 'pl-fe/hooks';
@@ -249,7 +249,7 @@ const Account = ({
           {withAvatar && (
             <ProfilePopper
               condition={showAccountHoverCard}
-              wrapper={(children) => <HoverRefWrapper className='relative' accountId={account.id} inline>{children}</HoverRefWrapper>}
+              wrapper={(children) => <HoverAccountWrapper className='relative' accountId={account.id} element='span'>{children}</HoverAccountWrapper>}
             >
               <LinkEl className='rounded-full' {...linkProps}>
                 <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} />
@@ -267,7 +267,7 @@ const Account = ({
           <div className='grow overflow-hidden'>
             <ProfilePopper
               condition={showAccountHoverCard}
-              wrapper={(children) => <HoverRefWrapper accountId={account.id} inline>{children}</HoverRefWrapper>}
+              wrapper={(children) => <HoverAccountWrapper accountId={account.id} element='span'>{children}</HoverAccountWrapper>}
             >
               <LinkEl {...linkProps}>
                 <HStack space={1} alignItems='center' grow>

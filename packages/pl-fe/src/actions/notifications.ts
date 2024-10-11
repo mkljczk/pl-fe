@@ -8,7 +8,7 @@ import { normalizeNotification } from 'pl-fe/normalizers';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { queryClient } from 'pl-fe/queries/client';
 // import { getFilters, regexFromFilters } from 'pl-fe/selectors';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStore } from 'pl-fe/stores';
 import { unescapeHTML } from 'pl-fe/utils/html';
 import { joinPublicPath } from 'pl-fe/utils/static';
 
@@ -39,8 +39,8 @@ const fetchRelatedRelationships = (dispatch: AppDispatch, notifications: Array<N
 };
 
 const updateNotifications = (notification: Notification) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const selectedFilter = useSettingsStore().settings.notifications.quickFilter.active;
+  (dispatch: AppDispatch) => {
+    const selectedFilter = useSettingsStore.getState().settings.notifications.quickFilter.active;
     const showInColumn = selectedFilter === 'all' ? true : (FILTER_TYPES[selectedFilter as FilterType] || [notification.type]).includes(notification.type);
 
     importEntities({ notifications: [{ ...notification, accounts: [notification.account], duplicate: false }] });

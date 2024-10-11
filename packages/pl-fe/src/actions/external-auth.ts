@@ -13,7 +13,6 @@ import { authLoggedIn, verifyCredentials, switchAccount } from 'pl-fe/actions/au
 import { obtainOAuthToken } from 'pl-fe/actions/oauth';
 import { parseBaseURL } from 'pl-fe/utils/auth';
 import sourceCode from 'pl-fe/utils/code';
-import { getQuirks } from 'pl-fe/utils/quirks';
 import { getInstanceScopes } from 'pl-fe/utils/scopes';
 
 import type { AppDispatch } from 'pl-fe/store';
@@ -31,20 +30,16 @@ const fetchExternalInstance = (baseURL: string) =>
       }
     });
 
-const createExternalApp = (instance: Instance, baseURL?: string) =>
-  (dispatch: AppDispatch) => {
-    // Mitra: skip creating the auth app
-    if (getQuirks(instance).noApps) return new Promise(f => f({}));
-
-    const params = {
-      client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
-      redirect_uris: `${window.location.origin}/login/external`,
-      website: sourceCode.homepage,
-      scopes: getInstanceScopes(instance),
-    };
-
-    return dispatch(createApp(params, baseURL));
+const createExternalApp = (instance: Instance, baseURL?: string) => {
+  const params = {
+    client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
+    redirect_uris: `${window.location.origin}/login/external`,
+    website: sourceCode.homepage,
+    scopes: getInstanceScopes(instance),
   };
+
+  return createApp(params, baseURL);
+};
 
 const externalAuthorize = (instance: Instance, baseURL: string) =>
   (dispatch: AppDispatch) => {

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { useAccount } from 'pl-fe/api/hooks';
 
-import HoverRefWrapper from './hover-ref-wrapper';
+import HoverAccountWrapper from './hover-account-wrapper';
 
 interface IStatusMention {
   accountId: string;
@@ -14,13 +14,13 @@ const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
   const { account } = useAccount(accountId);
 
   if (!account) return (
-    <HoverRefWrapper accountId={accountId} inline>
+    <HoverAccountWrapper accountId={accountId} element='span'>
       {fallback}
-    </HoverRefWrapper>
+    </HoverAccountWrapper>
   );
 
   return (
-    <HoverRefWrapper accountId={accountId} inline>
+    <HoverAccountWrapper accountId={accountId} element='span'>
       <Link
         to={`/@${account.acct}`}
         className='text-primary-600 hover:underline dark:text-accent-blue'
@@ -29,7 +29,7 @@ const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
       >
         @{account.acct}
       </Link>
-    </HoverRefWrapper>
+    </HoverAccountWrapper>
   );
 };
 

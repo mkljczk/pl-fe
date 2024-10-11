@@ -13,7 +13,7 @@ import { selectEntity } from 'pl-fe/entity-store/selectors';
 import { useAppDispatch, useLoggedIn } from 'pl-fe/hooks';
 import messages from 'pl-fe/messages';
 import { queryClient } from 'pl-fe/queries/client';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStore } from 'pl-fe/stores';
 import { getUnreadChatsCount, updateChatListItem } from 'pl-fe/utils/chats';
 import { play, soundCache } from 'pl-fe/utils/sounds';
 

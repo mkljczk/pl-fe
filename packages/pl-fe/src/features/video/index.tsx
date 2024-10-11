@@ -477,9 +477,9 @@ const Video: React.FC<IVideo> = ({
       )}
 
       <video
-        className={clsx('relative z-[1] block', {
-          'object-contain max-h-full': inline && !fullscreen,
-          'h-full w-full outline-0 !max-h-full !max-w-full': fullscreen,
+        className={clsx('relative z-[1] block h-full max-h-full', {
+          'object-contain': inline && !fullscreen,
+          'w-full outline-0 !max-h-full !max-w-full': fullscreen,
         })}
         ref={video}
         src={src}

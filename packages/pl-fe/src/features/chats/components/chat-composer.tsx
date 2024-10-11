@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
 import { unblockAccount } from 'pl-fe/actions/accounts';
+import { useRelationship } from 'pl-fe/api/hooks/accounts/useRelationship';
 import { Button, Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover, HStack, IconButton, Stack, Text } from 'pl-fe/components/ui';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
 import UploadButton from 'pl-fe/features/compose/components/upload-button';
 import emojiSearch from 'pl-fe/features/emoji/search';
-import { useAppDispatch, useAppSelector, useInstance } from 'pl-fe/hooks';
+import { useAppDispatch, useInstance } from 'pl-fe/hooks';
 import { useModalsStore } from 'pl-fe/stores';
 import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
 
@@ -73,9 +74,11 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
 
   const { openModal } = useModalsStore();
   const { chat } = useChatContext();
+  const { relationship } = useRelationship(chat?.account.id, { enabled: !!chat });
 
-  const isBlocked = useAppSelector((state) => state.getIn(['relationships', chat?.account?.id, 'blocked_by']));
-  const isBlocking = useAppSelector((state) => state.getIn(['relationships', chat?.account?.id, 'blocking']));
+  const isBlocked = relationship?.blocked_by && false;
+  const isBlocking = relationship?.blocking && false;
+
   const maxCharacterCount = useInstance().configuration.chats.max_characters;
 
   const [suggestions, setSuggestions] = useState<Suggestion>(initialSuggestionState);

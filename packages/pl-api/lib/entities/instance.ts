@@ -32,6 +32,7 @@ const instanceV1ToV2 = (data: any) => {
     registrations,
     short_description,
     thumbnail,
+    upload_limit,
     uri,
     urls,
     ...instance
@@ -42,17 +43,22 @@ const instanceV1ToV2 = (data: any) => {
     account_domain: instance.account_domain	|| uri,
     configuration: {
       ...configuration,
+      media_attachments: {
+        ...configuration.media_attachments,
+        image_size_limit: upload_limit ?? configuration.media_attachments.image_size_limit,
+        video_size_limit: upload_limit ?? configuration.media_attachments.video_size_limit,
+      },
       polls: {
         ...configuration.polls,
-        max_characters_per_option: configuration.polls.max_characters_per_option ?? poll_limits.max_option_chars ?? 25,
-        max_expiration: configuration.polls.max_expiration ?? poll_limits.max_expiration ?? 2629746,
-        max_options: configuration.polls.max_options ?? poll_limits.max_options ?? 4,
-        min_expiration: configuration.polls.min_expiration ?? poll_limits.min_expiration ?? 300,
+        max_characters_per_option: poll_limits.max_option_chars ?? configuration.polls.max_characters_per_option,
+        max_expiration: poll_limits.max_expiration ?? configuration.polls.max_expiration,
+        max_options: poll_limits.max_options ?? configuration.polls.max_options,
+        min_expiration: poll_limits.min_expiration ?? configuration.polls.min_expiration,
       },
       statuses: {
         ...configuration.statuses,
-        max_characters: configuration.statuses.max_characters ?? max_toot_chars ?? 500,
-        max_media_attachments: configuration.statuses.max_media_attachments ?? max_media_attachments,
+        max_characters: max_toot_chars ?? configuration.statuses.max_characters,
+        max_media_attachments: max_media_attachments ?? configuration.statuses.max_media_attachments,
       },
       urls: {
         streaming: urls.streaming_api,
@@ -279,6 +285,7 @@ const instanceV1Schema = coerceObject({
   stats: statsSchema,
   thumbnail: z.string().catch(''),
   title: z.string().catch(''),
+  upload_limit: z.number().optional().catch(undefined),
   uri: z.string().catch(''),
   urls: coerceObject({
     streaming_api: z.string().url().optional().catch(undefined),

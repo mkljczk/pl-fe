@@ -12,7 +12,7 @@ const CANCEL_DRAFT_STATUS = 'DELETE_DRAFT_STATUS' as const;
 const fetchDraftStatuses = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const accountUrl = queryClient.getQueryData<Account>(['accounts', 'entities', state.me])!.url;
+    const accountUrl = queryClient.getQueryData<Account>(['accounts', 'entities', state.me])?.url;
 
     return KVStore.getItem(`drafts:${accountUrl}`).then((statuses) => {
       dispatch({

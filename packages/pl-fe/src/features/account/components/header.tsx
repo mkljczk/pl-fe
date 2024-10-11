@@ -22,8 +22,7 @@ import SubscriptionButton from 'pl-fe/features/ui/components/subscription-button
 import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'pl-fe/hooks';
 import { useChats } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
-import { useModalsStore } from 'pl-fe/stores';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useModalsStore, useSettingsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 import { isDefaultHeader } from 'pl-fe/utils/accounts';
 import copy from 'pl-fe/utils/copy';

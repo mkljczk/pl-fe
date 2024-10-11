@@ -8,8 +8,7 @@ import { Language } from 'pl-fe/features/preferences';
 import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { selectAccount, selectOwnAccount, makeGetAccount } from 'pl-fe/selectors';
 import { tagHistory } from 'pl-fe/settings';
-import { useModalsStore } from 'pl-fe/stores';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useModalsStore, useSettingsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 
@@ -252,7 +251,9 @@ interface ComposeMentionAction {
 }
 
 const mentionCompose = (account: ComposeMentionAction['account']) =>
-  (dispatch: AppDispatch) => {
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!getState().me) return;
+
     const action: ComposeMentionAction = {
       type: COMPOSE_MENTION,
       composeId: 'compose-modal',

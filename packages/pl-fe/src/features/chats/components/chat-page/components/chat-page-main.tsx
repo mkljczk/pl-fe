@@ -6,6 +6,7 @@ import { blockAccount, unblockAccount } from 'pl-fe/actions/accounts';
 import { Avatar, HStack, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, Text } from 'pl-fe/components/ui';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
+import { Entities } from 'pl-fe/entity-store/entities';
 import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { useChat, useChatActions, useChats } from 'pl-fe/queries/chats';
 import { useModalsStore } from 'pl-fe/stores';
@@ -14,6 +15,8 @@ import Chat from '../../chat';
 
 import BlankslateEmpty from './blankslate-empty';
 import BlankslateWithChats from './blankslate-with-chats';
+
+import type { Relationship } from 'pl-api';
 
 const messages = defineMessages({
   blockMessage: { id: 'chat_settings.block.message', defaultMessage: 'Blocking will prevent this profile from direct messaging you and viewing your content. You can unblock later.' },
@@ -47,7 +50,7 @@ const ChatPageMain = () => {
 
   const { deleteChat } = useChatActions(chat?.id as string);
 
-  const isBlocking = useAppSelector((state) => state.getIn(['relationships', chat?.account?.id, 'blocking']));
+  const isBlocking = !!useAppSelector((state) => chat?.account?.id && (state.entities[Entities.RELATIONSHIPS]?.store[chat.account.id] as Relationship)?.blocked_by);
 
   const handleBlockUser = () => {
     openModal('CONFIRM', {

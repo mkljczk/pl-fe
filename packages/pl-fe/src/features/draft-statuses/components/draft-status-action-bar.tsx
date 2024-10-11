@@ -5,8 +5,7 @@ import { setComposeToStatus } from 'pl-fe/actions/compose';
 import { cancelDraftStatus } from 'pl-fe/actions/draft-statuses';
 import { Button, HStack } from 'pl-fe/components/ui';
 import { useAppDispatch } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useModalsStore, useSettingsStore } from 'pl-fe/stores';
 
 import type { Status as StatusEntity } from 'pl-fe/normalizers';
 import type { DraftStatus } from 'pl-fe/reducers/draft-statuses';

@@ -6,7 +6,7 @@ import messages from 'pl-fe/messages';
 import { Account } from 'pl-fe/pl-hooks/normalizers/normalizeAccount';
 import { queryClient } from 'pl-fe/queries/client';
 import KVStore from 'pl-fe/storage/kv-store';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 

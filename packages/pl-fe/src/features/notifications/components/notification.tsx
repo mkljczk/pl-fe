@@ -5,6 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { mentionCompose } from 'pl-fe/actions/compose';
 import { reblog, favourite, unreblog, unfavourite } from 'pl-fe/actions/interactions';
 import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
+import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import Icon from 'pl-fe/components/icon';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
 import { HStack, Text, Emoji } from 'pl-fe/components/ui';
@@ -13,8 +14,7 @@ import StatusContainer from 'pl-fe/containers/status-container';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch, useInstance, useLoggedIn } from 'pl-fe/hooks';
 import { useNotification } from 'pl-fe/pl-hooks/hooks/notifications/useNotification';
-import { useModalsStore } from 'pl-fe/stores';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useModalsStore, useSettingsStore } from 'pl-fe/stores';
 import { NotificationType } from 'pl-fe/utils/notification';
 
 import type { Notification as BaseNotification } from 'pl-api';
@@ -28,15 +28,15 @@ const notificationForScreenReader = (intl: IntlShape, message: string, timestamp
   return output.join(', ');
 };
 
-const buildLink = (account: Pick<Account, 'acct' | 'display_name_html'>): JSX.Element => (
-  <bdi key={account.acct}>
+const buildLink = (account: Pick<Account, 'acct' | 'display_name_html' | 'id'>): JSX.Element => (
+  <HoverAccountWrapper key={account.acct} element='bdi' accountId={account.id}>
     <Link
       className='font-bold text-gray-800 hover:underline dark:text-gray-200'
       title={account.acct}
       to={`/@${account.acct}`}
       dangerouslySetInnerHTML={{ __html: account.display_name_html }}
     />
-  </bdi>
+  </HoverAccountWrapper>
 );
 
 const icons: Partial<Record<NotificationType | 'reply', string>> = {
@@ -144,7 +144,7 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
 const buildMessage = (
   intl: IntlShape,
   type: NotificationType | 'reply',
-  accounts: Array<Pick<Account, 'acct' | 'display_name_html'>>,
+  accounts: Array<Pick<Account, 'acct' | 'display_name_html' | 'id'>>,
   targetName: string,
   instanceTitle: string,
 ): React.ReactNode => {

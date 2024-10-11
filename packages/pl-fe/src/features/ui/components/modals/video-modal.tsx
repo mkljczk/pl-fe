@@ -1,38 +1,26 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import Video from 'pl-fe/features/video';
 import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import type { BaseModalProps } from '../modal-root';
 import type { MediaAttachment } from 'pl-api';
-import type { Account } from 'pl-fe/normalizers';
 
 type VideoModalProps = {
   media: MediaAttachment;
   statusId: string;
-  account?: Pick<Account, 'id' | 'acct'>;
   time?: number;
 };
 
-const VideoModal: React.FC<VideoModalProps & BaseModalProps> = ({ statusId, account, media, time }) => {
+const VideoModal: React.FC<VideoModalProps & BaseModalProps> = ({ statusId, media, time }) => {
   const { data: status } = useStatus(statusId);
-  const history = useHistory();
 
-  const handleStatusClick: React.MouseEventHandler = e => {
-    if (!account) return;
-
-    if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
-      e.preventDefault();
-      history.push(`/@${account.acct}/posts/${statusId}`);
-    }
-  };
-
-  const link = status && account && (
-    <a href={status.url} onClick={handleStatusClick}>
+  const link = status && (
+    <Link to={`/@${status.account.acct}/posts/${status.id}`}>
       <FormattedMessage id='lightbox.view_context' defaultMessage='View context' />
-    </a>
+    </Link>
   );
 
   return (

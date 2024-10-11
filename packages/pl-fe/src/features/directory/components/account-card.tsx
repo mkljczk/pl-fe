@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom';
 import { useAccount } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
 import Badge from 'pl-fe/components/badge';
-import HoverRefWrapper from 'pl-fe/components/hover-ref-wrapper';
+import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
 import { Avatar, Stack, Text } from 'pl-fe/components/ui';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
 import { useAppSelector } from 'pl-fe/hooks';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStore } from 'pl-fe/stores';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
 interface IAccountCard {
@@ -49,7 +49,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           className='h-32 w-full rounded-t-lg object-cover'
         />
 
-        <HoverRefWrapper key={account.id} accountId={account.id} inline>
+        <HoverAccountWrapper key={account.id} accountId={account.id} element='span'>
           <Link to={`/@${account.acct}`} title={account.acct}>
             <Avatar
               src={account.avatar}
@@ -58,7 +58,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
               size={64}
             />
           </Link>
-        </HoverRefWrapper>
+        </HoverAccountWrapper>
       </div>
 
       <Stack space={4} className='p-3 pt-10'>

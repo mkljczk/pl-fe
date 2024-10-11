@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ReactSwipeableViews from 'react-swipeable-views';
 
 import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
@@ -32,7 +32,7 @@ const messages = defineMessages({
 
 // you can't use 100vh, because the viewport height is taller
 // than the visible part of the document in some mobile
-// browsers when it's address bar is visible.
+// browsers when its address bar is visible.
 // https://developers.google.com/web/updates/2016/12/url-bar-resizing
 const swipeableViewsStyle: React.CSSProperties = {
   width: '100%',
@@ -59,7 +59,6 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   } = props;
 
   const dispatch = useAppDispatch();
-  const history = useHistory();
   const intl = useIntl();
 
   const { data: status } = useStatus(statusId);
@@ -103,14 +102,6 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     setNavigationHidden(value => !value && userTouching.matches);
   };
 
-  const handleStatusClick: React.MouseEventHandler = e => {
-    if (status && e.button === 0 && !(e.ctrlKey || e.metaKey)) {
-      e.preventDefault();
-      history.push(`/@${status.account.acct}/posts/${status?.id}`);
-      onClose();
-    }
-  };
-
   const content = media.map((attachment, i) => {
     let width: number | undefined, height: number | undefined;
     if (attachment.type === 'image' || attachment.type === 'gifv' || attachment.type === 'video') {
@@ -119,9 +110,9 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     }
 
     const link = (status && (
-      <a href={status.url} onClick={handleStatusClick}>
+      <Link to={`/@${status.account.acct}/posts/${status.id}`}>
         <FormattedMessage id='lightbox.view_context' defaultMessage='View context' />
-      </a>
+      </Link>
     ));
 
     if (attachment.type === 'image') {

@@ -15,7 +15,7 @@ import {
 } from 'pl-fe/components/ui';
 import SettingToggle from 'pl-fe/features/notifications/components/setting-toggle';
 import { useAppDispatch } from 'pl-fe/hooks';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 
 const isJSONValid = (text: any): boolean => {

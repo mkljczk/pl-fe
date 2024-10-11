@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet as ReactHelmet } from 'react-helmet';
+import { Helmet as ReactHelmet } from 'react-helmet-async';
 
 import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { useAppSelector, useInstance, useSettings } from 'pl-fe/hooks';

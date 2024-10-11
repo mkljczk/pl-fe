@@ -234,13 +234,15 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
         </HStack>
       )}
 
-      <SpoilerInput
-        composeId={id}
-        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={onSuggestionsClearRequested}
-        onSuggestionSelected={onSpoilerSuggestionSelected}
-        theme={transparent ? 'transparent' : 'normal'}
-      />
+      {features.spoilers && (
+        <SpoilerInput
+          composeId={id}
+          onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={onSuggestionsClearRequested}
+          onSuggestionSelected={onSpoilerSuggestionSelected}
+          theme={transparent ? 'transparent' : 'normal'}
+        />
+      )}
 
       <div>
         <Suspense>

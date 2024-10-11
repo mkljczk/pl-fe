@@ -3,7 +3,7 @@ import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { selectAccount } from 'pl-fe/selectors';
 import { setSentryAccount } from 'pl-fe/sentry';
 import KVStore from 'pl-fe/storage/kv-store';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStore } from 'pl-fe/stores';
 import { getAuthUserId, getAuthUserUrl } from 'pl-fe/utils/auth';
 
 import { loadCredentials } from './auth';
