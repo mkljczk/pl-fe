@@ -1,9 +1,9 @@
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import Video from 'pl-fe/features/video';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import type { BaseModalProps } from '../modal-root';
 import type { MediaAttachment } from 'pl-api';

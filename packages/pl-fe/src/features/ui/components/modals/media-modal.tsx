@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -15,7 +16,6 @@ import Thread from 'pl-fe/features/status/components/thread';
 import Video from 'pl-fe/features/video';
 import { useAppDispatch } from 'pl-fe/hooks';
 import { userTouching } from 'pl-fe/is-mobile';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import ImageLoader from '../image-loader';
 

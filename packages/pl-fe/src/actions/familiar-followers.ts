@@ -1,5 +1,6 @@
+import { importEntities } from 'pl-hooks/importer';
+
 import { getClient } from 'pl-fe/api';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { AppDispatch, RootState } from 'pl-fe/store';
 
 import { fetchRelationships } from './accounts';

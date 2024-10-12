@@ -1,10 +1,10 @@
 import L from 'leaflet';
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { Button, Modal, Stack } from 'pl-fe/components/ui';
 import { usePlFeConfig } from 'pl-fe/hooks';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import type { BaseModalProps } from '../modal-root';
 

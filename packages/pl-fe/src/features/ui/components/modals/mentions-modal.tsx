@@ -1,3 +1,4 @@
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React, { useEffect, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -6,7 +7,6 @@ import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Modal, Spinner } from 'pl-fe/components/ui';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { useAppDispatch } from 'pl-fe/hooks';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import type { BaseModalProps } from '../modal-root';
 

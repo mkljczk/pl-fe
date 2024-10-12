@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React, { useEffect, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
@@ -12,7 +13,6 @@ import StatusTypeIcon from 'pl-fe/features/status/components/status-type-icon';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch, useSettings } from 'pl-fe/hooks';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 import { useModalsStore } from 'pl-fe/stores';
 import { textForScreenReader } from 'pl-fe/utils/status';
 

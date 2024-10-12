@@ -1,10 +1,7 @@
-import { importAccounts, importGroups, importPolls, importStatuses } from 'pl-fe/actions/importer';
-import { importEntities as importEntityStoreEntities } from 'pl-fe/entity-store/actions';
-import { Entities } from 'pl-fe/entity-store/entities';
-import { queryClient } from 'pl-fe/queries/client';
+import { queryClient } from 'pl-hooks/client';
 
-import { minifyNotification, type MinifiedNotification } from './minifiers/minifyNotification';
-import { DeduplicatedNotification } from './normalizers/deduplicateNotifications';
+import { type MinifiedNotification, minifyNotification } from './minifiers/minifyNotification';
+import { DeduplicatedNotification } from './normalizers/normalizeNotifications';
 import { normalizeStatus, type Status } from './normalizers/normalizeStatus';
 
 import type {
@@ -14,30 +11,34 @@ import type {
   Relationship as BaseRelationship,
   Status as BaseStatus,
 } from 'pl-api';
-import type { AppDispatch } from 'pl-fe/store';
 
-let dispatch: AppDispatch;
+const importAccount = (account: BaseAccount) => queryClient.setQueryData<BaseAccount>(
+  ['accounts', 'entities', account.id], account,
+);
 
-import('pl-fe/store').then(value => dispatch = value.store.dispatch).catch(() => {});
+const importGroup = (group: BaseGroup) => queryClient.setQueryData<BaseGroup>(
+  ['groups', 'entities', group.id], group,
+);
 
-const importNotification = (notification: DeduplicatedNotification) => {
-  queryClient.setQueryData<MinifiedNotification>(
-    ['notifications', 'entities', notification.id],
-    existingNotification => existingNotification?.duplicate ? existingNotification : minifyNotification(notification),
-  );
-};
+const importNotification = (notification: DeduplicatedNotification) => queryClient.setQueryData<MinifiedNotification>(
+  ['notifications', 'entities', notification.id],
+  existingNotification => existingNotification?.duplicate ? existingNotification : minifyNotification(notification),
+);
 
-const importStatus = (status: BaseStatus) => {
-  queryClient.setQueryData<Status>(
-    ['statuses', 'entities', status.id],
-    _ => normalizeStatus(status),
-  );
-};
+const importPoll = (poll: BasePoll) => queryClient.setQueryData<BasePoll>(
+  ['polls', 'entities', poll.id], poll,
+);
 
-const isEmpty = (object: Record<string, any>) => {
-  for (const i in object) return false;
-  return true;
-};
+const importRelationship = (relationship: BaseRelationship) => queryClient.setQueryData<BaseRelationship>(
+  ['relationships', 'entities', relationship.id], relationship,
+);
+
+const importStatus = (status: BaseStatus) => queryClient.setQueryData<Status>(
+  ['statuses', 'entities', status.id],
+  _ => normalizeStatus(status),
+);
+
+const isEmpty = (object: Record<string, any>) => !Object.values(object).some(value => value);
 
 const importEntities = (entities: {
   accounts?: Array<BaseAccount>;
@@ -56,16 +57,12 @@ const importEntities = (entities: {
   const relationships: Record<string, BaseRelationship> = {};
   const statuses: Record<string, BaseStatus> = {};
 
-  const processAccount = (account: BaseAccount, withParent = true) => {
-    if (withParent) accounts[account.id] = account;
-
+  const processAccount = (account: BaseAccount) => {
     if (account.moved) processAccount(account.moved);
     if (account.relationship) relationships[account.relationship.id] = account.relationship;
   };
 
-  const processNotification = (notification: DeduplicatedNotification, withParent = true) => {
-    if (withParent) notifications[notification.id] = notification;
-
+  const processNotification = (notification: DeduplicatedNotification) => {
     processAccount(notification.account);
     if (notification.type === 'move') processAccount(notification.target);
 
@@ -74,9 +71,8 @@ const importEntities = (entities: {
       processStatus(notification.status);
   };
 
-  const processStatus = (status: BaseStatus, withParent = true) => {
+  const processStatus = (status: BaseStatus) => {
     if (status.account) {
-      if (withParent) statuses[status.id] = status;
       processAccount(status.account);
     }
 
@@ -87,21 +83,23 @@ const importEntities = (entities: {
   };
 
   if (options.withParents) {
+    entities.accounts?.forEach(account => accounts[account.id] = account);
     entities.groups?.forEach(group => groups[group.id] = group);
+    entities.notifications?.forEach(notification => notifications[notification.id] = notification);
     entities.polls?.forEach(poll => polls[poll.id] = poll);
     entities.relationships?.forEach(relationship => relationships[relationship.id] = relationship);
+    entities.statuses?.forEach(status => statuses[status.id] = status);
   }
 
-  entities.accounts?.forEach((account) => processAccount(account, options.withParents));
-  entities.notifications?.forEach((notification) => processNotification(notification, options.withParents));
-  entities.statuses?.forEach((status) => processStatus(status, options.withParents));
+  entities.accounts?.forEach((account) => processAccount(account));
+  entities.notifications?.forEach((notification) => processNotification(notification));
+  entities.statuses?.forEach((status) => processStatus(status));
 
-  if (!isEmpty(accounts)) dispatch(importAccounts(Object.values(accounts)));
-  if (!isEmpty(groups)) dispatch(importGroups(Object.values(groups)));
+  if (!isEmpty(accounts)) Object.values(accounts).forEach(importAccount);
+  if (!isEmpty(groups)) Object.values(groups).forEach(importGroup);
   if (!isEmpty(notifications)) Object.values(notifications).forEach(importNotification);
-  if (!isEmpty(polls)) dispatch(importPolls(Object.values(polls)));
-  if (!isEmpty(relationships)) dispatch(importEntityStoreEntities(Object.values(relationships), Entities.RELATIONSHIPS));
-  if (!isEmpty(statuses)) dispatch(importStatuses(Object.values(statuses)));
+  if (!isEmpty(polls)) Object.values(polls).forEach(importPoll);
+  if (!isEmpty(relationships)) Object.values(relationships).forEach(importRelationship);
   if (!isEmpty(statuses)) Object.values(statuses).forEach(importStatus);
 };
 

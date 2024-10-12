@@ -1,7 +1,7 @@
+import { importEntities } from 'pl-hooks/importer';
 import { defineMessages } from 'react-intl';
 
 import { getClient } from 'pl-fe/api';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
 import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 

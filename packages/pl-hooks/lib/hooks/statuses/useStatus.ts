@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
+import { useAppSelector, useClient } from 'pl-fe/hooks';
+import { selectAccount, selectAccounts } from 'pl-fe/selectors';
 import { useIntl } from 'react-intl';
 
-import { useAccount } from 'pl-fe/api/hooks';
-import { useAppSelector, useClient } from 'pl-fe/hooks';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
-import { queryClient } from 'pl-fe/queries/client';
-import { selectAccount, selectAccounts } from 'pl-fe/selectors';
+import { queryClient } from 'pl-hooks/client';
+import { useAccount } from 'pl-hooks/hooks/accounts/useAccount';
+import { importEntities } from 'pl-hooks/importer';
 
 import { normalizeStatus, type Status } from '../../normalizers/normalizeStatus';
 
@@ -106,7 +106,7 @@ const useStatus = (statusId?: string) => {
 
   const status = statusQuery.data;
 
-  const { account } = useAccount(status?.account_id || undefined);
+  const { data: account } = useAccount(status?.account_id || undefined);
 
   // : (Status & {
   //   account: Account;

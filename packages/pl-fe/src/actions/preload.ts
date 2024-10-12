@@ -1,6 +1,5 @@
 import mapValues from 'lodash/mapValues';
-
-import { importEntities } from 'pl-fe/pl-hooks/importer';
+import { importEntities } from 'pl-hooks/importer';
 
 import { verifyCredentials } from './auth';
 

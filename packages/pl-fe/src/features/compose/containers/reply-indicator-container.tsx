@@ -1,8 +1,8 @@
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React from 'react';
 
 import { cancelReplyCompose } from 'pl-fe/actions/compose';
 import { useAppDispatch, useCompose } from 'pl-fe/hooks';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import ReplyIndicator from '../components/reply-indicator';
 

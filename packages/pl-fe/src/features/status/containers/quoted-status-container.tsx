@@ -1,7 +1,7 @@
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React from 'react';
 
 import QuotedStatus from 'pl-fe/components/quoted-status';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 interface IQuotedStatusContainer {
   /** Status ID to the quoted status. */

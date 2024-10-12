@@ -1,17 +1,16 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-
 import { useClient } from 'pl-fe/hooks';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
-import { deduplicateNotifications } from 'pl-fe/pl-hooks/normalizers/deduplicateNotifications';
-import { queryClient } from 'pl-fe/queries/client';
-import { flattenPages } from 'pl-fe/utils/queries';
+
+import { queryClient } from 'pl-hooks/client';
+import { importEntities } from 'pl-hooks/importer';
+import { deduplicateNotifications } from 'pl-hooks/normalizers/deduplicateNotifications';
+import { flattenPages } from 'pl-hooks/utils/queries';
 
 import type { Notification as BaseNotification, PaginatedResponse, PlApiClient } from 'pl-api';
-import type { NotificationType } from 'pl-fe/utils/notification';
 
 type UseNotificationParams = {
-  types?: Array<NotificationType>;
-  excludeTypes?: Array<NotificationType>;
+  types?: Array<BaseNotification['type']>;
+  excludeTypes?: Array<BaseNotification['type']>;
 }
 
 const getQueryKey = (params: UseNotificationParams) => [

@@ -1,5 +1,8 @@
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
+import { useMarker } from 'pl-hooks/hooks/markers/useMarkers';
+import { useUpdateMarkerMutation } from 'pl-hooks/hooks/markers/useUpdateMarkerMutation';
+import { useNotificationList } from 'pl-hooks/hooks/notifications/useNotificationList';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -10,9 +13,6 @@ import ScrollableList from 'pl-fe/components/scrollable-list';
 import { Column, Portal } from 'pl-fe/components/ui';
 import PlaceholderNotification from 'pl-fe/features/placeholder/components/placeholder-notification';
 import { useAppDispatch, useAppSelector, useSettings } from 'pl-fe/hooks';
-import { useMarker } from 'pl-fe/pl-hooks/hooks/markers/useMarkers';
-import { useUpdateMarkerMutation } from 'pl-fe/pl-hooks/hooks/markers/useUpdateMarkerMutation';
-import { useNotificationList } from 'pl-fe/pl-hooks/hooks/notifications/useNotificationList';
 import { compareId } from 'pl-fe/utils/comparators';
 import { NotificationType } from 'pl-fe/utils/notification';
 

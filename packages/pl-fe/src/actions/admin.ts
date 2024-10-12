@@ -1,7 +1,8 @@
 
+import { importEntities } from 'pl-hooks/importer';
+
 import { fetchRelationships } from 'pl-fe/actions/accounts';
 import { getClient } from 'pl-fe/api';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { filterBadges, getTagDiff } from 'pl-fe/utils/badges';
 
 import { deleteFromTimelines } from './timelines';

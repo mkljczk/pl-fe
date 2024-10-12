@@ -1,5 +1,6 @@
+import { importEntities } from 'pl-hooks/importer';
+
 import { getClient } from 'pl-fe/api';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { selectAccount } from 'pl-fe/selectors';
 import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';

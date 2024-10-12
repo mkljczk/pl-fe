@@ -1,9 +1,9 @@
+import { Account } from 'pl-hooks/normalizers/normalizeAccount';
 import { defineMessage } from 'react-intl';
 
 import { patchMe } from 'pl-fe/actions/me';
 import { getClient } from 'pl-fe/api';
 import messages from 'pl-fe/messages';
-import { Account } from 'pl-fe/pl-hooks/normalizers/normalizeAccount';
 import { queryClient } from 'pl-fe/queries/client';
 import KVStore from 'pl-fe/storage/kv-store';
 import { useSettingsStore } from 'pl-fe/stores';

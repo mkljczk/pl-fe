@@ -154,7 +154,6 @@ const config = defineConfig(({ command }) => ({
   resolve: {
     alias: [
       { find: 'pl-fe', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
-      { find: 'pl-hooks', replacement: fileURLToPath(new URL('./src/pl-hooks', import.meta.url)) },
     ],
   },
   test: {

@@ -1,6 +1,6 @@
 import omit from 'lodash/omit';
 
-import { DeduplicatedNotification } from '../normalizers/deduplicateNotifications';
+import { DeduplicatedNotification } from '../normalizers/normalizeNotifications';
 
 import type { AccountWarning, RelationshipSeveranceEvent } from 'pl-api';
 

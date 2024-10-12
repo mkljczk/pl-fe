@@ -1,10 +1,10 @@
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ReactSwipeableViews from 'react-swipeable-views';
 
 import EventPreview from 'pl-fe/components/event-preview';
 import { Card, Icon } from 'pl-fe/components/ui';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import PlaceholderEventPreview from '../../placeholder/components/placeholder-event-preview';
 

@@ -1,3 +1,4 @@
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React, { useCallback } from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
@@ -8,7 +9,6 @@ import TranslateButton from 'pl-fe/components/translate-button';
 import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
 import { usePlFeConfig } from 'pl-fe/hooks';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 import { useModalsStore } from 'pl-fe/stores';
 
 type RouteParams = { statusId: string };

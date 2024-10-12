@@ -15,7 +15,6 @@
     "skipLibCheck": true,
     "paths": {
       "pl-fe/*": ["src/*"],
-      "pl-hooks/*": ["src/pl-hooks/*"],
     },
     "typeRoots": [
       "./src/types",

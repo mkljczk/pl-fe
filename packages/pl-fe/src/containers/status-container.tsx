@@ -1,7 +1,7 @@
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React from 'react';
 
 import Status, { IStatus } from 'pl-fe/components/status';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 interface IStatusContainer extends Omit<IStatus, 'status'> {
   id: string;

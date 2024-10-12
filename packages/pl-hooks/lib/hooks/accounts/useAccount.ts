@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-
 import { useRelationship } from 'pl-fe/api/hooks/accounts/useRelationship';
 import { useClient } from 'pl-fe/hooks';
-import { normalizeAccount } from 'pl-fe/pl-hooks/normalizers/normalizeAccount';
-import { queryClient } from 'pl-fe/queries/client';
+
+import { queryClient } from 'pl-hooks/client';
+import { normalizeAccount } from 'pl-hooks/normalizers/normalizeAccount';
 
 interface UseAccountOpts {
   withRelationship?: boolean;

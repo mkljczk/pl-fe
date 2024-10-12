@@ -1,4 +1,6 @@
 import clsx from 'clsx';
+import { prefetchMarker } from 'pl-hooks/hooks/markers/useMarkers';
+import { prefetchNotifications } from 'pl-hooks/hooks/notifications/useNotificationList';
 import React, { Suspense, lazy, useEffect, useRef } from 'react';
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom';
 
@@ -33,8 +35,6 @@ import ProfileLayout from 'pl-fe/layouts/profile-layout';
 import RemoteInstanceLayout from 'pl-fe/layouts/remote-instance-layout';
 import SearchLayout from 'pl-fe/layouts/search-layout';
 import StatusLayout from 'pl-fe/layouts/status-layout';
-import { prefetchMarker } from 'pl-fe/pl-hooks/hooks/markers/useMarkers';
-import { prefetchNotifications } from 'pl-fe/pl-hooks/hooks/notifications/useNotificationList';
 import { useUiStore } from 'pl-fe/stores';
 import { getVapidKey } from 'pl-fe/utils/auth';
 import { isStandalone } from 'pl-fe/utils/state';

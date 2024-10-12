@@ -1,3 +1,4 @@
+import { fileURLToPath, URL } from 'node:url';
 import { resolve } from 'path';
 
 import { defineConfig } from 'vite';
@@ -15,5 +16,10 @@ export default defineConfig({
     },
     target: 'esnext',
     sourcemap: true,
+  },
+  resolve: {
+    alias: [
+      { find: 'pl-hooks', replacement: fileURLToPath(new URL('./lib', import.meta.url)) },
+    ],
   },
 });

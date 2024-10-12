@@ -1,4 +1,5 @@
 import { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -11,7 +12,6 @@ import { Stack } from 'pl-fe/components/ui';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import PendingStatus from 'pl-fe/features/ui/components/pending-status';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import ComposeForm from '../compose/components/compose-form';
 import { getDescendantsIds } from '../status/components/thread';

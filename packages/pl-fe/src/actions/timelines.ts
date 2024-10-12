@@ -1,9 +1,8 @@
 import { Map as ImmutableMap } from 'immutable';
-
+import { importEntities } from 'pl-hooks/importer';
 
 import { getLocale } from 'pl-fe/actions/settings';
 import { getClient } from 'pl-fe/api';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { useSettingsStore } from 'pl-fe/stores';
 import { shouldFilter } from 'pl-fe/utils/timelines';
 

@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-
 import { useClient } from 'pl-fe/hooks';
-import { queryClient } from 'pl-fe/queries/client';
+
+import { queryClient } from 'pl-hooks/client';
 
 import type { Timeline } from './useMarkers';
 import type { Marker } from 'pl-api';

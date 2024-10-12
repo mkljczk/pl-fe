@@ -96,7 +96,7 @@ const baseAccountSchema = z.object({
   acct: z.string().catch(''),
   url: z.string().url(),
   display_name: z.string().catch(''),
-  note: z.string().catch(''),
+  note: z.string().transform(note => note === '<p></p>' ? '' : note).catch(''),
   avatar: z.string().catch(''),
   avatar_static: z.string().url().catch(''),
   header: z.string().url().catch(''),

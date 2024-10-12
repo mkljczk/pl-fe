@@ -1,5 +1,6 @@
+import { importEntities } from 'pl-hooks/importer';
+
 import { getClient } from 'pl-fe/api';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
 import { useModalsStore, useSettingsStore } from 'pl-fe/stores';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 import { shouldHaveCard } from 'pl-fe/utils/status';

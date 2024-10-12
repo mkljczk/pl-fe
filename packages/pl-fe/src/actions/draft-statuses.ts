@@ -1,8 +1,8 @@
 import { queryClient } from 'pl-fe/queries/client';
 import KVStore from 'pl-fe/storage/kv-store';
 
-import type { Account } from 'pl-fe/pl-hooks/normalizers/normalizeAccount';
 import type { AppDispatch, RootState } from 'pl-fe/store';
+import type { Account } from 'pl-hooks/normalizers/normalizeAccount';
 
 const DRAFT_STATUSES_FETCH_SUCCESS = 'DRAFT_STATUSES_FETCH_SUCCESS' as const;
 

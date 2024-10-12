@@ -1,3 +1,4 @@
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -7,7 +8,6 @@ import Status from 'pl-fe/components/status';
 import { Spinner } from 'pl-fe/components/ui';
 import { useLogo } from 'pl-fe/hooks';
 import { iframeId } from 'pl-fe/iframe';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 interface IEmbeddedStatus {
   params: {

@@ -1,8 +1,8 @@
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
 import { useCompose, useFeatures } from 'pl-fe/hooks';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 import { useModalsStore } from 'pl-fe/stores';
 
 interface IReplyMentions {

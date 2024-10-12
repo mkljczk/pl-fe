@@ -1,3 +1,4 @@
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { FormattedMessage } from 'react-intl';
@@ -13,7 +14,6 @@ import {
   WhoToFollowPanel,
 } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector, useFeatures } from 'pl-fe/hooks';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 interface IEventLayout {
   params?: {

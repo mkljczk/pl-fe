@@ -41,7 +41,7 @@ const baseStatusSchema = z.object({
   uri: z.string().url().catch(''),
   created_at: dateSchema,
   account: accountSchema,
-  content: z.string().catch(''),
+  content: z.string().transform(note => note === '<p></p>' ? '' : note).catch(''),
   visibility: z.string().catch('public'),
   sensitive: z.coerce.boolean(),
   spoiler_text: z.string().catch(''),

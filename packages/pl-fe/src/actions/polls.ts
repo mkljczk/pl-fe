@@ -1,5 +1,6 @@
+import { importEntities } from 'pl-hooks/importer';
+
 import { getClient } from 'pl-fe/api';
-import { importEntities } from 'pl-fe/pl-hooks/importer';
 
 
 import type { Poll } from 'pl-api';

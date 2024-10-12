@@ -1,10 +1,10 @@
+import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from 'pl-fe/components/icon';
 import { Modal, Stack, Text } from 'pl-fe/components/ui';
 import ReplyIndicator from 'pl-fe/features/compose/components/reply-indicator';
-import { useStatus } from 'pl-fe/pl-hooks/hooks/statuses/useStatus';
 
 import type { BaseModalProps } from '../modal-root';
 import type { Status as StatusEntity } from 'pl-fe/normalizers';
