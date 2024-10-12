@@ -1123,7 +1123,7 @@
   "notification.pleroma:emoji_reaction": "{name} zareagował(a) na Twój wpis",
   "notification.pleroma:event_reminder": "Wydarzenie w którym bierzesz udział wkrótce się zaczyna",
   "notification.pleroma:participation_accepted": "Twoje zgłoszenie udziału do wydarzenia zostało przyjęte",
-  "notification.pleroma:participation_request": "{name} cce wziąć udział w Twoim wydarzeniu",
+  "notification.pleroma:participation_request": "{name} chce wziąć udział w Twoim wydarzeniu",
   "notification.poll": "Głosowanie w którym brałeś(-aś) udział zakończyła się",
   "notification.reblog": "{name} podbił(a) Twój wpis",
   "notification.reply": "{name} odpowiedział(a) na Twój wpis",
