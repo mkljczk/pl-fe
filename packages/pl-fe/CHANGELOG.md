@@ -26,7 +26,7 @@ Changes made since the project forked from Soapbox in April 2024.
 - You can write posts with multiple language versions, when supported by backend.
 - Language detection is done client-side for composed posts, utilizing `fasttext.wasm.js`.
 - Draft posts. They are stored locally only and work with any backend.
-
+- New visibility scopes are supported – local-only and list-only for Pleroma. Local-only is a separate switch on GoToSocial.
 
 **Features:**
 - The most recent scrobble is displayed on user profile/card.
@@ -34,7 +34,7 @@ Changes made since the project forked from Soapbox in April 2024.
 - You can bite users, if supported by backend.
 - You can browse Bubble timeline, if supported by backend.
 - Mastodon displays trending articles on Search page.
-- Postsa can be addressed to lists of users, on Pleroma.
+- Posts can be addressed to lists of users, on Pleroma.
 
 ### Changed
 
@@ -62,13 +62,14 @@ Changes made since the project forked from Soapbox in April 2024.
 - Updated Lists UI, to match the overall style.
 - RSS button is displayed in account header for local users, when unauthenticated.
 - Conversations page is always displayed, even when Chats are supported.
+- Made it woke.
 - Emojis are zoomed on hover.
 
 **Internal:**
 - Migrated some local stores from Redux to Zustand.
 
 **Dependencies:**
-- `@tanstack/react-virtual` is used for list virtualization, instead of `react-virtuoso`.
+- `@tanstack/react-virtual` is used for list virtualization, instead of `react-virtuoso`. This improves compatibility with Ladybird browser.
 - Replaced `react-popper` and `react-overlays` with `@floating-ui/react`.
 - `uuid` package is replaced by the `randomUUID()` method.
 
