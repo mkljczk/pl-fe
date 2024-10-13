@@ -1,3 +1,4 @@
+import * as v from 'valibot';
 import z from 'zod';
 
 import type { CustomEmoji } from 'pl-api';
@@ -18,8 +19,13 @@ const makeCustomEmojiMap = (customEmojis: CustomEmoji[]) =>
     result[`:${emoji.shortcode}:`] = emoji;
     return result;
   }, {});
+
 /** zod schema to force the value into an object, if it isn't already. */
-const coerceObject = <T extends z.ZodRawShape>(shape: T) =>
-  z.object({}).passthrough().catch({}).pipe(z.object(shape));
+const coerceObject = <T extends v.ObjectEntries>(shape: T) =>
+  v.pipe(
+    v.any(),
+    v.transform((input) => typeof input === 'object' ? input : {}),
+    v.object(shape),
+  );
 
 export { filteredArray, makeCustomEmojiMap, coerceObject };
