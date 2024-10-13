@@ -76,28 +76,15 @@ import request, { getNextLink, getPrevLink, type RequestBody, RequestMeta } from
 import { buildFullPath } from './utils/url';
 
 import type {
-  Account,
   AdminAccount,
   AdminAnnouncement,
-  AdminCanonicalEmailBlock,
-  AdminDomainAllow,
-  AdminDomainBlock,
-  AdminEmailDomainBlock,
-  AdminIpBlock,
   AdminModerationLogEntry,
   AdminReport,
-  Chat,
-  ChatMessage,
-  Conversation,
   GroupRole,
   Instance,
-  Notification,
   PleromaConfig,
-  ScheduledStatus,
-  Scrobble,
   Status,
   StreamingEvent,
-  Tag,
 } from './entities';
 import type {
   AdminAccountAction,
@@ -209,7 +196,6 @@ import type {
   UploadMediaParams,
 } from './params';
 import type { PaginatedResponse } from './responses';
-import type { ZodTypeAny } from 'zod';
 
 class PlApiClient {
 
@@ -241,14 +227,14 @@ class PlApiClient {
     }
   }
 
-  #paginatedGet = async <T>(input: URL | RequestInfo, body: RequestBody, schema: ZodTypeAny): Promise<PaginatedResponse<T>> => {
+  #paginatedGet = async <T extends z.ZodTypeAny>(input: URL | RequestInfo, body: RequestBody, schema: T): Promise<PaginatedResponse<z.infer<T>>> => {
     const getMore = (input: string | null) => input ? async () => {
       const response = await this.request(input);
 
       return {
         previous: getMore(getPrevLink(response)),
         next: getMore(getNextLink(response)),
-        items: filteredArray(schema).parse(response.json) as Array<T>,
+        items: filteredArray(schema).parse(response.json),
         partial: response.status === 206,
       };
     } : null;
@@ -258,7 +244,7 @@ class PlApiClient {
     return {
       previous: getMore(getPrevLink(response)),
       next: getMore(getNextLink(response)),
-      items: filteredArray(schema).parse(response.json) as Array<T>,
+      items: filteredArray(schema).parse(response.json),
       partial: response.status === 206,
     };
   };
@@ -443,7 +429,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/accounts/#statuses}
      */
     getAccountStatuses: async (accountId: string, params?: GetAccountStatusesParams) =>
-      this.#paginatedGet<Status>(`/api/v1/accounts/${accountId}/statuses`, { params }, statusSchema),
+      this.#paginatedGet(`/api/v1/accounts/${accountId}/statuses`, { params }, statusSchema),
 
     /**
      * Get account’s followers
@@ -451,7 +437,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/accounts/#followers}
      */
     getAccountFollowers: async (accountId: string, params?: GetAccountFollowersParams) =>
-      this.#paginatedGet<Account>(`/api/v1/accounts/${accountId}/followers`, { params }, accountSchema),
+      this.#paginatedGet(`/api/v1/accounts/${accountId}/followers`, { params }, accountSchema),
 
     /**
      * Get account’s following
@@ -459,7 +445,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/accounts/#following}
      */
     getAccountFollowing: async (accountId: string, params?: GetAccountFollowingParams) =>
-      this.#paginatedGet<Account>(`/api/v1/accounts/${accountId}/following`, { params }, accountSchema),
+      this.#paginatedGet(`/api/v1/accounts/${accountId}/following`, { params }, accountSchema),
 
     /**
      * Get account’s featured tags
@@ -640,7 +626,7 @@ class PlApiClient {
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#apiv1pleromaaccountsidfavourites}
      */
     getAccountFavourites: async (accountId: string, params?: GetAccountFavouritesParams) =>
-      this.#paginatedGet<Status>(`/api/v1/pleroma/accounts/${accountId}/favourites`, { params }, statusSchema),
+      this.#paginatedGet(`/api/v1/pleroma/accounts/${accountId}/favourites`, { params }, statusSchema),
 
     /**
      * Interact with profile or status from remote account
@@ -679,7 +665,7 @@ class PlApiClient {
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#get-apiv1pleromaaccountsidscrobbles}
      */
     getScrobbles: async (accountId: string, params?: GetScrobblesParams) =>
-      this.#paginatedGet<Scrobble>(`/api/v1/pleroma/accounts/${accountId}/scrobbles`, { params }, scrobbleSchema),
+      this.#paginatedGet(`/api/v1/pleroma/accounts/${accountId}/scrobbles`, { params }, scrobbleSchema),
 
     /**
      * Creates a new Listen activity for an account
@@ -703,7 +689,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/bookmarks/#get}
      */
     getBookmarks: async (params?: GetBookmarksParams) =>
-      this.#paginatedGet<Status>('/api/v1/bookmarks', { params }, statusSchema),
+      this.#paginatedGet('/api/v1/bookmarks', { params }, statusSchema),
 
     /**
      * View favourited statuses
@@ -711,14 +697,14 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/favourites/#get}
      */
     getFavourites: async (params?: GetFavouritesParams) =>
-      this.#paginatedGet<Status>('/api/v1/favourites', { params }, statusSchema),
+      this.#paginatedGet('/api/v1/favourites', { params }, statusSchema),
 
     /**
      * View pending follow requests
      * @see {@link https://docs.joinmastodon.org/methods/follow_requests/#get}
      */
     getFollowRequests: async (params?: GetFollowRequestsParams) =>
-      this.#paginatedGet<Account>('/api/v1/follow_requests', { params }, accountSchema),
+      this.#paginatedGet('/api/v1/follow_requests', { params }, accountSchema),
 
     /**
      * Accept follow request
@@ -746,7 +732,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/endorsements/#get}
      */
     getEndorsements: async (params?: GetEndorsementsParams) =>
-      this.#paginatedGet<Account>('/api/v1/endorsements', { params }, accountSchema),
+      this.#paginatedGet('/api/v1/endorsements', { params }, accountSchema),
 
     /**
      * View your featured tags
@@ -806,7 +792,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/followed_tags/#get}
      */
     getFollowedTags: async (params?: GetFollowedTagsParams) =>
-      this.#paginatedGet<Tag>('/api/v1/followed_tags', { params }, tagSchema),
+      this.#paginatedGet('/api/v1/followed_tags', { params }, tagSchema),
 
     /**
      * View information about a single tag
@@ -1489,14 +1475,14 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/mutes/#get}
      */
     getMutes: async (params?: GetMutesParams) =>
-      this.#paginatedGet<Account>('/api/v1/mutes', { params }, mutedAccountSchema),
+      this.#paginatedGet('/api/v1/mutes', { params }, mutedAccountSchema),
 
     /**
      * View blocked users
      * @see {@link https://docs.joinmastodon.org/methods/blocks/#get}
      */
     getBlocks: async (params?: GetBlocksParams) =>
-      this.#paginatedGet<Account>('/api/v1/blocks', { params }, accountSchema),
+      this.#paginatedGet('/api/v1/blocks', { params }, accountSchema),
 
     /**
      * Get domain blocks
@@ -1504,7 +1490,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/domain_blocks/#get}
      */
     getDomainBlocks: async (params?: GetDomainBlocksParams) =>
-      this.#paginatedGet<string>('/api/v1/domain_blocks', { params }, z.string()),
+      this.#paginatedGet('/api/v1/domain_blocks', { params }, z.string()),
 
     /**
      * Block a domain
@@ -1859,7 +1845,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/statuses/#reblogged_by}
      */
     getRebloggedBy: async (statusId: string, params?: GetRebloggedByParams) =>
-      this.#paginatedGet<Account>(`/api/v1/statuses/${statusId}/reblogged_by`, { params }, accountSchema),
+      this.#paginatedGet(`/api/v1/statuses/${statusId}/reblogged_by`, { params }, accountSchema),
 
     /**
      * See who favourited a status
@@ -1867,7 +1853,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/statuses/#favourited_by}
      */
     getFavouritedBy: async (statusId: string, params?: GetFavouritedByParams) =>
-      this.#paginatedGet<Account>(`/api/v1/statuses/${statusId}/favourited_by`, { params }, accountSchema),
+      this.#paginatedGet(`/api/v1/statuses/${statusId}/favourited_by`, { params }, accountSchema),
 
     /**
      * Favourite a status
@@ -2090,7 +2076,7 @@ class PlApiClient {
      * Requires features{@link Features['quotePosts']}.
      */
     getStatusQuotes: async (statusId: string, params?: GetStatusQuotesParams) =>
-      this.#paginatedGet<Status>(`/api/v1/pleroma/statuses/${statusId}/quotes`, { params }, statusSchema),
+      this.#paginatedGet(`/api/v1/pleroma/statuses/${statusId}/quotes`, { params }, statusSchema),
 
     /**
      * Returns the list of accounts that have disliked the status as known by the current server
@@ -2196,7 +2182,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/scheduled_statuses/#get}
      */
     getScheduledStatuses: async (params?: GetScheduledStatusesParams) =>
-      this.#paginatedGet<ScheduledStatus>('/api/v1/scheduled_statuses', { params }, scheduledStatusSchema),
+      this.#paginatedGet('/api/v1/scheduled_statuses', { params }, scheduledStatusSchema),
 
     /**
      * View a single scheduled status
@@ -2239,7 +2225,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/timelines/#public}
      */
     publicTimeline: (params?: PublicTimelineParams) =>
-      this.#paginatedGet<Status>('/api/v1/timelines/public', { params }, statusSchema),
+      this.#paginatedGet('/api/v1/timelines/public', { params }, statusSchema),
 
     /**
      * View hashtag timeline
@@ -2247,7 +2233,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/timelines/#tag}
      */
     hashtagTimeline: (hashtag: string, params?: HashtagTimelineParams) =>
-      this.#paginatedGet<Status>(`/api/v1/timelines/tag/${hashtag}`, { params }, statusSchema),
+      this.#paginatedGet(`/api/v1/timelines/tag/${hashtag}`, { params }, statusSchema),
 
     /**
      * View home timeline
@@ -2255,7 +2241,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/timelines/#home}
      */
     homeTimeline: (params?: HomeTimelineParams) =>
-      this.#paginatedGet<Status>('/api/v1/timelines/home', { params }, statusSchema),
+      this.#paginatedGet('/api/v1/timelines/home', { params }, statusSchema),
 
     /**
      * View link timeline
@@ -2263,7 +2249,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/timelines/#link}
      */
     linkTimeline: (url: string, params?: HashtagTimelineParams) =>
-      this.#paginatedGet<Status>('/api/v1/timelines/link', { params: { ...params, url } }, statusSchema),
+      this.#paginatedGet('/api/v1/timelines/link', { params: { ...params, url } }, statusSchema),
 
     /**
      * View list timeline
@@ -2271,14 +2257,14 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/timelines/#list}
      */
     listTimeline: (listId: string, params?: ListTimelineParams) =>
-      this.#paginatedGet<Status>(`/api/v1/timelines/list/${listId}`, { params }, statusSchema),
+      this.#paginatedGet(`/api/v1/timelines/list/${listId}`, { params }, statusSchema),
 
     /**
      * View all conversations
      * @see {@link https://docs.joinmastodon.org/methods/conversations/#get}
      */
     getConversations: (params?: GetConversationsParams) =>
-      this.#paginatedGet<Conversation>('/api/v1/conversations', { params }, conversationSchema),
+      this.#paginatedGet('/api/v1/conversations', { params }, conversationSchema),
 
     /**
      * Remove a conversation
@@ -2327,13 +2313,13 @@ class PlApiClient {
      * Requires features{@link Features['groups']}.
      */
     groupTimeline: async (groupId: string, params?: GroupTimelineParams) =>
-      this.#paginatedGet<Status>(`/api/v1/timelines/group/${groupId}`, { params }, statusSchema),
+      this.#paginatedGet(`/api/v1/timelines/group/${groupId}`, { params }, statusSchema),
 
     /**
      * Requires features{@link Features['bubbleTimeline']}.
      */
     bubbleTimeline: async (params?: BubbleTimelineParams) =>
-      this.#paginatedGet<Status>('/api/v1/timelines/bubble', { params }, statusSchema),
+      this.#paginatedGet('/api/v1/timelines/bubble', { params }, statusSchema),
   };
 
   public readonly lists = {
@@ -2396,7 +2382,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/lists/#accounts}
      */
     getListAccounts: async (listId: string, params?: GetListAccountsParams) =>
-      this.#paginatedGet<Account>(`/api/v1/lists/${listId}/accounts`, { params }, accountSchema),
+      this.#paginatedGet(`/api/v1/lists/${listId}/accounts`, { params }, accountSchema),
 
     /**
      * Add accounts to a list
@@ -2502,7 +2488,7 @@ class PlApiClient {
         ...params.exclude_types.filter(type => PLEROMA_TYPES.includes(type)).map(type => `pleroma:${type}`),
       ];
 
-      return this.#paginatedGet<Notification>('/api/v1/notifications', { ...meta, params }, notificationSchema);
+      return this.#paginatedGet('/api/v1/notifications', { ...meta, params }, notificationSchema);
     },
 
     /**
@@ -2566,7 +2552,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/notifications/#get-requests}
      */
     getNotificationRequests: async (params?: GetNotificationRequestsParams) =>
-      this.#paginatedGet<Notification>('/api/v1/notifications/requests', { params }, notificationRequestSchema),
+      this.#paginatedGet('/api/v1/notifications/requests', { params }, notificationRequestSchema),
 
     /**
      * Get a single notification request
@@ -2915,7 +2901,7 @@ class PlApiClient {
        */
       getAccounts: async (params?: AdminGetAccountsParams) => {
         if (this.features.mastodonAdminV2) {
-          return this.#paginatedGet<AdminAccount>('/api/v2/admin/accounts', { params }, adminAccountSchema);
+          return this.#paginatedGet('/api/v2/admin/accounts', { params }, adminAccountSchema);
         } else {
           return this.#paginatedPleromaAccounts(params ? {
             query: params.username,
@@ -3222,7 +3208,7 @@ class PlApiClient {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_blocks/#get}
        */
       getDomainBlocks: (params?: AdminGetDomainBlocksParams) =>
-        this.#paginatedGet<AdminDomainBlock>('/api/v1/admin/domain_blocks', { params }, adminDomainBlockSchema),
+        this.#paginatedGet('/api/v1/admin/domain_blocks', { params }, adminDomainBlockSchema),
 
       /**
        * Get a single blocked domain
@@ -3286,7 +3272,7 @@ class PlApiClient {
        */
       getReports: async (params?: AdminGetReportsParams) => {
         if (this.features.mastodonAdmin) {
-          return this.#paginatedGet<AdminReport>('/api/v1/admin/reports', { params }, adminReportSchema);
+          return this.#paginatedGet('/api/v1/admin/reports', { params }, adminReportSchema);
         } else {
           return this.#paginatedPleromaReports({
             state: params?.resolved === true ? 'resolved' : params?.resolved === false ? 'open' : undefined,
@@ -3478,7 +3464,7 @@ class PlApiClient {
        * @see {@link https://docs.joinmastodon.org/methods/admin/canonical_email_blocks/#get}
        */
       getCanonicalEmailBlocks: async (params?: AdminGetCanonicalEmailBlocks) =>
-        this.#paginatedGet<AdminCanonicalEmailBlock>('/api/v1/admin/canonical_email_blocks', { params }, adminCanonicalEmailBlockSchema),
+        this.#paginatedGet('/api/v1/admin/canonical_email_blocks', { params }, adminCanonicalEmailBlockSchema),
 
       /**
        * Show a single canonical email block
@@ -3544,7 +3530,7 @@ class PlApiClient {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_allows/#get}
        */
       getDomainAllows: (params?: AdminGetDomainAllowsParams) =>
-        this.#paginatedGet<AdminDomainAllow>('/api/v1/admin/domain_allows', { params }, adminDomainAllowSchema),
+        this.#paginatedGet('/api/v1/admin/domain_allows', { params }, adminDomainAllowSchema),
 
       /**
        * Get a single allowed domain
@@ -3588,7 +3574,7 @@ class PlApiClient {
        * @see {@link https://docs.joinmastodon.org/methods/admin/email_domain_blocks/#get}
        */
       getEmailDomainBlocks: (params?: AdminGetEmailDomainBlocksParams) =>
-        this.#paginatedGet<AdminEmailDomainBlock>('/api/v1/admin/email_domain_blocks', { params }, adminEmailDomainBlockSchema),
+        this.#paginatedGet('/api/v1/admin/email_domain_blocks', { params }, adminEmailDomainBlockSchema),
 
       /**
        * Get a single blocked email domain
@@ -3632,7 +3618,7 @@ class PlApiClient {
        * @see {@link https://docs.joinmastodon.org/methods/admin/ip_blocks/#get}
        */
       getIpBlocks: (params?: AdminGetIpBlocksParams) =>
-        this.#paginatedGet<AdminIpBlock>('/api/v1/admin/ip_blocks', { params }, adminIpBlockSchema),
+        this.#paginatedGet('/api/v1/admin/ip_blocks', { params }, adminIpBlockSchema),
 
       /**
        * Get a single IP block
@@ -4019,14 +4005,14 @@ class PlApiClient {
      * @see {@link https://docs.pleroma.social/backend/development/API/chats/#getting-a-list-of-chats}
      */
     getChats: async (params?: GetChatsParams) =>
-      this.#paginatedGet<Chat>('/api/v2/pleroma/chats', { params }, chatSchema),
+      this.#paginatedGet('/api/v2/pleroma/chats', { params }, chatSchema),
 
     /**
      * Getting the messages for a Chat
      * For a given Chat id, you can get the associated messages with
      */
     getChatMessages: async (chatId: string, params?: GetChatMessagesParams) =>
-      this.#paginatedGet<ChatMessage>(`/api/v1/pleroma/chats/${chatId}/messages`, { params }, chatMessageSchema),
+      this.#paginatedGet(`/api/v1/pleroma/chats/${chatId}/messages`, { params }, chatMessageSchema),
 
     /**
      * Posting a chat message
@@ -4088,24 +4074,21 @@ class PlApiClient {
      * @see {@link }
      */
     getJoinedEvents: async (state?: 'pending' | 'reject' | 'accept', params?: GetJoinedEventsParams) =>
-      this.#paginatedGet<Status>('/api/v1/pleroma/events/joined_events', { params: { ...params, state } }, statusSchema),
+      this.#paginatedGet('/api/v1/pleroma/events/joined_events', { params: { ...params, state } }, statusSchema),
 
     /**
      * Gets event participants
      * @see {@link https://github.com/mkljczk/pl/blob/fork/docs/development/API/pleroma_api.md#apiv1pleromaeventsidparticipations}
      */
     getEventParticipations: async (statusId: string, params?: GetEventParticipationsParams) =>
-      this.#paginatedGet<Account>(`/api/v1/pleroma/events/${statusId}/participations`, { params }, accountSchema),
+      this.#paginatedGet(`/api/v1/pleroma/events/${statusId}/participations`, { params }, accountSchema),
 
     /**
      * Gets event participation requests
      * @see {@link https://github.com/mkljczk/pl/blob/fork/docs/development/API/pleroma_api.md#apiv1pleromaeventsidparticipation_requests}
      */
     getEventParticipationRequests: async (statusId: string, params?: GetEventParticipationRequestsParams) =>
-      this.#paginatedGet<{
-        account:Account;
-        participation_message: string;
-      }>(`/api/v1/pleroma/events/${statusId}/participation_requests`, { params }, z.object({
+      this.#paginatedGet(`/api/v1/pleroma/events/${statusId}/participation_requests`, { params }, z.object({
         account: accountSchema,
         participation_message: z.string().catch(''),
       })),
@@ -4293,11 +4276,11 @@ class PlApiClient {
 
       /** Has an optional role attribute that can be used to filter by role (valid roles are `"admin"`, `"moderator"`, `"user"`). */
       getGroupMemberships: async (groupId: string, role?: GroupRole, params?: GetGroupMembershipsParams) =>
-        this.#paginatedGet<Account>(`/api/v1/groups/${groupId}/memberships`, { params: { ...params, role } }, groupMemberSchema),
+        this.#paginatedGet(`/api/v1/groups/${groupId}/memberships`, { params: { ...params, role } }, groupMemberSchema),
 
       /** returns an array of `Account` entities representing pending requests to join a group */
       getGroupMembershipRequests: async (groupId: string, params?: GetGroupMembershipRequestsParams) =>
-        this.#paginatedGet<Account>(`/api/v1/groups/${groupId}/membership_requests`, { params }, accountSchema),
+        this.#paginatedGet(`/api/v1/groups/${groupId}/membership_requests`, { params }, accountSchema),
 
       /** accept a pending request to become a group member */
       acceptGroupMembershipRequest: async (groupId: string, accountId: string) => {
@@ -4322,7 +4305,7 @@ class PlApiClient {
 
       /** list accounts blocked from interacting with the group */
       getGroupBlocks: async (groupId: string, params?: GetGroupBlocksParams) =>
-        this.#paginatedGet<Account>(`/api/v1/groups/${groupId}/blocks`, { params }, accountSchema),
+        this.#paginatedGet(`/api/v1/groups/${groupId}/blocks`, { params }, accountSchema),
 
       /** block one or more users. If they were in the group, they are also kicked of it */
       blockGroupUsers: async (groupId: string, accountIds: string[]) => {
