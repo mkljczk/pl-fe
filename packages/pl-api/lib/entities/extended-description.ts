@@ -1,13 +1,13 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { dateSchema } from './utils';
 
 /** @see {@link https://docs.joinmastodon.org/entities/ExtendedDescription} */
-const extendedDescriptionSchema = z.object({
+const extendedDescriptionSchema = v.object({
   updated_at: dateSchema,
-  content: z.string(),
+  content: v.string(),
 });
 
-type ExtendedDescription = z.infer<typeof extendedDescriptionSchema>;
+type ExtendedDescription = v.InferOutput<typeof extendedDescriptionSchema>;
 
 export { extendedDescriptionSchema, type ExtendedDescription };

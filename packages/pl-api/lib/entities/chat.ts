@@ -1,18 +1,18 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { accountSchema } from './account';
 import { chatMessageSchema } from './chat-message';
 import { dateSchema } from './utils';
 
 /** @see {@link https://docs.pleroma.social/backend/development/API/chats/#getting-a-list-of-chats} */
-const chatSchema = z.object({
-  id: z.string(),
+const chatSchema = v.object({
+  id: v.string(),
   account: accountSchema,
   unread: z.number().int(),
-  last_message: chatMessageSchema.nullable().catch(null),
+  last_message: v.fallback(v.nullable(chatMessageSchema), null),
   created_at: dateSchema,
 });
 
-type Chat = z.infer<typeof chatSchema>;
+type Chat = v.InferOutput<typeof chatSchema>;
 
 export { chatSchema, type Chat };

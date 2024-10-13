@@ -1,13 +1,13 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 /** @see {@link https://docs.joinmastodon.org/entities/WebPushSubscription/} */
-const webPushSubscriptionSchema = z.object({
+const webPushSubscriptionSchema = v.object({
   id: z.coerce.string(),
-  endpoint: z.string(),
+  endpoint: v.string(),
   alerts: z.record(z.boolean()),
-  server_key: z.string(),
+  server_key: v.string(),
 });
 
-type WebPushSubscription = z.infer<typeof webPushSubscriptionSchema>;
+type WebPushSubscription = v.InferOutput<typeof webPushSubscriptionSchema>;
 
 export { webPushSubscriptionSchema, type WebPushSubscription };

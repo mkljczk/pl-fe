@@ -1,5 +1,5 @@
 import pick from 'lodash.pick';
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { ruleSchema } from '../rule';
 import { statusWithoutAccountSchema } from '../status';
@@ -24,23 +24,23 @@ const adminReportSchema = z.preprocess((report: any) => {
     };
   }
   return report;
-}, z.object({
-  id: z.string(),
-  action_taken: z.boolean().optional().catch(undefined),
-  action_taken_at: dateSchema.nullable().catch(null),
-  category: z.string().optional().catch(undefined),
-  comment: z.string().optional().catch(undefined),
-  forwarded: z.boolean().optional().catch(undefined),
+}, v.object({
+  id: v.string(),
+  action_taken: v.fallback(v.optional(v.boolean()), undefined),
+  action_taken_at: v.fallback(v.nullable(dateSchema), null),
+  category: v.fallback(v.optional(v.string()), undefined),
+  comment: v.fallback(v.optional(v.string()), undefined),
+  forwarded: v.fallback(v.optional(v.boolean()), undefined),
   created_at: dateSchema.optional().catch(undefined),
   updated_at: dateSchema.optional().catch(undefined),
   account: adminAccountSchema,
   target_account: adminAccountSchema,
-  assigned_account: adminAccountSchema.nullable().catch(null),
-  action_taken_by_account: adminAccountSchema.nullable().catch(null),
+  assigned_account: v.fallback(v.nullable(adminAccountSchema), null),
+  action_taken_by_account: v.fallback(v.nullable(adminAccountSchema), null),
   statuses: filteredArray(statusWithoutAccountSchema),
   rules: filteredArray(ruleSchema),
 }));
 
-type AdminReport = z.infer<typeof adminReportSchema>;
+type AdminReport = v.InferOutput<typeof adminReportSchema>;
 
 export { adminReportSchema, type AdminReport };

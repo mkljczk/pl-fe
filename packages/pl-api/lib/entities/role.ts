@@ -1,16 +1,16 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 const hexSchema = z.string().regex(/^#[a-f0-9]{6}$/i);
 
-const roleSchema = z.object({
-  id: z.string().catch(''),
-  name: z.string().catch(''),
+const roleSchema = v.object({
+  id: v.fallback(v.string(), ''),
+  name: v.fallback(v.string(), ''),
   color: hexSchema.catch(''),
-  permissions: z.string().catch(''),
-  highlighted: z.boolean().catch(true),
+  permissions: v.fallback(v.string(), ''),
+  highlighted: v.fallback(v.boolean(), true),
 });
 
-type Role = z.infer<typeof roleSchema>;
+type Role = v.InferOutput<typeof roleSchema>;
 
 export {
   roleSchema,

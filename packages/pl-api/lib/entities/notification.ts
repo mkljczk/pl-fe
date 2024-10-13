@@ -1,5 +1,5 @@
 import pick from 'lodash.pick';
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { accountSchema } from './account';
 import { accountWarningSchema } from './account-warning';
@@ -9,15 +9,15 @@ import { reportSchema } from './report';
 import { statusSchema } from './status';
 import { dateSchema } from './utils';
 
-const baseNotificationSchema = z.object({
+const baseNotificationSchema = v.object({
   account: accountSchema,
   created_at: dateSchema,
-  id: z.string(),
-  group_key: z.string(),
-  type: z.string(),
+  id: v.string(),
+  group_key: v.string(),
+  type: v.string(),
 
-  is_muted: z.boolean().optional().catch(undefined),
-  is_seen: z.boolean().optional().catch(undefined),
+  is_muted: v.fallback(v.optional(v.boolean()), undefined),
+  is_seen: v.fallback(v.optional(v.boolean()), undefined),
 });
 
 const accountNotificationSchema = baseNotificationSchema.extend({
@@ -57,8 +57,8 @@ const moveNotificationSchema = baseNotificationSchema.extend({
 
 const emojiReactionNotificationSchema = baseNotificationSchema.extend({
   type: z.literal('emoji_reaction'),
-  emoji: z.string(),
-  emoji_url: z.string().nullable().catch(null),
+  emoji: v.string(),
+  emoji_url: v.fallback(v.nullable(v.string()), null),
   status: statusSchema,
 });
 
@@ -70,7 +70,7 @@ const chatMentionNotificationSchema = baseNotificationSchema.extend({
 const eventParticipationRequestNotificationSchema = baseNotificationSchema.extend({
   type: z.enum(['participation_accepted', 'participation_request']),
   status: statusSchema,
-  participation_message: z.string().nullable().catch(null),
+  participation_message: v.fallback(v.nullable(v.string()), null),
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Notification/} */
@@ -94,7 +94,7 @@ const notificationSchema: z.ZodType<Notification> = z.preprocess((notification: 
   eventParticipationRequestNotificationSchema,
 ])) as any;
 
-type Notification = z.infer<
+type Notification = v.InferOutput<
 | typeof accountNotificationSchema
 | typeof mentionNotificationSchema
 | typeof statusNotificationSchema

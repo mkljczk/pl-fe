@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { announcementSchema } from './announcement';
 import { announcementReactionSchema } from './announcement-reaction';
@@ -8,24 +8,24 @@ import { markersSchema } from './marker';
 import { notificationSchema } from './notification';
 import { statusSchema } from './status';
 
-const followRelationshipUpdateSchema = z.object({
+const followRelationshipUpdateSchema = v.object({
   state: z.enum(['follow_pending', 'follow_accept', 'follow_reject']),
-  follower: z.object({
-    id: z.string(),
-    follower_count: z.number().nullable().catch(null),
-    following_count: z.number().nullable().catch(null),
+  follower: v.object({
+    id: v.string(),
+    follower_count: v.fallback(v.nullable(v.number()), null),
+    following_count: v.fallback(v.nullable(v.number()), null),
   }),
-  following: z.object({
-    id: z.string(),
-    follower_count: z.number().nullable().catch(null),
-    following_count: z.number().nullable().catch(null),
+  following: v.object({
+    id: v.string(),
+    follower_count: v.fallback(v.nullable(v.number()), null),
+    following_count: v.fallback(v.nullable(v.number()), null),
   }),
 });
 
-type FollowRelationshipUpdate = z.infer<typeof followRelationshipUpdateSchema>;
+type FollowRelationshipUpdate = v.InferOutput<typeof followRelationshipUpdateSchema>;
 
-const baseStreamingEventSchema = z.object({
-  stream: z.array(z.string()).catch([]),
+const baseStreamingEventSchema = v.object({
+  stream: z.array(v.string()).catch([]),
 });
 
 const statusStreamingEventSchema = baseStreamingEventSchema.extend({
@@ -35,7 +35,7 @@ const statusStreamingEventSchema = baseStreamingEventSchema.extend({
 
 const stringStreamingEventSchema = baseStreamingEventSchema.extend({
   event: z.enum(['delete', 'announcement.delete']),
-  payload: z.string(),
+  payload: v.string(),
 });
 
 const notificationStreamingEventSchema = baseStreamingEventSchema.extend({
@@ -74,8 +74,8 @@ const followRelationshipsUpdateStreamingEventSchema = baseStreamingEventSchema.e
 
 const respondStreamingEventSchema = baseStreamingEventSchema.extend({
   event: z.literal('respond'),
-  payload: z.preprocess((payload: any) => JSON.parse(payload), z.object({
-    type: z.string(),
+  payload: z.preprocess((payload: any) => JSON.parse(payload), v.object({
+    type: v.string(),
     result: z.enum(['success', 'ignored', 'error']),
   })),
 });
@@ -103,7 +103,7 @@ const streamingEventSchema: z.ZodType<StreamingEvent> = z.preprocess((event: any
   markerStreamingEventSchema,
 ])) as any;
 
-type StreamingEvent = z.infer<
+type StreamingEvent = v.InferOutput<
 | typeof statusStreamingEventSchema
 | typeof stringStreamingEventSchema
 | typeof notificationStreamingEventSchema

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { announcementReactionSchema } from './announcement-reaction';
 import { customEmojiSchema } from './custom-emoji';
@@ -7,20 +7,20 @@ import { tagSchema } from './tag';
 import { dateSchema, filteredArray } from './utils';
 
 /** @see {@link https://docs.joinmastodon.org/entities/announcement/} */
-const announcementSchema = z.object({
-  id: z.string(),
-  content: z.string().catch(''),
+const announcementSchema = v.object({
+  id: v.string(),
+  content: v.fallback(v.string(), ''),
   starts_at: z.string().datetime().nullable().catch(null),
   ends_at: z.string().datetime().nullable().catch(null),
-  all_day: z.boolean().catch(false),
-  read: z.boolean().catch(false),
+  all_day: v.fallback(v.boolean(), false),
+  read: v.fallback(v.boolean(), false),
   published_at: dateSchema,
   reactions: filteredArray(announcementReactionSchema),
   statuses: z.preprocess(
     (statuses: any) => Array.isArray(statuses)
       ? Object.fromEntries(statuses.map((status: any) => [status.url, status.account?.acct]) || [])
       : statuses,
-    z.record(z.string(), z.string()),
+    z.record(v.string(), v.string()),
   ),
   mentions: filteredArray(mentionSchema),
   tags: filteredArray(tagSchema),
@@ -28,6 +28,6 @@ const announcementSchema = z.object({
   updated_at: dateSchema,
 });
 
-type Announcement = z.infer<typeof announcementSchema>;
+type Announcement = v.InferOutput<typeof announcementSchema>;
 
 export { announcementSchema, type Announcement };

@@ -1,5 +1,5 @@
 import pick from 'lodash.pick';
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { accountSchema } from './account';
 import { customEmojiSchema } from './custom-emoji';
@@ -15,54 +15,54 @@ import { tagSchema } from './tag';
 import { translationSchema } from './translation';
 import { dateSchema, filteredArray } from './utils';
 
-const statusEventSchema = z.object({
-  name: z.string().catch(''),
+const statusEventSchema = v.object({
+  name: v.fallback(v.string(), ''),
   start_time: z.string().datetime().nullable().catch(null),
   end_time: z.string().datetime().nullable().catch(null),
   join_mode: z.enum(['free', 'restricted', 'invite']).nullable().catch(null),
-  participants_count: z.number().catch(0),
-  location: z.object({
-    name: z.string().catch(''),
+  participants_count: v.fallback(v.number(), 0),
+  location: v.object({
+    name: v.fallback(v.string(), ''),
     url: z.string().url().catch(''),
-    latitude: z.number().catch(0),
-    longitude: z.number().catch(0),
-    street: z.string().catch(''),
-    postal_code: z.string().catch(''),
-    locality: z.string().catch(''),
-    region: z.string().catch(''),
-    country: z.string().catch(''),
+    latitude: v.fallback(v.number(), 0),
+    longitude: v.fallback(v.number(), 0),
+    street: v.fallback(v.string(), ''),
+    postal_code: v.fallback(v.string(), ''),
+    locality: v.fallback(v.string(), ''),
+    region: v.fallback(v.string(), ''),
+    country: v.fallback(v.string(), ''),
   }).nullable().catch(null),
   join_state: z.enum(['pending', 'reject', 'accept']).nullable().catch(null),
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Status/} */
-const baseStatusSchema = z.object({
-  id: z.string(),
+const baseStatusSchema = v.object({
+  id: v.string(),
   uri: z.string().url().catch(''),
   created_at: dateSchema,
   account: accountSchema,
-  content: z.string().catch(''),
+  content: v.fallback(v.string(), ''),
   visibility: z.string().catch('public'),
   sensitive: z.coerce.boolean(),
-  spoiler_text: z.string().catch(''),
+  spoiler_text: v.fallback(v.string(), ''),
   media_attachments: filteredArray(mediaAttachmentSchema),
-  application: z.object({
-    name: z.string(),
+  application: v.object({
+    name: v.string(),
     website: z.string().url().nullable().catch(null),
   }).nullable().catch(null),
   mentions: filteredArray(mentionSchema),
   tags: filteredArray(tagSchema),
   emojis: filteredArray(customEmojiSchema),
-  reblogs_count: z.number().catch(0),
-  favourites_count: z.number().catch(0),
-  replies_count: z.number().catch(0),
+  reblogs_count: v.fallback(v.number(), 0),
+  favourites_count: v.fallback(v.number(), 0),
+  replies_count: v.fallback(v.number(), 0),
   url: z.string().url().catch(''),
-  in_reply_to_id: z.string().nullable().catch(null),
-  in_reply_to_account_id: z.string().nullable().catch(null),
-  poll: pollSchema.nullable().catch(null),
-  card: previewCardSchema.nullable().catch(null),
-  language: z.string().nullable().catch(null),
-  text: z.string().nullable().catch(null),
+  in_reply_to_id: v.fallback(v.nullable(v.string()), null),
+  in_reply_to_account_id: v.fallback(v.nullable(v.string()), null),
+  poll: v.fallback(v.nullable(pollSchema), null),
+  card: v.fallback(v.nullable(previewCardSchema), null),
+  language: v.fallback(v.nullable(v.string()), null),
+  text: v.fallback(v.nullable(v.string()), null),
   edited_at: z.string().datetime().nullable().catch(null),
   favourited: z.coerce.boolean(),
   reblogged: z.coerce.boolean(),
@@ -71,32 +71,32 @@ const baseStatusSchema = z.object({
   pinned: z.coerce.boolean(),
   filtered: filteredArray(filterResultSchema),
   approval_status: z.enum(['pending', 'approval', 'rejected']).nullable().catch(null),
-  group: groupSchema.nullable().catch(null),
+  group: v.fallback(v.nullable(groupSchema), null),
   scheduled_at: z.null().catch(null),
 
-  quote_id: z.string().nullable().catch(null),
-  local: z.boolean().optional().catch(undefined),
-  conversation_id: z.string().optional().catch(undefined),
-  direct_conversation_id: z.string().optional().catch(undefined),
-  in_reply_to_account_acct: z.string().optional().catch(undefined),
+  quote_id: v.fallback(v.nullable(v.string()), null),
+  local: v.fallback(v.optional(v.boolean()), undefined),
+  conversation_id: v.fallback(v.optional(v.string()), undefined),
+  direct_conversation_id: v.fallback(v.optional(v.string()), undefined),
+  in_reply_to_account_acct: v.fallback(v.optional(v.string()), undefined),
   expires_at: z.string().datetime({ offset: true }).optional().catch(undefined),
-  thread_muted: z.boolean().optional().catch(undefined),
+  thread_muted: v.fallback(v.optional(v.boolean()), undefined),
   emoji_reactions: filteredArray(emojiReactionSchema),
-  parent_visible: z.boolean().optional().catch(undefined),
+  parent_visible: v.fallback(v.optional(v.boolean()), undefined),
   pinned_at: z.string().datetime({ offset: true }).nullable().catch(null),
-  quote_visible: z.boolean().optional().catch(undefined),
-  quote_url: z.string().optional().catch(undefined),
-  quotes_count: z.number().catch(0),
-  bookmark_folder: z.string().nullable().catch(null),
+  quote_visible: v.fallback(v.optional(v.boolean()), undefined),
+  quote_url: v.fallback(v.optional(v.string()), undefined),
+  quotes_count: v.fallback(v.number(), 0),
+  bookmark_folder: v.fallback(v.nullable(v.string()), null),
 
-  event: statusEventSchema.nullable().catch(null),
+  event: v.fallback(v.nullable(statusEventSchema), null),
   translation: translationSchema.nullable().or(z.literal(false)).catch(null),
 
-  content_map: z.record(z.string()).nullable().catch(null),
-  text_map: z.record(z.string()).nullable().catch(null),
-  spoiler_text_map: z.record(z.string()).nullable().catch(null),
+  content_map: z.record(v.string()).nullable().catch(null),
+  text_map: z.record(v.string()).nullable().catch(null),
+  spoiler_text_map: z.record(v.string()).nullable().catch(null),
 
-  dislikes_count: z.number().catch(0),
+  dislikes_count: v.fallback(v.number(), 0),
   disliked: z.coerce.boolean().catch(false),
 
   interaction_policy: interactionPolicySchema,
@@ -141,13 +141,13 @@ const statusSchema: z.ZodType<Status> = z.preprocess(preprocess, baseStatusSchem
 })) as any;
 
 const statusWithoutAccountSchema = z.preprocess(preprocess, baseStatusSchema.omit({ account: true }).extend({
-  account: accountSchema.nullable().catch(null),
+  account: v.fallback(v.nullable(accountSchema), null),
   reblog: z.lazy(() => statusSchema).nullable().catch(null),
 
   quote: z.lazy(() => statusSchema).nullable().catch(null),
 }));
 
-type Status = z.infer<typeof baseStatusSchema> & {
+type Status = v.InferOutput<typeof baseStatusSchema> & {
   reblog: Status | null;
   quote: Status | null;
 }

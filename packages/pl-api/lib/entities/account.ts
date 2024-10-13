@@ -1,5 +1,5 @@
 import pick from 'lodash.pick';
-import z from 'zod';
+import * as v from 'valibot';
 
 import { customEmojiSchema } from './custom-emoji';
 import { relationshipSchema } from './relationship';
@@ -61,64 +61,64 @@ const preprocessAccount = (account: any) => {
   };
 };
 
-const fieldSchema = z.object({
-  name: z.string(),
-  value: z.string(),
+const fieldSchema = v.object({
+  name: v.string(),
+  value: v.string(),
   verified_at: z.string().datetime({ offset: true }).nullable().catch(null),
 });
 
-const baseAccountSchema = z.object({
-  id: z.string(),
-  username: z.string().catch(''),
-  acct: z.string().catch(''),
+const baseAccountSchema = v.object({
+  id: v.string(),
+  username: v.fallback(v.string(), ''),
+  acct: v.fallback(v.string(), ''),
   url: z.string().url(),
-  display_name: z.string().catch(''),
-  note: z.string().catch(''),
-  avatar: z.string().catch(''),
+  display_name: v.fallback(v.string(), ''),
+  note: v.fallback(v.string(), ''),
+  avatar: v.fallback(v.string(), ''),
   avatar_static: z.string().url().catch(''),
   header: z.string().url().catch(''),
   header_static: z.string().url().catch(''),
-  locked: z.boolean().catch(false),
+  locked: v.fallback(v.boolean(), false),
   fields: filteredArray(fieldSchema),
   emojis: filteredArray(customEmojiSchema),
-  bot: z.boolean().catch(false),
-  group: z.boolean().catch(false),
-  discoverable: z.boolean().catch(false),
-  noindex: z.boolean().nullable().catch(null),
-  suspended: z.boolean().optional().catch(undefined),
-  limited: z.boolean().optional().catch(undefined),
+  bot: v.fallback(v.boolean(), false),
+  group: v.fallback(v.boolean(), false),
+  discoverable: v.fallback(v.boolean(), false),
+  noindex: v.fallback(v.optional(v.nullable()), null),
+  suspended: v.fallback(v.optional(v.boolean()), undefined),
+  limited: v.fallback(v.optional(v.boolean()), undefined),
   created_at: z.string().datetime().catch(new Date().toUTCString()),
   last_status_at: z.string().date().nullable().catch(null),
-  statuses_count: z.number().catch(0),
-  followers_count: z.number().catch(0),
-  following_count: z.number().catch(0),
+  statuses_count: v.fallback(v.number(), 0),
+  followers_count: v.fallback(v.number(), 0),
+  following_count: v.fallback(v.number(), 0),
   roles: filteredArray(roleSchema),
 
-  fqn: z.string().nullable().catch(null),
-  ap_id: z.string().nullable().catch(null),
-  background_image: z.string().nullable().catch(null),
+  fqn: v.fallback(v.nullable(v.string()), null),
+  ap_id: v.fallback(v.nullable(v.string()), null),
+  background_image: v.fallback(v.nullable(v.string()), null),
   relationship: relationshipSchema.optional().catch(undefined),
-  is_moderator: z.boolean().optional().catch(undefined),
-  is_admin: z.boolean().optional().catch(undefined),
-  is_suggested: z.boolean().optional().catch(undefined),
-  hide_favorites: z.boolean().catch(true),
-  hide_followers: z.boolean().optional().catch(undefined),
-  hide_follows: z.boolean().optional().catch(undefined),
-  hide_followers_count: z.boolean().optional().catch(undefined),
-  hide_follows_count: z.boolean().optional().catch(undefined),
-  accepts_chat_messages: z.boolean().nullable().catch(null),
-  favicon: z.string().optional().catch(undefined),
+  is_moderator: v.fallback(v.optional(v.boolean()), undefined),
+  is_admin: v.fallback(v.optional(v.boolean()), undefined),
+  is_suggested: v.fallback(v.optional(v.boolean()), undefined),
+  hide_favorites: v.fallback(v.boolean(), true),
+  hide_followers: v.fallback(v.optional(v.boolean()), undefined),
+  hide_follows: v.fallback(v.optional(v.boolean()), undefined),
+  hide_followers_count: v.fallback(v.optional(v.boolean()), undefined),
+  hide_follows_count: v.fallback(v.optional(v.boolean()), undefined),
+  accepts_chat_messages: v.fallback(v.optional(v.nullable()), null),
+  favicon: v.fallback(v.optional(v.string()), undefined),
   birthday: z.string().date().optional().catch(undefined),
-  deactivated: z.boolean().optional().catch(undefined),
+  deactivated: v.fallback(v.optional(v.boolean()), undefined),
 
-  location: z.string().optional().catch(undefined),
+  location: v.fallback(v.optional(v.string()), undefined),
   local: z.boolean().optional().catch(false),
 
-  avatar_description: z.string().catch(''),
-  enable_rss: z.boolean().catch(false),
-  header_description: z.string().catch(''),
+  avatar_description: v.fallback(v.string(), ''),
+  enable_rss: v.fallback(v.boolean(), false),
+  header_description: v.fallback(v.string(), ''),
 
-  verified: z.boolean().optional().catch(undefined),
+  verified: v.fallback(v.optional(v.boolean()), undefined),
 
   __meta: coerceObject({
     pleroma: z.any().optional().catch(undefined),
@@ -137,47 +137,47 @@ type WithMoved = {
   moved: Account | null;
 };
 
-type Account = z.infer<typeof accountWithMovedAccountSchema> & WithMoved;
+type Account = v.InferOutput<typeof accountWithMovedAccountSchema> & WithMoved;
 
 const accountSchema: z.ZodType<Account> = untypedAccountSchema as any;
 
 const untypedCredentialAccountSchema = z.preprocess(preprocessAccount, accountWithMovedAccountSchema.extend({
-  source: z.object({
-    note: z.string().catch(''),
+  source: v.object({
+    note: v.fallback(v.string(), ''),
     fields: filteredArray(fieldSchema),
     privacy: z.enum(['public', 'unlisted', 'private', 'direct']),
-    sensitive: z.boolean().catch(false),
-    language: z.string().nullable().catch(null),
+    sensitive: v.fallback(v.boolean(), false),
+    language: v.fallback(v.nullable(v.string()), null),
     follow_requests_count: z.number().int().nonnegative().catch(0),
 
     show_role: z.boolean().optional().nullable().catch(undefined),
     no_rich_text: z.boolean().optional().nullable().catch(undefined),
-    discoverable: z.boolean().optional().catch(undefined),
-    actor_type: z.string().optional().catch(undefined),
-    show_birthday: z.boolean().optional().catch(undefined),
+    discoverable: v.fallback(v.optional(v.boolean()), undefined),
+    actor_type: v.fallback(v.optional(v.string()), undefined),
+    show_birthday: v.fallback(v.optional(v.boolean()), undefined),
   }).nullable().catch(null),
-  role: roleSchema.nullable().catch(null),
+  role: v.fallback(v.nullable(roleSchema), null),
 
   settings_store: z.record(z.any()).optional().catch(undefined),
-  chat_token: z.string().optional().catch(undefined),
-  allow_following_move: z.boolean().optional().catch(undefined),
+  chat_token: v.fallback(v.optional(v.string()), undefined),
+  allow_following_move: v.fallback(v.optional(v.boolean()), undefined),
   unread_conversation_count: z.number().optional().catch(undefined),
   unread_notifications_count: z.number().optional().catch(undefined),
-  notification_settings: z.object({
-    block_from_strangers: z.boolean().catch(false),
-    hide_notification_contents: z.boolean().catch(false),
+  notification_settings: v.object({
+    block_from_strangers: v.fallback(v.boolean(), false),
+    hide_notification_contents: v.fallback(v.boolean(), false),
   }).optional().catch(undefined),
 }));
 
-type CredentialAccount = z.infer<typeof untypedCredentialAccountSchema> & WithMoved;
+type CredentialAccount = v.InferOutput<typeof untypedCredentialAccountSchema> & WithMoved;
 
 const credentialAccountSchema: z.ZodType<CredentialAccount> = untypedCredentialAccountSchema as any;
 
 const untypedMutedAccountSchema = z.preprocess(preprocessAccount, accountWithMovedAccountSchema.extend({
-  mute_expires_at: dateSchema.nullable().catch(null),
+  mute_expires_at: v.fallback(v.nullable(dateSchema), null),
 }));
 
-type MutedAccount = z.infer<typeof untypedMutedAccountSchema> & WithMoved;
+type MutedAccount = v.InferOutput<typeof untypedMutedAccountSchema> & WithMoved;
 
 const mutedAccountSchema: z.ZodType<MutedAccount> = untypedMutedAccountSchema as any;
 

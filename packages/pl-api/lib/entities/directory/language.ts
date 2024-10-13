@@ -1,11 +1,11 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
-const directoryLanguageSchema = z.object({
-  locale: z.string(),
-  language: z.string(),
+const directoryLanguageSchema = v.object({
+  locale: v.string(),
+  language: v.string(),
   servers_count: z.coerce.number().nullable().catch(null),
 });
 
-type DirectoryLanguage = z.infer<typeof directoryLanguageSchema>;
+type DirectoryLanguage = v.InferOutput<typeof directoryLanguageSchema>;
 
 export { directoryLanguageSchema, type DirectoryLanguage };

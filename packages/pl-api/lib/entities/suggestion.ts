@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { accountSchema } from './account';
 
@@ -29,12 +29,12 @@ const suggestionSchema = z.preprocess((suggestion: any) => {
   }
 
   return suggestion;
-}, z.object({
-  source: z.string().nullable().catch(null),
-  sources: z.array(z.string()).catch([]),
+}, v.object({
+  source: v.fallback(v.nullable(v.string()), null),
+  sources: z.array(v.string()).catch([]),
   account: accountSchema,
 }));
 
-type Suggestion = z.infer<typeof suggestionSchema>;
+type Suggestion = v.InferOutput<typeof suggestionSchema>;
 
 export { suggestionSchema, type Suggestion };

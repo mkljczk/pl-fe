@@ -1,5 +1,5 @@
 import { isBlurhashValid } from 'blurhash';
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { mimeSchema } from './utils';
 
@@ -14,31 +14,31 @@ const blurhashSchema = z.string().superRefine((value, ctx) => {
   }
 });
 
-const baseAttachmentSchema = z.object({
-  id: z.string(),
-  type: z.string(),
+const baseAttachmentSchema = v.object({
+  id: v.string(),
+  type: v.string(),
   url: z.string().url().catch(''),
   preview_url: z.string().url().catch(''),
   remote_url: z.string().url().nullable().catch(null),
-  description: z.string().catch(''),
-  blurhash: blurhashSchema.nullable().catch(null),
+  description: v.fallback(v.string(), ''),
+  blurhash: v.fallback(v.nullable(blurhashSchema), null),
 
-  mime_type: mimeSchema.nullable().catch(null),
+  mime_type: v.fallback(v.nullable(mimeSchema), null),
 });
 
-const imageMetaSchema = z.object({
+const imageMetaSchema = v.object({
   width: z.number(),
   height: z.number(),
   size: z.string().regex(/\d+x\d+$/).nullable().catch(null),
-  aspect: z.number().nullable().catch(null),
+  aspect: v.fallback(v.nullable(v.number()), null),
 });
 
 const imageAttachmentSchema = baseAttachmentSchema.extend({
   type: z.literal('image'),
-  meta: z.object({
+  meta: v.object({
     original: imageMetaSchema.optional().catch(undefined),
     small: imageMetaSchema.optional().catch(undefined),
-    focus: z.object({
+    focus: v.object({
       x: z.number().min(-1).max(1),
       y: z.number().min(-1).max(1),
     }).optional().catch(undefined),
@@ -47,7 +47,7 @@ const imageAttachmentSchema = baseAttachmentSchema.extend({
 
 const videoAttachmentSchema = baseAttachmentSchema.extend({
   type: z.literal('video'),
-  meta: z.object({
+  meta: v.object({
     duration: z.number().optional().catch(undefined),
     original: imageMetaSchema.extend({
       frame_rate: z.string().regex(/\d+\/\d+$/).nullable().catch(null),
@@ -60,7 +60,7 @@ const videoAttachmentSchema = baseAttachmentSchema.extend({
 
 const gifvAttachmentSchema = baseAttachmentSchema.extend({
   type: z.literal('gifv'),
-  meta: z.object({
+  meta: v.object({
     duration: z.number().optional().catch(undefined),
     original: imageMetaSchema.optional().catch(undefined),
   }).catch({}),
@@ -68,15 +68,15 @@ const gifvAttachmentSchema = baseAttachmentSchema.extend({
 
 const audioAttachmentSchema = baseAttachmentSchema.extend({
   type: z.literal('audio'),
-  meta: z.object({
+  meta: v.object({
     duration: z.number().optional().catch(undefined),
-    colors: z.object({
-      background: z.string().optional().catch(undefined),
-      foreground: z.string().optional().catch(undefined),
-      accent: z.string().optional().catch(undefined),
+    colors: v.object({
+      background: v.fallback(v.optional(v.string()), undefined),
+      foreground: v.fallback(v.optional(v.string()), undefined),
+      accent: v.fallback(v.optional(v.string()), undefined),
       duration: z.number().optional().catch(undefined),
     }).optional().catch(undefined),
-    original: z.object({
+    original: v.object({
       duration: z.number().optional().catch(undefined),
       bitrate: z.number().nonnegative().optional().catch(undefined),
     }).optional().catch(undefined),
@@ -104,6 +104,6 @@ const mediaAttachmentSchema = z.preprocess((data: any) => {
   unknownAttachmentSchema,
 ]));
 
-type MediaAttachment = z.infer<typeof mediaAttachmentSchema>;
+type MediaAttachment = v.InferOutput<typeof mediaAttachmentSchema>;
 
 export { blurhashSchema, mediaAttachmentSchema, type MediaAttachment };

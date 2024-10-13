@@ -1,11 +1,11 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 /** @see {@link https://docs.joinmastodon.org/entities/Status/#Mention} */
-const mentionSchema = z.object({
-  id: z.string(),
-  username: z.string().catch(''),
+const mentionSchema = v.object({
+  id: v.string(),
+  username: v.fallback(v.string(), ''),
   url: z.string().url().catch(''),
-  acct: z.string(),
+  acct: v.string(),
 }).transform((mention) => {
   if (!mention.username) {
     mention.username = mention.acct.split('@')[0];
@@ -14,6 +14,6 @@ const mentionSchema = z.object({
   return mention;
 });
 
-type Mention = z.infer<typeof mentionSchema>;
+type Mention = v.InferOutput<typeof mentionSchema>;
 
 export { mentionSchema, type Mention };

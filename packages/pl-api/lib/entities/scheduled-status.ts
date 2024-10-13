@@ -1,36 +1,36 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { mediaAttachmentSchema } from './media-attachment';
 import { filteredArray } from './utils';
 
 /** @see {@link https://docs.joinmastodon.org/entities/ScheduledStatus/} */
-const scheduledStatusSchema = z.object({
-  id: z.string(),
+const scheduledStatusSchema = v.object({
+  id: v.string(),
   scheduled_at: z.string().datetime({ offset: true }),
-  params: z.object({
-    text: z.string().nullable().catch(null),
-    poll: z.object({
-      options: z.array(z.string()),
+  params: v.object({
+    text: v.fallback(v.nullable(v.string()), null),
+    poll: v.object({
+      options: z.array(v.string()),
       expires_in: z.coerce.string(),
-      multiple: z.boolean().optional().catch(undefined),
-      hide_totals: z.boolean().optional().catch(undefined),
+      multiple: v.fallback(v.optional(v.boolean()), undefined),
+      hide_totals: v.fallback(v.optional(v.boolean()), undefined),
     }).nullable().catch(null),
-    media_ids: z.array(z.string()).nullable().catch(null),
+    media_ids: z.array(v.string()).nullable().catch(null),
     sensitive: z.coerce.boolean().nullable().catch(null),
-    spoiler_text: z.string().nullable().catch(null),
+    spoiler_text: v.fallback(v.nullable(v.string()), null),
     visibility: z.string().catch('public'),
-    in_reply_to_id: z.string().nullable().catch(null),
-    language: z.string().nullable().catch(null),
+    in_reply_to_id: v.fallback(v.nullable(v.string()), null),
+    language: v.fallback(v.nullable(v.string()), null),
     application_id: z.number().int().nullable().catch(null),
     scheduled_at: z.string().datetime({ offset: true }).nullable().catch(null),
-    idempotency: z.string().nullable().catch(null),
-    with_rate_limit: z.boolean().catch(false),
+    idempotency: v.fallback(v.nullable(v.string()), null),
+    with_rate_limit: v.fallback(v.boolean(), false),
 
-    expires_in: z.number().nullable().catch(null),
+    expires_in: v.fallback(v.nullable(v.number()), null),
   }),
   media_attachments: filteredArray(mediaAttachmentSchema),
 });
 
-type ScheduledStatus = z.infer<typeof scheduledStatusSchema>;
+type ScheduledStatus = v.InferOutput<typeof scheduledStatusSchema>;
 
 export { scheduledStatusSchema, type ScheduledStatus };

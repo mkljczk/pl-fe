@@ -1,20 +1,20 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { dateSchema } from '../utils';
 
 /** @see {@link https://docs.joinmastodon.org/entities/Admin_EmailDomainBlock/} */
-const adminEmailDomainBlockSchema = z.object({
-  id: z.string(),
-  domain: z.string(),
+const adminEmailDomainBlockSchema = v.object({
+  id: v.string(),
+  domain: v.string(),
   created_at: dateSchema,
-  history: z.array(z.object({
+  history: v.array(v.object({
     day: z.coerce.string(),
     accounts: z.coerce.string(),
     uses: z.coerce.string(),
   })),
 });
 
-type AdminEmailDomainBlock = z.infer<typeof adminEmailDomainBlockSchema>;
+type AdminEmailDomainBlock = v.InferOutput<typeof adminEmailDomainBlockSchema>;
 
 export {
   adminEmailDomainBlockSchema,

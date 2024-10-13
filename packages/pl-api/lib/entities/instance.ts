@@ -1,5 +1,5 @@
 /* eslint sort-keys: "error" */
-import z from 'zod';
+import * as v from 'valibot';
 
 import { accountSchema } from './account';
 import { ruleSchema } from './rule';
@@ -108,8 +108,8 @@ const fixVersion = (version: string) => {
 };
 
 const configurationSchema = coerceObject({
-  accounts: z.object({
-    allow_custom_css: z.boolean(),
+  accounts: v.object({
+    allow_custom_css: v.boolean(),
     max_featured_tags: z.number().int(),
     max_profile_fields: z.number().int(),
   }).nullable().catch(null),
@@ -136,7 +136,7 @@ const configurationSchema = coerceObject({
     min_expiration: z.number().catch(300),
   }),
   reactions: coerceObject({
-    max_reactions: z.number().catch(0),
+    max_reactions: v.fallback(v.number(), 0),
   }),
   statuses: coerceObject({
     characters_reserved_per_url: z.number().optional().catch(undefined),
@@ -145,13 +145,13 @@ const configurationSchema = coerceObject({
 
   }),
   translation: coerceObject({
-    enabled: z.boolean().catch(false),
+    enabled: v.fallback(v.boolean(), false),
   }),
   urls: coerceObject({
     streaming: z.string().url().optional().catch(undefined),
   }),
   vapid: coerceObject({
-    public_key: z.string().catch(''),
+    public_key: v.fallback(v.string(), ''),
   }),
 });
 
@@ -162,25 +162,25 @@ const contactSchema = coerceObject({
 
 const pleromaSchema = coerceObject({
   metadata: coerceObject({
-    account_activation_required: z.boolean().catch(false),
-    birthday_min_age: z.number().catch(0),
-    birthday_required: z.boolean().catch(false),
+    account_activation_required: v.fallback(v.boolean(), false),
+    birthday_min_age: v.fallback(v.number(), 0),
+    birthday_required: v.fallback(v.boolean(), false),
     description_limit: z.number().catch(1500),
-    features: z.string().array().catch([]),
+    features: v.fallback(v.array(v.string()), []),
     federation: coerceObject({
-      enabled: z.boolean().catch(true), // Assume true unless explicitly false
+      enabled: v.fallback(v.boolean(), true), // Assume true unless explicitly false
       mrf_policies: z.string().array().optional().catch(undefined),
       mrf_simple: coerceObject({
-        accept: z.string().array().catch([]),
-        avatar_removal: z.string().array().catch([]),
-        banner_removal: z.string().array().catch([]),
-        federated_timeline_removal: z.string().array().catch([]),
-        followers_only: z.string().array().catch([]),
-        media_nsfw: z.string().array().catch([]),
-        media_removal: z.string().array().catch([]),
-        reject: z.string().array().catch([]),
-        reject_deletes: z.string().array().catch([]),
-        report_removal: z.string().array().catch([]),
+        accept: v.fallback(v.array(v.string()), []),
+        avatar_removal: v.fallback(v.array(v.string()), []),
+        banner_removal: v.fallback(v.array(v.string()), []),
+        federated_timeline_removal: v.fallback(v.array(v.string()), []),
+        followers_only: v.fallback(v.array(v.string()), []),
+        media_nsfw: v.fallback(v.array(v.string()), []),
+        media_removal: v.fallback(v.array(v.string()), []),
+        reject: v.fallback(v.array(v.string()), []),
+        reject_deletes: v.fallback(v.array(v.string()), []),
+        report_removal: v.fallback(v.array(v.string()), []),
       }),
     }),
     fields_limits: coerceObject({
@@ -189,50 +189,50 @@ const pleromaSchema = coerceObject({
       value_length: z.number().nonnegative().catch(2047),
     }),
     markup: coerceObject({
-      allow_headings: z.boolean().catch(false),
-      allow_inline_images: z.boolean().catch(false),
+      allow_headings: v.fallback(v.boolean(), false),
+      allow_inline_images: v.fallback(v.boolean(), false),
     }),
     migration_cooldown_period: z.number().optional().catch(undefined),
     multitenancy: coerceObject({
       domains: z
         .array(
-          z.object({
+          v.object({
             domain: z.coerce.string(),
-            id: z.string(),
-            public: z.boolean().catch(false),
+            id: v.string(),
+            public: v.fallback(v.boolean(), false),
           }),
         )
         .optional(),
-      enabled: z.boolean().catch(false),
+      enabled: v.fallback(v.boolean(), false),
     }),
     post_formats: z.string().array().optional().catch(undefined),
     restrict_unauthenticated: coerceObject({
       activities: coerceObject({
-        local: z.boolean().catch(false),
-        remote: z.boolean().catch(false),
+        local: v.fallback(v.boolean(), false),
+        remote: v.fallback(v.boolean(), false),
       }),
       profiles: coerceObject({
-        local: z.boolean().catch(false),
-        remote: z.boolean().catch(false),
+        local: v.fallback(v.boolean(), false),
+        remote: v.fallback(v.boolean(), false),
       }),
       timelines: coerceObject({
-        bubble: z.boolean().catch(false),
-        federated: z.boolean().catch(false),
-        local: z.boolean().catch(false),
+        bubble: v.fallback(v.boolean(), false),
+        federated: v.fallback(v.boolean(), false),
+        local: v.fallback(v.boolean(), false),
       }),
     }),
     translation: coerceObject({
-      allow_remote: z.boolean().catch(true),
-      allow_unauthenticated: z.boolean().catch(false),
+      allow_remote: v.fallback(v.boolean(), true),
+      allow_unauthenticated: v.fallback(v.boolean(), false),
       source_languages: z.string().array().optional().catch(undefined),
       target_languages: z.string().array().optional().catch(undefined),
     }),
   }),
-  oauth_consumer_strategies: z.string().array().catch([]),
+  oauth_consumer_strategies: v.fallback(v.array(v.string()), []),
   stats: coerceObject({
     mau: z.number().optional().catch(undefined),
   }),
-  vapid_public_key: z.string().catch(''),
+  vapid_public_key: v.fallback(v.string(), ''),
 });
 
 const pleromaPollLimitsSchema = coerceObject({
@@ -243,9 +243,9 @@ const pleromaPollLimitsSchema = coerceObject({
 });
 
 const registrations = coerceObject({
-  approval_required: z.boolean().catch(false),
-  enabled: z.boolean().catch(false),
-  message: z.string().optional().catch(undefined),
+  approval_required: v.fallback(v.boolean(), false),
+  enabled: v.fallback(v.boolean(), false),
+  message: v.fallback(v.optional(v.string()), undefined),
 });
 
 const statsSchema = coerceObject({
@@ -255,38 +255,38 @@ const statsSchema = coerceObject({
 });
 
 const thumbnailSchema = coerceObject({
-  url: z.string().catch(''),
+  url: v.fallback(v.string(), ''),
 });
 
 const usageSchema = coerceObject({
   users: coerceObject({
-    active_month: z.number().catch(0),
+    active_month: v.fallback(v.number(), 0),
   }),
 });
 
 const instanceV1Schema = coerceObject({
-  account_domain: z.string().catch(''),
-  approval_required: z.boolean().catch(false),
+  account_domain: v.fallback(v.string(), ''),
+  approval_required: v.fallback(v.boolean(), false),
   configuration: configurationSchema,
   contact_account: accountSchema.optional().catch(undefined),
-  description: z.string().catch(''),
+  description: v.fallback(v.string(), ''),
   description_limit: z.number().catch(1500),
   email: z.string().email().catch(''),
-  feature_quote: z.boolean().catch(false),
-  fedibird_capabilities: z.array(z.string()).catch([]),
-  languages: z.string().array().catch([]),
+  feature_quote: v.fallback(v.boolean(), false),
+  fedibird_capabilities: z.array(v.string()).catch([]),
+  languages: v.fallback(v.array(v.string()), []),
   max_media_attachments: z.number().optional().catch(undefined),
   max_toot_chars: z.number().optional().catch(undefined),
   pleroma: pleromaSchema,
   poll_limits: pleromaPollLimitsSchema,
-  registrations: z.boolean().catch(false),
+  registrations: v.fallback(v.boolean(), false),
   rules: filteredArray(ruleSchema),
-  short_description: z.string().catch(''),
+  short_description: v.fallback(v.string(), ''),
   stats: statsSchema,
-  thumbnail: z.string().catch(''),
-  title: z.string().catch(''),
+  thumbnail: v.fallback(v.string(), ''),
+  title: v.fallback(v.string(), ''),
   upload_limit: z.number().optional().catch(undefined),
-  uri: z.string().catch(''),
+  uri: v.fallback(v.string(), ''),
   urls: coerceObject({
     streaming_api: z.string().url().optional().catch(undefined),
   }),
@@ -307,21 +307,21 @@ const instanceSchema = z.preprocess((data: any) => {
 
   return instanceV1ToV2({ ...data, api_versions: apiVersions });
 }, coerceObject({
-  account_domain: z.string().catch(''),
+  account_domain: v.fallback(v.string(), ''),
   api_versions: z.record(z.number()).catch({}),
   configuration: configurationSchema,
   contact: contactSchema,
-  description: z.string().catch(''),
-  domain: z.string().catch(''),
-  feature_quote: z.boolean().catch(false),
-  fedibird_capabilities: z.array(z.string()).catch([]),
-  languages: z.string().array().catch([]),
+  description: v.fallback(v.string(), ''),
+  domain: v.fallback(v.string(), ''),
+  feature_quote: v.fallback(v.boolean(), false),
+  fedibird_capabilities: z.array(v.string()).catch([]),
+  languages: v.fallback(v.array(v.string()), []),
   pleroma: pleromaSchema,
   registrations: registrations,
   rules: filteredArray(ruleSchema),
   stats: statsSchema,
   thumbnail: thumbnailSchema,
-  title: z.string().catch(''),
+  title: v.fallback(v.string(), ''),
   usage: usageSchema,
   version: z.string().catch('0.0.0'),
 }).transform((instance) => {
@@ -333,6 +333,6 @@ const instanceSchema = z.preprocess((data: any) => {
   };
 }));
 
-type Instance = z.infer<typeof instanceSchema>;
+type Instance = v.InferOutput<typeof instanceSchema>;
 
 export { instanceSchema, type Instance };

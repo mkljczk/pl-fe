@@ -1,17 +1,17 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { filteredArray } from './utils';
 
-const translationPollSchema = z.object({
-  id: z.string(),
-  options: z.array(z.object({
-    title: z.string(),
+const translationPollSchema = v.object({
+  id: v.string(),
+  options: z.array(v.object({
+    title: v.string(),
   })),
 });
 
-const translationMediaAttachment = z.object({
-  id: z.string(),
-  description: z.string().catch(''),
+const translationMediaAttachment = v.object({
+  id: v.string(),
+  description: v.fallback(v.string(), ''),
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Translation/} */
@@ -27,16 +27,16 @@ const translationSchema = z.preprocess((translation: any) => {
   };
 
   return translation;
-}, z.object({
-  id: z.string().nullable().catch(null),
-  content: z.string().catch(''),
-  spoiler_text: z.string().catch(''),
+}, v.object({
+  id: v.fallback(v.nullable(v.string()), null),
+  content: v.fallback(v.string(), ''),
+  spoiler_text: v.fallback(v.string(), ''),
   poll: translationPollSchema.optional().catch(undefined),
   media_attachments: filteredArray(translationMediaAttachment),
-  detected_source_language: z.string(),
-  provider: z.string(),
+  detected_source_language: v.string(),
+  provider: v.string(),
 }));
 
-type Translation = z.infer<typeof translationSchema>;
+type Translation = v.InferOutput<typeof translationSchema>;
 
 export { translationSchema, type Translation };

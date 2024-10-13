@@ -1,12 +1,12 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { dateSchema } from './utils';
 
 import { accountSchema, statusSchema } from '.';
 
 /** @see {@link https://docs.joinmastodon.org/entities/NotificationRequest} */
-const notificationRequestSchema = z.object({
-  id: z.string(),
+const notificationRequestSchema = v.object({
+  id: v.string(),
   created_at: dateSchema,
   updated_at: dateSchema,
   account: accountSchema,
@@ -14,6 +14,6 @@ const notificationRequestSchema = z.object({
   last_status: statusSchema.optional().catch(undefined),
 });
 
-type NotificationRequest = z.infer<typeof notificationRequestSchema>;
+type NotificationRequest = v.InferOutput<typeof notificationRequestSchema>;
 
 export { notificationRequestSchema, type NotificationRequest };

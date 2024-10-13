@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { customEmojiSchema } from './custom-emoji';
 import { mediaAttachmentSchema } from './media-attachment';
@@ -6,18 +6,18 @@ import { previewCardSchema } from './preview-card';
 import { dateSchema, filteredArray } from './utils';
 
 /** @see {@link https://docs.pleroma.social/backend/development/API/chats/#getting-the-messages-for-a-chat} */
-const chatMessageSchema = z.object({
-  id: z.string(),
-  content: z.string().catch(''),
-  chat_id: z.string(),
-  account_id: z.string(),
+const chatMessageSchema = v.object({
+  id: v.string(),
+  content: v.fallback(v.string(), ''),
+  chat_id: v.string(),
+  account_id: v.string(),
   created_at: dateSchema,
   emojis: filteredArray(customEmojiSchema),
-  attachment: mediaAttachmentSchema.nullable().catch(null),
-  unread: z.boolean(),
-  card: previewCardSchema.nullable().catch(null),
+  attachment: v.fallback(v.nullable(mediaAttachmentSchema), null),
+  unread: v.boolean(),
+  card: v.fallback(v.nullable(previewCardSchema), null),
 });
 
-type ChatMessage = z.infer<typeof chatMessageSchema>;
+type ChatMessage = v.InferOutput<typeof chatMessageSchema>;
 
 export { chatMessageSchema, type ChatMessage };

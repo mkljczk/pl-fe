@@ -1,4 +1,4 @@
-import z from 'zod';
+import * as v from 'valibot';
 
 /** Validate to Mastodon's date format, or use the current date. */
 const dateSchema = z.string().datetime({ offset: true }).catch(new Date().toUTCString());
@@ -10,7 +10,7 @@ const filteredArray = <T extends z.ZodTypeAny>(schema: T) =>
       arr.map((item) => {
         const parsed = schema.safeParse(item);
         return parsed.success ? parsed.data : undefined;
-      }).filter((item): item is z.infer<T> => Boolean(item))
+      }).filter((item): item is v.InferOutput<T> => Boolean(item))
     ));
 
 /** Validates the string as an emoji. */
@@ -21,6 +21,6 @@ const mimeSchema = z.string().regex(/^\w+\/[-+.\w]+$/);
 
 /** zod schema to force the value into an object, if it isn't already. */
 const coerceObject = <T extends z.ZodRawShape>(shape: T) =>
-  z.object({}).passthrough().catch({}).pipe(z.object(shape));
+  v.object({}).passthrough().catch({}).pipe(z.object(shape));
 
 export { filteredArray, emojiSchema, dateSchema, mimeSchema, coerceObject };

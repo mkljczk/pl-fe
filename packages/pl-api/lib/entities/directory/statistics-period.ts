@@ -1,12 +1,12 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
-const directoryStatisticsPeriodSchema = z.object({
+const directoryStatisticsPeriodSchema = v.object({
   period: z.string().date(),
   server_count: z.coerce.number().nullable().catch(null),
   user_count: z.coerce.number().nullable().catch(null),
   active_user_count: z.coerce.number().nullable().catch(null),
 });
 
-type DirectoryStatisticsPeriod = z.infer<typeof directoryStatisticsPeriodSchema>;
+type DirectoryStatisticsPeriod = v.InferOutput<typeof directoryStatisticsPeriodSchema>;
 
 export { directoryStatisticsPeriodSchema, type DirectoryStatisticsPeriod };

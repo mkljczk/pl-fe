@@ -1,9 +1,9 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
-const baseRuleSchema = z.object({
-  id: z.string(),
-  text: z.string().catch(''),
-  hint: z.string().catch(''),
+const baseRuleSchema = v.object({
+  id: v.string(),
+  text: v.fallback(v.string(), ''),
+  hint: v.fallback(v.string(), ''),
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Rule/} */
@@ -12,6 +12,6 @@ const ruleSchema = z.preprocess((data: any) => ({
   hint: data.hint || data.subtext,
 }), baseRuleSchema);
 
-type Rule = z.infer<typeof ruleSchema>;
+type Rule = v.InferOutput<typeof ruleSchema>;
 
 export { ruleSchema, type Rule };

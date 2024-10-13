@@ -1,5 +1,5 @@
 import pick from 'lodash.pick';
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { announcementSchema } from '../announcement';
 
@@ -8,9 +8,9 @@ const adminAnnouncementSchema = z.preprocess((announcement: any) => ({
   ...announcement,
   ...pick(announcement.pleroma, 'raw_content'),
 }), announcementSchema.extend({
-  raw_content: z.string().catch(''),
+  raw_content: v.fallback(v.string(), ''),
 }));
 
-type AdminAnnouncement = z.infer<typeof adminAnnouncementSchema>;
+type AdminAnnouncement = v.InferOutput<typeof adminAnnouncementSchema>;
 
 export { adminAnnouncementSchema, type AdminAnnouncement };

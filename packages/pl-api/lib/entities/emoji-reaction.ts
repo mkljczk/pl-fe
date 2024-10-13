@@ -1,20 +1,20 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { accountSchema } from './account';
 import { emojiSchema, filteredArray } from './utils';
 
-const baseEmojiReactionSchema = z.object({
-  count: z.number().nullable().catch(null),
-  me: z.boolean().catch(false),
+const baseEmojiReactionSchema = v.object({
+  count: v.fallback(v.nullable(v.number()), null),
+  me: v.fallback(v.boolean(), false),
   name: emojiSchema,
   url: z.literal(undefined).catch(undefined),
   static_url: z.literal(undefined).catch(undefined),
   accounts: filteredArray(accountSchema),
-  account_ids: filteredArray(z.string()).catch([]),
+  account_ids: filteredArray(v.string()).catch([]),
 });
 
 const customEmojiReactionSchema = baseEmojiReactionSchema.extend({
-  name: z.string(),
+  name: v.string(),
   url: z.string().url(),
   static_url: z.string().url(),
 });
@@ -29,6 +29,6 @@ const emojiReactionSchema = z.preprocess((reaction: any) => reaction ? {
   ...reaction,
 } : null, baseEmojiReactionSchema.or(customEmojiReactionSchema));
 
-type EmojiReaction = z.infer<typeof emojiReactionSchema>;
+type EmojiReaction = v.InferOutput<typeof emojiReactionSchema>;
 
 export { emojiReactionSchema, type EmojiReaction };

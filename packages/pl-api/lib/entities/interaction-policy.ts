@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { coerceObject } from './utils';
 
@@ -16,7 +16,7 @@ const interactionPolicySchema = coerceObject({
   can_reply: interactionPolicyRuleSchema,
 });
 
-type InteractionPolicy = z.infer<typeof interactionPolicySchema>;
+type InteractionPolicy = v.InferOutput<typeof interactionPolicySchema>;
 
 const interactionPoliciesSchema = coerceObject({
   public: interactionPolicySchema,
@@ -25,7 +25,7 @@ const interactionPoliciesSchema = coerceObject({
   direct: interactionPolicySchema,
 });
 
-type InteractionPolicies = z.infer<typeof interactionPoliciesSchema>;
+type InteractionPolicies = v.InferOutput<typeof interactionPoliciesSchema>;
 
 export { interactionPolicySchema, interactionPoliciesSchema, type InteractionPolicy, type InteractionPolicies };
 

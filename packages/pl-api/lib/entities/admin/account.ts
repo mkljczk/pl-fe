@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { accountSchema } from '../account';
 import { roleSchema } from '../role';
@@ -36,32 +36,32 @@ const adminAccountSchema = z.preprocess((account: any) => {
     };
   }
   return account;
-}, z.object({
-  id: z.string(),
-  username: z.string(),
-  domain: z.string().nullable().catch(null),
+}, v.object({
+  id: v.string(),
+  username: v.string(),
+  domain: v.fallback(v.nullable(v.string()), null),
   created_at: dateSchema,
-  email: z.string().nullable().catch(null),
+  email: v.fallback(v.nullable(v.string()), null),
   ip: z.string().ip().nullable().catch(null),
   ips: filteredArray(adminIpSchema),
-  locale: z.string().nullable().catch(null),
-  invite_request: z.string().nullable().catch(null),
-  role: roleSchema.nullable().catch(null),
-  confirmed: z.boolean().catch(false),
-  approved: z.boolean().catch(false),
-  disabled: z.boolean().catch(false),
-  silenced: z.boolean().catch(false),
-  suspended: z.boolean().catch(false),
-  account: accountSchema.nullable().catch(null),
-  created_by_application_id: z.string().optional().catch(undefined),
-  invited_by_account_id: z.string().optional().catch(undefined),
+  locale: v.fallback(v.nullable(v.string()), null),
+  invite_request: v.fallback(v.nullable(v.string()), null),
+  role: v.fallback(v.nullable(roleSchema), null),
+  confirmed: v.fallback(v.boolean(), false),
+  approved: v.fallback(v.boolean(), false),
+  disabled: v.fallback(v.boolean(), false),
+  silenced: v.fallback(v.boolean(), false),
+  suspended: v.fallback(v.boolean(), false),
+  account: v.fallback(v.nullable(accountSchema), null),
+  created_by_application_id: v.fallback(v.optional(v.string()), undefined),
+  invited_by_account_id: v.fallback(v.optional(v.string()), undefined),
 
-  actor_type: z.string().nullable().catch(null),
-  display_name: z.string().nullable().catch(null),
-  suggested: z.boolean().nullable().catch(null),
+  actor_type: v.fallback(v.nullable(v.string()), null),
+  display_name: v.fallback(v.nullable(v.string()), null),
+  suggested: v.fallback(v.optional(v.nullable()), null),
 }));
 
-type AdminAccount = z.infer<typeof adminAccountSchema>;
+type AdminAccount = v.InferOutput<typeof adminAccountSchema>;
 
 export {
   adminAccountSchema,

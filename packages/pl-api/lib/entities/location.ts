@@ -1,23 +1,23 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
-const locationSchema = z.object({
+const locationSchema = v.object({
   url: z.string().url().catch(''),
-  description: z.string().catch(''),
-  country: z.string().catch(''),
-  locality: z.string().catch(''),
-  region: z.string().catch(''),
-  postal_code: z.string().catch(''),
-  street: z.string().catch(''),
-  origin_id: z.string().catch(''),
-  origin_provider: z.string().catch(''),
-  type: z.string().catch(''),
-  timezone: z.string().catch(''),
-  geom: z.object({
+  description: v.fallback(v.string(), ''),
+  country: v.fallback(v.string(), ''),
+  locality: v.fallback(v.string(), ''),
+  region: v.fallback(v.string(), ''),
+  postal_code: v.fallback(v.string(), ''),
+  street: v.fallback(v.string(), ''),
+  origin_id: v.fallback(v.string(), ''),
+  origin_provider: v.fallback(v.string(), ''),
+  type: v.fallback(v.string(), ''),
+  timezone: v.fallback(v.string(), ''),
+  geom: v.object({
     coordinates: z.tuple([z.number(), z.number()]).nullable().catch(null),
-    srid: z.string().catch(''),
+    srid: v.fallback(v.string(), ''),
   }).nullable().catch(null),
 });
 
-type Location = z.infer<typeof locationSchema>;
+type Location = v.InferOutput<typeof locationSchema>;
 
 export { locationSchema, type Location };
