@@ -18,9 +18,6 @@ const mrfSimpleSchema = coerceObject(v.entriesFromList(
   v.fallback(v.array(v.string()), []),
 ));
 
-(window as any).v = v;
-(window as any).mrfSimpleSchema = mrfSimpleSchema;
-
 type MRFSimple = v.InferOutput<typeof mrfSimpleSchema>;
 
 export { mrfSimpleSchema, type MRFSimple };
