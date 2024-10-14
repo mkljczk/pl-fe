@@ -4,12 +4,12 @@ import * as v from 'valibot';
 const adminMeasureSchema = v.object({
   key: v.string(),
   unit: v.fallback(v.nullable(v.string()), null),
-  total: z.coerce.number(),
+  total: v.pipe(v.unknown(), v.transform(Number)),
   human_value: v.fallback(v.optional(v.string()), undefined),
-  previous_total: z.coerce.string().optional().catch(undefined),
-  data: z.array(v.object({
+  previous_total: v.fallback(v.optional(v.pipe(v.unknown(), v.transform(String))), undefined),
+  data: v.array(v.object({
     date: z.string().datetime({ offset: true }),
-    value: z.coerce.string(),
+    value: v.pipe(v.unknown(), v.transform(String)),
   })),
 });
 

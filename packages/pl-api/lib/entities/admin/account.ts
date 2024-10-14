@@ -22,9 +22,9 @@ const adminAccountSchema = z.preprocess((account: any) => {
       email: account.email,
       invite_request: account.registration_reason,
       role: account.roles?.is_admin
-        ? roleSchema.parse({ name: 'Admin' })
+        ? v.parse(roleSchema, { name: 'Admin' })
         : account.roles?.moderator
-          ? roleSchema.parse({ name: 'Moderator ' }) :
+          ? v.parse(roleSchema, { name: 'Moderator ' }) :
           null,
       confirmed: account.is_confirmed,
       approved: account.is_approved,

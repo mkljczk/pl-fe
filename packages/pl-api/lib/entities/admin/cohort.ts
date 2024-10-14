@@ -4,7 +4,7 @@ import * as v from 'valibot';
 const adminCohortSchema = v.object({
   period: z.string().datetime({ offset: true }),
   frequency: v.picklist(['day', 'month']),
-  data: z.array(v.object({
+  data: v.array(v.object({
     date: z.string().datetime({ offset: true }),
     rate: v.number(),
     value: v.pipe(v.number(), v.integer()),

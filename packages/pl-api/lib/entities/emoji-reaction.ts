@@ -10,10 +10,11 @@ const baseEmojiReactionSchema = v.object({
   url: v.fallback(v.undefined(), undefined),
   static_url: v.fallback(v.undefined(), undefined),
   accounts: filteredArray(accountSchema),
-  account_ids: filteredArray(v.string()).catch([]),
+  account_ids: v.fallback(filteredArray(v.string()), []),
 });
 
-const customEmojiReactionSchema = baseEmojiReactionSchema.extend({
+const customEmojiReactionSchema = v.object({
+  ...baseEmojiReactionSchema.entries,
   name: v.string(),
   url: v.pipe(v.string(), v.url()),
   static_url: v.pipe(v.string(), v.url()),
@@ -27,7 +28,7 @@ const emojiReactionSchema = z.preprocess((reaction: any) => reaction ? {
   static_url: reaction.url,
   account_ids: reaction.accounts?.map((account: any) => account?.id),
   ...reaction,
-} : null, baseEmojiReactionSchema.or(customEmojiReactionSchema));
+} : null, v.union([baseEmojiReactionSchema, customEmojiReactionSchema]);
 
 type EmojiReaction = v.InferOutput<typeof emojiReactionSchema>;
 

@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 
 const bookmarkFolderSchema = v.object({
-  id: z.coerce.string(),
+  id: v.pipe(v.unknown(), v.transform(String)),
   name: v.fallback(v.string(), ''),
   emoji: v.fallback(v.nullable(v.string()), null),
   emoji_url: v.fallback(v.nullable(v.string()), null),

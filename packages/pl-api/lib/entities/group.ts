@@ -13,11 +13,11 @@ const groupSchema = v.object({
   emojis: filteredArray(customEmojiSchema),
   header: v.fallback(v.string(), ''),
   header_static: v.fallback(v.string(), ''),
-  id: z.coerce.string(),
+  id: v.pipe(v.unknown(), v.transform(String)),
   locked: v.fallback(v.boolean(), false),
   membership_required: v.fallback(v.boolean(), false),
   members_count: v.fallback(v.number(), 0),
-  owner: v.object({ id: v.string() }).nullable().catch(null),
+  owner: v.fallback(v.nullable(v.object({ id: v.string() })), null),
   note: z.string().transform(note => note === '<p></p>' ? '' : note).catch(''),
   relationship: v.fallback(v.nullable(groupRelationshipSchema), null), // Dummy field to be overwritten later
   statuses_visibility: v.fallback(v.string(), 'public'),

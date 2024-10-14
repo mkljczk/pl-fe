@@ -4,8 +4,8 @@ import { statusSchema } from './status';
 
 /** @see {@link https://docs.joinmastodon.org/entities/Context/} */
 const contextSchema = v.object({
-  ancestors: z.array(statusSchema),
-  descendants: z.array(statusSchema),
+  ancestors: v.array(statusSchema),
+  descendants: v.array(statusSchema),
 });
 
 type Context = v.InferOutput<typeof contextSchema>;

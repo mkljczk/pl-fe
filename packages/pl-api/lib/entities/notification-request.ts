@@ -10,7 +10,7 @@ const notificationRequestSchema = v.object({
   created_at: dateSchema,
   updated_at: dateSchema,
   account: accountSchema,
-  notifications_count: z.coerce.string(),
+  notifications_count: v.pipe(v.unknown(), v.transform(String)),
   last_status: v.fallback(v.optional(statusSchema), undefined),
 });
 

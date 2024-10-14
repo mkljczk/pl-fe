@@ -9,7 +9,7 @@ const markerSchema = z.preprocess((marker: any) => marker ? ({
   last_read_id: v.string(),
   version: v.pipe(v.number(), v.integer()),
   updated_at: dateSchema,
-  unread_count: z.number().int().optional().catch(undefined),
+  unread_count: v.fallback(v.optional(v.pipe(v.number(), v.integer())), undefined),
 }));
 
 /** @see {@link https://docs.joinmastodon.org/entities/Marker/} */

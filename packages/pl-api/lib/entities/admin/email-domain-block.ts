@@ -8,9 +8,9 @@ const adminEmailDomainBlockSchema = v.object({
   domain: v.string(),
   created_at: dateSchema,
   history: v.array(v.object({
-    day: z.coerce.string(),
-    accounts: z.coerce.string(),
-    uses: z.coerce.string(),
+    day: v.pipe(v.unknown(), v.transform(String)),
+    accounts: v.pipe(v.unknown(), v.transform(String)),
+    uses: v.pipe(v.unknown(), v.transform(String)),
   })),
 });
 

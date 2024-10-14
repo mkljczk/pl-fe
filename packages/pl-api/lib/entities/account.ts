@@ -7,7 +7,7 @@ import { roleSchema } from './role';
 import { coerceObject, dateSchema, filteredArray } from './utils';
 
 const filterBadges = (tags?: string[]) =>
-  tags?.filter(tag => tag.startsWith('badge:')).map(tag => roleSchema.parse({ id: tag, name: tag.replace(/^badge:/, '') }));
+  tags?.filter(tag => tag.startsWith('badge:')).map(tag => v.parse(roleSchema, { id: tag, name: tag.replace(/^badge:/, '') }));
 
 const preprocessAccount = (account: any) => {
   if (!account?.acct) return null;
@@ -112,7 +112,7 @@ const baseAccountSchema = v.object({
   deactivated: v.fallback(v.optional(v.boolean()), undefined),
 
   location: v.fallback(v.optional(v.string()), undefined),
-  local: z.boolean().optional().catch(false),
+  local: v.fallback(v.optional(v.boolean()), false),
 
   avatar_description: v.fallback(v.string(), ''),
   enable_rss: v.fallback(v.boolean(), false),
@@ -142,7 +142,7 @@ type Account = v.InferOutput<typeof accountWithMovedAccountSchema> & WithMoved;
 const accountSchema: z.ZodType<Account> = untypedAccountSchema as any;
 
 const untypedCredentialAccountSchema = z.preprocess(preprocessAccount, accountWithMovedAccountSchema.extend({
-  source: v.object({
+  source: v.fallback(v.nullable(v.object({
     note: v.fallback(v.string(), ''),
     fields: filteredArray(fieldSchema),
     privacy: v.picklist(['public', 'unlisted', 'private', 'direct']),
@@ -150,15 +150,15 @@ const untypedCredentialAccountSchema = z.preprocess(preprocessAccount, accountWi
     language: v.fallback(v.nullable(v.string()), null),
     follow_requests_count: z.number().int().nonnegative().catch(0),
 
-    show_role: z.boolean().optional().nullable().catch(undefined),
-    no_rich_text: z.boolean().optional().nullable().catch(undefined),
+    show_role: v.fallback(v.nullable(v.optional(v.boolean())), undefined),
+    no_rich_text: v.fallback(v.nullable(v.optional(v.boolean())), undefined),
     discoverable: v.fallback(v.optional(v.boolean()), undefined),
     actor_type: v.fallback(v.optional(v.string()), undefined),
     show_birthday: v.fallback(v.optional(v.boolean()), undefined),
-  }).nullable().catch(null),
+  })), null),
   role: v.fallback(v.nullable(roleSchema), null),
 
-  settings_store: v.record(v.string(), v.any()).optional().catch(undefined),
+  settings_store: v.fallback(v.optional(v.record(v.string(), v.any())), undefined),
   chat_token: v.fallback(v.optional(v.string()), undefined),
   allow_following_move: v.fallback(v.optional(v.boolean()), undefined),
   unread_conversation_count: v.fallback(v.optional(v.number()), undefined),

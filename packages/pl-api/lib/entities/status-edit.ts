@@ -9,14 +9,14 @@ import { dateSchema, filteredArray } from './utils';
 const statusEditSchema = v.object({
   content: v.fallback(v.string(), ''),
   spoiler_text: v.fallback(v.string(), ''),
-  sensitive: z.coerce.boolean(),
+  sensitive: v.pipe(v.unknown(), v.transform(Boolean)),
   created_at: dateSchema,
   account: accountSchema,
-  poll: v.object({
-    options: z.array(v.object({
+  poll: v.fallback(v.nullable(v.object({
+    options: v.array(v.object({
       title: v.string(),
     })),
-  }).nullable().catch(null),
+  })), null),
   media_attachments: filteredArray(mediaAttachmentSchema),
   emojis: filteredArray(customEmojiSchema),
 });

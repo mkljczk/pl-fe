@@ -201,7 +201,7 @@ class PlApiClient {
 
   baseURL: string;
   #accessToken?: string;
-  #instance: Instance = instanceSchema.parse({});
+  #instance: Instance = v.parse(instanceSchema, {});
   public request = request.bind(this) as typeof request;
   public features: Features = getFeatures(this.#instance);
   #socket?: {
@@ -2714,9 +2714,9 @@ class PlApiClient {
 
       return v.parse(v.array(v.object({
         week: v.string(),
-        statuses: z.coerce.string(),
-        logins: z.coerce.string(),
-        registrations: z.coerce.string(),
+        statuses: v.pipe(v.unknown(), v.transform(String)),
+        logins: v.pipe(v.unknown(), v.transform(String)),
+        registrations: v.pipe(v.unknown(), v.transform(String)),
       })), response.json);
     },
 

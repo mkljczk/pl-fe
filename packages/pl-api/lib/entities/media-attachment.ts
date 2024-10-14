@@ -19,7 +19,7 @@ const baseAttachmentSchema = v.object({
   type: v.string(),
   url: v.fallback(v.pipe(v.string(), v.url()), ''),
   preview_url: v.fallback(v.pipe(v.string(), v.url()), ''),
-  remote_url: v.fallback(v.nullable(z.string().url()), null),
+  remote_url: v.fallback(v.nullable(v.pipe(v.string(), v.url())), null),
   description: v.fallback(v.string(), ''),
   blurhash: v.fallback(v.nullable(blurhashSchema), null),
 
@@ -29,11 +29,12 @@ const baseAttachmentSchema = v.object({
 const imageMetaSchema = v.object({
   width: v.number(),
   height: v.number(),
-  size: z.string().regex(/\d+x\d+$/).nullable().catch(null),
+  size: v.fallback(v.nullable(v.pipe(v.string(), v.regex(/\d+x\d+$/))), null),
   aspect: v.fallback(v.nullable(v.number()), null),
 });
 
-const imageAttachmentSchema = baseAttachmentSchema.extend({
+const imageAttachmentSchema = v.object({
+  ...baseAttachmentSchema.entries,
   type: v.literal('image'),
   meta: v.fallback(v.object({
     original: v.fallback(v.optional(imageMetaSchema), undefined),
@@ -45,7 +46,8 @@ const imageAttachmentSchema = baseAttachmentSchema.extend({
   }), {}),
 });
 
-const videoAttachmentSchema = baseAttachmentSchema.extend({
+const videoAttachmentSchema = v.object({
+  ...baseAttachmentSchema.entries,
   type: v.literal('video'),
   meta: v.fallback(v.object({
     duration: v.fallback(v.optional(v.number()), undefined),
@@ -58,7 +60,8 @@ const videoAttachmentSchema = baseAttachmentSchema.extend({
   }), {}),
 });
 
-const gifvAttachmentSchema = baseAttachmentSchema.extend({
+const gifvAttachmentSchema = v.object({
+  ...baseAttachmentSchema.entries,
   type: v.literal('gifv'),
   meta: v.fallback(v.object({
     duration: v.fallback(v.optional(v.number()), undefined),
@@ -66,7 +69,8 @@ const gifvAttachmentSchema = baseAttachmentSchema.extend({
   }), {}),
 });
 
-const audioAttachmentSchema = baseAttachmentSchema.extend({
+const audioAttachmentSchema = v.object({
+  ...baseAttachmentSchema.entries,
   type: v.literal('audio'),
   meta: v.fallback(v.object({
     duration: v.fallback(v.optional(v.number()), undefined),
@@ -83,7 +87,8 @@ const audioAttachmentSchema = baseAttachmentSchema.extend({
   }), {}),
 });
 
-const unknownAttachmentSchema = baseAttachmentSchema.extend({
+const unknownAttachmentSchema = v.object({
+  ...baseAttachmentSchema.entries,
   type: v.literal('unknown'),
 });
 
@@ -96,7 +101,7 @@ const mediaAttachmentSchema = z.preprocess((data: any) => {
     preview_url: data.url,
     ...data,
   };
-}, z.discriminatedUnion('type', [
+}, v.variant('type', [
   imageAttachmentSchema,
   videoAttachmentSchema,
   gifvAttachmentSchema,

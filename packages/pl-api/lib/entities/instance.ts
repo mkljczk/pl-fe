@@ -36,7 +36,7 @@ const instanceV1ToV2 = (data: any) => {
     uri,
     urls,
     ...instance
-  } = instanceV1Schema.parse(data);
+  } = v.parse(instanceV1Schema, data);
 
   return {
     ...instance,
@@ -196,14 +196,14 @@ const pleromaSchema = coerceObject({
     multitenancy: coerceObject({
       domains: v.optional(v.array(
         v.object({
-          domain: z.coerce.string(),
+          domain: v.pipe(v.unknown(), v.transform(String)),
           id: v.string(),
           public: v.fallback(v.boolean(), false),
         }),
       )),
       enabled: v.fallback(v.boolean(), false),
     }),
-    post_formats: z.string().array().optional().catch(undefined),
+    post_formats: v.fallback(v.optional(v.array(v.string())), undefined),
     restrict_unauthenticated: coerceObject({
       activities: coerceObject({
         local: v.fallback(v.boolean(), false),
@@ -222,8 +222,8 @@ const pleromaSchema = coerceObject({
     translation: coerceObject({
       allow_remote: v.fallback(v.boolean(), true),
       allow_unauthenticated: v.fallback(v.boolean(), false),
-      source_languages: z.string().array().optional().catch(undefined),
-      target_languages: z.string().array().optional().catch(undefined),
+      source_languages: v.fallback(v.optional(v.array(v.string())), undefined),
+      target_languages: v.fallback(v.optional(v.array(v.string())), undefined),
     }),
   }),
   oauth_consumer_strategies: v.fallback(v.array(v.string()), []),

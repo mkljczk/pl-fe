@@ -31,7 +31,7 @@ const suggestionSchema = z.preprocess((suggestion: any) => {
   return suggestion;
 }, v.object({
   source: v.fallback(v.nullable(v.string()), null),
-  sources: z.array(v.string()).catch([]),
+  sources: v.fallback(v.array(v.string()), []),
   account: accountSchema,
 }));
 

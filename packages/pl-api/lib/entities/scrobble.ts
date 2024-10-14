@@ -6,7 +6,7 @@ const scrobbleSchema = z.preprocess((scrobble: any) => scrobble ? {
   external_link: scrobble.externalLink,
   ...scrobble,
 } : null, v.object({
-  id: z.coerce.string(),
+  id: v.pipe(v.unknown(), v.transform(String)),
   account: accountSchema,
   created_at: z.string().datetime({ offset: true }),
   title: v.string(),

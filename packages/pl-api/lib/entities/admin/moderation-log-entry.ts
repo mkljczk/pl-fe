@@ -2,7 +2,7 @@ import * as v from 'valibot';
 
 /** @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminmoderation_log} */
 const adminModerationLogEntrySchema = v.object({
-  id: z.coerce.string(),
+  id: v.pipe(v.unknown(), v.transform(String)),
   data: v.fallback(v.record(v.string(), v.any()), {}),
   time: v.fallback(v.number(), 0),
   message: v.fallback(v.string(), ''),

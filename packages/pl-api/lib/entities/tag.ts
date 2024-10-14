@@ -1,9 +1,9 @@
 import * as v from 'valibot';
 
 const historySchema = v.object({
-  day: z.coerce.number(),
-  accounts: z.coerce.number(),
-  uses: z.coerce.number(),
+  day: v.pipe(v.unknown(), v.transform(Number)),
+  accounts: v.pipe(v.unknown(), v.transform(Number)),
+  uses: v.pipe(v.unknown(), v.transform(Number)),
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/tag} */

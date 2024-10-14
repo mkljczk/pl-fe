@@ -4,7 +4,7 @@ import { filteredArray } from './utils';
 
 const translationPollSchema = v.object({
   id: v.string(),
-  options: z.array(v.object({
+  options: v.array(v.object({
     title: v.string(),
   })),
 });

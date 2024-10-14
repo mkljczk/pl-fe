@@ -4,7 +4,7 @@ import { dateSchema, mimeSchema } from './utils';
 
 /** @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#post-apiv1pleromabackups} */
 const backupSchema = v.object({
-  id: z.coerce.string(),
+  id: v.pipe(v.unknown(), v.transform(String)),
   contentType: mimeSchema,
   file_size: v.fallback(v.number(), 0),
   inserted_at: dateSchema,

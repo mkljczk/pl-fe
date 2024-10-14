@@ -2,7 +2,7 @@ import * as v from 'valibot';
 
 /** @see {@link https://docs.joinmastodon.org/entities/List/} */
 const listSchema = v.object({
-  id: z.coerce.string(),
+  id: v.pipe(v.unknown(), v.transform(String)),
   title: v.string(),
   replies_policy: v.fallback(v.optional(v.string()), undefined),
   exclusive: v.fallback(v.optional(v.boolean()), undefined),
