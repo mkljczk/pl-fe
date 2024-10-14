@@ -20,7 +20,7 @@ const makeCustomEmojiMap = (customEmojis: CustomEmoji[]) =>
     return result;
   }, {});
 
-/** zod schema to force the value into an object, if it isn't already. */
+/** valibot schema to force the value into an object, if it isn't already. */
 const coerceObject = <T extends v.ObjectEntries>(shape: T) =>
   v.pipe(
     v.any(),

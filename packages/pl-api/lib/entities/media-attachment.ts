@@ -17,9 +17,9 @@ const blurhashSchema = z.string().superRefine((value, ctx) => {
 const baseAttachmentSchema = v.object({
   id: v.string(),
   type: v.string(),
-  url: z.string().url().catch(''),
-  preview_url: z.string().url().catch(''),
-  remote_url: z.string().url().nullable().catch(null),
+  url: v.fallback(v.pipe(v.string(), v.url()), ''),
+  preview_url: v.fallback(v.pipe(v.string(), v.url()), ''),
+  remote_url: v.fallback(v.nullable(z.string().url()), null),
   description: v.fallback(v.string(), ''),
   blurhash: v.fallback(v.nullable(blurhashSchema), null),
 
@@ -27,64 +27,64 @@ const baseAttachmentSchema = v.object({
 });
 
 const imageMetaSchema = v.object({
-  width: z.number(),
-  height: z.number(),
+  width: v.number(),
+  height: v.number(),
   size: z.string().regex(/\d+x\d+$/).nullable().catch(null),
   aspect: v.fallback(v.nullable(v.number()), null),
 });
 
 const imageAttachmentSchema = baseAttachmentSchema.extend({
-  type: z.literal('image'),
-  meta: v.object({
-    original: imageMetaSchema.optional().catch(undefined),
-    small: imageMetaSchema.optional().catch(undefined),
-    focus: v.object({
+  type: v.literal('image'),
+  meta: v.fallback(v.object({
+    original: v.fallback(v.optional(imageMetaSchema), undefined),
+    small: v.fallback(v.optional(imageMetaSchema), undefined),
+    focus: v.fallback(v.optional(v.object({
       x: z.number().min(-1).max(1),
       y: z.number().min(-1).max(1),
-    }).optional().catch(undefined),
-  }).catch({}),
+    })), undefined),
+  }), {}),
 });
 
 const videoAttachmentSchema = baseAttachmentSchema.extend({
-  type: z.literal('video'),
-  meta: v.object({
-    duration: z.number().optional().catch(undefined),
-    original: imageMetaSchema.extend({
-      frame_rate: z.string().regex(/\d+\/\d+$/).nullable().catch(null),
-      duration: z.number().nonnegative().nullable().catch(null),
-    }).optional().catch(undefined),
-    small: imageMetaSchema.optional().catch(undefined),
+  type: v.literal('video'),
+  meta: v.fallback(v.object({
+    duration: v.fallback(v.optional(v.number()), undefined),
+    original: v.fallback(v.optional(imageMetaSchema.extend({
+      frame_rate: v.fallback(v.nullable(v.pipe(v.string(), v.regex(/\d+\/\d+$/))), null),
+      duration: v.fallback(v.nullable(z.number().nonnegative()), null),
+    })), undefined),
+    small: v.fallback(v.optional(imageMetaSchema), undefined),
     // WIP: add rest
-  }).catch({}),
+  }), {}),
 });
 
 const gifvAttachmentSchema = baseAttachmentSchema.extend({
-  type: z.literal('gifv'),
-  meta: v.object({
-    duration: z.number().optional().catch(undefined),
-    original: imageMetaSchema.optional().catch(undefined),
-  }).catch({}),
+  type: v.literal('gifv'),
+  meta: v.fallback(v.object({
+    duration: v.fallback(v.optional(v.number()), undefined),
+    original: v.fallback(v.optional(imageMetaSchema), undefined),
+  }), {}),
 });
 
 const audioAttachmentSchema = baseAttachmentSchema.extend({
-  type: z.literal('audio'),
-  meta: v.object({
-    duration: z.number().optional().catch(undefined),
-    colors: v.object({
+  type: v.literal('audio'),
+  meta: v.fallback(v.object({
+    duration: v.fallback(v.optional(v.number()), undefined),
+    colors: v.fallback(v.optional(v.object({
       background: v.fallback(v.optional(v.string()), undefined),
       foreground: v.fallback(v.optional(v.string()), undefined),
       accent: v.fallback(v.optional(v.string()), undefined),
-      duration: z.number().optional().catch(undefined),
-    }).optional().catch(undefined),
-    original: v.object({
-      duration: z.number().optional().catch(undefined),
+      duration: v.fallback(v.optional(v.number()), undefined),
+    })), undefined),
+    original: v.fallback(v.optional(v.object({
+      duration: v.fallback(v.optional(v.number()), undefined),
       bitrate: z.number().nonnegative().optional().catch(undefined),
-    }).optional().catch(undefined),
-  }).catch({}),
+    })), undefined),
+  }), {}),
 });
 
 const unknownAttachmentSchema = baseAttachmentSchema.extend({
-  type: z.literal('unknown'),
+  type: v.literal('unknown'),
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/MediaAttachment} */

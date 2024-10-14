@@ -31,7 +31,7 @@ const translationSchema = z.preprocess((translation: any) => {
   id: v.fallback(v.nullable(v.string()), null),
   content: v.fallback(v.string(), ''),
   spoiler_text: v.fallback(v.string(), ''),
-  poll: translationPollSchema.optional().catch(undefined),
+  poll: v.fallback(v.optional(translationPollSchema), undefined),
   media_attachments: filteredArray(translationMediaAttachment),
   detected_source_language: v.string(),
   provider: v.string(),

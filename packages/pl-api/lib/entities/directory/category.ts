@@ -2,7 +2,7 @@ import * as v from 'valibot';
 
 const directoryCategorySchema = v.object({
   category: v.string(),
-  servers_count: z.coerce.number().nullable().catch(null),
+  servers_count: v.fallback(v.nullable(z.coerce.number()), null),
 });
 
 type DirectoryCategory = v.InferOutput<typeof directoryCategorySchema>;

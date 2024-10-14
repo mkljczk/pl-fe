@@ -14,13 +14,17 @@ const filteredArray = <T extends z.ZodTypeAny>(schema: T) =>
     ));
 
 /** Validates the string as an emoji. */
-const emojiSchema = z.string().refine((v) => /\p{Extended_Pictographic}|[\u{1F1E6}-\u{1F1FF}]{2}/u.test(v));
+const emojiSchema = v.pipe(v.string(), v.emoji());
 
 /** MIME schema, eg `image/png`. */
-const mimeSchema = z.string().regex(/^\w+\/[-+.\w]+$/);
+const mimeSchema = v.pipe(v.string(), v.regex(/^\w+\/[-+.\w]+$/));
 
-/** zod schema to force the value into an object, if it isn't already. */
-const coerceObject = <T extends z.ZodRawShape>(shape: T) =>
-  v.object({}).passthrough().catch({}).pipe(z.object(shape));
+/** valibot schema to force the value into an object, if it isn't already. */
+const coerceObject = <T extends v.ObjectEntries>(shape: T) =>
+  v.pipe(
+    v.any(),
+    v.transform((input) => typeof input === 'object' ? input : {}),
+    v.object(shape),
+  );
 
 export { filteredArray, emojiSchema, dateSchema, mimeSchema, coerceObject };

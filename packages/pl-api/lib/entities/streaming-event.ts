@@ -9,7 +9,7 @@ import { notificationSchema } from './notification';
 import { statusSchema } from './status';
 
 const followRelationshipUpdateSchema = v.object({
-  state: z.enum(['follow_pending', 'follow_accept', 'follow_reject']),
+  state: v.picklist(['follow_pending', 'follow_accept', 'follow_reject']),
   follower: v.object({
     id: v.string(),
     follower_count: v.fallback(v.nullable(v.number()), null),
@@ -29,59 +29,59 @@ const baseStreamingEventSchema = v.object({
 });
 
 const statusStreamingEventSchema = baseStreamingEventSchema.extend({
-  event: z.enum(['update', 'status.update']),
+  event: v.picklist(['update', 'status.update']),
   payload: z.preprocess((payload: any) => JSON.parse(payload), statusSchema),
 });
 
 const stringStreamingEventSchema = baseStreamingEventSchema.extend({
-  event: z.enum(['delete', 'announcement.delete']),
+  event: v.picklist(['delete', 'announcement.delete']),
   payload: v.string(),
 });
 
 const notificationStreamingEventSchema = baseStreamingEventSchema.extend({
-  event: z.literal('notification'),
+  event: v.literal('notification'),
   payload: z.preprocess((payload: any) => JSON.parse(payload), notificationSchema),
 });
 
 const emptyStreamingEventSchema = baseStreamingEventSchema.extend({
-  event: z.literal('filters_changed'),
+  event: v.literal('filters_changed'),
 });
 
 const conversationStreamingEventSchema = baseStreamingEventSchema.extend({
-  event: z.literal('conversation'),
+  event: v.literal('conversation'),
   payload: z.preprocess((payload: any) => JSON.parse(payload), conversationSchema),
 });
 
 const announcementStreamingEventSchema = baseStreamingEventSchema.extend({
-  event: z.literal('announcement'),
+  event: v.literal('announcement'),
   payload: z.preprocess((payload: any) => JSON.parse(payload), announcementSchema),
 });
 
 const announcementReactionStreamingEventSchema = baseStreamingEventSchema.extend({
-  event: z.literal('announcement.reaction'),
+  event: v.literal('announcement.reaction'),
   payload: z.preprocess((payload: any) => JSON.parse(payload), announcementReactionSchema),
 });
 
 const chatUpdateStreamingEventSchema = baseStreamingEventSchema.extend({
-  event: z.literal('chat_update'),
+  event: v.literal('chat_update'),
   payload: z.preprocess((payload: any) => JSON.parse(payload), chatSchema),
 });
 
 const followRelationshipsUpdateStreamingEventSchema = baseStreamingEventSchema.extend({
-  event: z.literal('follow_relationships_update'),
+  event: v.literal('follow_relationships_update'),
   payload: z.preprocess((payload: any) => JSON.parse(payload), followRelationshipUpdateSchema),
 });
 
 const respondStreamingEventSchema = baseStreamingEventSchema.extend({
-  event: z.literal('respond'),
+  event: v.literal('respond'),
   payload: z.preprocess((payload: any) => JSON.parse(payload), v.object({
     type: v.string(),
-    result: z.enum(['success', 'ignored', 'error']),
+    result: v.picklist(['success', 'ignored', 'error']),
   })),
 });
 
 const markerStreamingEventSchema = baseStreamingEventSchema.extend({
-  event: z.literal('marker'),
+  event: v.literal('marker'),
   payload: z.preprocess((payload: any) => JSON.parse(payload), markersSchema),
 });
 

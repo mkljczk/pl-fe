@@ -108,47 +108,47 @@ const fixVersion = (version: string) => {
 };
 
 const configurationSchema = coerceObject({
-  accounts: v.object({
+  accounts: v.fallback(v.nullable(v.object({
     allow_custom_css: v.boolean(),
-    max_featured_tags: z.number().int(),
-    max_profile_fields: z.number().int(),
-  }).nullable().catch(null),
+    max_featured_tags: v.pipe(v.number(), v.integer()),
+    max_profile_fields: v.pipe(v.number(), v.integer()),
+  })), null),
   chats: coerceObject({
-    max_characters: z.number().catch(5000),
+    max_characters: v.fallback(v.number(), 5000),
   }),
   groups: coerceObject({
-    max_characters_description: z.number().catch(160),
-    max_characters_name: z.number().catch(50),
+    max_characters_description: v.fallback(v.number(), 160),
+    max_characters_name: v.fallback(v.number(), 50),
   }),
   media_attachments: coerceObject({
-    image_matrix_limit: z.number().optional().catch(undefined),
-    image_size_limit: z.number().optional().catch(undefined),
-    supported_mime_types: mimeSchema.array().optional().catch(undefined),
-    video_duration_limit: z.number().optional().catch(undefined),
-    video_frame_rate_limit: z.number().optional().catch(undefined),
-    video_matrix_limit: z.number().optional().catch(undefined),
-    video_size_limit: z.number().optional().catch(undefined),
+    image_matrix_limit: v.fallback(v.optional(v.number()), undefined),
+    image_size_limit: v.fallback(v.optional(v.number()), undefined),
+    supported_mime_types: v.fallback(v.optional(v.array(mimeSchema)), undefined),
+    video_duration_limit: v.fallback(v.optional(v.number()), undefined),
+    video_frame_rate_limit: v.fallback(v.optional(v.number()), undefined),
+    video_matrix_limit: v.fallback(v.optional(v.number()), undefined),
+    video_size_limit: v.fallback(v.optional(v.number()), undefined),
   }),
   polls: coerceObject({
-    max_characters_per_option: z.number().catch(25),
-    max_expiration: z.number().catch(2629746),
-    max_options: z.number().catch(4),
-    min_expiration: z.number().catch(300),
+    max_characters_per_option: v.fallback(v.number(), 25),
+    max_expiration: v.fallback(v.number(), 2629746),
+    max_options: v.fallback(v.number(), 4),
+    min_expiration: v.fallback(v.number(), 300),
   }),
   reactions: coerceObject({
     max_reactions: v.fallback(v.number(), 0),
   }),
   statuses: coerceObject({
-    characters_reserved_per_url: z.number().optional().catch(undefined),
-    max_characters: z.number().catch(500),
-    max_media_attachments: z.number().catch(4),
+    characters_reserved_per_url: v.fallback(v.optional(v.number()), undefined),
+    max_characters: v.fallback(v.number(), 500),
+    max_media_attachments: v.fallback(v.number(), 4),
 
   }),
   translation: coerceObject({
     enabled: v.fallback(v.boolean(), false),
   }),
   urls: coerceObject({
-    streaming: z.string().url().optional().catch(undefined),
+    streaming: v.fallback(v.optional(v.pipe(v.string(), v.url())), undefined),
   }),
   vapid: coerceObject({
     public_key: v.fallback(v.string(), ''),
@@ -156,8 +156,8 @@ const configurationSchema = coerceObject({
 });
 
 const contactSchema = coerceObject({
-  contact_account: accountSchema.optional().catch(undefined),
-  email: z.string().email().catch(''),
+  contact_account: v.fallback(v.optional(accountSchema), undefined),
+  email: v.fallback(v.pipe(v.string(), v.email()), ''),
 });
 
 const pleromaSchema = coerceObject({
@@ -165,11 +165,11 @@ const pleromaSchema = coerceObject({
     account_activation_required: v.fallback(v.boolean(), false),
     birthday_min_age: v.fallback(v.number(), 0),
     birthday_required: v.fallback(v.boolean(), false),
-    description_limit: z.number().catch(1500),
+    description_limit: v.fallback(v.number(), 1500),
     features: v.fallback(v.array(v.string()), []),
     federation: coerceObject({
       enabled: v.fallback(v.boolean(), true), // Assume true unless explicitly false
-      mrf_policies: z.string().array().optional().catch(undefined),
+      mrf_policies: v.fallback(v.optional(v.array(v.string())), undefined),
       mrf_simple: coerceObject({
         accept: v.fallback(v.array(v.string()), []),
         avatar_removal: v.fallback(v.array(v.string()), []),
@@ -192,17 +192,15 @@ const pleromaSchema = coerceObject({
       allow_headings: v.fallback(v.boolean(), false),
       allow_inline_images: v.fallback(v.boolean(), false),
     }),
-    migration_cooldown_period: z.number().optional().catch(undefined),
+    migration_cooldown_period: v.fallback(v.optional(v.number()), undefined),
     multitenancy: coerceObject({
-      domains: z
-        .array(
-          v.object({
-            domain: z.coerce.string(),
-            id: v.string(),
-            public: v.fallback(v.boolean(), false),
-          }),
-        )
-        .optional(),
+      domains: v.optional(v.array(
+        v.object({
+          domain: z.coerce.string(),
+          id: v.string(),
+          public: v.fallback(v.boolean(), false),
+        }),
+      )),
       enabled: v.fallback(v.boolean(), false),
     }),
     post_formats: z.string().array().optional().catch(undefined),
@@ -230,16 +228,16 @@ const pleromaSchema = coerceObject({
   }),
   oauth_consumer_strategies: v.fallback(v.array(v.string()), []),
   stats: coerceObject({
-    mau: z.number().optional().catch(undefined),
+    mau: v.fallback(v.optional(v.number()), undefined),
   }),
   vapid_public_key: v.fallback(v.string(), ''),
 });
 
 const pleromaPollLimitsSchema = coerceObject({
-  max_expiration: z.number().optional().catch(undefined),
-  max_option_chars: z.number().optional().catch(undefined),
-  max_options: z.number().optional().catch(undefined),
-  min_expiration: z.number().optional().catch(undefined),
+  max_expiration: v.fallback(v.optional(v.number()), undefined),
+  max_option_chars: v.fallback(v.optional(v.number()), undefined),
+  max_options: v.fallback(v.optional(v.number()), undefined),
+  min_expiration: v.fallback(v.optional(v.number()), undefined),
 });
 
 const registrations = coerceObject({
@@ -249,9 +247,9 @@ const registrations = coerceObject({
 });
 
 const statsSchema = coerceObject({
-  domain_count: z.number().optional().catch(undefined),
-  status_count: z.number().optional().catch(undefined),
-  user_count: z.number().optional().catch(undefined),
+  domain_count: v.fallback(v.optional(v.number()), undefined),
+  status_count: v.fallback(v.optional(v.number()), undefined),
+  user_count: v.fallback(v.optional(v.number()), undefined),
 });
 
 const thumbnailSchema = coerceObject({
@@ -268,15 +266,15 @@ const instanceV1Schema = coerceObject({
   account_domain: v.fallback(v.string(), ''),
   approval_required: v.fallback(v.boolean(), false),
   configuration: configurationSchema,
-  contact_account: accountSchema.optional().catch(undefined),
+  contact_account: v.fallback(v.optional(accountSchema), undefined),
   description: v.fallback(v.string(), ''),
-  description_limit: z.number().catch(1500),
-  email: z.string().email().catch(''),
+  description_limit: v.fallback(v.number(), 1500),
+  email: v.fallback(v.pipe(v.string(), v.email()), ''),
   feature_quote: v.fallback(v.boolean(), false),
-  fedibird_capabilities: z.array(v.string()).catch([]),
+  fedibird_capabilities: v.fallback(v.array(v.string()), []),
   languages: v.fallback(v.array(v.string()), []),
-  max_media_attachments: z.number().optional().catch(undefined),
-  max_toot_chars: z.number().optional().catch(undefined),
+  max_media_attachments: v.fallback(v.optional(v.number()), undefined),
+  max_toot_chars: v.fallback(v.optional(v.number()), undefined),
   pleroma: pleromaSchema,
   poll_limits: pleromaPollLimitsSchema,
   registrations: v.fallback(v.boolean(), false),
@@ -285,13 +283,13 @@ const instanceV1Schema = coerceObject({
   stats: statsSchema,
   thumbnail: v.fallback(v.string(), ''),
   title: v.fallback(v.string(), ''),
-  upload_limit: z.number().optional().catch(undefined),
+  upload_limit: v.fallback(v.optional(v.number()), undefined),
   uri: v.fallback(v.string(), ''),
   urls: coerceObject({
-    streaming_api: z.string().url().optional().catch(undefined),
+    streaming_api: v.fallback(v.optional(v.pipe(v.string(), v.url())), undefined),
   }),
   usage: usageSchema,
-  version: z.string().catch('0.0.0'),
+  version: v.fallback(v.string(), '0.0.0'),
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Instance/} */
@@ -308,13 +306,13 @@ const instanceSchema = z.preprocess((data: any) => {
   return instanceV1ToV2({ ...data, api_versions: apiVersions });
 }, coerceObject({
   account_domain: v.fallback(v.string(), ''),
-  api_versions: z.record(z.number()).catch({}),
+  api_versions: v.fallback(v.record(v.string(), v.number()), {}),
   configuration: configurationSchema,
   contact: contactSchema,
   description: v.fallback(v.string(), ''),
   domain: v.fallback(v.string(), ''),
   feature_quote: v.fallback(v.boolean(), false),
-  fedibird_capabilities: z.array(v.string()).catch([]),
+  fedibird_capabilities: v.fallback(v.array(v.string()), []),
   languages: v.fallback(v.array(v.string()), []),
   pleroma: pleromaSchema,
   registrations: registrations,
@@ -323,7 +321,7 @@ const instanceSchema = z.preprocess((data: any) => {
   thumbnail: thumbnailSchema,
   title: v.fallback(v.string(), ''),
   usage: usageSchema,
-  version: z.string().catch('0.0.0'),
+  version: v.fallback(v.string(), '0.0.0'),
 }).transform((instance) => {
   const version = fixVersion(instance.version);
 

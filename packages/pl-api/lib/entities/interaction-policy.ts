@@ -2,11 +2,11 @@ import * as v from 'valibot';
 
 import { coerceObject } from './utils';
 
-const interactionPolicyEntrySchema = z.enum(['public', 'followers', 'following', 'mutuals', 'mentioned', 'author', 'me']);
+const interactionPolicyEntrySchema = v.picklist(['public', 'followers', 'following', 'mutuals', 'mentioned', 'author', 'me']);
 
 const interactionPolicyRuleSchema = coerceObject({
-  always: z.array(interactionPolicyEntrySchema).default(['public']),
-  with_approval: z.array(interactionPolicyEntrySchema).default([]),
+  always: v.fallback(v.array(interactionPolicyEntrySchema), ['public']),
+  with_approval: v.fallback(v.array(interactionPolicyEntrySchema), []),
 });
 
 /** @see {@link https://docs.gotosocial.org/en/latest/api/swagger/} */

@@ -7,16 +7,16 @@ const baseEmojiReactionSchema = v.object({
   count: v.fallback(v.nullable(v.number()), null),
   me: v.fallback(v.boolean(), false),
   name: emojiSchema,
-  url: z.literal(undefined).catch(undefined),
-  static_url: z.literal(undefined).catch(undefined),
+  url: v.fallback(v.undefined(), undefined),
+  static_url: v.fallback(v.undefined(), undefined),
   accounts: filteredArray(accountSchema),
   account_ids: filteredArray(v.string()).catch([]),
 });
 
 const customEmojiReactionSchema = baseEmojiReactionSchema.extend({
   name: v.string(),
-  url: z.string().url(),
-  static_url: z.string().url(),
+  url: v.pipe(v.string(), v.url()),
+  static_url: v.pipe(v.string(), v.url()),
 });
 
 /**

@@ -42,7 +42,7 @@ const adminAccountSchema = z.preprocess((account: any) => {
   domain: v.fallback(v.nullable(v.string()), null),
   created_at: dateSchema,
   email: v.fallback(v.nullable(v.string()), null),
-  ip: z.string().ip().nullable().catch(null),
+  ip: v.fallback(v.nullable(z.string().ip()), null),
   ips: filteredArray(adminIpSchema),
   locale: v.fallback(v.nullable(v.string()), null),
   invite_request: v.fallback(v.nullable(v.string()), null),
@@ -58,7 +58,7 @@ const adminAccountSchema = z.preprocess((account: any) => {
 
   actor_type: v.fallback(v.nullable(v.string()), null),
   display_name: v.fallback(v.nullable(v.string()), null),
-  suggested: v.fallback(v.optional(v.nullable()), null),
+  suggested: v.fallback(v.nullable(v.boolean()), null),
 }));
 
 type AdminAccount = v.InferOutput<typeof adminAccountSchema>;

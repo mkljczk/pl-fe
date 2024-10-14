@@ -4,7 +4,7 @@ import * as v from 'valibot';
 const webPushSubscriptionSchema = v.object({
   id: z.coerce.string(),
   endpoint: v.string(),
-  alerts: z.record(z.boolean()),
+  alerts: v.record(v.string(), z.boolean()),
   server_key: v.string(),
 });
 

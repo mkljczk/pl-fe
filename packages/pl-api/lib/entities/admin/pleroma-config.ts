@@ -1,8 +1,8 @@
 import * as v from 'valibot';
 
 const pleromaConfigSchema = v.object({
-  configs: z.array(v.object({
-    value: z.any(),
+  configs: v.array(v.object({
+    value: v.any(),
     group: v.string(),
     key: v.string(),
   })),

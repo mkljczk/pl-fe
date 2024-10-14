@@ -6,7 +6,7 @@ const oauthTokenSchema = z.preprocess((token: any) => ({
   valid_until: token?.valid_until?.padEnd(27, 'Z'),
 }), v.object({
   app_name: v.string(),
-  id: z.number(),
+  id: v.number(),
   valid_until: z.string().datetime({ offset: true }),
 }));
 

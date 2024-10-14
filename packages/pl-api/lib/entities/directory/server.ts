@@ -7,7 +7,7 @@ const directoryServerSchema = v.object({
   languages: z.array(v.string()),
   region: v.string(),
   categories: z.array(v.string()),
-  proxied_thumbnail: z.string().url().nullable().catch(null),
+  proxied_thumbnail: v.fallback(v.nullable(z.string().url()), null),
   blurhash: v.fallback(v.nullable(v.string()), null),
   total_users: z.coerce.number(),
   last_week_users: z.coerce.number(),

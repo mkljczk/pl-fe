@@ -5,8 +5,8 @@ const featuredTagSchema = v.object({
   id: v.string(),
   name: v.string(),
   url: v.fallback(v.optional(v.string()), undefined),
-  statuses_count: z.number(),
-  last_status_at: z.number(),
+  statuses_count: v.number(),
+  last_status_at: v.number(),
 });
 
 type FeaturedTag = v.InferOutput<typeof featuredTagSchema>;

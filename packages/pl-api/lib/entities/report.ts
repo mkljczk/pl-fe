@@ -11,9 +11,9 @@ const reportSchema = v.object({
   category: v.fallback(v.optional(v.string()), undefined),
   comment: v.fallback(v.optional(v.string()), undefined),
   forwarded: v.fallback(v.optional(v.boolean()), undefined),
-  created_at: dateSchema.optional().catch(undefined),
-  status_ids: z.array(v.string()).nullable().catch(null),
-  rule_ids: z.array(v.string()).nullable().catch(null),
+  created_at: v.fallback(v.optional(dateSchema), undefined),
+  status_ids: v.fallback(v.nullable(v.string()), null),
+  rule_ids: v.fallback(v.nullable(v.string()), null),
   target_account: v.fallback(v.nullable(accountSchema), null),
 });
 

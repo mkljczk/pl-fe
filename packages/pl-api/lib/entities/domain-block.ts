@@ -4,7 +4,7 @@ import * as v from 'valibot';
 const domainBlockSchema = v.object({
   domain: v.string(),
   digest: v.string(),
-  severity: z.enum(['silence', 'suspend']),
+  severity: v.picklist(['silence', 'suspend']),
   comment: v.fallback(v.optional(v.string()), undefined),
 });
 

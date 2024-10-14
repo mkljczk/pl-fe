@@ -5,8 +5,8 @@ import { filterSchema } from './filter';
 /** @see {@link https://docs.joinmastodon.org/entities/FilterResult/} */
 const filterResultSchema = v.object({
   filter: filterSchema,
-  keyword_matches: z.array(v.string()).nullable().catch(null),
-  status_matches: z.array(v.string()).nullable().catch(null),
+  keyword_matches: v.fallback(v.nullable(v.string()), null),
+  status_matches: v.fallback(v.nullable(v.string()), null),
 });
 
 type FilterResult = v.InferOutput<typeof filterResultSchema>;

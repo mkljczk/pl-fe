@@ -64,31 +64,31 @@ const preprocessAccount = (account: any) => {
 const fieldSchema = v.object({
   name: v.string(),
   value: v.string(),
-  verified_at: z.string().datetime({ offset: true }).nullable().catch(null),
+  verified_at: v.fallback(v.nullable(z.string().datetime({ offset: true })), null),
 });
 
 const baseAccountSchema = v.object({
   id: v.string(),
   username: v.fallback(v.string(), ''),
   acct: v.fallback(v.string(), ''),
-  url: z.string().url(),
+  url: v.pipe(v.string(), v.url()),
   display_name: v.fallback(v.string(), ''),
   note: v.fallback(v.string(), ''),
   avatar: v.fallback(v.string(), ''),
-  avatar_static: z.string().url().catch(''),
-  header: z.string().url().catch(''),
-  header_static: z.string().url().catch(''),
+  avatar_static: v.fallback(v.pipe(v.string(), v.url()), ''),
+  header: v.fallback(v.pipe(v.string(), v.url()), ''),
+  header_static: v.fallback(v.pipe(v.string(), v.url()), ''),
   locked: v.fallback(v.boolean(), false),
   fields: filteredArray(fieldSchema),
   emojis: filteredArray(customEmojiSchema),
   bot: v.fallback(v.boolean(), false),
   group: v.fallback(v.boolean(), false),
   discoverable: v.fallback(v.boolean(), false),
-  noindex: v.fallback(v.optional(v.nullable()), null),
+  noindex: v.fallback(v.nullable(v.boolean()), null),
   suspended: v.fallback(v.optional(v.boolean()), undefined),
   limited: v.fallback(v.optional(v.boolean()), undefined),
   created_at: z.string().datetime().catch(new Date().toUTCString()),
-  last_status_at: z.string().date().nullable().catch(null),
+  last_status_at: v.fallback(v.nullable(z.string().date()), null),
   statuses_count: v.fallback(v.number(), 0),
   followers_count: v.fallback(v.number(), 0),
   following_count: v.fallback(v.number(), 0),
@@ -97,7 +97,7 @@ const baseAccountSchema = v.object({
   fqn: v.fallback(v.nullable(v.string()), null),
   ap_id: v.fallback(v.nullable(v.string()), null),
   background_image: v.fallback(v.nullable(v.string()), null),
-  relationship: relationshipSchema.optional().catch(undefined),
+  relationship: v.fallback(v.optional(relationshipSchema), undefined),
   is_moderator: v.fallback(v.optional(v.boolean()), undefined),
   is_admin: v.fallback(v.optional(v.boolean()), undefined),
   is_suggested: v.fallback(v.optional(v.boolean()), undefined),
@@ -106,7 +106,7 @@ const baseAccountSchema = v.object({
   hide_follows: v.fallback(v.optional(v.boolean()), undefined),
   hide_followers_count: v.fallback(v.optional(v.boolean()), undefined),
   hide_follows_count: v.fallback(v.optional(v.boolean()), undefined),
-  accepts_chat_messages: v.fallback(v.optional(v.nullable()), null),
+  accepts_chat_messages: v.fallback(v.nullable(v.boolean()), null),
   favicon: v.fallback(v.optional(v.string()), undefined),
   birthday: z.string().date().optional().catch(undefined),
   deactivated: v.fallback(v.optional(v.boolean()), undefined),
@@ -121,13 +121,13 @@ const baseAccountSchema = v.object({
   verified: v.fallback(v.optional(v.boolean()), undefined),
 
   __meta: coerceObject({
-    pleroma: z.any().optional().catch(undefined),
-    source: z.any().optional().catch(undefined),
+    pleroma: v.fallback(v.any(), undefined),
+    source: v.fallback(v.any(), undefined),
   }),
 });
 
 const accountWithMovedAccountSchema = baseAccountSchema.extend({
-  moved: z.lazy((): typeof baseAccountSchema => accountWithMovedAccountSchema as any).nullable().catch(null),
+  moved: v.fallback(v.nullable(z.lazy((): typeof baseAccountSchema => accountWithMovedAccountSchema as any)), null),
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Account/} */
@@ -145,7 +145,7 @@ const untypedCredentialAccountSchema = z.preprocess(preprocessAccount, accountWi
   source: v.object({
     note: v.fallback(v.string(), ''),
     fields: filteredArray(fieldSchema),
-    privacy: z.enum(['public', 'unlisted', 'private', 'direct']),
+    privacy: v.picklist(['public', 'unlisted', 'private', 'direct']),
     sensitive: v.fallback(v.boolean(), false),
     language: v.fallback(v.nullable(v.string()), null),
     follow_requests_count: z.number().int().nonnegative().catch(0),
@@ -158,15 +158,15 @@ const untypedCredentialAccountSchema = z.preprocess(preprocessAccount, accountWi
   }).nullable().catch(null),
   role: v.fallback(v.nullable(roleSchema), null),
 
-  settings_store: z.record(z.any()).optional().catch(undefined),
+  settings_store: v.record(v.string(), v.any()).optional().catch(undefined),
   chat_token: v.fallback(v.optional(v.string()), undefined),
   allow_following_move: v.fallback(v.optional(v.boolean()), undefined),
-  unread_conversation_count: z.number().optional().catch(undefined),
-  unread_notifications_count: z.number().optional().catch(undefined),
-  notification_settings: v.object({
+  unread_conversation_count: v.fallback(v.optional(v.number()), undefined),
+  unread_notifications_count: v.fallback(v.optional(v.number()), undefined),
+  notification_settings: v.fallback(v.optional(v.object({
     block_from_strangers: v.fallback(v.boolean(), false),
     hide_notification_contents: v.fallback(v.boolean(), false),
-  }).optional().catch(undefined),
+  })), undefined),
 }));
 
 type CredentialAccount = v.InferOutput<typeof untypedCredentialAccountSchema> & WithMoved;

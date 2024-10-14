@@ -17,10 +17,10 @@ const groupSchema = v.object({
   locked: v.fallback(v.boolean(), false),
   membership_required: v.fallback(v.boolean(), false),
   members_count: v.fallback(v.number(), 0),
-  owner: v.object({ id: z.string() }).nullable().catch(null),
+  owner: v.object({ id: v.string() }).nullable().catch(null),
   note: z.string().transform(note => note === '<p></p>' ? '' : note).catch(''),
   relationship: v.fallback(v.nullable(groupRelationshipSchema), null), // Dummy field to be overwritten later
-  statuses_visibility: z.string().catch('public'),
+  statuses_visibility: v.fallback(v.string(), 'public'),
   uri: v.fallback(v.string(), ''),
   url: v.fallback(v.string(), ''),
 

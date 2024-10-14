@@ -11,7 +11,7 @@ const notificationRequestSchema = v.object({
   updated_at: dateSchema,
   account: accountSchema,
   notifications_count: z.coerce.string(),
-  last_status: statusSchema.optional().catch(undefined),
+  last_status: v.fallback(v.optional(statusSchema), undefined),
 });
 
 type NotificationRequest = v.InferOutput<typeof notificationRequestSchema>;

@@ -8,7 +8,7 @@ const adminDomainBlockSchema = v.object({
   domain: v.string(),
   digest: v.string(),
   created_at: dateSchema,
-  severity: z.enum(['silence', 'suspend', 'noop']),
+  severity: v.picklist(['silence', 'suspend', 'noop']),
   reject_media: v.boolean(),
   reject_reports: v.boolean(),
   private_comment: v.fallback(v.nullable(v.string()), null),

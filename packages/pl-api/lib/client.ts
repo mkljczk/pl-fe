@@ -380,7 +380,7 @@ class PlApiClient {
 
       return v.parse(v.intersect([v.object({
         type: v.string(),
-      }), z.record(v.any())]), response.json);
+      }), v.record(v.string(), v.any())]), response.json);
     },
 
     mfaChallenge: async (params: MfaChallengeParams) => {
@@ -2773,7 +2773,7 @@ class PlApiClient {
 
       const response = await this.request('/api/v1/instance/translation_languages');
 
-      return v.parse(z.record(v.array(v.string())), response.json);
+      return v.parse(v.record(v.string(), v.array(v.string())), response.json);
     },
 
     /**
@@ -2806,7 +2806,7 @@ class PlApiClient {
     getFrontendConfigurations: async () => {
       const response = await this.request('/api/pleroma/frontend_configurations');
 
-      return v.parse(z.record(z.record(v.any())).catch({}), response.json);
+      return v.parse(v.fallback(v.record(v.string(), v.record(v.string(), v.any())), {}), response.json);
     },
   };
 

@@ -7,7 +7,7 @@ const markerSchema = z.preprocess((marker: any) => marker ? ({
   ...marker,
 }) : null, v.object({
   last_read_id: v.string(),
-  version: z.number().int(),
+  version: v.pipe(v.number(), v.integer()),
   updated_at: dateSchema,
   unread_count: z.number().int().optional().catch(undefined),
 }));
@@ -15,7 +15,7 @@ const markerSchema = z.preprocess((marker: any) => marker ? ({
 /** @see {@link https://docs.joinmastodon.org/entities/Marker/} */
 type Marker = v.InferOutput<typeof markerSchema>;
 
-const markersSchema = z.record(markerSchema);
+const markersSchema = v.record(v.string(), markerSchema);
 
 type Markers = v.InferOutput<typeof markersSchema>;
 

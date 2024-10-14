@@ -4,7 +4,7 @@ import * as v from 'valibot';
 const mentionSchema = v.object({
   id: v.string(),
   username: v.fallback(v.string(), ''),
-  url: z.string().url().catch(''),
+  url: v.fallback(v.pipe(v.string(), v.url()), ''),
   acct: v.string(),
 }).transform((mention) => {
   if (!mention.username) {

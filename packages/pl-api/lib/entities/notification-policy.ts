@@ -7,8 +7,8 @@ const notificationPolicySchema = v.object({
   filter_new_accounts: v.boolean(),
   filter_private_mentions: v.boolean(),
   summary: v.object({
-    pending_requests_count: z.number().int(),
-    pending_notifications_count: z.number().int(),
+    pending_requests_count: v.pipe(v.number(), v.integer()),
+    pending_notifications_count: v.pipe(v.number(), v.integer()),
   }),
 });
 

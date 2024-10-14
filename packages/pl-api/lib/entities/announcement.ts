@@ -10,8 +10,8 @@ import { dateSchema, filteredArray } from './utils';
 const announcementSchema = v.object({
   id: v.string(),
   content: v.fallback(v.string(), ''),
-  starts_at: z.string().datetime().nullable().catch(null),
-  ends_at: z.string().datetime().nullable().catch(null),
+  starts_at: v.fallback(v.nullable(z.string().datetime()), null),
+  ends_at: v.fallback(v.nullable(z.string().datetime()), null),
   all_day: v.fallback(v.boolean(), false),
   read: v.fallback(v.boolean(), false),
   published_at: dateSchema,
@@ -20,7 +20,7 @@ const announcementSchema = v.object({
     (statuses: any) => Array.isArray(statuses)
       ? Object.fromEntries(statuses.map((status: any) => [status.url, status.account?.acct]) || [])
       : statuses,
-    z.record(v.string(), v.string()),
+    v.record(v.string(), v.string(), v.string()),
   ),
   mentions: filteredArray(mentionSchema),
   tags: filteredArray(tagSchema),

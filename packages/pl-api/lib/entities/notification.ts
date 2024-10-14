@@ -21,54 +21,54 @@ const baseNotificationSchema = v.object({
 });
 
 const accountNotificationSchema = baseNotificationSchema.extend({
-  type: z.enum(['follow', 'follow_request', 'admin.sign_up', 'bite']),
+  type: v.picklist(['follow', 'follow_request', 'admin.sign_up', 'bite']),
 });
 
 const mentionNotificationSchema = baseNotificationSchema.extend({
-  type: z.literal('mention'),
-  subtype: z.enum(['reply']).nullable().catch(null),
+  type: v.literal('mention'),
+  subtype: v.fallback(v.nullable(v.picklist(['reply'])), null),
   status: statusSchema,
 });
 
 const statusNotificationSchema = baseNotificationSchema.extend({
-  type: z.enum(['status', 'reblog', 'favourite', 'poll', 'update', 'event_reminder']),
+  type: v.picklist(['status', 'reblog', 'favourite', 'poll', 'update', 'event_reminder']),
   status: statusSchema,
 });
 
 const reportNotificationSchema = baseNotificationSchema.extend({
-  type: z.literal('admin.report'),
+  type: v.literal('admin.report'),
   report: reportSchema,
 });
 
 const severedRelationshipNotificationSchema = baseNotificationSchema.extend({
-  type: z.literal('severed_relationships'),
+  type: v.literal('severed_relationships'),
   relationship_severance_event: relationshipSeveranceEventSchema,
 });
 
 const moderationWarningNotificationSchema = baseNotificationSchema.extend({
-  type: z.literal('moderation_warning'),
+  type: v.literal('moderation_warning'),
   moderation_warning: accountWarningSchema,
 });
 
 const moveNotificationSchema = baseNotificationSchema.extend({
-  type: z.literal('move'),
+  type: v.literal('move'),
   target: accountSchema,
 });
 
 const emojiReactionNotificationSchema = baseNotificationSchema.extend({
-  type: z.literal('emoji_reaction'),
+  type: v.literal('emoji_reaction'),
   emoji: v.string(),
   emoji_url: v.fallback(v.nullable(v.string()), null),
   status: statusSchema,
 });
 
 const chatMentionNotificationSchema = baseNotificationSchema.extend({
-  type: z.literal('chat_mention'),
+  type: v.literal('chat_mention'),
   chat_message: chatMessageSchema,
 });
 
 const eventParticipationRequestNotificationSchema = baseNotificationSchema.extend({
-  type: z.enum(['participation_accepted', 'participation_request']),
+  type: v.picklist(['participation_accepted', 'participation_request']),
   status: statusSchema,
   participation_message: v.fallback(v.nullable(v.string()), null),
 });

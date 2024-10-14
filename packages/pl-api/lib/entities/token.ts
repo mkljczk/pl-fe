@@ -5,11 +5,11 @@ const tokenSchema = v.object({
   access_token: v.string(),
   token_type: v.string(),
   scope: v.string(),
-  created_at: z.number().optional().catch(undefined),
+  created_at: v.fallback(v.optional(v.number()), undefined),
 
-  id: z.number().optional().catch(undefined),
+  id: v.fallback(v.optional(v.number()), undefined),
   refresh_token: v.fallback(v.optional(v.string()), undefined),
-  expires_in: z.number().optional().catch(undefined),
+  expires_in: v.fallback(v.optional(v.number()), undefined),
   me: v.fallback(v.optional(v.string()), undefined),
 });
 

@@ -5,9 +5,9 @@ import { dateSchema } from './utils';
 /** @see {@link https://docs.joinmastodon.org/entities/RelationshipSeveranceEvent/} */
 const relationshipSeveranceEventSchema = v.object({
   id: v.string(),
-  type: z.enum(['domain_block', 'user_domain_block', 'account_suspension']),
+  type: v.picklist(['domain_block', 'user_domain_block', 'account_suspension']),
   purged: v.string(),
-  relationships_count: z.number().optional().catch(undefined),
+  relationships_count: v.fallback(v.optional(v.number()), undefined),
   created_at: dateSchema,
 });
 

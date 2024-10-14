@@ -8,7 +8,7 @@ import { dateSchema } from './utils';
 const chatSchema = v.object({
   id: v.string(),
   account: accountSchema,
-  unread: z.number().int(),
+  unread: v.pipe(v.number(), v.integer()),
   last_message: v.fallback(v.nullable(chatMessageSchema), null),
   created_at: dateSchema,
 });
