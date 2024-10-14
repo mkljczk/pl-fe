@@ -88,7 +88,7 @@ const baseAccountSchema = v.object({
   suspended: v.fallback(v.optional(v.boolean()), undefined),
   limited: v.fallback(v.optional(v.boolean()), undefined),
   created_at: z.string().datetime().catch(new Date().toUTCString()),
-  last_status_at: v.fallback(v.nullable(z.string().date()), null),
+  last_status_at: v.fallback(v.nullable(v.pipe(v.string(), v.isoDate())), null),
   statuses_count: v.fallback(v.number(), 0),
   followers_count: v.fallback(v.number(), 0),
   following_count: v.fallback(v.number(), 0),
@@ -108,7 +108,7 @@ const baseAccountSchema = v.object({
   hide_follows_count: v.fallback(v.optional(v.boolean()), undefined),
   accepts_chat_messages: v.fallback(v.nullable(v.boolean()), null),
   favicon: v.fallback(v.optional(v.string()), undefined),
-  birthday: z.string().date().optional().catch(undefined),
+  birthday: v.fallback(v.optional(v.pipe(v.string(), v.isoDate())), undefined),
   deactivated: v.fallback(v.optional(v.boolean()), undefined),
 
   location: v.fallback(v.optional(v.string()), undefined),
@@ -126,7 +126,8 @@ const baseAccountSchema = v.object({
   }),
 });
 
-const accountWithMovedAccountSchema = baseAccountSchema.extend({
+const accountWithMovedAccountSchema = v.object({
+  ...baseAccountSchema.entries,
   moved: v.fallback(v.nullable(z.lazy((): typeof baseAccountSchema => accountWithMovedAccountSchema as any)), null),
 });
 
@@ -141,7 +142,8 @@ type Account = v.InferOutput<typeof accountWithMovedAccountSchema> & WithMoved;
 
 const accountSchema: z.ZodType<Account> = untypedAccountSchema as any;
 
-const untypedCredentialAccountSchema = z.preprocess(preprocessAccount, accountWithMovedAccountSchema.extend({
+const untypedCredentialAccountSchema = z.preprocess(preprocessAccount, v.object({
+  ...accountWithMovedAccountSchema.entries,
   source: v.fallback(v.nullable(v.object({
     note: v.fallback(v.string(), ''),
     fields: filteredArray(fieldSchema),
@@ -173,7 +175,8 @@ type CredentialAccount = v.InferOutput<typeof untypedCredentialAccountSchema> & 
 
 const credentialAccountSchema: z.ZodType<CredentialAccount> = untypedCredentialAccountSchema as any;
 
-const untypedMutedAccountSchema = z.preprocess(preprocessAccount, accountWithMovedAccountSchema.extend({
+const untypedMutedAccountSchema = z.preprocess(preprocessAccount, v.object({
+  ...accountWithMovedAccountSchema.entries,
   mute_expires_at: v.fallback(v.nullable(dateSchema), null),
 }));
 

@@ -42,7 +42,7 @@ const adminAccountSchema = z.preprocess((account: any) => {
   domain: v.fallback(v.nullable(v.string()), null),
   created_at: dateSchema,
   email: v.fallback(v.nullable(v.string()), null),
-  ip: v.fallback(v.nullable(z.string().ip()), null),
+  ip: v.fallback(v.nullable(v.pipe(v.string(), v.ip())), null),
   ips: filteredArray(adminIpSchema),
   locale: v.fallback(v.nullable(v.string()), null),
   invite_request: v.fallback(v.nullable(v.string()), null),

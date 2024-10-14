@@ -7,7 +7,7 @@ const pollOptionSchema = v.object({
   title: v.fallback(v.string(), ''),
   votes_count: v.fallback(v.number(), 0),
 
-  title_map: v.record(v.string(), v.string()).nullable().catch(null),
+  title_map: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Poll/} */

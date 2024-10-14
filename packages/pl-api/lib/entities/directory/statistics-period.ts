@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 
 const directoryStatisticsPeriodSchema = v.object({
-  period: z.string().date(),
+  period: v.pipe(v.string(), v.isoDate()),
   server_count: v.fallback(v.nullable(v.pipe(v.unknown(), v.transform(Number))), null),
   user_count: v.fallback(v.nullable(v.pipe(v.unknown(), v.transform(Number))), null),
   active_user_count: v.fallback(v.nullable(v.pipe(v.unknown(), v.transform(Number))), null),

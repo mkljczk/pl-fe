@@ -20,54 +20,64 @@ const baseNotificationSchema = v.object({
   is_seen: v.fallback(v.optional(v.boolean()), undefined),
 });
 
-const accountNotificationSchema = baseNotificationSchema.extend({
+const accountNotificationSchema = v.object({
+  ...baseNotificationSchema.entries,
   type: v.picklist(['follow', 'follow_request', 'admin.sign_up', 'bite']),
 });
 
-const mentionNotificationSchema = baseNotificationSchema.extend({
+const mentionNotificationSchema = v.object({
+  ...baseNotificationSchema.entries,
   type: v.literal('mention'),
   subtype: v.fallback(v.nullable(v.picklist(['reply'])), null),
   status: statusSchema,
 });
 
-const statusNotificationSchema = baseNotificationSchema.extend({
+const statusNotificationSchema = v.object({
+  ...baseNotificationSchema.entries,
   type: v.picklist(['status', 'reblog', 'favourite', 'poll', 'update', 'event_reminder']),
   status: statusSchema,
 });
 
-const reportNotificationSchema = baseNotificationSchema.extend({
+const reportNotificationSchema = v.object({
+  ...baseNotificationSchema.entries,
   type: v.literal('admin.report'),
   report: reportSchema,
 });
 
-const severedRelationshipNotificationSchema = baseNotificationSchema.extend({
+const severedRelationshipNotificationSchema = v.object({
+  ...baseNotificationSchema.entries,
   type: v.literal('severed_relationships'),
   relationship_severance_event: relationshipSeveranceEventSchema,
 });
 
-const moderationWarningNotificationSchema = baseNotificationSchema.extend({
+const moderationWarningNotificationSchema = v.object({
+  ...baseNotificationSchema.entries,
   type: v.literal('moderation_warning'),
   moderation_warning: accountWarningSchema,
 });
 
-const moveNotificationSchema = baseNotificationSchema.extend({
+const moveNotificationSchema = v.object({
+  ...baseNotificationSchema.entries,
   type: v.literal('move'),
   target: accountSchema,
 });
 
-const emojiReactionNotificationSchema = baseNotificationSchema.extend({
+const emojiReactionNotificationSchema = v.object({
+  ...baseNotificationSchema.entries,
   type: v.literal('emoji_reaction'),
   emoji: v.string(),
   emoji_url: v.fallback(v.nullable(v.string()), null),
   status: statusSchema,
 });
 
-const chatMentionNotificationSchema = baseNotificationSchema.extend({
+const chatMentionNotificationSchema = v.object({
+  ...baseNotificationSchema.entries,
   type: v.literal('chat_mention'),
   chat_message: chatMessageSchema,
 });
 
-const eventParticipationRequestNotificationSchema = baseNotificationSchema.extend({
+const eventParticipationRequestNotificationSchema = v.object({
+  ...baseNotificationSchema.entries,
   type: v.picklist(['participation_accepted', 'participation_request']),
   status: statusSchema,
   participation_message: v.fallback(v.nullable(v.string()), null),
@@ -81,7 +91,7 @@ const notificationSchema: z.ZodType<Notification> = z.preprocess((notification: 
   type: notification.type === 'pleroma:report'
     ? 'admin.report'
     : notification.type?.replace(/^pleroma:/, ''),
-}), z.discriminatedUnion('type', [
+}), v.variant('type', [
   accountNotificationSchema,
   mentionNotificationSchema,
   statusNotificationSchema,

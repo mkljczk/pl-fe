@@ -7,7 +7,8 @@ import { announcementSchema } from '../announcement';
 const adminAnnouncementSchema = z.preprocess((announcement: any) => ({
   ...announcement,
   ...pick(announcement.pleroma, 'raw_content'),
-}), announcementSchema.extend({
+}), v.object({
+  ...announcementSchema.entries,
   raw_content: v.fallback(v.string(), ''),
 }));
 

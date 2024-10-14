@@ -51,7 +51,8 @@ const videoAttachmentSchema = v.object({
   type: v.literal('video'),
   meta: v.fallback(v.object({
     duration: v.fallback(v.optional(v.number()), undefined),
-    original: v.fallback(v.optional(imageMetaSchema.extend({
+    original: v.fallback(v.optional(v.object({
+      ...imageMetaSchema.entries,
       frame_rate: v.fallback(v.nullable(v.pipe(v.string(), v.regex(/\d+\/\d+$/))), null),
       duration: v.fallback(v.nullable(z.number().nonnegative()), null),
     })), undefined),

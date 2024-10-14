@@ -8,11 +8,11 @@ const statusSourceSchema = v.object({
   text: v.fallback(v.string(), ''),
   spoiler_text: v.fallback(v.string(), ''),
 
-  content_type: z.string().catch('text/plain'),
+  content_type: v.fallback(v.string(), 'text/plain'),
   location: v.fallback(v.nullable(locationSchema), null),
 
-  text_map: v.record(v.string(), v.string()).nullable().catch(null),
-  spoiler_text_map: v.record(v.string(), v.string()).nullable().catch(null),
+  text_map: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
+  spoiler_text_map: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
 });
 
 type StatusSource = v.InferOutput<typeof statusSourceSchema>;

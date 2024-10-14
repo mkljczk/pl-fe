@@ -90,7 +90,7 @@ const baseStatusSchema = v.object({
   bookmark_folder: v.fallback(v.nullable(v.string()), null),
 
   event: v.fallback(v.nullable(statusEventSchema), null),
-  translation: translationSchema.nullable().or(v.literal(false)).catch(null),
+  translation: v.fallback(v.union([v.nullable(translationSchema), v.literal(false)]), null),
 
   content_map: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
   text_map: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
@@ -134,13 +134,15 @@ const preprocess = (status: any) => {
   return status;
 };
 
-const statusSchema: z.ZodType<Status> = z.preprocess(preprocess, baseStatusSchema.extend({
+const statusSchema: z.ZodType<Status> = z.preprocess(preprocess, v.object({
+  ...baseStatusSchema.entries,
   reblog: v.fallback(v.nullable(z.lazy(() => statusSchema)), null),
 
   quote: v.fallback(v.nullable(z.lazy(() => statusSchema)), null),
 })) as any;
 
-const statusWithoutAccountSchema = z.preprocess(preprocess, baseStatusSchema.omit({ account: true }).extend({
+const statusWithoutAccountSchema = z.preprocess(preprocess, v.object({
+  ...(v.omit(baseStatusSchema, ['account']).entries),
   account: v.fallback(v.nullable(accountSchema), null),
   reblog: v.fallback(v.nullable(z.lazy(() => statusSchema)), null),
 
