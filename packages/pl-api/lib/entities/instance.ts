@@ -184,9 +184,9 @@ const pleromaSchema = coerceObject({
       }),
     }),
     fields_limits: coerceObject({
-      max_fields: z.number().nonnegative().catch(4),
-      name_length: z.number().nonnegative().catch(255),
-      value_length: z.number().nonnegative().catch(2047),
+      max_fields: v.fallback(v.pipe(v.number(), v.integer(), v.minValue(0)), 4),
+      name_length: v.fallback(v.pipe(v.number(), v.integer(), v.minValue(0)), 255),
+      value_length: v.fallback(v.pipe(v.number(), v.integer(), v.minValue(0)), 2047),
     }),
     markup: coerceObject({
       allow_headings: v.fallback(v.boolean(), false),
@@ -293,43 +293,40 @@ const instanceV1Schema = coerceObject({
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Instance/} */
-const instanceSchema = z.preprocess((data: any) => {
+const instanceSchema = v.pipe(
+  v.any(),
+  v.transform((data: any) => {
   // Detect GoToSocial
-  if (typeof data.configuration?.accounts?.allow_custom_css === 'boolean') {
-    data.version = `0.0.0 (compatible; GoToSocial ${data.version})`;
-  }
+    if (typeof data.configuration?.accounts?.allow_custom_css === 'boolean') {
+      data.version = `0.0.0 (compatible; GoToSocial ${data.version})`;
+    }
 
-  const apiVersions = getApiVersions(data);
+    const apiVersions = getApiVersions(data);
 
-  if (data.domain) return { account_domain: data.domain, ...data, api_versions: apiVersions };
+    if (data.domain) return { account_domain: data.domain, ...data, api_versions: apiVersions };
 
-  return instanceV1ToV2({ ...data, api_versions: apiVersions });
-}, coerceObject({
-  account_domain: v.fallback(v.string(), ''),
-  api_versions: v.fallback(v.record(v.string(), v.number()), {}),
-  configuration: configurationSchema,
-  contact: contactSchema,
-  description: v.fallback(v.string(), ''),
-  domain: v.fallback(v.string(), ''),
-  feature_quote: v.fallback(v.boolean(), false),
-  fedibird_capabilities: v.fallback(v.array(v.string()), []),
-  languages: v.fallback(v.array(v.string()), []),
-  pleroma: pleromaSchema,
-  registrations: registrations,
-  rules: filteredArray(ruleSchema),
-  stats: statsSchema,
-  thumbnail: thumbnailSchema,
-  title: v.fallback(v.string(), ''),
-  usage: usageSchema,
-  version: v.fallback(v.string(), '0.0.0'),
-}).transform((instance) => {
-  const version = fixVersion(instance.version);
-
-  return {
-    ...instance,
-    version,
-  };
-}));
+    return instanceV1ToV2({ ...data, api_versions: apiVersions });
+  }),
+  coerceObject({
+    account_domain: v.fallback(v.string(), ''),
+    api_versions: v.fallback(v.record(v.string(), v.number()), {}),
+    configuration: configurationSchema,
+    contact: contactSchema,
+    description: v.fallback(v.string(), ''),
+    domain: v.fallback(v.string(), ''),
+    feature_quote: v.fallback(v.boolean(), false),
+    fedibird_capabilities: v.fallback(v.array(v.string()), []),
+    languages: v.fallback(v.array(v.string()), []),
+    pleroma: pleromaSchema,
+    registrations: registrations,
+    rules: filteredArray(ruleSchema),
+    stats: statsSchema,
+    thumbnail: thumbnailSchema,
+    title: v.fallback(v.string(), ''),
+    usage: usageSchema,
+    version: v.pipe(v.fallback(v.string(), '0.0.0'), v.transform(fixVersion)),
+  }),
+);
 
 type Instance = v.InferOutput<typeof instanceSchema>;
 

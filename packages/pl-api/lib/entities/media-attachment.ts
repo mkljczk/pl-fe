@@ -3,16 +3,10 @@ import * as v from 'valibot';
 
 import { mimeSchema } from './utils';
 
-const blurhashSchema = z.string().superRefine((value, ctx) => {
-  const r = isBlurhashValid(value);
-
-  if (!r.result) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: r.errorReason,
-    });
-  }
-});
+const blurhashSchema = v.pipe(v.string(), v.check(
+  (value) => isBlurhashValid(value).result,
+  'invalid blurhash', // .errorReason
+));
 
 const baseAttachmentSchema = v.object({
   id: v.string(),
@@ -40,8 +34,8 @@ const imageAttachmentSchema = v.object({
     original: v.fallback(v.optional(imageMetaSchema), undefined),
     small: v.fallback(v.optional(imageMetaSchema), undefined),
     focus: v.fallback(v.optional(v.object({
-      x: z.number().min(-1).max(1),
-      y: z.number().min(-1).max(1),
+      x: v.pipe(v.number(), v.minValue(-1), v.maxValue(1)),
+      y: v.pipe(v.number(), v.minValue(-1), v.maxValue(1)),
     })), undefined),
   }), {}),
 });
@@ -54,7 +48,7 @@ const videoAttachmentSchema = v.object({
     original: v.fallback(v.optional(v.object({
       ...imageMetaSchema.entries,
       frame_rate: v.fallback(v.nullable(v.pipe(v.string(), v.regex(/\d+\/\d+$/))), null),
-      duration: v.fallback(v.nullable(z.number().nonnegative()), null),
+      duration: v.fallback(v.nullable(v.pipe(v.number(), v.minValue(0))), null),
     })), undefined),
     small: v.fallback(v.optional(imageMetaSchema), undefined),
     // WIP: add rest
@@ -83,7 +77,7 @@ const audioAttachmentSchema = v.object({
     })), undefined),
     original: v.fallback(v.optional(v.object({
       duration: v.fallback(v.optional(v.number()), undefined),
-      bitrate: z.number().nonnegative().optional().catch(undefined),
+      bitrate: v.fallback(v.optional(v.pipe(v.number(), v.minValue(0))), undefined),
     })), undefined),
   }), {}),
 });
@@ -94,21 +88,25 @@ const unknownAttachmentSchema = v.object({
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/MediaAttachment} */
-const mediaAttachmentSchema = z.preprocess((data: any) => {
-  if (!data) return null;
+const mediaAttachmentSchema = v.pipe(
+  v.any(),
+  v.transform((data: any) => {
+    if (!data) return null;
 
-  return {
-    mime_type: data.pleroma?.mime_type,
-    preview_url: data.url,
-    ...data,
-  };
-}, v.variant('type', [
-  imageAttachmentSchema,
-  videoAttachmentSchema,
-  gifvAttachmentSchema,
-  audioAttachmentSchema,
-  unknownAttachmentSchema,
-]));
+    return {
+      mime_type: data.pleroma?.mime_type,
+      preview_url: data.url,
+      ...data,
+    };
+  }),
+  v.variant('type', [
+    imageAttachmentSchema,
+    videoAttachmentSchema,
+    gifvAttachmentSchema,
+    audioAttachmentSchema,
+    unknownAttachmentSchema,
+  ]),
+);
 
 type MediaAttachment = v.InferOutput<typeof mediaAttachmentSchema>;
 

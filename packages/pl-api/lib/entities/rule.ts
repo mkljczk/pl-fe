@@ -7,10 +7,14 @@ const baseRuleSchema = v.object({
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Rule/} */
-const ruleSchema = z.preprocess((data: any) => ({
-  ...data,
-  hint: data.hint || data.subtext,
-}), baseRuleSchema);
+const ruleSchema =  v.pipe(
+  v.any(),
+  v.transform((data: any) => ({
+    ...data,
+    hint: data.hint || data.subtext,
+  })),
+  baseRuleSchema,
+);
 
 type Rule = v.InferOutput<typeof ruleSchema>;
 

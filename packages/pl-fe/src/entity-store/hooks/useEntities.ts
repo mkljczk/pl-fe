@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import z from 'zod';
+import * as v from 'valibot';
 
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
@@ -64,7 +64,7 @@ const useEntities = <TEntity extends Entity, TTransformedEntity extends Entity =
     dispatch(entitiesFetchRequest(entityType, listKey));
     try {
       const response = await req();
-      const entities = filteredArray(schema).parse(response);
+      const entities = v.parse(filteredArray(schema), response);
       const transformedEntities = opts.transform && entities.map(opts.transform);
 
       dispatch(entitiesFetchSuccess(transformedEntities || entities, entityType, listKey, pos, {

@@ -16,29 +16,33 @@ const filterStatusSchema = v.object({
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Filter/} */
-const filterSchema = z.preprocess((filter: any) => {
-  if (filter.phrase) {
-    return {
-      ...filter,
-      title: filter.phrase,
-      keywords: [{
-        id: '1',
-        keyword: filter.phrase,
-        whole_word: filter.whole_word,
-      }],
-      filter_action: filter.irreversible ? 'hide' : 'warn',
-    };
-  }
-  return filter;
-}, v.object({
-  id: v.string(),
-  title: v.string(),
-  context: v.array(v.picklist(['home', 'notifications', 'public', 'thread', 'account'])),
-  expires_at: v.fallback(v.nullable(z.string().datetime({ offset: true })), null),
-  filter_action: v.fallback(v.picklist(['warn', 'hide']), 'warn'),
-  keywords: filteredArray(filterKeywordSchema),
-  statuses: filteredArray(filterStatusSchema),
-}));
+const filterSchema = v.pipe(
+  v.any(),
+  v.transform((filter: any) => {
+    if (filter.phrase) {
+      return {
+        ...filter,
+        title: filter.phrase,
+        keywords: [{
+          id: '1',
+          keyword: filter.phrase,
+          whole_word: filter.whole_word,
+        }],
+        filter_action: filter.irreversible ? 'hide' : 'warn',
+      };
+    }
+    return filter;
+  }),
+  v.object({
+    id: v.string(),
+    title: v.string(),
+    context: v.array(v.picklist(['home', 'notifications', 'public', 'thread', 'account'])),
+    expires_at: v.fallback(v.nullable(z.string().datetime({ offset: true })), null),
+    filter_action: v.fallback(v.picklist(['warn', 'hide']), 'warn'),
+    keywords: filteredArray(filterKeywordSchema),
+    statuses: filteredArray(filterStatusSchema),
+  }),
+);
 
 type Filter = v.InferOutput<typeof filterSchema>;
 

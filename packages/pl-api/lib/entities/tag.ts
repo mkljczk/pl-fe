@@ -8,7 +8,7 @@ const historySchema = v.object({
 
 /** @see {@link https://docs.joinmastodon.org/entities/tag} */
 const tagSchema = v.object({
-  name: z.string().min(1),
+  name: v.pipe(v.string(), v.minLength(1)),
   url: v.fallback(v.pipe(v.string(), v.url()), ''),
   history: v.fallback(v.nullable(historySchema), null),
   following: v.fallback(v.optional(v.boolean()), undefined),

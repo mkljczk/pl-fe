@@ -16,11 +16,12 @@ const announcementSchema = v.object({
   read: v.fallback(v.boolean(), false),
   published_at: dateSchema,
   reactions: filteredArray(announcementReactionSchema),
-  statuses: z.preprocess(
-    (statuses: any) => Array.isArray(statuses)
+  statuses: v.pipe(
+    v.any(),
+    v.transform((statuses: any) => Array.isArray(statuses)
       ? Object.fromEntries(statuses.map((status: any) => [status.url, status.account?.acct]) || [])
-      : statuses,
-    v.record(v.string(), v.string(), v.string()),
+      : statuses),
+    v.record(v.string(), v.string()),
   ),
   mentions: filteredArray(mentionSchema),
   tags: filteredArray(tagSchema),

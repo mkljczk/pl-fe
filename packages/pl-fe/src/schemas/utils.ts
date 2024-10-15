@@ -1,17 +1,18 @@
 import * as v from 'valibot';
-import z from 'zod';
 
 import type { CustomEmoji } from 'pl-api';
 
 /** Validates individual items in an array, dropping any that aren't valid. */
-const filteredArray = <T extends z.ZodTypeAny>(schema: T) =>
-  z.any().array().catch([])
-    .transform((arr) => (
+const filteredArray = <T>(schema: v.BaseSchema<any, T, v.BaseIssue<unknown>>) =>
+  v.pipe(
+    v.fallback(v.array(v.any()), []),
+    v.transform((arr) => (
       arr.map((item) => {
-        const parsed = schema.safeParse(item);
-        return parsed.success ? parsed.data : undefined;
-      }).filter((item): item is z.infer<T> => Boolean(item))
-    ));
+        const parsed = v.safeParse(schema, item);
+        return parsed.success ? parsed.output : undefined;
+      }).filter((item): item is T => Boolean(item))
+    )),
+  );
 
 /** Map a list of CustomEmoji to their shortcodes. */
 const makeCustomEmojiMap = (customEmojis: CustomEmoji[]) =>

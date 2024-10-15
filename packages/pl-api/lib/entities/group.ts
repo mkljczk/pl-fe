@@ -18,7 +18,7 @@ const groupSchema = v.object({
   membership_required: v.fallback(v.boolean(), false),
   members_count: v.fallback(v.number(), 0),
   owner: v.fallback(v.nullable(v.object({ id: v.string() })), null),
-  note: z.string().transform(note => note === '<p></p>' ? '' : note).catch(''),
+  note: v.fallback(v.pipe(v.string(), v.transform(note => note === '<p></p>' ? '' : note)), ''),
   relationship: v.fallback(v.nullable(groupRelationshipSchema), null), // Dummy field to be overwritten later
   statuses_visibility: v.fallback(v.string(), 'public'),
   uri: v.fallback(v.string(), ''),

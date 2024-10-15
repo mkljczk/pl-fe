@@ -17,10 +17,10 @@ const pollSchema = v.object({
   expires_at: v.fallback(v.nullable(z.string().datetime()), null),
   id: v.string(),
   multiple: v.fallback(v.boolean(), false),
-  options: v.array(pollOptionSchema).min(2),
+  options: v.pipe(v.array(pollOptionSchema), v.minLength(2)),
   voters_count: v.fallback(v.number(), 0),
   votes_count: v.fallback(v.number(), 0),
-  own_votes: v.fallback(v.nullable(v.array(v.number())).nonempty(), null),
+  own_votes: v.fallback(v.nullable(v.pipe(v.array(v.number()), v.minLength(1))), null),
   voted: v.fallback(v.boolean(), false),
 
   non_anonymous: v.fallback(v.boolean(), false),

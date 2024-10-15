@@ -13,7 +13,7 @@ type GroupRole =`${GroupRoles}`;
 const groupMemberSchema = v.object({
   id: v.string(),
   account: accountSchema,
-  role: z.nativeEnum(GroupRoles),
+  role: v.enum(GroupRoles),
 });
 
 type GroupMember = v.InferOutput<typeof groupMemberSchema>;

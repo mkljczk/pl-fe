@@ -134,19 +134,19 @@ const preprocess = (status: any) => {
   return status;
 };
 
-const statusSchema: z.ZodType<Status> = z.preprocess(preprocess, v.object({
+const statusSchema: v.BaseSchema<any, Status, v.BaseIssue<unknown>> = v.pipe(v.any(), v.transform(preprocess), v.object({
   ...baseStatusSchema.entries,
-  reblog: v.fallback(v.nullable(z.lazy(() => statusSchema)), null),
+  reblog: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
 
-  quote: v.fallback(v.nullable(z.lazy(() => statusSchema)), null),
+  quote: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
 })) as any;
 
-const statusWithoutAccountSchema = z.preprocess(preprocess, v.object({
+const statusWithoutAccountSchema = v.pipe(v.any(), v.transform(preprocess), v.object({
   ...(v.omit(baseStatusSchema, ['account']).entries),
   account: v.fallback(v.nullable(accountSchema), null),
-  reblog: v.fallback(v.nullable(z.lazy(() => statusSchema)), null),
+  reblog: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
 
-  quote: v.fallback(v.nullable(z.lazy(() => statusSchema)), null),
+  quote: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
 }));
 
 type Status = v.InferOutput<typeof baseStatusSchema> & {

@@ -227,7 +227,7 @@ class PlApiClient {
     }
   }
 
-  #paginatedGet = async <T extends v.BaseSchema<any, any, any>>(input: URL | RequestInfo, body: RequestBody, schema: T): Promise<PaginatedResponse<v.InferOutput<T>>> => {
+  #paginatedGet = async <T>(input: URL | RequestInfo, body: RequestBody, schema: v.BaseSchema<any, T, v.BaseIssue<unknown>>): Promise<PaginatedResponse<T>> => {
     const getMore = (input: string | null) => input ? async () => {
       const response = await this.request(input);
 
@@ -2441,7 +2441,7 @@ class PlApiClient {
       const enqueue = (fn: () => any) => ws.readyState === WebSocket.CONNECTING ? queue.push(fn) : fn();
 
       ws.onmessage = (event) => {
-        const message = streamingEventSchema.parse(JSON.parse(event.data as string));
+        const message = v.parse(streamingEventSchema, JSON.parse(event.data as string));
 
         listeners.filter(({ listener, stream }) => (!stream || message.stream.includes(stream)) && listener(message));
       };
@@ -2687,7 +2687,7 @@ class PlApiClient {
         response = await this.request('/api/v1/instance');
       }
 
-      const instance = v.parse(instanceSchema.readonly(), response.json);
+      const instance = v.parse(v.pipe(instanceSchema, v.readonly()), response.json);
       this.#setInstance(instance);
 
       return instance;

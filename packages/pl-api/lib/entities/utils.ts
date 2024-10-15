@@ -4,14 +4,16 @@ import * as v from 'valibot';
 const dateSchema = z.string().datetime({ offset: true }).catch(new Date().toUTCString());
 
 /** Validates individual items in an array, dropping any that aren't valid. */
-const filteredArray = <T extends z.ZodTypeAny>(schema: T) =>
-  z.any().array().catch([])
-    .transform((arr) => (
+const filteredArray = <T>(schema: v.BaseSchema<any, T, v.BaseIssue<unknown>>) =>
+  v.pipe(
+    v.fallback(v.array(v.any()), []),
+    v.transform((arr) => (
       arr.map((item) => {
-        const parsed = schema.safeParse(item);
-        return parsed.success ? parsed.data : undefined;
-      }).filter((item): item is v.InferOutput<T> => Boolean(item))
-    ));
+        const parsed = v.safeParse(schema, item);
+        return parsed.success ? parsed.output : undefined;
+      }).filter((item): item is T => Boolean(item))
+    )),
+  );
 
 /** Validates the string as an emoji. */
 const emojiSchema = v.pipe(v.string(), v.emoji());

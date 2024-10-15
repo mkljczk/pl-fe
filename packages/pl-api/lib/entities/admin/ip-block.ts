@@ -5,7 +5,7 @@ import { dateSchema } from '../utils';
 /** @see {@link https://docs.joinmastodon.org/entities/Admin_IpBlock/} */
 const adminIpBlockSchema = v.object({
   id: v.string(),
-  ip: z.string().ip(),
+  ip: v.pipe(v.string(), v.ip()),
   severity: v.picklist(['sign_up_requires_approval', 'sign_up_block', 'no_access']),
   comment: v.fallback(v.string(), ''),
   created_at: dateSchema,

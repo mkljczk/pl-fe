@@ -84,25 +84,28 @@ const eventParticipationRequestNotificationSchema = v.object({
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Notification/} */
-const notificationSchema: z.ZodType<Notification> = z.preprocess((notification: any) => ({
-  group_key: `ungrouped-${notification.id}`,
-  ...pick(notification.pleroma || {}, ['is_muted', 'is_seen']),
-  ...notification,
-  type: notification.type === 'pleroma:report'
-    ? 'admin.report'
-    : notification.type?.replace(/^pleroma:/, ''),
-}), v.variant('type', [
-  accountNotificationSchema,
-  mentionNotificationSchema,
-  statusNotificationSchema,
-  reportNotificationSchema,
-  severedRelationshipNotificationSchema,
-  moderationWarningNotificationSchema,
-  moveNotificationSchema,
-  emojiReactionNotificationSchema,
-  chatMentionNotificationSchema,
-  eventParticipationRequestNotificationSchema,
-])) as any;
+const notificationSchema: v.BaseSchema<any, Notification, v.BaseIssue<unknown>> = v.pipe(
+  v.any(),
+  v.transform((notification: any) => ({
+    group_key: `ungrouped-${notification.id}`,
+    ...pick(notification.pleroma || {}, ['is_muted', 'is_seen']),
+    ...notification,
+    type: notification.type === 'pleroma:report'
+      ? 'admin.report'
+      : notification.type?.replace(/^pleroma:/, ''),
+  })),
+  v.variant('type', [
+    accountNotificationSchema,
+    mentionNotificationSchema,
+    statusNotificationSchema,
+    reportNotificationSchema,
+    severedRelationshipNotificationSchema,
+    moderationWarningNotificationSchema,
+    moveNotificationSchema,
+    emojiReactionNotificationSchema,
+    chatMentionNotificationSchema,
+    eventParticipationRequestNotificationSchema,
+  ])) as any;
 
 type Notification = v.InferOutput<
 | typeof accountNotificationSchema

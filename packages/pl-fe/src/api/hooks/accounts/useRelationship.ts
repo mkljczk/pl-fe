@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useEntity } from 'pl-fe/entity-store/hooks';
@@ -19,7 +19,7 @@ const useRelationship = (accountId: string | undefined, opts: UseRelationshipOpt
     () => client.accounts.getRelationships([accountId!]),
     {
       enabled: enabled && !!accountId,
-      schema: z.any().transform(arr => arr[0]),
+      schema: v.pipe(v.any(), v.transform(arr => arr[0])),
     },
   );
 

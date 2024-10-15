@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useEntity } from 'pl-fe/entity-store/hooks';
@@ -14,7 +14,7 @@ const useGroupRelationship = (groupId: string | undefined) => {
     () => client.experimental.groups.getGroupRelationships([groupId!]),
     {
       enabled: !!groupId,
-      schema: z.any().transform(arr => arr[0]),
+      schema: v.pipe(v.any(), v.transform(arr => arr[0])),
     },
   );
 

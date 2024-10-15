@@ -5,7 +5,7 @@ import { GroupRoles } from './group-member';
 const groupRelationshipSchema = v.object({
   id: v.string(),
   member: v.fallback(v.boolean(), false),
-  role: z.nativeEnum(GroupRoles).catch(GroupRoles.USER),
+  role: v.fallback(v.enum(GroupRoles), GroupRoles.USER),
   requested: v.fallback(v.boolean(), false),
 });
 

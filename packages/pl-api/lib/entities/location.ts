@@ -13,7 +13,7 @@ const locationSchema = v.object({
   type: v.fallback(v.string(), ''),
   timezone: v.fallback(v.string(), ''),
   geom: v.fallback(v.nullable(v.object({
-    coordinates: v.fallback(v.nullable(z.tuple([v.number(), v.number()])), null),
+    coordinates: v.fallback(v.nullable(v.tuple([v.number(), v.number()])), null),
     srid: v.fallback(v.string(), ''),
   })), null),
 });

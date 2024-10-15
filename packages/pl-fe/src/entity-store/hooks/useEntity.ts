@@ -47,7 +47,7 @@ const useEntity = <TEntity extends Entity, TTransformedEntity extends Entity = T
   const fetchEntity = async () => {
     try {
       const response = await setPromise(entityFn());
-      let entity: TEntity | TTransformedEntity = schema.parse(response);
+      let entity: TEntity | TTransformedEntity = v.parse(schema, response);
       if (opts.transform) entity = opts.transform(entity);
       dispatch(importEntities([entity], entityType));
     } catch (e) {

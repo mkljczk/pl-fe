@@ -32,7 +32,7 @@ const useCreateEntity = <TEntity extends Entity = Entity, TTransformedEntity ext
   ): Promise<void> => {
     const result = await setPromise(entityFn(data));
     const schema = opts.schema || z.custom<TEntity>();
-    let entity: TEntity | TTransformedEntity = schema.parse(result);
+    let entity: TEntity | TTransformedEntity = v.parse(schema, result);
     if (opts.transform) entity = opts.transform(entity);
 
     // TODO: optimistic updating

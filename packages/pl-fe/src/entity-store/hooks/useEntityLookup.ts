@@ -36,7 +36,7 @@ const useEntityLookup = <TEntity extends Entity, TTransformedEntity extends Enti
   const fetchEntity = async () => {
     try {
       const response = await setPromise(entityFn());
-      const entity = schema.parse(response);
+      const entity = v.parse(schema, response);
       const transformedEntity = opts.transform ? opts.transform(entity) : entity;
       setFetchedEntity(transformedEntity as TTransformedEntity);
       dispatch(importEntities([transformedEntity], entityType));

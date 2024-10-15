@@ -9,7 +9,7 @@ import { coerceObject, dateSchema, filteredArray } from './utils';
 const filterBadges = (tags?: string[]) =>
   tags?.filter(tag => tag.startsWith('badge:')).map(tag => v.parse(roleSchema, { id: tag, name: tag.replace(/^badge:/, '') }));
 
-const preprocessAccount = (account: any) => {
+const preprocessAccount = v.transform((account: any) => {
   if (!account?.acct) return null;
 
   const username = account.username || account.acct.split('@')[0];
@@ -59,7 +59,7 @@ const preprocessAccount = (account: any) => {
       ])), ...account.source }
       : undefined,
   };
-};
+});
 
 const fieldSchema = v.object({
   name: v.string(),
@@ -128,11 +128,11 @@ const baseAccountSchema = v.object({
 
 const accountWithMovedAccountSchema = v.object({
   ...baseAccountSchema.entries,
-  moved: v.fallback(v.nullable(z.lazy((): typeof baseAccountSchema => accountWithMovedAccountSchema as any)), null),
+  moved: v.fallback(v.nullable(v.lazy((): typeof baseAccountSchema => accountWithMovedAccountSchema as any)), null),
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Account/} */
-const untypedAccountSchema = z.preprocess(preprocessAccount, accountWithMovedAccountSchema);
+const untypedAccountSchema = v.pipe(v.any(), preprocessAccount, accountWithMovedAccountSchema);
 
 type WithMoved = {
   moved: Account | null;
@@ -140,9 +140,9 @@ type WithMoved = {
 
 type Account = v.InferOutput<typeof accountWithMovedAccountSchema> & WithMoved;
 
-const accountSchema: z.ZodType<Account> = untypedAccountSchema as any;
+const accountSchema: v.BaseSchema<any, Account, v.BaseIssue<unknown>> = untypedAccountSchema as any;
 
-const untypedCredentialAccountSchema = z.preprocess(preprocessAccount, v.object({
+const untypedCredentialAccountSchema = v.pipe(v.any(), preprocessAccount, v.object({
   ...accountWithMovedAccountSchema.entries,
   source: v.fallback(v.nullable(v.object({
     note: v.fallback(v.string(), ''),
@@ -150,7 +150,7 @@ const untypedCredentialAccountSchema = z.preprocess(preprocessAccount, v.object(
     privacy: v.picklist(['public', 'unlisted', 'private', 'direct']),
     sensitive: v.fallback(v.boolean(), false),
     language: v.fallback(v.nullable(v.string()), null),
-    follow_requests_count: z.number().int().nonnegative().catch(0),
+    follow_requests_count: v.fallback(v.pipe(v.number(), v.integer(), v.minValue(0)), 0),
 
     show_role: v.fallback(v.nullable(v.optional(v.boolean())), undefined),
     no_rich_text: v.fallback(v.nullable(v.optional(v.boolean())), undefined),
@@ -173,16 +173,16 @@ const untypedCredentialAccountSchema = z.preprocess(preprocessAccount, v.object(
 
 type CredentialAccount = v.InferOutput<typeof untypedCredentialAccountSchema> & WithMoved;
 
-const credentialAccountSchema: z.ZodType<CredentialAccount> = untypedCredentialAccountSchema as any;
+const credentialAccountSchema: v.BaseSchema<any, CredentialAccount, v.BaseIssue<unknown>> = untypedCredentialAccountSchema as any;
 
-const untypedMutedAccountSchema = z.preprocess(preprocessAccount, v.object({
+const untypedMutedAccountSchema = v.pipe(v.any(), preprocessAccount, v.object({
   ...accountWithMovedAccountSchema.entries,
   mute_expires_at: v.fallback(v.nullable(dateSchema), null),
 }));
 
 type MutedAccount = v.InferOutput<typeof untypedMutedAccountSchema> & WithMoved;
 
-const mutedAccountSchema: z.ZodType<MutedAccount> = untypedMutedAccountSchema as any;
+const mutedAccountSchema: v.BaseSchema<any, MutedAccount, v.BaseIssue<unknown>> = untypedMutedAccountSchema as any;
 
 export {
   accountSchema,
