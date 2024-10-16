@@ -1,12 +1,12 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
-const bookmarkFolderSchema = z.object({
-  id: z.coerce.string(),
-  name: z.string().catch(''),
-  emoji: z.string().nullable().catch(null),
-  emoji_url: z.string().nullable().catch(null),
+const bookmarkFolderSchema = v.object({
+  id: v.pipe(v.unknown(), v.transform(String)),
+  name: v.fallback(v.string(), ''),
+  emoji: v.fallback(v.nullable(v.string()), null),
+  emoji_url: v.fallback(v.nullable(v.string()), null),
 });
 
-type BookmarkFolder = z.infer<typeof bookmarkFolderSchema>;
+type BookmarkFolder = v.InferOutput<typeof bookmarkFolderSchema>;
 
 export { bookmarkFolderSchema, type BookmarkFolder };

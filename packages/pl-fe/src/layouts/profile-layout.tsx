@@ -95,7 +95,7 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
       <Layout.Main>
         <Column size='lg' label={account ? `@${getAcct(account, displayFqn)}` : ''} withHeader={false}>
           <div className='space-y-4'>
-            <Header account={account} />
+            <Header key={`profile-header-${account?.id}`} account={account} />
             <ProfileInfoPanel username={username} account={account} />
 
             {account && showTabs && (

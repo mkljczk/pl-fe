@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import z from 'zod';
+import * as v from 'valibot';
 
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
@@ -14,7 +14,7 @@ import type { PlfeResponse } from 'pl-fe/api';
 
 /** Additional options for the hook. */
 interface UseEntityOpts<TEntity extends Entity, TTransformedEntity extends Entity> {
-  /** A zod schema to parse the API entity. */
+  /** A valibot schema to parse the API entity. */
   schema?: EntitySchema<TEntity>;
   /** Whether to refetch this entity every time the hook mounts, even if it's already in the store. */
   refetch?: boolean;
@@ -35,7 +35,7 @@ const useEntity = <TEntity extends Entity, TTransformedEntity extends Entity = T
 
   const [entityType, entityId] = path;
 
-  const defaultSchema = z.custom<TEntity>();
+  const defaultSchema = v.custom<TEntity>(() => true);
   const schema = opts.schema || defaultSchema;
 
   const entity = useAppSelector(state => selectEntity<TTransformedEntity>(state, entityType, entityId));
@@ -47,7 +47,7 @@ const useEntity = <TEntity extends Entity, TTransformedEntity extends Entity = T
   const fetchEntity = async () => {
     try {
       const response = await setPromise(entityFn());
-      let entity: TEntity | TTransformedEntity = schema.parse(response);
+      let entity: TEntity | TTransformedEntity = v.parse(schema, response);
       if (opts.transform) entity = opts.transform(entity);
       dispatch(importEntities([entity], entityType));
     } catch (e) {

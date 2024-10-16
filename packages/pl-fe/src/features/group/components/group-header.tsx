@@ -1,6 +1,7 @@
 import { mediaAttachmentSchema } from 'pl-api';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
+import * as v from 'valibot';
 
 import GroupAvatar from 'pl-fe/components/groups/group-avatar';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
@@ -52,7 +53,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
   }
 
   const onAvatarClick = () => {
-    const avatar = mediaAttachmentSchema.parse({
+    const avatar = v.parse(mediaAttachmentSchema, {
       id: '',
       type: 'image',
       url: group.avatar,
@@ -68,7 +69,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
   };
 
   const onHeaderClick = () => {
-    const header = mediaAttachmentSchema.parse({
+    const header = v.parse(mediaAttachmentSchema, {
       id: '',
       type: 'image',
       url: group.header,

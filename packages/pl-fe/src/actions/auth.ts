@@ -9,6 +9,7 @@
 import { credentialAccountSchema, PlApiClient, type CreateAccountParams, type Token } from 'pl-api';
 import { importEntities } from 'pl-hooks/importer';
 import { defineMessages } from 'react-intl';
+import * as v from 'valibot';
 
 import { createAccount } from 'pl-fe/actions/accounts';
 import { createApp } from 'pl-fe/actions/apps';
@@ -155,7 +156,7 @@ const verifyCredentials = (token: string, accountUrl?: string) =>
       if (error?.response?.status === 403 && error?.response?.json?.id) {
         // The user is waitlisted
         const account = error.response.json;
-        const parsedAccount = credentialAccountSchema.parse(error.response.json);
+        const parsedAccount = v.parse(credentialAccountSchema, error.response.json);
         importEntities({ accounts: [parsedAccount] });
         dispatch({ type: VERIFY_CREDENTIALS_SUCCESS, token, account: parsedAccount });
         if (account.id === getState().me) dispatch(fetchMeSuccess(parsedAccount));

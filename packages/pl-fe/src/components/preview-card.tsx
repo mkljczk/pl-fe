@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { type MediaAttachment, type PreviewCard as CardEntity, mediaAttachmentSchema } from 'pl-api';
 import React, { useState, useEffect } from 'react';
+import * as v from 'valibot';
 
 import Blurhash from 'pl-fe/components/blurhash';
 import { HStack, Stack, Text, Icon } from 'pl-fe/components/ui';
@@ -43,7 +44,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   const trimmedDescription = trim(card.description, maxDescription);
 
   const handlePhotoClick = () => {
-    const attachment = mediaAttachmentSchema.parse({
+    const attachment = v.parse(mediaAttachmentSchema, {
       id: '',
       type: 'image',
       url: card.embed_url,

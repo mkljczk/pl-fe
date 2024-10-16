@@ -1,17 +1,17 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 /** @see {@link https://docs.joinmastodon.org/entities/NotificationPolicy} */
-const notificationPolicySchema = z.object({
-  filter_not_following: z.boolean(),
-  filter_not_followers: z.boolean(),
-  filter_new_accounts: z.boolean(),
-  filter_private_mentions: z.boolean(),
-  summary: z.object({
-    pending_requests_count: z.number().int(),
-    pending_notifications_count: z.number().int(),
+const notificationPolicySchema = v.object({
+  filter_not_following: v.boolean(),
+  filter_not_followers: v.boolean(),
+  filter_new_accounts: v.boolean(),
+  filter_private_mentions: v.boolean(),
+  summary: v.object({
+    pending_requests_count: v.pipe(v.number(), v.integer()),
+    pending_notifications_count: v.pipe(v.number(), v.integer()),
   }),
 });
 
-type NotificationPolicy = z.infer<typeof notificationPolicySchema>;
+type NotificationPolicy = v.InferOutput<typeof notificationPolicySchema>;
 
 export { notificationPolicySchema, type NotificationPolicy };

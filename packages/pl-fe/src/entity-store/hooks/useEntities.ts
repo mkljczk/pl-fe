@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import z from 'zod';
+import * as v from 'valibot';
 
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
@@ -17,7 +17,7 @@ import type { PaginatedResponse } from 'pl-api';
 
 /** Additional options for the hook. */
 interface UseEntitiesOpts<TEntity extends Entity, TTransformedEntity extends Entity> {
-  /** A zod schema to parse the API entities. */
+  /** A valibot schema to parse the API entities. */
   schema?: EntitySchema<TEntity>;
   /**
    * Time (milliseconds) until this query becomes stale and should be refetched.
@@ -43,7 +43,7 @@ const useEntities = <TEntity extends Entity, TTransformedEntity extends Entity =
 
   const { entityType, listKey, path } = parseEntitiesPath(expandedPath);
   const entities = useAppSelector(state => selectEntities<TTransformedEntity>(state, path));
-  const schema = opts.schema || z.custom<TEntity>();
+  const schema = opts.schema || v.custom<TEntity>(() => true);
 
   const isEnabled = opts.enabled ?? true;
   const isFetching = useListState(path, 'fetching');
@@ -64,7 +64,7 @@ const useEntities = <TEntity extends Entity, TTransformedEntity extends Entity =
     dispatch(entitiesFetchRequest(entityType, listKey));
     try {
       const response = await req();
-      const entities = filteredArray(schema).parse(response);
+      const entities = v.parse(filteredArray(schema), response);
       const transformedEntities = opts.transform && entities.map(opts.transform);
 
       dispatch(entitiesFetchSuccess(transformedEntities || entities, entityType, listKey, pos, {

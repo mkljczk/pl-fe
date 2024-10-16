@@ -94,7 +94,7 @@ const GroupLayout: React.FC<IGroupLayout> = ({ params, children }) => {
     <>
       <Layout.Main>
         <Column size='lg' label={group ? group.display_name : ''} withHeader={false}>
-          <GroupHeader group={group} />
+          <GroupHeader key={`group-header-${groupId}`} group={group} />
 
           <Tabs
             key={`group-tabs-${groupId}`}

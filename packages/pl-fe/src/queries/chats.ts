@@ -2,6 +2,7 @@ import { InfiniteData, keepPreviousData, useInfiniteQuery, useMutation, useQuery
 import sumBy from 'lodash/sumBy';
 import { type Chat, type ChatMessage as BaseChatMessage, type PaginatedResponse, chatMessageSchema, type Relationship } from 'pl-api';
 import { importEntities } from 'pl-hooks/importer';
+import * as v from 'valibot';
 
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
@@ -169,7 +170,7 @@ const useChatActions = (chatId: string) => {
               ...page,
               items: [
                 normalizeChatMessage({
-                  ...chatMessageSchema.parse({
+                  ...v.parse(chatMessageSchema, {
                     chat_id: variables.chatId,
                     content: variables.content,
                     id: pendingId,

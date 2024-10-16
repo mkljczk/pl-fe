@@ -1,6 +1,7 @@
 import { List as ImmutableList, Map as ImmutableMap, Record as ImmutableRecord, fromJS } from 'immutable';
 import trim from 'lodash/trim';
 import { applicationSchema, PlApiClient, tokenSchema, type Application, type CredentialAccount, type Token } from 'pl-api';
+import * as v from 'valibot';
 
 import { MASTODON_PRELOAD_IMPORT } from 'pl-fe/actions/preload';
 import * as BuildConfig from 'pl-fe/build-config';
@@ -60,8 +61,8 @@ const getLocalState = () => {
   if (!state) return undefined;
 
   return ReducerRecord({
-    app: state.app && applicationSchema.parse(state.app),
-    tokens: ImmutableMap(Object.entries(state.tokens).map(([key, value]) => [key, tokenSchema.parse(value)])),
+    app: state.app && v.parse(applicationSchema, state.app),
+    tokens: ImmutableMap(Object.entries(state.tokens).map(([key, value]) => [key, v.parse(tokenSchema, value)])),
     users: ImmutableMap(Object.entries(state.users).map(([key, value]) => [key, AuthUserRecord(value as any)])),
     me: state.me,
     client: new PlApiClient(parseBaseURL(state.me) || backendUrl, state.users[state.me]?.access_token),
@@ -237,7 +238,7 @@ const importMastodonPreload = (state: State, data: ImmutableMap<string, any>) =>
     const accessToken = data.getIn(['meta', 'access_token']) as string;
 
     if (validId(accessToken) && validId(accountId) && isURL(accountUrl)) {
-      state.setIn(['tokens', accessToken], tokenSchema.parse({
+      state.setIn(['tokens', accessToken], v.parse(tokenSchema, {
         access_token: accessToken,
         account: accountId,
         me: accountUrl,

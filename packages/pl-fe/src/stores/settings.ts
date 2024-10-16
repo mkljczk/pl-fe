@@ -1,4 +1,5 @@
 import { produce } from 'immer';
+import * as v from 'valibot';
 import { create } from 'zustand';
 
 import { settingsSchema, type Settings } from 'pl-fe/schemas/pl-fe/settings';
@@ -6,7 +7,7 @@ import { settingsSchema, type Settings } from 'pl-fe/schemas/pl-fe/settings';
 import type { Emoji } from 'pl-fe/features/emoji';
 import type { APIEntity } from 'pl-fe/types/entities';
 
-const settingsSchemaPartial = settingsSchema.partial();
+const settingsSchemaPartial = v.partial(settingsSchema);
 
 type State = {
   defaultSettings: Settings;
@@ -35,22 +36,22 @@ const changeSetting = (object: APIEntity, path: string[], value: any) => {
 const mergeSettings = (state: State) => state.settings = { ...state.defaultSettings, ...state.userSettings };
 
 const useSettingsStore = create<State>((set) => ({
-  defaultSettings: settingsSchema.parse({}),
+  defaultSettings: v.parse(settingsSchema, {}),
   userSettings: {},
 
-  settings: settingsSchema.parse({}),
+  settings: v.parse(settingsSchema, {}),
 
   loadDefaultSettings: (settings: APIEntity) => set(produce((state: State) => {
     if (typeof settings !== 'object') return;
 
-    state.defaultSettings = settingsSchema.parse(settings);
+    state.defaultSettings = v.parse(settingsSchema, settings);
     mergeSettings(state);
   })),
 
   loadUserSettings: (settings?: APIEntity) => set(produce((state: State) => {
     if (typeof settings !== 'object') return;
 
-    state.userSettings = settingsSchemaPartial.parse(settings);
+    state.userSettings = v.parse(settingsSchemaPartial, settings);
     mergeSettings(state);
   })),
 

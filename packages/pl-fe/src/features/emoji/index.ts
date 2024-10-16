@@ -2,8 +2,8 @@ import split from 'graphemesplit';
 
 import unicodeMapping from './mapping';
 
+import type { Emoji as EmojiMart, CustomEmoji as EmojiMartCustom } from './data';
 import type { CustomEmoji as BaseCustomEmoji } from 'pl-api';
-import type { Emoji as EmojiMart, CustomEmoji as EmojiMartCustom } from 'pl-fe/features/emoji/data';
 
 /*
  * TODO: Consolate emoji object types

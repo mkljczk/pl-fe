@@ -1,4 +1,5 @@
 import { instanceSchema } from 'pl-api';
+import * as v from 'valibot';
 
 import { __stub } from 'pl-fe/api';
 import { buildGroup } from 'pl-fe/jest/factory';
@@ -8,7 +9,7 @@ import { useGroups } from './useGroups';
 
 const group = buildGroup({ id: '1', display_name: 'soapbox' });
 const store = {
-  instance: instanceSchema.parse({
+  instance: v.parse(instanceSchema, {
     version: '3.4.1 (compatible; TruthSocial 1.0.0+unreleased)',
   }),
 };

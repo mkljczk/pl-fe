@@ -157,7 +157,6 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
     return handlers;
   }, [account?.id]);
 
-
   return (
     <HotKeys keyMap={keyMap} handlers={handlers} ref={setHotkeysRef} attach={window} focused>
       {children}
