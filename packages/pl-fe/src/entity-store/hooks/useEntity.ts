@@ -14,7 +14,7 @@ import type { PlfeResponse } from 'pl-fe/api';
 
 /** Additional options for the hook. */
 interface UseEntityOpts<TEntity extends Entity, TTransformedEntity extends Entity> {
-  /** A zod schema to parse the API entity. */
+  /** A valibot schema to parse the API entity. */
   schema?: EntitySchema<TEntity>;
   /** Whether to refetch this entity every time the hook mounts, even if it's already in the store. */
   refetch?: boolean;

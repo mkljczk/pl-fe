@@ -17,7 +17,7 @@ import type { PaginatedResponse } from 'pl-api';
 
 /** Additional options for the hook. */
 interface UseEntitiesOpts<TEntity extends Entity, TTransformedEntity extends Entity> {
-  /** A zod schema to parse the API entities. */
+  /** A valibot schema to parse the API entities. */
   schema?: EntitySchema<TEntity>;
   /**
    * Time (milliseconds) until this query becomes stale and should be refetched.
