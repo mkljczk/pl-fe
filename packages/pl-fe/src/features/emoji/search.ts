@@ -6,18 +6,20 @@ import type { CustomEmoji } from 'pl-api';
 
 let emojis: EmojiData['emojis'] = {};
 
-import('./data').then(data => emojis = data.emojis).catch(() => { });
+import('./data').then(data => {
+  emojis = data.emojis;
+
+  const sortedEmojis = Object.entries(emojis).sort((a, b) => a[0].localeCompare(b[0]));
+  for (const [key, emoji] of sortedEmojis) {
+    index.add('n' + key, `${emoji.id} ${emoji.name} ${emoji.keywords.join(' ')}`);
+  }
+}).catch(() => { });
 
 const index = new FlexSearch.Index({
   tokenize: 'full',
   optimize: true,
   context: true,
 });
-
-const sortedEmojis = Object.entries(emojis).sort((a, b) => a[0].localeCompare(b[0]));
-for (const [key, emoji] of sortedEmojis) {
-  index.add('n' + key, `${emoji.id} ${emoji.name} ${emoji.keywords.join(' ')}`);
-}
 
 interface searchOptions {
   maxResults?: number;
