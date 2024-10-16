@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
@@ -29,7 +29,7 @@ const useBatchedEntities = <TEntity extends Entity>(
   const getState = useGetState();
   const dispatch = useAppDispatch();
   const { entityType, listKey, path } = parseEntitiesPath(expandedPath);
-  const schema = opts.schema || z.custom<TEntity>();
+  const schema = opts.schema || v.custom<TEntity>(() => true);
 
   const isEnabled = opts.enabled ?? true;
   const isFetching = useListState(path, 'fetching');

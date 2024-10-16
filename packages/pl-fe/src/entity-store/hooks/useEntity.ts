@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import z from 'zod';
+import * as v from 'valibot';
 
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
@@ -35,7 +35,7 @@ const useEntity = <TEntity extends Entity, TTransformedEntity extends Entity = T
 
   const [entityType, entityId] = path;
 
-  const defaultSchema = z.custom<TEntity>();
+  const defaultSchema = v.custom<TEntity>(() => true);
   const schema = opts.schema || defaultSchema;
 
   const entity = useAppSelector(state => selectEntity<TTransformedEntity>(state, entityType, entityId));

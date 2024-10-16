@@ -43,7 +43,7 @@ const useEntities = <TEntity extends Entity, TTransformedEntity extends Entity =
 
   const { entityType, listKey, path } = parseEntitiesPath(expandedPath);
   const entities = useAppSelector(state => selectEntities<TTransformedEntity>(state, path));
-  const schema = opts.schema || z.custom<TEntity>();
+  const schema = opts.schema || v.custom<TEntity>(() => true);
 
   const isEnabled = opts.enabled ?? true;
   const isFetching = useListState(path, 'fetching');
