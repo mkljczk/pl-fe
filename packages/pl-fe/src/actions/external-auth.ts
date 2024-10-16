@@ -7,6 +7,7 @@
  */
 
 import { instanceSchema, PlApiClient, type Instance } from 'pl-api';
+import * as v from 'valibot';
 
 import { createApp } from 'pl-fe/actions/apps';
 import { authLoggedIn, verifyCredentials, switchAccount } from 'pl-fe/actions/auth';
@@ -24,7 +25,7 @@ const fetchExternalInstance = (baseURL: string) =>
       if (error.response?.status === 401) {
         // Authenticated fetch is enabled.
         // Continue with a limited featureset.
-        return instanceSchema.parse({});
+        return v.parse(instanceSchema, {});
       } else {
         throw error;
       }

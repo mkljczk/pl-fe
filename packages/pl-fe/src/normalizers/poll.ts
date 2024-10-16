@@ -1,7 +1,6 @@
 import escapeTextContentForBrowser from 'escape-html';
 import DOMPurify from 'isomorphic-dompurify';
 
-
 import emojify from 'pl-fe/features/emoji';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 

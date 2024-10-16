@@ -1,11 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { announcementReactionSchema, type AnnouncementReaction } from 'pl-api';
+import * as v from 'valibot';
 
 import { useClient } from 'pl-fe/hooks';
 import { type Announcement, normalizeAnnouncement } from 'pl-fe/normalizers';
 import { queryClient } from 'pl-fe/queries/client';
 
-const updateReaction = (reaction: AnnouncementReaction, count: number, me?: boolean, overwrite?: boolean) => announcementReactionSchema.parse({
+const updateReaction = (reaction: AnnouncementReaction, count: number, me?: boolean, overwrite?: boolean) => v.parse(announcementReactionSchema, {
   ...reaction,
   me: typeof me === 'boolean' ? me : reaction.me,
   count: overwrite ? count : (reaction.count + count),
@@ -18,7 +19,7 @@ const updateReactions = (reactions: AnnouncementReaction[], name: string, count:
     reactions = reactions.map(reaction => reaction.name === name ? updateReaction(reaction, count, me, overwrite) : reaction);
   }
 
-  return [...reactions, updateReaction(announcementReactionSchema.parse({ name }), count, me, overwrite)];
+  return [...reactions, updateReaction(v.parse(announcementReactionSchema, { name }), count, me, overwrite)];
 };
 
 const useAnnouncements = () => {

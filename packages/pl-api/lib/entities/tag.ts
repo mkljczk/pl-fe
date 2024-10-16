@@ -1,10 +1,10 @@
 import * as v from 'valibot';
 
-const historySchema = v.object({
+const historySchema = v.array(v.object({
   day: v.pipe(v.unknown(), v.transform(Number)),
   accounts: v.pipe(v.unknown(), v.transform(Number)),
   uses: v.pipe(v.unknown(), v.transform(Number)),
-});
+}));
 
 /** @see {@link https://docs.joinmastodon.org/entities/tag} */
 const tagSchema = v.object({

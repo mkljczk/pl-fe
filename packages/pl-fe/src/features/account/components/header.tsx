@@ -3,6 +3,7 @@ import { GOTOSOCIAL, MASTODON, mediaAttachmentSchema } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
+import * as v from 'valibot';
 
 import { biteAccount, blockAccount, pinAccount, removeFromFollowers, unblockAccount, unmuteAccount, unpinAccount } from 'pl-fe/actions/accounts';
 import { mentionCompose, directCompose } from 'pl-fe/actions/compose';
@@ -240,7 +241,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const onAvatarClick = () => {
-    const avatar = mediaAttachmentSchema.parse({
+    const avatar = v.parse(mediaAttachmentSchema, {
       id: '',
       type: 'image',
       url: account.avatar,
@@ -256,7 +257,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const onHeaderClick = () => {
-    const header = mediaAttachmentSchema.parse({
+    const header = v.parse(mediaAttachmentSchema, {
       type: 'image',
       url: account.header,
     });

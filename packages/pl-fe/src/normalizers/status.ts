@@ -6,6 +6,7 @@
 import escapeTextContentForBrowser from 'escape-html';
 import DOMPurify from 'isomorphic-dompurify';
 import { type Account as BaseAccount, type Status as BaseStatus, type CustomEmoji, type MediaAttachment, mentionSchema, type Translation } from 'pl-api';
+import * as v from 'valibot';
 
 import emojify from 'pl-fe/features/emoji';
 import { unescapeHTML } from 'pl-fe/utils/html';
@@ -111,7 +112,7 @@ const normalizeStatus = (status: BaseStatus & {
   const hasSelfMention = status.mentions.some(mention => status.account.id === mention.id);
 
   if (isSelfReply && !hasSelfMention) {
-    const selfMention = mentionSchema.parse(status.account);
+    const selfMention = v.parse(mentionSchema, status.account);
     mentions = [selfMention, ...mentions];
   }
 
