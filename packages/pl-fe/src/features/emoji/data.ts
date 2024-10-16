@@ -1,61 +1,11 @@
 import data from '@emoji-mart/data/sets/14/twitter.json';
 
-interface NativeEmoji {
-  unified: string;
-  native: string;
-  x: number;
-  y: number;
-}
-
-interface CustomEmoji {
-  src: string;
-}
-
-interface Emoji<T> {
-  id: string;
-  name: string;
-  keywords: string[];
-  skins: T[];
-  version?: number;
-}
-
-interface EmojiCategory {
-  id: string;
-  emojis: string[];
-}
-
-interface EmojiMap {
-  [s: string]: Emoji<NativeEmoji>;
-}
-
-interface EmojiAlias {
-  [s: string]: string;
-}
-
-interface EmojiSheet {
-  cols: number;
-  rows: number;
-}
-
-interface EmojiData {
-  categories: EmojiCategory[];
-  emojis: EmojiMap;
-  aliases: EmojiAlias;
-  sheet: EmojiSheet;
-}
+import type { EmojiData } from './types';
 
 const emojiData = data as EmojiData;
 const { categories, emojis, aliases, sheet } = emojiData;
 
 export {
-  type NativeEmoji,
-  type CustomEmoji,
-  type Emoji,
-  type EmojiCategory,
-  type EmojiMap,
-  type EmojiAlias,
-  type EmojiSheet,
-  type EmojiData,
   categories,
   emojis,
   aliases,

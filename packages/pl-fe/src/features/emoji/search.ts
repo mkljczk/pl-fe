@@ -1,9 +1,12 @@
 import FlexSearch from 'flexsearch';
 
-import data from './data';
-
 import type { Emoji } from './index';
+import type { EmojiData } from './types';
 import type { CustomEmoji } from 'pl-api';
+
+let emojis: EmojiData['emojis'] = {};
+
+import('./data').then(data => emojis = data.emojis).catch(() => { });
 
 const index = new FlexSearch.Index({
   tokenize: 'full',
@@ -11,7 +14,7 @@ const index = new FlexSearch.Index({
   context: true,
 });
 
-const sortedEmojis = Object.entries(data.emojis).sort((a, b) => a[0].localeCompare(b[0]));
+const sortedEmojis = Object.entries(emojis).sort((a, b) => a[0].localeCompare(b[0]));
 for (const [key, emoji] of sortedEmojis) {
   index.add('n' + key, `${emoji.id} ${emoji.name} ${emoji.keywords.join(' ')}`);
 }
@@ -58,7 +61,7 @@ const search = (
       }
     }
 
-    const skins = data.emojis[id.slice(1)]?.skins;
+    const skins = emojis[id.slice(1)]?.skins;
 
     if (skins) {
       return {
