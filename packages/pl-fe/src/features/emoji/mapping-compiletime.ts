@@ -1,6 +1,7 @@
 import { createRequire } from 'node:module';
 
-import type { EmojiData, UnicodeMap } from './types';
+import type { EmojiData } from './data';
+import type { UnicodeMap } from './mapping';
 
 const require = createRequire(import.meta.url);
 const data = require('@emoji-mart/data/sets/14/twitter.json');

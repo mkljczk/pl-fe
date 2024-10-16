@@ -1,7 +1,7 @@
 import FlexSearch from 'flexsearch';
 
+import type { EmojiData } from './data';
 import type { Emoji } from './index';
-import type { EmojiData } from './types';
 import type { CustomEmoji } from 'pl-api';
 
 let emojis: EmojiData['emojis'] = {};

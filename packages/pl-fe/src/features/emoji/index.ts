@@ -2,7 +2,7 @@ import split from 'graphemesplit';
 
 import unicodeMapping from './mapping';
 
-import type { Emoji as EmojiMart, CustomEmoji as EmojiMartCustom } from './types';
+import type { Emoji as EmojiMart, CustomEmoji as EmojiMartCustom } from './data';
 import type { CustomEmoji as BaseCustomEmoji } from 'pl-api';
 
 /*
