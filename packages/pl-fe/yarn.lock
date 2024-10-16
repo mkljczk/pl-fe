@@ -7556,10 +7556,10 @@ pirates@^4.0.1:
   resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.6.tgz#3018ae32ecfcff6c29ba2267cbf21166ac1f36b9"
   integrity sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==
 
-pl-api@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.1.0.tgz#bcb059a4f9562a7e1294535898f6098161129eaa"
-  integrity sha512-n1hSb1u4tfsSeseWpJOWCKdenvNQ5iXkb1OuAQq7c0duCuoib1q51Etp9sZiW52YpqcP6CKkkF6McJnlh551sg==
+pl-api@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.1.1.tgz#e3465482697ea53e10bba510c5217c42b1d40ab0"
+  integrity sha512-JFao273dOG9XgrunqlfJn+e3DUr001MePCmJasQwaX3aPjM/L158hKfCnYPmoDKn1u5bfekMK6tVauBtbnkmqA==
   dependencies:
     blurhash "^2.0.5"
     http-link-header "^1.1.3"
