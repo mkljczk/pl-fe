@@ -7556,10 +7556,10 @@ pirates@^4.0.1:
   resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.6.tgz#3018ae32ecfcff6c29ba2267cbf21166ac1f36b9"
   integrity sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==
 
-pl-api@^0.0.42:
-  version "0.0.42"
-  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.0.42.tgz#e15cd33ae494384e84feee4a1022849d7e61290b"
-  integrity sha512-BEkaJVIHC+8F/ta+5qdSIfK5/F8lCev2FboZoLp/aE9OtiRkvRxiZsBB4VLn5oSRSv26HmhoNYR8fHaJyw/VEw==
+pl-api@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.1.0.tgz#bcb059a4f9562a7e1294535898f6098161129eaa"
+  integrity sha512-n1hSb1u4tfsSeseWpJOWCKdenvNQ5iXkb1OuAQq7c0duCuoib1q51Etp9sZiW52YpqcP6CKkkF6McJnlh551sg==
   dependencies:
     blurhash "^2.0.5"
     http-link-header "^1.1.3"
@@ -7567,7 +7567,7 @@ pl-api@^0.0.42:
     object-to-formdata "^4.5.1"
     query-string "^9.1.0"
     semver "^7.6.3"
-    zod "^3.23.8"
+    valibot "^0.42.1"
 
 possible-typed-array-names@^1.0.0:
   version "1.0.0"
@@ -9748,6 +9748,11 @@ util@^0.12.5:
     is-typed-array "^1.1.3"
     which-typed-array "^1.1.2"
 
+valibot@^0.42.1:
+  version "0.42.1"
+  resolved "https://registry.yarnpkg.com/valibot/-/valibot-0.42.1.tgz#a31183d8e9d7552f98e22ca0977172cab8815188"
+  integrity sha512-3keXV29Ar5b//Hqi4MbSdV7lfVp6zuYLZuA9V1PvQUsXqogr+u5lvLPLk3A4f74VUXDnf/JfWMN6sB+koJ/FFw==
+
 value-equal@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/value-equal/-/value-equal-1.0.1.tgz#1e0b794c734c5c0cade179c437d356d931a34d6c"
@@ -10449,11 +10454,6 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
-
-zod@^3.23.8:
-  version "3.23.8"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.23.8.tgz#e37b957b5d52079769fb8097099b592f0ef4067d"
-  integrity sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==
 
 zustand@^5.0.0-rc.2:
   version "5.0.0-rc.2"

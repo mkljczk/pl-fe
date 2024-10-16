@@ -1,5 +1,6 @@
 import { Map as ImmutableMap, List as ImmutableList } from 'immutable';
 import { statusSchema } from 'pl-api';
+import * as v from 'valibot';
 
 import { normalizeStatus } from 'pl-fe/normalizers/status';
 import { makeGetAccount } from 'pl-fe/selectors';
@@ -46,7 +47,7 @@ const buildStatus = (state: RootState, pendingStatus: PendingStatus, idempotency
     visibility: pendingStatus.visibility,
   };
 
-  return normalizeStatus(statusSchema.parse(status));
+  return normalizeStatus(v.parse(statusSchema, status));
 };
 
 export { buildStatus };

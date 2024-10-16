@@ -4,8 +4,9 @@ import {
   Set as ImmutableSet,
 } from 'immutable';
 import trimStart from 'lodash/trimStart';
+import * as v from 'valibot';
 
-import { type MRFSimple, mrfSimpleSchema } from 'pl-fe/schemas/pleroma';
+import { mrfSimpleSchema } from 'pl-fe/schemas/pleroma';
 
 type Config = ImmutableMap<string, any>;
 type Policy = Record<string, any>;
@@ -18,7 +19,7 @@ const find = (
   config.isSuperset(ImmutableMap({ group, key })),
 );
 
-const toSimplePolicy = (configs: ImmutableList<Config>): MRFSimple => {
+const toSimplePolicy = (configs: ImmutableList<Config>) => {
   const config = find(configs, ':pleroma', ':mrf_simple');
 
   const reducer = (acc: ImmutableMap<string, any>, curr: ImmutableMap<string, any>) => {
@@ -30,9 +31,9 @@ const toSimplePolicy = (configs: ImmutableList<Config>): MRFSimple => {
   if (config?.get) {
     const value = config.get('value', ImmutableList());
     const result = value.reduce(reducer, ImmutableMap());
-    return mrfSimpleSchema.parse(result.toJS());
+    return v.parse(mrfSimpleSchema, result.toJS());
   } else {
-    return mrfSimpleSchema.parse({});
+    return v.parse(mrfSimpleSchema, {});
   }
 };
 

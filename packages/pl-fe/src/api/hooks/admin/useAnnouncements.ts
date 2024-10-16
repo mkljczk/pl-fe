@@ -5,6 +5,7 @@ import {
   type AdminCreateAnnouncementParams,
   type AdminUpdateAnnouncementParams,
 } from 'pl-api';
+import * as v from 'valibot';
 
 import { useClient } from 'pl-fe/hooks';
 import { normalizeAnnouncement, AdminAnnouncement } from 'pl-fe/normalizers';
@@ -36,7 +37,7 @@ const useAnnouncements = () => {
     retry: false,
     onSuccess: (data) =>
       queryClient.setQueryData(['admin', 'announcements'], (prevResult: ReadonlyArray<AdminAnnouncement>) =>
-        [...prevResult, adminAnnouncementSchema.parse(data)],
+        [...prevResult, v.parse(adminAnnouncementSchema, data)],
       ),
     onSettled: () => userAnnouncements.refetch(),
   });
@@ -50,7 +51,7 @@ const useAnnouncements = () => {
     retry: false,
     onSuccess: (data) =>
       queryClient.setQueryData(['admin', 'announcements'], (prevResult: ReadonlyArray<AdminAnnouncement>) =>
-        prevResult.map((announcement) => announcement.id === data.id ? adminAnnouncementSchema.parse(data) : announcement),
+        prevResult.map((announcement) => announcement.id === data.id ? v.parse(adminAnnouncementSchema, data) : announcement),
       ),
     onSettled: () => userAnnouncements.refetch(),
   });

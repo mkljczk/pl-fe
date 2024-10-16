@@ -1,6 +1,7 @@
 import { produce } from 'immer';
 import { Map as ImmutableMap, List as ImmutableList, fromJS } from 'immutable';
 import { type Instance, instanceSchema } from 'pl-api';
+import * as v from 'valibot';
 
 import { ADMIN_CONFIG_UPDATE_REQUEST, ADMIN_CONFIG_UPDATE_SUCCESS } from 'pl-fe/actions/admin';
 import { INSTANCE_FETCH_FAIL, INSTANCE_FETCH_SUCCESS, InstanceAction } from 'pl-fe/actions/instance';
@@ -10,11 +11,11 @@ import ConfigDB from 'pl-fe/utils/config-db';
 
 import type { AnyAction } from 'redux';
 
-const initialState: Instance = instanceSchema.parse({});
+const initialState: Instance = v.parse(instanceSchema, {});
 
 const preloadImport = (state: Instance, action: Record<string, any>, path: string) => {
   const instance = action.data[path];
-  return instance ? instanceSchema.parse(instance) : state;
+  return instance ? v.parse(instanceSchema, instance) : state;
 };
 
 const getConfigValue = (instanceConfig: ImmutableMap<string, any>, key: string) => {

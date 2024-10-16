@@ -1,19 +1,19 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
 /** @see {@link https://docs.joinmastodon.org/entities/Application/} */
-const applicationSchema = z.object({
-  name: z.string().catch(''),
-  website: z.string().optional().catch(undefined),
-  client_id: z.string().optional().catch(undefined),
-  client_secret: z.string().optional().catch(undefined),
-  redirect_uri: z.string().optional().catch(undefined),
+const applicationSchema = v.object({
+  name: v.fallback(v.string(), ''),
+  website: v.fallback(v.optional(v.string()), undefined),
+  client_id: v.fallback(v.optional(v.string()), undefined),
+  client_secret: v.fallback(v.optional(v.string()), undefined),
+  redirect_uri: v.fallback(v.optional(v.string()), undefined),
 
-  id: z.string().optional().catch(undefined),
+  id: v.fallback(v.optional(v.string()), undefined),
 
   /** @deprecated */
-  vapid_key: z.string().optional().catch(undefined),
+  vapid_key: v.fallback(v.optional(v.string()), undefined),
 });
 
-type Application = z.infer<typeof applicationSchema>;
+type Application = v.InferOutput<typeof applicationSchema>;
 
 export { applicationSchema, type Application };

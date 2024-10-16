@@ -26,6 +26,7 @@ import { mediaAttachmentSchema } from 'pl-api';
 import * as React from 'react';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import * as v from 'valibot';
 
 import { HStack, Icon, IconButton } from 'pl-fe/components/ui';
 import { useSettings } from 'pl-fe/hooks';
@@ -122,7 +123,7 @@ const ImageComponent = ({
   );
 
   const previewImage = () => {
-    const image = mediaAttachmentSchema.parse({
+    const image = v.parse(mediaAttachmentSchema, {
       id: '',
       type: 'image',
       url: src,

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { useCreateGroup } from 'pl-fe/api/hooks';
 import { Modal, Stack } from 'pl-fe/components/ui';
@@ -56,9 +56,9 @@ const CreateGroupModal: React.FC<BaseModalProps> = ({ onClose }) => {
             setGroup(group);
           },
           onError(error: { response?: PlfeResponse }) {
-            const msg = z.object({ error: z.string() }).safeParse(error?.response?.json);
+            const msg = v.safeParse(v.object({ error: v.string() }), error?.response?.json);
             if (msg.success) {
-              toast.error(msg.data.error);
+              toast.error(msg.output.error);
             }
           },
         });

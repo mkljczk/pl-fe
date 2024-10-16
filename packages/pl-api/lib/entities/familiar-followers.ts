@@ -1,14 +1,14 @@
-import z from 'zod';
+import * as v from 'valibot';
 
 import { accountSchema } from './account';
 import { filteredArray } from './utils';
 
 /** @see {@link https://docs.joinmastodon.org/entities/FamiliarFollowers/} */
-const familiarFollowersSchema = z.object({
-  id: z.string(),
+const familiarFollowersSchema = v.object({
+  id: v.string(),
   accounts: filteredArray(accountSchema),
 });
 
-type FamiliarFollowers = z.infer<typeof familiarFollowersSchema>
+type FamiliarFollowers = v.InferOutput<typeof familiarFollowersSchema>
 
 export { familiarFollowersSchema, type FamiliarFollowers };

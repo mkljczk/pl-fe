@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { z } from 'zod';
+import * as v from 'valibot';
 
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
@@ -22,7 +22,7 @@ const useEntityLookup = <TEntity extends Entity, TTransformedEntity extends Enti
   entityFn: EntityFn<void>,
   opts: UseEntityOpts<TEntity, TTransformedEntity> = {},
 ) => {
-  const { schema = z.custom<TEntity>() } = opts;
+  const { schema = v.custom<TEntity>(() => true) } = opts;
 
   const dispatch = useAppDispatch();
   const [fetchedEntity, setFetchedEntity] = useState<TTransformedEntity | undefined>();
@@ -36,7 +36,7 @@ const useEntityLookup = <TEntity extends Entity, TTransformedEntity extends Enti
   const fetchEntity = async () => {
     try {
       const response = await setPromise(entityFn());
-      const entity = schema.parse(response);
+      const entity = v.parse(schema, response);
       const transformedEntity = opts.transform ? opts.transform(entity) : entity;
       setFetchedEntity(transformedEntity as TTransformedEntity);
       dispatch(importEntities([transformedEntity], entityType));
