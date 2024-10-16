@@ -1,14 +1,14 @@
 import * as v from 'valibot';
 
-import { dateSchema } from './utils';
+import { datetimeSchema } from './utils';
 
 import { accountSchema, statusSchema } from '.';
 
 /** @see {@link https://docs.joinmastodon.org/entities/NotificationRequest} */
 const notificationRequestSchema = v.object({
   id: v.string(),
-  created_at: dateSchema,
-  updated_at: dateSchema,
+  created_at: datetimeSchema,
+  updated_at: datetimeSchema,
   account: accountSchema,
   notifications_count: v.pipe(v.unknown(), v.transform(String)),
   last_status: v.fallback(v.optional(statusSchema), undefined),

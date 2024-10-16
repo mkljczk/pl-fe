@@ -1,6 +1,7 @@
 import * as v from 'valibot';
 
 import { accountSchema } from './account';
+import { datetimeSchema } from './utils';
 
 const scrobbleSchema =  v.pipe(
   v.any(),
@@ -11,7 +12,7 @@ const scrobbleSchema =  v.pipe(
   v.object({
     id: v.pipe(v.unknown(), v.transform(String)),
     account: accountSchema,
-    created_at: z.string().datetime({ offset: true }),
+    created_at: datetimeSchema,
     title: v.string(),
     artist: v.fallback(v.string(), ''),
     album: v.fallback(v.string(), ''),

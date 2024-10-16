@@ -1,17 +1,17 @@
 import * as v from 'valibot';
 
 import { accountSchema } from './account';
-import { dateSchema } from './utils';
+import { datetimeSchema } from './utils';
 
 /** @see {@link https://docs.joinmastodon.org/entities/Report/} */
 const reportSchema = v.object({
   id: v.string(),
   action_taken: v.fallback(v.optional(v.boolean()), undefined),
-  action_taken_at: v.fallback(v.nullable(dateSchema), null),
+  action_taken_at: v.fallback(v.nullable(datetimeSchema), null),
   category: v.fallback(v.optional(v.string()), undefined),
   comment: v.fallback(v.optional(v.string()), undefined),
   forwarded: v.fallback(v.optional(v.boolean()), undefined),
-  created_at: v.fallback(v.optional(dateSchema), undefined),
+  created_at: v.fallback(v.optional(datetimeSchema), undefined),
   status_ids: v.fallback(v.nullable(v.string()), null),
   rule_ids: v.fallback(v.nullable(v.string()), null),
   target_account: v.fallback(v.nullable(accountSchema), null),

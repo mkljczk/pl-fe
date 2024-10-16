@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 
 import { customEmojiSchema } from './custom-emoji';
-import { filteredArray } from './utils';
+import { datetimeSchema, filteredArray } from './utils';
 
 const pollOptionSchema = v.object({
   title: v.fallback(v.string(), ''),
@@ -14,7 +14,7 @@ const pollOptionSchema = v.object({
 const pollSchema = v.object({
   emojis: filteredArray(customEmojiSchema),
   expired: v.fallback(v.boolean(), false),
-  expires_at: v.fallback(v.nullable(z.string().datetime()), null),
+  expires_at: v.fallback(v.nullable(datetimeSchema), null),
   id: v.string(),
   multiple: v.fallback(v.boolean(), false),
   options: v.pipe(v.array(pollOptionSchema), v.minLength(2)),

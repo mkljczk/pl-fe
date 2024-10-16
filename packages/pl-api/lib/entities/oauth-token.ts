@@ -1,5 +1,7 @@
 import * as v from 'valibot';
 
+import { datetimeSchema } from './utils';
+
 /** @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#get-apioauth_tokens} */
 const oauthTokenSchema = v.pipe(
   v.any(),
@@ -10,7 +12,7 @@ const oauthTokenSchema = v.pipe(
   v.object({
     app_name: v.string(),
     id: v.number(),
-    valid_until: z.string().datetime({ offset: true }),
+    valid_until: datetimeSchema,
   }),
 );
 

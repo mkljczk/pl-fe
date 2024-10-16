@@ -2,7 +2,7 @@ import * as v from 'valibot';
 
 import { accountSchema } from '../account';
 import { roleSchema } from '../role';
-import { dateSchema, filteredArray } from '../utils';
+import { datetimeSchema, filteredArray } from '../utils';
 
 import { adminIpSchema } from './ip';
 
@@ -43,7 +43,7 @@ const adminAccountSchema =  v.pipe(
     id: v.string(),
     username: v.string(),
     domain: v.fallback(v.nullable(v.string()), null),
-    created_at: dateSchema,
+    created_at: v.fallback(datetimeSchema, new Date().toISOString()),
     email: v.fallback(v.nullable(v.string()), null),
     ip: v.fallback(v.nullable(v.pipe(v.string(), v.ip())), null),
     ips: filteredArray(adminIpSchema),

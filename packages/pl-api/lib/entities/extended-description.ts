@@ -1,10 +1,10 @@
 import * as v from 'valibot';
 
-import { dateSchema } from './utils';
+import { datetimeSchema } from './utils';
 
 /** @see {@link https://docs.joinmastodon.org/entities/ExtendedDescription} */
 const extendedDescriptionSchema = v.object({
-  updated_at: dateSchema,
+  updated_at: datetimeSchema,
   content: v.string(),
 });
 

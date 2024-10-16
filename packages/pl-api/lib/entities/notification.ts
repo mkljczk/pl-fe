@@ -7,11 +7,11 @@ import { chatMessageSchema } from './chat-message';
 import { relationshipSeveranceEventSchema } from './relationship-severance-event';
 import { reportSchema } from './report';
 import { statusSchema } from './status';
-import { dateSchema } from './utils';
+import { datetimeSchema } from './utils';
 
 const baseNotificationSchema = v.object({
   account: accountSchema,
-  created_at: dateSchema,
+  created_at: v.fallback(datetimeSchema, new Date().toISOString()),
   id: v.string(),
   group_key: v.string(),
   type: v.string(),

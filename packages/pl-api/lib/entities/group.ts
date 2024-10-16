@@ -2,12 +2,12 @@ import * as v from 'valibot';
 
 import { customEmojiSchema } from './custom-emoji';
 import { groupRelationshipSchema } from './group-relationship';
-import { filteredArray } from './utils';
+import { datetimeSchema, filteredArray } from './utils';
 
 const groupSchema = v.object({
   avatar: v.fallback(v.string(), ''),
   avatar_static: v.fallback(v.string(), ''),
-  created_at: z.string().datetime().catch(new Date().toUTCString()),
+  created_at: v.fallback(datetimeSchema, new Date().toISOString()),
   display_name: v.fallback(v.string(), ''),
   domain: v.fallback(v.string(), ''),
   emojis: filteredArray(customEmojiSchema),

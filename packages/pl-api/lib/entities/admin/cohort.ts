@@ -1,11 +1,13 @@
 import * as v from 'valibot';
 
+import { datetimeSchema } from '../utils';
+
 /** @see {@link https://docs.joinmastodon.org/entities/Admin_Cohort/} */
 const adminCohortSchema = v.object({
-  period: z.string().datetime({ offset: true }),
+  period: datetimeSchema,
   frequency: v.picklist(['day', 'month']),
   data: v.array(v.object({
-    date: z.string().datetime({ offset: true }),
+    date: datetimeSchema,
     rate: v.number(),
     value: v.pipe(v.number(), v.integer()),
   })),

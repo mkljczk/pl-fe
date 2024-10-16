@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 
-import { dateSchema } from './utils';
+import { datetimeSchema } from './utils';
 
 const markerSchema = v.pipe(
   v.any(),
@@ -11,7 +11,7 @@ const markerSchema = v.pipe(
   v.object({
     last_read_id: v.string(),
     version: v.pipe(v.number(), v.integer()),
-    updated_at: dateSchema,
+    updated_at: datetimeSchema,
     unread_count: v.fallback(v.optional(v.pipe(v.number(), v.integer())), undefined),
   }),
 );

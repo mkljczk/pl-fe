@@ -3,7 +3,7 @@ import * as v from 'valibot';
 
 import { ruleSchema } from '../rule';
 import { statusWithoutAccountSchema } from '../status';
-import { dateSchema, filteredArray } from '../utils';
+import { datetimeSchema, filteredArray } from '../utils';
 
 import { adminAccountSchema } from './account';
 
@@ -30,12 +30,12 @@ const adminReportSchema =  v.pipe(
   v.object({
     id: v.string(),
     action_taken: v.fallback(v.optional(v.boolean()), undefined),
-    action_taken_at: v.fallback(v.nullable(dateSchema), null),
+    action_taken_at: v.fallback(v.nullable(datetimeSchema), null),
     category: v.fallback(v.optional(v.string()), undefined),
     comment: v.fallback(v.optional(v.string()), undefined),
     forwarded: v.fallback(v.optional(v.boolean()), undefined),
-    created_at: v.fallback(v.optional(dateSchema), undefined),
-    updated_at: v.fallback(v.optional(dateSchema), undefined),
+    created_at: v.fallback(v.optional(datetimeSchema), undefined),
+    updated_at: v.fallback(v.optional(datetimeSchema), undefined),
     account: adminAccountSchema,
     target_account: adminAccountSchema,
     assigned_account: v.fallback(v.nullable(adminAccountSchema), null),

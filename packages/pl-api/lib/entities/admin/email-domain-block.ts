@@ -1,12 +1,12 @@
 import * as v from 'valibot';
 
-import { dateSchema } from '../utils';
+import { datetimeSchema } from '../utils';
 
 /** @see {@link https://docs.joinmastodon.org/entities/Admin_EmailDomainBlock/} */
 const adminEmailDomainBlockSchema = v.object({
   id: v.string(),
   domain: v.string(),
-  created_at: dateSchema,
+  created_at: datetimeSchema,
   history: v.array(v.object({
     day: v.pipe(v.unknown(), v.transform(String)),
     accounts: v.pipe(v.unknown(), v.transform(String)),

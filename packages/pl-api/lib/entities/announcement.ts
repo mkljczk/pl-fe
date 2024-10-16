@@ -4,17 +4,17 @@ import { announcementReactionSchema } from './announcement-reaction';
 import { customEmojiSchema } from './custom-emoji';
 import { mentionSchema } from './mention';
 import { tagSchema } from './tag';
-import { dateSchema, filteredArray } from './utils';
+import { datetimeSchema, filteredArray } from './utils';
 
 /** @see {@link https://docs.joinmastodon.org/entities/announcement/} */
 const announcementSchema = v.object({
   id: v.string(),
   content: v.fallback(v.string(), ''),
-  starts_at: v.fallback(v.nullable(z.string().datetime()), null),
-  ends_at: v.fallback(v.nullable(z.string().datetime()), null),
+  starts_at: v.fallback(v.nullable(datetimeSchema), null),
+  ends_at: v.fallback(v.nullable(datetimeSchema), null),
   all_day: v.fallback(v.boolean(), false),
   read: v.fallback(v.boolean(), false),
-  published_at: dateSchema,
+  published_at: v.fallback(datetimeSchema, new Date().toISOString()),
   reactions: filteredArray(announcementReactionSchema),
   statuses: v.pipe(
     v.any(),
@@ -26,7 +26,7 @@ const announcementSchema = v.object({
   mentions: filteredArray(mentionSchema),
   tags: filteredArray(tagSchema),
   emojis: filteredArray(customEmojiSchema),
-  updated_at: dateSchema,
+  updated_at: v.fallback(datetimeSchema, new Date().toISOString()),
 });
 
 type Announcement = v.InferOutput<typeof announcementSchema>;

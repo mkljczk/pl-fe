@@ -13,12 +13,12 @@ import { pollSchema } from './poll';
 import { previewCardSchema } from './preview-card';
 import { tagSchema } from './tag';
 import { translationSchema } from './translation';
-import { dateSchema, filteredArray } from './utils';
+import { datetimeSchema, filteredArray } from './utils';
 
 const statusEventSchema = v.object({
   name: v.fallback(v.string(), ''),
-  start_time: v.fallback(v.nullable(z.string().datetime()), null),
-  end_time: v.fallback(v.nullable(z.string().datetime()), null),
+  start_time: v.fallback(v.nullable(datetimeSchema), null),
+  end_time: v.fallback(v.nullable(datetimeSchema), null),
   join_mode: v.fallback(v.nullable(v.picklist(['free', 'restricted', 'invite'])), null),
   participants_count: v.fallback(v.number(), 0),
   location: v.fallback(v.nullable(v.object({
@@ -39,7 +39,7 @@ const statusEventSchema = v.object({
 const baseStatusSchema = v.object({
   id: v.string(),
   uri: v.fallback(v.pipe(v.string(), v.url()), ''),
-  created_at: dateSchema,
+  created_at: v.fallback(datetimeSchema, new Date().toISOString()),
   account: accountSchema,
   content: v.fallback(v.string(), ''),
   visibility: v.fallback(v.string(), 'public'),
@@ -63,7 +63,7 @@ const baseStatusSchema = v.object({
   card: v.fallback(v.nullable(previewCardSchema), null),
   language: v.fallback(v.nullable(v.string()), null),
   text: v.fallback(v.nullable(v.string()), null),
-  edited_at: v.fallback(v.nullable(z.string().datetime()), null),
+  edited_at: v.fallback(v.nullable(datetimeSchema), null),
   favourited: v.pipe(v.unknown(), v.transform(Boolean)),
   reblogged: v.pipe(v.unknown(), v.transform(Boolean)),
   muted: v.pipe(v.unknown(), v.transform(Boolean)),
@@ -79,11 +79,11 @@ const baseStatusSchema = v.object({
   conversation_id: v.fallback(v.optional(v.string()), undefined),
   direct_conversation_id: v.fallback(v.optional(v.string()), undefined),
   in_reply_to_account_acct: v.fallback(v.optional(v.string()), undefined),
-  expires_at: v.fallback(v.optional(z.string().datetime({ offset: true })), undefined),
+  expires_at: v.fallback(v.optional(datetimeSchema), undefined),
   thread_muted: v.fallback(v.optional(v.boolean()), undefined),
   emoji_reactions: filteredArray(emojiReactionSchema),
   parent_visible: v.fallback(v.optional(v.boolean()), undefined),
-  pinned_at: v.fallback(v.nullable(z.string().datetime({ offset: true })), null),
+  pinned_at: v.fallback(v.nullable(datetimeSchema), null),
   quote_visible: v.fallback(v.optional(v.boolean()), undefined),
   quote_url: v.fallback(v.optional(v.string()), undefined),
   quotes_count: v.fallback(v.number(), 0),

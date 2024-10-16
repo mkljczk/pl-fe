@@ -1,12 +1,12 @@
 import * as v from 'valibot';
 
 import { mediaAttachmentSchema } from './media-attachment';
-import { filteredArray } from './utils';
+import { datetimeSchema, filteredArray } from './utils';
 
 /** @see {@link https://docs.joinmastodon.org/entities/ScheduledStatus/} */
 const scheduledStatusSchema = v.object({
   id: v.string(),
-  scheduled_at: z.string().datetime({ offset: true }),
+  scheduled_at: datetimeSchema,
   params: v.object({
     text: v.fallback(v.nullable(v.string()), null),
     poll: v.fallback(v.nullable(v.object({
@@ -22,7 +22,7 @@ const scheduledStatusSchema = v.object({
     in_reply_to_id: v.fallback(v.nullable(v.string()), null),
     language: v.fallback(v.nullable(v.string()), null),
     application_id: v.fallback(v.nullable(v.pipe(v.number(), v.integer())), null),
-    scheduled_at: v.fallback(v.nullable(z.string().datetime({ offset: true })), null),
+    scheduled_at: v.fallback(v.nullable(datetimeSchema), null),
     idempotency: v.fallback(v.nullable(v.string()), null),
     with_rate_limit: v.fallback(v.boolean(), false),
 

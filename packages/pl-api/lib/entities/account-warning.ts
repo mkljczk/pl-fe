@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 
 import { accountSchema } from './account';
-import { dateSchema } from './utils';
+import { datetimeSchema } from './utils';
 
 /** @see {@link https://docs.joinmastodon.org/entities/Appeal/} */
 const appealSchema = v.object({
@@ -17,7 +17,7 @@ const accountWarningSchema = v.object({
   status_ids: v.fallback(v.array(v.string()), []),
   target_account: accountSchema,
   appeal: v.fallback(v.nullable(appealSchema), null),
-  created_at: dateSchema,
+  created_at: v.fallback(datetimeSchema, new Date().toISOString()),
 });
 
 type AccountWarning = v.InferOutput<typeof accountWarningSchema>;

@@ -4,7 +4,7 @@ import * as v from 'valibot';
 import { customEmojiSchema } from './custom-emoji';
 import { relationshipSchema } from './relationship';
 import { roleSchema } from './role';
-import { coerceObject, dateSchema, filteredArray } from './utils';
+import { coerceObject, datetimeSchema, filteredArray } from './utils';
 
 const filterBadges = (tags?: string[]) =>
   tags?.filter(tag => tag.startsWith('badge:')).map(tag => v.parse(roleSchema, { id: tag, name: tag.replace(/^badge:/, '') }));
@@ -64,7 +64,7 @@ const preprocessAccount = v.transform((account: any) => {
 const fieldSchema = v.object({
   name: v.string(),
   value: v.string(),
-  verified_at: v.fallback(v.nullable(z.string().datetime({ offset: true })), null),
+  verified_at: v.fallback(v.nullable(datetimeSchema), null),
 });
 
 const baseAccountSchema = v.object({
@@ -87,7 +87,7 @@ const baseAccountSchema = v.object({
   noindex: v.fallback(v.nullable(v.boolean()), null),
   suspended: v.fallback(v.optional(v.boolean()), undefined),
   limited: v.fallback(v.optional(v.boolean()), undefined),
-  created_at: z.string().datetime().catch(new Date().toUTCString()),
+  created_at: v.fallback(datetimeSchema, new Date().toUTCString()),
   last_status_at: v.fallback(v.nullable(v.pipe(v.string(), v.isoDate())), null),
   statuses_count: v.fallback(v.number(), 0),
   followers_count: v.fallback(v.number(), 0),
@@ -177,7 +177,7 @@ const credentialAccountSchema: v.BaseSchema<any, CredentialAccount, v.BaseIssue<
 
 const untypedMutedAccountSchema = v.pipe(v.any(), preprocessAccount, v.object({
   ...accountWithMovedAccountSchema.entries,
-  mute_expires_at: v.fallback(v.nullable(dateSchema), null),
+  mute_expires_at: v.fallback(v.nullable(datetimeSchema), null),
 }));
 
 type MutedAccount = v.InferOutput<typeof untypedMutedAccountSchema> & WithMoved;

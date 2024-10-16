@@ -1,5 +1,7 @@
 import * as v from 'valibot';
 
+import { datetimeSchema } from '../utils';
+
 /** @see {@link https://docs.joinmastodon.org/entities/Admin_Measure/} */
 const adminMeasureSchema = v.object({
   key: v.string(),
@@ -8,7 +10,7 @@ const adminMeasureSchema = v.object({
   human_value: v.fallback(v.optional(v.string()), undefined),
   previous_total: v.fallback(v.optional(v.pipe(v.unknown(), v.transform(String))), undefined),
   data: v.array(v.object({
-    date: z.string().datetime({ offset: true }),
+    date: datetimeSchema,
     value: v.pipe(v.unknown(), v.transform(String)),
   })),
 });

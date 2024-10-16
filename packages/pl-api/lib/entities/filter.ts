@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 
-import { filteredArray } from './utils';
+import { datetimeSchema, filteredArray } from './utils';
 
 /** @see {@link https://docs.joinmastodon.org/entities/FilterKeyword/} */
 const filterKeywordSchema = v.object({
@@ -37,7 +37,7 @@ const filterSchema = v.pipe(
     id: v.string(),
     title: v.string(),
     context: v.array(v.picklist(['home', 'notifications', 'public', 'thread', 'account'])),
-    expires_at: v.fallback(v.nullable(z.string().datetime({ offset: true })), null),
+    expires_at: v.fallback(v.nullable(datetimeSchema), null),
     filter_action: v.fallback(v.picklist(['warn', 'hide']), 'warn'),
     keywords: filteredArray(filterKeywordSchema),
     statuses: filteredArray(filterStatusSchema),

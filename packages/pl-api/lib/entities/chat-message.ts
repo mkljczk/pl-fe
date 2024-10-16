@@ -3,7 +3,7 @@ import * as v from 'valibot';
 import { customEmojiSchema } from './custom-emoji';
 import { mediaAttachmentSchema } from './media-attachment';
 import { previewCardSchema } from './preview-card';
-import { dateSchema, filteredArray } from './utils';
+import { datetimeSchema, filteredArray } from './utils';
 
 /** @see {@link https://docs.pleroma.social/backend/development/API/chats/#getting-the-messages-for-a-chat} */
 const chatMessageSchema = v.object({
@@ -11,7 +11,7 @@ const chatMessageSchema = v.object({
   content: v.fallback(v.string(), ''),
   chat_id: v.string(),
   account_id: v.string(),
-  created_at: dateSchema,
+  created_at: datetimeSchema,
   emojis: filteredArray(customEmojiSchema),
   attachment: v.fallback(v.nullable(mediaAttachmentSchema), null),
   unread: v.boolean(),
