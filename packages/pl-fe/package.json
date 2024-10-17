@@ -56,8 +56,6 @@
     "@mkljczk/lexical-remark": "^0.4.0",
     "@mkljczk/react-hotkeys": "^1.2.2",
     "@reach/combobox": "^0.18.0",
-    "@reach/menu-button": "^0.18.0",
-    "@reach/popover": "^0.18.0",
     "@reach/rect": "^0.18.0",
     "@reach/tabs": "^0.18.0",
     "@reduxjs/toolkit": "^2.0.1",

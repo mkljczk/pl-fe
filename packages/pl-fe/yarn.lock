@@ -1972,27 +1972,6 @@
   dependencies:
     "@reach/utils" "0.18.0"
 
-"@reach/dropdown@0.18.0":
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/@reach/dropdown/-/dropdown-0.18.0.tgz#c2e2e99df682f2136558851b80dc05b4f9dd92a5"
-  integrity sha512-LriXdVgxJoUhIQfS2r2DHYv3X6fHyplYxa9FmSwQIMXdESpE/P9Zsb1pVEObcNf3ZQBrl0L1bl/5rk7SpK7qfA==
-  dependencies:
-    "@reach/auto-id" "0.18.0"
-    "@reach/descendants" "0.18.0"
-    "@reach/polymorphic" "0.18.0"
-    "@reach/popover" "0.18.0"
-    "@reach/utils" "0.18.0"
-
-"@reach/menu-button@^0.18.0":
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/@reach/menu-button/-/menu-button-0.18.0.tgz#ae40dc86e47e7f925599ca720e3ba65263cc56f3"
-  integrity sha512-v1lj5rYSpavOKI4ipXj8OfvQmvVNAYXCv+UcltRkjOcWEKWADUUKkGX55wiUhsCsTGCJ7lGYz5LqOZrn3LP6PQ==
-  dependencies:
-    "@reach/dropdown" "0.18.0"
-    "@reach/polymorphic" "0.18.0"
-    "@reach/popover" "0.18.0"
-    "@reach/utils" "0.18.0"
-
 "@reach/observe-rect@1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@reach/observe-rect/-/observe-rect-1.2.0.tgz#d7a6013b8aafcc64c778a0ccb83355a11204d3b2"
@@ -2003,7 +1982,7 @@
   resolved "https://registry.yarnpkg.com/@reach/polymorphic/-/polymorphic-0.18.0.tgz#2fe42007a774e06cdbc8e13e0d46f2dc30f2f1ed"
   integrity sha512-N9iAjdMbE//6rryZZxAPLRorzDcGBnluf7YQij6XDLiMtfCj1noa7KyLpEc/5XCIB/EwhX3zCluFAwloBKdblA==
 
-"@reach/popover@0.18.0", "@reach/popover@^0.18.0":
+"@reach/popover@0.18.0":
   version "0.18.0"
   resolved "https://registry.yarnpkg.com/@reach/popover/-/popover-0.18.0.tgz#1eba3e9ed826ac69dfdf3b01a1dab15ca889b5fc"
   integrity sha512-mpnWWn4w74L2U7fcneVdA6Fz3yKWNdZIRMoK8s6H7F8U2dLM/qN7AjzjEBqi6LXKb3Uf1ge4KHSbMixW0BygJQ==

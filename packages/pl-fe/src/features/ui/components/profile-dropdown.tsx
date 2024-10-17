@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 import { fetchOwnAccounts, logOut, switchAccount } from 'pl-fe/actions/auth';
 import Account from 'pl-fe/components/account';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import { MenuDivider } from 'pl-fe/components/ui';
 import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { makeGetAccount } from 'pl-fe/selectors';
 
@@ -135,7 +134,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ className, menuItem }) => {
       </div>
     );
   } else if (!menuItem.text) {
-    return <MenuDivider />;
+    return <hr className='mx-2 my-1 border-t-2 border-gray-100 black:border-t dark:border-gray-800' />;
   } else if (menuItem.action) {
     return (
       <button
