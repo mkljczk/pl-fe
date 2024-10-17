@@ -3,7 +3,8 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Link, useHistory, useParams } from 'react-router-dom';
 
 import { blockAccount, unblockAccount } from 'pl-fe/actions/accounts';
-import { Avatar, HStack, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, Text } from 'pl-fe/components/ui';
+import DropdownMenu, { type Menu } from 'pl-fe/components/dropdown-menu';
+import { Avatar, HStack, IconButton, Stack, Text } from 'pl-fe/components/ui';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
 import { Entities } from 'pl-fe/entity-store/entities';
@@ -104,6 +105,20 @@ const ChatPageMain = () => {
     return null;
   }
 
+  const menuItems: Menu = [
+    {
+      icon: require('@tabler/icons/outline/ban.svg'),
+      text: intl.formatMessage(isBlocking ? messages.unblockUser : messages.blockUser, { acct: chat.account.acct }),
+      action: isBlocking ? handleUnblockUser : handleBlockUser,
+    },
+  ];
+
+  if (features.chatsDelete) menuItems.push({
+    icon: require('@tabler/icons/outline/logout.svg'),
+    text: intl.formatMessage(messages.leaveChat),
+    action: handleLeaveChat,
+  });
+
   return (
     <Stack className='h-full overflow-hidden'>
       <HStack alignItems='center' justifyContent='between' space={2} className='w-full p-4'>
@@ -132,52 +147,19 @@ const ChatPageMain = () => {
           </Stack>
         </HStack>
 
-        <Menu>
-          <MenuButton
-            as={IconButton}
-            src={require('@tabler/icons/outline/info-circle.svg')}
-            iconClassName='h-5 w-5 text-gray-600'
-            children={null}
-          />
-
-          <MenuList className='w-80'>
-            <Stack space={4} className='px-6 py-5'>
-              <HStack alignItems='center' space={3}>
-                <Avatar src={chat.account.avatar_static} alt={chat.account.avatar_description} size={50} />
-                <Stack>
-                  <Text weight='semibold'>{chat.account.display_name}</Text>
-                  <Text size='sm' theme='primary'>@{chat.account.acct}</Text>
-                </Stack>
-              </HStack>
-
-              <Stack space={2}>
-                <MenuItem
-                  as='button'
-                  onSelect={isBlocking ? handleUnblockUser : handleBlockUser}
-                  className='!px-0 hover:!bg-transparent'
-                >
-                  <div className='flex w-full items-center space-x-2 text-sm font-bold text-primary-500 dark:text-accent-blue'>
-                    <Icon src={require('@tabler/icons/outline/ban.svg')} className='size-5' />
-                    <span>{intl.formatMessage(isBlocking ? messages.unblockUser : messages.blockUser, { acct: chat.account.acct })}</span>
-                  </div>
-                </MenuItem>
-
-                {features.chatsDelete && (
-                  <MenuItem
-                    as='button'
-                    onSelect={handleLeaveChat}
-                    className='!px-0 hover:!bg-transparent'
-                  >
-                    <div className='flex w-full items-center space-x-2 text-sm font-bold text-danger-600 dark:text-danger-500'>
-                      <Icon src={require('@tabler/icons/outline/logout.svg')} className='size-5' />
-                      <span>{intl.formatMessage(messages.leaveChat)}</span>
-                    </div>
-                  </MenuItem>
-                )}
+        <DropdownMenu
+          src={require('@tabler/icons/outline/info-circle.svg')}
+          component={() => (
+            <HStack className='px-4 py-2' alignItems='center' space={3}>
+              <Avatar src={chat.account.avatar_static} alt={chat.account.avatar_description} size={50} />
+              <Stack>
+                <Text weight='semibold'>{chat.account.display_name}</Text>
+                <Text size='sm' theme='primary'>@{chat.account.acct}</Text>
               </Stack>
-            </Stack>
-          </MenuList>
-        </Menu>
+            </HStack>
+          )}
+          items={menuItems}
+        />
       </HStack>
 
       <div className='h-full overflow-hidden'>

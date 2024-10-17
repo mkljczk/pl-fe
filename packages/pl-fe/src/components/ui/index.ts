@@ -27,15 +27,6 @@ export { default as Icon } from './icon/icon';
 export { default as IconButton } from './icon-button/icon-button';
 export { default as Input } from './input/input';
 export { default as Layout } from './layout/layout';
-export {
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuItems,
-  MenuLink,
-  MenuList,
-} from './menu/menu';
 export { default as Modal } from './modal/modal';
 export { default as Popover } from './popover/popover';
 export { default as Portal } from './portal/portal';

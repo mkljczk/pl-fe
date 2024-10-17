@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import { fileURLToPath, URL } from 'node:url';
 
 import react from '@vitejs/plugin-react';
-import { visualizer } from 'rollup-plugin-visualizer';
+import { bundleStats } from 'rollup-plugin-bundle-stats';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
 import compileTime from 'vite-plugin-compile-time';
@@ -132,11 +132,7 @@ const config = defineConfig(({ command }) => ({
         dest: 'fastText/',
       }],
     }),
-    visualizer({
-      emitFile: true,
-      filename: 'report.html',
-      title: 'pl-fe Bundle',
-    }),
+    bundleStats(),
     {
       name: 'mock-api',
       configureServer(server) {
