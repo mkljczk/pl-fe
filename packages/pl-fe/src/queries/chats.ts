@@ -1,13 +1,13 @@
 import { InfiniteData, keepPreviousData, useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 import sumBy from 'lodash/sumBy';
 import { type Chat, type ChatMessage as BaseChatMessage, type PaginatedResponse, chatMessageSchema, type Relationship } from 'pl-api';
+import { importEntities } from 'pl-hooks';
 import * as v from 'valibot';
 
-import { importFetchedAccount, importFetchedAccounts } from 'pl-fe/actions/importer';
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useAppDispatch, useAppSelector, useClient, useFeatures, useLoggedIn, useOwnAccount } from 'pl-fe/hooks';
+import { useAppSelector, useClient, useFeatures, useLoggedIn, useOwnAccount } from 'pl-fe/hooks';
 import { type ChatMessage, normalizeChatMessage } from 'pl-fe/normalizers';
 import { reOrderChatListItems } from 'pl-fe/utils/chats';
 import { flattenPages, updatePageItem } from 'pl-fe/utils/queries';
@@ -53,7 +53,6 @@ const useChatMessages = (chat: Chat) => {
 
 const useChats = () => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
   const { setUnreadChatsCount } = useStatContext();
   const fetchRelationships = useFetchRelationships();
@@ -67,7 +66,7 @@ const useChats = () => {
 
     // Set the relationships to these users in the redux store.
     fetchRelationships.mutate({ accountIds: items.map((item) => item.account.id) });
-    dispatch(importFetchedAccounts(items.map((item) => item.account)));
+    importEntities({ accounts: items.map((item) => item.account) });
 
     return response;
   };
@@ -96,7 +95,6 @@ const useChats = () => {
 
 const useChat = (chatId?: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const fetchRelationships = useFetchRelationships();
 
   const getChat = async () => {
@@ -104,7 +102,7 @@ const useChat = (chatId?: string) => {
       const data = await client.chats.getChat(chatId);
 
       fetchRelationships.mutate({ accountIds: [data.account.id] });
-      dispatch(importFetchedAccount(data.account));
+      importEntities({ accounts: [data.account] });
 
       return data;
     }

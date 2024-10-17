@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, useMemo, useEffect } from 'react';
-import {  FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { collapseStatusSpoiler, expandStatusSpoiler } from 'pl-fe/actions/statuses';
 import Icon from 'pl-fe/components/icon';
