@@ -1,5 +1,5 @@
 import { Map as ImmutableMap } from 'immutable';
-import { importEntities } from 'pl-hooks/importer';
+import { importEntities } from 'pl-hooks';
 
 import { getLocale } from 'pl-fe/actions/settings';
 import { getClient } from 'pl-fe/api';

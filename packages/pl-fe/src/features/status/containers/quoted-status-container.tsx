@@ -1,4 +1,4 @@
-import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
+import { useStatus } from 'pl-hooks';
 import React from 'react';
 
 import QuotedStatus from 'pl-fe/components/quoted-status';

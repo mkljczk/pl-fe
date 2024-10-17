@@ -1,4 +1,4 @@
-import { useNotification } from 'pl-hooks/hooks/notifications/useNotification';
+import { useNotification } from 'pl-hooks';
 import React, { useCallback } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage, IntlShape, MessageDescriptor } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';

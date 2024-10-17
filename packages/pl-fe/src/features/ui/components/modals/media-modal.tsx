@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
+import { useStatus } from 'pl-hooks';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';

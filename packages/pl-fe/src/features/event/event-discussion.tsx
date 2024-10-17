@@ -1,5 +1,5 @@
 import { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
-import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
+import { useStatus } from 'pl-hooks';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 

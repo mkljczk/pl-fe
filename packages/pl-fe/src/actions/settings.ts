@@ -1,4 +1,3 @@
-import { Account } from 'pl-hooks/normalizers/normalizeAccount';
 import { defineMessage } from 'react-intl';
 
 import { patchMe } from 'pl-fe/actions/me';
@@ -11,6 +10,7 @@ import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
+import type { Account } from 'pl-hooks/normalizers/normalizeAccount';
 
 const FE_NAME = 'pl_fe';
 

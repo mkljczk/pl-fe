@@ -1,4 +1,4 @@
-import { importEntities } from 'pl-hooks/importer';
+import { importEntities } from 'pl-hooks';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 

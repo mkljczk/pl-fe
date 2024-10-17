@@ -1,4 +1,4 @@
-import { importEntities } from 'pl-hooks/importer';
+import { importEntities } from 'pl-hooks';
 
 import { getClient } from 'pl-fe/api';
 import { isLoggedIn } from 'pl-fe/utils/auth';

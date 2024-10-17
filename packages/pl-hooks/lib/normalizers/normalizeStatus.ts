@@ -1,9 +1,5 @@
-/**
- * Status normalizer:
- * Converts API statuses into our internal format.
- * @see {@link https://docs.joinmastodon.org/entities/status/}
- */
 import { type Account as BaseAccount, type Status as BaseStatus, type MediaAttachment, mentionSchema } from 'pl-api';
+import * as v from 'valibot';
 
 type StatusApprovalStatus = Exclude<BaseStatus['approval_status'], null>;
 type StatusVisibility = 'public' | 'unlisted' | 'private' | 'direct' | 'group' | 'mutuals_only' | 'local';
@@ -23,7 +19,7 @@ const normalizeStatus = ({ account, accounts, reblog, poll, group, quote, ...sta
   const hasSelfMention = status.mentions.some(mention => account.id === mention.id);
 
   if (isSelfReply && !hasSelfMention) {
-    const selfMention = mentionSchema.parse(account);
+    const selfMention = v.parse(mentionSchema, account);
     mentions = [selfMention, ...mentions];
   }
 

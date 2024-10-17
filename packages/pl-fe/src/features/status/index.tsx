@@ -1,4 +1,4 @@
-import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
+import { useStatus } from 'pl-hooks';
 import React, { useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Redirect } from 'react-router-dom';

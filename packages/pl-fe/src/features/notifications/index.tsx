@@ -1,8 +1,6 @@
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
-import { useMarker } from 'pl-hooks/hooks/markers/useMarkers';
-import { useUpdateMarkerMutation } from 'pl-hooks/hooks/markers/useUpdateMarkerMutation';
-import { useNotificationList } from 'pl-hooks/hooks/notifications/useNotificationList';
+import { useMarker, useNotificationList, useUpdateMarkerMutation } from 'pl-hooks';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 

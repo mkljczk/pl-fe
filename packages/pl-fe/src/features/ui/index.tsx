@@ -1,6 +1,5 @@
 import clsx from 'clsx';
-import { prefetchMarker } from 'pl-hooks/hooks/markers/useMarkers';
-import { prefetchNotifications } from 'pl-hooks/hooks/notifications/useNotificationList';
+import { prefetchMarker, prefetchNotifications } from 'pl-hooks';
 import React, { Suspense, lazy, useEffect, useRef } from 'react';
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom';
 

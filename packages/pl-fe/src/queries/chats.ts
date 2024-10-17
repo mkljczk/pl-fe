@@ -1,7 +1,7 @@
 import { InfiniteData, keepPreviousData, useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 import sumBy from 'lodash/sumBy';
 import { type Chat, type ChatMessage as BaseChatMessage, type PaginatedResponse, chatMessageSchema, type Relationship } from 'pl-api';
-import { importEntities } from 'pl-hooks/importer';
+import { importEntities } from 'pl-hooks';
 import * as v from 'valibot';
 
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';

@@ -1,5 +1,5 @@
 import L from 'leaflet';
-import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
+import { useStatus } from 'pl-hooks';
 import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 

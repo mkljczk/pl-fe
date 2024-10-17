@@ -1,5 +1,5 @@
 import throttle from 'lodash/throttle';
-import { importEntities } from 'pl-hooks/importer';
+import { importEntities } from 'pl-hooks';
 import { defineMessages, IntlShape } from 'react-intl';
 
 import { getClient } from 'pl-fe/api';

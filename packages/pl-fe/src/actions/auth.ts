@@ -7,7 +7,7 @@
  * @see module:pl-fe/actions/security
 */
 import { credentialAccountSchema, PlApiClient, type CreateAccountParams, type Token } from 'pl-api';
-import { importEntities } from 'pl-hooks/importer';
+import { importEntities } from 'pl-hooks';
 import { defineMessages } from 'react-intl';
 import * as v from 'valibot';
 

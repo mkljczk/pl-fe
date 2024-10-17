@@ -1,4 +1,4 @@
-import { importEntities } from 'pl-hooks/importer';
+import { importEntities } from 'pl-hooks';
 import { defineMessages } from 'react-intl';
 
 import { getClient } from 'pl-fe/api';

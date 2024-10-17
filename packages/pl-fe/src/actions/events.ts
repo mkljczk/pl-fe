@@ -1,4 +1,4 @@
-import { importEntities } from 'pl-hooks/importer';
+import { importEntities } from 'pl-hooks';
 import { defineMessages } from 'react-intl';
 
 import { STATUS_FETCH_SOURCE_FAIL, STATUS_FETCH_SOURCE_REQUEST, STATUS_FETCH_SOURCE_SUCCESS } from 'pl-fe/actions/statuses';

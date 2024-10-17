@@ -1,4 +1,4 @@
-import { importEntities } from 'pl-hooks/importer';
+import { importEntities } from 'pl-hooks';
 
 import { getClient } from 'pl-fe/api';
 import { useModalsStore, useSettingsStore } from 'pl-fe/stores';

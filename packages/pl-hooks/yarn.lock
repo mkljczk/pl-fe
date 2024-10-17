@@ -2138,10 +2138,10 @@ pkg-types@^1.0.3, pkg-types@^1.1.1:
     mlly "^1.7.1"
     pathe "^1.1.2"
 
-pl-api@^0.0.37:
-  version "0.0.37"
-  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.0.37.tgz#1475be139a3733b8a60dc3dd5fdfb00f83743eea"
-  integrity sha512-oCeKkJtUYC5XwM5PIVt+VPdLrJT7rjvfXgiv+qrUydK++cHnO1ZiixCaBnYW3M5D1BLZ6/OS4T+mk5hlCt8+1g==
+pl-api@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-0.1.1.tgz#e3465482697ea53e10bba510c5217c42b1d40ab0"
+  integrity sha512-JFao273dOG9XgrunqlfJn+e3DUr001MePCmJasQwaX3aPjM/L158hKfCnYPmoDKn1u5bfekMK6tVauBtbnkmqA==
   dependencies:
     blurhash "^2.0.5"
     http-link-header "^1.1.3"
@@ -2149,7 +2149,7 @@ pl-api@^0.0.37:
     object-to-formdata "^4.5.1"
     query-string "^9.1.0"
     semver "^7.6.3"
-    zod "^3.23.8"
+    valibot "^0.42.1"
 
 possible-typed-array-names@^1.0.0:
   version "1.0.0"
@@ -2586,6 +2586,11 @@ uri-js@^4.2.2, uri-js@^4.4.1:
   dependencies:
     punycode "^2.1.0"
 
+valibot@^0.42.1:
+  version "0.42.1"
+  resolved "https://registry.yarnpkg.com/valibot/-/valibot-0.42.1.tgz#a31183d8e9d7552f98e22ca0977172cab8815188"
+  integrity sha512-3keXV29Ar5b//Hqi4MbSdV7lfVp6zuYLZuA9V1PvQUsXqogr+u5lvLPLk3A4f74VUXDnf/JfWMN6sB+koJ/FFw==
+
 vite-plugin-dts@^4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/vite-plugin-dts/-/vite-plugin-dts-4.2.1.tgz#f8bee33b732929717ce13ef7a382696d51200c30"
@@ -2665,8 +2670,3 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
-
-zod@^3.23.8:
-  version "3.23.8"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.23.8.tgz#e37b957b5d52079769fb8097099b592f0ef4067d"
-  integrity sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==

@@ -1,4 +1,4 @@
-import { useStatus } from 'pl-hooks/hooks/statuses/useStatus';
+import { useStatus } from 'pl-hooks';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 

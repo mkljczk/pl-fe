@@ -1,6 +1,6 @@
 import IntlMessageFormat from 'intl-messageformat';
 import 'intl-pluralrules';
-import { importEntities } from 'pl-hooks/importer';
+import { importEntities } from 'pl-hooks';
 import { defineMessages } from 'react-intl';
 
 import { FILTER_TYPES, type FilterType } from 'pl-fe/features/notifications';

@@ -1,5 +1,5 @@
 import { useMutation, keepPreviousData, useQuery } from '@tanstack/react-query';
-import { importEntities } from 'pl-hooks/importer';
+import { importEntities } from 'pl-hooks';
 
 import { fetchRelationships } from 'pl-fe/actions/accounts';
 import { useAppDispatch, useClient } from 'pl-fe/hooks';
