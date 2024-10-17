@@ -1,13 +1,13 @@
 import { useMutation } from '@tanstack/react-query';
-import { useClient } from 'pl-fe/hooks';
 
-import { queryClient } from 'pl-hooks/client';
+import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
+import { queryClient } from 'pl-hooks/contexts/query-client';
 
 import type { Timeline } from './useMarkers';
 import type { Marker } from 'pl-api';
 
 const useUpdateMarkerMutation = (timeline: Timeline) => {
-  const client = useClient();
+  const { client } = usePlHooksApiClient();
 
   return useMutation({
     mutationFn: (lastReadId: string) => client.timelines.saveMarkers({

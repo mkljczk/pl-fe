@@ -1,9 +1,9 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useClient } from 'pl-fe/hooks';
 
-import { queryClient } from 'pl-hooks/client';
+import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
+import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
 import { importEntities } from 'pl-hooks/importer';
-import { deduplicateNotifications } from 'pl-hooks/normalizers/deduplicateNotifications';
+import { deduplicateNotifications } from 'pl-hooks/normalizers/normalizeNotifications';
 import { flattenPages } from 'pl-hooks/utils/queries';
 
 import type { Notification as BaseNotification, PaginatedResponse, PlApiClient } from 'pl-api';
@@ -34,7 +34,8 @@ const importNotifications = (response: PaginatedResponse<BaseNotification>) => {
 };
 
 const useNotificationList = (params: UseNotificationParams) => {
-  const client = useClient();
+  const queryClient = usePlHooksQueryClient();
+  const { client } = usePlHooksApiClient();
 
   const notificationsQuery = useInfiniteQuery({
     queryKey: getQueryKey(params),
@@ -44,7 +45,7 @@ const useNotificationList = (params: UseNotificationParams) => {
     })).then(importNotifications),
     initialPageParam: { previous: null, next: null } as Pick<PaginatedResponse<BaseNotification>, 'previous' | 'next'>,
     getNextPageParam: (response) => response,
-  });
+  }, queryClient);
 
   const data = flattenPages<string>(notificationsQuery.data) || [];
 

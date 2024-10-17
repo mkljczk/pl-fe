@@ -1,7 +1,6 @@
-import { queryClient } from 'pl-hooks/client';
+import { queryClient } from 'pl-hooks/contexts/query-client';
 
-import { type MinifiedNotification, minifyNotification } from './minifiers/minifyNotification';
-import { DeduplicatedNotification } from './normalizers/normalizeNotifications';
+import { type DeduplicatedNotification, type NormalizedNotification, normalizeNotification } from './normalizers/normalizeNotifications';
 import { normalizeStatus, type Status } from './normalizers/normalizeStatus';
 
 import type {
@@ -20,9 +19,9 @@ const importGroup = (group: BaseGroup) => queryClient.setQueryData<BaseGroup>(
   ['groups', 'entities', group.id], group,
 );
 
-const importNotification = (notification: DeduplicatedNotification) => queryClient.setQueryData<MinifiedNotification>(
+const importNotification = (notification: DeduplicatedNotification) => queryClient.setQueryData<NormalizedNotification>(
   ['notifications', 'entities', notification.id],
-  existingNotification => existingNotification?.duplicate ? existingNotification : minifyNotification(notification),
+  existingNotification => existingNotification?.duplicate ? existingNotification : normalizeNotification(notification),
 );
 
 const importPoll = (poll: BasePoll) => queryClient.setQueryData<BasePoll>(

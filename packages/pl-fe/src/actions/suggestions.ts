@@ -2,7 +2,6 @@ import { importEntities } from 'pl-hooks/importer';
 
 import { getClient } from 'pl-fe/api';
 
-
 import { fetchRelationships } from './accounts';
 import { insertSuggestionsIntoTimeline } from './timelines';
 

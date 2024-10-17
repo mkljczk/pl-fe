@@ -1,13 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
-import { useAppSelector, useClient } from 'pl-fe/hooks';
-import { selectAccount, selectAccounts } from 'pl-fe/selectors';
-import { queryClient } from 'pl-hooks/client';
+
+import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
+import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
 import { type NormalizedNotification, normalizeNotification } from 'pl-hooks/normalizers/normalizeNotifications';
 
 import { useAccount } from '../accounts/useAccount';
 import { useStatus } from '../statuses/useStatus';
 
-type Account = ReturnType<typeof selectAccount>;
+import type { Account } from 'pl-hooks/normalizers/normalizeAccount';
+import type { Status } from 'pl-hooks/normalizers/normalizeStatus';
+
+const getNotificationStatusId = (n: NormalizedNotification) => {
+  if (['mention', 'status', 'reblog', 'favourite', 'poll', 'update', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request'].includes(n.type))
+    // @ts-ignore
+    return n.status_id;
+  return null;
+};
 
 const importNotification = (notification: NormalizedNotification) => {
   queryClient.setQueryData<NormalizedNotification>(
@@ -17,32 +25,40 @@ const importNotification = (notification: NormalizedNotification) => {
 };
 
 const useNotification = (notificationId: string) => {
-  const client = useClient();
+  const queryClient = usePlHooksQueryClient();
+  const { client } = usePlHooksApiClient();
 
   const notificationQuery = useQuery({
     queryKey: ['notifications', 'entities', notificationId],
     queryFn: () => client.notifications.getNotification(notificationId)
       .then(normalizeNotification),
-  });
+  }, queryClient);
 
   const notification = notificationQuery.data;
 
-  const accountQuery = useAccount(notification?.account_id);
-  const moveTargetAccountQuery = useAccount(notification?.target_id);
-  const statusQuery = useStatus(notification?.status_id);
+  const accountsQuery = queryClient.getQueriesData<Account>({
+    queryKey: ['accounts', 'entities', notification?.account_ids],
+  });
 
-  const data: Notification | null = useAppSelector((state) => {
-    if (!notification) return null;
-    const accounts = selectAccounts(state, notification.account_ids).filter((account): account is Account => account !== undefined);
+  const moveTargetAccountQuery = useAccount(notification?.type === 'move' ? notification.target_id : undefined);
+  const statusQuery = useStatus(notification ? getNotificationStatusId(notification) : false);
 
-    return {
+  let data: (NormalizedNotification & {
+    account: Account;
+    accounts: Array<Account>;
+    target: Account | null;
+    status: Status | null;
+  }) | null = null;
+
+  if (notification) {
+    data = {
       ...notification,
-      account: accountQuery.data,
+      account: accountsQuery[0][1]!,
+      accounts: accountsQuery.map(([_, account]) => account!).filter(Boolean),
       target: moveTargetAccountQuery.data,
       status: statusQuery.data,
-      accounts,
     };
-  });
+  }
 
   return { ...notificationQuery, data };
 };

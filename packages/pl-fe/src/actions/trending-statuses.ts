@@ -2,7 +2,6 @@ import { importEntities } from 'pl-hooks/importer';
 
 import { getClient } from 'pl-fe/api';
 
-
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const TRENDING_STATUSES_FETCH_REQUEST = 'TRENDING_STATUSES_FETCH_REQUEST' as const;

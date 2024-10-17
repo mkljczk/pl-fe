@@ -1,17 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { useAppSelector, useClient } from 'pl-fe/hooks';
-import { selectAccount, selectAccounts } from 'pl-fe/selectors';
-import { useIntl } from 'react-intl';
 
-import { queryClient } from 'pl-hooks/client';
-import { useAccount } from 'pl-hooks/hooks/accounts/useAccount';
+import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
+import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
 import { importEntities } from 'pl-hooks/importer';
 
 import { normalizeStatus, type Status } from '../../normalizers/normalizeStatus';
 
-// import type { Group } from 'pl-fe/normalizers';
-
-type Account = ReturnType<typeof selectAccount>;
+import type { Account } from 'pl-hooks/normalizers/normalizeAccount';
 
 // const toServerSideType = (columnType: string): Filter['context'][0] => {
 //   switch (columnType) {
@@ -90,42 +85,43 @@ const importStatus = (status: Status) => {
   );
 };
 
-const useStatus = (statusId?: string) => {
-  const client = useClient();
-  const intl = useIntl();
+const useStatus = (statusId?: string, opts: { language?: string } = {}) => {
+  const queryClient = usePlHooksQueryClient();
+  const { client } = usePlHooksApiClient();
 
   const statusQuery = useQuery({
     queryKey: ['statuses', 'entities', statusId],
     queryFn: () => client.statuses.getStatus(statusId!, {
-      language: intl.locale,
+      language: opts.language,
     })
       .then(status => (importEntities({ statuses: [status] }, { withParents: false }), status))
       .then(normalizeStatus),
     enabled: !!statusId,
-  });
+  }, queryClient);
 
   const status = statusQuery.data;
 
-  const { data: account } = useAccount(status?.account_id || undefined);
+  queryClient.getQueriesData({ queryKey: ['test', ['t']] });
 
-  // : (Status & {
-  //   account: Account;
-  //   accounts: Array<Account>;
-  //   reblog: Status | null;
-  // }) | null
-  const data = useAppSelector((state) => {
-    if (!status) return null;
-    const accounts = selectAccounts(state, status.account_ids).filter((account): account is Account => account !== undefined);
+  const accountsQuery = queryClient.getQueriesData<Account>({
+    queryKey: ['accounts', 'entities', status?.account_ids],
+  });
 
-    return {
+  let data: (Status & {
+    account: Account;
+    accounts: Array<Account>;
+  }) | null = null;
+
+  if (status) {
+    data = {
       ...status,
-      account: account!,
-      accounts,
+      account: accountsQuery[0][1]!,
+      accounts: accountsQuery.map(([_, account]) => account!).filter(Boolean),
       // quote,
       // reblog,
       // poll
     };
-  });
+  }
 
   return { ...statusQuery, data };
 };

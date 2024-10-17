@@ -27,7 +27,7 @@ const getNotificationStatus = (n: Pick<BaseNotification, 'type'>) => {
   return null;
 };
 
-const normalizeNotifications = (notifications: Array<BaseNotification>): Array<NormalizedNotification> => {
+const deduplicateNotifications = (notifications: Array<BaseNotification>): Array<DeduplicatedNotification> => {
   const deduplicatedNotifications: DeduplicatedNotification[] = [];
 
   for (const notification of notifications) {
@@ -50,9 +50,8 @@ const normalizeNotifications = (notifications: Array<BaseNotification>): Array<N
     }
   }
 
-  return deduplicatedNotifications.map(normalizeNotification);
+  return deduplicatedNotifications;
 };
-
 
 const normalizeNotification = (notification: BaseNotification | DeduplicatedNotification) => {
   // @ts-ignore
@@ -127,5 +126,4 @@ const normalizeNotification = (notification: BaseNotification | DeduplicatedNoti
 
 type NormalizedNotification = ReturnType<typeof normalizeNotification>;
 
-
-export { normalizeNotifications, normalizeNotification, type NormalizedNotification };
+export { deduplicateNotifications, normalizeNotification, type DeduplicatedNotification, type NormalizedNotification };

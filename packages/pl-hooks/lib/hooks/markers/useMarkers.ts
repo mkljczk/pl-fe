@@ -1,19 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
-import { useClient } from 'pl-fe/hooks';
 
-import { queryClient } from 'pl-hooks/client';
+import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
+import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
 
 import type { PlApiClient } from 'pl-api';
 
 type Timeline = 'home' | 'notifications';
 
 const useMarker = (timeline: Timeline) => {
-  const client = useClient();
+  const queryClient = usePlHooksQueryClient();
+  const { client } = usePlHooksApiClient();
 
   return useQuery({
     queryKey: ['markers', timeline],
     queryFn: () => client.timelines.getMarkers([timeline]).then(markers => markers[timeline]),
-  });
+  }, queryClient);
 };
 
 const prefetchMarker = (client: PlApiClient, timeline: 'home' | 'notifications') =>
