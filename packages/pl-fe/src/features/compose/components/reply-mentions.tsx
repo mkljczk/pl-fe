@@ -1,4 +1,3 @@
-import { useStatus } from 'pl-hooks';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
@@ -14,10 +13,9 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
   const features = useFeatures();
   const compose = useCompose(composeId);
 
-  const status = useStatus(compose.in_reply_to!);
   const to = compose.to.toArray();
 
-  if (!features.createStatusExplicitAddressing || !status || !to) {
+  if (!features.createStatusExplicitAddressing || compose.in_reply_to || !to) {
     return null;
   }
 
