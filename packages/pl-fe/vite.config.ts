@@ -116,7 +116,7 @@ const config = defineConfig(({ command }) => ({
     }),
     viteStaticCopy({
       targets: [{
-        src: './node_modules/twemoji/assets/svg/*',
+        src: './node_modules/@twemoji/svg/*',
         dest: 'packs/emoji/',
       }, {
         src: './src/instance',
