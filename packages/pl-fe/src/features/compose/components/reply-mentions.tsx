@@ -1,8 +1,7 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
-import { useAppSelector, useCompose, useFeatures } from 'pl-fe/hooks';
-import { makeGetStatus } from 'pl-fe/selectors';
+import { useCompose, useFeatures } from 'pl-fe/hooks';
 import { useModalsStore } from 'pl-fe/stores';
 
 interface IReplyMentions {
@@ -13,12 +12,9 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
   const { openModal } = useModalsStore();
   const features = useFeatures();
   const compose = useCompose(composeId);
-
-  const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id: compose.in_reply_to! }));
   const to = compose.to.toArray();
 
-  if (!features.createStatusExplicitAddressing || !status || !to) {
+  if (!features.createStatusExplicitAddressing || !compose.in_reply_to || !to) {
     return null;
   }
 
