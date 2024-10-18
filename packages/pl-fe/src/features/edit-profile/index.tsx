@@ -27,7 +27,7 @@ import { isDefaultAvatar, isDefaultHeader } from 'pl-fe/utils/accounts';
 import AvatarPicker from './components/avatar-picker';
 import HeaderPicker from './components/header-picker';
 
-import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield/streamfield';
+import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield';
 import type { Account } from 'pl-fe/normalizers';
 
 const nonDefaultAvatar = (url: string | undefined) => url && isDefaultAvatar(url) ? undefined : url;

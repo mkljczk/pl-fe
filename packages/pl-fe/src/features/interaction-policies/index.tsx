@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useInteractionPolicies } from 'pl-fe/api/hooks';
 import List, { ListItem } from 'pl-fe/components/list';
 import { Button, CardTitle, Column, Form, FormActions, Tabs } from 'pl-fe/components/ui';
-import { InlineMultiselect } from 'pl-fe/components/ui/inline-multiselect/inline-multiselect';
+import { InlineMultiselect } from 'pl-fe/components/ui/inline-multiselect';
 import toast from 'pl-fe/toast';
 
 import Warning from '../compose/components/warning';

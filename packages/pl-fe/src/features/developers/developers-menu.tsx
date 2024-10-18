@@ -4,7 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 
 import { changeSetting } from 'pl-fe/actions/settings';
 import { Column, Text } from 'pl-fe/components/ui';
-import SvgIcon from 'pl-fe/components/ui/icon/svg-icon';
+import SvgIcon from 'pl-fe/components/ui/svg-icon';
 import { useAppDispatch } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 import sourceCode from 'pl-fe/utils/code';

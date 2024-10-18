@@ -5,7 +5,7 @@ import { type FilterType, setFilter } from 'pl-fe/actions/notifications';
 import { Icon, Tabs } from 'pl-fe/components/ui';
 import { useAppDispatch, useFeatures, useSettings } from 'pl-fe/hooks';
 
-import type { Item } from 'pl-fe/components/ui/tabs/tabs';
+import type { Item } from 'pl-fe/components/ui/tabs';
 
 const messages = defineMessages({
   all: { id: 'notifications.filter.all', defaultMessage: 'All' },

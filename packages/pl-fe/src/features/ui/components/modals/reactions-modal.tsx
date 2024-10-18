@@ -10,7 +10,7 @@ import AccountContainer from 'pl-fe/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import type { BaseModalProps } from '../modal-root';
-import type { Item } from 'pl-fe/components/ui/tabs/tabs';
+import type { Item } from 'pl-fe/components/ui/tabs';
 
 const messages = defineMessages({
   all: { id: 'reactions.all', defaultMessage: 'All' },

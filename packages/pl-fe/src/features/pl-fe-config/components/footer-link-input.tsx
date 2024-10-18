@@ -3,7 +3,7 @@ import { useIntl, defineMessages } from 'react-intl';
 
 import { HStack, Input } from 'pl-fe/components/ui';
 
-import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield/streamfield';
+import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield';
 import type { FooterItem } from 'pl-fe/types/pl-fe';
 
 const messages = defineMessages({

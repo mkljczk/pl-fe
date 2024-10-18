@@ -5,7 +5,7 @@ import { HStack, Input } from 'pl-fe/components/ui';
 
 import IconPicker from './icon-picker';
 
-import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield/streamfield';
+import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield';
 import type { PromoPanelItem } from 'pl-fe/types/pl-fe';
 
 const messages = defineMessages({

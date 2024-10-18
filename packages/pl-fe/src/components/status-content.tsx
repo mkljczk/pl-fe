@@ -14,7 +14,7 @@ import Markup from './markup';
 import { ParsedContent } from './parsed-content';
 import Poll from './polls/poll';
 
-import type { Sizes } from 'pl-fe/components/ui/text/text';
+import type { Sizes } from 'pl-fe/components/ui/text';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 
 const BIG_EMOJI_LIMIT = 10;

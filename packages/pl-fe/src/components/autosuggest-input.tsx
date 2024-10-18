@@ -9,7 +9,7 @@ import AutosuggestAccount from 'pl-fe/features/compose/components/autosuggest-ac
 import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
 
 import type { Menu, MenuItem } from 'pl-fe/components/dropdown-menu';
-import type { InputThemes } from 'pl-fe/components/ui/input/input';
+import type { InputThemes } from 'pl-fe/components/ui/input';
 import type { Emoji } from 'pl-fe/features/emoji';
 
 type AutoSuggestion = string | Emoji;

@@ -12,7 +12,7 @@ import toast from 'pl-fe/toast';
 import { SelectDropdown } from '../forms';
 
 import type { FilterContext } from 'pl-api';
-import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield/streamfield';
+import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield';
 
 interface IFilterField {
   id?: string;

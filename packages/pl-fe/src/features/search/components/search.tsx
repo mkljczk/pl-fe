@@ -13,7 +13,7 @@ import {
 } from 'pl-fe/actions/search';
 import AutosuggestAccountInput from 'pl-fe/components/autosuggest-account-input';
 import { Input } from 'pl-fe/components/ui';
-import SvgIcon from 'pl-fe/components/ui/icon/svg-icon';
+import SvgIcon from 'pl-fe/components/ui/svg-icon';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { selectAccount } from 'pl-fe/selectors';
 import { AppDispatch, RootState } from 'pl-fe/store';

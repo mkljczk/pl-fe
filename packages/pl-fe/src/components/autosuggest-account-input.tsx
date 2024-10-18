@@ -7,7 +7,7 @@ import AutosuggestInput, { AutoSuggestion } from 'pl-fe/components/autosuggest-i
 import { useAppDispatch } from 'pl-fe/hooks';
 
 import type { Menu } from 'pl-fe/components/dropdown-menu';
-import type { InputThemes } from 'pl-fe/components/ui/input/input';
+import type { InputThemes } from 'pl-fe/components/ui/input';
 
 const noOp = () => { };
 
