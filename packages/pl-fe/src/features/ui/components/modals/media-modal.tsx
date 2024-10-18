@@ -1,5 +1,6 @@
 import clsx from 'clsx';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useStatus } from 'pl-hooks';
+import React, { useEffect, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import ReactSwipeableViews from 'react-swipeable-views';
@@ -13,9 +14,8 @@ import Audio from 'pl-fe/features/audio';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import Thread from 'pl-fe/features/status/components/thread';
 import Video from 'pl-fe/features/video';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks';
 import { userTouching } from 'pl-fe/is-mobile';
-import { makeGetStatus } from 'pl-fe/selectors';
 
 import ImageLoader from '../image-loader';
 
@@ -61,8 +61,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector((state) => statusId ? getStatus(state, { id: statusId }) : undefined);
+  const { data: status } = useStatus(statusId);
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
   const [index, setIndex] = useState<number | null>(null);

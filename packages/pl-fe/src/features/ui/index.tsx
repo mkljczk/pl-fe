@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { prefetchMarker, prefetchNotifications } from 'pl-hooks';
 import React, { Suspense, lazy, useEffect, useRef } from 'react';
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom';
 
@@ -7,8 +8,7 @@ import { fetchReports, fetchUsers, fetchConfig } from 'pl-fe/actions/admin';
 import { fetchCustomEmojis } from 'pl-fe/actions/custom-emojis';
 import { fetchDraftStatuses } from 'pl-fe/actions/draft-statuses';
 import { fetchFilters } from 'pl-fe/actions/filters';
-import { fetchMarker } from 'pl-fe/actions/markers';
-import { expandNotifications } from 'pl-fe/actions/notifications';
+import { FilterType } from 'pl-fe/actions/notifications';
 import { register as registerPushNotifications } from 'pl-fe/actions/push-notifications';
 import { fetchScheduledStatuses } from 'pl-fe/actions/scheduled-statuses';
 import { fetchSuggestionsForTimeline } from 'pl-fe/actions/suggestions';
@@ -17,7 +17,7 @@ import { useUserStream } from 'pl-fe/api/hooks';
 import SidebarNavigation from 'pl-fe/components/sidebar-navigation';
 import ThumbNavigation from 'pl-fe/components/thumb-navigation';
 import { Layout } from 'pl-fe/components/ui';
-import { useAppDispatch, useAppSelector, useOwnAccount, usePlFeConfig, useFeatures, useDraggedFiles, useInstance, useLoggedIn } from 'pl-fe/hooks';
+import { useAppDispatch, useAppSelector, useOwnAccount, usePlFeConfig, useFeatures, useDraggedFiles, useInstance, useLoggedIn, useClient, useSettings } from 'pl-fe/hooks';
 import AdminLayout from 'pl-fe/layouts/admin-layout';
 import ChatsLayout from 'pl-fe/layouts/chats-layout';
 import DefaultLayout from 'pl-fe/layouts/default-layout';
@@ -37,6 +37,8 @@ import StatusLayout from 'pl-fe/layouts/status-layout';
 import { useUiStore } from 'pl-fe/stores';
 import { getVapidKey } from 'pl-fe/utils/auth';
 import { isStandalone } from 'pl-fe/utils/state';
+
+import { FILTER_TYPES } from '../notifications';
 
 import BackgroundShapes from './components/background-shapes';
 import {
@@ -134,6 +136,8 @@ import {
 } from './util/async-components';
 import GlobalHotkeys from './util/global-hotkeys';
 import { WrappedRoute } from './util/react-router-helpers';
+
+import type { NotificationType } from 'pl-fe/utils/notification';
 
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
@@ -344,6 +348,7 @@ interface IUI {
 }
 
 const UI: React.FC<IUI> = ({ children }) => {
+  const client = useClient();
   const history = useHistory();
   const dispatch = useAppDispatch();
   const node = useRef<HTMLDivElement | null>(null);
@@ -351,6 +356,7 @@ const UI: React.FC<IUI> = ({ children }) => {
   const { account } = useOwnAccount();
   const features = useFeatures();
   const vapidKey = useAppSelector(state => getVapidKey(state));
+  const notificationFilter = useSettings().notifications.quickFilter.active as FilterType;
 
   const { isDropdownMenuOpen } = useUiStore();
   const standalone = useAppSelector(isStandalone);
@@ -372,6 +378,9 @@ const UI: React.FC<IUI> = ({ children }) => {
 
   /** Load initial data when a user is logged in */
   const loadAccountData = () => {
+    const notificationsParams = notificationFilter === 'all' ? {} : {
+      types: FILTER_TYPES[notificationFilter] || [notificationFilter] as Array<NotificationType>,
+    };
     if (!account) return;
 
     dispatch(fetchDraftStatuses());
@@ -380,9 +389,8 @@ const UI: React.FC<IUI> = ({ children }) => {
       dispatch(fetchSuggestionsForTimeline());
     }));
 
-    dispatch(expandNotifications())
-      // @ts-ignore
-      .then(() => dispatch(fetchMarker(['notifications'])))
+    prefetchNotifications(client, notificationsParams)
+      .then(() => prefetchMarker(client, 'notifications'))
       .catch(console.error);
 
     if (account.is_admin || account.is_moderator) {
