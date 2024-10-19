@@ -4,7 +4,7 @@ import { cancelReplyCompose } from 'pl-fe/actions/compose';
 import { cancelEventCompose } from 'pl-fe/actions/events';
 import Base from 'pl-fe/components/modal-root';
 import { useAppDispatch } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import ModalLoading from './modal-loading';
 

@@ -8,7 +8,8 @@ import Icon from 'pl-fe/components/ui/icon';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'pl-fe/hooks';
-import { useModalsStore, useUiStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
+import { useUiStore } from 'pl-fe/stores/ui';
 import { isStandalone } from 'pl-fe/utils/state';
 
 const messages = defineMessages({

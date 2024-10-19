@@ -11,7 +11,7 @@ import Text from 'pl-fe/components/ui/text';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import unicodeMapping from 'pl-fe/features/emoji/mapping';
 import { useAppDispatch, useFeatures, useLoggedIn, useSettings } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import AnimatedNumber from './animated-number';
 

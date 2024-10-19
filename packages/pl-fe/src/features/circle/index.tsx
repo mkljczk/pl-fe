@@ -16,7 +16,7 @@ import ProgressBar from 'pl-fe/components/ui/progress-bar';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 const toRad = (x: number) => x * (Math.PI / 180);
 

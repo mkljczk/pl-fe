@@ -13,7 +13,7 @@ import Text from 'pl-fe/components/ui/text';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
 import { useAppDispatch, useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
 import { makeGetStatus } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import type { Status as StatusEntity } from 'pl-fe/normalizers';
 

@@ -21,7 +21,7 @@ import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useAppDispatch, useFeatures, useOwnAccount, useSettings } from 'pl-fe/hooks';
 import { useChats } from 'pl-fe/queries/chats';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import copy from 'pl-fe/utils/copy';
 import { download } from 'pl-fe/utils/download';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';

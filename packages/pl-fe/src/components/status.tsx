@@ -17,7 +17,7 @@ import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-contain
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch, useAppSelector, useSettings } from 'pl-fe/hooks';
 import { makeGetStatus, type SelectedStatus } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import { textForScreenReader } from 'pl-fe/utils/status';
 
 import EventPreview from './event-preview';

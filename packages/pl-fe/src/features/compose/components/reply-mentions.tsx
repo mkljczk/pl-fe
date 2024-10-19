@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
 import { useCompose, useFeatures } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 interface IReplyMentions {
   composeId: string;

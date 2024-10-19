@@ -8,7 +8,7 @@ import Text from 'pl-fe/components/ui/text';
 import Widget from 'pl-fe/components/ui/widget';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { type AccountGalleryAttachment, getAccountGallery } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import MediaItem from '../../../account-gallery/components/media-item';
 

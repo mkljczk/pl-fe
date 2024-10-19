@@ -8,7 +8,8 @@ import HStack from 'pl-fe/components/ui/hstack';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import Portal from 'pl-fe/components/ui/portal';
 import { userTouching } from 'pl-fe/is-mobile';
-import { useUiStore, useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
+import { useUiStore } from 'pl-fe/stores/ui';
 
 import DropdownMenuItem, { MenuItem } from './dropdown-menu-item';
 

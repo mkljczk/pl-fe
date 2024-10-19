@@ -23,7 +23,7 @@ import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dr
 import { languages } from 'pl-fe/features/preferences';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance, useOwnAccount, useSettings } from 'pl-fe/hooks';
 import { useChats } from 'pl-fe/queries/chats';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 import copy from 'pl-fe/utils/copy';
 

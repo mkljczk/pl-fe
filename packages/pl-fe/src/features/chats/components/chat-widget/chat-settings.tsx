@@ -11,7 +11,7 @@ import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { useChatActions } from 'pl-fe/queries/chats';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import ChatPaneHeader from './chat-pane-header';
 

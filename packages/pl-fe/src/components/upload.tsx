@@ -19,7 +19,7 @@ import Icon from 'pl-fe/components/ui/icon';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import Motion from 'pl-fe/features/ui/util/optional-motion';
 import { useSettings } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import type { MediaAttachment } from 'pl-api';
 

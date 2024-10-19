@@ -11,7 +11,7 @@ import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { makeGetAccount } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import type { Account } from 'pl-fe/normalizers';
 

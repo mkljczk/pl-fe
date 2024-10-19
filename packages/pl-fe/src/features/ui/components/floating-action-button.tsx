@@ -9,7 +9,7 @@ import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import { useAppDispatch } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 const messages = defineMessages({
   publish: { id: 'compose_form.publish', defaultMessage: 'Post' },

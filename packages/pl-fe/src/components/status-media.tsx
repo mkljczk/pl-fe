@@ -5,7 +5,7 @@ import PreviewCard from 'pl-fe/components/preview-card';
 import PlaceholderCard from 'pl-fe/features/placeholder/components/placeholder-card';
 import { MediaGallery, Video, Audio } from 'pl-fe/features/ui/util/async-components';
 import { useSettings } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import { isMediaVisible } from './statuses/sensitive-content-overlay';
 

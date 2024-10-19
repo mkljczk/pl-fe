@@ -9,7 +9,7 @@ import {
 } from 'pl-fe/hooks';
 import { normalizePlFeConfig } from 'pl-fe/normalizers';
 import { startSentry } from 'pl-fe/sentry';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import { generateThemeCss } from 'pl-fe/utils/theme';
 
 const Helmet = React.lazy(() => import('pl-fe/components/helmet'));

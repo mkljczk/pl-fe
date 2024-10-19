@@ -17,7 +17,7 @@ import Select from 'pl-fe/components/ui/select';
 import Textarea from 'pl-fe/components/ui/textarea';
 import CaptchaField from 'pl-fe/features/auth-login/components/captcha';
 import { useAppDispatch, useSettings, useFeatures, useInstance } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import type { CreateAccountParams } from 'pl-api';
 

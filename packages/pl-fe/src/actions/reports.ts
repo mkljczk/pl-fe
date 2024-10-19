@@ -1,4 +1,4 @@
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import { getClient } from '../api';
 

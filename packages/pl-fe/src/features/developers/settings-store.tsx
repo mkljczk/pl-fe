@@ -12,7 +12,7 @@ import FormGroup from 'pl-fe/components/ui/form-group';
 import Textarea from 'pl-fe/components/ui/textarea';
 import SettingToggle from 'pl-fe/features/notifications/components/setting-toggle';
 import { useAppDispatch } from 'pl-fe/hooks';
-import { useSettingsStore } from 'pl-fe/stores';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
 
 const isJSONValid = (text: any): boolean => {

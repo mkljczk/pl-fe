@@ -3,7 +3,7 @@ import debounce from 'lodash/debounce';
 import React, { useRef } from 'react';
 
 import { isMobile } from 'pl-fe/is-mobile';
-import { useStatusHoverCardStore } from 'pl-fe/stores';
+import { useStatusHoverCardStore } from 'pl-fe/stores/status-hover-card';
 
 const showStatusHoverCard = debounce((openStatusHoverCard, ref, statusId) => {
   openStatusHoverCard(ref, statusId);

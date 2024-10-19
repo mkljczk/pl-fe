@@ -14,7 +14,7 @@ import { MediaGallery } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector } from 'pl-fe/hooks';
 import { ChatKeys, useChatActions } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import { stripHTML } from 'pl-fe/utils/html';
 import { onlyEmoji } from 'pl-fe/utils/rich-content';
 

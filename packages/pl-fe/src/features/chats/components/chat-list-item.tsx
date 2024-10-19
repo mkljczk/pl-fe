@@ -14,7 +14,7 @@ import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
 import { useFeatures } from 'pl-fe/hooks';
 import { useChatActions } from 'pl-fe/queries/chats';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import type { Chat } from 'pl-api';
 import type { Menu } from 'pl-fe/components/dropdown-menu';

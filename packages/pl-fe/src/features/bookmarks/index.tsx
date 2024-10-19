@@ -12,7 +12,7 @@ import StatusList from 'pl-fe/components/status-list';
 import Column from 'pl-fe/components/ui/column';
 import { useAppSelector, useAppDispatch, useTheme } from 'pl-fe/hooks';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
