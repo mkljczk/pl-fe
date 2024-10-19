@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedDate } from 'react-intl';
 
 import Icon from 'pl-fe/components/icon';
-import { HStack } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
 
 import type { Status } from 'pl-fe/normalizers';
 

@@ -2,7 +2,9 @@ import React, { useCallback } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from 'pl-fe/components/icon';
-import { Modal, Stack, Text } from 'pl-fe/components/ui';
+import Modal from 'pl-fe/components/ui/modal';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import ReplyIndicator from 'pl-fe/features/compose/components/reply-indicator';
 import { useAppSelector } from 'pl-fe/hooks';
 import { makeGetStatus } from 'pl-fe/selectors';

@@ -4,7 +4,10 @@ import { Link } from 'react-router-dom';
 
 import { useAccount } from 'pl-fe/api/hooks';
 import StillImage from 'pl-fe/components/still-image';
-import { Avatar, HStack, Stack, Text } from 'pl-fe/components/ui';
+import Avatar from 'pl-fe/components/ui/avatar';
+import HStack from 'pl-fe/components/ui/hstack';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useAppSelector, useSettings } from 'pl-fe/hooks';
 import { getAcct } from 'pl-fe/utils/accounts';

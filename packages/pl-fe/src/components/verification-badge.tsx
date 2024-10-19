@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import { Icon } from 'pl-fe/components/ui';
+import Icon from 'pl-fe/components/ui/icon';
 import { usePlFeConfig } from 'pl-fe/hooks';
 
 const messages = defineMessages({

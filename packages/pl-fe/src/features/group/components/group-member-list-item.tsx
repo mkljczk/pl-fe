@@ -7,7 +7,7 @@ import { groupKick } from 'pl-fe/actions/groups';
 import { useAccount, useBlockGroupMember, useDemoteGroupMember, usePromoteGroupMember } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
 import DropdownMenu from 'pl-fe/components/dropdown-menu/dropdown-menu';
-import { HStack } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
 import { deleteEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
 import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholder-account';

@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'pl-f
 import { useModalsStore, useUiStore } from 'pl-fe/stores';
 import { isStandalone } from 'pl-fe/utils/state';
 
-import { Icon } from './ui';
+import Icon from 'pl-fe/components/ui/icon';
 
 const messages = defineMessages({
   home: { id: 'navigation.home', defaultMessage: 'Home' },

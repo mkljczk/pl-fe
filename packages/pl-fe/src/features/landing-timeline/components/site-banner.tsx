@@ -2,7 +2,7 @@ import DOMPurify from 'isomorphic-dompurify';
 import React, { useMemo } from 'react';
 
 import Markup from 'pl-fe/components/markup';
-import { Stack } from 'pl-fe/components/ui';
+import Stack from 'pl-fe/components/ui/stack';
 import { useInstance } from 'pl-fe/hooks';
 import { getTextDirection } from 'pl-fe/utils/rtl';
 

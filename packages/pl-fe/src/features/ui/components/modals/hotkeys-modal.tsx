@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Modal } from 'pl-fe/components/ui';
+import Modal from 'pl-fe/components/ui/modal';
 import { useFeatures, useLoggedIn } from 'pl-fe/hooks';
 
 import type { BaseModalProps } from '../modal-root';

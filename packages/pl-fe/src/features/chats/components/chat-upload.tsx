@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 
 import Blurhash from 'pl-fe/components/blurhash';
-import { Icon } from 'pl-fe/components/ui';
+import Icon from 'pl-fe/components/ui/icon';
 import { useModalsStore } from 'pl-fe/stores';
 
 import ChatUploadPreview from './chat-upload-preview';

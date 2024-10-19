@@ -2,7 +2,8 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { cancelScheduledStatus } from 'pl-fe/actions/scheduled-statuses';
-import { Button, HStack } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import HStack from 'pl-fe/components/ui/hstack';
 import { useAppDispatch } from 'pl-fe/hooks';
 import { useModalsStore, useSettingsStore } from 'pl-fe/stores';
 

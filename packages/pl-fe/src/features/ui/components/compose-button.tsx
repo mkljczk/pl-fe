@@ -4,7 +4,9 @@ import { useLocation, useRouteMatch } from 'react-router-dom';
 
 import { groupComposeModal } from 'pl-fe/actions/compose';
 import { useGroup } from 'pl-fe/api/hooks';
-import { Avatar, Button, HStack } from 'pl-fe/components/ui';
+import Avatar from 'pl-fe/components/ui/avatar';
+import Button from 'pl-fe/components/ui/button';
+import HStack from 'pl-fe/components/ui/hstack';
 import { useAppDispatch } from 'pl-fe/hooks';
 import { useModalsStore } from 'pl-fe/stores';
 

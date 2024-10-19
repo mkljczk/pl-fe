@@ -6,7 +6,9 @@ import GroupPrivacy from 'pl-fe/features/group/components/group-privacy';
 import GroupRelationship from 'pl-fe/features/group/components/group-relationship';
 
 import GroupAvatar from './groups/group-avatar';
-import { HStack, Stack, Text } from './ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 
 import type { Group as GroupEntity } from 'pl-fe/normalizers';
 

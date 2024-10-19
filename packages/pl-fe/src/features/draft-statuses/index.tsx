@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchDraftStatuses } from 'pl-fe/actions/draft-statuses';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Column } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
 import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 import DraftStatus from './components/draft-status';

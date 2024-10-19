@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
-import { IconButton } from 'pl-fe/components/ui';
+import IconButton from 'pl-fe/components/ui/icon-button';
 import { useInstance } from 'pl-fe/hooks';
 
 const messages = defineMessages({

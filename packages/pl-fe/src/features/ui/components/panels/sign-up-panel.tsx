@@ -4,7 +4,9 @@ import { Redirect } from 'react-router-dom';
 
 import { logIn, switchAccount, verifyCredentials } from 'pl-fe/actions/auth';
 import { fetchInstance } from 'pl-fe/actions/instance';
-import { Button, Stack, Text } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import LoginForm from 'pl-fe/features/auth-login/components/login-form';
 import OtpAuthForm from 'pl-fe/features/auth-login/components/otp-auth-form';
 import ExternalLoginForm from 'pl-fe/features/external-login/components/external-login-form';

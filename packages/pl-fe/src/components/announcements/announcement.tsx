@@ -1,7 +1,8 @@
 import React from 'react';
 import { FormattedDate } from 'react-intl';
 
-import { Stack, Text } from 'pl-fe/components/ui';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import { useFeatures } from 'pl-fe/hooks';
 import { getTextDirection } from 'pl-fe/utils/rtl';
 

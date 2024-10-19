@@ -2,7 +2,8 @@ import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 
-import { HStack, Text } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Text from 'pl-fe/components/ui/text';
 import { useSettings } from 'pl-fe/hooks';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 

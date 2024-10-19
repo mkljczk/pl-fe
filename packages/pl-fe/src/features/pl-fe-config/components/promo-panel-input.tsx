@@ -1,7 +1,8 @@
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import { HStack, Input } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Input from 'pl-fe/components/ui/input';
 
 import IconPicker from './icon-picker';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Stack } from 'pl-fe/components/ui';
+import Stack from 'pl-fe/components/ui/stack';
 import { usePlFeConfig } from 'pl-fe/hooks';
 
 import CryptoAddress from './crypto-address';

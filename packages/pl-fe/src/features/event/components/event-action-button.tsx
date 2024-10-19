@@ -2,7 +2,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { joinEvent, leaveEvent } from 'pl-fe/actions/events';
-import { Button } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { useModalsStore } from 'pl-fe/stores';
 

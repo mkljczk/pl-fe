@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { useLeaveGroup } from 'pl-fe/api/hooks';
 import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
-import { IconButton } from 'pl-fe/components/ui';
+import IconButton from 'pl-fe/components/ui/icon-button';
 import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 

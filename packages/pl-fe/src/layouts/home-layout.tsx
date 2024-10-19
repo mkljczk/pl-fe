@@ -4,6 +4,11 @@ import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { uploadCompose } from 'pl-fe/actions/compose';
+import Avatar from 'pl-fe/components/ui/avatar';
+import Card, { CardBody } from 'pl-fe/components/ui/card';
+import HStack from 'pl-fe/components/ui/hstack';
+import Layout from 'pl-fe/components/ui/layout';
+import ComposeForm from 'pl-fe/features/compose/components/compose-form';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
   WhoToFollowPanel,
@@ -16,9 +21,6 @@ import {
 } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector, useOwnAccount, useFeatures, usePlFeConfig, useDraggedFiles, useAppDispatch } from 'pl-fe/hooks';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
-
-import { Avatar, Card, CardBody, HStack, Layout } from '../components/ui';
-import ComposeForm from '../features/compose/components/compose-form';
 
 interface IHomeLayout {
   children: React.ReactNode;

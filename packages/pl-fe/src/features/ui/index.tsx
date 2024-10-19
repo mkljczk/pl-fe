@@ -16,7 +16,7 @@ import { fetchHomeTimeline } from 'pl-fe/actions/timelines';
 import { useUserStream } from 'pl-fe/api/hooks';
 import SidebarNavigation from 'pl-fe/components/sidebar-navigation';
 import ThumbNavigation from 'pl-fe/components/thumb-navigation';
-import { Layout } from 'pl-fe/components/ui';
+import Layout from 'pl-fe/components/ui/layout';
 import { useAppDispatch, useAppSelector, useOwnAccount, usePlFeConfig, useFeatures, useDraggedFiles, useInstance, useLoggedIn } from 'pl-fe/hooks';
 import AdminLayout from 'pl-fe/layouts/admin-layout';
 import ChatsLayout from 'pl-fe/layouts/chats-layout';

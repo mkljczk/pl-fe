@@ -16,7 +16,7 @@ import { showAccountHoverCard } from './hover-account-wrapper';
 import { ParsedContent } from './parsed-content';
 import { dateFormatOptions } from './relative-timestamp';
 import Scrobble from './scrobble';
-import { Card, CardBody, HStack, Icon, Stack, Text } from './ui';
+import { Card, CardBody, HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
 
 import type { Account } from 'pl-fe/normalizers';
 

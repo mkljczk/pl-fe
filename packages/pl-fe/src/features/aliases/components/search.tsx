@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { fetchAliasesSuggestions, clearAliasesSuggestions, changeAliasesSuggestions } from 'pl-fe/actions/aliases';
 import Icon from 'pl-fe/components/icon';
-import { Button } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({

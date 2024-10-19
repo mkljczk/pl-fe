@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import { HStack, Stack, Slider } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Stack from 'pl-fe/components/ui/stack';
+import Slider from 'pl-fe/components/ui/slider';
 import { usePrevious } from 'pl-fe/hooks';
 import { compareId } from 'pl-fe/utils/comparators';
 import { hueShift } from 'pl-fe/utils/theme';

@@ -4,7 +4,7 @@ import { useIntl, defineMessages, IntlShape } from 'react-intl';
 import { changeComposeFederated, changeComposeVisibility } from 'pl-fe/actions/compose';
 import { fetchLists } from 'pl-fe/actions/lists';
 import DropdownMenu, { MenuItem } from 'pl-fe/components/dropdown-menu';
-import { Button } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
 import { getOrderedLists } from 'pl-fe/features/lists';
 import { useAppDispatch, useAppSelector, useCompose, useFeatures } from 'pl-fe/hooks';
 

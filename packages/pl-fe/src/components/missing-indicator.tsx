@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Card, CardBody, Stack, Text } from './ui';
+import { Card, CardBody, Stack, Text } from 'pl-fe/components/ui';
 
 interface MissingIndicatorProps {
   nested?: boolean;

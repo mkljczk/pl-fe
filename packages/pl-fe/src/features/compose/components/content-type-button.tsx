@@ -3,7 +3,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { changeComposeContentType } from 'pl-fe/actions/compose';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import { Button } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
 import { useAppDispatch, useCompose, useInstance } from 'pl-fe/hooks';
 
 const messages = defineMessages({

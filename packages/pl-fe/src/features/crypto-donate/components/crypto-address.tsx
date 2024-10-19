@@ -1,7 +1,10 @@
 import React from 'react';
 
 import CopyableInput from 'pl-fe/components/copyable-input';
-import { Text, Icon, Stack, HStack } from 'pl-fe/components/ui';
+import Text from 'pl-fe/components/ui/text';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import HStack from 'pl-fe/components/ui/hstack';
 import { useModalsStore } from 'pl-fe/stores';
 
 import { getExplorerUrl } from '../utils/block-explorer';

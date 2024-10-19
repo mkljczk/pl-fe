@@ -2,7 +2,7 @@ import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 import { useRouteMatch } from 'react-router-dom';
 
-import { Tabs } from 'pl-fe/components/ui';
+import Tabs from 'pl-fe/components/ui/tabs';
 import { useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({

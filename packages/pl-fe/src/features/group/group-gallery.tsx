@@ -4,7 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import { useGroup, useGroupMedia } from 'pl-fe/api/hooks';
 import LoadMore from 'pl-fe/components/load-more';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
-import { Column, Spinner } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
+import Spinner from 'pl-fe/components/ui/spinner';
 import { useModalsStore } from 'pl-fe/stores';
 
 import MediaItem from '../account-gallery/components/media-item';

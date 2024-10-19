@@ -5,7 +5,7 @@ import { addToAliases } from 'pl-fe/actions/aliases';
 import { useAccount } from 'pl-fe/api/hooks';
 import AccountComponent from 'pl-fe/components/account';
 import IconButton from 'pl-fe/components/icon-button';
-import { HStack } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
 import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 
 const messages = defineMessages({

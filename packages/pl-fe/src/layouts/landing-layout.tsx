@@ -7,7 +7,7 @@ import {
 } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector, useFeatures } from 'pl-fe/hooks';
 
-import { Layout } from '../components/ui';
+import Layout from 'pl-fe/components/ui/layout';
 
 interface ILandingLayout {
   children: React.ReactNode;

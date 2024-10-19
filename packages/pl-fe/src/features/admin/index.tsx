@@ -2,7 +2,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Switch, Route } from 'react-router-dom';
 
-import { Column } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
 import { useOwnAccount } from 'pl-fe/hooks';
 
 import AdminTabs from './components/admin-tabs';

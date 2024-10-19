@@ -5,7 +5,10 @@ import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import emojify from 'pl-fe/features/emoji';
 import { MediaGallery } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector } from 'pl-fe/hooks';

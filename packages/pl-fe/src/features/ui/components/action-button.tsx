@@ -11,7 +11,8 @@ import {
   biteAccount,
 } from 'pl-fe/actions/accounts';
 import { useFollow } from 'pl-fe/api/hooks';
-import { Button, HStack } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import HStack from 'pl-fe/components/ui/hstack';
 import { useAppDispatch, useFeatures, useLoggedIn } from 'pl-fe/hooks';
 import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';

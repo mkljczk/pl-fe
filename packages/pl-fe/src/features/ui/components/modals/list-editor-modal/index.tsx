@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { setupListEditor, resetListEditor } from 'pl-fe/actions/lists';
-import { CardHeader, CardTitle, Modal } from 'pl-fe/components/ui';
+import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
+import Modal from 'pl-fe/components/ui/modal';
 import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 import Account from './components/account';

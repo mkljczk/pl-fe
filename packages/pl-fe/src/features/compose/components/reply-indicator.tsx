@@ -4,7 +4,7 @@ import React from 'react';
 import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
 import Markup from 'pl-fe/components/markup';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
-import { Stack } from 'pl-fe/components/ui';
+import Stack from 'pl-fe/components/ui/stack';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { getTextDirection } from 'pl-fe/utils/rtl';
 

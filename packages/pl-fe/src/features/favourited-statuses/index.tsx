@@ -8,7 +8,7 @@ import { fetchFavouritedStatuses, expandFavouritedStatuses, fetchAccountFavourit
 import { useAccountLookup } from 'pl-fe/api/hooks';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StatusList from 'pl-fe/components/status-list';
-import { Column } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
 import { useAppDispatch, useAppSelector, useOwnAccount } from 'pl-fe/hooks';
 
 const messages = defineMessages({

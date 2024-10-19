@@ -3,7 +3,8 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { updateMrf } from 'pl-fe/actions/mrf';
 import List, { ListItem } from 'pl-fe/components/list';
-import { Modal, Toggle } from 'pl-fe/components/ui';
+import Modal from 'pl-fe/components/ui/modal';
+import Toggle from 'pl-fe/components/ui/toggle';
 import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 import { makeGetRemoteInstance } from 'pl-fe/selectors';
 import toast from 'pl-fe/toast';

@@ -3,7 +3,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { removeFromListEditor, addToListEditor } from 'pl-fe/actions/lists';
 import IconButton from 'pl-fe/components/icon-button';
-import { HStack } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 

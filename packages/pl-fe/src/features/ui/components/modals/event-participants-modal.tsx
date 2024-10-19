@@ -3,7 +3,8 @@ import { FormattedMessage } from 'react-intl';
 
 import { fetchEventParticipations } from 'pl-fe/actions/events';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Modal, Spinner } from 'pl-fe/components/ui';
+import Modal from 'pl-fe/components/ui/modal';
+import Spinner from 'pl-fe/components/ui/spinner';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 

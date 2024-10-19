@@ -2,7 +2,10 @@ import React from 'react';
 
 import { useAppSelector } from 'pl-fe/hooks';
 
-import { HStack, Icon, Stack, Text } from './ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 
 const buildingCommunityIcon = require('@tabler/icons/outline/building-community.svg');
 const homeIcon = require('@tabler/icons/outline/home-2.svg');

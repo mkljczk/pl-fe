@@ -5,7 +5,10 @@ import { translateStatus, undoStatusTranslation } from 'pl-fe/actions/statuses';
 import { useTranslationLanguages } from 'pl-fe/api/hooks';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance, useSettings } from 'pl-fe/hooks';
 
-import { HStack, Icon, Stack, Text } from './ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 
 import type { Status } from 'pl-fe/normalizers';
 

@@ -10,7 +10,7 @@ import { useAppDispatch, useFeatures, useLoggedIn, useSettings } from 'pl-fe/hoo
 import { useModalsStore } from 'pl-fe/stores';
 
 import AnimatedNumber from './animated-number';
-import { Emoji, HStack, Icon, Text } from './ui';
+import { Emoji, HStack, Icon, Text } from 'pl-fe/components/ui';
 
 import type { EmojiReaction } from 'pl-api';
 import type { Emoji as EmojiType } from 'pl-fe/features/emoji';

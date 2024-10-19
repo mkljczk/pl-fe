@@ -9,7 +9,7 @@ import {
 import { useAppSelector, useOwnAccount } from 'pl-fe/hooks';
 import { federationRestrictionsDisclosed } from 'pl-fe/utils/state';
 
-import { Layout } from '../components/ui';
+import Layout from 'pl-fe/components/ui/layout';
 
 interface IRemoteInstanceLayout {
   params?: {

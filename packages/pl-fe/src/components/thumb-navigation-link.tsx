@@ -3,7 +3,7 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 import IconWithCounter from 'pl-fe/components/icon-with-counter';
-import { Icon } from 'pl-fe/components/ui';
+import Icon from 'pl-fe/components/ui/icon';
 import { useSettings } from 'pl-fe/hooks';
 
 interface IThumbNavigationLink {

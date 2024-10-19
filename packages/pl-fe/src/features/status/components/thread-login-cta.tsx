@@ -1,7 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Card, CardTitle, Text, Stack, Button } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Card, { CardTitle } from 'pl-fe/components/ui/card';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import { useInstance, usePlFeConfig } from 'pl-fe/hooks';
 
 /** Prompts logged-out users to log in when viewing a thread. */

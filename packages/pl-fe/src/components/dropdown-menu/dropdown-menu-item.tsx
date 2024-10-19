@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import { userTouching } from 'pl-fe/is-mobile';
 
-import { Counter, Icon, Toggle } from '../ui';
+import { Counter, Icon, Toggle } from 'pl-fe/components/ui';
 
 interface MenuItem {
   action?: React.EventHandler<React.KeyboardEvent | React.MouseEvent>;

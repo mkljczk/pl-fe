@@ -3,7 +3,8 @@ import React from 'react';
 import { defineMessages, useIntl, FormatDateOptions } from 'react-intl';
 
 import Markup from 'pl-fe/components/markup';
-import { HStack, Icon } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
 import { CryptoAddress, LightningAddress } from 'pl-fe/features/ui/util/async-components';
 
 import type { Account } from 'pl-fe/normalizers';

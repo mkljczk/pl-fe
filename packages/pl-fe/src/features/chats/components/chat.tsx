@@ -3,7 +3,7 @@ import React, { MutableRefObject, useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { uploadMedia } from 'pl-fe/actions/media';
-import { Stack } from 'pl-fe/components/ui';
+import Stack from 'pl-fe/components/ui/stack';
 import { useAppDispatch } from 'pl-fe/hooks';
 import { useChatActions } from 'pl-fe/queries/chats';
 import toast from 'pl-fe/toast';

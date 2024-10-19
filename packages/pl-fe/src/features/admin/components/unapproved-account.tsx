@@ -3,7 +3,9 @@ import React from 'react';
 import { approveUser, deleteUser } from 'pl-fe/actions/admin';
 import { useAccount } from 'pl-fe/api/hooks';
 import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';
-import { Stack, HStack, Text } from 'pl-fe/components/ui';
+import Stack from 'pl-fe/components/ui/stack';
+import HStack from 'pl-fe/components/ui/hstack';
+import Text from 'pl-fe/components/ui/text';
 import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 interface IUnapprovedAccount {

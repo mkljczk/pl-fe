@@ -5,7 +5,8 @@ import { deleteStatusModal } from 'pl-fe/actions/moderation';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import StatusContent from 'pl-fe/components/status-content';
 import StatusMedia from 'pl-fe/components/status-media';
-import { HStack, Stack } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Stack from 'pl-fe/components/ui/stack';
 import { useAppDispatch } from 'pl-fe/hooks';
 
 import type { SelectedStatus } from 'pl-fe/selectors';

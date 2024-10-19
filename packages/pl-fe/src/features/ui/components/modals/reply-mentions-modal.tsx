@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Modal } from 'pl-fe/components/ui';
+import Modal from 'pl-fe/components/ui/modal';
 import Account from 'pl-fe/features/reply-mentions/account';
 import { useAppSelector, useCompose, useOwnAccount } from 'pl-fe/hooks';
 import { statusToMentionsAccountIdsArray } from 'pl-fe/reducers/compose';

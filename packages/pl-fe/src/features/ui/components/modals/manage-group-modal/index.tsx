@@ -3,7 +3,8 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
 import { useCreateGroup } from 'pl-fe/api/hooks';
-import { Modal, Stack } from 'pl-fe/components/ui';
+import Modal from 'pl-fe/components/ui/modal';
+import Stack from 'pl-fe/components/ui/stack';
 import toast from 'pl-fe/toast';
 
 import ConfirmationStep from './steps/confirmation-step';

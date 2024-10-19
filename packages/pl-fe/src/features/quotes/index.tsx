@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 
 import { expandStatusQuotes, fetchStatusQuotes } from 'pl-fe/actions/status-quotes';
 import StatusList from 'pl-fe/components/status-list';
-import { Column } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
 import { useAppDispatch, useAppSelector, useTheme } from 'pl-fe/hooks';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 

@@ -5,7 +5,7 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { fetchFollowedHashtags, expandFollowedHashtags } from 'pl-fe/actions/tags';
 import Hashtag from 'pl-fe/components/hashtag';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Column } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
 import PlaceholderHashtag from 'pl-fe/features/placeholder/components/placeholder-hashtag';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 

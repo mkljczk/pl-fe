@@ -2,7 +2,8 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { getPlFeConfig } from 'pl-fe/actions/pl-fe';
-import { Stack, Text } from 'pl-fe/components/ui';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import { useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({

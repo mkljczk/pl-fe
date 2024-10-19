@@ -2,7 +2,7 @@ import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
 import { pinHost, unpinHost } from 'pl-fe/actions/remote-timeline';
-import { Widget } from 'pl-fe/components/ui';
+import Widget from 'pl-fe/components/ui/widget';
 import { useAppSelector, useAppDispatch, useSettings } from 'pl-fe/hooks';
 import { makeGetRemoteInstance } from 'pl-fe/selectors';
 

@@ -5,7 +5,7 @@ import { directComposeById } from 'pl-fe/actions/compose';
 import { mountConversations, unmountConversations, expandConversations } from 'pl-fe/actions/conversations';
 import { useDirectStream } from 'pl-fe/api/hooks';
 import AccountSearch from 'pl-fe/components/account-search';
-import { Column } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
 import { useAppDispatch } from 'pl-fe/hooks';
 
 import ConversationsList from './components/conversations-list';

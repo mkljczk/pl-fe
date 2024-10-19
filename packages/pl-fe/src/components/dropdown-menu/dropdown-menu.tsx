@@ -7,7 +7,7 @@ import ReactSwipeableViews from 'react-swipeable-views';
 import { userTouching } from 'pl-fe/is-mobile';
 import { useUiStore, useModalsStore } from 'pl-fe/stores';
 
-import { HStack, IconButton, Portal } from '../ui';
+import { HStack, IconButton, Portal } from 'pl-fe/components/ui';
 
 import DropdownMenuItem, { MenuItem } from './dropdown-menu-item';
 

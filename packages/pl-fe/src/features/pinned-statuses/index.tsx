@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { fetchPinnedStatuses } from 'pl-fe/actions/pin-statuses';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StatusList from 'pl-fe/components/status-list';
-import { Column } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { selectOwnAccount } from 'pl-fe/selectors';
 

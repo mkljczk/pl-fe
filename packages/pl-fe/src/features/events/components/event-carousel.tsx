@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import ReactSwipeableViews from 'react-swipeable-views';
 
 import EventPreview from 'pl-fe/components/event-preview';
-import { Card, Icon } from 'pl-fe/components/ui';
+import Card from 'pl-fe/components/ui/card';
+import Icon from 'pl-fe/components/ui/icon';
 import { useAppSelector } from 'pl-fe/hooks';
 import { makeGetStatus } from 'pl-fe/selectors';
 

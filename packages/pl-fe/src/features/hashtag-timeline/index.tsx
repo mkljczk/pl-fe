@@ -5,7 +5,8 @@ import { fetchHashtag, followHashtag, unfollowHashtag } from 'pl-fe/actions/tags
 import { fetchHashtagTimeline, clearTimeline } from 'pl-fe/actions/timelines';
 import { useHashtagStream } from 'pl-fe/api/hooks';
 import List, { ListItem } from 'pl-fe/components/list';
-import { Column, Toggle } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
+import Toggle from 'pl-fe/components/ui/toggle';
 import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch, useAppSelector, useFeatures, useLoggedIn, useTheme } from 'pl-fe/hooks';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';

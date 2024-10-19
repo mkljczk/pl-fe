@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { fetchUsers } from 'pl-fe/actions/admin';
-import { Widget } from 'pl-fe/components/ui';
+import Widget from 'pl-fe/components/ui/widget';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 

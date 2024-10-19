@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchPinnedAccounts } from 'pl-fe/actions/accounts';
-import { Widget } from 'pl-fe/components/ui';
+import Widget from 'pl-fe/components/ui/widget';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { WhoToFollowPanel } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';

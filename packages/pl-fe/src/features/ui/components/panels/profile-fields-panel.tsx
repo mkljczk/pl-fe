@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Widget, Stack } from 'pl-fe/components/ui';
+import Widget from 'pl-fe/components/ui/widget';
+import Stack from 'pl-fe/components/ui/stack';
 
 import ProfileField from '../profile-field';
 

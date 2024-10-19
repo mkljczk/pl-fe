@@ -2,7 +2,7 @@ import React from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import { Widget } from 'pl-fe/components/ui';
+import Widget from 'pl-fe/components/ui/widget';
 import InstanceRestrictions from 'pl-fe/features/federation-restrictions/components/instance-restrictions';
 import { useAppSelector, useOwnAccount } from 'pl-fe/hooks';
 import { makeGetRemoteInstance } from 'pl-fe/selectors';

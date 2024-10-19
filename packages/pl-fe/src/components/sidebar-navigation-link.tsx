@@ -4,7 +4,8 @@ import { NavLink } from 'react-router-dom';
 
 import { useSettings } from 'pl-fe/hooks';
 
-import { Icon, Text } from './ui';
+import Icon from 'pl-fe/components/ui/icon';
+import Text from 'pl-fe/components/ui/text';
 
 interface ISidebarNavigationLink {
   /** Notification count, if any. */

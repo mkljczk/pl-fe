@@ -2,7 +2,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import List, { ListItem } from 'pl-fe/components/list';
-import { Toggle } from 'pl-fe/components/ui';
+import Toggle from 'pl-fe/components/ui/toggle';
 import { useOwnAccount } from 'pl-fe/hooks';
 import { useUpdateCredentials } from 'pl-fe/queries/accounts';
 

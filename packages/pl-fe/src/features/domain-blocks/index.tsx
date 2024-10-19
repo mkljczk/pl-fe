@@ -5,7 +5,8 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { fetchDomainBlocks, expandDomainBlocks } from 'pl-fe/actions/domain-blocks';
 import Domain from 'pl-fe/components/domain';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Column, Spinner } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
+import Spinner from 'pl-fe/components/ui/spinner';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 const messages = defineMessages({

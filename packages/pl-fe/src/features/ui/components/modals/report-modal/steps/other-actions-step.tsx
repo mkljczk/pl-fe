@@ -2,7 +2,12 @@ import { OrderedSet } from 'immutable';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { Button, FormGroup, HStack, Stack, Text, Toggle } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import FormGroup from 'pl-fe/components/ui/form-group';
+import HStack from 'pl-fe/components/ui/hstack';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
+import Toggle from 'pl-fe/components/ui/toggle';
 import StatusCheckBox from 'pl-fe/features/ui/components/modals/report-modal/components/status-check-box';
 import { useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { getDomain } from 'pl-fe/utils/accounts';

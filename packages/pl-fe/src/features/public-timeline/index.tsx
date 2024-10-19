@@ -6,7 +6,8 @@ import { changeSetting } from 'pl-fe/actions/settings';
 import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
 import { usePublicStream } from 'pl-fe/api/hooks';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import { Accordion, Column } from 'pl-fe/components/ui';
+import Accordion from 'pl-fe/components/ui/accordion';
+import Column from 'pl-fe/components/ui/column';
 import { useAppDispatch, useInstance, useSettings, useTheme } from 'pl-fe/hooks';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 

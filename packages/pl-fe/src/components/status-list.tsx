@@ -11,7 +11,8 @@ import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder
 import PendingStatus from 'pl-fe/features/ui/components/pending-status';
 import { usePlFeConfig } from 'pl-fe/hooks';
 
-import { Stack, Text } from './ui';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 
 import type { OrderedSet as ImmutableOrderedSet } from 'immutable';
 

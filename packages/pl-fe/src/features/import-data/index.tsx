@@ -6,7 +6,7 @@ import {
   importBlocks,
   importMutes,
 } from 'pl-fe/actions/import-data';
-import { Column } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
 import { useFeatures } from 'pl-fe/hooks';
 
 import DataImporter from './components/data-importer';

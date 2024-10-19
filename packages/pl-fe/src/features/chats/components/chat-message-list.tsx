@@ -2,7 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Avatar, Button, Divider, Stack, Text } from 'pl-fe/components/ui';
+import Avatar from 'pl-fe/components/ui/avatar';
+import Button from 'pl-fe/components/ui/button';
+import Divider from 'pl-fe/components/ui/divider';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import { Entities } from 'pl-fe/entity-store/entities';
 import PlaceholderChatMessage from 'pl-fe/features/placeholder/components/placeholder-chat-message';
 import { useAppSelector } from 'pl-fe/hooks';

@@ -108,4 +108,11 @@ const CardBody: React.FC<ICardBody> = ({ className, children }): JSX.Element => 
   <div data-testid='card-body' className={className}>{children}</div>
 );
 
-export { type CardSizes, Card, CardHeader, CardTitle, CardBody };
+export {
+  type CardSizes,
+  Card as default,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardBody,
+};

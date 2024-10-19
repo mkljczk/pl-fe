@@ -9,7 +9,7 @@ import { useBookmarkFolder, useDeleteBookmarkFolder } from 'pl-fe/api/hooks';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import StatusList from 'pl-fe/components/status-list';
-import { Column } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
 import { useAppSelector, useAppDispatch, useTheme } from 'pl-fe/hooks';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 import { useModalsStore } from 'pl-fe/stores';

@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchBirthdayReminders } from 'pl-fe/actions/accounts';
-import { Widget } from 'pl-fe/components/ui';
+import Widget from 'pl-fe/components/ui/widget';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 

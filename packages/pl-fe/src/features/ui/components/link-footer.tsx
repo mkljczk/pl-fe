@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Text } from 'pl-fe/components/ui';
+import Text from 'pl-fe/components/ui/text';
 import emojify from 'pl-fe/features/emoji';
 import { usePlFeConfig } from 'pl-fe/hooks';
 import sourceCode from 'pl-fe/utils/code';

@@ -3,7 +3,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { useJoinGroup, useLeaveGroup } from 'pl-fe/api/hooks';
-import { Button } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
 import { importEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useAppDispatch } from 'pl-fe/hooks';

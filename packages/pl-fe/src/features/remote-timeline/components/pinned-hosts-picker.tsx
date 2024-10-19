@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Button, HStack } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import HStack from 'pl-fe/components/ui/hstack';
 import { useSettings } from 'pl-fe/hooks';
 
 interface IPinnedHostsPicker {

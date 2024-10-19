@@ -4,7 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import { Redirect, useHistory } from 'react-router-dom';
 
 import { useAccountLookup } from 'pl-fe/api/hooks';
-import { Column, Layout, Tabs } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
+import Layout from 'pl-fe/components/ui/layout';
+import Tabs from 'pl-fe/components/ui/tabs';
 import Header from 'pl-fe/features/account/components/header';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
