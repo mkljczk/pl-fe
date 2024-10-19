@@ -5,7 +5,7 @@ import React, { useRef } from 'react';
 import { fetchAccount } from 'pl-fe/actions/accounts';
 import { useAppDispatch } from 'pl-fe/hooks';
 import { isMobile } from 'pl-fe/is-mobile';
-import { useAccountHoverCardStore } from 'pl-fe/stores';
+import { useAccountHoverCardStore } from 'pl-fe/stores/account-hover-card';
 
 const showAccountHoverCard = debounce((openAccountHoverCard, ref, accountId) => {
   openAccountHoverCard(ref, accountId);

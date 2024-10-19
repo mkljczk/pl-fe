@@ -6,7 +6,9 @@ import ReactSwipeableViews from 'react-swipeable-views';
 import { createSelector } from 'reselect';
 
 import { useAnnouncements } from 'pl-fe/api/hooks/announcements';
-import { Card, HStack, Widget } from 'pl-fe/components/ui';
+import Card from 'pl-fe/components/ui/card';
+import HStack from 'pl-fe/components/ui/hstack';
+import Widget from 'pl-fe/components/ui/widget';
 import { useAppSelector } from 'pl-fe/hooks';
 
 import Announcement from './announcement';

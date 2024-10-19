@@ -5,7 +5,17 @@ import { useHistory } from 'react-router-dom';
 import { createFilter, fetchFilter, updateFilter } from 'pl-fe/actions/filters';
 import List, { ListItem } from 'pl-fe/components/list';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
-import { Button, Column, Form, FormActions, FormGroup, HStack, Input, Stack, Streamfield, Text, Toggle } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Column from 'pl-fe/components/ui/column';
+import Form from 'pl-fe/components/ui/form';
+import FormActions from 'pl-fe/components/ui/form-actions';
+import FormGroup from 'pl-fe/components/ui/form-group';
+import HStack from 'pl-fe/components/ui/hstack';
+import Input from 'pl-fe/components/ui/input';
+import Stack from 'pl-fe/components/ui/stack';
+import Streamfield from 'pl-fe/components/ui/streamfield';
+import Text from 'pl-fe/components/ui/text';
+import Toggle from 'pl-fe/components/ui/toggle';
 import { useAppDispatch, useFeatures } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 

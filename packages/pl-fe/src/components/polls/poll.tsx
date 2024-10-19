@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { vote } from 'pl-fe/actions/polls';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
-
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useModalsStore } from 'pl-fe/stores';
 
 import PollFooter from './poll-footer';
 import PollOption from './poll-option';

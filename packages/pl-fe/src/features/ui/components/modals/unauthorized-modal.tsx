@@ -3,7 +3,12 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { remoteInteraction } from 'pl-fe/actions/interactions';
-import { Button, Form, Input, Modal, Stack, Text } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Form from 'pl-fe/components/ui/form';
+import Input from 'pl-fe/components/ui/input';
+import Modal from 'pl-fe/components/ui/modal';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import { useAppSelector, useAppDispatch, useFeatures, useInstance, useRegistrationStatus } from 'pl-fe/hooks';
 import { selectAccount } from 'pl-fe/selectors';
 import toast from 'pl-fe/toast';

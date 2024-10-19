@@ -7,7 +7,10 @@ import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
 import { useAccount } from 'pl-fe/api/hooks';
 import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
 import StatusContent from 'pl-fe/components/status-content';
-import { Modal, ProgressBar, Stack, Text } from 'pl-fe/components/ui';
+import Modal from 'pl-fe/components/ui/modal';
+import ProgressBar from 'pl-fe/components/ui/progress-bar';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { useAppDispatch, useAppSelector, useInstance } from 'pl-fe/hooks';
 

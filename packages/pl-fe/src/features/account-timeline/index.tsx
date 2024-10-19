@@ -7,7 +7,9 @@ import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
 import { useAccountLookup } from 'pl-fe/api/hooks';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StatusList from 'pl-fe/components/status-list';
-import { Card, CardBody, Spinner, Text } from 'pl-fe/components/ui';
+import Card, { CardBody } from 'pl-fe/components/ui/card';
+import Spinner from 'pl-fe/components/ui/spinner';
+import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch, useAppSelector, useFeatures, useSettings } from 'pl-fe/hooks';
 import { makeGetStatusIds } from 'pl-fe/selectors';
 

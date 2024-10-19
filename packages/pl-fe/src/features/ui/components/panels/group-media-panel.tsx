@@ -3,7 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchGroupTimeline } from 'pl-fe/actions/timelines';
-import { Spinner, Text, Widget } from 'pl-fe/components/ui';
+import Spinner from 'pl-fe/components/ui/spinner';
+import Text from 'pl-fe/components/ui/text';
+import Widget from 'pl-fe/components/ui/widget';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import { type AccountGalleryAttachment, getGroupGallery } from 'pl-fe/selectors';
 import { useModalsStore } from 'pl-fe/stores';

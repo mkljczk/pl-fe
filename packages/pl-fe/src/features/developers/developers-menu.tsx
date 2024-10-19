@@ -3,8 +3,9 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
 import { changeSetting } from 'pl-fe/actions/settings';
-import { Column, Text } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
 import SvgIcon from 'pl-fe/components/ui/svg-icon';
+import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 import sourceCode from 'pl-fe/utils/code';

@@ -6,7 +6,9 @@ import { useGroup, useGroupMembers, useGroupMembershipRequests } from 'pl-fe/api
 import Account from 'pl-fe/components/account';
 import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Column, HStack, Spinner } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
+import HStack from 'pl-fe/components/ui/hstack';
+import Spinner from 'pl-fe/components/ui/spinner';
 import toast from 'pl-fe/toast';
 
 import ColumnForbidden from '../ui/components/column-forbidden';

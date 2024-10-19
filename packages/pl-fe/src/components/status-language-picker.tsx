@@ -2,13 +2,13 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { changeStatusLanguage } from 'pl-fe/actions/statuses';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Text from 'pl-fe/components/ui/text';
 import { type Language, languages } from 'pl-fe/features/preferences';
 import { useAppDispatch } from 'pl-fe/hooks';
 
 import DropdownMenu from './dropdown-menu';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Text from 'pl-fe/components/ui/text';
 
 import type { Status } from 'pl-fe/normalizers';
 

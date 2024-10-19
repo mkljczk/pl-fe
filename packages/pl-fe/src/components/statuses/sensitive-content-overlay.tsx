@@ -3,11 +3,10 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { hideStatusMedia, revealStatusMedia } from 'pl-fe/actions/statuses';
-import { useAppDispatch, useSettings } from 'pl-fe/hooks';
-
 import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
+import { useAppDispatch, useSettings } from 'pl-fe/hooks';
 
 import type { Status } from 'pl-fe/normalizers';
 

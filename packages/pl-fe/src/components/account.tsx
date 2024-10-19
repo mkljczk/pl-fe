@@ -3,6 +3,13 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
+import Avatar from 'pl-fe/components/ui/avatar';
+import Emoji from 'pl-fe/components/ui/emoji';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import IconButton from 'pl-fe/components/ui/icon-button';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
 import { useAppSelector } from 'pl-fe/hooks';
@@ -12,14 +19,6 @@ import { displayFqn } from 'pl-fe/utils/state';
 import Badge from './badge';
 import { ParsedContent } from './parsed-content';
 import RelativeTimestamp from './relative-timestamp';
-import Avatar from 'pl-fe/components/ui/avatar';
-import Emoji from 'pl-fe/components/ui/emoji';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-
 
 import type { Account as AccountSchema } from 'pl-fe/normalizers';
 import type { StatusApprovalStatus } from 'pl-fe/normalizers/status';

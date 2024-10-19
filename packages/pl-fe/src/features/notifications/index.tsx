@@ -13,7 +13,8 @@ import {
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import ScrollTopButton from 'pl-fe/components/scroll-top-button';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Column, Portal } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
+import Portal from 'pl-fe/components/ui/portal';
 import PlaceholderNotification from 'pl-fe/features/placeholder/components/placeholder-notification';
 import { useAppDispatch, useAppSelector, useSettings } from 'pl-fe/hooks';
 

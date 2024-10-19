@@ -4,7 +4,10 @@ import React, { useState, useEffect } from 'react';
 import * as v from 'valibot';
 
 import Blurhash from 'pl-fe/components/blurhash';
-import { HStack, Stack, Text, Icon } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import { addAutoPlay } from 'pl-fe/utils/media';
 import { getTextDirection } from 'pl-fe/utils/rtl';
 

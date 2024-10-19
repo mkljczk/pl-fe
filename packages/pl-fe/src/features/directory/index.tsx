@@ -6,7 +6,9 @@ import { useLocation } from 'react-router-dom';
 import { fetchDirectory, expandDirectory } from 'pl-fe/actions/directory';
 import LoadMore from 'pl-fe/components/load-more';
 import { RadioGroup, RadioItem } from 'pl-fe/components/radio';
-import { CardTitle, Column, Stack } from 'pl-fe/components/ui';
+import { CardTitle } from 'pl-fe/components/ui/card';
+import Column from 'pl-fe/components/ui/column';
+import Stack from 'pl-fe/components/ui/stack';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance } from 'pl-fe/hooks';
 
 import AccountCard from './components/account-card';

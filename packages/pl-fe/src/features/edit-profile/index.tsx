@@ -7,18 +7,16 @@ import { updateNotificationSettings } from 'pl-fe/actions/accounts';
 import { patchMe } from 'pl-fe/actions/me';
 import BirthdayInput from 'pl-fe/components/birthday-input';
 import List, { ListItem } from 'pl-fe/components/list';
-import {
-  Button,
-  Column,
-  Form,
-  FormActions,
-  FormGroup,
-  HStack,
-  Input,
-  Streamfield,
-  Textarea,
-  Toggle,
-} from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Column from 'pl-fe/components/ui/column';
+import Form from 'pl-fe/components/ui/form';
+import FormActions from 'pl-fe/components/ui/form-actions';
+import FormGroup from 'pl-fe/components/ui/form-group';
+import HStack from 'pl-fe/components/ui/hstack';
+import Input from 'pl-fe/components/ui/input';
+import Streamfield from 'pl-fe/components/ui/streamfield';
+import Textarea from 'pl-fe/components/ui/textarea';
+import Toggle from 'pl-fe/components/ui/toggle';
 import { useAppDispatch, useOwnAccount, useFeatures, useInstance, useAppSelector } from 'pl-fe/hooks';
 import { useImageField } from 'pl-fe/hooks/forms';
 import toast from 'pl-fe/toast';

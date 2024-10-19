@@ -3,7 +3,8 @@ import clsx from 'clsx';
 import React, { KeyboardEvent, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { IconButton, Portal } from 'pl-fe/components/ui';
+import IconButton from 'pl-fe/components/ui/icon-button';
+import Portal from 'pl-fe/components/ui/portal';
 import { useClickOutside } from 'pl-fe/hooks';
 
 import EmojiPickerDropdown, { IEmojiPickerDropdown } from '../components/emoji-picker-dropdown';

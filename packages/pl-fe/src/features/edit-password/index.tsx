@@ -2,7 +2,12 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { changePassword } from 'pl-fe/actions/security';
-import { Button, Column, Form, FormActions, FormGroup, Input } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Column from 'pl-fe/components/ui/column';
+import Form from 'pl-fe/components/ui/form';
+import FormActions from 'pl-fe/components/ui/form-actions';
+import FormGroup from 'pl-fe/components/ui/form-group';
+import Input from 'pl-fe/components/ui/input';
 import { useAppDispatch } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 

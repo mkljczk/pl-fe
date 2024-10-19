@@ -2,10 +2,10 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import CopyableInput from 'pl-fe/components/copyable-input';
-import Text from 'pl-fe/components/ui/text';
-import Stack from 'pl-fe/components/ui/stack';
-import HStack from 'pl-fe/components/ui/hstack';
 import Emoji from 'pl-fe/components/ui/emoji';
+import HStack from 'pl-fe/components/ui/hstack';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 
 interface ILightningAddress {
   address: string;

@@ -2,9 +2,9 @@ import { useLongPress } from '@uidotdev/usehooks';
 import clsx from 'clsx';
 import React from 'react';
 
-import Text from 'pl-fe/components/ui/text';
-import Icon from 'pl-fe/components/ui/icon';
 import Emoji from 'pl-fe/components/ui/emoji';
+import Icon from 'pl-fe/components/ui/icon';
+import Text from 'pl-fe/components/ui/text';
 import { useSettings } from 'pl-fe/hooks';
 
 import AnimatedNumber from './animated-number';

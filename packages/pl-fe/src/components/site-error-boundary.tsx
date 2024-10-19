@@ -3,7 +3,10 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { FormattedMessage } from 'react-intl';
 
 import { NODE_ENV } from 'pl-fe/build-config';
-import { HStack, Text, Stack, Textarea } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
+import Textarea from 'pl-fe/components/ui/textarea';
 import { useLogo, usePlFeConfig } from 'pl-fe/hooks';
 import { captureSentryException } from 'pl-fe/sentry';
 import KVStore from 'pl-fe/storage/kv-store';

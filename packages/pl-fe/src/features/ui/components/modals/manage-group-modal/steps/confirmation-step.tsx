@@ -3,11 +3,11 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { ParsedContent } from 'pl-fe/components/parsed-content';
 import Avatar from 'pl-fe/components/ui/avatar';
+import Button from 'pl-fe/components/ui/button';
 import Divider from 'pl-fe/components/ui/divider';
 import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import Button from 'pl-fe/components/ui/button';
 import toast from 'pl-fe/toast';
 import copy from 'pl-fe/utils/copy';
 

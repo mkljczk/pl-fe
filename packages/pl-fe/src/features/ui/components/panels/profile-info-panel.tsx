@@ -6,7 +6,10 @@ import Markup from 'pl-fe/components/markup';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
 import { dateFormatOptions } from 'pl-fe/components/relative-timestamp';
 import Scrobble from 'pl-fe/components/scrobble';
-import { Icon, HStack, Stack, Text } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import { useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
 import { capitalize } from 'pl-fe/utils/strings';
 

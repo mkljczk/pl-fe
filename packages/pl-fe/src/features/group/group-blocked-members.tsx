@@ -5,7 +5,10 @@ import { fetchGroupBlocks, groupUnblock } from 'pl-fe/actions/groups';
 import { useAccount, useGroup } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Button, Column, HStack, Spinner } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Column from 'pl-fe/components/ui/column';
+import HStack from 'pl-fe/components/ui/hstack';
+import Spinner from 'pl-fe/components/ui/spinner';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 

@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { useGroup, useUpdateGroup } from 'pl-fe/api/hooks';
-import { Button, Column, Form, FormActions, FormGroup, Icon, Input, Spinner, Textarea } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Column from 'pl-fe/components/ui/column';
+import Form from 'pl-fe/components/ui/form';
+import FormActions from 'pl-fe/components/ui/form-actions';
+import FormGroup from 'pl-fe/components/ui/form-group';
+import Icon from 'pl-fe/components/ui/icon';
+import Input from 'pl-fe/components/ui/input';
+import Spinner from 'pl-fe/components/ui/spinner';
+import Textarea from 'pl-fe/components/ui/textarea';
 import { useAppSelector, useInstance } from 'pl-fe/hooks';
 import { useImageField, useTextField } from 'pl-fe/hooks/forms';
 import toast from 'pl-fe/toast';

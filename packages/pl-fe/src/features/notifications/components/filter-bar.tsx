@@ -2,7 +2,8 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { type FilterType, setFilter } from 'pl-fe/actions/notifications';
-import { Icon, Tabs } from 'pl-fe/components/ui';
+import Icon from 'pl-fe/components/ui/icon';
+import Tabs from 'pl-fe/components/ui/tabs';
 import { useAppDispatch, useFeatures, useSettings } from 'pl-fe/hooks';
 
 import type { Item } from 'pl-fe/components/ui/tabs';

@@ -4,7 +4,10 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { setSchedule, removeSchedule } from 'pl-fe/actions/compose';
 import IconButton from 'pl-fe/components/icon-button';
-import { HStack, Input, Stack, Text } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Input from 'pl-fe/components/ui/input';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import { DatePicker } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch, useCompose } from 'pl-fe/hooks';
 

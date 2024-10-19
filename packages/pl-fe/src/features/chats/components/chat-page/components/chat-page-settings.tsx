@@ -4,7 +4,13 @@ import { useHistory } from 'react-router-dom';
 
 import { changeSetting } from 'pl-fe/actions/settings';
 import List, { ListItem } from 'pl-fe/components/list';
-import { Button, CardBody, CardTitle, Form, HStack, IconButton, Stack, Toggle } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import { CardBody, CardTitle } from 'pl-fe/components/ui/card';
+import Form from 'pl-fe/components/ui/form';
+import HStack from 'pl-fe/components/ui/hstack';
+import IconButton from 'pl-fe/components/ui/icon-button';
+import Stack from 'pl-fe/components/ui/stack';
+import Toggle from 'pl-fe/components/ui/toggle';
 import SettingToggle from 'pl-fe/features/notifications/components/setting-toggle';
 import { useAppDispatch, useOwnAccount, useSettings } from 'pl-fe/hooks';
 import { useUpdateCredentials } from 'pl-fe/queries/accounts';

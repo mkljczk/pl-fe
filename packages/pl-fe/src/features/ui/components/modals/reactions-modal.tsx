@@ -5,7 +5,10 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchReactions } from 'pl-fe/actions/interactions';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Emoji, Modal, Spinner, Tabs } from 'pl-fe/components/ui';
+import Emoji from 'pl-fe/components/ui/emoji';
+import Modal from 'pl-fe/components/ui/modal';
+import Spinner from 'pl-fe/components/ui/spinner';
+import Tabs from 'pl-fe/components/ui/tabs';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 

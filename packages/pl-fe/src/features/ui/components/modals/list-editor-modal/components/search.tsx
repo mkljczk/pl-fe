@@ -4,7 +4,10 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { fetchListSuggestions, clearListSuggestions, changeListSuggestions } from 'pl-fe/actions/lists';
 import Icon from 'pl-fe/components/icon';
-import { Button, Form, HStack, Input } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Form from 'pl-fe/components/ui/form';
+import HStack from 'pl-fe/components/ui/hstack';
+import Input from 'pl-fe/components/ui/input';
 import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
 
 const messages = defineMessages({

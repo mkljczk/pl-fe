@@ -2,7 +2,9 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import List, { ListItem } from 'pl-fe/components/list';
-import { CardTitle, Icon, Stack } from 'pl-fe/components/ui';
+import { CardTitle } from 'pl-fe/components/ui/card';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
 import { useOwnAccount, useFeatures, useInstance } from 'pl-fe/hooks';
 import sourceCode from 'pl-fe/utils/code';
 

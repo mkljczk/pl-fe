@@ -3,7 +3,13 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { moveAccount } from 'pl-fe/actions/security';
-import { Button, Column, Form, FormActions, FormGroup, Input, Text } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Column from 'pl-fe/components/ui/column';
+import Form from 'pl-fe/components/ui/form';
+import FormActions from 'pl-fe/components/ui/form-actions';
+import FormGroup from 'pl-fe/components/ui/form-group';
+import Input from 'pl-fe/components/ui/input';
+import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch, useInstance } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 

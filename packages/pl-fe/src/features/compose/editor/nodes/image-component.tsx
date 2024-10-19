@@ -28,7 +28,9 @@ import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import { HStack, Icon, IconButton } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import IconButton from 'pl-fe/components/ui/icon-button';
 import { useSettings } from 'pl-fe/hooks';
 import { useModalsStore } from 'pl-fe/stores';
 

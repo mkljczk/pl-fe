@@ -1,7 +1,10 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { Form, FormGroup, Input, Textarea } from 'pl-fe/components/ui';
+import Form from 'pl-fe/components/ui/form';
+import FormGroup from 'pl-fe/components/ui/form-group';
+import Input from 'pl-fe/components/ui/input';
+import Textarea from 'pl-fe/components/ui/textarea';
 import AvatarPicker from 'pl-fe/features/edit-profile/components/avatar-picker';
 import HeaderPicker from 'pl-fe/features/edit-profile/components/header-picker';
 import { useAppSelector, useInstance } from 'pl-fe/hooks';

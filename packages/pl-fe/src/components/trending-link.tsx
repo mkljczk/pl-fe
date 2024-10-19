@@ -5,10 +5,10 @@ import { getTextDirection } from 'pl-fe/utils/rtl';
 
 import Blurhash from './blurhash';
 import { accountsCountRenderer } from './hashtag';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
+import HStack from './ui/hstack';
+import Icon from './ui/icon';
+import Stack from './ui/stack';
+import Text from './ui/text';
 
 interface ITrendingLink {
   trendingLink: TrendsLink;

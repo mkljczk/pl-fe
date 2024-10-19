@@ -3,7 +3,13 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { useRelays } from 'pl-fe/api/hooks/admin';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Button, Column, Form, HStack, Input, Stack, Text } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Column from 'pl-fe/components/ui/column';
+import Form from 'pl-fe/components/ui/form';
+import HStack from 'pl-fe/components/ui/hstack';
+import Input from 'pl-fe/components/ui/input';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import { useTextField } from 'pl-fe/hooks/forms';
 import toast from 'pl-fe/toast';
 

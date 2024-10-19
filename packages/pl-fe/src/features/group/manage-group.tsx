@@ -5,7 +5,10 @@ import { useHistory } from 'react-router-dom';
 
 import { useDeleteGroup, useGroup } from 'pl-fe/api/hooks';
 import List, { ListItem } from 'pl-fe/components/list';
-import { CardBody, CardHeader, CardTitle, Column, Spinner, Text } from 'pl-fe/components/ui';
+import { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
+import Column from 'pl-fe/components/ui/column';
+import Spinner from 'pl-fe/components/ui/spinner';
+import Text from 'pl-fe/components/ui/text';
 import { useModalsStore } from 'pl-fe/stores';
 import toast from 'pl-fe/toast';
 

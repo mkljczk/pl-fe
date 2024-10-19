@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { FormattedDate, defineMessages, useIntl } from 'react-intl';
 
 import { fetchBackups, createBackup } from 'pl-fe/actions/backups';
-import { Button, Card, Column, FormActions, HStack, Spinner, Stack, Text } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Card from 'pl-fe/components/ui/card';
+import Column from 'pl-fe/components/ui/column';
+import FormActions from 'pl-fe/components/ui/form-actions';
+import HStack from 'pl-fe/components/ui/hstack';
+import Spinner from 'pl-fe/components/ui/spinner';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
 import type { Backup as BackupEntity } from 'pl-api';

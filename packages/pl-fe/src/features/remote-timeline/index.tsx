@@ -5,7 +5,9 @@ import { useHistory } from 'react-router-dom';
 import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
 import { useRemoteStream } from 'pl-fe/api/hooks';
 import IconButton from 'pl-fe/components/icon-button';
-import { Column, HStack, Text } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
+import HStack from 'pl-fe/components/ui/hstack';
+import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch, useSettings, useTheme } from 'pl-fe/hooks';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 

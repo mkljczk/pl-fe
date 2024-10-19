@@ -3,7 +3,10 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { patchMe } from 'pl-fe/actions/me';
 import { BigCard } from 'pl-fe/components/big-card';
-import { Button, FormGroup, Stack, Textarea } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import FormGroup from 'pl-fe/components/ui/form-group';
+import Stack from 'pl-fe/components/ui/stack';
+import Textarea from 'pl-fe/components/ui/textarea';
 import { useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
 import toast from 'pl-fe/toast';
 

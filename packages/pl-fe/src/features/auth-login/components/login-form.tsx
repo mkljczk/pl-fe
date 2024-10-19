@@ -2,7 +2,11 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { Button, Form, FormActions, FormGroup, Input } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Form from 'pl-fe/components/ui/form';
+import FormActions from 'pl-fe/components/ui/form-actions';
+import FormGroup from 'pl-fe/components/ui/form-group';
+import Input from 'pl-fe/components/ui/input';
 import { useFeatures } from 'pl-fe/hooks';
 
 const messages = defineMessages({
