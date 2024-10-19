@@ -2,7 +2,7 @@ import { statusSchema } from 'pl-api';
 import * as v from 'valibot';
 
 import { Entities } from 'pl-fe/entity-store/entities';
-import { normalizeStatus } from 'pl-fe/normalizers';
+import { normalizeStatus } from 'pl-fe/normalizers/status';
 
 import type { DraftStatus } from 'pl-fe/reducers/draft-statuses';
 import type { RootState } from 'pl-fe/store';

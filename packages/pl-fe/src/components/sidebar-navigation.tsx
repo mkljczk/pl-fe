@@ -9,11 +9,11 @@ import ComposeButton from 'pl-fe/features/ui/components/compose-button';
 import ProfileDropdown from 'pl-fe/features/ui/components/profile-dropdown';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useFeatures } from 'pl-fe/hooks/useFeatures';
-import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
-import { useSettings } from 'pl-fe/hooks/useSettings';
 import { useInstance } from 'pl-fe/hooks/useInstance';
-import { useRegistrationStatus } from 'pl-fe/hooks/useRegistrationStatus';
 import { useLogo } from 'pl-fe/hooks/useLogo';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
+import { useRegistrationStatus } from 'pl-fe/hooks/useRegistrationStatus';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 
 import Account from './account';
 import DropdownMenu, { Menu } from './dropdown-menu';

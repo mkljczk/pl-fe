@@ -10,7 +10,7 @@ import Widget from 'pl-fe/components/ui/widget';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
-import type { Account as AccountEntity } from 'pl-fe/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 import type { AppDispatch } from 'pl-fe/store';
 
 const onSave = debounce(

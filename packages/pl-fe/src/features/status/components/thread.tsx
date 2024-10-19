@@ -27,7 +27,8 @@ import DetailedStatus from './detailed-status';
 import ThreadStatus from './thread-status';
 
 import type { Virtualizer } from '@tanstack/react-virtual';
-import type { Account, Status } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
+import type { Status } from 'pl-fe/normalizers/status';
 import type { SelectedStatus } from 'pl-fe/selectors';
 
 const getAncestorsIds = createSelector([

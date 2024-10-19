@@ -13,7 +13,7 @@ import { useClient } from 'pl-fe/hooks/useClient';
 import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
 import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
-import { type ChatMessage, normalizeChatMessage } from 'pl-fe/normalizers';
+import { type ChatMessage, normalizeChatMessage } from 'pl-fe/normalizers/chat-message';
 import { reOrderChatListItems } from 'pl-fe/utils/chats';
 import { flattenPages, updatePageItem } from 'pl-fe/utils/queries';
 

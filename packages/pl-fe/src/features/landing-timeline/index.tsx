@@ -7,8 +7,8 @@ import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import Column from 'pl-fe/components/ui/column';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useInstance } from 'pl-fe/hooks/useInstance';
-import { useTheme } from 'pl-fe/hooks/useTheme';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
+import { useTheme } from 'pl-fe/hooks/useTheme';
 
 import AboutPage from '../about';
 import Timeline from '../ui/components/timeline';

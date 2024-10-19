@@ -16,7 +16,7 @@ import { buildStatus } from '../util/pending-status-builder';
 
 import PollPreview from './poll-preview';
 
-import type { Status as StatusEntity } from 'pl-fe/normalizers';
+import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
 
 const shouldHaveCard = (pendingStatus: StatusEntity) => Boolean(pendingStatus.content.match(/https?:\/\/\S*/));
 

@@ -12,8 +12,8 @@ import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
-import { useTheme } from 'pl-fe/hooks/useTheme';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
+import { useTheme } from 'pl-fe/hooks/useTheme';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
 import Timeline from '../ui/components/timeline';

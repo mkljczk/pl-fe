@@ -14,7 +14,7 @@ import { makeGetAccount } from 'pl-fe/selectors';
 
 import ThemeToggle from './theme-toggle';
 
-import type { Account as AccountEntity } from 'pl-fe/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 
 const messages = defineMessages({
   add: { id: 'profile_dropdown.add_account', defaultMessage: 'Add an existing account' },

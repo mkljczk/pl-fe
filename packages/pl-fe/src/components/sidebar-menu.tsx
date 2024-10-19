@@ -24,7 +24,7 @@ import { useUiStore } from 'pl-fe/stores/ui';
 import sourceCode from 'pl-fe/utils/code';
 
 import type { List as ImmutableList } from 'immutable';
-import type { Account as AccountEntity } from 'pl-fe/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 
 const messages = defineMessages({
   profile: { id: 'account.profile', defaultMessage: 'Profile' },

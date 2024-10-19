@@ -1,7 +1,8 @@
 import { Map as ImmutableMap } from 'immutable';
 import omit from 'lodash/omit';
 
-import { normalizeStatus, normalizeTranslation, Status as StatusRecord } from 'pl-fe/normalizers';
+import { normalizeStatus, Status as StatusRecord } from 'pl-fe/normalizers/status';
+import { normalizeTranslation } from 'pl-fe/normalizers/translation';
 import { simulateEmojiReact, simulateUnEmojiReact } from 'pl-fe/utils/emoji-reacts';
 
 import {

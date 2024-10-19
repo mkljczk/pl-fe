@@ -17,7 +17,7 @@ import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
 import { makeGetStatus } from 'pl-fe/selectors';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
-import type { Status as StatusEntity } from 'pl-fe/normalizers';
+import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
 
 type RouteParams = { statusId: string };
 

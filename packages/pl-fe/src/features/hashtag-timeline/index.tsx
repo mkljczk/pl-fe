@@ -11,9 +11,9 @@ import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
 import { useTheme } from 'pl-fe/hooks/useTheme';
-import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 interface IHashtagTimeline {
   params?: {

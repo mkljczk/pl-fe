@@ -9,9 +9,9 @@ import Column from 'pl-fe/components/ui/column';
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 import { useSettings } from 'pl-fe/hooks/useSettings';
 import { useTheme } from 'pl-fe/hooks/useTheme';
-import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 import Timeline from '../ui/components/timeline';
 

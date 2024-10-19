@@ -17,12 +17,12 @@ import Input from 'pl-fe/components/ui/input';
 import Streamfield from 'pl-fe/components/ui/streamfield';
 import Textarea from 'pl-fe/components/ui/textarea';
 import Toggle from 'pl-fe/components/ui/toggle';
+import { useImageField } from 'pl-fe/hooks/forms/useImageField';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
-import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import { useInstance } from 'pl-fe/hooks/useInstance';
-import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
-import { useImageField } from 'pl-fe/hooks/forms/useImageField';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 import toast from 'pl-fe/toast';
 import { isDefaultAvatar, isDefaultHeader } from 'pl-fe/utils/accounts';
 

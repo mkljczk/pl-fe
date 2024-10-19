@@ -20,7 +20,7 @@ import { onlyEmoji } from 'pl-fe/utils/rich-content';
 
 import type { Chat, CustomEmoji } from 'pl-api';
 import type { Menu as IMenu } from 'pl-fe/components/dropdown-menu';
-import type { ChatMessage as ChatMessageEntity } from 'pl-fe/normalizers';
+import type { ChatMessage as ChatMessageEntity } from 'pl-fe/normalizers/chat-message';
 
 const messages = defineMessages({
   copy: { id: 'chats.actions.copy', defaultMessage: 'Copy' },

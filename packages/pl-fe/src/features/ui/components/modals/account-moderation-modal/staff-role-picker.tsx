@@ -6,7 +6,7 @@ import { SelectDropdown } from 'pl-fe/features/forms';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import toast from 'pl-fe/toast';
 
-import type { Account as AccountEntity } from 'pl-fe/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 
 /** Staff role. */
 type AccountRole = 'user' | 'moderator' | 'admin';

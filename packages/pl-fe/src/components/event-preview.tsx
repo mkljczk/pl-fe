@@ -12,7 +12,7 @@ import EventActionButton from 'pl-fe/features/event/components/event-action-butt
 import EventDate from 'pl-fe/features/event/components/event-date';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
-import type { Status as StatusEntity } from 'pl-fe/normalizers';
+import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
 
 const messages = defineMessages({
   eventBanner: { id: 'event.banner', defaultMessage: 'Event banner' },

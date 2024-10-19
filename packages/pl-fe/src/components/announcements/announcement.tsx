@@ -11,7 +11,7 @@ import ReactionsBar from './reactions-bar';
 
 import type { Map as ImmutableMap } from 'immutable';
 import type { CustomEmoji } from 'pl-api';
-import type { Announcement as AnnouncementEntity } from 'pl-fe/normalizers';
+import type { Announcement as AnnouncementEntity } from 'pl-fe/normalizers/announcement';
 
 interface IAnnouncement {
   announcement: AnnouncementEntity;

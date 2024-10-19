@@ -4,7 +4,7 @@ import { defineMessages } from 'react-intl';
 
 import { getClient } from 'pl-fe/api';
 import { getNotificationStatus } from 'pl-fe/features/notifications/components/notification';
-import { normalizeNotification, normalizeNotifications, type Notification } from 'pl-fe/normalizers';
+import { normalizeNotification, normalizeNotifications, type Notification } from 'pl-fe/normalizers/notification';
 import { getFilters, regexFromFilters } from 'pl-fe/selectors';
 import { useSettingsStore } from 'pl-fe/stores/settings';
 import { isLoggedIn } from 'pl-fe/utils/auth';

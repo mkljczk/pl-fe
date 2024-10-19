@@ -8,7 +8,7 @@ import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
 import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
-import type { Status as StatusEntity } from 'pl-fe/normalizers';
+import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
 
 const messages = defineMessages({
   leaveHeading: { id: 'confirmations.leave_event.heading', defaultMessage: 'Leave event' },

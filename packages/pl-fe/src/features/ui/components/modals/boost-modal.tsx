@@ -10,7 +10,7 @@ import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { makeGetStatus } from 'pl-fe/selectors';
 
 import type { BaseModalProps } from '../modal-root';
-import type { Status as StatusEntity } from 'pl-fe/normalizers';
+import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
 
 const messages = defineMessages({
   cancel_reblog: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },

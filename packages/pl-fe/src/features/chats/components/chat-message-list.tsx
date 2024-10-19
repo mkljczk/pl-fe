@@ -15,7 +15,7 @@ import { useChatActions, useChatMessages } from 'pl-fe/queries/chats';
 import ChatMessage from './chat-message';
 
 import type { Chat, Relationship } from 'pl-api';
-import type { ChatMessage as ChatMessageEntity } from 'pl-fe/normalizers';
+import type { ChatMessage as ChatMessageEntity } from 'pl-fe/normalizers/chat-message';
 
 const messages = defineMessages({
   today: { id: 'chats.dividers.today', defaultMessage: 'Today' },

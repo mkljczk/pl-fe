@@ -19,13 +19,13 @@ import {
   BirthdayPanel,
   AnnouncementsPanel,
 } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
-import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
-import { useFeatures } from 'pl-fe/hooks/useFeatures';
-import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
-import { useDraggedFiles } from 'pl-fe/hooks/useDraggedFiles';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useDraggedFiles } from 'pl-fe/hooks/useDraggedFiles';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
+import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
 
 interface IHomeLayout {
   children: React.ReactNode;

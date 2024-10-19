@@ -6,7 +6,7 @@ import Icon from 'pl-fe/components/icon';
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
 
-import type { Account as AccountEntity } from 'pl-fe/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 
 interface IMovedNote {
   from: AccountEntity;

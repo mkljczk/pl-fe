@@ -18,10 +18,10 @@ import Streamfield from 'pl-fe/components/ui/streamfield';
 import Textarea from 'pl-fe/components/ui/textarea';
 import Toggle from 'pl-fe/components/ui/toggle';
 import ThemeSelector from 'pl-fe/features/ui/components/theme-selector';
-import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useFeatures } from 'pl-fe/hooks/useFeatures';
-import { normalizePlFeConfig } from 'pl-fe/normalizers';
+import { normalizePlFeConfig } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
 import toast from 'pl-fe/toast';
 
 import CryptoAddressInput from './components/crypto-address-input';

@@ -6,7 +6,7 @@ import IconButton from 'pl-fe/components/ui/icon-button';
 import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import toast from 'pl-fe/toast';
 
-import type { Account as AccountEntity } from 'pl-fe/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 
 const messages = defineMessages({
   subscribe: { id: 'account.subscribe', defaultMessage: 'Subscribe to notifications from @{name}' },

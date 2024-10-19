@@ -14,7 +14,7 @@ import ColorPicker from 'pl-fe/features/pl-fe-config/components/color-picker';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
-import { normalizePlFeConfig } from 'pl-fe/normalizers';
+import { normalizePlFeConfig } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
 import toast from 'pl-fe/toast';
 import { download } from 'pl-fe/utils/download';
 

@@ -8,7 +8,7 @@ import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import { useSettingsStore } from 'pl-fe/stores/settings';
 
-import type { Status as StatusEntity } from 'pl-fe/normalizers';
+import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
 
 const messages = defineMessages({
   cancel: { id: 'scheduled_status.cancel', defaultMessage: 'Cancel' },

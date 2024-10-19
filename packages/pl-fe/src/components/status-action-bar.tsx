@@ -40,7 +40,8 @@ import GroupPopover from './groups/popover/group-popover';
 import type { Menu } from 'pl-fe/components/dropdown-menu';
 import type { Emoji as EmojiType } from 'pl-fe/features/emoji';
 import type { UnauthorizedModalAction } from 'pl-fe/features/ui/components/modals/unauthorized-modal';
-import type { Account, Group } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
+import type { Group } from 'pl-fe/normalizers/group';
 import type { SelectedStatus } from 'pl-fe/selectors';
 
 const messages = defineMessages({

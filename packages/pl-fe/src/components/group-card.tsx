@@ -10,7 +10,7 @@ import GroupRelationship from 'pl-fe/features/group/components/group-relationshi
 
 import GroupAvatar from './groups/group-avatar';
 
-import type { Group as GroupEntity } from 'pl-fe/normalizers';
+import type { Group as GroupEntity } from 'pl-fe/normalizers/group';
 
 interface IGroupCard {
   group: GroupEntity;

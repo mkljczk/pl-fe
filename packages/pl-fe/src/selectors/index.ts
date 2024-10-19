@@ -15,7 +15,9 @@ import { shouldFilter } from 'pl-fe/utils/timelines';
 
 import type { Account as BaseAccount, Filter, MediaAttachment, Relationship } from 'pl-api';
 import type { EntityStore } from 'pl-fe/entity-store/types';
-import type { Account, Group, Notification } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
+import type { Group } from 'pl-fe/normalizers/group';
+import type { Notification } from 'pl-fe/normalizers/notification';
 import type { MinifiedNotification } from 'pl-fe/reducers/notifications';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 import type { MRFSimple } from 'pl-fe/schemas/pleroma';

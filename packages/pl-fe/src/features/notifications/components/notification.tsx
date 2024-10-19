@@ -24,7 +24,9 @@ import { useSettingsStore } from 'pl-fe/stores/settings';
 import { NotificationType } from 'pl-fe/utils/notification';
 
 import type { Notification as BaseNotification } from 'pl-api';
-import type { Account, Notification as NotificationEntity, Status as StatusEntity } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
+import type { Notification as NotificationEntity } from 'pl-fe/normalizers/notification';
+import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
 import type { MinifiedNotification } from 'pl-fe/reducers/notifications';
 
 const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: string) => {

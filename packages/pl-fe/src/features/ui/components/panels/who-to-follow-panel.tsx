@@ -9,7 +9,7 @@ import PlaceholderSidebarSuggestions from 'pl-fe/features/placeholder/components
 import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import { useDismissSuggestion, useSuggestions } from 'pl-fe/queries/suggestions';
 
-import type { Account as AccountEntity } from 'pl-fe/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 
 const messages = defineMessages({
   dismissSuggestion: { id: 'suggestions.dismiss', defaultMessage: 'Dismiss suggestion' },

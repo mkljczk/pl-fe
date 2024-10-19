@@ -16,7 +16,7 @@ import toast from 'pl-fe/toast';
 import ColumnForbidden from '../ui/components/column-forbidden';
 
 import type { PlfeResponse } from 'pl-fe/api';
-import type { Account as AccountEntity } from 'pl-fe/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 
 type RouteParams = { groupId: string };
 

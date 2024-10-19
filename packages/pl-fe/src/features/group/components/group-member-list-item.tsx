@@ -19,7 +19,8 @@ import { useModalsStore } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 import type { Menu as IMenu } from 'pl-fe/components/dropdown-menu';
-import type { Group, GroupMember } from 'pl-fe/normalizers';
+import type { Group } from 'pl-fe/normalizers/group';
+import type { GroupMember } from 'pl-fe/normalizers/group-member';
 
 const messages = defineMessages({
   adminLimitTitle: { id: 'group.member.admin.limit.title', defaultMessage: 'Admin limit reached' },
