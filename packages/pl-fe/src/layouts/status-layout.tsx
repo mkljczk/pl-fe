@@ -3,7 +3,8 @@ import React from 'react';
 import Layout from 'pl-fe/components/ui/layout';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import { WhoToFollowPanel, TrendsPanel, SignUpPanel } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 
 interface IStatusLayout {
   children: React.ReactNode;

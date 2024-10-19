@@ -5,7 +5,9 @@ import { useParams } from 'react-router-dom';
 import { fetchAboutPage } from 'pl-fe/actions/about';
 import { Navlinks } from 'pl-fe/components/navlinks';
 import Card from 'pl-fe/components/ui/card';
-import { usePlFeConfig, useSettings, useAppDispatch } from 'pl-fe/hooks';
+import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
+import { useSettings } from 'pl-fe/hooks/useSettings';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 
 import { languages } from '../preferences';
 

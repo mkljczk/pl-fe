@@ -5,7 +5,8 @@ import ReactSwipeableViews from 'react-swipeable-views';
 import { endOnboarding } from 'pl-fe/actions/onboarding';
 import LandingGradient from 'pl-fe/components/landing-gradient';
 import HStack from 'pl-fe/components/ui/hstack';
-import { useAppDispatch, useFeatures } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 
 import AvatarSelectionStep from './steps/avatar-selection-step';
 import BioStep from './steps/bio-step';

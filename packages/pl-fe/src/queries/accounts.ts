@@ -1,7 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { patchMeSuccess } from 'pl-fe/actions/me';
-import { useAppDispatch, useClient } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useClient } from 'pl-fe/hooks/useClient';
 import toast from 'pl-fe/toast';
 
 type IAccount = {

@@ -4,7 +4,7 @@ import { Entities } from 'pl-fe/entity-store/entities';
 import { useDismissEntity  } from 'pl-fe/entity-store/hooks/useDismissEntity';
 import { useEntities } from 'pl-fe/entity-store/hooks/useEntities';
 import { useClient } from 'pl-fe/hooks/useClient';
-import { normalizeAccount } from 'pl-fe/normalizers';
+import { normalizeAccount } from 'pl-fe/normalizers/account';
 
 import { useGroupRelationship } from './useGroupRelationship';
 

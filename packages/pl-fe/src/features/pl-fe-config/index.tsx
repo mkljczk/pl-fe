@@ -18,7 +18,9 @@ import Streamfield from 'pl-fe/components/ui/streamfield';
 import Textarea from 'pl-fe/components/ui/textarea';
 import Toggle from 'pl-fe/components/ui/toggle';
 import ThemeSelector from 'pl-fe/features/ui/components/theme-selector';
-import { useAppSelector, useAppDispatch, useFeatures } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import { normalizePlFeConfig } from 'pl-fe/normalizers';
 import toast from 'pl-fe/toast';
 

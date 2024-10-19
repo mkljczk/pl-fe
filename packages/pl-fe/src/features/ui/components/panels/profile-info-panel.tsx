@@ -10,7 +10,8 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import { useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
 import { capitalize } from 'pl-fe/utils/strings';
 
 import ProfileFamiliarFollowers from '../profile-familiar-followers';

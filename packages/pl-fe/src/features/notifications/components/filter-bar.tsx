@@ -4,7 +4,9 @@ import { defineMessages, useIntl } from 'react-intl';
 import { type FilterType, setFilter } from 'pl-fe/actions/notifications';
 import Icon from 'pl-fe/components/ui/icon';
 import Tabs from 'pl-fe/components/ui/tabs';
-import { useAppDispatch, useFeatures, useSettings } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 
 import type { Item } from 'pl-fe/components/ui/tabs';
 

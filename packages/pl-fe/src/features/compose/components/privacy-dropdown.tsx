@@ -6,7 +6,10 @@ import { fetchLists } from 'pl-fe/actions/lists';
 import DropdownMenu, { MenuItem } from 'pl-fe/components/dropdown-menu';
 import Button from 'pl-fe/components/ui/button';
 import { getOrderedLists } from 'pl-fe/features/lists';
-import { useAppDispatch, useAppSelector, useCompose, useFeatures } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useCompose } from 'pl-fe/hooks/useCompose';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 
 import type { Features } from 'pl-api';
 

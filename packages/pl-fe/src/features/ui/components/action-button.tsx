@@ -13,7 +13,9 @@ import {
 import { useFollow } from 'pl-fe/api/hooks/accounts/useFollow';
 import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
-import { useAppDispatch, useFeatures, useLoggedIn } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 

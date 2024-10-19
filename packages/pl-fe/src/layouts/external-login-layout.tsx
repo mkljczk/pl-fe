@@ -7,7 +7,8 @@ import {
   TrendsPanel,
   SignUpPanel,
 } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import { isStandalone } from 'pl-fe/utils/state';
 
 interface IExternalLoginLayout {

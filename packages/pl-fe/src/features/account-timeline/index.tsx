@@ -10,7 +10,10 @@ import StatusList from 'pl-fe/components/status-list';
 import Card, { CardBody } from 'pl-fe/components/ui/card';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch, useAppSelector, useFeatures, useSettings } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 import { makeGetStatusIds } from 'pl-fe/selectors';
 
 const getStatusIds = makeGetStatusIds();

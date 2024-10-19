@@ -6,7 +6,10 @@ import List, { ListItem } from 'pl-fe/components/list';
 import Card, { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
 import Column from 'pl-fe/components/ui/column';
 import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 
 import Preferences from '../preferences';
 

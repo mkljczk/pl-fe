@@ -5,7 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import Button from 'pl-fe/components/ui/button';
 import Modal from 'pl-fe/components/ui/modal';
 import Stack from 'pl-fe/components/ui/stack';
-import { useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
 import { makeGetStatus } from 'pl-fe/selectors';
 
 import 'leaflet/dist/leaflet.css';

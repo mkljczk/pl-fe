@@ -7,7 +7,9 @@ import List, { ListItem } from 'pl-fe/components/list';
 import Form from 'pl-fe/components/ui/form';
 import { Mutliselect, SelectDropdown } from 'pl-fe/features/forms';
 import SettingToggle from 'pl-fe/features/notifications/components/setting-toggle';
-import { useAppDispatch, useFeatures, useSettings } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 
 import ThemeToggle from '../ui/components/theme-toggle';
 

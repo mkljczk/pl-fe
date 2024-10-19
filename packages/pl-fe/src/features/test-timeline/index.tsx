@@ -5,7 +5,8 @@ import { importFetchedStatuses } from 'pl-fe/actions/importer';
 import { expandTimelineSuccess } from 'pl-fe/actions/timelines';
 import Column from 'pl-fe/components/ui/column';
 import Timeline from 'pl-fe/features/ui/components/timeline';
-import { useAppDispatch, useTheme } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useTheme } from 'pl-fe/hooks/useTheme';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 const messages = defineMessages({

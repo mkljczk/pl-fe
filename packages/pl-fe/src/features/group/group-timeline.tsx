@@ -13,7 +13,10 @@ import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import ComposeForm from 'pl-fe/features/compose/components/compose-form';
-import { useAppDispatch, useAppSelector, useDraggedFiles, useOwnAccount } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useDraggedFiles } from 'pl-fe/hooks/useDraggedFiles';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 import { makeGetStatusIds } from 'pl-fe/selectors';
 
 import Timeline from '../ui/components/timeline';

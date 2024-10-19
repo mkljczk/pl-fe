@@ -10,7 +10,10 @@ import Text from 'pl-fe/components/ui/text';
 import LoginForm from 'pl-fe/features/auth-login/components/login-form';
 import OtpAuthForm from 'pl-fe/features/auth-login/components/otp-auth-form';
 import ExternalLoginForm from 'pl-fe/features/external-login/components/external-login-form';
-import { useAppDispatch, useAppSelector, useInstance, useRegistrationStatus } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useInstance } from 'pl-fe/hooks/useInstance';
+import { useRegistrationStatus } from 'pl-fe/hooks/useRegistrationStatus';
 import { getRedirectUrl } from 'pl-fe/utils/redirect';
 import { isStandalone } from 'pl-fe/utils/state';
 

@@ -7,7 +7,8 @@ import Button from 'pl-fe/components/ui/button';
 import FormGroup from 'pl-fe/components/ui/form-group';
 import Input from 'pl-fe/components/ui/input';
 import Stack from 'pl-fe/components/ui/stack';
-import { useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 import toast from 'pl-fe/toast';
 
 import type { PlfeResponse } from 'pl-fe/api';

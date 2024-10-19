@@ -8,7 +8,11 @@ import Column from 'pl-fe/components/ui/column';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Timeline from 'pl-fe/features/ui/components/timeline';
-import { useAppSelector, useAppDispatch, useFeatures, useInstance, useTheme } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useInstance } from 'pl-fe/hooks/useInstance';
+import { useTheme } from 'pl-fe/hooks/useTheme';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 const messages = defineMessages({

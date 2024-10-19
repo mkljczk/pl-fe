@@ -6,7 +6,7 @@ import { useEntityLookup } from 'pl-fe/entity-store/hooks/useEntityLookup';
 import { useClient } from 'pl-fe/hooks/useClient';
 import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
-import { type Account, normalizeAccount } from 'pl-fe/normalizers';
+import { type Account, normalizeAccount } from 'pl-fe/normalizers/account';
 
 import { useAccountScrobble } from './useAccountScrobble';
 import { useRelationship } from './useRelationship';

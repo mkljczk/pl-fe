@@ -8,7 +8,11 @@ import List, { ListItem } from 'pl-fe/components/list';
 import Column from 'pl-fe/components/ui/column';
 import Toggle from 'pl-fe/components/ui/toggle';
 import Timeline from 'pl-fe/features/ui/components/timeline';
-import { useAppDispatch, useAppSelector, useFeatures, useLoggedIn, useTheme } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
+import { useTheme } from 'pl-fe/hooks/useTheme';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 interface IHashtagTimeline {

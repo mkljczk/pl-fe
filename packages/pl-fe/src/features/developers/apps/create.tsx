@@ -12,7 +12,8 @@ import Input from 'pl-fe/components/ui/input';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Textarea from 'pl-fe/components/ui/textarea';
-import { useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 import { getBaseURL } from 'pl-fe/utils/accounts';
 
 import type { Token } from 'pl-api';

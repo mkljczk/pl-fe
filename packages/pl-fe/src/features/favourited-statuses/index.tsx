@@ -9,7 +9,9 @@ import { useAccountLookup } from 'pl-fe/api/hooks/accounts/useAccountLookup';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StatusList from 'pl-fe/components/status-list';
 import Column from 'pl-fe/components/ui/column';
-import { useAppDispatch, useAppSelector, useOwnAccount } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 
 const messages = defineMessages({
   heading: { id: 'column.favourited_statuses', defaultMessage: 'Liked posts' },

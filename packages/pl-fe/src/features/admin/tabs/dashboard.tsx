@@ -5,7 +5,9 @@ import List, { ListItem } from 'pl-fe/components/list';
 import { CardTitle } from 'pl-fe/components/ui/card';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
-import { useOwnAccount, useFeatures, useInstance } from 'pl-fe/hooks';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 import sourceCode from 'pl-fe/utils/code';
 
 import { DashCounter, DashCounters } from '../components/dashcounter';

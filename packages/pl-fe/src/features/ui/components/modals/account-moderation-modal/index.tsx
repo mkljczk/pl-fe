@@ -17,7 +17,9 @@ import Modal from 'pl-fe/components/ui/modal';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Toggle from 'pl-fe/components/ui/toggle';
-import { useAppDispatch, useFeatures, useOwnAccount } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 import toast from 'pl-fe/toast';
 import { getBadges } from 'pl-fe/utils/badges';
 

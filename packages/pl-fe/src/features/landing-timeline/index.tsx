@@ -5,7 +5,9 @@ import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
 import { useCommunityStream } from 'pl-fe/api/hooks/streaming/useCommunityStream';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import Column from 'pl-fe/components/ui/column';
-import { useAppDispatch, useInstance, useTheme } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useInstance } from 'pl-fe/hooks/useInstance';
+import { useTheme } from 'pl-fe/hooks/useTheme';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
 
 import AboutPage from '../about';

@@ -7,7 +7,9 @@ import MissingIndicator from 'pl-fe/components/missing-indicator';
 import SiteLogo from 'pl-fe/components/site-logo';
 import Status from 'pl-fe/components/status';
 import Spinner from 'pl-fe/components/ui/spinner';
-import { useAppDispatch, useAppSelector, useLogo } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useLogo } from 'pl-fe/hooks/useLogo';
 import { iframeId } from 'pl-fe/iframe';
 import { makeGetStatus } from 'pl-fe/selectors';
 

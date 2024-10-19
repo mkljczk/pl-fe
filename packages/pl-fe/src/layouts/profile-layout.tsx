@@ -18,7 +18,9 @@ import {
   PinnedAccountsPanel,
   AccountNotePanel,
 } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector, useFeatures, usePlFeConfig } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
 import { getAcct } from 'pl-fe/utils/accounts';
 
 interface IProfileLayout {

@@ -3,7 +3,7 @@ import { announcementReactionSchema, type AnnouncementReaction } from 'pl-api';
 import * as v from 'valibot';
 
 import { useClient } from 'pl-fe/hooks/useClient';
-import { type Announcement, normalizeAnnouncement } from 'pl-fe/normalizers';
+import { type Announcement, normalizeAnnouncement } from 'pl-fe/normalizers/announcement';
 import { queryClient } from 'pl-fe/queries/client';
 
 const updateReaction = (reaction: AnnouncementReaction, count: number, me?: boolean, overwrite?: boolean) => v.parse(announcementReactionSchema, {

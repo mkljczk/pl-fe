@@ -3,7 +3,8 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Modal from 'pl-fe/components/ui/modal';
-import { useFeatures, useLoggedIn } from 'pl-fe/hooks';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
 
 import type { BaseModalProps } from '../modal-root';
 

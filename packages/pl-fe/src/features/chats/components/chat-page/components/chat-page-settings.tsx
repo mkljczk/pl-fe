@@ -12,7 +12,9 @@ import IconButton from 'pl-fe/components/ui/icon-button';
 import Stack from 'pl-fe/components/ui/stack';
 import Toggle from 'pl-fe/components/ui/toggle';
 import SettingToggle from 'pl-fe/features/notifications/components/setting-toggle';
-import { useAppDispatch, useOwnAccount, useSettings } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 import { useUpdateCredentials } from 'pl-fe/queries/accounts';
 
 type FormData = {

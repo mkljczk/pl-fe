@@ -3,7 +3,9 @@ import { FormattedMessage } from 'react-intl';
 
 import Modal from 'pl-fe/components/ui/modal';
 import Account from 'pl-fe/features/reply-mentions/account';
-import { useAppSelector, useCompose, useOwnAccount } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useCompose } from 'pl-fe/hooks/useCompose';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 import { statusToMentionsAccountIdsArray } from 'pl-fe/reducers/compose';
 import { makeGetStatus } from 'pl-fe/selectors';
 

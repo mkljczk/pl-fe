@@ -7,7 +7,8 @@ import Input from 'pl-fe/components/ui/input';
 import Textarea from 'pl-fe/components/ui/textarea';
 import AvatarPicker from 'pl-fe/features/edit-profile/components/avatar-picker';
 import HeaderPicker from 'pl-fe/features/edit-profile/components/header-picker';
-import { useAppSelector, useInstance } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 import { usePreview } from 'pl-fe/hooks/forms/usePreview';
 import resizeImage from 'pl-fe/utils/resize-image';
 

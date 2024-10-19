@@ -9,7 +9,9 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Toggle from 'pl-fe/components/ui/toggle';
-import { useAppDispatch, useCompose, useInstance } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useCompose } from 'pl-fe/hooks/useCompose';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 
 import DurationSelector from './duration-selector';
 
