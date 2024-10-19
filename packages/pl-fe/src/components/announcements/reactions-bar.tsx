@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { TransitionMotion, spring } from 'react-motion';
 
-import { useAnnouncements } from 'pl-fe/api/hooks/announcements';
+import { useAnnouncements } from 'pl-fe/api/hooks/announcements/useAnnouncements';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import { useSettings } from 'pl-fe/hooks/useSettings';
 

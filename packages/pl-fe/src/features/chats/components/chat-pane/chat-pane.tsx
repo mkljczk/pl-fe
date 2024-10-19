@@ -12,7 +12,7 @@ import EmptyResultsBlankslate from '../chat-search/empty-results-blankslate';
 import ChatPaneHeader from '../chat-widget/chat-pane-header';
 import ChatWindow from '../chat-widget/chat-window';
 import ChatSearchHeader from '../chat-widget/headers/chat-search-header';
-import { Pane } from '../ui';
+import { Pane } from '../ui/pane';
 
 import Blankslate from './blankslate';
 

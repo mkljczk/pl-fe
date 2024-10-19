@@ -14,7 +14,8 @@ import {
 import AutosuggestAccountInput from 'pl-fe/components/autosuggest-account-input';
 import Input from 'pl-fe/components/ui/input';
 import SvgIcon from 'pl-fe/components/ui/svg-icon';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { selectAccount } from 'pl-fe/selectors';
 import { AppDispatch, RootState } from 'pl-fe/store';
 

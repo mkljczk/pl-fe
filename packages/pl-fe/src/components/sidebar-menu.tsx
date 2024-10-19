@@ -5,7 +5,7 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link, NavLink } from 'react-router-dom';
 
 import { fetchOwnAccounts, logOut, switchAccount } from 'pl-fe/actions/auth';
-import { useAccount } from 'pl-fe/api/hooks';
+import { useAccount } from 'pl-fe/api/hooks/accounts/useAccount';
 import Account from 'pl-fe/components/account';
 import Divider from 'pl-fe/components/ui/divider';
 import HStack from 'pl-fe/components/ui/hstack';

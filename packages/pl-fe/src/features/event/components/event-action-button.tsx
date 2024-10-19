@@ -3,7 +3,8 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { joinEvent, leaveEvent } from 'pl-fe/actions/events';
 import Button from 'pl-fe/components/ui/button';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
 import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';

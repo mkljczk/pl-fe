@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import { fetchAccountByUsername } from 'pl-fe/actions/accounts';
 import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
-import { useAccountLookup } from 'pl-fe/api/hooks';
+import { useAccountLookup } from 'pl-fe/api/hooks/accounts/useAccountLookup';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StatusList from 'pl-fe/components/status-list';
 import Card, { CardBody } from 'pl-fe/components/ui/card';

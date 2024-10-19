@@ -5,7 +5,8 @@ import { updateMrf } from 'pl-fe/actions/mrf';
 import List, { ListItem } from 'pl-fe/components/list';
 import Modal from 'pl-fe/components/ui/modal';
 import Toggle from 'pl-fe/components/ui/toggle';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { makeGetRemoteInstance } from 'pl-fe/selectors';
 import toast from 'pl-fe/toast';
 

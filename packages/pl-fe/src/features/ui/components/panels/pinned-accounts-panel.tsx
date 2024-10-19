@@ -6,7 +6,8 @@ import { fetchPinnedAccounts } from 'pl-fe/actions/accounts';
 import Widget from 'pl-fe/components/ui/widget';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { WhoToFollowPanel } from 'pl-fe/features/ui/util/async-components';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 import type { Account } from 'pl-fe/normalizers/account';
 

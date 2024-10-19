@@ -1,7 +1,7 @@
-import { useTransaction } from 'pl-fe/entity-store/hooks';
-import { EntityCallbacks } from 'pl-fe/entity-store/hooks/types';
+import { useTransaction } from 'pl-fe/entity-store/hooks/useTransaction';
 import { useClient } from 'pl-fe/hooks/useClient';
 
+import type { EntityCallbacks } from 'pl-fe/entity-store/hooks/types';
 import type { Account } from 'pl-fe/normalizers/account';
 
 const useVerify = () => {

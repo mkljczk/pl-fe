@@ -4,8 +4,9 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { setBadges as saveBadges } from 'pl-fe/actions/admin';
 import { deactivateUserModal, deleteUserModal } from 'pl-fe/actions/moderation';
-import { useAccount } from 'pl-fe/api/hooks';
-import { useSuggest, useVerify } from 'pl-fe/api/hooks/admin';
+import { useAccount } from 'pl-fe/api/hooks/accounts/useAccount';
+import { useSuggest } from 'pl-fe/api/hooks/admin/useSuggest';
+import { useVerify } from 'pl-fe/api/hooks/admin/useVerify';
 import Account from 'pl-fe/components/account';
 import List, { ListItem } from 'pl-fe/components/list';
 import MissingIndicator from 'pl-fe/components/missing-indicator';

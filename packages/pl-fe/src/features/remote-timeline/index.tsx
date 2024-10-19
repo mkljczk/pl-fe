@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
-import { useRemoteStream } from 'pl-fe/api/hooks';
+import { useRemoteStream } from 'pl-fe/api/hooks/streaming/useRemoteStream';
 import IconButton from 'pl-fe/components/icon-button';
 import Column from 'pl-fe/components/ui/column';
 import HStack from 'pl-fe/components/ui/hstack';

@@ -5,7 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import { fetchBirthdayReminders } from 'pl-fe/actions/accounts';
 import Widget from 'pl-fe/components/ui/widget';
 import AccountContainer from 'pl-fe/containers/account-container';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 const timeToMidnight = () => {
   const now = new Date();

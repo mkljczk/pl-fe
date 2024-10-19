@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { FormattedMessage } from 'react-intl';
 import { Redirect, useHistory } from 'react-router-dom';
 
-import { useAccountLookup } from 'pl-fe/api/hooks';
+import { useAccountLookup } from 'pl-fe/api/hooks/accounts/useAccountLookup';
 import Column from 'pl-fe/components/ui/column';
 import Layout from 'pl-fe/components/ui/layout';
 import Tabs from 'pl-fe/components/ui/tabs';

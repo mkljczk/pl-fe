@@ -10,7 +10,7 @@ import {
   rejectFollowRequest,
   biteAccount,
 } from 'pl-fe/actions/accounts';
-import { useFollow } from 'pl-fe/api/hooks';
+import { useFollow } from 'pl-fe/api/hooks/accounts/useFollow';
 import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
 import { useAppDispatch, useFeatures, useLoggedIn } from 'pl-fe/hooks';

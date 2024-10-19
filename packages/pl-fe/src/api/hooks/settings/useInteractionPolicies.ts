@@ -2,7 +2,9 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { type InteractionPolicies, interactionPoliciesSchema } from 'pl-api';
 import * as v from 'valibot';
 
-import { useClient, useFeatures, useLoggedIn } from 'pl-fe/hooks';
+import { useClient } from 'pl-fe/hooks/useClient';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
 import { queryClient } from 'pl-fe/queries/client';
 
 const emptySchema = v.parse(interactionPoliciesSchema, {});

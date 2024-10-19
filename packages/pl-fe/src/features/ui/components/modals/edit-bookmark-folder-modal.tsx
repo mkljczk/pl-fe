@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useBookmarkFolder, useUpdateBookmarkFolder } from 'pl-fe/api/hooks';
+import { useBookmarkFolder } from 'pl-fe/api/hooks/statuses/useBookmarkFolder';
+import { useUpdateBookmarkFolder } from 'pl-fe/api/hooks/statuses/useUpdateBookmarkFolder';
 import Emoji from 'pl-fe/components/ui/emoji';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';

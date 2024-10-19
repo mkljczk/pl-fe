@@ -1,7 +1,7 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useFollow } from 'pl-fe/api/hooks';
+import { useFollow } from 'pl-fe/api/hooks/accounts/useFollow';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import toast from 'pl-fe/toast';

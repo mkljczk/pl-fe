@@ -1,7 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useGroup, useGroupMedia } from 'pl-fe/api/hooks';
+import { useGroup } from 'pl-fe/api/hooks/groups/useGroup';
+import { useGroupMedia } from 'pl-fe/api/hooks/groups/useGroupMedia';
 import LoadMore from 'pl-fe/components/load-more';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import Column from 'pl-fe/components/ui/column';

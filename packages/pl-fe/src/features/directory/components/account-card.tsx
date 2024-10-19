@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { useAccount } from 'pl-fe/api/hooks';
+import { useAccount } from 'pl-fe/api/hooks/accounts/useAccount';
 import Account from 'pl-fe/components/account';
 import Badge from 'pl-fe/components/badge';
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';

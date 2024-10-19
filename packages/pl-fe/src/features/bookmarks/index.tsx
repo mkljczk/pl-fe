@@ -5,7 +5,8 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { fetchBookmarkedStatuses, expandBookmarkedStatuses } from 'pl-fe/actions/bookmarks';
-import { useBookmarkFolder, useDeleteBookmarkFolder } from 'pl-fe/api/hooks';
+import { useBookmarkFolder } from 'pl-fe/api/hooks/statuses/useBookmarkFolder';
+import { useDeleteBookmarkFolder } from 'pl-fe/api/hooks/statuses/useDeleteBookmarkFolder';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import StatusList from 'pl-fe/components/status-list';

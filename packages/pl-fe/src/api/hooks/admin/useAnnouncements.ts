@@ -11,7 +11,7 @@ import { useClient } from 'pl-fe/hooks/useClient';
 import { normalizeAnnouncement, AdminAnnouncement } from 'pl-fe/normalizers';
 import { queryClient } from 'pl-fe/queries/client';
 
-import { useAnnouncements as useUserAnnouncements } from '../announcements';
+import { useAnnouncements as useUserAnnouncements } from '../announcements/useAnnouncements';
 
 const useAnnouncements = () => {
   const client = useClient();

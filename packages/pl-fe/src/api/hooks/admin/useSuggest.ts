@@ -1,4 +1,4 @@
-import { useTransaction } from 'pl-fe/entity-store/hooks';
+import { useTransaction } from 'pl-fe/entity-store/hooks/useTransaction';
 import { EntityCallbacks } from 'pl-fe/entity-store/hooks/types';
 import { useClient } from 'pl-fe/hooks/useClient';
 

@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useEntity } from 'pl-fe/entity-store/hooks';
+import { useEntity } from 'pl-fe/entity-store/hooks/useEntity';
 import { useAppSelector, useClient, useFeatures, useLoggedIn } from 'pl-fe/hooks';
 import { type Account, normalizeAccount } from 'pl-fe/normalizers';
 

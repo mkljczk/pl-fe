@@ -7,7 +7,8 @@ import { dequeueTimeline, scrollTopTimeline } from 'pl-fe/actions/timelines';
 import ScrollTopButton from 'pl-fe/components/scroll-top-button';
 import StatusList, { IStatusList } from 'pl-fe/components/status-list';
 import Portal from 'pl-fe/components/ui/portal';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { makeGetStatusIds } from 'pl-fe/selectors';
 
 const messages = defineMessages({

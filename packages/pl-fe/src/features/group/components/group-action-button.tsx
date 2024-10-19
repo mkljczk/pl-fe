@@ -2,7 +2,8 @@ import { GroupRoles } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useJoinGroup, useLeaveGroup } from 'pl-fe/api/hooks';
+import { useJoinGroup } from 'pl-fe/api/hooks/groups/useJoinGroup';
+import { useLeaveGroup } from 'pl-fe/api/hooks/groups/useLeaveGroup';
 import Button from 'pl-fe/components/ui/button';
 import { importEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';

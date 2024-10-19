@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { changeSetting } from 'pl-fe/actions/settings';
 import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
-import { usePublicStream } from 'pl-fe/api/hooks';
+import { usePublicStream } from 'pl-fe/api/hooks/streaming/usePublicStream';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import Accordion from 'pl-fe/components/ui/accordion';
 import Column from 'pl-fe/components/ui/column';

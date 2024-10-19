@@ -7,7 +7,8 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
 import Textarea from 'pl-fe/components/ui/textarea';
 import Widget from 'pl-fe/components/ui/widget';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 import type { Account as AccountEntity } from 'pl-fe/normalizers';
 import type { AppDispatch } from 'pl-fe/store';

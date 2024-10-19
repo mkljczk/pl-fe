@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 
 import { groupCompose, uploadCompose } from 'pl-fe/actions/compose';
 import { fetchGroupTimeline } from 'pl-fe/actions/timelines';
-import { useGroup, useGroupStream } from 'pl-fe/api/hooks';
+import { useGroup } from 'pl-fe/api/hooks/groups/useGroup';
+import { useGroupStream } from 'pl-fe/api/hooks/streaming/useGroupStream';
 import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';

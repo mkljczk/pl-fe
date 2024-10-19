@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useGroup, useUpdateGroup } from 'pl-fe/api/hooks';
+import { useGroup } from 'pl-fe/api/hooks/groups/useGroup';
+import { useUpdateGroup } from 'pl-fe/api/hooks/groups/useUpdateGroup';
 import Button from 'pl-fe/components/ui/button';
 import Column from 'pl-fe/components/ui/column';
 import Form from 'pl-fe/components/ui/form';

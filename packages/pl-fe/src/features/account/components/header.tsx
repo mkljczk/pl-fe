@@ -11,7 +11,7 @@ import { blockDomain, unblockDomain } from 'pl-fe/actions/domain-blocks';
 import { initMuteModal } from 'pl-fe/actions/mutes';
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { setSearchAccount } from 'pl-fe/actions/search';
-import { useFollow } from 'pl-fe/api/hooks';
+import { useFollow } from 'pl-fe/api/hooks/accounts/useFollow';
 import Badge from 'pl-fe/components/badge';
 import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
 import StillImage from 'pl-fe/components/still-image';

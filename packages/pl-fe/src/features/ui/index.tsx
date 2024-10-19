@@ -13,7 +13,7 @@ import { register as registerPushNotifications } from 'pl-fe/actions/push-notifi
 import { fetchScheduledStatuses } from 'pl-fe/actions/scheduled-statuses';
 import { fetchSuggestionsForTimeline } from 'pl-fe/actions/suggestions';
 import { fetchHomeTimeline } from 'pl-fe/actions/timelines';
-import { useUserStream } from 'pl-fe/api/hooks';
+import { useUserStream } from 'pl-fe/api/hooks/streaming/useUserStream';
 import SidebarNavigation from 'pl-fe/components/sidebar-navigation';
 import ThumbNavigation from 'pl-fe/components/thumb-navigation';
 import Layout from 'pl-fe/components/ui/layout';

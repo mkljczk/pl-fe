@@ -1,5 +1,5 @@
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useEntities } from 'pl-fe/entity-store/hooks';
+import { useEntities } from 'pl-fe/entity-store/hooks/useEntities';
 import { useClient, useFeatures } from 'pl-fe/hooks';
 
 import type { TrendsLink } from 'pl-api';

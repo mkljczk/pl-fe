@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { fetchHashtag, followHashtag, unfollowHashtag } from 'pl-fe/actions/tags';
 import { fetchHashtagTimeline, clearTimeline } from 'pl-fe/actions/timelines';
-import { useHashtagStream } from 'pl-fe/api/hooks';
+import { useHashtagStream } from 'pl-fe/api/hooks/streaming/useHashtagStream';
 import List, { ListItem } from 'pl-fe/components/list';
 import Column from 'pl-fe/components/ui/column';
 import Toggle from 'pl-fe/components/ui/toggle';

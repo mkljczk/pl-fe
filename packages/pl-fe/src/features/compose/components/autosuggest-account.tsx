@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useAccount } from 'pl-fe/api/hooks';
+import { useAccount } from 'pl-fe/api/hooks/accounts/useAccount';
 import Account from 'pl-fe/components/account';
 
 interface IAutosuggestAccount {

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { deleteList, fetchList } from 'pl-fe/actions/lists';
 import { fetchListTimeline } from 'pl-fe/actions/timelines';
-import { useListStream } from 'pl-fe/api/hooks';
+import { useListStream } from 'pl-fe/api/hooks/streaming/useListStream';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import Button from 'pl-fe/components/ui/button';

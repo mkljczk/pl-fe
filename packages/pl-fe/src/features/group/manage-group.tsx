@@ -3,7 +3,8 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { useDeleteGroup, useGroup } from 'pl-fe/api/hooks';
+import { useDeleteGroup } from 'pl-fe/api/hooks/groups/useDeleteGroup';
+import { useGroup } from 'pl-fe/api/hooks/groups/useGroup';
 import List, { ListItem } from 'pl-fe/components/list';
 import { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
 import Column from 'pl-fe/components/ui/column';

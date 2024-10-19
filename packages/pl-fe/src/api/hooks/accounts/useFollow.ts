@@ -1,6 +1,6 @@
 import { importEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useTransaction } from 'pl-fe/entity-store/hooks';
+import { useTransaction } from 'pl-fe/entity-store/hooks/useTransaction';
 import { useAppDispatch, useClient, useLoggedIn } from 'pl-fe/hooks';
 
 interface FollowOpts {

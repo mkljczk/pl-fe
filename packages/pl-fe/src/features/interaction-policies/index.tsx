@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useInteractionPolicies } from 'pl-fe/api/hooks';
+import { useInteractionPolicies } from 'pl-fe/api/hooks/settings/useInteractionPolicies';
 import List, { ListItem } from 'pl-fe/components/list';
 import Button from 'pl-fe/components/ui/button';
 import { CardTitle } from 'pl-fe/components/ui/card';

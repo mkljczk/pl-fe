@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { uploadCompose } from 'pl-fe/actions/compose';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 import UploadButton from '../components/upload-button';
 

@@ -5,7 +5,8 @@ import { defineMessages, useIntl } from 'react-intl';
 import { fetchAliasesSuggestions, clearAliasesSuggestions, changeAliasesSuggestions } from 'pl-fe/actions/aliases';
 import Icon from 'pl-fe/components/icon';
 import Button from 'pl-fe/components/ui/button';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 const messages = defineMessages({
   search: { id: 'aliases.search', defaultMessage: 'Search your old account' },

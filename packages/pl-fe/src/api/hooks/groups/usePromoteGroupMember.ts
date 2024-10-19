@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useCreateEntity } from 'pl-fe/entity-store/hooks';
+import { useCreateEntity } from 'pl-fe/entity-store/hooks/useCreateEntity';
 import { useClient } from 'pl-fe/hooks/useClient';
 import { normalizeGroupMember } from 'pl-fe/normalizers';
 
