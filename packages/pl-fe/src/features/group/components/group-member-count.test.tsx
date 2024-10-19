@@ -7,7 +7,6 @@ import GroupMemberCount from './group-member-count';
 
 import type { Group } from 'pl-fe/normalizers/group';
 
-
 let group: Group;
 
 describe('<GroupMemberCount />', () => {

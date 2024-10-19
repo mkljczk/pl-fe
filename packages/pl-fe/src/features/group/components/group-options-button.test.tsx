@@ -8,7 +8,6 @@ import GroupOptionsButton from './group-options-button';
 
 import type { Group } from 'pl-fe/normalizers/group';
 
-
 let group: Group;
 
 describe('<GroupOptionsButton />', () => {

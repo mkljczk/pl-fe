@@ -8,7 +8,6 @@ import GroupRelationship from './group-relationship';
 
 import type { Group } from 'pl-fe/normalizers/group';
 
-
 let group: Group;
 
 describe('<GroupRelationship />', () => {

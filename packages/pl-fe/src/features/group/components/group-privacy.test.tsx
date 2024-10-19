@@ -7,7 +7,6 @@ import GroupPrivacy from './group-privacy';
 
 import type { Group } from 'pl-fe/normalizers/group';
 
-
 let group: Group;
 
 describe('<GroupPrivacy />', () => {

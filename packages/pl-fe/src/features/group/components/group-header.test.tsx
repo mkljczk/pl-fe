@@ -7,7 +7,6 @@ import GroupHeader from './group-header';
 
 import type { Group } from 'pl-fe/normalizers/group';
 
-
 let group: Group;
 
 describe('<GroupHeader />', () => {

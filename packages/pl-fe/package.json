@@ -79,7 +79,7 @@
     "cryptocurrency-icons": "^0.18.1",
     "cssnano": "^6.0.0",
     "detect-passive-events": "^2.0.0",
-    "emoji-datasource": "^15.0.1",
+    "emoji-datasource": "15.0.1",
     "emoji-mart": "^5.6.0",
     "escape-html": "^1.0.3",
     "exifr": "^7.1.3",

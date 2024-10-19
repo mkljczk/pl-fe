@@ -4430,10 +4430,10 @@ electron-to-chromium@^1.5.28:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.31.tgz#b1478418769dec72ea70d9fdf147a81491857f10"
   integrity sha512-QcDoBbQeYt0+3CWcK/rEbuHvwpbT/8SV9T3OSgs6cX1FlcUAkgrkqbg9zLnDrMM/rLamzQwal4LYFCiWk861Tg==
 
-emoji-datasource@^15.0.1:
-  version "15.1.2"
-  resolved "https://registry.yarnpkg.com/emoji-datasource/-/emoji-datasource-15.1.2.tgz#afec422adadeafbf59c4e346fe24a891900e257c"
-  integrity sha512-tXAqGsrDVhgCRpFePtaD9P4Z8Ro2SUQSL/4MIJBG0SxqQJaMslEbin8J53OaFwEBu6e7JxFaIF6s4mw9+8acAQ==
+emoji-datasource@15.0.1:
+  version "15.0.1"
+  resolved "https://registry.yarnpkg.com/emoji-datasource/-/emoji-datasource-15.0.1.tgz#6cc7676e4d48d7559c2e068ffcacf84ec653584c"
+  integrity sha512-aF5Q6LCKXzJzpG4K0ETiItuzz0xLYxNexR9qWw45/shuuEDWZkOIbeGHA23uopOSYA/LmeZIXIFsySCx+YKg2g==
 
 emoji-mart@^5.6.0:
   version "5.6.0"
