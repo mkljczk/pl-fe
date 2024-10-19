@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useClient } from 'pl-fe/hooks';
+import { useClient } from 'pl-fe/hooks/useClient';
 import { type Account, normalizeAccount } from 'pl-fe/normalizers';
 import { flattenPages } from 'pl-fe/utils/queries';
 

@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
 import { makeGetAccount } from 'pl-fe/selectors';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 const getAccount = makeGetAccount();
 

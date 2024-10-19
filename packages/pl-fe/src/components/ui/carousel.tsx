@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { useDimensions } from 'pl-fe/hooks';
+import { useDimensions } from 'pl-fe/hooks/useDimensions';
 
 import HStack from './hstack';
 import Icon from './icon';

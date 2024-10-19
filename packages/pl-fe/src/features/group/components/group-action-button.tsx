@@ -6,7 +6,7 @@ import { useJoinGroup, useLeaveGroup } from 'pl-fe/api/hooks';
 import Button from 'pl-fe/components/ui/button';
 import { importEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 

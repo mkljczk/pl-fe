@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { getTextDirection } from 'pl-fe/utils/rtl';
 
 import type { Mention as MentionEntity } from 'pl-api';
-import type { Announcement } from 'pl-fe/normalizers';
+import type { Announcement } from 'pl-fe/normalizers/announcement';
 
 interface IAnnouncementContent {
   announcement: Announcement;

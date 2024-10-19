@@ -9,7 +9,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { Entities } from 'pl-fe/entity-store/entities';
 import PlaceholderChatMessage from 'pl-fe/features/placeholder/components/placeholder-chat-message';
-import { useAppSelector } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useChatActions, useChatMessages } from 'pl-fe/queries/chats';
 
 import ChatMessage from './chat-message';

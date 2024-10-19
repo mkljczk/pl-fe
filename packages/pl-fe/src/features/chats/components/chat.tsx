@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { uploadMedia } from 'pl-fe/actions/media';
 import Stack from 'pl-fe/components/ui/stack';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useChatActions } from 'pl-fe/queries/chats';
 import toast from 'pl-fe/toast';
 

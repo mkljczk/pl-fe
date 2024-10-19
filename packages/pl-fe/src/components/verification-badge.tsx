@@ -3,7 +3,7 @@ import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
 import Icon from 'pl-fe/components/ui/icon';
-import { usePlFeConfig } from 'pl-fe/hooks';
+import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
 
 const messages = defineMessages({
   verified: { id: 'account.verified', defaultMessage: 'Verified Account' },

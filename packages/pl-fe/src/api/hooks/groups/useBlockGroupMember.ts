@@ -1,9 +1,9 @@
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useCreateEntity } from 'pl-fe/entity-store/hooks';
-import { useClient } from 'pl-fe/hooks';
+import { useClient } from 'pl-fe/hooks/useClient';
 
 import type { Group } from 'pl-api';
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 const useBlockGroupMember = (group: Pick<Group, 'id'>, account: Pick<Account, 'id'>) => {
   const client = useClient();

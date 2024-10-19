@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { useClient } from 'pl-fe/hooks';
+import { useClient } from 'pl-fe/hooks/useClient';
 
 const useFetchRelationships = () => {
   const client = useClient();

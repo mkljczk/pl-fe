@@ -5,7 +5,7 @@ import Widget from 'pl-fe/components/ui/widget';
 
 import ProfileField from '../profile-field';
 
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 interface IProfileFieldsPanel {
   account: Pick<Account, 'fields'>;

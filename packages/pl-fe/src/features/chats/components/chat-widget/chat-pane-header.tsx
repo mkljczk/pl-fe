@@ -3,7 +3,7 @@ import React, { HTMLAttributes } from 'react';
 import HStack from 'pl-fe/components/ui/hstack';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import Text from 'pl-fe/components/ui/text';
-import { useSettings } from 'pl-fe/hooks';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 
 interface IChatPaneHeader {
   isOpen: boolean;

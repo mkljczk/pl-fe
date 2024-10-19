@@ -13,7 +13,7 @@ import GroupPrivacy from 'pl-fe/features/group/components/group-privacy';
 
 import GroupAvatar from '../group-avatar';
 
-import type { Group } from 'pl-fe/normalizers';
+import type { Group } from 'pl-fe/normalizers/group';
 
 interface IGroupPopoverContainer {
   children: React.ReactElement<any, string | React.JSXElementConstructor<any>>;

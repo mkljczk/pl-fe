@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Link from 'pl-fe/components/link';
 import Text from 'pl-fe/components/ui/text';
-import { useAppSelector } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { makeGetStatus } from 'pl-fe/selectors';
 
 interface IReplyGroupIndicator {

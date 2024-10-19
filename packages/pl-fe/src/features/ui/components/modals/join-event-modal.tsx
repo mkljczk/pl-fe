@@ -5,7 +5,7 @@ import { joinEvent } from 'pl-fe/actions/events';
 import FormGroup from 'pl-fe/components/ui/form-group';
 import Modal from 'pl-fe/components/ui/modal';
 import Textarea from 'pl-fe/components/ui/textarea';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 
 import { BaseModalProps } from '../modal-root';
 

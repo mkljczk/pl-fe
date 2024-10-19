@@ -30,7 +30,7 @@ import PlaceholderEventHeader from '../../placeholder/components/placeholder-eve
 import EventActionButton from '../components/event-action-button';
 import EventDate from '../components/event-date';
 
-import type { Status } from 'pl-fe/normalizers';
+import type { Status } from 'pl-fe/normalizers/status';
 
 const messages = defineMessages({
   bannerHeader: { id: 'event.banner', defaultMessage: 'Event banner' },

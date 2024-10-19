@@ -1,6 +1,6 @@
 import { Settings } from 'pl-fe/schemas/pl-fe/settings';
 
-import type { Status } from 'pl-fe/normalizers';
+import type { Status } from 'pl-fe/normalizers/status';
 
 const shouldFilter = (
   status: Pick<Status, 'in_reply_to_id' | 'visibility' | 'reblog_id'>,

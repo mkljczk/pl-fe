@@ -6,7 +6,7 @@ import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import HoverStatusWrapper from 'pl-fe/components/hover-status-wrapper';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
-import type { Status } from 'pl-fe/normalizers';
+import type { Status } from 'pl-fe/normalizers/status';
 
 interface IStatusReplyMentions {
   status: Pick<Status, 'in_reply_to_id' | 'id' | 'mentions'>;

@@ -6,7 +6,7 @@ import Button from 'pl-fe/components/ui/button';
 import Form from 'pl-fe/components/ui/form';
 import HStack from 'pl-fe/components/ui/hstack';
 import Input from 'pl-fe/components/ui/input';
-import { useTextField } from 'pl-fe/hooks/forms';
+import { useTextField } from 'pl-fe/hooks/forms/useTextField';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({

@@ -4,10 +4,10 @@ import { NavLink } from 'react-router-dom';
 
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
-import { useSettings } from 'pl-fe/hooks';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 const messages = defineMessages({
   followers: { id: 'account.followers', defaultMessage: 'Followers' },

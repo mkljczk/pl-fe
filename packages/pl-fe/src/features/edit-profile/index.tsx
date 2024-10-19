@@ -18,7 +18,7 @@ import Streamfield from 'pl-fe/components/ui/streamfield';
 import Textarea from 'pl-fe/components/ui/textarea';
 import Toggle from 'pl-fe/components/ui/toggle';
 import { useAppDispatch, useOwnAccount, useFeatures, useInstance, useAppSelector } from 'pl-fe/hooks';
-import { useImageField } from 'pl-fe/hooks/forms';
+import { useImageField } from 'pl-fe/hooks/forms/useImageField';
 import toast from 'pl-fe/toast';
 import { isDefaultAvatar, isDefaultHeader } from 'pl-fe/utils/accounts';
 
@@ -26,7 +26,7 @@ import AvatarPicker from './components/avatar-picker';
 import HeaderPicker from './components/header-picker';
 
 import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield';
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 const nonDefaultAvatar = (url: string | undefined) => url && isDefaultAvatar(url) ? undefined : url;
 const nonDefaultHeader = (url: string | undefined) => url && isDefaultHeader(url) ? undefined : url;

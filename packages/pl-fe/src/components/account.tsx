@@ -12,7 +12,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
-import { useAppSelector } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { getAcct } from 'pl-fe/utils/accounts';
 import { displayFqn } from 'pl-fe/utils/state';
 

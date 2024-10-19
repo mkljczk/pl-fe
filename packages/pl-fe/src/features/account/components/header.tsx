@@ -32,7 +32,7 @@ import { isDefaultHeader } from 'pl-fe/utils/accounts';
 import copy from 'pl-fe/utils/copy';
 
 import type { PlfeResponse } from 'pl-fe/api';
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 const messages = defineMessages({
   edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },

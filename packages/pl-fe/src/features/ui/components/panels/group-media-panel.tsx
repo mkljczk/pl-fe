@@ -12,7 +12,7 @@ import { useModalsStore } from 'pl-fe/stores/modals';
 
 import MediaItem from '../../../account-gallery/components/media-item';
 
-import type { Group } from 'pl-fe/normalizers';
+import type { Group } from 'pl-fe/normalizers/group';
 
 interface IGroupMediaPanel {
   group?: Group;

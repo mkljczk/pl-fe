@@ -10,7 +10,7 @@ import { importFetchedStatus, importFetchedStatuses } from './importer';
 import { deleteFromTimelines } from './timelines';
 
 import type { CreateStatusParams, Status as BaseStatus } from 'pl-api';
-import type { Status } from 'pl-fe/normalizers';
+import type { Status } from 'pl-fe/normalizers/status';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 import type { IntlShape } from 'react-intl';
 

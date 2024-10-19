@@ -12,7 +12,7 @@ import { useModalsStore } from 'pl-fe/stores/modals';
 
 import MediaItem from '../../../account-gallery/components/media-item';
 
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 interface IProfileMediaPanel {
   account?: Account;

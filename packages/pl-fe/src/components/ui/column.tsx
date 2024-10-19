@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Helmet from 'pl-fe/components/helmet';
-import { usePlFeConfig } from 'pl-fe/hooks';
+import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
 
 import { Card, CardBody, CardHeader, CardTitle, type CardSizes } from './card';
 

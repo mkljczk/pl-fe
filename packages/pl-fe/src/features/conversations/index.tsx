@@ -6,7 +6,7 @@ import { mountConversations, unmountConversations, expandConversations } from 'p
 import { useDirectStream } from 'pl-fe/api/hooks';
 import AccountSearch from 'pl-fe/components/account-search';
 import Column from 'pl-fe/components/ui/column';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 
 import ConversationsList from './components/conversations-list';
 

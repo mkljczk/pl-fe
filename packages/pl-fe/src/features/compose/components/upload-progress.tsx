@@ -1,7 +1,7 @@
 import React from 'react';
 
 import UploadProgress from 'pl-fe/components/upload-progress';
-import { useCompose } from 'pl-fe/hooks';
+import { useCompose } from 'pl-fe/hooks/useCompose';
 
 interface IComposeUploadProgress {
   composeId: string;

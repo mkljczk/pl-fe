@@ -6,9 +6,9 @@ import FormGroup from 'pl-fe/components/ui/form-group';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Textarea from 'pl-fe/components/ui/textarea';
-import { useInstance } from 'pl-fe/hooks';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 const messages = defineMessages({
   placeholder: { id: 'report.placeholder', defaultMessage: 'Additional comments' },

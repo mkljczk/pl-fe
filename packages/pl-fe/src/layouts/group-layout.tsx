@@ -15,7 +15,7 @@ import {
   GroupMediaPanel,
   SignUpPanel,
 } from 'pl-fe/features/ui/util/async-components';
-import { useOwnAccount } from 'pl-fe/hooks';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 
 const messages = defineMessages({
   all: { id: 'group.tabs.all', defaultMessage: 'All' },

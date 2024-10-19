@@ -10,7 +10,7 @@ import Text from 'pl-fe/components/ui/text';
 import GroupActionButton from 'pl-fe/features/group/components/group-action-button';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
-import type { Group } from 'pl-fe/normalizers';
+import type { Group } from 'pl-fe/normalizers/group';
 
 interface IGroupListItem {
   group: Pick<Group, 'id' | 'avatar' | 'avatar_description' | 'display_name_html' | 'locked' | 'members_count' | 'relationship'>;

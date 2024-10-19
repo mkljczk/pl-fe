@@ -7,7 +7,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Text from 'pl-fe/components/ui/text';
 
-import type { Poll } from 'pl-fe/normalizers';
+import type { Poll } from 'pl-fe/normalizers/poll';
 
 const messages = defineMessages({
   voted: { id: 'poll.voted', defaultMessage: 'You voted for this answer' },

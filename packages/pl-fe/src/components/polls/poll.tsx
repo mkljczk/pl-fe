@@ -10,7 +10,7 @@ import { useModalsStore } from 'pl-fe/stores/modals';
 import PollFooter from './poll-footer';
 import PollOption from './poll-option';
 
-import type { Status } from 'pl-fe/normalizers';
+import type { Status } from 'pl-fe/normalizers/status';
 
 type Selected = Record<number, boolean>;
 

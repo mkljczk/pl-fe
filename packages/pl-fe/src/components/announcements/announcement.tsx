@@ -3,7 +3,7 @@ import { FormattedDate } from 'react-intl';
 
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import { useFeatures } from 'pl-fe/hooks';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import { getTextDirection } from 'pl-fe/utils/rtl';
 
 import AnnouncementContent from './announcement-content';

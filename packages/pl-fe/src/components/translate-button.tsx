@@ -9,7 +9,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch, useAppSelector, useFeatures, useInstance, useSettings } from 'pl-fe/hooks';
 
-import type { Status } from 'pl-fe/normalizers';
+import type { Status } from 'pl-fe/normalizers/status';
 
 interface ITranslateButton {
   status: Pick<Status, 'id' | 'account' | 'contentHtml' | 'contentMapHtml' | 'language' | 'translating' | 'translation' | 'visibility'>;

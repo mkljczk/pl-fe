@@ -11,8 +11,10 @@ import Icon from 'pl-fe/components/ui/icon';
 import Input from 'pl-fe/components/ui/input';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Textarea from 'pl-fe/components/ui/textarea';
-import { useAppSelector, useInstance } from 'pl-fe/hooks';
-import { useImageField, useTextField } from 'pl-fe/hooks/forms';
+import { useImageField } from 'pl-fe/hooks/forms/useImageField';
+import { useTextField } from 'pl-fe/hooks/forms/useTextField';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 import toast from 'pl-fe/toast';
 import { isDefaultAvatar, isDefaultHeader } from 'pl-fe/utils/accounts';
 

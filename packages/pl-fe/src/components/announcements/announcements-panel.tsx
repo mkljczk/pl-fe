@@ -9,7 +9,7 @@ import { useAnnouncements } from 'pl-fe/api/hooks/announcements';
 import Card from 'pl-fe/components/ui/card';
 import HStack from 'pl-fe/components/ui/hstack';
 import Widget from 'pl-fe/components/ui/widget';
-import { useAppSelector } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 import Announcement from './announcement';
 

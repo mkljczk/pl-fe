@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from 'pl-fe/components/ui/icon';
 
-import type { Group } from 'pl-fe/normalizers';
+import type { Group } from 'pl-fe/normalizers/group';
 
 const messages = defineMessages({
   header: { id: 'group.header.alt', defaultMessage: 'Group header' },

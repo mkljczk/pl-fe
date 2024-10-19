@@ -8,7 +8,7 @@ import { useGroup } from 'pl-fe/api/hooks';
 import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
 const messages = defineMessages({

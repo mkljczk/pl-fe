@@ -40,7 +40,7 @@ import { createPortal } from 'react-dom';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from 'pl-fe/components/ui/icon';
-import { useInstance } from 'pl-fe/hooks';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 
 import { getDOMRangeRect } from '../utils/get-dom-range-rect';
 import { getSelectedNode } from '../utils/get-selected-node';

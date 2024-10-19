@@ -10,7 +10,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
-import { useFeatures } from 'pl-fe/hooks';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 
 import NewFolderForm from './components/new-folder-form';
 

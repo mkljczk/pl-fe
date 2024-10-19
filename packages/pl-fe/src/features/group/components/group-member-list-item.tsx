@@ -11,7 +11,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import { deleteEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
 import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholder-account';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 

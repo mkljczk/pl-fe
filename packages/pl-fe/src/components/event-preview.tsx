@@ -10,7 +10,7 @@ import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import EventActionButton from 'pl-fe/features/event/components/event-action-button';
 import EventDate from 'pl-fe/features/event/components/event-date';
-import { useAppSelector } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 import type { Status as StatusEntity } from 'pl-fe/normalizers';
 

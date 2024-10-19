@@ -12,7 +12,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
-import { useFeatures } from 'pl-fe/hooks';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import { useChatActions } from 'pl-fe/queries/chats';
 import { useModalsStore } from 'pl-fe/stores/modals';
 

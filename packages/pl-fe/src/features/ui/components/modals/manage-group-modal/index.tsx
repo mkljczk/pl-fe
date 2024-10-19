@@ -13,7 +13,7 @@ import DetailsStep from './steps/details-step';
 import type { BaseModalProps } from '../../modal-root';
 import type { CreateGroupParams } from 'pl-api';
 import type { PlfeResponse } from 'pl-fe/api';
-import type { Group } from 'pl-fe/normalizers';
+import type { Group } from 'pl-fe/normalizers/group';
 
 const messages = defineMessages({
   create: { id: 'manage_group.create', defaultMessage: 'Create Group' },

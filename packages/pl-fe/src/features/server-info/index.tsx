@@ -5,7 +5,7 @@ import Column from 'pl-fe/components/ui/column';
 import Divider from 'pl-fe/components/ui/divider';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import { useInstance } from 'pl-fe/hooks';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 
 import LinkFooter from '../ui/components/link-footer';
 import PromoPanel from '../ui/components/panels/promo-panel';

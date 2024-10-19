@@ -10,7 +10,7 @@ import { useModalsStore } from 'pl-fe/stores/modals';
 
 import MediaItem from '../account-gallery/components/media-item';
 
-import type { Status } from 'pl-fe/normalizers';
+import type { Status } from 'pl-fe/normalizers/status';
 import type { AccountGalleryAttachment } from 'pl-fe/selectors';
 
 interface IGroupGallery {

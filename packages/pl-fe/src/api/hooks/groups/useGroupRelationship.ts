@@ -2,7 +2,7 @@ import * as v from 'valibot';
 
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useEntity } from 'pl-fe/entity-store/hooks';
-import { useClient } from 'pl-fe/hooks';
+import { useClient } from 'pl-fe/hooks/useClient';
 
 import type { GroupRelationship } from 'pl-api';
 

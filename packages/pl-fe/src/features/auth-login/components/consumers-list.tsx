@@ -5,7 +5,7 @@ import Card from 'pl-fe/components/ui/card';
 import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import { useInstance } from 'pl-fe/hooks';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 
 import ConsumerButton from './consumer-button';
 

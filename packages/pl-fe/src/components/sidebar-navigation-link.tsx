@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { useSettings } from 'pl-fe/hooks';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 
 import Icon from './ui/icon';
 import Text from './ui/text';

@@ -7,7 +7,7 @@ import {
 } from 'pl-api';
 import * as v from 'valibot';
 
-import { useClient } from 'pl-fe/hooks';
+import { useClient } from 'pl-fe/hooks/useClient';
 import { normalizeAnnouncement, AdminAnnouncement } from 'pl-fe/normalizers';
 import { queryClient } from 'pl-fe/queries/client';
 

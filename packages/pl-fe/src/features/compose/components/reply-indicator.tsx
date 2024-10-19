@@ -8,7 +8,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { getTextDirection } from 'pl-fe/utils/rtl';
 
-import type { Status } from 'pl-fe/normalizers';
+import type { Status } from 'pl-fe/normalizers/status';
 
 interface IReplyIndicator {
   className?: string;

@@ -5,7 +5,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import IconButton from 'pl-fe/components/ui/icon-button';
 import Portal from 'pl-fe/components/ui/portal';
-import { useClickOutside } from 'pl-fe/hooks';
+import { useClickOutside } from 'pl-fe/hooks/useClickOutside';
 
 import EmojiPickerDropdown, { IEmojiPickerDropdown } from '../components/emoji-picker-dropdown';
 

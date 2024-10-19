@@ -6,7 +6,7 @@ import Form from 'pl-fe/components/ui/form';
 import FormGroup from 'pl-fe/components/ui/form-group';
 import Input from 'pl-fe/components/ui/input';
 import Modal from 'pl-fe/components/ui/modal';
-import { useTextField } from 'pl-fe/hooks/forms';
+import { useTextField } from 'pl-fe/hooks/forms/useTextField';
 import toast from 'pl-fe/toast';
 
 import type { BaseModalProps } from '../modal-root';

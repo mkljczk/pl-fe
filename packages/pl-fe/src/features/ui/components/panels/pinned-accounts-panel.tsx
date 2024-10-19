@@ -8,7 +8,7 @@ import AccountContainer from 'pl-fe/containers/account-container';
 import { WhoToFollowPanel } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
 
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 interface IPinnedAccountsPanel {
   account: Pick<Account, 'id' | 'display_name_html'>;

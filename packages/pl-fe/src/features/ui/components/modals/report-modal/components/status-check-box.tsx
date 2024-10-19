@@ -5,7 +5,7 @@ import StatusContent from 'pl-fe/components/status-content';
 import Stack from 'pl-fe/components/ui/stack';
 import Toggle from 'pl-fe/components/ui/toggle';
 import { MediaGallery, Video, Audio } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 interface IStatusCheckBox {
   id: string;

@@ -11,7 +11,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import emojify from 'pl-fe/features/emoji';
 import { MediaGallery } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { ChatKeys, useChatActions } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
 import { useModalsStore } from 'pl-fe/stores/modals';

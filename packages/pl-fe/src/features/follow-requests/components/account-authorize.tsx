@@ -4,7 +4,7 @@ import { authorizeFollowRequest, rejectFollowRequest } from 'pl-fe/actions/accou
 import { useAccount } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
 import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 
 interface IAccountAuthorize {
   id: string;

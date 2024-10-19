@@ -8,7 +8,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch, useSettings } from 'pl-fe/hooks';
 
-import type { Status } from 'pl-fe/normalizers';
+import type { Status } from 'pl-fe/normalizers/status';
 
 const isMediaVisible = (status: Pick<Status, 'media_attachments' | 'sensitive' | 'spoiler_text'> & { hidden?: boolean | null }, displayMedia: 'default' | 'show_all' | 'hide_all') => {
   let visible = !(status.sensitive || status.spoiler_text);

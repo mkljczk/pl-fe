@@ -1,6 +1,6 @@
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useCreateEntity } from 'pl-fe/entity-store/hooks';
-import { useClient } from 'pl-fe/hooks';
+import { useClient } from 'pl-fe/hooks/useClient';
 import { normalizeGroup } from 'pl-fe/normalizers';
 
 interface UpdateGroupParams {

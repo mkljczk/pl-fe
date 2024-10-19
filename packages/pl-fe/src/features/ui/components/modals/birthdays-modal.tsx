@@ -5,7 +5,7 @@ import ScrollableList from 'pl-fe/components/scrollable-list';
 import Modal from 'pl-fe/components/ui/modal';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Account from 'pl-fe/features/birthdays/account';
-import { useAppSelector } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 import type { BaseModalProps } from '../modal-root';
 

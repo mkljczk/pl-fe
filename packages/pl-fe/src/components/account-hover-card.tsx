@@ -22,7 +22,7 @@ import { ParsedContent } from './parsed-content';
 import { dateFormatOptions } from './relative-timestamp';
 import Scrobble from './scrobble';
 
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 const getBadges = (
   account?: Pick<Account, 'is_admin' | 'is_moderator'>,

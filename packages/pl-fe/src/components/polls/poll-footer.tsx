@@ -7,12 +7,12 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Tooltip from 'pl-fe/components/ui/tooltip';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 
 import RelativeTimestamp from '../relative-timestamp';
 
 import type { Selected } from './poll';
-import type { Poll } from 'pl-fe/normalizers';
+import type { Poll } from 'pl-fe/normalizers/poll';
 
 const messages = defineMessages({
   closed: { id: 'poll.closed', defaultMessage: 'Closed' },

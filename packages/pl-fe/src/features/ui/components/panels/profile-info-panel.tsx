@@ -18,7 +18,7 @@ import ProfileField from '../profile-field';
 import ProfileStats from '../profile-stats';
 
 import type { Scrobble as ScrobbleEntity } from 'pl-api';
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 const messages = defineMessages({
   linkVerifiedOn: { id: 'account.link_verified_on', defaultMessage: 'Ownership of this link was checked on {date}' },
