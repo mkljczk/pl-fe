@@ -23,9 +23,9 @@ import {
   TIMELINE_INSERT,
 } from '../actions/timelines';
 
-import type { Status } from '../normalizers';
 import type { PaginatedResponse, Status as BaseStatus, Relationship } from 'pl-api';
 import type { ImportPosition } from 'pl-fe/entity-store/types';
+import type { Status } from 'pl-fe/normalizers/status';
 import type { AnyAction } from 'redux';
 
 const TRUNCATE_LIMIT = 40;
