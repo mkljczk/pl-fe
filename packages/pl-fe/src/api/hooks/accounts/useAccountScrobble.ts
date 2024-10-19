@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { useClient, useFeatures } from 'pl-fe/hooks';
+import { useClient } from 'pl-fe/hooks/useClient';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 
 import type { Scrobble } from 'pl-api';
 

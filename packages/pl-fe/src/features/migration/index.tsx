@@ -10,7 +10,8 @@ import FormActions from 'pl-fe/components/ui/form-actions';
 import FormGroup from 'pl-fe/components/ui/form-group';
 import Input from 'pl-fe/components/ui/input';
 import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch, useInstance } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({

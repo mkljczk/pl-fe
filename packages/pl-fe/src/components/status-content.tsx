@@ -7,7 +7,8 @@ import Icon from 'pl-fe/components/icon';
 import Button from 'pl-fe/components/ui/button';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch, useSettings } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 import { onlyEmoji as isOnlyEmoji } from 'pl-fe/utils/rich-content';
 
 import { getTextDirection } from '../utils/rtl';

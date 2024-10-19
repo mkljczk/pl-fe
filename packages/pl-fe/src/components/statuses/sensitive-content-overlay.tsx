@@ -6,7 +6,8 @@ import { hideStatusMedia, revealStatusMedia } from 'pl-fe/actions/statuses';
 import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch, useSettings } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 
 import type { Status } from 'pl-fe/normalizers/status';
 

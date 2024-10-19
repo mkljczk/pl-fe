@@ -23,7 +23,8 @@ import { createPortal } from 'react-dom';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { uploadFile } from 'pl-fe/actions/compose';
-import { useAppDispatch, useInstance } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 
 import { $createImageNode } from '../nodes/image-node';
 import { setFloatingElemPosition } from '../utils/set-floating-elem-position';

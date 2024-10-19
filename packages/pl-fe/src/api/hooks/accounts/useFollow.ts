@@ -1,7 +1,9 @@
 import { importEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useTransaction } from 'pl-fe/entity-store/hooks/useTransaction';
-import { useAppDispatch, useClient, useLoggedIn } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useClient } from 'pl-fe/hooks/useClient';
+import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
 
 interface FollowOpts {
   reblogs?: boolean;

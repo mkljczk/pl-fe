@@ -16,7 +16,9 @@ import ScrollableList from 'pl-fe/components/scrollable-list';
 import Column from 'pl-fe/components/ui/column';
 import Portal from 'pl-fe/components/ui/portal';
 import PlaceholderNotification from 'pl-fe/features/placeholder/components/placeholder-notification';
-import { useAppDispatch, useAppSelector, useSettings } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 
 import FilterBar from './components/filter-bar';
 import Notification from './components/notification';
