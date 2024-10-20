@@ -2,7 +2,7 @@ import semverCoerce from 'semver/functions/coerce';
 import gte from 'semver/functions/gte';
 import semverParse from 'semver/functions/parse';
 
-import type { Instance } from './entities';
+import type { Instance } from './entities/instance';
 
 /** Truthy array convenience function */
 const any = (arr: Array<any>): boolean => arr.some(Boolean);

@@ -1,8 +1,10 @@
 import * as v from 'valibot';
 
+import { accountSchema } from './account';
+import { groupSchema } from './group';
+import { statusSchema } from './status';
+import { tagSchema } from './tag';
 import { filteredArray } from './utils';
-
-import { accountSchema, groupSchema, statusSchema, tagSchema } from '.';
 
 /** @see {@link https://docs.joinmastodon.org/entities/Search} */
 const searchSchema = v.object({

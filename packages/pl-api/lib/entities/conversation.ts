@@ -1,8 +1,8 @@
 import * as v from 'valibot';
 
+import { accountSchema } from './account';
+import { statusSchema } from './status';
 import { filteredArray } from './utils';
-
-import { accountSchema, statusSchema } from '.';
 
 /** @see {@link https://docs.joinmastodon.org/entities/Conversation} */
 const conversationSchema = v.object({
