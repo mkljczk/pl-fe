@@ -1,4 +1,3 @@
-import { OrderedSet as ImmutableOrderedSet } from 'immutable';
 import debounce from 'lodash/debounce';
 import React, { useCallback } from 'react';
 import { defineMessages } from 'react-intl';
@@ -34,8 +33,8 @@ const Timeline: React.FC<ITimeline> = ({
   const dispatch = useAppDispatch();
   const getStatusIds = useCallback(makeGetStatusIds(), []);
 
-  const lastStatusId = useAppSelector(state => (state.timelines.get(timelineId)?.items || ImmutableOrderedSet()).last() as string | undefined);
   const statusIds = useAppSelector(state => getStatusIds(state, { type: timelineId, prefix }));
+  const lastStatusId = statusIds.last();
   const isLoading = useAppSelector(state => (state.timelines.get(timelineId) || { isLoading: true }).isLoading === true);
   const isPartial = useAppSelector(state => (state.timelines.get(timelineId)?.isPartial || false) === true);
   const hasMore = useAppSelector(state => state.timelines.get(timelineId)?.hasMore === true);
