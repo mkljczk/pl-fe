@@ -34,7 +34,6 @@ const PlFeLoad: React.FC<IPlFeLoad> = ({ children }) => {
 
   const me = useAppSelector(state => state.me);
   const { account } = useOwnAccount();
-  const swUpdating = useAppSelector(state => state.meta.swUpdating);
   const { locale } = useLocale();
 
   const [messages, setMessages] = useState<Record<string, string>>({});
@@ -47,7 +46,6 @@ const PlFeLoad: React.FC<IPlFeLoad> = ({ children }) => {
     me && !account,
     !isLoaded,
     localeLoading,
-    swUpdating,
   ].some(Boolean);
 
   // Load the user's locale
