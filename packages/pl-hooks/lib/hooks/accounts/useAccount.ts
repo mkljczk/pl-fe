@@ -38,4 +38,4 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
   return { ...accountQuery, data };
 };
 
-export { useAccount };
+export { useAccount, type UseAccountOpts };

@@ -11,9 +11,10 @@ import type {
   Status as BaseStatus,
 } from 'pl-api';
 
-const importAccount = (account: BaseAccount) => queryClient.setQueryData<BaseAccount>(
-  ['accounts', 'entities', account.id], account,
-);
+const importAccount = (account: BaseAccount) => {
+  queryClient.setQueryData<string>(['accounts', 'byAcct', account.acct.toLocaleLowerCase()], account.id);
+  return queryClient.setQueryData<BaseAccount>(['accounts', 'entities', account.id], account);
+};
 
 const importGroup = (group: BaseGroup) => queryClient.setQueryData<BaseGroup>(
   ['groups', 'entities', group.id], group,
