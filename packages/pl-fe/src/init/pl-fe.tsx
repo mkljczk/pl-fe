@@ -30,11 +30,10 @@ const PlFe: React.FC = () => (
     <QueryClientProvider client={queryClient}>
       <StatProvider>
         <HelmetProvider>
-          <PlFeHead>
-            <PlFeLoad>
-              <PlFeMount />
-            </PlFeLoad>
-          </PlFeHead>
+          <PlFeHead />
+          <PlFeLoad>
+            <PlFeMount />
+          </PlFeLoad>
         </HelmetProvider>
       </StatProvider>
     </QueryClientProvider>

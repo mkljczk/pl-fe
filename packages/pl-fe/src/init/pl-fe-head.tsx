@@ -12,12 +12,8 @@ import { generateThemeCss } from 'pl-fe/utils/theme';
 
 const Helmet = React.lazy(() => import('pl-fe/components/helmet'));
 
-interface IPlFeHead {
-  children: React.ReactNode;
-}
-
 /** Injects metadata into site head with Helmet. */
-const PlFeHead: React.FC<IPlFeHead> = ({ children }) => {
+const PlFeHead = () => {
   const { locale, direction } = useLocale();
   const { demo, reduceMotion, underlineLinks, demetricator, systemFont } = useSettings();
   const plFeConfig = usePlFeConfig();
@@ -43,17 +39,13 @@ const PlFeHead: React.FC<IPlFeHead> = ({ children }) => {
   }, [dsn]);
 
   return (
-    <>
-      <Helmet>
-        <html lang={locale} className={clsx('h-full', { 'dark': theme === 'dark', 'dark black': theme === 'black' })} />
-        <body className={bodyClass} dir={direction} />
-        {themeCss && <style id='theme' type='text/css'>{`:root{${themeCss}}`}</style>}
-        {['dark', 'black'].includes(theme) && <style type='text/css'>{':root { color-scheme: dark; }'}</style>}
-        <meta name='theme-color' content={plFeConfig.brandColor} />
-      </Helmet>
-
-      {children}
-    </>
+    <Helmet>
+      <html lang={locale} className={clsx('h-full', { 'dark': theme === 'dark', 'dark black': theme === 'black' })} />
+      <body className={bodyClass} dir={direction} />
+      {themeCss && <style id='theme' type='text/css'>{`:root{${themeCss}}`}</style>}
+      {['dark', 'black'].includes(theme) && <style type='text/css'>{':root { color-scheme: dark; }'}</style>}
+      <meta name='theme-color' content={plFeConfig.brandColor} />
+    </Helmet>
   );
 };
 
