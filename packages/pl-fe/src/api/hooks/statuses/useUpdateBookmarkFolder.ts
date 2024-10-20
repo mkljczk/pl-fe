@@ -1,6 +1,6 @@
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useCreateEntity } from 'pl-fe/entity-store/hooks';
-import { useClient } from 'pl-fe/hooks';
+import { useCreateEntity } from 'pl-fe/entity-store/hooks/useCreateEntity';
+import { useClient } from 'pl-fe/hooks/useClient';
 
 interface UpdateBookmarkFolderParams {
   name: string;

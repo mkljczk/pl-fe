@@ -6,8 +6,11 @@ import * as v from 'valibot';
 import GroupAvatar from 'pl-fe/components/groups/group-avatar';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
 import StillImage from 'pl-fe/components/still-image';
-import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
-import { useModalsStore } from 'pl-fe/stores';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import { isDefaultHeader } from 'pl-fe/utils/accounts';
 
 import GroupActionButton from './group-action-button';
@@ -16,7 +19,7 @@ import GroupOptionsButton from './group-options-button';
 import GroupPrivacy from './group-privacy';
 import GroupRelationship from './group-relationship';
 
-import type { Group } from 'pl-fe/normalizers';
+import type { Group } from 'pl-fe/normalizers/group';
 
 const messages = defineMessages({
   header: { id: 'group.header.alt', defaultMessage: 'Group header' },

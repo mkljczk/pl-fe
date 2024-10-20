@@ -2,9 +2,10 @@ import { useStatus } from 'pl-hooks';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Modal } from 'pl-fe/components/ui';
+import Modal from 'pl-fe/components/ui/modal';
 import Account from 'pl-fe/features/reply-mentions/account';
-import { useCompose, useOwnAccount } from 'pl-fe/hooks';
+import { useCompose } from 'pl-fe/hooks/useCompose';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 import { statusToMentionsAccountIdsArray } from 'pl-fe/reducers/compose';
 
 import type { BaseModalProps } from '../modal-root';

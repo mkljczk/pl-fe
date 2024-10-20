@@ -2,7 +2,7 @@ import { importEntities } from 'pl-hooks';
 import { defineMessages } from 'react-intl';
 
 import { getClient } from 'pl-fe/api';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import toast, { type IToastOptions } from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 

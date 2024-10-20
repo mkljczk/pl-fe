@@ -1,9 +1,10 @@
 import { GroupRoles } from 'pl-api';
 
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useDismissEntity, useEntities } from 'pl-fe/entity-store/hooks';
-import { useClient } from 'pl-fe/hooks';
-import { normalizeAccount } from 'pl-fe/normalizers';
+import { useDismissEntity  } from 'pl-fe/entity-store/hooks/useDismissEntity';
+import { useEntities } from 'pl-fe/entity-store/hooks/useEntities';
+import { useClient } from 'pl-fe/hooks/useClient';
+import { normalizeAccount } from 'pl-fe/normalizers/account';
 
 import { useGroupRelationship } from './useGroupRelationship';
 

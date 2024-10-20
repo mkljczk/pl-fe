@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl';
 
 import { getClient } from 'pl-fe/api';
-import { normalizeAccount } from 'pl-fe/normalizers';
+import { normalizeAccount } from 'pl-fe/normalizers/account';
 import toast from 'pl-fe/toast';
 
 import type { Account, PaginatedResponse } from 'pl-api';

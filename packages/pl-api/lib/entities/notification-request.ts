@@ -1,8 +1,8 @@
 import * as v from 'valibot';
 
+import { accountSchema } from './account';
+import { statusSchema } from './status';
 import { datetimeSchema } from './utils';
-
-import { accountSchema, statusSchema } from '.';
 
 /** @see {@link https://docs.joinmastodon.org/entities/NotificationRequest} */
 const notificationRequestSchema = v.object({

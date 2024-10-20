@@ -7,12 +7,14 @@ import { Link } from 'react-router-dom';
 import { fetchOwnAccounts, logOut, switchAccount } from 'pl-fe/actions/auth';
 import Account from 'pl-fe/components/account';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import { makeGetAccount } from 'pl-fe/selectors';
 
 import ThemeToggle from './theme-toggle';
 
-import type { Account as AccountEntity } from 'pl-fe/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 
 const messages = defineMessages({
   add: { id: 'profile_dropdown.add_account', defaultMessage: 'Add an existing account' },

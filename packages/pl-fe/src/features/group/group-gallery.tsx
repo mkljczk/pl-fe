@@ -1,15 +1,17 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useGroup, useGroupMedia } from 'pl-fe/api/hooks';
+import { useGroup } from 'pl-fe/api/hooks/groups/useGroup';
+import { useGroupMedia } from 'pl-fe/api/hooks/groups/useGroupMedia';
 import LoadMore from 'pl-fe/components/load-more';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
-import { Column, Spinner } from 'pl-fe/components/ui';
-import { useModalsStore } from 'pl-fe/stores';
+import Column from 'pl-fe/components/ui/column';
+import Spinner from 'pl-fe/components/ui/spinner';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import MediaItem from '../account-gallery/components/media-item';
 
-import type { Status } from 'pl-fe/normalizers';
+import type { Status } from 'pl-fe/normalizers/status';
 import type { AccountGalleryAttachment } from 'pl-fe/selectors';
 
 interface IGroupGallery {

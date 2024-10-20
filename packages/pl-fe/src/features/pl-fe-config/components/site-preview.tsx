@@ -3,9 +3,9 @@ import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import BackgroundShapes from 'pl-fe/features/ui/components/background-shapes';
-import { useSystemTheme } from 'pl-fe/hooks';
-import { normalizePlFeConfig } from 'pl-fe/normalizers';
-import { useSettingsStore } from 'pl-fe/stores';
+import { useSystemTheme } from 'pl-fe/hooks/useSystemTheme';
+import { normalizePlFeConfig } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { generateThemeCss } from 'pl-fe/utils/theme';
 
 interface ISitePreview {

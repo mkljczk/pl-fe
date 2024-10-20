@@ -2,8 +2,9 @@ import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Icon from 'pl-fe/components/icon';
-import { HStack, Text } from 'pl-fe/components/ui';
-import { useAppSelector } from 'pl-fe/hooks';
+import HStack from 'pl-fe/components/ui/hstack';
+import Text from 'pl-fe/components/ui/text';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 interface IUploadButton {
   disabled?: boolean;

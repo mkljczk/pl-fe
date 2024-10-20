@@ -5,20 +5,25 @@ import { useIntl, FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { fetchRelationships } from 'pl-fe/actions/accounts';
-import { useAccount } from 'pl-fe/api/hooks';
+import { useAccount } from 'pl-fe/api/hooks/accounts/useAccount';
 import Badge from 'pl-fe/components/badge';
+import Card, { CardBody } from 'pl-fe/components/ui/card';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
 import { UserPanel } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
-import { useAccountHoverCardStore } from 'pl-fe/stores';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useAccountHoverCardStore } from 'pl-fe/stores/account-hover-card';
 
 import { showAccountHoverCard } from './hover-account-wrapper';
 import { ParsedContent } from './parsed-content';
 import { dateFormatOptions } from './relative-timestamp';
 import Scrobble from './scrobble';
-import { Card, CardBody, HStack, Icon, Stack, Text } from './ui';
 
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 const getBadges = (
   account?: Pick<Account, 'is_admin' | 'is_moderator'>,

@@ -3,11 +3,16 @@ import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { bookmark } from 'pl-fe/actions/interactions';
-import { useBookmarkFolders } from 'pl-fe/api/hooks';
+import { useBookmarkFolders } from 'pl-fe/api/hooks/statuses/useBookmarkFolders';
 import { RadioGroup, RadioItem } from 'pl-fe/components/radio';
-import { Emoji, HStack, Icon, Modal, Spinner, Stack } from 'pl-fe/components/ui';
+import Emoji from 'pl-fe/components/ui/emoji';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Modal from 'pl-fe/components/ui/modal';
+import Spinner from 'pl-fe/components/ui/spinner';
+import Stack from 'pl-fe/components/ui/stack';
 import NewFolderForm from 'pl-fe/features/bookmark-folders/components/new-folder-form';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 
 import type { BaseModalProps } from '../modal-root';
 

@@ -4,8 +4,13 @@ import { FormattedDate, FormattedMessage } from 'react-intl';
 import { fetchHistory } from 'pl-fe/actions/history';
 import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
-import { HStack, Modal, Spinner, Stack, Text } from 'pl-fe/components/ui';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import HStack from 'pl-fe/components/ui/hstack';
+import Modal from 'pl-fe/components/ui/modal';
+import Spinner from 'pl-fe/components/ui/spinner';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 import type { BaseModalProps } from '../modal-root';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { Modal } from 'pl-fe/components/ui';
+import Modal from 'pl-fe/components/ui/modal';
 
 import type { BaseModalProps } from '../modal-root';
 

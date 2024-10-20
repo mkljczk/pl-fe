@@ -7,28 +7,30 @@ import { updateNotificationSettings } from 'pl-fe/actions/accounts';
 import { patchMe } from 'pl-fe/actions/me';
 import BirthdayInput from 'pl-fe/components/birthday-input';
 import List, { ListItem } from 'pl-fe/components/list';
-import {
-  Button,
-  Column,
-  Form,
-  FormActions,
-  FormGroup,
-  HStack,
-  Input,
-  Streamfield,
-  Textarea,
-  Toggle,
-} from 'pl-fe/components/ui';
-import { useAppDispatch, useOwnAccount, useFeatures, useInstance, useAppSelector } from 'pl-fe/hooks';
-import { useImageField } from 'pl-fe/hooks/forms';
+import Button from 'pl-fe/components/ui/button';
+import Column from 'pl-fe/components/ui/column';
+import Form from 'pl-fe/components/ui/form';
+import FormActions from 'pl-fe/components/ui/form-actions';
+import FormGroup from 'pl-fe/components/ui/form-group';
+import HStack from 'pl-fe/components/ui/hstack';
+import Input from 'pl-fe/components/ui/input';
+import Streamfield from 'pl-fe/components/ui/streamfield';
+import Textarea from 'pl-fe/components/ui/textarea';
+import Toggle from 'pl-fe/components/ui/toggle';
+import { useImageField } from 'pl-fe/hooks/forms/useImageField';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useInstance } from 'pl-fe/hooks/useInstance';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 import toast from 'pl-fe/toast';
 import { isDefaultAvatar, isDefaultHeader } from 'pl-fe/utils/accounts';
 
 import AvatarPicker from './components/avatar-picker';
 import HeaderPicker from './components/header-picker';
 
-import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield/streamfield';
-import type { Account } from 'pl-fe/normalizers';
+import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield';
+import type { Account } from 'pl-fe/normalizers/account';
 
 const nonDefaultAvatar = (url: string | undefined) => url && isDefaultAvatar(url) ? undefined : url;
 const nonDefaultHeader = (url: string | undefined) => url && isDefaultHeader(url) ? undefined : url;

@@ -5,7 +5,8 @@ import Blurhash from 'pl-fe/components/blurhash';
 import Icon from 'pl-fe/components/icon';
 import StillImage from 'pl-fe/components/still-image';
 import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
-import { useSettings, usePlFeConfig } from 'pl-fe/hooks';
+import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 import { truncateFilename } from 'pl-fe/utils/media';
 
 import { isIOS } from '../is-mobile';

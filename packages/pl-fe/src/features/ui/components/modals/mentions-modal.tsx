@@ -4,9 +4,10 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Modal, Spinner } from 'pl-fe/components/ui';
+import Modal from 'pl-fe/components/ui/modal';
+import Spinner from 'pl-fe/components/ui/spinner';
 import AccountContainer from 'pl-fe/containers/account-container';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 
 import type { BaseModalProps } from '../modal-root';
 

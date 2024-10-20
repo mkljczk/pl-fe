@@ -2,9 +2,9 @@ import { createSelector } from 'reselect';
 
 import { getHost } from 'pl-fe/actions/instance';
 import { getClient, staticFetch } from 'pl-fe/api';
-import { normalizePlFeConfig } from 'pl-fe/normalizers';
+import { normalizePlFeConfig } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
 import KVStore from 'pl-fe/storage/kv-store';
-import { useSettingsStore } from 'pl-fe/stores';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
 import type { APIEntity } from 'pl-fe/types/entities';

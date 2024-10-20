@@ -2,9 +2,11 @@ import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useEntityLookup } from 'pl-fe/entity-store/hooks';
-import { useClient, useFeatures, useLoggedIn } from 'pl-fe/hooks';
-import { type Account, normalizeAccount } from 'pl-fe/normalizers';
+import { useEntityLookup } from 'pl-fe/entity-store/hooks/useEntityLookup';
+import { useClient } from 'pl-fe/hooks/useClient';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
+import { type Account, normalizeAccount } from 'pl-fe/normalizers/account';
 
 import { useAccountScrobble } from './useAccountScrobble';
 import { useRelationship } from './useRelationship';

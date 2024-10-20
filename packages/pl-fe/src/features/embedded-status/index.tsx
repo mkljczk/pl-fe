@@ -5,8 +5,8 @@ import { useHistory } from 'react-router-dom';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import SiteLogo from 'pl-fe/components/site-logo';
 import Status from 'pl-fe/components/status';
-import { Spinner } from 'pl-fe/components/ui';
-import { useLogo } from 'pl-fe/hooks';
+import Spinner from 'pl-fe/components/ui/spinner';
+import { useLogo } from 'pl-fe/hooks/useLogo';
 import { iframeId } from 'pl-fe/iframe';
 
 interface IEmbeddedStatus {

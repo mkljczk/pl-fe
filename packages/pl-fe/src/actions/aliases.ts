@@ -6,7 +6,7 @@ import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import type { Account as BaseAccount } from 'pl-api';
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const ALIASES_FETCH_REQUEST = 'ALIASES_FETCH_REQUEST' as const;

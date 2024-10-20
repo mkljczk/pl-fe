@@ -2,8 +2,9 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { BigCard } from 'pl-fe/components/big-card';
-import { Text } from 'pl-fe/components/ui';
-import { useInstance, useRegistrationStatus } from 'pl-fe/hooks';
+import Text from 'pl-fe/components/ui/text';
+import { useInstance } from 'pl-fe/hooks/useInstance';
+import { useRegistrationStatus } from 'pl-fe/hooks/useRegistrationStatus';
 
 import RegistrationForm from './registration-form';
 

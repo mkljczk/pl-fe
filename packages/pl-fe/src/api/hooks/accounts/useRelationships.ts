@@ -1,6 +1,7 @@
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useBatchedEntities } from 'pl-fe/entity-store/hooks/useBatchedEntities';
-import { useClient, useLoggedIn } from 'pl-fe/hooks';
+import { useClient } from 'pl-fe/hooks/useClient';
+import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
 
 import type { Relationship } from 'pl-api';
 

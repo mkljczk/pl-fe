@@ -3,9 +3,11 @@ import { FormattedMessage } from 'react-intl';
 
 import { fetchFavourites, expandFavourites } from 'pl-fe/actions/interactions';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Modal, Spinner } from 'pl-fe/components/ui';
+import Modal from 'pl-fe/components/ui/modal';
+import Spinner from 'pl-fe/components/ui/spinner';
 import AccountContainer from 'pl-fe/containers/account-container';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 import type { BaseModalProps } from '../modal-root';
 

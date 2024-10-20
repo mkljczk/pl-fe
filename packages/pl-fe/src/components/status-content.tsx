@@ -4,8 +4,11 @@ import { FormattedMessage } from 'react-intl';
 
 import { collapseStatusSpoiler, expandStatusSpoiler } from 'pl-fe/actions/statuses';
 import Icon from 'pl-fe/components/icon';
-import { Button, Stack, Text } from 'pl-fe/components/ui';
-import { useAppDispatch, useSettings } from 'pl-fe/hooks';
+import Button from 'pl-fe/components/ui/button';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 import { onlyEmoji as isOnlyEmoji } from 'pl-fe/utils/rich-content';
 
 import { getTextDirection } from '../utils/rtl';
@@ -14,7 +17,7 @@ import Markup from './markup';
 import { ParsedContent } from './parsed-content';
 import Poll from './polls/poll';
 
-import type { Sizes } from 'pl-fe/components/ui/text/text';
+import type { Sizes } from 'pl-fe/components/ui/text';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 
 const BIG_EMOJI_LIMIT = 10;

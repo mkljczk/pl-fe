@@ -31,7 +31,7 @@ const mimeSchema = v.pipe(v.string(), v.regex(/^\w+\/[-+.\w]+$/));
 const coerceObject = <T extends v.ObjectEntries>(shape: T) =>
   v.pipe(
     v.any(),
-    v.transform((input) => typeof input === 'object' ? input : {}),
+    v.transform((input) => typeof input === 'object' && input !== null ? input : {}),
     v.object(shape),
   );
 

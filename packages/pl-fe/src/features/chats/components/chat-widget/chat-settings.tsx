@@ -2,12 +2,18 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { blockAccount, unblockAccount } from 'pl-fe/actions/accounts';
-import { Avatar, HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
+import Avatar from 'pl-fe/components/ui/avatar';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import { useChatActions } from 'pl-fe/queries/chats';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import ChatPaneHeader from './chat-pane-header';
 

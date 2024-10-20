@@ -4,19 +4,23 @@ import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { groupKick } from 'pl-fe/actions/groups';
-import { useAccount, useBlockGroupMember, useDemoteGroupMember, usePromoteGroupMember } from 'pl-fe/api/hooks';
+import { useAccount } from 'pl-fe/api/hooks/accounts/useAccount';
+import { useBlockGroupMember } from 'pl-fe/api/hooks/groups/useBlockGroupMember';
+import { useDemoteGroupMember } from 'pl-fe/api/hooks/groups/useDemoteGroupMember';
+import { usePromoteGroupMember } from 'pl-fe/api/hooks/groups/usePromoteGroupMember';
 import Account from 'pl-fe/components/account';
 import DropdownMenu from 'pl-fe/components/dropdown-menu/dropdown-menu';
-import { HStack } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
 import { deleteEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
 import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholder-account';
-import { useAppDispatch } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 import type { Menu as IMenu } from 'pl-fe/components/dropdown-menu';
-import type { Group, GroupMember } from 'pl-fe/normalizers';
+import type { Group } from 'pl-fe/normalizers/group';
+import type { GroupMember } from 'pl-fe/normalizers/group-member';
 
 const messages = defineMessages({
   adminLimitTitle: { id: 'group.member.admin.limit.title', defaultMessage: 'Admin limit reached' },

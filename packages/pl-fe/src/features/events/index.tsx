@@ -2,9 +2,13 @@ import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchJoinedEvents, fetchRecentEvents } from 'pl-fe/actions/events';
-import { Button, CardBody, CardHeader, CardTitle, Column, HStack } from 'pl-fe/components/ui';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import Button from 'pl-fe/components/ui/button';
+import { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
+import Column from 'pl-fe/components/ui/column';
+import HStack from 'pl-fe/components/ui/hstack';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import EventCarousel from './components/event-carousel';
 

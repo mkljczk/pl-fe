@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { __stub } from 'pl-fe/api';
 import { buildAccount, buildRelationship } from 'pl-fe/jest/factory';
 import { createTestStore, mockStore, queryClient, renderHook, rootState, waitFor } from 'pl-fe/jest/test-helpers';
-import { normalizeChatMessage } from 'pl-fe/normalizers';
+import { normalizeChatMessage } from 'pl-fe/normalizers/chat-message';
 import { Store } from 'pl-fe/store';
 import { flattenPages } from 'pl-fe/utils/queries';
 

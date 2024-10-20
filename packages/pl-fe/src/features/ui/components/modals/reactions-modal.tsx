@@ -5,12 +5,16 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchReactions } from 'pl-fe/actions/interactions';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Emoji, Modal, Spinner, Tabs } from 'pl-fe/components/ui';
+import Emoji from 'pl-fe/components/ui/emoji';
+import Modal from 'pl-fe/components/ui/modal';
+import Spinner from 'pl-fe/components/ui/spinner';
+import Tabs from 'pl-fe/components/ui/tabs';
 import AccountContainer from 'pl-fe/containers/account-container';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 import type { BaseModalProps } from '../modal-root';
-import type { Item } from 'pl-fe/components/ui/tabs/tabs';
+import type { Item } from 'pl-fe/components/ui/tabs';
 
 const messages = defineMessages({
   all: { id: 'reactions.all', defaultMessage: 'All' },

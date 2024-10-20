@@ -3,14 +3,17 @@ import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchGroupTimeline } from 'pl-fe/actions/timelines';
-import { Spinner, Text, Widget } from 'pl-fe/components/ui';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import Spinner from 'pl-fe/components/ui/spinner';
+import Text from 'pl-fe/components/ui/text';
+import Widget from 'pl-fe/components/ui/widget';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { type AccountGalleryAttachment, getGroupGallery } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import MediaItem from '../../../account-gallery/components/media-item';
 
-import type { Group } from 'pl-fe/normalizers';
+import type { Group } from 'pl-fe/normalizers/group';
 
 interface IGroupMediaPanel {
   group?: Group;

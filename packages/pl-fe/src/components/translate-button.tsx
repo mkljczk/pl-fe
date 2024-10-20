@@ -2,12 +2,18 @@ import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { translateStatus, undoStatusTranslation } from 'pl-fe/actions/statuses';
-import { useTranslationLanguages } from 'pl-fe/api/hooks';
-import { useAppDispatch, useAppSelector, useFeatures, useInstance, useSettings } from 'pl-fe/hooks';
+import { useTranslationLanguages } from 'pl-fe/api/hooks/instance/useTranslationLanguages';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useInstance } from 'pl-fe/hooks/useInstance';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 
-import { HStack, Icon, Stack, Text } from './ui';
-
-import type { Status } from 'pl-fe/normalizers';
+import type { Status } from 'pl-fe/normalizers/status';
 
 interface ITranslateButton {
   status: Pick<Status, 'id' | 'account' | 'contentHtml' | 'contentMapHtml' | 'language' | 'translating' | 'translation' | 'visibility'>;

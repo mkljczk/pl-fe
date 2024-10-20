@@ -2,11 +2,15 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { useAccount } from 'pl-fe/api/hooks';
+import { useAccount } from 'pl-fe/api/hooks/accounts/useAccount';
 import StillImage from 'pl-fe/components/still-image';
-import { Avatar, HStack, Stack, Text } from 'pl-fe/components/ui';
+import Avatar from 'pl-fe/components/ui/avatar';
+import HStack from 'pl-fe/components/ui/hstack';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
-import { useAppSelector, useSettings } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 import { getAcct } from 'pl-fe/utils/accounts';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 import { displayFqn } from 'pl-fe/utils/state';

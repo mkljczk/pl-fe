@@ -2,8 +2,10 @@ import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
 import { pinHost, unpinHost } from 'pl-fe/actions/remote-timeline';
-import { Widget } from 'pl-fe/components/ui';
-import { useAppSelector, useAppDispatch, useSettings } from 'pl-fe/hooks';
+import Widget from 'pl-fe/components/ui/widget';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 import { makeGetRemoteInstance } from 'pl-fe/selectors';
 
 const getRemoteInstance = makeGetRemoteInstance();

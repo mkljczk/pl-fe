@@ -3,10 +3,10 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 
 import { accountSearch } from 'pl-fe/actions/accounts';
 import AutosuggestInput, { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 
 import type { Menu } from 'pl-fe/components/dropdown-menu';
-import type { InputThemes } from 'pl-fe/components/ui/input/input';
+import type { InputThemes } from 'pl-fe/components/ui/input';
 
 const noOp = () => { };
 

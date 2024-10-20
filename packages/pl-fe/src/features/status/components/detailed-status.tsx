@@ -12,7 +12,10 @@ import StatusReplyMentions from 'pl-fe/components/status-reply-mentions';
 import SensitiveContentOverlay from 'pl-fe/components/statuses/sensitive-content-overlay';
 import StatusInfo from 'pl-fe/components/statuses/status-info';
 import TranslateButton from 'pl-fe/components/translate-button';
-import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
 
 import StatusInteractionBar from './status-interaction-bar';

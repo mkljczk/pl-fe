@@ -2,8 +2,9 @@ import clsx from 'clsx';
 import React, { useCallback, useRef } from 'react';
 
 import { changeMediaOrder } from 'pl-fe/actions/compose';
-import { HStack } from 'pl-fe/components/ui';
-import { useAppDispatch, useCompose } from 'pl-fe/hooks';
+import HStack from 'pl-fe/components/ui/hstack';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useCompose } from 'pl-fe/hooks/useCompose';
 
 import Upload from './upload';
 import UploadProgress from './upload-progress';

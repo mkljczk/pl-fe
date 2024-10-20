@@ -4,11 +4,16 @@ import { useHistory } from 'react-router-dom';
 
 import { fetchAccountByUsername } from 'pl-fe/actions/accounts';
 import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
-import { useAccountLookup } from 'pl-fe/api/hooks';
+import { useAccountLookup } from 'pl-fe/api/hooks/accounts/useAccountLookup';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StatusList from 'pl-fe/components/status-list';
-import { Card, CardBody, Spinner, Text } from 'pl-fe/components/ui';
-import { useAppDispatch, useAppSelector, useFeatures, useSettings } from 'pl-fe/hooks';
+import Card, { CardBody } from 'pl-fe/components/ui/card';
+import Spinner from 'pl-fe/components/ui/spinner';
+import Text from 'pl-fe/components/ui/text';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 import { makeGetStatusIds } from 'pl-fe/selectors';
 
 const getStatusIds = makeGetStatusIds();

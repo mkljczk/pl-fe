@@ -2,8 +2,13 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Account from 'pl-fe/components/account';
-import { Button, Card, CardBody, Icon, Stack, Text } from 'pl-fe/components/ui';
-import { useInstance, useOwnAccount } from 'pl-fe/hooks';
+import Button from 'pl-fe/components/ui/button';
+import Card, { CardBody } from 'pl-fe/components/ui/card';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
+import { useInstance } from 'pl-fe/hooks/useInstance';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 
 const FediverseStep = ({ onNext }: { onNext: () => void }) => {
   const { account } = useOwnAccount();

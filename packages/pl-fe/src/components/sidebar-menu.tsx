@@ -5,17 +5,26 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link, NavLink } from 'react-router-dom';
 
 import { fetchOwnAccounts, logOut, switchAccount } from 'pl-fe/actions/auth';
-import { useAccount } from 'pl-fe/api/hooks';
+import { useAccount } from 'pl-fe/api/hooks/accounts/useAccount';
 import Account from 'pl-fe/components/account';
-import { Stack, Divider, HStack, Icon, Text } from 'pl-fe/components/ui';
+import Divider from 'pl-fe/components/ui/divider';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import ProfileStats from 'pl-fe/features/ui/components/profile-stats';
-import { useAppDispatch, useAppSelector, useFeatures, useInstance, useRegistrationStatus } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useInstance } from 'pl-fe/hooks/useInstance';
+import { useRegistrationStatus } from 'pl-fe/hooks/useRegistrationStatus';
 import { makeGetOtherAccounts } from 'pl-fe/selectors';
-import { useUiStore, useSettingsStore } from 'pl-fe/stores';
+import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useUiStore } from 'pl-fe/stores/ui';
 import sourceCode from 'pl-fe/utils/code';
 
 import type { List as ImmutableList } from 'immutable';
-import type { Account as AccountEntity } from 'pl-fe/normalizers';
+import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 
 const messages = defineMessages({
   profile: { id: 'account.profile', defaultMessage: 'Profile' },

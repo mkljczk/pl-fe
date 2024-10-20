@@ -7,8 +7,12 @@ import * as v from 'valibot';
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useAppSelector, useClient, useFeatures, useLoggedIn, useOwnAccount } from 'pl-fe/hooks';
-import { type ChatMessage, normalizeChatMessage } from 'pl-fe/normalizers';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useClient } from 'pl-fe/hooks/useClient';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
+import { type ChatMessage, normalizeChatMessage } from 'pl-fe/normalizers/chat-message';
 import { reOrderChatListItems } from 'pl-fe/utils/chats';
 import { flattenPages, updatePageItem } from 'pl-fe/utils/queries';
 

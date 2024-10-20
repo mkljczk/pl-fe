@@ -1,8 +1,9 @@
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
-import { useCompose, useFeatures } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { useCompose } from 'pl-fe/hooks/useCompose';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 interface IReplyMentions {
   composeId: string;
@@ -12,10 +13,9 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
   const { openModal } = useModalsStore();
   const features = useFeatures();
   const compose = useCompose(composeId);
-
   const to = compose.to.toArray();
 
-  if (!features.createStatusExplicitAddressing || compose.in_reply_to || !to) {
+  if (!features.createStatusExplicitAddressing || !compose.in_reply_to || !to) {
     return null;
   }
 

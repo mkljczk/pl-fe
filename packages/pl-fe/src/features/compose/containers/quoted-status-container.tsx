@@ -3,7 +3,8 @@ import React from 'react';
 
 import { cancelQuoteCompose } from 'pl-fe/actions/compose';
 import QuotedStatus from 'pl-fe/components/quoted-status';
-import { useAppDispatch, useCompose } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useCompose } from 'pl-fe/hooks/useCompose';
 
 interface IQuotedStatusContainer {
   composeId: string;

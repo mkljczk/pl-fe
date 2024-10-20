@@ -4,10 +4,11 @@ import { defineMessages, IntlShape } from 'react-intl';
 import { fetchAccountByUsername } from 'pl-fe/actions/accounts';
 import { deactivateUser, deleteUser, deleteStatus, toggleStatusSensitivity } from 'pl-fe/actions/admin';
 import OutlineBox from 'pl-fe/components/outline-box';
-import { Stack, Text } from 'pl-fe/components/ui';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { selectAccount } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';

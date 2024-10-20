@@ -1,19 +1,9 @@
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useCreateEntity } from 'pl-fe/entity-store/hooks';
-import { useClient } from 'pl-fe/hooks';
-import { normalizeGroup, type Group } from 'pl-fe/normalizers';
+import { useCreateEntity } from 'pl-fe/entity-store/hooks/useCreateEntity';
+import { useClient } from 'pl-fe/hooks/useClient';
+import { normalizeGroup, type Group } from 'pl-fe/normalizers/group';
 
-import type { Group as BaseGroup } from 'pl-api';
-
-interface CreateGroupParams {
-  display_name: string;
-  note?: string;
-  avatar?: File;
-  header?: File;
-  group_visibility?: 'members_only' | 'everyone';
-  discoverable?: boolean;
-  tags?: string[];
-}
+import type { Group as BaseGroup, CreateGroupParams } from 'pl-api';
 
 const useCreateGroup = () => {
   const client = useClient();
@@ -30,4 +20,4 @@ const useCreateGroup = () => {
   };
 };
 
-export { useCreateGroup, type CreateGroupParams };
+export { useCreateGroup };

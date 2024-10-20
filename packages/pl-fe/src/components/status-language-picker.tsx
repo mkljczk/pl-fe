@@ -2,13 +2,15 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { changeStatusLanguage } from 'pl-fe/actions/statuses';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Text from 'pl-fe/components/ui/text';
 import { type Language, languages } from 'pl-fe/features/preferences';
-import { useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 
 import DropdownMenu from './dropdown-menu';
-import { HStack, Icon, Text } from './ui';
 
-import type { Status } from 'pl-fe/normalizers';
+import type { Status } from 'pl-fe/normalizers/status';
 
 const messages = defineMessages({
   languageVersions: { id: 'status.language_versions', defaultMessage: 'The post has multiple language versions.' },

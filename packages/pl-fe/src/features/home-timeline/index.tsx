@@ -4,10 +4,16 @@ import { Link } from 'react-router-dom';
 
 import { fetchHomeTimeline } from 'pl-fe/actions/timelines';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import { Column, Stack, Text } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import Timeline from 'pl-fe/features/ui/components/timeline';
-import { useAppSelector, useAppDispatch, useFeatures, useInstance, useTheme } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
+import { useTheme } from 'pl-fe/hooks/useTheme';
 
 const messages = defineMessages({
   title: { id: 'column.home', defaultMessage: 'Home' },

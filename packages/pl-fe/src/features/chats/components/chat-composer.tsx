@@ -3,12 +3,18 @@ import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
 import { unblockAccount } from 'pl-fe/actions/accounts';
 import { useRelationship } from 'pl-fe/api/hooks/accounts/useRelationship';
-import { Button, Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover, HStack, IconButton, Stack, Text } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Combobox, { ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover } from 'pl-fe/components/ui/combobox';
+import HStack from 'pl-fe/components/ui/hstack';
+import IconButton from 'pl-fe/components/ui/icon-button';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
 import UploadButton from 'pl-fe/features/compose/components/upload-button';
 import emojiSearch from 'pl-fe/features/emoji/search';
-import { useAppDispatch, useInstance } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useInstance } from 'pl-fe/hooks/useInstance';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
 
 import ChatTextarea from './chat-textarea';

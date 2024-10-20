@@ -1,6 +1,7 @@
 import { importEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
-import { normalizeAccount, normalizeGroup, type Account, type Group } from 'pl-fe/normalizers';
+import { normalizeAccount, type Account } from 'pl-fe/normalizers/account';
+import { normalizeGroup, type Group } from 'pl-fe/normalizers/group';
 
 import type { Account as BaseAccount, Group as BaseGroup, Poll, Status as BaseStatus } from 'pl-api';
 import type { AppDispatch } from 'pl-fe/store';

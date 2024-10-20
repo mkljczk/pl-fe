@@ -9,16 +9,23 @@ import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import Icon from 'pl-fe/components/icon';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
-import { HStack, Text, Emoji } from 'pl-fe/components/ui';
+import Emoji from 'pl-fe/components/ui/emoji';
+import HStack from 'pl-fe/components/ui/hstack';
+import Text from 'pl-fe/components/ui/text';
 import AccountContainer from 'pl-fe/containers/account-container';
 import StatusContainer from 'pl-fe/containers/status-container';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
-import { useAppDispatch, useInstance, useLoggedIn } from 'pl-fe/hooks';
-import { useModalsStore, useSettingsStore } from 'pl-fe/stores';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useInstance } from 'pl-fe/hooks/useInstance';
+import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
+import { useModalsStore } from 'pl-fe/stores/modals';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { NotificationType } from 'pl-fe/utils/notification';
 
 import type { Notification as BaseNotification } from 'pl-api';
-import type { Account, Notification as NotificationEntity, Status as StatusEntity } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
+import type { Notification as NotificationEntity } from 'pl-fe/normalizers/notification';
+import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
 
 const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: string) => {
   const output = [message];

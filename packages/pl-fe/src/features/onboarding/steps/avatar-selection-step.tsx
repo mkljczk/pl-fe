@@ -4,8 +4,13 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { patchMe } from 'pl-fe/actions/me';
 import { BigCard } from 'pl-fe/components/big-card';
-import { Avatar, Button, Icon, Spinner, Stack } from 'pl-fe/components/ui';
-import { useAppDispatch, useOwnAccount } from 'pl-fe/hooks';
+import Avatar from 'pl-fe/components/ui/avatar';
+import Button from 'pl-fe/components/ui/button';
+import Icon from 'pl-fe/components/ui/icon';
+import Spinner from 'pl-fe/components/ui/spinner';
+import Stack from 'pl-fe/components/ui/stack';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 import toast from 'pl-fe/toast';
 import { isDefaultAvatar } from 'pl-fe/utils/accounts';
 import resizeImage from 'pl-fe/utils/resize-image';

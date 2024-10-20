@@ -6,13 +6,16 @@ import { Link } from 'react-router-dom';
 import { fetchAccountFamiliarFollowers } from 'pl-fe/actions/familiar-followers';
 import AvatarStack from 'pl-fe/components/avatar-stack';
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
-import { HStack, Text } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
-import { useAppDispatch, useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import { makeGetAccount } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 const getAccount = makeGetAccount();
 

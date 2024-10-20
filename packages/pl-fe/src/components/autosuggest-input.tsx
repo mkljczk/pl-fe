@@ -4,12 +4,13 @@ import React, { PureComponent } from 'react';
 
 import AutosuggestEmoji from 'pl-fe/components/autosuggest-emoji';
 import Icon from 'pl-fe/components/icon';
-import { Input, Portal } from 'pl-fe/components/ui';
+import Input from 'pl-fe/components/ui/input';
+import Portal from 'pl-fe/components/ui/portal';
 import AutosuggestAccount from 'pl-fe/features/compose/components/autosuggest-account';
 import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
 
 import type { Menu, MenuItem } from 'pl-fe/components/dropdown-menu';
-import type { InputThemes } from 'pl-fe/components/ui/input/input';
+import type { InputThemes } from 'pl-fe/components/ui/input';
 import type { Emoji } from 'pl-fe/features/emoji';
 
 type AutoSuggestion = string | Emoji;

@@ -4,6 +4,11 @@ import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { uploadCompose } from 'pl-fe/actions/compose';
+import Avatar from 'pl-fe/components/ui/avatar';
+import Card, { CardBody } from 'pl-fe/components/ui/card';
+import HStack from 'pl-fe/components/ui/hstack';
+import Layout from 'pl-fe/components/ui/layout';
+import ComposeForm from 'pl-fe/features/compose/components/compose-form';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
   WhoToFollowPanel,
@@ -14,11 +19,13 @@ import {
   BirthdayPanel,
   AnnouncementsPanel,
 } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector, useOwnAccount, useFeatures, usePlFeConfig, useDraggedFiles, useAppDispatch } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useDraggedFiles } from 'pl-fe/hooks/useDraggedFiles';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
-
-import { Avatar, Card, CardBody, HStack, Layout } from '../components/ui';
-import ComposeForm from '../features/compose/components/compose-form';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
+import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
 
 interface IHomeLayout {
   children: React.ReactNode;

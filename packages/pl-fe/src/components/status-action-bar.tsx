@@ -14,16 +14,24 @@ import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { changeSetting } from 'pl-fe/actions/settings';
 import { deleteStatus, editStatus, toggleMuteStatus, translateStatus, undoStatusTranslation } from 'pl-fe/actions/statuses';
 import { deleteFromTimelines } from 'pl-fe/actions/timelines';
-import { useBlockGroupMember, useGroup, useGroupRelationship, useTranslationLanguages } from 'pl-fe/api/hooks';
+import { useBlockGroupMember } from 'pl-fe/api/hooks/groups/useBlockGroupMember';
 import { useDeleteGroupStatus } from 'pl-fe/api/hooks/groups/useDeleteGroupStatus';
+import { useGroup } from 'pl-fe/api/hooks/groups/useGroup';
+import { useGroupRelationship } from 'pl-fe/api/hooks/groups/useGroupRelationship';
+import { useTranslationLanguages } from 'pl-fe/api/hooks/instance/useTranslationLanguages';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import StatusActionButton from 'pl-fe/components/status-action-button';
-import { HStack } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import { languages } from 'pl-fe/features/preferences';
-import { useAppDispatch, useAppSelector, useFeatures, useInstance, useOwnAccount, useSettings } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useInstance } from 'pl-fe/hooks/useInstance';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 import { useChats } from 'pl-fe/queries/chats';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 import copy from 'pl-fe/utils/copy';
 
@@ -32,7 +40,8 @@ import GroupPopover from './groups/popover/group-popover';
 import type { Menu } from 'pl-fe/components/dropdown-menu';
 import type { Emoji as EmojiType } from 'pl-fe/features/emoji';
 import type { UnauthorizedModalAction } from 'pl-fe/features/ui/components/modals/unauthorized-modal';
-import type { Account, Group } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
+import type { Group } from 'pl-fe/normalizers/group';
 import type { SelectedStatus } from 'pl-fe/selectors';
 
 const messages = defineMessages({

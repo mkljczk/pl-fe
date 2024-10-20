@@ -8,7 +8,8 @@ import emojiSearch from 'pl-fe/features/emoji/search';
 import { Language } from 'pl-fe/features/preferences';
 import { selectAccount, selectOwnAccount, makeGetAccount } from 'pl-fe/selectors';
 import { tagHistory } from 'pl-fe/settings';
-import { useModalsStore, useSettingsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 
@@ -21,7 +22,8 @@ import type { EditorState } from 'lexical';
 import type { Account as BaseAccount, BackendVersion, CreateStatusParams, Group, MediaAttachment, Status as BaseStatus, Tag, Poll, ScheduledStatus } from 'pl-api';
 import type { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
 import type { Emoji } from 'pl-fe/features/emoji';
-import type { Account, Status } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
+import type { Status } from 'pl-fe/normalizers/status';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 import type { History } from 'pl-fe/types/history';
 

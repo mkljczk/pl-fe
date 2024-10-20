@@ -1,7 +1,9 @@
 import { useStatus } from 'pl-hooks';
 import React from 'react';
 
-import { HStack, Icon, Text } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Text from 'pl-fe/components/ui/text';
 
 interface IQuotedStatusIndicator {
   /** The quoted status id. */

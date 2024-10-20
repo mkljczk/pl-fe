@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 
-import { useAppSelector, useClient, useInstance } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useClient } from 'pl-fe/hooks/useClient';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 import { getAccessToken } from 'pl-fe/utils/auth';
 
 import type { StreamingEvent } from 'pl-api';

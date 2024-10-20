@@ -1,4 +1,4 @@
-import { useLoggedIn } from 'pl-fe/hooks';
+import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
 
 import { useTimelineStream } from './useTimelineStream';
 

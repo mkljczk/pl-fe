@@ -2,8 +2,8 @@ import DOMPurify from 'isomorphic-dompurify';
 import React, { useMemo } from 'react';
 
 import Markup from 'pl-fe/components/markup';
-import { Stack } from 'pl-fe/components/ui';
-import { useInstance } from 'pl-fe/hooks';
+import Stack from 'pl-fe/components/ui/stack';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 import { getTextDirection } from 'pl-fe/utils/rtl';
 
 import { LogoText } from './logo-text';

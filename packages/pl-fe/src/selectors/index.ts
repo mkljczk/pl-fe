@@ -7,7 +7,7 @@ import { createSelector } from 'reselect';
 
 import { getLocale } from 'pl-fe/actions/settings';
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useSettingsStore } from 'pl-fe/stores';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { getDomain } from 'pl-fe/utils/accounts';
 import { validId } from 'pl-fe/utils/auth';
 import ConfigDB from 'pl-fe/utils/config-db';
@@ -15,7 +15,8 @@ import { shouldFilter } from 'pl-fe/utils/timelines';
 
 import type { Account as BaseAccount, MediaAttachment, Relationship } from 'pl-api';
 import type { EntityStore } from 'pl-fe/entity-store/types';
-import type { Account, Group } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
+import type { Group } from 'pl-fe/normalizers/group';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 import type { MRFSimple } from 'pl-fe/schemas/pleroma';
 import type { RootState } from 'pl-fe/store';

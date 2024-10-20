@@ -2,8 +2,12 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import List, { ListItem } from 'pl-fe/components/list';
-import { CardTitle, Icon, Stack } from 'pl-fe/components/ui';
-import { useOwnAccount, useFeatures, useInstance } from 'pl-fe/hooks';
+import { CardTitle } from 'pl-fe/components/ui/card';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useInstance } from 'pl-fe/hooks/useInstance';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 import sourceCode from 'pl-fe/utils/code';
 
 import { DashCounter, DashCounters } from '../components/dashcounter';

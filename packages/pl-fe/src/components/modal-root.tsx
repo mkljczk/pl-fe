@@ -6,8 +6,9 @@ import 'wicg-inert';
 
 import { cancelReplyCompose } from 'pl-fe/actions/compose';
 import { saveDraftStatus } from 'pl-fe/actions/draft-statuses';
-import { useAppDispatch, usePrevious } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { usePrevious } from 'pl-fe/hooks/usePrevious';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
 import type { ReducerCompose } from 'pl-fe/reducers/compose';

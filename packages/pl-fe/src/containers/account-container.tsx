@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useAccount } from 'pl-fe/api/hooks';
+import { useAccount } from 'pl-fe/api/hooks/accounts/useAccount';
 import Account, { IAccount } from 'pl-fe/components/account';
 
 interface IAccountContainer extends Omit<IAccount, 'account'> {

@@ -2,11 +2,13 @@ import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
-import { useCommunityStream } from 'pl-fe/api/hooks';
+import { useCommunityStream } from 'pl-fe/api/hooks/streaming/useCommunityStream';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import { Column } from 'pl-fe/components/ui';
-import { useAppDispatch, useInstance, useTheme } from 'pl-fe/hooks';
+import Column from 'pl-fe/components/ui/column';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
+import { useTheme } from 'pl-fe/hooks/useTheme';
 
 import AboutPage from '../about';
 import Timeline from '../ui/components/timeline';

@@ -1,14 +1,12 @@
 import IntlMessageFormat from 'intl-messageformat';
 import 'intl-pluralrules';
-import { importEntities } from 'pl-hooks';
+import { importEntities, queryClient } from 'pl-hooks';
 import { defineMessages } from 'react-intl';
 
 import { FILTER_TYPES, type FilterType } from 'pl-fe/features/notifications';
 import { getNotificationStatus } from 'pl-fe/features/notifications/components/notification';
-import { normalizeNotification } from 'pl-fe/normalizers';
-import { queryClient } from 'pl-fe/queries/client';
-// import { getFilters, regexFromFilters } from 'pl-fe/selectors';
-import { useSettingsStore } from 'pl-fe/stores';
+import { normalizeNotification } from 'pl-fe/normalizers/notification';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { unescapeHTML } from 'pl-fe/utils/html';
 import { joinPublicPath } from 'pl-fe/utils/static';
 

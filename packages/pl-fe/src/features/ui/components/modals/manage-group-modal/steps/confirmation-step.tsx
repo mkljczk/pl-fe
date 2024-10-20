@@ -2,11 +2,16 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { ParsedContent } from 'pl-fe/components/parsed-content';
-import { Avatar, Divider, HStack, Stack, Text, Button } from 'pl-fe/components/ui';
+import Avatar from 'pl-fe/components/ui/avatar';
+import Button from 'pl-fe/components/ui/button';
+import Divider from 'pl-fe/components/ui/divider';
+import HStack from 'pl-fe/components/ui/hstack';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import toast from 'pl-fe/toast';
 import copy from 'pl-fe/utils/copy';
 
-import type { Group } from 'pl-fe/normalizers';
+import type { Group } from 'pl-fe/normalizers/group';
 
 interface IConfirmationStep {
   group: Group | null;

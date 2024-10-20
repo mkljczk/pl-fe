@@ -1,10 +1,13 @@
 import React from 'react';
 
 import { approveUser, deleteUser } from 'pl-fe/actions/admin';
-import { useAccount } from 'pl-fe/api/hooks';
+import { useAccount } from 'pl-fe/api/hooks/accounts/useAccount';
 import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';
-import { Stack, HStack, Text } from 'pl-fe/components/ui';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import HStack from 'pl-fe/components/ui/hstack';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 interface IUnapprovedAccount {
   accountId: string;

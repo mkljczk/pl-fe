@@ -1,5 +1,5 @@
 import { changeSetting } from 'pl-fe/actions/settings';
-import { useSettingsStore } from 'pl-fe/stores';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
 

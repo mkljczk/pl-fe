@@ -16,7 +16,7 @@ import {
 import { TIMELINE_DELETE } from '../actions/timelines';
 
 import type { AccountWarning, Notification as BaseNotification, Relationship, RelationshipSeveranceEvent, Report } from 'pl-api';
-import type { Notification } from 'pl-fe/normalizers';
+import type { Notification } from 'pl-fe/normalizers/notification';
 import type { AnyAction } from 'redux';
 
 const QueuedNotificationRecord = ImmutableRecord({

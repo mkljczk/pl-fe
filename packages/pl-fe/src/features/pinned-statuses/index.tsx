@@ -5,8 +5,9 @@ import { useParams } from 'react-router-dom';
 import { fetchPinnedStatuses } from 'pl-fe/actions/pin-statuses';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StatusList from 'pl-fe/components/status-list';
-import { Column } from 'pl-fe/components/ui';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import Column from 'pl-fe/components/ui/column';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { selectOwnAccount } from 'pl-fe/selectors';
 
 const messages = defineMessages({

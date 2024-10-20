@@ -35,7 +35,8 @@ import ReactDOM from 'react-dom';
 import { clearComposeSuggestions, fetchComposeSuggestions } from 'pl-fe/actions/compose';
 import { chooseEmoji } from 'pl-fe/actions/emojis';
 import AutosuggestEmoji from 'pl-fe/components/autosuggest-emoji';
-import { useAppDispatch, useCompose } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useCompose } from 'pl-fe/hooks/useCompose';
 import { selectAccount } from 'pl-fe/selectors';
 import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
 

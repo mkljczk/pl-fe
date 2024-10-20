@@ -6,9 +6,11 @@ import { useParams } from 'react-router-dom';
 
 import { expandStatusQuotes, fetchStatusQuotes } from 'pl-fe/actions/status-quotes';
 import StatusList from 'pl-fe/components/status-list';
-import { Column } from 'pl-fe/components/ui';
-import { useAppDispatch, useAppSelector, useTheme } from 'pl-fe/hooks';
+import Column from 'pl-fe/components/ui/column';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
+import { useTheme } from 'pl-fe/hooks/useTheme';
 
 const messages = defineMessages({
   heading: { id: 'column.quotes', defaultMessage: 'Post quotes' },

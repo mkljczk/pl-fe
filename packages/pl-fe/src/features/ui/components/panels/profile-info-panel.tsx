@@ -6,8 +6,12 @@ import Markup from 'pl-fe/components/markup';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
 import { dateFormatOptions } from 'pl-fe/components/relative-timestamp';
 import Scrobble from 'pl-fe/components/scrobble';
-import { Icon, HStack, Stack, Text } from 'pl-fe/components/ui';
-import { useAppSelector, usePlFeConfig } from 'pl-fe/hooks';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
 import { capitalize } from 'pl-fe/utils/strings';
 
 import ProfileFamiliarFollowers from '../profile-familiar-followers';
@@ -15,7 +19,7 @@ import ProfileField from '../profile-field';
 import ProfileStats from '../profile-stats';
 
 import type { Scrobble as ScrobbleEntity } from 'pl-api';
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 const messages = defineMessages({
   linkVerifiedOn: { id: 'account.link_verified_on', defaultMessage: 'Ownership of this link was checked on {date}' },

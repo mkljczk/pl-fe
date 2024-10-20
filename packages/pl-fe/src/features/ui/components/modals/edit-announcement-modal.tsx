@@ -2,7 +2,14 @@ import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { useAnnouncements } from 'pl-fe/api/hooks/admin/useAnnouncements';
-import { Form, FormGroup, HStack, Modal, Stack, Text, Textarea, Toggle } from 'pl-fe/components/ui';
+import Form from 'pl-fe/components/ui/form';
+import FormGroup from 'pl-fe/components/ui/form-group';
+import HStack from 'pl-fe/components/ui/hstack';
+import Modal from 'pl-fe/components/ui/modal';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
+import Textarea from 'pl-fe/components/ui/textarea';
+import Toggle from 'pl-fe/components/ui/toggle';
 import { DatePicker } from 'pl-fe/features/ui/util/async-components';
 import toast from 'pl-fe/toast';
 

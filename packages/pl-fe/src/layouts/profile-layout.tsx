@@ -3,8 +3,10 @@ import { Helmet } from 'react-helmet-async';
 import { FormattedMessage } from 'react-intl';
 import { Redirect, useHistory } from 'react-router-dom';
 
-import { useAccountLookup } from 'pl-fe/api/hooks';
-import { Column, Layout, Tabs } from 'pl-fe/components/ui';
+import { useAccountLookup } from 'pl-fe/api/hooks/accounts/useAccountLookup';
+import Column from 'pl-fe/components/ui/column';
+import Layout from 'pl-fe/components/ui/layout';
+import Tabs from 'pl-fe/components/ui/tabs';
 import Header from 'pl-fe/features/account/components/header';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
@@ -16,7 +18,9 @@ import {
   PinnedAccountsPanel,
   AccountNotePanel,
 } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector, useFeatures, usePlFeConfig } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
 import { getAcct } from 'pl-fe/utils/accounts';
 
 interface IProfileLayout {

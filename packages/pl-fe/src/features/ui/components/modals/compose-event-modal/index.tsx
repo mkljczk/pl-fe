@@ -12,12 +12,25 @@ import {
 import { uploadFile } from 'pl-fe/actions/media';
 import { ADDRESS_ICONS } from 'pl-fe/components/autosuggest-location';
 import LocationSearch from 'pl-fe/components/location-search';
-import { Button, Form, FormGroup, HStack, Icon, IconButton, Input, Modal, Spinner, Stack, Tabs, Text, Toggle } from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import Form from 'pl-fe/components/ui/form';
+import FormGroup from 'pl-fe/components/ui/form-group';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import IconButton from 'pl-fe/components/ui/icon-button';
+import Input from 'pl-fe/components/ui/input';
+import Modal from 'pl-fe/components/ui/modal';
+import Spinner from 'pl-fe/components/ui/spinner';
+import Stack from 'pl-fe/components/ui/stack';
+import Tabs from 'pl-fe/components/ui/tabs';
+import Text from 'pl-fe/components/ui/text';
+import Toggle from 'pl-fe/components/ui/toggle';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { isCurrentOrFutureDate } from 'pl-fe/features/compose/components/schedule-form';
 import { ComposeEditor, DatePicker } from 'pl-fe/features/ui/util/async-components';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import UploadButton from './upload-button';
 

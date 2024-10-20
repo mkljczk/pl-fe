@@ -1,9 +1,12 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useRules } from 'pl-fe/api/hooks/admin';
-import { Form, FormGroup, Input, Modal } from 'pl-fe/components/ui';
-import { useTextField } from 'pl-fe/hooks/forms';
+import { useRules } from 'pl-fe/api/hooks/admin/useRules';
+import Form from 'pl-fe/components/ui/form';
+import FormGroup from 'pl-fe/components/ui/form-group';
+import Input from 'pl-fe/components/ui/input';
+import Modal from 'pl-fe/components/ui/modal';
+import { useTextField } from 'pl-fe/hooks/forms/useTextField';
 import toast from 'pl-fe/toast';
 
 import type { BaseModalProps } from '../modal-root';

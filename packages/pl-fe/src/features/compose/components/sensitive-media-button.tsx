@@ -2,7 +2,8 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { changeComposeSpoilerness } from 'pl-fe/actions/compose';
-import { useAppDispatch, useCompose } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useCompose } from 'pl-fe/hooks/useCompose';
 
 import ComposeFormButton from './compose-form-button';
 

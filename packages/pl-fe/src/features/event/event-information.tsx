@@ -6,10 +6,13 @@ import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StatusContent from 'pl-fe/components/status-content';
 import StatusMedia from 'pl-fe/components/status-media';
 import TranslateButton from 'pl-fe/components/translate-button';
-import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
-import { usePlFeConfig } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 type RouteParams = { statusId: string };
 

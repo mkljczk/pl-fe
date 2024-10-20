@@ -3,7 +3,8 @@ import MultiselectReactDropdown from 'multiselect-react-dropdown';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { Icon, Select } from '../../components/ui';
+import Icon from 'pl-fe/components/ui/icon';
+import Select from 'pl-fe/components/ui/select';
 
 const messages = defineMessages({
   selectPlaceholder: { id: 'select.placeholder', defaultMessage: 'Select' },

@@ -5,12 +5,12 @@ import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { fetchStatus } from 'pl-fe/actions/statuses';
+import { showStatusHoverCard } from 'pl-fe/components/hover-status-wrapper';
+import Card, { CardBody } from 'pl-fe/components/ui/card';
 import StatusContainer from 'pl-fe/containers/status-container';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
-import { useStatusHoverCardStore } from 'pl-fe/stores';
-
-import { showStatusHoverCard } from './hover-status-wrapper';
-import { Card, CardBody } from './ui';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useStatusHoverCardStore } from 'pl-fe/stores/status-hover-card';
 
 interface IStatusHoverCard {
   visible?: boolean;

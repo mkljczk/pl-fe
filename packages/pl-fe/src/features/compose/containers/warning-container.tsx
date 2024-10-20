@@ -2,7 +2,8 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { useAppSelector, useCompose } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useCompose } from 'pl-fe/hooks/useCompose';
 import { selectOwnAccount } from 'pl-fe/selectors';
 
 import Warning from '../components/warning';

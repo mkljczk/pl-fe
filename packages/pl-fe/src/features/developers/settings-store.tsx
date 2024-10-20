@@ -3,19 +3,16 @@ import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
 import { changeSetting, updateSettingsStore } from 'pl-fe/actions/settings';
 import List, { ListItem } from 'pl-fe/components/list';
-import {
-  CardHeader,
-  CardTitle,
-  Column,
-  Button,
-  Form,
-  FormActions,
-  FormGroup,
-  Textarea,
-} from 'pl-fe/components/ui';
+import Button from 'pl-fe/components/ui/button';
+import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
+import Column from 'pl-fe/components/ui/column';
+import Form from 'pl-fe/components/ui/form';
+import FormActions from 'pl-fe/components/ui/form-actions';
+import FormGroup from 'pl-fe/components/ui/form-group';
+import Textarea from 'pl-fe/components/ui/textarea';
 import SettingToggle from 'pl-fe/features/notifications/components/setting-toggle';
-import { useAppDispatch } from 'pl-fe/hooks';
-import { useSettingsStore } from 'pl-fe/stores';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
 
 const isJSONValid = (text: any): boolean => {

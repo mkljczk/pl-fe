@@ -6,8 +6,14 @@ import { closeReport } from 'pl-fe/actions/admin';
 import { deactivateUserModal, deleteUserModal } from 'pl-fe/actions/moderation';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
-import { Accordion, Avatar, Button, Stack, HStack, Text } from 'pl-fe/components/ui';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import Accordion from 'pl-fe/components/ui/accordion';
+import Avatar from 'pl-fe/components/ui/avatar';
+import Button from 'pl-fe/components/ui/button';
+import HStack from 'pl-fe/components/ui/hstack';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { makeGetReport } from 'pl-fe/selectors';
 import toast from 'pl-fe/toast';
 

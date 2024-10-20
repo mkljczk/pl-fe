@@ -3,7 +3,7 @@ import { importEntities } from 'pl-hooks';
 
 import { getLocale } from 'pl-fe/actions/settings';
 import { getClient } from 'pl-fe/api';
-import { useSettingsStore } from 'pl-fe/stores';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { shouldFilter } from 'pl-fe/utils/timelines';
 
 import type { PaginatedResponse, Status as BaseStatus, PublicTimelineParams, HomeTimelineParams, ListTimelineParams, HashtagTimelineParams, GetAccountStatusesParams, GroupTimelineParams } from 'pl-api';

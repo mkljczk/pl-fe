@@ -17,7 +17,7 @@ import {
   ADMIN_USER_APPROVE_REQUEST,
   ADMIN_USER_APPROVE_SUCCESS,
 } from 'pl-fe/actions/admin';
-import { normalizeAdminReport, type AdminReport } from 'pl-fe/normalizers';
+import { normalizeAdminReport, type AdminReport } from 'pl-fe/normalizers/admin-report';
 
 import type { AdminAccount, AdminGetAccountsParams, AdminReport as BaseAdminReport } from 'pl-api';
 import type { Config } from 'pl-fe/utils/config-db';

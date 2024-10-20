@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { useClient } from 'pl-fe/hooks';
+import { useClient } from 'pl-fe/hooks/useClient';
 import { queryClient } from 'pl-fe/queries/client';
 
 import type { AdminRule } from 'pl-api';

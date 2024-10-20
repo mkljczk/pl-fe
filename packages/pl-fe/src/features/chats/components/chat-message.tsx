@@ -5,19 +5,22 @@ import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import { HStack, Icon, Stack, Text } from 'pl-fe/components/ui';
+import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import emojify from 'pl-fe/features/emoji';
 import { MediaGallery } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { ChatKeys, useChatActions } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import { stripHTML } from 'pl-fe/utils/html';
 import { onlyEmoji } from 'pl-fe/utils/rich-content';
 
 import type { Chat, CustomEmoji } from 'pl-api';
 import type { Menu as IMenu } from 'pl-fe/components/dropdown-menu';
-import type { ChatMessage as ChatMessageEntity } from 'pl-fe/normalizers';
+import type { ChatMessage as ChatMessageEntity } from 'pl-fe/normalizers/chat-message';
 
 const messages = defineMessages({
   copy: { id: 'chats.actions.copy', defaultMessage: 'Copy' },

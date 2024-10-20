@@ -1,12 +1,19 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { Icon, Stack } from 'pl-fe/components/ui';
+import Icon from 'pl-fe/components/ui/icon';
+import Stack from 'pl-fe/components/ui/stack';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
 import Search from 'pl-fe/features/search/components/search';
 import ComposeButton from 'pl-fe/features/ui/components/compose-button';
 import ProfileDropdown from 'pl-fe/features/ui/components/profile-dropdown';
-import { useAppSelector, useFeatures, useOwnAccount, useSettings, useInstance, useRegistrationStatus, useLogo } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useInstance } from 'pl-fe/hooks/useInstance';
+import { useLogo } from 'pl-fe/hooks/useLogo';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
+import { useRegistrationStatus } from 'pl-fe/hooks/useRegistrationStatus';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 
 import Account from './account';
 import DropdownMenu, { Menu } from './dropdown-menu';

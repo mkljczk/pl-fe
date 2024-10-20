@@ -1,7 +1,7 @@
 import { importEntities } from 'pl-hooks';
 
 import { getClient } from 'pl-fe/api';
-import { useSettingsStore } from 'pl-fe/stores';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 
 import { fetchRelationships } from './accounts';
 

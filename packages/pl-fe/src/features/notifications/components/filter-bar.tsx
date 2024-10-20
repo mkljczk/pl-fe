@@ -2,10 +2,13 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { type FilterType, setFilter } from 'pl-fe/actions/notifications';
-import { Icon, Tabs } from 'pl-fe/components/ui';
-import { useAppDispatch, useFeatures, useSettings } from 'pl-fe/hooks';
+import Icon from 'pl-fe/components/ui/icon';
+import Tabs from 'pl-fe/components/ui/tabs';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 
-import type { Item } from 'pl-fe/components/ui/tabs/tabs';
+import type { Item } from 'pl-fe/components/ui/tabs';
 
 const messages = defineMessages({
   all: { id: 'notifications.filter.all', defaultMessage: 'All' },

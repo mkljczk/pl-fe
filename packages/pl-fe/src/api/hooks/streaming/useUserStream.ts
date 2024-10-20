@@ -10,10 +10,11 @@ import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { importEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { selectEntity } from 'pl-fe/entity-store/selectors';
-import { useAppDispatch, useLoggedIn } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
 import messages from 'pl-fe/messages';
 import { queryClient } from 'pl-fe/queries/client';
-import { useSettingsStore } from 'pl-fe/stores';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { getUnreadChatsCount, updateChatListItem } from 'pl-fe/utils/chats';
 import { play, soundCache } from 'pl-fe/utils/sounds';
 

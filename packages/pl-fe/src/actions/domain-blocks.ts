@@ -4,7 +4,7 @@ import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import type { PaginatedResponse } from 'pl-api';
 import type { EntityStore } from 'pl-fe/entity-store/types';
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const DOMAIN_BLOCK_REQUEST = 'DOMAIN_BLOCK_REQUEST' as const;

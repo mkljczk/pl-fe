@@ -3,8 +3,10 @@ import { useStatus } from 'pl-hooks';
 import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Button, Modal, Stack } from 'pl-fe/components/ui';
-import { usePlFeConfig } from 'pl-fe/hooks';
+import Button from 'pl-fe/components/ui/button';
+import Modal from 'pl-fe/components/ui/modal';
+import Stack from 'pl-fe/components/ui/stack';
+import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
 
 import type { BaseModalProps } from '../modal-root';
 

@@ -3,8 +3,8 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Link from 'pl-fe/components/link';
-import { Text } from 'pl-fe/components/ui';
-import { useCompose } from 'pl-fe/hooks';
+import Text from 'pl-fe/components/ui/text';
+import { useCompose } from 'pl-fe/hooks/useCompose';
 
 interface IReplyGroupIndicator {
   composeId: string;

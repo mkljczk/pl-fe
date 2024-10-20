@@ -68,7 +68,8 @@ import { unescapeHTML } from '../utils/html';
 
 import type { Emoji } from 'pl-fe/features/emoji';
 import type { Language } from 'pl-fe/features/preferences';
-import type { Account, Status } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
+import type { Status } from 'pl-fe/normalizers/status';
 
 const getResetFileKey = () => Math.floor((Math.random() * 0x10000));
 

@@ -3,7 +3,8 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { changeComposeSpoilerText } from 'pl-fe/actions/compose';
 import AutosuggestInput, { IAutosuggestInput } from 'pl-fe/components/autosuggest-input';
-import { useAppDispatch, useCompose } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useCompose } from 'pl-fe/hooks/useCompose';
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Subject (optional)' },

@@ -1,7 +1,8 @@
 import { importEntities } from 'pl-hooks';
 
 import { getClient } from 'pl-fe/api';
-import { useModalsStore, useSettingsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 import { shouldHaveCard } from 'pl-fe/utils/status';
 
@@ -10,7 +11,7 @@ import { importFetchedStatus } from './importer';
 import { deleteFromTimelines } from './timelines';
 
 import type { CreateStatusParams, Status as BaseStatus } from 'pl-api';
-import type { Status } from 'pl-fe/normalizers';
+import type { Status } from 'pl-fe/normalizers/status';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 import type { IntlShape } from 'react-intl';
 

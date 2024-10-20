@@ -3,11 +3,15 @@ import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
-import { useRemoteStream } from 'pl-fe/api/hooks';
+import { useRemoteStream } from 'pl-fe/api/hooks/streaming/useRemoteStream';
 import IconButton from 'pl-fe/components/icon-button';
-import { Column, HStack, Text } from 'pl-fe/components/ui';
-import { useAppDispatch, useSettings, useTheme } from 'pl-fe/hooks';
+import Column from 'pl-fe/components/ui/column';
+import HStack from 'pl-fe/components/ui/hstack';
+import Text from 'pl-fe/components/ui/text';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
+import { useSettings } from 'pl-fe/hooks/useSettings';
+import { useTheme } from 'pl-fe/hooks/useTheme';
 
 import Timeline from '../ui/components/timeline';
 

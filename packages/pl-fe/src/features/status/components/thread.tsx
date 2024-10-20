@@ -12,20 +12,23 @@ import { toggleStatusMediaHidden } from 'pl-fe/actions/statuses';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import StatusActionBar from 'pl-fe/components/status-action-bar';
 import Tombstone from 'pl-fe/components/tombstone';
-import { Stack } from 'pl-fe/components/ui';
+import Stack from 'pl-fe/components/ui/stack';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import PendingStatus from 'pl-fe/features/ui/components/pending-status';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { RootState } from 'pl-fe/store';
-import { useModalsStore, useSettingsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { textForScreenReader } from 'pl-fe/utils/status';
 
 import DetailedStatus from './detailed-status';
 import ThreadStatus from './thread-status';
 
 import type { Virtualizer } from '@tanstack/react-virtual';
-import type { Account, Status } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
+import type { Status } from 'pl-fe/normalizers/status';
 import type { SelectedStatus } from 'pl-fe/selectors';
 
 const getAncestorsIds = createSelector([

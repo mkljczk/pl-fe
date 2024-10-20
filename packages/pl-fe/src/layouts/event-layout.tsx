@@ -4,7 +4,9 @@ import { Helmet } from 'react-helmet-async';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { Column, Layout, Tabs } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
+import Layout from 'pl-fe/components/ui/layout';
+import Tabs from 'pl-fe/components/ui/tabs';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
@@ -13,7 +15,8 @@ import {
   TrendsPanel,
   WhoToFollowPanel,
 } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector, useFeatures } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
 
 interface IEventLayout {
   params?: {

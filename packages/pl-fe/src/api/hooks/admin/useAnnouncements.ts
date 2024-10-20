@@ -7,11 +7,11 @@ import {
 } from 'pl-api';
 import * as v from 'valibot';
 
-import { useClient } from 'pl-fe/hooks';
-import { normalizeAnnouncement, AdminAnnouncement } from 'pl-fe/normalizers';
+import { useClient } from 'pl-fe/hooks/useClient';
+import { normalizeAnnouncement, AdminAnnouncement } from 'pl-fe/normalizers/announcement';
 import { queryClient } from 'pl-fe/queries/client';
 
-import { useAnnouncements as useUserAnnouncements } from '../announcements';
+import { useAnnouncements as useUserAnnouncements } from '../announcements/useAnnouncements';
 
 const useAnnouncements = () => {
   const client = useClient();

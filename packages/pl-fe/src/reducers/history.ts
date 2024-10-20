@@ -1,7 +1,7 @@
 import { Map as ImmutableMap, Record as ImmutableRecord } from 'immutable';
 
 import { HISTORY_FETCH_REQUEST, HISTORY_FETCH_SUCCESS, HISTORY_FETCH_FAIL, type HistoryAction } from 'pl-fe/actions/history';
-import { normalizeStatusEdit } from 'pl-fe/normalizers';
+import { normalizeStatusEdit } from 'pl-fe/normalizers/status-edit';
 
 import type { StatusEdit as BaseStatusEdit } from 'pl-api';
 

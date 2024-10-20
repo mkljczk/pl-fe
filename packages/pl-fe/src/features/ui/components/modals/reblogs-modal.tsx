@@ -4,9 +4,11 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { fetchReblogs, expandReblogs } from 'pl-fe/actions/interactions';
 import { fetchStatus } from 'pl-fe/actions/statuses';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Modal, Spinner } from 'pl-fe/components/ui';
+import Modal from 'pl-fe/components/ui/modal';
+import Spinner from 'pl-fe/components/ui/spinner';
 import AccountContainer from 'pl-fe/containers/account-container';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 import type { BaseModalProps } from '../modal-root';
 

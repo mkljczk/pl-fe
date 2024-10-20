@@ -3,7 +3,7 @@ import { Map as ImmutableMap } from 'immutable';
 import { __stub } from 'pl-fe/api';
 import { buildInstance, buildRelationship } from 'pl-fe/jest/factory';
 import { mockStore, rootState } from 'pl-fe/jest/test-helpers';
-import { normalizeAccount } from 'pl-fe/normalizers';
+import { normalizeAccount } from 'pl-fe/normalizers/account';
 import { ListRecord, ReducerRecord } from 'pl-fe/reducers/user-lists';
 
 import {

@@ -1,6 +1,6 @@
 import { Entities } from 'pl-fe/entity-store/entities';
 import { selectEntity } from 'pl-fe/entity-store/selectors';
-import { useAppSelector } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 import { useBookmarkFolders } from './useBookmarkFolders';
 

@@ -4,8 +4,9 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchScheduledStatuses, expandScheduledStatuses } from 'pl-fe/actions/scheduled-statuses';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Column } from 'pl-fe/components/ui';
-import { useAppSelector, useAppDispatch } from 'pl-fe/hooks';
+import Column from 'pl-fe/components/ui/column';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 import ScheduledStatus from './components/scheduled-status';
 

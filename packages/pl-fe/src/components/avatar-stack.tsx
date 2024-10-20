@@ -2,11 +2,12 @@ import clsx from 'clsx';
 import { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
 import React from 'react';
 
-import { Avatar, HStack } from 'pl-fe/components/ui';
-import { useAppSelector } from 'pl-fe/hooks';
+import Avatar from 'pl-fe/components/ui/avatar';
+import HStack from 'pl-fe/components/ui/hstack';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { makeGetAccount } from 'pl-fe/selectors';
 
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 const getAccount = makeGetAccount();
 

@@ -2,7 +2,9 @@ import React from 'react';
 import { Helmet as ReactHelmet } from 'react-helmet-async';
 
 import { useStatContext } from 'pl-fe/contexts/stat-context';
-import { useAppSelector, useInstance, useSettings } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useInstance } from 'pl-fe/hooks/useInstance';
+import { useSettings } from 'pl-fe/hooks/useSettings';
 import { RootState } from 'pl-fe/store';
 import FaviconService from 'pl-fe/utils/favicon-service';
 

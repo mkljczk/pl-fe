@@ -2,15 +2,17 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import Icon from 'pl-fe/components/icon';
+import Button from 'pl-fe/components/ui/button';
+import HStack from 'pl-fe/components/ui/hstack';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
+import VerificationBadge from 'pl-fe/components/verification-badge';
 import EventActionButton from 'pl-fe/features/event/components/event-action-button';
 import EventDate from 'pl-fe/features/event/components/event-date';
-import { useAppSelector } from 'pl-fe/hooks';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
-import Icon from './icon';
-import { Button, HStack, Stack, Text } from './ui';
-import VerificationBadge from './verification-badge';
-
-import type { Status as StatusEntity } from 'pl-fe/normalizers';
+import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
 
 const messages = defineMessages({
   eventBanner: { id: 'event.banner', defaultMessage: 'Event banner' },

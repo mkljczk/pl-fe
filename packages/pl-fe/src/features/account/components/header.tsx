@@ -11,25 +11,31 @@ import { blockDomain, unblockDomain } from 'pl-fe/actions/domain-blocks';
 import { initMuteModal } from 'pl-fe/actions/mutes';
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { setSearchAccount } from 'pl-fe/actions/search';
-import { useFollow } from 'pl-fe/api/hooks';
+import { useFollow } from 'pl-fe/api/hooks/accounts/useFollow';
 import Badge from 'pl-fe/components/badge';
 import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
 import StillImage from 'pl-fe/components/still-image';
-import { Avatar, HStack, IconButton } from 'pl-fe/components/ui';
+import Avatar from 'pl-fe/components/ui/avatar';
+import HStack from 'pl-fe/components/ui/hstack';
+import IconButton from 'pl-fe/components/ui/icon-button';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import MovedNote from 'pl-fe/features/account-timeline/components/moved-note';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
 import SubscriptionButton from 'pl-fe/features/ui/components/subscription-button';
-import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 import { useChats } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
-import { useModalsStore, useSettingsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
 import { isDefaultHeader } from 'pl-fe/utils/accounts';
 import copy from 'pl-fe/utils/copy';
 
 import type { PlfeResponse } from 'pl-fe/api';
-import type { Account } from 'pl-fe/normalizers';
+import type { Account } from 'pl-fe/normalizers/account';
 
 const messages = defineMessages({
   edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },

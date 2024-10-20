@@ -1,6 +1,6 @@
 import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 
-import { useClient } from 'pl-fe/hooks';
+import { useClient } from 'pl-fe/hooks/useClient';
 import { flattenPages } from 'pl-fe/utils/queries';
 
 import type { Account, PaginatedResponse } from 'pl-api';

@@ -3,7 +3,7 @@ import { defineMessages } from 'react-intl';
 
 import { STATUS_FETCH_SOURCE_FAIL, STATUS_FETCH_SOURCE_REQUEST, STATUS_FETCH_SOURCE_SUCCESS } from 'pl-fe/actions/statuses';
 import { getClient } from 'pl-fe/api';
-import { useModalsStore } from 'pl-fe/stores';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 import type { Account, CreateEventParams, Location, MediaAttachment, PaginatedResponse, Status } from 'pl-api';

@@ -1,7 +1,7 @@
 import { Entities } from 'pl-fe/entity-store/entities';
-import { useEntities } from 'pl-fe/entity-store/hooks';
-import { useClient } from 'pl-fe/hooks';
-import { normalizeStatus } from 'pl-fe/normalizers';
+import { useEntities } from 'pl-fe/entity-store/hooks/useEntities';
+import { useClient } from 'pl-fe/hooks/useClient';
+import { normalizeStatus } from 'pl-fe/normalizers/status';
 
 const useGroupMedia = (groupId: string) => {
   const client = useClient();

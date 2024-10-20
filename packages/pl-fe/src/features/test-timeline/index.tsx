@@ -3,11 +3,11 @@ import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { expandTimelineSuccess } from 'pl-fe/actions/timelines';
-import { useAppDispatch, useTheme } from 'pl-fe/hooks';
+import Column from 'pl-fe/components/ui/column';
+import Timeline from 'pl-fe/features/ui/components/timeline';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useIsMobile } from 'pl-fe/hooks/useIsMobile';
-
-import { Column } from '../../components/ui';
-import Timeline from '../ui/components/timeline';
+import { useTheme } from 'pl-fe/hooks/useTheme';
 
 const messages = defineMessages({
   title: { id: 'column.test', defaultMessage: 'Test timeline' },

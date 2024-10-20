@@ -2,9 +2,16 @@ import React, { useEffect } from 'react';
 import { defineMessages, FormattedDate, useIntl } from 'react-intl';
 
 import { fetchOAuthTokens, revokeOAuthTokenById } from 'pl-fe/actions/security';
-import { Button, Card, CardBody, CardHeader, CardTitle, Column, HStack, Spinner, Stack, Text } from 'pl-fe/components/ui';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
-import { useModalsStore } from 'pl-fe/stores';
+import Button from 'pl-fe/components/ui/button';
+import Card, { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
+import Column from 'pl-fe/components/ui/column';
+import HStack from 'pl-fe/components/ui/hstack';
+import Spinner from 'pl-fe/components/ui/spinner';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { useModalsStore } from 'pl-fe/stores/modals';
 
 import type { OauthToken } from 'pl-api';
 

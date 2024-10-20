@@ -4,9 +4,11 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { expandUserIndex, fetchUserIndex, setUserIndexQuery } from 'pl-fe/actions/admin';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { Column, Input } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
+import Input from 'pl-fe/components/ui/input';
 import AccountContainer from 'pl-fe/containers/account-container';
-import { useAppDispatch, useAppSelector } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.users', defaultMessage: 'Users' },

@@ -6,9 +6,11 @@ import { Redirect } from 'react-router-dom';
 import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import { Column, Stack } from 'pl-fe/components/ui';
+import Column from 'pl-fe/components/ui/column';
+import Stack from 'pl-fe/components/ui/stack';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
-import { useAppDispatch, useLoggedIn } from 'pl-fe/hooks';
+import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useLoggedIn } from 'pl-fe/hooks/useLoggedIn';
 
 import Thread from './components/thread';
 import ThreadLoginCta from './components/thread-login-cta';
