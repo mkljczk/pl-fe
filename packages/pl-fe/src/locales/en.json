@@ -1434,6 +1434,7 @@
   "status.add_known_language": "Do not auto-translate posts in {language}.",
   "status.admin_account": "Moderate @{name}",
   "status.admin_status": "Open this post in the moderation interface",
+  "status.application_name": "Sent form {name}",
   "status.approval.pending": "Pending approval",
   "status.approval.rejected": "Rejected",
   "status.bookmark": "Bookmark",
