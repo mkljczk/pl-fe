@@ -12,7 +12,7 @@ import type { Status } from 'pl-fe/normalizers/status';
 
 interface IReplyIndicator {
   className?: string;
-  status?: Pick<Status, 'account_id' | 'contentHtml' | 'created_at' | 'hidden' | 'media_attachments' | 'mentions' | 'search_index' | 'sensitive' | 'spoiler_text' | 'quote_id'>;
+  status?: Pick<Status, 'account_id' | 'content' | 'created_at' | 'emojis' | 'hidden' | 'media_attachments' | 'mentions' | 'search_index' | 'sensitive' | 'spoiler_text' | 'quote_id'>;
   onCancel?: () => void;
   hideActions: boolean;
 }
@@ -52,7 +52,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({ className, status, hideActi
         size='sm'
         direction={getTextDirection(status.search_index)}
       >
-        <ParsedContent html={status.contentHtml} mentions={status.mentions} hasQuote={!!status.quote_id} />
+        <ParsedContent html={status.content} mentions={status.mentions} hasQuote={!!status.quote_id} emojis={status.emojis} />
       </Markup>
 
       {status.media_attachments.length > 0 && (

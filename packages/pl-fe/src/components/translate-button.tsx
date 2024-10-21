@@ -16,7 +16,7 @@ import { useSettings } from 'pl-fe/hooks/useSettings';
 import type { Status } from 'pl-fe/normalizers/status';
 
 interface ITranslateButton {
-  status: Pick<Status, 'id' | 'account' | 'contentHtml' | 'contentMapHtml' | 'language' | 'translating' | 'translation' | 'visibility'>;
+  status: Pick<Status, 'id' | 'account' | 'content' | 'content_map' | 'language' | 'translating' | 'translation' | 'visibility'>;
 }
 
 const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
@@ -36,7 +36,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
     allow_unauthenticated: allowUnauthenticated,
   } = instance.pleroma.metadata.translation;
 
-  const renderTranslate = (me || allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.contentHtml.length > 0 && status.language !== null && intl.locale !== status.language && !status.contentMapHtml?.[intl.locale];
+  const renderTranslate = (me || allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.content.length > 0 && status.language !== null && intl.locale !== status.language && !status.content_map?.[intl.locale];
 
   const supportsLanguages = (translationLanguages[status.language!]?.includes(intl.locale));
 

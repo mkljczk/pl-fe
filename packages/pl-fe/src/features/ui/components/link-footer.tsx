@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Text from 'pl-fe/components/ui/text';
-import emojify from 'pl-fe/features/emoji';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
 import sourceCode from 'pl-fe/utils/code';
 
@@ -12,10 +12,9 @@ const LinkFooter: React.FC = (): JSX.Element => {
   return (
     <Text theme='muted' size='sm'>
       {plFeConfig.linkFooterMessage ? (
-        <span
-          className='inline-block align-middle'
-          dangerouslySetInnerHTML={{ __html: emojify(plFeConfig.linkFooterMessage) }}
-        />
+        <span className='inline-block align-middle'>
+          <Emojify text={plFeConfig.linkFooterMessage} />
+        </span>
       ) : (
         <FormattedMessage
           id='getting_started.open_source_notice'

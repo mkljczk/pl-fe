@@ -9,7 +9,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import emojify from 'pl-fe/features/emoji';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { MediaGallery } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { ChatKeys, useChatActions } from 'pl-fe/queries/chats';
@@ -18,7 +18,7 @@ import { useModalsStore } from 'pl-fe/stores/modals';
 import { stripHTML } from 'pl-fe/utils/html';
 import { onlyEmoji } from 'pl-fe/utils/rich-content';
 
-import type { Chat, CustomEmoji } from 'pl-api';
+import type { Chat } from 'pl-api';
 import type { Menu as IMenu } from 'pl-fe/components/dropdown-menu';
 import type { ChatMessage as ChatMessageEntity } from 'pl-fe/normalizers/chat-message';
 
@@ -31,10 +31,6 @@ const messages = defineMessages({
 
 const BIG_EMOJI_LIMIT = 3;
 
-const makeEmojiMap = (record: ChatMessageEntity) =>
-  record.emojis.reduce((map: Record<string, CustomEmoji>, emoji: CustomEmoji) =>
-    (map[`:${emoji.shortcode}:`] = emoji, map), {});
-
 const parsePendingContent = (content: string) => escape(content).replace(/(?:\r\n|\r|\n)/g, '<br>');
 
 const parseContent = (chatMessage: ChatMessageEntity) => {
@@ -42,8 +38,7 @@ const parseContent = (chatMessage: ChatMessageEntity) => {
   const pending = chatMessage.pending;
   const deleting = chatMessage.deleting;
   const formatted = (pending && !deleting) ? parsePendingContent(content) : content;
-  const emojiMap = makeEmojiMap(chatMessage);
-  return emojify(formatted, emojiMap);
+  return formatted;
 };
 
 interface IChatMessage {
@@ -244,12 +239,9 @@ const ChatMessage = (props: IChatMessage) => {
                   ref={setBubbleRef}
                   tabIndex={0}
                 >
-                  <Text
-                    size='sm'
-                    theme='inherit'
-                    className='break-word-nested'
-                    dangerouslySetInnerHTML={{ __html: content }}
-                  />
+                  <Text size='sm' theme='inherit' className='break-word-nested'>
+                    <Emojify text={content} emojis={chatMessage.emojis} />
+                  </Text>
                 </div>
               </HStack>
             )}

@@ -1,9 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { announcementReactionSchema, type AnnouncementReaction } from 'pl-api';
+import { announcementReactionSchema, type AnnouncementReaction, type Announcement } from 'pl-api';
 import * as v from 'valibot';
 
 import { useClient } from 'pl-fe/hooks/useClient';
-import { type Announcement, normalizeAnnouncement } from 'pl-fe/normalizers/announcement';
 import { queryClient } from 'pl-fe/queries/client';
 
 const updateReaction = (reaction: AnnouncementReaction, count: number, me?: boolean, overwrite?: boolean) => v.parse(announcementReactionSchema, {
@@ -25,14 +24,9 @@ const updateReactions = (reactions: AnnouncementReaction[], name: string, count:
 const useAnnouncements = () => {
   const client = useClient();
 
-  const getAnnouncements = async () => {
-    const data = await client.announcements.getAnnouncements();
-    return data.map(normalizeAnnouncement);
-  };
-
   const { data, ...result } = useQuery<ReadonlyArray<Announcement>>({
     queryKey: ['announcements'],
-    queryFn: getAnnouncements,
+    queryFn: () => client.announcements.getAnnouncements(),
     placeholderData: [],
   });
 

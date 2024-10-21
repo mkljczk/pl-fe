@@ -156,7 +156,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       allow_unauthenticated: allowUnauthenticated,
     } = instance.pleroma.metadata.translation;
 
-    const renderTranslate = (me || allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.contentHtml.length > 0 && status.language !== null && !knownLanguages.includes(status.language);
+    const renderTranslate = (me || allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.content.length > 0 && status.language !== null && !knownLanguages.includes(status.language);
     const supportsLanguages = (translationLanguages[status.language!]?.includes(intl.locale));
 
     return autoTranslate && features.translations && renderTranslate && supportsLanguages;
