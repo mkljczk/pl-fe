@@ -203,7 +203,7 @@ const pleromaSchema = coerceObject({
       )),
       enabled: v.fallback(v.boolean(), false),
     }),
-    post_formats: v.fallback(v.optional(v.array(v.string())), undefined),
+    post_formats: v.fallback(v.array(v.string()), ['text/plain']),
     restrict_unauthenticated: coerceObject({
       activities: coerceObject({
         local: v.fallback(v.boolean(), false),

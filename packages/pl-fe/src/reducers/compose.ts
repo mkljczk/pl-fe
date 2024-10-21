@@ -1,6 +1,7 @@
 import { Map as ImmutableMap, List as ImmutableList, OrderedSet as ImmutableOrderedSet, Record as ImmutableRecord, fromJS } from 'immutable';
-import { PLEROMA, type CredentialAccount, type MediaAttachment, type Tag } from 'pl-api';
+import { Instance, PLEROMA, type CredentialAccount, type MediaAttachment, type Tag } from 'pl-api';
 
+import { INSTANCE_FETCH_SUCCESS, InstanceAction } from 'pl-fe/actions/instance';
 import { isNativeEmoji } from 'pl-fe/features/emoji';
 import { tagHistory } from 'pl-fe/settings';
 import { hasIntegerMediaIds } from 'pl-fe/utils/status';
@@ -276,6 +277,12 @@ const importAccount = (compose: Compose, account: CredentialAccount) => {
 //   }
 // };
 
+const updateDefaultContentType = (compose: Compose, instance: Instance) => {
+  const postFormats = instance.pleroma.metadata.post_formats;
+
+  return compose.update('content_type', type => postFormats.includes(type) ? type : postFormats.includes('text/markdown') ? 'text/markdown' : postFormats[0]);
+};
+
 const updateCompose = (state: State, key: string, updater: (compose: Compose) => Compose) =>
   state.update(key, state.get('default')!, updater);
 
@@ -283,7 +290,7 @@ const initialState: State = ImmutableMap({
   default: ReducerCompose({ idempotencyKey: crypto.randomUUID(), resetFileKey: getResetFileKey() }),
 });
 
-const compose = (state = initialState, action: ComposeAction | EventsAction | MeAction | TimelineAction) => {
+const compose = (state = initialState, action: ComposeAction | EventsAction | InstanceAction | MeAction | TimelineAction) => {
   switch (action.type) {
     case COMPOSE_TYPE_CHANGE:
       return updateCompose(state, action.composeId, compose => compose.withMutations(map => {
@@ -589,6 +596,8 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | Me
         .set('quote', null));
     case COMPOSE_FEDERATED_CHANGE:
       return updateCompose(state, action.composeId, compose => compose.update('federated', value => !value));
+    case INSTANCE_FETCH_SUCCESS:
+      return updateCompose(state, 'default', (compose) => updateDefaultContentType(compose, action.instance));
     default:
       return state;
   }

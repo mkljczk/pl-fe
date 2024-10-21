@@ -8,7 +8,7 @@ import { datetimeSchema, filteredArray } from '../utils';
 import { adminAccountSchema } from './account';
 
 /** @see {@link https://docs.joinmastodon.org/entities/Admin_Report/} */
-const adminReportSchema =  v.pipe(
+const adminReportSchema = v.pipe(
   v.any(),
   v.transform((report: any) => {
     if (report.actor) {
