@@ -7,7 +7,7 @@ Want to test `pl-fe` with **any existing MastoAPI-compatible server?** Try [pl.m
 If you want to use `pl-fe` as the default frontend on your server, download the latest build from [pl.mkljczk.pl/pl-fe.zip](http://pl.mkljczk.pl/pl-fe.zip) and install it following the instructions for your backend. For example, on a standard Pleroma installation you can use:
 
 ```sh
-curl -O http://pl.mkljczk.pl/pl-fe.zip
+curl -O https://pl.mkljczk.pl/pl-fe.zip
 unzip pl-fe.zip -d /opt/pleroma/instance/static/
 rm pl-fe.zip
 ```

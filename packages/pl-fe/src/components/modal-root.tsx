@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
-import 'wicg-inert';
 
 import { cancelReplyCompose } from 'pl-fe/actions/compose';
 import { saveDraftStatus } from 'pl-fe/actions/draft-statuses';
