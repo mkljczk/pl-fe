@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import Account from 'pl-fe/components/account';
@@ -21,6 +21,10 @@ import StatusInteractionBar from './status-interaction-bar';
 import StatusTypeIcon from './status-type-icon';
 
 import type { SelectedStatus } from 'pl-fe/selectors';
+
+const messages = defineMessages({
+  applicationName: { id: 'status.application_name', defaultMessage: 'Sent form {name}' },
+});
 
 interface IDetailedStatus {
   status: SelectedStatus;
@@ -152,8 +156,14 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                 {actualStatus.application && (
                   <>
                     {' · '}
-                    <a href={(actualStatus.application.website) ? actualStatus.application.website : '#'} target='_blank' rel='noopener' className='hover:underline'>
-                      ({actualStatus.application.name})
+                    <a
+                      href={(actualStatus.application.website) ? actualStatus.application.website : '#'}
+                      target='_blank'
+                      rel='noopener'
+                      className='hover:underline'
+                      title={intl.formatMessage(messages.applicationName, { name: actualStatus.application.name })}
+                    >
+                      {actualStatus.application.name}
                     </a>
                   </>
                 )}
