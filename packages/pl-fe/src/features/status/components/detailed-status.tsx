@@ -144,35 +144,34 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
           <HStack space={1} alignItems='center'>
             <span>
-              <a href={actualStatus.url} target='_blank' rel='noopener' className='hover:underline'>
-                <Text tag='span' theme='muted' size='sm'>
+              <Text tag='span' theme='muted' size='sm'>
+                <a href={actualStatus.url} target='_blank' rel='noopener' className='hover:underline'>
                   <FormattedDate value={new Date(actualStatus.created_at)} hour12 year='numeric' month='short' day='2-digit' hour='numeric' minute='2-digit' />
-                </Text>
-              </a>
-
-              {actualStatus.application && (
-                <a href={(actualStatus.application.website) ? actualStatus.application.website : '#' } target='_blank' rel='noopener' className='hover:underline ml-2'>
-                  <Text tag='span' theme='muted' size='sm'>
-                    ({actualStatus.application.name})
-                  </Text>
                 </a>
-              )}
 
-              {actualStatus.edited_at && (
-                <>
-                  {' · '}
-                  <div
-                    className='inline hover:underline'
-                    onClick={handleOpenCompareHistoryModal}
-                    role='button'
-                    tabIndex={0}
-                  >
-                    <Text tag='span' theme='muted' size='sm'>
+                {actualStatus.application && (
+                  <>
+                    {' · '}
+                    <a href={(actualStatus.application.website) ? actualStatus.application.website : '#'} target='_blank' rel='noopener' className='hover:underline'>
+                      ({actualStatus.application.name})
+                    </a>
+                  </>
+                )}
+
+                {actualStatus.edited_at && (
+                  <>
+                    {' · '}
+                    <div
+                      className='inline hover:underline'
+                      onClick={handleOpenCompareHistoryModal}
+                      role='button'
+                      tabIndex={0}
+                    >
                       <FormattedMessage id='status.edited' defaultMessage='Edited {date}' values={{ date: intl.formatDate(new Date(actualStatus.edited_at), { hour12: true, month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit' }) }} />
-                    </Text>
-                  </div>
-                </>
-              )}
+                    </div>
+                  </>
+                )}
+              </Text>
             </span>
 
             <StatusTypeIcon status={actualStatus} />
