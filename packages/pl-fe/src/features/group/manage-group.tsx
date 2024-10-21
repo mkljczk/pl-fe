@@ -13,6 +13,7 @@ import Text from 'pl-fe/components/ui/text';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
+import Emojify from '../emoji/emojify';
 import ColumnForbidden from '../ui/components/column-forbidden';
 
 type RouteParams = { groupId: string };
@@ -86,7 +87,7 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
 
             <List>
               <ListItem label={intl.formatMessage(messages.editGroup)} to={`/groups/${group.id}/manage/edit`}>
-                <span dangerouslySetInnerHTML={{ __html: group.display_name_html }} />
+                <span><Emojify text={group.display_name} emojis={group.emojis} /></span>
               </ListItem>
             </List>
           </>

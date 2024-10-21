@@ -1,10 +1,10 @@
 import emojify from 'pl-fe/features/emoji';
-import { makeCustomEmojiMap } from 'pl-fe/schemas/utils';
+import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
 import type { AdminAnnouncement as BaseAdminAnnouncement, Announcement as BaseAnnouncement } from 'pl-api';
 
 const normalizeAnnouncement = <T extends BaseAnnouncement = BaseAnnouncement>(announcement: T) => {
-  const emojiMap = makeCustomEmojiMap(announcement.emojis);
+  const emojiMap = makeEmojiMap(announcement.emojis);
 
   const contentHtml = emojify(announcement.content, emojiMap);
 

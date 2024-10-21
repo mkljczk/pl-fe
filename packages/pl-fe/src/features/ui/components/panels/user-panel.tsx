@@ -9,6 +9,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useSettings } from 'pl-fe/hooks/useSettings';
 import { getAcct } from 'pl-fe/utils/accounts';
@@ -29,7 +30,6 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
   const fqn = useAppSelector((state) => displayFqn(state));
 
   if (!account) return null;
-  const displayNameHtml = { __html: account.display_name_html };
   const acct = !account.acct.includes('@') && domain ? `${account.acct}@${domain}` : account.acct;
   const header = account.header;
   const verified = account.verified;
@@ -67,7 +67,9 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
         <Stack>
           <Link to={`/@${account.acct}`}>
             <HStack space={1} alignItems='center'>
-              <Text size='lg' weight='bold' dangerouslySetInnerHTML={displayNameHtml} truncate />
+              <Text size='lg' weight='bold' truncate>
+                <Emojify text={account.display_name} emojis={account.emojis} />
+              </Text>
 
               {verified && <VerificationBadge />}
 

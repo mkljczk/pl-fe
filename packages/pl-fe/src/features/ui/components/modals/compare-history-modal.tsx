@@ -9,6 +9,7 @@ import Modal from 'pl-fe/components/ui/modal';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
@@ -43,7 +44,6 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
       <div className='divide-y divide-solid divide-gray-200 dark:divide-gray-800'>
         {versions?.map((version) => {
           const content = <ParsedContent html={version.contentHtml} mentions={status?.mentions} hasQuote={!!status?.quote_id} />;
-          const spoilerContent = { __html: version.spoilerHtml };
 
           const poll = typeof version.poll !== 'string' && version.poll;
 
@@ -51,7 +51,9 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
             <div className='flex flex-col py-2 first:pt-0 last:pb-0'>
               {version.spoiler_text?.length > 0 && (
                 <>
-                  <span dangerouslySetInnerHTML={spoilerContent} />
+                  <span>
+                    <Emojify text={version.spoiler_text} emojis={version.emojis} />
+                  </span>
                   <hr />
                 </>
               )}
@@ -71,7 +73,9 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
                           role='radio'
                         />
 
-                        <span dangerouslySetInnerHTML={{ __html: option.title_emojified }} />
+                        <span>
+                          <ParsedContent html={option.title} emojis={version.emojis} />
+                        </span>
                       </HStack>
                     ))}
                   </Stack>

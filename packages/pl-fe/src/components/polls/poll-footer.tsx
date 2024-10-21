@@ -12,7 +12,7 @@ import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import RelativeTimestamp from '../relative-timestamp';
 
 import type { Selected } from './poll';
-import type { Poll } from 'pl-fe/normalizers/poll';
+import type { Poll } from 'pl-api';
 
 const messages = defineMessages({
   closed: { id: 'poll.closed', defaultMessage: 'Closed' },

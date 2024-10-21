@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { fetchPinnedAccounts } from 'pl-fe/actions/accounts';
 import Widget from 'pl-fe/components/ui/widget';
 import AccountContainer from 'pl-fe/containers/account-container';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { WhoToFollowPanel } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
@@ -12,7 +13,7 @@ import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import type { Account } from 'pl-fe/normalizers/account';
 
 interface IPinnedAccountsPanel {
-  account: Pick<Account, 'id' | 'display_name_html'>;
+  account: Pick<Account, 'id' | 'display_name' | 'emojis'>;
   limit: number;
 }
 
@@ -36,7 +37,7 @@ const PinnedAccountsPanel: React.FC<IPinnedAccountsPanel> = ({ account, limit })
         id='pinned_accounts.title'
         defaultMessage='{name}’s choices'
         values={{
-          name: <span dangerouslySetInnerHTML={{ __html: account.display_name_html }} />,
+          name: <span><Emojify text={account.display_name} emojis={account.emojis} /></span>,
         }}
       />}
     >

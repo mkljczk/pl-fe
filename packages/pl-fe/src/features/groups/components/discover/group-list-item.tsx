@@ -7,13 +7,14 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import GroupActionButton from 'pl-fe/features/group/components/group-action-button';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
 import type { Group } from 'pl-fe/normalizers/group';
 
 interface IGroupListItem {
-  group: Pick<Group, 'id' | 'avatar' | 'avatar_description' | 'display_name_html' | 'locked' | 'members_count' | 'relationship'>;
+  group: Pick<Group, 'id' | 'avatar' | 'avatar_description' | 'display_name' | 'emojis' | 'locked' | 'members_count' | 'relationship'>;
   withJoinAction?: boolean;
 }
 
@@ -34,11 +35,9 @@ const GroupListItem = (props: IGroupListItem) => {
           />
 
           <Stack className='overflow-hidden'>
-            <Text
-              weight='bold'
-              dangerouslySetInnerHTML={{ __html: group.display_name_html }}
-              truncate
-            />
+            <Text weight='bold' truncate>
+              <Emojify text={group.display_name} emojis={group.emojis} />
+            </Text>
 
             <HStack className='text-gray-700 dark:text-gray-600' space={1} alignItems='center'>
               <Icon

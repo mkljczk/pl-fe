@@ -12,6 +12,7 @@ import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import AccountContainer from 'pl-fe/containers/account-container';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import StatusTypeIcon from 'pl-fe/features/status/components/status-type-icon';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
@@ -204,23 +205,17 @@ const Status: React.FC<IStatus> = (props) => {
                     className='hover:underline'
                   >
                     <bdi className='truncate'>
-                      <strong
-                        className='text-gray-800 dark:text-gray-200'
-                        dangerouslySetInnerHTML={{
-                          __html: status.account.display_name_html,
-                        }}
-                      />
+                      <strong className='text-gray-800 dark:text-gray-200'>
+                        <Emojify text={status.account.display_name} emojis={status.account.emojis} />
+                      </strong>
                     </bdi>
                   </Link>
                 ),
                 group: (
                   <Link to={`/groups/${group.id}`} className='hover:underline'>
-                    <strong
-                      className='text-gray-800 dark:text-gray-200'
-                      dangerouslySetInnerHTML={{
-                        __html: group.display_name_html,
-                      }}
-                    />
+                    <strong className='text-gray-800 dark:text-gray-200'>
+                      <Emojify text={group.display_name} emojis={group.emojis} />
+                    </strong>
                   </Link>
                 ),
               }}
@@ -234,12 +229,9 @@ const Status: React.FC<IStatus> = (props) => {
       const renderedAccounts = accounts.slice(0, 2).map(account => !!account && (
         <Link key={account.acct} to={`/@${account.acct}`} className='hover:underline'>
           <bdi className='truncate'>
-            <strong
-              className='text-gray-800 dark:text-gray-200'
-              dangerouslySetInnerHTML={{
-                __html: account.display_name_html,
-              }}
-            />
+            <strong className='text-gray-800 dark:text-gray-200'>
+              <Emojify text={status.account.display_name} emojis={status.account.emojis} />
+            </strong>
           </bdi>
         </Link>
       ));
@@ -294,7 +286,7 @@ const Status: React.FC<IStatus> = (props) => {
                   <Link to={`/groups/${group.id}`} className='hover:underline'>
                     <bdi className='truncate'>
                       <strong className='text-gray-800 dark:text-gray-200'>
-                        <span dangerouslySetInnerHTML={{ __html: group.display_name_html }} />
+                        <Emojify text={group.display_name} emojis={group.emojis} />
                       </strong>
                     </bdi>
                   </Link>

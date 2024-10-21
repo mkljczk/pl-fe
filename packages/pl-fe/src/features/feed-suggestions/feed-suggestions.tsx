@@ -10,6 +10,7 @@ import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 
+import Emojify from '../emoji/emojify';
 import ActionButton from '../ui/components/action-button';
 import { HotKeys } from '../ui/components/hotkeys';
 
@@ -41,14 +42,9 @@ const SuggestionItem: React.FC<ISuggestionItem> = ({ accountId }) => {
 
           <Stack>
             <HStack alignItems='center' justifyContent='center' space={1}>
-              <Text
-                weight='semibold'
-                dangerouslySetInnerHTML={{ __html: account.display_name_html }}
-                truncate
-                align='center'
-                size='sm'
-                className='max-w-[95%]'
-              />
+              <Text weight='semibold' truncate align='center' size='sm' className='max-w-[95%]'>
+                <Emojify text={account.display_name} emojis={account.emojis} />
+              </Text>
 
               {account.verified && <VerificationBadge />}
             </HStack>

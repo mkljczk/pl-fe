@@ -13,6 +13,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
 import AccountContainer from 'pl-fe/containers/account-container';
 import StatusContainer from 'pl-fe/containers/status-container';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
@@ -37,14 +38,15 @@ const notificationForScreenReader = (intl: IntlShape, message: string, timestamp
   return output.join(', ');
 };
 
-const buildLink = (account: Pick<Account, 'acct' | 'display_name_html' | 'id'>): JSX.Element => (
+const buildLink = (account: Pick<Account, 'acct' | 'display_name' | 'emojis' | 'id'>): JSX.Element => (
   <HoverAccountWrapper key={account.acct} element='bdi' accountId={account.id}>
     <Link
       className='font-bold text-gray-800 hover:underline dark:text-gray-200'
       title={account.acct}
       to={`/@${account.acct}`}
-      dangerouslySetInnerHTML={{ __html: account.display_name_html }}
-    />
+    >
+      <Emojify text={account.display_name} emojis={account.emojis} />
+    </Link>
   </HoverAccountWrapper>
 );
 
@@ -153,7 +155,7 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
 const buildMessage = (
   intl: IntlShape,
   type: NotificationType | 'reply',
-  accounts: Array<Pick<Account, 'acct' | 'display_name_html' | 'id'>>,
+  accounts: Array<Pick<Account, 'acct' | 'display_name' | 'emojis' | 'id'>>,
   targetName: string,
   instanceTitle: string,
 ): React.ReactNode => {

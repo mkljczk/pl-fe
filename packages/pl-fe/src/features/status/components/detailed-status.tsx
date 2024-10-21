@@ -15,6 +15,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
 
 import StatusInteractionBar from './status-interaction-bar';
@@ -66,7 +67,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                     <Link to={`/groups/${status.group.id}`} className='hover:underline'>
                       <bdi className='truncate'>
                         <strong className='text-gray-800 dark:text-gray-200'>
-                          <span dangerouslySetInnerHTML={{ __html: status.group.display_name_html }} />
+                          <Emojify text={status.account.display_name} emojis={status.account.emojis} />
                         </strong>
                       </bdi>
                     </Link>

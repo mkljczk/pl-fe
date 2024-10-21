@@ -10,6 +10,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import { isDefaultHeader } from 'pl-fe/utils/accounts';
 
@@ -141,9 +142,10 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
         <Text
           size='xl'
           weight='bold'
-          dangerouslySetInnerHTML={{ __html: group.display_name_html }}
           data-testid='group-name'
-        />
+        >
+          <Emojify text={group.display_name} emojis={group.emojis} />
+        </Text>
 
         <Stack data-testid='group-meta' space={1} alignItems='center'>
           <HStack className='text-gray-700 dark:text-gray-600' space={2} wrap>
@@ -157,7 +159,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
             align='center'
             className='[&_a]:text-primary-600 [&_a]:hover:underline [&_a]:dark:text-accent-blue'
           >
-            <ParsedContent html={group.note_emojified} />
+            <ParsedContent html={group.note} emojis={group.emojis} />
           </Text>
         </Stack>
 

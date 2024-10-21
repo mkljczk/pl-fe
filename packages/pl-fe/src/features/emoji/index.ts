@@ -225,5 +225,6 @@ export {
   isCustomEmoji,
   isNativeEmoji,
   buildCustomEmojis,
+  validEmojiChar,
   emojify as default,
 };

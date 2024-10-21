@@ -5,6 +5,7 @@ import Account from 'pl-fe/components/account';
 import Icon from 'pl-fe/components/icon';
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
+import Emojify from 'pl-fe/features/emoji/emojify';
 
 import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 
@@ -27,7 +28,7 @@ const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
             id='notification.move'
             defaultMessage='{name} moved to {targetName}'
             values={{
-              name: <span dangerouslySetInnerHTML={{ __html: from.display_name_html }} />,
+              name: <span><Emojify text={from.display_name} emojis={from.emojis} /></span>,
               targetName: to.acct,
             }}
           />

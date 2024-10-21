@@ -10,6 +10,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { usePlFeConfig } from 'pl-fe/hooks/usePlFeConfig';
 import { capitalize } from 'pl-fe/utils/strings';
@@ -122,8 +123,6 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
     );
   }
 
-  const deactivated = account.deactivated ?? false;
-  const displayNameHtml = deactivated ? { __html: intl.formatMessage(messages.deactivated) } : { __html: account.display_name_html };
   const memberSinceDate = intl.formatDate(account.created_at, { month: 'long', year: 'numeric' });
   const badges = getBadges();
 
@@ -132,7 +131,11 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
       <Stack space={2}>
         <Stack>
           <HStack space={1} alignItems='center'>
-            <Text size='lg' weight='bold' dangerouslySetInnerHTML={displayNameHtml} truncate />
+            <Text size='lg' weight='bold' truncate>
+              {account.deactivated
+                ? <FormattedMessage id='account.deactivated' defaultMessage='Deactivated' />
+                : <Emojify text={account.display_name} emojis={account.emojis} />}
+            </Text>
 
             {account.bot && <Badge slug='bot' title={intl.formatMessage(messages.bot)} />}
 
@@ -160,9 +163,9 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
         <ProfileStats account={account} />
 
-        {!!account.note_emojified && (
+        {!!account.note && (
           <Markup size='sm'>
-            <ParsedContent html={account.note_emojified} />
+            <ParsedContent html={account.note} emojis={account.emojis} />
           </Markup>
         )}
 
@@ -208,7 +211,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
       {account.fields.length > 0 && (
         <Stack space={2} className='mt-4 xl:hidden'>
           {account.fields.map((field, i) => (
-            <ProfileField field={field} key={i} />
+            <ProfileField field={field} key={i} emojis={account.emojis} />
           ))}
         </Stack>
       )}

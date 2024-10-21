@@ -3,11 +3,14 @@ import DOMPurify from 'isomorphic-dompurify';
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
+import Emojify from 'pl-fe/features/emoji/emojify';
+import { makeEmojiMap } from 'pl-fe/utils/normalizers';
+
 import HashtagLink from './hashtag-link';
 import HoverAccountWrapper from './hover-account-wrapper';
 import StatusMention from './status-mention';
 
-import type { Mention } from 'pl-api';
+import type { CustomEmoji, Mention } from 'pl-api';
 
 const nodesToText = (nodes: Array<DOMNode>): string =>
   nodes.map(node => node.type === 'text' ? node.data : node.type === 'tag' ? nodesToText(node.children as Array<DOMNode>) : '').join('');
@@ -19,13 +22,17 @@ interface IParsedContent {
   mentions?: Array<Mention>;
   /** Whether it's a status which has a quote. */
   hasQuote?: boolean;
+  /** Related custom emojis. */
+  emojis?: Array<CustomEmoji>;
 }
 
-const ParsedContent: React.FC<IParsedContent> = (({ html, mentions, hasQuote }) => {
+const ParsedContent: React.FC<IParsedContent> = (({ html, mentions, hasQuote, emojis }) => {
   return useMemo(() => {
     if (html.length === 0) {
       return null;
     }
+
+    const emojiMap = emojis ? makeEmojiMap(emojis) : undefined;
 
     const selectors: Array<string> = [];
 
@@ -98,6 +105,14 @@ const ParsedContent: React.FC<IParsedContent> = (({ html, mentions, hasQuote }) 
 
           return fallback;
         }
+      },
+
+      transform(reactNode) {
+        if (typeof reactNode === 'string') {
+          return <Emojify text={reactNode} emojis={emojiMap} />;
+        }
+
+        return reactNode as JSX.Element;
       },
     };
 
