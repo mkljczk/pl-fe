@@ -8,6 +8,7 @@ export * from './hooks/markers/useMarkers';
 export * from './hooks/markers/useUpdateMarkerMutation';
 export * from './hooks/notifications/useNotification';
 export * from './hooks/notifications/useNotificationList';
+export * from './hooks/polls/usePoll';
 export * from './hooks/statuses/useStatus';
 
 export * from './importer';

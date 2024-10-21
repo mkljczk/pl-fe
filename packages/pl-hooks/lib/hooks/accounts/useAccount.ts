@@ -1,10 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
-import { usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
+import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
+import { importEntities } from 'pl-hooks/importer';
 import { type Account, normalizeAccount } from 'pl-hooks/normalizers/normalizeAccount';
 
 import { useAccountRelationship } from './useAccountRelationship';
+
+import type { PlApiClient } from 'pl-api';
 
 interface UseAccountOpts {
   withRelationship?: boolean;
@@ -38,4 +41,15 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
   return { ...accountQuery, data };
 };
 
-export { useAccount, type UseAccountOpts };
+const prefetchAccount = (client: PlApiClient, accountId: string) =>
+  queryClient.prefetchQuery({
+    queryKey: ['accounts', 'entities', accountId],
+    queryFn: () => client.accounts.getAccount(accountId!)
+      .then(account => {
+        importEntities({ accounts: [account] }, { withParents: false });
+
+        return normalizeAccount(account);
+      }),
+  });
+
+export { useAccount, prefetchAccount, type UseAccountOpts };

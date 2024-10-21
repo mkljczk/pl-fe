@@ -12,7 +12,6 @@ import type {
 } from 'pl-api';
 
 const importAccount = (account: BaseAccount) => {
-  queryClient.setQueryData<string>(['accounts', 'byAcct', account.acct.toLocaleLowerCase()], account.id);
   return queryClient.setQueryData<BaseAccount>(['accounts', 'entities', account.id], account);
 };
 
@@ -58,6 +57,8 @@ const importEntities = (entities: {
   const statuses: Record<string, BaseStatus> = {};
 
   const processAccount = (account: BaseAccount) => {
+    queryClient.setQueryData<string>(['accounts', 'byAcct', account.acct.toLocaleLowerCase()], account.id);
+
     if (account.moved) processAccount(account.moved);
     if (account.relationship) relationships[account.relationship.id] = account.relationship;
   };
