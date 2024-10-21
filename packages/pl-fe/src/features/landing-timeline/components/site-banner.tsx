@@ -1,7 +1,7 @@
-import DOMPurify from 'isomorphic-dompurify';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import Markup from 'pl-fe/components/markup';
+import { ParsedContent } from 'pl-fe/components/parsed-content';
 import Stack from 'pl-fe/components/ui/stack';
 import { useInstance } from 'pl-fe/hooks/useInstance';
 import { getTextDirection } from 'pl-fe/utils/rtl';
@@ -10,7 +10,6 @@ import { LogoText } from './logo-text';
 
 const SiteBanner: React.FC = () => {
   const instance = useInstance();
-  const description = useMemo(() => DOMPurify.sanitize(instance.description), [instance.description]);
 
   return (
     <Stack space={6}>
@@ -21,9 +20,10 @@ const SiteBanner: React.FC = () => {
       {instance.description.trim().length > 0 && (
         <Markup
           size='lg'
-          dangerouslySetInnerHTML={{ __html: description }}
-          direction={getTextDirection(description)}
-        />
+          direction={getTextDirection(instance.description)}
+        >
+          <ParsedContent html={instance.description} />
+        </Markup>
       )}
     </Stack>
   );

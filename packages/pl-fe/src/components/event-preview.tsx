@@ -8,6 +8,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import EventActionButton from 'pl-fe/features/event/components/event-action-button';
 import EventDate from 'pl-fe/features/event/components/event-date';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
@@ -71,7 +72,9 @@ const EventPreview: React.FC<IEventPreview> = ({ status, className, hideAction, 
           <HStack alignItems='center' space={2}>
             <Icon src={require('@tabler/icons/outline/user.svg')} />
             <HStack space={1} alignItems='center' grow>
-              <span dangerouslySetInnerHTML={{ __html: account.display_name_html }} />
+              <span>
+                <Emojify text={account.display_name} emojis={account.emojis} />
+              </span>
               {account.verified && <VerificationBadge />}
             </HStack>
           </HStack>

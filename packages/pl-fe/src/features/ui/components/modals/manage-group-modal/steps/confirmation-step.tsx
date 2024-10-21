@@ -64,7 +64,7 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
             size='md'
             className='mx-auto max-w-sm [&_a]:text-primary-600 [&_a]:hover:underline [&_a]:dark:text-accent-blue'
           >
-            <ParsedContent html={group.note_emojified} />
+            <ParsedContent html={group.note} emojis={group.emojis} />
           </Text>
         </Stack>
       </Stack>

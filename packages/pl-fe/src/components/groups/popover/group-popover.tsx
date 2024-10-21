@@ -8,6 +8,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Popover from 'pl-fe/components/ui/popover';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import GroupMemberCount from 'pl-fe/features/group/components/group-member-count';
 import GroupPrivacy from 'pl-fe/features/group/components/group-privacy';
 
@@ -71,7 +72,9 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
 
             {/* Group Info */}
             <Stack alignItems='center' justifyContent='end' grow className='basis-1/2 py-4' space={0.5}>
-              <Text size='lg' weight='bold' dangerouslySetInnerHTML={{ __html: group.display_name_html }} />
+              <Text size='lg' weight='bold'>
+                <Emojify text={group.display_name} emojis={group.emojis} />
+              </Text>
 
               <HStack className='text-gray-700 dark:text-gray-600' space={2} wrap>
                 <GroupPrivacy group={group} />

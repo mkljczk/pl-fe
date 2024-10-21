@@ -19,6 +19,7 @@ import IconButton from 'pl-fe/components/ui/icon-button';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useFeatures } from 'pl-fe/hooks/useFeatures';
 import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
@@ -414,7 +415,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
                   name: (
                     <Link className='mention inline-block' to={`/@${account.acct}`}>
                       <HStack space={1} alignItems='center' grow>
-                        <span dangerouslySetInnerHTML={{ __html: account.display_name_html }} />
+                        <span><Emojify text={account.display_name} emojis={account.emojis} /></span>
                         {account.verified && <VerificationBadge />}
                       </HStack>
                     </Link>

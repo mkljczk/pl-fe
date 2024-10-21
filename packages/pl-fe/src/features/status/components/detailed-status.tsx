@@ -1,8 +1,8 @@
+import { useGroup } from 'pl-fe/api/hooks';
 import React, { useRef } from 'react';
-import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { useGroup } from 'pl-fe/api/hooks';
 import Account from 'pl-fe/components/account';
 import StatusContent from 'pl-fe/components/status-content';
 import StatusLanguagePicker from 'pl-fe/components/status-language-picker';
@@ -16,12 +16,17 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
 
 import StatusInteractionBar from './status-interaction-bar';
 import StatusTypeIcon from './status-type-icon';
 
 import type { SelectedStatus } from 'pl-fe/selectors';
+
+const messages = defineMessages({
+  applicationName: { id: 'status.application_name', defaultMessage: 'Sent form {name}' },
+});
 
 interface IDetailedStatus {
   status: SelectedStatus;
@@ -65,7 +70,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                     <Link to={`/groups/${status.group_id}`} className='hover:underline'>
                       <bdi className='truncate'>
                         <strong className='text-gray-800 dark:text-gray-200'>
-                          <span dangerouslySetInnerHTML={{ __html: groupQuery.group?.display_name_html }} />
+                          <Emojify text={groupQuery.group?.display_name} emojis={groupQuery.group?.emojis} />
                         </strong>
                       </bdi>
                     </Link>
@@ -147,27 +152,40 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
           <HStack space={1} alignItems='center'>
             <span>
-              <a href={actualStatus.url} target='_blank' rel='noopener' className='hover:underline'>
-                <Text tag='span' theme='muted' size='sm'>
+              <Text tag='span' theme='muted' size='sm'>
+                <a href={actualStatus.url} target='_blank' rel='noopener' className='hover:underline'>
                   <FormattedDate value={new Date(actualStatus.created_at)} hour12 year='numeric' month='short' day='2-digit' hour='numeric' minute='2-digit' />
-                </Text>
-              </a>
+                </a>
 
-              {actualStatus.edited_at && (
-                <>
-                  {' · '}
-                  <div
-                    className='inline hover:underline'
-                    onClick={handleOpenCompareHistoryModal}
-                    role='button'
-                    tabIndex={0}
-                  >
-                    <Text tag='span' theme='muted' size='sm'>
+                {actualStatus.application && (
+                  <>
+                    {' · '}
+                    <a
+                      href={(actualStatus.application.website) ? actualStatus.application.website : '#'}
+                      target='_blank'
+                      rel='noopener'
+                      className='hover:underline'
+                      title={intl.formatMessage(messages.applicationName, { name: actualStatus.application.name })}
+                    >
+                      {actualStatus.application.name}
+                    </a>
+                  </>
+                )}
+
+                {actualStatus.edited_at && (
+                  <>
+                    {' · '}
+                    <div
+                      className='inline hover:underline'
+                      onClick={handleOpenCompareHistoryModal}
+                      role='button'
+                      tabIndex={0}
+                    >
                       <FormattedMessage id='status.edited' defaultMessage='Edited {date}' values={{ date: intl.formatDate(new Date(actualStatus.edited_at), { hour12: true, month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit' }) }} />
-                    </Text>
-                  </div>
-                </>
-              )}
+                    </div>
+                  </>
+                )}
+              </Text>
             </span>
 
             <StatusTypeIcon status={actualStatus} />

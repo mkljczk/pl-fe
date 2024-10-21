@@ -7,7 +7,7 @@ const baseRuleSchema = v.object({
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Rule/} */
-const ruleSchema =  v.pipe(
+const ruleSchema = v.pipe(
   v.any(),
   v.transform((data: any) => ({
     ...data,

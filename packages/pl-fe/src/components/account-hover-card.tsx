@@ -160,7 +160,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
                 size='sm'
                 className='mr-2 rtl:ml-2 rtl:mr-0 [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
               >
-                <ParsedContent html={account.note_emojified} />
+                <ParsedContent html={account.note} emojis={account.emojis} />
               </Text>
             )}
           </Stack>

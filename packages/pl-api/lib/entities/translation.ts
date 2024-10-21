@@ -15,7 +15,7 @@ const translationMediaAttachment = v.object({
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Translation/} */
-const translationSchema =  v.pipe(
+const translationSchema = v.pipe(
   v.any(),
   v.transform((translation: any) => {
   /**

@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Link from 'pl-fe/components/link';
 import Text from 'pl-fe/components/ui/text';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { useCompose } from 'pl-fe/hooks/useCompose';
 
 interface IReplyGroupIndicator {
@@ -28,10 +29,11 @@ const ReplyGroupIndicator = (props: IReplyGroupIndicator) => {
         id='compose.reply_group_indicator.message'
         defaultMessage='Posting to {groupLink}'
         values={{
-          groupLink: <Link
-            to={`/groups/${group.id}`}
-            dangerouslySetInnerHTML={{ __html: group.display_name_html }}
-          />,
+          groupLink: (
+            <Link to={`/groups/${group.id}`}>
+              <Emojify text={group.display_name} emojis={group.emojis} />
+            </Link>
+          ),
         }}
       />
     </Text>

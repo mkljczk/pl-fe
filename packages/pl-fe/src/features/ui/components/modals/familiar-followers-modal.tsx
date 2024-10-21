@@ -5,6 +5,7 @@ import ScrollableList from 'pl-fe/components/scrollable-list';
 import Modal from 'pl-fe/components/ui/modal';
 import Spinner from 'pl-fe/components/ui/spinner';
 import AccountContainer from 'pl-fe/containers/account-container';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { makeGetAccount } from 'pl-fe/selectors';
 
@@ -30,7 +31,13 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
   if (!account || !familiarFollowerIds) {
     body = <Spinner />;
   } else {
-    const emptyMessage = <FormattedMessage id='account.familiar_followers.empty' defaultMessage='No one you know follows {name}.' values={{ name: <span dangerouslySetInnerHTML={{ __html: account.display_name_html }} /> }} />;
+    const emptyMessage = (
+      <FormattedMessage
+        id='account.familiar_followers.empty'
+        defaultMessage='No one you know follows {name}.'
+        values={{ name: <span><Emojify text={account.display_name} emojis={account.emojis} /></span> }}
+      />
+    );
 
     body = (
       <ScrollableList
@@ -53,7 +60,7 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
         <FormattedMessage
           id='column.familiar_followers'
           defaultMessage='People you know following {name}'
-          values={{ name: <span dangerouslySetInnerHTML={{ __html: account?.display_name_html || '' }} /> }}
+          values={{ name: !!account && <span><Emojify text={account.display_name} emojis={account.emojis} /></span> }}
         />
       }
       onClose={onClickClose}

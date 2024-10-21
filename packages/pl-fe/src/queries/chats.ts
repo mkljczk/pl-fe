@@ -178,7 +178,7 @@ const useChatActions = (chatId: string) => {
                     chat_id: variables.chatId,
                     content: variables.content,
                     id: pendingId,
-                    created_at: new Date(),
+                    created_at: new Date().toISOString(),
                     account_id: account?.id,
                     unread: true,
                   }),

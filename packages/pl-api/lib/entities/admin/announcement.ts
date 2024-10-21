@@ -4,7 +4,7 @@ import * as v from 'valibot';
 import { announcementSchema } from '../announcement';
 
 /** @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminannouncements} */
-const adminAnnouncementSchema =  v.pipe(
+const adminAnnouncementSchema = v.pipe(
   v.any(),
   v.transform((announcement: any) => ({
     ...announcement,

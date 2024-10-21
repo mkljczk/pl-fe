@@ -11,6 +11,7 @@ import IconButton from 'pl-fe/components/ui/icon-button';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { getAcct } from 'pl-fe/utils/accounts';
@@ -219,8 +220,9 @@ const Account = ({
                 size='sm'
                 weight='semibold'
                 truncate
-                dangerouslySetInnerHTML={{ __html: account.display_name_html }}
-              />
+              >
+                <Emojify text={account.display_name} emojis={account.emojis} />
+              </Text>
 
               {account.verified && <VerificationBadge />}
 
@@ -281,8 +283,9 @@ const Account = ({
                     size='sm'
                     weight='semibold'
                     truncate
-                    dangerouslySetInnerHTML={{ __html: account.display_name_html }}
-                  />
+                  >
+                    <Emojify text={account.display_name} emojis={account.emojis} />
+                  </Text>
 
                   {account.verified && <VerificationBadge />}
 
@@ -356,7 +359,7 @@ const Account = ({
                   truncate
                   size='sm'
                 >
-                  <ParsedContent html={account.note_emojified} />
+                  <ParsedContent html={account.note} emojis={account.emojis} />
                 </Text>
               )}
             </Stack>

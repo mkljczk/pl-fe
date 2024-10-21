@@ -1,7 +1,5 @@
 import * as v from 'valibot';
 
-import type { CustomEmoji } from 'pl-api';
-
 /** Validates individual items in an array, dropping any that aren't valid. */
 const filteredArray = <T>(schema: v.BaseSchema<any, T, v.BaseIssue<unknown>>) =>
   v.pipe(
@@ -14,13 +12,6 @@ const filteredArray = <T>(schema: v.BaseSchema<any, T, v.BaseIssue<unknown>>) =>
     )),
   );
 
-/** Map a list of CustomEmoji to their shortcodes. */
-const makeCustomEmojiMap = (customEmojis: CustomEmoji[]) =>
-  customEmojis.reduce<Record<string, CustomEmoji>>((result, emoji) => {
-    result[`:${emoji.shortcode}:`] = emoji;
-    return result;
-  }, {});
-
 /** valibot schema to force the value into an object, if it isn't already. */
 const coerceObject = <T extends v.ObjectEntries>(shape: T) =>
   v.pipe(
@@ -29,4 +20,4 @@ const coerceObject = <T extends v.ObjectEntries>(shape: T) =>
     v.object(shape),
   );
 
-export { filteredArray, makeCustomEmojiMap, coerceObject };
+export { filteredArray, coerceObject };

@@ -33,12 +33,14 @@ const preprocessAccount = v.transform((account: any) => {
   if (!account?.acct) return null;
 
   const username = account.username || account.acct.split('@')[0];
-  const fqn = guessFqn(account);
+
+  const fqn = account.fqn || guessFqn(account);
+  const domain = fqn.split('@')[1] || '';
 
   return {
     username,
     fqn,
-    domain: fqn.split('@')[1] || '',
+    domain,
     avatar_static: account.avatar_static || account.avatar,
     header_static: account.header_static || account.header,
     local: typeof account.pleroma?.is_local === 'boolean' ? account.pleroma.is_local : account.acct.split('@')[1] === undefined,
@@ -96,7 +98,7 @@ const baseAccountSchema = v.object({
   acct: v.fallback(v.string(), ''),
   url: v.pipe(v.string(), v.url()),
   display_name: v.fallback(v.string(), ''),
-  content: v.fallback(v.pipe(v.string(), v.transform((note => note === '<p></p>' ? '' : note))), ''),
+  note: v.fallback(v.pipe(v.string(), v.transform(note => note === '<p></p>' ? '' : note)), ''),
   avatar: v.fallback(v.string(), ''),
   avatar_static: v.fallback(v.pipe(v.string(), v.url()), ''),
   header: v.fallback(v.pipe(v.string(), v.url()), ''),
@@ -110,7 +112,7 @@ const baseAccountSchema = v.object({
   noindex: v.fallback(v.nullable(v.boolean()), null),
   suspended: v.fallback(v.optional(v.boolean()), undefined),
   limited: v.fallback(v.optional(v.boolean()), undefined),
-  created_at: v.fallback(datetimeSchema, new Date().toUTCString()),
+  created_at: v.fallback(datetimeSchema, new Date().toISOString()),
   last_status_at: v.fallback(v.nullable(v.pipe(v.string(), v.isoDate())), null),
   statuses_count: v.fallback(v.number(), 0),
   followers_count: v.fallback(v.number(), 0),

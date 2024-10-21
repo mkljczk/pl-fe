@@ -10,8 +10,7 @@ import AnnouncementContent from './announcement-content';
 import ReactionsBar from './reactions-bar';
 
 import type { Map as ImmutableMap } from 'immutable';
-import type { CustomEmoji } from 'pl-api';
-import type { Announcement as AnnouncementEntity } from 'pl-fe/normalizers/announcement';
+import type { Announcement as AnnouncementEntity, CustomEmoji } from 'pl-api';
 
 interface IAnnouncement {
   announcement: AnnouncementEntity;

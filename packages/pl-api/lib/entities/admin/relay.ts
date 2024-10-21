@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 
-const adminRelaySchema =  v.pipe(
+const adminRelaySchema = v.pipe(
   v.any(),
   v.transform((data: any) => ({ id: data.actor, ...data })),
   v.object({

@@ -9,6 +9,7 @@ import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useFeatures } from 'pl-fe/hooks/useFeatures';
@@ -51,12 +52,9 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
     <HoverAccountWrapper accountId={account.id} key={account.id} element='span'>
       <Link className='mention inline-block' to={`/@${account.acct}`}>
         <HStack space={1} alignItems='center' grow>
-          <Text
-            size='sm'
-            theme='primary'
-            truncate
-            dangerouslySetInnerHTML={{ __html: account.display_name_html }}
-          />
+          <Text size='sm' theme='primary' truncate>
+            <Emojify text={account.display_name} emojis={account.emojis} />
+          </Text>
 
           {account.verified && <VerificationBadge />}
         </HStack>

@@ -4,7 +4,7 @@ import React from 'react';
 import PollOption from 'pl-fe/components/polls/poll-option';
 import Stack from 'pl-fe/components/ui/stack';
 
-import type { Poll } from 'pl-fe/normalizers/poll';
+import type { Poll } from 'pl-api';
 
 interface IPollPreview {
   poll: Poll;

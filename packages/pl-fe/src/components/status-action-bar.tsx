@@ -5,7 +5,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import { blockAccount } from 'pl-fe/actions/accounts';
 import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'pl-fe/actions/compose';
-import { emojiReact } from 'pl-fe/actions/emoji-reacts';
+import { emojiReact, unEmojiReact } from 'pl-fe/actions/emoji-reacts';
 import { editEvent } from 'pl-fe/actions/events';
 import { toggleBookmark, toggleDislike, toggleFavourite, togglePin, toggleReblog } from 'pl-fe/actions/interactions';
 import { deleteStatusModal, toggleStatusSensitivityModal } from 'pl-fe/actions/moderation';
@@ -104,6 +104,7 @@ const messages = defineMessages({
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
   unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
   viewReactions: { id: 'status.view_reactions', defaultMessage: 'View reactions' },
+  wrench: { id: 'status.wrench', defaultMessage: 'Wrench reaction' },
   addKnownLanguage: { id: 'status.add_known_language', defaultMessage: 'Do not auto-translate posts in {language}.' },
   translate: { id: 'status.translate', defaultMessage: 'Translate' },
   hideTranslation: { id: 'status.hide_translation', defaultMessage: 'Hide translation' },
@@ -143,7 +144,9 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const { groupRelationship } = useGroupRelationship(status.group_id || undefined);
   const features = useFeatures();
   const instance = useInstance();
-  const { autoTranslate, boostModal, deleteModal, knownLanguages } = useSettings();
+  const { autoTranslate, boostModal, deleteModal, knownLanguages, showWrenchButton } = useSettings();
+
+  const wrenches = showWrenchButton && status.emoji_reactions.find(emoji => emoji.name === '🔧') || undefined;
 
   const { translationLanguages } = useTranslationLanguages();
 
@@ -153,7 +156,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       allow_unauthenticated: allowUnauthenticated,
     } = instance.pleroma.metadata.translation;
 
-    const renderTranslate = (me || allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.contentHtml.length > 0 && status.language !== null && !knownLanguages.includes(status.language);
+    const renderTranslate = (me || allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.content.length > 0 && status.language !== null && !knownLanguages.includes(status.language);
     const supportsLanguages = (translationLanguages[status.language!]?.includes(intl.locale));
 
     return autoTranslate && features.translations && renderTranslate && supportsLanguages;
@@ -211,8 +214,22 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     }
   };
 
+  const handleWrenchClick: React.EventHandler<React.MouseEvent> = (e) => {
+    if (!me) {
+      onOpenUnauthorizedModal('DISLIKE');
+    } else if (wrenches?.me) {
+      dispatch(unEmojiReact(status, '🔧'));
+    } else {
+      dispatch(emojiReact(status, '🔧'));
+    }
+  };
+
   const handleDislikeLongPress = status.dislikes_count ? () => {
     openModal('DISLIKES', { statusId: status.id });
+  } : undefined;
+
+  const handleWrenchLongPress = wrenches?.count ? () => {
+    openModal('REACTIONS', { statusId: status.id, reaction: wrenches.name });
   } : undefined;
 
   const handlePickEmoji = (emoji: EmojiType) => {
@@ -780,6 +797,20 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
             active={status.disliked}
             count={status.dislikes_count}
             text={withLabels ? intl.formatMessage(messages.disfavourite) : undefined}
+            theme={statusActionButtonTheme}
+          />
+        )}
+
+        {me && !withLabels && features.emojiReacts && showWrenchButton && (
+          <StatusActionButton
+            title={intl.formatMessage(messages.wrench)}
+            icon={require('@tabler/icons/outline/tool.svg')}
+            color='accent'
+            filled
+            onClick={handleWrenchClick}
+            onLongPress={handleWrenchLongPress}
+            active={wrenches?.me}
+            count={wrenches?.count || undefined}
             theme={statusActionButtonTheme}
           />
         )}

@@ -1,16 +1,15 @@
 import { Map as ImmutableMap } from 'immutable';
 
 import { POLLS_IMPORT } from 'pl-fe/actions/importer';
-import { normalizePoll } from 'pl-fe/normalizers/poll';
 
-import type { Status } from 'pl-api';
+import type { Poll, Status } from 'pl-api';
 import type { AnyAction } from 'redux';
 
-type State = ImmutableMap<string, ReturnType<typeof normalizePoll>>;
+type State = ImmutableMap<string, Poll>;
 
 const importPolls = (state: State, polls: Array<Exclude<Status['poll'], null>>) =>
   state.withMutations(map =>
-    polls.forEach(poll => map.set(poll.id, normalizePoll(poll))),
+    polls.forEach(poll => map.set(poll.id, poll)),
   );
 
 const initialState: State = ImmutableMap();

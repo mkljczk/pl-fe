@@ -7,6 +7,7 @@ import Icon from 'pl-fe/components/icon';
 import Button from 'pl-fe/components/ui/button';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useSettings } from 'pl-fe/hooks/useSettings';
 import { onlyEmoji as isOnlyEmoji } from 'pl-fe/utils/rich-content';
@@ -106,13 +107,13 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     maybeSetOnlyEmoji();
   });
 
-  const parsedHtml = useMemo(
+  const content = useMemo(
     (): string => translatable && status.translation
       ? status.translation.content!
-      : (status.contentMapHtml && status.currentLanguage)
-        ? (status.contentMapHtml[status.currentLanguage] || status.contentHtml)
-        : status.contentHtml,
-    [status.contentHtml, status.translation, status.currentLanguage],
+      : (status.content_map && status.currentLanguage)
+        ? (status.content_map[status.currentLanguage] || status.content)
+        : status.content,
+    [status.content, status.translation, status.currentLanguage],
   );
 
   useEffect(() => {
@@ -121,9 +122,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
 
   const withSpoiler = status.spoiler_text.length > 0;
 
-  const spoilerText = status.spoilerMapHtml && status.currentLanguage
-    ? status.spoilerMapHtml[status.currentLanguage] || status.spoilerHtml
-    : status.spoilerHtml;
+  const spoilerText = status.spoiler_text_map && status.currentLanguage
+    ? status.spoiler_text_map[status.currentLanguage] || status.spoiler_text
+    : status.spoiler_text;
 
   const direction = getTextDirection(status.search_index);
   const className = clsx('relative text-ellipsis break-words text-gray-900 focus:outline-none dark:text-gray-100', {
@@ -142,11 +143,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   if (spoilerText) {
     output.push(
       <Text key='spoiler' size='2xl' weight='medium'>
-        <span
-          className={clsx({ 'line-clamp-3': !expanded && lineClamp })}
-          dangerouslySetInnerHTML={{ __html: spoilerText }}
-          ref={spoilerNode}
-        />
+        <span className={clsx({ 'line-clamp-3': !expanded && lineClamp })} ref={spoilerNode}>
+          <Emojify text={spoilerText} emojis={status.emojis} />
+        </span>
         {status.content && expandable && (
           <Button
             className='ml-2 align-middle'
@@ -179,7 +178,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
           lang={status.language || undefined}
           size={textSize}
         >
-          <ParsedContent html={parsedHtml} mentions={status.mentions} hasQuote={!!status.quote_id} />
+          <ParsedContent html={content} mentions={status.mentions} hasQuote={!!status.quote_id} emojis={status.emojis} />
         </Markup>,
       );
     }
@@ -207,7 +206,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
           lang={status.language || undefined}
           size={textSize}
         >
-          <ParsedContent html={parsedHtml} mentions={status.mentions} hasQuote={!!status.quote_id} />
+          <ParsedContent html={content} mentions={status.mentions} hasQuote={!!status.quote_id} emojis={status.emojis} />
         </Markup>,
       );
     }

@@ -1,14 +1,13 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   adminAnnouncementSchema,
-  type AdminAnnouncement as BaseAdminAnnouncement,
+  type AdminAnnouncement,
   type AdminCreateAnnouncementParams,
   type AdminUpdateAnnouncementParams,
 } from 'pl-api';
 import * as v from 'valibot';
 
 import { useClient } from 'pl-fe/hooks/useClient';
-import { normalizeAnnouncement, AdminAnnouncement } from 'pl-fe/normalizers/announcement';
 import { queryClient } from 'pl-fe/queries/client';
 
 import { useAnnouncements as useUserAnnouncements } from '../announcements/useAnnouncements';
@@ -20,7 +19,7 @@ const useAnnouncements = () => {
   const getAnnouncements = async () => {
     const data = await client.admin.announcements.getAnnouncements();
 
-    return data.items.map(normalizeAnnouncement<BaseAdminAnnouncement>);
+    return data.items;
   };
 
   const result = useQuery<ReadonlyArray<AdminAnnouncement>>({

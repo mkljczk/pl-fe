@@ -18,6 +18,7 @@ import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useInstance } from 'pl-fe/hooks/useInstance';
 import toast from 'pl-fe/toast';
 import { isDefaultAvatar, isDefaultHeader } from 'pl-fe/utils/accounts';
+import { unescapeHTML } from 'pl-fe/utils/html';
 
 import AvatarPicker from '../edit-profile/components/avatar-picker';
 import HeaderPicker from '../edit-profile/components/header-picker';
@@ -51,7 +52,7 @@ const EditGroup: React.FC<IEditGroup> = ({ params: { groupId } }) => {
   const header = useImageField({ maxPixels: 1920 * 1080, preview: nonDefaultHeader(group?.header) });
 
   const displayName = useTextField(group?.display_name);
-  const note = useTextField(group?.note_plain);
+  const note = useTextField(unescapeHTML(group?.note));
 
   const maxName = Number(instance.configuration.groups.max_characters_name);
   const maxNote = Number(instance.configuration.groups.max_characters_description);

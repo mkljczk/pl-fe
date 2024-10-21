@@ -1000,6 +1000,7 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA,
       v.software === MITRA,
       v.software === GOTOSOCIAL,
+      instance.pleroma.metadata.post_formats.length > 1,
     ]),
 
     /**
