@@ -7,7 +7,7 @@ import { datetimeSchema, filteredArray } from '../utils';
 import { adminIpSchema } from './ip';
 
 /** @see {@link https://docs.joinmastodon.org/entities/Admin_Account/} */
-const adminAccountSchema =  v.pipe(
+const adminAccountSchema = v.pipe(
   v.any(),
   v.transform((account: any) => {
     if (!account.account) {

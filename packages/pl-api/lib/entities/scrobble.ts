@@ -3,7 +3,7 @@ import * as v from 'valibot';
 import { accountSchema } from './account';
 import { datetimeSchema } from './utils';
 
-const scrobbleSchema =  v.pipe(
+const scrobbleSchema = v.pipe(
   v.any(),
   v.transform((scrobble: any) => scrobble ? {
     external_link: scrobble.externalLink,

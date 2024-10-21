@@ -9,6 +9,7 @@ import { Mutliselect, SelectDropdown } from 'pl-fe/features/forms';
 import SettingToggle from 'pl-fe/features/notifications/components/setting-toggle';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { useInstance } from 'pl-fe/hooks/useInstance';
 import { useSettings } from 'pl-fe/hooks/useSettings';
 
 import ThemeToggle from '../ui/components/theme-toggle';
@@ -98,6 +99,7 @@ const Preferences = () => {
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const settings = useSettings();
+  const instance = useInstance();
 
   const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, path: string[]) => {
     dispatch(changeSetting(path, event.target.value, { showAlert: true }));
@@ -123,11 +125,17 @@ const Preferences = () => {
     private: intl.formatMessage(messages.privacy_followers_only),
   }), [settings.locale]);
 
-  const defaultContentTypeOptions = React.useMemo(() => ({
-    'text/plain': intl.formatMessage(messages.content_type_plaintext),
-    'text/markdown': intl.formatMessage(messages.content_type_markdown),
-    'text/html': intl.formatMessage(messages.content_type_html),
-  }), [settings.locale]);
+  const defaultContentTypeOptions = React.useMemo(() => {
+    const postFormats = instance.pleroma.metadata.post_formats;
+
+    const options = Object.entries({
+      'text/plain': intl.formatMessage(messages.content_type_plaintext),
+      'text/markdown': intl.formatMessage(messages.content_type_markdown),
+      'text/html': intl.formatMessage(messages.content_type_html),
+    }).filter(([key]) => postFormats.includes(key));
+
+    if (options.length > 1) return Object.fromEntries(options);
+  }, [settings.locale]);
 
   return (
     <Form>
@@ -179,7 +187,7 @@ const Preferences = () => {
           </ListItem>
         )}
 
-        {features.richText && (
+        {features.richText && !!defaultContentTypeOptions && (
           <ListItem label={<FormattedMessage id='preferences.fields.content_type_label' defaultMessage='Default post format' />}>
             <SelectDropdown
               className='max-w-[200px]'

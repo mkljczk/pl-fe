@@ -87,7 +87,7 @@ const baseAccountSchema = v.object({
   noindex: v.fallback(v.nullable(v.boolean()), null),
   suspended: v.fallback(v.optional(v.boolean()), undefined),
   limited: v.fallback(v.optional(v.boolean()), undefined),
-  created_at: v.fallback(datetimeSchema, new Date().toUTCString()),
+  created_at: v.fallback(datetimeSchema, new Date().toISOString()),
   last_status_at: v.fallback(v.nullable(v.pipe(v.string(), v.isoDate())), null),
   statuses_count: v.fallback(v.number(), 0),
   followers_count: v.fallback(v.number(), 0),
