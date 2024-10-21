@@ -214,6 +214,12 @@ const Preferences = () => {
         >
           <SettingToggle settings={settings} settingPath={['demetricator']} onChange={onToggleChange} />
         </ListItem>
+
+        {features.emojiReacts && (
+          <ListItem label={<FormattedMessage id='preferences.fields.wrench_label' defaultMessage='Display wrench reaction button' />} >
+            <SettingToggle settings={settings} settingPath={['showWrenchButton']} onChange={onToggleChange} />
+          </ListItem>
+        )}
       </List>
 
       <List>
