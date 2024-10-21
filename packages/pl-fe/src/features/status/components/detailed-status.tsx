@@ -150,6 +150,14 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                 </Text>
               </a>
 
+              {actualStatus.application && (
+                <a href={(actualStatus.application.website) ? actualStatus.application.website : '#' } target='_blank' rel='noopener' className='hover:underline ml-2'>
+                  <Text tag='span' theme='muted' size='sm'>
+                    ({actualStatus.application.name})
+                  </Text>
+                </a>
+              )}
+
               {actualStatus.edited_at && (
                 <>
                   {' · '}
