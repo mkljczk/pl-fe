@@ -37,7 +37,6 @@ const normalizeAccount = (account: BaseAccount) => {
   const emojiMap = makeEmojiMap(account.emojis);
 
   return {
-    mute_expires_at: null,
     ...account,
     avatar: account.avatar || account.avatar_static || missingAvatar,
     avatar_static: account.avatar_static || account.avatar || missingAvatar,
