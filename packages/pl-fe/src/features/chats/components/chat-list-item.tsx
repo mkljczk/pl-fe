@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import { useRelationship } from 'pl-fe/api/hooks/accounts/useRelationship';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import { ParsedContent } from 'pl-fe/components/parsed-content';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
 import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -124,8 +125,9 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
                     truncate
                     className='truncate-child pointer-events-none h-5 w-full'
                     data-testid='chat-last-message'
-                    dangerouslySetInnerHTML={{ __html: chat.last_message?.content }}
-                  />
+                  >
+                    <ParsedContent html={chat.last_message?.content} emojis={chat.last_message.emojis} />
+                  </Text>
                 )}
               </>
             )}

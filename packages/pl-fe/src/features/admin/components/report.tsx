@@ -127,10 +127,9 @@ const Report: React.FC<IReport> = ({ id }) => {
 
         <Stack>
           {!!report.comment && report.comment.length > 0 && (
-            <Text
-              tag='blockquote'
-              dangerouslySetInnerHTML={{ __html: report.comment }}
-            />
+            <Text tag='blockquote'>
+              {report.comment}
+            </Text>
           )}
 
           {!!account && (
