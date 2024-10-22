@@ -4,6 +4,8 @@ export * from './contexts/query-client';
 export * from './hooks/accounts/useAccount';
 export * from './hooks/accounts/useAccountLookup';
 export * from './hooks/accounts/useAccountRelationship';
+export * from './hooks/instance/useInstance';
+export * from './hooks/instance/useTranslationLanguages';
 export * from './hooks/markers/useMarkers';
 export * from './hooks/markers/useUpdateMarkerMutation';
 export * from './hooks/notifications/useNotification';

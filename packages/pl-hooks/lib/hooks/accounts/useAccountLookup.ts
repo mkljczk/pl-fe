@@ -7,8 +7,8 @@ import { importEntities } from 'pl-hooks/importer';
 import { useAccount, type UseAccountOpts } from './useAccount';
 
 const useAccountLookup = (acct?: string, opts: UseAccountOpts = {}) => {
-  const queryClient = usePlHooksQueryClient();
   const { client } = usePlHooksApiClient();
+  const queryClient = usePlHooksQueryClient();
   const { features } = client;
 
   const accountIdQuery = useQuery({

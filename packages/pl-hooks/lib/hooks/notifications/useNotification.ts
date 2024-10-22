@@ -25,8 +25,8 @@ const importNotification = (notification: NormalizedNotification) => {
 };
 
 const useNotification = (notificationId: string) => {
-  const queryClient = usePlHooksQueryClient();
   const { client } = usePlHooksApiClient();
+  const queryClient = usePlHooksQueryClient();
 
   const notificationQuery = useQuery({
     queryKey: ['notifications', 'entities', notificationId],

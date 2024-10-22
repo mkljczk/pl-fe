@@ -16,8 +16,8 @@ interface UseAccountOpts {
 }
 
 const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
-  const queryClient = usePlHooksQueryClient();
   const { client } = usePlHooksApiClient();
+  const queryClient = usePlHooksQueryClient();
 
   const accountQuery = useQuery({
     queryKey: ['accounts', 'entities', accountId],

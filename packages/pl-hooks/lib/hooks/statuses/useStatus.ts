@@ -1,12 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 
 import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
 import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
 import { importEntities } from 'pl-hooks/importer';
+import { useAccount } from 'pl-hooks/main';
+import { type Account, normalizeAccount } from 'pl-hooks/normalizers/normalizeAccount';
 
 import { normalizeStatus, type Status } from '../../normalizers/normalizeStatus';
-
-import type { Account } from 'pl-hooks/normalizers/normalizeAccount';
 
 // const toServerSideType = (columnType: string): Filter['context'][0] => {
 //   switch (columnType) {
@@ -101,11 +101,14 @@ const useStatus = (statusId?: string, opts: { language?: string } = {}) => {
 
   const status = statusQuery.data;
 
-  queryClient.getQueriesData({ queryKey: ['test', ['t']] });
-
-  const accountsQuery = queryClient.getQueriesData<Account>({
-    queryKey: ['accounts', 'entities', status?.account_ids],
-  });
+  const accountsQuery = useQueries({
+    queries: status?.account_ids.map(accountId => ({
+      queryKey: ['accounts', 'entities', accountId],
+      queryFn: () => client.accounts.getAccount(accountId!)
+        .then(account => (importEntities({ accounts: [account] }, { withParents: false }), account))
+        .then(normalizeAccount),
+    })) || [],
+  }, queryClient);
 
   let data: (Status & {
     account: Account;
@@ -115,8 +118,8 @@ const useStatus = (statusId?: string, opts: { language?: string } = {}) => {
   if (status) {
     data = {
       ...status,
-      account: accountsQuery[0][1]!,
-      accounts: accountsQuery.map(([_, account]) => account!).filter(Boolean),
+      account: accountsQuery[0].data!,
+      accounts: accountsQuery.map(({ data }) => data!).filter(Boolean),
       // quote,
       // reblog,
       // poll

@@ -8,8 +8,8 @@ import type { PlApiClient } from 'pl-api';
 type Timeline = 'home' | 'notifications';
 
 const useMarker = (timeline: Timeline) => {
-  const queryClient = usePlHooksQueryClient();
   const { client } = usePlHooksApiClient();
+  const queryClient = usePlHooksQueryClient();
 
   return useQuery({
     queryKey: ['markers', timeline],

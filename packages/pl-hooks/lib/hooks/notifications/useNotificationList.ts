@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { InfiniteData, useInfiniteQuery, UseInfiniteQueryResult } from '@tanstack/react-query';
 
 import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
 import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
@@ -33,9 +33,13 @@ const importNotifications = (response: PaginatedResponse<BaseNotification>) => {
   };
 };
 
-const useNotificationList = (params: UseNotificationParams) => {
-  const queryClient = usePlHooksQueryClient();
+const useNotificationList = (params: UseNotificationParams): Omit<UseInfiniteQueryResult<InfiniteData<{
+  items: string[];
+  previous: (() => Promise<PaginatedResponse<BaseNotification>>) | null;
+  next: (() => Promise<PaginatedResponse<BaseNotification>>) | null;
+}, unknown>, Error>, 'data'> & { data: string[] } => {
   const { client } = usePlHooksApiClient();
+  const queryClient = usePlHooksQueryClient();
 
   const notificationsQuery = useInfiniteQuery({
     queryKey: getQueryKey(params),
@@ -47,7 +51,7 @@ const useNotificationList = (params: UseNotificationParams) => {
     getNextPageParam: (response) => response,
   }, queryClient);
 
-  const data = flattenPages<string>(notificationsQuery.data) || [];
+  const data: string[] = flattenPages<string>(notificationsQuery.data) || [];
 
   return {
     ...notificationsQuery,

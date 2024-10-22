@@ -11,9 +11,9 @@ import type {
   Status as BaseStatus,
 } from 'pl-api';
 
-const importAccount = (account: BaseAccount) => {
-  return queryClient.setQueryData<BaseAccount>(['accounts', 'entities', account.id], account);
-};
+const importAccount = (account: BaseAccount) => queryClient.setQueryData<BaseAccount>(
+  ['accounts', 'entities', account.id], account,
+);
 
 const importGroup = (group: BaseGroup) => queryClient.setQueryData<BaseGroup>(
   ['groups', 'entities', group.id], group,
@@ -33,8 +33,7 @@ const importRelationship = (relationship: BaseRelationship) => queryClient.setQu
 );
 
 const importStatus = (status: BaseStatus) => queryClient.setQueryData<Status>(
-  ['statuses', 'entities', status.id],
-  _ => normalizeStatus(status),
+  ['statuses', 'entities', status.id], normalizeStatus(status),
 );
 
 const isEmpty = (object: Record<string, any>) => !Object.values(object).some(value => value);
@@ -56,23 +55,30 @@ const importEntities = (entities: {
   const relationships: Record<string, BaseRelationship> = {};
   const statuses: Record<string, BaseStatus> = {};
 
-  const processAccount = (account: BaseAccount) => {
+  const processAccount = (account: BaseAccount, withSelf = true) => {
+    if (withSelf) accounts[account.id] = account;
+
     queryClient.setQueryData<string>(['accounts', 'byAcct', account.acct.toLocaleLowerCase()], account.id);
 
     if (account.moved) processAccount(account.moved);
     if (account.relationship) relationships[account.relationship.id] = account.relationship;
   };
 
-  const processNotification = (notification: DeduplicatedNotification) => {
+  const processNotification = (notification: DeduplicatedNotification, withSelf = true) => {
+    if (withSelf) notifications[notification.id] = notification;
+
     processAccount(notification.account);
     if (notification.type === 'move') processAccount(notification.target);
 
-    if (['mention', 'status', 'reblog', 'favourite', 'poll', 'update', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request'].includes(notification.type))
+    if (['mention', 'status', 'reblog', 'favourite', 'poll', 'update', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request'].includes(notification.type)) {
       // @ts-ignore
       processStatus(notification.status);
+    }
   };
 
-  const processStatus = (status: BaseStatus) => {
+  const processStatus = (status: BaseStatus, withSelf = true) => {
+    if (withSelf) statuses[status.id] = status;
+
     if (status.account) {
       processAccount(status.account);
     }
@@ -84,17 +90,14 @@ const importEntities = (entities: {
   };
 
   if (options.withParents) {
-    entities.accounts?.forEach(account => accounts[account.id] = account);
     entities.groups?.forEach(group => groups[group.id] = group);
-    entities.notifications?.forEach(notification => notifications[notification.id] = notification);
     entities.polls?.forEach(poll => polls[poll.id] = poll);
     entities.relationships?.forEach(relationship => relationships[relationship.id] = relationship);
-    entities.statuses?.forEach(status => statuses[status.id] = status);
   }
 
-  entities.accounts?.forEach((account) => processAccount(account));
-  entities.notifications?.forEach((notification) => processNotification(notification));
-  entities.statuses?.forEach((status) => processStatus(status));
+  entities.accounts?.forEach((account) => processAccount(account, options.withParents));
+  entities.notifications?.forEach((notification) => processNotification(notification, options.withParents));
+  entities.statuses?.forEach((status) => processStatus(status, options.withParents));
 
   if (!isEmpty(accounts)) Object.values(accounts).forEach(importAccount);
   if (!isEmpty(groups)) Object.values(groups).forEach(importGroup);
