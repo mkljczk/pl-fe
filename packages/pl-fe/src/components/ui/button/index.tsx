@@ -24,6 +24,8 @@ interface IButton extends Pick<
   text?: React.ReactNode;
   /** Makes the button into a navlink, if provided. */
   to?: string;
+  /** Makes the button into an anchor, if provided. */
+  href?: string;
   /** Styles the button visually with a predefined theme. */
   theme?: ButtonThemes;
 }
@@ -40,6 +42,7 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>(({
   text,
   theme = 'secondary',
   to,
+  href,
   type = 'button',
   className,
   ...props
@@ -84,6 +87,14 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>(({
       <Link to={to} tabIndex={-1} className='inline-flex'>
         {renderButton()}
       </Link>
+    );
+  }
+
+  if (href) {
+    return (
+      <a href={href} target='_blank' rel='noopener' tabIndex={-1} className='inline-flex'>
+        {renderButton()}
+      </a>
     );
   }
 

@@ -30,6 +30,20 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
 
   const event = status.event!;
 
+  if (event.join_mode === 'external') {
+    return (
+      <Button
+        className='min-w-max'
+        size='sm'
+        theme={theme}
+        icon={require('@tabler/icons/outline/external-link.svg')}
+        href={status.url}
+      >
+        <FormattedMessage id='event.join_state.empty' defaultMessage='Participate' />
+      </Button>
+    );
+  }
+
   const handleJoin: React.EventHandler<React.MouseEvent> = (e) => {
     e.preventDefault();
 

@@ -19,7 +19,7 @@ const statusEventSchema = v.object({
   name: v.fallback(v.string(), ''),
   start_time: v.fallback(v.nullable(datetimeSchema), null),
   end_time: v.fallback(v.nullable(datetimeSchema), null),
-  join_mode: v.fallback(v.nullable(v.picklist(['free', 'restricted', 'invite'])), null),
+  join_mode: v.fallback(v.nullable(v.picklist(['free', 'restricted', 'invite', 'external'])), null),
   participants_count: v.fallback(v.number(), 0),
   location: v.fallback(v.nullable(v.object({
     name: v.fallback(v.string(), ''),
