@@ -5,11 +5,11 @@ import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import { ParsedContent } from 'pl-fe/components/parsed-content';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import Emojify from 'pl-fe/features/emoji/emojify';
 import { MediaGallery } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { ChatKeys, useChatActions } from 'pl-fe/queries/chats';
@@ -240,7 +240,7 @@ const ChatMessage = (props: IChatMessage) => {
                   tabIndex={0}
                 >
                   <Text size='sm' theme='inherit' className='break-word-nested'>
-                    <Emojify text={content} emojis={chatMessage.emojis} />
+                    <ParsedContent html={content} emojis={chatMessage.emojis} />
                   </Text>
                 </div>
               </HStack>
