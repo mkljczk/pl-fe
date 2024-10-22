@@ -121,6 +121,7 @@ const config = defineConfig(({ command }) => ({
           },
         ],
         start_url: '/',
+        id: '/',
       },
       srcDir: 'src/service-worker',
       filename: 'sw.ts',
