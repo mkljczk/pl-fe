@@ -131,6 +131,9 @@ const config = defineConfig(({ command }) => ({
         src: './node_modules/@twemoji/svg/*',
         dest: 'packs/emoji/',
       }, {
+        src: './favicon.ico',
+        dest: '.',
+      }, {
         src: './src/instance',
         dest: '.',
       }, {
