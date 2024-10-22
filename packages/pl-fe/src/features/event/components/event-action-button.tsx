@@ -36,6 +36,7 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
         className='min-w-max'
         size='sm'
         theme={theme}
+        icon={require('@tabler/icons/outline/external-link.svg')}
         href={status.url}
       >
         <FormattedMessage id='event.join_state.empty' defaultMessage='Participate' />
