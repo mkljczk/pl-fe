@@ -24,7 +24,7 @@ import StatusTypeIcon from './status-type-icon';
 import type { SelectedStatus } from 'pl-fe/selectors';
 
 const messages = defineMessages({
-  applicationName: { id: 'status.application_name', defaultMessage: 'Sent form {name}' },
+  applicationName: { id: 'status.application_name', defaultMessage: 'Sent from {name}' },
 });
 
 interface IDetailedStatus {
