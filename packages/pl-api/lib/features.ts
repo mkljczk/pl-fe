@@ -202,6 +202,7 @@ const getFeatures = (instance: Instance) => {
      * @see {@link https://docs.joinmastodon.org/methods/announcements/}
      */
     announcements: any([
+      v.software === FIREFISH,
       v.software === ICESHRIMP,
       v.software === MASTODON,
       v.software === PLEROMA,
@@ -397,6 +398,7 @@ const getFeatures = (instance: Instance) => {
      * @see PUT /api/v1/statuses/:id
      */
     editStatuses: any([
+      v.software === FIREFISH,
       v.software === FRIENDICA && gte(v.version, '2022.12.0'),
       v.software === ICESHRIMP,
       v.software === MASTODON,
@@ -430,6 +432,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /v1/statuses/:id/unreact/:emoji
      */
     emojiReacts: any([
+      v.software === FIREFISH,
       v.software === MITRA && gte(v.version, '2.21.0'),
       v.software === PLEROMA,
       instance ? instance.configuration.reactions.max_reactions > 0 : false,
@@ -541,6 +544,7 @@ const getFeatures = (instance: Instance) => {
      * @see PATCH /api/v1/accounts/update_credentials
      */
     followRequests: any([
+      v.software === FIREFISH,
       v.software === GOTOSOCIAL,
       v.software === MASTODON,
       v.software === MITRA,
@@ -651,6 +655,7 @@ const getFeatures = (instance: Instance) => {
      * @see {@link https://docs.joinmastodon.org/methods/instance/#v2}
     */
     instanceV2: any([
+      v.software === FIREFISH,
       v.software === GOTOSOCIAL,
       v.software === MASTODON && gte(v.compatVersion, '4.0.0'),
       v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.6.0'),
@@ -745,6 +750,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v2/media
      */
     mediaV2: any([
+      v.software === FIREFISH,
       v.software === ICESHRIMP,
       v.software === MASTODON,
       v.software === MITRA,
@@ -822,6 +828,7 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/notifications
      */
     notificationsIncludeTypes: any([
+      v.software === FIREFISH,
       v.software === ICESHRIMP,
       v.software === MASTODON,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
@@ -1018,6 +1025,7 @@ const getFeatures = (instance: Instance) => {
      * @see {@link https://docs.joinmastodon.org/methods/scheduled_statuses/}
      */
     scheduledStatuses: any([
+      v.software === FIREFISH,
       v.software === FRIENDICA,
       v.software === MASTODON,
       v.software === PLEROMA,
@@ -1140,6 +1148,7 @@ const getFeatures = (instance: Instance) => {
      */
     trendingStatuses: any([
       v.software === DITTO,
+      v.software === FIREFISH,
       v.software === FRIENDICA && gte(v.version, '2022.12.0'),
       v.software === ICESHRIMP,
       v.software === MASTODON,
@@ -1151,6 +1160,7 @@ const getFeatures = (instance: Instance) => {
      */
     trends: any([
       v.software === DITTO,
+      v.software === FIREFISH,
       v.software === FRIENDICA && gte(v.version, '2022.12.0'),
       v.software === ICESHRIMP,
       v.software === MASTODON,
