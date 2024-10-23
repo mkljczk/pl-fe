@@ -58,7 +58,6 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
 
   const needsConfirmation = instance.pleroma.metadata.account_activation_required;
   const needsApproval = instance.registrations.approval_required;
-  const supportsEmailList = features.emailList;
   const supportsAccountLookup = features.accountLookup;
   const birthdayRequired = instance.pleroma.metadata.birthday_required;
   const domains = instance.pleroma.metadata.multitenancy.enabled ? instance.pleroma.metadata.multitenancy.domains!.filter((domain) => domain.public) : undefined;
@@ -363,16 +362,6 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
               required
             />
           </FormGroup>
-
-          {supportsEmailList && (
-            <FormGroup labelText={intl.formatMessage(messages.newsletter)}>
-              <Checkbox
-                name='accepts_email_list'
-                onChange={onCheckboxChange}
-                checked={params.accepts_email_list}
-              />
-            </FormGroup>
-          )}
 
           <FormActions>
             <Button type='submit'>
