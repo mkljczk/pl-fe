@@ -4,7 +4,7 @@ import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
 import { usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
 import { importEntities } from 'pl-hooks/importer';
 
-import { useAccount, type UseAccountOpts } from './useAccount';
+import { useAccount, type UseAccountOpts } from './use-account';
 
 const useAccountLookup = (acct?: string, opts: UseAccountOpts = {}) => {
   const { client } = usePlHooksApiClient();

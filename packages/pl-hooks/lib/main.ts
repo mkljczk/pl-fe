@@ -1,16 +1,16 @@
 export * from './contexts/api-client';
 export * from './contexts/query-client';
 
-export * from './hooks/accounts/useAccount';
-export * from './hooks/accounts/useAccountLookup';
-export * from './hooks/accounts/useAccountRelationship';
-export * from './hooks/instance/useInstance';
-export * from './hooks/instance/useTranslationLanguages';
-export * from './hooks/markers/useMarkers';
-export * from './hooks/markers/useUpdateMarkerMutation';
-export * from './hooks/notifications/useNotification';
-export * from './hooks/notifications/useNotificationList';
-export * from './hooks/polls/usePoll';
-export * from './hooks/statuses/useStatus';
+export * from './hooks/accounts/use-account';
+export * from './hooks/accounts/use-account-lookup';
+export * from './hooks/accounts/use-account-relationship';
+export * from './hooks/instance/use-instance';
+export * from './hooks/instance/use-translation-languages';
+export * from './hooks/markers/use-markers';
+export * from './hooks/markers/use-update-marker-mutation';
+export * from './hooks/notifications/use-notification';
+export * from './hooks/notifications/use-notification-list';
+export * from './hooks/polls/use-poll';
+export * from './hooks/statuses/use-status';
 
 export * from './importer';

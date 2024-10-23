@@ -2,13 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 
 import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
 import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
-import { type NormalizedNotification, normalizeNotification } from 'pl-hooks/normalizers/normalizeNotifications';
+import { type NormalizedNotification, normalizeNotification } from 'pl-hooks/normalizers/notification';
 
-import { useAccount } from '../accounts/useAccount';
-import { useStatus } from '../statuses/useStatus';
+import { useAccount } from '../accounts/use-account';
+import { useStatus } from '../statuses/use-status';
 
-import type { Account } from 'pl-hooks/normalizers/normalizeAccount';
-import type { Status } from 'pl-hooks/normalizers/normalizeStatus';
+import type { Account } from 'pl-hooks/normalizers/account';
+import type { Status } from 'pl-hooks/normalizers/status';
 
 const getNotificationStatusId = (n: NormalizedNotification) => {
   if (['mention', 'status', 'reblog', 'favourite', 'poll', 'update', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request'].includes(n.type))

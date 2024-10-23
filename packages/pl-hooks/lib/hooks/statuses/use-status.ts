@@ -3,9 +3,9 @@ import { useQueries, useQuery } from '@tanstack/react-query';
 import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
 import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
 import { importEntities } from 'pl-hooks/importer';
-import { type Account, normalizeAccount } from 'pl-hooks/normalizers/normalizeAccount';
+import { type Account, normalizeAccount } from 'pl-hooks/normalizers/account';
 
-import { normalizeStatus, type Status } from '../../normalizers/normalizeStatus';
+import { normalizeStatus, type Status } from '../../normalizers/status';
 
 // const toServerSideType = (columnType: string): Filter['context'][0] => {
 //   switch (columnType) {

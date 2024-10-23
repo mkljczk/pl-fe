@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
 import { usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
 
-import type { Timeline } from './useMarkers';
+import type { Timeline } from './use-markers';
 import type { Marker } from 'pl-api';
 
 const useUpdateMarkerMutation = (timeline: Timeline) => {

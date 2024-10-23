@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
 import { usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
 
-import { useInstance } from './useInstance';
+import { useInstance } from './use-instance';
 
 const useTranslationLanguages = () => {
   const { client } = usePlHooksApiClient();

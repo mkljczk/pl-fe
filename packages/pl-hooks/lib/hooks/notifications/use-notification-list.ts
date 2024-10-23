@@ -3,7 +3,7 @@ import { InfiniteData, useInfiniteQuery, UseInfiniteQueryResult } from '@tanstac
 import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
 import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
 import { importEntities } from 'pl-hooks/importer';
-import { deduplicateNotifications } from 'pl-hooks/normalizers/normalizeNotifications';
+import { deduplicateNotifications } from 'pl-hooks/normalizers/notification';
 import { flattenPages } from 'pl-hooks/utils/queries';
 
 import type { Notification as BaseNotification, PaginatedResponse, PlApiClient } from 'pl-api';
