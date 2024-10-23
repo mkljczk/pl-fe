@@ -29,7 +29,6 @@ const normalizeAccount = (account: BaseAccount) => {
   const note = account.note === '<p></p>' ? '' : account.note;
 
   return {
-    mute_expires_at: null,
     ...account,
     avatar: account.avatar || account.avatar_static || missingAvatar,
     avatar_static: account.avatar_static || account.avatar || missingAvatar,
