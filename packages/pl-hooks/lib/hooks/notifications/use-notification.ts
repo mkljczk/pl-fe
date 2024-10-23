@@ -46,9 +46,9 @@ const useNotification = (notificationId: string) => {
   let data: (NormalizedNotification & {
     account: Account;
     accounts: Array<Account>;
-    target: Account | null;
-    status: Status | null;
-  }) | null = null;
+    target: Account | undefined;
+    status: Status | undefined;
+  }) | undefined;
 
   if (notification) {
     data = {

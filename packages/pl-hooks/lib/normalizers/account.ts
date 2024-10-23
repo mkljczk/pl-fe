@@ -1,6 +1,6 @@
 import type { Account as BaseAccount } from 'pl-api';
 
-const normalizeAccount = ({ moved, ...account }: BaseAccount) => ({
+const normalizeAccount = ({ moved, relationship, ...account }: BaseAccount) => ({
   ...account,
   moved_id: moved?.id || null,
 });
