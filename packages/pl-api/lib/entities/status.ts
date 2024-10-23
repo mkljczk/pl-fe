@@ -1,7 +1,7 @@
 import pick from 'lodash.pick';
 import * as v from 'valibot';
 
-import { accountSchema } from './account';
+import { type Account, accountSchema } from './account';
 import { customEmojiSchema } from './custom-emoji';
 import { emojiReactionSchema } from './emoji-reaction';
 import { filterResultSchema } from './filter-result';
@@ -41,7 +41,7 @@ const baseStatusSchema = v.object({
   uri: v.fallback(v.pipe(v.string(), v.url()), ''),
   created_at: v.fallback(datetimeSchema, new Date().toISOString()),
   account: accountSchema,
-  content: v.fallback(v.string(), ''),
+  content: v.fallback(v.pipe(v.string(), v.transform((note => note === '<p></p>' ? '' : note))), ''),
   visibility: v.fallback(v.string(), 'public'),
   sensitive: v.pipe(v.unknown(), v.transform(Boolean)),
   spoiler_text: v.fallback(v.string(), ''),
@@ -149,9 +149,15 @@ const statusWithoutAccountSchema = v.pipe(v.any(), v.transform(preprocess), v.ob
   quote: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
 }));
 
+type StatusWithoutAccount = Omit<v.InferOutput<typeof baseStatusSchema>, 'account'> & {
+  account: Account | null;
+  reblog: Status | null;
+  quote: Status | null;
+}
+
 type Status = v.InferOutput<typeof baseStatusSchema> & {
   reblog: Status | null;
   quote: Status | null;
 }
 
-export { statusSchema, statusWithoutAccountSchema, type Status };
+export { statusSchema, statusWithoutAccountSchema, type Status, type StatusWithoutAccount };

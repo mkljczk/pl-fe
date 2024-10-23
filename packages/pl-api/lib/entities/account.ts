@@ -6,10 +6,7 @@ import { relationshipSchema } from './relationship';
 import { roleSchema } from './role';
 import { coerceObject, datetimeSchema, filteredArray } from './utils';
 
-const filterBadges = (tags?: string[]) =>
-  tags?.filter(tag => tag.startsWith('badge:')).map(tag => v.parse(roleSchema, { id: tag, name: tag.replace(/^badge:/, '') }));
-
-const getDomainFromURL = (account: any): string => {
+const getDomainFromURL = (account: Pick<Account, 'url'>): string => {
   try {
     const url = account.url;
     return new URL(url).host;
@@ -18,7 +15,7 @@ const getDomainFromURL = (account: any): string => {
   }
 };
 
-const guessFqn = (account: any): string => {
+const guessFqn = (account: Pick<Account, 'acct' | 'url'>): string => {
   const acct = account.acct;
   const [user, domain] = acct.split('@');
 
@@ -28,6 +25,9 @@ const guessFqn = (account: any): string => {
     return [user, getDomainFromURL(account)].join('@');
   }
 };
+
+const filterBadges = (tags?: string[]) =>
+  tags?.filter(tag => tag.startsWith('badge:')).map(tag => v.parse(roleSchema, { id: tag, name: tag.replace(/^badge:/, '') }));
 
 const preprocessAccount = v.transform((account: any) => {
   if (!account?.acct) return null;
@@ -144,6 +144,7 @@ const baseAccountSchema = v.object({
   header_description: v.fallback(v.string(), ''),
 
   verified: v.fallback(v.optional(v.boolean()), undefined),
+  domain: v.fallback(v.string(), ''),
 
   __meta: coerceObject({
     pleroma: v.fallback(v.any(), undefined),
