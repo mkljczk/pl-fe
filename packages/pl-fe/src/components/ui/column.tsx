@@ -122,5 +122,4 @@ const Column = React.forwardRef<HTMLDivElement, IColumn>((props, ref): JSX.Eleme
 export {
   Column as default,
   Column,
-  ColumnHeader,
 };

@@ -45,15 +45,12 @@ interface EmojiData {
 }
 
 const emojiData = data as EmojiData;
-const { categories, emojis, aliases, sheet } = emojiData;
+const { emojis } = emojiData;
 
 export {
   type CustomEmoji,
   type Emoji,
   type EmojiData,
-  categories,
   emojis,
-  aliases,
-  sheet,
   emojiData as default,
 };

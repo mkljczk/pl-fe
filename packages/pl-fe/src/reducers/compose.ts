@@ -605,7 +605,6 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
 
 export {
   ReducerCompose,
-  statusToMentionsArray,
   statusToMentionsAccountIdsArray,
   initialState,
   compose as default,

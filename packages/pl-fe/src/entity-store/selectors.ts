@@ -62,7 +62,6 @@ const findEntity = <TEntity extends Entity>(
 
 export {
   selectCache,
-  selectList,
   selectListState,
   useListState,
   selectEntities,

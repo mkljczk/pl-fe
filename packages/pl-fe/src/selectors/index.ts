@@ -349,7 +349,6 @@ const makeGetStatusIds = () => createSelector([
 export {
   type RemoteInstance,
   selectAccount,
-  selectAccounts,
   selectOwnAccount,
   makeGetAccount,
   getFilters,
@@ -363,7 +362,6 @@ export {
   makeGetReport,
   makeGetOtherAccounts,
   makeGetHosts,
-  RemoteInstanceRecord,
   makeGetRemoteInstance,
   makeGetStatusIds,
 };

@@ -72,7 +72,6 @@ const useFollowers = (accountId: string | undefined) => {
 };
 
 export {
-  useAccountList,
   useBlocks,
   useMutes,
   useFollowing,

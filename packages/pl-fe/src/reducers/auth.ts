@@ -365,6 +365,5 @@ const auth = (oldState: State = initialState, action: AnyAction) => {
 export {
   AuthUserRecord,
   ReducerRecord,
-  localState,
   auth as default,
 };

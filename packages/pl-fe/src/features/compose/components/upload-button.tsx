@@ -88,4 +88,4 @@ const UploadButton: React.FC<IUploadButton> = ({
   );
 };
 
-export { UploadButton as default, onlyImages };
+export { UploadButton as default };

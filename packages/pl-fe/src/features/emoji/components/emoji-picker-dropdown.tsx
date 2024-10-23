@@ -236,7 +236,6 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
 };
 
 export {
-  messages,
-  type IEmojiPickerDropdown,
   EmojiPickerDropdown as default,
+  type IEmojiPickerDropdown,
 };
