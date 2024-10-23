@@ -273,14 +273,6 @@ const expandStatusSpoiler = (statusIds: string[] | string) => {
   };
 };
 
-const toggleStatusSpoilerExpanded = (status: Pick<Status, 'id' | 'expanded'>) => {
-  if (status.expanded) {
-    return collapseStatusSpoiler(status.id);
-  } else {
-    return expandStatusSpoiler(status.id);
-  }
-};
-
 let TRANSLATIONS_QUEUE: Set<string> = new Set();
 let TRANSLATIONS_TIMEOUT: NodeJS.Timeout | null = null;
 
@@ -414,7 +406,6 @@ export {
   toggleStatusMediaHidden,
   expandStatusSpoiler,
   collapseStatusSpoiler,
-  toggleStatusSpoilerExpanded,
   translateStatus,
   undoStatusTranslation,
   unfilterStatus,

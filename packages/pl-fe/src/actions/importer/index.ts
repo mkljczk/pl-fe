@@ -10,8 +10,6 @@ const STATUS_IMPORT = 'STATUS_IMPORT' as const;
 const STATUSES_IMPORT = 'STATUSES_IMPORT' as const;
 const POLLS_IMPORT = 'POLLS_IMPORT' as const;
 
-const importAccount = (data: BaseAccount) => importAccounts([data]);
-
 const importAccounts = (data: Array<BaseAccount>) => (dispatch: AppDispatch) => {
   try {
     const accounts = data.map(normalizeAccount);
@@ -162,13 +160,6 @@ export {
   STATUS_IMPORT,
   STATUSES_IMPORT,
   POLLS_IMPORT,
-  importAccount,
-  importAccounts,
-  importGroup,
-  importGroups,
-  importStatus,
-  importStatuses,
-  importPolls,
   importFetchedAccount,
   importFetchedAccounts,
   importFetchedStatus,
