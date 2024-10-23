@@ -62,6 +62,14 @@ const config = defineConfig(({ command }) => ({
         name: 'pl-fe',
         short_name: 'pl-fe',
         description: 'Web-based federated social media client, a fork of Soapbox',
+        icons: [
+          {
+            src: '/instance/images/logo.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any',
+          },
+        ],
         display: 'standalone',
         display_override: [
           'window-controls-overlay',
@@ -85,6 +93,7 @@ const config = defineConfig(({ command }) => ({
               {
                 src: '/instance/images/shortcuts/search.png',
                 sizes: '192x192',
+                type: 'image/png',
               },
             ],
           },
@@ -95,6 +104,7 @@ const config = defineConfig(({ command }) => ({
               {
                 src: '/instance/images/shortcuts/notifications.png',
                 sizes: '192x192',
+                type: 'image/png',
               },
             ],
           },
@@ -105,11 +115,13 @@ const config = defineConfig(({ command }) => ({
               {
                 src: '/instance/images/shortcuts/chats.png',
                 sizes: '192x192',
+                type: 'image/png',
               },
             ],
           },
         ],
         start_url: '/',
+        id: '/',
       },
       srcDir: 'src/service-worker',
       filename: 'sw.ts',
@@ -118,6 +130,9 @@ const config = defineConfig(({ command }) => ({
       targets: [{
         src: './node_modules/@twemoji/svg/*',
         dest: 'packs/emoji/',
+      }, {
+        src: './favicon.ico',
+        dest: '.',
       }, {
         src: './src/instance',
         dest: '.',
