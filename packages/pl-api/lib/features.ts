@@ -271,6 +271,7 @@ const getFeatures = (instance: Instance) => {
      */
     bots: any([
       v.software === GOTOSOCIAL,
+      v.software === ICESHRIMP,
       v.software === MASTODON,
       v.software === PLEROMA,
     ]),
@@ -926,6 +927,7 @@ const getFeatures = (instance: Instance) => {
      * @see PATCH /api/v1/accounts/update_credentials
      */
     profileFields: any([
+      v.software === ICESHRIMP,
       v.software === MASTODON,
       v.software === PLEROMA,
       v.software === TAKAHE && gte(v.version, '0.7.0'),
