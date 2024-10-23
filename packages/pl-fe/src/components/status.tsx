@@ -1,6 +1,5 @@
 import clsx from 'clsx';
-import { useStatus } from 'pl-hooks';
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -18,7 +17,9 @@ import StatusTypeIcon from 'pl-fe/features/status/components/status-type-icon';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
 import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useSettings } from 'pl-fe/hooks/useSettings';
+import { makeGetStatus, type SelectedStatus } from 'pl-fe/selectors';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import { textForScreenReader } from 'pl-fe/utils/status';
 
@@ -31,8 +32,6 @@ import StatusReactionsBar from './status-reactions-bar';
 import StatusReplyMentions from './status-reply-mentions';
 import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 import StatusInfo from './statuses/status-info';
-
-import type { SelectedStatus } from 'pl-fe/selectors';
 
 const messages = defineMessages({
   reblogged_by: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
@@ -87,7 +86,8 @@ const Status: React.FC<IStatus> = (props) => {
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
 
-  const actualStatus = useStatus(status.reblog_id || undefined).data || status;
+  const getStatus = useCallback(makeGetStatus(), []);
+  const actualStatus = useAppSelector(state => status.reblog_id && getStatus(state, { id: status.reblog_id }) || status)!;
 
   const isReblog = status.reblog_id;
   const statusUrl = `/@${actualStatus.account.acct}/posts/${actualStatus.id}`;

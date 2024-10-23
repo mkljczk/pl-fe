@@ -146,6 +146,7 @@ const SearchResults = () => {
 
     if (results.statuses && results.statuses.length > 0) {
       searchResults = results.statuses.map((statusId: string) => (
+        // @ts-ignore
         <StatusContainer
           key={statusId}
           id={statusId}
@@ -156,6 +157,7 @@ const SearchResults = () => {
       resultsIds = results.statuses;
     } else if (!submitted && !filterByAccount && trendingStatuses && trendingStatuses.length !== 0) {
       searchResults = trendingStatuses.map((statusId: string) => (
+        // @ts-ignore
         <StatusContainer
           key={statusId}
           id={statusId}

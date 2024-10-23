@@ -1,6 +1,5 @@
 import { List as ImmutableList, OrderedSet as ImmutableOrderedSet } from 'immutable';
-import { useStatus } from 'pl-hooks';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { eventDiscussionCompose } from 'pl-fe/actions/compose';
@@ -13,6 +12,7 @@ import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder
 import PendingStatus from 'pl-fe/features/ui/components/pending-status';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 import ComposeForm from '../compose/components/compose-form';
 import { getDescendantsIds } from '../status/components/thread';
@@ -32,7 +32,8 @@ const EventDiscussion: React.FC<IEventDiscussion> = ({ params: { statusId: statu
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const { data: status } = useStatus(statusId);
+  const getStatus = useCallback(makeGetStatus(), []);
+  const status = useAppSelector(state => getStatus(state, { id: statusId }));
 
   const me = useAppSelector((state) => state.me);
 
@@ -90,7 +91,7 @@ const EventDiscussion: React.FC<IEventDiscussion> = ({ params: { statusId: statu
     <ThreadStatus
       key={id}
       id={id}
-      focusedStatusId={statusId}
+      focusedStatusId={status!.id}
       onMoveUp={handleMoveUp}
       onMoveDown={handleMoveDown}
     />

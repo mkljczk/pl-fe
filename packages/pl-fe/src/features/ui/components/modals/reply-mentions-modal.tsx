@@ -1,12 +1,13 @@
-import { useStatus } from 'pl-hooks';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Modal from 'pl-fe/components/ui/modal';
 import Account from 'pl-fe/features/reply-mentions/account';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useCompose } from 'pl-fe/hooks/useCompose';
 import { useOwnAccount } from 'pl-fe/hooks/useOwnAccount';
 import { statusToMentionsAccountIdsArray } from 'pl-fe/reducers/compose';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 import type { BaseModalProps } from '../modal-root';
 
@@ -17,7 +18,8 @@ interface ReplyMentionsModalProps {
 const ReplyMentionsModal: React.FC<BaseModalProps & ReplyMentionsModalProps> = ({ composeId, onClose }) => {
   const compose = useCompose(composeId);
 
-  const { data: status } = useStatus(compose.in_reply_to!);
+  const getStatus = useCallback(makeGetStatus(), []);
+  const status = useAppSelector(state => getStatus(state, { id: compose.in_reply_to! }));
   const { account } = useOwnAccount();
 
   const mentions = statusToMentionsAccountIdsArray(status!, account!, compose.parent_reblogged_by);

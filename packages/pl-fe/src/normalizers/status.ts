@@ -147,6 +147,7 @@ const normalizeStatus = (status: BaseStatus & {
     media_attachments,
     ...calculated,
     translation: (status.translation || calculated.translation || null) as Translation | null | false,
+    // quote: status.quote ? normalizeStatus(status.quote as any) : null,
   };
 };
 

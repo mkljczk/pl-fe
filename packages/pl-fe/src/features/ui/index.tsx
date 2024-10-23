@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { prefetchMarker, prefetchNotifications } from 'pl-hooks';
 import React, { Suspense, lazy, useEffect, useRef } from 'react';
 import { Switch, useHistory, useLocation, Redirect } from 'react-router-dom';
 
@@ -8,7 +7,8 @@ import { fetchReports, fetchUsers, fetchConfig } from 'pl-fe/actions/admin';
 import { fetchCustomEmojis } from 'pl-fe/actions/custom-emojis';
 import { fetchDraftStatuses } from 'pl-fe/actions/draft-statuses';
 import { fetchFilters } from 'pl-fe/actions/filters';
-import { FilterType } from 'pl-fe/actions/notifications';
+import { fetchMarker } from 'pl-fe/actions/markers';
+import { expandNotifications } from 'pl-fe/actions/notifications';
 import { register as registerPushNotifications } from 'pl-fe/actions/push-notifications';
 import { fetchScheduledStatuses } from 'pl-fe/actions/scheduled-statuses';
 import { fetchSuggestionsForTimeline } from 'pl-fe/actions/suggestions';
@@ -44,8 +44,6 @@ import StatusLayout from 'pl-fe/layouts/status-layout';
 import { useUiStore } from 'pl-fe/stores/ui';
 import { getVapidKey } from 'pl-fe/utils/auth';
 import { isStandalone } from 'pl-fe/utils/state';
-
-import { FILTER_TYPES } from '../notifications';
 
 import BackgroundShapes from './components/background-shapes';
 import {
@@ -143,8 +141,6 @@ import {
 } from './util/async-components';
 import GlobalHotkeys from './util/global-hotkeys';
 import { WrappedRoute } from './util/react-router-helpers';
-
-import type { NotificationType } from 'pl-fe/utils/notification';
 
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
@@ -355,7 +351,6 @@ interface IUI {
 }
 
 const UI: React.FC<IUI> = ({ children }) => {
-  const client = useClient();
   const history = useHistory();
   const dispatch = useAppDispatch();
   const node = useRef<HTMLDivElement | null>(null);
@@ -363,7 +358,6 @@ const UI: React.FC<IUI> = ({ children }) => {
   const { account } = useOwnAccount();
   const features = useFeatures();
   const vapidKey = useAppSelector(state => getVapidKey(state));
-  const notificationFilter = useSettings().notifications.quickFilter.active as FilterType;
 
   const { isDropdownMenuOpen } = useUiStore();
   const standalone = useAppSelector(isStandalone);
@@ -385,9 +379,6 @@ const UI: React.FC<IUI> = ({ children }) => {
 
   /** Load initial data when a user is logged in */
   const loadAccountData = () => {
-    const notificationsParams = notificationFilter === 'all' ? {} : {
-      types: FILTER_TYPES[notificationFilter] || [notificationFilter] as Array<NotificationType>,
-    };
     if (!account) return;
 
     dispatch(fetchDraftStatuses());
@@ -396,8 +387,9 @@ const UI: React.FC<IUI> = ({ children }) => {
       dispatch(fetchSuggestionsForTimeline());
     }));
 
-    prefetchNotifications(client, notificationsParams)
-      .then(() => prefetchMarker(client, 'notifications'))
+    dispatch(expandNotifications())
+      // @ts-ignore
+      .then(() => dispatch(fetchMarker(['notifications'])))
       .catch(console.error);
 
     if (account.is_admin || account.is_moderator) {

@@ -1,6 +1,7 @@
-import { getClient } from 'pl-fe/api';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { isLoggedIn } from 'pl-fe/utils/auth';
+
+import { getClient } from '../api';
 
 import type { PaginatedResponse } from 'pl-api';
 import type { EntityStore } from 'pl-fe/entity-store/types';

@@ -8,14 +8,26 @@ import {
   FOLLOW_REQUEST_REJECT_SUCCESS,
 } from '../actions/accounts';
 import {
+  MARKER_FETCH_SUCCESS,
+  MARKER_SAVE_REQUEST,
+  MARKER_SAVE_SUCCESS,
+} from '../actions/markers';
+import {
   NOTIFICATIONS_UPDATE,
+  NOTIFICATIONS_EXPAND_SUCCESS,
+  NOTIFICATIONS_EXPAND_REQUEST,
+  NOTIFICATIONS_EXPAND_FAIL,
+  NOTIFICATIONS_FILTER_SET,
+  NOTIFICATIONS_CLEAR,
+  NOTIFICATIONS_SCROLL_TOP,
   NOTIFICATIONS_UPDATE_QUEUE,
   NOTIFICATIONS_DEQUEUE,
+  NOTIFICATIONS_MARK_READ_REQUEST,
   MAX_QUEUED_NOTIFICATIONS,
 } from '../actions/notifications';
 import { TIMELINE_DELETE } from '../actions/timelines';
 
-import type { AccountWarning, Notification as BaseNotification, Relationship, RelationshipSeveranceEvent, Report } from 'pl-api';
+import type { AccountWarning, Notification as BaseNotification, Markers, PaginatedResponse, Relationship, RelationshipSeveranceEvent, Report } from 'pl-api';
 import type { Notification } from 'pl-fe/normalizers/notification';
 import type { AnyAction } from 'redux';
 
@@ -27,9 +39,13 @@ const QueuedNotificationRecord = ImmutableRecord({
 
 const ReducerRecord = ImmutableRecord({
   items: ImmutableOrderedMap<string, MinifiedNotification>(),
+  hasMore: true,
+  top: false,
   unread: 0,
+  isLoading: false,
   queuedNotifications: ImmutableOrderedMap<string, QueuedNotification>(), //max = MAX_QUEUED_NOTIFICATIONS
   totalQueuedNotificationsCount: 0, //used for queuedItems overflow for MAX_QUEUED_NOTIFICATIONS+
+  lastRead: -1 as string | -1,
 });
 
 type State = ReturnType<typeof ReducerRecord>;
@@ -109,8 +125,18 @@ const minifyNotification = (notification: Notification) => {
 
 type MinifiedNotification = ReturnType<typeof minifyNotification>;
 
+// Count how many notifications appear after the given ID (for unread count)
+const countFuture = (notifications: ImmutableOrderedMap<string, MinifiedNotification>, lastId: string | number) =>
+  notifications.reduce((acc, notification) => {
+    if (!notification.duplicate && parseId(notification.id) > parseId(lastId)) {
+      return acc + 1;
+    } else {
+      return acc;
+    }
+  }, 0);
+
 const importNotification = (state: State, notification: Notification) => {
-  const top = false; // state.top;
+  const top = state.top;
 
   if (!top && !notification.duplicate) state = state.update('unread', unread => unread + 1);
 
@@ -123,12 +149,28 @@ const importNotification = (state: State, notification: Notification) => {
   });
 };
 
+const expandNormalizedNotifications = (state: State, notifications: Notification[], next: (() => Promise<PaginatedResponse<BaseNotification>>) | null) => {
+  const items = ImmutableOrderedMap(notifications.map(minifyNotification).map(n => [n.id, n]));
+
+  return state.withMutations(mutable => {
+    mutable.update('items', map => map.merge(items).sort(comparator));
+
+    if (!next) mutable.set('hasMore', false);
+    mutable.set('isLoading', false);
+  });
+};
+
 const filterNotifications = (state: State, relationship: Relationship) =>
   state.update('items', map => map.filterNot(item => item !== null && item.account_ids.includes(relationship.id)));
 
 const filterNotificationIds = (state: State, accountIds: Array<string>, type?: string) => {
   const helper = (list: ImmutableOrderedMap<string, MinifiedNotification>) => list.filterNot(item => item !== null && accountIds.includes(item.account_ids[0]) && (type === undefined || type === item.type));
   return state.update('items', helper);
+};
+
+const updateTop = (state: State, top: boolean) => {
+  if (top) state = state.set('unread', 0);
+  return state.set('top', top);
 };
 
 const deleteByStatus = (state: State, statusId: string) =>
@@ -157,8 +199,33 @@ const updateNotificationsQueue = (state: State, notification: BaseNotification, 
   });
 };
 
+const importMarker = (state: State, marker: Markers) => {
+  const lastReadId = marker.notifications.last_read_id || -1 as string | -1;
+
+  if (!lastReadId) {
+    return state;
+  }
+
+  return state.withMutations(state => {
+    const notifications = state.items;
+    const unread = countFuture(notifications, lastReadId);
+
+    state.set('unread', unread);
+    state.set('lastRead', lastReadId);
+  });
+};
+
 const notifications = (state: State = ReducerRecord(), action: AnyAction) => {
   switch (action.type) {
+    case NOTIFICATIONS_EXPAND_REQUEST:
+      return state.set('isLoading', true);
+    case NOTIFICATIONS_EXPAND_FAIL:
+      if (action.error?.message === 'canceled') return state;
+      return state.set('isLoading', false);
+    case NOTIFICATIONS_FILTER_SET:
+      return state.set('items', ImmutableOrderedMap()).set('hasMore', true);
+    case NOTIFICATIONS_SCROLL_TOP:
+      return updateTop(state, action.top);
     case NOTIFICATIONS_UPDATE:
       return importNotification(state, action.notification);
     case NOTIFICATIONS_UPDATE_QUEUE:
@@ -168,6 +235,8 @@ const notifications = (state: State = ReducerRecord(), action: AnyAction) => {
         mutable.delete('queuedNotifications');
         mutable.set('totalQueuedNotificationsCount', 0);
       });
+    case NOTIFICATIONS_EXPAND_SUCCESS:
+      return expandNormalizedNotifications(state, action.notifications, action.next);
     case ACCOUNT_BLOCK_SUCCESS:
       return filterNotifications(state, action.relationship);
     case ACCOUNT_MUTE_SUCCESS:
@@ -175,6 +244,14 @@ const notifications = (state: State = ReducerRecord(), action: AnyAction) => {
     case FOLLOW_REQUEST_AUTHORIZE_SUCCESS:
     case FOLLOW_REQUEST_REJECT_SUCCESS:
       return filterNotificationIds(state, [action.accountId], 'follow_request');
+    case NOTIFICATIONS_CLEAR:
+      return state.set('items', ImmutableOrderedMap()).set('hasMore', false);
+    case NOTIFICATIONS_MARK_READ_REQUEST:
+      return state.set('lastRead', action.lastRead);
+    case MARKER_FETCH_SUCCESS:
+    case MARKER_SAVE_REQUEST:
+    case MARKER_SAVE_SUCCESS:
+      return importMarker(state, action.marker);
     case TIMELINE_DELETE:
       return deleteByStatus(state, action.statusId);
     default:

@@ -1,4 +1,3 @@
-import { useStatus } from 'pl-hooks';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { FormattedMessage } from 'react-intl';
@@ -17,6 +16,9 @@ import {
 } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
 import { useFeatures } from 'pl-fe/hooks/useFeatures';
+import { makeGetStatus } from 'pl-fe/selectors';
+
+const getStatus = makeGetStatus();
 
 interface IEventLayout {
   params?: {
@@ -32,7 +34,7 @@ const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
   const history = useHistory();
   const statusId = params?.statusId!;
 
-  const { data: status } = useStatus(statusId);
+  const status = useAppSelector(state => getStatus(state, { id: statusId }) || undefined);
 
   const event = status?.event;
 
@@ -71,10 +73,10 @@ const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
       <Layout.Main>
         <Column label={event?.name} withHeader={false}>
           <div className='space-y-4'>
-            <EventHeader status={status || undefined} />
+            <EventHeader status={status} />
 
             {status && showTabs && (
-              <Tabs key={`event-tabs-${statusId}`} items={tabs} activeItem={activeItem} />
+              <Tabs key={`event-tabs-${status.id}`} items={tabs} activeItem={activeItem} />
             )}
 
             {children}

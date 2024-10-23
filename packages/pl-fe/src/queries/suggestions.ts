@@ -1,7 +1,7 @@
 import { useMutation, keepPreviousData, useQuery } from '@tanstack/react-query';
-import { importEntities } from 'pl-hooks';
 
 import { fetchRelationships } from 'pl-fe/actions/accounts';
+import { importFetchedAccounts } from 'pl-fe/actions/importer';
 import { useAppDispatch } from 'pl-fe/hooks/useAppDispatch';
 import { useClient } from 'pl-fe/hooks/useClient';
 
@@ -20,7 +20,7 @@ const useSuggestions = () => {
 
     const accounts = response.map(({ account }) => account);
     const accountIds = accounts.map((account) => account.id);
-    importEntities({ accounts });
+    dispatch(importFetchedAccounts(accounts));
     dispatch(fetchRelationships(accountIds));
 
     return response.map(({ account, ...x }) => ({ ...x, account_id: account.id }));
@@ -60,7 +60,7 @@ const useOnboardingSuggestions = () => {
 
     const accounts = response.map(({ account }) => account);
     const accountIds = accounts.map((account) => account.id);
-    importEntities({ accounts });
+    dispatch(importFetchedAccounts(accounts));
     dispatch(fetchRelationships(accountIds));
 
     return response;

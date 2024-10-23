@@ -1,9 +1,9 @@
-import { importEntities } from 'pl-hooks';
-
-import { getClient } from 'pl-fe/api';
 import { useSettingsStore } from 'pl-fe/stores/settings';
 
+import { getClient } from '../api';
+
 import { fetchRelationships } from './accounts';
+import { importFetchedAccounts, importFetchedStatuses } from './importer';
 
 import type { Search } from 'pl-api';
 import type { SearchFilter } from 'pl-fe/reducers/search';
@@ -54,7 +54,13 @@ const submitSearch = (value: string, filter?: SearchFilter) =>
     if (accountId) params.account_id = accountId;
 
     return getClient(getState()).search.search(value, params).then(response => {
-      importEntities({ accounts: response.accounts, statuses: response.statuses, groups: response.groups });
+      if (response.accounts) {
+        dispatch(importFetchedAccounts(response.accounts));
+      }
+
+      if (response.statuses) {
+        dispatch(importFetchedStatuses(response.statuses));
+      }
 
       dispatch(fetchSearchSuccess(response, value, type));
       dispatch(fetchRelationships(response.accounts.map((item) => item.id)));
@@ -107,7 +113,13 @@ const expandSearch = (type: SearchFilter) => (dispatch: AppDispatch, getState: (
   if (accountId) params.account_id = accountId;
 
   return getClient(getState()).search.search(value, params).then(response => {
-    importEntities({ accounts: response.accounts, statuses: response.statuses, groups: response.groups });
+    if (response.accounts) {
+      dispatch(importFetchedAccounts(response.accounts));
+    }
+
+    if (response.statuses) {
+      dispatch(importFetchedStatuses(response.statuses));
+    }
 
     dispatch(expandSearchSuccess(response, value, type));
     dispatch(fetchRelationships(response.accounts.map((item) => item.id)));

@@ -71,6 +71,7 @@ import type { Emoji } from 'pl-fe/features/emoji';
 import type { Language } from 'pl-fe/features/preferences';
 import type { Account } from 'pl-fe/normalizers/account';
 import type { Status } from 'pl-fe/normalizers/status';
+import type { APIEntity } from 'pl-fe/types/entities';
 
 const getResetFileKey = () => Math.floor((Math.random() * 0x10000));
 
@@ -107,7 +108,7 @@ const ReducerCompose = ImmutableRecord({
   sensitive: false,
   spoiler_text: '',
   spoilerTextMap: ImmutableMap<Language, string>(),
-  suggestions: [] as Array<string | Emoji>,
+  suggestions: ImmutableList<string>(),
   suggestion_token: null as string | null,
   tagHistory: ImmutableList<string>(),
   text: '',
@@ -187,7 +188,7 @@ const insertSuggestion = (compose: Compose, position: number, token: string | nu
   compose.withMutations(map => {
     map.updateIn(path, oldText => `${(oldText as string).slice(0, position)}${completion} ${(oldText as string).slice(position + (token?.length ?? 0))}`);
     map.set('suggestion_token', null);
-    map.set('suggestions', []);
+    map.set('suggestions', ImmutableList());
     if (path.length === 1 && path[0] === 'text') {
       map.set('focusDate', new Date());
       map.set('caretPosition', position + completion.length + 1);
@@ -199,10 +200,10 @@ const updateSuggestionTags = (compose: Compose, token: string, tags: Tag[]) => {
   const prefix = token.slice(1);
 
   return compose.merge({
-    suggestions: tags
+    suggestions: ImmutableList(tags
       .filter((tag) => tag.name.toLowerCase().startsWith(prefix.toLowerCase()))
       .slice(0, 4)
-      .map((tag) => '#' + tag.name),
+      .map((tag) => '#' + tag.name)),
     suggestion_token: token,
   });
 };
@@ -429,9 +430,9 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         map.set('idempotencyKey', crypto.randomUUID());
       }));
     case COMPOSE_SUGGESTIONS_CLEAR:
-      return updateCompose(state, action.composeId, compose => compose.set('suggestions', []).set('suggestion_token', null));
+      return updateCompose(state, action.composeId, compose => compose.update('suggestions', list => list?.clear()).set('suggestion_token', null));
     case COMPOSE_SUGGESTIONS_READY:
-      return updateCompose(state, action.composeId, compose => compose.set('suggestions', action.accounts ? action.accounts.map((item) => item.id) : action.emojis || []).set('suggestion_token', action.token));
+      return updateCompose(state, action.composeId, compose => compose.set('suggestions', ImmutableList(action.accounts ? action.accounts.map((item: APIEntity) => item.id) : action.emojis)).set('suggestion_token', action.token));
     case COMPOSE_SUGGESTION_SELECT:
       return updateCompose(state, action.composeId, compose => insertSuggestion(compose, action.position, action.token, action.completion, action.path));
     case COMPOSE_SUGGESTION_TAGS_UPDATE:

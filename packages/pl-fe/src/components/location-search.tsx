@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { OrderedSet as ImmutableOrderedSet } from 'immutable';
 import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -23,7 +24,7 @@ interface ILocationSearch {
 const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const [locationIds, setLocationIds] = useState(Array<string>());
+  const [locationIds, setLocationIds] = useState(ImmutableOrderedSet<string>());
   const controller = useRef(new AbortController());
 
   const [value, setValue] = useState('');
@@ -62,14 +63,14 @@ const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
   };
 
   const clearResults = () => {
-    setLocationIds([]);
+    setLocationIds(ImmutableOrderedSet());
   };
 
   const handleLocationSearch = useCallback(throttle(q => {
     dispatch(locationSearch(q, controller.current.signal))
       .then((locations: { origin_id: string }[]) => {
         const locationIds = locations.map(location => location.origin_id);
-        setLocationIds(locationIds);
+        setLocationIds(ImmutableOrderedSet(locationIds));
       })
       .catch(noOp);
   }, 900, { leading: true, trailing: true }), []);
@@ -87,7 +88,7 @@ const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
         placeholder={intl.formatMessage(messages.placeholder)}
         value={value}
         onChange={handleChange}
-        suggestions={locationIds}
+        suggestions={locationIds.toList()}
         onSuggestionsFetchRequested={noOp}
         onSuggestionsClearRequested={noOp}
         onSuggestionSelected={handleSelected}

@@ -1,6 +1,6 @@
-import { importEntities } from 'pl-hooks';
+import { getClient } from '../api';
 
-import { getClient } from 'pl-fe/api';
+import { importFetchedStatuses } from './importer';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
@@ -18,7 +18,7 @@ const fetchTrendingStatuses = () =>
     dispatch({ type: TRENDING_STATUSES_FETCH_REQUEST });
 
     return client.trends.getTrendingStatuses().then((statuses) => {
-      importEntities({ statuses });
+      dispatch(importFetchedStatuses(statuses));
       dispatch({ type: TRENDING_STATUSES_FETCH_SUCCESS, statuses });
       return statuses;
     }).catch(error => {

@@ -1,7 +1,8 @@
-import { useStatus } from 'pl-hooks';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import QuotedStatus from 'pl-fe/components/quoted-status';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 interface IQuotedStatusContainer {
   /** Status ID to the quoted status. */
@@ -9,14 +10,16 @@ interface IQuotedStatusContainer {
 }
 
 const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ statusId }) => {
-  const { data: status } = useStatus(statusId);
+  const getStatus = useCallback(makeGetStatus(), []);
+
+  const status = useAppSelector(state => getStatus(state, { id: statusId }));
 
   if (!status) {
     return null;
   }
 
   return (
-    <QuotedStatus status={status || undefined} />
+    <QuotedStatus status={status} />
   );
 };
 

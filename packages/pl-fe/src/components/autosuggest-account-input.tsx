@@ -1,3 +1,4 @@
+import { OrderedSet as ImmutableOrderedSet } from 'immutable';
 import throttle from 'lodash/throttle';
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
@@ -29,7 +30,7 @@ const AutosuggestAccountInput: React.FC<IAutosuggestAccountInput> = ({
   ...rest
 }) => {
   const dispatch = useAppDispatch();
-  const [accountIds, setAccountIds] = useState(Array<string>());
+  const [accountIds, setAccountIds] = useState(ImmutableOrderedSet<string>());
   const controller = useRef(new AbortController());
 
   const refreshCancelToken = () => {
@@ -38,14 +39,14 @@ const AutosuggestAccountInput: React.FC<IAutosuggestAccountInput> = ({
   };
 
   const clearResults = () => {
-    setAccountIds([]);
+    setAccountIds(ImmutableOrderedSet());
   };
 
   const handleAccountSearch = useCallback(throttle((q) => {
     dispatch(accountSearch(q, controller.current.signal))
       .then((accounts: { id: string }[]) => {
         const accountIds = accounts.map(account => account.id);
-        setAccountIds(accountIds);
+        setAccountIds(ImmutableOrderedSet(accountIds));
       })
       .catch(noOp);
   }, 900, { leading: true, trailing: true }), []);
@@ -78,7 +79,7 @@ const AutosuggestAccountInput: React.FC<IAutosuggestAccountInput> = ({
     <AutosuggestInput
       value={value}
       onChange={handleChange}
-      suggestions={accountIds}
+      suggestions={accountIds.toList()}
       onSuggestionsFetchRequested={noOp}
       onSuggestionsClearRequested={noOp}
       onSuggestionSelected={handleSelected}

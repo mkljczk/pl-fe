@@ -3,16 +3,17 @@ import { defineMessage } from 'react-intl';
 import { patchMe } from 'pl-fe/actions/me';
 import { getClient } from 'pl-fe/api';
 import messages from 'pl-fe/messages';
-import { queryClient } from 'pl-fe/queries/client';
+import { makeGetAccount } from 'pl-fe/selectors';
 import KVStore from 'pl-fe/storage/kv-store';
 import { useSettingsStore } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
-import type { Account } from 'pl-hooks/normalizers/normalizeAccount';
 
 const FE_NAME = 'pl_fe';
+
+const getAccount = makeGetAccount();
 
 /** Options when changing/saving settings. */
 type SettingOpts = {
@@ -70,7 +71,7 @@ const updateSettingsStore = (settings: any) =>
         },
       }));
     } else {
-      const accountUrl = queryClient.getQueryData<Account>(['accounts', 'entities', state.me])!.url;
+      const accountUrl = getAccount(state, state.me as string)!.url;
 
       return updateAuthAccount(accountUrl, settings);
     }

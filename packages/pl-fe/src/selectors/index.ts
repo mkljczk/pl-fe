@@ -13,10 +13,12 @@ import { validId } from 'pl-fe/utils/auth';
 import ConfigDB from 'pl-fe/utils/config-db';
 import { shouldFilter } from 'pl-fe/utils/timelines';
 
-import type { Account as BaseAccount, MediaAttachment, Relationship } from 'pl-api';
+import type { Account as BaseAccount, Filter, MediaAttachment, Relationship } from 'pl-api';
 import type { EntityStore } from 'pl-fe/entity-store/types';
 import type { Account } from 'pl-fe/normalizers/account';
 import type { Group } from 'pl-fe/normalizers/group';
+import type { Notification } from 'pl-fe/normalizers/notification';
+import type { MinifiedNotification } from 'pl-fe/reducers/notifications';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 import type { MRFSimple } from 'pl-fe/schemas/pleroma';
 import type { RootState } from 'pl-fe/store';
@@ -50,6 +52,76 @@ const makeGetAccount = () => createSelector([
   };
 });
 
+const toServerSideType = (columnType: string): Filter['context'][0] => {
+  switch (columnType) {
+    case 'home':
+    case 'notifications':
+    case 'public':
+    case 'thread':
+      return columnType;
+    default:
+      if (columnType.includes('list:')) {
+        return 'home';
+      } else {
+        return 'public'; // community, account, hashtag
+      }
+  }
+};
+
+type FilterContext = { contextType?: string };
+
+const getFilters = (state: RootState, query: FilterContext) =>
+  state.filters.filter((filter) =>
+    (!query?.contextType || filter.context.includes(toServerSideType(query.contextType)))
+      && (filter.expires_at === null || Date.parse(filter.expires_at) > new Date().getTime()),
+  );
+
+const escapeRegExp = (string: string) =>
+  string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+
+const regexFromFilters = (filters: ImmutableList<Filter>) => {
+  if (filters.size === 0) return null;
+
+  return new RegExp(filters.map(filter =>
+    filter.keywords.map(keyword => {
+      let expr = escapeRegExp(keyword.keyword);
+
+      if (keyword.whole_word) {
+        if (/^[\w]/.test(expr)) {
+          expr = `\\b${expr}`;
+        }
+
+        if (/[\w]$/.test(expr)) {
+          expr = `${expr}\\b`;
+        }
+      }
+
+      return expr;
+    }).join('|'),
+  ).join('|'), 'i');
+};
+
+const checkFiltered = (index: string, filters: ImmutableList<Filter>) =>
+  filters.reduce((result: Array<string>, filter) =>
+    result.concat(filter.keywords.reduce((result: Array<string>, keyword) => {
+      let expr = escapeRegExp(keyword.keyword);
+
+      if (keyword.whole_word) {
+        if (/^[\w]/.test(expr)) {
+          expr = `\\b${expr}`;
+        }
+
+        if (/[\w]$/.test(expr)) {
+          expr = `${expr}\\b`;
+        }
+      }
+
+      const regex = new RegExp(expr);
+
+      if (regex.test(index)) return result.concat(filter.title);
+      return result;
+    }, [])), []);
+
 type APIStatus = { id: string; username?: string };
 
 const makeGetStatus = () => createSelector(
@@ -64,12 +136,13 @@ const makeGetStatus = () => createSelector(
     },
     (state: RootState, { id }: APIStatus) => state.polls.get(id) || null,
     (_state: RootState, { username }: APIStatus) => username,
+    getFilters,
     (state: RootState) => state.me,
     (state: RootState) => state.auth.client.features,
     (state: RootState) => getLocale('en'),
   ],
 
-  (statusBase, statusReblog, statusQuote, statusGroup, poll, username, me, features, locale) => {
+  (statusBase, statusReblog, statusQuote, statusGroup, poll, username, filters, me, features, locale) => {
     if (!statusBase) return null;
     const { account } = statusBase;
     const accountUsername = account.acct;
@@ -79,12 +152,17 @@ const makeGetStatus = () => createSelector(
       return null;
     }
 
+    const filtered = features.filtersV2
+      ? statusBase.filtered
+      : features.filters && account.id !== me && checkFiltered(statusReblog?.search_index || statusBase.search_index || '', filters) || [];
+
     return {
       ...statusBase,
       reblog: statusReblog || null,
       quote: statusQuote || null,
       group: statusGroup || null,
       poll,
+      filtered,
     };
     // if (map.currentLanguage === null && map.content_map?.size) {
     //   let currentLanguage: string | null = null;
@@ -97,6 +175,27 @@ const makeGetStatus = () => createSelector(
 );
 
 type SelectedStatus = Exclude<ReturnType<ReturnType<typeof makeGetStatus>>, null>;
+
+const makeGetNotification = () => createSelector([
+  (_state: RootState, notification: MinifiedNotification) => notification,
+  // @ts-ignore
+  (state: RootState, notification: MinifiedNotification) => selectAccount(state, notification.account_id),
+  // @ts-ignore
+  (state: RootState, notification: MinifiedNotification) => selectAccount(state, notification.target_id),
+  // @ts-ignore
+  (state: RootState, notification: MinifiedNotification) => state.statuses.get(notification.status_id),
+  (state: RootState, notification: MinifiedNotification) => notification.account_ids ? selectAccounts(state, notification.account_ids) : null,
+], (notification, account, target, status, accounts): MinifiedNotification & Notification => ({
+  ...notification,
+  // @ts-ignore
+  account: account || null,
+  // @ts-ignore
+  target: target || null,
+  // @ts-ignore
+  status: status || null,
+  // @ts-ignore
+  accounts,
+}));
 
 type AccountGalleryAttachment = MediaAttachment & {
   status: MinifiedStatus;
@@ -254,7 +353,11 @@ export {
   selectAccounts,
   selectOwnAccount,
   makeGetAccount,
+  getFilters,
+  regexFromFilters,
+  makeGetStatus,
   type SelectedStatus,
+  makeGetNotification,
   type AccountGalleryAttachment,
   getAccountGallery,
   getGroupGallery,

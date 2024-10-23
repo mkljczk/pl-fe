@@ -1,9 +1,10 @@
-import { useStatus } from 'pl-hooks';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import Video from 'pl-fe/features/video';
+import { useAppSelector } from 'pl-fe/hooks/useAppSelector';
+import { makeGetStatus } from 'pl-fe/selectors';
 
 import type { BaseModalProps } from '../modal-root';
 import type { MediaAttachment } from 'pl-api';
@@ -15,7 +16,9 @@ type VideoModalProps = {
 };
 
 const VideoModal: React.FC<VideoModalProps & BaseModalProps> = ({ statusId, media, time }) => {
-  const { data: status } = useStatus(statusId);
+  const getStatus = useCallback(makeGetStatus(), []);
+
+  const status = useAppSelector(state => getStatus(state, { id: statusId }))!;
 
   const link = status && (
     <Link to={`/@${status.account.acct}/posts/${status.id}`}>

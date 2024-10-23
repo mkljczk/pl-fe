@@ -1,5 +1,4 @@
 import throttle from 'lodash/throttle';
-import { importEntities } from 'pl-hooks';
 import { defineMessages, IntlShape } from 'react-intl';
 
 import { getClient } from 'pl-fe/api';
@@ -14,6 +13,7 @@ import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { chooseEmoji } from './emojis';
+import { importFetchedAccounts } from './importer';
 import { rememberLanguageUse } from './languages';
 import { uploadFile, updateMedia } from './media';
 import { createStatus } from './statuses';
@@ -593,7 +593,7 @@ const fetchComposeSuggestionsAccounts = throttle((dispatch, getState, composeId,
 
   return getClient(getState).accounts.searchAccounts(token.slice(1), { resolve: false, limit: 10 }, { signal })
     .then(response => {
-      importEntities({ accounts: response });
+      dispatch(importFetchedAccounts(response));
       dispatch(readyComposeSuggestionsAccounts(composeId, token, response));
     }).catch(error => {
       if (!signal.aborted) {
