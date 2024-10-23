@@ -6,9 +6,9 @@ import { normalizeGroup } from 'pl-fe/normalizers/group';
 import type { Account as BaseAccount, Group, Poll, Status as BaseStatus } from 'pl-api';
 import type { AppDispatch } from 'pl-fe/store';
 
-const STATUS_IMPORT = 'STATUS_IMPORT';
-const STATUSES_IMPORT = 'STATUSES_IMPORT';
-const POLLS_IMPORT = 'POLLS_IMPORT';
+const STATUS_IMPORT = 'STATUS_IMPORT' as const;
+const STATUSES_IMPORT = 'STATUSES_IMPORT' as const;
+const POLLS_IMPORT = 'POLLS_IMPORT' as const;
 
 const importAccount = (data: BaseAccount) => importAccounts([data]);
 
@@ -153,6 +153,11 @@ const importFetchedPoll = (poll: Poll) =>
     dispatch(importPolls([poll]));
   };
 
+type ImporterAction =
+  | ReturnType<typeof importStatus>
+  | ReturnType<typeof importStatuses>
+  | ReturnType<typeof importPolls>;
+
 export {
   STATUS_IMPORT,
   STATUSES_IMPORT,
@@ -169,4 +174,5 @@ export {
   importFetchedStatus,
   importFetchedStatuses,
   importFetchedPoll,
+  type ImporterAction,
 };

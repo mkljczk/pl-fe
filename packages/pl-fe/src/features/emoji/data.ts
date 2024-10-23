@@ -48,13 +48,8 @@ const emojiData = data as EmojiData;
 const { categories, emojis, aliases, sheet } = emojiData;
 
 export {
-  type NativeEmoji,
   type CustomEmoji,
   type Emoji,
-  type EmojiCategory,
-  type EmojiMap,
-  type EmojiAlias,
-  type EmojiSheet,
   type EmojiData,
   categories,
   emojis,

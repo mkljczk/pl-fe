@@ -120,7 +120,6 @@ const Column = React.forwardRef<HTMLDivElement, IColumn>((props, ref): JSX.Eleme
 });
 
 export {
-  type IColumn,
   Column as default,
   Column,
   ColumnHeader,

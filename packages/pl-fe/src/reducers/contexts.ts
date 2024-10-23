@@ -11,8 +11,9 @@ import {
   CONTEXT_FETCH_SUCCESS,
   STATUS_CREATE_REQUEST,
   STATUS_CREATE_SUCCESS,
+  type StatusesAction,
 } from '../actions/statuses';
-import { TIMELINE_DELETE } from '../actions/timelines';
+import { TIMELINE_DELETE, type TimelineAction } from '../actions/timelines';
 
 import type { Status } from 'pl-api';
 import type { AnyAction } from 'redux';
@@ -185,7 +186,7 @@ const deletePendingStatus = (state: State, params: Pick<Status, 'id' | 'in_reply
 };
 
 /** Contexts reducer. Used for building a nested tree structure for threads. */
-const replies = (state = ReducerRecord(), action: AnyAction) => {
+const replies = (state = ReducerRecord(), action: AnyAction | StatusesAction | TimelineAction) => {
   switch (action.type) {
     case ACCOUNT_BLOCK_SUCCESS:
     case ACCOUNT_MUTE_SUCCESS:

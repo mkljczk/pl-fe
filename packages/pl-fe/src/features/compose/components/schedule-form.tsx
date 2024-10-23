@@ -85,8 +85,4 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
   );
 };
 
-export {
-  isCurrentOrFutureDate,
-  type IScheduleForm,
-  ScheduleForm as default,
-};
+export { ScheduleForm as default, isCurrentOrFutureDate };

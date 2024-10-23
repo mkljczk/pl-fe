@@ -563,7 +563,4 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
   );
 };
 
-export {
-  type IMediaGallery,
-  MediaGallery as default,
-};
+export { MediaGallery as default };

@@ -347,7 +347,6 @@ const makeGetStatusIds = () => createSelector([
 );
 
 export {
-  type HostFederation,
   type RemoteInstance,
   selectAccount,
   selectAccounts,
