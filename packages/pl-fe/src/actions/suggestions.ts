@@ -1,7 +1,8 @@
-import { getClient } from '../api';
+import { importEntities } from 'pl-hooks';
+
+import { getClient } from 'pl-fe/api';
 
 import { fetchRelationships } from './accounts';
-import { importFetchedAccounts } from './importer';
 import { insertSuggestionsIntoTimeline } from './timelines';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
@@ -24,7 +25,8 @@ const fetchSuggestions = (limit = 50) =>
       return getClient(getState).myAccount.getSuggestions(limit).then((suggestions) => {
         const accounts = suggestions.map(({ account }) => account);
 
-        dispatch(importFetchedAccounts(accounts));
+        importEntities({ accounts });
+
         dispatch({ type: SUGGESTIONS_FETCH_SUCCESS, suggestions });
 
         dispatch(fetchRelationships(accounts.map(({ id }) => id)));

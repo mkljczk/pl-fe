@@ -433,8 +433,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
                   id='event.participants'
                   defaultMessage='{count} {rawCount, plural, one {person} other {people}} going'
                   values={{
-                    rawCount: event.participants_count || 0,
-                    count: shortNumberFormat(event.participants_count || 0),
+                    rawCount: event.participants_count,
+                    count: shortNumberFormat(event.participants_count),
                   }}
                 />
               </span>

@@ -1,11 +1,10 @@
+import { importEntities } from 'pl-hooks';
 import { defineMessages } from 'react-intl';
 
+import { STATUS_FETCH_SOURCE_FAIL, STATUS_FETCH_SOURCE_REQUEST, STATUS_FETCH_SOURCE_SUCCESS } from 'pl-fe/actions/statuses';
 import { getClient } from 'pl-fe/api';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
-
-import { importFetchedAccounts, importFetchedStatus, importFetchedStatuses } from './importer';
-import { STATUS_FETCH_SOURCE_FAIL, STATUS_FETCH_SOURCE_REQUEST, STATUS_FETCH_SOURCE_SUCCESS } from './statuses';
 
 import type { Account, CreateEventParams, Location, MediaAttachment, PaginatedResponse, Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
@@ -132,7 +131,7 @@ const submitEvent = ({
         : getClient(state).events.editEvent(statusId, params)
     ).then((data) => {
       useModalsStore.getState().closeModal('COMPOSE_EVENT');
-      dispatch(importFetchedStatus(data));
+      importEntities({ statuses: [data] });
       dispatch(submitEventSuccess(data));
       toast.success(
         statusId ? messages.editSuccess : messages.success,
@@ -171,7 +170,7 @@ const joinEvent = (statusId: string, participationMessage?: string) =>
     dispatch(joinEventRequest(status.id));
 
     return getClient(getState).events.joinEvent(statusId, participationMessage).then((data) => {
-      dispatch(importFetchedStatus(data));
+      importEntities({ statuses: [data] });
       dispatch(joinEventSuccess(status.id));
       toast.success(
         data.event?.join_state === 'pending' ? messages.joinRequestSuccess : messages.joinSuccess,
@@ -213,7 +212,7 @@ const leaveEvent = (statusId: string) =>
     dispatch(leaveEventRequest(status.id));
 
     return getClient(getState).events.leaveEvent(statusId).then((data) => {
-      dispatch(importFetchedStatus(data));
+      importEntities({ statuses: [data] });
       dispatch(leaveEventSuccess(status.id));
     }).catch((error) => {
       dispatch(leaveEventFail(error, status.id));
@@ -241,7 +240,7 @@ const fetchEventParticipations = (statusId: string) =>
     dispatch(fetchEventParticipationsRequest(statusId));
 
     return getClient(getState).events.getEventParticipations(statusId).then(response => {
-      dispatch(importFetchedAccounts(response.items));
+      importEntities({ accounts: response.items });
       return dispatch(fetchEventParticipationsSuccess(statusId, response.items, response.next));
     }).catch(error => {
       dispatch(fetchEventParticipationsFail(statusId, error));
@@ -277,7 +276,7 @@ const expandEventParticipations = (statusId: string) =>
     dispatch(expandEventParticipationsRequest(statusId));
 
     return next().then(response => {
-      dispatch(importFetchedAccounts(response.items));
+      importEntities({ accounts: response.items });
       return dispatch(expandEventParticipationsSuccess(statusId, response.items, response.next));
     }).catch(error => {
       dispatch(expandEventParticipationsFail(statusId, error));
@@ -307,7 +306,7 @@ const fetchEventParticipationRequests = (statusId: string) =>
     dispatch(fetchEventParticipationRequestsRequest(statusId));
 
     return getClient(getState).events.getEventParticipationRequests(statusId).then(response => {
-      dispatch(importFetchedAccounts(response.items.map(({ account }) => account)));
+      importEntities({ accounts: response.items.map(({ account }) => account) });
       return dispatch(fetchEventParticipationRequestsSuccess(statusId, response.items, response.next));
     }).catch(error => {
       dispatch(fetchEventParticipationRequestsFail(statusId, error));
@@ -346,7 +345,7 @@ const expandEventParticipationRequests = (statusId: string) =>
     dispatch(expandEventParticipationRequestsRequest(statusId));
 
     return next().then(response => {
-      dispatch(importFetchedAccounts(response.items.map(({ account }) => account)));
+      importEntities({ accounts: response.items.map(({ account }) => account) });
       return dispatch(expandEventParticipationRequestsSuccess(statusId, response.items, response.next));
     }).catch(error => {
       dispatch(expandEventParticipationRequestsFail(statusId, error));
@@ -479,7 +478,7 @@ const fetchRecentEvents = () =>
     return getClient(getState()).timelines.publicTimeline({
       only_events: true,
     }).then(response => {
-      dispatch(importFetchedStatuses(response.items));
+      importEntities({ statuses: response.items });
       dispatch({
         type: RECENT_EVENTS_FETCH_SUCCESS,
         statuses: response.items,
@@ -499,7 +498,7 @@ const fetchJoinedEvents = () =>
     dispatch({ type: JOINED_EVENTS_FETCH_REQUEST });
 
     getClient(getState).events.getJoinedEvents().then(response => {
-      dispatch(importFetchedStatuses(response.items));
+      importEntities({ statuses: response.items });
       dispatch({
         type: JOINED_EVENTS_FETCH_SUCCESS,
         statuses: response.items,
