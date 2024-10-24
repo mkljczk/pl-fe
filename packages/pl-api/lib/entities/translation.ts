@@ -25,7 +25,6 @@ const translationSchema = v.pipe(
     if (translation?.text) return {
       content: translation.text,
       detected_source_language: translation.detected_language,
-      provider: '',
     };
 
     return translation;
@@ -37,7 +36,7 @@ const translationSchema = v.pipe(
     poll: v.fallback(v.optional(translationPollSchema), undefined),
     media_attachments: filteredArray(translationMediaAttachment),
     detected_source_language: v.string(),
-    provider: v.string(),
+    provider: v.fallback(v.nullable(v.string()), null),
   }),
 );
 

@@ -87,7 +87,14 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
       <Stack space={3} alignItems='start'>
         {button}
         <Text theme='muted'>
-          <FormattedMessage id='status.translated_from_with' defaultMessage='Translated from {lang} using {provider}' values={{ lang: languageName, provider }} />
+          <FormattedMessage
+            id='status.translated_from_with'
+            defaultMessage='Translated from {lang} {provider}'
+            values={{
+              lang: languageName,
+              provider: provider ? <FormattedMessage id='status.translated_from_with.provider' defaultMessage='with {provider}' values={{ provider }} /> : undefined,
+            }}
+          />
         </Text>
       </Stack>
     );
