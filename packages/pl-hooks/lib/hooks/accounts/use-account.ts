@@ -3,7 +3,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
 import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
 import { importEntities } from 'pl-hooks/importer';
-import { normalizeAccount, type Account as NormalizedAccount } from 'pl-hooks/normalizers/account';
+import { normalizeAccount, type NormalizedAccount } from 'pl-hooks/normalizers/account';
 
 import { useAccountRelationship } from './use-account-relationship';
 

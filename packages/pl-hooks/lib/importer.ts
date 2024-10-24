@@ -1,7 +1,7 @@
 import { queryClient } from 'pl-hooks/contexts/query-client';
 
 import { type DeduplicatedNotification, type NormalizedNotification, normalizeNotification } from './normalizers/notification';
-import { normalizeStatus, type Status } from './normalizers/status';
+import { normalizeStatus, type NormalizedStatus } from './normalizers/status';
 
 import type {
   Account as BaseAccount,
@@ -32,7 +32,7 @@ const importRelationship = (relationship: BaseRelationship) => queryClient.setQu
   ['relationships', 'entities', relationship.id], relationship,
 );
 
-const importStatus = (status: BaseStatus) => queryClient.setQueryData<Status>(
+const importStatus = (status: BaseStatus) => queryClient.setQueryData<NormalizedStatus>(
   ['statuses', 'entities', status.id], normalizeStatus(status),
 );
 

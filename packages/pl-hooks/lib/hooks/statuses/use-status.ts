@@ -4,8 +4,8 @@ import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
 import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
 import { importEntities } from 'pl-hooks/importer';
 import { usePoll } from 'pl-hooks/main';
-import { type Account, normalizeAccount } from 'pl-hooks/normalizers/account';
-import { type Status as NormalizedStatus, normalizeStatus } from 'pl-hooks/normalizers/status';
+import { normalizeAccount, type NormalizedAccount } from 'pl-hooks/normalizers/account';
+import { type NormalizedStatus, normalizeStatus } from 'pl-hooks/normalizers/status';
 
 import type { Poll } from 'pl-api';
 
@@ -87,8 +87,8 @@ const importStatus = (status: NormalizedStatus) => {
 };
 
 type Status = NormalizedStatus & {
-  account: Account;
-  accounts: Array<Account>;
+  account: NormalizedAccount;
+  accounts: Array<NormalizedAccount>;
   poll?: Poll;
   reblog?: Status;
 };

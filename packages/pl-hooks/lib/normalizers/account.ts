@@ -7,4 +7,4 @@ const normalizeAccount = ({ moved, relationship, ...account }: BaseAccount) => (
 
 type Account = ReturnType<typeof normalizeAccount>;
 
-export { normalizeAccount, type Account };
+export { normalizeAccount, type Account as NormalizedAccount };
