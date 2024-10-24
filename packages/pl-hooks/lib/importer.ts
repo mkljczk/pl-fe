@@ -1,7 +1,7 @@
 import { queryClient } from 'pl-hooks/contexts/query-client';
 
 import { type DeduplicatedNotification, type NormalizedNotification, normalizeNotification } from './normalizers/notification';
-import { normalizeStatus, type NormalizedStatus } from './normalizers/status';
+import { type NormalizedStatus, normalizeStatus } from './normalizers/status';
 
 import type {
   Account as BaseAccount,
