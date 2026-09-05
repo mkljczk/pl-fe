@@ -44,6 +44,7 @@ const useTimeline = (
 ) => {
   const polling = options?.polling ?? true;
   const restoringMaxId = options?.restoringMaxId;
+  const pendingRestoringMaxId = useRef(restoringMaxId);
 
   const scopeUrl = useScopeUrl();
   const timeline = useStoreTimeline(scopeUrl, timelineId);
@@ -135,15 +136,17 @@ const useTimeline = (
   }, [scopeUrl, timelineId, timeline.isPending]);
 
   const fetchInitial = useCallback(
-    async (isRestoring = !!restoringMaxId) => {
+    async (isRestoring = !!pendingRestoringMaxId.current) => {
+      const restoringFromId = isRestoring ? pendingRestoringMaxId.current : undefined;
+      pendingRestoringMaxId.current = undefined;
       timelineActions.setLoading(scopeUrl, timelineId, true);
       try {
         const [response, shouldInsertGap] = await Promise.all([
           fetcherRef.current(),
-          !restoringMaxId
+          !restoringFromId
             ? Promise.resolve(false)
             : fetcherRef
-                .current({ since_id: restoringMaxId, limit: 1 })
+                .current({ since_id: restoringFromId, limit: 1 })
                 .then((res) => res.items.length > 0)
                 .catch(() => true),
         ]);
