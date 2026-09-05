@@ -404,7 +404,7 @@ const useTimelinesStore = create<State>()(
                 timeline.entries.some((entry) => entry.type === 'status' && entry.id === status.id)
               ) {
                 timeline.entries.splice(idx, 1);
-                return;
+                continue;
               }
               const queuedEntryIndex = timeline.queuedEntries.findIndex(
                 (queued) => queued.id === status.id,
@@ -412,6 +412,7 @@ const useTimelinesStore = create<State>()(
 
               if (queuedEntryIndex !== -1) {
                 timeline.queuedEntries.splice(queuedEntryIndex, 1);
+                timeline.queuedCount = Math.max(timeline.queuedCount - 1, 0);
               }
 
               timeline.entries[idx] = {
