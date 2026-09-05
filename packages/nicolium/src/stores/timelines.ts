@@ -399,38 +399,39 @@ const useTimelinesStore = create<State>()(
             const idx = timeline.entries.findIndex(
               (e) => e.type === 'pending-status' && e.id === idempotencyKey,
             );
-            if (idx !== -1) {
-              if (
-                timeline.entries.some((entry) => entry.type === 'status' && entry.id === status.id)
-              ) {
-                timeline.entries.splice(idx, 1);
-                continue;
-              }
-              const queuedEntryIndex = timeline.queuedEntries.findIndex(
-                (queued) => queued.id === status.id,
-              );
+            const queuedEntryIndex = timeline.queuedEntries.findIndex(
+              (queued) => queued.id === status.id,
+            );
 
-              if (queuedEntryIndex !== -1) {
-                timeline.queuedEntries.splice(queuedEntryIndex, 1);
-                timeline.queuedCount = Math.max(timeline.queuedCount - 1, 0);
-              }
-
-              timeline.entries[idx] = {
-                type: 'status',
-                id: status.id,
-                originalId: status.id,
-                accountId: status.account.id,
-                rebloggedBy: [],
-                reblogIds: [],
-                isReply: status.in_reply_to_id !== null,
-                isReblog: false,
-                isQuote: status.quote !== null,
-                isDirect: status.visibility === 'direct',
-                hasMedia: status.media_attachments.length > 0,
-                hasMediaWithoutAltText: hasMediaWithoutAltText(status),
-                createdAt: status.created_at,
-              };
+            if (queuedEntryIndex !== -1) {
+              timeline.queuedEntries.splice(queuedEntryIndex, 1);
+              timeline.queuedCount = timeline.queuedEntries.length;
             }
+
+            if (idx === -1) continue;
+
+            if (
+              timeline.entries.some((entry) => entry.type === 'status' && entry.id === status.id)
+            ) {
+              timeline.entries.splice(idx, 1);
+              continue;
+            }
+
+            timeline.entries[idx] = {
+              type: 'status',
+              id: status.id,
+              originalId: status.id,
+              accountId: status.account.id,
+              rebloggedBy: [],
+              reblogIds: [],
+              isReply: status.in_reply_to_id !== null,
+              isReblog: false,
+              isQuote: status.quote !== null,
+              isDirect: status.visibility === 'direct',
+              hasMedia: status.media_attachments.length > 0,
+              hasMediaWithoutAltText: hasMediaWithoutAltText(status),
+              createdAt: status.created_at,
+            };
           }
         }),
       deletePendingStatus: (scopeUrl, idempotencyKey) =>
