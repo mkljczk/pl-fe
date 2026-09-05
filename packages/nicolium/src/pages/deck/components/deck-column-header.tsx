@@ -709,6 +709,18 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
     .filter((value) => value)
     .flat().length;
 
+  const timelineId = useMemo(() => {
+    const additionalTags = [
+      ...(column.any ?? []).map((tag) => `any:${tag}`),
+      ...(column.all ?? []).map((tag) => `all:${tag}`),
+      ...(column.none ?? []).map((tag) => `none:${tag}`),
+    ];
+
+    return additionalTags.length
+      ? `hashtag:${column.hashtag}:${additionalTags.join(',')}`
+      : `hashtag:${column.hashtag}`;
+  }, [filtersOptions]);
+
   const items = useMemo(() => {
     if (!features.additionalTags) return filtersOptions;
 
@@ -812,6 +824,7 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
       items={items}
       settings={showEditAdditionalTags && <HashtagDeckColumnSettings columnId={column.id} />}
       onHideSettings={() => setShowEditAdditionalTags(false)}
+      actions={<TimelineRefreshButton timelineId={timelineId} />}
     />
   );
 };
