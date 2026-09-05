@@ -167,7 +167,7 @@ const useTimeline = (
         );
       }
     },
-    [scopeUrl, timelineId, restoringMaxId],
+    [scopeUrl, timelineId],
   );
 
   const fetchNextPage = useCallback(async () => {

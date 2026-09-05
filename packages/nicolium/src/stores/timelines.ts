@@ -239,7 +239,7 @@ const useTimelinesStore = create<State>()(
 
           if (initialFetch) timeline.entries = entries;
           else timeline.entries.push(...entries);
-          if (restoring) {
+          if (restoring && statuses.length) {
             timeline.entries.unshift({
               type: 'gap',
               minId: statuses[0].id,
