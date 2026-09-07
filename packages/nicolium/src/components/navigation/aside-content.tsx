@@ -7,7 +7,10 @@ import { useSettings } from '@/stores/settings';
 import { useShoutboxIsLoading } from '@/stores/shoutbox';
 import { useFederationRestrictionsDisclosed, useIsStandalone } from '@/utils/state';
 
+import SearchInput from '../search-input';
+
 import LinkFooter from './link-footer';
+import { SidebarNavigationAccount } from './sidebar-navigation';
 
 import type { Account, Group } from 'pl-api';
 
@@ -202,6 +205,13 @@ const AsideContent: React.FC<IAsideContent> = ({
           items.push(<ShoutboxPanel key='shoutbox' />);
           break;
         }
+        case 'search': {
+          items.push(<SearchInput />);
+          break;
+        }
+        case 'profile-switcher':
+          items.push(<SidebarNavigationAccount />);
+          break;
         case 'footer': {
           items.push(<LinkFooter key='footer' />);
           break;

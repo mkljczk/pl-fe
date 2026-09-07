@@ -16,10 +16,12 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import ComposeButton from '@/components/navigation/compose-button';
 import ProfileDropdown from '@/components/navigation/profile-dropdown';
 import Icon from '@/components/ui/icon';
+import { useMinWidth } from '@/hooks/use-min-width';
 import { useNavigationItems } from '@/hooks/use-navigation-items';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 import sourceCode from '@/utils/code';
 
 import Account from '../accounts/account';
@@ -27,6 +29,7 @@ import DropdownMenu, { type Menu } from '../dropdown-menu';
 import SearchInput from '../search-input';
 import SiteLogo from '../site-logo';
 import Avatar from '../ui/avatar';
+import { breakpoints } from '../ui/layout';
 
 import {
   SidebarNavigationAccountLink,
@@ -59,6 +62,65 @@ const messages = defineMessages({
   sourceCode: { id: 'navigation.source_code', defaultMessage: 'Source code' },
   profile: { id: 'tabs_bar.profile', defaultMessage: 'Profile' },
 });
+
+type ISidebarNavigationAccount = ISidebarNavigation;
+
+const SidebarNavigationAccount: React.FC<ISidebarNavigationAccount> = ({ shrink }) => {
+  const { data: account } = useOwnAccount();
+
+  if (!account) return null;
+
+  return (
+    <div className='sidebar-navigation__header__account'>
+      <ProfileDropdown account={account}>
+        {shrink ? (
+          <Avatar
+            src={account.avatar}
+            alt={account.avatar_description}
+            isCat={account.is_cat}
+            username={account.username}
+            size={40}
+          />
+        ) : (
+          <Account
+            account={account}
+            action={
+              <Icon src={iconCaretDown} className='sidebar-navigation__header__account__expand' />
+            }
+            disabled
+            withLinkToProfile={false}
+          />
+        )}
+      </ProfileDropdown>
+    </div>
+  );
+};
+
+const WrappedSearchInput = () => {
+  const { sidebarItems } = useSettings();
+  const isAsideDisplayed = useMinWidth(`(min-width: ${breakpoints.xl})`);
+
+  if (sidebarItems.includes('search') && isAsideDisplayed) return null;
+
+  return (
+    <li key='search-input'>
+      <SearchInput />
+    </li>
+  );
+};
+
+const WrappedSidebarNavigationAccount: React.FC<ISidebarNavigationAccount> = ({ shrink }) => {
+  const { sidebarItems } = useSettings();
+  const isAsideDisplayed = useMinWidth(`(min-width: ${breakpoints.xl})`);
+
+  if (sidebarItems.includes('profile-switcher') && isAsideDisplayed) return null;
+
+  return (
+    <div className='sidebar-navigation__header'>
+      <SidebarNavigationAccount shrink={shrink} />
+    </div>
+  );
+};
 
 interface ISidebarNavigation {
   /** Whether the sidebar is in shrinked mode. */
@@ -144,35 +206,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
     <div className={clsx('sidebar-navigation', { 'sidebar-navigation--narrow': shrink })}>
       <SiteLogo />
 
-      {account && (
-        <div className='sidebar-navigation__header'>
-          <div className='sidebar-navigation__header__account'>
-            <ProfileDropdown account={account}>
-              {shrink ? (
-                <Avatar
-                  src={account.avatar}
-                  alt={account.avatar_description}
-                  isCat={account.is_cat}
-                  username={account.username}
-                  size={40}
-                />
-              ) : (
-                <Account
-                  account={account}
-                  action={
-                    <Icon
-                      src={iconCaretDown}
-                      className='sidebar-navigation__header__account__expand'
-                    />
-                  }
-                  disabled
-                  withLinkToProfile={false}
-                />
-              )}
-            </ProfileDropdown>
-          </div>
-        </div>
-      )}
+      {account && <WrappedSidebarNavigationAccount shrink={shrink} />}
 
       <ul className='sidebar-navigation__links'>
         {navigationItems.map((item, index) => {
@@ -183,11 +217,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               return null;
             case 'search-input':
               if (shrink) return null;
-              return (
-                <li key='search-input'>
-                  <SearchInput />
-                </li>
-              );
+              return <WrappedSearchInput key='search' />;
             case 'profile-link':
               return (
                 <li key={`profile-link:${item.accountId}`}>
@@ -252,4 +282,4 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
 
 SidebarNavigation.displayName = 'SidebarNavigation';
 
-export { SidebarNavigation as default };
+export { SidebarNavigation as default, SidebarNavigationAccount };

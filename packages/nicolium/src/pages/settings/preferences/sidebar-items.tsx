@@ -51,6 +51,14 @@ const itemsMessages = {
     id: 'settings.sidebar_items.item.account',
     defaultMessage: 'Account',
   },
+  search: {
+    id: 'settings.sidebar_items.item.search',
+    defaultMessage: 'Search form',
+  },
+  'profile-switcher': {
+    id: 'settings.sidebar_items.item.profile_switcher',
+    defaultMessage: 'Profile switcher',
+  },
 };
 
 const itemHintsMessages = {
@@ -86,6 +94,14 @@ const itemHintsMessages = {
   account: {
     id: 'settings.sidebar_items.item.account.hint',
     defaultMessage: "Shows the account's latest post.",
+  },
+  search: {
+    id: 'settings.sidebar_items.item.search.hint',
+    defaultMessage: 'Search or enter post address.',
+  },
+  'profile-switcher': {
+    id: 'settings.sidebar_items.item.profile_switcher.hint',
+    defaultMessage: 'View current account or switch accounts.',
   },
 };
 

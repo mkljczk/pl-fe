@@ -109,6 +109,8 @@ const AVAILABLE_SIDEBAR_ITEMS = [
   'footer',
   'compose',
   'notifications',
+  'search',
+  'profile-switcher',
   'shoutbox',
 ] as const;
 
