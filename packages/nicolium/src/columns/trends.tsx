@@ -114,6 +114,7 @@ const TrendsColumn: React.FC<ITrendsColumn> = ({ type }) => {
       break;
     }
     case 'links': {
+      console.log('links');
       children = trendingLinks?.map((link) => <TrendingLink key={link.id} trendingLink={link} />);
       isFetching = isFetchingLinks;
       isLoading = isLoadingLinks;

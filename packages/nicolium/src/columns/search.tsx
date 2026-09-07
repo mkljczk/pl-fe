@@ -100,7 +100,7 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId }) => {
     }
     case 'statuses':
     case 'links': {
-      if (!query && !accountId) return <TrendsColumn type='statuses' />;
+      if (!query && !accountId) return <TrendsColumn type={type} />;
       else if (!query) return null;
       if (searchStatusesQuery.data && searchStatusesQuery.data.length > 0) {
         resultsIds = searchStatusesQuery.data;
