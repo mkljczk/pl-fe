@@ -1081,6 +1081,10 @@ body {
         border-right-width: 1px;
       }
 
+      .body--reverse.dark.black & {
+        border-left-width: 1px;
+      }
+
       .layout:not(:has(.layout__aside, .layout__settings-sections, .layout__admin-sections)) & {
         grid-column: span 9 / span 9;
       }
