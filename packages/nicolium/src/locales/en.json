@@ -2505,6 +2505,7 @@
   "search.clear": "Clear input",
   "search.clear_account_filter": "Clear account filter",
   "search.placeholder": "Search",
+  "search.search_or_paste": "Search or paste URL",
   "search_results.accounts": "People",
   "search_results.filter_message": "You are searching for posts from @{acct}.",
   "search_results.hashtags": "Hashtags",

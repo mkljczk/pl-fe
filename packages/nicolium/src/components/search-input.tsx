@@ -6,6 +6,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import AutosuggestAccountInput from '@/components/autosuggest-account-input';
 import SvgIcon from '@/components/ui/svg-icon';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
@@ -13,12 +14,17 @@ import { scopedQueryKey } from '@/queries/query';
 
 const messages = defineMessages({
   placeholder: { id: 'search.placeholder', defaultMessage: 'Search' },
+  placeholderSignedIn: {
+    id: 'search.search_or_paste',
+    defaultMessage: 'Search or paste URL',
+  },
   clear: { id: 'search.clear', defaultMessage: 'Clear input' },
   action: { id: 'search.action', defaultMessage: 'Search for “{query}”' },
 });
 
 const SearchInput = React.memo(() => {
   const [value, setValue] = useState('');
+  const { isLoggedIn } = useLoggedIn();
 
   const navigate = useNavigate();
   const intl = useIntl();
@@ -82,8 +88,12 @@ const SearchInput = React.memo(() => {
       <div className='search-input__content'>
         <AutosuggestAccountInput
           id='search'
-          placeholder={intl.formatMessage(messages.placeholder)}
-          aria-label={intl.formatMessage(messages.placeholder)}
+          placeholder={intl.formatMessage(
+            isLoggedIn ? messages.placeholderSignedIn : messages.placeholder,
+          )}
+          aria-label={intl.formatMessage(
+            isLoggedIn ? messages.placeholderSignedIn : messages.placeholder,
+          )}
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
