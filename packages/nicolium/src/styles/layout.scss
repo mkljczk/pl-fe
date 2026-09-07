@@ -1256,6 +1256,12 @@ body {
 .footer-text {
   @include mixins.text($size: sm, $theme: muted);
 
+  margin-top: auto !important;
+
+  & + .footer-text {
+    margin-top: 1rem !important;
+  }
+
   a {
     @include mixins.text($size: inherit, $theme: subtle);
 
