@@ -504,12 +504,12 @@ const AutosuggestPlugin = ({
         },
         COMMAND_PRIORITY_NORMAL,
       ),
-      editor.registerCommand<KeyboardEvent>(
+      editor.registerCommand<KeyboardEvent | null>(
         KEY_ENTER_COMMAND,
         (payload) => {
           const event = payload;
-          event.preventDefault();
-          event.stopImmediatePropagation();
+          event?.preventDefault();
+          event?.stopImmediatePropagation();
           onSelectSuggestion(selectedSuggestion);
           setResolution(null);
           return true;

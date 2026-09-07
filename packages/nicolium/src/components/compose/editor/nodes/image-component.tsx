@@ -148,7 +148,7 @@ const ImageComponent = ({
   );
 
   const onEnter = useCallback(
-    (event: KeyboardEvent) => {
+    (event: KeyboardEvent | null) => {
       const latestSelection = $getSelection();
       const buttonElem = buttonRef.current;
       if (
@@ -157,7 +157,7 @@ const ImageComponent = ({
         latestSelection.getNodes().length === 1
       ) {
         if (buttonElem !== null && buttonElem !== document.activeElement) {
-          event.preventDefault();
+          event?.preventDefault();
           buttonElem.focus();
           return true;
         }
