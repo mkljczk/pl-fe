@@ -453,7 +453,8 @@
     margin: 0 1rem 0 0;
   }
 
-  &__fade {
+  html:not(.body--reverse) &__fade,
+  .body--reverse &__fade-right {
     pointer-events: none;
 
     position: sticky;
@@ -487,6 +488,20 @@
 
     &--visible::after {
       opacity: 1;
+    }
+  }
+
+  .body--reverse &__fade-right::after {
+    right: 0;
+    transform: translateX(-3rem);
+    background: linear-gradient(to left, var(--color-gray-50) 0%, transparent 100%);
+
+    .dark & {
+      background: linear-gradient(to left, var(--color-gray-800) 0%, transparent 100%);
+    }
+
+    .black & {
+      background: linear-gradient(to left, black 0%, transparent 100%);
     }
   }
 

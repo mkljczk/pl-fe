@@ -73,6 +73,7 @@ const DeckPage: React.FC = () => {
   const knownColumnIds = useRef<Set<string> | null>(null);
   const knownLayoutId = useRef<string | null>(null);
   const [isNearLeft, setNearLeft] = useState<boolean>(true);
+  const [isNearRight, setNearRight] = useState<boolean>(false);
 
   useEffect(() => {
     const scrollContainer = fadeRef.current?.parentElement?.parentElement;
@@ -81,6 +82,9 @@ const DeckPage: React.FC = () => {
     const handleScroll = () => {
       const scrollLeft = scrollContainer.scrollLeft;
       setNearLeft(scrollLeft < 32);
+      setNearRight(
+        scrollContainer.clientWidth + scrollContainer.scrollLeft > scrollContainer.scrollWidth - 32,
+      );
     };
 
     scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
@@ -254,6 +258,11 @@ const DeckPage: React.FC = () => {
           {columns.length > 0 && <NewColumnButton />}
           <div className='deck__sidebar__spacer' />
         </div>
+        <div
+          className={clsx('deck__fade-right', {
+            'deck__fade-right--visible': !isNearRight,
+          })}
+        />
       </div>
     </>
   );
