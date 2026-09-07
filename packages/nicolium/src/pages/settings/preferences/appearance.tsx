@@ -577,6 +577,36 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
               onChange={onToggleChange}
             />
           </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.invert_columns_order'
+                defaultMessage='Invert order of interface columns'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['invertColumnsOrder']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.sidebar_navigation_dense'
+                defaultMessage='Increase density of links in sidebar'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['sidebarNavigationDense']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
         </List>
 
         <List>

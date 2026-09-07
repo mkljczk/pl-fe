@@ -498,6 +498,8 @@ const settingsSchema = v.object({
   showFilteredStatusAuthor: v.fallback(v.boolean(), false),
   filters: filteredArray(filterSchema),
   fitScrollTopButtonInHeader: v.fallback(v.boolean(), true),
+  invertColumnsOrder: v.fallback(v.boolean(), false),
+  sidebarNavigationDense: v.fallback(v.boolean(), false),
 
   openshock: v.optional(
     coerceObject({
@@ -518,8 +520,6 @@ const settingsSchema = v.object({
       grayscale: v.fallback(v.boolean(), false),
       contrast: v.fallback(v.picklist(['low', 'normal', 'high', 'max']), 'normal'),
       systemDarkThemePreference: v.fallback(v.picklist(['dark', 'black']), 'black'),
-      invertColumnsOrder: v.fallback(v.boolean(), false),
-      sidebarNavigationDense: v.fallback(v.boolean(), false),
     }),
     undefined,
   ),

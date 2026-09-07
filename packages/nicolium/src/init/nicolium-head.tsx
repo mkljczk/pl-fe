@@ -27,6 +27,7 @@ const NicoliumHead: React.FC = () => {
     demetricator,
     systemFont,
     theme: themeSettings,
+    invertColumnsOrder,
   } = useSettings();
   const frontendConfig = useFrontendConfig();
   const theme = useTheme();
@@ -85,7 +86,7 @@ const NicoliumHead: React.FC = () => {
         'dark black': theme === 'black',
         'window-controls-overlay': wcoVisible,
         'window-controls-overlay--right': wcoRight,
-        'body--reverse': themeSettings?.invertColumnsOrder,
+        'body--reverse': invertColumnsOrder,
       },
     );
   }, [
@@ -93,7 +94,7 @@ const NicoliumHead: React.FC = () => {
     themeSettings?.borderRadiusIntensity,
     themeSettings?.contrast,
     themeSettings?.interfaceSize,
-    themeSettings?.invertColumnsOrder,
+    invertColumnsOrder,
     theme,
     wcoVisible,
     wcoRight,
