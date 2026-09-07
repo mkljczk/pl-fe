@@ -85,13 +85,15 @@ const NicoliumHead: React.FC = () => {
         'dark black': theme === 'black',
         'window-controls-overlay': wcoVisible,
         'window-controls-overlay--right': wcoRight,
+        'body--reverse': themeSettings?.invertColumnsOrder,
       },
     );
   }, [
     locale,
-    themeSettings?.interfaceSize,
     themeSettings?.borderRadiusIntensity,
     themeSettings?.contrast,
+    themeSettings?.interfaceSize,
+    themeSettings?.invertColumnsOrder,
     theme,
     wcoVisible,
     wcoRight,

@@ -991,6 +991,10 @@ body {
       padding-bottom: 1rem;
     }
 
+    .body--reverse & {
+      order: 3;
+    }
+
     @media (min-width: variables.$breakpoint-sm) {
       display: block;
     }
@@ -1051,9 +1055,18 @@ body {
       }
     }
 
+    .body--reverse & {
+      order: 2;
+    }
+
     @media (min-width: variables.$breakpoint-sm) {
       .dark.black & {
         border-left-width: 1px;
+      }
+
+      .body--reverse.dark.black & {
+        border-right-width: 1px;
+        border-left-width: 0;
       }
     }
 
@@ -1091,6 +1104,10 @@ body {
       & > :not([hidden]) ~ :not([hidden]) {
         margin-top: 1rem;
       }
+    }
+
+    .body--reverse & {
+      order: 1;
     }
 
     @media (min-width: variables.$breakpoint-xl) {
