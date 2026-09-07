@@ -670,6 +670,48 @@ body {
     @include mixins.text($weight: semibold, $theme: inherit);
   }
 
+  .sidebar-navigation--dense & {
+    &__icon {
+      padding: 0;
+      background: none !important;
+
+      svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      .icon__counter {
+        top: -0.75rem;
+      }
+    }
+
+    &--active {
+      color: var(--color-primary-500);
+
+      .sidebar-navigation-link__icon svg {
+        color: var(--color-primary-500);
+      }
+    }
+
+    &:not(&--active) {
+      .dark & {
+        &,
+        .sidebar-navigation-link__icon svg {
+          color: var(--color-gray-200);
+        }
+      }
+
+      &:hover,
+      &:hover .sidebar-navigation-link__icon svg {
+        color: var(--color-primary-900);
+
+        .dark & {
+          color: white;
+        }
+      }
+    }
+  }
+
   @media (height >= 960px) {
     padding: 0.5rem 0;
   }

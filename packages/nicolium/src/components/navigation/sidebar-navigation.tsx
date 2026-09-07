@@ -131,6 +131,7 @@ interface ISidebarNavigation {
 const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) => {
   const intl = useIntl();
   const { openModal } = useModalsActions();
+  const { sidebarNavigationDense } = useSettings();
 
   const { data: account } = useOwnAccount();
   const { isOpen } = useRegistrationStatus();
@@ -203,7 +204,12 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   }, [menuItems, intl.locale]);
 
   return (
-    <div className={clsx('sidebar-navigation', { 'sidebar-navigation--narrow': shrink })}>
+    <div
+      className={clsx('sidebar-navigation', {
+        'sidebar-navigation--narrow': shrink,
+        'sidebar-navigation--dense': sidebarNavigationDense,
+      })}
+    >
       <SiteLogo />
 
       {account && <WrappedSidebarNavigationAccount shrink={shrink} />}

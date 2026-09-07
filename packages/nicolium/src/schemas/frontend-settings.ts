@@ -519,6 +519,7 @@ const settingsSchema = v.object({
       contrast: v.fallback(v.picklist(['low', 'normal', 'high', 'max']), 'normal'),
       systemDarkThemePreference: v.fallback(v.picklist(['dark', 'black']), 'black'),
       invertColumnsOrder: v.fallback(v.boolean(), false),
+      sidebarNavigationDense: v.fallback(v.boolean(), false),
     }),
     undefined,
   ),
