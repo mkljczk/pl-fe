@@ -1008,6 +1008,11 @@ body {
 
       :has(.deck) & {
         padding-inline-end: 0;
+
+        .body--reverse & {
+          padding-inline-start: 0;
+          padding-inline-end: 2rem;
+        }
       }
     }
   }

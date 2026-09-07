@@ -2871,6 +2871,11 @@ div[data-viewport-type='window']:has(.empty-message) {
   background: white;
   box-shadow: var(--shadow-3xl);
 
+  .body--reverse & {
+    inset-inline-start: 1.25rem;
+    inset-inline-end: unset;
+  }
+
   .dark & {
     background: var(--color-gray-900);
   }
