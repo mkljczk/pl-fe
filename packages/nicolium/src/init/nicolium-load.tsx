@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IntlProvider } from 'react-intl';
+import { defineMessage, IntlProvider } from 'react-intl';
 
 import { loadFrontendConfig } from '@/actions/frontend-config';
 import { checkIfStandalone, fetchInstance } from '@/actions/instance';
@@ -9,6 +9,13 @@ import { useLocale } from '@/hooks/use-locale';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import MESSAGES from '@/messages';
 import { useAuthActions } from '@/stores/auth';
+import toast from '@/toast';
+
+const localeLoadFailMessage = defineMessage({
+  id: 'locale_load.fail',
+  defaultMessage:
+    'Failed to load interface locale. Try refreshing the page to check if the error persists.',
+});
 
 interface INicoliumLoad {
   children: React.ReactNode;
@@ -35,7 +42,10 @@ const NicoliumLoad: React.FC<INicoliumLoad> = ({ children }) => {
         setMessages(messages);
         setLocaleLoading(false);
       })
-      .catch(() => {});
+      .catch(() => {
+        setLocaleLoading(false);
+        toast.error(localeLoadFailMessage);
+      });
   }, [locale]);
 
   // Load initial data from the API
