@@ -170,8 +170,8 @@
     box-shadow: inset 0 0 6px 1px var(--color-gray-800);
   }
 
-  .black & {
-    border: 1px solid var(--color-gray-800);
+  .body--bordered & {
+    border: 1px solid var(--card-border);
     box-shadow: none;
   }
 
@@ -529,6 +529,10 @@
   }
 }
 
+.body--bordered .settings-card {
+  padding-top: 0;
+}
+
 .settings-card,
 .mfa-setup {
   display: flex;
@@ -636,8 +640,8 @@
       border-top-color: var(--color-primary-800);
     }
 
-    .black & {
-      border-top-color: var(--color-gray-800);
+    .body--bordered & {
+      border-top-color: var(--card-border);
     }
   }
 }

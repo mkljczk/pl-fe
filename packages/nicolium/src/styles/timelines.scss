@@ -6,11 +6,11 @@
   flex-direction: column;
   gap: 1rem;
 
-  .dark.black & {
+  .body--bordered & {
     gap: 0;
 
     & > :not([hidden]) ~ :not([hidden]) {
-      border-color: var(--color-gray-800);
+      border-color: var(--card-border);
     }
   }
 
@@ -29,8 +29,8 @@
 
   transition: all 150ms var(--ease-default);
 
-  .dark.black & {
-    border-color: var(--color-gray-800);
+  .body--bordered & {
+    border-color: var(--card-border);
     border-bottom-width: 1px;
   }
 

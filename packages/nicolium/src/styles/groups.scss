@@ -276,7 +276,7 @@
       background-color: variables.opaque(--color-gray-900, 0.5);
     }
 
-    .black & {
+    .body--bordered & {
       border-top-left-radius: 0;
       border-top-right-radius: 0;
     }

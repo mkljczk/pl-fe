@@ -91,8 +91,11 @@
     background-color: var(--color-primary-800);
   }
 
-  &:is(.black *) {
+  &:is(.body--bordered *) {
     padding: 0;
+  }
+
+  &:is(.black *) {
     background-color: #000;
   }
 

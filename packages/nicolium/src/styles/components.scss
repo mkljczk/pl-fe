@@ -204,7 +204,7 @@
         border-top-color: var(--color-gray-800);
       }
 
-      .dark.black & {
+      .body--bordered & {
         border-top-width: 1px;
       }
     }
@@ -1372,16 +1372,11 @@ div[data-viewport-type='window']:has(.empty-message) {
 .card {
   &--rounded {
     color: var(--color-gray-900);
-    background-color: #fff;
+    background-color: var(--card-background);
     box-shadow: var(--shadow-lg);
-
-    .dark.black & {
-      background-color: #000;
-    }
 
     .dark & {
       color: var(--color-gray-100);
-      background-color: var(--color-primary-900);
       box-shadow: none;
     }
 
@@ -1415,7 +1410,7 @@ div[data-viewport-type='window']:has(.empty-message) {
       &--md,
       &--lg,
       &--xl {
-        .dark.black & {
+        .body--bordered & {
           border-radius: 0;
         }
       }
@@ -1492,7 +1487,7 @@ div[data-viewport-type='window']:has(.empty-message) {
     .column__header {
       padding: 1rem;
 
-      .dark.black & {
+      .body--bordered & {
         padding: 1rem;
       }
 
@@ -2880,8 +2875,11 @@ div[data-viewport-type='window']:has(.empty-message) {
     background: var(--color-gray-900);
   }
 
+  .body--bordered & {
+    border: 1px solid var(--card-border);
+  }
+
   .black & {
-    border: 1px solid var(--color-gray-800);
     background: black;
   }
 

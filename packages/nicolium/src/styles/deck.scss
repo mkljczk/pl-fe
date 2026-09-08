@@ -2,6 +2,8 @@
 @use 'variables';
 
 .deck {
+  --deck-fade-background: var(--color-gray-50);
+
   position: relative;
 
   display: flex;
@@ -11,7 +13,15 @@
   height: calc(100vh - 3.25rem - 1px);
   margin-inline-start: 1rem;
 
-  .black & {
+  .dark & {
+    --deck-fade-background: var(--color-gray-800);
+  }
+
+  .body--bordered & {
+    --deck-fade-background: var(--card-background);
+  }
+
+  .body--bordered & {
     @media (min-width: variables.$breakpoint-sm) {
       height: 100vh;
     }
@@ -22,9 +32,9 @@
     gap: 1rem;
     height: 100%;
 
-    .black & {
+    .body--bordered & {
       gap: 0;
-      border-right: 1px solid var(--color-gray-800);
+      border-right: 1px solid var(--card-border);
     }
   }
 
@@ -79,8 +89,9 @@
             box-shadow: 6px 0 16px var(--color-gray-800);
           }
 
-          .black & {
-            border-right: 1px solid var(--color-gray-800);
+          .body--bordered & {
+            border-right: 1px solid var(--card-border);
+            box-shadow: none;
           }
         }
 
@@ -159,6 +170,10 @@
 
       background: #fff;
       box-shadow: var(--shadow-lg);
+
+      .body--bordered & {
+        border-bottom: 1px solid var(--card-border);
+      }
 
       .dark & {
         border-bottom: 1px solid var(--color-gray-800);
@@ -313,8 +328,8 @@
           }
         }
 
-        .black & {
-          border-top: 1px solid var(--color-gray-800);
+        .body--bordered & {
+          border-top: 1px solid var(--card-border);
           border-radius: 0;
         }
       }
@@ -390,8 +405,8 @@
       }
     }
 
-    .black & {
-      border-left: 1px solid var(--color-gray-800);
+    .body--bordered & {
+      border-left: 1px solid var(--card-border);
     }
 
     &:focus-visible {
@@ -473,17 +488,10 @@
       height: 100%;
 
       opacity: 0;
-      background: linear-gradient(to right, var(--color-gray-50) 0%, transparent 100%);
+      background: linear-gradient(to right, var(--deck-fade-background) 0%, transparent 100%);
 
       transition: opacity 500ms var(--ease-default);
 
-      .dark & {
-        background: linear-gradient(to right, var(--color-gray-800) 0%, transparent 100%);
-      }
-
-      .black & {
-        background: linear-gradient(to right, black 0%, transparent 100%);
-      }
     }
 
     &--visible::after {
@@ -494,15 +502,8 @@
   .body--reverse &__fade-right::after {
     right: 0;
     transform: translateX(-3rem);
-    background: linear-gradient(to left, var(--color-gray-50) 0%, transparent 100%);
+    background: linear-gradient(to left, var(--deck-fade-background) 0%, transparent 100%);
 
-    .dark & {
-      background: linear-gradient(to left, var(--color-gray-800) 0%, transparent 100%);
-    }
-
-    .black & {
-      background: linear-gradient(to left, black 0%, transparent 100%);
-    }
   }
 
   &:has(&__column--fill) {

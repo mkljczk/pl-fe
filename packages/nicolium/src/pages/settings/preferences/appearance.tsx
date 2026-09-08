@@ -343,6 +343,26 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
               onChange={onGrayscaleChange}
             />
           </ListItem>
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.bordered'
+                defaultMessage='Bordered visuals'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='preferences.fields.bordered.hint'
+                defaultMessage='Use borders instead of shadows in light and dark themes, similarly to black theme.'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['theme', 'bordered']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
           {settings.themeMode === 'system' && (
             <ListItem
               label={

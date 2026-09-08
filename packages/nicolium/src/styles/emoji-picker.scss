@@ -1,3 +1,5 @@
+@use 'mixins';
+
 em-emoji-picker {
   --rgb-background: 0 0 0 0;
   --rgb-accent: var(--color-primary-600);

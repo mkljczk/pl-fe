@@ -38,7 +38,7 @@
     height: 8rem;
     background-color: var(--color-gray-200);
 
-    .black & {
+    .body--bordered & {
       border-top-left-radius: 0;
       border-top-right-radius: 0;
     }
@@ -67,7 +67,7 @@
 
     object-fit: cover;
 
-    .black & {
+    .body--bordered & {
       border-top-left-radius: 0;
       border-top-right-radius: 0;
     }
@@ -155,9 +155,12 @@
 
   background-color: var(--color-gray-100);
 
-  .dark.black & {
-    border-color: var(--color-gray-800);
+  .body--bordered & {
+    border-color: var(--card-border);
     border-width: 1px;
+  }
+
+  .dark.black & {
     background-color: #000;
   }
 
@@ -732,8 +735,11 @@
     background-color: var(--color-primary-800);
   }
 
+  .body--bordered & {
+    border: 1px solid var(--card-border);
+  }
+
   .black & {
-    border: 1px solid var(--color-gray-800);
     background-color: black;
   }
 

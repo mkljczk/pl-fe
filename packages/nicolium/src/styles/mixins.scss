@@ -132,16 +132,11 @@
 @mixin card($variant: default, $size: md) {
   @if $variant == rounded {
     color: var(--color-gray-900);
-    background-color: #fff;
+    background-color: var(--card-background);
     box-shadow: var(--shadow-lg);
-
-    &:is(.dark.black *) {
-      background-color: #000;
-    }
 
     &:is(.dark *) {
       color: var(--color-gray-100);
-      background-color: var(--color-primary-900);
       box-shadow: none;
     }
 
@@ -174,7 +169,7 @@
   }
 
   @if $size != xl {
-    &:is(.black *) {
+    &:is(.body--bordered *) {
       border-radius: 0;
     }
   }

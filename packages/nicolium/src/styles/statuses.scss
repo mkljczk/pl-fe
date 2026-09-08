@@ -1089,7 +1089,7 @@ a.status-card {
     border: none;
     border-top: 2px solid var(--color-gray-200);
 
-    .black & {
+    .body--bordered & {
       border-top-width: 1px;
     }
 
@@ -2416,9 +2416,9 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 .fake-news-alert {
   @include mixins.card($variant: rounded);
 
-  .black & {
+  .body--bordered & {
     margin-top: 0.5rem;
-    border: 1px solid var(--color-gray-800);
+    border: 1px solid var(--card-border);
     border-radius: var(--radius-md);
   }
 
@@ -2852,8 +2852,8 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   &__status {
     isolation: isolate;
 
-    .black & {
-      border: 1px solid var(--color-gray-800);
+    .body--bordered & {
+      border: 1px solid var(--card-border);
       border-radius: var(--radius-xl);
     }
   }
@@ -2869,7 +2869,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   @media (min-width: variables.$breakpoint-sm) {
     padding-bottom: 1rem;
 
-    .black & {
+    .body--bordered & {
       margin: 0 1rem;
       padding-bottom: 0;
     }

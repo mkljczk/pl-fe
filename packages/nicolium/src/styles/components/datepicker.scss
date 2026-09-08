@@ -182,8 +182,8 @@
     border-color: var(--color-gray-700);
   }
 
-  .black & {
-    border-color: var(--color-gray-800);
+  .body--bordered & {
+    border-color: var(--card-border);
   }
 }
 

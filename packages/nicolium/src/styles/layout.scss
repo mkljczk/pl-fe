@@ -36,6 +36,10 @@ body {
     background-color: var(--color-gray-800);
   }
 
+  .body--bordered & {
+    background-color: var(--card-background);
+  }
+
   &.system-font,
   &.system-font .font-sans {
     font-family:
@@ -240,7 +244,7 @@ body {
       border-style: solid;
       border-top-width: 2px;
 
-      .dark.black & {
+      .body--bordered & {
         border-top-width: 1px;
       }
 
@@ -331,6 +335,10 @@ body {
   background-color: #fffe;
   backdrop-filter: blur(12px) saturate(2);
   box-shadow: 0 25px 50px -12px #0004;
+
+  .body--bordered & {
+    box-shadow: none;
+  }
 
   .dark.black & {
     background-color: #000b;
@@ -523,8 +531,8 @@ body {
         border-color: var(--color-gray-900);
       }
 
-      .black & {
-        border-color: var(--color-gray-800);
+      .body--bordered & {
+        border-color: var(--card-border);
       }
     }
 
@@ -745,7 +753,7 @@ body {
       border-color: var(--color-gray-800);
     }
 
-    .dark.black & {
+    .body--bordered & {
       border-top-width: 1px;
     }
   }
@@ -957,7 +965,7 @@ body {
     margin-right: auto;
     margin-left: auto;
 
-    .dark.black & {
+    .body--bordered:root & {
       padding-top: 0;
     }
 
@@ -1053,8 +1061,8 @@ body {
     max-width: 100%;
     padding-bottom: calc(3.25rem + 1px + var(--safe-area-inset-bottom, 0px));
 
-    .dark.black & {
-      border-color: var(--color-gray-800);
+    .body--bordered & {
+      border-color: var(--card-border);
     }
 
     &--with-chats {
@@ -1088,7 +1096,7 @@ body {
 
       margin: 0 1rem;
 
-      .black & {
+      .body--bordered & {
         margin: 1rem;
       }
 
@@ -1107,11 +1115,11 @@ body {
     }
 
     @media (min-width: variables.$breakpoint-sm) {
-      .dark.black & {
+      .body--bordered & {
         border-left-width: 1px;
       }
 
-      .body--reverse.dark.black & {
+      .body--reverse.body--bordered & {
         border-right-width: 1px;
         border-left-width: 0;
       }
@@ -1124,11 +1132,11 @@ body {
     @media (min-width: variables.$breakpoint-xl) {
       grid-column: span 6 / span 6;
 
-      .dark.black & {
+      .body--bordered & {
         border-right-width: 1px;
       }
 
-      .body--reverse.dark.black & {
+      .body--reverse.body--bordered & {
         border-left-width: 1px;
       }
 
@@ -1192,9 +1200,9 @@ body {
     display: none;
     grid-column: span 3 / span 3;
 
-    .black & {
+    .body--bordered & {
       margin-right: -2rem;
-      border-left: 1px solid var(--color-gray-800);
+      border-left: 1px solid var(--card-border);
 
       .column {
         padding-top: 0;
@@ -1224,8 +1232,8 @@ body {
     @media (min-width: variables.$breakpoint-lg) {
       grid-column: span 9 / span 9;
 
-      .black & {
-        border: 1px solid var(--color-gray-800);
+      .body--bordered & {
+        border: 1px solid var(--card-border);
         border-top: none;
         border-bottom: none;
       }
@@ -1250,10 +1258,10 @@ body {
     border-style: none;
   }
 
-  .dark.black & {
+  .body--bordered & {
     padding: 0;
     padding-bottom: 1.5rem;
-    border-color: var(--color-gray-800);
+    border-color: var(--card-border);
     border-style: solid;
   }
 

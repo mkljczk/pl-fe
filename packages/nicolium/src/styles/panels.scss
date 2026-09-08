@@ -46,8 +46,8 @@
     position: relative;
     gap: 0;
 
-    .black & {
-      border: 1px solid var(--color-gray-800);
+    .body--bordered & {
+      border: 1px solid var(--card-border);
       border-radius: var(--radius-xl);
     }
   }

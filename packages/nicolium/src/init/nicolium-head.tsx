@@ -84,6 +84,7 @@ const NicoliumHead: React.FC = () => {
       {
         dark: theme === 'dark',
         'dark black': theme === 'black',
+        'body--bordered': theme === 'black' || themeSettings?.bordered,
         'window-controls-overlay': wcoVisible,
         'window-controls-overlay--right': wcoRight,
         'body--reverse': invertColumnsOrder,
@@ -92,6 +93,7 @@ const NicoliumHead: React.FC = () => {
   }, [
     locale,
     themeSettings?.borderRadiusIntensity,
+    themeSettings?.bordered,
     themeSettings?.contrast,
     themeSettings?.interfaceSize,
     invertColumnsOrder,

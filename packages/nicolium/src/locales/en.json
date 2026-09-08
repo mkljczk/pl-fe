@@ -2232,6 +2232,8 @@
   "preferences.fields.bite_controls.label": "Allow bites from",
   "preferences.fields.boost_modal.label": "Show confirmation dialog before reposting",
   "preferences.fields.border_radius_intensity": "Border radius intensity",
+  "preferences.fields.bordered": "Bordered visuals",
+  "preferences.fields.bordered.hint": "Use borders instead of shadows in light and dark themes, similarly to black theme.",
   "preferences.fields.check_emoji_react_supports.hint": "This will expose your IP address to the instances you’re interacting with.",
   "preferences.fields.check_emoji_react_supports.label": "Check whether remote hosts support emoji reactions when reacting",
   "preferences.fields.compose_in_timelines.label": "Display post composer in timelines",

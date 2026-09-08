@@ -517,6 +517,7 @@ const settingsSchema = v.object({
       colors: v.optional(v.any()),
       interfaceSize: v.fallback(v.picklist(['sm', 'md', 'lg', 'xl']), 'md'),
       borderRadiusIntensity: v.fallback(v.picklist(['none', 'reduced', 'default']), 'default'),
+      bordered: v.fallback(v.boolean(), false),
       grayscale: v.fallback(v.boolean(), false),
       contrast: v.fallback(v.picklist(['low', 'normal', 'high', 'max']), 'normal'),
       systemDarkThemePreference: v.fallback(v.picklist(['dark', 'black']), 'black'),
