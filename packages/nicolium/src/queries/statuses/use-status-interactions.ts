@@ -502,6 +502,46 @@ const useUnpinStatus = (statusId: string) => {
   });
 };
 
+const useMuteStatus = (statusId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const importEntities = useImportEntities();
+  const scopeUrl = useScopeUrl();
+
+  return useMutation({
+    mutationKey: ['statuses', 'mute', statusId],
+    mutationFn: () => client.statuses.muteStatus(statusId),
+    onMutate: () => updateStatus(statusId, { muted: true }, queryClient, scopeUrl),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
+    onSuccess: (status) => {
+      importEntities({ statuses: [status] });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.statusLists.mutedThreads, scopeUrl),
+      });
+    },
+  });
+};
+
+const useUnmuteStatus = (statusId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const importEntities = useImportEntities();
+  const scopeUrl = useScopeUrl();
+
+  return useMutation({
+    mutationKey: ['statuses', 'mute', statusId],
+    mutationFn: () => client.statuses.muteStatus(statusId),
+    onMutate: () => updateStatus(statusId, { muted: true }, queryClient, scopeUrl),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
+    onSuccess: (status) => {
+      importEntities({ statuses: [status] });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.statusLists.mutedThreads, scopeUrl),
+      });
+    },
+  });
+};
+
 export {
   useStatusDislikes,
   useStatusFavourites,
@@ -519,6 +559,8 @@ export {
   useUnpinStatus,
   useEmojiReactMutation,
   useEmojiUnreactMutation,
+  useMuteStatus,
+  useUnmuteStatus,
   updateStatus,
   restorePreviousStatus,
   type MinifiedEmojiReaction,

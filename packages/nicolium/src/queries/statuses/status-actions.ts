@@ -12,7 +12,6 @@ import { shouldHaveCard } from '@/utils/status';
 
 import { importEntities } from '../utils/import-entities';
 
-import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 import type { useQueryClient } from '@tanstack/react-query';
 import type { CreateStatusParams, PlApiClient, Status as BaseStatus } from 'pl-api';
 import type { IntlShape } from 'react-intl';
@@ -211,45 +210,11 @@ const fetchStatus = (client: PlApiClient, statusId: string, scopeUrl: string, in
   });
 };
 
-const muteStatus = (client: PlApiClient, statusId: string, scopeUrl: string) =>
-  client.statuses.muteStatus(statusId).then(() => {
-    updateStatus(
-      statusId,
-      (status) => {
-        status.muted = true;
-      },
-      queryClient,
-      scopeUrl,
-    );
-  });
-
-const unmuteStatus = (client: PlApiClient, statusId: string, scopeUrl: string) =>
-  client.statuses.unmuteStatus(statusId).then(() => {
-    updateStatus(
-      statusId,
-      (status) => {
-        status.muted = false;
-      },
-      queryClient,
-      scopeUrl,
-    );
-  });
-
-const toggleMuteStatus = (
-  client: PlApiClient,
-  status: Pick<Status, 'id' | 'muted'>,
-  scopeUrl: string,
-) =>
-  status.muted
-    ? unmuteStatus(client, status.id, scopeUrl)
-    : muteStatus(client, status.id, scopeUrl);
-
 export {
   createStatus,
   editStatus,
   redactStatus,
   fetchStatus,
-  toggleMuteStatus,
   decrementReplyCount,
   incrementReplyCount,
 };

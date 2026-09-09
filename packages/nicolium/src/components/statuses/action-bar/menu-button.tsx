@@ -52,7 +52,7 @@ import { useChats } from '@/queries/chats';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useBlockGroupUserMutation } from '@/queries/groups/use-group-blocks';
 import { useTranslationLanguages } from '@/queries/instance/use-translation-languages';
-import { editStatus, toggleMuteStatus, redactStatus } from '@/queries/statuses/status-actions';
+import { editStatus, redactStatus } from '@/queries/statuses/status-actions';
 import {
   useDeleteStatus,
   useDeleteStatusFromGroup,
@@ -63,6 +63,8 @@ import {
   usePinStatus,
   useUnbookmarkStatus,
   useUnpinStatus,
+  useMuteStatus,
+  useUnmuteStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { layouts } from '@/router';
 import { useAuthStore } from '@/stores/auth';
@@ -158,6 +160,8 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status.id);
   const { mutate: pinStatus } = usePinStatus(status.id);
   const { mutate: unpinStatus } = useUnpinStatus(status.id);
+  const { mutate: muteStatus } = useMuteStatus(status.id);
+  const { mutate: unmuteStatus } = useUnmuteStatus(status.id);
   const { mutate: unblockAccount } = useUnblockAccountMutation(status.account_id);
   const { mutate: deleteStatus } = useDeleteStatus(status.id);
   const { mutate: deleteStatusFromGroup } = useDeleteStatusFromGroup(
@@ -326,12 +330,14 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleConversationMuteClick: React.EventHandler<React.MouseEvent> = () => {
-      toggleMuteStatus(client, status, scopeUrl).then(() => {
-        toast.success(
-          mutingConversation
-            ? messages.unmuteConversationSuccess
-            : messages.muteConversationSuccess,
-        );
+      (status.muted ? unmuteStatus : muteStatus)(undefined, {
+        onSuccess: () => {
+          toast.success(
+            mutingConversation
+              ? messages.unmuteConversationSuccess
+              : messages.muteConversationSuccess,
+          );
+        },
       });
     };
 
