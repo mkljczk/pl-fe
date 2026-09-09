@@ -1309,6 +1309,7 @@ a.status-card {
     display: flex;
     gap: 0.125rem;
 
+    width: fit-content;
     height: 3rem;
     border-radius: var(--radius-md);
 
