@@ -54,7 +54,7 @@ const StatusPreview: React.FC<IStatusPreview> = ({ status }) => {
   }
 
   if (!status.rss_feed) {
-    output.push(<StatusActionBar key='action-bar' status={status} space='sm' />);
+    output.push(<StatusActionBar key='action-bar' status={status} space='sm' expandable />);
   }
 
   return output;
