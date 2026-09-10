@@ -59,6 +59,8 @@ import type {
   Location,
   Marker,
   NotificationGroup,
+  NotificationPolicy,
+  NotificationRequest,
   OauthToken,
   PaginatedResponse,
   PlApiClient,
@@ -325,6 +327,15 @@ const notifications = {
       InfiniteData<PaginatedResponse<Array<NotificationGroup>, false>>
     >;
   },
+  fromAccount: (accountId: string) =>
+    key<InfiniteData<PaginatedResponse<Notification>>>()('notifications', 'fromAccount', accountId),
+  notificationPolicy: key<NotificationPolicy>()('notifications', 'notificationPolicy'),
+  notificationRequests: key<InfiniteData<PaginatedResponse<NotificationRequest>>>()(
+    'notifications',
+    'notificationRequests',
+  ),
+  notificationRequest: (requestId: string) =>
+    key<NotificationRequest>()('notifications', 'notificationRequests', requestId),
 };
 
 const markers = {
