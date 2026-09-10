@@ -53,4 +53,4 @@ pnpm -F nicolium fmt:check
 
 While contributing code, try to follow the existing coding style. Common sense rules regarding contributions apply. Keep your changes focused on a single issue or feature. Do not create pull requests including larger changes you don't understand fully—whether it's from another project or some auto-generated code.
 
-Contributions must not include LLM-generated first-party code or graphic assets.
+Contributions must not consist of output of so-called 'generative AI', including, but not limited to, LLM-generated first-party code or graphic assets. When discussing LLM outputs (in contexts such as security-related reports), do not refer to them using brand-specific terms (companies releasing them, model names) publicly.
