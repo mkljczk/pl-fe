@@ -1,8 +1,10 @@
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import { useQueryClient } from '@tanstack/react-query';
 import { createRootRoute, createRoute, Outlet, useRouter } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
 import { clsx } from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
@@ -61,6 +63,8 @@ import HashtagFollowToggle from '@/pages/timelines/components/hashtag-follow-tog
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 import { useChat } from '@/queries/chats';
+import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import { usePinnedStatuses } from '@/queries/status-lists/use-pinned-statuses';
 import { useStatus } from '@/queries/statuses/use-status';
 import { router as appRouter } from '@/router';
@@ -837,11 +841,34 @@ const collectionRoute = createRoute({
 const DriveDeckColumn: React.FC = () => {
   const { folderId } = driveRoute.useParams();
   const [column, updateColumn] = useDeckColumnConfig<Extract<DeckColumn, { type: 'drive' }>>();
+  const scopeUrl = useScopeUrl();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (column && column.folderId !== folderId) {
       updateColumn({ folderId });
     }
+    if (!isFirstRender.current) {
+      setTimeout(
+        () =>
+          flushSync(() => {
+            let element = document.querySelector<HTMLDivElement>(
+              `[data-column-id='${column?.id}'] .deck__column__content .focusable`,
+            );
+
+            if (element)
+              (element.querySelector<HTMLDivElement>('.drive-file') || element).focus({
+                preventScroll: true,
+              });
+          }),
+        0,
+      );
+    }
+    isFirstRender.current = false;
   }, [folderId]);
 
   const handlers = {
@@ -851,6 +878,15 @@ const DriveDeckColumn: React.FC = () => {
       } else {
         return false;
       }
+    },
+    back: () => {
+      const folder = queryClient.getQueryData(
+        scopedQueryKey(queryKeys.drive.folders.show(folderId), scopeUrl),
+      );
+
+      if (!folder?.id) return false;
+
+      navigate({ to: '/drive/{-$folderId}', params: { folderId: folder.parent_id ?? undefined } });
     },
   };
 
