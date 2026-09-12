@@ -542,7 +542,7 @@ const useQueuedEntries = (
 
     return {
       queuedCount: visible.length,
-      queuedAccountIds: Array.from(new Set(visible.map((entry) => entry.accountId))).toReversed(),
+      queuedAccountIds: Array.from(new Set(visible.map((entry) => entry.accountId))),
     };
   }, [filters, timeline.queuedEntries, followedAccountIds]);
 };
