@@ -47,6 +47,14 @@
       }
     }
 
+    &--empty {
+      height: 6rem;
+
+      @media (min-width: variables.$breakpoint-lg) {
+        height: 8rem;
+      }
+    }
+
     @media (min-width: variables.$breakpoint-sm) {
       border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     }

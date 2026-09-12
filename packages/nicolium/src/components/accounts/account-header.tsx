@@ -378,6 +378,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
       <div
         className={clsx('account-header__banner', {
           'account-header__banner--media': !settings.disableUserProvidedMedia,
+          'account-header__banner--empty': account.header_default,
         })}
       >
         {renderHeader()}
