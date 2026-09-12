@@ -542,6 +542,7 @@ const useQueuedEntries = (
 
     return {
       queuedCount: visible.length,
+      // 0ca3419 introduced `toReversed()` here and i don't remember why
       queuedAccountIds: Array.from(new Set(visible.map((entry) => entry.accountId))),
     };
   }, [filters, timeline.queuedEntries, followedAccountIds]);
