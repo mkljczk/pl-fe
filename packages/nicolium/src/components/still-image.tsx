@@ -58,7 +58,11 @@ const StillImage: React.FC<IStillImage> = ({
 
   const handleImageLoad: React.ReactEventHandler<HTMLImageElement> = (e) => {
     if (img.current) {
-      setPixelArt(img.current.naturalHeight * img.current.naturalWidth <= 128 * 128);
+      setPixelArt(
+        img.current.naturalHeight * img.current.naturalWidth <= 128 * 128 &&
+          (img.current.clientHeight >= img.current.naturalHeight * 3 ||
+            img.current.clientWidth >= img.current.naturalWidth * 3),
+      );
     }
 
     if (hoverToPlay && !staticSrc && canvas.current && img.current) {
