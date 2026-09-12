@@ -584,6 +584,7 @@ const settingsSchema = v.object({
       show: v.optional(v.boolean(), true),
     }),
     sounds: v.optional(v.record(v.string(), v.boolean()), {}),
+    autoMarkRead: v.optional(v.boolean(), true),
   }),
 
   frequentlyUsedEmojis: v.fallback(v.record(v.string(), v.number()), {}),

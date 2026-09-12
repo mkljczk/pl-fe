@@ -186,6 +186,7 @@ interface INotificationsColumn {
    * Used to disable PTR when a refresh button is displayed.
    */
   conditionalPullToRefresh?: boolean;
+  disableAutoMarkRead?: boolean;
 }
 
 const NotificationsColumn: React.FC<INotificationsColumn> = ({
@@ -195,6 +196,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({
   onChangeFilter,
   advanced,
   conditionalPullToRefresh,
+  disableAutoMarkRead,
 }) => {
   const columnId: string = useRef(`notifications-${crypto.randomUUID()}`).current;
 
@@ -267,12 +269,20 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({
 
   const handleScrollToTop = useCallback(
     debounce(() => {
+      if (!settings.notifications.autoMarkRead || disableAutoMarkRead) return;
+
       const topNotificationId =
         displayedNotifications[0]?.page_max_id ??
         displayedNotifications[0]?.most_recent_notification_id;
       markNotificationsRead(topNotificationId);
     }, 100),
-    [fetchNextPage, hasMore, isFetchingNextPage, displayedNotifications],
+    [
+      fetchNextPage,
+      hasMore,
+      isFetchingNextPage,
+      displayedNotifications,
+      settings.notifications.autoMarkRead,
+    ],
   );
 
   const handleMoveUp = (id: string) => {
@@ -295,8 +305,9 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({
   const handleDequeueNotifications = useCallback(() => {
     setTopNotification(notifications[0]?.most_recent_notification_id);
 
+    if (!settings.notifications.autoMarkRead || disableAutoMarkRead) return;
     markNotificationsRead(notifications[0]?.most_recent_notification_id);
-  }, [notifications, markNotificationsRead]);
+  }, [notifications, markNotificationsRead, settings.notifications.autoMarkRead]);
 
   const handleRefresh = useCallback(() => {
     queryClient.resetQueries({

@@ -1,4 +1,5 @@
 import iconArrowsClockwise from '@phosphor-icons/core/regular/arrows-clockwise.svg';
+import iconChecks from '@phosphor-icons/core/regular/checks.svg';
 import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
 import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
@@ -11,7 +12,12 @@ import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
-import { type FilterType, useNotifications } from '@/queries/notifications/use-notifications';
+import {
+  type FilterType,
+  useMarkNotificationsReadMutation,
+  useNotifications,
+  useNotificationsUnreadCount,
+} from '@/queries/notifications/use-notifications';
 import { useSettings } from '@/stores/settings';
 import { userTouching } from '@/utils/is-mobile';
 
@@ -25,8 +31,40 @@ const messages = defineMessages({
     id: 'preferences.notifications.include_bots',
     defaultMessage: 'Include automated accounts',
   },
+  autoMarkRead: {
+    id: 'preferences.notifications.auto_mark_read',
+    defaultMessage: 'Mark notifications read automatically',
+  },
+  markRead: {
+    id: 'notifications.mark_read',
+    defaultMessage: 'Mark notifications read',
+  },
   refresh: { id: 'notifications.refresh', defaultMessage: 'Refresh notifications' },
 });
+
+const NotificationsMarkReadButton = () => {
+  const intl = useIntl();
+  const notificationCount = useNotificationsUnreadCount();
+  const { mutate: markNotificationsRead } = useMarkNotificationsReadMutation();
+
+  const { data: notifications = [] } = useNotifications('all');
+
+  const handleClick = () => {
+    markNotificationsRead(
+      notifications[0]?.page_max_id ?? notifications[0]?.most_recent_notification_id,
+    );
+  };
+
+  return (
+    <IconButton
+      disabled={!notificationCount}
+      className='timeline-refresh-button'
+      title={intl.formatMessage(messages.markRead)}
+      src={iconChecks}
+      onClick={handleClick}
+    />
+  );
+};
 
 interface INotificationsRefreshButton {
   activeFilter?: FilterType;
@@ -80,6 +118,12 @@ const NotificationsPage: React.FC = () => {
       checked: !settings.notifications.hideBots,
       onChange: (value) => changeSetting(['notifications', 'hideBots'], !value),
     },
+    {
+      text: intl.formatMessage(messages.autoMarkRead),
+      type: 'toggle',
+      checked: settings.notifications.autoMarkRead,
+      onChange: (value) => changeSetting(['notifications', 'autoMarkRead'], value),
+    },
   ];
 
   return (
@@ -87,6 +131,7 @@ const NotificationsPage: React.FC = () => {
       label={intl.formatMessage(messages.title)}
       action={
         <>
+          {!settings.notifications.autoMarkRead && <NotificationsMarkReadButton />}
           <NotificationsRefreshButton />
           <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
         </>
@@ -97,4 +142,4 @@ const NotificationsPage: React.FC = () => {
   );
 };
 
-export { NotificationsPage as default, NotificationsRefreshButton };
+export { NotificationsPage as default, NotificationsMarkReadButton, NotificationsRefreshButton };

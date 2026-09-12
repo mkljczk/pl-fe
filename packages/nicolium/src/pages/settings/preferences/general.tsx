@@ -160,7 +160,9 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
               onChange={onToggleChange}
             />
           </ListItem>
+        </List>
 
+        <List>
           <ListItem
             label={
               <FormattedMessage
@@ -172,6 +174,36 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
             <SettingToggle
               settings={settings}
               settingPath={['notifications', 'quickFilter', 'advanced']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.notifications.hide_bots'
+                defaultMessage='Filter notifications from automated accounts'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['notifications', 'hideBots']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.notifications.auto_mark_read'
+                defaultMessage='Mark notifications read automatically'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['notifications', 'autoMarkRead']}
               onChange={onToggleChange}
             />
           </ListItem>

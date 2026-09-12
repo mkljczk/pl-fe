@@ -37,7 +37,10 @@ import { useComposeHeading } from '@/hooks/use-compose-heading';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { defaultFiltersSettings } from '@/hooks/use-timeline-filters-options';
-import { NotificationsRefreshButton } from '@/pages/notifications/notifications';
+import {
+  NotificationsMarkReadButton,
+  NotificationsRefreshButton,
+} from '@/pages/notifications/notifications';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useList } from '@/queries/accounts/use-lists';
 import { useDriveFolderQuery } from '@/queries/drive/use-drive-folder';
@@ -494,7 +497,12 @@ const DeckNotificationsColumnHeader: React.FC<
     icon={iconBell}
     title={<FormattedMessage id='column.notifications' defaultMessage='Notifications' />}
     subtitle={NOTIFICATION_COLUMN_FILTER_TITLES[column.filter]}
-    actions={<NotificationsRefreshButton activeFilter={column.filter} />}
+    actions={
+      <>
+        <NotificationsMarkReadButton />
+        <NotificationsRefreshButton activeFilter={column.filter} />
+      </>
+    }
   />
 );
 
