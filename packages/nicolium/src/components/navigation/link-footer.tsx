@@ -28,6 +28,9 @@ const LinkFooter: React.FC = (): React.JSX.Element => {
             }}
           />
         )}
+        <span aria-hidden>
+          <Emojify text=' 🏳️‍🌈🏳️‍⚧️' />
+        </span>
       </p>
       {frontendConfig.copyright.trim() && (
         <p className='footer-text'>
